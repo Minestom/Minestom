@@ -4,6 +4,7 @@ import net.minestom.server.Tickable;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -45,17 +46,18 @@ public final class ThreadDispatcher<P> {
         TickThread[] threads = new TickThread[threadCount];
         Arrays.setAll(threads, threadGenerator);
         this.threads = List.of(threads);
-        this.threads.forEach(Thread::start);
     }
 
     /**
      * Creates a new ThreadDispatcher using default thread names (ex. Ms-Tick-n).
+     * <p>Remember to start the dispatcher using {@link #start()}</p>
      *
      * @param provider the {@link ThreadProvider} instance to be used for defining thread IDs
      * @param threadCount the number of threads to create for this dispatcher
      * @return a new ThreadDispatcher instance
      * @param <P> the dispatcher partition type
      */
+    @Contract(pure = true)
     public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider, int threadCount) {
         return new ThreadDispatcher<>(provider, threadCount, TickThread::new);
     }
@@ -63,6 +65,7 @@ public final class ThreadDispatcher<P> {
     /**
      * Creates a new ThreadDispatcher using the caller-provided thread name generator {@code nameGenerator}. This is
      * useful to disambiguate custom ThreadDispatcher instances from ones used in core Minestom code.
+     * <p>Remember to start the dispatcher using {@link #start()}</p>
      *
      * @param provider the {@link ThreadProvider} instance to be used for defining thread IDs
      * @param nameGenerator a function that should return unique names, given a thread index
@@ -70,6 +73,7 @@ public final class ThreadDispatcher<P> {
      * @return a new ThreadDispatcher instance
      * @param <P> the dispatcher partition type
      */
+    @Contract(pure = true)
     public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider,
                                                       @NotNull IntFunction<String> nameGenerator, int threadCount) {
         return new ThreadDispatcher<>(provider, threadCount, index -> new TickThread(nameGenerator.apply(index)));
@@ -77,10 +81,12 @@ public final class ThreadDispatcher<P> {
 
     /**
      * Creates a single-threaded dispatcher that uses default thread names.
+     * <p>Remember to start the dispatcher using {@link #start()}</p>
      *
      * @return a new ThreadDispatcher instance
      * @param <P> the dispatcher partition type
      */
+    @Contract(pure = true)
     public static <P> @NotNull ThreadDispatcher<P> singleThread() {
         return of(ThreadProvider.counter(), 1);
     }
@@ -207,6 +213,29 @@ public final class ThreadDispatcher<P> {
      */
     public void removeElement(@NotNull Tickable tickable) {
         signalUpdate(new DispatchUpdate.ElementRemove<>(tickable));
+    }
+
+    /**
+     * Starts all the {@link TickThread tick threads}.
+     * <p>
+     * This will throw an {@link IllegalThreadStateException} if the threads have already been started.
+     */
+    public void start() {
+        this.threads.forEach(Thread::start);
+    }
+
+    /**
+     * Checks if all the {@link TickThread tick threads} are alive.
+     *
+     * @return true if all threads are alive, false otherwise
+     */
+    public boolean isAlive() {
+        for (TickThread thread : threads) {
+            if (!thread.isAlive()) {
+                return false;
+            }
+        }
+        return !threads.isEmpty();
     }
 
     /**

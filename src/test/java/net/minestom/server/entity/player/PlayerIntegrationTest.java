@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerGameModeChangeEvent;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
@@ -274,4 +275,19 @@ public class PlayerIntegrationTest {
 
         assertEquals(startingPlayerPos, player.getPosition());
     }
+
+    @Test
+    public void removePlayer(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        Player player = connection.connect(instance, new Pos(0, 40, 0));
+
+        instance.eventNode().addListener(PlayerChunkUnloadEvent.class, event -> {
+            assertEquals(instance, event.getInstance());
+            assertEquals(player, event.getPlayer());
+        });
+
+        player.remove(true);
+    }
+
 }

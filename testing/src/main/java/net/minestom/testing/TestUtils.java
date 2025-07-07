@@ -2,6 +2,7 @@ package net.minestom.testing;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.coordinate.Point;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -55,6 +56,10 @@ public final class TestUtils {
         assertEqualsIgnoreSpace(s1, s2, true);
     }
 
+    public static void assertPoint(Point p1, Point p2) {
+        assertTrue(p1.samePoint(p2), String.format("Points don't match! Expected: %s, but got: %s", p1, p2));
+    }
+
     private static String stripExtraSpaces(String s) {
         StringBuilder formattedString = new StringBuilder();
         java.util.StringTokenizer st = new java.util.StringTokenizer(s);
@@ -63,5 +68,4 @@ public final class TestUtils {
         }
         return formattedString.toString().trim();
     }
-
 }

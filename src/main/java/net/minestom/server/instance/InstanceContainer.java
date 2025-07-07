@@ -11,6 +11,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.instance.InstanceBlockUpdateEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
@@ -180,6 +181,7 @@ public class InstanceContainer extends Instance {
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
             }
+            EventDispatcher.call(new InstanceBlockUpdateEvent(this, blockPosition, block));
         }
     }
 
@@ -617,7 +619,7 @@ public class InstanceContainer extends Instance {
      * @param block         the block
      * @return true if the block changed since the last update
      */
-    private boolean isAlreadyChanged(@NotNull Point blockPosition, @NotNull Block block) {
+    private boolean isAlreadyChanged(@NotNull BlockVec blockPosition, @NotNull Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         return Objects.equals(changedBlock, block);
     }

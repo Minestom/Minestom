@@ -52,9 +52,11 @@ public class DynamicChunk extends Chunk {
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
+
     protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
     protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
     private boolean needsCompleteHeightmapRefresh = true;
+  
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
@@ -247,6 +249,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void invalidate() {
+        this.needsCompleteHeightmapRefresh = true;
         this.chunkCache.invalidate();
     }
 
@@ -256,11 +259,12 @@ public class DynamicChunk extends Chunk {
         synchronized (this) {
             heightmaps = getHeightmaps();
 
+            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
             data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
                     networkBuffer.write(SHORT, (short) section.blockPalette().count());
                     networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blockPalette());
-                    networkBuffer.write(Palette.BIOME_SERIALIZER, section.biomePalette());
+                    networkBuffer.write(biomeSerializer, section.biomePalette());
                 }
             });
         }

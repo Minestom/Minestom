@@ -47,6 +47,7 @@ public final class TickThread extends MinestomThread {
 
     @Override
     public void run() {
+        // This is safe to do, as the thread will blow through this first lock during the race, see #park documentation.
         LockSupport.park(this);
         while (!stop) {
             this.lock.lock();

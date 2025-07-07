@@ -6,6 +6,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,7 @@ public class FrogMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#FROG_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull Variant getVariant() {
+    public @NotNull RegistryKey<FrogVariant> getVariant() {
         return metadata.get(MetadataDef.Frog.VARIANT);
     }
 
@@ -26,7 +27,7 @@ public class FrogMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#FROG_VARIANT} instead.
      */
     @Deprecated
-    public void setVariant(@NotNull Variant value) {
+    public void setVariant(@NotNull RegistryKey<FrogVariant> value) {
         metadata.set(MetadataDef.Frog.VARIANT, value);
     }
 
@@ -47,17 +48,10 @@ public class FrogMeta extends AnimalMeta {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
         if (component == DataComponents.FROG_VARIANT)
-            setVariant((Variant) value);
+            setVariant((RegistryKey<FrogVariant>) value);
         else super.set(component, value);
-    }
-
-    public enum Variant {
-        TEMPERATE,
-        WARM,
-        COLD;
-
-        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
     }
 }

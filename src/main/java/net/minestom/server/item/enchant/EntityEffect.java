@@ -163,7 +163,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             @NotNull Codec.RawValue pitch
     ) implements EntityEffect, LocationEffect {
         public static final StructCodec<PlaySound> CODEC = StructCodec.struct(
-                "sound_event", SoundEvent.CODEC, PlaySound::soundEvent,
+                "sound", SoundEvent.CODEC, PlaySound::soundEvent,
                 "volume", Codec.RAW_VALUE, PlaySound::volume,
                 "pitch", Codec.RAW_VALUE, PlaySound::pitch,
                 PlaySound::new);
@@ -274,7 +274,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             boolean joinTeam
     ) implements EntityEffect, LocationEffect {
         public static final StructCodec<SummonEntity> CODEC = StructCodec.struct(
-                "entity_types", Codec.RAW_VALUE, SummonEntity::entityTypes,
+                "entity", Codec.RAW_VALUE, SummonEntity::entityTypes,
                 "join_team", Codec.BOOLEAN.optional(false), SummonEntity::joinTeam,
                 SummonEntity::new);
 
