@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.minestom.demo.block.SignHandler;
 import net.minestom.demo.block.TestBlockHandler;
 import net.minestom.demo.block.placement.BedPlacementRule;
 import net.minestom.demo.block.placement.DripstonePlacementRule;
@@ -22,11 +23,16 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.RecipeBookCategory;
+import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.TagKey;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 public class Main {
 
@@ -88,6 +94,12 @@ public class Main {
         MinecraftServer.getBenchmarkManager().enable(Duration.of(10, TimeUnit.SECOND));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night"));
+
+        RegistryTag<Block> tag = Block.staticRegistry().getTag(TagKey.ofHash("#minecraft:all_signs"));
+        SignHandler signHandler = new SignHandler();
+        for (RegistryKey<Block> key : Objects.requireNonNull(tag)) {
+            blockManager.registerHandler(key.key(), () -> signHandler);
+        }
 
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
             ResponseData responseData = event.getResponseData();
