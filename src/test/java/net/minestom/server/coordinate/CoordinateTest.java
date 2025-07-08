@@ -127,6 +127,28 @@ public class CoordinateTest {
     }
 
     @Test
+    public void vecSameEpsilon() {
+        final double TEST_EPSILON = 0.000000999999; // Less than 1e-6
+        Vec v1 = new Vec(TEST_EPSILON, 0, 0);
+        Vec v2 = new Vec(0, 0, 0);
+        Vec v3 = new Vec(TEST_EPSILON, -TEST_EPSILON, TEST_EPSILON);
+        Vec v4 = new Vec(0.001, 0, 0);
+        Vec v5 = v1.add(TEST_EPSILON);
+
+        // Vectors with small differences should be considered the same under epsilon
+        assertTrue(v1.samePoint(v2, Vec.EPSILON));
+        assertTrue(v2.samePoint(v3, Vec.EPSILON));
+        assertTrue(v1.samePoint(v3, Vec.EPSILON));
+        assertTrue(v5.samePoint(v1, Vec.EPSILON));
+
+        // Vectors with larger differences should not be considered the same
+        assertFalse(v1.samePoint(v4, Vec.EPSILON));
+
+        // 0 epsilon should throw an exception
+        assertThrows(IllegalArgumentException.class, () -> v5.samePoint(v5, 0));
+    }
+
+    @Test
     public void toSectionRelativeCoordinate() {
         assertEquals(8, CoordConversion.globalToSectionRelative(-40));
         assertEquals(12, CoordConversion.globalToSectionRelative(-20));

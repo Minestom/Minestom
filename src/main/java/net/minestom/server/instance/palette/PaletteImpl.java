@@ -11,10 +11,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static net.minestom.server.instance.palette.Palettes.*;
 
 final class PaletteImpl implements Palette {
-    private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[4096]);
+    private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[SECTION_BLOCK_COUNT]);
     final byte dimension, minBitsPerEntry, maxBitsPerEntry, directBits;
 
     byte bitsPerEntry = 0;
@@ -104,6 +105,26 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public void offset(int offset) {
+        if (offset == 0) return;
+        if (bitsPerEntry == 0) {
+            this.count += offset;
+        } else {
+            replaceAll((x, y, z, value) -> value + offset);
+        }
+    }
+
+    @Override
+    public void replace(int oldValue, int newValue) {
+        if (oldValue == newValue) return;
+        if (bitsPerEntry == 0) {
+            if (oldValue == count) fill(newValue);
+        } else {
+            replaceAll((x, y, z, value) -> value == oldValue ? newValue : value);
+        }
+    }
+
+    @Override
     public void setAll(@NotNull EntrySupplier supplier) {
         int[] cache = WRITE_CACHE.get();
         final int dimension = dimension();
@@ -124,10 +145,7 @@ final class PaletteImpl implements Palette {
                         }
                     }
                     // Set value in cache
-                    if (value != 0) {
-                        value = valueToPaletteIndex(value);
-                        count++;
-                    }
+                    if (value != 0) count++;
                     cache[index++] = value;
                 }
             }
@@ -135,6 +153,7 @@ final class PaletteImpl implements Palette {
         assert index == maxSize();
         // Update palette content
         if (fillValue < 0) {
+            if (bitsPerEntry != directBits) resize(directBits);
             updateAll(cache);
             this.count = count;
         } else {
@@ -159,13 +178,169 @@ final class PaletteImpl implements Palette {
             final int newValue = function.apply(x, y, z, value);
             final int index = arrayIndex.getPlain();
             arrayIndex.setPlain(index + 1);
-            cache[index] = newValue != value ? valueToPaletteIndex(newValue) : value;
+            cache[index] = newValue;
             if (newValue != 0) count.setPlain(count.getPlain() + 1);
         });
         assert arrayIndex.getPlain() == maxSize();
         // Update palette content
+        if (bitsPerEntry != directBits) resize(directBits);
         updateAll(cache);
         this.count = count.getPlain();
+    }
+
+    @Override
+    public void copyFrom(@NotNull Palette source, int offsetX, int offsetY, int offsetZ) {
+        if (offsetX == 0 && offsetY == 0 && offsetZ == 0) {
+            copyFrom(source);
+            return;
+        }
+
+        final PaletteImpl sourcePalette = (PaletteImpl) source;
+        final int sourceDimension = sourcePalette.dimension();
+        final int targetDimension = this.dimension();
+        if (sourceDimension != targetDimension) {
+            throw new IllegalArgumentException("Source palette dimension (" + sourceDimension +
+                    ") must equal target palette dimension (" + targetDimension + ")");
+        }
+
+        // Calculate the actual copy bounds - only copy what fits within target bounds
+        final int maxX = Math.min(sourceDimension, targetDimension - offsetX);
+        final int maxY = Math.min(sourceDimension, targetDimension - offsetY);
+        final int maxZ = Math.min(sourceDimension, targetDimension - offsetZ);
+
+        // Early exit if nothing to copy (offset pushes everything out of bounds)
+        if (maxX <= 0 || maxY <= 0 || maxZ <= 0) {
+            return;
+        }
+
+        // Fast path: if source is single-value palette
+        if (sourcePalette.bitsPerEntry == 0) {
+            if (sourcePalette.count == 0) return; // Nothing to copy (all air)
+
+            // Fill the region with the single value - optimized loop order
+            final int value = sourcePalette.count;
+            final int paletteValue = valueToPaletteIndex(value);
+
+            // Direct write to avoid repeated palette lookups
+            for (int y = 0; y < maxY; y++) {
+                final int targetY = offsetY + y;
+                for (int z = 0; z < maxZ; z++) {
+                    final int targetZ = offsetZ + z;
+                    for (int x = 0; x < maxX; x++) {
+                        final int targetX = offsetX + x;
+                        final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, paletteValue);
+                        // Update count based on air transitions
+                        final boolean wasAir = oldValue == 0;
+                        final boolean isAir = paletteValue == 0;
+                        if (wasAir != isAir) {
+                            this.count += wasAir ? 1 : -1;
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
+        // Source is empty, fill target region with air
+        if (sourcePalette.count == 0) {
+            int removedBlocks = 0;
+            for (int y = 0; y < maxY; y++) {
+                final int targetY = offsetY + y;
+                for (int z = 0; z < maxZ; z++) {
+                    final int targetZ = offsetZ + z;
+                    for (int x = 0; x < maxX; x++) {
+                        final int targetX = offsetX + x;
+                        final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, 0);
+                        if (oldValue != 0) removedBlocks++;
+                    }
+                }
+            }
+            this.count -= removedBlocks;
+            return;
+        }
+
+        // General case: copy each value individually with bounds checking
+        // Use optimized access patterns to minimize cache misses
+        final long[] sourceValues = sourcePalette.values;
+        final int sourceBitsPerEntry = sourcePalette.bitsPerEntry;
+        final int sourceMask = (1 << sourceBitsPerEntry) - 1;
+        final int sourceValuesPerLong = 64 / sourceBitsPerEntry;
+        final int sourceDimensionBitCount = MathUtils.bitsToRepresent(sourceDimension - 1);
+        final int sourceShiftedDimensionBitCount = sourceDimensionBitCount << 1;
+        final int[] sourcePaletteIds = sourcePalette.hasPalette() ? sourcePalette.paletteToValueList.elements() : null;
+
+        int countDelta = 0;
+        for (int y = 0; y < maxY; y++) {
+            final int targetY = offsetY + y;
+            for (int z = 0; z < maxZ; z++) {
+                final int targetZ = offsetZ + z;
+                for (int x = 0; x < maxX; x++) {
+                    final int targetX = offsetX + x;
+
+                    final int sourceIndex = y << sourceShiftedDimensionBitCount | z << sourceDimensionBitCount | x;
+                    final int longIndex = sourceIndex / sourceValuesPerLong;
+                    final int bitIndex = (sourceIndex - longIndex * sourceValuesPerLong) * sourceBitsPerEntry;
+                    final int sourcePaletteIndex = (int) (sourceValues[longIndex] >> bitIndex) & sourceMask;
+                    final int sourceValue = sourcePaletteIds != null && sourcePaletteIndex < sourcePaletteIds.length ?
+                            sourcePaletteIds[sourcePaletteIndex] : sourcePaletteIndex;
+
+                    // Convert to target palette index and write
+                    final int targetPaletteIndex = valueToPaletteIndex(sourceValue);
+                    final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, targetPaletteIndex);
+
+                    // Update count
+                    final boolean wasAir = oldValue == 0;
+                    final boolean isAir = targetPaletteIndex == 0;
+                    if (wasAir != isAir) {
+                        countDelta += wasAir ? 1 : -1;
+                    }
+                }
+            }
+        }
+
+        this.count += countDelta;
+    }
+
+    @Override
+    public void copyFrom(@NotNull Palette source) {
+        final PaletteImpl sourcePalette = (PaletteImpl) source;
+        final int sourceDimension = sourcePalette.dimension();
+        final int targetDimension = this.dimension();
+        if (sourceDimension != targetDimension) {
+            throw new IllegalArgumentException("Source palette dimension (" + sourceDimension +
+                    ") must equal target palette dimension (" + targetDimension + ")");
+        }
+
+        if (sourcePalette.bitsPerEntry == 0) {
+            fill(sourcePalette.count);
+            return;
+        }
+        if (sourcePalette.count == 0) {
+            fill(0);
+            return;
+        }
+
+        // Copy
+        this.bitsPerEntry = sourcePalette.bitsPerEntry;
+        this.count = sourcePalette.count;
+
+        if (sourcePalette.values != null) {
+            this.values = sourcePalette.values.clone();
+        } else {
+            this.values = null;
+        }
+
+        if (sourcePalette.paletteToValueList != null) {
+            this.paletteToValueList = new IntArrayList(sourcePalette.paletteToValueList);
+        } else {
+            this.paletteToValueList = null;
+        }
+
+        if (sourcePalette.valueToPaletteMap != null) {
+            this.valueToPaletteMap = new Int2IntOpenHashMap(sourcePalette.valueToPaletteMap);
+        } else {
+            this.valueToPaletteMap = null;
+        }
     }
 
     @Override
@@ -245,10 +420,8 @@ final class PaletteImpl implements Palette {
         clone.count = this.count;
         if (bitsPerEntry == 0) return clone;
         clone.values = values.clone();
-        if (hasPalette()) {
-            clone.paletteToValueList = new IntArrayList(paletteToValueList);
-            clone.valueToPaletteMap = new Int2IntOpenHashMap(valueToPaletteMap);
-        }
+        if (paletteToValueList != null) clone.paletteToValueList = paletteToValueList.clone();
+        if (valueToPaletteMap != null) clone.valueToPaletteMap = valueToPaletteMap.clone();
         return clone;
     }
 
