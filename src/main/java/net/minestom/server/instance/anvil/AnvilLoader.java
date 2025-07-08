@@ -1,9 +1,9 @@
 package net.minestom.server.instance.anvil;
 
 import it.unimi.dsi.fastutil.ints.*;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
@@ -13,6 +13,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
@@ -35,7 +36,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
-    private final static int PLAINS_ID = BIOME_REGISTRY.getId(Key.key("minecraft:plains"));
+    private final static int PLAINS_ID = BIOME_REGISTRY.getId(Biome.PLAINS);
 
     private final ReentrantLock fileCreationLock = new ReentrantLock();
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
@@ -258,8 +259,12 @@ public class AnvilLoader implements IChunkLoader {
                     if (property.getValue() instanceof StringBinaryTag propertyValue) {
                         properties.put(property.getKey(), propertyValue.value());
                     } else {
-                        LOGGER.warn("Fail to parse block state properties {}, expected a string for {}, but contents were {}",
-                                propertiesNBT, property.getKey(), TagStringIOExt.writeTag(property.getValue()));
+                        try {
+                            LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were {}",
+                                    propertiesNBT, property.getKey(), MinestomAdventure.tagStringIO().asString(property.getValue()));
+                        } catch (IOException e) {
+                            LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were a {} tag", propertiesNBT, property.getKey(), property.getValue().examinableName());
+                        }
                     }
                 }
                 if (!properties.isEmpty()) block = block.withProperties(properties);
@@ -278,7 +283,7 @@ public class AnvilLoader implements IChunkLoader {
         int[] convertedPalette = new int[paletteTag.size()];
         for (int i = 0; i < convertedPalette.length; i++) {
             final String name = paletteTag.getString(i);
-            int biomeId = BIOME_REGISTRY.getId(Key.key(name));
+            int biomeId = BIOME_REGISTRY.getId(RegistryKey.unsafeOf(name));
             if (biomeId == -1) biomeId = PLAINS_ID;
             convertedPalette[i] = biomeId;
         }
@@ -428,8 +433,8 @@ public class AnvilLoader implements IChunkLoader {
                             // Add biome (biome are stored for 4x4x4 volumes, avoid unnecessary work)
                             if (x % 4 == 0 && sectionLocalY % 4 == 0 && z % 4 == 0) {
                                 int biomeIndex = (x / 4) + (sectionLocalY / 4) * 4 * 4 + (z / 4) * 4;
-                                final DynamicRegistry.Key<Biome> biomeKey = chunk.getBiome(x, y, z);
-                                final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.name());
+                                final RegistryKey<Biome> biomeKey = chunk.getBiome(x, y, z);
+                                final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
 
                                 int biomePaletteIndex = biomePalette.indexOf(biomeName);
                                 if (biomePaletteIndex == -1) {

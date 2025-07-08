@@ -1,18 +1,18 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityPose;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -45,6 +45,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
     Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();
+    Type<Key> KEY = STRING.transform(Key::key, Key::asString);
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
     Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.IOUTF8StringType();
     Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
@@ -65,14 +66,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Instant> INSTANT_MS = LONG.transform(Instant::ofEpochMilli, Instant::toEpochMilli);
     Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.transform(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
 
-    static <T extends ProtocolObject> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector, boolean holder) {
-        return new NetworkBufferTypeImpl.RegistryTypeType<>(selector, holder);
-    }
-
-    // METADATA
-    Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
     Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
     Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
+    Type<Point> VECTOR3I = new NetworkBufferTypeImpl.Vector3IType();
     Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
     Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
 
@@ -106,11 +102,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
 
-    static <T> @NotNull Type<T> TypedNBT(@NotNull BinaryTagSerializer<T> serializer) {
+    static <T> @NotNull Type<T> TypedNBT(@NotNull Codec<T> serializer) {
         return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 
-    <T> void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    static <L, R> @NotNull Type<Either<L, R>> Either(@NotNull NetworkBuffer.Type<L> left, @NotNull NetworkBuffer.Type<R> right) {
+        return new NetworkBufferTypeImpl.EitherType<>(left, right);
+    }
+
+    <T>
+    void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
 
     <T> @UnknownNullability T read(@NotNull Type<T> type) throws IndexOutOfBoundsException;
 
@@ -203,6 +204,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
         default @NotNull Type<List<T>> list() {
             return list(Integer.MAX_VALUE);
+        }
+
+        default @NotNull Type<Set<T>> set(int maxSize) {
+            return new NetworkBufferTypeImpl.SetType<>(this, maxSize);
+        }
+
+        default @NotNull Type<Set<T>> set() {
+            return set(Integer.MAX_VALUE);
         }
 
         default @NotNull Type<T> optional() {

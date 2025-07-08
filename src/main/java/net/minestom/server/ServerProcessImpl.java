@@ -3,16 +3,23 @@ package net.minestom.server;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.animal.ChickenVariant;
+import net.minestom.server.entity.metadata.animal.CowVariant;
+import net.minestom.server.entity.metadata.animal.FrogVariant;
+import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -42,7 +49,6 @@ import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.collection.MappedCollection;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -61,10 +67,10 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final ExceptionManager exception;
 
-    private final DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues;
-    private final DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects;
-    private final DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects;
-    private final DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects;
+    private final DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues;
+    private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
+    private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
+    private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
 
     private final DynamicRegistry<ChatType> chatType;
     private final DynamicRegistry<DimensionType> dimensionType;
@@ -73,11 +79,17 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<TrimMaterial> trimMaterial;
     private final DynamicRegistry<TrimPattern> trimPattern;
     private final DynamicRegistry<BannerPattern> bannerPattern;
-    private final DynamicRegistry<WolfMeta.Variant> wolfVariant;
     private final DynamicRegistry<Enchantment> enchantment;
-    private final DynamicRegistry<PaintingMeta.Variant> paintingVariant;
+    private final DynamicRegistry<PaintingVariant> paintingVariant;
     private final DynamicRegistry<JukeboxSong> jukeboxSong;
     private final DynamicRegistry<Instrument> instrument;
+    private final DynamicRegistry<WolfVariant> wolfVariant;
+    private final DynamicRegistry<WolfSoundVariant> wolfSoundVariant;
+    private final DynamicRegistry<CatVariant> catVariant;
+    private final DynamicRegistry<ChickenVariant> chickenVariant;
+    private final DynamicRegistry<CowVariant> cowVariant;
+    private final DynamicRegistry<FrogVariant> frogVariant;
+    private final DynamicRegistry<PigVariant> pigVariant;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
@@ -92,7 +104,6 @@ final class ServerProcessImpl implements ServerProcess {
     private final BenchmarkManager benchmark;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
-    private final TagManager tag;
 
     private final Server server;
 
@@ -106,6 +117,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.exception = new ExceptionManager();
 
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
+        var ignoredForInit = DataComponents.ITEM_NAME;
 
         this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
@@ -119,11 +131,17 @@ final class ServerProcessImpl implements ServerProcess {
         this.trimMaterial = TrimMaterial.createDefaultRegistry();
         this.trimPattern = TrimPattern.createDefaultRegistry();
         this.bannerPattern = BannerPattern.createDefaultRegistry();
-        this.wolfVariant = WolfMeta.Variant.createDefaultRegistry();
         this.enchantment = Enchantment.createDefaultRegistry(this);
-        this.paintingVariant = PaintingMeta.Variant.createDefaultRegistry();
+        this.paintingVariant = PaintingVariant.createDefaultRegistry();
         this.jukeboxSong = JukeboxSong.createDefaultRegistry();
         this.instrument = Instrument.createDefaultRegistry();
+        this.wolfVariant = WolfVariant.createDefaultRegistry();
+        this.wolfSoundVariant = WolfSoundVariant.createDefaultRegistry();
+        this.catVariant = CatVariant.createDefaultRegistry();
+        this.chickenVariant = ChickenVariant.createDefaultRegistry();
+        this.cowVariant = CowVariant.createDefaultRegistry();
+        this.frogVariant = FrogVariant.createDefaultRegistry();
+        this.pigVariant = PigVariant.createDefaultRegistry();
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
@@ -138,7 +156,6 @@ final class ServerProcessImpl implements ServerProcess {
         this.benchmark = new BenchmarkManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
-        this.tag = new TagManager();
 
         this.server = new Server(packetParser);
 
@@ -172,17 +189,12 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DynamicRegistry<WolfMeta.Variant> wolfVariant() {
-        return wolfVariant;
-    }
-
-    @Override
     public @NotNull DynamicRegistry<Enchantment> enchantment() {
         return enchantment;
     }
 
     @Override
-    public @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant() {
+    public @NotNull DynamicRegistry<PaintingVariant> paintingVariant() {
         return paintingVariant;
     }
 
@@ -197,22 +209,57 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public @NotNull DynamicRegistry<WolfVariant> wolfVariant() {
+        return wolfVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
+        return wolfSoundVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<CatVariant> catVariant() {
+        return catVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<ChickenVariant> chickenVariant() {
+        return chickenVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<CowVariant> cowVariant() {
+        return cowVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<FrogVariant> frogVariant() {
+        return frogVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<PigVariant> pigVariant() {
+        return pigVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return enchantmentLevelBasedValues;
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return enchantmentValueEffects;
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
         return enchantmentEntityEffects;
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return enchantmentLocationEffects;
     }
 
@@ -272,11 +319,6 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull TagManager tag() {
-        return tag;
-    }
-
-    @Override
     public @NotNull DynamicRegistry<ChatType> chatType() {
         return chatType;
     }
@@ -322,7 +364,7 @@ final class ServerProcessImpl implements ServerProcess {
             throw new IllegalStateException("Server already started");
         }
 
-        LOGGER.info("Starting " + MinecraftServer.getBrandName() + " server.");
+        LOGGER.info("Starting {} ({}) server.", MinecraftServer.getBrandName(), Git.version());
 
         // Init server
         try {

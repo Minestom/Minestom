@@ -11,6 +11,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.instance.InstanceBlockUpdateEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
@@ -27,6 +28,8 @@ import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
@@ -75,7 +78,7 @@ public class InstanceContainer extends Instance {
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
 
     private final Lock changingBlockLock = new ReentrantLock();
-    private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
+    private final Map<BlockVec, Block> currentlyChangingBlocks = new HashMap<>();
 
     // the chunk loader, used when trying to load/save a chunk from another source
     private IChunkLoader chunkLoader;
@@ -90,26 +93,26 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, null, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull Key dimensionName) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @NotNull Key dimensionName) {
         this(uuid, dimensionType, null, dimensionName);
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
         this(uuid, dimensionType, loader, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull Key dimensionName) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull Key dimensionName) {
         this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, loader, dimensionName);
     }
 
     public InstanceContainer(
             @NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry,
             @NotNull UUID uuid,
-            @NotNull DynamicRegistry.Key<DimensionType> dimensionType,
+            @NotNull RegistryKey<DimensionType> dimensionType,
             @Nullable IChunkLoader loader,
             @NotNull Key dimensionName
     ) {
@@ -154,7 +157,7 @@ public class InstanceContainer extends Instance {
         synchronized (chunk) {
             // Refresh the last block change time
             this.lastBlockChangeTime = System.currentTimeMillis();
-            final Vec blockPosition = new Vec(x, y, z);
+            final BlockVec blockPosition = new BlockVec(x, y, z);
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
@@ -197,12 +200,13 @@ public class InstanceContainer extends Instance {
             // Refresh player chunk block
             {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-                var registry = block.registry();
+                RegistryData.BlockEntry registry = block.registry();
                 if (registry.isBlockEntity()) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
             }
+            EventDispatcher.call(new InstanceBlockUpdateEvent(this, blockPosition, block));
         }
     }
 
@@ -647,7 +651,7 @@ public class InstanceContainer extends Instance {
      * @param block         the block
      * @return true if the block changed since the last update
      */
-    private boolean isAlreadyChanged(@NotNull Point blockPosition, @NotNull Block block) {
+    private boolean isAlreadyChanged(@NotNull BlockVec blockPosition, @NotNull Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         return Objects.equals(changedBlock, block);
     }

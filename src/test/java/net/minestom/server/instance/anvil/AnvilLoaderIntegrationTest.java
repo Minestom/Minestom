@@ -1,12 +1,13 @@
 package net.minestom.server.instance.anvil;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -104,7 +105,7 @@ public class AnvilLoaderIntegrationTest {
                 for (int y = 0; y < 16; y++) {
                     for (int x = 0; x < 16; x++) {
                         for (int z = 0; z < 16; z++) {
-                            DynamicRegistry.Key<Biome> b = chunk.getBiome(x, y, z);
+                            RegistryKey<Biome> b = chunk.getBiome(x, y, z);
                             assertEquals(Biome.PLAINS, b);
                         }
                     }
@@ -203,16 +204,17 @@ public class AnvilLoaderIntegrationTest {
             Section originalSection = originalChunk.getSection(section);
             Section reloadedSection = reloadedChunk.getSection(section);
 
+            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
             // easiest equality check to write is a memory compare on written output
             var original = NetworkBuffer.makeArray(buffer -> {
                 buffer.write(SHORT, (short) originalSection.blockPalette().count());
                 buffer.write(Palette.BLOCK_SERIALIZER, originalSection.blockPalette());
-                buffer.write(Palette.BIOME_SERIALIZER, originalSection.biomePalette());
+                buffer.write(biomeSerializer, originalSection.biomePalette());
             });
             var reloaded = NetworkBuffer.makeArray(buffer -> {
                 buffer.write(SHORT, (short) reloadedSection.blockPalette().count());
                 buffer.write(Palette.BLOCK_SERIALIZER, reloadedSection.blockPalette());
-                buffer.write(Palette.BIOME_SERIALIZER, reloadedSection.biomePalette());
+                buffer.write(biomeSerializer, reloadedSection.biomePalette());
             });
             Assertions.assertArrayEquals(original, reloaded);
         }

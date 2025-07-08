@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.CoordConversion;
@@ -96,6 +97,10 @@ public class LightingChunk extends DynamicChunk {
 
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ);
+    }
+
+    protected LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ, @NotNull List<Section> sections) {
+        super(instance, chunkX, chunkZ, sections);
     }
 
     private boolean checkSkyOcclusion(Block block) {
@@ -387,20 +392,24 @@ public class LightingChunk extends DynamicChunk {
 
             final Palette blockPalette = section.blockPalette();
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
-                final Set<Point> toAdd = switch (queueType) {
-                    case INTERNAL -> light.calculateInternal(blockPalette,
-                            chunk.getChunkX(), point.blockY(), chunk.getChunkZ(),
-                            lightingChunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
-                            lightLookup);
-                    case EXTERNAL -> light.calculateExternal(blockPalette,
-                            Light.getNeighbors(chunk, point.blockY()),
-                            lightLookup, paletteLookup);
-                };
+                try {
+                    final Set<Point> toAdd = switch (queueType) {
+                        case INTERNAL -> light.calculateInternal(blockPalette,
+                                chunk.getChunkX(), point.blockY(), chunk.getChunkZ(),
+                                lightingChunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
+                                lightLookup);
+                        case EXTERNAL -> light.calculateExternal(blockPalette,
+                                Light.getNeighbors(chunk, point.blockY()),
+                                lightLookup, paletteLookup);
+                    };
 
-                sections.add(light);
+                    sections.add(light);
 
-                light.flip();
-                newQueue.addAll(toAdd);
+                    light.flip();
+                    newQueue.addAll(toAdd);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
             }, pool);
 
             tasks.add(task);
@@ -556,8 +565,8 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
-        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ);
-        lightingChunk.sections = sections.stream().map(Section::clone).toList();
+        var sections = this.sections.stream().map(Section::clone).toList();
+        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
         lightingChunk.entries.putAll(entries);
         return lightingChunk;
     }

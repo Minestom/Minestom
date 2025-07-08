@@ -8,13 +8,13 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.chunk.ChunkCache;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
 @ApiStatus.Internal
@@ -177,8 +177,14 @@ public final class CollisionUtils {
         return newPosition;
     }
 
-    public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {
-        return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry.occludes(), blockEntry.lightEmission());
+    public static Shape parseBlockShape(Map<Object, Object> internCache, String collision, String occlusion, boolean occludes, byte lightEmission) {
+        record ShapeEntry(String collision, String occlusion, boolean occludes, byte lightEmission) {} // Easy way to Hashcode
+        ShapeEntry entry = new ShapeEntry(collision, occlusion, occludes, lightEmission);
+        final Shape cachedShape = (Shape) internCache.get(entry);
+        if (cachedShape != null) return cachedShape;
+        final Shape parsedShape = ShapeImpl.parseBlockFromRegistry(collision, occlusion, occludes, lightEmission);
+        internCache.put(entry, parsedShape);
+        return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
     }
 
     /**

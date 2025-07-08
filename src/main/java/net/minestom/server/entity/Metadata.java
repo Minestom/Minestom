@@ -3,19 +3,19 @@ package net.minestom.server.entity;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
-import net.minestom.server.entity.metadata.animal.FrogMeta;
-import net.minestom.server.entity.metadata.animal.SnifferMeta;
-import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.animal.*;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
+import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -112,13 +112,8 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE_LIST, particles, Particle.NETWORK_TYPE.list(Short.MAX_VALUE));
     }
 
-    public static Entry<int[]> VillagerData(int[] data) {
-        Check.argCondition(data.length != 3, "Villager data array must have a length of 3");
-        return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, data, NetworkBuffer.VILLAGER_DATA);
-    }
-
-    public static Entry<int[]> VillagerData(int villagerType, int villagerProfession, int level) {
-        return VillagerData(new int[]{villagerType, villagerProfession, level});
+    public static Entry<VillagerMeta.VillagerData> VillagerData(@NotNull VillagerMeta.VillagerData data) {
+        return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, data, VillagerMeta.VillagerData.NETWORK_TYPE);
     }
 
     public static Entry<Integer> OptVarInt(@Nullable Integer value) {
@@ -140,20 +135,36 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
-    public static Entry<CatMeta.Variant> CatVariant(@NotNull CatMeta.Variant value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatMeta.Variant.NETWORK_TYPE);
+    public static Entry<RegistryKey<CatVariant>> CatVariant(@NotNull RegistryKey<CatVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatVariant.NETWORK_TYPE);
     }
 
-    public static Entry<DynamicRegistry.Key<WolfMeta.Variant>> WolfVariant(@NotNull DynamicRegistry.Key<WolfMeta.Variant> value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_WOLF_VARIANT, value, WolfMeta.Variant.NETWORK_TYPE);
+    public static Entry<RegistryKey<CowVariant>> CowVariant(@NotNull RegistryKey<CowVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_COW_VARIANT, value, CowVariant.NETWORK_TYPE);
+    }
+
+    public static Entry<RegistryKey<WolfVariant>> WolfVariant(@NotNull RegistryKey<WolfVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_WOLF_VARIANT, value, WolfVariant.NETWORK_TYPE);
+    }
+
+    public static Entry<RegistryKey<WolfSoundVariant>> WolfSoundVariant(@NotNull RegistryKey<WolfSoundVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_WOLF_SOUND_VARIANT, value, WolfSoundVariant.NETWORK_TYPE);
     }
 
     public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {
         return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, FrogMeta.Variant.NETWORK_TYPE);
     }
 
-    public static Entry<DynamicRegistry.Key<PaintingMeta.Variant>> PaintingVariant(@NotNull DynamicRegistry.Key<PaintingMeta.Variant> value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, PaintingMeta.Variant.NETWORK_TYPE);
+    public static Entry<RegistryKey<PigVariant>> PigVariant(@NotNull RegistryKey<PigVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PIG_VARIANT, value, PigVariant.NETWORK_TYPE);
+    }
+
+    public static Entry<RegistryKey<ChickenVariant>> ChickenVariant(@NotNull RegistryKey<ChickenVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_CHICKEN_VARIANT, value, ChickenVariant.NETWORK_TYPE);
+    }
+
+    public static Entry<Holder<PaintingVariant>> PaintingVariant(@NotNull Holder<PaintingVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, PaintingVariant.NETWORK_TYPE);
     }
 
     public static Entry<SnifferMeta.State> SnifferState(@NotNull SnifferMeta.State value) {
@@ -197,8 +208,12 @@ public final class Metadata {
     public static final byte TYPE_OPT_VARINT = nextId();
     public static final byte TYPE_POSE = nextId();
     public static final byte TYPE_CAT_VARIANT = nextId();
+    public static final byte TYPE_COW_VARIANT = nextId();
     public static final byte TYPE_WOLF_VARIANT = nextId();
+    public static final byte TYPE_WOLF_SOUND_VARIANT = nextId();
     public static final byte TYPE_FROG_VARIANT = nextId();
+    public static final byte TYPE_PIG_VARIANT = nextId();
+    public static final byte TYPE_CHICKEN_VARIANT = nextId();
     public static final byte TYPE_OPT_GLOBAL_POSITION = nextId(); // Unused by protocol it seems
     public static final byte TYPE_PAINTING_VARIANT = nextId();
     public static final byte TYPE_SNIFFER_STATE = nextId();

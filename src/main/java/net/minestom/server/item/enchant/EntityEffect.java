@@ -1,225 +1,286 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.gamedata.DataPack;
-import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 
 public non-sealed interface EntityEffect extends Enchantment.Effect {
 
-    @NotNull BinaryTagSerializer<EntityEffect> NBT_TYPE = BinaryTagSerializer.registryTaggedUnion(
-            Registries::enchantmentEntityEffects, EntityEffect::nbtType, "type");
+    @NotNull StructCodec<EntityEffect> CODEC = Codec.RegistryTaggedUnion(
+            Registries::enchantmentEntityEffects, EntityEffect::codec, "type");
 
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> createDefaultRegistry() {
-        final DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
-        registry.register("all_of", AllOf.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("apply_mob_effect", ApplyPotionEffect.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("change_item_damage", ChangeItemDamage.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("damage_entity", DamageEntity.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("explode", Explode.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("ignite", Ignite.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("play_sound", PlaySound.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("replace_block", ReplaceBlock.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("replace_disk", ReplaceDisc.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("run_function", RunFunction.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("set_block_properties", SetBlockProperties.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("spawn_particles", SpawnParticles.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("summon_entity", SummonEntity.NBT_TYPE, DataPack.MINECRAFT_CORE);
+    static @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> createDefaultRegistry() {
+        final DynamicRegistry<StructCodec<? extends EntityEffect>> registry = DynamicRegistry.create(Key.key("minestom:enchantment_value_effect"));
+        registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("apply_mob_effect", ApplyPotionEffect.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("change_item_damage", ChangeItemDamage.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("damage_entity", DamageEntity.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("explode", Explode.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("ignite", Ignite.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("play_sound", PlaySound.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("replace_block", ReplaceBlock.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("replace_disk", ReplaceDisc.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("run_function", RunFunction.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("set_block_properties", SetBlockProperties.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("spawn_particles", SpawnParticles.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("summon_entity", SummonEntity.CODEC, DataPack.MINECRAFT_CORE);
         return registry;
     }
 
-    @NotNull BinaryTagSerializer<? extends EntityEffect> nbtType();
+    @NotNull StructCodec<? extends EntityEffect> codec();
 
     record AllOf(@NotNull List<EntityEffect> effect) implements EntityEffect {
-        public static final BinaryTagSerializer<AllOf> NBT_TYPE = BinaryTagSerializer.object(
-                "effects", EntityEffect.NBT_TYPE.list(), AllOf::effect,
-                AllOf::new
-        );
+        public static final StructCodec<AllOf> CODEC = StructCodec.struct(
+                "effects", EntityEffect.CODEC.list(), AllOf::effect,
+                AllOf::new);
 
         public AllOf {
             effect = List.copyOf(effect);
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<AllOf> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<AllOf> codec() {
+            return CODEC;
         }
     }
 
     record ApplyPotionEffect(
-            @NotNull ObjectSet<PotionEffect> toApply,
+            @NotNull RegistryTag<PotionEffect> toApply,
             @NotNull LevelBasedValue minDuration,
             @NotNull LevelBasedValue maxDuration,
             @NotNull LevelBasedValue minAmplifier,
             @NotNull LevelBasedValue maxAmplifier
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<ApplyPotionEffect> NBT_TYPE = BinaryTagSerializer.object(
-                "to_apply", ObjectSet.nbtType(Tag.BasicType.POTION_EFFECTS), ApplyPotionEffect::toApply,
-                "min_duration", LevelBasedValue.NBT_TYPE, ApplyPotionEffect::minDuration,
-                "max_duration", LevelBasedValue.NBT_TYPE, ApplyPotionEffect::maxDuration,
-                "min_amplifier", LevelBasedValue.NBT_TYPE, ApplyPotionEffect::minAmplifier,
-                "max_amplifier", LevelBasedValue.NBT_TYPE, ApplyPotionEffect::maxAmplifier,
+        public static final StructCodec<ApplyPotionEffect> CODEC = StructCodec.struct(
+                "to_apply", RegistryTag.codec(Registries::potionEffect), ApplyPotionEffect::toApply,
+                "min_duration", LevelBasedValue.CODEC, ApplyPotionEffect::minDuration,
+                "max_duration", LevelBasedValue.CODEC, ApplyPotionEffect::maxDuration,
+                "min_amplifier", LevelBasedValue.CODEC, ApplyPotionEffect::minAmplifier,
+                "max_amplifier", LevelBasedValue.CODEC, ApplyPotionEffect::maxAmplifier,
                 ApplyPotionEffect::new
         );
 
         @Override
-        public @NotNull BinaryTagSerializer<ApplyPotionEffect> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<ApplyPotionEffect> codec() {
+            return CODEC;
         }
     }
 
     record DamageEntity(
-            @NotNull DynamicRegistry.Key<DamageType> damageType,
+            @NotNull RegistryKey<DamageType> damageType,
             @NotNull LevelBasedValue minDamage,
             @NotNull LevelBasedValue maxDamage
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<DamageEntity> NBT_TYPE = BinaryTagSerializer.object(
-                "damage_type", DamageType.NBT_TYPE, DamageEntity::damageType,
-                "min_damage", LevelBasedValue.NBT_TYPE, DamageEntity::minDamage,
-                "max_damage", LevelBasedValue.NBT_TYPE, DamageEntity::maxDamage,
-                DamageEntity::new
-        );
+        public static final StructCodec<DamageEntity> CODEC = StructCodec.struct(
+                "damage_type", DamageType.CODEC, DamageEntity::damageType,
+                "min_damage", LevelBasedValue.CODEC, DamageEntity::minDamage,
+                "max_damage", LevelBasedValue.CODEC, DamageEntity::maxDamage,
+                DamageEntity::new);
 
         @Override
-        public @NotNull BinaryTagSerializer<DamageEntity> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<DamageEntity> codec() {
+            return CODEC;
         }
     }
 
     record ChangeItemDamage(@NotNull LevelBasedValue amount) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<ChangeItemDamage> NBT_TYPE = BinaryTagSerializer.object(
-                "amount", LevelBasedValue.NBT_TYPE, ChangeItemDamage::amount,
+        public static final StructCodec<ChangeItemDamage> CODEC = StructCodec.struct(
+                "amount", LevelBasedValue.CODEC, ChangeItemDamage::amount,
                 ChangeItemDamage::new
         );
 
         @Override
-        public @NotNull BinaryTagSerializer<ChangeItemDamage> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<ChangeItemDamage> codec() {
+            return CODEC;
         }
     }
 
     record Explode(
-            CompoundBinaryTag content
-            //todo
+            boolean attributeToUser,
+            @Nullable RegistryKey<DamageType> damageType,
+            @Nullable LevelBasedValue knockbackMultiplier,
+            @Nullable Codec.RawValue immuneBlocks,
+            @NotNull Point offset,
+            @NotNull LevelBasedValue radius,
+            boolean createFire,
+            @NotNull Codec.RawValue blockInteraction,
+            @NotNull Codec.RawValue smallParticle,
+            @NotNull Codec.RawValue largeParticle,
+            @NotNull SoundEvent sound
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<Explode> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(Explode::new, Explode::content);
+        public static final StructCodec<Explode> CODEC = StructCodec.struct(
+                "attribute_to_user", Codec.BOOLEAN.optional(false), Explode::attributeToUser,
+                "damage_type", DamageType.CODEC.optional(), Explode::damageType,
+                "knockback_multiplier", LevelBasedValue.CODEC.optional(), Explode::knockbackMultiplier,
+                "immune_blocks", Codec.RAW_VALUE.optional(), Explode::immuneBlocks,
+                "offset", Codec.VECTOR3D.optional(Vec.ZERO), Explode::offset,
+                "radius", LevelBasedValue.CODEC, Explode::radius,
+                "create_fire", Codec.BOOLEAN.optional(false), Explode::createFire,
+                "block_interaction", Codec.RAW_VALUE, Explode::blockInteraction,
+                "small_particle", Codec.RAW_VALUE, Explode::smallParticle,
+                "large_particle", Codec.RAW_VALUE, Explode::largeParticle,
+                "sound", SoundEvent.CODEC, Explode::sound,
+                Explode::new);
 
         @Override
-        public @NotNull BinaryTagSerializer<Explode> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<Explode> codec() {
+            return CODEC;
         }
     }
 
     record Ignite(@NotNull LevelBasedValue duration) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<Ignite> NBT_TYPE = BinaryTagSerializer.object(
-                "duration", LevelBasedValue.NBT_TYPE, Ignite::duration,
+        public static final StructCodec<Ignite> CODEC = StructCodec.struct(
+                "duration", LevelBasedValue.CODEC, Ignite::duration,
                 Ignite::new
         );
 
         @Override
-        public @NotNull BinaryTagSerializer<Ignite> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<Ignite> codec() {
+            return CODEC;
         }
     }
 
     record PlaySound(
-            CompoundBinaryTag content
-//            @NotNull SoundEvent sound,
-//            Object volume, // "A Float Provider between 0.00001 and 10.0 specifying the volume of the sound"
-//            Object pitch // "A Float Provider between 0.00001 and 2.0 specifying the pitch of the sound"
+            @NotNull SoundEvent soundEvent,
+            @NotNull Codec.RawValue volume,
+            @NotNull Codec.RawValue pitch
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<PlaySound> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(PlaySound::new, PlaySound::content);
+        public static final StructCodec<PlaySound> CODEC = StructCodec.struct(
+                "sound", SoundEvent.CODEC, PlaySound::soundEvent,
+                "volume", Codec.RAW_VALUE, PlaySound::volume,
+                "pitch", Codec.RAW_VALUE, PlaySound::pitch,
+                PlaySound::new);
 
         @Override
-        public @NotNull BinaryTagSerializer<PlaySound> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<PlaySound> codec() {
+            return CODEC;
         }
     }
 
     record ReplaceBlock(
-            CompoundBinaryTag content
-//            Object blockState, // "A block state provider giving the block state to set"
-//            @NotNull Point offset,
-//            @Nullable Object predicate // "A World-generation style Block Predicate to used to determine if the block should be replaced"
+            @NotNull Codec.RawValue offset,
+            @Nullable Codec.RawValue predicate,
+            @NotNull Codec.RawValue blockState,
+            @Nullable Codec.RawValue triggerGameEvent
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<ReplaceBlock> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ReplaceBlock::new, ReplaceBlock::content);
+        public static final StructCodec<ReplaceBlock> CODEC = StructCodec.struct(
+                "offset", Codec.RAW_VALUE, ReplaceBlock::offset,
+                "predicate", Codec.RAW_VALUE, ReplaceBlock::predicate,
+                "block_state", Codec.RAW_VALUE, ReplaceBlock::blockState,
+                "trigger_game_event", Codec.RAW_VALUE, ReplaceBlock::triggerGameEvent,
+                ReplaceBlock::new);
 
         @Override
-        public @NotNull BinaryTagSerializer<ReplaceBlock> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<ReplaceBlock> codec() {
+            return CODEC;
         }
     }
 
     record ReplaceDisc(
-            CompoundBinaryTag content
-            // todo
+            @NotNull LevelBasedValue radius,
+            @NotNull LevelBasedValue height,
+            @NotNull Codec.RawValue offset,
+            @Nullable Codec.RawValue predicate,
+            @NotNull Codec.RawValue blockState,
+            @Nullable Codec.RawValue triggerGameEvent
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<ReplaceDisc> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ReplaceDisc::new, ReplaceDisc::content);
+        public static final StructCodec<ReplaceDisc> CODEC = StructCodec.struct(
+                "radius", LevelBasedValue.CODEC, ReplaceDisc::radius,
+                "height", LevelBasedValue.CODEC, ReplaceDisc::height,
+                "offset", Codec.RAW_VALUE, ReplaceDisc::offset,
+                "predicate", Codec.RAW_VALUE.optional(), ReplaceDisc::predicate,
+                "block_state", Codec.RAW_VALUE, ReplaceDisc::blockState,
+                "trigger_game_event", Codec.RAW_VALUE.optional(), ReplaceDisc::triggerGameEvent,
+                ReplaceDisc::new);
 
         @Override
-        public @NotNull BinaryTagSerializer<ReplaceDisc> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<ReplaceDisc> codec() {
+            return CODEC;
         }
     }
 
     record RunFunction(
             @NotNull String function
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<RunFunction> NBT_TYPE = BinaryTagSerializer.object(
-                "function", BinaryTagSerializer.STRING, RunFunction::function,
-                RunFunction::new
-        );
+        public static final StructCodec<RunFunction> CODEC = StructCodec.struct(
+                "function", Codec.STRING, RunFunction::function,
+                RunFunction::new);
 
         @Override
-        public @NotNull BinaryTagSerializer<RunFunction> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<RunFunction> codec() {
+            return CODEC;
         }
     }
 
     record SetBlockProperties(
-            CompoundBinaryTag content
-            //todo
+            @NotNull Codec.RawValue properties,
+            @NotNull Codec.RawValue offset,
+            @Nullable Codec.RawValue triggerGameEvent
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<SetBlockProperties> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(SetBlockProperties::new, SetBlockProperties::content);
+        public static final StructCodec<SetBlockProperties> CODEC = StructCodec.struct(
+                "properties", Codec.RAW_VALUE, SetBlockProperties::properties,
+                "offset", Codec.RAW_VALUE, SetBlockProperties::offset,
+                "trigger_game_event", Codec.RAW_VALUE.optional(), SetBlockProperties::triggerGameEvent,
+                SetBlockProperties::new);
 
         @Override
-        public @NotNull BinaryTagSerializer<SetBlockProperties> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<SetBlockProperties> codec() {
+            return CODEC;
         }
     }
 
     record SpawnParticles(
-            CompoundBinaryTag content
-            //todo
+            @NotNull Codec.RawValue particle,
+            @NotNull Codec.RawValue horizontalPosition,
+            @NotNull Codec.RawValue verticalPosition,
+            @NotNull Codec.RawValue horizontalVelocity,
+            @NotNull Codec.RawValue verticalVelocity,
+            @NotNull Codec.RawValue speed
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<SpawnParticles> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(SpawnParticles::new, SpawnParticles::content);
+        public static final StructCodec<SpawnParticles> CODEC = StructCodec.struct(
+                "particle", Codec.RAW_VALUE, SpawnParticles::particle,
+                "horizontal_position", Codec.RAW_VALUE, SpawnParticles::horizontalPosition,
+                "vertical_position", Codec.RAW_VALUE, SpawnParticles::verticalPosition,
+                "horizontal_velocity", Codec.RAW_VALUE, SpawnParticles::horizontalVelocity,
+                "vertical_velocity", Codec.RAW_VALUE, SpawnParticles::verticalVelocity,
+                "speed", Codec.RAW_VALUE, SpawnParticles::speed,
+                SpawnParticles::new);
 
         @Override
-        public @NotNull BinaryTagSerializer<SpawnParticles> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<SpawnParticles> codec() {
+            return CODEC;
         }
     }
 
     record SummonEntity(
-            CompoundBinaryTag content
-            //todo
+            @NotNull Codec.RawValue entityTypes,
+            boolean joinTeam
     ) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<SummonEntity> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(SummonEntity::new, SummonEntity::content);
+        public static final StructCodec<SummonEntity> CODEC = StructCodec.struct(
+                "entity", Codec.RAW_VALUE, SummonEntity::entityTypes,
+                "join_team", Codec.BOOLEAN.optional(false), SummonEntity::joinTeam,
+                SummonEntity::new);
 
         @Override
-        public @NotNull BinaryTagSerializer<SummonEntity> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<SummonEntity> codec() {
+            return CODEC;
         }
     }
 

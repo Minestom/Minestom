@@ -29,6 +29,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.*;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
@@ -49,7 +50,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.inventory.click.ClickPreprocessor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.WrittenBookContent;
@@ -73,6 +74,7 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.snapshot.EntitySnapshot;
@@ -174,6 +176,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private int level;
     private int portalCooldown = 0;
 
+    protected ClickPreprocessor clickPreprocessor = new ClickPreprocessor();
     protected PlayerInventory inventory;
     private AbstractInventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
@@ -256,6 +259,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 .withDynamic(Identity.UUID, this::getUuid)
                 .withDynamic(Identity.NAME, this::getUsername)
                 .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
+                .withDynamic(Identity.LOCALE, this::getLocale)
                 .build();
 
         // When in configuration state no metadata updates can be sent.
@@ -283,7 +287,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.pendingInstance = null;
 
         this.removed = false;
-        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType().key());
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType());
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
@@ -420,7 +424,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 // has not changed the item (the default behavior) we need to refresh the slot.
                 if (itemStack.equals(getItemInHand(itemUseHand))) {
                     final int slot = isOffHand ? PlayerInventoryUtils.OFFHAND_SLOT : getHeldSlot();
-                    inventory.sendSlotRefresh(slot, itemStack, itemStack);
+                    inventory.sendSlotRefresh(slot, itemStack);
                 }
             }
         }
@@ -565,7 +569,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             EventDispatcher.call(new PlayerDisconnectEvent(this));
         }
 
-        super.remove(permanent);
 
         final AbstractInventory currentInventory = getOpenInventory();
         if (currentInventory != null) currentInventory.removeViewer(this);
@@ -588,6 +591,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Remove from the tab-list
         PacketSendingUtils.broadcastPlayPacket(getRemovePlayerToList());
 
+        super.remove(permanent);
         // Prevent the player from being stuck in loading screen, or just unable to interact with the server
         // This should be considered as a bug, since the player will ultimately time out anyway.
         if (permanent && playerConnection.isOnline()) kick(REMOVE_MESSAGE);
@@ -819,7 +823,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         var meta = getEntityMeta();
         if (meta.isFlyingWithElytra()) {
             newPose = EntityPose.FALL_FLYING;
-        } else if (false) { // When should they be sleeping? We don't have any in-bed state...
+        } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.getBedInWhichSleepingPosition() != null) {
             newPose = EntityPose.SLEEPING;
         } else if (meta.isSwimming()) {
             newPose = EntityPose.SWIMMING;
@@ -943,7 +947,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     /**
      * Plays a given worldEvent at the given position for this player.
      *
-     * @param worldEvent                the worldEvent to play
+     * @param worldEvent            the worldEvent to play
      * @param x                     x position of the worldEvent
      * @param y                     y position of the worldEvent
      * @param z                     z position of the worldEvent
@@ -1000,7 +1004,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         String title = PlainTextComponentSerializer.plainText().serialize(book.title());
         String author = PlainTextComponentSerializer.plainText().serialize(book.author());
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .set(ItemComponent.WRITTEN_BOOK_CONTENT, new WrittenBookContent(title, author, 0, book.pages(), false))
+                .set(DataComponents.WRITTEN_BOOK_CONTENT, new WrittenBookContent(title, author, 0, book.pages(), false))
                 .build();
 
         // Set book in offhand
@@ -1099,7 +1103,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public boolean isEating() {
         if (!isUsingItem()) return false;
         final ItemStack itemStack = getItemInHand(itemUseHand);
-        return itemStack.has(ItemComponent.FOOD) || itemStack.material() == Material.POTION;
+        return itemStack.has(DataComponents.FOOD) || itemStack.material() == Material.POTION;
     }
 
     /**
@@ -1410,7 +1414,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * and send data to his new viewers.
      */
     protected void refreshAfterTeleport() {
-        sendPacketsToViewers(getEntityType().registry().spawnType().getSpawnPacket(this));
+        sendPacketsToViewers(getSpawnPacket());
 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
@@ -1649,7 +1653,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      *
      * @param dimensionType the new player dimension
      */
-    protected void sendDimension(@NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull String dimensionName) {
+    protected void sendDimension(@NotNull RegistryKey<DimensionType> dimensionType, @NotNull String dimensionName) {
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
@@ -1712,6 +1716,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         this.belowNameTag = belowNameTag;
+    }
+
+    public @NotNull ClickPreprocessor getClickPreprocessor() {
+        return clickPreprocessor;
     }
 
     /**
@@ -2226,7 +2234,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
+        connection.sendPacket(getSpawnPacket());
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
         connection.sendPacket(getEquipmentsPacket());
@@ -2316,6 +2324,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void sendNotification(@NotNull Notification notification) {
         sendPacket(notification.buildAddPacket());
         sendPacket(notification.buildRemovePacket());
+    }
+
+    /**
+     * Sends a {@link EntityAnimationPacket} to clear remove the sleep darkness.
+     */
+    @Override
+    public void leaveBed() {
+        EntityAnimationPacket packet = new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.LEAVE_BED);
+        sendPacket(packet);
+        super.leaveBed();
     }
 
     public enum FacePoint {

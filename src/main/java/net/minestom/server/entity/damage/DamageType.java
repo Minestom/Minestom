@@ -1,24 +1,35 @@
 package net.minestom.server.entity.damage;
 
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public sealed interface DamageType extends ProtocolObject, DamageTypes permits DamageTypeImpl {
+public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
+    @NotNull Codec<DamageType> REGISTRY_CODEC = StructCodec.struct(
+            "message_id", Codec.STRING, DamageType::messageId,
+            "scaling", Codec.STRING, DamageType::scaling,
+            "exhaustion", Codec.FLOAT, DamageType::exhaustion,
+            "effects", Codec.STRING.optional("hurt"), DamageType::effects,
+            "death_message_type", Codec.STRING.optional("default"), DamageType::deathMessageType,
+            DamageType::create);
 
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<DamageType>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::damageType);
+    @NotNull Codec<RegistryKey<DamageType>> CODEC = RegistryKey.codec(Registries::damageType);
 
     static @NotNull DamageType create(
-            float exhaustion,
             @NotNull String messageId,
-            @NotNull String scaling
+            @NotNull String scaling,
+            float exhaustion,
+            @Nullable String effects,
+            @Nullable String deathMessageType
     ) {
-        return new DamageTypeImpl(exhaustion, messageId, scaling, null);
+        return new DamageTypeImpl(messageId, scaling, exhaustion, effects, deathMessageType);
     }
 
     static @NotNull Builder builder() {
@@ -32,31 +43,27 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DAMAGE_TYPES,
-                (namespace, props) -> new DamageTypeImpl(Registry.damageType(namespace, props))
-        );
+        return DynamicRegistry.create(Key.key("minecraft:damage_type"), REGISTRY_CODEC, RegistryData.Resource.DAMAGE_TYPES);
     }
-
-    float exhaustion();
 
     @NotNull String messageId();
 
     @NotNull String scaling();
 
-    @Nullable Registry.DamageTypeEntry registry();
+    float exhaustion();
+
+    @Nullable String effects();
+
+    @Nullable String deathMessageType();
 
     final class Builder {
-        private float exhaustion = 0f;
         private String messageId;
         private String scaling;
+        private float exhaustion = 0f;
+        private String effects;
+        private String deathMessageType;
 
         private Builder() {
-        }
-
-        public @NotNull Builder exhaustion(float exhaustion) {
-            this.exhaustion = exhaustion;
-            return this;
         }
 
         public @NotNull Builder messageId(@NotNull String messageId) {
@@ -69,8 +76,23 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
             return this;
         }
 
+        public @NotNull Builder exhaustion(float exhaustion) {
+            this.exhaustion = exhaustion;
+            return this;
+        }
+
+        public @NotNull Builder effects(@Nullable String effects) {
+            this.effects = effects;
+            return this;
+        }
+
+        public @NotNull Builder deathMessageType(@Nullable String deathMessageType) {
+            this.deathMessageType = deathMessageType;
+            return this;
+        }
+
         public @NotNull DamageType build() {
-            return new DamageTypeImpl(exhaustion, messageId, scaling, null);
+            return new DamageTypeImpl(messageId, scaling, exhaustion, effects, deathMessageType);
         }
     }
 

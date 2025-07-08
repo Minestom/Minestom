@@ -17,7 +17,7 @@ public class MotionBlockingHeightmap extends Heightmap {
     }
 
     @Override
-    public String NBTName() {
-        return "MOTION_BLOCKING";
+    public @NotNull Type type() {
+        return Type.MOTION_BLOCKING;
     }
 }

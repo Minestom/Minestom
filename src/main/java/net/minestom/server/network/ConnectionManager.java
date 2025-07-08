@@ -49,16 +49,7 @@ public final class ConnectionManager {
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
     private static final Component SHUTDOWN_TEXT = Component.text("Server shutting down");
 
-    private CachedPacket defaultTags;
-
-    private CachedPacket getDefaultTags(Registries registries) {
-        var defaultTags = this.defaultTags;
-        if (defaultTags == null) {
-            final TagsPacket packet = MinecraftServer.getTagManager().packet(registries);
-            this.defaultTags = defaultTags = new CachedPacket(packet);
-        }
-        return defaultTags;
-    }
+    private final CachedPacket cachedTagsPacket = new CachedPacket(this::createTagsPacket);
 
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
@@ -187,6 +178,17 @@ public final class ConnectionManager {
         return player;
     }
 
+    public void sendRegistryTags(@NotNull Player player) {
+        player.sendPacket(cachedTagsPacket);
+    }
+
+    // This is a somewhat weird implementation where connectionmanager owns the caching of tags.
+    // There should be no registry->connectionmanager communication.
+    @ApiStatus.Internal
+    public void invalidateTags() {
+        this.cachedTagsPacket.invalidate();
+    }
+
     public GameProfile transitionLoginToConfig(@NotNull PlayerConnection connection, @NotNull GameProfile gameProfile) {
         assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
         // Compression
@@ -267,13 +269,19 @@ public final class ConnectionManager {
             player.sendPacket(registries.trimMaterial().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.trimPattern().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.bannerPattern().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.wolfVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.enchantment().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.paintingVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.jukeboxSong().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.instrument().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.wolfVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.wolfSoundVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.catVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.chickenVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.cowVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.frogVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.pigVariant().registryDataPacket(registries, excludeVanilla));
 
-            player.sendPacket(getDefaultTags(registries));
+            sendRegistryTags(player);
         }
 
         // Wait for pending resource packs if any
@@ -317,7 +325,7 @@ public final class ConnectionManager {
         for (final Player playPlayer : playPlayers)
             playPlayer.kick(SHUTDOWN_TEXT);
         this.playPlayers.clear();
-        
+
         this.keepAlivePlayers.clear();
         this.connectionPlayerMap.clear();
     }
@@ -373,5 +381,27 @@ public final class ConnectionManager {
                 player.kick(TIMEOUT_TEXT);
             }
         }
+    }
+
+    private @NotNull TagsPacket createTagsPacket() {
+        final List<TagsPacket.Registry> entries = new ArrayList<>();
+
+        // The following are the registries which contain tags used by the vanilla client.
+        // We don't care about registries unused by the client.
+        final Registries registries = MinecraftServer.process();
+        entries.add(registries.bannerPattern().tagRegistry());
+        entries.add(registries.biome().tagRegistry());
+        entries.add(registries.blocks().tagRegistry());
+        entries.add(registries.catVariant().tagRegistry());
+        entries.add(registries.damageType().tagRegistry());
+        entries.add(registries.enchantment().tagRegistry());
+        entries.add(registries.entityType().tagRegistry());
+        entries.add(registries.fluid().tagRegistry());
+        entries.add(registries.gameEvent().tagRegistry());
+        entries.add(registries.instrument().tagRegistry());
+        entries.add(registries.material().tagRegistry());
+        entries.add(registries.paintingVariant().tagRegistry());
+
+        return new TagsPacket(entries);
     }
 }

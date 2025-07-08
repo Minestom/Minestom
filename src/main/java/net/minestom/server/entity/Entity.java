@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -7,12 +8,15 @@ import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.*;
 import net.minestom.server.collision.*;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
+import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
@@ -34,6 +38,7 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
@@ -79,7 +84,7 @@ import java.util.function.UnaryOperator;
  * To create your own entity you probably want to extend {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
-        HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity> {
+        HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity>, DataComponent.Holder {
     // This is somewhat arbitrary, but we don't want to hit the max int ever because it is very easy to
     // overflow while working with a position at the max int (for example, looping over a bounding box)
     private static final int MAX_COORDINATE = 2_000_000_000;
@@ -89,12 +94,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     // Certain entities should only have their position packets sent during synchronization
     private static final Set<EntityType> SYNCHRONIZE_ONLY_ENTITIES = Set.of(EntityType.ITEM, EntityType.FALLING_BLOCK,
             EntityType.ARROW, EntityType.SPECTRAL_ARROW, EntityType.TRIDENT, EntityType.LLAMA_SPIT, EntityType.WIND_CHARGE,
-            EntityType.FISHING_BOBBER, EntityType.SNOWBALL, EntityType.EGG, EntityType.ENDER_PEARL, EntityType.POTION,
-            EntityType.EYE_OF_ENDER, EntityType.DRAGON_FIREBALL, EntityType.FIREBALL, EntityType.SMALL_FIREBALL,
-            EntityType.TNT);
+            EntityType.FISHING_BOBBER, EntityType.SNOWBALL, EntityType.EGG, EntityType.ENDER_PEARL, EntityType.SPLASH_POTION,
+            EntityType.LINGERING_POTION, EntityType.EYE_OF_ENDER, EntityType.DRAGON_FIREBALL, EntityType.FIREBALL,
+            EntityType.SMALL_FIREBALL, EntityType.TNT);
     private static final Set<EntityType> ALLOW_BLOCK_PLACEMENT_ENTITIES = Set.of(EntityType.ARROW, EntityType.ITEM,
-            EntityType.SNOWBALL, EntityType.EXPERIENCE_BOTTLE, EntityType.EXPERIENCE_ORB, EntityType.POTION,
-            EntityType.AREA_EFFECT_CLOUD);
+            EntityType.SNOWBALL, EntityType.EXPERIENCE_BOTTLE, EntityType.EXPERIENCE_ORB, EntityType.SPLASH_POTION,
+            EntityType.LINGERING_POTION, EntityType.AREA_EFFECT_CLOUD);
     private static final Set<EntityType> NO_ENTITY_COLLISION_ENTITIES = Set.of(EntityType.TEXT_DISPLAY, EntityType.ITEM_DISPLAY,
             EntityType.BLOCK_DISPLAY);
     private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
@@ -187,11 +192,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
+        final RegistryData.EntityEntry registry = entityType.registry();
         setBoundingBox(entityType.registry().boundingBox());
 
-        EntitySpawnType type = entityType.registry().spawnType();
-        this.aerodynamics = new Aerodynamics(entityType.registry().acceleration(),
-                type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
+        this.aerodynamics = new Aerodynamics(
+                registry.acceleration(),
+                registry.horizontalAirResistance(),
+                registry.verticalAirResistance());
 
         final ServerProcess process = MinecraftServer.process();
         if (process != null) {
@@ -277,6 +284,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return this.entityMeta;
     }
 
+    @SuppressWarnings("unchecked") @Override
+    public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.CUSTOM_DATA)
+            return (T) tagHandler.asCompound();
+        return EntityMeta.getComponent(getEntityMeta(), component);
+    }
+
+    public <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.CUSTOM_DATA)
+            tagHandler.updateContent((CompoundBinaryTag) value);
+        else EntityMeta.setComponent(getEntityMeta(), component, value);
+    }
+
     /**
      * Do a batch edit of this entity's metadata.
      */
@@ -346,7 +366,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             setPositionInternal(globalPosition);
             this.velocity = globalVelocity;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
+            if (this instanceof Player player)
+                player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
             else synchronizePosition();
         };
 
@@ -478,7 +499,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @ApiStatus.Internal
     public void updateNewViewer(@NotNull Player player) {
-        player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
+        player.sendPacket(getSpawnPacket());
         if (hasVelocity()) player.sendPacket(getVelocityPacket());
         player.sendPacket(this.getMetadataPacket());
         // Passengers
@@ -547,9 +568,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.entityType = entityType;
         this.metadata = new MetadataHolder(this);
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
-        EntitySpawnType type = entityType.registry().spawnType();
-        this.aerodynamics = aerodynamics.withAirResistance(type == EntitySpawnType.LIVING ||
-                type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
+
+        final RegistryData.EntityEntry registry = entityType.registry();
+        this.aerodynamics = aerodynamics.withAirResistance(
+                registry.horizontalAirResistance(),
+                registry.verticalAirResistance());
+
         updateCollisions();
         Set<Player> viewers = new HashSet<>(getViewers());
         getViewers().forEach(this::updateOldViewer);
@@ -1185,7 +1209,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
+     *
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
      */
+    @Deprecated
     public @Nullable Component getCustomName() {
         return this.entityMeta.getCustomName();
     }
@@ -1194,7 +1221,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Changes the entity custom name.
      *
      * @param customName the custom name of the entity, null to remove it
+     *
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
      */
+    @Deprecated
     public void setCustomName(@Nullable Component customName) {
         this.entityMeta.setCustomName(customName);
     }
@@ -1398,10 +1428,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param potion The potion to add
      */
     public void addEffect(@NotNull Potion potion) {
-        removeEffect(potion.effect());
-        this.effects.add(new TimedPotion(potion, getAliveTicks()));
-        potion.sendAddPacket(this);
-        EventDispatcher.call(new EntityPotionAddEvent(this, potion));
+        EventDispatcher.callCancellable(new EntityPotionAddEvent(this, potion), () -> {
+            removeEffect(potion.effect());
+            this.effects.add(new TimedPotion(potion, getAliveTicks()));
+            potion.sendAddPacket(this);
+        });
     }
 
     /**
@@ -1542,6 +1573,23 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     protected @NotNull Vec getVelocityForPacket() {
         return this.velocity.mul(8000f / ServerFlag.SERVER_TICKS_PER_SECOND);
+    }
+
+    protected @NotNull SpawnEntityPacket getSpawnPacket() {
+        int data = 0;
+        short velocityX = 0, velocityZ = 0, velocityY = 0;
+        if (getEntityMeta() instanceof ObjectDataProvider objectDataProvider) {
+            data = objectDataProvider.getObjectData();
+            if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
+                final var velocity = getVelocityForPacket();
+                velocityX = (short) velocity.x();
+                velocityY = (short) velocity.y();
+                velocityZ = (short) velocity.z();
+            }
+        }
+        final Pos position = getPosition();
+        return new SpawnEntityPacket(getEntityId(), getUuid(), getEntityType().id(),
+                position, position.yaw(), data, velocityX, velocityY, velocityZ);
     }
 
     protected @NotNull EntityVelocityPacket getVelocityPacket() {

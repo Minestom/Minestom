@@ -2,15 +2,18 @@ package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
+import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -23,6 +26,11 @@ import java.util.function.IntFunction;
  */
 record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implements DataComponentMap {
     private static final char REMOVAL_PREFIX = '!';
+
+    @Override
+    public boolean isEmpty() {
+        return components.isEmpty();
+    }
 
     @Override
     public boolean has(@NotNull DataComponent<?> component) {
@@ -66,6 +74,15 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         Int2ObjectMap<Object> newComponents = new Int2ObjectArrayMap<>(components);
         newComponents.put(component.id(), null);
         return new DataComponentMapImpl(newComponents);
+    }
+
+    @Override
+    public @NotNull Collection<DataComponent.Value> entrySet() {
+        if (components.isEmpty()) return List.of();
+        final List<DataComponent.Value> entries = new ArrayList<>(components.size());
+        for (var entry : components.int2ObjectEntrySet())
+            entries.add(new DataComponent.Value(DataComponent.fromId(entry.getIntKey()), entry.getValue()));
+        return entries;
     }
 
     @Override
@@ -134,7 +151,10 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         }
     }
 
-    record PatchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType) implements NetworkBuffer.Type<DataComponentMap> {
+    record NetworkTypeImpl(
+            @NotNull IntFunction<DataComponent<?>> idToType,
+            boolean isPatch, boolean isTrusted
+    ) implements NetworkBuffer.Type<DataComponentMap> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, DataComponentMap value) {
             final DataComponentMapImpl patch = (DataComponentMapImpl) value;
@@ -144,18 +164,28 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
             }
 
             buffer.write(NetworkBuffer.VAR_INT, added);
-            buffer.write(NetworkBuffer.VAR_INT, patch.components.size() - added);
-            for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
-                if (entry.getValue() != null) {
-                    buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
-                    //noinspection unchecked
-                    DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
-                    assert type != null;
-                    type.write(buffer, entry.getValue());
-                }
+            if (isPatch) {
+                buffer.write(NetworkBuffer.VAR_INT, patch.components.size() - added);
             }
             for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
-                if (entry.getValue() == null) {
+                if (entry.getValue() == null) continue;
+
+                buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
+                //noinspection unchecked
+                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
+                assert type != null;
+                if (isTrusted) {
+                    type.write(buffer, entry.getValue());
+                } else {
+                    // Need to length prefix it, so write to another buffer first then copy.
+                    final byte[] componentData = NetworkBuffer.makeArray(b -> type.write(b, entry.getValue()), buffer.registries());
+                    buffer.write(NetworkBuffer.BYTE_ARRAY, componentData);
+                }
+            }
+            if (isPatch) {
+                for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
+                    if (entry.getValue() != null) continue;
+
                     buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
                 }
             }
@@ -164,15 +194,21 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         @Override
         public DataComponentMap read(@NotNull NetworkBuffer buffer) {
             int added = buffer.read(NetworkBuffer.VAR_INT);
-            int removed = buffer.read(NetworkBuffer.VAR_INT);
-            Check.stateCondition(added + removed > 256, "Item component patch too large: {0}", added + removed);
+            int removed = isPatch ? buffer.read(NetworkBuffer.VAR_INT) : 0;
+            Check.stateCondition(added + removed > 256, "Data component map too large: {0}", added + removed);
             Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(added + removed);
             for (int i = 0; i < added; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
                 //noinspection unchecked
                 DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(id);
                 Check.notNull(type, "Unknown component: {0}", id);
-                patch.put(type.id(), type.read(buffer));
+                if (isTrusted) {
+                    patch.put(type.id(), type.read(buffer));
+                } else {
+                    final byte[] array = buffer.read(NetworkBuffer.BYTE_ARRAY);
+                    final NetworkBuffer tempBuffer = NetworkBuffer.wrap(array, 0, array.length, buffer.registries());
+                    patch.put(type.id(), type.read(tempBuffer));
+                }
             }
             for (int i = 0; i < removed; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
@@ -181,55 +217,68 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
             return new DataComponentMapImpl(patch);
         }
     }
-    record NbtType(
+
+    record CodecImpl(
             @NotNull IntFunction<DataComponent<?>> idToType,
             @NotNull Function<String, DataComponent<?>> nameToType,
             boolean isPatch
-    ) implements BinaryTagSerializer<DataComponentMap> {
-
+    ) implements Codec<DataComponentMap> {
         @Override
-        public @NotNull BinaryTag write(@NotNull Context context, @NotNull DataComponentMap value) {
-            final DataComponentMapImpl patch = (DataComponentMapImpl) value;
-            if (patch.components.isEmpty()) return CompoundBinaryTag.empty();
-            CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
-            for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
-                //noinspection unchecked
-                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
-                Check.notNull(type, "Unknown item component id: {0}", entry.getIntKey());
-                if (entry.getValue() == null) {
-                    if (isPatch) builder.put(REMOVAL_PREFIX + type.name(), CompoundBinaryTag.empty());
-                    // Removing a component in an absolute (non-patch) builder is a noop because it is not yet present.
-                } else {
-                    builder.put(type.name(), type.write(context, entry.getValue()));
-                }
-            }
-            return builder.build();
-        }
+        public @NotNull <D> Result<DataComponentMap> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<MapLike<D>> mapResult = coder.getMap(value);
+            if (!(mapResult instanceof Result.Ok(var map)))
+                return mapResult.cast();
+            if (map.isEmpty()) return new Result.Ok<>(EMPTY);
 
-        @Override
-        public @NotNull DataComponentMap read(@NotNull Context context, @NotNull BinaryTag anyTag) {
-            if (!(anyTag instanceof CompoundBinaryTag tag))
-                throw new IllegalArgumentException("Component patch must be a compound tag, was: " + anyTag.type());
-            if (tag.size() == 0) return EMPTY;
-            Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(tag.size());
-            for (Map.Entry<String, ? extends BinaryTag> entry : tag) {
-                String key = entry.getKey();
+            final Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(map.size());
+            for (String key : map.keys()) {
                 boolean remove = false;
                 if (!key.isEmpty() && key.charAt(0) == REMOVAL_PREFIX) {
                     key = key.substring(1);
                     remove = true;
                 }
-                DataComponent<?> type = this.nameToType.apply(key);
-                Check.notNull(type, "Unknown item component: {0}", key);
+                final DataComponent<?> type = this.nameToType.apply(key);
+                if (type == null) return new Result.Error<>("unknown data component: " + key);
+
                 if (remove) {
                     if (isPatch) patch.put(type.id(), null);
                     // Removing a component in an absolute (non-patch) builder is a noop because it is not yet present.
                 } else {
-                    Object value = type.read(context, entry.getValue());
-                    patch.put(type.id(), value);
+                    switch (map.getValue(key).map(v -> type.decode(coder, v))) {
+                        case Result.Ok(Object componentData) -> patch.put(type.id(), componentData);
+                        case Result.Error<?>(String message) -> {
+                            return new Result.Error<>(type.name() + ": " + message);
+                        }
+                    }
                 }
             }
-            return new DataComponentMapImpl(patch);
+
+            return new Result.Ok<>(new DataComponentMapImpl(patch));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable DataComponentMap value) {
+            final DataComponentMapImpl patch = (DataComponentMapImpl) value;
+
+            final Transcoder.MapBuilder<D> map = coder.createMap();
+            for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
+                //noinspection unchecked
+                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
+                if (type == null) return new Result.Error<>("unknown data component id: " + entry.getIntKey());
+                if (entry.getValue() == null) {
+                    if (isPatch) map.put(REMOVAL_PREFIX + type.name(), coder.createMap().build());
+                    // Removing a component in an absolute (non-patch) builder is a noop because it is not yet present.
+                } else {
+                    switch (type.encode(coder, entry.getValue())) {
+                        case Result.Ok(D componentValue) -> map.put(type.name(), componentValue);
+                        case Result.Error<?>(String message) -> {
+                            return new Result.Error<>(type.name() + ": " + message);
+                        }
+                    }
+                }
+            }
+
+            return new Result.Ok<>(map.build());
         }
     }
 

@@ -1,10 +1,14 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -28,14 +32,23 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
         trades = List.copyOf(trades);
     }
 
-    public record Trade(ItemStack inputItem1, ItemStack result,
-                        ItemStack inputItem2, boolean tradeDisabled,
-                        int tradeUsesNumber, int maxTradeUsesNumber, int exp,
-                        int specialPrice, float priceMultiplier, int demand) {
+    public record Trade(
+            @NotNull ItemCost inputItem1,
+            @NotNull ItemStack result,
+            @Nullable ItemCost inputItem2,
+            boolean tradeDisabled,
+            int tradeUsesNumber,
+            int maxTradeUsesNumber,
+            int exp,
+            int specialPrice,
+            float priceMultiplier,
+            int demand
+    ) {
+
         public static final NetworkBuffer.Type<Trade> SERIALIZER = NetworkBufferTemplate.template(
-                ItemStack.NETWORK_TYPE, Trade::inputItem1,
+                ItemCost.NETWORK_TYPE, Trade::inputItem1,
                 ItemStack.NETWORK_TYPE, Trade::result,
-                ItemStack.NETWORK_TYPE.optional(), Trade::inputItem2,
+                ItemCost.NETWORK_TYPE.optional(), Trade::inputItem2,
                 BOOLEAN, Trade::tradeDisabled,
                 INT, Trade::tradeUsesNumber,
                 INT, Trade::maxTradeUsesNumber,
@@ -44,5 +57,43 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
                 FLOAT, Trade::priceMultiplier,
                 INT, Trade::demand,
                 Trade::new);
+
+        public Trade(
+                @NotNull ItemStack inputItem1,
+                @NotNull ItemStack result,
+                @Nullable ItemStack inputItem2,
+                boolean tradeDisabled,
+                int tradeUsesNumber,
+                int maxTradeUsesNumber,
+                int exp,
+                int specialPrice,
+                float priceMultiplier,
+                int demand
+        ) {
+            this(
+                    new ItemCost(inputItem1),
+                    result,
+                    inputItem2 == null ? null : new ItemCost(inputItem2),
+                    tradeDisabled,
+                    tradeUsesNumber,
+                    maxTradeUsesNumber,
+                    exp,
+                    specialPrice,
+                    priceMultiplier,
+                    demand
+            );
+        }
+    }
+
+    public record ItemCost(@NotNull Material material, int amount, @NotNull DataComponentMap components) {
+        private static final NetworkBuffer.Type<ItemCost> NETWORK_TYPE = NetworkBufferTemplate.template(
+                Material.NETWORK_TYPE, ItemCost::material,
+                VAR_INT, ItemCost::amount,
+                DataComponent.MAP_NETWORK_TYPE, ItemCost::components,
+                ItemCost::new);
+
+        public ItemCost(@NotNull ItemStack itemStack) {
+            this(itemStack.material(), itemStack.amount(), itemStack.componentPatch());
+        }
     }
 }

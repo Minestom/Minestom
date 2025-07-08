@@ -3,8 +3,8 @@ metadata.format.version = "1.1"
 [versions]
 
 # Important dependencies
-data = "1.21.4-rv2"
-adventure = "4.18.0"
+data = "1.21.5-rv2"
+adventure = "4.23.0"
 jetbrainsAnnotations = "26.0.1"
 slf4j = "2.0.16"
 
@@ -28,8 +28,9 @@ logback = "1.5.16"
 
 # Gradle plugins
 blossom = "2.1.0"
-shadow = "8.3.5"
-nexuspublish = "2.0.0"
+nmcp = "1.0.0-rc.1"
+jmh-plugin = "0.7.2"
+jcstress-plugin = "0.8.15"
 
 [libraries]
 
@@ -45,7 +46,7 @@ adventure-text-logger-slf4j = { group = "net.kyori", name = "adventure-text-logg
 # Miscellaneous
 minestomData = { group = "net.minestom", name = "data", version.ref = "data" }
 jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrainsAnnotations" }
-slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j"}
+slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
 # Performance / Data Structures
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
@@ -79,7 +80,8 @@ junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-
 logback = ["logback-core", "logback-classic"]
 
 [plugins]
-
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
-shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
-nexuspublish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexuspublish" }
+jmh-plugin = { id = "me.champeau.jmh", version.ref = "jmh-plugin" }
+jcstress-plugin = { id = "io.github.reyerizo.gradle.jcstress", version.ref = "jcstress-plugin" }
+nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
+nmcp-aggregation = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }
