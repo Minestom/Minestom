@@ -78,8 +78,8 @@ can update without you changing anything in your build file (and possibly be inc
 has cached an older version, by default for 24h).
 
 To pin the snapshot version to a specific release you can reference the exact build. There are two places to find this:
-* The maven-metadata.xml, check the `value` under the `jar` `snapshotVersion`. For example, the 1.21.6 branch is 
-  currently published as `1_21_6-SNAPSHOT` and `1_21_6-20250707.001347-1`.
+* The maven-metadata.xml, combine the parts of `snapshot.timestamp` and `snapshot.buildNumber`. For example, the 1.21.6
+  branch is currently published as `1_21_6-SNAPSHOT` and `1_21_6-20250707.141325-4`.
 * In the "External Libraries" section of IntelliJ, if you expand the `-SNAPSHOT` jar it will show the pinnable 
   version which you can use.
 
