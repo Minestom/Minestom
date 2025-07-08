@@ -107,6 +107,12 @@ public sealed interface Palette permits PaletteImpl {
      */
     int count(int value);
 
+    /**
+     * Checks if the palette contains the given value.
+     *
+     * @param value the value to check
+     * @return true if the palette contains the value, false otherwise
+     */
     boolean any(int value);
 
     /**
