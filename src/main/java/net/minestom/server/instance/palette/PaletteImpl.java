@@ -353,6 +353,24 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public int count(int value) {
+        if (bitsPerEntry == 0) {
+            return count == value ? maxSize() : 0;
+        }
+        if (value == 0) return maxSize() - count();
+        AtomicInteger count = new AtomicInteger();
+        getAllPresent((x, y, z, v) -> {
+            if (v == value) count.getAndIncrement();
+        });
+        return count.get();
+    }
+
+    @Override
+    public boolean any(int value) {
+        return count(value) > 0;
+    }
+
+    @Override
     public int bitsPerEntry() {
         return bitsPerEntry;
     }
