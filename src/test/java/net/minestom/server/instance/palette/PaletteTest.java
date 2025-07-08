@@ -327,6 +327,10 @@ public class PaletteTest {
             palette.set(0, 0, 1, 1);
             assertTrue(palette.any(1));
             assertTrue(palette.any(0));
+            palette.set(0, 0, 1, 0);
+            assertFalse(palette.any(1));
+            assertTrue(palette.any(0));
+            palette.set(0, 0, 1, 1);
             palette.replace(0, 2);
             assertTrue(palette.any(1));
             assertFalse(palette.any(0));

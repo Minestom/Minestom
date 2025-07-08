@@ -354,20 +354,53 @@ final class PaletteImpl implements Palette {
 
     @Override
     public int count(int value) {
-        if (bitsPerEntry == 0) {
-            return count == value ? maxSize() : 0;
-        }
+        if (bitsPerEntry == 0) return count == value ? maxSize() : 0;
         if (value == 0) return maxSize() - count();
-        AtomicInteger count = new AtomicInteger();
-        getAllPresent((x, y, z, v) -> {
-            if (v == value) count.getAndIncrement();
-        });
-        return count.get();
+        int queryValue = value;
+        if (hasPalette()) {
+            queryValue = valueToPaletteMap.getOrDefault(value, -1);
+            if (queryValue == -1) return 0;
+        }
+        // Scan through the values
+        int result = 0;
+        final int size = maxSize();
+        final int bits = bitsPerEntry;
+        final int valuesPerLong = 64 / bits;
+        final int mask = (1 << bits) - 1;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                if (((int) (block & mask)) == queryValue) result++;
+                block >>>= bits;
+            }
+        }
+        return result;
     }
 
     @Override
     public boolean any(int value) {
-        return count(value) > 0;
+        if (bitsPerEntry == 0) return count == value;
+        if (value == 0) return maxSize() != count();
+        int queryValue = value;
+        if (hasPalette()) {
+            queryValue = valueToPaletteMap.getOrDefault(value, -1);
+            if (queryValue == -1) return false;
+        }
+        // Scan through the values
+        final int size = maxSize();
+        final int bits = bitsPerEntry;
+        final int valuesPerLong = 64 / bits;
+        final int mask = (1 << bits) - 1;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                if (((int) (block & mask)) == queryValue) return true;
+                block >>>= bits;
+            }
+        }
+        return false;
     }
 
     @Override
