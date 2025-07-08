@@ -1885,6 +1885,8 @@ public interface SoundEventKeys {
 
     RegistryKey<SoundEvent> MUSIC_DISC_FAR = RegistryKey.unsafeOf("music_disc.far");
 
+    RegistryKey<SoundEvent> MUSIC_DISC_LAVA_CHICKEN = RegistryKey.unsafeOf("music_disc.lava_chicken");
+
     RegistryKey<SoundEvent> MUSIC_DISC_MALL = RegistryKey.unsafeOf("music_disc.mall");
 
     RegistryKey<SoundEvent> MUSIC_DISC_MELLOHI = RegistryKey.unsafeOf("music_disc.mellohi");

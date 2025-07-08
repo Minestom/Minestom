@@ -2519,6 +2519,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> MUSIC_DISC_FAR = RegistryKey.unsafeOf("music_disc_far");
 
+    RegistryKey<Material> MUSIC_DISC_LAVA_CHICKEN = RegistryKey.unsafeOf("music_disc_lava_chicken");
+
     RegistryKey<Material> MUSIC_DISC_MALL = RegistryKey.unsafeOf("music_disc_mall");
 
     RegistryKey<Material> MUSIC_DISC_MELLOHI = RegistryKey.unsafeOf("music_disc_mellohi");

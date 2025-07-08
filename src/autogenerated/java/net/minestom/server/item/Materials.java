@@ -2517,6 +2517,8 @@ interface Materials {
 
     Material MUSIC_DISC_FAR = MaterialImpl.get(MaterialKeys.MUSIC_DISC_FAR);
 
+    Material MUSIC_DISC_LAVA_CHICKEN = MaterialImpl.get(MaterialKeys.MUSIC_DISC_LAVA_CHICKEN);
+
     Material MUSIC_DISC_MALL = MaterialImpl.get(MaterialKeys.MUSIC_DISC_MALL);
 
     Material MUSIC_DISC_MELLOHI = MaterialImpl.get(MaterialKeys.MUSIC_DISC_MELLOHI);
