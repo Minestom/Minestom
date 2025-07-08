@@ -120,7 +120,24 @@ final class PaletteImpl implements Palette {
         if (bitsPerEntry == 0) {
             if (oldValue == count) fill(newValue);
         } else {
-            replaceAll((x, y, z, value) -> value == oldValue ? newValue : value);
+            if (hasPalette()) {
+                final int index = valueToPaletteMap.get(oldValue);
+                if (index == -1) return; // Old value not present in palette
+                final boolean countUpdate = newValue == 0 || oldValue == 0;
+                final int count = countUpdate ? count(oldValue) : -1;
+                if (count == 0) return; // No blocks to replace
+                paletteToValueList.set(index, newValue);
+                valueToPaletteMap.remove(oldValue);
+                valueToPaletteMap.put(newValue, index);
+                // Update count
+                if (newValue == 0) {
+                    this.count -= count; // Replacing with air
+                } else if (oldValue == 0) {
+                    this.count += count; // Replacing air with a block
+                }
+            } else {
+                replaceAll((x, y, z, value) -> value == oldValue ? newValue : value);
+            }
         }
     }
 
@@ -381,7 +398,7 @@ final class PaletteImpl implements Palette {
     @Override
     public boolean any(int value) {
         if (bitsPerEntry == 0) return count == value;
-        if (value == 0) return maxSize() != count();
+        if (value == 0) return maxSize() != count;
         int queryValue = value;
         if (hasPalette()) {
             queryValue = valueToPaletteMap.getOrDefault(value, -1);
