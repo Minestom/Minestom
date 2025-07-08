@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
@@ -46,4 +47,7 @@ public sealed interface VillagerProfession extends StaticProtocolObject<Villager
         return VillagerProfessionImpl.REGISTRY.get(id);
     }
 
+    static @NotNull Registry<VillagerProfession> staticRegistry() {
+        return VillagerProfessionImpl.REGISTRY;
+    }
 }
