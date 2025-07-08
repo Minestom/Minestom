@@ -513,7 +513,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         void callListener(@NotNull EventListener<E> listener, E event) {
             var node = (EventNodeImpl<E>) EventNodeImpl.this;
-            EventListener.Result result = listener.run(event);
+            EventListener.Result result = listener.apply(event);
             if (result == EventListener.Result.EXPIRED) {
                 node.removeListener(listener);
                 invalidate();

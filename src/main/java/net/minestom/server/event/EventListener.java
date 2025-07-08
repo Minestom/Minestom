@@ -1,6 +1,7 @@
 package net.minestom.server.event;
 
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.RecursiveEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -17,11 +19,9 @@ import java.util.function.Predicate;
  *
  * @param <T> The event type being handled.
  */
-public interface EventListener<T extends Event> {
+public interface EventListener<T extends Event> extends Function<T, EventListener.Result> {
 
     @NotNull Class<T> eventType();
-
-    @NotNull Result run(@NotNull T event);
 
     @Contract(pure = true)
     static <T extends Event> EventListener.@NotNull Builder<T> builder(@NotNull Class<T> eventType) {
@@ -39,10 +39,33 @@ public interface EventListener<T extends Event> {
      */
     @Contract(pure = true)
     static <T extends Event> @NotNull EventListener<T> of(@NotNull Class<T> eventType, @NotNull Consumer<@NotNull T> listener) {
-        return builder(eventType).handler(listener).build();
+        if (CancellableEvent.class.isAssignableFrom(eventType) || RecursiveEvent.class.isAssignableFrom(eventType)) {
+            return new Builder.ListenerImpl<>(eventType, event -> {
+                if (event instanceof CancellableEvent cancellableEvent && cancellableEvent.isCancelled()) {
+                    return Result.INVALID;
+                }
+                listener.accept(event);
+                return Result.SUCCESS;
+            });
+        } else {
+            return new Builder.ListenerImpl<>(eventType, event -> {
+                listener.accept(event);
+                return Result.SUCCESS;
+            });
+        }
     }
 
     class Builder<T extends Event> {
+        private record ListenerImpl<T extends Event>(
+                @NotNull Class<T> eventType,
+                @NotNull Function<T, EventListener.Result> function
+        ) implements EventListener<T> {
+            @Override
+            public Result apply(T t) {
+                return function.apply(t);
+            }
+        }
+
         private final Class<T> eventType;
         private final List<Predicate<T>> filters = new ArrayList<>();
         private boolean ignoreCancelled = true;
@@ -120,43 +143,35 @@ public interface EventListener<T extends Event> {
 
             final var filters = new ArrayList<>(this.filters);
             final var handler = this.handler;
-            return new EventListener<>() {
-                @Override
-                public @NotNull Class<T> eventType() {
-                    return eventType;
+            return new ListenerImpl<>(eventType, event -> {
+                // Event cancellation
+                if (ignoreCancelled && event instanceof CancellableEvent cancellableEvent &&
+                        cancellableEvent.isCancelled()) {
+                    return Result.INVALID;
                 }
-
-                @Override
-                public @NotNull Result run(@NotNull T event) {
-                    // Event cancellation
-                    if (ignoreCancelled && event instanceof CancellableEvent &&
-                            ((CancellableEvent) event).isCancelled()) {
-                        return Result.INVALID;
-                    }
-                    // Expiration predicate
-                    if (expireWhen != null && expireWhen.test(event)) {
-                        return Result.EXPIRED;
-                    }
-                    // Filtering
-                    if (!filters.isEmpty()) {
-                        for (var filter : filters) {
-                            if (!filter.test(event)) {
-                                // Cancelled
-                                return Result.INVALID;
-                            }
+                // Expiration predicate
+                if (expireWhen != null && expireWhen.test(event)) {
+                    return Result.EXPIRED;
+                }
+                // Filtering
+                if (!filters.isEmpty()) {
+                    for (var filter : filters) {
+                        if (!filter.test(event)) {
+                            // Cancelled
+                            return Result.INVALID;
                         }
                     }
-                    // Handler
-                    if (handler != null) {
-                        handler.accept(event);
-                    }
-                    // Expiration count
-                    if (hasExpirationCount && expirationCount.decrementAndGet() == 0) {
-                        return Result.EXPIRED;
-                    }
-                    return Result.SUCCESS;
                 }
-            };
+                // Handler
+                if (handler != null) {
+                    handler.accept(event);
+                }
+                // Expiration count
+                if (hasExpirationCount && expirationCount.decrementAndGet() == 0) {
+                    return Result.EXPIRED;
+                }
+                return Result.SUCCESS;
+            });
         }
     }
 
