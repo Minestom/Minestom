@@ -100,6 +100,22 @@ public sealed interface Palette permits PaletteImpl {
     int count();
 
     /**
+     * Returns the number of entries in this palette that match the given value.
+     *
+     * @param value the value to count
+     * @return the number of entries matching the value
+     */
+    int count(int value);
+
+    /**
+     * Checks if the palette contains the given value.
+     *
+     * @param value the value to check
+     * @return true if the palette contains the value, false otherwise
+     */
+    boolean any(int value);
+
+    /**
      * Returns the number of bits used per entry.
      */
     int bitsPerEntry();
