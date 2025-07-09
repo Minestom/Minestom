@@ -26,6 +26,14 @@ public sealed interface TagKey<T> extends Keyed permits TagKeyImpl {
         return new TagKeyImpl<>(Key.key(hashedKey.substring(1)));
     }
 
+    /**
+     * Creates a new {@link TagKey} from the given raw string. Should not be used externally.
+     * Use {@link TagKey#ofHash(String)} instead.
+     *
+     * @param key the key to create the TagKey from
+     * @return a new TagKey instance
+     * @param <T> the type of the registry entry
+     */
     @ApiStatus.Internal
     static <T> @NotNull TagKey<T> unsafeOf(@NotNull Key key) {
         return new TagKeyImpl<>(key);
