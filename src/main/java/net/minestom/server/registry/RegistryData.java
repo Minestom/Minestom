@@ -146,9 +146,13 @@ public final class RegistryData {
      * <p>The data file should be at <code>/{registryKey.path()}.json</code></p>.
      *
      * <p>Tags will be loaded from <code>/tags/{registryKey.path()}.json</code></p>
+     *
+     * @throws IllegalStateException when MinecraftServer isn't initializing.
      */
     @ApiStatus.Internal
     public static <T extends StaticProtocolObject<T>> @NotNull Registry<T> createStaticRegistry(@NotNull RegistryKey<Registry<T>> registryKey, @NotNull Loader<T> loader) {
+        Check.stateCondition(!MinecraftServer.isInitializing(),
+                "Static registry `{0}` cannot be created before its unsealed. Did you forget to do MinecraftServer#init before using?", registryKey.name());
         // Create the registry (data)
         var entries = RegistryData.load(String.format("%s.json", registryKey.key().value()), true);
         Map<Key, T> namespaces = new HashMap<>(entries.size());

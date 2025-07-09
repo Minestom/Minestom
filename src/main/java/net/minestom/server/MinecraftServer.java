@@ -70,6 +70,7 @@ public final class MinecraftServer implements MinecraftConstants {
 
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
+    private static volatile boolean unsealed = false; // This could be moved into ServerProcess as a sentinel. Requires casting.
     private static volatile DetourRegistry detourRegistry;
 
     private static int compressionThreshold = 256;
@@ -83,6 +84,7 @@ public final class MinecraftServer implements MinecraftConstants {
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
+        unsealed = true;
         serverProcess = null;
         ServerProcess process = new ServerProcessImpl();
         serverProcess = process;
@@ -371,7 +373,19 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     @ApiStatus.Internal
     public static boolean isInitializing() {
-        return serverProcess == null;
+        return serverProcess == null && isUnsealed();
+    }
+
+    /**
+     * Checks if the server is unsealed, meaning that it is allowed to start class loading.
+     * <p>
+     *     This is true after {@link #init()} has been called, and false before that.
+     *     This is used to unseal static variables that are not allowed to be initialized before the server is unsealed.
+     * </p>
+     * @return true if the server is unsealed, false otherwise.
+     */
+    public static boolean isUnsealed() {
+        return unsealed;
     }
 
     private static boolean hasStartedSafe() {
