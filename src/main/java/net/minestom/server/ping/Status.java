@@ -81,7 +81,7 @@ public record Status(
                 PlayerInfo::new);
 
         public PlayerInfo {
-            sample = Collections.unmodifiableList(sample);
+            sample = List.copyOf(sample);
         }
 
         public static PlayerInfo online() {
