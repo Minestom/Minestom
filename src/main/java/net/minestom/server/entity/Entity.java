@@ -489,7 +489,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public final boolean addViewer(@NotNull Player player) {
         Check.stateCondition(!isActive(), "Entities must be in an instance before adding viewers");
         if (!viewEngine.manualAdd(player)) return false;
-        updateNewViewer(player);
+        this.viewEngine.viewableOption.addition.accept(player);
         return true;
     }
 
@@ -514,11 +514,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // Passengers
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
-            for (Entity passenger : passengers) {
-                if (passenger != player && passenger.viewEngine.viewableOption.predicate(player)) {
-                    passenger.updateNewViewer(player);
-                }
-            }
+            passengers.forEach(passenger -> passenger.viewEngine.propagateView(player));
             player.sendPacket(getPassengersPacket());
         }
         // Leashes
@@ -999,13 +995,28 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Instance currentInstance = this.instance;
         Check.stateCondition(currentInstance == null, "You need to set an instance using Entity#setInstance");
         Check.stateCondition(entity == getVehicle(), "Cannot add the entity vehicle as a passenger");
+
+        if (entity instanceof Player passengerPlayer && this.isViewer(passengerPlayer)) {
+            this.viewEngine.viewableOption.removal.accept(passengerPlayer);
+        }
+
         final Entity vehicle = entity.getVehicle();
         if (vehicle != null) vehicle.removePassenger(entity);
         if (!currentInstance.equals(entity.getInstance()))
             entity.setInstance(currentInstance, position).join();
+
+        if (!(entity instanceof Player)) {
+            currentInstance.getEntityTracker().unregister(entity, entity.trackingTarget, null);
+        }
+
         this.passengers.add(entity);
         entity.vehicle = this;
-        sendPacketToViewersAndSelf(getPassengersPacket());
+
+        final SetPassengersPacket packet = getPassengersPacket();
+        sendPacketToViewersAndSelf(packet);
+        if (entity instanceof Player passengerPlayer) {
+            passengerPlayer.sendPacket(packet);
+        }
         // Updates the position of the new passenger, and then teleports the passenger
         updatePassengerPosition(position, entity);
         entity.synchronizePosition();
@@ -1021,6 +1032,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void removePassenger(@NotNull Entity entity) {
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
         if (!passengers.remove(entity)) return;
+        if (!(entity instanceof Player)) {
+            this.instance.getEntityTracker().register(entity, entity.getPosition(), entity.trackingTarget, entity.trackingUpdate);
+        }
         entity.vehicle = null;
         sendPacketToViewersAndSelf(getPassengersPacket());
         entity.synchronizePosition();
@@ -1358,7 +1372,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 newPosition.z());
         passenger.setPositionInternal(newPassengerPos);
         passenger.previousPosition = oldPassengerPos;
-        passenger.refreshCoordinate(newPassengerPos);
+        if (passenger.getInstance() != null && !oldPassengerPos.sameChunk(newPassengerPos)) {
+            final Chunk newChunk = passenger.getInstance().getChunk(newPassengerPos.chunkX(), newPassengerPos.chunkZ());
+            if (newChunk != null) {
+                passenger.refreshCurrentChunk(newChunk);
+            }
+        }
+        if (passenger instanceof Player) {
+            passenger.refreshCoordinate(newPassengerPos);
+        }
     }
 
     /**
