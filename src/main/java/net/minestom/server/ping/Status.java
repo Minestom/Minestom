@@ -42,8 +42,18 @@ public record Status(
             "enforcesSecureChat", Codec.BOOLEAN.optional(false), Status::enforcesSecureChat,
             Status::new);
 
+    public Status {
+        if (favicon != null) {
+            favicon = favicon.clone();
+        }
+    }
+
     public static Builder builder() {
         return new Builder();
+    }
+
+    public static Builder builder(Status status) {
+        return new Builder(status);
     }
 
     public record VersionInfo(@NotNull String name, int protocolVersion) {
@@ -70,6 +80,10 @@ public record Status(
                 "sample", SAMPLE_CODEC.list(), PlayerInfo::sample,
                 PlayerInfo::new);
 
+        public PlayerInfo {
+            sample = Collections.unmodifiableList(sample);
+        }
+
         public static PlayerInfo online() {
             Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
             return new PlayerInfo(players.size(), players.size() + 1, players.stream()
@@ -81,13 +95,23 @@ public record Status(
             return new Builder();
         }
 
+        public static Builder builder(PlayerInfo playerInfo) {
+            return new Builder(playerInfo);
+        }
+
         public static final class Builder {
             private int onlinePlayers;
             private int maxPlayers;
             private List<@NotNull NamedAndIdentified> sample;
 
-            Builder() {
+            private Builder() {
                 this.sample = new ArrayList<>();
+            }
+
+            private Builder(PlayerInfo playerInfo) {
+                this.onlinePlayers = playerInfo.onlinePlayers;
+                this.maxPlayers = playerInfo.maxPlayers;
+                this.sample = new ArrayList<>(playerInfo.sample);
             }
 
             @Contract(value = "_ -> this")
@@ -99,6 +123,12 @@ public record Status(
             @Contract(value = "_ -> this")
             public Builder maxPlayers(int maxPlayers) {
                 this.maxPlayers = maxPlayers;
+                return this;
+            }
+
+            @Contract(value = "_ -> this")
+            public Builder sample(List<@NotNull NamedAndIdentified> sample) {
+                this.sample = sample;
                 return this;
             }
 
@@ -142,6 +172,14 @@ public record Status(
             this.description = DEFAULT_DESCRIPTION;
             this.versionInfo = VersionInfo.DEFAULT;
             this.playerInfo = PlayerInfo.online();
+        }
+
+        private Builder(Status status) {
+            this.description = status.description;
+            this.favicon = status.favicon;
+            this.versionInfo = status.versionInfo;
+            this.playerInfo = status.playerInfo;
+            this.enforcesSecureChat = status.enforcesSecureChat;
         }
 
         @Contract(value = "_ -> this")

@@ -113,9 +113,7 @@ public class Main {
 
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
             int onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
-            Status.PlayerInfo.Builder builder = Status.PlayerInfo.builder()
-                    .onlinePlayers(onlinePlayers)
-                    .maxPlayers(onlinePlayers + 1)
+            Status.PlayerInfo.Builder builder = Status.PlayerInfo.builder(Status.PlayerInfo.online())
                     .sample("The first line is separated from the others")
                     .sample("Could be a name, or a message");
 
