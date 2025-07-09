@@ -21,13 +21,11 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.ping.ResponseData;
+import net.minestom.server.ping.Status;
 import net.minestom.server.recipe.RecipeBookCategory;
-import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
-import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
@@ -102,37 +100,43 @@ public class Main {
         }
 
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
-            ResponseData responseData = event.getResponseData();
-            responseData.addEntry(NamedAndIdentified.named("The first line is separated from the others"));
-            responseData.addEntry(NamedAndIdentified.named("Could be a name, or a message"));
+            int onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
+            Status.PlayerInfo.Builder builder = Status.PlayerInfo.builder()
+                    .onlinePlayers(onlinePlayers)
+                    .maxPlayers(onlinePlayers + 1)
+                    .sample("The first line is separated from the others")
+                    .sample("Could be a name, or a message");
 
             // on modern versions, you can obtain the player connection directly from the event
             if (event.getConnection() != null) {
-                responseData.addEntry(NamedAndIdentified.named("IP test: " + event.getConnection().getRemoteAddress().toString()));
-
-                responseData.addEntry(NamedAndIdentified.named("Connection Info:"));
                 String ip = event.getConnection().getServerAddress();
-                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                        .append(Component.text(" IP: ", NamedTextColor.GRAY))
-                        .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW))));
-                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                        .append(Component.text(" PORT: ", NamedTextColor.GRAY))
-                        .append(Component.text(event.getConnection().getServerPort()))));
-                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                        .append(Component.text(" VERSION: ", NamedTextColor.GRAY))
-                        .append(Component.text(event.getConnection().getProtocolVersion()))));
+                builder = builder
+                        .sample("IP test: " + event.getConnection().getRemoteAddress().toString())
+                        .sample("Connection Info:")
+                        .sample(Component.text('-', NamedTextColor.DARK_GRAY)
+                                .append(Component.text(" IP: ", NamedTextColor.GRAY))
+                                .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW)))
+                        .sample(Component.text('-', NamedTextColor.DARK_GRAY)
+                                .append(Component.text(" PORT: ", NamedTextColor.GRAY))
+                                .append(Component.text(event.getConnection().getServerPort())))
+                        .sample(Component.text('-', NamedTextColor.DARK_GRAY)
+                                .append(Component.text(" VERSION: ", NamedTextColor.GRAY))
+                                .append(Component.text(event.getConnection().getProtocolVersion())));
             }
-            responseData.addEntry(NamedAndIdentified.named(Component.text("Time", NamedTextColor.YELLOW)
-                    .append(Component.text(": ", NamedTextColor.GRAY))
-                    .append(Component.text(System.currentTimeMillis(), Style.style(TextDecoration.ITALIC)))));
 
-            // components will be converted the legacy section sign format so they are displayed in the client
-            responseData.addEntry(NamedAndIdentified.named(Component.text("You can use ").append(Component.text("styling too!", NamedTextColor.RED, TextDecoration.BOLD))));
+            builder = builder
+                    .sample(Component.text("Time", NamedTextColor.YELLOW)
+                            .append(Component.text(": ", NamedTextColor.GRAY))
+                            .append(Component.text(System.currentTimeMillis(), Style.style(TextDecoration.ITALIC))))
+                    // components will be converted the legacy section sign format so they are displayed in the client
+                    .sample(Component.text("You can use ").append(Component.text("styling too!", NamedTextColor.RED, TextDecoration.BOLD)));
 
-            // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
-            // on legacy versions, colors will be converted to the section format so it'll work there too
-            responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
-            //responseData.setPlayersHidden(true);
+            event.setStatus(Status.builder()
+                    // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
+                    // on legacy versions, colors will be converted to the section format so it'll work there too
+                    .description(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)))
+                    .playerInfo(builder.build())
+                    .build());
         });
 
         MinecraftServer.getRecipeManager().addRecipe(new ShapelessRecipe(

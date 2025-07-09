@@ -18,7 +18,7 @@ public final class StatusListener {
         final ServerListPingType pingVersion = ServerListPingType.fromModernProtocolVersion(connection.getProtocolVersion());
         final ServerListPingEvent statusRequestEvent = new ServerListPingEvent(connection, pingVersion);
         EventDispatcher.callCancellable(statusRequestEvent, () ->
-                connection.sendPacket(new ResponsePacket(pingVersion.getPingResponse(statusRequestEvent.getResponseData()))));
+                connection.sendPacket(new ResponsePacket(pingVersion.getPingResponse(statusRequestEvent.getStatus()))));
     }
 
     public static void pingRequestListener(@NotNull ClientPingRequestPacket packet, @NotNull PlayerConnection connection) {

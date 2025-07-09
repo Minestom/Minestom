@@ -1,13 +1,12 @@
 package net.minestom.server.ping;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
-import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -30,12 +29,12 @@ public enum ServerListPingType {
     MODERN_NAMED_COLORS(data -> getModernPingResponse(data, false).toString()),
 
     /**
-     * The client is on version 1.6 and supports a description, the player count and the version information.
+     * The client is on version 1.4 or higher and supports a description, the player count and the version information.
      */
     LEGACY_VERSIONED(data -> getLegacyPingResponse(data, true)),
 
     /**
-     * The client is on version 1.5 or lower and supports a description and the player count.
+     * The client is on version 1.3.2 or lower and supports a description and the player count.
      */
     LEGACY_UNVERSIONED(data -> getLegacyPingResponse(data, false)),
 
@@ -46,20 +45,20 @@ public enum ServerListPingType {
      */
     OPEN_TO_LAN(ServerListPingType::getOpenToLANPing);
 
-    private final Function<ResponseData, String> pingResponseCreator;
+    private final Function<Status, String> pingResponseCreator;
 
-    ServerListPingType(@NotNull Function<ResponseData, String> pingResponseCreator) {
+    ServerListPingType(@NotNull Function<Status, String> pingResponseCreator) {
         this.pingResponseCreator = pingResponseCreator;
     }
 
     /**
      * Gets the ping response for this version.
      *
-     * @param responseData the response data
+     * @param status the response data
      * @return the response
      */
-    public @NotNull String getPingResponse(@NotNull ResponseData responseData) {
-        return this.pingResponseCreator.apply(responseData);
+    public @NotNull String getPingResponse(@NotNull Status status) {
+        return this.pingResponseCreator.apply(status);
     }
 
     private static final String LAN_PING_FORMAT = "[MOTD]%s[/MOTD][AD]%s[/AD]";
@@ -70,77 +69,56 @@ public enum ServerListPingType {
     /**
      * Creates a ping sent when the server is sending {@link OpenToLAN} packets.
      *
-     * @param data the response data
+     * @param status the response data
      * @return the ping
      * @see OpenToLAN
      */
-    public static @NotNull String getOpenToLANPing(@NotNull ResponseData data) {
-        return String.format(LAN_PING_FORMAT, SECTION.serialize(data.getDescription()), MinecraftServer.getServer().getPort());
+    public static @NotNull String getOpenToLANPing(@NotNull Status status) {
+        return String.format(LAN_PING_FORMAT, SECTION.serialize(status.description()), MinecraftServer.getServer().getPort());
     }
 
     /**
      * Creates a legacy ping response for client versions below the Netty rewrite (1.6-).
      *
-     * @param data             the response data
+     * @param status           the response data
      * @param supportsVersions if the client supports recieving the versions of the server
      * @return the response
      */
-    public static @NotNull String getLegacyPingResponse(@NotNull ResponseData data, boolean supportsVersions) {
-        final String motd = SECTION.serialize(data.getDescription());
+    public static @NotNull String getLegacyPingResponse(@NotNull Status status, boolean supportsVersions) {
+        final String motd = SECTION.serialize(status.description());
+        Status.PlayerInfo playerInfo = status.playerInfo();
+        int onlinePlayers = playerInfo == null ? 0 : playerInfo.onlinePlayers();
+        int maxPlayers = playerInfo == null ? 1 : playerInfo.maxPlayers();
 
         if (supportsVersions) {
             return String.format("§1\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d",
-                    data.getProtocol(), data.getVersion(), motd, data.getOnline(), data.getMaxPlayer());
+                    status.versionInfo().protocolVersion(),
+                    status.versionInfo().name(),
+                    motd,
+                    onlinePlayers,
+                    maxPlayers);
         } else {
-            return String.format("%s§%d§%d", motd, data.getOnline(), data.getMaxPlayer());
+            return String.format("%s§%d§%d", motd, onlinePlayers, maxPlayers);
         }
     }
 
     /**
      * Creates a modern ping response for client versions above the Netty rewrite (1.7+).
      *
-     * @param data            the response data
-     * @param supportsFullRgb if the client supports full RGB
+     * @param status          the response data
+     * @param supportsFullRgb if the client supports full RGB colors in text components
      * @return the response
      */
-    public static @NotNull JsonObject getModernPingResponse(@NotNull ResponseData data, boolean supportsFullRgb) {
-        // version
-        final JsonObject versionObject = new JsonObject();
-        versionObject.addProperty("name", data.getVersion());
-        versionObject.addProperty("protocol", data.getProtocol());
+    public static @NotNull JsonObject getModernPingResponse(@NotNull Status status, boolean supportsFullRgb) {
+        JsonObject element = (JsonObject) Status.CODEC.encode(Transcoder.JSON, status).orElseThrow();
 
-        JsonObject playersObject = null;
-        if (!data.arePlayersHidden()) {
-            // players info
-            playersObject = new JsonObject();
-            playersObject.addProperty("max", data.getMaxPlayer());
-            playersObject.addProperty("online", data.getOnline());
-
-            // individual players
-            final JsonArray sampleArray = new JsonArray();
-            for (NamedAndIdentified entry : data.getEntries()) {
-                JsonObject playerObject = new JsonObject();
-                playerObject.addProperty("name", SECTION.serialize(entry.getName()));
-                playerObject.addProperty("id", entry.getUuid().toString());
-                sampleArray.add(playerObject);
-            }
-
-            playersObject.add("sample", sampleArray);
+        // reset description element with downscaled colors if this version does not support RGB
+        if (!supportsFullRgb) {
+            GsonComponentSerializer serializer = GsonComponentSerializer.colorDownsamplingGson();
+            element.add("description", serializer.serializeToTree(status.description()));
         }
 
-        final JsonObject jsonObject = new JsonObject();
-        jsonObject.add("version", versionObject);
-        jsonObject.add("players", playersObject);
-        jsonObject.addProperty("favicon", data.getFavicon());
-
-        // description
-        if (supportsFullRgb) {
-            jsonObject.add("description", FULL_RGB.serializeToTree(data.getDescription()));
-        } else {
-            jsonObject.add("description", NAMED_RGB.serializeToTree(data.getDescription()));
-        }
-
-        return jsonObject;
+        return element;
     }
 
     /**
@@ -151,10 +129,6 @@ public enum ServerListPingType {
      * @return the corresponding server list ping version
      */
     public static @NotNull ServerListPingType fromModernProtocolVersion(int version) {
-        if (version >= 713) {
-            return MODERN_FULL_RGB;
-        } else {
-            return MODERN_NAMED_COLORS;
-        }
+        return version >= 713 ? MODERN_FULL_RGB : MODERN_NAMED_COLORS;
     }
 }
