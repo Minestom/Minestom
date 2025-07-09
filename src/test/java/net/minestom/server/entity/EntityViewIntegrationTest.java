@@ -153,20 +153,46 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
+    public void sendsSpawnPacketsToExistingViewers(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var vehicle = new Entity(EntityType.ZOMBIE);
+        var passenger = new Entity(EntityType.ZOMBIE);
+
+        vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
+        vehicle.addPassenger(passenger);
+
+        var tracker = connection.trackIncoming(SpawnEntityPacket.class);
+        var player = connection.connect(instance, new Pos(0, 40, 0));
+
+        var spawns = tracker.collect().stream()
+                .filter(p -> p.entityId() != player.getEntityId()).toList();
+        assertEquals(2, spawns.size());
+
+        assertEquals(1, vehicle.getViewers().size());
+        assertTrue(vehicle.isViewer(player));
+        assertEquals(1, passenger.getViewers().size());
+        assertTrue(passenger.isViewer(player));
+    }
+
+    @Test
     public void vehicleInheritance(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 40, 0));
         var p2 = env.createPlayer(instance, new Pos(0, 40, 0));
 
-        var vehicle = new Entity(EntityType.ZOMBIE);
-        vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
-        vehicle.addPassenger(p1);
+        var vehicle1 = new Entity(EntityType.ZOMBIE);
+        vehicle1.setInstance(instance, new Pos(0, 40, 0)).join();
+        vehicle1.addPassenger(p1);
 
         var vehicle2 = new Entity(EntityType.ZOMBIE);
         vehicle2.setInstance(instance, new Pos(0, 40, 0)).join();
         vehicle2.addPassenger(p2);
 
-        assertEquals(2, vehicle.getViewers().size());
-        assertEquals(2, vehicle2.getViewers().size());
+        assertEquals(1, vehicle1.getViewers().size());
+        assertTrue(vehicle1.getViewers().contains(p2));
+
+        assertEquals(1, vehicle2.getViewers().size());
+        assertTrue(vehicle2.getViewers().contains(p1));
     }
 }
