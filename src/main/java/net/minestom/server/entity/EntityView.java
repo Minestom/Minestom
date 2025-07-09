@@ -35,35 +35,71 @@ final class EntityView {
         this.entity = entity;
         this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities,
                 player -> {
-                    // Add viewable
-                    var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
-                    var lock2 = lock1 == entity ? player : entity;
-                    synchronized (lock1.viewEngine.mutex) {
-                        synchronized (lock2.viewEngine.mutex) {
-                            if (player.getVehicle() == entity) return;
-                            if (!entity.viewEngine.viewableOption.predicate(player) ||
-                                    !player.viewEngine.viewerOption.predicate(entity)) return;
-                            entity.viewEngine.viewableOption.register(player);
-                            player.viewEngine.viewerOption.register(entity);
+                    List<Entity> entityChain = new ArrayList<>();
+                    collectEntityChain(this.entity, player, entityChain);
+                    if (entityChain.isEmpty()) return;
+
+                    for (Entity e : entityChain) {
+                        e.updateNewViewer(player);
+                    }
+
+                    for (int i = entityChain.size() - 1; i >= 0; i--) {
+                        Entity e = entityChain.get(i);
+                        if (e.hasPassenger()) {
+                            player.sendPacket(e.getPassengersPacket());
                         }
                     }
-                    entity.updateNewViewer(player);
                 },
-                player -> {
-                    // Remove viewable
-                    var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
-                    var lock2 = lock1 == entity ? player : entity;
-                    synchronized (lock1.viewEngine.mutex) {
-                        synchronized (lock2.viewEngine.mutex) {
-                            entity.viewEngine.viewableOption.unregister(player);
-                            player.viewEngine.viewerOption.unregister(entity);
-                        }
-                    }
-                    entity.updateOldViewer(player);
-                });
+                player -> hideEntityFromPlayer(this.entity, player));
         this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.addition.accept(player) : null,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.removal.accept(player) : null);
+    }
+
+    private static void collectEntityChain(Entity entity, Player player, List<Entity> chain) {
+        var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
+        var lock2 = lock1 == entity ? player : entity;
+        boolean shouldAdd = false;
+        synchronized (lock1.viewEngine.mutex) {
+            synchronized (lock2.viewEngine.mutex) {
+                if (!entity.isViewer(player) &&
+                        player.getVehicle() != entity &&
+                        entity.viewEngine.viewableOption.predicate(player) &&
+                        player.viewEngine.viewerOption.predicate(entity)) {
+
+                    entity.viewEngine.viewableOption.register(player);
+                    player.viewEngine.viewerOption.register(entity);
+                    shouldAdd = true;
+                }
+            }
+        }
+        if (shouldAdd) {
+            chain.add(entity);
+            for (Entity passenger : entity.getPassengers()) {
+                collectEntityChain(passenger, player, chain);
+            }
+        }
+    }
+
+    private static void hideEntityFromPlayer(Entity entity, Player player) {
+        boolean wasVisible;
+        var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
+        var lock2 = lock1 == entity ? player : entity;
+        synchronized (lock1.viewEngine.mutex) {
+            synchronized (lock2.viewEngine.mutex) {
+                wasVisible = entity.isViewer(player);
+                if (wasVisible) {
+                    entity.viewEngine.viewableOption.unregister(player);
+                    player.viewEngine.viewerOption.unregister(entity);
+                }
+            }
+        }
+        if (wasVisible) {
+            entity.updateOldViewer(player);
+            for (Entity passenger : entity.getPassengers()) {
+                hideEntityFromPlayer(passenger, player);
+            }
+        }
     }
 
     public void updateTracker(@Nullable Instance instance, @NotNull Point point) {
@@ -77,7 +113,7 @@ final class EntityView {
         if (player == this.entity) return false;
         synchronized (mutex) {
             if (manualViewers.add(player)) {
-                viewableOption.bitSet.add(player.getEntityId());
+                this.viewableOption.addition.accept(player);
                 return true;
             }
             return false;
@@ -88,7 +124,7 @@ final class EntityView {
         if (player == this.entity) return false;
         synchronized (mutex) {
             if (manualViewers.remove(player)) {
-                viewableOption.bitSet.remove(player.getEntityId());
+                this.viewableOption.removal.accept(player);
                 return true;
             }
             return false;
@@ -125,20 +161,6 @@ final class EntityView {
         if (entity instanceof Player player && player.autoViewEntities() && viewableOption.isAuto()) {
             if (viewable != null) viewable.accept(player); // Send packet to the range-visible player
         }
-    }
-
-    public void propagateView(@NotNull Player player) {
-        var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
-        var lock2 = lock1 == entity ? player : entity;
-        synchronized (lock1.viewEngine.mutex) {
-            synchronized (lock2.viewEngine.mutex) {
-                if (entity.isViewer(player)) return;
-                if (!entity.viewEngine.viewableOption.predicate(player)) return;
-                entity.viewEngine.viewableOption.register(player);
-                player.viewEngine.viewerOption.register(entity);
-            }
-        }
-        entity.updateNewViewer(player);
     }
 
     public final class Option<T extends Entity> {

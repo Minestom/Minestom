@@ -488,16 +488,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @Override
     public final boolean addViewer(@NotNull Player player) {
         Check.stateCondition(!isActive(), "Entities must be in an instance before adding viewers");
-        if (!viewEngine.manualAdd(player)) return false;
-        this.viewEngine.viewableOption.addition.accept(player);
-        return true;
+        return viewEngine.manualAdd(player);
     }
 
     @Override
     public final boolean removeViewer(@NotNull Player player) {
-        if (!viewEngine.manualRemove(player)) return false;
-        updateOldViewer(player);
-        return true;
+        return viewEngine.manualRemove(player);
     }
 
     /**
@@ -511,12 +507,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         player.sendPacket(getSpawnPacket());
         if (hasVelocity()) player.sendPacket(getVelocityPacket());
         player.sendPacket(this.getMetadataPacket());
-        // Passengers
-        final Set<Entity> passengers = this.passengers;
-        if (!passengers.isEmpty()) {
-            passengers.forEach(passenger -> passenger.viewEngine.propagateView(player));
-            player.sendPacket(getPassengersPacket());
-        }
         // Leashes
         if (leashHolder != null && (player.equals(leashHolder) || leashHolder.isViewer(player))) {
             player.sendPacket(getAttachEntityPacket());
@@ -538,12 +528,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @ApiStatus.Internal
     public void updateOldViewer(@NotNull Player player) {
-        final Set<Entity> passengers = this.passengers;
-        if (!passengers.isEmpty()) {
-            for (Entity passenger : passengers) {
-                if (passenger != player) passenger.updateOldViewer(player);
-            }
-        }
         leashedEntities.forEach(entity -> player.sendPacket(new AttachEntityPacket(entity.getEntityId(), -1)));
         player.sendPacket(destroyPacketCache);
     }
