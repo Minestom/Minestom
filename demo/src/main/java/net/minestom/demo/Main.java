@@ -28,7 +28,11 @@ import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
 import net.minestom.server.utils.time.TimeUnit;
 
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -99,6 +103,14 @@ public class Main {
             blockManager.registerHandler(key.key(), () -> signHandler);
         }
 
+        byte[] favicon;
+
+        try (InputStream stream = Main.class.getResourceAsStream("/minestom.png")) {
+            favicon = Objects.requireNonNull(stream).readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
             int onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
             Status.PlayerInfo.Builder builder = Status.PlayerInfo.builder()
@@ -131,10 +143,13 @@ public class Main {
                     // components will be converted the legacy section sign format so they are displayed in the client
                     .sample(Component.text("You can use ").append(Component.text("styling too!", NamedTextColor.RED, TextDecoration.BOLD)));
 
+            System.out.println(favicon.length);
+            System.out.println(Arrays.toString(favicon));
             event.setStatus(Status.builder()
                     // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
                     // on legacy versions, colors will be converted to the section format so it'll work there too
                     .description(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)))
+                    .favicon(favicon)
                     .playerInfo(builder.build())
                     .build());
         });
