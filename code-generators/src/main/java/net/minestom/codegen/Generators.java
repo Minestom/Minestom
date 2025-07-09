@@ -35,7 +35,8 @@ public final class Generators {
         // Custom static generators
         var customStaticRegistries = customStaticRegistries();
         var customStaticRegistriesMap = customStaticRegistries.stream().collect(Collectors.toMap(StaticEntry::namespace, Function.identity()));
-        new ParticleGenerator(customStaticRegistriesMap.get("particle").resource(), outputFolder).generate();
+        final StaticEntry particleKeys = customStaticRegistriesMap.get("particle");
+        new ParticleGenerator(particleKeys.resource(), outputFolder).generate();
 
         // Enum generators.
         new DyeColorGenerator(customStaticRegistriesMap.get("dye_colors").resource(), outputFolder).generate();
@@ -50,6 +51,9 @@ public final class Generators {
         new WorldEventGenerator(customStaticRegistriesMap.get("world_events"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);
+
+        // Particle Keys
+        generator.generateKeys(particleKeys.resource(), particleKeys.packageName(), particleKeys.typeName(), particleKeys.keysName(), true);
 
         // Static registries
         var staticRegistries = Generators.staticRegistries();
