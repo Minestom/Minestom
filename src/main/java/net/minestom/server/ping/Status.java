@@ -85,11 +85,10 @@ public record Status(
             this(onlinePlayers, maxPlayers, Collections.emptyList());
         }
 
+        @SuppressWarnings({"unchecked", "rawtypes"})
         public static PlayerInfo online() {
             Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            return new PlayerInfo(players.size(), players.size() + 1, players.stream()
-                    .map(player -> (NamedAndIdentified) player)
-                    .toList());
+            return new PlayerInfo(players.size(), players.size() + 1, (List<NamedAndIdentified>) (List) players);
         }
 
         public static @NotNull Builder builder() {
