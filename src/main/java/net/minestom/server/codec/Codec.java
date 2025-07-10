@@ -70,10 +70,12 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<UUID> UUID = Codec.INT_ARRAY.transform(UUIDUtils::intArrayToUuid, UUIDUtils::uuidToIntArray);
 
-    @NotNull Codec<UUID> UUID_COERCED = UUID.orElse(Codec.STRING.transform(java.util.UUID::fromString, java.util.UUID::toString));
+    @NotNull Codec<UUID> UUID_STRING = STRING.transform(java.util.UUID::fromString, java.util.UUID::toString);
+
+    @NotNull Codec<UUID> UUID_COERCED = UUID.orElse(UUID_STRING);
 
     @NotNull Codec<Component> COMPONENT = ComponentCodecs.COMPONENT;
-    
+
     @NotNull Codec<Style> COMPONENT_STYLE = ComponentCodecs.STYLE;
 
     @NotNull Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
