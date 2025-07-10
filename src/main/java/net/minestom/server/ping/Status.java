@@ -68,7 +68,7 @@ public record Status(
 
         private static final Codec<NamedAndIdentified> SAMPLE_CODEC = StructCodec.struct(
                 "name", LEGACY_CODEC, NamedAndIdentified::getName,
-                "id", Codec.STRING.transform(UUID::fromString, UUID::toString), NamedAndIdentified::getUuid,
+                "id", Codec.UUID_STRING, NamedAndIdentified::getUuid,
                 NamedAndIdentified::of);
 
         public static final Codec<PlayerInfo> CODEC = StructCodec.struct(
