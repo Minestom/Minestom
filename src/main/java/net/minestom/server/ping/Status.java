@@ -14,7 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.List;
 
 public record Status(
         @NotNull Component description,
@@ -61,7 +64,7 @@ public record Status(
                 VersionInfo::new);
     }
 
-    public record PlayerInfo(int onlinePlayers, int maxPlayers, @NotNull List<@NotNull NamedAndIdentified> sample) {
+    public record PlayerInfo(int onlinePlayers, int maxPlayers, @NotNull List<NamedAndIdentified> sample) {
         private static final Codec<Component> LEGACY_CODEC = Codec.STRING.transform(
                 string -> LegacyComponentSerializer.legacySection().deserialize(string),
                 component -> LegacyComponentSerializer.legacySection().serialize(component));
@@ -82,13 +85,29 @@ public record Status(
         }
 
         public PlayerInfo(int onlinePlayers, int maxPlayers) {
-            this(onlinePlayers, maxPlayers, Collections.emptyList());
+            this(onlinePlayers, maxPlayers, List.of());
         }
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        public static PlayerInfo online() {
-            Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            return new PlayerInfo(players.size(), players.size() + 1, (List<NamedAndIdentified>) (List) players);
+        public static @NotNull PlayerInfo onlineCount() {
+            final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            return new PlayerInfo(players.size(), players.size() + 1, List.of());
+        }
+
+        /**
+         * @param maxSamples The maximum number of player entries to include in the sample
+         * @return A {@link PlayerInfo} containing the online count, and a sample of online players.
+         */
+        public static @NotNull PlayerInfo online(int maxSamples) {
+            final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            final List<NamedAndIdentified> samples = new ArrayList<>(Math.min(maxSamples, players.size()));
+            for (final Player player : players) {
+                if (!player.getSettings().allowServerListings())
+                    continue;
+                samples.add(player);
+                if (samples.size() >= maxSamples)
+                    break;
+            }
+            return new PlayerInfo(players.size(), players.size() + 1, samples);
         }
 
         public static @NotNull Builder builder() {
@@ -171,7 +190,7 @@ public record Status(
         private Builder() {
             this.description = DEFAULT_DESCRIPTION;
             this.versionInfo = VersionInfo.DEFAULT;
-            this.playerInfo = PlayerInfo.online();
+            this.playerInfo = PlayerInfo.onlineCount();
         }
 
         private Builder(Status status) {
