@@ -189,10 +189,10 @@ public class EntityViewIntegrationTest {
         vehicle2.setInstance(instance, new Pos(0, 40, 0)).join();
         vehicle2.addPassenger(p2);
 
-        assertEquals(1, vehicle1.getViewers().size());
+        assertEquals(2, vehicle1.getViewers().size());
         assertTrue(vehicle1.getViewers().contains(p2));
 
-        assertEquals(1, vehicle2.getViewers().size());
+        assertEquals(2, vehicle2.getViewers().size());
         assertTrue(vehicle2.getViewers().contains(p1));
     }
 }

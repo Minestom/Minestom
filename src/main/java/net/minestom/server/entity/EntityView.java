@@ -34,26 +34,33 @@ final class EntityView {
     public EntityView(Entity entity) {
         this.entity = entity;
         this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities,
-                player -> {
-                    List<Entity> entityChain = new ArrayList<>();
-                    collectEntityChain(this.entity, player, entityChain);
-                    if (entityChain.isEmpty()) return;
-
-                    for (Entity e : entityChain) {
-                        e.updateNewViewer(player);
-                    }
-
-                    for (int i = entityChain.size() - 1; i >= 0; i--) {
-                        Entity e = entityChain.get(i);
-                        if (e.hasPassenger()) {
-                            player.sendPacket(e.getPassengersPacket());
-                        }
-                    }
-                },
-                player -> hideEntityFromPlayer(this.entity, player));
+                player -> showEntityToPlayer(this.entity, player),
+                player -> hideEntityFromPlayer(this.entity, player)
+        );
         this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.addition.accept(player) : null,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.removal.accept(player) : null);
+    }
+
+    private static void showEntityToPlayer(Entity entity, Player player) {
+        // Collects the chain of entities, including the vehicle and all passengers, that should be visible to the player.
+        List<Entity> visibleChain = new ArrayList<>();
+        collectEntityChain(entity, player, visibleChain);
+
+        if (visibleChain.isEmpty()) return;
+
+        // Send spawn packets
+        for (Entity e : visibleChain) {
+            e.updateNewViewer(player);
+        }
+
+        // Send passenger packets (in reverse order)
+        for (int i = visibleChain.size() - 1; i >= 0; i--) {
+            Entity e = visibleChain.get(i);
+            if (e.hasPassenger() && e.getPassengers().stream().anyMatch(visibleChain::contains)) {
+                player.sendPacket(e.getPassengersPacket());
+            }
+        }
     }
 
     private static void collectEntityChain(Entity entity, Player player, List<Entity> chain) {
@@ -82,24 +89,15 @@ final class EntityView {
     }
 
     private static void hideEntityFromPlayer(Entity entity, Player player) {
-        boolean wasVisible;
         var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
         var lock2 = lock1 == entity ? player : entity;
         synchronized (lock1.viewEngine.mutex) {
             synchronized (lock2.viewEngine.mutex) {
-                wasVisible = entity.isViewer(player);
-                if (wasVisible) {
-                    entity.viewEngine.viewableOption.unregister(player);
-                    player.viewEngine.viewerOption.unregister(entity);
-                }
+                entity.viewEngine.viewableOption.unregister(player);
+                player.viewEngine.viewerOption.unregister(entity);
             }
         }
-        if (wasVisible) {
-            entity.updateOldViewer(player);
-            for (Entity passenger : entity.getPassengers()) {
-                hideEntityFromPlayer(passenger, player);
-            }
-        }
+        entity.updateOldViewer(player);
     }
 
     public void updateTracker(@Nullable Instance instance, @NotNull Point point) {
@@ -113,7 +111,7 @@ final class EntityView {
         if (player == this.entity) return false;
         synchronized (mutex) {
             if (manualViewers.add(player)) {
-                this.viewableOption.addition.accept(player);
+                viewableOption.bitSet.add(player.getEntityId());
                 return true;
             }
             return false;
@@ -124,7 +122,7 @@ final class EntityView {
         if (player == this.entity) return false;
         synchronized (mutex) {
             if (manualViewers.remove(player)) {
-                this.viewableOption.removal.accept(player);
+                viewableOption.bitSet.remove(player.getEntityId());
                 return true;
             }
             return false;
@@ -154,7 +152,6 @@ final class EntityView {
     }
 
     private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
-        if (entity.getVehicle() != null && !(entity instanceof Player)) return;
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
             if (viewer != null) viewer.accept(entity); // Send packet to this player
         }
@@ -251,10 +248,10 @@ final class EntityView {
 
         private void update(Predicate<T> visibilityPredicate,
                             Consumer<T> action) {
-            if (this == EntityView.this.viewableOption && EntityView.this.entity.getVehicle() != null) return;
             references().forEach(entity -> {
                 if (entity == EntityView.this.entity || !visibilityPredicate.test(entity)) return;
                 if (entity instanceof Player player && manualViewers.contains(player)) return;
+                if (entity.getVehicle() != null) return;
                 action.accept(entity);
             });
         }
