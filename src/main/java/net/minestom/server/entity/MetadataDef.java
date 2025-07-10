@@ -306,7 +306,7 @@ public sealed class MetadataDef {
     public static sealed class AbstractHorse extends AgeableMob {
         public static final Entry<Byte> ABSTRACT_HORSE_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_TAME = bitMask(0, (byte) 0x02, false);
-        public static final Entry<Boolean> IS_SADDLED = bitMask(0, (byte) 0x04, false);
+        // 0x04 is unused, historically was for saddle
         public static final Entry<Boolean> HAS_BRED = bitMask(0, (byte) 0x08, false);
         public static final Entry<Boolean> IS_EATING = bitMask(0, (byte) 0x10, false);
         public static final Entry<Boolean> IS_REARING = bitMask(0, (byte) 0x20, false);
@@ -395,9 +395,8 @@ public sealed class MetadataDef {
     }
 
     public static final class Pig extends AgeableMob {
-        public static final Entry<Boolean> HAS_SADDLE = index(0, Metadata::Boolean, false);
-        public static final Entry<Integer> BOOST_TIME = index(1, Metadata::VarInt, 0);
-        public static final Entry<RegistryKey<PigVariant>> VARIANT = index(2, Metadata::PigVariant, PigVariant.TEMPERATE);
+        public static final Entry<Integer> BOOST_TIME = index(0, Metadata::VarInt, 0);
+        public static final Entry<RegistryKey<PigVariant>> VARIANT = index(1, Metadata::PigVariant, PigVariant.TEMPERATE);
     }
 
     public static final class Rabbit extends AgeableMob {
@@ -430,7 +429,6 @@ public sealed class MetadataDef {
     public static final class Strider extends AgeableMob {
         public static final Entry<Integer> FUNGUS_BOOST = index(0, Metadata::VarInt, 0);
         public static final Entry<Boolean> IS_SHAKING = index(1, Metadata::Boolean, false);
-        public static final Entry<Boolean> HAS_SADDLE = index(2, Metadata::Boolean, false);
     }
 
     public static final class Goat extends AgeableMob {
