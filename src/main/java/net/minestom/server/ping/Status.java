@@ -8,6 +8,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.utils.identity.NamedAndIdentified;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,12 +27,8 @@ public record Status(
 
     public static final Codec<byte @Nullable []> FAVICON_CODEC = Codec.STRING.transform(
             string -> {
-                if (!string.startsWith(FAVICON_PREFIX)) {
-                    throw new IllegalArgumentException("Favicon format must be a PNG image encoded in base 64!");
-                }
-
-                string = string.substring(FAVICON_PREFIX.length()).replaceAll("\n", "");
-                return Base64.getDecoder().decode(string.getBytes(StandardCharsets.UTF_8));
+                Check.argCondition(!string.startsWith(FAVICON_PREFIX), "Favicon format must be a PNG image encoded in base 64!");
+                return Base64.getDecoder().decode(string.substring(FAVICON_PREFIX.length()).getBytes(StandardCharsets.UTF_8));
             }, data -> FAVICON_PREFIX + new String(Base64.getEncoder().encode(data), StandardCharsets.UTF_8));
 
     public static final Codec<Status> CODEC = StructCodec.struct(
@@ -48,11 +45,11 @@ public record Status(
         }
     }
 
-    public static Builder builder() {
+    public static @NotNull Builder builder() {
         return new Builder();
     }
 
-    public static Builder builder(Status status) {
+    public static @NotNull Builder builder(@NotNull Status status) {
         return new Builder(status);
     }
 
@@ -64,7 +61,7 @@ public record Status(
                 VersionInfo::new);
     }
 
-    public record PlayerInfo(int onlinePlayers, int maxPlayers, List<@NotNull NamedAndIdentified> sample) {
+    public record PlayerInfo(int onlinePlayers, int maxPlayers, @NotNull List<@NotNull NamedAndIdentified> sample) {
         private static final Codec<Component> LEGACY_CODEC = Codec.STRING.transform(
                 string -> LegacyComponentSerializer.legacySection().deserialize(string),
                 component -> LegacyComponentSerializer.legacySection().serialize(component));
@@ -84,6 +81,10 @@ public record Status(
             sample = List.copyOf(sample);
         }
 
+        public PlayerInfo(int onlinePlayers, int maxPlayers) {
+            this(onlinePlayers, maxPlayers, Collections.emptyList());
+        }
+
         public static PlayerInfo online() {
             Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
             return new PlayerInfo(players.size(), players.size() + 1, players.stream()
@@ -91,24 +92,24 @@ public record Status(
                     .toList());
         }
 
-        public static Builder builder() {
+        public static @NotNull Builder builder() {
             return new Builder();
         }
 
-        public static Builder builder(PlayerInfo playerInfo) {
+        public static @NotNull Builder builder(PlayerInfo playerInfo) {
             return new Builder(playerInfo);
         }
 
         public static final class Builder {
             private int onlinePlayers;
             private int maxPlayers;
-            private List<@NotNull NamedAndIdentified> sample;
+            private @NotNull List<@NotNull NamedAndIdentified> sample;
 
             private Builder() {
                 this.sample = new ArrayList<>();
             }
 
-            private Builder(PlayerInfo playerInfo) {
+            private Builder(@NotNull PlayerInfo playerInfo) {
                 this.onlinePlayers = playerInfo.onlinePlayers;
                 this.maxPlayers = playerInfo.maxPlayers;
                 this.sample = new ArrayList<>(playerInfo.sample);
@@ -127,29 +128,29 @@ public record Status(
             }
 
             @Contract(value = "_ -> this")
-            public Builder sample(List<@NotNull NamedAndIdentified> sample) {
+            public Builder sample(@NotNull List<@NotNull NamedAndIdentified> sample) {
                 this.sample = sample;
                 return this;
             }
 
             @Contract(value = "_ -> this")
-            public Builder sample(NamedAndIdentified profile) {
+            public Builder sample(@NotNull NamedAndIdentified profile) {
                 this.sample.add(profile);
                 return this;
             }
 
             @Contract(value = "_ -> this")
-            public Builder sample(GameProfile profile) {
+            public Builder sample(@NotNull GameProfile profile) {
                 return this.sample(NamedAndIdentified.of(profile.name(), profile.uuid()));
             }
 
             @Contract(value = "_ -> this")
-            public Builder sample(Component component) {
+            public Builder sample(@NotNull Component component) {
                 return this.sample(NamedAndIdentified.named(component));
             }
 
             @Contract(value = "_ -> this")
-            public Builder sample(String string) {
+            public Builder sample(@NotNull String string) {
                 return this.sample(NamedAndIdentified.named(string));
             }
 
@@ -203,6 +204,12 @@ public record Status(
         @Contract(value = "_ -> this")
         public @NotNull Builder playerInfo(@Nullable PlayerInfo playerInfo) {
             this.playerInfo = playerInfo;
+            return this;
+        }
+
+        @Contract(value = "_, _ -> this")
+        public @NotNull Builder playerInfo(int onlinePlayers, int maxPlayers) {
+            this.playerInfo = new PlayerInfo(onlinePlayers, maxPlayers);
             return this;
         }
 
