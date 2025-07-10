@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -32,7 +33,7 @@ enum ConsumeEffectType implements StaticProtocolObject<ConsumeEffectType> {
 
     private final Key key;
 
-    ConsumeEffectType(@NotNull String key) {
+    ConsumeEffectType(@NotNull @KeyPattern String key) {
         this.key = Key.key(key);
     }
 

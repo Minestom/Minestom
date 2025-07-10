@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.codegen.Generators;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -104,7 +105,7 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
                 List.of(
                         // Constructor
                         MethodSpec.constructorBuilder()
-                                .addParameter(ParameterSpec.builder(String.class, "key").addAnnotation(NotNull.class).build())
+                                .addParameter(ParameterSpec.builder(String.class, "key").addAnnotation(NotNull.class).addAnnotation(KeyPattern.class).build())
                                 .addStatement("this.key = $T.key(key)", keyCN)
                                 .build(),
                         MethodSpec.methodBuilder("key")

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -32,7 +33,7 @@ public enum RecipeDisplayType implements StaticProtocolObject<RecipeDisplayType>
 
     private final Key key;
 
-    RecipeDisplayType(@NotNull String key) {
+    RecipeDisplayType(@NotNull @KeyPattern String key) {
         this.key = Key.key(key);
     }
 
