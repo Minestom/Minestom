@@ -168,7 +168,56 @@ public class EntityViewerRuleIntegrationTest {
     }
 
     @Test
-    public void manualViewerSeesPassenger(Env env) {
+    public void passengerRespectsViewableRuleChange(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var spawnTracker = connection.trackIncoming(SpawnEntityPacket.class);
+
+        var vehicle = new Entity(EntityType.ZOMBIE);
+        vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
+        var passenger = new Entity(EntityType.PIG);
+        vehicle.addPassenger(passenger);
+
+        var testPlayer = connection.connect(instance, new Pos(0, 40, 0));
+
+        var spawns = spawnTracker.collect().stream()
+                .filter(p -> p.entityId() != testPlayer.getEntityId())
+                .toList();
+        assertEquals(2, spawns.size());
+
+        passenger.updateViewableRule(p -> false);
+
+        assertTrue(vehicle.getViewers().contains(testPlayer));
+        assertFalse(passenger.getViewers().contains(testPlayer));
+    }
+
+
+    @Test
+    public void vehicleViewableRuleChange(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var spawnTracker = connection.trackIncoming(SpawnEntityPacket.class);
+
+        var vehicle = new Entity(EntityType.ZOMBIE);
+        vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
+        var passenger = new Entity(EntityType.PIG);
+        vehicle.addPassenger(passenger);
+
+        var testPlayer = connection.connect(instance, new Pos(0, 40, 0));
+
+        var spawns = spawnTracker.collect().stream()
+                .filter(p -> p.entityId() != testPlayer.getEntityId())
+                .toList();
+        assertEquals(2, spawns.size());
+
+        vehicle.updateViewableRule(p -> false);
+
+        assertFalse(vehicle.getViewers().contains(testPlayer));
+        assertTrue(passenger.getViewers().contains(testPlayer));
+    }
+
+    @Test
+    public void manualViewerOnlySeesVehicle(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var spawnTracker1 = connection.trackIncoming(SpawnEntityPacket.class);
@@ -187,9 +236,9 @@ public class EntityViewerRuleIntegrationTest {
 
         vehicle.addViewer(testPlayer);
 
-        spawnTracker2.assertCount(2);
+        spawnTracker2.assertCount(1);
         assertTrue(vehicle.isViewer(testPlayer));
-        assertTrue(passenger.isViewer(testPlayer));
+        assertFalse(passenger.isViewer(testPlayer));
     }
 
     @Test
