@@ -1,4 +1,3 @@
-net.kyori.adventure.nbt
 net.minestom.server
 net.minestom.server.advancements
 net.minestom.server.adventure
@@ -24,6 +23,7 @@ net.minestom.server.component
 net.minestom.server.condition
 net.minestom.server.coordinate
 net.minestom.server.crypto
+net.minestom.server.dialog
 net.minestom.server.entity
 net.minestom.server.entity.ai
 net.minestom.server.entity.ai.goal
@@ -146,6 +146,7 @@ net.minestom.server.utils.crypto
 net.minestom.server.utils.entity
 net.minestom.server.utils.identity
 net.minestom.server.utils.inventory
+net.minestom.server.utils.json
 net.minestom.server.utils.location
 net.minestom.server.utils.mojang
 net.minestom.server.utils.nbt
