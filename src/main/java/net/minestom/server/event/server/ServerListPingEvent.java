@@ -2,8 +2,8 @@ package net.minestom.server.event.server;
 
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.ping.ResponseData;
 import net.minestom.server.ping.ServerListPingType;
+import net.minestom.server.ping.Status;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,8 +17,8 @@ public class ServerListPingEvent implements CancellableEvent {
     private final PlayerConnection connection;
     private final ServerListPingType type;
 
-    private boolean cancelled = false;
-    private ResponseData responseData;
+    private boolean cancelled;
+    private Status status;
 
     /**
      * Creates a new server list ping event with no player connection.
@@ -36,7 +36,7 @@ public class ServerListPingEvent implements CancellableEvent {
      * @param type       the ping type to respond with
      */
     public ServerListPingEvent(@Nullable PlayerConnection connection, @NotNull ServerListPingType type) {
-        this.responseData = new ResponseData();
+        this.status = Status.builder().build();
         this.connection = connection;
         this.type = type;
     }
@@ -47,17 +47,17 @@ public class ServerListPingEvent implements CancellableEvent {
      *
      * @return the response data being returned
      */
-    public @NotNull ResponseData getResponseData() {
-        return responseData;
+    public @NotNull Status getStatus() {
+        return status;
     }
 
     /**
      * Sets the response data, overwriting the exiting data.
      *
-     * @param responseData the new data
+     * @param status the new data
      */
-    public void setResponseData(@NotNull ResponseData responseData) {
-        this.responseData = Objects.requireNonNull(responseData);
+    public void setStatus(@NotNull Status status) {
+        this.status = Objects.requireNonNull(status);
     }
 
     /**
