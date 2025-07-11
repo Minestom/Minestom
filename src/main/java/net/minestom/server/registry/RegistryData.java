@@ -212,8 +212,8 @@ public final class RegistryData {
     }
 
     public record GameEventEntry(Key key, int id, int notificationRadius) implements Entry {
-        public GameEventEntry(String key, Properties main) {
-            this(Key.key(key), main.getInt("id"), main.getInt("notificationRadius"));
+        public GameEventEntry(Key key, Properties main) {
+            this(key, main.getInt("id"), main.getInt("notificationRadius"));
         }
     }
 
