@@ -9,10 +9,27 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 @SuppressWarnings("ALL")
 public final class EventsJFR {
+    public static final String SERVER_PING = "minestom.ServerPing";
     public static final String SERVER_TICK = "minestom.ServerTickTime";
 
     public static final String CHUNK_GENERATION = "minestom.ChunkGeneration";
     public static final String CHUNK_LOADING = "minestom.ChunkLoading";
+
+    public static final String INSTANCE_JOIN = "minestom.InstanceJoin";
+    public static final String INSTANCE_LEAVE = "minestom.InstanceLeave";
+
+    @Name(SERVER_PING)
+    @Label("Server Ping")
+    @Category({"Minestom", "Server"})
+    @Description("A server ping (status query) was received")
+    public static final class ServerPing extends Event {
+        @Label("Remote Address")
+        String remoteAddress;
+
+        public ServerPing(String remoteAddress) {
+            this.remoteAddress = remoteAddress;
+        }
+    }
 
     @Name(SERVER_TICK)
     @Label("Server Tick")
@@ -62,7 +79,7 @@ public final class EventsJFR {
         }
     }
 
-    @Name("minestom.InstanceJoin")
+    @Name(INSTANCE_JOIN)
     @Label("Instance Join")
     @Category({"Minestom", "Instance"})
     @Description("An Entity has joined an instance")
@@ -78,7 +95,7 @@ public final class EventsJFR {
         }
     }
 
-    @Name("minestom.InstanceLeave")
+    @Name(INSTANCE_LEAVE)
     @Label("Instance Leave")
     @Category({"Minestom", "Instance"})
     @Description("An Entity has left an instance")
