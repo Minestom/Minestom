@@ -1,6 +1,8 @@
 package net.minestom.demo.block;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.OpenSignEditorPacket;
 import net.minestom.server.tag.Tag;
@@ -16,10 +18,10 @@ public class SignHandler implements BlockHandler {
     }
 
     @Override
-    public boolean onInteract(@NotNull Interaction interaction) {
-        interaction.getPlayer().sendPacket(
+    public boolean onInteract(@NotNull BlockChange.Player interaction) {
+        interaction.player().sendPacket(
                 new OpenSignEditorPacket(
-                        interaction.getBlockPosition(),
+                        interaction.blockPosition(),
                         true
                 )
         );
