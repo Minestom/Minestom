@@ -21,6 +21,7 @@ public final class EventsJFR {
     public static final String PLAYER_JOIN = "minestom.PlayerJoin";
     public static final String PLAYER_LEAVE = "minestom.PlayerLeave";
     public static final String PLAYER_COMMAND = "minestom.PlayerCommand";
+    public static final String PLAYER_CHAT = "minestom.PlayerChat";
 
     @Name(SERVER_PING)
     @Label("Server Ping")
@@ -154,6 +155,22 @@ public final class EventsJFR {
         public PlayerCommand(String player, String command) {
             this.player = player;
             this.command = command;
+        }
+    }
+
+    @Name(PLAYER_CHAT)
+    @Label("Player Chat")
+    @Category({"Minestom", "Player"})
+    @Description("A player sent a chat message")
+    public static final class PlayerChat extends Event {
+        @Label("Player UUID")
+        String player;
+        @Label("Message")
+        String message;
+
+        public PlayerChat(String player, String message) {
+            this.player = player;
+            this.message = message;
         }
     }
 }
