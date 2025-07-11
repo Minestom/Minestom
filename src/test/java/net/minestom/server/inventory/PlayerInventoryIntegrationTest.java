@@ -2,16 +2,20 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class PlayerInventoryIntegrationTest {
@@ -175,6 +179,23 @@ public class PlayerInventoryIntegrationTest {
         equipmentTracker.assertSingle(entityEquipmentPacket -> {
             assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND));
         });
+    }
+
+    @Test
+    public void closingPlayerInventorySendsEventTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var listener = env.listen(InventoryCloseEvent.class);
+
+        AtomicBoolean received = new AtomicBoolean(false);
+        listener.followup(event -> received.set(true));
+
+        player.addPacketToQueue(new ClientCloseWindowPacket(0));
+        player.interpretPacketQueue();
+
+        assertTrue(received.get());
     }
 
 }
