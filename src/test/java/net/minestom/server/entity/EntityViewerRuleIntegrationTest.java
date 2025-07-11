@@ -213,7 +213,7 @@ public class EntityViewerRuleIntegrationTest {
         vehicle.updateViewableRule(p -> false);
 
         assertFalse(vehicle.getViewers().contains(testPlayer));
-        assertTrue(passenger.getViewers().contains(testPlayer));
+        assertFalse(passenger.getViewers().contains(testPlayer));
     }
 
     @Test
