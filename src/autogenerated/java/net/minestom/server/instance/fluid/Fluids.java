@@ -5,13 +5,13 @@ package net.minestom.server.instance.fluid;
  */
 @SuppressWarnings("unused")
 interface Fluids {
-    Fluid EMPTY = FluidImpl.get("empty");
+    Fluid EMPTY = FluidImpl.get(FluidKeys.EMPTY);
 
-    Fluid FLOWING_WATER = FluidImpl.get("flowing_water");
+    Fluid FLOWING_WATER = FluidImpl.get(FluidKeys.FLOWING_WATER);
 
-    Fluid WATER = FluidImpl.get("water");
+    Fluid WATER = FluidImpl.get(FluidKeys.WATER);
 
-    Fluid FLOWING_LAVA = FluidImpl.get("flowing_lava");
+    Fluid FLOWING_LAVA = FluidImpl.get(FluidKeys.FLOWING_LAVA);
 
-    Fluid LAVA = FluidImpl.get("lava");
+    Fluid LAVA = FluidImpl.get(FluidKeys.LAVA);
 }

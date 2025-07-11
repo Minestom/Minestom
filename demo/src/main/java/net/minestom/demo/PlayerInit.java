@@ -45,6 +45,7 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.Either;
@@ -174,48 +175,7 @@ public class PlayerInit {
                 }
             })
             .addListener(PlayerChatEvent.class, event -> {
-                var dialog = new Dialog.MultiAction(
-                        new DialogMetadata(
-                                Component.text("Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?").hoverEvent(HoverEvent.showText(Component.text("Hover text here"))),
-                                null, true, false,
-                                DialogAfterAction.CLOSE,
-                                List.of(
-                                        new DialogBody.PlainMessage(Component.text("plain message here").hoverEvent(HoverEvent.showText(Component.text("Hover text here"))), DialogBody.PlainMessage.DEFAULT_WIDTH),
-                                        new DialogBody.Item(ItemStack.of(Material.DIAMOND, 5),
-                                                new DialogBody.PlainMessage(Component.text("item message"), DialogBody.PlainMessage.DEFAULT_WIDTH),
-                                                false, true, 16, 16)
-                                ),
-                                List.of(
-                                        new DialogInput.Text("text", DialogInput.DEFAULT_WIDTH * 2, Component.text("Enter some text")
-                                                .hoverEvent(HoverEvent.showText(Component.text("Hover text here"))), true, "", Integer.MAX_VALUE, new DialogInput.Text.Multiline(15, null)),
-                                        new DialogInput.Boolean("bool", Component.text("Checkbox"), false, "true", "false"),
-                                        new DialogInput.SingleOption("single_option", DialogInput.DEFAULT_WIDTH, List.of(
-                                                new DialogInput.SingleOption.Option("option1", Component.text("Option 1"), true),
-                                                new DialogInput.SingleOption.Option("option2", Component.text("Option 2"), false),
-                                                new DialogInput.SingleOption.Option("option3", Component.text("Option 3"), false)
-                                        ), Component.text("Single option"), true),
-                                        new DialogInput.NumberRange("number_range", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
-                                                "options.generic_value", 0, 500, 250f, 1f),
-                                        new DialogInput.NumberRange("number_r2ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
-                                                "options.generic_value", 0, 500, 250f, 1f),
-                                        new DialogInput.NumberRange("number_r3ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
-                                                "options.generic_value", 0, 500, 250f, 1f),
-                                        new DialogInput.NumberRange("number_r4ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
-                                                "options.generic_value", 0, 500, 250f, 1f),
-                                        new DialogInput.NumberRange("number_r5ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
-                                                "options.generic_value", 0, 500, 250f, 1f),
-                                        new DialogInput.NumberRange("number_r6ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
-                                                "options.generic_value", 0, 500, 250f, 1f)
-                                )
-                        ),
-                        List.of(
-                                new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, new DialogAction.DynamicCustom(Key.key("done_action"), null)),
-                                new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, null)
-                        ),
-                        null, 2
-                );
-
-                event.getPlayer().sendMessage(Component.text("Click for dialog!").clickEvent(ClickEvent.showDialog(dialog)));
+                event.getPlayer().sendMessage(Component.text("Click for dialog!").clickEvent(ClickEvent.showDialog(Dialog.forKey(RegistryKey.unsafeOf("cookie:test")))));
             })
             .addListener(PlayerCustomClickEvent.class, event -> {
                 String payload = "null";

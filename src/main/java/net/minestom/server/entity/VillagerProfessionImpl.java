@@ -1,17 +1,18 @@
 package net.minestom.server.entity;
 
-import net.kyori.adventure.key.Key;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 public record VillagerProfessionImpl(RegistryData.VillagerProfessionEntry registry) implements VillagerProfession {
-    static final Registry<VillagerProfession> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:villager_profession"),
+    static final Registry<VillagerProfession> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.VILLAGER_PROFESSION,
             (namespace, properties) -> new VillagerProfessionImpl(RegistryData.villagerProfession(namespace, properties)));
 
-    static @UnknownNullability VillagerProfession get(@NotNull String key) {
-        return REGISTRY.get(Key.key(key));
+    static @UnknownNullability VillagerProfession get(@NotNull RegistryKey<VillagerProfession> key) {
+        return REGISTRY.get(key);
     }
 
     @Override
