@@ -47,13 +47,20 @@ import static net.minestom.server.network.NetworkBuffer.SHORT;
  */
 public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
-    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
+
     protected final List<Section> sections;
+
+    private boolean needsCompleteHeightmapRefresh = true;
+
+    protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
+    protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
+
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
+    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);

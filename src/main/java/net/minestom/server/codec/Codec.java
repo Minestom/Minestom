@@ -78,8 +78,6 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     
     @NotNull Codec<Style> COMPONENT_STYLE = ComponentCodecs.STYLE;
 
-    @NotNull Codec<Style> COMPONENT_STYLE = ComponentCodecs.STYLE;
-
     @NotNull Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
 
     @NotNull Codec<Point> VECTOR3D = new CodecImpl.Vector3DImpl();
