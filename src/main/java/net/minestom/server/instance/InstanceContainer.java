@@ -218,7 +218,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+    public @NotNull BlockBatch getBlockBatch(long flags, @NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
         final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
         final boolean originAligned = sectionAligned(originX, originY, originZ);
         final int minX = Math.min(p1.blockX(), p2.blockX());
@@ -273,13 +273,18 @@ public class InstanceContainer extends Instance {
             }
         }
 
+        final boolean ignoreData = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0;
+        final boolean generate = (flags & BlockBatch.GENERATE_FLAG) != 0;
         Function<BlockBatch.Builder, Void> chunkRegister = builder -> {
             for (long sectionIdx : sectionIndexes) {
                 final int sectionX = sectionIndexGetX(sectionIdx);
                 final int sectionY = sectionIndexGetY(sectionIdx);
                 final int sectionZ = sectionIndexGetZ(sectionIdx);
                 Chunk chunk = getChunk(sectionX, sectionZ);
-                if (chunk == null) continue;
+                if (chunk == null) {
+                    if (!generate) continue;
+                    chunk = loadOptionalChunk(sectionX, sectionZ).join();
+                }
                 synchronized (chunk) {
                     Section section = chunk.getSection(sectionY);
                     Palette palette = section.blockPalette();
@@ -305,7 +310,7 @@ public class InstanceContainer extends Instance {
                             builder.setBlock(bX, bY, bZ, block);
                         });
                     }
-                    if (chunk instanceof DynamicChunk dynamicChunk) {
+                    if (!ignoreData && chunk instanceof DynamicChunk dynamicChunk) {
                         // Add block states
                         for (Int2ObjectMap.Entry<Block> entry : dynamicChunk.entries.int2ObjectEntrySet()) {
                             final int blockIndex = entry.getIntKey();
@@ -331,10 +336,11 @@ public class InstanceContainer extends Instance {
             return BlockBatch.unaligned(builder -> {
                 chunkRegister.apply(builder);
                 // Add individual blocks from partially contained sections
+                final Condition condition = ignoreData ? Condition.TYPE : Condition.NONE;
                 for (BlockVec vec : blockCoords) {
                     final int bX = vec.blockX() - originX, bY = vec.blockY() - originY, bZ = vec.blockZ() - originZ;
                     try {
-                        final Block block = getBlock(vec);
+                        final Block block = getBlock(vec, condition);
                         builder.setBlock(bX, bY, bZ, block);
                     } catch (NullPointerException ignored) {
                     }

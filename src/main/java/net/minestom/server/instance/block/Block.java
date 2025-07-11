@@ -12,6 +12,7 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.*;
 
 import java.util.Collection;
@@ -281,7 +282,8 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
             return Objects.requireNonNull(getBlock(point, Condition.NONE));
         }
 
-        default @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+        default @NotNull BlockBatch getBlockBatch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
+                                                  @NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
             final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
             final int minX = Math.min(p1.blockX(), p2.blockX());
             final int minY = Math.min(p1.blockY(), p2.blockY());
@@ -289,13 +291,14 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
             final int maxX = Math.max(p1.blockX(), p2.blockX());
             final int maxY = Math.max(p1.blockY(), p2.blockY());
             final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
-            return BlockBatch.unaligned(builder -> {
+            final Condition condition = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0 ? Condition.TYPE : Condition.NONE;
+            return BlockBatch.batch(flags, builder -> {
                 for (int x = minX; x <= maxX; x++) {
                     for (int y = minY; y <= maxY; y++) {
                         for (int z = minZ; z <= maxZ; z++) {
                             final int bX = x - originX, bY = y - originY, bZ = z - originZ;
                             try {
-                                final Block block = getBlock(x, y, z);
+                                final Block block = getBlock(x, y, z, condition);
                                 builder.setBlock(bX, bY, bZ, block);
                             } catch (NullPointerException ignored) {
                             }

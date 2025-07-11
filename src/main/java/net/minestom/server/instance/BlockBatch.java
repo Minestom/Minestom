@@ -12,6 +12,7 @@ import static net.minestom.server.instance.BlockBatchImpl.BuilderImpl;
 
 @ApiStatus.Experimental
 public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
+    long NO_FLAGS = 0L;               // No flags set
     long IGNORE_DATA_FLAG = 1L;       // Ignore NBT and handlers
     long ALIGNED_FLAG = 1L << 1;      // Section-aligned optimization
     long GENERATE_FLAG = 1L << 2;     // Generate world if unloaded
