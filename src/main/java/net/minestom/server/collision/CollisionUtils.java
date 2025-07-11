@@ -178,12 +178,10 @@ public final class CollisionUtils {
     }
 
     public static Shape parseCollisionShape(Map<Object, Object> internCache, String shape) {
-        record ShapeEntry(String shape) {} // Easy way to Hashcode
-        ShapeEntry entry = new ShapeEntry(shape);
-        final Shape cachedShape = (Shape) internCache.get(entry);
+        final Shape cachedShape = (Shape) internCache.get(shape);
         if (cachedShape != null) return cachedShape;
         final Shape parsedShape = ShapeImpl.parseShapeFromRegistry(shape, (byte) 0);
-        internCache.put(entry, parsedShape);
+        internCache.put(shape, parsedShape);
         return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
     }
 
