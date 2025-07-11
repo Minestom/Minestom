@@ -352,24 +352,24 @@ public class InstanceContainer extends Instance {
     @Override
     public void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
         final BlockBatchImpl batchImpl = (BlockBatchImpl) batch;
-        LongSet chunkIndexes = new LongOpenHashSet();
+        LongSet sectionIndexes = new LongOpenHashSet();
         if (sectionAligned(x, y, z)) {
-            setBlockBatchAligned(x, y, z, batchImpl, chunkIndexes);
+            setBlockBatchAligned(x, y, z, batchImpl, sectionIndexes);
         } else {
-            setBlockBatchUnaligned(x, y, z, batchImpl, chunkIndexes);
+            setBlockBatchUnaligned(x, y, z, batchImpl, sectionIndexes);
         }
-        // Invalidate all affected chunks
-        for (long chunkIndex : chunkIndexes) {
-            final int chunkX = chunkIndexGetX(chunkIndex);
-            final int chunkZ = chunkIndexGetZ(chunkIndex);
-            final Chunk chunk = getChunk(chunkX, chunkZ);
-            if (chunk == null) continue;
-            chunk.invalidate();
-            chunk.sendChunk();
+        // Invalidate all affected sections
+        for (long sectionIndex : sectionIndexes) {
+            final int sectionX = sectionIndexGetX(sectionIndex);
+            final int sectionY = sectionIndexGetY(sectionIndex);
+            final int sectionZ = sectionIndexGetZ(sectionIndex);
+            invalidateSection(sectionX, sectionY, sectionZ);
+            final Chunk chunk = getChunk(sectionX, sectionZ);
+            if (chunk != null) chunk.sendChunk();
         }
     }
 
-    private void setBlockBatchAligned(int x, int y, int z, BlockBatchImpl batch, LongSet chunkIndexes) {
+    private void setBlockBatchAligned(int x, int y, int z, BlockBatchImpl batch, LongSet sectionIndexes) {
         // Each batch section map to a single instance section
         for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batch.sectionStates().long2ObjectEntrySet()) {
             final long sectionIndex = entry.getLongKey();
@@ -389,7 +389,7 @@ public class InstanceContainer extends Instance {
             final Chunk targetChunk = batch.generate() ?
                     loadOptionalChunk(targetSectionX, targetSectionZ).join() : getChunk(targetSectionX, targetSectionZ);
             if (targetChunk == null) continue;
-            chunkIndexes.add(chunkIndex(targetSectionX, targetSectionZ));
+            sectionIndexes.add(sectionIndex(targetSectionX, targetSectionY, targetSectionZ));
             synchronized (targetChunk) {
                 final Section targetSection = targetChunk.getSection(targetSectionY);
                 if (batch.aligned()) {
@@ -431,7 +431,7 @@ public class InstanceContainer extends Instance {
         }
     }
 
-    private void setBlockBatchUnaligned(int x, int y, int z, BlockBatchImpl batch, LongSet chunkIndexes) {
+    private void setBlockBatchUnaligned(int x, int y, int z, BlockBatchImpl batch, LongSet sectionIndexes) {
         // For unaligned batches, a single batch section can affect multiple instance sections
         for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batch.sectionStates().long2ObjectEntrySet()) {
             final long sectionIndex = entry.getLongKey();
@@ -463,7 +463,7 @@ public class InstanceContainer extends Instance {
                         final Chunk targetChunk = batch.generate() ?
                                 loadOptionalChunk(instanceSectionX, instanceSectionZ).join() : getChunk(instanceSectionX, instanceSectionZ);
                         if (targetChunk == null) continue;
-                        chunkIndexes.add(chunkIndex(instanceSectionX, instanceSectionZ));
+                        sectionIndexes.add(sectionIndex(instanceSectionX, instanceSectionY, instanceSectionZ));
                         synchronized (targetChunk) {
                             final Section targetSection = targetChunk.getSection(instanceSectionY);
 
