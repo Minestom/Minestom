@@ -534,12 +534,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @ApiStatus.Internal
     public void updateOldViewer(@NotNull Player player) {
-        final Set<Entity> passengers = this.passengers;
-        if (!passengers.isEmpty()) {
-            for (Entity passenger : passengers) {
-                if (passenger != player) passenger.updateOldViewer(player);
-            }
-        }
         leashedEntities.forEach(entity -> player.sendPacket(new AttachEntityPacket(entity.getEntityId(), -1)));
         player.sendPacket(destroyPacketCache);
     }

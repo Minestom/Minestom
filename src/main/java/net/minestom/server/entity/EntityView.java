@@ -98,6 +98,12 @@ final class EntityView {
             }
         }
         entity.updateOldViewer(player);
+        final Set<Entity> passengers = entity.getPassengers();
+        if (!passengers.isEmpty()) {
+            for (Entity passenger : passengers) {
+                if (passenger != player) hideEntityFromPlayer(passenger, player);
+            }
+        }
     }
 
     public void updateTracker(@Nullable Instance instance, @NotNull Point point) {
