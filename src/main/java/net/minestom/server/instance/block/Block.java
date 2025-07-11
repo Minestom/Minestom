@@ -268,7 +268,8 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     }
 
     interface Getter {
-        @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition);
+        @UnknownNullability
+        Block getBlock(int x, int y, int z, @NotNull Condition condition);
 
         default @UnknownNullability Block getBlock(@NotNull Point point, @NotNull Condition condition) {
             return getBlock(point.blockX(), point.blockY(), point.blockZ(), condition);
@@ -306,6 +307,10 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
                     }
                 }
             });
+        }
+
+        default @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+            return getBlockBatch(BlockBatch.NO_FLAGS, origin, p1, p2);
         }
 
         /**
