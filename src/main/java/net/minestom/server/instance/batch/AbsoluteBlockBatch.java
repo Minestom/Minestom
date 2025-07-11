@@ -140,10 +140,6 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
                     // Execute the callback if this was the last chunk to process
                     if (isLast) {
                         if (inverse != null) inverse.readyLatch.countDown();
-                        if (instance instanceof InstanceContainer) {
-                            // FIXME: put method in Instance instead
-                            ((InstanceContainer) instance).refreshLastBlockChangeTime();
-                        }
                         if (callback != null) {
                             if (safeCallback) {
                                 instance.scheduleNextTick(inst -> callback.run());

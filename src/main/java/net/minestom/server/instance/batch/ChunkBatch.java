@@ -230,11 +230,6 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             chunk.sendChunk();
         }
 
-        if (instance instanceof InstanceContainer) {
-            // FIXME: put method in Instance instead
-            ((InstanceContainer) instance).refreshLastBlockChangeTime();
-        }
-
         if (callback != null) {
             if (safeCallback) {
                 instance.scheduleNextTick(inst -> callback.accept(chunk));

@@ -96,7 +96,6 @@ public class InstanceContainer extends Instance {
 
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
-    private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, null, dimensionType.key());
@@ -125,8 +124,6 @@ public class InstanceContainer extends Instance {
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
-        // last block change starts at instance creation time
-        refreshLastBlockChangeTime();
     }
 
     @Override
@@ -163,7 +160,6 @@ public class InstanceContainer extends Instance {
 
         synchronized (chunk) {
             // Refresh the last block change time
-            this.lastBlockChangeTime = System.nanoTime();
             final BlockVec blockPosition = new BlockVec(x, y, z);
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
@@ -785,9 +781,6 @@ public class InstanceContainer extends Instance {
             processFork(chunk);
         } catch (Throwable e) {
             MinecraftServer.getExceptionManager().handleException(e);
-        } finally {
-            // End generation
-            refreshLastBlockChangeTime();
         }
         return chunk;
     }
@@ -915,7 +908,6 @@ public class InstanceContainer extends Instance {
         InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType());
         copiedInstance.srcInstance = this;
         copiedInstance.tagHandler = this.tagHandler.copy();
-        copiedInstance.lastBlockChangeTime = this.lastBlockChangeTime;
         for (Chunk chunk : chunks.values()) {
             final int chunkX = chunk.getChunkX();
             final int chunkZ = chunk.getChunkZ();
@@ -935,24 +927,6 @@ public class InstanceContainer extends Instance {
      */
     public @Nullable InstanceContainer getSrcInstance() {
         return srcInstance;
-    }
-
-    /**
-     * Gets the last time at which a block changed.
-     *
-     * @return the time at which the last block changed in nanoseconds. Only use this to calculate delta times
-     */
-    public long getLastBlockChangeTime() {
-        return lastBlockChangeTime;
-    }
-
-    /**
-     * Signals the instance that a block changed.
-     * <p>
-     * Useful if you change blocks values directly using a {@link Chunk} object.
-     */
-    public void refreshLastBlockChangeTime() {
-        this.lastBlockChangeTime = System.nanoTime();
     }
 
     @Override
