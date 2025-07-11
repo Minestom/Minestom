@@ -107,9 +107,9 @@ public class LightingChunk extends DynamicChunk {
         if (block == Block.AIR) return false;
         if (DIFFUSE_SKY_LIGHT.contains(block.key())) return true;
 
-        Shape shape = block.registry().collisionShape();
-        boolean occludesTop = Block.AIR.registry().collisionShape().isOccluded(shape, BlockFace.TOP);
-        boolean occludesBottom = Block.AIR.registry().collisionShape().isOccluded(shape, BlockFace.BOTTOM);
+        Shape shape = block.registry().occlusionShape();
+        boolean occludesTop = Block.AIR.registry().occlusionShape().isOccluded(shape, BlockFace.TOP);
+        boolean occludesBottom = Block.AIR.registry().occlusionShape().isOccluded(shape, BlockFace.BOTTOM);
 
         return occludesBottom || occludesTop;
     }

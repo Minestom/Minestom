@@ -13,24 +13,18 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public record ShapeImpl(CollisionData collisionData, LightData lightData) implements Shape {
+public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implements Shape {
     private static final Pattern PATTERN = Pattern.compile("\\d.\\d+", Pattern.MULTILINE);
 
-    record CollisionData(List<BoundingBox> collisionBoundingBoxes,
-                         Point relativeStart, Point relativeEnd,
-                         byte fullFaces) {
-        public CollisionData {
-            collisionBoundingBoxes = List.copyOf(collisionBoundingBoxes);
+    record ShapeData(List<BoundingBox> boundingBoxes,
+                     Point relativeStart, Point relativeEnd,
+                     byte fullFaces) {
+        public ShapeData {
+            boundingBoxes = List.copyOf(boundingBoxes);
         }
     }
 
-    record LightData(List<BoundingBox> occlusionBoundingBoxes,
-                     byte blockOcclusion, byte airOcclusion,
-                     byte lightEmission) {
-        public LightData {
-            occlusionBoundingBoxes = List.copyOf(occlusionBoundingBoxes);
-        }
-    }
+    record OcclusionData(byte blockOcclusion, byte airOcclusion, byte lightEmission) {}
 
     /**
      * Computes the occlusion for a given face.
@@ -57,46 +51,50 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
 
     @Override
     public @NotNull Point relativeStart() {
-        return collisionData.relativeStart;
+        return shapeData.relativeStart;
     }
 
     @Override
     public @NotNull Point relativeEnd() {
-        return collisionData.relativeEnd;
+        return shapeData.relativeEnd;
     }
 
     @Override
     public boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face) {
-        final LightData lightData = this.lightData;
-        final LightData otherLightData = ((ShapeImpl) shape).lightData;
-        final boolean hasBlockOcclusion = (((lightData.blockOcclusion >> face.ordinal()) & 1) == 1);
-        final boolean hasBlockOcclusionOther = ((otherLightData.blockOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
+        final OcclusionData occlusionData = this.occlusionData;
+        final OcclusionData otherOcclusionData = ((ShapeImpl) shape).occlusionData;
 
-        if (lightData.lightEmission > 0) return hasBlockOcclusionOther;
+        final boolean hasBlockOcclusion = (((occlusionData.blockOcclusion >> face.ordinal()) & 1) == 1);
+        final boolean hasBlockOcclusionOther = ((otherOcclusionData.blockOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
+
+        if (occlusionData.lightEmission > 0) return hasBlockOcclusionOther;
 
         // If either face is full, return true
         if (hasBlockOcclusion || hasBlockOcclusionOther) return true;
 
-        final boolean hasAirOcclusion = (((lightData.airOcclusion >> face.ordinal()) & 1) == 1);
-        final boolean hasAirOcclusionOther = ((otherLightData.airOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
+        final boolean hasAirOcclusion = (((occlusionData.airOcclusion >> face.ordinal()) & 1) == 1);
+        final boolean hasAirOcclusionOther = ((otherOcclusionData.airOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
 
         // If a single face is air, return false
         if (hasAirOcclusion || hasAirOcclusionOther) return false;
 
+        final ShapeData shapeData = this.shapeData;
+        final ShapeData otherShapeData = ((ShapeImpl) shape).shapeData;
+
         // Comparing two partial faces. Computation needed
-        List<Rectangle> allRectangles = computeOcclusionSet(face.getOppositeFace(), otherLightData.occlusionBoundingBoxes);
-        allRectangles.addAll(computeOcclusionSet(face, lightData.occlusionBoundingBoxes));
+        List<Rectangle> allRectangles = computeOcclusionSet(face.getOppositeFace(), otherShapeData.boundingBoxes);
+        allRectangles.addAll(computeOcclusionSet(face, shapeData.boundingBoxes));
         return isFaceCovered(allRectangles) == 2;
     }
 
     @Override
     public boolean isFaceFull(@NotNull BlockFace face) {
-        return (((collisionData.fullFaces >> face.ordinal()) & 1) == 1);
+        return (((shapeData.fullFaces >> face.ordinal()) & 1) == 1);
     }
 
     @Override
     public boolean intersectBox(@NotNull Point position, @NotNull BoundingBox boundingBox) {
-        for (BoundingBox blockSection : collisionData.collisionBoundingBoxes) {
+        for (BoundingBox blockSection : shapeData.boundingBoxes) {
             if (boundingBox.intersectBox(position, blockSection)) return true;
         }
         return false;
@@ -106,7 +104,7 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection,
                                      @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         boolean hitBlock = false;
-        for (BoundingBox blockSection : collisionData.collisionBoundingBoxes) {
+        for (BoundingBox blockSection : shapeData.boundingBoxes) {
             // Update final result if the temp result collision is sooner than the current final result
             if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
                 finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
@@ -123,30 +121,27 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
     }
 
     /**
-     * Gets the collision bounding boxes for this block. There will be more than one bounds for more complex shapes e.g.
+     * Gets the bounding boxes for this shape. There will be more than one bounds for more complex shapes e.g.
      * stairs.
      *
-     * @return the collision bounding boxes for this block
+     * @return the bounding boxes for this shape
      */
     public @NotNull @Unmodifiable List<BoundingBox> collisionBoundingBoxes() {
-        return collisionData.collisionBoundingBoxes;
+        return shapeData.boundingBoxes;
     }
 
-    /**
-     * Gets the occlusion bounding boxes for this block.
-     *
-     * @return the occlusion bounding boxes for this block
-     */
-    public @NotNull @Unmodifiable List<BoundingBox> occlusionBoundingBoxes() {
-        return lightData.occlusionBoundingBoxes;
+    static ShapeImpl parseShapeFromRegistry(String shape, byte lightEmission) {
+        BoundingBox[] boundingBoxes = parseRegistryBoundingBoxString(shape);
+        final ShapeData shapeData = shapeData(List.of(boundingBoxes));
+        final OcclusionData occlusionData = occlusionData(shapeData, lightEmission);
+        return new ShapeImpl(shapeData, occlusionData);
     }
 
-    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, boolean occludes, byte lightEmission) {
-        BoundingBox[] collisionBoundingBoxes = parseRegistryBoundingBoxString(collision);
-        BoundingBox[] occlusionBoundingBoxes = occludes ? parseRegistryBoundingBoxString(occlusion) : new BoundingBox[0];
-        final CollisionData collisionData = collisionData(List.of(collisionBoundingBoxes));
-        final LightData lightData = lightData(List.of(occlusionBoundingBoxes), lightEmission);
-        return new ShapeImpl(collisionData, lightData);
+    static ShapeImpl emptyShape(byte lightEmission) {
+        BoundingBox[] boundingBoxes = new BoundingBox[0];
+        final ShapeData shapeData = shapeData(List.of(boundingBoxes));
+        final OcclusionData occlusionData = occlusionData(shapeData, lightEmission);
+        return new ShapeImpl(shapeData, occlusionData);
     }
 
     private static BoundingBox[] parseRegistryBoundingBoxString(String str) {
@@ -178,7 +173,7 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
         return boundingBoxes;
     }
 
-    private static CollisionData collisionData(List<BoundingBox> collisionBoundingBoxes) {
+    private static ShapeData shapeData(List<BoundingBox> collisionBoundingBoxes) {
         // Find bounds of collision
         Vec relativeStart;
         Vec relativeEnd;
@@ -208,18 +203,18 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
             fullCollisionFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
         }
 
-        return new CollisionData(collisionBoundingBoxes, relativeStart, relativeEnd, fullCollisionFaces);
+        return new ShapeData(collisionBoundingBoxes, relativeStart, relativeEnd, fullCollisionFaces);
     }
 
-    private static LightData lightData(List<BoundingBox> occlusionBoundingBoxes, byte lightEmission) {
+    private static OcclusionData occlusionData(ShapeData shapeData, byte lightEmission) {
         byte fullFaces = 0;
         byte airFaces = 0;
         for (BlockFace f : BlockFace.values()) {
-            final byte res = isFaceCovered(computeOcclusionSet(f, occlusionBoundingBoxes));
+            final byte res = isFaceCovered(computeOcclusionSet(f, shapeData.boundingBoxes));
             fullFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
             airFaces |= ((res == 0) ? 0b1 : 0b0) << (byte) f.ordinal();
         }
-        return new LightData(occlusionBoundingBoxes, fullFaces, airFaces, lightEmission);
+        return new OcclusionData(fullFaces, airFaces, lightEmission);
     }
 
     private static @NotNull List<Rectangle> computeOcclusionSet(BlockFace face, List<BoundingBox> boundingBoxes) {

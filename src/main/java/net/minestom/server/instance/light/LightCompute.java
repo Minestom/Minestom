@@ -82,8 +82,8 @@ public final class LightCompute {
                     final Block currentBlock = Objects.requireNonNullElse(getBlock(blockPalette, x, y, z), Block.AIR);
                     final Block propagatedBlock = Objects.requireNonNullElse(getBlock(blockPalette, xO, yO, zO), Block.AIR);
 
-                    final Shape currentShape = currentBlock.registry().collisionShape();
-                    final Shape propagatedShape = propagatedBlock.registry().collisionShape();
+                    final Shape currentShape = currentBlock.registry().occlusionShape();
+                    final Shape propagatedShape = propagatedBlock.registry().occlusionShape();
 
                     final boolean airAir = currentBlock.isAir() && propagatedBlock.isAir();
                     if (!airAir && currentShape.isOccluded(propagatedShape, BlockFace.fromDirection(direction)))
