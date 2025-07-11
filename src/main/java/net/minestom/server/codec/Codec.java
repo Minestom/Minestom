@@ -42,7 +42,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<RawValue> RAW_VALUE = new CodecImpl.RawValueCodecImpl();
 
-    @NotNull Codec<Unit> UNIT = StructCodec.struct(() -> Unit.INSTANCE);
+    @NotNull Codec<Unit> UNIT = StructCodec.struct(Unit.INSTANCE);
 
     @NotNull Codec<Boolean> BOOLEAN = new PrimitiveImpl<>(Transcoder::createBoolean, Transcoder::getBoolean);
 

@@ -17,7 +17,7 @@ public class DataComponentPredicates {
             NetworkBuffer.UNIT.list(), DataComponentPredicates::exact,
             NetworkBuffer.UNIT.list(), DataComponentPredicates::partial,
             DataComponentPredicates::new);
-    public static final Codec<DataComponentPredicates> CODEC = StructCodec.struct(DataComponentPredicates::new);
+    public static final Codec<DataComponentPredicates> CODEC = StructCodec.struct(new DataComponentPredicates());
 
     private DataComponentPredicates() {
     }

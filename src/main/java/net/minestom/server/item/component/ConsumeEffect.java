@@ -57,7 +57,7 @@ public sealed interface ConsumeEffect {
 
         public static final NetworkBuffer.Type<ClearAllEffects> NETWORK_TYPE = NetworkBuffer.UNIT
                 .transform(buffer -> INSTANCE, ignored -> Unit.INSTANCE);
-        public static final StructCodec<ClearAllEffects> CODEC = StructCodec.struct(() -> INSTANCE);
+        public static final StructCodec<ClearAllEffects> CODEC = StructCodec.struct(INSTANCE);
 
         private ClearAllEffects() {
         }
