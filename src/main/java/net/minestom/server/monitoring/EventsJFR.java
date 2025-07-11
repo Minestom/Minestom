@@ -61,4 +61,36 @@ public final class EventsJFR {
             this.chunkZ = chunkZ;
         }
     }
+
+    @Name("minestom.InstanceJoin")
+    @Label("Instance Join")
+    @Category({"Minestom", "Instance"})
+    @Description("An Entity has joined an instance")
+    public static final class InstanceJoin extends Event {
+        @Label("Entity UUID")
+        String entity;
+        @Label("Instance UUID")
+        String instance;
+
+        public InstanceJoin(String entity, String instance) {
+            this.entity = entity;
+            this.instance = instance;
+        }
+    }
+
+    @Name("minestom.InstanceLeave")
+    @Label("Instance Leave")
+    @Category({"Minestom", "Instance"})
+    @Description("An Entity has left an instance")
+    public static final class InstanceLeave extends Event {
+        @Label("Entity UUID")
+        String entity;
+        @Label("Instance UUID")
+        String instance;
+
+        public InstanceLeave(String entity, String instance) {
+            this.entity = entity;
+            this.instance = instance;
+        }
+    }
 }

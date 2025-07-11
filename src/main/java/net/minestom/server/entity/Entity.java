@@ -38,6 +38,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.potion.Potion;
@@ -67,11 +68,7 @@ import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.*;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -836,6 +833,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (event.isCancelled()) return null; // TODO what to return?
 
         if (previousInstance != null) removeFromInstance(previousInstance);
+        new EventsJFR.InstanceJoin(getUuid().toString(), instance.toString()).commit();
 
         this.isActive = true;
         setPositionInternal(spawnPosition);
@@ -882,6 +880,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
         this.viewEngine.forManuals(this::removeViewer);
+        new EventsJFR.InstanceLeave(getUuid().toString(), instance.getUuid().toString()).commit();
     }
 
     /**
@@ -1221,7 +1220,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
-     *
      * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
      */
     @Deprecated
@@ -1233,7 +1231,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Changes the entity custom name.
      *
      * @param customName the custom name of the entity, null to remove it
-     *
      * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
      */
     @Deprecated
