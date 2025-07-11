@@ -211,9 +211,9 @@ public final class RegistryData {
         @NotNull T get(RegistryKey<T> key, Properties properties);
     }
 
-    public record GameEventEntry(Key key, Properties main) implements Entry {
+    public record GameEventEntry(Key key, int id, int notificationRadius) implements Entry {
         public GameEventEntry(String key, Properties main) {
-            this(Key.key(key), main);
+            this(Key.key(key), main.getInt("id"), main.getInt("notificationRadius"));
         }
     }
 

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.UnknownNullability;
  * Represents a game event implementation.
  * Used for a wide variety of events, from weather to bed use to game mode to demo messages.
  */
-record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) implements GameEvent {
+record GameEventImpl(RegistryData.GameEventEntry registry) implements GameEvent {
     static final Registry<GameEvent> REGISTRY = RegistryData.createStaticRegistry(
             BuiltinRegistries.GAME_EVENT, GameEventImpl::createImpl);
 
@@ -28,17 +28,22 @@ record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) impl
         return new GameEventImpl(RegistryData.gameEventEntry(namespace, properties));
     }
 
-    /**
-     * Creates a new {@link GameEventImpl} with the given registry.
-     *
-     * @param registry the registry
-     */
-    private GameEventImpl(RegistryData.GameEventEntry registry) {
-        this(registry, registry.key(), registry.main().getInt("id"));
-    }
-
     static @UnknownNullability GameEvent get(@NotNull RegistryKey<GameEvent> key) {
         return REGISTRY.get(key);
     }
 
+    @Override
+    public @NotNull Key key() {
+        return registry.key();
+    }
+
+    @Override
+    public int id() {
+        return registry.id();
+    }
+
+    @Override
+    public int notificationRadius() {
+        return registry.notificationRadius();
+    }
 }
