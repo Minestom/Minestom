@@ -215,6 +215,9 @@ public class InstanceContainer extends Instance {
 
     @Override
     public @NotNull BlockBatch getBlockBatch(long flags, @NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+        final boolean ignoreData = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0;
+        final boolean aligned = (flags & BlockBatch.ALIGNED_FLAG) != 0;
+        final boolean generate = (flags & BlockBatch.GENERATE_FLAG) != 0;
         final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
         final boolean originAligned = sectionAligned(originX, originY, originZ);
         final int minX = Math.min(p1.blockX(), p2.blockX());
@@ -243,9 +246,10 @@ public class InstanceContainer extends Instance {
                     final int sectionMaxZ = sectionMinZ + 15;
 
                     // Check if this section is fully contained within the requested bounds
-                    if (sectionMinX >= minX && sectionMaxX <= maxX &&
+                    final boolean contained = sectionMinX >= minX && sectionMaxX <= maxX &&
                             sectionMinY >= minY && sectionMaxY <= maxY &&
-                            sectionMinZ >= minZ && sectionMaxZ <= maxZ) {
+                            sectionMinZ >= minZ && sectionMaxZ <= maxZ;
+                    if (aligned || contained) {
                         // Section is fully contained - add to sectionIndexes
                         sectionIndexes.add(sectionIndex(sectionX, sectionY, sectionZ));
                     } else {
@@ -269,8 +273,6 @@ public class InstanceContainer extends Instance {
             }
         }
 
-        final boolean ignoreData = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0;
-        final boolean generate = (flags & BlockBatch.GENERATE_FLAG) != 0;
         Function<BlockBatch.Builder, Void> chunkRegister = builder -> {
             for (long sectionIdx : sectionIndexes) {
                 final int sectionX = sectionIndexGetX(sectionIdx);
@@ -324,7 +326,7 @@ public class InstanceContainer extends Instance {
             return null;
         };
 
-        if (blockCoords.isEmpty()) {
+        if (aligned) {
             // Fast aligned batch
             return BlockBatch.aligned(chunkRegister::apply);
         } else {
