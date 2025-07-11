@@ -8,6 +8,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -148,6 +149,7 @@ public abstract class PlayerConnection {
                 player.scheduleNextTick(Entity::remove);
             else {
                 EventDispatcher.call(new PlayerDisconnectEvent(player));
+                new EventsJFR.PlayerLeave(player.getUuid().toString()).commit();
             }
         }
     }

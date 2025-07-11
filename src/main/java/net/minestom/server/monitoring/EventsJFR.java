@@ -18,6 +18,10 @@ public final class EventsJFR {
     public static final String INSTANCE_JOIN = "minestom.InstanceJoin";
     public static final String INSTANCE_LEAVE = "minestom.InstanceLeave";
 
+    public static final String PLAYER_JOIN = "minestom.PlayerJoin";
+    public static final String PLAYER_LEAVE = "minestom.PlayerLeave";
+    public static final String PLAYER_COMMAND = "minestom.PlayerCommand";
+
     @Name(SERVER_PING)
     @Label("Server Ping")
     @Category({"Minestom", "Server"})
@@ -108,6 +112,48 @@ public final class EventsJFR {
         public InstanceLeave(String entity, String instance) {
             this.entity = entity;
             this.instance = instance;
+        }
+    }
+
+    @Name(PLAYER_JOIN)
+    @Label("Player Join")
+    @Category({"Minestom", "Player"})
+    @Description("A player joined the server")
+    public static final class PlayerJoin extends Event {
+        @Label("Player UUID")
+        String player;
+
+        public PlayerJoin(String player) {
+            this.player = player;
+        }
+    }
+
+    @Name(PLAYER_LEAVE)
+    @Label("Player Leave")
+    @Category({"Minestom", "Player"})
+    @Description("A player left the server")
+    public static final class PlayerLeave extends Event {
+        @Label("Player UUID")
+        String player;
+
+        public PlayerLeave(String player) {
+            this.player = player;
+        }
+    }
+
+    @Name(PLAYER_COMMAND)
+    @Label("Player Command")
+    @Category({"Minestom", "Player"})
+    @Description("A player executed a command")
+    public static final class PlayerCommand extends Event {
+        @Label("Player UUID")
+        String player;
+        @Label("Command")
+        String command;
+
+        public PlayerCommand(String player, String command) {
+            this.player = player;
+            this.command = command;
         }
     }
 }
