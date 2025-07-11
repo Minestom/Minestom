@@ -126,7 +126,7 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
      *
      * @return the bounding boxes for this shape
      */
-    public @NotNull @Unmodifiable List<BoundingBox> collisionBoundingBoxes() {
+    public @NotNull @Unmodifiable List<BoundingBox> boundingBoxes() {
         return shapeData.boundingBoxes;
     }
 
