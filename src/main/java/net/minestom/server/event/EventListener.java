@@ -19,9 +19,11 @@ import java.util.function.Predicate;
  *
  * @param <T> The event type being handled.
  */
-public interface EventListener<T extends Event> extends Function<T, EventListener.Result> {
+public interface EventListener<T extends Event> {
 
     @NotNull Class<T> eventType();
+
+    @NotNull Result run(@NotNull T event);
 
     @Contract(pure = true)
     static <T extends Event> EventListener.@NotNull Builder<T> builder(@NotNull Class<T> eventType) {
@@ -61,7 +63,7 @@ public interface EventListener<T extends Event> extends Function<T, EventListene
                 @NotNull Function<T, EventListener.Result> function
         ) implements EventListener<T> {
             @Override
-            public Result apply(T t) {
+            public @NotNull Result run(@NotNull T t) {
                 return function.apply(t);
             }
         }
