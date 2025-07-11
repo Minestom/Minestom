@@ -244,4 +244,6 @@ interface BlockSoundTypes {
     BlockSoundType RESIN_BRICKS = BlockSoundImpl.get("resin_bricks");
 
     BlockSoundType IRON = BlockSoundImpl.get("iron");
+
+    BlockSoundType DRIED_GHAST = BlockSoundImpl.get("dried_ghast");
 }

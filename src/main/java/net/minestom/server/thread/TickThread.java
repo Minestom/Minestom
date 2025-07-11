@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -26,7 +27,7 @@ public final class TickThread extends MinestomThread {
     private volatile boolean stop;
 
     private CountDownLatch latch;
-    private long tickTime;
+    private long tickTimeNanos;
     private long tickNum = 0;
     private final List<ThreadDispatcher.Partition> entries = new ArrayList<>();
 
@@ -64,7 +65,7 @@ public final class TickThread extends MinestomThread {
 
     private void tick() {
         final ReentrantLock lock = this.lock;
-        final long tickTime = this.tickTime;
+        final long tickTime = TimeUnit.NANOSECONDS.toMillis(this.tickTimeNanos);
         for (ThreadDispatcher.Partition entry : entries) {
             assert entry.thread() == this;
             final List<Tickable> elements = entry.elements();
@@ -84,14 +85,14 @@ public final class TickThread extends MinestomThread {
         }
     }
 
-    void startTick(CountDownLatch latch, long tickTime) {
+    void startTick(CountDownLatch latch, long tickTimeNanos) {
         if (stop || entries.isEmpty()) {
             // Nothing to tick
             latch.countDown();
             return;
         }
         this.latch = latch;
-        this.tickTime = tickTime;
+        this.tickTimeNanos = tickTimeNanos;
         this.tickNum += 1;
         this.stop = false;
         LockSupport.unpark(this);

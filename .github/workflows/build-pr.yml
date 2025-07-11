@@ -18,27 +18,34 @@ jobs:
           # Allow caching for all branches in our repo;
           # this is so we don't get evicted, see Cache Optimization in action docs for more info
           cache-read-only: ${{ github.repository_owner != 'Minestom' }}
-      - name: Build on ${{ matrix.os }}
+      - name: Build
         run: ./gradlew test javadoc
-#  publish:
-#    name: Publish PR
-#    if: contains(github.event.pull_request.labels.*.name, 'Publish Pull Request') && github.repository_owner == 'Minestom'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v4
-#      - id: vars
-#        run: |
-#          export ACTUAL=${{ github.event.pull_request.head.sha }}
-#          echo "short_commit_hash=${ACTUAL::10}" >> $GITHUB_OUTPUT
-#      - name: Publish Artifacts
-#        env:
-#          MINESTOM_VERSION: ${{ github.head_ref }}-${{ steps.vars.outputs.short_commit_hash }}
-#          MINESTOM_CHANNEL: snapshot
-#          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-#          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-#          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-#          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
-#        run: |
-#          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
-#          echo "Version: ${MINESTOM_VERSION}" >> $GITHUB_STEP_SUMMARY
+  publish:
+    name: Publish PR
+    if: contains(github.event.pull_request.labels.*.name, 'Publish Pull Request') && github.repository_owner == 'Minestom'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          # Allow caching for all branches in our repo;
+          # this is so we don't get evicted, see Cache Optimization in action docs for more info
+          cache-read-only: ${{ github.repository_owner != 'Minestom' }}
+
+      - name: Publish Artifacts
+        env:
+          MINESTOM_VERSION: ${{ github.head_ref }}-SNAPSHOT
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
+        run: |
+          ./gradlew nmcpPublishAggregationToCentralPortalSnapshots
+          echo "Version: ${MINESTOM_VERSION}" >> $GITHUB_STEP_SUMMARY
