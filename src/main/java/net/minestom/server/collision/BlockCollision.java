@@ -61,8 +61,8 @@ final class BlockCollision {
                                                Block.Getter getter, PhysicsResult lastPhysicsResult) {
         if (lastPhysicsResult != null && lastPhysicsResult.collisionShapes()[1] instanceof ShapeImpl shape) {
             var currentBlock = getter.getBlock(lastPhysicsResult.collisionShapePositions()[1], Block.Getter.Condition.TYPE);
-            var lastBlockBoxes = shape.collisionBoundingBoxes();
-            var currentBlockBoxes = ((ShapeImpl) currentBlock.registry().collisionShape()).collisionBoundingBoxes();
+            var lastBlockBoxes = shape.boundingBoxes();
+            var currentBlockBoxes = ((ShapeImpl) currentBlock.registry().collisionShape()).boundingBoxes();
 
             // Fast exit if entity hasn't moved
             if (lastPhysicsResult.collisionY()

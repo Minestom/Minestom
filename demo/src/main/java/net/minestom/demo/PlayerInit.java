@@ -172,6 +172,7 @@ public class PlayerInit {
                             new TrackedWaypointPacket.Target.Vec3i(happyGhast.getPosition())
                     )));
                 }
+                System.out.println(event.getKey() + " -> " + payload);
             })
             .addListener(PlayerChatEvent.class, event -> {
                 var dialog = new Dialog.MultiAction(

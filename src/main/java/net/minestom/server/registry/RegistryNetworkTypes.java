@@ -17,7 +17,7 @@ final class RegistryNetworkTypes {
             final var registries = Objects.requireNonNull(buffer.registries(), "Buffer is missing registries");
             final var registry = selector.select(registries);
             final int id = registry.getId(value);
-            Check.stateCondition(id == -1, "Key %s is not registered in registry %s", value, registry.key());
+            Check.stateCondition(id == -1, "Key {0} is not registered in registry {1}", value, registry.key());
             buffer.write(NetworkBuffer.VAR_INT, id);
         }
 
@@ -27,7 +27,7 @@ final class RegistryNetworkTypes {
             final var registry = selector.select(registries);
             final int id = buffer.read(NetworkBuffer.VAR_INT);
             final var key = registry.getKey(id);
-            Check.stateCondition(key == null, "Unknown id %d for registry %s", id - 1, registry.key());
+            Check.stateCondition(key == null, "Unknown id {0} for registry {1}", id - 1, registry.key());
             return key;
         }
     }
@@ -43,7 +43,7 @@ final class RegistryNetworkTypes {
             switch (value.unwrap()) {
                 case Either.Left(RegistryKey<T> key) -> {
                     final int id = registry.getId(key);
-                    Check.stateCondition(id == -1, "Key %s is not registered in registry %s", key, registry.key());
+                    Check.stateCondition(id == -1, "Key {0} is not registered in registry {1}", key, registry.key());
                     buffer.write(NetworkBuffer.VAR_INT, id + 1);
                 }
                 case Either.Right(T direct) -> {
@@ -62,7 +62,7 @@ final class RegistryNetworkTypes {
                 return (Holder<T>) buffer.read(registryNetworkType);
 
             final var key = registry.getKey(id - 1);
-            Check.stateCondition(key == null, "Unknown id %d for registry %s", id - 1, registry.key());
+            Check.stateCondition(key == null, "Unknown id {0} for registry {1}", id - 1, registry.key());
             return key;
         }
     }

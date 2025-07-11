@@ -53,10 +53,6 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
-    protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
-    protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
-    private boolean needsCompleteHeightmapRefresh = true;
-  
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {

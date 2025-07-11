@@ -1,0 +1,24 @@
+name: Build PR
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    name: Build & Test Main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          # Allow caching for all branches in our repo;
+          # this is so we don't get evicted, see Cache Optimization in action docs for more info
+          cache-read-only: ${{ github.repository_owner != 'Minestom' }}
+      - name: Build
+        run: ./gradlew test javadoc

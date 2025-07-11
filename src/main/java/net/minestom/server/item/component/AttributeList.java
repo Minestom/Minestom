@@ -78,15 +78,15 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
         record Default() implements Display {
             public static final Default INSTANCE = new Default();
 
-            public static final NetworkBuffer.Type<Default> NETWORK_TYPE = NetworkBufferTemplate.template(() -> INSTANCE);
-            public static final StructCodec<Default> CODEC = StructCodec.struct(() -> INSTANCE);
+            public static final NetworkBuffer.Type<Default> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
+            public static final StructCodec<Default> CODEC = StructCodec.struct(INSTANCE);
         }
 
         record Hidden() implements Display {
             public static final Hidden INSTANCE = new Hidden();
 
-            public static final NetworkBuffer.Type<Hidden> NETWORK_TYPE = NetworkBufferTemplate.template(() -> INSTANCE);
-            public static final StructCodec<Hidden> CODEC = StructCodec.struct(() -> INSTANCE);
+            public static final NetworkBuffer.Type<Hidden> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
+            public static final StructCodec<Hidden> CODEC = StructCodec.struct(INSTANCE);
         }
 
         record Override(@NotNull Component component) implements Display {
