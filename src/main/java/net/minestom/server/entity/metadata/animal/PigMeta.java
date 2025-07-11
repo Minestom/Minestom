@@ -14,14 +14,6 @@ public class PigMeta extends AnimalMeta {
         super(entity, metadata);
     }
 
-    public boolean isHasSaddle() {
-        return metadata.get(MetadataDef.Pig.HAS_SADDLE);
-    }
-
-    public void setHasSaddle(boolean value) {
-        metadata.set(MetadataDef.Pig.HAS_SADDLE, value);
-    }
-
     public int getTimeToBoost() {
         return metadata.get(MetadataDef.Pig.BOOST_TIME);
     }

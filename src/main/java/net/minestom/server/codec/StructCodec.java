@@ -55,6 +55,21 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
+    static <R> StructCodec<R> struct(R value) {
+        final Result<R> ok = new Result.Ok<>(value);
+        return new StructCodec<>() {
+            @Override
+            public @NotNull <D> Result<R> decodeFromMap(@NotNull Transcoder<D> coder, @NotNull MapLike<D> map) {
+                return ok;
+            }
+
+            @Override
+            public <D> @NotNull Result<D> encodeToMap(@NotNull Transcoder<D> coder, @NotNull R value, @NotNull MapBuilder<D> map) {
+                return new Result.Ok<>(map.build());
+            }
+        };
+    }
+
     static <R> StructCodec<R> struct(Supplier<R> ctor) {
         return new StructCodec<>() {
             @Override

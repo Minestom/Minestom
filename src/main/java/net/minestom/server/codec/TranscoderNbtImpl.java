@@ -261,6 +261,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
             case ByteArrayBinaryTag byteArrayTag -> new Result.Ok<>(coder.createByteArray(byteArrayTag.value()));
             case StringBinaryTag stringTag -> new Result.Ok<>(coder.createString(stringTag.value()));
             case ListBinaryTag listTag -> {
+                listTag = listTag.unwrapHeterogeneity();
                 final ListBuilder<O> list = coder.createList(listTag.size());
                 for (int i = 0; i < listTag.size(); i++) {
                     switch (convertTo(coder, listTag.get(i))) {

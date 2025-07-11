@@ -120,7 +120,24 @@ final class PaletteImpl implements Palette {
         if (bitsPerEntry == 0) {
             if (oldValue == count) fill(newValue);
         } else {
-            replaceAll((x, y, z, value) -> value == oldValue ? newValue : value);
+            if (hasPalette()) {
+                final int index = valueToPaletteMap.get(oldValue);
+                if (index == -1) return; // Old value not present in palette
+                final boolean countUpdate = newValue == 0 || oldValue == 0;
+                final int count = countUpdate ? count(oldValue) : -1;
+                if (count == 0) return; // No blocks to replace
+                paletteToValueList.set(index, newValue);
+                valueToPaletteMap.remove(oldValue);
+                valueToPaletteMap.put(newValue, index);
+                // Update count
+                if (newValue == 0) {
+                    this.count -= count; // Replacing with air
+                } else if (oldValue == 0) {
+                    this.count += count; // Replacing air with a block
+                }
+            } else {
+                replaceAll((x, y, z, value) -> value == oldValue ? newValue : value);
+            }
         }
     }
 
@@ -350,6 +367,57 @@ final class PaletteImpl implements Palette {
         } else {
             return count;
         }
+    }
+
+    @Override
+    public int count(int value) {
+        if (bitsPerEntry == 0) return count == value ? maxSize() : 0;
+        if (value == 0) return maxSize() - count();
+        int queryValue = value;
+        if (hasPalette()) {
+            queryValue = valueToPaletteMap.getOrDefault(value, -1);
+            if (queryValue == -1) return 0;
+        }
+        // Scan through the values
+        int result = 0;
+        final int size = maxSize();
+        final int bits = bitsPerEntry;
+        final int valuesPerLong = 64 / bits;
+        final int mask = (1 << bits) - 1;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                if (((int) (block & mask)) == queryValue) result++;
+                block >>>= bits;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean any(int value) {
+        if (bitsPerEntry == 0) return count == value;
+        if (value == 0) return maxSize() != count;
+        int queryValue = value;
+        if (hasPalette()) {
+            queryValue = valueToPaletteMap.getOrDefault(value, -1);
+            if (queryValue == -1) return false;
+        }
+        // Scan through the values
+        final int size = maxSize();
+        final int bits = bitsPerEntry;
+        final int valuesPerLong = 64 / bits;
+        final int mask = (1 << bits) - 1;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                if (((int) (block & mask)) == queryValue) return true;
+                block >>>= bits;
+            }
+        }
+        return false;
     }
 
     @Override

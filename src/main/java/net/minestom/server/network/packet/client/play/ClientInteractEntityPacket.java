@@ -55,7 +55,7 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
     }
 
     public record Attack() implements Type {
-        public static final NetworkBuffer.Type<Attack> SERIALIZER = NetworkBufferTemplate.template(Attack::new);
+        public static final NetworkBuffer.Type<Attack> SERIALIZER = NetworkBufferTemplate.template(new Attack());
 
         @Override
         public int id() {

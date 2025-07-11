@@ -5,5 +5,5 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
 public record ClientLoginAcknowledgedPacket() implements ClientPacket {
-    public static final NetworkBuffer.Type<ClientLoginAcknowledgedPacket> SERIALIZER = NetworkBufferTemplate.template(ClientLoginAcknowledgedPacket::new);
+    public static final NetworkBuffer.Type<ClientLoginAcknowledgedPacket> SERIALIZER = NetworkBufferTemplate.template(new ClientLoginAcknowledgedPacket());
 }

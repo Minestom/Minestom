@@ -23,6 +23,7 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
@@ -331,8 +332,11 @@ public class InstanceContainer extends Instance {
         final Consumer<Chunk> generate = chunk -> {
             if (chunk == null) {
                 // Loader couldn't load the chunk, generate it
+                EventsJFR.ChunkGeneration chunkGeneration = new EventsJFR.ChunkGeneration(getUuid().toString(), chunkX, chunkZ);
+                chunkGeneration.begin();
                 chunk = createChunk(chunkX, chunkZ);
                 chunk.onGenerate();
+                chunkGeneration.commit();
             }
 
             // TODO run in the instance thread?
@@ -344,17 +348,25 @@ public class InstanceContainer extends Instance {
             assert future == completableFuture : "Invalid future: " + future;
             completableFuture.complete(chunk);
         };
+        Supplier<Chunk> loaderSupplier = () -> {
+            EventsJFR.ChunkLoading chunkLoading = new EventsJFR.ChunkLoading(getUuid().toString(), loader.getClass(), chunkX, chunkZ);
+            chunkLoading.begin();
+            final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+            chunkLoading.end();
+            if (chunk != null) chunkLoading.commit();
+            return chunk;
+        };
         if (loader.supportsParallelLoading()) {
             Thread.startVirtualThread(() -> {
                 try {
-                    final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+                    final Chunk chunk = loaderSupplier.get();
                     generate.accept(chunk);
                 } catch (Throwable e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             });
         } else {
-            final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+            final Chunk chunk = loaderSupplier.get();
             Thread.startVirtualThread(() -> {
                 try {
                     generate.accept(chunk);

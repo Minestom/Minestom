@@ -59,6 +59,7 @@ import net.minestom.server.item.component.WrittenBookContent;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
@@ -563,6 +564,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (permanent) {
             this.packets.clear();
             EventDispatcher.call(new PlayerDisconnectEvent(this));
+            new EventsJFR.PlayerLeave(getUuid().toString()).commit();
         }
 
 
@@ -741,6 +743,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
+        if (firstSpawn) new EventsJFR.PlayerJoin(getUuid().toString()).commit();
     }
 
     @ApiStatus.Internal
