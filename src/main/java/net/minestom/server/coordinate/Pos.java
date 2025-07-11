@@ -1,6 +1,7 @@
 package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.Contract;
@@ -155,6 +156,19 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
         return new Vec(-xz * Math.sin(Math.toRadians(rotX)),
                 -Math.sin(Math.toRadians(rotY)),
                 xz * Math.cos(Math.toRadians(rotX)));
+    }
+
+    /**
+     * @return The closest direction {@link #yaw() yaw} and {@link #pitch() pitch} are facing to.
+     */
+    public @NotNull Direction facing() {
+        if (pitch < -45) return Direction.UP;
+        if (pitch > 45) return Direction.DOWN;
+        if (yaw > 135 || yaw <= -135) return Direction.NORTH;
+        if (-135 < yaw && yaw <= -45) return Direction.EAST;
+        if (-45 < yaw && yaw <= 45) return Direction.SOUTH;
+        if (45 < yaw) return Direction.WEST;
+        throw new IllegalStateException("Illegal yaw (%s) or pitch (%s) value.".formatted(this.yaw, pitch));
     }
 
     /**
