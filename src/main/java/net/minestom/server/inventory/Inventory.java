@@ -114,8 +114,8 @@ public non-sealed class Inventory extends AbstractInventory {
     /**
      * Gets the cursor item of a player.
      *
-     * @see <a href="https://github.com/Minestom/Minestom/pull/2294">the relevant PR</a>
      * @deprecated normal inventories no longer store cursor items
+     * @see <a href="https://github.com/Minestom/Minestom/pull/2294">the relevant PR</a>
      */
     @Deprecated
     public @NotNull ItemStack getCursorItem(@NotNull Player player) {
@@ -125,8 +125,8 @@ public non-sealed class Inventory extends AbstractInventory {
     /**
      * Changes the cursor item of a player.
      *
-     * @see <a href="https://github.com/Minestom/Minestom/pull/2294">the relevant PR</a>
      * @deprecated normal inventories no longer store cursor items
+     * @see <a href="https://github.com/Minestom/Minestom/pull/2294">the relevant PR</a>
      */
     @Deprecated
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
@@ -199,7 +199,6 @@ public non-sealed class Inventory extends AbstractInventory {
         final ItemStack cursor = playerInventory.getCursorItem(); // Isn't used in the algorithm
 
         InventoryClickResult clickResult;
-
         if (isInWindow) {
             // The player shift-clicked an item in this GUI into their inventory.
             // Prioritize the hotbar (8->0), then their regular inventory (35->9).
@@ -225,11 +224,14 @@ public non-sealed class Inventory extends AbstractInventory {
             updateAll(player);
             return false;
         }
+
         if (isInWindow) {
             setItemStack(slot, clickResult.getClicked());
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
+
+        updateAll(player); // FIXME: currently not properly client-predicted
         playerInventory.setCursorItem(clickResult.getCursor());
         return true;
     }
