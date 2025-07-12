@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
 
 /**
  * A Batch used when all of the block changed are contained inside a single chunk.
@@ -29,7 +30,9 @@ import java.util.concurrent.CountDownLatch;
  * Coordinates are relative to the chunk (0-15) instead of world coordinates.
  *
  * @see Batch
+ * @deprecated Use {@link net.minestom.server.instance.BlockBatch#aligned(Consumer)}
  */
+@Deprecated
 public class ChunkBatch implements Batch<ChunkCallback> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
@@ -225,11 +228,6 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         if (options.shouldSendUpdate()) {
             // TODO update all sections from `updatedSections`
             chunk.sendChunk();
-        }
-
-        if (instance instanceof InstanceContainer) {
-            // FIXME: put method in Instance instead
-            ((InstanceContainer) instance).refreshLastBlockChangeTime();
         }
 
         if (callback != null) {

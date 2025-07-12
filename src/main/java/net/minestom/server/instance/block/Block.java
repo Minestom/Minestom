@@ -4,14 +4,15 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.*;
 
 import java.util.Collection;
@@ -244,7 +245,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     /**
      * Represents an element which can place blocks at position.
      * <p>
-     * Notably used by {@link Instance}, {@link Batch}.
+     * Notably used by {@link Instance}, {@link BlockBatch}.
      */
     interface Setter {
         void setBlock(int x, int y, int z, @NotNull Block block);
@@ -252,10 +253,23 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         default void setBlock(@NotNull Point blockPosition, @NotNull Block block) {
             setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block);
         }
+
+        default void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
+            batch.getAll((x1, y1, z1, block) -> setBlock(x + x1, y + y1, z + z1, block));
+        }
+
+        default void setBlockBatch(@NotNull BlockBatch batch) {
+            setBlockBatch(0, 0, 0, batch);
+        }
+
+        default void setBlockBatch(@NotNull Point blockPosition, @NotNull BlockBatch batch) {
+            setBlockBatch(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), batch);
+        }
     }
 
     interface Getter {
-        @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition);
+        @UnknownNullability
+        Block getBlock(int x, int y, int z, @NotNull Condition condition);
 
         default @UnknownNullability Block getBlock(@NotNull Point point, @NotNull Condition condition) {
             return getBlock(point.blockX(), point.blockY(), point.blockZ(), condition);
@@ -267,6 +281,36 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
         default @NotNull Block getBlock(@NotNull Point point) {
             return Objects.requireNonNull(getBlock(point, Condition.NONE));
+        }
+
+        default @NotNull BlockBatch getBlockBatch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
+                                                  @NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+            final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
+            final int minX = Math.min(p1.blockX(), p2.blockX());
+            final int minY = Math.min(p1.blockY(), p2.blockY());
+            final int minZ = Math.min(p1.blockZ(), p2.blockZ());
+            final int maxX = Math.max(p1.blockX(), p2.blockX());
+            final int maxY = Math.max(p1.blockY(), p2.blockY());
+            final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
+            final Condition condition = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0 ? Condition.TYPE : Condition.NONE;
+            return BlockBatch.batch(flags, builder -> {
+                for (int x = minX; x <= maxX; x++) {
+                    for (int y = minY; y <= maxY; y++) {
+                        for (int z = minZ; z <= maxZ; z++) {
+                            final int bX = x - originX, bY = y - originY, bZ = z - originZ;
+                            try {
+                                final Block block = getBlock(x, y, z, condition);
+                                builder.setBlock(bX, bY, bZ, block);
+                            } catch (NullPointerException ignored) {
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        default @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+            return getBlockBatch(BlockBatch.NO_FLAGS, origin, p1, p2);
         }
 
         /**
