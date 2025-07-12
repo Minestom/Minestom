@@ -110,7 +110,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private int remainingThunderTransitionTicks;
 
     // Attached boss bars
-    private final Set<BossBar> bossBarsAttach = new CopyOnWriteArraySet<>();
+    private final Set<BossBar> attachedBossBars = new CopyOnWriteArraySet<>();
 
     // Field for tick events
     private long lastTickAge = TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
@@ -885,7 +885,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @ApiStatus.Experimental
     public boolean attachBossBar(@NotNull BossBar bossBar) {
         Check.notNull(bossBar, "Boss bar cannot be null");
-        if (!bossBarsAttach.add(bossBar)) return false;
+        if (!attachedBossBars.add(bossBar)) return false;
         showBossBar(bossBar);
         return true;
     }
@@ -893,14 +893,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @ApiStatus.Experimental
     public boolean detachBossBar(@NotNull BossBar bossBar) {
         Check.notNull(bossBar, "Boss bar cannot be null");
-        if (!bossBarsAttach.remove(bossBar)) return false;
+        if (!attachedBossBars.remove(bossBar)) return false;
         hideBossBar(bossBar);
         return true;
     }
 
     @ApiStatus.Experimental
     public Set<BossBar> attachedBossBars() {
-        return Collections.unmodifiableSet(bossBarsAttach);
+        return Collections.unmodifiableSet(attachedBossBars);
     }
 
     @Override

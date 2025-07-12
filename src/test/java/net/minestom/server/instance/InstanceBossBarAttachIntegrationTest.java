@@ -9,8 +9,7 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static net.kyori.adventure.text.Component.text;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class InstanceBossBarAttachIntegrationTest {
@@ -24,10 +23,13 @@ public class InstanceBossBarAttachIntegrationTest {
         Instance instance = env.process().instance().createInstanceContainer();
         BossBar bossBar = sampleBossBar();
 
+        assertEquals(0, instance.attachedBossBars().size());
         assertTrue(instance.attachBossBar(bossBar));
         assertFalse(instance.attachBossBar(bossBar));
+        assertEquals(1, instance.attachedBossBars().size());
         assertTrue(instance.detachBossBar(bossBar));
         assertFalse(instance.detachBossBar(bossBar));
+        assertEquals(0, instance.attachedBossBars().size());
     }
 
     @Test
