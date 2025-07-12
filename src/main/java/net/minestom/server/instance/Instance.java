@@ -110,7 +110,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private int remainingThunderTransitionTicks;
 
     // Attached boss bars
-    private final Set<BossBar> attachedBossBars = new CopyOnWriteArraySet<>();
+    private final Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
 
     // Field for tick events
     private long lastTickAge = TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
@@ -882,25 +882,33 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return new Weather(rainLevel, thunderLevel);
     }
 
-    @ApiStatus.Experimental
-    public boolean attachBossBar(@NotNull BossBar bossBar) {
-        Check.notNull(bossBar, "Boss bar cannot be null");
-        if (!attachedBossBars.add(bossBar)) return false;
-        showBossBar(bossBar);
-        return true;
+    /**
+     * Shows a {@link BossBar} to all players in the instance and tracks it.
+     *
+     * @param bar a boss bar
+     */
+    @Override
+    public void showBossBar(@NotNull BossBar bar) {
+        Check.notNull(bar, "Boss bar cannot be null");
+        if (!bossBars.add(bar)) return;
+        PacketGroupingAudience.super.showBossBar(bar);
+    }
+
+    /**
+     * Hides a {@link BossBar} from all players in the instance and stops tracking it.
+     *
+     * @param bar a boss bar
+     */
+    @Override
+    public void hideBossBar(@NotNull BossBar bar) {
+        Check.notNull(bar, "Boss bar cannot be null");
+        if (!bossBars.remove(bar)) return;
+        PacketGroupingAudience.super.hideBossBar(bar);
     }
 
     @ApiStatus.Experimental
-    public boolean detachBossBar(@NotNull BossBar bossBar) {
-        Check.notNull(bossBar, "Boss bar cannot be null");
-        if (!attachedBossBars.remove(bossBar)) return false;
-        hideBossBar(bossBar);
-        return true;
-    }
-
-    @ApiStatus.Experimental
-    public Set<BossBar> attachedBossBars() {
-        return Collections.unmodifiableSet(attachedBossBars);
+    public Set<BossBar> bossBars() {
+        return Collections.unmodifiableSet(bossBars);
     }
 
     @Override

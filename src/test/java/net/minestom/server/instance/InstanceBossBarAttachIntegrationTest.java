@@ -9,7 +9,8 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static net.kyori.adventure.text.Component.text;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 @EnvTest
 public class InstanceBossBarAttachIntegrationTest {
@@ -23,13 +24,13 @@ public class InstanceBossBarAttachIntegrationTest {
         Instance instance = env.process().instance().createInstanceContainer();
         BossBar bossBar = sampleBossBar();
 
-        assertEquals(0, instance.attachedBossBars().size());
-        assertTrue(instance.attachBossBar(bossBar));
-        assertFalse(instance.attachBossBar(bossBar));
-        assertEquals(1, instance.attachedBossBars().size());
-        assertTrue(instance.detachBossBar(bossBar));
-        assertFalse(instance.detachBossBar(bossBar));
-        assertEquals(0, instance.attachedBossBars().size());
+        assertEquals(0, instance.bossBars().size());
+        instance.showBossBar(bossBar);
+        instance.showBossBar(bossBar);
+        assertEquals(1, instance.bossBars().size());
+        instance.hideBossBar(bossBar);
+        instance.hideBossBar(bossBar);
+        assertEquals(0, instance.bossBars().size());
     }
 
     @Test
@@ -41,7 +42,7 @@ public class InstanceBossBarAttachIntegrationTest {
         connection.connect(instance, new Pos(0, 40, 0));
 
         var collector = connection.trackIncoming(BossBarPacket.class);
-        instance.attachBossBar(bossBar);
+        instance.showBossBar(bossBar);
         collector.assertSingle(bossBarPacket -> assertInstanceOf(BossBarPacket.AddAction.class, bossBarPacket.action()));
     }
 
@@ -52,9 +53,9 @@ public class InstanceBossBarAttachIntegrationTest {
 
         var connection = env.createConnection();
         connection.connect(instance, new Pos(0, 40, 0));
-        instance.attachBossBar(bossBar);
+        instance.showBossBar(bossBar);
         var collector = connection.trackIncoming(BossBarPacket.class);
-        instance.detachBossBar(bossBar);
+        instance.hideBossBar(bossBar);
         collector.assertSingle(bossBarPacket -> assertInstanceOf(BossBarPacket.RemoveAction.class, bossBarPacket.action()));
     }
 
@@ -62,7 +63,7 @@ public class InstanceBossBarAttachIntegrationTest {
     public void showOnAdd(Env env) {
         Instance instance = env.process().instance().createInstanceContainer();
         BossBar bossBar = sampleBossBar();
-        instance.attachBossBar(bossBar);
+        instance.showBossBar(bossBar);
 
         var connection = env.createConnection();
         var collector = connection.trackIncoming(BossBarPacket.class);
@@ -78,7 +79,7 @@ public class InstanceBossBarAttachIntegrationTest {
 
         var connection = env.createConnection();
         Player player = connection.connect(instance, new Pos(0, 40, 0));
-        instance.attachBossBar(bossBar);
+        instance.showBossBar(bossBar);
         var collector = connection.trackIncoming(BossBarPacket.class);
         player.setInstance(instance2).join();
         collector.assertSingle(bossBarPacket -> assertInstanceOf(BossBarPacket.RemoveAction.class, bossBarPacket.action()));
@@ -88,7 +89,7 @@ public class InstanceBossBarAttachIntegrationTest {
     public void update(Env env) {
         Instance instance = env.process().instance().createInstanceContainer();
         BossBar bossBar = sampleBossBar();
-        instance.attachBossBar(bossBar);
+        instance.showBossBar(bossBar);
 
         var connection = env.createConnection();
         connection.connect(instance, new Pos(0, 40, 0));
