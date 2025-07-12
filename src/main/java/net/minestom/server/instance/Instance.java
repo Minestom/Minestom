@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.key.Key;
@@ -59,6 +60,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -106,6 +108,9 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private Weather transitioningWeather = Weather.CLEAR;
     private int remainingRainTransitionTicks;
     private int remainingThunderTransitionTicks;
+
+    // Attached boss bars
+    private final Set<BossBar> bossBarsAttach = new CopyOnWriteArraySet<>();
 
     // Field for tick events
     private long lastTickAge = TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
@@ -875,6 +880,27 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float) Math.max(1, remainingRainTransitionTicks));
         float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float) Math.max(1, remainingThunderTransitionTicks));
         return new Weather(rainLevel, thunderLevel);
+    }
+
+    @ApiStatus.Experimental
+    public boolean attachBossBar(@NotNull BossBar bossBar) {
+        Check.notNull(bossBar, "Boss bar cannot be null");
+        if (!bossBarsAttach.add(bossBar)) return false;
+        showBossBar(bossBar);
+        return true;
+    }
+
+    @ApiStatus.Experimental
+    public boolean detachBossBar(@NotNull BossBar bossBar) {
+        Check.notNull(bossBar, "Boss bar cannot be null");
+        if (!bossBarsAttach.remove(bossBar)) return false;
+        hideBossBar(bossBar);
+        return true;
+    }
+
+    @ApiStatus.Experimental
+    public Set<BossBar> attachedBossBars() {
+        return Collections.unmodifiableSet(bossBarsAttach);
     }
 
     @Override
