@@ -104,7 +104,6 @@ public class Main {
             blockManager.registerHandler(key.key(), () -> signHandler);
         }
 
-
         byte[] favicon;
 
         try (InputStream stream = Main.class.getResourceAsStream("/minestom.png")) {
