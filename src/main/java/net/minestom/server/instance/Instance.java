@@ -53,10 +53,7 @@ import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -907,7 +904,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     @ApiStatus.Experimental
-    public Set<BossBar> bossBars() {
+    public @UnmodifiableView Set<BossBar> bossBars() {
         return Collections.unmodifiableSet(bossBars);
     }
 
