@@ -42,7 +42,7 @@ public class InstanceBossBarAttachIntegrationTest {
 
         var collector = connection.trackIncoming(BossBarPacket.class);
         instance.attachBossBar(bossBar);
-        collector.assertSingle();
+        collector.assertSingle(bossBarPacket -> assertInstanceOf(BossBarPacket.AddAction.class, bossBarPacket.action()));
     }
 
     @Test
@@ -55,7 +55,7 @@ public class InstanceBossBarAttachIntegrationTest {
         instance.attachBossBar(bossBar);
         var collector = connection.trackIncoming(BossBarPacket.class);
         instance.detachBossBar(bossBar);
-        collector.assertSingle();
+        collector.assertSingle(bossBarPacket -> assertInstanceOf(BossBarPacket.RemoveAction.class, bossBarPacket.action()));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class InstanceBossBarAttachIntegrationTest {
         var connection = env.createConnection();
         var collector = connection.trackIncoming(BossBarPacket.class);
         connection.connect(instance, new Pos(0, 40, 0));
-        collector.assertSingle();
+        collector.assertSingle(bossBarPacket -> assertInstanceOf(BossBarPacket.AddAction.class, bossBarPacket.action()));
     }
 
     @Test
@@ -81,6 +81,19 @@ public class InstanceBossBarAttachIntegrationTest {
         instance.attachBossBar(bossBar);
         var collector = connection.trackIncoming(BossBarPacket.class);
         player.setInstance(instance2).join();
-        collector.assertSingle();
+        collector.assertSingle(bossBarPacket -> assertInstanceOf(BossBarPacket.RemoveAction.class, bossBarPacket.action()));
+    }
+
+    @Test
+    public void update(Env env) {
+        Instance instance = env.process().instance().createInstanceContainer();
+        BossBar bossBar = sampleBossBar();
+        instance.attachBossBar(bossBar);
+
+        var connection = env.createConnection();
+        connection.connect(instance, new Pos(0, 40, 0));
+        var collector = connection.trackIncoming(BossBarPacket.class);
+        bossBar.name(text("Text update"));
+        collector.assertSingle(bossBarPacket -> assertInstanceOf(BossBarPacket.UpdateTitleAction.class, bossBarPacket.action()));
     }
 }
