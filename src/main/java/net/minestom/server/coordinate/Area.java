@@ -12,6 +12,10 @@ import java.util.List;
  */
 @ApiStatus.Experimental
 public sealed interface Area extends Iterable<Vec> {
+    static @NotNull Area.Single single(@NotNull Point point) {
+        return new AreaImpl.Single(point);
+    }
+
     static @NotNull Area.Line line(@NotNull Point start, @NotNull Point end) {
         return new AreaImpl.Line(start, end);
     }
@@ -40,6 +44,10 @@ public sealed interface Area extends Iterable<Vec> {
 
     static @NotNull Area.Mesh mesh(@NotNull List<Point> vertices) {
         return new AreaImpl.Mesh(vertices);
+    }
+
+    sealed interface Single extends Area permits AreaImpl.Single {
+        @NotNull Point point();
     }
 
     sealed interface Line extends Area permits AreaImpl.Line {

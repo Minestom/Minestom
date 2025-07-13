@@ -9,6 +9,31 @@ import java.util.NoSuchElementException;
 
 final class AreaImpl {
 
+    record Single(Point point) implements Area.Single {
+        public Single {
+            if (point == null) throw new IllegalArgumentException("Point cannot be null");
+        }
+
+        @Override
+        public @NotNull Iterator<Vec> iterator() {
+            return new Iterator<>() {
+                private boolean hasNext = true;
+
+                @Override
+                public boolean hasNext() {
+                    return hasNext;
+                }
+
+                @Override
+                public Vec next() {
+                    if (!hasNext) throw new NoSuchElementException();
+                    hasNext = false;
+                    return new Vec(point.blockX(), point.blockY(), point.blockZ());
+                }
+            };
+        }
+    }
+
     record Line(Point start, Point end) implements Area.Line {
         public Line {
             if (start == null || end == null) {
