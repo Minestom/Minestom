@@ -221,54 +221,61 @@ public class InstanceContainer extends Instance {
         final boolean generate = (flags & BlockBatch.GENERATE_FLAG) != 0;
         final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
         final boolean originAligned = sectionAligned(originX, originY, originZ);
-        if (!(area instanceof Area.Cuboid cuboid)) throw new IllegalArgumentException("Area must be a Cuboid");
-        final Point min = cuboid.min(), max = cuboid.max();
-        final int minX = min.blockX(), minY = min.blockY(), minZ = min.blockZ();
-        final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
 
-        final int minSectionX = globalToChunk(minX), minSectionY = globalToChunk(minY), minSectionZ = globalToChunk(minZ);
-        final int maxSectionX = globalToChunk(maxX), maxSectionY = globalToChunk(maxY), maxSectionZ = globalToChunk(maxZ);
-
+        // This section/block querying should eventually be moved to a dedicated class
         LongSet sectionIndexes = new LongOpenHashSet();
         Set<BlockVec> blockCoords = new HashSet<>();
+        switch (area) {
+            case Area.Cuboid cuboid -> {
+                final Point min = cuboid.min(), max = cuboid.max();
+                final int minX = min.blockX(), minY = min.blockY(), minZ = min.blockZ();
+                final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
 
-        // Iterate through all sections in the bounding box
-        for (int sectionX = minSectionX; sectionX <= maxSectionX; sectionX++) {
-            for (int sectionY = minSectionY; sectionY <= maxSectionY; sectionY++) {
-                for (int sectionZ = minSectionZ; sectionZ <= maxSectionZ; sectionZ++) {
-                    // Calculate section bounds in global coordinates
-                    final int sectionMinX = sectionX * 16;
-                    final int sectionMinY = sectionY * 16;
-                    final int sectionMinZ = sectionZ * 16;
-                    final int sectionMaxX = sectionMinX + 15;
-                    final int sectionMaxY = sectionMinY + 15;
-                    final int sectionMaxZ = sectionMinZ + 15;
+                final int minSectionX = globalToChunk(minX), minSectionY = globalToChunk(minY), minSectionZ = globalToChunk(minZ);
+                final int maxSectionX = globalToChunk(maxX), maxSectionY = globalToChunk(maxY), maxSectionZ = globalToChunk(maxZ);
 
-                    // Check if this section is fully contained within the requested bounds
-                    final boolean contained = sectionMinX >= minX && sectionMaxX <= maxX &&
-                            sectionMinY >= minY && sectionMaxY <= maxY &&
-                            sectionMinZ >= minZ && sectionMaxZ <= maxZ;
-                    if (aligned || contained) {
-                        // Section is fully contained - add to sectionIndexes
-                        sectionIndexes.add(sectionIndex(sectionX, sectionY, sectionZ));
-                    } else {
-                        // Section is partially contained - add individual blocks to blockCoords
-                        final int blockMinX = Math.max(sectionMinX, minX);
-                        final int blockMaxX = Math.min(sectionMaxX, maxX);
-                        final int blockMinY = Math.max(sectionMinY, minY);
-                        final int blockMaxY = Math.min(sectionMaxY, maxY);
-                        final int blockMinZ = Math.max(sectionMinZ, minZ);
-                        final int blockMaxZ = Math.min(sectionMaxZ, maxZ);
+                // Iterate through all sections in the bounding box
+                for (int sectionX = minSectionX; sectionX <= maxSectionX; sectionX++) {
+                    for (int sectionY = minSectionY; sectionY <= maxSectionY; sectionY++) {
+                        for (int sectionZ = minSectionZ; sectionZ <= maxSectionZ; sectionZ++) {
+                            // Calculate section bounds in global coordinates
+                            final int sectionMinX = sectionX * 16;
+                            final int sectionMinY = sectionY * 16;
+                            final int sectionMinZ = sectionZ * 16;
+                            final int sectionMaxX = sectionMinX + 15;
+                            final int sectionMaxY = sectionMinY + 15;
+                            final int sectionMaxZ = sectionMinZ + 15;
 
-                        for (int x = blockMinX; x <= blockMaxX; x++) {
-                            for (int y = blockMinY; y <= blockMaxY; y++) {
-                                for (int z = blockMinZ; z <= blockMaxZ; z++) {
-                                    blockCoords.add(new BlockVec(x, y, z));
+                            // Check if this section is fully contained within the requested bounds
+                            final boolean contained = sectionMinX >= minX && sectionMaxX <= maxX &&
+                                    sectionMinY >= minY && sectionMaxY <= maxY &&
+                                    sectionMinZ >= minZ && sectionMaxZ <= maxZ;
+                            if (aligned || contained) {
+                                // Section is fully contained - add to sectionIndexes
+                                sectionIndexes.add(sectionIndex(sectionX, sectionY, sectionZ));
+                            } else {
+                                // Section is partially contained - add individual blocks to blockCoords
+                                final int blockMinX = Math.max(sectionMinX, minX);
+                                final int blockMaxX = Math.min(sectionMaxX, maxX);
+                                final int blockMinY = Math.max(sectionMinY, minY);
+                                final int blockMaxY = Math.min(sectionMaxY, maxY);
+                                final int blockMinZ = Math.max(sectionMinZ, minZ);
+                                final int blockMaxZ = Math.min(sectionMaxZ, maxZ);
+
+                                for (int x = blockMinX; x <= blockMaxX; x++) {
+                                    for (int y = blockMinY; y <= blockMaxY; y++) {
+                                        for (int z = blockMinZ; z <= blockMaxZ; z++) {
+                                            blockCoords.add(new BlockVec(x, y, z));
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            }
+            default -> {
+                for (Vec vec : area) blockCoords.add(new BlockVec(vec));
             }
         }
 
@@ -296,11 +303,6 @@ public class InstanceContainer extends Instance {
                             final int globalX = (sectionX * 16) + x;
                             final int globalY = (sectionY * 16) + y;
                             final int globalZ = (sectionZ * 16) + z;
-                            if (globalX < minX || globalX > maxX ||
-                                    globalY < minY || globalY > maxY ||
-                                    globalZ < minZ || globalZ > maxZ) {
-                                return; // Skip blocks outside the requested bounds
-                            }
                             final int bX = globalX - originX, bY = globalY - originY, bZ = globalZ - originZ;
                             final Block block = Block.fromStateId(value);
                             assert block != null;
