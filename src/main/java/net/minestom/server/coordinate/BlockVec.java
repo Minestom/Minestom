@@ -16,12 +16,24 @@ import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
  * callers continually having to convert.
  */
 public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
+    public static final BlockVec ZERO = new BlockVec(0);
+    public static final BlockVec ONE = new BlockVec(1);
+    public static final BlockVec SECTION = new BlockVec(16);
+
     public BlockVec(double x, double y, double z) {
         this(globalToBlock(x), globalToBlock(y), globalToBlock(z));
     }
 
     public BlockVec(@NotNull Point point) {
         this(point.blockX(), point.blockY(), point.blockZ());
+    }
+
+    public BlockVec(int value) {
+        this(value, value, value);
+    }
+
+    public BlockVec(double value) {
+        this(value, value, value);
     }
 
     @Override
