@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
@@ -62,6 +63,11 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * the number of sections or palette entries.
      */
     int count();
+
+    /**
+     * Makes a {@link Generator} from this batch. Blocks outside it will not be generated.
+     */
+    @NotNull Generator asGenerator();
 
     long flags();
 

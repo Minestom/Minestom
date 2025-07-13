@@ -5,8 +5,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
@@ -97,6 +99,50 @@ record BlockBatchImpl(
             }
             return count;
         }
+    }
+
+    @Override
+    public @NotNull Generator asGenerator() {
+        return unit -> {
+            final Point start = unit.absoluteStart(), end = unit.absoluteEnd();
+            final int minX = start.chunkX(), minY = start.section(), minZ = start.chunkZ();
+            final int maxX = end.chunkX(), maxY = end.section(), maxZ = end.chunkZ();
+
+            for (int sectionX = minX; sectionX < maxX; sectionX++) {
+                for (int sectionY = minY; sectionY < maxY; sectionY++) {
+                    for (int sectionZ = minZ; sectionZ < maxZ; sectionZ++) {
+                        final long sectionIndex = sectionIndex(sectionX, sectionY, sectionZ);
+                        final SectionState sectionState = sectionStates.get(sectionIndex);
+                        if (sectionState == null) continue;
+                        final Palette palette = sectionState.palette;
+                        final Int2ObjectMap<Block> blockStates = sectionState.blockStates;
+                        if (palette.count() == 0 && blockStates.isEmpty()) continue;
+                        final int finalSectionX = sectionX, finalSectionY = sectionY, finalSectionZ = sectionZ;
+                        palette.getAllPresent((x, y, z, value) -> {
+                            final int globalX = x + finalSectionX * 16;
+                            final int globalY = y + finalSectionY * 16;
+                            final int globalZ = z + finalSectionZ * 16;
+                            final Block block = Block.fromStateId(value);
+                            assert block != null;
+                            unit.modifier().setBlock(globalX, globalY, globalZ, block);
+                        });
+                        if (!ignoreData() && blockStates.isEmpty()) {
+                            for (Int2ObjectMap.Entry<Block> entry : blockStates.int2ObjectEntrySet()) {
+                                final int sectionBlockIndex = entry.getIntKey();
+                                final Block block = entry.getValue();
+                                final int localX = sectionBlockIndexGetX(sectionBlockIndex);
+                                final int localY = sectionBlockIndexGetY(sectionBlockIndex);
+                                final int localZ = sectionBlockIndexGetZ(sectionBlockIndex);
+                                final int globalX = localX + finalSectionX * 16;
+                                final int globalY = localY + finalSectionY * 16;
+                                final int globalZ = localZ + finalSectionZ * 16;
+                                unit.modifier().setBlock(globalX, globalY, globalZ, block);
+                            }
+                        }
+                    }
+                }
+            }
+        };
     }
 
     final static class BuilderImpl implements Builder {
