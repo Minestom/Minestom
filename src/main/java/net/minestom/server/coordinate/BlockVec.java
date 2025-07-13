@@ -21,7 +21,7 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     }
 
     public BlockVec(@NotNull Point point) {
-        this(point.x(), point.y(), point.z());
+        this(point.blockX(), point.blockY(), point.blockZ());
     }
 
     @Override
