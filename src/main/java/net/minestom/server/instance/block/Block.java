@@ -256,6 +256,10 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
             setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block);
         }
 
+        default void setBlockArea(@NotNull Area area, @NotNull Block block) {
+            for (Vec vec : area) setBlock(vec.blockX(), vec.blockY(), vec.blockZ(), block);
+        }
+
         default void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
             batch.getAll((x1, y1, z1, block) -> setBlock(x + x1, y + y1, z + z1, block));
         }
