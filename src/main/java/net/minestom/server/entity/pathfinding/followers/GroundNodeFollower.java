@@ -49,7 +49,7 @@ public class GroundNodeFollower implements NodeFollower {
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, 0, speedZ));
-        this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
+        this.entity.refreshPosition(physicsResult.newPosition().asPosition().withView(yaw, pitch));
     }
 
     @Override

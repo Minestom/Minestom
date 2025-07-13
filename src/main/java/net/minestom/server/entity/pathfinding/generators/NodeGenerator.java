@@ -61,7 +61,7 @@ public interface NodeGenerator {
 
         if (getter.getBlock(end) != Block.AIR) return false;
         PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox,
-                Pos.fromPoint(start), Vec.fromPoint(diff), null, false);
+                start.asPosition(), diff.asVec(), null, false);
         return !res.collisionZ() && !res.collisionY() && !res.collisionX();
     }
 

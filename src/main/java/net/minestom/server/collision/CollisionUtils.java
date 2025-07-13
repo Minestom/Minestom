@@ -141,8 +141,7 @@ public final class CollisionUtils {
                                                      @NotNull Point start, @NotNull Point end,
                                                      @NotNull Shape shape) {
         final PhysicsResult result = handlePhysics(instance, chunk,
-                BoundingBox.ZERO,
-                Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
+                BoundingBox.ZERO, start.asPosition(), end.sub(start).asVec(),
                 null, false);
 
         return shape.intersectBox(end.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
@@ -178,7 +177,8 @@ public final class CollisionUtils {
     }
 
     public static Shape parseBlockShape(Map<Object, Object> internCache, String collision, String occlusion, boolean occludes, byte lightEmission) {
-        record ShapeEntry(String collision, String occlusion, boolean occludes, byte lightEmission) {} // Easy way to Hashcode
+        record ShapeEntry(String collision, String occlusion, boolean occludes, byte lightEmission) {
+        } // Easy way to Hashcode
         ShapeEntry entry = new ShapeEntry(collision, occlusion, occludes, lightEmission);
         final Shape cachedShape = (Shape) internCache.get(entry);
         if (cachedShape != null) return cachedShape;

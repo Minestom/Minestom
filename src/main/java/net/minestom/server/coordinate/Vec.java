@@ -44,6 +44,7 @@ public record Vec(double x, double y, double z) implements Point {
      *
      * @param point the point to convert
      * @return the converted vector
+     * @deprecated use {@link Point#asVec()} instead
      */
     public static @NotNull Vec fromPoint(@NotNull Point point) {
         if (point instanceof Vec vec) return vec;
