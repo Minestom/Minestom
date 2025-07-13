@@ -3,7 +3,9 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.NetworkBuffer;
@@ -284,33 +286,24 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         }
 
         default @NotNull BlockBatch getBlockBatch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
-                                                  @NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+                                                  @NotNull Point origin, @NotNull Area area) {
             final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
-            final int minX = Math.min(p1.blockX(), p2.blockX());
-            final int minY = Math.min(p1.blockY(), p2.blockY());
-            final int minZ = Math.min(p1.blockZ(), p2.blockZ());
-            final int maxX = Math.max(p1.blockX(), p2.blockX());
-            final int maxY = Math.max(p1.blockY(), p2.blockY());
-            final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
             final Condition condition = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0 ? Condition.TYPE : Condition.NONE;
             return BlockBatch.batch(flags, builder -> {
-                for (int x = minX; x <= maxX; x++) {
-                    for (int y = minY; y <= maxY; y++) {
-                        for (int z = minZ; z <= maxZ; z++) {
-                            final int bX = x - originX, bY = y - originY, bZ = z - originZ;
-                            try {
-                                final Block block = getBlock(x, y, z, condition);
-                                builder.setBlock(bX, bY, bZ, block);
-                            } catch (NullPointerException ignored) {
-                            }
-                        }
+                for (Vec vec : area) {
+                    final int x = vec.blockX(), y = vec.blockY(), z = vec.blockZ();
+                    final int bX = x - originX, bY = y - originY, bZ = z - originZ;
+                    try {
+                        final Block block = getBlock(x, y, z, condition);
+                        builder.setBlock(bX, bY, bZ, block);
+                    } catch (NullPointerException ignored) {
                     }
                 }
             });
         }
 
-        default @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
-            return getBlockBatch(BlockBatch.NO_FLAGS, origin, p1, p2);
+        default @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Area area) {
+            return getBlockBatch(BlockBatch.NO_FLAGS, origin, area);
         }
 
         /**

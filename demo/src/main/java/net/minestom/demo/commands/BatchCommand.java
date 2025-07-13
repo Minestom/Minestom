@@ -11,6 +11,7 @@ import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.instance.Instance;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.RelativeBlockPosition;
+import static net.minestom.server.coordinate.Area.cuboid;
 import static net.minestom.server.coordinate.CoordConversion.sectionAligned;
 import static net.minestom.server.instance.BlockBatch.NO_FLAGS;
 
@@ -49,7 +50,7 @@ public class BatchCommand extends Command {
 
             // Measure getBlockBatch timing
             long getStartTime = System.nanoTime();
-            final BlockBatch batch = instance.getBlockBatch(NO_FLAGS, originVec, startVec, endVec);
+            final BlockBatch batch = instance.getBlockBatch(NO_FLAGS, originVec, cuboid(startVec, endVec));
             long getEndTime = System.nanoTime();
             double getTimeMs = (getEndTime - getStartTime) / 1_000_000.0;
 

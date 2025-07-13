@@ -7,6 +7,7 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
+import static net.minestom.server.coordinate.Area.cuboid;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -675,7 +676,7 @@ public class BlockBatchIntegrationTest {
         Block chestWithItems = Block.CHEST;
         instance.setBlock(0, 0, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.ZERO);
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, cuboid(Vec.ZERO, Vec.ZERO));
         assertNotNull(batch);
         assertEquals(1, batch.count());
         assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
@@ -691,7 +692,7 @@ public class BlockBatchIntegrationTest {
                 .build());
         instance.setBlock(0, 0, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.ZERO);
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, cuboid(Vec.ZERO, Vec.ZERO));
         assertNotNull(batch);
         assertEquals(1, batch.count());
         assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
@@ -704,7 +705,7 @@ public class BlockBatchIntegrationTest {
         Block chestWithItems = Block.CHEST;
         instance.setBlock(0, 0, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.SECTION.sub(1));
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, cuboid(Vec.ZERO, Vec.SECTION.sub(1)));
         assertNotNull(batch);
         assertEquals(SECTION_BLOCK_COUNT, batch.count());
         assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
@@ -720,7 +721,7 @@ public class BlockBatchIntegrationTest {
                 .build());
         instance.setBlock(0, 0, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.SECTION.sub(1));
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, cuboid(Vec.ZERO, Vec.SECTION.sub(1)));
         assertNotNull(batch);
         assertEquals(SECTION_BLOCK_COUNT, batch.count());
         assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
@@ -737,7 +738,7 @@ public class BlockBatchIntegrationTest {
         instance.setBlock(0, 32, 0, chestWithItems);
         instance.setBlock(0, 16, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.SECTION.sub(1));
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, cuboid(Vec.ZERO, Vec.SECTION.sub(1)));
         assertNotNull(batch);
         batch.getAll((x, y, z, block) -> assertEquals(Block.AIR, block));
     }
@@ -749,7 +750,7 @@ public class BlockBatchIntegrationTest {
         Block block = Block.STONE;
         instance.setBlock(0, 0, 0, block);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ONE, Vec.ZERO, Vec.ZERO);
+        BlockBatch batch = instance.getBlockBatch(Vec.ONE, cuboid(Vec.ZERO, Vec.ZERO));
         assertNotNull(batch);
         assertEquals(1, batch.count());
         assertEquals(block, batch.getBlock(Vec.ONE.neg()));
@@ -762,7 +763,7 @@ public class BlockBatchIntegrationTest {
         Block block = Block.STONE;
         instance.setBlock(0, 0, 0, block);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.SECTION, Vec.ZERO, Vec.ZERO);
+        BlockBatch batch = instance.getBlockBatch(Vec.SECTION, cuboid(Vec.ZERO, Vec.ZERO));
         assertNotNull(batch);
         assertEquals(1, batch.count());
         batch.getAll((x, y, z, b) -> {
@@ -782,7 +783,7 @@ public class BlockBatchIntegrationTest {
         Block block = Block.STONE;
         instance.setBlock(0, 0, 0, block);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.SECTION, Vec.ZERO, Vec.SECTION.sub(1));
+        BlockBatch batch = instance.getBlockBatch(Vec.SECTION, cuboid(Vec.ZERO, Vec.SECTION.sub(1)));
         assertNotNull(batch);
         assertEquals(SECTION_BLOCK_COUNT, batch.count());
         batch.getAll((x, y, z, b) -> {
@@ -804,7 +805,7 @@ public class BlockBatchIntegrationTest {
 
         final Vec origin = new Vec(4);
 
-        BlockBatch batch = instance.getBlockBatch(origin, Vec.ZERO, Vec.ZERO);
+        BlockBatch batch = instance.getBlockBatch(origin, cuboid(Vec.ZERO, Vec.ZERO));
         assertNotNull(batch);
         assertEquals(1, batch.count());
         assertEquals(block, batch.getBlock(origin.neg()));
@@ -819,7 +820,7 @@ public class BlockBatchIntegrationTest {
 
         final Vec origin = new Vec(4);
 
-        BlockBatch batch = instance.getBlockBatch(origin, Vec.ONE.neg(), Vec.ONE);
+        BlockBatch batch = instance.getBlockBatch(origin, cuboid(Vec.ONE.neg(), Vec.ONE));
         assertNotNull(batch);
         assertEquals(block, batch.getBlock(origin.neg()));
     }
@@ -833,7 +834,7 @@ public class BlockBatchIntegrationTest {
 
         final Vec origin = new Vec(4);
 
-        BlockBatch batch = instance.getBlockBatch(origin, Vec.ZERO, Vec.SECTION.sub(1));
+        BlockBatch batch = instance.getBlockBatch(origin, cuboid(Vec.ZERO, Vec.SECTION.sub(1)));
         assertNotNull(batch);
         batch.getAll((x, y, z, b) -> {
             final Vec expected = origin.neg().add(Vec.ONE);

@@ -15,7 +15,7 @@ import static net.minestom.server.instance.BlockBatchImpl.BuilderImpl;
 public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
     long NO_FLAGS = 0L;               // No flags set
     long IGNORE_DATA_FLAG = 1L;       // Ignore NBT and handlers
-    long ALIGNED_FLAG = 1L << 1;      // Section-aligned optimization
+    long ALIGNED_FLAG = 1L << 1;      // Force section alignment, considering unset blocks as air
     long GENERATE_FLAG = 1L << 2;     // Generate world if unloaded
 
     static @NotNull BlockBatch batch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,

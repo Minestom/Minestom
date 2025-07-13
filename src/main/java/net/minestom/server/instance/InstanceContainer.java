@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -214,18 +215,16 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @NotNull BlockBatch getBlockBatch(long flags, @NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+    public @NotNull BlockBatch getBlockBatch(long flags, @NotNull Point origin, @NotNull Area area) {
         final boolean ignoreData = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0;
         final boolean aligned = (flags & BlockBatch.ALIGNED_FLAG) != 0;
         final boolean generate = (flags & BlockBatch.GENERATE_FLAG) != 0;
         final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
         final boolean originAligned = sectionAligned(originX, originY, originZ);
-        final int minX = Math.min(p1.blockX(), p2.blockX());
-        final int minY = Math.min(p1.blockY(), p2.blockY());
-        final int minZ = Math.min(p1.blockZ(), p2.blockZ());
-        final int maxX = Math.max(p1.blockX(), p2.blockX());
-        final int maxY = Math.max(p1.blockY(), p2.blockY());
-        final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
+        if (!(area instanceof Area.Cuboid cuboid)) throw new IllegalArgumentException("Area must be a Cuboid");
+        final Point min = cuboid.min(), max = cuboid.max();
+        final int minX = min.blockX(), minY = min.blockY(), minZ = min.blockZ();
+        final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
 
         final int minSectionX = globalToChunk(minX), minSectionY = globalToChunk(minY), minSectionZ = globalToChunk(minZ);
         final int maxSectionX = globalToChunk(maxX), maxSectionY = globalToChunk(maxY), maxSectionZ = globalToChunk(maxZ);
