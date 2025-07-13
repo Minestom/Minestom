@@ -367,7 +367,7 @@ public class GeneratorTest {
         assertEquals(expectedStones, stones);
     }
 
-    static GenerationUnit dummyUnit(Point start, Point end) {
+    static GenerationUnit dummyUnit(Vec start, Vec end) {
         return unit(null, null, start, end, null);
     }
 }
