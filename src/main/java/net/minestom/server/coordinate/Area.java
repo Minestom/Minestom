@@ -14,6 +14,11 @@ public sealed interface Area extends Iterable<Vec> {
         return new AreaImpl.Cuboid(min, max);
     }
 
+    static @NotNull Area.Cuboid section(int sectionX, int sectionY, int sectionZ) {
+        final Vec section = Vec.SECTION.mul(sectionX, sectionY, sectionZ);
+        return cuboid(section, Vec.SECTION.add(section).sub(1));
+    }
+
     static @NotNull Area.Sphere sphere(@NotNull Point center, int radius) {
         return new AreaImpl.Sphere(center, radius);
     }
