@@ -283,11 +283,6 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
         return (Pos) Point.super.relative(face);
     }
 
-    @Contract(pure = true)
-    public @NotNull Vec asVec() {
-        return new Vec(x, y, z);
-    }
-
     @FunctionalInterface
     public interface Operator {
         @NotNull Pos apply(double x, double y, double z, float yaw, float pitch);

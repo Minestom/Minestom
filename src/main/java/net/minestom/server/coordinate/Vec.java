@@ -202,11 +202,6 @@ public record Vec(double x, double y, double z) implements Point {
         return new Vec(Math.max(x, value), Math.max(y, value), Math.max(z, value));
     }
 
-    @Contract(pure = true)
-    public @NotNull Pos asPosition() {
-        return new Pos(x, y, z);
-    }
-
     /**
      * Gets the magnitude of the vector squared.
      *

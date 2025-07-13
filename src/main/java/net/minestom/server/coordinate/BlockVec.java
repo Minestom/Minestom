@@ -208,9 +208,4 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
             case EAST -> add(1, 0, 0);
         };
     }
-
-    @Contract(pure = true)
-    public @NotNull Vec asVec() {
-        return new Vec(blockX, blockY, blockZ);
-    }
 }
