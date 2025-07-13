@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
@@ -103,7 +105,9 @@ record BlockBatchImpl(
 
     @Override
     public @NotNull Generator asGenerator() {
+        LongSet sectionIndices = new LongOpenHashSet(sectionStates.keySet());
         return unit -> {
+            if (sectionIndices.isEmpty()) return;
             final Point start = unit.absoluteStart(), end = unit.absoluteEnd();
             final int minX = start.chunkX(), minY = start.section(), minZ = start.chunkZ();
             final int maxX = end.chunkX(), maxY = end.section(), maxZ = end.chunkZ();
@@ -112,6 +116,7 @@ record BlockBatchImpl(
                 for (int sectionY = minY; sectionY < maxY; sectionY++) {
                     for (int sectionZ = minZ; sectionZ < maxZ; sectionZ++) {
                         final long sectionIndex = sectionIndex(sectionX, sectionY, sectionZ);
+                        if (!sectionIndices.remove(sectionIndex)) continue;
                         final SectionState sectionState = sectionStates.get(sectionIndex);
                         if (sectionState == null) continue;
                         final Palette palette = sectionState.palette;
