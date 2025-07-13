@@ -4,7 +4,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a collection of aligned coordinates in a 3D space.
+ * Represents a collection of aligned block coordinates in a 3D space.
  * <p>
  * If switched over, consider a fallback to the iterator as more implementations may be added in the future.
  */
@@ -16,6 +16,15 @@ public sealed interface Area extends Iterable<Vec> {
 
     static @NotNull Area.Cuboid cuboid(@NotNull Point min, @NotNull Point max) {
         return new AreaImpl.Cuboid(min, max);
+    }
+
+    static Area.Cuboid cube(@NotNull Point center, int size) {
+        return cuboid(center.sub((double) size / 2), center.add((double) size / 2));
+    }
+
+    static Area.Cuboid box(@NotNull Point center, @NotNull Point size) {
+        final Point half = size.div(2);
+        return cuboid(center.sub(half), center.add(half));
     }
 
     static @NotNull Area.Cuboid section(int sectionX, int sectionY, int sectionZ) {
