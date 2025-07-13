@@ -239,12 +239,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
 
     /**
      * Checks it two points have similar (x/y/z) coordinates within a given epsilon.
-     * @param x the x coordinate to compare
-     * @param y the y coordinate to compare
-     * @param z the z coordinate to compare
+     *
+     * @param x       the x coordinate to compare
+     * @param y       the y coordinate to compare
+     * @param z       the z coordinate to compare
      * @param epsilon the maximum difference allowed between the two points (exclusive)
-     * @throws IllegalArgumentException if epsilon is less than or equal to 0
      * @return true if the two positions are similar within the epsilon
+     * @throws IllegalArgumentException if epsilon is less than or equal to 0
      */
     default boolean samePoint(double x, double y, double z, double epsilon) {
         Check.argCondition(epsilon <= 0, "Epsilon must be greater than 0 but found {0}", epsilon);
@@ -253,10 +254,11 @@ public sealed interface Point permits Vec, Pos, BlockVec {
 
     /**
      * Checks it two points have similar (x/y/z) coordinates within a given epsilon.
-     * @param point the point to compare
+     *
+     * @param point   the point to compare
      * @param epsilon the maximum difference allowed between the two points (exclusive)
-     * @throws IllegalArgumentException if epsilon is less than or equal to 0
      * @return true if the two positions are similar within the epsilon
+     * @throws IllegalArgumentException if epsilon is less than or equal to 0
      */
     default boolean samePoint(@NotNull Point point, double epsilon) {
         return samePoint(point.x(), point.y(), point.z(), epsilon);
