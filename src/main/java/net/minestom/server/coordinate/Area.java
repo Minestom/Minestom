@@ -3,6 +3,8 @@ package net.minestom.server.coordinate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Represents a collection of aligned block coordinates in a 3D space.
  * <p>
@@ -36,6 +38,10 @@ public sealed interface Area extends Iterable<Vec> {
         return new AreaImpl.Sphere(center, radius);
     }
 
+    static @NotNull Area.Mesh mesh(@NotNull List<Point> vertices) {
+        return new AreaImpl.Mesh(vertices);
+    }
+
     sealed interface Line extends Area permits AreaImpl.Line {
         @NotNull Point start();
 
@@ -52,5 +58,9 @@ public sealed interface Area extends Iterable<Vec> {
         @NotNull Point center();
 
         int radius();
+    }
+
+    sealed interface Mesh extends Area permits AreaImpl.Mesh {
+        @NotNull List<Point> vertices();
     }
 }

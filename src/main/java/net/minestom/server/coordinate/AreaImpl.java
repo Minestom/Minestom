@@ -2,7 +2,9 @@ package net.minestom.server.coordinate;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 final class AreaImpl {
@@ -172,6 +174,122 @@ final class AreaImpl {
                         z++;
                     }
                     return vec;
+                }
+            };
+        }
+    }
+
+    record Mesh(List<Point> vertices) implements Area.Mesh {
+        public Mesh {
+            if (vertices == null || vertices.isEmpty()) {
+                throw new IllegalArgumentException("Vertices cannot be null or empty");
+            }
+            if (vertices.size() < 3) {
+                throw new IllegalArgumentException("Mesh must have at least 3 vertices");
+            }
+        }
+
+        @Override
+        public @NotNull Iterator<Vec> iterator() {
+            // Calculate bounding box of the mesh
+            int minXTemp = Integer.MAX_VALUE, maxXTemp = Integer.MIN_VALUE;
+            int minYTemp = Integer.MAX_VALUE, maxYTemp = Integer.MIN_VALUE;
+            int minZTemp = Integer.MAX_VALUE, maxZTemp = Integer.MIN_VALUE;
+
+            for (Point vertex : vertices) {
+                minXTemp = Math.min(minXTemp, vertex.blockX());
+                maxXTemp = Math.max(maxXTemp, vertex.blockX());
+                minYTemp = Math.min(minYTemp, vertex.blockY());
+                maxYTemp = Math.max(maxYTemp, vertex.blockY());
+                minZTemp = Math.min(minZTemp, vertex.blockZ());
+                maxZTemp = Math.max(maxZTemp, vertex.blockZ());
+            }
+
+            final int minX = minXTemp;
+            final int maxX = maxXTemp;
+            final int minY = minYTemp;
+            final int maxY = maxYTemp;
+            final int minZ = minZTemp;
+            final int maxZ = maxZTemp;
+
+            return new Iterator<>() {
+                private int currentX = minX;
+                private int currentY = minY;
+                private int currentZ = minZ;
+                private boolean hasNextPoint = findNextValidPoint();
+
+                private boolean findNextValidPoint() {
+                    while (currentY <= maxY) {
+                        while (currentZ <= maxZ) {
+                            while (currentX <= maxX) {
+                                if (isPointInMesh(currentX, currentY, currentZ)) {
+                                    return true;
+                                }
+                                currentX++;
+                            }
+                            currentX = minX;
+                            currentZ++;
+                        }
+                        currentX = minX;
+                        currentZ = minZ;
+                        currentY++;
+                    }
+                    return false;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return hasNextPoint;
+                }
+
+                @Override
+                public Vec next() {
+                    if (!hasNextPoint) {
+                        throw new NoSuchElementException();
+                    }
+
+                    Vec result = new Vec(currentX, currentY, currentZ);
+                    currentX++;
+                    hasNextPoint = findNextValidPoint();
+                    return result;
+                }
+
+                // Simple point-in-mesh test using 2D projection to XZ plane
+                // For each Y level, check if point is inside the polygon formed by vertices at that level
+                private boolean isPointInMesh(int x, int y, int z) {
+                    // Find vertices that bracket this Y level
+                    List<Point> relevantVertices = new ArrayList<>();
+
+                    // For simplicity, we'll use vertices that are close to this Y level
+                    // This is a basic implementation - a more sophisticated approach would
+                    // use proper 3D mesh algorithms like ray-triangle intersection
+                    for (Point vertex : vertices) {
+                        if (Math.abs(vertex.blockY() - y) <= 1) {
+                            relevantVertices.add(vertex);
+                        }
+                    }
+
+                    // If we don't have enough vertices at this level, not inside
+                    if (relevantVertices.size() < 3) {
+                        return false;
+                    }
+
+                    // Use 2D ray casting on the XZ plane
+                    boolean inside = false;
+                    int j = relevantVertices.size() - 1;
+
+                    for (int i = 0; i < relevantVertices.size(); i++) {
+                        Point vi = relevantVertices.get(i);
+                        Point vj = relevantVertices.get(j);
+
+                        if (((vi.z() > z) != (vj.z() > z)) &&
+                                (x < (vj.x() - vi.x()) * (z - vi.z()) / (vj.z() - vi.z()) + vi.x())) {
+                            inside = !inside;
+                        }
+                        j = i;
+                    }
+
+                    return inside;
                 }
             };
         }
