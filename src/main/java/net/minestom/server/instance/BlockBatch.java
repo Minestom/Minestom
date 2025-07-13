@@ -66,6 +66,7 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
 
     /**
      * Makes a {@link Generator} from this batch. Blocks outside it will not be generated.
+     * GENERATE_FLAG is ignored.
      */
     @NotNull Generator asGenerator();
 
