@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
  */
 @ApiStatus.Experimental
 public sealed interface Area extends Iterable<Vec> {
+    static @NotNull Area.Line line(@NotNull Point start, @NotNull Point end) {
+        return new AreaImpl.Line(start, end);
+    }
+
     static @NotNull Area.Cuboid cuboid(@NotNull Point min, @NotNull Point max) {
         return new AreaImpl.Cuboid(min, max);
     }
@@ -21,6 +25,12 @@ public sealed interface Area extends Iterable<Vec> {
 
     static @NotNull Area.Sphere sphere(@NotNull Point center, int radius) {
         return new AreaImpl.Sphere(center, radius);
+    }
+
+    sealed interface Line extends Area permits AreaImpl.Line {
+        @NotNull Point start();
+
+        @NotNull Point end();
     }
 
     sealed interface Cuboid extends Area permits AreaImpl.Cuboid {
