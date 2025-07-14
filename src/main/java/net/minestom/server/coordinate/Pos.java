@@ -41,6 +41,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @return the converted position
      * @deprecated use {@link Point#asPos()} instead
      */
+    @Deprecated
     public static @NotNull Pos fromPoint(@NotNull Point point) {
         if (point instanceof Pos pos) return pos;
         return new Pos(point.x(), point.y(), point.z());
