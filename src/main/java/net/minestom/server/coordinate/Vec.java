@@ -46,6 +46,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @return the converted vector
      * @deprecated use {@link Point#asVec()} instead
      */
+    @Deprecated
     public static @NotNull Vec fromPoint(@NotNull Point point) {
         if (point instanceof Vec vec) return vec;
         return new Vec(point.x(), point.y(), point.z());
