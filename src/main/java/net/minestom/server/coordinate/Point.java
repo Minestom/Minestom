@@ -299,7 +299,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     }
 
     @Contract(pure = true)
-    default @NotNull Pos asPosition() {
+    default @NotNull Pos asPos() {
         return switch (this) {
             case Pos pos -> pos;
             case Vec vec -> new Pos(vec.x(), vec.y(), vec.z());

@@ -860,7 +860,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
-        return setInstance(instance, spawnPosition.asPosition());
+        return setInstance(instance, spawnPosition.asPos());
     }
 
     /**

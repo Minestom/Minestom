@@ -25,7 +25,7 @@ public final class PathGenerator {
 
         final Point target = (generator.hasGravitySnap())
                 ? orgTarget.withY(generator.gravitySnap(getter, orgTarget.x(), orgTarget.y(), orgTarget.z(), boundingBox, 100).orElse(orgTarget.y()))
-                : orgTarget.asPosition();
+                : orgTarget.asPos();
 
         PPath path = new PPath(maxDistance, pathVariance, onComplete);
         computePath(getter, start, target, closeDistance, maxDistance, pathVariance, boundingBox, path, generator);

@@ -94,7 +94,7 @@ public class EntityProjectileCollisionIntegrationTest {
         projectile.setInstance(instance, shooter.getPosition().withY(y -> y + shooter.getEyeHeight())).join();
 
         final LivingEntity target = new LivingEntity(EntityType.RABBIT);
-        target.setInstance(instance, targetPosition.asPosition()).join();
+        target.setInstance(instance, targetPosition.asPos()).join();
         projectile.shoot(targetPosition, 1, 0);
 
         final var eventRef = new AtomicReference<ProjectileCollideWithEntityEvent>();

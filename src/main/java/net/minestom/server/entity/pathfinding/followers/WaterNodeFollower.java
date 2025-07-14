@@ -61,7 +61,7 @@ public class WaterNodeFollower implements NodeFollower {
         }
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
-        this.entity.refreshPosition(physicsResult.newPosition().asPosition().withView(yaw, pitch));
+        this.entity.refreshPosition(physicsResult.newPosition().asPos().withView(yaw, pitch));
     }
 
     @Override

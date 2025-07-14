@@ -139,7 +139,7 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
         final Point end = endOrg.add(0, Vec.EPSILON, 0);
         final Point start = startOrg.add(0, Vec.EPSILON, 0);
         final Point diff = end.sub(start);
-        PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox, start.asPosition(), diff.asVec(), null, false);
+        PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox, start.asPos(), diff.asVec(), null, false);
         return !res.collisionZ() && !res.collisionY() && !res.collisionX();
     }
 }

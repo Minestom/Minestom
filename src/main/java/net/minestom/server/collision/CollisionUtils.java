@@ -141,7 +141,7 @@ public final class CollisionUtils {
                                                      @NotNull Point start, @NotNull Point end,
                                                      @NotNull Shape shape) {
         final PhysicsResult result = handlePhysics(instance, chunk,
-                BoundingBox.ZERO, start.asPosition(), end.sub(start).asVec(),
+                BoundingBox.ZERO, start.asPos(), end.sub(start).asVec(),
                 null, false);
 
         return shape.intersectBox(end.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);

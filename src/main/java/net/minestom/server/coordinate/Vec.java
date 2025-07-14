@@ -204,6 +204,15 @@ public record Vec(double x, double y, double z) implements Point {
     }
 
     /**
+     * @deprecated use {@link Point#asPos()} instead.
+     */
+    @Deprecated
+    @Contract(pure = true)
+    public @NotNull Pos asPosition() {
+        return new Pos(x, y, z);
+    }
+
+    /**
      * Gets the magnitude of the vector squared.
      *
      * @return the magnitude
