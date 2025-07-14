@@ -478,43 +478,27 @@ public class InstanceContainer extends Instance {
                             final int overlapMaxZ = Math.min(globalSectionZ + 15, instanceGlobalZ + 15);
 
                             if (batch.aligned()) {
-                                // Use optimized copyFrom with offset for section-aligned batches
-                                final int offsetX = overlapMinX - instanceGlobalX;
-                                final int offsetY = overlapMinY - instanceGlobalY;
-                                final int offsetZ = overlapMinZ - instanceGlobalZ;
+                                // Aligned batch means the palette contains all blocks in the section
+                                sectionState.palette().getAll((localX, localY, localZ, value) -> {
+                                    final int globalX = globalSectionX + localX;
+                                    final int globalY = globalSectionY + localY;
+                                    final int globalZ = globalSectionZ + localZ;
 
-                                // Clear NBT data for blocks that will be overwritten in the overlap region
-                                for (int dx = 0; dx <= overlapMaxX - overlapMinX; dx++) {
-                                    for (int dy = 0; dy <= overlapMaxY - overlapMinY; dy++) {
-                                        for (int dz = 0; dz <= overlapMaxZ - overlapMinZ; dz++) {
-                                            final int globalX = overlapMinX + dx;
-                                            final int globalY = overlapMinY + dy;
-                                            final int globalZ = overlapMinZ + dz;
-                                            clearBlockNbtData(targetChunk, globalX, globalY, globalZ);
-                                        }
+                                    // Check if this block is within the current instance section
+                                    if (globalX >= overlapMinX && globalX <= overlapMaxX &&
+                                            globalY >= overlapMinY && globalY <= overlapMaxY &&
+                                            globalZ >= overlapMinZ && globalZ <= overlapMaxZ) {
+
+                                        final int targetX = globalX - instanceGlobalX;
+                                        final int targetY = globalY - instanceGlobalY;
+                                        final int targetZ = globalZ - instanceGlobalZ;
+
+                                        // Clear NBT data for this specific block position
+                                        clearBlockNbtData(targetChunk, globalX, globalY, globalZ);
+
+                                        targetSection.blockPalette().set(targetX, targetY, targetZ, value);
                                     }
-                                }
-
-                                // Create a temporary palette for the overlap region
-                                final Palette tempPalette = Palette.blocks();
-                                final int batchOffsetX = overlapMinX - globalSectionX;
-                                final int batchOffsetY = overlapMinY - globalSectionY;
-                                final int batchOffsetZ = overlapMinZ - globalSectionZ;
-
-                                // Copy the overlapping region from batch palette to temp palette
-                                for (int dx = 0; dx <= overlapMaxX - overlapMinX; dx++) {
-                                    for (int dy = 0; dy <= overlapMaxY - overlapMinY; dy++) {
-                                        for (int dz = 0; dz <= overlapMaxZ - overlapMinZ; dz++) {
-                                            final int value = sectionState.palette().get(batchOffsetX + dx, batchOffsetY + dy, batchOffsetZ + dz);
-                                            if (value != 0) { // Only copy non-air blocks
-                                                tempPalette.set(dx, dy, dz, value);
-                                            }
-                                        }
-                                    }
-                                }
-
-                                // Copy from temp palette to target section with offset
-                                targetSection.blockPalette().copyFrom(tempPalette, offsetX, offsetY, offsetZ);
+                                });
                             } else {
                                 // Use getAllPresent for non-section-aligned batches
                                 sectionState.palette().getAllPresent((localX, localY, localZ, value) -> {
