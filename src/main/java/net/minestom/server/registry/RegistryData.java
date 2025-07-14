@@ -259,7 +259,8 @@ public final class RegistryData {
         private final int blockEntityId;
         private final @Nullable Material material;
         private final @Nullable BlockSoundType blockSoundType;
-        private final Shape shape;
+        private final Shape collisionShape;
+        private final Shape occlusionShape;
 
         private BlockEntry(String namespace, Properties main, @NotNull Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
             assert parent == null || !main.asMap().isEmpty() : "BlockEntry cannot be empty if it has a parent";
@@ -296,18 +297,20 @@ public final class RegistryData {
                 }, null);
             }
             { // Unique special case where the shape strings can mutate but arent saved after the parse.
-                this.shape = fromParent(parent, BlockEntry::collisionShape, main, "collisionShape", (properties, string) -> {
-                    String collision = properties.getString(string);
-                    String occlusion = properties.getString("occlusionShape");
-                    if (parent == null || parentProperties == null)  // No parent, so we can just parse the shape
-                        return CollisionUtils.parseBlockShape(internCache, collision, occlusion, occludes, this.lightEmission);
+                this.collisionShape = fromParent(parent, BlockEntry::collisionShape, main, "collisionShape", (properties, string) -> {
+                    String shape = properties.getString(string);
+                    return CollisionUtils.parseCollisionShape(internCache, shape);
+                }, null);
+                this.occlusionShape = fromParent(parent, BlockEntry::occlusionShape, main, "occlusionShape", (properties, string) -> {
+                    String shape = properties.getString(string);
+                    if (parent == null || parentProperties == null) // No parent, so we can just parse the shape
+                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
                     // TODO make this condition just change the condition; like adding lightData if emission just changes.
-                    if (collision != null || occlusion != null || occludes != parent.occludes() || this.lightEmission != parent.lightEmission) {
-                        if (collision == null) collision = parentProperties.getString(string);
-                        if (occlusion == null) occlusion = parentProperties.getString("occlusionShape");
-                        return CollisionUtils.parseBlockShape(internCache, collision, occlusion, occludes, this.lightEmission);
+                    if (shape != null || occludes != parent.occludes() || this.lightEmission != parent.lightEmission) {
+                        if (shape == null) shape = parentProperties.getString(string);
+                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
                     }
-                    return parent.collisionShape();
+                    return parent.occlusionShape();
                 }, null);
             }
             var redstoneConductor = fromParent(parent, BlockEntry::isRedstoneConductor, main, "redstoneConductor", Properties::getBoolean, null);
@@ -432,7 +435,11 @@ public final class RegistryData {
         }
 
         public Shape collisionShape() {
-            return shape;
+            return collisionShape;
+        }
+
+        public Shape occlusionShape() {
+            return occlusionShape;
         }
 
         public @Nullable BlockSoundType getBlockSoundType() {
