@@ -113,7 +113,7 @@ final class RegistryCodecs {
                 if (registry != null && tagKeyStr.startsWith("#")) {
                     final var tagKey = TagKey.<T>ofHash(tagKeyStr);
                     // During initialization of the registry we allow creating tags that do not exist yet, otherwise we do not.
-                    final var tag = context.init() ? registry.getOrCreateTag(tagKey) : registry.getTag(tagKey);
+                    final var tag = registry.getTag(tagKey);
                     return tag != null ? new Result.Ok<>(tag)
                             : new Result.Error<>("Unknown tag " + tagKey + " for registry " + registry.key());
                 }

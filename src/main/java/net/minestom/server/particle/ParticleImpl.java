@@ -8,15 +8,17 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 final class ParticleImpl {
-    static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:particle"),
-            (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
+    static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.PARTICLE,
+            (namespace, properties) -> defaultParticle(namespace.key(), properties.getInt("id")));
 
-    static @UnknownNullability Particle get(@NotNull String key) {
-        return REGISTRY.get(Key.key(key));
+    static @UnknownNullability Particle get(@NotNull RegistryKey<Particle> key) {
+        return REGISTRY.get(key);
     }
 
     private static Particle defaultParticle(@NotNull Key key, int id) {

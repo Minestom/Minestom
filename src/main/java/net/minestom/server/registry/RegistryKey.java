@@ -12,8 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> the type of the registry entry
  */
-@ApiStatus.NonExtendable
-public non-sealed interface RegistryKey<T> extends Holder<T>, Keyed {
+public sealed interface RegistryKey<T> extends Holder<T>, Keyed permits RegistryKeyImpl, StaticProtocolObject {
 
     static <T> NetworkBuffer.@NotNull Type<RegistryKey<T>> networkType(@NotNull Registries.Selector<T> selector) {
         return new RegistryNetworkTypes.RegistryKeyImpl<>(selector);
@@ -33,7 +32,7 @@ public non-sealed interface RegistryKey<T> extends Holder<T>, Keyed {
 
     /**
      * Creates a new {@link RegistryKey} from the given raw string. Should not be used externally.
-     * Registry keys are returned from {@link DynamicRegistry#register(Key, Object)}.
+     * Registry keys are returned from {@link DynamicRegistry#register(Keyed, Object)}.
      */
     @ApiStatus.Internal
     static <T> @NotNull RegistryKey<T> unsafeOf(@NotNull String key) {
@@ -42,7 +41,7 @@ public non-sealed interface RegistryKey<T> extends Holder<T>, Keyed {
 
     /**
      * Creates a new {@link RegistryKey} from the given raw string. Should not be used externally.
-     * Registry keys are returned from {@link DynamicRegistry#register(Key, Object)}.
+     * Registry keys are returned from {@link DynamicRegistry#register(Keyed, Object)}.
      */
     @ApiStatus.Internal
     static <T> @NotNull RegistryKey<T> unsafeOf(@NotNull Key key) {

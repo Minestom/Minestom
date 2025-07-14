@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.codegen.Generators;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -26,12 +27,12 @@ import java.util.stream.StreamSupport;
 public class GenericEnumGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericEnumGenerator.class);
 
-    private final String packageName;
-    private final String className;
-    private final InputStream entriesFile;
-    private final File outputFolder;
+    protected final String packageName;
+    protected final String className;
+    protected final InputStream entriesFile;
+    protected final File outputFolder;
 
-    private boolean isPackagePrivate = false;
+    protected boolean isPackagePrivate = false;
 
     public GenericEnumGenerator(
             @NotNull String packageName, @NotNull String className,
@@ -41,6 +42,10 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
         this.className = className;
         this.entriesFile = entriesFile;
         this.outputFolder = outputFolder;
+    }
+
+    public GenericEnumGenerator(@NotNull Generators.StaticEntry entry, @NotNull File outputFolder) {
+        this(entry.packageName(), entry.generatedName(), entry.resource(), outputFolder);
     }
 
     public GenericEnumGenerator packagePrivate() {
@@ -100,7 +105,7 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
                 List.of(
                         // Constructor
                         MethodSpec.constructorBuilder()
-                                .addParameter(ParameterSpec.builder(String.class, "key").addAnnotation(NotNull.class).build())
+                                .addParameter(ParameterSpec.builder(String.class, "key").addAnnotation(NotNull.class).addAnnotation(KeyPattern.class).build())
                                 .addStatement("this.key = $T.key(key)", keyCN)
                                 .build(),
                         MethodSpec.methodBuilder("key")

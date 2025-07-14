@@ -5,7 +5,7 @@ import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -65,8 +65,9 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:dimension_type"), REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
+        return DynamicRegistry.load(BuiltinRegistries.DIMENSION_TYPE, REGISTRY_CODEC);
     }
+
 
     boolean ultrawarm();
 

@@ -11,6 +11,7 @@ import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
@@ -69,6 +70,10 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
 
     static @Nullable Particle fromId(int id) {
         return ParticleImpl.REGISTRY.get(id);
+    }
+
+    static @NotNull Registry<Particle> staticRegistry() {
+        return ParticleImpl.REGISTRY;
     }
 
     @NotNull Particle readData(@NotNull NetworkBuffer reader);

@@ -2,6 +2,7 @@ package net.minestom.server.statistic;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,4 +27,7 @@ public sealed interface StatisticType extends StaticProtocolObject<StatisticType
         return StatisticTypeImpl.REGISTRY.get(id);
     }
 
+    static @NotNull Registry<StatisticType> staticRegistry() {
+        return StatisticTypeImpl.REGISTRY;
+    }
 }
