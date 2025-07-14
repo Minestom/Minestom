@@ -22,7 +22,7 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
     final static BoundingBox ZERO = new BoundingBox(Vec.ZERO, Vec.ZERO);
 
     public BoundingBox(double width, double height, double depth, Point offset) {
-        this(Vec.fromPoint(offset), new Vec(width, height, depth).add(offset));
+        this(offset.asVec(), new Vec(width, height, depth).add(offset));
     }
 
     public BoundingBox(double width, double height, double depth) {
@@ -299,7 +299,7 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
     }
 
     public static @NotNull BoundingBox fromPoints(@NotNull Point a, @NotNull Point b) {
-        Vec aVec = Vec.fromPoint(a);
+        Vec aVec = a.asVec();
         Vec min = aVec.min(b);
         Vec max = aVec.max(b);
         Vec dimensions = max.sub(min);

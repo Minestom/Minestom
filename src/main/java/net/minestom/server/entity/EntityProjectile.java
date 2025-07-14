@@ -141,7 +141,7 @@ public class EntityProjectile extends Entity {
         final double part = bb.width() / 2;
         final Vec dir = posNow.sub(pos).asVec();
         final int parts = (int) Math.ceil(dir.length() / part);
-        final Pos direction = dir.normalize().mul(part).asPosition();
+        final Pos direction = dir.normalize().mul(part).asPos();
         final long aliveTicks = getAliveTicks();
         Block block = null;
         Point blockPos = null;

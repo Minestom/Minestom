@@ -203,7 +203,7 @@ final class BlockCollision {
         BlockIterator iterator = new BlockIterator();
         // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
         for (Vec point : allFaces) {
-            iterator.reset(Vec.fromPoint(point.add(entityPosition)), velocity, 0, velocity.length(), false);
+            iterator.reset(point.add(entityPosition), velocity, 0, velocity.length(), false);
             int timer = -1;
 
             while (iterator.hasNext() && timer != 0) {
