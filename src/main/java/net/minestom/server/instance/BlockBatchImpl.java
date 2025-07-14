@@ -109,12 +109,16 @@ record BlockBatchImpl(
     public @NotNull Generator asGenerator() {
         LongSet sectionIndices = new LongOpenHashSet(sectionStates.keySet());
         return unit -> {
-            if (sectionIndices.isEmpty()) return;
+            synchronized (sectionIndices) {
+                if (sectionIndices.isEmpty()) return;
+            }
             final Set<Vec> sections = unit.sections();
             for (Vec section : sections) {
                 final int sectionX = section.blockX(), sectionY = section.blockY(), sectionZ = section.blockZ();
                 final long sectionIndex = sectionIndex(sectionX, sectionY, sectionZ);
-                if (!sectionIndices.remove(sectionIndex)) continue;
+                synchronized (sectionIndices) {
+                    if (!sectionIndices.remove(sectionIndex)) continue;
+                }
                 final SectionState sectionState = sectionStates.get(sectionIndex);
                 if (sectionState == null) continue;
                 final Palette palette = sectionState.palette;
