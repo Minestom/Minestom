@@ -419,10 +419,9 @@ public class InstanceContainer extends Instance {
                         final int localY = sectionBlockIndexGetY(blockIndex);
                         final int localZ = sectionBlockIndexGetZ(blockIndex);
 
-                        final int globalBlockX = (batchSectionX * 16) + localX + x;
-                        final int globalBlockY = (batchSectionY * 16) + localY + y;
-                        final int globalBlockZ = (batchSectionZ * 16) + localZ + z;
-
+                        final int globalBlockX = (targetSectionX * 16) + localX;
+                        final int globalBlockY = (targetSectionY * 16) + localY;
+                        final int globalBlockZ = (targetSectionZ * 16) + localZ;
                         setBlock(globalBlockX, globalBlockY, globalBlockZ, block);
                     }
                 }
