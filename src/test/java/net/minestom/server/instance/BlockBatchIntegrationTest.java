@@ -857,8 +857,35 @@ public class BlockBatchIntegrationTest {
 
         final Block block = Block.STONE;
         final Vec origin = new Vec(4);
+        final Area.Line line = Area.line(origin, origin.add(Vec.SECTION.add(7)));
 
-        Area.Line line = Area.line(origin, origin.add(Vec.SECTION.add(7)));
+        BlockBatch batch = BlockBatch.aligned(builder -> builder.setBlockArea(line, block));
+        for (Vec point : line) assertEquals(block, batch.getBlock(point));
+
+        Set<Vec> points = StreamSupport.stream(line.spliterator(), false).collect(Collectors.toSet());
+        batch.getAll((x, y, z, b) -> {
+            Vec point = new Vec(x, y, z);
+            if (points.contains(point)) {
+                assertEquals(block, b, "Block at " + point + " should be " + block);
+            } else {
+                assertEquals(Block.AIR, b, "Block at " + point + " should be AIR");
+            }
+        });
+
+        instance.setBlockBatch(origin, batch);
+        for (Vec point : line) {
+            assertEquals(block, instance.getBlock(point.add(origin)),
+                    "Block at " + point.add(origin) + " should be " + block);
+        }
+    }
+
+    @Test
+    public void batchAlignedLineFar(Env env) {
+        var instance = env.createEmptyInstance();
+
+        final Block block = Block.STONE;
+        final Vec origin = new Vec(50, 50, 0);
+        final Area.Line line = Area.line(origin, origin.add(Vec.SECTION.add(25, 16, 18)));
 
         BlockBatch batch = BlockBatch.aligned(builder -> builder.setBlockArea(line, block));
         for (Vec point : line) assertEquals(block, batch.getBlock(point));
@@ -886,8 +913,40 @@ public class BlockBatchIntegrationTest {
 
         final Block block = Block.STONE;
         final Vec origin = new Vec(4);
+        final Area.Line line = Area.line(origin, origin.add(Vec.SECTION.add(7)));
 
-        Area.Line line = Area.line(origin, origin.add(Vec.SECTION.add(7)));
+        BlockBatch batch = BlockBatch.unaligned(builder -> builder.setBlockArea(line, block));
+        int count = 0;
+        for (Vec point : line) {
+            assertEquals(block, batch.getBlock(point));
+            count++;
+        }
+        assertEquals(count, batch.count());
+
+        Set<Vec> points = StreamSupport.stream(line.spliterator(), false).collect(Collectors.toSet());
+        batch.getAll((x, y, z, b) -> {
+            Vec point = new Vec(x, y, z);
+            if (points.contains(point)) {
+                assertEquals(block, b, "Block at " + point + " should be " + block);
+            } else {
+                assertEquals(Block.AIR, b, "Block at " + point + " should be AIR");
+            }
+        });
+
+        instance.setBlockBatch(origin, batch);
+        for (Vec point : line) {
+            assertEquals(block, instance.getBlock(point.add(origin)),
+                    "Block at " + point.add(origin) + " should be " + block);
+        }
+    }
+
+    @Test
+    public void batchUnalignedLineFar(Env env) {
+        var instance = env.createEmptyInstance();
+
+        final Block block = Block.STONE;
+        final Vec origin = new Vec(50, 50, 0);
+        final Area.Line line = Area.line(origin, origin.add(Vec.SECTION.add(25, 16, 18)));
 
         BlockBatch batch = BlockBatch.unaligned(builder -> builder.setBlockArea(line, block));
         int count = 0;
