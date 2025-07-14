@@ -34,6 +34,7 @@ import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
@@ -428,6 +429,8 @@ final class ServerProcessImpl implements ServerProcess {
     private final class TickerImpl implements Ticker {
         @Override
         public void tick(long nanoTime) {
+            EventsJFR.ServerTick serverTickEvent = new EventsJFR.ServerTick();
+            serverTickEvent.begin();
             scheduler().processTick();
 
             // Connection tick (let waiting clients in, send keep alives, handle configuration players packets)
@@ -448,6 +451,7 @@ final class ServerProcessImpl implements ServerProcess {
                 final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
                 EventDispatcher.call(new ServerTickMonitorEvent(tickMonitor));
             }
+            serverTickEvent.commit();
         }
 
         private void serverTick(long nanoStart) {

@@ -1,7 +1,6 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -12,7 +11,6 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -46,7 +44,6 @@ import net.minestom.server.network.packet.server.common.CustomReportDetailsPacke
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -59,8 +56,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class PlayerInit {
 
@@ -242,7 +237,7 @@ public class PlayerInit {
                 if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
                 var isHead = "head".equals(block.getProperty("part"));
                 var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
-                var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPosition()) : pos.add(facing.toDirection().vec().asPosition()));
+                var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                 var otherBlock = instance.getBlock(other);
                 if (otherBlock.id() == block.id()) {
                     instance.setBlock(other, Block.AIR);
@@ -257,7 +252,7 @@ public class PlayerInit {
                     if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
                     var isHead = "head".equals(block.getProperty("part"));
                     var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
-                    var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPosition()) : pos.add(facing.toDirection().vec().asPosition()));
+                    var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                     var otherBlock = instance.getBlock(other);
                     if (otherBlock.id() == block.id()) {
                         player.setVelocity(Vec.ZERO);

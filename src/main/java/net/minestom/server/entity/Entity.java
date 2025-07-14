@@ -38,6 +38,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.potion.Potion;
@@ -67,11 +68,7 @@ import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.*;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -296,7 +293,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return this.entityMeta;
     }
 
-    @SuppressWarnings("unchecked") @Override
+    @SuppressWarnings("unchecked")
+    @Override
     public <T> @Nullable T get(@NotNull DataComponent<T> component) {
         if (component == DataComponents.CUSTOM_DATA)
             return (T) tagHandler.asCompound();
@@ -836,6 +834,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (event.isCancelled()) return null; // TODO what to return?
 
         if (previousInstance != null) removeFromInstance(previousInstance);
+        if (this instanceof Player player) instance.bossBars().forEach(player::showBossBar);
+        new EventsJFR.InstanceJoin(getUuid().toString(), instance.toString()).commit();
 
         this.isActive = true;
         setPositionInternal(spawnPosition);
@@ -862,7 +862,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
-        return setInstance(instance, Pos.fromPoint(spawnPosition));
+        return setInstance(instance, spawnPosition.asPos());
     }
 
     /**
@@ -880,8 +880,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
+        if (this instanceof Player player) instance.bossBars().forEach(player::hideBossBar);
         instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
         this.viewEngine.forManuals(this::removeViewer);
+        new EventsJFR.InstanceLeave(getUuid().toString(), instance.getUuid().toString()).commit();
     }
 
     /**
@@ -1221,7 +1223,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
-     *
      * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
      */
     @Deprecated
@@ -1233,7 +1234,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Changes the entity custom name.
      *
      * @param customName the custom name of the entity, null to remove it
-     *
      * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
      */
     @Deprecated

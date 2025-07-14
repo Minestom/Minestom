@@ -54,7 +54,7 @@ public class FlyingNodeFollower implements NodeFollower {
         }
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
-        this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
+        this.entity.refreshPosition(physicsResult.newPosition().asPos().withView(yaw, pitch));
     }
 
     @Override
