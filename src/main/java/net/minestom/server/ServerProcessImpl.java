@@ -431,6 +431,7 @@ final class ServerProcessImpl implements ServerProcess {
         public void tick(long nanoTime) {
             EventsJFR.ServerTick serverTickEvent = new EventsJFR.ServerTick();
             serverTickEvent.begin();
+          
             scheduler().processTick();
 
             // Connection tick (let waiting clients in, send keep alives, handle configuration players packets)

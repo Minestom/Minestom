@@ -16,10 +16,7 @@ import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.*;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -64,7 +61,7 @@ public class BlockPlacementListener {
         if (!playerBlockInteractEvent.isCancelled()) {
             final var handler = interactedBlock.handler();
             if (handler != null) {
-                blockUse |= !handler.onInteract(new BlockHandler.Interaction(interactedBlock, instance, blockFace, blockPosition, cursorPosition, player, hand));
+                blockUse |= !handler.onInteract(new BlockChange.Player(instance, blockPosition, interactedBlock, blockFace, player, hand, cursorPosition));
             }
         }
         if (blockUse) {
@@ -97,19 +94,29 @@ public class BlockPlacementListener {
 
 
         // Get the newly placed block position
-        //todo it feels like it should be possible to have better replacement rules than this, feels pretty scuffed.
         Point placementPosition = blockPosition;
+        BlockChange.Replacement replacement = new BlockChange.Replacement(
+                instance,
+                placementPosition,
+                interactedBlock,
+                blockFace,
+                cursorPosition,
+                false,
+                useMaterial
+        );
+
         var interactedPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(interactedBlock);
-        if (!interactedBlock.isAir() && (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(
-                new BlockPlacementRule.Replacement(interactedBlock, blockFace, cursorPosition, false, useMaterial)))) {
-            // If the block is not replaceable, try to place next to it.
+        boolean interactedReplaceable = interactedBlock.isAir() ||
+                (interactedPlacementRule != null && interactedPlacementRule.isSelfReplaceable(replacement));
+
+        if (!interactedReplaceable) {
             placementPosition = blockPosition.relative(blockFace);
 
             var placementBlock = instance.getBlock(placementPosition);
             var placementRule = BLOCK_MANAGER.getBlockPlacementRule(placementBlock);
-            if (!placementBlock.registry().isReplaceable() && !(placementRule != null && placementRule.isSelfReplaceable(
-                    new BlockPlacementRule.Replacement(placementBlock, blockFace, cursorPosition, true, useMaterial)))) {
-                // If the block is still not replaceable, cancel the placement
+            boolean placementReplaceable = placementBlock.registry().isReplaceable() ||
+                    (placementRule != null && placementRule.isSelfReplaceable(replacement.withOffset(true)));
+            if (!placementReplaceable) {
                 canPlaceBlock = false;
             }
         }
@@ -168,8 +175,7 @@ public class BlockPlacementListener {
 
         // Place the block
         Block resultBlock = playerBlockPlaceEvent.getBlock();
-        instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
-                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()), playerBlockPlaceEvent.shouldDoBlockUpdates());
+        instance.placeBlock(new BlockChange.Player(instance, placementPosition, resultBlock, blockFace, player, packet.hand(), cursorPosition), playerBlockPlaceEvent.shouldDoBlockUpdates());
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {

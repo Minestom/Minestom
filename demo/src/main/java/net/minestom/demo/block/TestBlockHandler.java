@@ -1,6 +1,8 @@
 package net.minestom.demo.block;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,12 +15,14 @@ public class TestBlockHandler implements BlockHandler {
     }
 
     @Override
-    public void onPlace(@NotNull Placement placement) {
-        System.out.println(placement);
+    public @NotNull Block onPlace(@NotNull BlockChange blockChange) {
+        System.out.println("onPlace");
+        return Block.DIAMOND_BLOCK;
     }
 
     @Override
-    public void onDestroy(@NotNull Destroy destroy) {
-        System.out.println(destroy);
+    public @NotNull Block onDestroy(@NotNull BlockChange blockChange) {
+        System.out.println("onDestroy");
+        return Block.EMERALD_BLOCK;
     }
 }

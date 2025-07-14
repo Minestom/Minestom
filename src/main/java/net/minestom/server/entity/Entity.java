@@ -69,7 +69,6 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.*;
-
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;

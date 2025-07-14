@@ -8,11 +8,10 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -21,7 +20,6 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -91,13 +89,10 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        setBlock(x, y, z, block, null, null);
+        setBlock(new BlockChange.Instance(this, new Vec(x, y, z), block));
     }
 
-    protected abstract void setBlock(int x, int y, int z, @NotNull Block block,
-                                     @Nullable BlockHandler.Placement placement,
-                                     @Nullable BlockHandler.Destroy destroy);
-
+    public abstract @NotNull Block setBlock(@NotNull BlockChange mutation);
     public abstract @NotNull List<Section> getSections();
 
     public abstract @NotNull Section getSection(int section);
