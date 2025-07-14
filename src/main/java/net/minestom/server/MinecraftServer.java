@@ -5,6 +5,7 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
@@ -247,6 +248,10 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static @NotNull DynamicRegistry<ChatType> getChatTypeRegistry() {
         return serverProcess.chatType();
+    }
+
+    public static @NotNull DynamicRegistry<Dialog> getDialogRegistry() {
+        return serverProcess.dialog();
     }
 
     public static @NotNull DynamicRegistry<DimensionType> getDimensionTypeRegistry() {
