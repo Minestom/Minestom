@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 
 /**
  * Represents a block that can be placed anywhere.
@@ -287,6 +288,20 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
         default @NotNull Block getBlock(@NotNull Point point) {
             return Objects.requireNonNull(getBlock(point, Condition.NONE));
+        }
+
+        @ApiStatus.Experimental
+        default void getBlockArea(Area area, @NotNull Condition condition, Consumer<Block> consumer) {
+            for (BlockVec vec : area) {
+                final int x = vec.blockX(), y = vec.blockY(), z = vec.blockZ();
+                final Block block = getBlock(x, y, z, condition);
+                if (block != null) consumer.accept(block);
+            }
+        }
+
+        @ApiStatus.Experimental
+        default void getBlockArea(Area area, Consumer<Block> consumer) {
+            getBlockArea(area, Condition.NONE, consumer);
         }
 
         default @NotNull BlockBatch getBlockBatch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,

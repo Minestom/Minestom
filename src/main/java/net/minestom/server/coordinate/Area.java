@@ -51,8 +51,8 @@ public sealed interface Area extends Iterable<BlockVec> {
     }
 
     static Area.Cuboid section(int sectionX, int sectionY, int sectionZ) {
-        final Vec section = Vec.SECTION.mul(sectionX, sectionY, sectionZ);
-        return cuboid(section, Vec.SECTION.add(section).sub(1));
+        final BlockVec section = BlockVec.SECTION.mul(sectionX, sectionY, sectionZ);
+        return cuboid(section, BlockVec.SECTION.add(section).sub(1));
     }
 
     static Area.Sphere sphere(Point center, int radius) {

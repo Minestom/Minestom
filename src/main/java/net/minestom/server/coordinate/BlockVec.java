@@ -161,6 +161,11 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
         return new Vec(blockX * x, blockY * y, blockZ * z);
     }
 
+    @Contract(pure = true)
+    public @NotNull BlockVec mul(int x, int y, int z) {
+        return new BlockVec(blockX * x, blockY * y, blockZ * z);
+    }
+
     @Override
     public @NotNull Point mul(@NotNull Point point) {
         return mul(point.x(), point.y(), point.z());
@@ -176,9 +181,19 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
         return mul(value, value, value);
     }
 
+    @Contract(pure = true)
+    public @NotNull BlockVec mul(int value) {
+        return mul(value, value, value);
+    }
+
     @Override
     public @NotNull Point div(double x, double y, double z) {
         return new Vec(blockX / x, blockY / y, blockZ / z);
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec div(int x, int y, int z) {
+        return new BlockVec(blockX / x, blockY / y, blockZ / z);
     }
 
     @Override
@@ -193,6 +208,11 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
 
     @Override
     public @NotNull Point div(double value) {
+        return div(value, value, value);
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec div(int value) {
         return div(value, value, value);
     }
 
