@@ -1,11 +1,16 @@
 package net.minestom.server.instance;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static net.minestom.server.coordinate.Area.cuboid;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
@@ -844,5 +849,68 @@ public class BlockBatchIntegrationTest {
                 assertEquals(Block.AIR, b, "Block at (" + x + "," + y + "," + z + ") should be AIR");
             }
         });
+    }
+
+    @Test
+    public void batchAlignedLine(Env env) {
+        var instance = env.createEmptyInstance();
+
+        final Block block = Block.STONE;
+        final Vec origin = new Vec(4);
+
+        Area.Line line = Area.line(origin, origin.add(Vec.SECTION.add(7)));
+
+        BlockBatch batch = BlockBatch.aligned(builder -> builder.setBlockArea(line, block));
+        for (Vec point : line) assertEquals(block, batch.getBlock(point));
+
+        Set<Vec> points = StreamSupport.stream(line.spliterator(), false).collect(Collectors.toSet());
+        batch.getAll((x, y, z, b) -> {
+            Vec point = new Vec(x, y, z);
+            if (points.contains(point)) {
+                assertEquals(block, b, "Block at " + point + " should be " + block);
+            } else {
+                assertEquals(Block.AIR, b, "Block at " + point + " should be AIR");
+            }
+        });
+
+        instance.setBlockBatch(origin, batch);
+        for (Vec point : line) {
+            assertEquals(block, instance.getBlock(point.add(origin)),
+                    "Block at " + point.add(origin) + " should be " + block);
+        }
+    }
+
+    @Test
+    public void batchUnalignedLine(Env env) {
+        var instance = env.createEmptyInstance();
+
+        final Block block = Block.STONE;
+        final Vec origin = new Vec(4);
+
+        Area.Line line = Area.line(origin, origin.add(Vec.SECTION.add(7)));
+
+        BlockBatch batch = BlockBatch.unaligned(builder -> builder.setBlockArea(line, block));
+        int count = 0;
+        for (Vec point : line) {
+            assertEquals(block, batch.getBlock(point));
+            count++;
+        }
+        assertEquals(count, batch.count());
+
+        Set<Vec> points = StreamSupport.stream(line.spliterator(), false).collect(Collectors.toSet());
+        batch.getAll((x, y, z, b) -> {
+            Vec point = new Vec(x, y, z);
+            if (points.contains(point)) {
+                assertEquals(block, b, "Block at " + point + " should be " + block);
+            } else {
+                assertEquals(Block.AIR, b, "Block at " + point + " should be AIR");
+            }
+        });
+
+        instance.setBlockBatch(origin, batch);
+        for (Vec point : line) {
+            assertEquals(block, instance.getBlock(point.add(origin)),
+                    "Block at " + point.add(origin) + " should be " + block);
+        }
     }
 }
