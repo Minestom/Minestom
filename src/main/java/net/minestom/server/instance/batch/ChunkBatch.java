@@ -4,12 +4,11 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -179,7 +178,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
             if (blocks.isEmpty()) {
                 // Nothing to flush
-                OptionalCallback.execute(callback, chunk);
+                if (callback != null) callback.accept(chunk);
                 return;
             }
 
@@ -192,11 +191,12 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                     sections.add(section);
                 }
             }
+            instance.invalidateSections(chunk.getChunkX(), chunk.getChunkZ());
 
             if (inverse != null) inverse.readyLatch.countDown();
             updateChunk(instance, chunk, sections, callback, safeCallback);
         } catch (Exception e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 

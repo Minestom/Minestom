@@ -59,9 +59,12 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -114,6 +117,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
 
+    protected final AtomicLong version = new AtomicLong(0);
     private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
 
     // the uuid of this instance
@@ -285,15 +289,47 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         unloadChunk(chunk);
     }
 
-    public void invalidateSection(int sectionX, int sectionY, int sectionZ) {
+    public synchronized void invalidateSection(int sectionX, int sectionY, int sectionZ) {
         final Chunk chunk = getChunk(sectionX, sectionZ);
-        if (chunk != null) {
+        if (chunk == null) return;
+        this.version.incrementAndGet();
+        Section section = chunk.getSection(sectionY);
+        section.skyLight().invalidate();
+        section.blockLight().invalidate();
+        chunk.invalidate();
+        EventDispatcher.call(new InstanceSectionInvalidateEvent(this, sectionX, sectionY, sectionZ));
+    }
+
+    public synchronized void invalidateSections(int chunkX, int chunkZ) {
+        final Chunk chunk = getChunk(chunkX, chunkZ);
+        if (chunk == null) return;
+        this.version.incrementAndGet();
+        final DimensionType dimension = cachedDimensionType;
+        final int minSection = dimension.minY() / SECTION_SIZE;
+        final int maxSection = (dimension.minY() + dimension.height()) / SECTION_SIZE;
+        for (int sectionY = minSection; sectionY < maxSection; sectionY++) {
             Section section = chunk.getSection(sectionY);
             section.skyLight().invalidate();
             section.blockLight().invalidate();
-            chunk.invalidate();
-            EventDispatcher.call(new InstanceSectionInvalidateEvent(this, sectionX, sectionY, sectionZ));
+            EventDispatcher.call(new InstanceSectionInvalidateEvent(this, chunkX, sectionY, chunkZ));
         }
+        chunk.invalidate();
+    }
+
+    /**
+     * Retrieves the instance state version, incremented every time a block change is detected/signaled.
+     * <p>
+     * You shouldn't interpolate the importance of a change through version delta.
+     * <p>
+     * TODO: should chunk loading/generation affect version?
+     *
+     * @return the instance version
+     * @see #setBlock(int, int, int, Block) 
+     * @see #invalidateSection(int, int, int)
+     * @see #invalidateSections(int, int) 
+     */
+    public long version() {
+        return version.get();
     }
 
     /**

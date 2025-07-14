@@ -4,7 +4,8 @@ import org.jetbrains.annotations.NotNullByDefault;
 
 @NotNullByDefault
 public final class CoordConversion {
-    public static final int SECTION_BLOCK_COUNT = 16 * 16 * 16;
+    public static final int SECTION_SIZE = 16;
+    public static final int SECTION_BLOCK_COUNT = SECTION_SIZE * SECTION_SIZE * SECTION_SIZE;
 
     // COORDINATE CONVERSIONS
 

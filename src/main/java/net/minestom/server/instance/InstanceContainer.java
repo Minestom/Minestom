@@ -153,6 +153,7 @@ public class InstanceContainer extends Instance {
     private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
                                               @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
                                               boolean doBlockUpdates, int updateDistance) {
+        this.version.incrementAndGet();
         if (chunk.isReadOnly()) return;
         final DimensionType dim = getCachedDimensionType();
         if (y >= dim.maxY() || y < dim.minY()) {
@@ -216,7 +217,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @NotNull BlockBatch getBlockBatch(long flags, @NotNull Point origin, @NotNull Area area) {
+    public synchronized @NotNull BlockBatch getBlockBatch(long flags, @NotNull Point origin, @NotNull Area area) {
         final boolean ignoreData = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0;
         final boolean aligned = (flags & BlockBatch.ALIGNED_FLAG) != 0;
         final boolean generate = (flags & BlockBatch.GENERATE_FLAG) != 0;
@@ -350,7 +351,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
+    public synchronized void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
         final BlockBatchImpl batchImpl = (BlockBatchImpl) batch;
         LongSet sectionIndexes = new LongOpenHashSet();
         if (sectionAligned(x, y, z)) {
