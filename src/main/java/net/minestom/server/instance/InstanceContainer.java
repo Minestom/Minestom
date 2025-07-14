@@ -276,7 +276,7 @@ public class InstanceContainer extends Instance {
                 }
             }
             default -> {
-                for (Vec vec : area) blockCoords.add(new BlockVec(vec));
+                for (BlockVec vec : area) blockCoords.add(vec);
             }
         }
 

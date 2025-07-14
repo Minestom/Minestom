@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -16,7 +15,6 @@ import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static net.minestom.server.coordinate.CoordConversion.*;
@@ -112,19 +110,7 @@ record BlockBatchImpl(
         LongSet sectionIndices = new LongOpenHashSet(sectionStates.keySet());
         return unit -> {
             if (sectionIndices.isEmpty()) return;
-            final Point start = unit.absoluteStart(), end = unit.absoluteEnd();
-            final int minX = start.chunkX(), minY = start.section(), minZ = start.chunkZ();
-            final int maxX = end.chunkX(), maxY = end.section(), maxZ = end.chunkZ();
-
-            Set<Vec> sections = new HashSet<>();
-            for (int sectionX = minX; sectionX < maxX; sectionX++) {
-                for (int sectionY = minY; sectionY < maxY; sectionY++) {
-                    for (int sectionZ = minZ; sectionZ < maxZ; sectionZ++) {
-                        sections.add(new Vec(sectionX, sectionY, sectionZ));
-                    }
-                }
-            }
-
+            final Set<Vec> sections = unit.sections();
             for (Vec section : sections) {
                 final int sectionX = section.blockX(), sectionY = section.blockY(), sectionZ = section.blockZ();
                 final long sectionIndex = sectionIndex(sectionX, sectionY, sectionZ);

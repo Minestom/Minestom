@@ -9,17 +9,17 @@ import org.jetbrains.annotations.NotNull;
  * If switched over, consider a fallback to the iterator as more implementations may be added in the future.
  */
 @ApiStatus.Experimental
-public sealed interface Area extends Iterable<Vec> {
+public sealed interface Area extends Iterable<BlockVec> {
     static @NotNull Area.Single single(@NotNull Point point) {
-        return new AreaImpl.Single(point);
+        return new AreaImpl.Single(point.asBlockVec());
     }
 
     static @NotNull Area.Line line(@NotNull Point start, @NotNull Point end) {
-        return new AreaImpl.Line(start, end);
+        return new AreaImpl.Line(start.asBlockVec(), end.asBlockVec());
     }
 
     static @NotNull Area.Cuboid cuboid(@NotNull Point min, @NotNull Point max) {
-        return new AreaImpl.Cuboid(min, max);
+        return new AreaImpl.Cuboid(min.asBlockVec(), max.asBlockVec());
     }
 
     static Area.Cuboid cube(@NotNull Point center, int size) {
@@ -37,27 +37,27 @@ public sealed interface Area extends Iterable<Vec> {
     }
 
     static @NotNull Area.Sphere sphere(@NotNull Point center, int radius) {
-        return new AreaImpl.Sphere(center, radius);
+        return new AreaImpl.Sphere(center.asBlockVec(), radius);
     }
 
     sealed interface Single extends Area permits AreaImpl.Single {
-        @NotNull Point point();
+        @NotNull BlockVec point();
     }
 
     sealed interface Line extends Area permits AreaImpl.Line {
-        @NotNull Point start();
+        @NotNull BlockVec start();
 
-        @NotNull Point end();
+        @NotNull BlockVec end();
     }
 
     sealed interface Cuboid extends Area permits AreaImpl.Cuboid {
-        @NotNull Point min();
+        @NotNull BlockVec min();
 
-        @NotNull Point max();
+        @NotNull BlockVec max();
     }
 
     sealed interface Sphere extends Area permits AreaImpl.Sphere {
-        @NotNull Point center();
+        @NotNull BlockVec center();
 
         int radius();
     }

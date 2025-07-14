@@ -4,8 +4,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Area;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.NetworkBuffer;
@@ -257,7 +257,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         }
 
         default void setBlockArea(@NotNull Area area, @NotNull Block block) {
-            for (Vec vec : area) setBlock(vec.blockX(), vec.blockY(), vec.blockZ(), block);
+            for (BlockVec vec : area) setBlock(vec.blockX(), vec.blockY(), vec.blockZ(), block);
         }
 
         default void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
@@ -294,7 +294,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
             final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
             final Condition condition = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0 ? Condition.TYPE : Condition.NONE;
             return BlockBatch.batch(flags, builder -> {
-                for (Vec vec : area) {
+                for (BlockVec vec : area) {
                     final int x = vec.blockX(), y = vec.blockY(), z = vec.blockZ();
                     final int bX = x - originX, bY = y - originY, bZ = z - originZ;
                     try {

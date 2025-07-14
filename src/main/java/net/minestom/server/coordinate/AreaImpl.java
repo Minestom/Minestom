@@ -2,17 +2,18 @@ package net.minestom.server.coordinate;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 final class AreaImpl {
 
-    record Single(Point point) implements Area.Single {
+    record Single(BlockVec point) implements Area.Single {
         public Single {
             if (point == null) throw new IllegalArgumentException("Point cannot be null");
         }
 
         @Override
-        public @NotNull Iterator<Vec> iterator() {
+        public @NotNull Iterator<BlockVec> iterator() {
             return new Iterator<>() {
                 private boolean hasNext = true;
 
@@ -22,16 +23,16 @@ final class AreaImpl {
                 }
 
                 @Override
-                public Vec next() {
+                public BlockVec next() {
                     if (!hasNext) throw new NoSuchElementException();
                     hasNext = false;
-                    return new Vec(point.blockX(), point.blockY(), point.blockZ());
+                    return point;
                 }
             };
         }
     }
 
-    record Line(Point start, Point end) implements Area.Line {
+    record Line(BlockVec start, BlockVec end) implements Area.Line {
         public Line {
             if (start == null || end == null) {
                 throw new IllegalArgumentException("Points cannot be null");
@@ -39,7 +40,7 @@ final class AreaImpl {
         }
 
         @Override
-        public @NotNull Iterator<Vec> iterator() {
+        public @NotNull Iterator<BlockVec> iterator() {
             return new Iterator<>() {
                 private final int x1 = start.blockX(), y1 = start.blockY(), z1 = start.blockZ();
                 private final int x2 = end.blockX(), y2 = end.blockY(), z2 = end.blockZ();
@@ -63,9 +64,9 @@ final class AreaImpl {
                 }
 
                 @Override
-                public Vec next() {
+                public BlockVec next() {
                     if (done) throw new NoSuchElementException();
-                    Vec result = new Vec(x, y, z);
+                    BlockVec result = new BlockVec(x, y, z);
                     if (x == x2 && y == y2 && z == z2) {
                         done = true;
                         return result;
@@ -113,17 +114,17 @@ final class AreaImpl {
         }
     }
 
-    record Cuboid(Point min, Point max) implements Area.Cuboid {
+    record Cuboid(BlockVec min, BlockVec max) implements Area.Cuboid {
         public Cuboid {
             if (min == null || max == null) {
                 throw new IllegalArgumentException("Points cannot be null");
             }
-            min = new Vec(
+            min = new BlockVec(
                     Math.min(min.blockX(), max.blockX()),
                     Math.min(min.blockY(), max.blockY()),
                     Math.min(min.blockZ(), max.blockZ())
             );
-            max = new Vec(
+            max = new BlockVec(
                     Math.max(min.blockX(), max.blockX()),
                     Math.max(min.blockY(), max.blockY()),
                     Math.max(min.blockZ(), max.blockZ())
@@ -131,7 +132,7 @@ final class AreaImpl {
         }
 
         @Override
-        public @NotNull Iterator<Vec> iterator() {
+        public @NotNull Iterator<BlockVec> iterator() {
             final int minX = min.blockX(), minY = min.blockY(), minZ = min.blockZ();
             final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
             return new Iterator<>() {
@@ -145,8 +146,8 @@ final class AreaImpl {
                 }
 
                 @Override
-                public Vec next() {
-                    Vec vec = new Vec(x, y, z);
+                public BlockVec next() {
+                    BlockVec vec = new BlockVec(x, y, z);
                     if (x < maxX) {
                         x++;
                     } else if (y < maxY) {
@@ -163,7 +164,7 @@ final class AreaImpl {
         }
     }
 
-    record Sphere(Point center, int radius) implements Area.Sphere {
+    record Sphere(BlockVec center, int radius) implements Area.Sphere {
         public Sphere {
             if (center == null || radius < 0) {
                 throw new IllegalArgumentException("Center cannot be null and radius must be non-negative");
@@ -171,7 +172,7 @@ final class AreaImpl {
         }
 
         @Override
-        public @NotNull Iterator<Vec> iterator() {
+        public @NotNull Iterator<BlockVec> iterator() {
             return new Iterator<>() {
                 private int x = center.blockX() - radius;
                 private int y = center.blockY() - radius;
@@ -183,8 +184,8 @@ final class AreaImpl {
                 }
 
                 @Override
-                public Vec next() {
-                    Vec vec = new Vec(x, y, z);
+                public BlockVec next() {
+                    BlockVec vec = new BlockVec(x, y, z);
                     if (x < center.blockX() + radius) {
                         x++;
                     } else if (y < center.blockY() + radius) {
