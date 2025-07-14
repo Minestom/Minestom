@@ -45,8 +45,8 @@ public final class CoordConversion {
         final int maxX = Math.max(p1.blockX(), p2.blockX());
         final int maxY = Math.max(p1.blockY(), p2.blockY());
         final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
-        return sectionAligned(minX, minY, minZ) &&
-                globalToSectionRelative(maxX) == 15 && globalToSectionRelative(maxY) == 15 && globalToSectionRelative(maxZ) == 15;
+        return ((minX | minY | minZ) & 0xF) == 0 &&
+                ((maxX | maxY | maxZ) & 0xF) == 0xF;
     }
 
     public static int chunkToRegion(int chunkCoordinate) {
@@ -58,11 +58,11 @@ public final class CoordConversion {
     }
 
     public static int floorSection(int coordinate) {
-        return coordinate - (coordinate & 0xF);
+        return coordinate & ~0xF;
     }
 
     public static int ceilSection(int coordinate) {
-        return ((coordinate - 1) | 15) + 1;
+        return (coordinate + 15) & ~15;
     }
 
     // CHUNK INDEX
