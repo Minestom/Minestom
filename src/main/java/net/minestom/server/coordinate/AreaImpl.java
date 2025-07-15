@@ -119,16 +119,23 @@ final class AreaImpl {
             if (min == null || max == null) {
                 throw new IllegalArgumentException("Points cannot be null");
             }
-            min = new BlockVec(
-                    Math.min(min.blockX(), max.blockX()),
-                    Math.min(min.blockY(), max.blockY()),
-                    Math.min(min.blockZ(), max.blockZ())
+            // Preserve original parameters for correct comparison
+            BlockVec origMin = min;
+            BlockVec origMax = max;
+            // Compute sorted bounds
+            BlockVec sortedMin = new BlockVec(
+                    Math.min(origMin.blockX(), origMax.blockX()),
+                    Math.min(origMin.blockY(), origMax.blockY()),
+                    Math.min(origMin.blockZ(), origMax.blockZ())
             );
-            max = new BlockVec(
-                    Math.max(min.blockX(), max.blockX()),
-                    Math.max(min.blockY(), max.blockY()),
-                    Math.max(min.blockZ(), max.blockZ())
+            BlockVec sortedMax = new BlockVec(
+                    Math.max(origMin.blockX(), origMax.blockX()),
+                    Math.max(origMin.blockY(), origMax.blockY()),
+                    Math.max(origMin.blockZ(), origMax.blockZ())
             );
+            // Assign to record components
+            min = sortedMin;
+            max = sortedMax;
         }
 
         @Override
@@ -139,16 +146,21 @@ final class AreaImpl {
                 private int x = minX;
                 private int y = minY;
                 private int z = minZ;
+                private boolean hasNext = true;
 
                 @Override
                 public boolean hasNext() {
-                    return x <= maxX && y <= maxY && z <= maxZ;
+                    return hasNext;
                 }
 
                 @Override
                 public BlockVec next() {
+                    if (!hasNext) throw new NoSuchElementException();
                     BlockVec vec = new BlockVec(x, y, z);
-                    if (x < maxX) {
+                    // Determine next position or finish
+                    if (x == maxX && y == maxY && z == maxZ) {
+                        hasNext = false;
+                    } else if (x < maxX) {
                         x++;
                     } else if (y < maxY) {
                         x = minX;
@@ -173,27 +185,37 @@ final class AreaImpl {
 
         @Override
         public @NotNull Iterator<BlockVec> iterator() {
+            final int minX = center.blockX() - radius;
+            final int minY = center.blockY() - radius;
+            final int minZ = center.blockZ() - radius;
+            final int maxX = center.blockX() + radius;
+            final int maxY = center.blockY() + radius;
+            final int maxZ = center.blockZ() + radius;
             return new Iterator<>() {
-                private int x = center.blockX() - radius;
-                private int y = center.blockY() - radius;
-                private int z = center.blockZ() - radius;
+                private int x = minX;
+                private int y = minY;
+                private int z = minZ;
+                private boolean hasNext = true;
 
                 @Override
                 public boolean hasNext() {
-                    return x <= center.blockX() + radius && y <= center.blockY() + radius && z <= center.blockZ() + radius;
+                    return hasNext;
                 }
 
                 @Override
                 public BlockVec next() {
+                    if (!hasNext) throw new NoSuchElementException();
                     BlockVec vec = new BlockVec(x, y, z);
-                    if (x < center.blockX() + radius) {
+                    if (x == maxX && y == maxY && z == maxZ) {
+                        hasNext = false;
+                    } else if (x < maxX) {
                         x++;
-                    } else if (y < center.blockY() + radius) {
-                        x = center.blockX() - radius;
+                    } else if (y < maxY) {
+                        x = minX;
                         y++;
-                    } else if (z < center.blockZ() + radius) {
-                        x = center.blockX() - radius;
-                        y = center.blockY() - radius;
+                    } else if (z < maxZ) {
+                        x = minX;
+                        y = minY;
                         z++;
                     }
                     return vec;
