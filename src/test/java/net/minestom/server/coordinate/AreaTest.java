@@ -279,4 +279,78 @@ public class AreaTest {
         Set<Area.Cuboid> actual = new HashSet<>(cuboid.split());
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void boundSingle() {
+        Area.Single single = Area.single(new BlockVec(5, 10, 15));
+        Area.Cuboid bound = single.bound();
+        assertPoint(new BlockVec(5, 10, 15), bound.min());
+        assertPoint(new BlockVec(5, 10, 15), bound.max());
+    }
+
+    @Test
+    public void boundLine() {
+        Area.Line line = Area.line(new BlockVec(1, 2, 3), new BlockVec(4, 5, 6));
+        Area.Cuboid bound = line.bound();
+        assertPoint(new BlockVec(1, 2, 3), bound.min());
+        assertPoint(new BlockVec(4, 5, 6), bound.max());
+    }
+
+    @Test
+    public void boundLineReversed() {
+        Area.Line line = Area.line(new BlockVec(4, 5, 6), new BlockVec(1, 2, 3));
+        Area.Cuboid bound = line.bound();
+        assertPoint(new BlockVec(1, 2, 3), bound.min());
+        assertPoint(new BlockVec(4, 5, 6), bound.max());
+    }
+
+    @Test
+    public void boundLineDiagonal() {
+        Area.Line line = Area.line(new BlockVec(-2, 10, -5), new BlockVec(3, -1, 2));
+        Area.Cuboid bound = line.bound();
+        assertPoint(new BlockVec(-2, -1, -5), bound.min());
+        assertPoint(new BlockVec(3, 10, 2), bound.max());
+    }
+
+    @Test
+    public void boundCuboid() {
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(1, 2, 3), new BlockVec(4, 5, 6));
+        Area.Cuboid bound = cuboid.bound();
+        // Bounding box of a cuboid should be itself
+        assertPoint(cuboid.min(), bound.min());
+        assertPoint(cuboid.max(), bound.max());
+    }
+
+    @Test
+    public void boundCuboidUnordered() {
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(4, 5, 6), new BlockVec(1, 2, 3));
+        Area.Cuboid bound = cuboid.bound();
+        // Should still return correctly ordered bounds
+        assertPoint(new BlockVec(1, 2, 3), bound.min());
+        assertPoint(new BlockVec(4, 5, 6), bound.max());
+    }
+
+    @Test
+    public void boundSphere() {
+        Area.Sphere sphere = Area.sphere(new BlockVec(0, 0, 0), 3);
+        Area.Cuboid bound = sphere.bound();
+        assertPoint(new BlockVec(-3, -3, -3), bound.min());
+        assertPoint(new BlockVec(3, 3, 3), bound.max());
+    }
+
+    @Test
+    public void boundSphereOffset() {
+        Area.Sphere sphere = Area.sphere(new BlockVec(10, 20, 30), 5);
+        Area.Cuboid bound = sphere.bound();
+        assertPoint(new BlockVec(5, 15, 25), bound.min());
+        assertPoint(new BlockVec(15, 25, 35), bound.max());
+    }
+
+    @Test
+    public void boundSphereZeroRadius() {
+        Area.Sphere sphere = Area.sphere(new BlockVec(1, 2, 3), 0);
+        Area.Cuboid bound = sphere.bound();
+        assertPoint(new BlockVec(1, 2, 3), bound.min());
+        assertPoint(new BlockVec(1, 2, 3), bound.max());
+    }
 }
