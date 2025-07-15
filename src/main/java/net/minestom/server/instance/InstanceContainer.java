@@ -218,6 +218,8 @@ public class InstanceContainer extends Instance {
 
     @Override
     public synchronized @NotNull BlockBatch getBlockBatch(long flags, @NotNull Point origin, @NotNull Area area) {
+        EventsJFR.InstanceGetBatch getBatchEvent = new EventsJFR.InstanceGetBatch(
+                getUuid().toString(), origin.toString(), flags, 0);
         final boolean ignoreData = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0;
         final boolean aligned = (flags & BlockBatch.ALIGNED_FLAG) != 0;
         final boolean generate = (flags & BlockBatch.GENERATE_FLAG) != 0;
@@ -329,12 +331,13 @@ public class InstanceContainer extends Instance {
             return null;
         };
 
+        BlockBatch result;
         if (aligned) {
             // Fast aligned batch
-            return BlockBatch.aligned(chunkRegister::apply);
+            result = BlockBatch.aligned(chunkRegister::apply);
         } else {
             // Slower unaligned batch
-            return BlockBatch.unaligned(builder -> {
+            result = BlockBatch.unaligned(builder -> {
                 chunkRegister.apply(builder);
                 // Add individual blocks from partially contained sections
                 final Condition condition = ignoreData ? Condition.TYPE : Condition.NONE;
@@ -348,10 +351,16 @@ public class InstanceContainer extends Instance {
                 }
             });
         }
+        getBatchEvent.batchCount = result.count();
+        getBatchEvent.commit();
+        return result;
     }
 
     @Override
     public synchronized void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
+        EventsJFR.InstanceSetBatch setBatchEvent = new EventsJFR.InstanceSetBatch(
+                getUuid().toString(), new BlockVec(x, y, z).toString(), (int) batch.flags(), batch.count());
+        setBatchEvent.begin();
         final BlockBatchImpl batchImpl = (BlockBatchImpl) batch;
         LongSet sectionIndexes = new LongOpenHashSet();
         if (sectionAligned(x, y, z)) {
@@ -368,6 +377,7 @@ public class InstanceContainer extends Instance {
             final Chunk chunk = getChunk(sectionX, sectionZ);
             if (chunk != null) chunk.sendChunk();
         }
+        setBatchEvent.commit();
     }
 
     private void setBlockBatchAligned(int x, int y, int z, BlockBatchImpl batch, LongSet sectionIndexes) {
