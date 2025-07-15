@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
 import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
 
 /**
@@ -18,7 +19,7 @@ import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
 public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     public static final BlockVec ZERO = new BlockVec(0);
     public static final BlockVec ONE = new BlockVec(1);
-    public static final BlockVec SECTION = new BlockVec(16);
+    public static final BlockVec SECTION = new BlockVec(SECTION_SIZE);
 
     public BlockVec(double x, double y, double z) {
         this(globalToBlock(x), globalToBlock(y), globalToBlock(z));
