@@ -8,14 +8,13 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.utils.position.PositionUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class WaterNodeFollower implements NodeFollower {
     private final Entity entity;
     private static final double WATER_SPEED_MULTIPLIER = 0.5;
 
-    public WaterNodeFollower(@NotNull Entity entity) {
+    public WaterNodeFollower(Entity entity) {
         this.entity = entity;
     }
 
@@ -27,7 +26,7 @@ public class WaterNodeFollower implements NodeFollower {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
-    public void moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
+    public void moveTowards(Point direction, double speed, Point lookAt) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
@@ -69,7 +68,7 @@ public class WaterNodeFollower implements NodeFollower {
     }
 
     @Override
-    public boolean isAtPoint(@NotNull Point point) {
+    public boolean isAtPoint(Point point) {
         return entity.getPosition().sameBlock(point);
     }
 

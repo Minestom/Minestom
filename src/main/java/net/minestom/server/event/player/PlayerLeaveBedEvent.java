@@ -5,8 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PlayerLeaveBedEvent implements CancellableEvent, PlayerInstanceEvent {
 
@@ -28,7 +27,7 @@ public class PlayerLeaveBedEvent implements CancellableEvent, PlayerInstanceEven
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 

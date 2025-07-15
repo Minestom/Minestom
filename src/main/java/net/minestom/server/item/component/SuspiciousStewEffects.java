@@ -5,12 +5,11 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record SuspiciousStewEffects(@NotNull List<Effect> effects) {
+public record SuspiciousStewEffects(List<Effect> effects) {
     public static final int DEFAULT_DURATION = 160;
     public static final SuspiciousStewEffects EMPTY = new SuspiciousStewEffects(List.of());
 
@@ -21,17 +20,17 @@ public record SuspiciousStewEffects(@NotNull List<Effect> effects) {
         effects = List.copyOf(effects);
     }
 
-    public SuspiciousStewEffects(@NotNull Effect effect) {
+    public SuspiciousStewEffects(Effect effect) {
         this(List.of(effect));
     }
 
-    public @NotNull SuspiciousStewEffects with(@NotNull Effect effect) {
+    public SuspiciousStewEffects with(Effect effect) {
         List<Effect> newEffects = new ArrayList<>(effects);
         newEffects.add(effect);
         return new SuspiciousStewEffects(newEffects);
     }
 
-    public record Effect(@NotNull PotionEffect id, int durationTicks) {
+    public record Effect(PotionEffect id, int durationTicks) {
 
         public static final NetworkBuffer.Type<Effect> NETWORK_TYPE = NetworkBufferTemplate.template(
                 PotionEffect.NETWORK_TYPE, Effect::id,
@@ -43,7 +42,7 @@ public record SuspiciousStewEffects(@NotNull List<Effect> effects) {
                 "duration", Codec.INT.optional(DEFAULT_DURATION), Effect::durationTicks,
                 Effect::new);
 
-        public Effect(@NotNull PotionEffect id) {
+        public Effect(PotionEffect id) {
             this(id, DEFAULT_DURATION);
         }
     }

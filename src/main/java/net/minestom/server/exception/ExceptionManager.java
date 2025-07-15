@@ -1,7 +1,7 @@
 package net.minestom.server.exception;
 
 import net.minestom.server.MinecraftServer;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Manages the handling of exceptions.

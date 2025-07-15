@@ -7,7 +7,6 @@ import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
@@ -44,14 +43,14 @@ public class EventNodeTest {
 
     record ItemTestEvent(ItemStack item) implements ItemEvent {
         @Override
-        public @NotNull ItemStack getItemStack() {
+        public ItemStack getItemStack() {
             return item;
         }
     }
 
     record EntityTestEvent(Entity entity) implements EntityEvent {
         @Override
-        public @NotNull Entity getEntity() {
+        public Entity getEntity() {
             return entity;
         }
     }

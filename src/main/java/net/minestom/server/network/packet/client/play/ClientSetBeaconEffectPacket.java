@@ -4,7 +4,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.potion.PotionType;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record ClientSetBeaconEffectPacket(@Nullable PotionType primaryEffect,
                                           @Nullable PotionType secondaryEffect) implements ClientPacket {

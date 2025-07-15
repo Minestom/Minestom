@@ -5,13 +5,12 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
     private Entity shooter;
 
-    public WitherSkullMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public WitherSkullMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

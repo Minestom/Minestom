@@ -4,8 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -40,20 +39,20 @@ public class Advancement {
     private AdvancementsPacket.Criteria criteria;
     private boolean sendTelemetryData;
 
-    public Advancement(@NotNull Component title, @NotNull Component description,
-                       @NotNull Material icon, @NotNull FrameType frameType,
+    public Advancement(Component title, Component description,
+                       Material icon, FrameType frameType,
                        float x, float y) {
         this(title, description, ItemStack.of(icon), frameType, x, y, false);
     }
 
-    public Advancement(@NotNull Component title, Component description,
-                       @NotNull ItemStack icon, @NotNull FrameType frameType,
+    public Advancement(Component title, Component description,
+                       ItemStack icon, FrameType frameType,
                        float x, float y) {
         this(title, description, icon, frameType, x, y, false);
     }
 
-    public Advancement(@NotNull Component title, Component description,
-                       @NotNull ItemStack icon, @NotNull FrameType frameType,
+    public Advancement(Component title, Component description,
+                       ItemStack icon, FrameType frameType,
                        float x, float y, boolean sendTelemetryData) {
         this.title = title;
         this.description = description;
@@ -94,7 +93,7 @@ public class Advancement {
         return tab;
     }
 
-    protected void setTab(@NotNull AdvancementTab tab) {
+    protected void setTab(AdvancementTab tab) {
         this.tab = tab;
     }
 
@@ -112,7 +111,7 @@ public class Advancement {
      *
      * @param title the new title
      */
-    public void setTitle(@NotNull Component title) {
+    public void setTitle(Component title) {
         this.title = title;
         update();
     }
@@ -122,7 +121,7 @@ public class Advancement {
      *
      * @return the description title
      */
-    public @NotNull Component getDescription() {
+    public Component getDescription() {
         return description;
     }
 
@@ -131,7 +130,7 @@ public class Advancement {
      *
      * @param description the new description
      */
-    public void setDescription(@NotNull Component description) {
+    public void setDescription(Component description) {
         this.description = description;
         update();
     }
@@ -141,7 +140,7 @@ public class Advancement {
      *
      * @return the advancement icon
      */
-    public @NotNull ItemStack getIcon() {
+    public ItemStack getIcon() {
         return icon;
     }
 
@@ -150,7 +149,7 @@ public class Advancement {
      *
      * @param icon the new advancement icon
      */
-    public void setIcon(@NotNull ItemStack icon) {
+    public void setIcon(ItemStack icon) {
         this.icon = icon;
         update();
     }
@@ -190,7 +189,6 @@ public class Advancement {
      *
      * @return this advancement frame type
      */
-    @NotNull
     public FrameType getFrameType() {
         return frameType;
     }
@@ -289,12 +287,12 @@ public class Advancement {
         this.parent = parent;
     }
 
-    protected @NotNull AdvancementsPacket.ProgressMapping toProgressMapping() {
+    protected AdvancementsPacket.ProgressMapping toProgressMapping() {
         final var advancementProgress = new AdvancementsPacket.AdvancementProgress(List.of(criteria));
         return new AdvancementsPacket.ProgressMapping(identifier, advancementProgress);
     }
 
-    protected @NotNull AdvancementsPacket.DisplayData toDisplayData() {
+    protected AdvancementsPacket.DisplayData toDisplayData() {
         return new AdvancementsPacket.DisplayData(title, description, icon,
                 frameType, getFlags(), background, x, y);
     }
@@ -304,7 +302,7 @@ public class Advancement {
      *
      * @return the mapping of this advancement
      */
-    protected @NotNull AdvancementsPacket.AdvancementMapping toMapping() {
+    protected AdvancementsPacket.AdvancementMapping toMapping() {
         final Advancement parent = getParent();
         final String parentIdentifier = parent != null ? parent.getIdentifier() : null;
         AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement(parentIdentifier, toDisplayData(),

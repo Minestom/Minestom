@@ -3,7 +3,6 @@ package net.minestom.server.event.instance;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This event is triggered when a section of an instance is manually marked as invalid.
@@ -25,7 +24,7 @@ public class InstanceSectionInvalidateEvent implements InstanceEvent {
     }
 
     @Override
-    public @NotNull Instance getInstance() {
+    public Instance getInstance() {
         return instance;
     }
 

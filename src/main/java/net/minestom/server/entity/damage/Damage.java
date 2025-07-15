@@ -12,8 +12,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a type of damage, required when calling {@link LivingEntity#damage(Damage)}
@@ -42,7 +41,7 @@ public class Damage implements Taggable {
      * @param amount         amount of damage
      * @param sourcePosition The position of the source of damage
      */
-    public Damage(@NotNull RegistryKey<DamageType> type, @Nullable Entity source, @Nullable Entity attacker, @Nullable Point sourcePosition, float amount) {
+    public Damage(RegistryKey<DamageType> type, @Nullable Entity source, @Nullable Entity attacker, @Nullable Point sourcePosition, float amount) {
         this.typeKey = type;
         this.type = DAMAGE_TYPE_REGISTRY.get(type);
         Check.argCondition(this.type == null, "Damage type is not registered: {0}", type);
@@ -59,7 +58,7 @@ public class Damage implements Taggable {
      *
      * @return the damage type
      */
-    public @NotNull RegistryKey<DamageType> getType() {
+    public RegistryKey<DamageType> getType() {
         return typeKey;
     }
 
@@ -110,7 +109,7 @@ public class Damage implements Taggable {
      * @param killed the player who has been killed
      * @return the death message, null to do not send anything
      */
-    public @Nullable Component buildDeathMessage(@NotNull Player killed) {
+    public @Nullable Component buildDeathMessage(Player killed) {
         return Component.translatable("death.attack." + type.messageId(), Component.text(killed.getUsername()));
     }
 
@@ -122,7 +121,7 @@ public class Damage implements Taggable {
      * @param amount     amount of damage
      * @return a new {@link EntityProjectileDamage}
      */
-    public static @NotNull Damage fromProjectile(@Nullable Entity shooter, @NotNull Entity projectile, float amount) {
+    public static Damage fromProjectile(@Nullable Entity shooter, Entity projectile, float amount) {
         return new EntityProjectileDamage(shooter, projectile, amount);
     }
 
@@ -133,7 +132,7 @@ public class Damage implements Taggable {
      * @param amount amount of damage
      * @return a new {@link EntityDamage}
      */
-    public static @NotNull EntityDamage fromPlayer(@NotNull Player player, float amount) {
+    public static EntityDamage fromPlayer(Player player, float amount) {
         return new EntityDamage(player, amount);
     }
 
@@ -144,11 +143,11 @@ public class Damage implements Taggable {
      * @param amount amount of damage
      * @return a new {@link EntityDamage}
      */
-    public static @NotNull EntityDamage fromEntity(@NotNull Entity entity, float amount) {
+    public static EntityDamage fromEntity(Entity entity, float amount) {
         return new EntityDamage(entity, amount);
     }
 
-    public static @NotNull PositionalDamage fromPosition(@NotNull RegistryKey<DamageType> type, @NotNull Point sourcePosition, float amount) {
+    public static PositionalDamage fromPosition(RegistryKey<DamageType> type, Point sourcePosition, float amount) {
         return new PositionalDamage(type, sourcePosition, amount);
     }
 
@@ -158,7 +157,7 @@ public class Damage implements Taggable {
      * @param killed the player who has been killed
      * @return the death screen text, null to do not send anything
      */
-    public @Nullable Component buildDeathScreenText(@NotNull Player killed) {
+    public @Nullable Component buildDeathScreenText(Player killed) {
         return Component.translatable("death.attack." + type.messageId());
     }
 
@@ -168,24 +167,24 @@ public class Damage implements Taggable {
      * @param entity the entity hit by this damage
      * @return the sound to play when the given entity is hurt by this damage type. Can be null if no sound should play
      */
-    public @Nullable SoundEvent getSound(@NotNull LivingEntity entity) {
+    public @Nullable SoundEvent getSound(LivingEntity entity) {
         if (entity instanceof Player) {
             return getPlayerSound((Player) entity);
         }
         return getGenericSound(entity);
     }
 
-    protected SoundEvent getGenericSound(@NotNull LivingEntity entity) {
+    protected SoundEvent getGenericSound(LivingEntity entity) {
         return SoundEvent.ENTITY_GENERIC_HURT;
     }
 
-    protected SoundEvent getPlayerSound(@NotNull Player player) {
+    protected SoundEvent getPlayerSound(Player player) {
         if (DamageType.ON_FIRE.equals(typeKey)) return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
         return SoundEvent.ENTITY_PLAYER_HURT;
     }
 
     @Override
-    public @NotNull TagHandler tagHandler() {
+    public TagHandler tagHandler() {
         return tagHandler;
     }
 

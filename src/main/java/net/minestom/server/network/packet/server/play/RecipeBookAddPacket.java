@@ -7,8 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.display.RecipeDisplay;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +16,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final byte FLAG_NOTIFICATION = 1;
     public static final byte FLAG_HIGHLIGHT = 1 << 1;
 
@@ -27,8 +26,8 @@ public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace)
             RecipeBookAddPacket::new);
 
     public record Entry(
-            int displayId, @NotNull RecipeDisplay display,
-            @Nullable Integer group, @NotNull RecipeBookCategory category,
+            int displayId, RecipeDisplay display,
+            @Nullable Integer group, RecipeBookCategory category,
             @Nullable List<Ingredient> craftingRequirements,
             byte flags
     ) {
@@ -41,8 +40,8 @@ public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace)
                 NetworkBuffer.BYTE, Entry::flags,
                 Entry::new);
 
-        public Entry(int displayId, @NotNull RecipeDisplay display,
-                     @Nullable Integer group, @NotNull RecipeBookCategory category,
+        public Entry(int displayId, RecipeDisplay display,
+                     @Nullable Integer group, RecipeBookCategory category,
                      @Nullable List<Ingredient> craftingRequirements,
                      boolean notification, boolean highlight) {
             this(displayId, display, group, category, craftingRequirements,
@@ -59,7 +58,7 @@ public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace)
     }
 
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         final var components = new ArrayList<Component>();
         for (Entry entry : entries)
             components.addAll(entry.display.components());
@@ -67,7 +66,7 @@ public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace)
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         final var entries = new ArrayList<Entry>();
         for (Entry entry : this.entries) {
             entries.add(new Entry(entry.displayId, entry.display.copyWithOperator(operator),

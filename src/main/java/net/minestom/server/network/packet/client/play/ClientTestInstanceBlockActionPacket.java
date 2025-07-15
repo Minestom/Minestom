@@ -5,16 +5,15 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record ClientTestInstanceBlockActionPacket(
-        @NotNull Point blockPosition,
-        @NotNull Action action,
-        @NotNull Data data
+        Point blockPosition,
+        Action action,
+        Data data
 ) implements ClientPacket {
 
-    public static final @NotNull NetworkBuffer.Type<ClientTestInstanceBlockActionPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<ClientTestInstanceBlockActionPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.BLOCK_POSITION, ClientTestInstanceBlockActionPacket::blockPosition,
             Action.NETWORK_TYPE, ClientTestInstanceBlockActionPacket::action,
             Data.NETWORK_TYPE, ClientTestInstanceBlockActionPacket::data,
@@ -22,13 +21,13 @@ public record ClientTestInstanceBlockActionPacket(
 
     public record Data(
             @Nullable String test,
-            @NotNull Point size,
+            Point size,
             int rotation,
             boolean ignoreEntities,
-            @NotNull Status status,
+            Status status,
             @Nullable Component errorMessage
     ) {
-        public static final @NotNull NetworkBuffer.Type<Data> NETWORK_TYPE = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Data> NETWORK_TYPE = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING.optional(), Data::test,
                 NetworkBuffer.VECTOR3I, Data::size,
                 NetworkBuffer.VAR_INT, Data::rotation,

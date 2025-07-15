@@ -8,8 +8,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class EnchantmentTableInventory extends Inventory {
     private static final DynamicRegistry<Enchantment> ENCHANTMENT_REGISTRY = MinecraftServer.getEnchantmentRegistry();
@@ -19,11 +18,11 @@ public class EnchantmentTableInventory extends Inventory {
     private final short[] enchantmentShown = new short[EnchantmentSlot.values().length];
     private final short[] enchantmentLevel = new short[EnchantmentSlot.values().length];
 
-    public EnchantmentTableInventory(@NotNull Component title) {
+    public EnchantmentTableInventory(Component title) {
         super(InventoryType.ENCHANTMENT, title);
     }
 
-    public EnchantmentTableInventory(@NotNull String title) {
+    public EnchantmentTableInventory(String title) {
         super(InventoryType.ENCHANTMENT, title);
     }
 
@@ -77,7 +76,7 @@ public class EnchantmentTableInventory extends Inventory {
      * @param enchantmentSlot the enchantment slot
      * @return the enchantment shown in the slot, null if it is hidden
      */
-    public RegistryKey<Enchantment> getEnchantmentShown(@NotNull EnchantmentSlot enchantmentSlot) {
+    public RegistryKey<Enchantment> getEnchantmentShown(EnchantmentSlot enchantmentSlot) {
         final int id = enchantmentShown[enchantmentSlot.ordinal()];
         if (id == -1) return null;
         return ENCHANTMENT_REGISTRY.getKey(id);
@@ -91,7 +90,7 @@ public class EnchantmentTableInventory extends Inventory {
      * @param enchantmentSlot the enchantment slot
      * @param enchantment     the enchantment
      */
-    public void setEnchantmentShown(@NotNull EnchantmentSlot enchantmentSlot, @Nullable RegistryKey<Enchantment> enchantment) {
+    public void setEnchantmentShown(EnchantmentSlot enchantmentSlot, @Nullable RegistryKey<Enchantment> enchantment) {
         final short id = enchantment == null ? -1 : (short) ENCHANTMENT_REGISTRY.getId(enchantment);
         switch (enchantmentSlot) {
             case TOP -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_TOP, id);

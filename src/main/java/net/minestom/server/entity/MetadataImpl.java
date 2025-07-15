@@ -17,7 +17,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.collection.ObjectArray;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
@@ -65,16 +64,16 @@ final class MetadataImpl {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     record EntryImpl<T>(int type, @UnknownNullability T value,
-                        @NotNull NetworkBuffer.Type<T> serializer) implements Metadata.Entry<T> {
+                        NetworkBuffer.Type<T> serializer) implements Metadata.Entry<T> {
         static final NetworkBuffer.Type<EntryImpl<?>> SERIALIZER = new NetworkBuffer.Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, EntryImpl value) {
+            public void write(NetworkBuffer buffer, EntryImpl value) {
                 buffer.write(VAR_INT, value.type);
                 buffer.write(value.serializer, value.value);
             }
 
             @Override
-            public EntryImpl read(@NotNull NetworkBuffer buffer) {
+            public EntryImpl read(NetworkBuffer buffer) {
                 final int type = buffer.read(VAR_INT);
                 final EntryImpl<?> value = (EntryImpl<?>) EMPTY_VALUES.get(type);
                 if (value == null) throw new UnsupportedOperationException("Unknown value type: " + type);

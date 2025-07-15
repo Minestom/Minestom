@@ -1,6 +1,5 @@
 package net.minestom.server.message;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 
@@ -25,7 +24,7 @@ public enum ChatMessageType {
 
     private final EnumSet<ChatPosition> acceptedPositions;
 
-    ChatMessageType(@NotNull EnumSet<ChatPosition> acceptedPositions) {
+    ChatMessageType(EnumSet<ChatPosition> acceptedPositions) {
         this.acceptedPositions = acceptedPositions;
     }
 
@@ -35,7 +34,7 @@ public enum ChatMessageType {
      * @param chatPosition the position
      * @return if the message is accepted
      */
-    public boolean accepts(@NotNull ChatPosition chatPosition) {
+    public boolean accepts(ChatPosition chatPosition) {
         return this.acceptedPositions.contains(chatPosition);
     }
 
@@ -54,7 +53,7 @@ public enum ChatMessageType {
      * @param id the packet ID
      * @return the chat message type
      */
-    public static @NotNull ChatMessageType fromPacketID(int id) {
+    public static ChatMessageType fromPacketID(int id) {
         return switch (id) {
             case 0 -> FULL;
             case 1 -> SYSTEM;

@@ -6,7 +6,6 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 public class EnvTestPlayerProviderTest {
 
     public static class CustomPlayer extends Player {
-        public CustomPlayer(@NotNull PlayerConnection playerConnection, @NotNull GameProfile gameProfile) {
+        public CustomPlayer(PlayerConnection playerConnection, GameProfile gameProfile) {
             super(playerConnection, gameProfile);
         }
     }

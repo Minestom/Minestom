@@ -6,8 +6,7 @@ import net.kyori.adventure.nbt.BinaryTagTypes;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.ServerFlag;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.invoke.VarHandle;
@@ -36,13 +35,13 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
-    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(Tag<T> tag) {
         VarHandle.fullFence();
         return root.getTag(tag);
     }
 
     @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+    public <T> void setTag(Tag<T> tag, @Nullable T value) {
         // Handle view tags
         if (tag.isView()) {
             synchronized (this) {
@@ -82,26 +81,26 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
-    public <T> @Nullable T getAndSetTag(@NotNull Tag<T> tag, @Nullable T value) {
+    public <T> @Nullable T getAndSetTag(Tag<T> tag, @Nullable T value) {
         return updateTag0(tag, t -> value, true);
     }
 
     @Override
-    public <T> void updateTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
+    public <T> void updateTag(Tag<T> tag, UnaryOperator<@UnknownNullability T> value) {
         updateTag0(tag, value, false);
     }
 
     @Override
-    public <T> @UnknownNullability T updateAndGetTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
+    public <T> @UnknownNullability T updateAndGetTag(Tag<T> tag, UnaryOperator<@UnknownNullability T> value) {
         return updateTag0(tag, value, false);
     }
 
     @Override
-    public <T> @UnknownNullability T getAndUpdateTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
+    public <T> @UnknownNullability T getAndUpdateTag(Tag<T> tag, UnaryOperator<@UnknownNullability T> value) {
         return updateTag0(tag, value, true);
     }
 
-    private synchronized <T> T updateTag0(@NotNull Tag<T> tag, @NotNull UnaryOperator<T> value, boolean returnPrevious) {
+    private synchronized <T> T updateTag0(Tag<T> tag, UnaryOperator<T> value, boolean returnPrevious) {
         final Node node = traversePathWrite(root, tag, true);
         if (tag.isView()) {
             final T previousValue = tag.read(node.compound());
@@ -136,7 +135,7 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
-    public @NotNull TagReadable readableCopy() {
+    public TagReadable readableCopy() {
         Node copy = this.copy;
         if (copy == null) {
             synchronized (this) {
@@ -147,17 +146,17 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
-    public synchronized @NotNull TagHandler copy() {
+    public synchronized TagHandler copy() {
         return new TagHandlerImpl(root.copy(null));
     }
 
     @Override
-    public synchronized void updateContent(@NotNull CompoundBinaryTag compound) {
+    public synchronized void updateContent(CompoundBinaryTag compound) {
         this.root.updateContent(compound);
     }
 
     @Override
-    public @NotNull CompoundBinaryTag asCompound() {
+    public CompoundBinaryTag asCompound() {
         VarHandle.fullFence();
         return root.compound();
     }
@@ -213,7 +212,7 @@ final class TagHandlerImpl implements TagHandler {
         return local;
     }
 
-    private <T> Entry<?> valueToEntry(Node parent, Tag<T> tag, @NotNull T value) {
+    private <T> Entry<?> valueToEntry(Node parent, Tag<T> tag, T value) {
         if (value instanceof BinaryTag nbt) {
             if (nbt instanceof CompoundBinaryTag compound) {
                 final TagHandlerImpl handler = fromCompound(compound);
@@ -246,7 +245,7 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         @Override
-        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(Tag<T> tag) {
             final Node node = traversePathRead(this, tag);
             if (node == null)
                 return tag.createDefault(); // Must be a path-able entry, but not present
@@ -269,7 +268,7 @@ final class TagHandlerImpl implements TagHandler {
             return type == null || type.equals(nbt.type()) ? serializerEntry.read(nbt) : tag.createDefault();
         }
 
-        void updateContent(@NotNull CompoundBinaryTag compound) {
+        void updateContent(CompoundBinaryTag compound) {
             final TagHandlerImpl converted = fromCompound(compound);
             this.entries.updateContent(converted.root.entries);
             this.compound = compound;

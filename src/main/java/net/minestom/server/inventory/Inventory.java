@@ -8,7 +8,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,7 +27,7 @@ public non-sealed class Inventory extends AbstractInventory {
 
     private final int offset;
 
-    public Inventory(@NotNull InventoryType inventoryType, @NotNull Component title) {
+    public Inventory(InventoryType inventoryType, Component title) {
         super(inventoryType.getSize());
         this.id = generateId();
         this.inventoryType = inventoryType;
@@ -37,7 +36,7 @@ public non-sealed class Inventory extends AbstractInventory {
         this.offset = getSize();
     }
 
-    public Inventory(@NotNull InventoryType inventoryType, @NotNull String title) {
+    public Inventory(InventoryType inventoryType, String title) {
         this(inventoryType, Component.text(title));
     }
 
@@ -50,7 +49,7 @@ public non-sealed class Inventory extends AbstractInventory {
      *
      * @return the inventory type
      */
-    public @NotNull InventoryType getInventoryType() {
+    public InventoryType getInventoryType() {
         return inventoryType;
     }
 
@@ -59,7 +58,7 @@ public non-sealed class Inventory extends AbstractInventory {
      *
      * @return the inventory title
      */
-    public @NotNull Component getTitle() {
+    public Component getTitle() {
         return title;
     }
 
@@ -68,7 +67,7 @@ public non-sealed class Inventory extends AbstractInventory {
      *
      * @param title the new inventory title
      */
-    public void setTitle(@NotNull Component title) {
+    public void setTitle(Component title) {
         this.title = title;
         // Re-open the inventory
         sendPacketToViewers(new OpenWindowPacket(getWindowId(), getInventoryType().getWindowType(), title));
@@ -88,7 +87,7 @@ public non-sealed class Inventory extends AbstractInventory {
      * @return true if the player has successfully been added
      */
     @Override
-    public boolean addViewer(@NotNull Player player) {
+    public boolean addViewer(Player player) {
         if (!this.viewers.add(player)) return false;
 
         // Also send the open window packet
@@ -104,7 +103,7 @@ public non-sealed class Inventory extends AbstractInventory {
      * @return true if the player has successfully been removed
      */
     @Override
-    public boolean removeViewer(@NotNull Player player) {
+    public boolean removeViewer(Player player) {
         if (!super.removeViewer(player)) return false;
 
         player.getClickPreprocessor().clearCache();
@@ -118,7 +117,7 @@ public non-sealed class Inventory extends AbstractInventory {
      * @deprecated normal inventories no longer store cursor items
      */
     @Deprecated
-    public @NotNull ItemStack getCursorItem(@NotNull Player player) {
+    public ItemStack getCursorItem(Player player) {
         return player.getInventory().getCursorItem();
     }
 
@@ -129,7 +128,7 @@ public non-sealed class Inventory extends AbstractInventory {
      * @deprecated normal inventories no longer store cursor items
      */
     @Deprecated
-    public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
+    public void setCursorItem(Player player, ItemStack cursorItem) {
         player.getInventory().setCursorItem(cursorItem);
     }
 
@@ -140,12 +139,12 @@ public non-sealed class Inventory extends AbstractInventory {
      * @param value    the value of the property
      * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Set_Container_Property">the Minecraft wiki</a>
      */
-    protected void sendProperty(@NotNull InventoryProperty property, short value) {
+    protected void sendProperty(InventoryProperty property, short value) {
         sendPacketToViewers(new WindowPropertyPacket(getWindowId(), property.getProperty(), value));
     }
 
     @Override
-    public boolean leftClick(@NotNull Player player, int slot) {
+    public boolean leftClick(Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
         final ItemStack cursor = playerInventory.getCursorItem();
         final boolean isInWindow = isClickInWindow(slot);
@@ -168,7 +167,7 @@ public non-sealed class Inventory extends AbstractInventory {
     }
 
     @Override
-    public boolean rightClick(@NotNull Player player, int slot) {
+    public boolean rightClick(Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
         final ItemStack cursor = playerInventory.getCursorItem();
         final boolean isInWindow = isClickInWindow(slot);
@@ -191,7 +190,7 @@ public non-sealed class Inventory extends AbstractInventory {
     }
 
     @Override
-    public boolean shiftClick(@NotNull Player player, int slot, int button) {
+    public boolean shiftClick(Player player, int slot, int button) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : slot - offset;
@@ -235,7 +234,7 @@ public non-sealed class Inventory extends AbstractInventory {
     }
 
     @Override
-    public boolean changeHeld(@NotNull Player player, int slot, int key) {
+    public boolean changeHeld(Player player, int slot, int key) {
         final int convertedKey = key == 40 ? PlayerInventoryUtils.OFFHAND_SLOT : key;
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
@@ -259,14 +258,14 @@ public non-sealed class Inventory extends AbstractInventory {
     }
 
     @Override
-    public boolean middleClick(@NotNull Player player, int slot) {
+    public boolean middleClick(Player player, int slot) {
         // TODO
         update(player);
         return false;
     }
 
     @Override
-    public boolean drop(@NotNull Player player, boolean all, int slot) {
+    public boolean drop(Player player, boolean all, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final boolean outsideDrop = slot == -999;
@@ -292,7 +291,7 @@ public non-sealed class Inventory extends AbstractInventory {
     }
 
     @Override
-    public boolean dragging(@NotNull Player player, List<Integer> slots, int button) {
+    public boolean dragging(Player player, List<Integer> slots, int button) {
         final PlayerInventory playerInventory = player.getInventory();
         final ItemStack cursor = playerInventory.getCursorItem();
 
@@ -307,7 +306,7 @@ public non-sealed class Inventory extends AbstractInventory {
     }
 
     @Override
-    public boolean doubleClick(@NotNull Player player, int slot) {
+    public boolean doubleClick(Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : slot - offset;

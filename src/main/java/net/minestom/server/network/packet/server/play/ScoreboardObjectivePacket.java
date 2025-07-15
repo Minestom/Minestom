@@ -4,8 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.scoreboard.Sidebar;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,13 +12,13 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode,
+public record ScoreboardObjectivePacket(String objectiveName, byte mode,
                                         @Nullable Component objectiveValue,
                                         @Nullable Type type,
-                                        @Nullable Sidebar.NumberFormat numberFormat) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+                                        Sidebar.@Nullable NumberFormat numberFormat) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<ScoreboardObjectivePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, ScoreboardObjectivePacket value) {
+        public void write(NetworkBuffer buffer, ScoreboardObjectivePacket value) {
             buffer.write(STRING, value.objectiveName);
             buffer.write(BYTE, value.mode);
             if (value.mode == 0 || value.mode == 2) {
@@ -32,7 +31,7 @@ public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode
         }
 
         @Override
-        public ScoreboardObjectivePacket read(@NotNull NetworkBuffer buffer) {
+        public ScoreboardObjectivePacket read(NetworkBuffer buffer) {
             String objectiveName = buffer.read(STRING);
             byte mode = buffer.read(BYTE);
             Component objectiveValue = null;
@@ -48,13 +47,13 @@ public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode
     };
 
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         return mode == 0 || mode == 2 ? List.of(objectiveValue) :
                 List.of();
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         return mode == 0 || mode == 2 ? new ScoreboardObjectivePacket(objectiveName, mode,
                 operator.apply(objectiveValue), type, numberFormat) : this;
     }

@@ -2,8 +2,7 @@ package net.minestom.server.entity.pathfinding;
 
 import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PNode {
     public enum Type {
@@ -30,7 +29,7 @@ public class PNode {
         this(px, py, pz, g, h, Type.WALK, parent);
     }
 
-    public PNode(double px, double py, double pz, double g, double h, @NotNull PNode.Type type, @Nullable PNode parent) {
+    public PNode(double px, double py, double pz, double g, double h, PNode.Type type, @Nullable PNode parent) {
         this.g = g;
         this.h = h;
         this.parent = parent;
@@ -95,7 +94,7 @@ public class PNode {
     }
 
     @ApiStatus.Internal
-    public @NotNull Type getType() {
+    public Type getType() {
         return type;
     }
 
@@ -120,7 +119,7 @@ public class PNode {
     }
 
     @ApiStatus.Internal
-    public void setType(@NotNull PNode.Type newType) {
+    public void setType(PNode.Type newType) {
         this.type = newType;
     }
 

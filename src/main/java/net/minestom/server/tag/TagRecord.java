@@ -4,8 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -64,7 +63,7 @@ final class TagRecord {
         }
     };
 
-    static <T extends Record> @NotNull Serializer<T> serializer(@NotNull Class<T> type) {
+    static <T extends Record> Serializer<T> serializer(Class<T> type) {
         assert type.isRecord();
         //noinspection unchecked
         return (Serializer<T>) serializers.get(type);
@@ -82,7 +81,7 @@ final class TagRecord {
         }
 
         @Override
-        public @Nullable T read(@NotNull TagReadable reader) {
+        public @Nullable T read(TagReadable reader) {
             Object[] components = new Object[entries.length];
             for (int i = 0; i < components.length; i++) {
                 final Entry entry = entries[i];
@@ -98,7 +97,7 @@ final class TagRecord {
         }
 
         @Override
-        public void write(@NotNull TagWritable writer, @NotNull T value) {
+        public void write(TagWritable writer, T value) {
             try {
                 for (Entry entry : entries) {
                     final Object component = entry.component.getAccessor().invoke(value);

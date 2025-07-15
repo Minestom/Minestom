@@ -4,7 +4,6 @@ package net.minestom.server.game;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 /**
@@ -35,7 +34,7 @@ record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) impl
         this(registry, registry.key(), registry.main().getInt("id"));
     }
 
-    public static @UnknownNullability GameEvent get(@NotNull String key) {
+    public static @UnknownNullability GameEvent get(String key) {
         return REGISTRY.get(Key.key(key));
     }
 

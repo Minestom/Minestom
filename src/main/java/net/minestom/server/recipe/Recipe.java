@@ -3,8 +3,7 @@ package net.minestom.server.recipe;
 import net.minestom.server.item.Material;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public interface Recipe {
      *
      * @return a list of recipe displays, or none if the recipe should not be displayed in the recipe book
      */
-    default @NotNull List<RecipeDisplay> createRecipeDisplays() {
+    default List<RecipeDisplay> createRecipeDisplays() {
         return List.of();
     }
 
@@ -36,7 +35,7 @@ public interface Recipe {
      *
      * @return A map of item properties associated with this recipe.
      */
-    default @NotNull Map<RecipeProperty, List<Material>> itemProperties() {
+    default Map<RecipeProperty, List<Material>> itemProperties() {
         return Map.of();
     }
 

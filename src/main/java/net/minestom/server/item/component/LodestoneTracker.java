@@ -6,8 +6,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record LodestoneTracker(@Nullable WorldPos target, boolean tracked) {
 
@@ -20,15 +19,15 @@ public record LodestoneTracker(@Nullable WorldPos target, boolean tracked) {
             "tracked", Codec.BOOLEAN.optional(true), LodestoneTracker::tracked,
             LodestoneTracker::new);
 
-    public LodestoneTracker(@NotNull String dimension, @NotNull Point blockPosition, boolean tracked) {
+    public LodestoneTracker(String dimension, Point blockPosition, boolean tracked) {
         this(new WorldPos(dimension, blockPosition), tracked);
     }
 
-    public @NotNull LodestoneTracker withTarget(@Nullable WorldPos target) {
+    public LodestoneTracker withTarget(@Nullable WorldPos target) {
         return new LodestoneTracker(target, tracked);
     }
 
-    public @NotNull LodestoneTracker withTracked(boolean tracked) {
+    public LodestoneTracker withTracked(boolean tracked) {
         return new LodestoneTracker(target, tracked);
     }
 

@@ -8,7 +8,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +19,7 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
     private final static int MAX_FALL_DISTANCE = 5;
 
     @Override
-    public @NotNull Collection<? extends PNode> getWalkable(Block.@NotNull Getter getter, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
+    public Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited, PNode current, Point goal, BoundingBox boundingBox) {
         Collection<PNode> nearby = new ArrayList<>();
         tempNode = new PNode(0, 0, 0, 0, 0, current);
 
@@ -125,7 +124,7 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
     }
 
     @Override
-    public @NotNull OptionalDouble gravitySnap(Block.@NotNull Getter getter, double pointOrgX, double pointOrgY, double pointOrgZ, @NotNull BoundingBox boundingBox, double maxFall) {
+    public OptionalDouble gravitySnap(Block.Getter getter, double pointOrgX, double pointOrgY, double pointOrgZ, BoundingBox boundingBox, double maxFall) {
         final double pointX = (int) Math.floor(pointOrgX) + 0.5;
         final double pointZ = (int) Math.floor(pointOrgZ) + 0.5;
         final PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox,
@@ -135,7 +134,7 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
     }
 
     @Override
-    public boolean canMoveTowards(Block.@NotNull Getter getter, @NotNull Point startOrg, @NotNull Point endOrg, @NotNull BoundingBox boundingBox) {
+    public boolean canMoveTowards(Block.Getter getter, Point startOrg, Point endOrg, BoundingBox boundingBox) {
         final Point end = endOrg.add(0, Vec.EPSILON, 0);
         final Point start = startOrg.add(0, Vec.EPSILON, 0);
         final Point diff = end.sub(start);

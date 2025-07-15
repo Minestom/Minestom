@@ -6,7 +6,6 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -47,26 +46,26 @@ public final class AlphaColor extends Color implements ARGBLike {
      *
      * @param rgbLike the color
      */
-    public AlphaColor(int alpha, @NotNull RGBLike rgbLike) {
+    public AlphaColor(int alpha, RGBLike rgbLike) {
         this(alpha, rgbLike.red(), rgbLike.green(), rgbLike.blue());
     }
 
     @Override
-    public @NotNull AlphaColor withRed(int red) {
+    public AlphaColor withRed(int red) {
         return new AlphaColor(alpha(), red, green(), blue());
     }
 
     @Override
-    public @NotNull AlphaColor withGreen(int green) {
+    public AlphaColor withGreen(int green) {
         return new AlphaColor(alpha(), red(), green, blue());
     }
 
     @Override
-    public @NotNull AlphaColor withBlue(int blue) {
+    public AlphaColor withBlue(int blue) {
         return new AlphaColor(alpha(), red(), green(), blue);
     }
 
-    public @NotNull AlphaColor withAlpha(int alpha) {
+    public AlphaColor withAlpha(int alpha) {
         return new AlphaColor(alpha, red(), green(), blue());
     }
 

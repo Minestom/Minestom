@@ -54,8 +54,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -131,7 +130,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
+    public Instance(UUID uuid, RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, dimensionType.key());
     }
 
@@ -141,7 +140,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @NotNull Key dimensionName) {
+    public Instance(UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
         this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, dimensionName);
     }
 
@@ -151,7 +150,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry, @NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @NotNull Key dimensionName) {
+    public Instance(DynamicRegistry<DimensionType> dimensionTypeRegistry, UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
         this.uuid = uuid;
         this.dimensionType = dimensionType;
         this.cachedDimensionType = dimensionTypeRegistry.get(dimensionType);
@@ -175,28 +174,28 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @param callback the task to execute during the next instance tick
      */
-    public void scheduleNextTick(@NotNull Consumer<Instance> callback) {
+    public void scheduleNextTick(Consumer<Instance> callback) {
         this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
+    public void setBlock(int x, int y, int z, Block block) {
         setBlock(x, y, z, block, true);
     }
 
-    public void setBlock(@NotNull Point blockPosition, @NotNull Block block, boolean doBlockUpdates) {
+    public void setBlock(Point blockPosition, Block block, boolean doBlockUpdates) {
         setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block, doBlockUpdates);
     }
 
-    public abstract void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates);
+    public abstract void setBlock(int x, int y, int z, Block block, boolean doBlockUpdates);
 
     @ApiStatus.Internal
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
+    public boolean placeBlock(BlockHandler.Placement placement) {
         return placeBlock(placement, true);
     }
 
     @ApiStatus.Internal
-    public abstract boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates);
+    public abstract boolean placeBlock(BlockHandler.Placement placement, boolean doBlockUpdates);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
@@ -207,7 +206,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return true if the block has been broken, false if it has been cancelled
      */
     @ApiStatus.Internal
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace) {
+    public boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace) {
         return breakBlock(player, blockPosition, blockFace, true);
     }
 
@@ -221,7 +220,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return true if the block has been broken, false if it has been cancelled
      */
     @ApiStatus.Internal
-    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
+    public abstract boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
@@ -230,14 +229,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param chunkZ the chunk Z
      * @return a {@link CompletableFuture} completed once the chunk has been loaded
      */
-    public abstract @NotNull CompletableFuture<@NotNull Chunk> loadChunk(int chunkX, int chunkZ);
+    public abstract CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ);
 
     /**
      * Loads the chunk at the given {@link Point} with a callback.
      *
      * @param point the chunk position
      */
-    public @NotNull CompletableFuture<@NotNull Chunk> loadChunk(@NotNull Point point) {
+    public CompletableFuture<Chunk> loadChunk(Point point) {
         return loadChunk(point.chunkX(), point.chunkZ());
     }
 
@@ -249,7 +248,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param chunkZ the chunk Z
      * @return a {@link CompletableFuture} completed once the chunk has been processed, can be null if not loaded
      */
-    public abstract @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(int chunkX, int chunkZ);
+    public abstract CompletableFuture<@Nullable Chunk> loadOptionalChunk(int chunkX, int chunkZ);
 
     /**
      * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
@@ -258,7 +257,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param point the chunk position
      * @return a {@link CompletableFuture} completed once the chunk has been processed, null if not loaded
      */
-    public @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(@NotNull Point point) {
+    public CompletableFuture<@Nullable Chunk> loadOptionalChunk(Point point) {
         return loadOptionalChunk(point.chunkX(), point.chunkZ());
     }
 
@@ -269,7 +268,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @param chunk the chunk to unload
      */
-    public abstract void unloadChunk(@NotNull Chunk chunk);
+    public abstract void unloadChunk(Chunk chunk);
 
     /**
      * Unloads the chunk at the given position.
@@ -330,7 +329,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the future called once the instance data has been saved
      */
-    public abstract @NotNull CompletableFuture<Void> saveInstance();
+    public abstract CompletableFuture<Void> saveInstance();
 
     /**
      * Saves a {@link Chunk} to permanent storage.
@@ -338,16 +337,16 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param chunk the {@link Chunk} to save
      * @return future called when the chunk is done saving
      */
-    public abstract @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk);
+    public abstract CompletableFuture<Void> saveChunkToStorage(Chunk chunk);
 
     /**
      * Saves multiple chunks to permanent storage.
      *
      * @return future called when the chunks are done saving
      */
-    public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
+    public abstract CompletableFuture<Void> saveChunksToStorage();
 
-    public abstract void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier);
+    public abstract void setChunkSupplier(ChunkSupplier chunkSupplier);
 
     /**
      * Gets the chunk supplier of the instance.
@@ -375,7 +374,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return an unmodifiable containing all the instance chunks
      */
-    public abstract @NotNull Collection<@NotNull Chunk> getChunks();
+    public abstract Collection<Chunk> getChunks();
 
     /**
      * When set to true, chunks will load automatically when requested.
@@ -398,7 +397,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param point the point in the world
      * @return true if the point is inside the void
      */
-    public abstract boolean isInVoid(@NotNull Point point);
+    public abstract boolean isInVoid(Point point);
 
     /**
      * Gets if the instance has been registered in {@link InstanceManager}.
@@ -430,7 +429,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     @ApiStatus.Internal
-    public @NotNull DimensionType getCachedDimensionType() {
+    public DimensionType getCachedDimensionType() {
         return cachedDimensionType;
     }
 
@@ -439,7 +438,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the dimension name of the instance
      */
-    public @NotNull String getDimensionName() {
+    public String getDimensionName() {
         return dimensionName;
     }
 
@@ -543,7 +542,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the {@link TimeUpdatePacket} with this instance data
      */
     @ApiStatus.Internal
-    public @NotNull TimeUpdatePacket createTimePacket() {
+    public TimeUpdatePacket createTimePacket() {
         return new TimeUpdatePacket(worldAge, time, timeRate != 0);
     }
 
@@ -552,7 +551,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the {@link WorldBorder} for the instance of the current tick
      */
-    public @NotNull WorldBorder getWorldBorder() {
+    public WorldBorder getWorldBorder() {
         return worldBorder;
     }
 
@@ -563,7 +562,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param transitionTime the time in seconds this world border's diameter
      *                       will transition for (0 makes this instant)
      */
-    public void setWorldBorder(@NotNull WorldBorder worldBorder, double transitionTime) {
+    public void setWorldBorder(WorldBorder worldBorder, double transitionTime) {
         Check.stateCondition(transitionTime < 0, "Transition time cannot be lower than 0");
         long transitionMilliseconds = (long) (transitionTime * 1000);
         sendNewWorldBorderPackets(worldBorder, transitionMilliseconds);
@@ -579,18 +578,18 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * Set the instance {@link WorldBorder} with an instant transition.
      * see {@link Instance#setWorldBorder(WorldBorder, double)}.
      */
-    public void setWorldBorder(@NotNull WorldBorder worldBorder) {
+    public void setWorldBorder(WorldBorder worldBorder) {
         setWorldBorder(worldBorder, 0);
     }
 
     /**
      * Creates the {@link InitializeWorldBorderPacket} sent to players who join this instance.
      */
-    public @NotNull InitializeWorldBorderPacket createInitializeWorldBorderPacket() {
+    public InitializeWorldBorderPacket createInitializeWorldBorderPacket() {
         return worldBorder.createInitializePacket(targetBorderDiameter, remainingWorldBorderTransitionTicks * MinecraftServer.TICK_MS);
     }
 
-    private void sendNewWorldBorderPackets(@NotNull WorldBorder newBorder, long transitionMilliseconds) {
+    private void sendNewWorldBorderPackets(WorldBorder newBorder, long transitionMilliseconds) {
         // Only send the relevant border packets
         if (this.worldBorder.diameter() != newBorder.diameter()) {
             if (transitionMilliseconds == 0) sendGroupedPacket(newBorder.createSizePacket());
@@ -605,7 +604,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             sendGroupedPacket(newBorder.createWarningReachPacket());
     }
 
-    private @NotNull WorldBorder transitionWorldBorder(long remainingTicks) {
+    private WorldBorder transitionWorldBorder(long remainingTicks) {
         if (remainingTicks <= 1) return worldBorder.withDiameter(targetBorderDiameter);
         return worldBorder.withDiameter(worldBorder.diameter() + (targetBorderDiameter - worldBorder.diameter()) * (1 / (double) remainingTicks));
     }
@@ -615,7 +614,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
-    public @NotNull Set<@NotNull Entity> getEntities() {
+    public Set<Entity> getEntities() {
         return entityTracker.entities();
     }
 
@@ -659,7 +658,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return an unmodifiable {@link Set} containing all the players in the instance
      */
     @Override
-    public @NotNull Set<@NotNull Player> getPlayers() {
+    public Set<Player> getPlayers() {
         return entityTracker.entities(EntityTracker.Target.PLAYERS);
     }
 
@@ -669,7 +668,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return an unmodifiable {@link Set} containing all the creatures in the instance
      */
     @Deprecated
-    public @NotNull Set<@NotNull EntityCreature> getCreatures() {
+    public Set<EntityCreature> getCreatures() {
         return entityTracker.entities().stream()
                 .filter(EntityCreature.class::isInstance)
                 .map(entity -> (EntityCreature) entity)
@@ -682,7 +681,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
      */
     @Deprecated
-    public @NotNull Set<@NotNull ExperienceOrb> getExperienceOrbs() {
+    public Set<ExperienceOrb> getExperienceOrbs() {
         return entityTracker.entities().stream()
                 .filter(ExperienceOrb.class::isInstance)
                 .map(entity -> (ExperienceOrb) entity)
@@ -696,7 +695,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
-    public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
+    public Set<Entity> getChunkEntities(Chunk chunk) {
         var chunkEntities = entityTracker.chunkEntities(chunk.toPosition(), EntityTracker.Target.ENTITIES);
         return ObjectArraySet.ofUnchecked(chunkEntities.toArray(Entity[]::new));
     }
@@ -708,14 +707,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param range max range from the given point to collect entities at
      * @return entities that are not further than the specified distance from the transmitted position.
      */
-    public @NotNull Collection<Entity> getNearbyEntities(@NotNull Point point, double range) {
+    public Collection<Entity> getNearbyEntities(Point point, double range) {
         List<Entity> result = new ArrayList<>();
         this.entityTracker.nearbyEntities(point, range, EntityTracker.Target.ENTITIES, result::add);
         return result;
     }
 
     @Override
-    public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+    public @Nullable Block getBlock(int x, int y, int z, Condition condition) {
         final Block block = blockRetriever.getBlock(x, y, z, condition);
         if (block == null) throw new NullPointerException("Unloaded chunk at " + x + "," + y + "," + z);
         return block;
@@ -729,7 +728,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param actionParam   the action parameter, depends on the block
      * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
      */
-    public void sendBlockAction(@NotNull Point blockPosition, byte actionId, byte actionParam) {
+    public void sendBlockAction(Point blockPosition, byte actionId, byte actionParam) {
         final Block block = getBlock(blockPosition);
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "The chunk at {0} is not loaded!", blockPosition);
@@ -753,7 +752,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param point the position
      * @return the chunk at the given position, null if not loaded
      */
-    public @Nullable Chunk getChunkAt(@NotNull Point point) {
+    public @Nullable Chunk getChunkAt(Point point) {
         return getChunk(point.chunkX(), point.chunkZ());
     }
 
@@ -766,7 +765,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the instance unique id
      */
-    public @NotNull UUID getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
@@ -777,7 +776,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @deprecated Replace with {@link Instance#getUuid()}
      */
     @Deprecated(forRemoval = true)
-    public @NotNull UUID getUniqueId() {
+    public UUID getUniqueId() {
         return uuid;
     }
 
@@ -832,7 +831,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the instance weather
      */
-    public @NotNull Weather getWeather() {
+    public Weather getWeather() {
         return weather;
     }
 
@@ -842,7 +841,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param weather         the new weather
      * @param transitionTicks the ticks to transition to new weather
      */
-    public void setWeather(@NotNull Weather weather, int transitionTicks) {
+    public void setWeather(Weather weather, int transitionTicks) {
         Check.stateCondition(transitionTicks < 1, "Transition ticks cannot be lower than 0");
         this.weather = weather;
         remainingRainTransitionTicks = transitionTicks;
@@ -854,13 +853,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @param weather the new weather
      */
-    public void setWeather(@NotNull Weather weather) {
+    public void setWeather(Weather weather) {
         this.weather = weather;
         remainingRainTransitionTicks = (int) Math.max(1, Math.abs((this.weather.rainLevel() - transitioningWeather.rainLevel()) / 0.01));
         remainingThunderTransitionTicks = (int) Math.max(1, Math.abs((this.weather.thunderLevel() - transitioningWeather.thunderLevel()) / 0.01));
     }
 
-    private void sendWeatherPackets(@NotNull Weather previousWeather) {
+    private void sendWeatherPackets(Weather previousWeather) {
         boolean toggledRain = (transitioningWeather.isRaining() != previousWeather.isRaining());
         if (toggledRain) sendGroupedPacket(transitioningWeather.createIsRainingPacket());
         if (transitioningWeather.rainLevel() != previousWeather.rainLevel())
@@ -869,7 +868,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             sendGroupedPacket(transitioningWeather.createThunderLevelPacket());
     }
 
-    private @NotNull Weather transitionWeather(int remainingRainTransitionTicks, int remainingThunderTransitionTicks) {
+    private Weather transitionWeather(int remainingRainTransitionTicks, int remainingThunderTransitionTicks) {
         Weather target = weather;
         Weather current = transitioningWeather;
         float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float) Math.max(1, remainingRainTransitionTicks));
@@ -878,23 +877,23 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     @Override
-    public @NotNull TagHandler tagHandler() {
+    public TagHandler tagHandler() {
         return tagHandler;
     }
 
     @Override
-    public @NotNull Scheduler scheduler() {
+    public Scheduler scheduler() {
         return scheduler;
     }
 
     @Override
     @ApiStatus.Experimental
-    public @NotNull EventNode<InstanceEvent> eventNode() {
+    public EventNode<InstanceEvent> eventNode() {
         return eventNode;
     }
 
     @Override
-    public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+    public InstanceSnapshot updateSnapshot(SnapshotUpdater updater) {
         final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(),
                 value -> CoordConversion.chunkIndex(value.getChunkX(), value.getChunkZ()));
         final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
@@ -910,16 +909,16 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param sound          The sound to play
      * @param point          The point in this instance at which to play the sound
      */
-    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, @NotNull Point point) {
+    public void playSoundExcept(@Nullable Player excludedPlayer, Sound sound, Point point) {
         playSoundExcept(excludedPlayer, sound, point.x(), point.y(), point.z());
     }
 
-    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, double x, double y, double z) {
+    public void playSoundExcept(@Nullable Player excludedPlayer, Sound sound, double x, double y, double z) {
         ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, x, y, z);
         PacketSendingUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
     }
 
-    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, Sound.@NotNull Emitter emitter) {
+    public void playSoundExcept(@Nullable Player excludedPlayer, Sound sound, Sound.Emitter emitter) {
         if (emitter != Sound.Emitter.self()) {
             ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
             PacketSendingUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
@@ -984,13 +983,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     @Override
     @Contract(pure = true)
-    public @NotNull Pointers pointers() {
+    public Pointers pointers() {
         return INSTANCE_POINTERS_SUPPLIER.view(this);
     }
 
     @Override
     @Contract(pure = true)
-    public @NotNull Identity identity() {
+    public Identity identity() {
         return Identity.identity(this.uuid); // Warning, do not pull up until this.uuid is final
     }
 

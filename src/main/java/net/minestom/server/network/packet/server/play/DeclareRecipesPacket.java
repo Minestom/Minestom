@@ -7,14 +7,13 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.SlotDisplay;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
 public record DeclareRecipesPacket(
-        @NotNull Map<RecipeProperty, List<Material>> itemProperties,
-        @NotNull List<StonecutterRecipe> stonecutterRecipes
+        Map<RecipeProperty, List<Material>> itemProperties,
+        List<StonecutterRecipe> stonecutterRecipes
 ) implements ServerPacket.Play {
     private static final int MAX_ITEMS_PER_PROPERTY = Short.MAX_VALUE;
     private static final int MAX_STONECUTTER_RECIPES = Short.MAX_VALUE;
@@ -30,8 +29,8 @@ public record DeclareRecipesPacket(
     }
 
     public record StonecutterRecipe(
-            @NotNull Ingredient ingredient,
-            @NotNull SlotDisplay optionDisplay
+            Ingredient ingredient,
+            SlotDisplay optionDisplay
     ) {
         public static final NetworkBuffer.Type<StonecutterRecipe> NETWORK_TYPE = NetworkBufferTemplate.template(
                 Ingredient.NETWORK_TYPE, StonecutterRecipe::ingredient,

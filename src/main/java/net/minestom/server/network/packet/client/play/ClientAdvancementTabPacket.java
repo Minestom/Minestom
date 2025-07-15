@@ -3,16 +3,15 @@ package net.minestom.server.network.packet.client.play;
 import net.minestom.server.advancements.AdvancementAction;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record ClientAdvancementTabPacket(@NotNull AdvancementAction action,
+public record ClientAdvancementTabPacket(AdvancementAction action,
                                          @Nullable String tabIdentifier) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientAdvancementTabPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, ClientAdvancementTabPacket value) {
+        public void write(NetworkBuffer buffer, ClientAdvancementTabPacket value) {
             buffer.write(NetworkBuffer.Enum(AdvancementAction.class), value.action);
             if (value.action == AdvancementAction.OPENED_TAB) {
                 assert value.tabIdentifier != null;
@@ -21,7 +20,7 @@ public record ClientAdvancementTabPacket(@NotNull AdvancementAction action,
         }
 
         @Override
-        public ClientAdvancementTabPacket read(@NotNull NetworkBuffer buffer) {
+        public ClientAdvancementTabPacket read(NetworkBuffer buffer) {
             var action = buffer.read(NetworkBuffer.Enum(AdvancementAction.class));
             var tabIdentifier = action == AdvancementAction.OPENED_TAB ? buffer.read(STRING) : null;
             return new ClientAdvancementTabPacket(action, tabIdentifier);

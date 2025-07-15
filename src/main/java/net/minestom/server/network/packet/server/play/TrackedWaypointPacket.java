@@ -8,14 +8,13 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.Either;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
 public record TrackedWaypointPacket(
-        @NotNull Operation operation,
-        @NotNull Waypoint waypoint
+        Operation operation,
+        Waypoint waypoint
 ) implements ServerPacket.Configuration, ServerPacket.Play {
     public static final NetworkBuffer.Type<TrackedWaypointPacket> SERIALIZER = NetworkBufferTemplate.template(
             Operation.NETWORK_TYPE, TrackedWaypointPacket::operation,
@@ -31,9 +30,9 @@ public record TrackedWaypointPacket(
     }
 
     public record Waypoint(
-            @NotNull Either<UUID, String> id,
-            @NotNull Icon icon,
-            @NotNull Target target
+            Either<UUID, String> id,
+            Icon icon,
+            Target target
     ) {
         public static final NetworkBuffer.Type<Waypoint> NETWORK_TYPE = NetworkBufferTemplate.template(
                 NetworkBuffer.Either(NetworkBuffer.UUID, NetworkBuffer.STRING), Waypoint::id,
@@ -43,7 +42,7 @@ public record TrackedWaypointPacket(
     }
 
     public record Icon(
-            @NotNull Key style,
+            Key style,
             @Nullable RGBLike color
     ) {
         public static final Key DEFAULT_STYLE = Key.key("default");
@@ -55,20 +54,20 @@ public record TrackedWaypointPacket(
                 Icon::color,
                 Icon::new);
 
-        public Icon(@NotNull Key style) {
+        public Icon(Key style) {
             this(style, null);
         }
     }
 
     public sealed interface Target {
-        @NotNull NetworkBuffer.Type<Target> NETWORK_TYPE = Type.NETWORK_TYPE
+        NetworkBuffer.Type<Target> NETWORK_TYPE = Type.NETWORK_TYPE
                 .unionType(Target::dataSerializer, Target::targetToType);
 
         record Empty() implements Target {
             public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBufferTemplate.template(new Empty());
         }
 
-        record Vec3i(@NotNull Point point) implements Target {
+        record Vec3i(Point point) implements Target {
             public static final NetworkBuffer.Type<Vec3i> NETWORK_TYPE = NetworkBufferTemplate.template(
                     NetworkBuffer.VECTOR3I, Vec3i::point,
                     Vec3i::new);
@@ -94,7 +93,7 @@ public record TrackedWaypointPacket(
         }
 
         @SuppressWarnings({"unchecked", "rawtypes"})
-        private static NetworkBuffer.Type<Target> dataSerializer(@NotNull Type type) {
+        private static NetworkBuffer.Type<Target> dataSerializer(Type type) {
             return (NetworkBuffer.Type) switch (type) {
                 case EMPTY -> Empty.NETWORK_TYPE;
                 case VEC3I -> Vec3i.NETWORK_TYPE;
@@ -103,7 +102,7 @@ public record TrackedWaypointPacket(
             };
         }
 
-        private static @NotNull Type targetToType(@NotNull Target target) {
+        private static Type targetToType(Target target) {
             return switch (target) {
                 case Empty ignored -> Type.EMPTY;
                 case Vec3i ignored -> Type.VEC3I;

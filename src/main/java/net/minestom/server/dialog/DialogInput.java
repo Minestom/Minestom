@@ -7,8 +7,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -17,13 +16,13 @@ import java.util.Map;
 public sealed interface DialogInput {
     int DEFAULT_WIDTH = 200;
 
-    @NotNull Registry<StructCodec<? extends DialogInput>> REGISTRY = DynamicRegistry.fromMap(
+    Registry<StructCodec<? extends DialogInput>> REGISTRY = DynamicRegistry.fromMap(
             Key.key("minecraft:input_control_type"),
             Map.entry(Key.key("boolean"), Boolean.CODEC),
             Map.entry(Key.key("number_range"), NumberRange.CODEC),
             Map.entry(Key.key("single_option"), SingleOption.CODEC),
             Map.entry(Key.key("text"), Text.CODEC));
-    @NotNull StructCodec<DialogInput> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogInput::codec, "type");
+    StructCodec<DialogInput> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogInput::codec, "type");
 
     static void validateKey(String key) {
         for (var c : key.toCharArray())
@@ -32,11 +31,11 @@ public sealed interface DialogInput {
     }
 
     record Boolean(
-            @NotNull String key,
-            @NotNull Component label,
+            String key,
+            Component label,
             boolean initial,
-            @NotNull String onTrue,
-            @NotNull String onFalse
+            String onTrue,
+            String onFalse
     ) implements DialogInput {
 
         public static final StructCodec<Boolean> CODEC = StructCodec.struct(
@@ -52,15 +51,15 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public @NotNull StructCodec<? extends DialogInput> codec() {
+        public StructCodec<? extends DialogInput> codec() {
             return CODEC;
         }
     }
 
     record NumberRange(
-            @NotNull String key, int width,
-            @NotNull Component label,
-            @NotNull String labelFormat,
+            String key, int width,
+            Component label,
+            String labelFormat,
             float start, float end,
             @Nullable Float initial,
             @Nullable Float step
@@ -82,15 +81,15 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public @NotNull StructCodec<? extends DialogInput> codec() {
+        public StructCodec<? extends DialogInput> codec() {
             return CODEC;
         }
     }
 
     record SingleOption(
-            @NotNull String key, int width,
-            @NotNull List<Option> options,
-            @NotNull Component label,
+            String key, int width,
+            List<Option> options,
+            Component label,
             boolean labelVisible
     ) implements DialogInput {
         public static final StructCodec<SingleOption> CODEC = StructCodec.struct(
@@ -112,11 +111,11 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public @NotNull StructCodec<? extends DialogInput> codec() {
+        public StructCodec<? extends DialogInput> codec() {
             return CODEC;
         }
 
-        public record Option(@NotNull String id, @Nullable Component display, boolean initial) {
+        public record Option(String id, @Nullable Component display, boolean initial) {
             public static final StructCodec<Option> CODEC = StructCodec.struct(
                     "id", Codec.STRING, Option::id,
                     "display", Codec.COMPONENT.optional(), Option::display,
@@ -126,10 +125,10 @@ public sealed interface DialogInput {
     }
 
     record Text(
-            @NotNull String key, int width,
-            @NotNull Component label,
+            String key, int width,
+            Component label,
             boolean labelVisible,
-            @NotNull String initial,
+            String initial,
             int maxLength,
             @Nullable Multiline multiline
     ) implements DialogInput {
@@ -148,7 +147,7 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public @NotNull StructCodec<? extends DialogInput> codec() {
+        public StructCodec<? extends DialogInput> codec() {
             return CODEC;
         }
 
@@ -160,6 +159,6 @@ public sealed interface DialogInput {
         }
     }
 
-    @NotNull StructCodec<? extends DialogInput> codec();
+    StructCodec<? extends DialogInput> codec();
 
 }

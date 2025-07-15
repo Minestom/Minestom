@@ -9,7 +9,6 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -64,7 +63,7 @@ public class ItemComponentReadWriteTest {
         }));
     }
 
-    private static void readWriteTestImpl(@NotNull DataComponent<Object> component, @NotNull JsonElement input) {
+    private static void readWriteTestImpl(DataComponent<Object> component, JsonElement input) {
         try {
             var value = assertOk(component.decode(CODER, input));
             var actual = assertOk(component.encode(CODER, value));
@@ -92,7 +91,7 @@ public class ItemComponentReadWriteTest {
         }
     }
 
-    private static void assertEqualsJson(@NotNull JsonElement expected, @NotNull JsonElement actual) {
+    private static void assertEqualsJson(JsonElement expected, JsonElement actual) {
 
     }
 }

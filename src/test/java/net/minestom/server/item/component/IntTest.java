@@ -2,7 +2,6 @@ package net.minestom.server.item.component;
 
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -22,12 +21,12 @@ public class IntTest extends AbstractItemComponentTest<Integer> {
     );
 
     @Override
-    protected @NotNull DataComponent<Integer> component() {
+    protected DataComponent<Integer> component() {
         return INT_COMPONENTS.getFirst();
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, Integer>> directReadWriteEntries() {
+    protected List<Map.Entry<String, Integer>> directReadWriteEntries() {
         return List.of(
                 entry("instance", 2)
         );

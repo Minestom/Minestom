@@ -4,7 +4,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.potion.Potion;
-import org.jetbrains.annotations.NotNull;
 
 public class EntityPotionAddEvent implements EntityInstanceEvent, CancellableEvent {
 
@@ -13,12 +12,12 @@ public class EntityPotionAddEvent implements EntityInstanceEvent, CancellableEve
 
     private boolean cancelled = false;
 
-    public EntityPotionAddEvent(@NotNull Entity entity, @NotNull Potion potion) {
+    public EntityPotionAddEvent(Entity entity, Potion potion) {
         this.entity = entity;
         this.potion = potion;
     }
 
-    @NotNull
+
     @Override
     public Entity getEntity() {
         return entity;
@@ -29,7 +28,6 @@ public class EntityPotionAddEvent implements EntityInstanceEvent, CancellableEve
      *
      * @return the added potion.
      */
-    @NotNull
     public Potion getPotion() {
         return potion;
     }

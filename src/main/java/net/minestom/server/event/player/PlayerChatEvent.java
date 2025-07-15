@@ -5,7 +5,6 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,8 +20,8 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     private Component formattedMessage;
     private boolean cancelled;
 
-    public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
-                           @NotNull String rawMessage) {
+    public PlayerChatEvent(Player player, Collection<Player> recipients,
+                           String rawMessage) {
         this.player = player;
         this.recipients = new ArrayList<>(recipients);
         this.rawMessage = rawMessage;
@@ -36,7 +35,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @return a modifiable list of the message's targets
      */
-    public @NotNull Collection<Player> getRecipients() {
+    public Collection<Player> getRecipients() {
         return recipients;
     }
 
@@ -45,7 +44,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @return the sender's message
      */
-    public @NotNull String getRawMessage() {
+    public String getRawMessage() {
         return rawMessage;
     }
 
@@ -63,7 +62,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @param message the new message component
      */
-    public void setFormattedMessage(@NotNull Component message) {
+    public void setFormattedMessage(Component message) {
         formattedMessage = message;
     }
 
@@ -78,7 +77,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 

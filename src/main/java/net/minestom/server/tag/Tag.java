@@ -6,8 +6,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.collection.AutoIncrementMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,12 +56,12 @@ public class Tag<T> {
         this.listScope = listScope;
     }
 
-    static <T, N extends BinaryTag> Tag<T> tag(@NotNull String key, @NotNull Serializers.Entry<T, N> entry) {
+    static <T, N extends BinaryTag> Tag<T> tag(String key, Serializers.Entry<T, N> entry) {
         return new Tag<>(INDEX_MAP.get(key), key, entry.reader(), (Serializers.Entry<T, BinaryTag>) entry,
                 null, null, null, 0);
     }
 
-    static <T> Tag<T> fromSerializer(@NotNull String key, @NotNull TagSerializer<T> serializer) {
+    static <T> Tag<T> fromSerializer(String key, TagSerializer<T> serializer) {
         if (serializer instanceof TagRecord.Serializer recordSerializer) {
             // Allow fast retrieval
             //noinspection unchecked
@@ -76,23 +75,23 @@ public class Tag<T> {
      *
      * @return the tag key
      */
-    public @NotNull String getKey() {
+    public String getKey() {
         return key;
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public Tag<T> defaultValue(@NotNull Supplier<T> defaultValue) {
+    public Tag<T> defaultValue(Supplier<T> defaultValue) {
         return new Tag<>(index, key, readComparator, entry, defaultValue, path, copy, listScope);
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public Tag<T> defaultValue(@NotNull T defaultValue) {
+    public Tag<T> defaultValue(T defaultValue) {
         return defaultValue(() -> defaultValue);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    public <R> Tag<R> map(@NotNull Function<T, R> readMap,
-                          @NotNull Function<R, T> writeMap) {
+    public <R> Tag<R> map(Function<T, R> readMap,
+                          Function<R, T> writeMap) {
         var entry = this.entry;
         final Function<BinaryTag, R> readFunction = entry.reader().andThen(t -> {
             if (t == null) return null;
@@ -145,7 +144,7 @@ public class Tag<T> {
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public Tag<T> path(@NotNull String @Nullable ... path) {
+    public Tag<T> path(String @Nullable ... path) {
         if (path == null || path.length == 0) {
             return new Tag<>(index, key, readComparator, entry, defaultValue, null, copy, listScope);
         }
@@ -159,7 +158,7 @@ public class Tag<T> {
         return new Tag<>(index, key, readComparator, entry, defaultValue, pathEntries, copy, listScope);
     }
 
-    public @Nullable T read(@NotNull CompoundBinaryTag nbt) {
+    public @Nullable T read(CompoundBinaryTag nbt) {
         final BinaryTag readable = isView() ? nbt : nbt.get(key);
         final T result;
         try {
@@ -171,7 +170,7 @@ public class Tag<T> {
         }
     }
 
-    public void write(@NotNull CompoundBinaryTag.Builder nbtCompound, @Nullable T value) {
+    public void write(CompoundBinaryTag.Builder nbtCompound, @Nullable T value) {
         if (value != null) {
             final BinaryTag nbt = entry.write(value);
             if (isView()) nbtCompound.put((CompoundBinaryTag) nbt);
@@ -184,7 +183,7 @@ public class Tag<T> {
         }
     }
 
-    public void writeUnsafe(@NotNull CompoundBinaryTag.Builder nbtCompound, @Nullable Object value) {
+    public void writeUnsafe(CompoundBinaryTag.Builder nbtCompound, @Nullable Object value) {
         //noinspection unchecked
         write(nbtCompound, (T) value);
     }
@@ -193,7 +192,7 @@ public class Tag<T> {
         return key.isEmpty();
     }
 
-    final boolean shareValue(@NotNull Tag<?> other) {
+    final boolean shareValue(Tag<?> other) {
         if (this == other) return true;
         // Tags are not strictly the same, compare readers
         if (this.listScope != other.listScope)
@@ -206,7 +205,7 @@ public class Tag<T> {
         return supplier != null ? supplier.get() : null;
     }
 
-    final T copyValue(@NotNull T value) {
+    final T copyValue(T value) {
         final UnaryOperator<T> copier = copy;
         return copier != null ? copier.apply(value) : value;
     }
@@ -229,47 +228,47 @@ public class Tag<T> {
         return result;
     }
 
-    public static @NotNull Tag<Byte> Byte(@NotNull String key) {
+    public static Tag<Byte> Byte(String key) {
         return tag(key, Serializers.BYTE);
     }
 
-    public static @NotNull Tag<Boolean> Boolean(@NotNull String key) {
+    public static Tag<Boolean> Boolean(String key) {
         return tag(key, Serializers.BOOLEAN);
     }
 
-    public static @NotNull Tag<Short> Short(@NotNull String key) {
+    public static Tag<Short> Short(String key) {
         return tag(key, Serializers.SHORT);
     }
 
-    public static @NotNull Tag<Integer> Integer(@NotNull String key) {
+    public static Tag<Integer> Integer(String key) {
         return tag(key, Serializers.INT);
     }
 
-    public static @NotNull Tag<Long> Long(@NotNull String key) {
+    public static Tag<Long> Long(String key) {
         return tag(key, Serializers.LONG);
     }
 
-    public static @NotNull Tag<Float> Float(@NotNull String key) {
+    public static Tag<Float> Float(String key) {
         return tag(key, Serializers.FLOAT);
     }
 
-    public static @NotNull Tag<Double> Double(@NotNull String key) {
+    public static Tag<Double> Double(String key) {
         return tag(key, Serializers.DOUBLE);
     }
 
-    public static @NotNull Tag<String> String(@NotNull String key) {
+    public static Tag<String> String(String key) {
         return tag(key, Serializers.STRING);
     }
 
-    public static @NotNull Tag<UUID> UUID(@NotNull String key) {
+    public static Tag<UUID> UUID(String key) {
         return tag(key, Serializers.UUID);
     }
 
-    public static @NotNull Tag<ItemStack> ItemStack(@NotNull String key) {
+    public static Tag<ItemStack> ItemStack(String key) {
         return tag(key, Serializers.ITEM);
     }
 
-    public static @NotNull Tag<Component> Component(@NotNull String key) {
+    public static Tag<Component> Component(String key) {
         return tag(key, Serializers.COMPONENT);
     }
 
@@ -278,7 +277,7 @@ public class Tag<T> {
      * <p>
      * Specialized tags are recommended if the type is known as conversion will be required both way (read and write).
      */
-    public static @NotNull Tag<BinaryTag> NBT(@NotNull String key) {
+    public static Tag<BinaryTag> NBT(String key) {
         return tag(key, Serializers.NBT_ENTRY);
     }
 
@@ -292,7 +291,7 @@ public class Tag<T> {
      * @param <T>        the tag type
      * @return the created tag
      */
-    public static <T> @NotNull Tag<T> Structure(@NotNull String key, @NotNull TagSerializer<T> serializer) {
+    public static <T> Tag<T> Structure(String key, TagSerializer<T> serializer) {
         return fromSerializer(key, serializer);
     }
 
@@ -301,17 +300,17 @@ public class Tag<T> {
      * <p>
      * Must be used with care.
      */
-    public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
+    public static <T> Tag<T> View(TagSerializer<T> serializer) {
         return Structure("", serializer);
     }
 
     @ApiStatus.Experimental
-    public static <T extends Record> @NotNull Tag<T> Structure(@NotNull String key, @NotNull Class<T> type) {
+    public static <T extends Record> Tag<T> Structure(String key, Class<T> type) {
         return Structure(key, TagRecord.serializer(type));
     }
 
     @ApiStatus.Experimental
-    public static <T extends Record> @NotNull Tag<T> View(@NotNull Class<T> type) {
+    public static <T extends Record> Tag<T> View(Class<T> type) {
         return View(TagRecord.serializer(type));
     }
     
@@ -325,7 +324,7 @@ public class Tag<T> {
     * @param key The key.
     * @return A transient tag with the key.
     */    
-    public static <T> @NotNull Tag<T> Transient(@NotNull String key) {
+    public static <T> Tag<T> Transient(String key) {
         //noinspection unchecked
         return (Tag<T>) tag(key, Serializers.EMPTY);
     }

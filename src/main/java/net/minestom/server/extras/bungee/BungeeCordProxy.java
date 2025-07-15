@@ -2,8 +2,7 @@ package net.minestom.server.extras.bungee;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -61,7 +60,7 @@ public final class BungeeCordProxy {
      * @param token The token to test
      * @return Whether the token is a valid BungeeGuard token
      */
-    public static boolean isValidBungeeGuardToken(@NotNull String token) {
+    public static boolean isValidBungeeGuardToken(String token) {
         return isBungeeGuardEnabled() && bungeeGuardTokens.contains(token);
     }
 

@@ -10,8 +10,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.utils.block.BlockUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -37,7 +36,7 @@ public record BlockPredicate(
         @Nullable RegistryTag<Block> blocks,
         @Nullable PropertiesPredicate state,
         @Nullable CompoundBinaryTag nbt,
-        @NotNull DataComponentPredicates components
+        DataComponentPredicates components
 ) implements Predicate<Block> {
     /**
      * Matches all blocks.
@@ -63,19 +62,19 @@ public record BlockPredicate(
             StructCodec.INLINE, DataComponentPredicates.CODEC, BlockPredicate::components,
             BlockPredicate::new);
 
-    public BlockPredicate(@NotNull RegistryTag<Block> blocks) {
+    public BlockPredicate(RegistryTag<Block> blocks) {
         this(blocks, null, null);
     }
 
-    public BlockPredicate(@NotNull Block... blocks) {
+    public BlockPredicate(Block... blocks) {
         this(RegistryTag.direct(blocks));
     }
 
-    public BlockPredicate(@NotNull PropertiesPredicate state) {
+    public BlockPredicate(PropertiesPredicate state) {
         this(null, state, null);
     }
 
-    public BlockPredicate(@NotNull CompoundBinaryTag nbt) {
+    public BlockPredicate(CompoundBinaryTag nbt) {
         this(null, null, nbt);
     }
 
@@ -84,7 +83,7 @@ public record BlockPredicate(
     }
 
     @Override
-    public boolean test(@NotNull Block block) {
+    public boolean test(Block block) {
         if (blocks != null && !blocks.contains(block))
             return false;
         if (state != null && !state.test(block))

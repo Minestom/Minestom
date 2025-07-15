@@ -16,8 +16,7 @@ import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -38,12 +37,12 @@ public final class Navigator {
     NodeGenerator nodeGenerator = new GroundNodeGenerator();
     private NodeFollower nodeFollower;
 
-    public Navigator(@NotNull Entity entity) {
+    public Navigator(Entity entity) {
         this.entity = entity;
         nodeFollower = new GroundNodeFollower(entity);
     }
 
-    public @NotNull PPath.State getState() {
+    public PPath.State getState() {
         if (path == null && computingPath == null) return PPath.State.INVALID;
         if (path == null) return computingPath.getState();
         return path.getState();
@@ -197,7 +196,7 @@ public final class Navigator {
      *
      * @return the entity
      */
-    public @NotNull Entity getEntity() {
+    public Entity getEntity() {
         return entity;
     }
 
@@ -225,11 +224,11 @@ public final class Navigator {
         return goalPosition;
     }
 
-    public void setNodeFollower(@NotNull Supplier<NodeFollower> nodeFollower) {
+    public void setNodeFollower(Supplier<NodeFollower> nodeFollower) {
         this.nodeFollower = nodeFollower.get();
     }
 
-    public void setNodeGenerator(@NotNull Supplier<NodeGenerator> nodeGenerator) {
+    public void setNodeGenerator(Supplier<NodeGenerator> nodeGenerator) {
         this.nodeGenerator = nodeGenerator.get();
     }
 

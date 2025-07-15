@@ -3,10 +3,9 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
 
 public class PandaMeta extends AnimalMeta {
-    public PandaMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public PandaMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -34,21 +33,19 @@ public class PandaMeta extends AnimalMeta {
         metadata.set(MetadataDef.Panda.EAT_TIMER, value);
     }
 
-    @NotNull
     public Gene getMainGene() {
         return Gene.VALUES[metadata.get(MetadataDef.Panda.MAIN_GENE)];
     }
 
-    public void setMainGene(@NotNull Gene value) {
+    public void setMainGene(Gene value) {
         metadata.set(MetadataDef.Panda.MAIN_GENE, (byte) value.ordinal());
     }
 
-    @NotNull
     public Gene getHiddenGene() {
         return Gene.VALUES[metadata.get(MetadataDef.Panda.HIDDEN_GENE)];
     }
 
-    public void setHiddenGene(@NotNull Gene value) {
+    public void setHiddenGene(Gene value) {
         metadata.set(MetadataDef.Panda.HIDDEN_GENE, (byte) value.ordinal());
     }
 

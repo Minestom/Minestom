@@ -7,8 +7,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentCommand;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -33,7 +32,7 @@ record GraphImpl(NodeImpl root) implements Graph {
     }
 
     @Override
-    public boolean compare(@NotNull Graph graph, @NotNull Comparator comparator) {
+    public boolean compare(Graph graph, Comparator comparator) {
         return compare(root, graph.root(), comparator);
     }
 
@@ -43,8 +42,8 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
 
         @Override
-        public Graph.@NotNull Builder append(@NotNull Argument<?> argument, @Nullable Execution execution,
-                                             @NotNull Consumer<Graph.Builder> consumer) {
+        public Graph.Builder append(Argument<?> argument, @Nullable Execution execution,
+                                             Consumer<Graph.Builder> consumer) {
             BuilderImpl builder = new BuilderImpl(argument, execution);
             consumer.accept(builder);
             this.children.add(builder);
@@ -52,13 +51,13 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
 
         @Override
-        public Graph.@NotNull Builder append(@NotNull Argument<?> argument, @Nullable Execution execution) {
+        public Graph.Builder append(Argument<?> argument, @Nullable Execution execution) {
             this.children.add(new BuilderImpl(argument, List.of(), execution));
             return this;
         }
 
         @Override
-        public @NotNull GraphImpl build() {
+        public GraphImpl build() {
             return new GraphImpl(NodeImpl.fromBuilder(this));
         }
     }
@@ -190,7 +189,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         return Word(command.getName()).from(command.getNames());
     }
 
-    static boolean compare(@NotNull Node first, Node second, @NotNull Comparator comparator) {
+    static boolean compare(Node first, Node second, Comparator comparator) {
         return switch (comparator) {
             case TREE -> {
                 if (!first.argument().equals(second.argument())) yield false;

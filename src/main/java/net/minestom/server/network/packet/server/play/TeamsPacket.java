@@ -8,7 +8,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +23,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
 
     public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, TeamsPacket value) {
+        public void write(NetworkBuffer buffer, TeamsPacket value) {
             buffer.write(STRING, value.teamName);
             buffer.write(BYTE, (byte) value.action.id());
             @SuppressWarnings("unchecked") final Type<Action> type = (Type<Action>) actionSerializer(value.action.id());
@@ -32,7 +31,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
 
         @Override
-        public @NotNull TeamsPacket read(@NotNull NetworkBuffer buffer) {
+        public TeamsPacket read(NetworkBuffer buffer) {
             final String teamName = buffer.read(STRING);
             final byte actionId = buffer.read(BYTE);
             final var type = actionSerializer(actionId);
@@ -41,7 +40,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     };
 
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         return this.action instanceof ComponentHolder<?> holder ? holder.components() : List.of();
     }
 
@@ -57,7 +56,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         return new TeamsPacket(
                 this.teamName,
                 this.action instanceof ComponentHolder<?> holder
@@ -80,7 +79,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
 
         public static final NetworkBuffer.Type<CreateTeamAction> SERIALIZER = new Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, CreateTeamAction value) {
+            public void write(NetworkBuffer buffer, CreateTeamAction value) {
                 buffer.write(COMPONENT, value.displayName);
                 buffer.write(BYTE, value.friendlyFlags);
                 buffer.write(NameTagVisibility.NETWORK_TYPE, value.nameTagVisibility);
@@ -92,7 +91,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             }
 
             @Override
-            public CreateTeamAction read(@NotNull NetworkBuffer buffer) {
+            public CreateTeamAction read(NetworkBuffer buffer) {
                 return new CreateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
                         buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
                         NamedTextColor.namedColor(buffer.read(VAR_INT)), buffer.read(COMPONENT), buffer.read(COMPONENT),
@@ -106,12 +105,12 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
         }
 
         @Override
-        public @NotNull CreateTeamAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public CreateTeamAction copyWithOperator(UnaryOperator<Component> operator) {
             return new CreateTeamAction(
                     operator.apply(this.displayName),
                     this.friendlyFlags,
@@ -142,7 +141,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
 
         public static final NetworkBuffer.Type<UpdateTeamAction> SERIALIZER = new Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, UpdateTeamAction value) {
+            public void write(NetworkBuffer buffer, UpdateTeamAction value) {
                 buffer.write(COMPONENT, value.displayName);
                 buffer.write(BYTE, value.friendlyFlags);
                 buffer.write(NameTagVisibility.NETWORK_TYPE, value.nameTagVisibility);
@@ -153,7 +152,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             }
 
             @Override
-            public UpdateTeamAction read(@NotNull NetworkBuffer buffer) {
+            public UpdateTeamAction read(NetworkBuffer buffer) {
                 return new UpdateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
                         buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
                         NamedTextColor.namedColor(buffer.read(VAR_INT)),
@@ -167,12 +166,12 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
         }
 
         @Override
-        public @NotNull UpdateTeamAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public UpdateTeamAction copyWithOperator(UnaryOperator<Component> operator) {
             return new UpdateTeamAction(
                     operator.apply(this.displayName),
                     this.friendlyFlags,
@@ -185,7 +184,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record AddEntitiesToTeamAction(@NotNull List<@NotNull String> entities) implements Action {
+    public record AddEntitiesToTeamAction(List<String> entities) implements Action {
         public AddEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }
@@ -205,7 +204,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record RemoveEntitiesToTeamAction(@NotNull List<@NotNull String> entities) implements Action {
+    public record RemoveEntitiesToTeamAction(List<String> entities) implements Action {
         public RemoveEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }
@@ -262,8 +261,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             this.identifier = identifier;
         }
 
-        @NotNull
-        public static NameTagVisibility fromIdentifier(String identifier) {
+            public static NameTagVisibility fromIdentifier(String identifier) {
             for (NameTagVisibility v : values()) {
                 if (v.getIdentifier().equals(identifier))
                     return v;
@@ -277,8 +275,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          *
          * @return the identifier
          */
-        @NotNull
-        public String getIdentifier() {
+            public String getIdentifier() {
             return identifier;
         }
     }
@@ -320,7 +317,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             this.identifier = identifier;
         }
 
-        public static @NotNull CollisionRule fromIdentifier(String identifier) {
+        public static CollisionRule fromIdentifier(String identifier) {
             for (CollisionRule v : values()) {
                 if (v.getIdentifier().equals(identifier))
                     return v;
@@ -334,7 +331,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          *
          * @return the identifier
          */
-        public @NotNull String getIdentifier() {
+        public String getIdentifier() {
             return identifier;
         }
     }

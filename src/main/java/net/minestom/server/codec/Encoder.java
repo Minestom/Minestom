@@ -1,21 +1,20 @@
 package net.minestom.server.codec;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ApiStatus.Experimental
 public interface Encoder<T> {
 
-    static @NotNull <T> Encoder<T> empty() {
+    static <T> Encoder<T> empty() {
         return new Encoder<>() {
             @Override
-            public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
+            public <D> Result<D> encode(Transcoder<D> coder, @Nullable T value) {
                 return new Result.Ok<>(coder.createNull());
             }
         };
     }
 
-    <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value);
+    <D> Result<D> encode(Transcoder<D> coder, @Nullable T value);
 
 }

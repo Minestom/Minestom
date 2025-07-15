@@ -17,7 +17,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.time.TimeUnit;
-import org.jetbrains.annotations.NotNull;
 
 public class DisplayCommand extends Command {
 
@@ -35,7 +34,7 @@ public class DisplayCommand extends Command {
         addSyntax(this::spawnText, ArgumentType.Literal("text"), follow);
     }
 
-    public void spawnItem(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    public void spawnItem(CommandSender sender, CommandContext context) {
         if (!(sender instanceof Player player))
             return;
 
@@ -50,7 +49,7 @@ public class DisplayCommand extends Command {
         }
     }
 
-    public void spawnBlock(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    public void spawnBlock(CommandSender sender, CommandContext context) {
         if (!(sender instanceof Player player))
             return;
 
@@ -65,7 +64,7 @@ public class DisplayCommand extends Command {
         }
     }
 
-    public void spawnText(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    public void spawnText(CommandSender sender, CommandContext context) {
         if (!(sender instanceof Player player))
             return;
 
@@ -81,7 +80,7 @@ public class DisplayCommand extends Command {
         }
     }
 
-    private void startSmoothFollow(@NotNull Entity entity, @NotNull Player player) {
+    private void startSmoothFollow(Entity entity, Player player) {
 //        entity.setCustomName(Component.text("MY CUSTOM NAME"));
 //        entity.setCustomNameVisible(true);
         MinecraftServer.getSchedulerManager().buildTask(() -> {

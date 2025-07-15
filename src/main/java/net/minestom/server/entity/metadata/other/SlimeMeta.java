@@ -4,10 +4,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.MobMeta;
-import org.jetbrains.annotations.NotNull;
 
 public class SlimeMeta extends MobMeta {
-    public SlimeMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public SlimeMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

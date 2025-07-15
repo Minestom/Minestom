@@ -7,10 +7,9 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Either;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
-public record InstrumentComponent(@NotNull Either<Holder<Instrument>, RegistryKey<Instrument>> instrument) {
+public record InstrumentComponent(Either<Holder<Instrument>, RegistryKey<Instrument>> instrument) {
     public static final NetworkBuffer.Type<InstrumentComponent> NETWORK_TYPE = NetworkBuffer
             .Either(Instrument.NETWORK_TYPE, RegistryKey.<Instrument>uncheckedNetworkType())
             .transform(InstrumentComponent::new, InstrumentComponent::instrument);
@@ -18,7 +17,7 @@ public record InstrumentComponent(@NotNull Either<Holder<Instrument>, RegistryKe
             .Either(Instrument.CODEC, RegistryKey.<Instrument>uncheckedCodec())
             .transform(InstrumentComponent::new, InstrumentComponent::instrument);
 
-    public @Nullable Instrument resolve(@NotNull DynamicRegistry<Instrument> registry) {
+    public @Nullable Instrument resolve(DynamicRegistry<Instrument> registry) {
         return switch (this.instrument) {
             case Either.Left(Holder<Instrument> holder) -> holder.resolve(registry);
             case Either.Right(RegistryKey<Instrument> reference) -> registry.get(reference);

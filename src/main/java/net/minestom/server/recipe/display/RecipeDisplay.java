@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,13 +11,13 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
-    @NotNull NetworkBuffer.Type<RecipeDisplay> NETWORK_TYPE = RecipeDisplayType.NETWORK_TYPE
+    NetworkBuffer.Type<RecipeDisplay> NETWORK_TYPE = RecipeDisplayType.NETWORK_TYPE
             .unionType(RecipeDisplay::dataSerializer, RecipeDisplay::recipeDisplayToType);
 
     record CraftingShapeless(
-            @NotNull List<SlotDisplay> ingredients,
-            @NotNull SlotDisplay result,
-            @NotNull SlotDisplay craftingStation
+            List<SlotDisplay> ingredients,
+            SlotDisplay result,
+            SlotDisplay craftingStation
     ) implements RecipeDisplay {
         private static final int MAX_INGREDIENTS = Short.MAX_VALUE;
 
@@ -29,7 +28,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 CraftingShapeless::new);
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             final var components = new ArrayList<Component>();
             for (SlotDisplay ingredient : ingredients)
                 components.addAll(ingredient.components());
@@ -39,7 +38,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
 
         @Override
-        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public RecipeDisplay copyWithOperator(UnaryOperator<Component> operator) {
             final var newIngredients = new ArrayList<SlotDisplay>();
             for (SlotDisplay ingredient : ingredients)
                 newIngredients.add(ingredient.copyWithOperator(operator));
@@ -49,9 +48,9 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
 
     record CraftingShaped(
             int width, int height,
-            @NotNull List<SlotDisplay> ingredients,
-            @NotNull SlotDisplay result,
-            @NotNull SlotDisplay craftingStation
+            List<SlotDisplay> ingredients,
+            SlotDisplay result,
+            SlotDisplay craftingStation
     ) implements RecipeDisplay {
         private static final int MAX_INGREDIENTS = Short.MAX_VALUE;
 
@@ -70,7 +69,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             final var components = new ArrayList<Component>();
             for (SlotDisplay ingredient : ingredients)
                 components.addAll(ingredient.components());
@@ -80,7 +79,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
 
         @Override
-        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public RecipeDisplay copyWithOperator(UnaryOperator<Component> operator) {
             final var newIngredients = new ArrayList<SlotDisplay>();
             for (SlotDisplay ingredient : ingredients)
                 newIngredients.add(ingredient.copyWithOperator(operator));
@@ -89,10 +88,10 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
     }
 
     record Furnace(
-            @NotNull SlotDisplay ingredient,
-            @NotNull SlotDisplay fuel,
-            @NotNull SlotDisplay result,
-            @NotNull SlotDisplay craftingStation,
+            SlotDisplay ingredient,
+            SlotDisplay fuel,
+            SlotDisplay result,
+            SlotDisplay craftingStation,
             int duration, float experience
     ) implements RecipeDisplay {
         public static final NetworkBuffer.Type<Furnace> NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -105,7 +104,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 Furnace::new);
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             final var components = new ArrayList<Component>();
             components.addAll(ingredient.components());
             components.addAll(fuel.components());
@@ -115,7 +114,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
 
         @Override
-        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public RecipeDisplay copyWithOperator(UnaryOperator<Component> operator) {
             return new Furnace(ingredient.copyWithOperator(operator), fuel.copyWithOperator(operator),
                     result.copyWithOperator(operator), craftingStation.copyWithOperator(operator),
                     duration, experience);
@@ -123,9 +122,9 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
     }
 
     record Stonecutter(
-            @NotNull SlotDisplay ingredient,
-            @NotNull SlotDisplay result,
-            @NotNull SlotDisplay craftingStation
+            SlotDisplay ingredient,
+            SlotDisplay result,
+            SlotDisplay craftingStation
     ) implements RecipeDisplay {
         public static final NetworkBuffer.Type<Stonecutter> NETWORK_TYPE = NetworkBufferTemplate.template(
                 SlotDisplay.NETWORK_TYPE, Stonecutter::ingredient,
@@ -134,7 +133,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 Stonecutter::new);
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             final var components = new ArrayList<Component>();
             components.addAll(ingredient.components());
             components.addAll(result.components());
@@ -143,18 +142,18 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
 
         @Override
-        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public RecipeDisplay copyWithOperator(UnaryOperator<Component> operator) {
             return new Stonecutter(ingredient.copyWithOperator(operator), result.copyWithOperator(operator),
                     craftingStation.copyWithOperator(operator));
         }
     }
 
     record Smithing(
-            @NotNull SlotDisplay template,
-            @NotNull SlotDisplay base,
-            @NotNull SlotDisplay addition,
-            @NotNull SlotDisplay result,
-            @NotNull SlotDisplay craftingStation
+            SlotDisplay template,
+            SlotDisplay base,
+            SlotDisplay addition,
+            SlotDisplay result,
+            SlotDisplay craftingStation
     ) implements RecipeDisplay {
         public static final NetworkBuffer.Type<Smithing> NETWORK_TYPE = NetworkBufferTemplate.template(
                 SlotDisplay.NETWORK_TYPE, Smithing::template,
@@ -165,7 +164,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 Smithing::new);
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             final var components = new ArrayList<Component>();
             components.addAll(template.components());
             components.addAll(base.components());
@@ -176,14 +175,14 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
 
         @Override
-        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public RecipeDisplay copyWithOperator(UnaryOperator<Component> operator) {
             return new Smithing(template.copyWithOperator(operator), base.copyWithOperator(operator),
                     addition.copyWithOperator(operator), result.copyWithOperator(operator), craftingStation.copyWithOperator(operator));
         }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static NetworkBuffer.Type<RecipeDisplay> dataSerializer(@NotNull RecipeDisplayType type) {
+    private static NetworkBuffer.Type<RecipeDisplay> dataSerializer(RecipeDisplayType type) {
         return (NetworkBuffer.Type) switch (type) {
             case CRAFTING_SHAPELESS -> CraftingShapeless.NETWORK_TYPE;
             case CRAFTING_SHAPED -> CraftingShaped.NETWORK_TYPE;
@@ -193,7 +192,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         };
     }
 
-    private static RecipeDisplayType recipeDisplayToType(@NotNull RecipeDisplay recipeDisplay) {
+    private static RecipeDisplayType recipeDisplayToType(RecipeDisplay recipeDisplay) {
         return switch (recipeDisplay) {
             case CraftingShapeless ignored -> RecipeDisplayType.CRAFTING_SHAPELESS;
             case CraftingShaped ignored -> RecipeDisplayType.CRAFTING_SHAPED;

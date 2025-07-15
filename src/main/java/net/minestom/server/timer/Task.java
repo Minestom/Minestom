@@ -1,6 +1,5 @@
 package net.minestom.server.timer;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -9,9 +8,9 @@ import java.util.function.Supplier;
 public sealed interface Task permits TaskImpl {
     int id();
 
-    @NotNull ExecutionType executionType();
+    ExecutionType executionType();
 
-    @NotNull Scheduler owner();
+    Scheduler owner();
 
     /**
      * Unpark the tasks to be executed during next processing.
@@ -45,23 +44,23 @@ public sealed interface Task permits TaskImpl {
             };
         }
 
-        public @NotNull Builder executionType(@NotNull ExecutionType executionType) {
+        public Builder executionType(ExecutionType executionType) {
             this.executionType = executionType;
             return this;
         }
 
-        public @NotNull Builder delay(@NotNull TaskSchedule schedule) {
+        public Builder delay(TaskSchedule schedule) {
             this.delay = schedule;
             return this;
         }
 
-        public @NotNull Builder repeat(@NotNull TaskSchedule schedule) {
+        public Builder repeat(TaskSchedule schedule) {
             this.repeat = schedule;
             this.repeatOverride = true;
             return this;
         }
 
-        public @NotNull Task schedule() {
+        public Task schedule() {
             var innerTask = this.innerTask;
             var delay = this.delay;
             var repeat = this.repeat;
@@ -85,19 +84,19 @@ public sealed interface Task permits TaskImpl {
             }, executionType);
         }
 
-        public @NotNull Builder delay(@NotNull Duration duration) {
+        public Builder delay(Duration duration) {
             return delay(TaskSchedule.duration(duration));
         }
 
-        public @NotNull Builder delay(long time, @NotNull TemporalUnit unit) {
+        public Builder delay(long time, TemporalUnit unit) {
             return delay(Duration.of(time, unit));
         }
 
-        public @NotNull Builder repeat(@NotNull Duration duration) {
+        public Builder repeat(Duration duration) {
             return repeat(TaskSchedule.duration(duration));
         }
 
-        public @NotNull Builder repeat(long time, @NotNull TemporalUnit unit) {
+        public Builder repeat(long time, TemporalUnit unit) {
             return repeat(Duration.of(time, unit));
         }
     }

@@ -7,11 +7,10 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.VillagerType;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ZombieVillagerMeta extends ZombieMeta {
-    public ZombieVillagerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public ZombieVillagerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -23,24 +22,24 @@ public class ZombieVillagerMeta extends ZombieMeta {
         metadata.set(MetadataDef.ZombieVillager.IS_CONVERTING, value);
     }
 
-    public @NotNull VillagerMeta.VillagerData getVillagerData() {
+    public VillagerMeta.VillagerData getVillagerData() {
         return metadata.get(MetadataDef.ZombieVillager.VILLAGER_DATA);
     }
 
-    public void setVillagerData(@NotNull VillagerMeta.VillagerData data) {
+    public void setVillagerData(VillagerMeta.VillagerData data) {
         metadata.set(MetadataDef.Villager.VARIANT, data);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.VILLAGER_VARIANT)
             return (T) getVillagerData().type();
         return super.get(component);
     }
 
     @Override
-    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+    protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.VILLAGER_VARIANT)
             setVillagerData(getVillagerData().withType((VillagerType) value));
         else super.set(component, value);

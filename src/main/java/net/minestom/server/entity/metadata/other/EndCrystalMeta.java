@@ -5,11 +5,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class EndCrystalMeta extends EntityMeta {
-    public EndCrystalMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public EndCrystalMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

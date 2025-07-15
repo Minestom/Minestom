@@ -5,7 +5,6 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Unit;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -30,12 +29,12 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
     }
 
     @Override
-    protected @NotNull DataComponent<Unit> component() {
+    protected DataComponent<Unit> component() {
         return UNIT_COMPONENTS.getFirst();
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, Unit>> directReadWriteEntries() {
+    protected List<Map.Entry<String, Unit>> directReadWriteEntries() {
         return List.of(
                 entry("instance", Unit.INSTANCE)
         );

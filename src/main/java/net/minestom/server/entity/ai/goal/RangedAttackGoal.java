@@ -10,7 +10,6 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -42,7 +41,7 @@ public class RangedAttackGoal extends GoalSelector {
      * @param power          shot power (1 for normal).
      * @param timeUnit       the unit of the delay.
      */
-    public RangedAttackGoal(@NotNull EntityCreature entityCreature, int delay, int attackRange, int desirableRange, boolean comeClose, double power, double spread, @NotNull TemporalUnit timeUnit) {
+    public RangedAttackGoal(EntityCreature entityCreature, int delay, int attackRange, int desirableRange, boolean comeClose, double power, double spread, TemporalUnit timeUnit) {
         this(entityCreature, Duration.of(delay, timeUnit), attackRange, desirableRange, comeClose, power, spread);
     }
 
@@ -55,7 +54,7 @@ public class RangedAttackGoal extends GoalSelector {
      * @param spread         shot spread (0 for best accuracy).
      * @param power          shot power (1 for normal).
      */
-    public RangedAttackGoal(@NotNull EntityCreature entityCreature, Duration delay, int attackRange, int desirableRange, boolean comeClose, double power, double spread) {
+    public RangedAttackGoal(EntityCreature entityCreature, Duration delay, int attackRange, int desirableRange, boolean comeClose, double power, double spread) {
         super(entityCreature);
         this.delay = delay;
         this.attackRangeSquared = attackRange * attackRange;

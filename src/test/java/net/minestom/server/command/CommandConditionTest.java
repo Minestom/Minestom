@@ -4,7 +4,6 @@ import net.kyori.adventure.identity.Identity;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.tag.TagHandler;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -125,12 +124,12 @@ public class CommandConditionTest {
 
     private static final class Sender implements CommandSender {
         @Override
-        public @NotNull TagHandler tagHandler() {
+        public TagHandler tagHandler() {
             return null;
         }
 
         @Override
-        public @NotNull Identity identity() {
+        public Identity identity() {
             return Identity.nil();
         }
     }

@@ -10,8 +10,7 @@ import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -43,7 +42,7 @@ public final class CommandManager {
      * @param command the command to register
      * @throws IllegalStateException if a command with the same name already exists
      */
-    public synchronized void register(@NotNull Command command) {
+    public synchronized void register(Command command) {
         Check.stateCondition(commandExists(command.getName()),
                 "A command with the name " + command.getName() + " is already registered!");
         if (command.getAliases() != null) {
@@ -66,7 +65,7 @@ public final class CommandManager {
      * @param commands the array of commands
      * @throws IllegalStateException if a command with the same name already exists
      */
-    public synchronized void register(@NotNull Command... commands) {
+    public synchronized void register(Command... commands) {
         for (Command command : commands) {
             register(command);
         }
@@ -78,7 +77,7 @@ public final class CommandManager {
      *
      * @param command the command to remove
      */
-    public void unregister(@NotNull Command command) {
+    public void unregister(Command command) {
         commands.remove(command);
         for (String name : command.getNames()) {
             commandMap.remove(name);
@@ -93,7 +92,7 @@ public final class CommandManager {
      * @param commandName the command name
      * @return the command associated with the name, null if not any
      */
-    public @Nullable Command getCommand(@NotNull String commandName) {
+    public @Nullable Command getCommand(String commandName) {
         return commandMap.get(commandName.toLowerCase(Locale.ROOT));
     }
 
@@ -103,7 +102,7 @@ public final class CommandManager {
      * @param commandName the command name to check
      * @return true if the command does exist
      */
-    public boolean commandExists(@NotNull String commandName) {
+    public boolean commandExists(String commandName) {
         return getCommand(commandName) != null;
     }
 
@@ -114,7 +113,7 @@ public final class CommandManager {
      * @param command the raw command string (without the command prefix)
      * @return the execution result
      */
-    public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
+    public CommandResult execute(CommandSender sender, String command) {
         command = command.trim();
         // Command event
         if (sender instanceof Player player) {
@@ -143,11 +142,11 @@ public final class CommandManager {
      *
      * @see #execute(CommandSender, String)
      */
-    public @NotNull CommandResult executeServerCommand(@NotNull String command) {
+    public CommandResult executeServerCommand(String command) {
         return execute(serverSender, command);
     }
 
-    public @NotNull CommandDispatcher getDispatcher() {
+    public CommandDispatcher getDispatcher() {
         return dispatcher;
     }
 
@@ -175,7 +174,7 @@ public final class CommandManager {
      *
      * @return the {@link ConsoleSender}
      */
-    public @NotNull ConsoleSender getConsoleSender() {
+    public ConsoleSender getConsoleSender() {
         return consoleSender;
     }
 
@@ -187,11 +186,11 @@ public final class CommandManager {
      * @param player the player to get the commands packet
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
-    public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
+    public DeclareCommandsPacket createDeclareCommandsPacket(Player player) {
         return GraphConverter.createPacket(getGraph(), player);
     }
 
-    public @NotNull Set<@NotNull Command> getCommands() {
+    public Set<Command> getCommands() {
         return Collections.unmodifiableSet(commands);
     }
 
@@ -201,11 +200,11 @@ public final class CommandManager {
      * @param input commands string without prefix
      * @return the parsing result
      */
-    public CommandParser.Result parseCommand(@NotNull CommandSender sender, String input) {
+    public CommandParser.Result parseCommand(CommandSender sender, String input) {
         return parser.parse(sender, getGraph(), input);
     }
 
-    private @NotNull Graph getGraph() {
+    private Graph getGraph() {
         Graph graph = cachedGraph;
         if (graph == null) {
             synchronized (this) {

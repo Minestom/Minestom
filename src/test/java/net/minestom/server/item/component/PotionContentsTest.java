@@ -8,7 +8,6 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,12 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PotionContentsTest extends AbstractItemComponentTest<PotionContents> {
 
     @Override
-    protected @NotNull DataComponent<PotionContents> component() {
+    protected DataComponent<PotionContents> component() {
         return DataComponents.POTION_CONTENTS;
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, PotionContents>> directReadWriteEntries() {
+    protected List<Map.Entry<String, PotionContents>> directReadWriteEntries() {
         return List.of(
                 Map.entry("empty", PotionContents.EMPTY),
                 Map.entry("single effect", new PotionContents(PotionType.STRONG_SWIFTNESS)),

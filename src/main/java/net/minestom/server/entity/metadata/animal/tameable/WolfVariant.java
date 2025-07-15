@@ -10,7 +10,6 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -19,18 +18,18 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
             "assets", Assets.CODEC, WolfVariant::assets,
             WolfVariantImpl::new);
 
-    @NotNull NetworkBuffer.Type<RegistryKey<WolfVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::wolfVariant);
-    @NotNull Codec<RegistryKey<WolfVariant>> CODEC = RegistryKey.codec(Registries::wolfVariant);
+    NetworkBuffer.Type<RegistryKey<WolfVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::wolfVariant);
+    Codec<RegistryKey<WolfVariant>> CODEC = RegistryKey.codec(Registries::wolfVariant);
 
-    static @NotNull WolfVariant create(@NotNull Assets assets) {
+    static WolfVariant create(Assets assets) {
         return new WolfVariantImpl(assets);
     }
 
-    static @NotNull WolfVariant create(@NotNull Key wild, @NotNull Key tame, @NotNull Key angry) {
+    static WolfVariant create(Key wild, Key tame, Key angry) {
         return new WolfVariantImpl(new Assets(wild, tame, angry));
     }
 
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -44,9 +43,9 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
         return DynamicRegistry.create(Key.key("minecraft:wolf_variant"), REGISTRY_CODEC, RegistryData.Resource.WOLF_VARIANTS);
     }
 
-    @NotNull Assets assets();
+    Assets assets();
 
-    record Assets(@NotNull Key wild, @NotNull Key tame, @NotNull Key angry) {
+    record Assets(Key wild, Key tame, Key angry) {
         public static final Codec<Assets> CODEC = StructCodec.struct(
                 "wild", Codec.KEY, Assets::wild,
                 "tame", Codec.KEY, Assets::tame,
@@ -70,27 +69,27 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
         private Builder() {
         }
 
-        public @NotNull Builder wildAsset(@NotNull Key wildAsset) {
+        public Builder wildAsset(Key wildAsset) {
             this.wildAsset = wildAsset;
             return this;
         }
 
-        public @NotNull Builder tameAsset(@NotNull Key tameAsset) {
+        public Builder tameAsset(Key tameAsset) {
             this.tameAsset = tameAsset;
             return this;
         }
 
-        public @NotNull Builder angryAsset(@NotNull Key angryAsset) {
+        public Builder angryAsset(Key angryAsset) {
             this.angryAsset = angryAsset;
             return this;
         }
 
-        public @NotNull Builder assets(@NotNull Assets assets) {
+        public Builder assets(Assets assets) {
             this.assets = assets;
             return this;
         }
 
-        public @NotNull WolfVariant build() {
+        public WolfVariant build() {
             final Assets assets = Objects.requireNonNullElseGet(this.assets, () -> new Assets(wildAsset, tameAsset, angryAsset));
             return new WolfVariantImpl(assets);
         }

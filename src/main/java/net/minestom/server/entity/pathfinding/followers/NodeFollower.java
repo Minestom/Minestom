@@ -2,8 +2,7 @@ package net.minestom.server.entity.pathfinding.followers;
 
 import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface NodeFollower {
     /**
@@ -13,7 +12,7 @@ public interface NodeFollower {
      * @param speed  the speed to move at
      * @param lookAt the point to look at
      */
-    void moveTowards(@NotNull Point target, double speed, @NotNull Point lookAt);
+    void moveTowards(Point target, double speed, Point lookAt);
 
     /**
      * Jump
@@ -25,7 +24,7 @@ public interface NodeFollower {
      * @param point the point to check
      * @return true if the follower is at the point
      */
-    boolean isAtPoint(@NotNull Point point);
+    boolean isAtPoint(Point point);
 
     /**
      * Get the movement speed of the follower

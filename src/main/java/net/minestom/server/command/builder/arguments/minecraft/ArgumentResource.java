@@ -6,8 +6,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ArgumentResource extends Argument<String> {
 
@@ -15,13 +14,13 @@ public class ArgumentResource extends Argument<String> {
 
     private final String identifier;
 
-    public ArgumentResource(@NotNull String id, @NotNull String identifier) {
+    public ArgumentResource(String id, String identifier) {
         super(id);
         this.identifier = identifier;
     }
 
     @Override
-    public @NotNull String parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public String parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         if (input.contains(StringUtils.SPACE))
             throw new ArgumentSyntaxException("Resource location cannot contain space character", input, SPACE_ERROR);
 

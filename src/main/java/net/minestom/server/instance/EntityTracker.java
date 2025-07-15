@@ -7,8 +7,7 @@ import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
@@ -23,20 +22,20 @@ import java.util.function.Consumer;
  * Implementations are expected to be thread-safe.
  */
 public sealed interface EntityTracker permits EntityTrackerImpl {
-    static @NotNull EntityTracker newTracker() {
+    static EntityTracker newTracker() {
         return new EntityTrackerImpl();
     }
 
     /**
      * Register an entity to be tracked.
      */
-    <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
-                                     @NotNull Target<T> target, @Nullable Update<T> update);
+    <T extends Entity> void register(Entity entity, Point point,
+                                     Target<T> target, @Nullable Update<T> update);
 
     /**
      * Unregister an entity tracking.
      */
-    <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Target<T> target, @Nullable Update<T> update);
+    <T extends Entity> void unregister(Entity entity, Target<T> target, @Nullable Update<T> update);
 
     /**
      * Gets an entity based on its id (from {@link Entity#getEntityId()}).
@@ -58,42 +57,42 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
      * Called every time an entity move, you may want to verify if the new
      * position is in a different chunk.
      */
-    <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
-                                 @NotNull Target<T> target, @Nullable Update<T> update);
+    <T extends Entity> void move(Entity entity, Point newPoint,
+                                 Target<T> target, @Nullable Update<T> update);
 
-    @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target);
+    @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, Target<T> target);
 
     @UnmodifiableView
-    default <T extends Entity> @NotNull Collection<T> chunkEntities(@NotNull Point point, @NotNull Target<T> target) {
+    default <T extends Entity> Collection<T> chunkEntities(Point point, Target<T> target) {
         return chunkEntities(point.chunkX(), point.chunkZ(), target);
     }
 
     /**
      * Gets the entities within a chunk range.
      */
-    <T extends Entity> void nearbyEntitiesByChunkRange(@NotNull Point point, int chunkRange,
-                                                       @NotNull Target<T> target, @NotNull Consumer<T> query);
+    <T extends Entity> void nearbyEntitiesByChunkRange(Point point, int chunkRange,
+                                                       Target<T> target, Consumer<T> query);
 
     /**
      * Gets the entities within a range.
      */
-    <T extends Entity> void nearbyEntities(@NotNull Point point, double range,
-                                           @NotNull Target<T> target, @NotNull Consumer<T> query);
+    <T extends Entity> void nearbyEntities(Point point, double range,
+                                           Target<T> target, Consumer<T> query);
 
     /**
      * Gets all the entities tracked by this class.
      */
     @UnmodifiableView
-    @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target);
+    <T extends Entity> Set<T> entities(Target<T> target);
 
     @UnmodifiableView
-    default @NotNull Set<@NotNull Entity> entities() {
+    default Set<Entity> entities() {
         return entities(Target.ENTITIES);
     }
 
-    @NotNull Viewable viewable(@NotNull List<@NotNull SharedInstance> sharedInstances, int chunkX, int chunkZ);
+    Viewable viewable(List<SharedInstance> sharedInstances, int chunkX, int chunkZ);
 
-    default @NotNull Viewable viewable(int chunkX, int chunkZ) {
+    default Viewable viewable(int chunkX, int chunkZ) {
         return viewable(List.of(), chunkX, chunkZ);
     }
 
@@ -135,11 +134,11 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
      * Callback to know the newly visible entities and those to remove.
      */
     interface Update<E extends Entity> {
-        void add(@NotNull E entity);
+        void add(E entity);
 
-        void remove(@NotNull E entity);
+        void remove(E entity);
 
-        default void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {
+        default void referenceUpdate(Point point, @Nullable EntityTracker tracker) {
             // Empty
         }
     }

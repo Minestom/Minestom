@@ -7,8 +7,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,9 +17,9 @@ import java.util.function.UnaryOperator;
 
 public record AdvancementsPacket(
         boolean reset,
-        @NotNull List<AdvancementMapping> advancementMappings,
-        @NotNull List<String> identifiersToRemove,
-        @NotNull List<ProgressMapping> progressMappings,
+        List<AdvancementMapping> advancementMappings,
+        List<String> identifiersToRemove,
+        List<ProgressMapping> progressMappings,
         boolean showAdvancements
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ADVANCEMENTS = Short.MAX_VALUE;
@@ -42,7 +41,7 @@ public record AdvancementsPacket(
 
     // TODO is the display-item needed to be updated?
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         final var displayData = this.advancementMappings.stream().map(AdvancementMapping::value).map(Advancement::displayData).filter(Objects::nonNull).toList();
         final var titles = displayData.stream().map(DisplayData::title).toList();
         final var descriptions = displayData.stream().map(DisplayData::description).toList();
@@ -56,7 +55,7 @@ public record AdvancementsPacket(
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(final @NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(final UnaryOperator<Component> operator) {
         return new AdvancementsPacket(
                 this.reset,
                 this.advancementMappings.stream().map(mapping -> mapping.copyWithOperator(operator)).toList(),
@@ -69,8 +68,8 @@ public record AdvancementsPacket(
     /**
      * AdvancementMapping maps the namespaced ID to the Advancement.
      */
-    public record AdvancementMapping(@NotNull String key,
-                                     @NotNull Advancement value) implements ComponentHolder<AdvancementMapping> {
+    public record AdvancementMapping(String key,
+                                     Advancement value) implements ComponentHolder<AdvancementMapping> {
         public static final NetworkBuffer.Type<AdvancementMapping> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING, AdvancementMapping::key,
                 Advancement.SERIALIZER, AdvancementMapping::value,
@@ -78,18 +77,18 @@ public record AdvancementsPacket(
         );
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return this.value.components();
         }
 
         @Override
-        public @NotNull AdvancementMapping copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public AdvancementMapping copyWithOperator(UnaryOperator<Component> operator) {
             return this.value.displayData == null ? this : new AdvancementMapping(this.key, this.value.copyWithOperator(operator));
         }
     }
 
     public record Advancement(@Nullable String parentIdentifier, @Nullable DisplayData displayData,
-                              @NotNull List<Requirement> requirements,
+                              List<Requirement> requirements,
                               boolean sendTelemetryData) implements ComponentHolder<Advancement> {
         public Advancement {
             requirements = List.copyOf(requirements);
@@ -104,17 +103,17 @@ public record AdvancementsPacket(
         );
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return this.displayData != null ? this.displayData.components() : List.of();
         }
 
         @Override
-        public @NotNull Advancement copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public Advancement copyWithOperator(UnaryOperator<Component> operator) {
             return this.displayData == null ? this : new Advancement(this.parentIdentifier, this.displayData.copyWithOperator(operator), this.requirements, this.sendTelemetryData);
         }
     }
 
-    public record Requirement(@NotNull List<String> requirements) {
+    public record Requirement(List<String> requirements) {
         public static final NetworkBuffer.Type<Requirement> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING.list(MAX_ADVANCEMENTS), Requirement::requirements,
                 Requirement::new
@@ -125,14 +124,14 @@ public record AdvancementsPacket(
         }
     }
 
-    public record DisplayData(@NotNull Component title, @NotNull Component description,
-                              @NotNull ItemStack icon, @NotNull FrameType frameType,
+    public record DisplayData(Component title, Component description,
+                              ItemStack icon, FrameType frameType,
                               int flags, @Nullable String backgroundTexture,
                               float x, float y) implements ComponentHolder<DisplayData> {
 
         public static final NetworkBuffer.Type<DisplayData> SERIALIZER = new NetworkBuffer.Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, DisplayData value) {
+            public void write(NetworkBuffer buffer, DisplayData value) {
                 buffer.write(NetworkBuffer.COMPONENT, value.title);
                 buffer.write(NetworkBuffer.COMPONENT, value.description);
                 buffer.write(ItemStack.NETWORK_TYPE, value.icon);
@@ -147,7 +146,7 @@ public record AdvancementsPacket(
             }
 
             @Override
-            public DisplayData read(@NotNull NetworkBuffer buffer) {
+            public DisplayData read(NetworkBuffer buffer) {
                 var title = buffer.read(NetworkBuffer.COMPONENT);
                 var description = buffer.read(NetworkBuffer.COMPONENT);
                 var icon = buffer.read(ItemStack.NETWORK_TYPE);
@@ -164,17 +163,17 @@ public record AdvancementsPacket(
         };
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return List.of(this.title, this.description);
         }
 
         @Override
-        public @NotNull DisplayData copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public DisplayData copyWithOperator(UnaryOperator<Component> operator) {
             return new DisplayData(operator.apply(this.title), operator.apply(this.description), this.icon, this.frameType, this.flags, this.backgroundTexture, this.x, this.y);
         }
     }
 
-    public record ProgressMapping(@NotNull String key, @NotNull AdvancementProgress progress) {
+    public record ProgressMapping(String key, AdvancementProgress progress) {
         public static final NetworkBuffer.Type<ProgressMapping> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING, ProgressMapping::key,
                 AdvancementProgress.SERIALIZER, ProgressMapping::progress,
@@ -182,7 +181,7 @@ public record AdvancementsPacket(
         );
     }
 
-    public record AdvancementProgress(@NotNull List<@NotNull Criteria> criteria) {
+    public record AdvancementProgress(List<Criteria> criteria) {
         public static final NetworkBuffer.Type<AdvancementProgress> SERIALIZER = NetworkBufferTemplate.template(
                 Criteria.SERIALIZER.list(MAX_ADVANCEMENTS), AdvancementProgress::criteria,
                 AdvancementProgress::new
@@ -193,7 +192,7 @@ public record AdvancementsPacket(
         }
     }
 
-    public record Criteria(@NotNull String criterionIdentifier, @NotNull CriterionProgress criterionProgress) {
+    public record Criteria(String criterionIdentifier, CriterionProgress criterionProgress) {
         public static final NetworkBuffer.Type<Criteria> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING, Criteria::criterionIdentifier,
                 CriterionProgress.SERIALIZER, Criteria::criterionProgress,

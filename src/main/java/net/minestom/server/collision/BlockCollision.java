@@ -8,8 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.block.BlockIterator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 final class BlockCollision {
     /**
@@ -18,9 +17,9 @@ final class BlockCollision {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      */
-    static PhysicsResult handlePhysics(@NotNull BoundingBox boundingBox,
-                                       @NotNull Vec velocity, @NotNull Pos entityPosition,
-                                       @NotNull Block.Getter getter,
+    static PhysicsResult handlePhysics(BoundingBox boundingBox,
+                                       Vec velocity, Pos entityPosition,
+                                       Block.Getter getter,
                                        @Nullable PhysicsResult lastPhysicsResult,
                                        boolean singleCollision) {
         if (velocity.isZero()) {
@@ -85,9 +84,9 @@ final class BlockCollision {
         return null;
     }
 
-    private static PhysicsResult stepPhysics(@NotNull BoundingBox boundingBox,
-                                             @NotNull Vec velocity, @NotNull Pos entityPosition,
-                                             @NotNull Block.Getter getter, boolean singleCollision) {
+    private static PhysicsResult stepPhysics(BoundingBox boundingBox,
+                                             Vec velocity, Pos entityPosition,
+                                             Block.Getter getter, boolean singleCollision) {
         // Allocate once and update values
         SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
@@ -154,11 +153,11 @@ final class BlockCollision {
                 foundCollisionX, foundCollisionY, foundCollisionZ, velocity, collidedPoints, collisionShapes, collisionShapePositions, hasCollided, finalResult);
     }
 
-    private static PhysicsResult computePhysics(@NotNull BoundingBox boundingBox,
-                                                @NotNull Vec velocity, Pos entityPosition,
-                                                @NotNull Block.Getter getter,
-                                                @NotNull Vec[] allFaces,
-                                                @NotNull SweepResult finalResult) {
+    private static PhysicsResult computePhysics(BoundingBox boundingBox,
+                                                Vec velocity, Pos entityPosition,
+                                                Block.Getter getter,
+                                                Vec[] allFaces,
+                                                SweepResult finalResult) {
         // If the movement is small we don't need to run the expensive ray casting.
         // Positions of move less than one can have hardcoded blocks to check for every direction
         // Diagonals are a special case which will work with fast physics
@@ -195,11 +194,11 @@ final class BlockCollision {
         return Math.abs(velocity.x()) == 1 && Math.abs(velocity.z()) == 1;
     }
 
-    private static void slowPhysics(@NotNull BoundingBox boundingBox,
-                                    @NotNull Vec velocity, Pos entityPosition,
-                                    @NotNull Block.Getter getter,
-                                    @NotNull Vec[] allFaces,
-                                    @NotNull SweepResult finalResult) {
+    private static void slowPhysics(BoundingBox boundingBox,
+                                    Vec velocity, Pos entityPosition,
+                                    Block.Getter getter,
+                                    Vec[] allFaces,
+                                    SweepResult finalResult) {
         BlockIterator iterator = new BlockIterator();
         // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
         for (Vec point : allFaces) {
@@ -218,11 +217,11 @@ final class BlockCollision {
         }
     }
 
-    private static void fastPhysics(@NotNull BoundingBox boundingBox,
-                                    @NotNull Vec velocity, Pos entityPosition,
-                                    @NotNull Block.Getter getter,
-                                    @NotNull Vec[] allFaces,
-                                    @NotNull SweepResult finalResult) {
+    private static void fastPhysics(BoundingBox boundingBox,
+                                    Vec velocity, Pos entityPosition,
+                                    Block.Getter getter,
+                                    Vec[] allFaces,
+                                    SweepResult finalResult) {
         for (Vec point : allFaces) {
             final Vec pointBefore = point.add(entityPosition);
             final Vec pointAfter = point.add(entityPosition).add(velocity);

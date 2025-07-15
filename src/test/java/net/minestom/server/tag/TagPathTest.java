@@ -1,7 +1,6 @@
 package net.minestom.server.tag;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
@@ -267,13 +266,13 @@ public class TagPathTest {
             private static final Tag<Integer> VALUE_TAG = Tag.Integer("value");
 
             @Override
-            public @Nullable Entry read(@NotNull TagReadable reader) {
+            public @Nullable Entry read(TagReadable reader) {
                 final Integer value = reader.getTag(VALUE_TAG);
                 return value != null ? new Entry(value) : null;
             }
 
             @Override
-            public void write(@NotNull TagWritable writer, @NotNull Entry value) {
+            public void write(TagWritable writer, Entry value) {
                 writer.setTag(VALUE_TAG, value.value);
             }
         });

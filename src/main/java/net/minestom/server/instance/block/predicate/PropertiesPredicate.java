@@ -7,15 +7,14 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.Predicate;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> properties) implements Predicate<Block> {
+public record PropertiesPredicate(Map<String, ValuePredicate> properties) implements Predicate<Block> {
 
     public static final NetworkBuffer.Type<PropertiesPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.STRING.mapValue(ValuePredicate.NETWORK_TYPE), PropertiesPredicate::properties,
@@ -24,7 +23,7 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
     public static final Codec<PropertiesPredicate> CODEC = Codec.STRING.mapValue(ValuePredicate.CODEC)
             .transform(PropertiesPredicate::new, PropertiesPredicate::properties);
 
-    public static @NotNull PropertiesPredicate exact(@NotNull String key, @NotNull String value) {
+    public static PropertiesPredicate exact(String key, String value) {
         return new PropertiesPredicate(Map.of(key, new ValuePredicate.Exact(value)));
     }
 
@@ -33,7 +32,7 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
     }
 
     @Override
-    public boolean test(@NotNull Block block) {
+    public boolean test(Block block) {
         for (Map.Entry<String, ValuePredicate> entry : properties.entrySet()) {
             final String value = block.getProperty(entry.getKey());
             if (!entry.getValue().test(value))
@@ -43,9 +42,9 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
     }
 
     public sealed interface ValuePredicate extends Predicate<@Nullable String> permits ValuePredicate.Exact, ValuePredicate.Range {
-        @NotNull NetworkBuffer.Type<ValuePredicate> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        NetworkBuffer.Type<ValuePredicate> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, ValuePredicate value) {
+            public void write(NetworkBuffer buffer, ValuePredicate value) {
                 switch (value) {
                     case Exact exact -> {
                         buffer.write(NetworkBuffer.BOOLEAN, true);
@@ -59,13 +58,13 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
             }
 
             @Override
-            public ValuePredicate read(@NotNull NetworkBuffer buffer) {
+            public ValuePredicate read(NetworkBuffer buffer) {
                 return buffer.read(NetworkBuffer.BOOLEAN) ? buffer.read(Exact.NETWORK_TYPE) : buffer.read(Range.NETWORK_TYPE);
             }
         };
-        @NotNull Codec<ValuePredicate> CODEC = new Codec<>() {
+        Codec<ValuePredicate> CODEC = new Codec<>() {
             @Override
-            public @NotNull <D> Result<ValuePredicate> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            public <D> Result<ValuePredicate> decode(Transcoder<D> coder, D value) {
                 final Result<Exact> exactResult = Exact.CODEC.decode(coder, value);
                 if (exactResult instanceof Result.Ok(Exact exact))
                     return new Result.Ok<>(exact);
@@ -76,7 +75,7 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
             }
 
             @Override
-            public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable ValuePredicate value) {
+            public <D> Result<D> encode(Transcoder<D> coder, @Nullable ValuePredicate value) {
                 if (value == null) return new Result.Error<>("null");
                 return switch (value) {
                     case Exact exact -> Exact.CODEC.encode(coder, exact);

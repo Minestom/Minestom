@@ -8,15 +8,14 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public record PotionContents(
         @Nullable PotionType potion,
         @Nullable RGBLike customColor,
-        @NotNull List<CustomPotionEffect> customEffects,
+        List<CustomPotionEffect> customEffects,
         @Nullable String customName
 ) {
     public static final PotionContents EMPTY = new PotionContents(null, null, List.of(), null);
@@ -39,23 +38,23 @@ public record PotionContents(
         customEffects = List.copyOf(customEffects);
     }
 
-    public PotionContents(@NotNull PotionType potion) {
+    public PotionContents(PotionType potion) {
         this(potion, null, List.of(), null);
     }
 
-    public PotionContents(@NotNull PotionType potion, @NotNull RGBLike customColor) {
+    public PotionContents(PotionType potion, RGBLike customColor) {
         this(potion, customColor, List.of(), null);
     }
 
-    public PotionContents(@NotNull List<CustomPotionEffect> customEffects) {
+    public PotionContents(List<CustomPotionEffect> customEffects) {
         this(null, null, customEffects, null);
     }
 
-    public PotionContents(@NotNull CustomPotionEffect customEffect) {
+    public PotionContents(CustomPotionEffect customEffect) {
         this(null, null, List.of(customEffect), null);
     }
 
-    public PotionContents(@Nullable PotionType potion, @Nullable RGBLike customColor, @NotNull List<CustomPotionEffect> customEffects) {
+    public PotionContents(@Nullable PotionType potion, @Nullable RGBLike customColor, List<CustomPotionEffect> customEffects) {
         this(potion, customColor, customEffects, null);
     }
 

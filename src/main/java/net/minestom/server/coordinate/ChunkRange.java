@@ -1,6 +1,6 @@
 package net.minestom.server.coordinate;
 
-import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Helper class to iterate over chunks within a range.
@@ -21,7 +21,7 @@ public final class ChunkRange {
 
     public static void chunksInRangeDiffering(int newChunkX, int newChunkZ,
                                               int oldChunkX, int oldChunkZ,
-                                              int range, @NotNull ChunkConsumer callback) {
+                                              int range, ChunkConsumer callback) {
         for (int x = newChunkX - range; x <= newChunkX + range; x++) {
             for (int z = newChunkZ - range; z <= newChunkZ + range; z++) {
                 if (Math.abs(x - oldChunkX) > range || Math.abs(z - oldChunkZ) > range) {
@@ -34,7 +34,7 @@ public final class ChunkRange {
     public static void chunksInRangeDiffering(int newChunkX, int newChunkZ,
                                               int oldChunkX, int oldChunkZ,
                                               int range,
-                                              @NotNull ChunkConsumer newCallback, @NotNull ChunkConsumer oldCallback) {
+                                              ChunkConsumer newCallback, ChunkConsumer oldCallback) {
         // Find the new chunks
         chunksInRangeDiffering(newChunkX, newChunkZ, oldChunkX, oldChunkZ, range, newCallback);
         // Find the old chunks
@@ -73,7 +73,7 @@ public final class ChunkRange {
         }
     }
 
-    public static void chunksInRange(@NotNull Point point, int range, ChunkConsumer consumer) {
+    public static void chunksInRange(Point point, int range, ChunkConsumer consumer) {
         chunksInRange(point.chunkX(), point.chunkZ(), range, consumer);
     }
 

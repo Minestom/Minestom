@@ -4,7 +4,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
@@ -31,9 +30,9 @@ public abstract class Heightmap {
         minHeight = chunk.getInstance().getCachedDimensionType().minY() - 1;
     }
 
-    public abstract @NotNull Type type();
+    public abstract Type type();
 
-    protected abstract boolean checkBlock(@NotNull Block block);
+    protected abstract boolean checkBlock(Block block);
 
     public void refresh(int x, int y, int z, Block block) {
         if (checkBlock(block)) {

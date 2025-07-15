@@ -12,7 +12,6 @@ import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -54,12 +53,12 @@ public class InstanceBlockPacketIntegrationTest {
 
         BlockHandler signHandler = new BlockHandler() {
             @Override
-            public @NotNull Collection<Tag<?>> getBlockEntityTags() {
+            public Collection<Tag<?>> getBlockEntityTags() {
                 return List.of(Tag.Byte("is_waxed"));
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minecraft:sign");
             }
         };

@@ -3,11 +3,10 @@ package net.minestom.server.entity.metadata.monster;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class EndermanMeta extends MonsterMeta {
-    public EndermanMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public EndermanMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

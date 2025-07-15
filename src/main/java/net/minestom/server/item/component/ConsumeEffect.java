@@ -10,7 +10,6 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public sealed interface ConsumeEffect {
     StructCodec<ConsumeEffect> CODEC = ConsumeEffectType.CODEC
             .unionType(ConsumeEffect::codec, ConsumeEffect::consumeEffectToType);
 
-    record ApplyEffects(@NotNull List<CustomPotionEffect> effects, float probability) implements ConsumeEffect {
+    record ApplyEffects(List<CustomPotionEffect> effects, float probability) implements ConsumeEffect {
         private static final int MAX_EFFECTS = 256;
 
         public static final NetworkBuffer.Type<ApplyEffects> NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -37,12 +36,12 @@ public sealed interface ConsumeEffect {
             effects = List.copyOf(effects);
         }
 
-        public ApplyEffects(@NotNull CustomPotionEffect effect, float probability) {
+        public ApplyEffects(CustomPotionEffect effect, float probability) {
             this(List.of(effect), probability);
         }
     }
 
-    record RemoveEffects(@NotNull RegistryTag<PotionEffect> effects) implements ConsumeEffect {
+    record RemoveEffects(RegistryTag<PotionEffect> effects) implements ConsumeEffect {
         public static final NetworkBuffer.Type<RemoveEffects> NETWORK_TYPE = NetworkBufferTemplate.template(
                 RegistryTag.networkType(Registries::potionEffect), RemoveEffects::effects,
                 RemoveEffects::new);
@@ -76,7 +75,7 @@ public sealed interface ConsumeEffect {
         }
     }
 
-    record PlaySound(@NotNull SoundEvent sound) implements ConsumeEffect {
+    record PlaySound(SoundEvent sound) implements ConsumeEffect {
         public static final NetworkBuffer.Type<PlaySound> NETWORK_TYPE = NetworkBufferTemplate.template(
                 SoundEvent.NETWORK_TYPE, PlaySound::sound,
                 PlaySound::new);
@@ -86,7 +85,7 @@ public sealed interface ConsumeEffect {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static NetworkBuffer.Type<ConsumeEffect> networkType(@NotNull ConsumeEffectType type) {
+    private static NetworkBuffer.Type<ConsumeEffect> networkType(ConsumeEffectType type) {
         return (NetworkBuffer.Type) switch (type) {
             case APPLY_EFFECTS -> ApplyEffects.NETWORK_TYPE;
             case REMOVE_EFFECTS -> RemoveEffects.NETWORK_TYPE;
@@ -96,7 +95,7 @@ public sealed interface ConsumeEffect {
         };
     }
 
-    private static StructCodec<? extends ConsumeEffect> codec(@NotNull ConsumeEffectType type) {
+    private static StructCodec<? extends ConsumeEffect> codec(ConsumeEffectType type) {
         return switch (type) {
             case APPLY_EFFECTS -> ApplyEffects.CODEC;
             case REMOVE_EFFECTS -> RemoveEffects.CODEC;
@@ -106,7 +105,7 @@ public sealed interface ConsumeEffect {
         };
     }
 
-    private static ConsumeEffectType consumeEffectToType(@NotNull ConsumeEffect consumeEffect) {
+    private static ConsumeEffectType consumeEffectToType(ConsumeEffect consumeEffect) {
         return switch (consumeEffect) {
             case ApplyEffects ignored -> ConsumeEffectType.APPLY_EFFECTS;
             case RemoveEffects ignored -> ConsumeEffectType.REMOVE_EFFECTS;

@@ -6,10 +6,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
-import org.jetbrains.annotations.NotNull;
 
 public class AbstractDisplayMeta extends EntityMeta {
-    protected AbstractDisplayMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    protected AbstractDisplayMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -37,45 +36,45 @@ public class AbstractDisplayMeta extends EntityMeta {
         metadata.set(MetadataDef.Display.POSITION_ROTATION_INTERPOLATION_DURATION, value);
     }
 
-    public @NotNull Point getTranslation() {
+    public Point getTranslation() {
         return metadata.get(MetadataDef.Display.TRANSLATION);
     }
 
-    public void setTranslation(@NotNull Point value) {
+    public void setTranslation(Point value) {
         metadata.set(MetadataDef.Display.TRANSLATION, value);
     }
 
-    public @NotNull Vec getScale() {
+    public Vec getScale() {
         return Vec.fromPoint(metadata.get(MetadataDef.Display.SCALE));
     }
 
-    public void setScale(@NotNull Vec value) {
+    public void setScale(Vec value) {
         metadata.set(MetadataDef.Display.SCALE, value);
     }
 
-    public float @NotNull[] getLeftRotation() {
+    public float [] getLeftRotation() {
         //todo replace with actual quaternion type
         return metadata.get(MetadataDef.Display.ROTATION_LEFT);
     }
 
-    public void setLeftRotation(float @NotNull[] value) {
+    public void setLeftRotation(float [] value) {
         metadata.set(MetadataDef.Display.ROTATION_LEFT, value);
     }
 
-    public float @NotNull[] getRightRotation() {
+    public float [] getRightRotation() {
         //todo replace with actual quaternion type
         return metadata.get(MetadataDef.Display.ROTATION_RIGHT);
     }
 
-    public void setRightRotation(float @NotNull[] value) {
+    public void setRightRotation(float [] value) {
         metadata.set(MetadataDef.Display.ROTATION_RIGHT, value);
     }
 
-    public @NotNull BillboardConstraints getBillboardRenderConstraints() {
+    public BillboardConstraints getBillboardRenderConstraints() {
         return BillboardConstraints.VALUES[metadata.get(MetadataDef.Display.BILLBOARD_CONSTRAINTS)];
     }
 
-    public void setBillboardRenderConstraints(@NotNull BillboardConstraints value) {
+    public void setBillboardRenderConstraints(BillboardConstraints value) {
         metadata.set(MetadataDef.Display.BILLBOARD_CONSTRAINTS, (byte) value.ordinal());
     }
 

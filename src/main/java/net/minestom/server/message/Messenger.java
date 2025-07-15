@@ -5,8 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.utils.PacketSendingUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -32,7 +31,7 @@ public final class Messenger {
      * @param uuid     the UUID of the sender, if any
      * @return if the message was sent
      */
-    public static boolean sendMessage(@NotNull Player player, @NotNull Component message, @NotNull ChatPosition position, @Nullable UUID uuid) {
+    public static boolean sendMessage(Player player, Component message, ChatPosition position, @Nullable UUID uuid) {
         if (getChatMessageType(player).accepts(position)) {
             player.sendPacket(new SystemChatPacket(message, false));
             return true;
@@ -48,8 +47,8 @@ public final class Messenger {
      * @param position the position
      * @param uuid     the UUID of the sender, if any
      */
-    public static void sendMessage(@NotNull Collection<Player> players, @NotNull Component message,
-                                   @NotNull ChatPosition position, @Nullable UUID uuid) {
+    public static void sendMessage(Collection<Player> players, Component message,
+                                   ChatPosition position, @Nullable UUID uuid) {
         PacketSendingUtils.sendGroupedPacket(players, new SystemChatPacket(message, false),
                 player -> getChatMessageType(player).accepts(position));
     }
@@ -60,7 +59,7 @@ public final class Messenger {
      * @param player the player
      * @return if the server should receive messages from them
      */
-    public static boolean canReceiveMessage(@NotNull Player player) {
+    public static boolean canReceiveMessage(Player player) {
         return getChatMessageType(player) == ChatMessageType.FULL;
     }
 
@@ -70,7 +69,7 @@ public final class Messenger {
      * @param player the player
      * @return if the server should receive commands from them
      */
-    public static boolean canReceiveCommand(@NotNull Player player) {
+    public static boolean canReceiveCommand(Player player) {
         return getChatMessageType(player) != ChatMessageType.NONE;
     }
 
@@ -79,7 +78,7 @@ public final class Messenger {
      *
      * @param player the player
      */
-    public static void sendRejectionMessage(@NotNull Player player) {
+    public static void sendRejectionMessage(Player player) {
         player.sendPacket(CANNOT_SEND_PACKET);
     }
 
@@ -89,7 +88,7 @@ public final class Messenger {
      * @param player the player
      * @return the chat message type
      */
-    private static @NotNull ChatMessageType getChatMessageType(@NotNull Player player) {
+    private static ChatMessageType getChatMessageType(Player player) {
         return Objects.requireNonNullElse(player.getSettings().chatMessageType(), ChatMessageType.FULL);
     }
 }

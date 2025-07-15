@@ -18,7 +18,7 @@ import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Direction;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;

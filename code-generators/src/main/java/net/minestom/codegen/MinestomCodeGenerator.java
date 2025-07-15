@@ -3,7 +3,6 @@ package net.minestom.codegen;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.JavaFile;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +17,7 @@ public abstract class MinestomCodeGenerator {
 
     public abstract void generate();
 
-    protected void writeFiles(@NotNull List<JavaFile> fileList, File outputFolder) {
+    protected void writeFiles(List<JavaFile> fileList, File outputFolder) {
         for (JavaFile javaFile : fileList) {
             try {
                 javaFile.writeTo(outputFolder);

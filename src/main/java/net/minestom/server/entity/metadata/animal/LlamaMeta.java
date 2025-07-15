@@ -7,11 +7,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class LlamaMeta extends ChestedHorseMeta {
-    public LlamaMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public LlamaMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -35,7 +34,7 @@ public class LlamaMeta extends ChestedHorseMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#LLAMA_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull Variant getVariant() {
+    public Variant getVariant() {
         return Variant.VALUES[metadata.get(MetadataDef.Llama.VARIANT)];
     }
 
@@ -49,14 +48,14 @@ public class LlamaMeta extends ChestedHorseMeta {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.LLAMA_VARIANT)
             return (T) getVariant();
         return super.get(component);
     }
 
     @Override
-    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+    protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.LLAMA_VARIANT)
             setVariant((Variant) value);
         else super.set(component, value);

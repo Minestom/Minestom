@@ -8,7 +8,6 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -34,7 +33,7 @@ public class MeleeAttackGoal extends GoalSelector {
      * @param delay          the delay between each attacks
      * @param timeUnit       the unit of the delay
      */
-    public MeleeAttackGoal(@NotNull EntityCreature entityCreature, double range, int delay, @NotNull TemporalUnit timeUnit) {
+    public MeleeAttackGoal(EntityCreature entityCreature, double range, int delay, TemporalUnit timeUnit) {
         this(entityCreature, range, Duration.of(delay, timeUnit));
     }
 
@@ -43,13 +42,13 @@ public class MeleeAttackGoal extends GoalSelector {
      * @param range          the allowed range the entity can attack others.
      * @param delay          the delay between each attacks
      */
-    public MeleeAttackGoal(@NotNull EntityCreature entityCreature, double range, Duration delay) {
+    public MeleeAttackGoal(EntityCreature entityCreature, double range, Duration delay) {
         super(entityCreature);
         this.range = range;
         this.delay = delay;
     }
 
-    public @NotNull Cooldown getCooldown() {
+    public Cooldown getCooldown() {
         return this.cooldown;
     }
 

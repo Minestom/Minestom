@@ -1,7 +1,6 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -146,7 +145,6 @@ public class CommandParseTest {
         return CommandParser.parser().parse(new ServerSender(), graph, input);
     }
 
-    @NotNull
     private static Graph.Execution createExecutor(AtomicBoolean atomicBoolean) {
         return new GraphImpl.ExecutionImpl(null, null, null, (sender, context) -> atomicBoolean.set(true), null);
     }

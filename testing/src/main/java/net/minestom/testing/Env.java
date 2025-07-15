@@ -8,19 +8,18 @@ import net.minestom.server.event.EventFilter;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.function.BooleanSupplier;
 
 public interface Env {
-    @NotNull ServerProcess process();
+    ServerProcess process();
 
-    @NotNull TestConnection createConnection();
+    TestConnection createConnection();
 
-    <E extends Event, H> @NotNull Collector<E> trackEvent(@NotNull Class<E> eventType, @NotNull EventFilter<? super E, H> filter, @NotNull H actor);
+    <E extends Event, H> Collector<E> trackEvent(Class<E> eventType, EventFilter<? super E, H> filter, H actor);
 
-    <E extends Event> @NotNull FlexibleListener<E> listen(@NotNull Class<E> eventType);
+    <E extends Event> FlexibleListener<E> listen(Class<E> eventType);
 
     default void tick() {
         process().ticker().tick(System.nanoTime());
@@ -39,21 +38,21 @@ public interface Env {
         return true;
     }
 
-    default @NotNull Player createPlayer(@NotNull Instance instance, @NotNull Pos pos) {
+    default Player createPlayer(Instance instance, Pos pos) {
         return createConnection().connect(instance, pos);
     }
 
-    default @NotNull Instance createFlatInstance() {
+    default Instance createFlatInstance() {
         return createFlatInstance(null);
     }
 
-    default @NotNull Instance createFlatInstance(IChunkLoader chunkLoader) {
+    default Instance createFlatInstance(IChunkLoader chunkLoader) {
         var instance = process().instance().createInstanceContainer(chunkLoader);
         instance.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
         return instance;
     }
 
-    default @NotNull Instance createEmptyInstance() {
+    default Instance createEmptyInstance() {
         return process().instance().createInstanceContainer();
     }
 

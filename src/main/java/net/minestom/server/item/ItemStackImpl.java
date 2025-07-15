@@ -14,18 +14,17 @@ import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
 
-    static @NotNull NetworkBuffer.Type<ItemStack> networkType(@NotNull NetworkBuffer.Type<DataComponentMap> componentPatchType) {
+    static NetworkBuffer.Type<ItemStack> networkType(NetworkBuffer.Type<DataComponentMap> componentPatchType) {
         return new NetworkBuffer.Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
+            public void write(NetworkBuffer buffer, ItemStack value) {
                 if (value.isAir()) {
                     buffer.write(NetworkBuffer.VAR_INT, 0);
                     return;
@@ -37,7 +36,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
             }
 
             @Override
-            public ItemStack read(@NotNull NetworkBuffer buffer) {
+            public ItemStack read(NetworkBuffer buffer) {
                 int amount = buffer.read(NetworkBuffer.VAR_INT);
                 if (amount <= 0) return ItemStack.AIR;
                 Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
@@ -74,45 +73,45 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
-    public @NotNull DataComponentMap componentPatch() {
+    public DataComponentMap componentPatch() {
         return this.components;
     }
 
     @Override
-    public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    public <T> @Nullable T get(DataComponent<T> component) {
         return components.get(material.prototype(), component);
     }
 
     @Override
-    public boolean has(@NotNull DataComponent<?> component) {
+    public boolean has(DataComponent<?> component) {
         return components.has(material.prototype(), component);
     }
 
     @Override
-    public @NotNull ItemStack with(@NotNull Consumer<ItemStack.@NotNull Builder> consumer) {
+    public ItemStack with(Consumer<ItemStack.Builder> consumer) {
         ItemStack.Builder builder = builder();
         consumer.accept(builder);
         return builder.build();
     }
 
     @Override
-    public @NotNull ItemStack withMaterial(@NotNull Material material) {
+    public ItemStack withMaterial(Material material) {
         return new ItemStackImpl(material, amount, components);
     }
 
     @Override
-    public @NotNull ItemStack withAmount(int amount) {
+    public ItemStack withAmount(int amount) {
         if (amount <= 0) return ItemStack.AIR;
         return create(material, amount, components);
     }
 
     @Override
-    public @NotNull <T> ItemStack with(@NotNull DataComponent<T> component, @NotNull T value) {
+    public <T> ItemStack with(DataComponent<T> component, T value) {
         return new ItemStackImpl(material, amount, components.set(component, value));
     }
 
     @Override
-    public @NotNull ItemStack without(@NotNull DataComponent<?> component) {
+    public ItemStack without(DataComponent<?> component) {
         // We can be slightly smart here. If the component is not present, this will always be a noop.
         // No need to make a new patch with the removal only for it to be removed again when doing a diff.
         if (get(component) == null) return this;
@@ -120,12 +119,12 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
-    public @NotNull ItemStack consume(int amount) {
+    public ItemStack consume(int amount) {
         return withAmount(amount() - amount);
     }
 
     @Override
-    public @NotNull ItemStack damage(int amount) {
+    public ItemStack damage(int amount) {
         final Integer damage = get(DataComponents.DAMAGE);
         if (damage == null) return this;
         final Integer maxDamage = get(DataComponents.MAX_DAMAGE);
@@ -137,19 +136,19 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
-    public boolean isSimilar(@NotNull ItemStack itemStack) {
+    public boolean isSimilar(ItemStack itemStack) {
         return material == itemStack.material() && components.equals(((ItemStackImpl) itemStack).components);
     }
 
     @Override
-    public @NotNull CompoundBinaryTag toItemNBT() {
+    public CompoundBinaryTag toItemNBT() {
         final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
         return (CompoundBinaryTag) CODEC.encode(coder, this).orElseThrow("Invalid NBT for ItemStack");
     }
 
     @Override
     @Contract(value = "-> new", pure = true)
-    public @NotNull ItemStack.Builder builder() {
+    public ItemStack.Builder builder() {
         return new Builder(material, amount, components.toPatchBuilder());
     }
 
@@ -171,37 +170,37 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         }
 
         @Override
-        public ItemStack.@NotNull Builder material(@NotNull Material material) {
+        public ItemStack.Builder material(Material material) {
             this.material = material;
             return this;
         }
 
         @Override
-        public ItemStack.@NotNull Builder amount(int amount) {
+        public ItemStack.Builder amount(int amount) {
             this.amount = amount;
             return this;
         }
 
         @Override
-        public <T> ItemStack.@NotNull Builder set(@NotNull DataComponent<T> component, T value) {
+        public <T> ItemStack.Builder set(DataComponent<T> component, T value) {
             components.set(component, value);
             return this;
         }
 
         @Override
-        public ItemStack.@NotNull Builder remove(@NotNull DataComponent<?> component) {
+        public ItemStack.Builder remove(DataComponent<?> component) {
             components.remove(component);
             return this;
         }
 
         @Override
-        public <T> ItemStack.@NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
+        public <T> ItemStack.Builder set(Tag<T> tag, @Nullable T value) {
             components.set(DataComponents.CUSTOM_DATA, components.get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
             return this;
         }
 
         @Override
-        public ItemStack.@NotNull Builder hideExtraTooltip() {
+        public ItemStack.Builder hideExtraTooltip() {
             return set(DataComponents.TOOLTIP_DISPLAY, new TooltipDisplay(false, Set.of(
                     DataComponents.BANNER_PATTERNS, DataComponents.BEES, DataComponents.BLOCK_ENTITY_DATA,
                     DataComponents.BLOCK_STATE, DataComponents.BUNDLE_CONTENTS, DataComponents.CHARGED_PROJECTILES,
@@ -213,7 +212,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         }
 
         @Override
-        public @NotNull ItemStack build() {
+        public ItemStack build() {
             return ItemStackImpl.create(material, amount, components.build());
         }
 

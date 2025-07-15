@@ -6,12 +6,11 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record PlayerPositionAndLookPacket(
-        int teleportId, @NotNull Point position, @NotNull Point delta,
+        int teleportId, Point position, Point delta,
         float yaw, float pitch,
         @MagicConstant(flagsFromClass = RelativeFlags.class) int flags
 ) implements ServerPacket.Play {

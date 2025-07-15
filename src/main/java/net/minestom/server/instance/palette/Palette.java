@@ -3,8 +3,7 @@ package net.minestom.server.instance.palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.IntUnaryOperator;
 
@@ -53,9 +52,9 @@ public sealed interface Palette permits PaletteImpl {
 
     int get(int x, int y, int z);
 
-    void getAll(@NotNull EntryConsumer consumer);
+    void getAll(EntryConsumer consumer);
 
-    void getAllPresent(@NotNull EntryConsumer consumer);
+    void getAllPresent(EntryConsumer consumer);
 
     void set(int x, int y, int z, int value);
 
@@ -65,11 +64,11 @@ public sealed interface Palette permits PaletteImpl {
 
     void replace(int oldValue, int newValue);
 
-    void setAll(@NotNull EntrySupplier supplier);
+    void setAll(EntrySupplier supplier);
 
-    void replace(int x, int y, int z, @NotNull IntUnaryOperator operator);
+    void replace(int x, int y, int z, IntUnaryOperator operator);
 
-    void replaceAll(@NotNull EntryFunction function);
+    void replaceAll(EntryFunction function);
 
     /**
      * Efficiently copies values from another palette with the given offset.
@@ -81,7 +80,7 @@ public sealed interface Palette permits PaletteImpl {
      * @param offsetY the Y offset to apply when copying
      * @param offsetZ the Z offset to apply when copying
      */
-    void copyFrom(@NotNull Palette source, int offsetX, int offsetY, int offsetZ);
+    void copyFrom(Palette source, int offsetX, int offsetY, int offsetZ);
 
     /**
      * Efficiently copies values from another palette starting at position (0, 0, 0).
@@ -92,7 +91,7 @@ public sealed interface Palette permits PaletteImpl {
      *
      * @param source the source palette to copy from
      */
-    void copyFrom(@NotNull Palette source);
+    void copyFrom(Palette source);
 
     /**
      * Returns the number of entries in this palette.
@@ -143,9 +142,9 @@ public sealed interface Palette permits PaletteImpl {
      * @param palette the palette to compare with
      * @return true if the palettes are equivalent, false otherwise
      */
-    boolean compare(@NotNull Palette palette);
+    boolean compare(Palette palette);
 
-    @NotNull Palette clone();
+    Palette clone();
 
     @ApiStatus.Internal
     int paletteIndexToValue(int value);
@@ -191,7 +190,7 @@ public sealed interface Palette permits PaletteImpl {
         //noinspection unchecked
         return (NetworkBuffer.Type) new NetworkBuffer.Type<PaletteImpl>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, PaletteImpl value) {
+            public void write(NetworkBuffer buffer, PaletteImpl value) {
                 // Temporary fix for biome direct bits depending on the number of registered biomes
                 if (directBits != value.directBits && !value.hasPalette()) {
                     PaletteImpl tmp = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
@@ -211,7 +210,7 @@ public sealed interface Palette permits PaletteImpl {
             }
 
             @Override
-            public PaletteImpl read(@NotNull NetworkBuffer buffer) {
+            public PaletteImpl read(NetworkBuffer buffer) {
                 final byte bitsPerEntry = buffer.read(BYTE);
                 if (bitsPerEntry == 0) {
                     // Single value palette

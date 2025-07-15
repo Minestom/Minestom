@@ -3,7 +3,6 @@ package net.minestom.server.item.component;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -16,12 +15,12 @@ public class BeesTest extends AbstractItemComponentTest<List<Bee>> {
             .build());
 
     @Override
-    protected @NotNull DataComponent<List<Bee>> component() {
+    protected DataComponent<List<Bee>> component() {
         return DataComponents.BEES;
     }
 
     @Override
-    public @NotNull List<Map.Entry<String, List<Bee>>> directReadWriteEntries() {
+    public List<Map.Entry<String, List<Bee>>> directReadWriteEntries() {
         return List.of(
                 entry("empty", List.of()),
                 entry("single", List.of(new Bee(SOME_DATA, 1, 2))),

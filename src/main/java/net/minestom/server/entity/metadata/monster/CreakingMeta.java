@@ -4,11 +4,10 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class CreakingMeta extends MonsterMeta {
-    public CreakingMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public CreakingMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -3,7 +3,6 @@ package net.minestom.server.snapshot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
@@ -13,7 +12,7 @@ public sealed interface ChunkSnapshot extends Snapshot, Block.Getter, Biome.Gett
 
     int chunkZ();
 
-    @NotNull InstanceSnapshot instance();
+    InstanceSnapshot instance();
 
-    @NotNull Collection<@NotNull EntitySnapshot> entities();
+    Collection<EntitySnapshot> entities();
 }

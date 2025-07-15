@@ -1,13 +1,12 @@
 package net.minestom.server.world.biome;
 
-import org.jetbrains.annotations.NotNull;
 
 record BiomeImpl(
         float temperature,
         float downfall,
-        @NotNull BiomeEffects effects,
+        BiomeEffects effects,
         boolean hasPrecipitation,
-        @NotNull TemperatureModifier temperatureModifier
+        TemperatureModifier temperatureModifier
 ) implements Biome {
     // https://minecraft.wiki/w/Rain
     private final static double SNOW_TEMPERATURE = 0.15;

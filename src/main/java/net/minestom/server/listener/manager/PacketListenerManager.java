@@ -21,7 +21,6 @@ import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,7 +115,7 @@ public final class PacketListenerManager {
      * @param connection the connection of the player who sent the packet
      * @param <T>        the packet type
      */
-    public <T extends ClientPacket> void processClientPacket(@NotNull T packet, @NotNull PlayerConnection connection, @NotNull ConnectionState state) {
+    public <T extends ClientPacket> void processClientPacket(T packet, PlayerConnection connection, ConnectionState state) {
         final Class clazz = packet.getClass();
         PacketPrePlayListenerConsumer<T> packetListenerConsumer = listeners[state.ordinal()].get(clazz);
 
@@ -154,7 +153,7 @@ public final class PacketListenerManager {
      * @param consumer    the new packet's listener
      * @param <T>         the type of the packet
      */
-    public <T extends ClientPacket> void setListener(@NotNull ConnectionState state, @NotNull Class<T> packetClass, @NotNull PacketPrePlayListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setListener(ConnectionState state, Class<T> packetClass, PacketPrePlayListenerConsumer<T> consumer) {
         this.listeners[state.ordinal()].put(packetClass, consumer);
     }
 
@@ -167,11 +166,11 @@ public final class PacketListenerManager {
      * @param consumer    the new packet's listener
      * @param <T>         the type of the packet
      */
-    public <T extends ClientPacket> void setPlayListener(@NotNull Class<T> packetClass, @NotNull PacketPlayListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setPlayListener(Class<T> packetClass, PacketPlayListenerConsumer<T> consumer) {
         setListener(ConnectionState.PLAY, packetClass, (packet, playerConnection) -> consumer.accept(packet, playerConnection.getPlayer()));
     }
 
-    public <T extends ClientPacket> void setConfigurationListener(@NotNull Class<T> packetClass, @NotNull PacketPlayListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setConfigurationListener(Class<T> packetClass, PacketPlayListenerConsumer<T> consumer) {
         setListener(ConnectionState.CONFIGURATION, packetClass, (packet, playerConnection) -> consumer.accept(packet, playerConnection.getPlayer()));
     }
 
@@ -185,7 +184,7 @@ public final class PacketListenerManager {
      * @param <T>         the type of the packet
      */
     @Deprecated
-    public <T extends ClientPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketPlayListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setListener(Class<T> packetClass, PacketPlayListenerConsumer<T> consumer) {
         setPlayListener(packetClass, consumer);
     }
 

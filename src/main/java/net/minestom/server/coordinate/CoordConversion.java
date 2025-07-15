@@ -1,6 +1,5 @@
 package net.minestom.server.coordinate;
 
-import org.jetbrains.annotations.NotNull;
 
 public final class CoordConversion {
     public static final int SECTION_BLOCK_COUNT = 16 * 16 * 16;
@@ -33,11 +32,11 @@ public final class CoordConversion {
         return sectionAligned(x) && sectionAligned(y) && sectionAligned(z);
     }
 
-    public static boolean sectionAligned(@NotNull Point point) {
+    public static boolean sectionAligned(Point point) {
         return sectionAligned(point.blockX(), point.blockY(), point.blockZ());
     }
 
-    public static boolean sectionAligned(@NotNull Point p1, @NotNull Point p2) {
+    public static boolean sectionAligned(Point p1, Point p2) {
         final int minX = Math.min(p1.blockX(), p2.blockX());
         final int minY = Math.min(p1.blockY(), p2.blockY());
         final int minZ = Math.min(p1.blockZ(), p2.blockZ());
@@ -70,7 +69,7 @@ public final class CoordConversion {
         return (((long) chunkX) << 32) | (chunkZ & 0xffffffffL);
     }
 
-    public static long chunkIndex(@NotNull Point point) {
+    public static long chunkIndex(Point point) {
         return chunkIndex(point.chunkX(), point.chunkZ());
     }
 
@@ -114,7 +113,7 @@ public final class CoordConversion {
         return (index >>> 28) & 0xF; // bits 28-31
     }
 
-    public static @NotNull Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {
+    public static Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {
         final int x = chunkBlockIndexGetX(index) + 16 * chunkX;
         final int y = chunkBlockIndexGetY(index);
         final int z = chunkBlockIndexGetZ(index) + 16 * chunkZ;

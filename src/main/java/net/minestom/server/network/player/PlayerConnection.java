@@ -20,8 +20,7 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.net.SocketAddress;
 import java.util.Collection;
@@ -58,7 +57,7 @@ public abstract class PlayerConnection {
      *
      * @return this connection identifier
      */
-    public @NotNull String getIdentifier() {
+    public String getIdentifier() {
         final Player player = getPlayer();
         return player != null ?
                 player.getUsername() :
@@ -70,13 +69,13 @@ public abstract class PlayerConnection {
      *
      * @param packet the packet to send
      */
-    public abstract void sendPacket(@NotNull SendablePacket packet);
+    public abstract void sendPacket(SendablePacket packet);
 
-    public void sendPackets(@NotNull Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<SendablePacket> packets) {
         packets.forEach(this::sendPacket);
     }
 
-    public void sendPackets(@NotNull SendablePacket... packets) {
+    public void sendPackets(SendablePacket... packets) {
         sendPackets(List.of(packets));
     }
 
@@ -85,7 +84,7 @@ public abstract class PlayerConnection {
      *
      * @return the remote address
      */
-    public abstract @NotNull SocketAddress getRemoteAddress();
+    public abstract SocketAddress getRemoteAddress();
 
     /**
      * Gets protocol version of client.
@@ -125,7 +124,7 @@ public abstract class PlayerConnection {
      *
      * @param component the reason
      */
-    public void kick(@NotNull Component component) {
+    public void kick(Component component) {
         // Packet type depends on the current player connection state
         final ServerPacket disconnectPacket;
         if (connectionState == ConnectionState.LOGIN) {
@@ -183,7 +182,7 @@ public abstract class PlayerConnection {
         return online;
     }
 
-    public void setConnectionState(@NotNull ConnectionState connectionState) {
+    public void setConnectionState(ConnectionState connectionState) {
         this.connectionState = connectionState;
         if (connectionState == ConnectionState.CONFIGURATION) {
             // Clear the plugin request map (it is not used beyond login)
@@ -196,7 +195,7 @@ public abstract class PlayerConnection {
      *
      * @return the client connection state
      */
-    public @NotNull ConnectionState getConnectionState() {
+    public ConnectionState getConnectionState() {
         return connectionState;
     }
 
@@ -208,11 +207,11 @@ public abstract class PlayerConnection {
         this.playerPublicKey = playerPublicKey;
     }
 
-    public void storeCookie(@NotNull String key, byte @NotNull [] data) {
+    public void storeCookie(String key, byte [] data) {
         sendPacket(new CookieStorePacket(key, data));
     }
 
-    public CompletableFuture<byte @Nullable []> fetchCookie(@NotNull String key) {
+    public CompletableFuture<byte @Nullable []> fetchCookie(String key) {
         if (getConnectionState() == ConnectionState.CONFIGURATION && getPlayer() == null) {
             // This is a bit of an unfortunate limitation. The player provider blocks the player read virtual
             // thread waiting for the player provider so a cookie response would never be received and the
@@ -229,7 +228,7 @@ public abstract class PlayerConnection {
     }
 
     @ApiStatus.Internal
-    public void receiveCookieResponse(@NotNull String key, byte @Nullable [] data) {
+    public void receiveCookieResponse(String key, byte @Nullable [] data) {
         CompletableFuture<byte[]> future = pendingCookieRequests.remove(Key.key(key));
         if (future != null) {
             future.complete(data);
@@ -240,20 +239,20 @@ public abstract class PlayerConnection {
      * Gets the login plugin message processor, only available during the login state.
      */
     @ApiStatus.Internal
-    public @NotNull LoginPluginMessageProcessor loginPluginMessageProcessor() {
+    public LoginPluginMessageProcessor loginPluginMessageProcessor() {
         return Objects.requireNonNull(this.loginPluginMessageProcessor,
                 "Login plugin message processor is only available during the login state.");
     }
 
     @ApiStatus.Internal
-    public @NotNull CompletableFuture<List<SelectKnownPacksPacket.Entry>> requestKnownPacks(@NotNull List<SelectKnownPacksPacket.Entry> serverPacks) {
+    public CompletableFuture<List<SelectKnownPacksPacket.Entry>> requestKnownPacks(List<SelectKnownPacksPacket.Entry> serverPacks) {
         Check.stateCondition(knownPacksFuture != null, "Known packs already pending");
         sendPacket(new SelectKnownPacksPacket(serverPacks));
         return knownPacksFuture = new CompletableFuture<>();
     }
 
     @ApiStatus.Internal
-    public void receiveKnownPacksResponse(@NotNull List<SelectKnownPacksPacket.Entry> clientPacks) {
+    public void receiveKnownPacksResponse(List<SelectKnownPacksPacket.Entry> clientPacks) {
         final var future = knownPacksFuture;
         if (future != null) {
             future.complete(clientPacks);

@@ -5,7 +5,6 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.plugin.LoginPlugin;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -20,15 +19,15 @@ public class AsyncPlayerPreLoginEvent implements Event {
     private GameProfile gameProfile;
     private final LoginPluginMessageProcessor pluginMessageProcessor;
 
-    public AsyncPlayerPreLoginEvent(@NotNull PlayerConnection connection,
-                                    @NotNull GameProfile gameProfile,
-                                    @NotNull LoginPluginMessageProcessor pluginMessageProcessor) {
+    public AsyncPlayerPreLoginEvent(PlayerConnection connection,
+                                    GameProfile gameProfile,
+                                    LoginPluginMessageProcessor pluginMessageProcessor) {
         this.connection = connection;
         this.gameProfile = gameProfile;
         this.pluginMessageProcessor = pluginMessageProcessor;
     }
 
-    public @NotNull PlayerConnection getConnection() {
+    public PlayerConnection getConnection() {
         return connection;
     }
 
@@ -48,22 +47,22 @@ public class AsyncPlayerPreLoginEvent implements Event {
      * @param requestPayload the contents of the plugin message, can be null for empty
      * @return a CompletableFuture for the response. The thread on which it completes is asynchronous.
      */
-    public @NotNull CompletableFuture<LoginPlugin.Response> sendPluginRequest(String channel, byte[] requestPayload) {
+    public CompletableFuture<LoginPlugin.Response> sendPluginRequest(String channel, byte[] requestPayload) {
         return pluginMessageProcessor.request(channel, requestPayload);
     }
 
     @Deprecated
-    public @NotNull String getUsername() {
+    public String getUsername() {
         return gameProfile.name();
     }
 
     @Deprecated
-    public void setUsername(@NotNull String username) {
+    public void setUsername(String username) {
         this.gameProfile = new GameProfile(gameProfile.uuid(), username, gameProfile.properties());
     }
 
     @Deprecated
-    public @NotNull UUID getPlayerUuid() {
+    public UUID getPlayerUuid() {
         return gameProfile.uuid();
     }
 }

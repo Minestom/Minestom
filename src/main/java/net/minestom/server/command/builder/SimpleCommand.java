@@ -2,11 +2,10 @@ package net.minestom.server.command.builder;
 
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class SimpleCommand extends Command {
-    public SimpleCommand(@NotNull String name, @Nullable String... aliases) {
+    public SimpleCommand(String name, @Nullable String... aliases) {
         super(name, aliases);
 
         setCondition(this::hasAccess);
@@ -27,7 +26,7 @@ public abstract class SimpleCommand extends Command {
      * @param args    an array containing all the args (split by space char)
      * @return true when the command is successful, false otherwise
      */
-    public abstract boolean process(@NotNull CommandSender sender, @NotNull String command, @NotNull String[] args);
+    public abstract boolean process(CommandSender sender, String command, String[] args);
 
     /**
      * Called to know if a player has access to the command.
@@ -37,6 +36,6 @@ public abstract class SimpleCommand extends Command {
      *                      null if this is an access request
      * @return true if the player has access to the command, false otherwise
      */
-    public abstract boolean hasAccess(@NotNull CommandSender sender, @Nullable String commandString);
+    public abstract boolean hasAccess(CommandSender sender, @Nullable String commandString);
 
 }

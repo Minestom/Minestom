@@ -10,7 +10,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -28,12 +27,12 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
+            public void onTouch(Touch touch) {
                 assertTrue(positions.add(touch.getBlockPosition()));
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minestom:test");
             }
         };
@@ -67,12 +66,12 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
+            public void onTouch(Touch touch) {
                 assertTrue(positions.add(touch.getBlockPosition()));
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minestom:test");
             }
         };
@@ -107,12 +106,12 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
+            public void onTouch(Touch touch) {
                 assertTrue(positions.add(touch.getBlockPosition()));
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minestom:test");
             }
         };
@@ -155,12 +154,12 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
+            public void onTouch(Touch touch) {
                 assertTrue(positions.add(touch.getBlockPosition()));
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minestom:test");
             }
         };

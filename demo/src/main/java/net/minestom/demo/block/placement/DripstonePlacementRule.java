@@ -5,8 +5,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -20,7 +19,7 @@ public class DripstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @Nullable Block blockPlace(@NotNull PlacementState placementState) {
+    public @Nullable Block blockPlace(PlacementState placementState) {
         var blockFace = Objects.requireNonNullElse(placementState.blockFace(), BlockFace.TOP);
         var direction = switch (blockFace) {
             case TOP -> "up";
@@ -35,13 +34,13 @@ public class DripstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockUpdate(@NotNull UpdateState updateState) {
+    public Block blockUpdate(UpdateState updateState) {
         var direction = updateState.currentBlock().getProperty(PROP_VERTICAL_DIRECTION).equals("up");
         var newThickness = getThickness(updateState.instance(), updateState.blockPosition(), direction);
         return updateState.currentBlock().withProperty(PROP_THICKNESS, newThickness);
     }
 
-    private @NotNull String getThickness(@NotNull Block.Getter instance, @NotNull Point blockPosition, boolean direction) {
+    private String getThickness(Block.Getter instance, Point blockPosition, boolean direction) {
         var abovePosition = blockPosition.add(0, direction ? 1 : -1, 0);
         var aboveBlock = instance.getBlock(abovePosition, Block.Getter.Condition.TYPE);
 

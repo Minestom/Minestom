@@ -8,8 +8,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.time.TimeUnit;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -32,14 +31,13 @@ public class ArgumentTime extends Argument<Duration> {
         super(id);
     }
 
-    public @NotNull ArgumentTime min(int min) {
+    public ArgumentTime min(int min) {
         this.min = min;
         return this;
     }
 
-    @NotNull
     @Override
-    public Duration parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public Duration parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         final char lastChar = input.charAt(input.length() - 1);
 
         TemporalUnit timeUnit;

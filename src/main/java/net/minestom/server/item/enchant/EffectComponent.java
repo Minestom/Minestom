@@ -8,8 +8,7 @@ import net.minestom.server.item.crossbow.CrossbowChargingSounds;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,11 +52,11 @@ public class EffectComponent {
 
     public static final Codec<DataComponentMap> CODEC = DataComponentMap.codec(EffectComponent::fromId, EffectComponent::fromNamespaceId);
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
+    public static @Nullable DataComponent<?> fromNamespaceId(String namespaceId) {
         return NAMESPACES.get(namespaceId);
     }
 
-    public static @Nullable DataComponent<?> fromKey(@NotNull Key namespaceId) {
+    public static @Nullable DataComponent<?> fromKey(Key namespaceId) {
         return fromNamespaceId(namespaceId.asString());
     }
 
@@ -65,11 +64,11 @@ public class EffectComponent {
         return IDS.get(id);
     }
 
-    public static @NotNull Collection<DataComponent<?>> values() {
+    public static Collection<DataComponent<?>> values() {
         return NAMESPACES.values();
     }
 
-    static <T> DataComponent<T> register(@NotNull String name, @Nullable Codec<T> nbt) {
+    static <T> DataComponent<T> register(String name, @Nullable Codec<T> nbt) {
         DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), null, nbt);
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);

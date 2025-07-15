@@ -6,8 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
@@ -242,13 +241,13 @@ public class NetworkBufferTest {
     public void sizeOfCompounds() {
         var type = new Type<Integer>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+            public void write(NetworkBuffer buffer, Integer value) {
                 buffer.write(INT, value);
                 buffer.write(INT, value);
             }
 
             @Override
-            public Integer read(@NotNull NetworkBuffer buffer) {
+            public Integer read(NetworkBuffer buffer) {
                 throw new UnsupportedOperationException();
             }
         };
@@ -260,12 +259,12 @@ public class NetworkBufferTest {
     public void sizeOfThrow() {
         Function<Consumer<NetworkBuffer>, Type<Integer>> fn = networkBufferConsumer -> new Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+            public void write(NetworkBuffer buffer, Integer value) {
                 networkBufferConsumer.accept(buffer);
             }
 
             @Override
-            public Integer read(@NotNull NetworkBuffer buffer) {
+            public Integer read(NetworkBuffer buffer) {
                 throw new UnsupportedOperationException();
             }
         };
@@ -531,7 +530,7 @@ public class NetworkBufferTest {
         assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
     }
 
-    static <T> void assertBufferType(NetworkBuffer.@NotNull Type<T> type, @UnknownNullability T value, byte[] expected, @NotNull Action<T> action) {
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte[] expected, Action<T> action) {
         var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());
@@ -564,43 +563,43 @@ public class NetworkBufferTest {
         }
     }
 
-    static <T> void assertBufferType(NetworkBuffer.@NotNull Type<T> type, @NotNull T value, byte @Nullable [] expected) {
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value, byte @Nullable [] expected) {
         assertBufferType(type, value, expected, new Action<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type, @UnknownNullability T value) {
+            public void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value) {
                 buffer.write(type, value);
             }
 
             @Override
-            public T read(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type) {
+            public T read(NetworkBuffer buffer, NetworkBuffer.Type<T> type) {
                 return buffer.read(type);
             }
         });
     }
 
-    static <T> void assertBufferType(NetworkBuffer.@NotNull Type<T> type, @NotNull T value) {
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value) {
         assertBufferType(type, value, null);
     }
 
-    static <T> void assertBufferTypeOptional(NetworkBuffer.@NotNull Type<T> type, @Nullable T value, byte @Nullable [] expected) {
+    static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value, byte @Nullable [] expected) {
         assertBufferType(type, value, expected, new Action<T>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type, @UnknownNullability T value) {
+            public void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value) {
                 buffer.write(type.optional(), value);
             }
 
             @Override
-            public T read(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type) {
+            public T read(NetworkBuffer buffer, NetworkBuffer.Type<T> type) {
                 return buffer.read(type.optional());
             }
         });
     }
 
-    static <T> void assertBufferTypeOptional(NetworkBuffer.@NotNull Type<T> type, @Nullable T value) {
+    static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value) {
         assertBufferTypeOptional(type, value, null);
     }
 
-    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull List<T> values, byte @Nullable [] expected) {
+    static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> values, byte @Nullable [] expected) {
         var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
         buffer.write(type.list(), values);
         assertEquals(0, buffer.readIndex());
@@ -619,13 +618,13 @@ public class NetworkBufferTest {
         }
     }
 
-    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull List<T> value) {
+    static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> value) {
         assertBufferTypeCollection(type, value, null);
     }
 
     interface Action<T> {
-        void write(@NotNull NetworkBuffer buffer, NetworkBuffer.@NotNull Type<T> type, @UnknownNullability T value);
+        void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value);
 
-        T read(@NotNull NetworkBuffer buffer, NetworkBuffer.@NotNull Type<T> type);
+        T read(NetworkBuffer buffer, NetworkBuffer.Type<T> type);
     }
 }

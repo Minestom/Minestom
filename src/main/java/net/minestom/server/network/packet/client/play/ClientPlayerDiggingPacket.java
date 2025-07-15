@@ -5,12 +5,11 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientPlayerDiggingPacket(@NotNull Status status, @NotNull Point blockPosition,
-                                        @NotNull BlockFace blockFace, int sequence) implements ClientPacket {
+public record ClientPlayerDiggingPacket(Status status, Point blockPosition,
+                                        BlockFace blockFace, int sequence) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientPlayerDiggingPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.Enum(Status.class), ClientPlayerDiggingPacket::status,
             BLOCK_POSITION, ClientPlayerDiggingPacket::blockPosition,

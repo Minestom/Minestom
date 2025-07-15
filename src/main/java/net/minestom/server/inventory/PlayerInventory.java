@@ -12,8 +12,7 @@ import net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPack
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -51,7 +50,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         return 0;
     }
 
-    private int getSlotId(@NotNull EquipmentSlot slot, byte heldSlot) {
+    private int getSlotId(EquipmentSlot slot, byte heldSlot) {
         return switch (slot) {
             case MAIN_HAND -> heldSlot;
             case OFF_HAND -> OFFHAND_SLOT;
@@ -70,13 +69,13 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         };
     }
 
-    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot, byte heldSlot) {
+    public ItemStack getEquipment(EquipmentSlot slot, byte heldSlot) {
         final int slotId = getSlotId(slot, heldSlot);
         if (slotId < 0) return ItemStack.AIR;
         return getItemStack(slotId);
     }
 
-    public void setEquipment(@NotNull EquipmentSlot slot, byte heldSlot, @NotNull ItemStack itemStack) {
+    public void setEquipment(EquipmentSlot slot, byte heldSlot, ItemStack itemStack) {
         final int slotId = getSlotId(slot, heldSlot);
         if (slotId < 0) Check.fail("PlayerInventory does not support " + slot + " equipment");
 
@@ -84,7 +83,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public void update(@NotNull Player player) {
+    public void update(Player player) {
         player.sendPacket(createWindowItemsPacket());
     }
 
@@ -93,7 +92,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
      *
      * @return the cursor item
      */
-    public @NotNull ItemStack getCursorItem() {
+    public ItemStack getCursorItem() {
         return cursorItem;
     }
 
@@ -102,7 +101,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
      *
      * @param cursorItem the new cursor item
      */
-    public void setCursorItem(@NotNull ItemStack cursorItem) {
+    public void setCursorItem(ItemStack cursorItem) {
         setCursorItem(cursorItem, true);
     }
 
@@ -112,14 +111,14 @@ public non-sealed class PlayerInventory extends AbstractInventory {
      * @param cursorItem the new cursor item
      * @param sendPacket true to send the update packet to the client, false otherwise
      */
-    public void setCursorItem(@NotNull ItemStack cursorItem, boolean sendPacket) {
+    public void setCursorItem(ItemStack cursorItem, boolean sendPacket) {
         if (this.cursorItem.equals(cursorItem)) return;
         this.cursorItem = cursorItem;
         if (sendPacket) sendPacketToViewers(new SetCursorItemPacket(cursorItem));
     }
 
     @Override
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack item, @NotNull ItemStack previous, boolean sendPacket) {
+    protected void UNSAFE_itemInsert(int slot, ItemStack item, ItemStack previous, boolean sendPacket) {
         for (Player player : getViewers()) {
             final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
             if (equipmentSlot == null) continue;
@@ -136,7 +135,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public void sendSlotRefresh(int slot, @NotNull ItemStack item) {
+    public void sendSlotRefresh(int slot, ItemStack item) {
         if (slot < 0 || slot > INVENTORY_SIZE)
             return; // Sanity check
         // See note in PlayerInventoryUtils about why we do this conversion
@@ -165,7 +164,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public boolean leftClick(@NotNull Player player, int slot) {
+    public boolean leftClick(Player player, int slot) {
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(slot);
         final InventoryClickResult clickResult = clickProcessor.leftClick(clicked, cursor);
@@ -180,7 +179,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public boolean rightClick(@NotNull Player player, int slot) {
+    public boolean rightClick(Player player, int slot) {
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(slot);
         final InventoryClickResult clickResult = clickProcessor.rightClick(clicked, cursor);
@@ -195,14 +194,14 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public boolean middleClick(@NotNull Player player, int slot) {
+    public boolean middleClick(Player player, int slot) {
         // TODO
         update();
         return false;
     }
 
     @Override
-    public boolean drop(@NotNull Player player, boolean all, int slot) {
+    public boolean drop(Player player, boolean all, int slot) {
         final ItemStack cursor = getCursorItem();
         final boolean outsideDrop = slot == -999;
         final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(slot);
@@ -220,7 +219,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public boolean shiftClick(@NotNull Player player, int slot, int button) {
+    public boolean shiftClick(Player player, int slot, int button) {
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(slot);
         final boolean hotBarClick = slot < 9;
@@ -241,7 +240,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public boolean changeHeld(@NotNull Player player, int slot, int key) {
+    public boolean changeHeld(Player player, int slot, int key) {
         final ItemStack cursorItem = getCursorItem();
         if (!cursorItem.isAir()) return false;
         final ItemStack heldItem = getItemStack(key);
@@ -258,7 +257,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public boolean dragging(@NotNull Player player, List<Integer> slots, int button) {
+    public boolean dragging(Player player, List<Integer> slots, int button) {
         final ItemStack cursor = getCursorItem();
 
         final ItemStack clickResult = clickProcessor.dragging(player, this, slots, button, cursor);
@@ -272,7 +271,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public boolean doubleClick(@NotNull Player player, int slot) {
+    public boolean doubleClick(Player player, int slot) {
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(slot);
         final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, slot, clicked, cursor);

@@ -6,7 +6,6 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,12 +21,12 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicates> {
 
     @Override
-    protected @NotNull DataComponent<BlockPredicates> component() {
+    protected DataComponent<BlockPredicates> component() {
         return DataComponents.CAN_PLACE_ON; // CAN_BREAK is the same thing
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, BlockPredicates>> directReadWriteEntries() {
+    protected List<Map.Entry<String, BlockPredicates>> directReadWriteEntries() {
         return List.of(
                 // TODO(1.21.5)
                 entry("empty", new BlockPredicates(List.of()))

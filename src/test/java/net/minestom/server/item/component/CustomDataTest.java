@@ -7,7 +7,6 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.tag.Tag;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -28,12 +27,12 @@ public class CustomDataTest extends AbstractItemComponentTest<CustomData> {
     );
 
     @Override
-    protected @NotNull DataComponent<CustomData> component() {
+    protected DataComponent<CustomData> component() {
         return SHARED_COMPONENTS.getFirst();
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, CustomData>> directReadWriteEntries() {
+    protected List<Map.Entry<String, CustomData>> directReadWriteEntries() {
         return List.of(
                 entry("simple", new CustomData(CompoundBinaryTag.builder()
                         .putString("hello", "world")

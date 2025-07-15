@@ -10,8 +10,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -43,7 +42,7 @@ public class ItemEntity extends Entity {
     // pickup delay in nanos
     private long pickupDelay;
 
-    public ItemEntity(@NotNull ItemStack itemStack) {
+    public ItemEntity(ItemStack itemStack) {
         super(EntityType.ITEM);
         setItemStack(itemStack);
         setBoundingBox(0.25f, 0.25f, 0.25f);
@@ -114,7 +113,7 @@ public class ItemEntity extends Entity {
     }
 
     @Override
-    public @NotNull ItemEntityMeta getEntityMeta() {
+    public ItemEntityMeta getEntityMeta() {
         return (ItemEntityMeta) super.getEntityMeta();
     }
 
@@ -123,7 +122,6 @@ public class ItemEntity extends Entity {
      *
      * @return the item stack
      */
-    @NotNull
     public ItemStack getItemStack() {
         return itemStack;
     }
@@ -133,7 +131,7 @@ public class ItemEntity extends Entity {
      *
      * @param itemStack the item stack
      */
-    public void setItemStack(@NotNull ItemStack itemStack) {
+    public void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack;
         getEntityMeta().setItem(itemStack);
     }
@@ -211,7 +209,7 @@ public class ItemEntity extends Entity {
      * @param delay        the pickup delay
      * @param temporalUnit the unit of the delay
      */
-    public void setPickupDelay(long delay, @NotNull TemporalUnit temporalUnit) {
+    public void setPickupDelay(long delay, TemporalUnit temporalUnit) {
         setPickupDelay(Duration.of(delay, temporalUnit));
     }
 
@@ -247,7 +245,7 @@ public class ItemEntity extends Entity {
     @ApiStatus.Experimental
     @SuppressWarnings("unchecked")
     @Override
-    public @NotNull Acquirable<? extends ItemEntity> acquirable() {
+    public Acquirable<? extends ItemEntity> acquirable() {
         return (Acquirable<? extends ItemEntity>) super.acquirable();
     }
 }

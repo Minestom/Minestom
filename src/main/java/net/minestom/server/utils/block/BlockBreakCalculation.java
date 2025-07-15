@@ -15,8 +15,7 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class BlockBreakCalculation {
 
@@ -32,7 +31,7 @@ public class BlockBreakCalculation {
      *
      * @return the block break time in ticks, -1 if the block is unbreakable
      */
-    public static int breakTicks(@NotNull Block block, @NotNull Player player) {
+    public static int breakTicks(Block block, Player player) {
         if (player.getGameMode() == GameMode.CREATIVE) {
             // Creative can always break blocks instantly
             return 0;
@@ -105,7 +104,7 @@ public class BlockBreakCalculation {
         return (int) Math.ceil(1 / damage);
     }
 
-    private static boolean isInWater(@NotNull Player player) {
+    private static boolean isInWater(Player player) {
         Pos pos = player.getPosition();
         Instance instance = player.getInstance();
         double eyeY = pos.y() + player.getEyeHeight();
@@ -150,7 +149,7 @@ public class BlockBreakCalculation {
         return (8 - level) / 9F;
     }
 
-    private static float getMiningFatigueMultiplier(@NotNull Player player) {
+    private static float getMiningFatigueMultiplier(Player player) {
         int level = player.getEffectLevel(PotionEffect.MINING_FATIGUE) + 1;
         // Use switch to avoid expensive Math.pow
         return switch (level) { // 0.3 ^ min(level, 4)
@@ -162,24 +161,24 @@ public class BlockBreakCalculation {
         };
     }
 
-    private static float getHasteMultiplier(@NotNull Player player) {
+    private static float getHasteMultiplier(Player player) {
         // Add 1 to potion level for correct calculation
         float level = Math.max(player.getEffectLevel(PotionEffect.HASTE), player.getEffectLevel(PotionEffect.CONDUIT_POWER)) + 1;
         return (1F + 0.2F * level);
     }
 
-    private static float getMiningSpeed(@Nullable Tool tool, @NotNull Block block) {
+    private static float getMiningSpeed(@Nullable Tool tool, Block block) {
         if (tool == null) {
             return 1;
         }
         return tool.getSpeed(block);
     }
 
-    private static boolean canBreakBlock(@Nullable Tool tool, @NotNull Block block) {
+    private static boolean canBreakBlock(@Nullable Tool tool, Block block) {
         return !block.registry().requiresTool() || isEffective(tool, block);
     }
 
-    private static boolean isEffective(@Nullable Tool tool, @NotNull Block block) {
+    private static boolean isEffective(@Nullable Tool tool, Block block) {
         return tool != null && tool.isCorrectForDrops(block);
     }
 }

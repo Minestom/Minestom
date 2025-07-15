@@ -4,16 +4,15 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record MapDataPacket(int mapId, byte scale, boolean locked,
-                            boolean trackingPosition, @NotNull List<Icon> icons,
-                            @Nullable MapDataPacket.ColorContent colorContent) implements ServerPacket.Play {
+                            boolean trackingPosition, List<Icon> icons,
+                            MapDataPacket.@Nullable ColorContent colorContent) implements ServerPacket.Play {
     public static final int MAX_ICONS = 1024;
 
     public MapDataPacket {
@@ -22,7 +21,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
 
     public static final NetworkBuffer.Type<MapDataPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, MapDataPacket value) {
+        public void write(NetworkBuffer buffer, MapDataPacket value) {
             buffer.write(VAR_INT, value.mapId);
             buffer.write(BYTE, value.scale);
             buffer.write(BOOLEAN, value.locked);
@@ -36,7 +35,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
         }
 
         @Override
-        public MapDataPacket read(@NotNull NetworkBuffer buffer) {
+        public MapDataPacket read(NetworkBuffer buffer) {
             var mapId = buffer.read(VAR_INT);
             var scale = buffer.read(BYTE);
             var locked = buffer.read(BOOLEAN);
@@ -67,7 +66,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
     }
 
     public record ColorContent(byte columns, byte rows, byte x, byte z,
-                               byte @NotNull [] data) {
+                               byte [] data) {
         public static final NetworkBuffer.Type<ColorContent> SERIALIZER = NetworkBufferTemplate.template(
                 BYTE, ColorContent::columns,
                 BYTE, ColorContent::rows,

@@ -6,16 +6,15 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.color.Color;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
 public record FireworkExplosion(
-        @NotNull Shape shape,
-        @NotNull List<RGBLike> colors,
-        @NotNull List<RGBLike> fadeColors,
+        Shape shape,
+        List<RGBLike> colors,
+        List<RGBLike> fadeColors,
         boolean hasTrail,
         boolean hasTwinkle
 ) {

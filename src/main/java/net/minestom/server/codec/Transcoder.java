@@ -3,7 +3,6 @@ package net.minestom.server.codec;
 import com.google.gson.JsonElement;
 import net.kyori.adventure.nbt.BinaryTag;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,62 +10,62 @@ import java.util.List;
 @ApiStatus.Experimental
 public interface Transcoder<D> {
 
-    @NotNull Transcoder<BinaryTag> NBT = TranscoderNbtImpl.INSTANCE;
-    @NotNull Transcoder<JsonElement> JSON = TranscoderJsonImpl.INSTANCE;
-    @NotNull Transcoder<Object> JAVA = TranscoderJavaImpl.INSTANCE;
-    @NotNull Transcoder<Integer> CRC32_HASH = TranscoderCrc32Impl.INSTANCE;
+    Transcoder<BinaryTag> NBT = TranscoderNbtImpl.INSTANCE;
+    Transcoder<JsonElement> JSON = TranscoderJsonImpl.INSTANCE;
+    Transcoder<Object> JAVA = TranscoderJavaImpl.INSTANCE;
+    Transcoder<Integer> CRC32_HASH = TranscoderCrc32Impl.INSTANCE;
 
-    @NotNull D createNull();
+    D createNull();
 
-    @NotNull Result<Boolean> getBoolean(@NotNull D value);
+    Result<Boolean> getBoolean(D value);
 
-    @NotNull D createBoolean(boolean value);
+    D createBoolean(boolean value);
 
-    @NotNull Result<Byte> getByte(@NotNull D value);
+    Result<Byte> getByte(D value);
 
-    @NotNull D createByte(byte value);
+    D createByte(byte value);
 
-    @NotNull Result<Short> getShort(@NotNull D value);
+    Result<Short> getShort(D value);
 
-    @NotNull D createShort(short value);
+    D createShort(short value);
 
-    @NotNull Result<Integer> getInt(@NotNull D value);
+    Result<Integer> getInt(D value);
 
-    @NotNull D createInt(int value);
+    D createInt(int value);
 
-    @NotNull Result<Long> getLong(@NotNull D value);
+    Result<Long> getLong(D value);
 
-    @NotNull D createLong(long value);
+    D createLong(long value);
 
-    @NotNull Result<Float> getFloat(@NotNull D value);
+    Result<Float> getFloat(D value);
 
-    @NotNull D createFloat(float value);
+    D createFloat(float value);
 
-    @NotNull Result<Double> getDouble(@NotNull D value);
+    Result<Double> getDouble(D value);
 
-    @NotNull D createDouble(double value);
+    D createDouble(double value);
 
-    @NotNull Result<String> getString(@NotNull D value);
+    Result<String> getString(D value);
 
-    @NotNull D createString(@NotNull String value);
+    D createString(String value);
 
-    @NotNull Result<List<D>> getList(@NotNull D value);
+    Result<List<D>> getList(D value);
 
-    default @NotNull D emptyList() {
+    default D emptyList() {
         return createList(0).build();
     }
 
-    @NotNull ListBuilder<D> createList(int expectedSize);
+    ListBuilder<D> createList(int expectedSize);
 
-    @NotNull Result<MapLike<D>> getMap(@NotNull D value);
+    Result<MapLike<D>> getMap(D value);
 
-    default @NotNull D emptyMap() {
+    default D emptyMap() {
         return createMap().build();
     }
 
-    @NotNull MapBuilder<D> createMap();
+    MapBuilder<D> createMap();
 
-    default @NotNull Result<byte[]> getByteArray(@NotNull D value) {
+    default Result<byte[]> getByteArray(D value) {
         final Result<List<D>> listResult = getList(value);
         if (!(listResult instanceof Result.Ok(List<D> list)))
             return listResult.cast();
@@ -80,13 +79,13 @@ public interface Transcoder<D> {
         return new Result.Ok<>(byteArray);
     }
 
-    default @NotNull D createByteArray(byte[] value) {
+    default D createByteArray(byte[] value) {
         final ListBuilder<D> list = createList(value.length);
         for (byte b : value) list.add(createByte(b));
         return list.build();
     }
 
-    default @NotNull Result<int[]> getIntArray(@NotNull D value) {
+    default Result<int[]> getIntArray(D value) {
         final Result<List<D>> listResult = getList(value);
         if (!(listResult instanceof Result.Ok(List<D> list)))
             return listResult.cast();
@@ -100,13 +99,13 @@ public interface Transcoder<D> {
         return new Result.Ok<>(intArray);
     }
 
-    default @NotNull D createIntArray(int[] value) {
+    default D createIntArray(int[] value) {
         final ListBuilder<D> list = createList(value.length);
         for (int i : value) list.add(createInt(i));
         return list.build();
     }
 
-    default @NotNull Result<long[]> getLongArray(@NotNull D value) {
+    default Result<long[]> getLongArray(D value) {
         final Result<List<D>> listResult = getList(value);
         if (!(listResult instanceof Result.Ok(List<D> list)))
             return listResult.cast();
@@ -120,27 +119,27 @@ public interface Transcoder<D> {
         return new Result.Ok<>(longArray);
     }
 
-    default @NotNull D createLongArray(long[] value) {
+    default D createLongArray(long[] value) {
         final ListBuilder<D> list = createList(value.length);
         for (long l : value) list.add(createLong(l));
         return list.build();
     }
 
-    <O> @NotNull Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull D value);
+    <O> Result<O> convertTo(Transcoder<O> coder, D value);
 
     interface ListBuilder<D> {
-        @NotNull ListBuilder<D> add(D value);
+        ListBuilder<D> add(D value);
 
         D build();
     }
 
     interface MapLike<D> {
 
-        @NotNull Collection<String> keys();
+        Collection<String> keys();
 
-        boolean hasValue(@NotNull String key);
+        boolean hasValue(String key);
 
-        @NotNull Result<D> getValue(@NotNull String key);
+        Result<D> getValue(String key);
 
         default int size() {
             return keys().size();
@@ -152,9 +151,9 @@ public interface Transcoder<D> {
     }
 
     interface MapBuilder<D> {
-        @NotNull MapBuilder<D> put(@NotNull D key, D value);
+        MapBuilder<D> put(D key, D value);
 
-        @NotNull MapBuilder<D> put(@NotNull String key, D value);
+        MapBuilder<D> put(String key, D value);
 
         D build();
     }

@@ -9,20 +9,19 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * https://minecraft.wiki/w/Custom_dimension
  */
 public sealed interface DimensionType extends DimensionTypes permits DimensionTypeImpl {
 
-    @NotNull Key OVERWORLD_EFFECTS = Key.key("minecraft:overworld");
+    Key OVERWORLD_EFFECTS = Key.key("minecraft:overworld");
 
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
 
-    @NotNull Codec<DimensionType> REGISTRY_CODEC = StructCodec.struct(
+    Codec<DimensionType> REGISTRY_CODEC = StructCodec.struct(
             "ultrawarm", Codec.BOOLEAN, DimensionType::ultrawarm,
             "natural", Codec.BOOLEAN, DimensionType::natural,
             "coordinate_scale", Codec.DOUBLE, DimensionType::coordinateScale,
@@ -43,10 +42,10 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
             "monster_spawn_light_level", Codec.INT.orElse(Codec.UNIT.transform(ignored -> 0, ignored -> Unit.INSTANCE)), DimensionType::monsterSpawnLightLevel,
             DimensionType::create);
 
-    static @NotNull DimensionType create(
+    static DimensionType create(
             boolean ultrawarm, boolean natural, double coordinateScale, boolean hasSkylight, boolean hasCeiling,
             float ambientLight, @Nullable Long fixedTime, boolean piglinSafe, boolean bedWorks, boolean respawnAnchorWorks,
-            boolean hasRaids, int logicalHeight, int minY, int height, @NotNull String infiniburn, @NotNull Key effects,
+            boolean hasRaids, int logicalHeight, int minY, int height, String infiniburn, Key effects,
             int monsterSpawnBlockLightLimit, int monsterSpawnLightLevel
     ) {
         return new DimensionTypeImpl(ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
@@ -54,7 +53,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
                 infiniburn, effects, monsterSpawnBlockLightLimit, monsterSpawnLightLevel);
     }
 
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -64,7 +63,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
+    static DynamicRegistry<DimensionType> createDefaultRegistry() {
         return DynamicRegistry.create(Key.key("minecraft:dimension_type"), REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
     }
 
@@ -100,9 +99,9 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
 
     int height();
 
-    @NotNull String infiniburn();
+    String infiniburn();
 
-    @NotNull Key effects();
+    Key effects();
 
     int monsterSpawnBlockLightLimit();
 
@@ -135,108 +134,108 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder ultrawarm(boolean ultrawarm) {
+        public Builder ultrawarm(boolean ultrawarm) {
             this.ultrawarm = ultrawarm;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder natural(boolean natural) {
+        public Builder natural(boolean natural) {
             this.natural = natural;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder coordinateScale(double coordinateScale) {
+        public Builder coordinateScale(double coordinateScale) {
             this.coordinateScale = coordinateScale;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder hasSkylight(boolean hasSkylight) {
+        public Builder hasSkylight(boolean hasSkylight) {
             this.hasSkylight = hasSkylight;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder hasCeiling(boolean hasCeiling) {
+        public Builder hasCeiling(boolean hasCeiling) {
             this.hasCeiling = hasCeiling;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder ambientLight(float ambientLight) {
+        public Builder ambientLight(float ambientLight) {
             this.ambientLight = ambientLight;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder fixedTime(@Nullable Long fixedTime) {
+        public Builder fixedTime(@Nullable Long fixedTime) {
             this.fixedTime = fixedTime;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder piglinSafe(boolean piglinSafe) {
+        public Builder piglinSafe(boolean piglinSafe) {
             this.piglinSafe = piglinSafe;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder bedWorks(boolean bedWorks) {
+        public Builder bedWorks(boolean bedWorks) {
             this.bedWorks = bedWorks;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder respawnAnchorWorks(boolean respawnAnchorWorks) {
+        public Builder respawnAnchorWorks(boolean respawnAnchorWorks) {
             this.respawnAnchorWorks = respawnAnchorWorks;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder hasRaids(boolean hasRaids) {
+        public Builder hasRaids(boolean hasRaids) {
             this.hasRaids = hasRaids;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder logicalHeight(int logicalHeight) {
+        public Builder logicalHeight(int logicalHeight) {
             this.logicalHeight = logicalHeight;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder minY(int minY) {
+        public Builder minY(int minY) {
             this.minY = minY;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder height(int height) {
+        public Builder height(int height) {
             this.height = height;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder infiniburn(@NotNull String infiniburn) {
+        public Builder infiniburn(String infiniburn) {
             this.infiniburn = infiniburn;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder effects(@KeyPattern @NotNull String effects) {
+        public Builder effects(@KeyPattern String effects) {
             return effects(Key.key(effects));
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder effects(@NotNull Key effects) {
+        public Builder effects(Key effects) {
             this.effects = effects;
             return this;
         }
 
         @Contract(pure = true)
-        public @NotNull DimensionType build() {
+        public DimensionType build() {
             return new DimensionTypeImpl(
                     ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
                     fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,

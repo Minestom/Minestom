@@ -1,8 +1,7 @@
 package net.minestom.server.utils.validate;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.text.MessageFormat;
 import java.util.Objects;
@@ -17,66 +16,66 @@ public final class Check {
     }
 
     @Contract("null, _ -> fail")
-    public static void notNull(@Nullable Object object, @NotNull String reason) {
+    public static void notNull(@Nullable Object object, String reason) {
         if (Objects.isNull(object)) {
             throw new NullPointerException(reason);
         }
     }
 
     @Contract("null, _, _ -> fail")
-    public static void notNull(@Nullable Object object, @NotNull String reason, Object... arguments) {
+    public static void notNull(@Nullable Object object, String reason, Object... arguments) {
         if (Objects.isNull(object)) {
             throw new NullPointerException(MessageFormat.format(reason, arguments));
         }
     }
 
     @Contract("true, _ -> fail")
-    public static void argCondition(boolean condition, @NotNull String reason) {
+    public static void argCondition(boolean condition, String reason) {
         if (condition) {
             throw new IllegalArgumentException(reason);
         }
     }
 
     @Contract("true, _, _ -> fail")
-    public static void argCondition(boolean condition, @NotNull String reason, Object... arguments) {
+    public static void argCondition(boolean condition, String reason, Object... arguments) {
         if (condition) {
             throw new IllegalArgumentException(MessageFormat.format(reason, arguments));
         }
     }
 
     @Contract("_ -> fail")
-    public static void fail(@NotNull String reason) {
+    public static void fail(String reason) {
         throw new IllegalArgumentException(reason);
     }
 
     @Contract("_, _ -> fail")
-    public static void fail(@NotNull String reason, Object... arguments) {
+    public static void fail(String reason, Object... arguments) {
         throw new IllegalArgumentException(MessageFormat.format(reason, arguments));
     }
 
     @Contract("true, _ -> fail")
-    public static void stateCondition(boolean condition, @NotNull String reason) {
+    public static void stateCondition(boolean condition, String reason) {
         if (condition) {
             throw new IllegalStateException(reason);
         }
     }
 
     @Contract("true, _, _ -> fail")
-    public static void stateCondition(boolean condition, @NotNull String reason, Object... arguments) {
+    public static void stateCondition(boolean condition, String reason, Object... arguments) {
         if (condition) {
             throw new IllegalStateException(MessageFormat.format(reason, arguments));
         }
     }
 
     @Contract("false, _ -> fail")
-    public static void isTrue(boolean condition, @NotNull String reason) {
+    public static void isTrue(boolean condition, String reason) {
         if (!condition) {
             throw new IllegalStateException(reason);
         }
     }
 
     @Contract("false, _, _ -> fail")
-    public static void isTrue(boolean condition, @NotNull String reason, Object... arguments) {
+    public static void isTrue(boolean condition, String reason, Object... arguments) {
         if (!condition) {
             throw new IllegalStateException(MessageFormat.format(reason, arguments));
         }

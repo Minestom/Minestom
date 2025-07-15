@@ -54,7 +54,6 @@ import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.time.Tick;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,207 +169,207 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull ExceptionManager exception() {
+    public ExceptionManager exception() {
         return exception;
     }
 
     @Override
-    public @NotNull DynamicRegistry<Dialog> dialog() {
+    public DynamicRegistry<Dialog> dialog() {
         return dialog;
     }
 
     @Override
-    public @NotNull DynamicRegistry<DamageType> damageType() {
+    public DynamicRegistry<DamageType> damageType() {
         return damageType;
     }
 
     @Override
-    public @NotNull DynamicRegistry<TrimMaterial> trimMaterial() {
+    public DynamicRegistry<TrimMaterial> trimMaterial() {
         return trimMaterial;
     }
 
     @Override
-    public @NotNull DynamicRegistry<TrimPattern> trimPattern() {
+    public DynamicRegistry<TrimPattern> trimPattern() {
         return trimPattern;
     }
 
     @Override
-    public @NotNull DynamicRegistry<BannerPattern> bannerPattern() {
+    public DynamicRegistry<BannerPattern> bannerPattern() {
         return bannerPattern;
     }
 
     @Override
-    public @NotNull DynamicRegistry<Enchantment> enchantment() {
+    public DynamicRegistry<Enchantment> enchantment() {
         return enchantment;
     }
 
     @Override
-    public @NotNull DynamicRegistry<PaintingVariant> paintingVariant() {
+    public DynamicRegistry<PaintingVariant> paintingVariant() {
         return paintingVariant;
     }
 
     @Override
-    public @NotNull DynamicRegistry<JukeboxSong> jukeboxSong() {
+    public DynamicRegistry<JukeboxSong> jukeboxSong() {
         return jukeboxSong;
     }
 
     @Override
-    public @NotNull DynamicRegistry<Instrument> instrument() {
+    public DynamicRegistry<Instrument> instrument() {
         return instrument;
     }
 
     @Override
-    public @NotNull DynamicRegistry<WolfVariant> wolfVariant() {
+    public DynamicRegistry<WolfVariant> wolfVariant() {
         return wolfVariant;
     }
 
     @Override
-    public @NotNull DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
+    public DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
         return wolfSoundVariant;
     }
 
     @Override
-    public @NotNull DynamicRegistry<CatVariant> catVariant() {
+    public DynamicRegistry<CatVariant> catVariant() {
         return catVariant;
     }
 
     @Override
-    public @NotNull DynamicRegistry<ChickenVariant> chickenVariant() {
+    public DynamicRegistry<ChickenVariant> chickenVariant() {
         return chickenVariant;
     }
 
     @Override
-    public @NotNull DynamicRegistry<CowVariant> cowVariant() {
+    public DynamicRegistry<CowVariant> cowVariant() {
         return cowVariant;
     }
 
     @Override
-    public @NotNull DynamicRegistry<FrogVariant> frogVariant() {
+    public DynamicRegistry<FrogVariant> frogVariant() {
         return frogVariant;
     }
 
     @Override
-    public @NotNull DynamicRegistry<PigVariant> pigVariant() {
+    public DynamicRegistry<PigVariant> pigVariant() {
         return pigVariant;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return enchantmentLevelBasedValues;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
+    public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return enchantmentValueEffects;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
+    public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
         return enchantmentEntityEffects;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
+    public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return enchantmentLocationEffects;
     }
 
     @Override
-    public @NotNull ConnectionManager connection() {
+    public ConnectionManager connection() {
         return connection;
     }
 
     @Override
-    public @NotNull InstanceManager instance() {
+    public InstanceManager instance() {
         return instance;
     }
 
     @Override
-    public @NotNull BlockManager block() {
+    public BlockManager block() {
         return block;
     }
 
     @Override
-    public @NotNull CommandManager command() {
+    public CommandManager command() {
         return command;
     }
 
     @Override
-    public @NotNull RecipeManager recipe() {
+    public RecipeManager recipe() {
         return recipe;
     }
 
     @Override
-    public @NotNull TeamManager team() {
+    public TeamManager team() {
         return team;
     }
 
     @Override
-    public @NotNull GlobalEventHandler eventHandler() {
+    public GlobalEventHandler eventHandler() {
         return eventHandler;
     }
 
     @Override
-    public @NotNull SchedulerManager scheduler() {
+    public SchedulerManager scheduler() {
         return scheduler;
     }
 
     @Override
-    public @NotNull BenchmarkManager benchmark() {
+    public BenchmarkManager benchmark() {
         return benchmark;
     }
 
     @Override
-    public @NotNull AdvancementManager advancement() {
+    public AdvancementManager advancement() {
         return advancement;
     }
 
     @Override
-    public @NotNull BossBarManager bossBar() {
+    public BossBarManager bossBar() {
         return bossBar;
     }
 
     @Override
-    public @NotNull DynamicRegistry<ChatType> chatType() {
+    public DynamicRegistry<ChatType> chatType() {
         return chatType;
     }
 
     @Override
-    public @NotNull DynamicRegistry<DimensionType> dimensionType() {
+    public DynamicRegistry<DimensionType> dimensionType() {
         return dimensionType;
     }
 
     @Override
-    public @NotNull DynamicRegistry<Biome> biome() {
+    public DynamicRegistry<Biome> biome() {
         return biome;
     }
 
     @Override
-    public @NotNull PacketListenerManager packetListener() {
+    public PacketListenerManager packetListener() {
         return packetListener;
     }
 
     @Override
-    public @NotNull PacketParser<ClientPacket> packetParser() {
+    public PacketParser<ClientPacket> packetParser() {
         return packetParser;
     }
 
     @Override
-    public @NotNull Server server() {
+    public Server server() {
         return server;
     }
 
     @Override
-    public @NotNull ThreadDispatcher<Chunk> dispatcher() {
+    public ThreadDispatcher<Chunk> dispatcher() {
         return dispatcher;
     }
 
     @Override
-    public @NotNull Ticker ticker() {
+    public Ticker ticker() {
         return ticker;
     }
 
     @Override
-    public void start(@NotNull SocketAddress socketAddress) {
+    public void start(SocketAddress socketAddress) {
         if (!started.compareAndSet(false, true)) {
             throw new IllegalStateException("Server already started");
         }
@@ -414,7 +413,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull ServerSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+    public ServerSnapshot updateSnapshot(SnapshotUpdater updater) {
         List<AtomicReference<InstanceSnapshot>> instanceRefs = new ArrayList<>();
         Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs = new Int2ObjectOpenHashMap<>();
         for (Instance instance : instance.getInstances()) {

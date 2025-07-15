@@ -7,7 +7,6 @@ import net.minestom.server.network.packet.server.play.ExplosionPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.PacketSendingUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -58,7 +57,7 @@ public abstract class Explosion {
      *
      * @param instance instance to perform this explosion in
      */
-    public void apply(@NotNull Instance instance) {
+    public void apply(Instance instance) {
         List<Point> blocks = prepare(instance);
         for (final Point pos : blocks) {
             instance.setBlock(pos, Block.AIR);

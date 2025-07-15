@@ -7,11 +7,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class RabbitMeta extends AnimalMeta {
-    public RabbitMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public RabbitMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -19,7 +18,7 @@ public class RabbitMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#RABBIT_VARIANT} instead.
      */
     @Deprecated
-    public void setVariant(@NotNull RabbitMeta.Variant variant) {
+    public void setVariant(RabbitMeta.Variant variant) {
         int id = variant == Variant.KILLER_BUNNY ? 99 : variant.ordinal();
         metadata.set(MetadataDef.Rabbit.TYPE, id);
     }
@@ -28,7 +27,7 @@ public class RabbitMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#RABBIT_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull RabbitMeta.Variant getVariant() {
+    public RabbitMeta.Variant getVariant() {
         int id = metadata.get(MetadataDef.Rabbit.TYPE);
         if (id == 99) {
             return Variant.KILLER_BUNNY;
@@ -38,14 +37,14 @@ public class RabbitMeta extends AnimalMeta {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.RABBIT_VARIANT)
             return (T) getVariant();
         return super.get(component);
     }
 
     @Override
-    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+    protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.RABBIT_VARIANT)
             setVariant((Variant) value);
         else super.set(component, value);

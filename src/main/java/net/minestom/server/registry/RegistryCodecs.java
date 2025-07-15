@@ -6,8 +6,7 @@ import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.utils.Either;
 import org.intellij.lang.annotations.Subst;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,9 +15,9 @@ import java.util.Set;
 
 final class RegistryCodecs {
 
-    record RegistryKeyImpl<T>(@NotNull Registries.Selector<T> selector) implements Codec<RegistryKey<T>> {
+    record RegistryKeyImpl<T>(Registries.Selector<T> selector) implements Codec<RegistryKey<T>> {
         @Override
-        public @NotNull <D> Result<RegistryKey<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public <D> Result<RegistryKey<T>> decode(Transcoder<D> coder, D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = selector.select(context.registries());
@@ -31,7 +30,7 @@ final class RegistryCodecs {
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable RegistryKey<T> value) {
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable RegistryKey<T> value) {
             if (value == null) return new Result.Error<>("null");
             if (!(coder instanceof RegistryTranscoder<D>))
                 return new Result.Error<>("Missing registries in transcoder");
@@ -40,11 +39,11 @@ final class RegistryCodecs {
     }
 
     record HolderCodec<T>(
-            @NotNull Registries.Selector<T> selector,
-            @NotNull Codec<T> registryCodec
+            Registries.Selector<T> selector,
+            Codec<T> registryCodec
     ) implements Codec<Holder<T>> {
         @Override
-        public @NotNull <D> Result<Holder<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public <D> Result<Holder<T>> decode(Transcoder<D> coder, D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = selector.select(context.registries());
@@ -61,7 +60,7 @@ final class RegistryCodecs {
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Holder<T> value) {
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable Holder<T> value) {
             if (value == null) return new Result.Error<>("null");
             if (!(coder instanceof RegistryTranscoder<D>))
                 return new Result.Error<>("Missing registries in transcoder");
@@ -72,9 +71,9 @@ final class RegistryCodecs {
         }
     }
 
-    record TagKeyImpl<T>(@NotNull Registries.Selector<T> selector, boolean hash) implements Codec<TagKey<T>> {
+    record TagKeyImpl<T>(Registries.Selector<T> selector, boolean hash) implements Codec<TagKey<T>> {
         @Override
-        public @NotNull <D> Result<TagKey<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public <D> Result<TagKey<T>> decode(Transcoder<D> coder, D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = selector.select(context.registries());
@@ -93,7 +92,7 @@ final class RegistryCodecs {
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable TagKey<T> value) {
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable TagKey<T> value) {
             if (value == null) return new Result.Error<>("null");
             if (!(coder instanceof RegistryTranscoder<D>))
                 return new Result.Error<>("Missing registries in transcoder");
@@ -101,11 +100,11 @@ final class RegistryCodecs {
         }
     }
 
-    record RegistryTagImpl<T>(@NotNull Registries.Selector<T> selector) implements Codec<RegistryTag<T>> {
+    record RegistryTagImpl<T>(Registries.Selector<T> selector) implements Codec<RegistryTag<T>> {
         // Per vanilla, this codec supports registryless context, in which case it can only decode direct tags.
 
         @Override
-        public @NotNull <D> Result<RegistryTag<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public <D> Result<RegistryTag<T>> decode(Transcoder<D> coder, D value) {
             final var context = coder instanceof RegistryTranscoder<D> transcoder ? transcoder : null;
             final var registry = context != null ? selector.select(context.registries()) : null;
             final Result<String> tagKeyResult = coder.getString(value);
@@ -138,7 +137,7 @@ final class RegistryCodecs {
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable RegistryTag<T> value) {
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable RegistryTag<T> value) {
             if (value == null) return new Result.Error<>("null");
             return switch (value) {
                 case net.minestom.server.registry.RegistryTagImpl.Backed<T> backed ->
@@ -158,11 +157,11 @@ final class RegistryCodecs {
     }
 
     record HolderSetImpl<T extends Holder<T>>(
-            @NotNull Codec<RegistryTag<T>> tagCodec,
-            @NotNull Codec<T> directCodec
+            Codec<RegistryTag<T>> tagCodec,
+            Codec<T> directCodec
     ) implements Codec<HolderSet<T>> {
         @Override
-        public @NotNull <D> Result<HolderSet<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public <D> Result<HolderSet<T>> decode(Transcoder<D> coder, D value) {
             // First try to decode as a tag
             final Result<RegistryTag<T>> tagResult = tagCodec.decode(coder, value);
             if (tagResult instanceof Result.Ok(RegistryTag<T> tag))
@@ -189,7 +188,7 @@ final class RegistryCodecs {
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable HolderSet<T> value) {
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable HolderSet<T> value) {
             if (value == null) return new Result.Error<>("null");
             return switch (value) {
                 case RegistryTag<T> tag -> tagCodec.encode(coder, tag);

@@ -8,11 +8,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class TropicalFishMeta extends AbstractFishMeta {
-    public TropicalFishMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public TropicalFishMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -20,7 +19,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents} instead.
      */
     @Deprecated
-    public @NotNull Variant getVariant() {
+    public Variant getVariant() {
         return Variant.fromPackedId(metadata.get(MetadataDef.TropicalFish.VARIANT));
     }
 
@@ -28,13 +27,13 @@ public class TropicalFishMeta extends AbstractFishMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents} instead.
      */
     @Deprecated
-    public void setVariant(@NotNull Variant variant) {
+    public void setVariant(Variant variant) {
         metadata.set(MetadataDef.TropicalFish.VARIANT, variant.packedId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.TROPICAL_FISH_PATTERN)
             return (T) getVariant().pattern();
         if (component == DataComponents.TROPICAL_FISH_BASE_COLOR)
@@ -45,7 +44,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
     }
 
     @Override
-    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+    protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.TROPICAL_FISH_PATTERN)
             setVariant(getVariant().withPattern((Pattern) value));
         else if (component == DataComponents.TROPICAL_FISH_BASE_COLOR)
@@ -55,10 +54,10 @@ public class TropicalFishMeta extends AbstractFishMeta {
         else super.set(component, value);
     }
 
-    public record Variant(@NotNull Pattern pattern, @NotNull DyeColor baseColor, @NotNull DyeColor patternColor) {
+    public record Variant(Pattern pattern, DyeColor baseColor, DyeColor patternColor) {
         public static final Variant DEFAULT = new Variant(Pattern.KOB, DyeColor.WHITE, DyeColor.WHITE);
 
-        public static @NotNull Variant fromPackedId(int packedId) {
+        public static Variant fromPackedId(int packedId) {
             int patternColorId = (packedId >> 24) & 0xFF;
             int bodyColorId = (packedId >> 16) & 0xFF;
             int patternId = packedId & 0xFF;
@@ -76,15 +75,15 @@ public class TropicalFishMeta extends AbstractFishMeta {
                     | pattern.id();
         }
 
-        public @NotNull Variant withPattern(@NotNull Pattern newPattern) {
+        public Variant withPattern(Pattern newPattern) {
             return new Variant(newPattern, this.baseColor, this.patternColor);
         }
 
-        public @NotNull Variant withBodyColor(@NotNull DyeColor newBodyColor) {
+        public Variant withBodyColor(DyeColor newBodyColor) {
             return new Variant(this.pattern, newBodyColor, this.patternColor);
         }
 
-        public @NotNull Variant withPatternColor(@NotNull DyeColor newPatternColor) {
+        public Variant withPatternColor(DyeColor newPatternColor) {
             return new Variant(this.pattern, this.baseColor, newPatternColor);
         }
     }
@@ -108,7 +107,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
 
         private final static Pattern[] VALUES = values();
 
-        public static @NotNull Pattern fromId(int id) {
+        public static Pattern fromId(int id) {
             for (Pattern pattern : VALUES) {
                 if (pattern.id() == id) {
                     return pattern;

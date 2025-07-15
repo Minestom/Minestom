@@ -7,13 +7,12 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
 public class FoxMeta extends AnimalMeta {
-    public FoxMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public FoxMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -22,7 +21,7 @@ public class FoxMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#FOX_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull FoxMeta.Variant getVariant() {
+    public FoxMeta.Variant getVariant() {
         return Variant.VALUES[metadata.get(MetadataDef.Fox.VARIANT)];
     }
 
@@ -30,7 +29,7 @@ public class FoxMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#FOX_VARIANT} instead.
      */
     @Deprecated
-    public void setVariant(@NotNull FoxMeta.Variant variant) {
+    public void setVariant(FoxMeta.Variant variant) {
         metadata.set(MetadataDef.Fox.VARIANT, variant.ordinal());
     }
 
@@ -110,14 +109,14 @@ public class FoxMeta extends AnimalMeta {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.FOX_VARIANT)
             return (T) getVariant();
         return super.get(component);
     }
 
     @Override
-    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+    protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.FOX_VARIANT)
             setVariant((FoxMeta.Variant) value);
         else super.set(component, value);

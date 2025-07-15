@@ -4,7 +4,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
@@ -22,14 +21,14 @@ public interface AudienceProvider<A> {
      *
      * @return all audience members
      */
-    @NotNull A all();
+    A all();
 
     /**
      * Gets all audience members that are of type {@link Player}.
      *
      * @return all players
      */
-    @NotNull A players();
+    A players();
 
     /**
      * Gets all audience members that are of type {@link Player} and match the predicate.
@@ -37,21 +36,21 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all players matching the predicate
      */
-    @NotNull A players(@NotNull Predicate<Player> filter);
+    A players(Predicate<Player> filter);
 
     /**
      * Gets the console as an audience.
      *
      * @return the console
      */
-    @NotNull A console();
+    A console();
 
     /**
      * Gets the combination of {@link #players()} and {@link #console()}.
      *
      * @return the audience of all players and the console
      */
-    @NotNull A server();
+    A server();
 
     /**
      * Gets all custom audience members stored using the given keyed object.
@@ -59,7 +58,7 @@ public interface AudienceProvider<A> {
      * @param keyed the keyed object
      * @return all custom audience members stored using the key of the object
      */
-    default @NotNull A custom(@NotNull Keyed keyed) {
+    default A custom(Keyed keyed) {
         return this.custom(keyed.key());
     }
 
@@ -69,7 +68,7 @@ public interface AudienceProvider<A> {
      * @param key the key
      * @return all custom audience members stored using the key
      */
-    @NotNull A custom(@NotNull Key key);
+    A custom(Key key);
 
     /**
      * Gets all custom audience members stored using the given keyed object that match
@@ -79,7 +78,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all custom audience members stored using the key
      */
-    default @NotNull A custom(@NotNull Keyed keyed, Predicate<Audience> filter) {
+    default A custom(Keyed keyed, Predicate<Audience> filter) {
         return this.custom(keyed.key(), filter);
     }
 
@@ -91,14 +90,14 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all custom audience members stored using the key
      */
-    @NotNull A custom(@NotNull Key key, Predicate<Audience> filter);
+    A custom(Key key, Predicate<Audience> filter);
 
     /**
      * Gets all custom audience members.
      *
      * @return all custom audience members
      */
-    @NotNull A customs();
+    A customs();
 
     /**
      * Gets all custom audience members matching the given predicate.
@@ -106,7 +105,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all matching custom audience members
      */
-    @NotNull A customs(@NotNull Predicate<Audience> filter);
+    A customs(Predicate<Audience> filter);
 
     /**
      * Gets all audience members that match the given predicate.
@@ -114,12 +113,12 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all matching audience members
      */
-    @NotNull A all(@NotNull Predicate<Audience> filter);
+    A all(Predicate<Audience> filter);
 
     /**
      * Gets the audience registry used to register custom audiences.
      *
      * @return the registry
      */
-    @NotNull AudienceRegistry registry();
+    AudienceRegistry registry();
 }

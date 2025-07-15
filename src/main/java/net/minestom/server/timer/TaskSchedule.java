@@ -1,6 +1,5 @@
 package net.minestom.server.timer;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -13,53 +12,53 @@ public sealed interface TaskSchedule permits
         TaskScheduleImpl.Park,
         TaskScheduleImpl.Stop,
         TaskScheduleImpl.TickSchedule {
-    static @NotNull TaskSchedule duration(@NotNull Duration duration) {
+    static TaskSchedule duration(Duration duration) {
         return new TaskScheduleImpl.DurationSchedule(duration);
     }
 
-    static @NotNull TaskSchedule tick(int tick) {
+    static TaskSchedule tick(int tick) {
         return new TaskScheduleImpl.TickSchedule(tick);
     }
 
-    static @NotNull TaskSchedule future(@NotNull CompletableFuture<?> future) {
+    static TaskSchedule future(CompletableFuture<?> future) {
         return new TaskScheduleImpl.FutureSchedule(future);
     }
 
-    static @NotNull TaskSchedule park() {
+    static TaskSchedule park() {
         return TaskScheduleImpl.PARK;
     }
 
-    static @NotNull TaskSchedule stop() {
+    static TaskSchedule stop() {
         return TaskScheduleImpl.STOP;
     }
 
-    static @NotNull TaskSchedule immediate() {
+    static TaskSchedule immediate() {
         return TaskScheduleImpl.IMMEDIATE;
     }
 
     // Shortcuts
 
-    static @NotNull TaskSchedule duration(long amount, @NotNull TemporalUnit unit) {
+    static TaskSchedule duration(long amount, TemporalUnit unit) {
         return duration(Duration.of(amount, unit));
     }
 
-    static @NotNull TaskSchedule nextTick() {
+    static TaskSchedule nextTick() {
         return TaskScheduleImpl.NEXT_TICK;
     }
 
-    static @NotNull TaskSchedule hours(long hours) {
+    static TaskSchedule hours(long hours) {
         return duration(Duration.ofHours(hours));
     }
 
-    static @NotNull TaskSchedule minutes(long minutes) {
+    static TaskSchedule minutes(long minutes) {
         return duration(Duration.ofMinutes(minutes));
     }
 
-    static @NotNull TaskSchedule seconds(long seconds) {
+    static TaskSchedule seconds(long seconds) {
         return duration(Duration.ofSeconds(seconds));
     }
 
-    static @NotNull TaskSchedule millis(long millis) {
+    static TaskSchedule millis(long millis) {
         return duration(Duration.ofMillis(millis));
     }
 }

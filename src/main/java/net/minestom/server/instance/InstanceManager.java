@@ -9,8 +9,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -26,7 +25,7 @@ public final class InstanceManager {
     private final Registries registries;
     private final Set<Instance> instances = new CopyOnWriteArraySet<>();
 
-    public InstanceManager(@NotNull Registries registries) {
+    public InstanceManager(Registries registries) {
         this.registries = registries;
     }
 
@@ -38,7 +37,7 @@ public final class InstanceManager {
      *
      * @param instance the {@link Instance} to register
      */
-    public void registerInstance(@NotNull Instance instance) {
+    public void registerInstance(Instance instance) {
         Check.stateCondition(instance instanceof SharedInstance,
                 "Please use InstanceManager#registerSharedInstance to register a shared instance");
         UNSAFE_registerInstance(instance);
@@ -51,17 +50,17 @@ public final class InstanceManager {
      * @param loader        the chunk loader
      * @return the created {@link InstanceContainer}
      */
-    public @NotNull InstanceContainer createInstanceContainer(@NotNull RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
+    public InstanceContainer createInstanceContainer(RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
         final InstanceContainer instanceContainer = new InstanceContainer(registries.dimensionType(), UUID.randomUUID(), dimensionType, loader, dimensionType.key());
         registerInstance(instanceContainer);
         return instanceContainer;
     }
 
-    public @NotNull InstanceContainer createInstanceContainer(@NotNull RegistryKey<DimensionType> dimensionType) {
+    public InstanceContainer createInstanceContainer(RegistryKey<DimensionType> dimensionType) {
         return createInstanceContainer(dimensionType, null);
     }
 
-    public @NotNull InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
+    public InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
         return createInstanceContainer(DimensionType.OVERWORLD, loader);
     }
 
@@ -70,7 +69,7 @@ public final class InstanceManager {
      *
      * @return the created {@link InstanceContainer}
      */
-    public @NotNull InstanceContainer createInstanceContainer() {
+    public InstanceContainer createInstanceContainer() {
         return createInstanceContainer(DimensionType.OVERWORLD, null);
     }
 
@@ -83,7 +82,7 @@ public final class InstanceManager {
      * @return the registered {@link SharedInstance}
      * @throws NullPointerException if {@code sharedInstance} doesn't have an {@link InstanceContainer} assigned to it
      */
-    public @NotNull SharedInstance registerSharedInstance(@NotNull SharedInstance sharedInstance) {
+    public SharedInstance registerSharedInstance(SharedInstance sharedInstance) {
         final InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();
         Check.notNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
 
@@ -99,7 +98,7 @@ public final class InstanceManager {
      * @return the created {@link SharedInstance}
      * @throws IllegalStateException if {@code instanceContainer} is not registered
      */
-    public @NotNull SharedInstance createSharedInstance(@NotNull InstanceContainer instanceContainer) {
+    public SharedInstance createSharedInstance(InstanceContainer instanceContainer) {
         Check.notNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
         Check.stateCondition(!instanceContainer.isRegistered(), "The container needs to be register in the InstanceManager");
 
@@ -114,7 +113,7 @@ public final class InstanceManager {
      *
      * @param instance the {@link Instance} to unregister
      */
-    public void unregisterInstance(@NotNull Instance instance) {
+    public void unregisterInstance(Instance instance) {
         long onlinePlayers = instance.getPlayers().stream().filter(Player::isOnline).count();
         Check.stateCondition(onlinePlayers > 0, "You cannot unregister an instance with players inside.");
         synchronized (instance) {
@@ -138,7 +137,7 @@ public final class InstanceManager {
      *
      * @return an unmodifiable {@link Set} containing all the registered instances
      */
-    public @NotNull Set<@NotNull Instance> getInstances() {
+    public Set<Instance> getInstances() {
         return Collections.unmodifiableSet(instances);
     }
 
@@ -148,7 +147,7 @@ public final class InstanceManager {
      * @param uuid UUID of the instance
      * @return the instance with the given UUID, null if not found
      */
-    public @Nullable Instance getInstance(@NotNull UUID uuid) {
+    public @Nullable Instance getInstance(UUID uuid) {
         Optional<Instance> instance = getInstances()
                 .stream()
                 .filter(someInstance -> someInstance.getUuid().equals(uuid))
@@ -163,7 +162,7 @@ public final class InstanceManager {
      *
      * @param instance the {@link Instance} to register
      */
-    private void UNSAFE_registerInstance(@NotNull Instance instance) {
+    private void UNSAFE_registerInstance(Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
         var dispatcher = MinecraftServer.process().dispatcher();

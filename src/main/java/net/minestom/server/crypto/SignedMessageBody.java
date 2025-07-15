@@ -2,14 +2,13 @@ package net.minestom.server.crypto;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
 
 public final class SignedMessageBody {
 
-    public record Packed(@NotNull String content, @NotNull Instant timeStamp, long salt,
-                         LastSeenMessages.@NotNull Packed lastSeen) {
+    public record Packed(String content, Instant timeStamp, long salt,
+                         LastSeenMessages.Packed lastSeen) {
         public Packed {
             if (content.length() > MessageSignature.SIGNATURE_BYTE_LENGTH) {
                 throw new IllegalArgumentException("Message content too long");

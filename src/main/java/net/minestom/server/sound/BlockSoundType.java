@@ -1,6 +1,5 @@
 package net.minestom.server.sound;
 
-import org.jetbrains.annotations.NotNull;
 
 public interface BlockSoundType {
 
@@ -8,13 +7,13 @@ public interface BlockSoundType {
 
     float pitch();
 
-    @NotNull SoundEvent breakSound();
+    SoundEvent breakSound();
 
-    @NotNull SoundEvent hitSound();
+    SoundEvent hitSound();
 
-    @NotNull SoundEvent fallSound();
+    SoundEvent fallSound();
 
-    @NotNull SoundEvent placeSound();
+    SoundEvent placeSound();
 
-    @NotNull SoundEvent stepSound();
+    SoundEvent stepSound();
 }

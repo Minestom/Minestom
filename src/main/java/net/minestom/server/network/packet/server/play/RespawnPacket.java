@@ -5,14 +5,13 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record RespawnPacket(
-        int dimensionType, @NotNull String worldName,
-        long hashedSeed, @NotNull GameMode gameMode, @NotNull GameMode previousGameMode,
+        int dimensionType, String worldName,
+        long hashedSeed, GameMode gameMode, GameMode previousGameMode,
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
         int portalCooldown, byte copyData, int seaLevel
 ) implements ServerPacket.Play {

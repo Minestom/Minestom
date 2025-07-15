@@ -2,8 +2,7 @@ package net.minestom.server.registry;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,33 +19,33 @@ import java.util.List;
 public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKey<T>>
         permits RegistryTagImpl.Empty, RegistryTagImpl.Backed, RegistryTagImpl.Direct {
 
-    static <T> NetworkBuffer.@NotNull Type<RegistryTag<T>> networkType(@NotNull Registries.Selector<T> selector) {
+    static <T> NetworkBuffer.Type<RegistryTag<T>> networkType(Registries.Selector<T> selector) {
         return new RegistryNetworkTypes.RegistryTagImpl<>(selector);
     }
 
-    static <T> @NotNull Codec<RegistryTag<T>> codec(@NotNull Registries.Selector<T> selector) {
+    static <T> Codec<RegistryTag<T>> codec(Registries.Selector<T> selector) {
         return new RegistryCodecs.RegistryTagImpl<>(selector);
     }
 
-    static <T> @NotNull RegistryTag<T> empty() {
+    static <T> RegistryTag<T> empty() {
         //noinspection unchecked
         return (RegistryTag<T>) RegistryTagImpl.Empty.INSTANCE;
     }
 
     @SafeVarargs
-    static <T> @NotNull RegistryTag<T> direct(@NotNull RegistryKey<T>... keys) {
+    static <T> RegistryTag<T> direct(RegistryKey<T>... keys) {
         if (keys.length == 0) return empty();
         return new RegistryTagImpl.Direct<>(List.of(keys));
     }
 
-    static <T> @NotNull RegistryTag<T> direct(@NotNull Collection<RegistryKey<T>> values) {
+    static <T> RegistryTag<T> direct(Collection<RegistryKey<T>> values) {
         if (values.isEmpty()) return empty();
         return new RegistryTagImpl.Direct<>(List.copyOf(values));
     }
 
     @Nullable TagKey<T> key();
 
-    boolean contains(@NotNull RegistryKey<T> value);
+    boolean contains(RegistryKey<T> value);
 
     int size();
 

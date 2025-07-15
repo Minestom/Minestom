@@ -3,8 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Called when a player tries to pick an entity (middle-click).
@@ -16,7 +15,7 @@ public class PlayerPickEntityEvent implements PlayerInstanceEvent {
     private final Entity entityTarget;
     private final boolean includeData;
 
-    public PlayerPickEntityEvent(@NotNull Player player, @Nullable Entity entityTarget,
+    public PlayerPickEntityEvent(Player player, @Nullable Entity entityTarget,
                                  boolean includeData) {
         this.player = player;
 
@@ -43,7 +42,7 @@ public class PlayerPickEntityEvent implements PlayerInstanceEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

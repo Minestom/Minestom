@@ -8,8 +8,7 @@ import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
 import net.minestom.server.network.packet.server.configuration.UpdateEnabledFeaturesPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -34,7 +33,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     private boolean sendRegistryData;
     private Instance spawningInstance;
 
-    public AsyncPlayerConfigurationEvent(@NotNull Player player, boolean isFirstConfig) {
+    public AsyncPlayerConfigurationEvent(Player player, boolean isFirstConfig) {
         this.player = player;
         this.isFirstConfig = isFirstConfig;
 
@@ -47,7 +46,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
 
@@ -75,7 +74,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      * @see UpdateEnabledFeaturesPacket
      * @see net.minestom.server.FeatureFlag
      */
-    public void addFeatureFlag(@NotNull FeatureFlag feature) {
+    public void addFeatureFlag(FeatureFlag feature) {
         this.featureFlags.add(feature);
     }
 
@@ -89,7 +88,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      * @see UpdateEnabledFeaturesPacket
      * @see net.minestom.server.FeatureFlag
      */
-    public boolean removeFeatureFlag(@NotNull FeatureFlag feature) {
+    public boolean removeFeatureFlag(FeatureFlag feature) {
         return this.featureFlags.remove(feature); // Should this have sanity checking to see if the feature was actually contained in the list?
     }
 
@@ -101,7 +100,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      * @see UpdateEnabledFeaturesPacket
      * @see net.minestom.server.FeatureFlag
      */
-    public @NotNull Set<FeatureFlag> getFeatureFlags() {
+    public Set<FeatureFlag> getFeatureFlags() {
         return ObjectSets.unmodifiable(this.featureFlags);
     }
 

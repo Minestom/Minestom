@@ -2,7 +2,7 @@ package net.minestom.server.utils.callback;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.chunk.ChunkCallback;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Convenient class to execute callbacks which can be null.

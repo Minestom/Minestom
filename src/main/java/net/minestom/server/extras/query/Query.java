@@ -12,7 +12,6 @@ import net.minestom.server.extras.query.response.FullQueryResponse;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.time.TimeUnit;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -196,7 +195,7 @@ public class Query {
         }
     }
 
-    private static <T> void sendResponse(NetworkBuffer.Type<T> type, @NotNull T queryResponse, int sessionID, @NotNull SocketAddress sender) {
+    private static <T> void sendResponse(NetworkBuffer.Type<T> type, T queryResponse, int sessionID, SocketAddress sender) {
         final byte[] responseData = NetworkBuffer.makeArray(buffer -> {
             // header
             buffer.write(NetworkBuffer.BYTE, (byte) 0);

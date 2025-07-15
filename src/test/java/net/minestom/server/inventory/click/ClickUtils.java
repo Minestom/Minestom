@@ -9,8 +9,7 @@ import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.net.SocketAddress;
 import java.util.*;
@@ -18,23 +17,23 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class ClickUtils {
-    public static final @NotNull InventoryType TYPE = InventoryType.HOPPER;
+    public static final InventoryType TYPE = InventoryType.HOPPER;
 
     public static final int SIZE = TYPE.getSize(); // Default hopper size
 
-    public static @NotNull Inventory createInventory() {
+    public static Inventory createInventory() {
         return new Inventory(TYPE, "TestInventory");
     }
 
-    public static void assertProcessed(@NotNull ClickPreprocessor preprocessor, @Nullable Click info, @NotNull ClientClickWindowPacket packet) {
+    public static void assertProcessed(ClickPreprocessor preprocessor, @Nullable Click info, ClientClickWindowPacket packet) {
         assertEquals(info, preprocessor.processClick(packet, SIZE));
     }
 
-    public static void assertProcessed(@Nullable Click info, @NotNull ClientClickWindowPacket packet) {
+    public static void assertProcessed(@Nullable Click info, ClientClickWindowPacket packet) {
         assertProcessed(new ClickPreprocessor(), info, packet);
     }
 
-    public static @NotNull ClientClickWindowPacket clickPacket(@NotNull ClientClickWindowPacket.ClickType type, int windowId, int button, int slot) {
+    public static ClientClickWindowPacket clickPacket(ClientClickWindowPacket.ClickType type, int windowId, int button, int slot) {
         return new ClientClickWindowPacket((byte) windowId, 0, (short) slot, (byte) button, type, Map.of(), ItemStack.Hash.AIR);
     }
 }

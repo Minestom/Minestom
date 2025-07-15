@@ -3,8 +3,7 @@ package net.minestom.server.inventory.click;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -34,7 +33,7 @@ public final class ClickPreprocessor {
      * @param hasCursorItem if the client has an item in the cursor (for checking {@code Click.Middle})
      * @return if the click is creative only
      */
-    public boolean isCreativeClick(@NotNull Click click, boolean hasCursorItem) {
+    public boolean isCreativeClick(Click click, boolean hasCursorItem) {
         return switch (click) {
             case Click.Middle ignored -> !hasCursorItem; // Block clones (except the edge case)
             case Click.MiddleDrag ignored -> true; // Block clone drags
@@ -50,7 +49,7 @@ public final class ClickPreprocessor {
      * @return the processed click, or nothing if the click takes place over multiple packets and this is not the final
      *         one (e.g. a drag)
      */
-    public @Nullable Click processClick(@NotNull ClientClickWindowPacket packet, @Nullable Integer containerSize) {
+    public @Nullable Click processClick(ClientClickWindowPacket packet, @Nullable Integer containerSize) {
         final int slot;
         if (containerSize == null) {
             slot = PlayerInventoryUtils.convertWindow0SlotToMinestomSlot(packet.slot());
@@ -73,7 +72,7 @@ public final class ClickPreprocessor {
     /**
      * Processes a click in an invalid slot (i.e. the slot is irrelevant, like in a drop)
      */
-    private @Nullable Click processInvalidSlot(@NotNull ClientClickWindowPacket.ClickType type, byte button) {
+    private @Nullable Click processInvalidSlot(ClientClickWindowPacket.ClickType type, byte button) {
         return switch (type) {
             case PICKUP, THROW -> {
                 if (button == 0) yield new Click.LeftDropCursor();
@@ -114,7 +113,7 @@ public final class ClickPreprocessor {
     /**
      * Processes a click in a valid slot, possibly returning a result.
      */
-    private @Nullable Click process(@NotNull ClientClickWindowPacket.ClickType type, int slot, byte button) {
+    private @Nullable Click process(ClientClickWindowPacket.ClickType type, int slot, byte button) {
         return switch (type) {
             case PICKUP -> switch (button) {
                 case 0 -> new Click.Left(slot);

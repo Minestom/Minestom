@@ -12,8 +12,7 @@ import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.dialog.Dialog;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public final class ComponentCodecs {
 
     public static final Codec<TextColor> TEXT_COLOR = new Codec<>() {
         @Override
-        public @NotNull <D> Result<TextColor> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public <D> Result<TextColor> decode(Transcoder<D> coder, D value) {
             final Result<String> colorResult = coder.getString(value);
             if (!(colorResult instanceof Result.Ok(String colorString)))
                 return colorResult.cast();
@@ -39,7 +38,7 @@ public final class ComponentCodecs {
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable TextColor value) {
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable TextColor value) {
             if (value == null) return new Result.Error<>("null");
             if (value instanceof NamedTextColor namedColor)
                 return new Result.Ok<>(coder.createString(namedColor.toString()));
@@ -49,7 +48,7 @@ public final class ComponentCodecs {
 
     public static final Codec<ShadowColor> SHADOW_COLOR = Codec.INT.transform(ShadowColor::shadowColor, ShadowColor::value);
 
-    private static @Nullable Boolean stateToBool(@NotNull TextDecoration.State state) {
+    private static @Nullable Boolean stateToBool(TextDecoration.State state) {
         return switch (state) {
             case NOT_SET -> null;
             case FALSE -> false;
@@ -61,7 +60,7 @@ public final class ComponentCodecs {
         private static final Codec<ClickEvent.Action> ACTION_CODEC = Codec.Enum(ClickEvent.Action.class);
 
         @Override
-        public @NotNull <D> Result<ClickEvent> decodeFromMap(@NotNull Transcoder<D> coder, @NotNull MapLike<D> map) {
+        public <D> Result<ClickEvent> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
             final Result<ClickEvent.Action> actionResult = map.getValue("action").map(value -> ACTION_CODEC.decode(coder, value));
             if (!(actionResult instanceof Result.Ok(var action)))
                 return actionResult.cast();
@@ -102,7 +101,7 @@ public final class ComponentCodecs {
         }
 
         @Override
-        public @NotNull <D> Result<D> encodeToMap(@NotNull Transcoder<D> coder, @NotNull ClickEvent value, @NotNull MapBuilder<D> map) {
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, ClickEvent value, MapBuilder<D> map) {
             final Result<D> actionResult = ACTION_CODEC.encode(coder, value.action());
             if (!(actionResult instanceof Result.Ok(D actionValue)))
                 return actionResult.cast();
@@ -119,7 +118,7 @@ public final class ComponentCodecs {
             }, value.payload(), map);
         }
 
-        private static <D> @NotNull Result<D> encodePayload(@NotNull Transcoder<D> coder, @NotNull String name, @NotNull ClickEvent.Payload payload, @NotNull MapBuilder<D> map) {
+        private static <D> Result<D> encodePayload(Transcoder<D> coder, String name, ClickEvent.Payload payload, MapBuilder<D> map) {
             return switch (payload) {
                 case ClickEvent.Payload.Text string -> {
                     map.put(name, coder.createString(string.value()));
@@ -167,7 +166,7 @@ public final class ComponentCodecs {
             "name", COMPONENT_FORWARD, hoverEvent -> hoverEvent.value().name(),
             HoverEvent::showEntity);
 
-    private static StructCodec<? extends HoverEvent<?>> hoverEventCodec(@NotNull HoverEvent.Action<?> action) {
+    private static StructCodec<? extends HoverEvent<?>> hoverEventCodec(HoverEvent.Action<?> action) {
         if (action == HoverEvent.Action.SHOW_TEXT) return SHOW_TEXT;
         if (action == HoverEvent.Action.SHOW_ITEM) return SHOW_ITEM;
         if (action == HoverEvent.Action.SHOW_ENTITY) return SHOW_ENTITY;
@@ -225,12 +224,12 @@ public final class ComponentCodecs {
             Component::keybind);
     private static final StructCodec<NBTComponent<?, ?>> NBT_CONTENT = new StructCodec<>() {
         @Override
-        public @NotNull <D> Result<NBTComponent<?, ?>> decodeFromMap(@NotNull Transcoder<D> coder, @NotNull MapLike<D> map) {
+        public <D> Result<NBTComponent<?, ?>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
             return new Result.Error<>("NBTComponent not yet supported");
         }
 
         @Override
-        public @NotNull <D> Result<D> encodeToMap(@NotNull Transcoder<D> coder, @NotNull NBTComponent<?, ?> value, @NotNull MapBuilder<D> map) {
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, NBTComponent<?, ?> value, MapBuilder<D> map) {
             return new Result.Error<>("NBTComponent not yet supported");
         }
     };
@@ -242,7 +241,7 @@ public final class ComponentCodecs {
                 children -> children);
         return new Codec<>() {
             @Override
-            public @NotNull <D> Result<Component> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            public <D> Result<Component> decode(Transcoder<D> coder, D value) {
                 // A single string is a valid serialized form of a text component, try it.
                 final Result<String> stringResult = coder.getString(value);
                 if (stringResult instanceof Result.Ok(String string))
@@ -295,7 +294,7 @@ public final class ComponentCodecs {
             }
 
             @Override
-            public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Component value) {
+            public <D> Result<D> encode(Transcoder<D> coder, @Nullable Component value) {
                 if (value == null) return new Result.Error<>("null");
 
                 // As a special case we want to encode text components with no children or styling as strings directly.

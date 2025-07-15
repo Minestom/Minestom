@@ -7,22 +7,21 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 
 record DataComponentImpl<T>(
         int id,
-        @NotNull Key key,
-        @Nullable NetworkBuffer.Type<T> network,
+        Key key,
+        NetworkBuffer.@Nullable Type<T> network,
         @Nullable Codec<T> codec
 ) implements DataComponent<T> {
     static final Map<String, DataComponent<?>> NAMESPACES = new HashMap<>(32);
     static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 
-    static <T> DataComponent<T> register(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable Codec<T> nbt) {
+    static <T> DataComponent<T> register(String name, NetworkBuffer.@Nullable Type<T> network, @Nullable Codec<T> nbt) {
         DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), network, nbt);
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
@@ -40,25 +39,25 @@ record DataComponentImpl<T>(
     }
 
     @Override
-    public @NotNull <D> Result<T> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+    public <D> Result<T> decode(Transcoder<D> coder, D value) {
         Check.notNull(codec, "{0} cannot be deserialized from Codec", this);
         return this.codec.decode(coder, value);
     }
 
     @Override
-    public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
+    public <D> Result<D> encode(Transcoder<D> coder, @Nullable T value) {
         Check.notNull(codec, "{0} cannot be deserialized from Codec", this);
         return this.codec.encode(coder, value);
     }
 
     @Override
-    public @NotNull T read(@NotNull NetworkBuffer reader) {
+    public T read(NetworkBuffer reader) {
         Check.notNull(network, "{0} cannot be deserialized from network", this);
         return network.read(reader);
     }
 
     @Override
-    public void write(@NotNull NetworkBuffer writer, @NotNull T value) {
+    public void write(NetworkBuffer writer, T value) {
         Check.notNull(network, "{0} cannot be serialized to network", this);
         network.write(writer, value);
     }

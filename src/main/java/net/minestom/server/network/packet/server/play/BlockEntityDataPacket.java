@@ -4,16 +4,15 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
+public record BlockEntityDataPacket(Point blockPosition, int action,
                                     @Nullable CompoundBinaryTag data) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<BlockEntityDataPacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, BlockEntityDataPacket value) {
+        public void write(NetworkBuffer buffer, BlockEntityDataPacket value) {
             buffer.write(BLOCK_POSITION, value.blockPosition);
             buffer.write(VAR_INT, value.action);
             if (value.data != null) {
@@ -25,7 +24,7 @@ public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
         }
 
         @Override
-        public BlockEntityDataPacket read(@NotNull NetworkBuffer buffer) {
+        public BlockEntityDataPacket read(NetworkBuffer buffer) {
             return new BlockEntityDataPacket(buffer.read(BLOCK_POSITION), buffer.read(VAR_INT), buffer.read(NBT_COMPOUND));
         }
     };

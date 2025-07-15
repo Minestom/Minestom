@@ -8,8 +8,7 @@ import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
@@ -18,7 +17,7 @@ public class EntityMeta {
     private final WeakReference<Entity> entityRef;
     protected final MetadataHolder metadata;
 
-    public EntityMeta(@Nullable Entity entity, @NotNull MetadataHolder metadata) {
+    public EntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
         this.entityRef = new WeakReference<>(entity);
         this.metadata = metadata;
     }
@@ -144,12 +143,11 @@ public class EntityMeta {
         metadata.set(MetadataDef.HAS_NO_GRAVITY, value);
     }
 
-    @NotNull
     public EntityPose getPose() {
         return metadata.get(MetadataDef.POSE);
     }
 
-    public void setPose(@NotNull EntityPose value) {
+    public void setPose(EntityPose value) {
         metadata.set(MetadataDef.POSE, value);
     }
 
@@ -176,7 +174,7 @@ public class EntityMeta {
      * @see Entity#set(DataComponent, Object)
      */
     @ApiStatus.Internal
-    public static <T> @Nullable T getComponent(@NotNull EntityMeta meta, @NotNull DataComponent<T> component) {
+    public static <T> @Nullable T getComponent(EntityMeta meta, DataComponent<T> component) {
         return meta.get(component);
     }
 
@@ -188,18 +186,18 @@ public class EntityMeta {
      * @see Entity#set(DataComponent, Object)
      */
     @ApiStatus.Internal
-    public static <T> void setComponent(@NotNull EntityMeta meta, @NotNull DataComponent<T> component, @NotNull T value) {
+    public static <T> void setComponent(EntityMeta meta, DataComponent<T> component, T value) {
         meta.set(component, value);
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.CUSTOM_NAME)
             return (T) metadata.get(MetadataDef.CUSTOM_NAME);
         return null;
     }
 
-    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+    protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.CUSTOM_NAME)
             metadata.set(MetadataDef.CUSTOM_NAME, (Component) value);
     }

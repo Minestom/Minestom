@@ -11,7 +11,6 @@ import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -222,7 +221,7 @@ public class AnvilLoaderIntegrationTest {
         env.destroyInstance(instance);
     }
 
-    private static Path extractWorld(@NotNull String resourceName) throws IOException {
+    private static Path extractWorld(String resourceName) throws IOException {
         var worldFolder = Files.createTempDirectory("minestom-test-world-" + resourceName);
 
         // https://stackoverflow.com/a/60621544

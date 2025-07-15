@@ -5,8 +5,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Argument which will take a quoted string.
@@ -25,9 +24,8 @@ public class ArgumentString extends Argument<String> {
         super(id, true);
     }
 
-    @NotNull
     @Override
-    public String parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public String parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         return staticParse(input);
     }
 
@@ -45,7 +43,7 @@ public class ArgumentString extends Argument<String> {
      * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @Deprecated
-    public static String staticParse(@NotNull String input) throws ArgumentSyntaxException {
+    public static String staticParse(String input) throws ArgumentSyntaxException {
         // Return if not quoted
         if (!input.contains(String.valueOf(DOUBLE_QUOTE)) &&
                 !input.contains(String.valueOf(QUOTE)) &&

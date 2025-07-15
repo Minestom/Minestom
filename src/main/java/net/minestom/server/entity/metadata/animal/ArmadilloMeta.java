@@ -4,19 +4,17 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
 
 public class ArmadilloMeta extends AnimalMeta {
-    public ArmadilloMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public ArmadilloMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    @NotNull
     public State getState() {
         return metadata.get(MetadataDef.Armadillo.STATE);
     }
 
-    public void setState(@NotNull State value) {
+    public void setState(State value) {
         metadata.set(MetadataDef.Armadillo.STATE, value);
     }
 

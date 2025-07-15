@@ -10,8 +10,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class SidebarCommand extends Command {
     private final Sidebar sidebar = new Sidebar(Component.text("DEMO").decorate(TextDecoration.BOLD));
@@ -66,7 +65,7 @@ public class SidebarCommand extends Command {
         }
     }
 
-    private void addLine(@NotNull String content, @Nullable Sidebar.NumberFormat numberFormat) {
+    private void addLine(String content, Sidebar.@Nullable NumberFormat numberFormat) {
         if (currentLine < 16) {
             sidebar.createLine(new Sidebar.ScoreboardLine(String.valueOf(currentLine), Component.text(content).color(NamedTextColor.WHITE), currentLine, numberFormat));
             currentLine++;
@@ -80,7 +79,7 @@ public class SidebarCommand extends Command {
         }
     }
 
-    private void setTitle(@NotNull String title) {
+    private void setTitle(String title) {
         sidebar.setTitle(Component.text(title).decorate(TextDecoration.BOLD));
     }
 
@@ -89,11 +88,11 @@ public class SidebarCommand extends Command {
         else sidebar.addViewer(player);
     }
 
-    private void updateLineContent(@NotNull String content, @NotNull String lineId) {
+    private void updateLineContent(String content, String lineId) {
         sidebar.updateLineContent(lineId, Component.text(content).color(NamedTextColor.WHITE));
     }
 
-    private void updateLineScore(int score, @NotNull String lineId) {
+    private void updateLineScore(int score, String lineId) {
         sidebar.updateLineScore(lineId, score);
     }
 }

@@ -2,8 +2,7 @@ package net.minestom.server.command.builder;
 
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ExecutableCommand;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a {@link Command} ready to be executed (already parsed).
@@ -24,12 +23,12 @@ public class ParsedCommand {
      * @param source the command source
      * @return the command data, null if none
      */
-    public @Nullable CommandData execute(@NotNull CommandSender source) {
+    public @Nullable CommandData execute(CommandSender source) {
         final ExecutableCommand.Result result = executableCommand.execute(source);
         return result.commandData();
     }
 
-    public static @NotNull ParsedCommand fromExecutable(ExecutableCommand executableCommand) {
+    public static ParsedCommand fromExecutable(ExecutableCommand executableCommand) {
         return new ParsedCommand(executableCommand);
     }
 }

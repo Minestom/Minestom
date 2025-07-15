@@ -4,16 +4,15 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientClickWindowPacket(int windowId, int stateId,
-                                      short slot, byte button, @NotNull ClickType clickType,
-                                      @NotNull Map<Short, ItemStack.Hash> changedSlots,
-                                      @NotNull ItemStack.Hash clickedItem) implements ClientPacket {
+                                      short slot, byte button, ClickType clickType,
+                                      Map<Short, ItemStack.Hash> changedSlots,
+                                      ItemStack.Hash clickedItem) implements ClientPacket {
     public static final int MAX_CHANGED_SLOTS = 128;
 
     public static final NetworkBuffer.Type<ClientClickWindowPacket> SERIALIZER = NetworkBufferTemplate.template(

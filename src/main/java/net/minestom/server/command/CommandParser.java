@@ -4,14 +4,13 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.suggestion.Suggestion;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 @ApiStatus.Internal
 public interface CommandParser {
-    static @NotNull CommandParser parser() {
+    static CommandParser parser() {
         return CommandParserImpl.PARSER;
     }
 
@@ -23,10 +22,10 @@ public interface CommandParser {
      * @return the parsed command which can be executed and cached
      */
     @Contract("_, _ -> new")
-    @NotNull Result parse(@NotNull CommandSender sender, @NotNull Graph graph, @NotNull String input);
+    Result parse(CommandSender sender, Graph graph, String input);
 
     sealed interface Result {
-        @NotNull ExecutableCommand executable();
+        ExecutableCommand executable();
 
         @ApiStatus.Internal
         @Nullable Suggestion suggestion(CommandSender sender);

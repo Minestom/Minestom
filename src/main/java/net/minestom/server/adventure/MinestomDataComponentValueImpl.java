@@ -1,7 +1,7 @@
 package net.minestom.server.adventure;
 
 import net.kyori.adventure.text.event.DataComponentValue;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 sealed class MinestomDataComponentValueImpl implements MinestomDataComponentValue permits MinestomDataComponentValueImpl.Removed {
     private final Object value;

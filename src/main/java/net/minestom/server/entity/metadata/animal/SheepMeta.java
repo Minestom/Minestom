@@ -6,13 +6,12 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class SheepMeta extends AnimalMeta {
     private static final DyeColor[] DYE_VALUES = DyeColor.values();
 
-    public SheepMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public SheepMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -20,7 +19,7 @@ public class SheepMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#SHEEP_COLOR} instead.
      */
     @Deprecated
-    public @NotNull DyeColor getColor() {
+    public DyeColor getColor() {
         return DYE_VALUES[metadata.get(MetadataDef.Sheep.COLOR_ID)];
     }
 
@@ -28,7 +27,7 @@ public class SheepMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#SHEEP_COLOR} instead.
      */
     @Deprecated
-    public void setColor(@NotNull DyeColor color) {
+    public void setColor(DyeColor color) {
         metadata.set(MetadataDef.Sheep.COLOR_ID, (byte) color.ordinal());
     }
 
@@ -42,14 +41,14 @@ public class SheepMeta extends AnimalMeta {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.SHEEP_COLOR)
             return (T) getColor();
         return super.get(component);
     }
 
     @Override
-    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+    protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.SHEEP_COLOR)
             setColor((DyeColor) value);
         else super.set(component, value);

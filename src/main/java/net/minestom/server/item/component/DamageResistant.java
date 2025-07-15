@@ -7,9 +7,8 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.TagKey;
-import org.jetbrains.annotations.NotNull;
 
-public record DamageResistant(@NotNull TagKey<DamageType> types) {
+public record DamageResistant(TagKey<DamageType> types) {
     public static final NetworkBuffer.Type<DamageResistant> NETWORK_TYPE = NetworkBufferTemplate.template(
             TagKey.networkType(Registries::damageType), DamageResistant::types,
             DamageResistant::new);

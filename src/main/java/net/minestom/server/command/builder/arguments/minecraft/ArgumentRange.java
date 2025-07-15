@@ -4,7 +4,6 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.Range;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -23,7 +22,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
     private final Function<String, N> parser;
     private final BiFunction<N, N, T> rangeConstructor;
 
-    public ArgumentRange(@NotNull String id, N min, N max, Function<String, N> parser, BiFunction<N, N, T> rangeConstructor) {
+    public ArgumentRange(String id, N min, N max, Function<String, N> parser, BiFunction<N, N, T> rangeConstructor) {
         super(id);
         this.min = min;
         this.max = max;
@@ -31,9 +30,8 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
         this.rangeConstructor = rangeConstructor;
     }
 
-    @NotNull
     @Override
-    public T parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public T parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
             final String[] split = input.split(Pattern.quote(".."), -1);
 

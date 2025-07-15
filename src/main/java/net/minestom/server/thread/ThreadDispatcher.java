@@ -5,7 +5,6 @@ import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
@@ -41,7 +40,7 @@ public final class ThreadDispatcher<P> {
     private final MessagePassingQueue<DispatchUpdate<P>> updates = new MpscUnboundedArrayQueue<>(1024);
 
     private ThreadDispatcher(ThreadProvider<P> provider, int threadCount,
-                             @NotNull IntFunction<? extends TickThread> threadGenerator) {
+                             IntFunction<? extends TickThread> threadGenerator) {
         this.provider = provider;
         TickThread[] threads = new TickThread[threadCount];
         Arrays.setAll(threads, threadGenerator);
@@ -58,7 +57,7 @@ public final class ThreadDispatcher<P> {
      * @param <P> the dispatcher partition type
      */
     @Contract(pure = true)
-    public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider, int threadCount) {
+    public static <P> ThreadDispatcher<P> of(ThreadProvider<P> provider, int threadCount) {
         return new ThreadDispatcher<>(provider, threadCount, TickThread::new);
     }
 
@@ -74,8 +73,8 @@ public final class ThreadDispatcher<P> {
      * @param <P> the dispatcher partition type
      */
     @Contract(pure = true)
-    public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider,
-                                                      @NotNull IntFunction<String> nameGenerator, int threadCount) {
+    public static <P> ThreadDispatcher<P> of(ThreadProvider<P> provider,
+                                                      IntFunction<String> nameGenerator, int threadCount) {
         return new ThreadDispatcher<>(provider, threadCount, index -> new TickThread(nameGenerator.apply(index)));
     }
 
@@ -87,7 +86,7 @@ public final class ThreadDispatcher<P> {
      * @param <P> the dispatcher partition type
      */
     @Contract(pure = true)
-    public static <P> @NotNull ThreadDispatcher<P> singleThread() {
+    public static <P> ThreadDispatcher<P> singleThread() {
         return of(ThreadProvider.counter(), 1);
     }
 
@@ -100,7 +99,7 @@ public final class ThreadDispatcher<P> {
      */
     @Unmodifiable
     @ApiStatus.Internal
-    public @NotNull List<@NotNull TickThread> threads() {
+    public List<TickThread> threads() {
         return threads;
     }
 
@@ -183,7 +182,7 @@ public final class ThreadDispatcher<P> {
      *
      * @param partition the partition to register
      */
-    public void createPartition(@NotNull P partition) {
+    public void createPartition(P partition) {
         signalUpdate(new DispatchUpdate.PartitionLoad<>(partition));
     }
 
@@ -192,7 +191,7 @@ public final class ThreadDispatcher<P> {
      *
      * @param partition the partition to delete
      */
-    public void deletePartition(@NotNull P partition) {
+    public void deletePartition(P partition) {
         signalUpdate(new DispatchUpdate.PartitionUnload<>(partition));
     }
 
@@ -202,7 +201,7 @@ public final class ThreadDispatcher<P> {
      * @param tickable the Tickable to update
      * @param partition the partition the Tickable is part of
      */
-    public void updateElement(@NotNull Tickable tickable, @NotNull P partition) {
+    public void updateElement(Tickable tickable, P partition) {
         signalUpdate(new DispatchUpdate.ElementUpdate<>(tickable, partition));
     }
 
@@ -211,7 +210,7 @@ public final class ThreadDispatcher<P> {
      *
      * @param tickable the Tickable to remove
      */
-    public void removeElement(@NotNull Tickable tickable) {
+    public void removeElement(Tickable tickable) {
         signalUpdate(new DispatchUpdate.ElementRemove<>(tickable));
     }
 
@@ -253,7 +252,7 @@ public final class ThreadDispatcher<P> {
         return threads.get(index);
     }
 
-    private void signalUpdate(@NotNull DispatchUpdate<P> update) {
+    private void signalUpdate(DispatchUpdate<P> update) {
         this.updates.relaxedOffer(update);
     }
 
@@ -326,7 +325,7 @@ public final class ThreadDispatcher<P> {
          * @return the TickThread used by this partition
          */
         @ApiStatus.Internal
-        public @NotNull TickThread thread() {
+        public TickThread thread() {
             return thread;
         }
 
@@ -335,7 +334,7 @@ public final class ThreadDispatcher<P> {
          *
          * @return the tickables assigned to this partition
          */
-        public @NotNull List<Tickable> elements() {
+        public List<Tickable> elements() {
             return elements;
         }
     }
@@ -344,16 +343,16 @@ public final class ThreadDispatcher<P> {
     sealed interface DispatchUpdate<P> permits
             DispatchUpdate.PartitionLoad, DispatchUpdate.PartitionUnload,
             DispatchUpdate.ElementUpdate, DispatchUpdate.ElementRemove {
-        record PartitionLoad<P>(@NotNull P partition) implements DispatchUpdate<P> {
+        record PartitionLoad<P>(P partition) implements DispatchUpdate<P> {
         }
 
-        record PartitionUnload<P>(@NotNull P partition) implements DispatchUpdate<P> {
+        record PartitionUnload<P>(P partition) implements DispatchUpdate<P> {
         }
 
-        record ElementUpdate<P>(@NotNull Tickable tickable, P partition) implements DispatchUpdate<P> {
+        record ElementUpdate<P>(Tickable tickable, P partition) implements DispatchUpdate<P> {
         }
 
-        record ElementRemove<P>(@NotNull Tickable tickable) implements DispatchUpdate<P> {
+        record ElementRemove<P>(Tickable tickable) implements DispatchUpdate<P> {
         }
     }
 }

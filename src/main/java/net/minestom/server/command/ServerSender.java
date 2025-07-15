@@ -4,7 +4,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.tag.TagHandler;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Sender used in {@link CommandManager#executeServerCommand(String)}.
@@ -19,12 +18,12 @@ public class ServerSender implements CommandSender {
 
 
     @Override
-    public @NotNull TagHandler tagHandler() {
+    public TagHandler tagHandler() {
         return tagHandler;
     }
 
     @Override
-    public @NotNull Identity identity() {
+    public Identity identity() {
         return Identity.nil();
     }
 }

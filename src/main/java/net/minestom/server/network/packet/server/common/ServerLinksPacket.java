@@ -5,12 +5,11 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public record ServerLinksPacket(@NotNull List<Entry> entries) implements ServerPacket.Configuration, ServerPacket.Play {
+public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Configuration, ServerPacket.Play {
     private static final int MAX_ENTRIES = 100;
 
     public static final NetworkBuffer.Type<ServerLinksPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -21,14 +20,14 @@ public record ServerLinksPacket(@NotNull List<Entry> entries) implements ServerP
         entries = List.copyOf(entries);
     }
 
-    public ServerLinksPacket(@NotNull Entry... entries) {
+    public ServerLinksPacket(Entry... entries) {
         this(List.of(entries));
     }
 
-    public record Entry(@Nullable KnownLinkType knownType, @Nullable Component customType, @NotNull String link) {
+    public record Entry(@Nullable KnownLinkType knownType, @Nullable Component customType, String link) {
         public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, Entry value) {
+            public void write(NetworkBuffer buffer, Entry value) {
                 buffer.write(NetworkBuffer.BOOLEAN, value.knownType != null);
                 if (value.knownType != null) {
                     buffer.write(KnownLinkType.NETWORK_TYPE, value.knownType);
@@ -40,7 +39,7 @@ public record ServerLinksPacket(@NotNull List<Entry> entries) implements ServerP
             }
 
             @Override
-            public Entry read(@NotNull NetworkBuffer buffer) {
+            public Entry read(NetworkBuffer buffer) {
                 boolean known = buffer.read(NetworkBuffer.BOOLEAN);
                 if (known) {
                     return new Entry(buffer.read(KnownLinkType.NETWORK_TYPE), buffer.read(NetworkBuffer.STRING));
@@ -55,11 +54,11 @@ public record ServerLinksPacket(@NotNull List<Entry> entries) implements ServerP
             Check.argCondition(knownType != null && customType != null, "Only one of knownType and customType may be present");
         }
 
-        public Entry(@NotNull KnownLinkType type, @NotNull String link) {
+        public Entry(KnownLinkType type, String link) {
             this(type, null, link);
         }
 
-        public Entry(@NotNull Component type, @NotNull String link) {
+        public Entry(Component type, String link) {
             this(null, type, link);
         }
     }

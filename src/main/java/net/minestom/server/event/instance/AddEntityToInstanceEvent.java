@@ -5,7 +5,6 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.Instance;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called by an Instance when an entity is added to it.
@@ -18,13 +17,13 @@ public class AddEntityToInstanceEvent implements InstanceEvent, EntityEvent, Can
 
     private boolean cancelled;
 
-    public AddEntityToInstanceEvent(@NotNull Instance instance, @NotNull Entity entity) {
+    public AddEntityToInstanceEvent(Instance instance, Entity entity) {
         this.instance = instance;
         this.entity = entity;
     }
 
     @Override
-    public @NotNull Instance getInstance() {
+    public Instance getInstance() {
         return instance;
     }
 
@@ -33,7 +32,6 @@ public class AddEntityToInstanceEvent implements InstanceEvent, EntityEvent, Can
      *
      * @return the entity being added
      */
-    @NotNull
     public Entity getEntity() {
         return entity;
     }

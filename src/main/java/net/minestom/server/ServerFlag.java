@@ -1,8 +1,7 @@
 package net.minestom.server;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Contains server settings/flags to be set with system properties.
@@ -54,14 +53,14 @@ public final class ServerFlag {
     public static final boolean SERIALIZE_EMPTY_COMPOUND = booleanProperty("minestom.serialization.serialize-empty-nbt-compound", false);
 
     // Online Mode
-    public static final @NotNull String AUTH_URL = stringProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined");
+    public static final String AUTH_URL = stringProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined");
     public static final boolean AUTH_PREVENT_PROXY_CONNECTIONS = booleanProperty("minestom.auth.prevent-proxy-connections", false);
 
     // World
     public static final int WORLD_BORDER_SIZE = intProperty("minestom.world-border-size", 29999984);
 
     // Maps
-    public static final @NotNull String MAP_RGB_MAPPING = stringProperty("minestom.map.rgbmapping", "lazy");
+    public static final String MAP_RGB_MAPPING = stringProperty("minestom.map.rgbmapping", "lazy");
     public static final int MAP_RGB_REDUCTION = intProperty("minestom.map.rgbreduction", -1); // Only used if rgb mapping is "approximate"
 
     // Entities
@@ -76,11 +75,11 @@ public final class ServerFlag {
 
     private ServerFlag() {}
 
-    private static boolean booleanProperty(@NotNull String name) {
+    private static boolean booleanProperty(String name) {
         return Boolean.getBoolean(name);
     }
 
-    private static boolean booleanProperty(@NotNull String name, boolean defaultValue) {
+    private static boolean booleanProperty(String name, boolean defaultValue) {
         boolean result = defaultValue;
         try {
             final String value = System.getProperty(name);
@@ -91,15 +90,15 @@ public final class ServerFlag {
     }
 
     @Contract("_, null -> null; _, !null -> !null")
-    private static String stringProperty(@NotNull String name, @Nullable String defaultValue) {
+    private static String stringProperty(String name, @Nullable String defaultValue) {
         return System.getProperty(name, defaultValue);
     }
 
-    private static String stringProperty(@NotNull String name) {
+    private static String stringProperty(String name) {
         return System.getProperty(name);
     }
 
-    private static int intProperty(@NotNull String name, int defaultValue, int minValue, int maxValue) {
+    private static int intProperty(String name, int defaultValue, int minValue, int maxValue) {
         int value = Integer.getInteger(name, defaultValue);
         if (value < minValue || value > maxValue) {
             throw new IllegalArgumentException(String.format(
@@ -114,11 +113,11 @@ public final class ServerFlag {
         return intProperty(name, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
-    private static long longProperty(@NotNull String name, long defaultValue) {
+    private static long longProperty(String name, long defaultValue) {
         return Long.getLong(name, defaultValue);
     }
 
-    private static float floatProperty(@NotNull String name, float defaultValue) {
+    private static float floatProperty(String name, float defaultValue) {
         float result = defaultValue;
         try {
             final String value = System.getProperty(name);

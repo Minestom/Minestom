@@ -9,17 +9,16 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
     Codec<CatVariant> REGISTRY_CODEC = StructCodec.struct(
             "asset_id", Codec.KEY, CatVariant::assetId,
             CatVariantImpl::new);
 
-    @NotNull NetworkBuffer.Type<RegistryKey<CatVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::catVariant);
-    @NotNull Codec<RegistryKey<CatVariant>> NBT_TYPE = RegistryKey.codec(Registries::catVariant);
+    NetworkBuffer.Type<RegistryKey<CatVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::catVariant);
+    Codec<RegistryKey<CatVariant>> NBT_TYPE = RegistryKey.codec(Registries::catVariant);
 
-    static @NotNull CatVariant create(@NotNull Key assetId) {
+    static CatVariant create(Key assetId) {
         return new CatVariantImpl(assetId);
     }
 
@@ -33,6 +32,6 @@ public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
         return DynamicRegistry.create(Key.key("minecraft:cat_variant"), REGISTRY_CODEC, RegistryData.Resource.CAT_VARIANTS);
     }
 
-    @NotNull Key assetId();
+    Key assetId();
 
 }

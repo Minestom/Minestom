@@ -1,13 +1,12 @@
 package net.minestom.server.utils;
 
-import org.jetbrains.annotations.NotNull;
 
 public class StringUtils {
 
     public static final String SPACE = " ";
     public static final char SPACE_CHAR = ' ';
 
-    public static int countMatches(@NotNull final CharSequence str, final char ch) {
+    public static int countMatches(final CharSequence str, final char ch) {
         if (str.length() == 0) {
             return 0;
         }

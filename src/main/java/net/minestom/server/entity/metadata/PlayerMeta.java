@@ -5,11 +5,10 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PlayerMeta extends LivingEntityMeta {
-    public PlayerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public PlayerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -101,7 +100,6 @@ public class PlayerMeta extends LivingEntityMeta {
         metadata.set(MetadataDef.Player.MAIN_HAND, value ? (byte) 1 : (byte) 0);
     }
 
-    @NotNull
     public BinaryTag getLeftShoulderEntityData() {
         return metadata.get(MetadataDef.Player.LEFT_SHOULDER_ENTITY_DATA);
     }
@@ -112,7 +110,6 @@ public class PlayerMeta extends LivingEntityMeta {
         metadata.set(MetadataDef.Player.LEFT_SHOULDER_ENTITY_DATA, value);
     }
 
-    @NotNull
     public BinaryTag getRightShoulderEntityData() {
         return metadata.get(MetadataDef.Player.RIGHT_SHOULDER_ENTITY_DATA);
     }

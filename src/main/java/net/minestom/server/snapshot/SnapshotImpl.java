@@ -17,8 +17,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
@@ -34,7 +33,7 @@ public final class SnapshotImpl {
     public record Server(Collection<InstanceSnapshot> instances,
                          Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs) implements ServerSnapshot {
         @Override
-        public @NotNull Collection<EntitySnapshot> entities() {
+        public Collection<EntitySnapshot> entities() {
             return MappedCollection.plainReferences(entityRefs.values());
         }
 
@@ -57,22 +56,22 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public @NotNull Collection<@NotNull ChunkSnapshot> chunks() {
+        public Collection<ChunkSnapshot> chunks() {
             return MappedCollection.plainReferences(chunksMap.values());
         }
 
         @Override
-        public @NotNull Collection<EntitySnapshot> entities() {
+        public Collection<EntitySnapshot> entities() {
             return new IntMappedArray<>(entitiesIds, id -> server().entity(id));
         }
 
         @Override
-        public @NotNull ServerSnapshot server() {
+        public ServerSnapshot server() {
             return serverRef.getPlain();
         }
 
         @Override
-        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(Tag<T> tag) {
             return tagReadable.getTag(tag);
         }
     }
@@ -84,7 +83,7 @@ public final class SnapshotImpl {
                         AtomicReference<InstanceSnapshot> instanceRef,
                         TagReadable tagReadable) implements ChunkSnapshot {
         @Override
-        public @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        public @UnknownNullability Block getBlock(int x, int y, int z, Condition condition) {
             // Verify if the block object is present
             if (condition != Condition.TYPE) {
                 final Block entry = !blockEntries.isEmpty() ?
@@ -101,7 +100,7 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public @NotNull RegistryKey<Biome> getBiome(int x, int y, int z) {
+        public RegistryKey<Biome> getBiome(int x, int y, int z) {
             final Section section = sections[globalToChunk(y) - minSection];
             final int id = section.biomePalette()
                     .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
@@ -111,17 +110,17 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(Tag<T> tag) {
             return tagReadable.getTag(tag);
         }
 
         @Override
-        public @NotNull InstanceSnapshot instance() {
+        public InstanceSnapshot instance() {
             return instanceRef.getPlain();
         }
 
         @Override
-        public @NotNull Collection<@NotNull EntitySnapshot> entities() {
+        public Collection<EntitySnapshot> entities() {
             return new IntMappedArray<>(entitiesIds, id -> instance().server().entity(id));
         }
     }
@@ -131,27 +130,27 @@ public final class SnapshotImpl {
                          int[] viewersId, int[] passengersId, int vehicleId,
                          TagReadable tagReadable) implements EntitySnapshot {
         @Override
-        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(Tag<T> tag) {
             return tagReadable.getTag(tag);
         }
 
         @Override
-        public @NotNull InstanceSnapshot instance() {
+        public InstanceSnapshot instance() {
             return instanceRef.getPlain();
         }
 
         @Override
-        public @NotNull ChunkSnapshot chunk() {
+        public ChunkSnapshot chunk() {
             return Objects.requireNonNull(instance().chunk(chunkX, chunkZ));
         }
 
         @Override
-        public @NotNull Collection<@NotNull PlayerSnapshot> viewers() {
+        public Collection<PlayerSnapshot> viewers() {
             return new IntMappedArray<>(viewersId, id -> (PlayerSnapshot) instance().server().entity(id));
         }
 
         @Override
-        public @NotNull Collection<@NotNull EntitySnapshot> passengers() {
+        public Collection<EntitySnapshot> passengers() {
             return new IntMappedArray<>(passengersId, id -> instance().server().entity(id));
         }
 
@@ -165,12 +164,12 @@ public final class SnapshotImpl {
     public record Player(EntitySnapshot snapshot, String username,
                          GameMode gameMode) implements PlayerSnapshot {
         @Override
-        public @NotNull EntityType type() {
+        public EntityType type() {
             return snapshot.type();
         }
 
         @Override
-        public @NotNull UUID uuid() {
+        public UUID uuid() {
             return snapshot.uuid();
         }
 
@@ -180,32 +179,32 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public @NotNull Pos position() {
+        public Pos position() {
             return snapshot.position();
         }
 
         @Override
-        public @NotNull Vec velocity() {
+        public Vec velocity() {
             return snapshot.velocity();
         }
 
         @Override
-        public @NotNull InstanceSnapshot instance() {
+        public InstanceSnapshot instance() {
             return snapshot.instance();
         }
 
         @Override
-        public @NotNull ChunkSnapshot chunk() {
+        public ChunkSnapshot chunk() {
             return snapshot.chunk();
         }
 
         @Override
-        public @NotNull Collection<@NotNull PlayerSnapshot> viewers() {
+        public Collection<PlayerSnapshot> viewers() {
             return snapshot.viewers();
         }
 
         @Override
-        public @NotNull Collection<@NotNull EntitySnapshot> passengers() {
+        public Collection<EntitySnapshot> passengers() {
             return snapshot.passengers();
         }
 
@@ -215,7 +214,7 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        public <T> @UnknownNullability T getTag(Tag<T> tag) {
             return snapshot.getTag(tag);
         }
     }

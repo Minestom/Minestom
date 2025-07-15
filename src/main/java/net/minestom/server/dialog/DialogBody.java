@@ -7,20 +7,19 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
 public sealed interface DialogBody {
-    @NotNull Registry<StructCodec<? extends DialogBody>> REGISTRY = DynamicRegistry.fromMap(
+    Registry<StructCodec<? extends DialogBody>> REGISTRY = DynamicRegistry.fromMap(
             Key.key("minecraft:dialog_body_type"),
             Map.entry(Key.key("item"), Item.CODEC),
             Map.entry(Key.key("plain_message"), PlainMessage.CODEC));
-    @NotNull StructCodec<DialogBody> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogBody::codec, "type");
+    StructCodec<DialogBody> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogBody::codec, "type");
 
     record Item(
-            @NotNull ItemStack itemStack,
+            ItemStack itemStack,
             @Nullable PlainMessage description,
             boolean showDecoration,
             boolean showTooltip,
@@ -36,12 +35,12 @@ public sealed interface DialogBody {
                 Item::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogBody> codec() {
+        public StructCodec<? extends DialogBody> codec() {
             return CODEC;
         }
     }
 
-    record PlainMessage(@NotNull Component contents, int width) implements DialogBody {
+    record PlainMessage(Component contents, int width) implements DialogBody {
         public static final int DEFAULT_WIDTH = 200;
 
         private static final StructCodec<PlainMessage> COMPONENT_CODEC = StructCodec.struct(
@@ -53,11 +52,11 @@ public sealed interface DialogBody {
                 PlainMessage::new).orElseStruct(COMPONENT_CODEC);
 
         @Override
-        public @NotNull StructCodec<? extends DialogBody> codec() {
+        public StructCodec<? extends DialogBody> codec() {
             return CODEC;
         }
     }
 
-    @NotNull StructCodec<? extends DialogBody> codec();
+    StructCodec<? extends DialogBody> codec();
 
 }

@@ -4,7 +4,6 @@ import net.kyori.adventure.resource.ResourcePackStatus;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -12,8 +11,8 @@ import static net.minestom.server.network.NetworkBuffer.UUID;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientResourcePackStatusPacket(
-        @NotNull UUID id,
-        @NotNull ResourcePackStatus status
+        UUID id,
+        ResourcePackStatus status
 ) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientResourcePackStatusPacket> SERIALIZER = NetworkBufferTemplate.template(
             UUID, ClientResourcePackStatusPacket::id,
@@ -21,7 +20,7 @@ public record ClientResourcePackStatusPacket(
             ClientResourcePackStatusPacket::new
     );
 
-    private static @NotNull ResourcePackStatus readStatus(int id) {
+    private static ResourcePackStatus readStatus(int id) {
         return switch (id) {
             case 0 -> ResourcePackStatus.SUCCESSFULLY_LOADED;
             case 1 -> ResourcePackStatus.DECLINED;
@@ -35,7 +34,7 @@ public record ClientResourcePackStatusPacket(
         };
     }
 
-    private static int statusId(@NotNull ResourcePackStatus status) {
+    private static int statusId(ResourcePackStatus status) {
         return switch (status) {
             case SUCCESSFULLY_LOADED -> 0;
             case DECLINED -> 1;

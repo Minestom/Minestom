@@ -2,8 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.anvil.AnvilLoader;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.concurrent.Phaser;
@@ -15,7 +14,7 @@ import java.util.concurrent.Phaser;
  */
 public interface IChunkLoader {
 
-    static @NotNull IChunkLoader noop() {
+    static IChunkLoader noop() {
         return NoopChunkLoaderImpl.INSTANCE;
     }
 
@@ -24,7 +23,7 @@ public interface IChunkLoader {
      *
      * @param instance the instance to retrieve the data from
      */
-    default void loadInstance(@NotNull Instance instance) {
+    default void loadInstance(Instance instance) {
     }
 
     /**
@@ -35,9 +34,9 @@ public interface IChunkLoader {
      * @param chunkZ   the chunk Z
      * @return the chunk, or null if not present
      */
-    @Nullable Chunk loadChunk(@NotNull Instance instance, int chunkX, int chunkZ);
+    @Nullable Chunk loadChunk(Instance instance, int chunkX, int chunkZ);
 
-    default void saveInstance(@NotNull Instance instance) {
+    default void saveInstance(Instance instance) {
     }
 
     /**
@@ -45,7 +44,7 @@ public interface IChunkLoader {
      *
      * @param chunk the {@link Chunk} to save
      */
-    void saveChunk(@NotNull Chunk chunk);
+    void saveChunk(Chunk chunk);
 
     /**
      * Saves multiple chunks with an optional callback for when it is done.
@@ -54,7 +53,7 @@ public interface IChunkLoader {
      *
      * @param chunks the chunks to save
      */
-    default void saveChunks(@NotNull Collection<Chunk> chunks) {
+    default void saveChunks(Collection<Chunk> chunks) {
         if (supportsParallelSaving()) {
             Phaser phaser = new Phaser(1);
             for (Chunk chunk : chunks) {

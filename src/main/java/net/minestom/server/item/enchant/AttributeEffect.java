@@ -5,13 +5,12 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeOperation;
-import org.jetbrains.annotations.NotNull;
 
 public record AttributeEffect(
-        @NotNull Key id,
-        @NotNull Attribute attribute,
-        @NotNull LevelBasedValue amount,
-        @NotNull AttributeOperation operation
+        Key id,
+        Attribute attribute,
+        LevelBasedValue amount,
+        AttributeOperation operation
 ) implements Enchantment.Effect, LocationEffect {
 
     public static final StructCodec<AttributeEffect> CODEC = StructCodec.struct(
@@ -22,7 +21,7 @@ public record AttributeEffect(
             AttributeEffect::new);
 
     @Override
-    public @NotNull StructCodec<AttributeEffect> codec() {
+    public StructCodec<AttributeEffect> codec() {
         return CODEC;
     }
 }

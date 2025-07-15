@@ -1,8 +1,7 @@
 package net.minestom.server.inventory.click;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Function;
@@ -40,7 +39,7 @@ public sealed interface Click {
          * indicate slots in the player inventory; subtract the size of the event inventory to get the player inventory
          * slot.
          */
-        @NotNull List<Integer> slots();
+        List<Integer> slots();
 
     }
 
@@ -116,7 +115,7 @@ public sealed interface Click {
      * @return the (possibly) converted click
      */
     @ApiStatus.Internal
-    static @NotNull Click.Window toWindow(@NotNull Click click, @Nullable Integer containerSize) {
+    static Click.Window toWindow(Click click, @Nullable Integer containerSize) {
         return switch (click) {
             // Everything with one dynamic slot
             case Left(int slot) -> toWindowSingle(slot, containerSize, Left::new);
@@ -141,7 +140,7 @@ public sealed interface Click {
         };
     }
 
-    private static @NotNull Click.Window toWindowSingle(int slot, @Nullable Integer containerSize, @NotNull IntFunction<Click> constructor) {
+    private static Click.Window toWindowSingle(int slot, @Nullable Integer containerSize, IntFunction<Click> constructor) {
         if (containerSize == null) { // No opened inventory, so always in the player inventory
             return new Window(false, constructor.apply(slot));
         } else if (slot < containerSize) { // In the opened inventory, so do nothing
@@ -151,7 +150,7 @@ public sealed interface Click {
         }
     }
 
-    private static @NotNull Click.Window toWindowMultiple(@NotNull List<Integer> slots, @Nullable Integer containerSize, @NotNull Function<List<Integer>, Click> constructor) {
+    private static Click.Window toWindowMultiple(List<Integer> slots, @Nullable Integer containerSize, Function<List<Integer>, Click> constructor) {
         if (containerSize == null) { // No opened inventory, so always in the player inventory
             return new Window(false, constructor.apply(slots));
         }
@@ -177,7 +176,7 @@ public sealed interface Click {
      * @return the (potentially) converted click information
      */
     @ApiStatus.Internal
-    static @NotNull Click fromWindow(@NotNull Click.Window window, @Nullable Integer containerSize) {
+    static Click fromWindow(Click.Window window, @Nullable Integer containerSize) {
         return switch (window.click()) {
             // Everything with one dynamic slot
             case Left(int slot) -> fromWindowSingle(window, containerSize, Left::new);
@@ -202,13 +201,13 @@ public sealed interface Click {
         };
     }
 
-    private static @NotNull Click fromWindowSingle(@NotNull Click.Window window, @Nullable Integer containerSize, @NotNull IntFunction<Click> constructor) {
+    private static Click fromWindowSingle(Click.Window window, @Nullable Integer containerSize, IntFunction<Click> constructor) {
         // The inverse of toWindowSingle; more details there
         return containerSize == null || window.inOpened() ? window.click()
                 : constructor.apply(window.click().slot() + containerSize);
     }
 
-    private static @NotNull Click fromWindowMultiple(@NotNull Window window, @NotNull List<Integer> slots, @Nullable Integer containerSize, @NotNull Function<List<Integer>, Click> constructor) {
+    private static Click fromWindowMultiple(Window window, List<Integer> slots, @Nullable Integer containerSize, Function<List<Integer>, Click> constructor) {
         // The inverse of toWindowMultiple; more details there
         return containerSize == null || window.inOpened() ? window.click()
                 : constructor.apply(slots.stream().map(slot -> slot + containerSize).toList());
@@ -220,7 +219,7 @@ public sealed interface Click {
      * @param inOpened whether the window is the player inventory (false) or the opened inventory (true).
      * @param click the (contextualized) click
      */
-    record Window(boolean inOpened, @NotNull Click click) {
+    record Window(boolean inOpened, Click click) {
     }
 
 }

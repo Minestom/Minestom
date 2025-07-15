@@ -1,7 +1,6 @@
 package net.minestom.server.event;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a key to a listenable event, retrievable from {@link EventNode#getHandle(Class)}.
@@ -21,7 +20,7 @@ public sealed interface ListenerHandle<E extends Event> permits EventNodeImpl.Ha
      *
      * @param event the event to call
      */
-    void call(@NotNull E event);
+    void call(E event);
 
     /**
      * Gets if any listener has been registered for the given handle.

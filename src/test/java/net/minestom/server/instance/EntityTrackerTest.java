@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -18,13 +17,13 @@ public class EntityTrackerTest {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var updater = new EntityTracker.Update<>() {
             @Override
-            public void add(@NotNull Entity entity) {
+            public void add(Entity entity) {
                 assertNotSame(ent1, entity);
                 fail("No other entity should be registered yet");
             }
 
             @Override
-            public void remove(@NotNull Entity entity) {
+            public void remove(Entity entity) {
                 assertNotSame(ent1, entity);
                 fail("No other entity should be registered yet");
             }
@@ -45,12 +44,12 @@ public class EntityTrackerTest {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var updater = new EntityTracker.Update<>() {
             @Override
-            public void add(@NotNull Entity entity) {
+            public void add(Entity entity) {
                 fail("No other entity should be registered yet");
             }
 
             @Override
-            public void remove(@NotNull Entity entity) {
+            public void remove(Entity entity) {
                 fail("No other entity should be registered yet");
             }
         };
@@ -73,38 +72,38 @@ public class EntityTrackerTest {
         EntityTracker tracker = EntityTracker.newTracker();
         tracker.register(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, new EntityTracker.Update<>() {
             @Override
-            public void add(@NotNull Entity entity) {
+            public void add(Entity entity) {
                 fail("No other entity should be registered yet");
             }
 
             @Override
-            public void remove(@NotNull Entity entity) {
+            public void remove(Entity entity) {
                 fail("No other entity should be registered yet");
             }
         });
 
         tracker.register(ent2, Vec.ZERO, EntityTracker.Target.ENTITIES, new EntityTracker.Update<>() {
             @Override
-            public void add(@NotNull Entity entity) {
+            public void add(Entity entity) {
                 assertNotSame(ent2, entity);
                 assertSame(ent1, entity);
             }
 
             @Override
-            public void remove(@NotNull Entity entity) {
+            public void remove(Entity entity) {
                 fail("No other entity should be removed yet");
             }
         });
 
         tracker.move(ent1, new Vec(Integer.MAX_VALUE, 0, 0), EntityTracker.Target.ENTITIES, new EntityTracker.Update<>() {
             @Override
-            public void add(@NotNull Entity entity) {
+            public void add(Entity entity) {
                 assertNotSame(ent1, entity);
                 fail("No other entity should be added");
             }
 
             @Override
-            public void remove(@NotNull Entity entity) {
+            public void remove(Entity entity) {
                 assertNotSame(ent1, entity);
                 assertSame(ent2, entity);
             }
@@ -112,13 +111,13 @@ public class EntityTrackerTest {
 
         tracker.move(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, new EntityTracker.Update<>() {
             @Override
-            public void add(@NotNull Entity entity) {
+            public void add(Entity entity) {
                 assertNotSame(ent1, entity);
                 assertSame(ent2, entity);
             }
 
             @Override
-            public void remove(@NotNull Entity entity) {
+            public void remove(Entity entity) {
                 fail("no entity to remove");
             }
         });
@@ -131,12 +130,12 @@ public class EntityTrackerTest {
         var ent3 = new Entity(EntityType.ZOMBIE);
         var updater = new EntityTracker.Update<>() {
             @Override
-            public void add(@NotNull Entity entity) {
+            public void add(Entity entity) {
                 // Empty
             }
 
             @Override
-            public void remove(@NotNull Entity entity) {
+            public void remove(Entity entity) {
                 // Empty
             }
         };
@@ -184,12 +183,12 @@ public class EntityTrackerTest {
         var ent3 = new Entity(EntityType.ZOMBIE);
         var updater = new EntityTracker.Update<>() {
             @Override
-            public void add(@NotNull Entity entity) {
+            public void add(Entity entity) {
                 // Empty
             }
 
             @Override
-            public void remove(@NotNull Entity entity) {
+            public void remove(Entity entity) {
                 // Empty
             }
         };
@@ -222,13 +221,13 @@ public class EntityTrackerTest {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var updater = new EntityTracker.Update<>() {
             @Override
-            public void add(@NotNull Entity entity) {
+            public void add(Entity entity) {
                 assertNotSame(ent1, entity);
                 fail("No other entity should be registered yet");
             }
 
             @Override
-            public void remove(@NotNull Entity entity) {
+            public void remove(Entity entity) {
                 assertNotSame(ent1, entity);
                 fail("No other entity should be registered yet");
             }

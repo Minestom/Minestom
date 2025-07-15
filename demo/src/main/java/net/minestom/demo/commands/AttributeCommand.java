@@ -15,7 +15,7 @@ import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;

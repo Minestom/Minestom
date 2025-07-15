@@ -6,7 +6,6 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Event when an item is used without clicking on a block.
@@ -20,7 +19,7 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
     private long itemUseTime;
     private boolean cancelled;
 
-    public PlayerUseItemEvent(@NotNull Player player, @NotNull PlayerHand hand, @NotNull ItemStack itemStack, long itemUseTime) {
+    public PlayerUseItemEvent(Player player, PlayerHand hand, ItemStack itemStack, long itemUseTime) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
@@ -32,7 +31,7 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
      *
      * @return the hand used
      */
-    public @NotNull PlayerHand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
@@ -42,7 +41,7 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
      * @return the item
      */
     @Override
-    public @NotNull ItemStack getItemStack() {
+    public ItemStack getItemStack() {
         return itemStack;
     }
 
@@ -76,7 +75,7 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

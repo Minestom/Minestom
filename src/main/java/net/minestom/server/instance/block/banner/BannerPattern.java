@@ -11,29 +11,28 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 public sealed interface BannerPattern extends Holder.Direct<BannerPattern>, BannerPatterns permits BannerPatternImpl {
-    @NotNull NetworkBuffer.Type<BannerPattern> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
+    NetworkBuffer.Type<BannerPattern> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.KEY, BannerPattern::assetId,
             NetworkBuffer.STRING, BannerPattern::translationKey,
             BannerPattern::create);
-    @NotNull Codec<BannerPattern> REGISTRY_CODEC = StructCodec.struct(
+    Codec<BannerPattern> REGISTRY_CODEC = StructCodec.struct(
             "asset_id", Codec.KEY, BannerPattern::assetId,
             "translation_key", Codec.STRING, BannerPattern::translationKey,
             BannerPattern::create);
 
-    @NotNull NetworkBuffer.Type<Holder<BannerPattern>> HOLDER_NETWORK_TYPE = Holder.networkType(Registries::bannerPattern, BannerPattern.REGISTRY_NETWORK_TYPE);
-    @NotNull Codec<Holder<BannerPattern>> HOLDER_CODEC = Holder.codec(Registries::bannerPattern, BannerPattern.REGISTRY_CODEC);
+    NetworkBuffer.Type<Holder<BannerPattern>> HOLDER_NETWORK_TYPE = Holder.networkType(Registries::bannerPattern, BannerPattern.REGISTRY_NETWORK_TYPE);
+    Codec<Holder<BannerPattern>> HOLDER_CODEC = Holder.codec(Registries::bannerPattern, BannerPattern.REGISTRY_CODEC);
 
-    static @NotNull BannerPattern create(
-            @NotNull Key assetId,
-            @NotNull String translationKey
+    static BannerPattern create(
+            Key assetId,
+            String translationKey
     ) {
         return new BannerPatternImpl(assetId, translationKey);
     }
 
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -43,13 +42,13 @@ public sealed interface BannerPattern extends Holder.Direct<BannerPattern>, Bann
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
+    static DynamicRegistry<BannerPattern> createDefaultRegistry() {
         return DynamicRegistry.create(Key.key("minecraft:banner_pattern"), REGISTRY_CODEC, RegistryData.Resource.BANNER_PATTERNS);
     }
 
-    @NotNull Key assetId();
+    Key assetId();
 
-    @NotNull String translationKey();
+    String translationKey();
 
     final class Builder {
         private Key assetId;
@@ -59,19 +58,19 @@ public sealed interface BannerPattern extends Holder.Direct<BannerPattern>, Bann
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder assetId(@NotNull Key assetId) {
+        public Builder assetId(Key assetId) {
             this.assetId = assetId;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder translationKey(@NotNull String translationKey) {
+        public Builder translationKey(String translationKey) {
             this.translationKey = translationKey;
             return this;
         }
 
         @Contract(pure = true)
-        public @NotNull BannerPattern build() {
+        public BannerPattern build() {
             return new BannerPatternImpl(assetId, translationKey);
         }
     }

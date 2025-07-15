@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.invoke.VarHandle;
 import java.util.concurrent.atomic.AtomicLong;
@@ -18,27 +17,27 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     private final T value;
     private TickThread assignedThread;
 
-    public AcquirableImpl(@NotNull T value) {
+    public AcquirableImpl(T value) {
         this.value = value;
     }
 
     @Override
-    public @NotNull T unwrap() {
+    public T unwrap() {
         return value;
     }
 
     @Override
-    public @NotNull TickThread assignedThread() {
+    public TickThread assignedThread() {
         VarHandle.acquireFence();
         return assignedThread;
     }
 
-    void updateThread(@NotNull TickThread thread) {
+    void updateThread(TickThread thread) {
         this.assignedThread = thread;
         VarHandle.releaseFence();
     }
 
-    static @Nullable ReentrantLock enter(@NotNull Thread currentThread, @Nullable TickThread elementThread) {
+    static @Nullable ReentrantLock enter(Thread currentThread, @Nullable TickThread elementThread) {
         if (elementThread == null) return null;
         if (currentThread == elementThread) return null;
         final ReentrantLock currentLock = currentThread instanceof TickThread ? ((TickThread) currentThread).lock() : null;

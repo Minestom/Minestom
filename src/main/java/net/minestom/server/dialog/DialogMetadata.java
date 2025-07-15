@@ -4,19 +4,18 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public record DialogMetadata(
-        @NotNull Component title,
+        Component title,
         @Nullable Component externalTitle,
         boolean canCloseWithEscape,
         boolean pause,
-        @NotNull DialogAfterAction afterAction,
-        @NotNull List<DialogBody> body,
-        @NotNull List<DialogInput> inputs
+        DialogAfterAction afterAction,
+        List<DialogBody> body,
+        List<DialogInput> inputs
 ) {
     public static final StructCodec<DialogMetadata> CODEC = StructCodec.struct(
             "title", Codec.COMPONENT, DialogMetadata::title,

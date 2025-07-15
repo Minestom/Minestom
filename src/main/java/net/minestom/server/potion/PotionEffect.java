@@ -8,20 +8,19 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>, PotionEffects permits PotionEffectImpl {
-    @NotNull NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionEffect::fromId, PotionEffect::id);
-    @NotNull Codec<PotionEffect> CODEC = Codec.KEY.transform(PotionEffect::fromKey, PotionEffect::key);
+    NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionEffect::fromId, PotionEffect::id);
+    Codec<PotionEffect> CODEC = Codec.KEY.transform(PotionEffect::fromKey, PotionEffect::key);
 
     @Contract(pure = true)
-    @NotNull RegistryData.PotionEffectEntry registry();
+    RegistryData.PotionEffectEntry registry();
 
     @Override
-    default @NotNull Key key() {
+    default Key key() {
         return registry().key();
     }
 
@@ -30,15 +29,15 @@ public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>,
         return registry().id();
     }
 
-    static @NotNull Collection<@NotNull PotionEffect> values() {
+    static Collection<PotionEffect> values() {
         return PotionEffectImpl.REGISTRY.values();
     }
 
-    static @Nullable PotionEffect fromKey(@KeyPattern @NotNull String key) {
+    static @Nullable PotionEffect fromKey(@KeyPattern String key) {
         return fromKey(Key.key(key));
     }
 
-    static @Nullable PotionEffect fromKey(@NotNull Key key) {
+    static @Nullable PotionEffect fromKey(Key key) {
         return PotionEffectImpl.REGISTRY.get(key);
     }
 
@@ -46,7 +45,7 @@ public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>,
         return PotionEffectImpl.REGISTRY.get(id);
     }
 
-    static @NotNull Registry<PotionEffect> staticRegistry() {
+    static Registry<PotionEffect> staticRegistry() {
         return PotionEffectImpl.REGISTRY;
     }
 }

@@ -7,15 +7,14 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SalmonMeta extends AbstractFishMeta {
-    public SalmonMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public SalmonMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -23,7 +22,7 @@ public class SalmonMeta extends AbstractFishMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#SALMON_SIZE} instead.
      */
     @Deprecated
-    public @NotNull SalmonMeta.Size getSize() {
+    public SalmonMeta.Size getSize() {
         return Size.VALUES[metadata.get(MetadataDef.Salmon.SIZE)];
     }
 
@@ -31,20 +30,20 @@ public class SalmonMeta extends AbstractFishMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#SALMON_SIZE} instead.
      */
     @Deprecated
-    public void setSize(@NotNull SalmonMeta.Size size) {
+    public void setSize(SalmonMeta.Size size) {
         metadata.set(MetadataDef.Salmon.SIZE, size.ordinal());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.SALMON_SIZE)
             return (T) getSize();
         return super.get(component);
     }
 
     @Override
-    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+    protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.SALMON_SIZE)
             setSize((SalmonMeta.Size) value);
         else super.set(component, value);
@@ -65,11 +64,11 @@ public class SalmonMeta extends AbstractFishMeta {
 
         private final String id;
 
-        Size(@NotNull String id) {
+        Size(String id) {
             this.id = id;
         }
 
-        public @NotNull String id() {
+        public String id() {
             return id;
         }
     }

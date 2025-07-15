@@ -2,16 +2,15 @@ package net.minestom.server.adventure.serializer.nbt;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.event.DataComponentValue;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public sealed interface NbtDataComponentValue extends DataComponentValue permits NbtDataComponentValueImpl {
 
-    static @NotNull NbtDataComponentValue removed() {
+    static NbtDataComponentValue removed() {
         return new NbtDataComponentValueImpl.Removed();
     }
 
-    static @NotNull NbtDataComponentValue nbtDataComponentValue(@NotNull BinaryTag tag) {
+    static NbtDataComponentValue nbtDataComponentValue(BinaryTag tag) {
         return new NbtDataComponentValueImpl(tag);
     }
 

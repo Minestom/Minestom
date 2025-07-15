@@ -1,8 +1,7 @@
 package net.minestom.server.command.builder;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class CommandResult {
 
@@ -11,11 +10,11 @@ public class CommandResult {
     protected ParsedCommand parsedCommand;
     protected CommandData commandData;
 
-    public @NotNull Type getType() {
+    public Type getType() {
         return type;
     }
 
-    public @NotNull String getInput() {
+    public String getInput() {
         return input;
     }
 
@@ -47,7 +46,7 @@ public class CommandResult {
         UNKNOWN
     }
 
-    public static @NotNull CommandResult of(@NotNull Type type, @NotNull String input) {
+    public static CommandResult of(Type type, String input) {
         CommandResult result = new CommandResult();
         result.type = type;
         result.input = input;
@@ -55,7 +54,7 @@ public class CommandResult {
     }
 
     @ApiStatus.Internal
-    public static @NotNull CommandResult of(Type type, String input, ParsedCommand parsedCommand, CommandData data) {
+    public static CommandResult of(Type type, String input, ParsedCommand parsedCommand, CommandData data) {
         CommandResult result = new CommandResult();
         result.type = type;
         result.input = input;

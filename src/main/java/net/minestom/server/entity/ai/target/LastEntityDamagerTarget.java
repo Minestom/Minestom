@@ -6,7 +6,6 @@ import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.damage.EntityDamage;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Targets the last damager of this entity.
@@ -15,7 +14,7 @@ public class LastEntityDamagerTarget extends TargetSelector {
 
     private final float range;
 
-    public LastEntityDamagerTarget(@NotNull EntityCreature entityCreature, float range) {
+    public LastEntityDamagerTarget(EntityCreature entityCreature, float range) {
         super(entityCreature);
         this.range = range;
     }

@@ -6,8 +6,7 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -22,11 +21,9 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
      * Returns the 'registry' data for the block sound type. Note: Block sound types are not an actual minecraft registry
      */
     @Contract(pure = true)
-    @NotNull
     RegistryData.BlockSoundTypeEntry registry();
 
     @Override
-    @NotNull
     default Key key() {
         return registry().key();
     }
@@ -39,23 +36,23 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
         return registry().pitch();
     }
 
-    default @NotNull SoundEvent breakSound() {
+    default SoundEvent breakSound() {
         return registry().breakSound();
     }
 
-    default @NotNull SoundEvent hitSound() {
+    default SoundEvent hitSound() {
         return registry().hitSound();
     }
 
-    default @NotNull SoundEvent fallSound() {
+    default SoundEvent fallSound() {
         return registry().fallSound();
     }
 
-    default @NotNull SoundEvent placeSound() {
+    default SoundEvent placeSound() {
         return registry().placeSound();
     }
 
-    default @NotNull SoundEvent stepSound() {
+    default SoundEvent stepSound() {
         return registry().stepSound();
     }
 
@@ -63,15 +60,15 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
         return 0; // Not sent through packets in the protocol, also must be between 0 and [size of block sound type list] because id mappings are stored in an array
     }
 
-    static @NotNull Collection<@NotNull BlockSoundType> values() {
+    static Collection<BlockSoundType> values() {
         return BlockSoundImpl.REGISTRY.values();
     }
 
-    static @Nullable BlockSoundType fromKey(@KeyPattern @NotNull String key) {
+    static @Nullable BlockSoundType fromKey(@KeyPattern String key) {
         return fromKey(Key.key(key));
     }
 
-    static @Nullable BlockSoundType fromKey(@NotNull Key key) {
+    static @Nullable BlockSoundType fromKey(Key key) {
         return BlockSoundImpl.REGISTRY.get(key);
     }
 

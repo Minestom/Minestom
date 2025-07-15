@@ -5,13 +5,12 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 record PaintingVariantImpl(
         int width,
         int height,
-        @NotNull Key assetId,
+        Key assetId,
         @Nullable Component title,
         @Nullable Component author
 ) implements PaintingVariant {
@@ -26,12 +25,12 @@ record PaintingVariantImpl(
     // BELOW ARE WORKAROUND METHODS FOR BROKEN INLINE VALUES
     // See PaintingVariant for the documentation of its brokenness. TLDR: inline values are broken.
     @Override
-    public @NotNull Either<RegistryKey<PaintingVariant>, PaintingVariant> unwrap() {
+    public Either<RegistryKey<PaintingVariant>, PaintingVariant> unwrap() {
         return Either.left(asKey());
     }
 
     @Override
-    public @NotNull RegistryKey<PaintingVariant> asKey() {
+    public RegistryKey<PaintingVariant> asKey() {
         return RegistryKey.unsafeOf(assetId);
     }
 

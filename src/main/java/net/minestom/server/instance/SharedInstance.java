@@ -7,8 +7,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -21,38 +20,38 @@ import java.util.concurrent.CompletableFuture;
 public class SharedInstance extends Instance {
     private final InstanceContainer instanceContainer;
 
-    public SharedInstance(@NotNull UUID uuid, @NotNull InstanceContainer instanceContainer) {
+    public SharedInstance(UUID uuid, InstanceContainer instanceContainer) {
         super(uuid, instanceContainer.getDimensionType());
         this.instanceContainer = instanceContainer;
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates) {
+    public void setBlock(int x, int y, int z, Block block, boolean doBlockUpdates) {
         this.instanceContainer.setBlock(x, y, z, block, doBlockUpdates);
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
+    public boolean placeBlock(BlockHandler.Placement placement, boolean doBlockUpdates) {
         return instanceContainer.placeBlock(placement, doBlockUpdates);
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
+    public boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates) {
         return instanceContainer.breakBlock(player, blockPosition, blockFace, doBlockUpdates);
     }
 
     @Override
-    public @NotNull CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadChunk(chunkX, chunkZ);
     }
 
     @Override
-    public @NotNull CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadOptionalChunk(chunkX, chunkZ);
     }
 
     @Override
-    public void unloadChunk(@NotNull Chunk chunk) {
+    public void unloadChunk(Chunk chunk) {
         instanceContainer.unloadChunk(chunk);
     }
 
@@ -62,22 +61,22 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveInstance() {
+    public CompletableFuture<Void> saveInstance() {
         return instanceContainer.saveInstance();
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
+    public CompletableFuture<Void> saveChunkToStorage(Chunk chunk) {
         return instanceContainer.saveChunkToStorage(chunk);
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunksToStorage() {
+    public CompletableFuture<Void> saveChunksToStorage() {
         return instanceContainer.saveChunksToStorage();
     }
 
     @Override
-    public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
+    public void setChunkSupplier(ChunkSupplier chunkSupplier) {
         instanceContainer.setChunkSupplier(chunkSupplier);
     }
 
@@ -96,7 +95,6 @@ public class SharedInstance extends Instance {
         instanceContainer.setGenerator(generator);
     }
 
-    @NotNull
     @Override
     public Collection<Chunk> getChunks() {
         return instanceContainer.getChunks();
@@ -113,7 +111,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean isInVoid(@NotNull Point point) {
+    public boolean isInVoid(Point point) {
         return instanceContainer.isInVoid(point);
     }
 
@@ -122,7 +120,7 @@ public class SharedInstance extends Instance {
      *
      * @return the associated {@link InstanceContainer}
      */
-    public @NotNull InstanceContainer getInstanceContainer() {
+    public InstanceContainer getInstanceContainer() {
         return instanceContainer;
     }
 

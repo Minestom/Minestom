@@ -2,7 +2,7 @@ package net.minestom.server.entity.attribute;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public enum AttributeOperation {
     ADD_VALUE(0),

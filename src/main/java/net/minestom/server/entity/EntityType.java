@@ -8,8 +8,7 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -23,10 +22,10 @@ public sealed interface EntityType extends StaticProtocolObject<EntityType>, Ent
      * @return the entity registry
      */
     @Contract(pure = true)
-    @NotNull RegistryData.EntityEntry registry();
+    RegistryData.EntityEntry registry();
 
     @Override
-    default @NotNull Key key() {
+    default Key key() {
         return registry().key();
     }
 
@@ -43,15 +42,15 @@ public sealed interface EntityType extends StaticProtocolObject<EntityType>, Ent
         return registry().height();
     }
 
-    static @NotNull Collection<@NotNull EntityType> values() {
+    static Collection<EntityType> values() {
         return EntityTypeImpl.REGISTRY.values();
     }
 
-    static @Nullable EntityType fromKey(@KeyPattern @NotNull String key) {
+    static @Nullable EntityType fromKey(@KeyPattern String key) {
         return fromKey(Key.key(key));
     }
 
-    static @Nullable EntityType fromKey(@NotNull Key key) {
+    static @Nullable EntityType fromKey(Key key) {
         return EntityTypeImpl.REGISTRY.get(key);
     }
 
@@ -59,7 +58,7 @@ public sealed interface EntityType extends StaticProtocolObject<EntityType>, Ent
         return EntityTypeImpl.REGISTRY.get(id);
     }
 
-    static @NotNull Registry<EntityType> staticRegistry() {
+    static Registry<EntityType> staticRegistry() {
         return EntityTypeImpl.REGISTRY;
     }
 }

@@ -2,7 +2,6 @@
 
 package net.minestom.server.snapshot;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -12,7 +11,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     private IdentityHashMap<Snapshotable, AtomicReference<Snapshot>> readOnlyReferenceMap;
     private List<Entry> queue = new ArrayList<>();
 
-    static <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
+    static <T extends Snapshot> T update(Snapshotable snapshotable) {
         var updater = new SnapshotUpdaterImpl();
         var ref = updater.reference(snapshotable);
         updater.update();
@@ -20,7 +19,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     }
 
     @Override
-    public <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable) {
+    public <T extends Snapshot> AtomicReference<T> reference(Snapshotable snapshotable) {
         AtomicReference<Snapshot> ref;
         // Very often the same snapshotable is referenced multiple times.
         var readOnly = this.readOnlyReferenceMap;

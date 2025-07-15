@@ -5,25 +5,24 @@ import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 public sealed interface Fluid extends StaticProtocolObject<Fluid>, Fluids permits FluidImpl {
 
     @Override
-    @NotNull RegistryData.FluidEntry registry();
+    RegistryData.FluidEntry registry();
 
-    static @NotNull Collection<@NotNull Fluid> values() {
+    static Collection<Fluid> values() {
         return FluidImpl.REGISTRY.values();
     }
 
-    static @Nullable Fluid fromKey(@KeyPattern @NotNull String key) {
+    static @Nullable Fluid fromKey(@KeyPattern String key) {
         return fromKey(Key.key(key));
     }
 
-    static @Nullable Fluid fromKey(@NotNull Key key) {
+    static @Nullable Fluid fromKey(Key key) {
         return FluidImpl.REGISTRY.get(key);
     }
 
@@ -31,7 +30,7 @@ public sealed interface Fluid extends StaticProtocolObject<Fluid>, Fluids permit
         return FluidImpl.REGISTRY.get(id);
     }
 
-    static @NotNull Registry<Fluid> staticRegistry() {
+    static Registry<Fluid> staticRegistry() {
         return FluidImpl.REGISTRY;
     }
 }

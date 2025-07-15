@@ -7,14 +7,13 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
+public record TradeListPacket(int windowId, List<Trade> trades,
                               int villagerLevel, int experience,
                               boolean regularVillager, boolean canRestock) implements ServerPacket.Play {
     public static final int MAX_TRADES = Short.MAX_VALUE;
@@ -33,8 +32,8 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
     }
 
     public record Trade(
-            @NotNull ItemCost inputItem1,
-            @NotNull ItemStack result,
+            ItemCost inputItem1,
+            ItemStack result,
             @Nullable ItemCost inputItem2,
             boolean tradeDisabled,
             int tradeUsesNumber,
@@ -59,8 +58,8 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
                 Trade::new);
 
         public Trade(
-                @NotNull ItemStack inputItem1,
-                @NotNull ItemStack result,
+                ItemStack inputItem1,
+                ItemStack result,
                 @Nullable ItemStack inputItem2,
                 boolean tradeDisabled,
                 int tradeUsesNumber,
@@ -85,14 +84,14 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
         }
     }
 
-    public record ItemCost(@NotNull Material material, int amount, @NotNull DataComponentMap components) {
+    public record ItemCost(Material material, int amount, DataComponentMap components) {
         private static final NetworkBuffer.Type<ItemCost> NETWORK_TYPE = NetworkBufferTemplate.template(
                 Material.NETWORK_TYPE, ItemCost::material,
                 VAR_INT, ItemCost::amount,
                 DataComponent.MAP_NETWORK_TYPE, ItemCost::components,
                 ItemCost::new);
 
-        public ItemCost(@NotNull ItemStack itemStack) {
+        public ItemCost(ItemStack itemStack) {
             this(itemStack.material(), itemStack.amount(), itemStack.componentPatch());
         }
     }

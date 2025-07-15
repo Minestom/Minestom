@@ -1,7 +1,6 @@
 package net.minestom.server.event;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,13 +12,13 @@ import java.util.function.Predicate;
 @ApiStatus.Experimental
 public interface EventBinding<E extends Event> {
 
-    static <E extends Event, T> @NotNull FilteredBuilder<E, T> filtered(@NotNull EventFilter<E, T> filter, @NotNull Predicate<T> predicate) {
+    static <E extends Event, T> FilteredBuilder<E, T> filtered(EventFilter<E, T> filter, Predicate<T> predicate) {
         return new FilteredBuilder<>(filter, predicate);
     }
 
-    @NotNull Collection<Class<? extends Event>> eventTypes();
+    Collection<Class<? extends Event>> eventTypes();
 
-    @NotNull Consumer<@NotNull E> consumer(@NotNull Class<? extends Event> eventType);
+    Consumer<E> consumer(Class<? extends Event> eventType);
 
     class FilteredBuilder<E extends Event, T> {
         private final EventFilter<E, T> filter;
@@ -31,14 +30,14 @@ public interface EventBinding<E extends Event> {
             this.predicate = predicate;
         }
 
-        public <M extends E> FilteredBuilder<E, T> map(@NotNull Class<M> eventType,
-                                                       @NotNull BiConsumer<@NotNull T, @NotNull M> consumer) {
+        public <M extends E> FilteredBuilder<E, T> map(Class<M> eventType,
+                                                       BiConsumer<T, M> consumer) {
             //noinspection unchecked
             this.mapped.put(eventType, (BiConsumer<Object, E>) consumer);
             return this;
         }
 
-        public @NotNull EventBinding<E> build() {
+        public EventBinding<E> build() {
             final var copy = Map.copyOf(mapped);
             final var eventTypes = copy.keySet();
 
@@ -53,12 +52,12 @@ public interface EventBinding<E extends Event> {
             }
             return new EventBinding<>() {
                 @Override
-                public @NotNull Collection<Class<? extends Event>> eventTypes() {
+                public Collection<Class<? extends Event>> eventTypes() {
                     return eventTypes;
                 }
 
                 @Override
-                public @NotNull Consumer<E> consumer(@NotNull Class<? extends Event> eventType) {
+                public Consumer<E> consumer(Class<? extends Event> eventType) {
                     return consumers.get(eventType);
                 }
             };

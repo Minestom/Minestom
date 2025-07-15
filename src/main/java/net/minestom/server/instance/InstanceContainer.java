@@ -39,8 +39,7 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.worldevent.WorldEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
@@ -94,28 +93,28 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
+    public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, null, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @NotNull Key dimensionName) {
+    public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
         this(uuid, dimensionType, null, dimensionName);
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
+    public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
         this(uuid, dimensionType, loader, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull Key dimensionName) {
+    public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader, Key dimensionName) {
         this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, loader, dimensionName);
     }
 
     public InstanceContainer(
-            @NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry,
-            @NotNull UUID uuid,
-            @NotNull RegistryKey<DimensionType> dimensionType,
+            DynamicRegistry<DimensionType> dimensionTypeRegistry,
+            UUID uuid,
+            RegistryKey<DimensionType> dimensionType,
             @Nullable IChunkLoader loader,
-            @NotNull Key dimensionName
+            Key dimensionName
     ) {
         super(dimensionTypeRegistry, uuid, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);
@@ -126,7 +125,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates) {
+    public void setBlock(int x, int y, int z, Block block, boolean doBlockUpdates) {
         Chunk chunk = getChunkAt(x, z);
         if (chunk == null) {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),
@@ -147,8 +146,8 @@ public class InstanceContainer extends Instance {
      * @param z     the block Z
      * @param block the block to place
      */
-    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
-                                              @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
+    private synchronized void UNSAFE_setBlock(Chunk chunk, int x, int y, int z, Block block,
+                                              BlockHandler.@Nullable Placement placement, BlockHandler.@Nullable Destroy destroy,
                                               boolean doBlockUpdates, int updateDistance) {
         if (chunk.isReadOnly()) return;
         final DimensionType dim = getCachedDimensionType();
@@ -214,7 +213,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
+    public boolean placeBlock(BlockHandler.Placement placement, boolean doBlockUpdates) {
         final Point blockPosition = placement.getBlockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
         if (!isLoaded(chunk)) return false;
@@ -224,7 +223,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
+    public boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates) {
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
@@ -257,17 +256,17 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @NotNull CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
         return loadOrRetrieve(chunkX, chunkZ, () -> retrieveChunk(chunkX, chunkZ));
     }
 
     @Override
-    public @NotNull CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         return loadOrRetrieve(chunkX, chunkZ, () -> hasEnabledAutoChunkLoad() ? retrieveChunk(chunkX, chunkZ) : AsyncUtils.empty());
     }
 
     @Override
-    public synchronized void unloadChunk(@NotNull Chunk chunk) {
+    public synchronized void unloadChunk(Chunk chunk) {
         if (!isLoaded(chunk)) return;
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();
@@ -289,19 +288,19 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveInstance() {
+    public CompletableFuture<Void> saveInstance() {
         final IChunkLoader chunkLoader = this.chunkLoader;
         return optionalAsync(chunkLoader.supportsParallelSaving(), () -> chunkLoader.saveInstance(this));
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
+    public CompletableFuture<Void> saveChunkToStorage(Chunk chunk) {
         final IChunkLoader chunkLoader = this.chunkLoader;
         return optionalAsync(chunkLoader.supportsParallelSaving(), () -> chunkLoader.saveChunk(chunk));
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunksToStorage() {
+    public CompletableFuture<Void> saveChunksToStorage() {
         final IChunkLoader chunkLoader = this.chunkLoader;
         return optionalAsync(chunkLoader.supportsParallelSaving(), () -> chunkLoader.saveChunks(getChunks()));
     }
@@ -323,7 +322,7 @@ public class InstanceContainer extends Instance {
         return future;
     }
 
-    protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
+    protected CompletableFuture<Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         final long index = CoordConversion.chunkIndex(chunkX, chunkZ);
         final CompletableFuture<Chunk> prev = loadingChunks.putIfAbsent(index, completableFuture);
@@ -380,7 +379,7 @@ public class InstanceContainer extends Instance {
 
     Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
 
-    protected @NotNull Chunk createChunk(int chunkX, int chunkZ) {
+    protected Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         Generator generator = generator();
@@ -491,7 +490,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean isInVoid(@NotNull Point point) {
+    public boolean isInVoid(Point point) {
         // TODO: more customizable
         return point.y() < getCachedDimensionType().minY() - 64;
     }
@@ -509,7 +508,7 @@ public class InstanceContainer extends Instance {
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
     @Override
-    public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
+    public void setChunkSupplier(ChunkSupplier chunkSupplier) {
         this.chunkSupplier = chunkSupplier;
     }
 
@@ -622,7 +621,7 @@ public class InstanceContainer extends Instance {
      * @return the chunks of this instance
      */
     @Override
-    public @NotNull Collection<@NotNull Chunk> getChunks() {
+    public Collection<Chunk> getChunks() {
         return chunks.values();
     }
 
@@ -631,7 +630,7 @@ public class InstanceContainer extends Instance {
      *
      * @return the {@link IChunkLoader} of this instance
      */
-    public @NotNull IChunkLoader getChunkLoader() {
+    public IChunkLoader getChunkLoader() {
         return chunkLoader;
     }
 
@@ -642,7 +641,7 @@ public class InstanceContainer extends Instance {
      *
      * @param chunkLoader the new {@link IChunkLoader}
      */
-    public void setChunkLoader(@NotNull IChunkLoader chunkLoader) {
+    public void setChunkLoader(IChunkLoader chunkLoader) {
         this.chunkLoader = Objects.requireNonNull(chunkLoader, "Chunk loader cannot be null");
     }
 
@@ -665,7 +664,7 @@ public class InstanceContainer extends Instance {
      * @param block         the block
      * @return true if the block changed since the last update
      */
-    private boolean isAlreadyChanged(@NotNull BlockVec blockPosition, @NotNull Block block) {
+    private boolean isAlreadyChanged(BlockVec blockPosition, Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         return Objects.equals(changedBlock, block);
     }
@@ -677,7 +676,7 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, int updateDistance) {
+    private void executeNeighboursBlockPlacementRule(Point blockPosition, int updateDistance) {
         ChunkCache cache = new ChunkCache(this, null, null);
         for (var updateFace : BLOCK_UPDATE_FACES) {
             var direction = updateFace.toDirection();
@@ -718,7 +717,7 @@ public class InstanceContainer extends Instance {
         return supplier.get();
     }
 
-    private void cacheChunk(@NotNull Chunk chunk) {
+    private void cacheChunk(Chunk chunk) {
         this.chunks.put(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.createPartition(chunk);

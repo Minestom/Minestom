@@ -3,7 +3,7 @@ package net.minestom.server.item.crossbow;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.sound.SoundEvent;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record CrossbowChargingSounds(
         @Nullable SoundEvent start,

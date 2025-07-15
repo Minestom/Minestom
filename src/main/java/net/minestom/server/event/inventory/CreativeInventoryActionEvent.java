@@ -5,7 +5,6 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player interacts with an item in the creative menu
@@ -16,9 +15,9 @@ public class CreativeInventoryActionEvent implements PlayerInstanceEvent, Cancel
     private ItemStack clickedItem;
     private boolean cancelled;
 
-    public CreativeInventoryActionEvent(@NotNull Player player,
+    public CreativeInventoryActionEvent(Player player,
                                         int slot,
-                                        @NotNull ItemStack clicked) {
+                                        ItemStack clicked) {
         this.player = player;
         this.slot = slot;
         this.clickedItem = clicked;
@@ -30,7 +29,6 @@ public class CreativeInventoryActionEvent implements PlayerInstanceEvent, Cancel
      *
      * @return the player who clicked
      */
-    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -49,7 +47,6 @@ public class CreativeInventoryActionEvent implements PlayerInstanceEvent, Cancel
      *
      * @return the clicked item
      */
-    @NotNull
     public ItemStack getClickedItem() {
         return clickedItem;
     }
@@ -59,7 +56,7 @@ public class CreativeInventoryActionEvent implements PlayerInstanceEvent, Cancel
      *
      * @param clickedItem the clicked item
      */
-    public void setClickedItem(@NotNull ItemStack clickedItem) {
+    public void setClickedItem(ItemStack clickedItem) {
         this.clickedItem = clickedItem;
     }
 

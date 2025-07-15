@@ -1,7 +1,6 @@
 package net.minestom.server.tag;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.function.UnaryOperator;
@@ -18,9 +17,9 @@ public interface TagWritable extends TagReadable {
      * @param value the tag value, null to remove
      * @param <T>   the tag type
      */
-    <T> void setTag(@NotNull Tag<T> tag, @Nullable T value);
+    <T> void setTag(Tag<T> tag, @Nullable T value);
 
-    default void removeTag(@NotNull Tag<?> tag) {
+    default void removeTag(Tag<?> tag) {
         setTag(tag, null);
     }
 
@@ -32,14 +31,14 @@ public interface TagWritable extends TagReadable {
      * @param <T>   the tag type
      * @return the previous tag value, null if not present
      */
-    <T> @Nullable T getAndSetTag(@NotNull Tag<T> tag, @Nullable T value);
+    <T> @Nullable T getAndSetTag(Tag<T> tag, @Nullable T value);
 
-    <T> void updateTag(@NotNull Tag<T> tag,
-                       @NotNull UnaryOperator<@UnknownNullability T> value);
+    <T> void updateTag(Tag<T> tag,
+                       UnaryOperator<@UnknownNullability T> value);
 
-    <T> @UnknownNullability T updateAndGetTag(@NotNull Tag<T> tag,
-                                              @NotNull UnaryOperator<@UnknownNullability T> value);
+    <T> @UnknownNullability T updateAndGetTag(Tag<T> tag,
+                                              UnaryOperator<@UnknownNullability T> value);
 
-    <T> @UnknownNullability T getAndUpdateTag(@NotNull Tag<T> tag,
-                                              @NotNull UnaryOperator<@UnknownNullability T> value);
+    <T> @UnknownNullability T getAndUpdateTag(Tag<T> tag,
+                                              UnaryOperator<@UnknownNullability T> value);
 }

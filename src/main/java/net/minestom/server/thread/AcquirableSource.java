@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -19,5 +18,5 @@ public interface AcquirableSource<T> {
      *
      * @return an Acquirable which can be used to synchronize access to this object
      */
-    @NotNull Acquirable<? extends T> acquirable();
+    Acquirable<? extends T> acquirable();
 }

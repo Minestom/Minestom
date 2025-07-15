@@ -6,7 +6,6 @@ import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an argument which will give you a {@link Style} containing the colour or no
@@ -22,9 +21,8 @@ public class ArgumentColor extends Argument<Style> {
         super(id);
     }
 
-    @NotNull
     @Override
-    public Style parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public Style parse(CommandSender sender, String input) throws ArgumentSyntaxException {
 
         // check for colour
         NamedTextColor color = NamedTextColor.NAMES.value(input);

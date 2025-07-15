@@ -4,26 +4,25 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public class ItemDisplayMeta extends AbstractDisplayMeta {
-    public ItemDisplayMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public ItemDisplayMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public @NotNull ItemStack getItemStack() {
+    public ItemStack getItemStack() {
         return metadata.get(MetadataDef.ItemDisplay.DISPLAYED_ITEM);
     }
 
-    public void setItemStack(@NotNull ItemStack value) {
+    public void setItemStack(ItemStack value) {
         metadata.set(MetadataDef.ItemDisplay.DISPLAYED_ITEM, value);
     }
 
-    public @NotNull DisplayContext getDisplayContext() {
+    public DisplayContext getDisplayContext() {
         return DisplayContext.VALUES[metadata.get(MetadataDef.ItemDisplay.DISPLAY_TYPE)];
     }
 
-    public void setDisplayContext(@NotNull DisplayContext value) {
+    public void setDisplayContext(DisplayContext value) {
         metadata.set(MetadataDef.ItemDisplay.DISPLAY_TYPE, (byte) value.ordinal());
     }
 

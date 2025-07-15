@@ -32,8 +32,7 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -100,7 +99,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
-    public PlayerSocketConnection(@NotNull SocketChannel channel, SocketAddress remoteAddress, @NotNull Thread readThread, @NotNull Thread writeThread) {
+    public PlayerSocketConnection(SocketChannel channel, SocketAddress remoteAddress, Thread readThread, Thread writeThread) {
         super();
         this.channel = channel;
         this.remoteAddress = remoteAddress;
@@ -191,7 +190,7 @@ public class PlayerSocketConnection extends PlayerConnection {
      * @param secretKey the secret key to use in the encryption
      * @throws IllegalStateException if encryption is already enabled for this connection
      */
-    public void setEncryptionKey(@NotNull SecretKey secretKey) {
+    public void setEncryptionKey(SecretKey secretKey) {
         Check.stateCondition(encryptionContext != null, "Encryption is already enabled!");
         this.encryptionContext = new EncryptionContext(MojangCrypt.getCipher(1, secretKey), MojangCrypt.getCipher(2, secretKey));
     }
@@ -210,13 +209,13 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @Override
-    public void sendPacket(@NotNull SendablePacket packet) {
+    public void sendPacket(SendablePacket packet) {
         this.packetQueue.relaxedOffer(packet);
         unlockWriteThread();
     }
 
     @Override
-    public void sendPackets(@NotNull Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<SendablePacket> packets) {
         for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(packet);
         unlockWriteThread();
     }
@@ -230,7 +229,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @Override
-    public @NotNull SocketAddress getRemoteAddress() {
+    public SocketAddress getRemoteAddress() {
         return remoteAddress;
     }
 
@@ -242,11 +241,11 @@ public class PlayerSocketConnection extends PlayerConnection {
      * @param remoteAddress the new connection remote address
      */
     @ApiStatus.Internal
-    public void setRemoteAddress(@NotNull SocketAddress remoteAddress) {
+    public void setRemoteAddress(SocketAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
 
-    public @NotNull SocketChannel getChannel() {
+    public SocketChannel getChannel() {
         return channel;
     }
 
@@ -254,7 +253,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         return gameProfile;
     }
 
-    public void UNSAFE_setProfile(@NotNull GameProfile gameProfile) {
+    public void UNSAFE_setProfile(GameProfile gameProfile) {
         this.gameProfile = gameProfile;
     }
 
@@ -274,7 +273,7 @@ public class PlayerSocketConnection extends PlayerConnection {
      *
      * @param loginUsername the new login username field
      */
-    public void UNSAFE_setLoginUsername(@NotNull String loginUsername) {
+    public void UNSAFE_setLoginUsername(String loginUsername) {
         this.loginUsername = loginUsername;
     }
 

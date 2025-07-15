@@ -6,13 +6,12 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.particle.Particle;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public class LivingEntityMeta extends EntityMeta {
-    protected LivingEntityMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    protected LivingEntityMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -24,12 +23,11 @@ public class LivingEntityMeta extends EntityMeta {
         metadata.set(MetadataDef.LivingEntity.IS_HAND_ACTIVE, value);
     }
 
-    @NotNull
     public PlayerHand getActiveHand() {
         return metadata.get(MetadataDef.LivingEntity.ACTIVE_HAND) ? PlayerHand.OFF : PlayerHand.MAIN;
     }
 
-    public void setActiveHand(@NotNull PlayerHand hand) {
+    public void setActiveHand(PlayerHand hand) {
         metadata.set(MetadataDef.LivingEntity.ACTIVE_HAND, hand == PlayerHand.OFF);
     }
 
@@ -49,11 +47,11 @@ public class LivingEntityMeta extends EntityMeta {
         metadata.set(MetadataDef.LivingEntity.HEALTH, value);
     }
 
-    public @NotNull List<Particle> getEffectParticles() {
+    public List<Particle> getEffectParticles() {
         return metadata.get(MetadataDef.LivingEntity.POTION_EFFECT_PARTICLES);
     }
 
-    public void setEffectParticles(@NotNull List<Particle> value) {
+    public void setEffectParticles(List<Particle> value) {
         metadata.set(MetadataDef.LivingEntity.POTION_EFFECT_PARTICLES, value);
     }
 

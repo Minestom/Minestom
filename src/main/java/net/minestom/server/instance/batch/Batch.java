@@ -2,8 +2,7 @@ package net.minestom.server.instance.batch;
 
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
@@ -68,5 +67,5 @@ public interface Batch<C> extends Block.Setter {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Nullable
-    Batch<C> apply(@NotNull Instance instance, @Nullable C callback);
+    Batch<C> apply(Instance instance, @Nullable C callback);
 }

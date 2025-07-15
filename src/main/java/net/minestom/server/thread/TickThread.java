@@ -5,8 +5,7 @@ import net.minestom.server.Tickable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +34,7 @@ public final class TickThread extends MinestomThread {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
     }
 
-    public TickThread(@NotNull String name) {
+    public TickThread(String name) {
         super(name);
     }
 
@@ -107,7 +106,7 @@ public final class TickThread extends MinestomThread {
      *
      * @return the thread lock
      */
-    public @NotNull ReentrantLock lock() {
+    public ReentrantLock lock() {
         return lock;
     }
 

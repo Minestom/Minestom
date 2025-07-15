@@ -16,8 +16,7 @@ import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Direction;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
@@ -41,11 +40,11 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_FLOAT, value, NetworkBuffer.FLOAT);
     }
 
-    public static Entry<String> String(@NotNull String value) {
+    public static Entry<String> String(String value) {
         return new MetadataImpl.EntryImpl<>(TYPE_STRING, value, NetworkBuffer.STRING);
     }
 
-    public static Entry<Component> Chat(@NotNull Component value) {
+    public static Entry<Component> Chat(Component value) {
         return new MetadataImpl.EntryImpl<>(TYPE_CHAT, value, NetworkBuffer.COMPONENT);
     }
 
@@ -53,7 +52,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_OPT_CHAT, value, NetworkBuffer.OPT_CHAT);
     }
 
-    public static Entry<ItemStack> ItemStack(@NotNull ItemStack value) {
+    public static Entry<ItemStack> ItemStack(ItemStack value) {
         return new MetadataImpl.EntryImpl<>(TYPE_ITEM_STACK, value, ItemStack.NETWORK_TYPE);
     }
 
@@ -61,11 +60,11 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_BOOLEAN, value, NetworkBuffer.BOOLEAN);
     }
 
-    public static Entry<Point> Rotation(@NotNull Point value) {
+    public static Entry<Point> Rotation(Point value) {
         return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, NetworkBuffer.VECTOR3);
     }
 
-    public static Entry<Point> BlockPosition(@NotNull Point value) {
+    public static Entry<Point> BlockPosition(Point value) {
         return new MetadataImpl.EntryImpl<>(TYPE_BLOCK_POSITION, value, NetworkBuffer.BLOCK_POSITION);
     }
 
@@ -73,7 +72,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_OPT_BLOCK_POSITION, value, NetworkBuffer.OPT_BLOCK_POSITION);
     }
 
-    public static Entry<Direction> Direction(@NotNull Direction value) {
+    public static Entry<Direction> Direction(Direction value) {
         return new MetadataImpl.EntryImpl<>(TYPE_DIRECTION, value, NetworkBuffer.DIRECTION);
     }
 
@@ -81,105 +80,105 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_OPT_UUID, value, NetworkBuffer.OPT_UUID);
     }
 
-    public static Entry<Block> BlockState(@NotNull Block value) {
+    public static Entry<Block> BlockState(Block value) {
         return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, Block.NETWORK_TYPE);
     }
 
     public static Entry<Integer> OptBlockState(@Nullable Integer value) {
         return new MetadataImpl.EntryImpl<>(TYPE_OPT_BLOCKSTATE, value, new NetworkBuffer.Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+            public void write(NetworkBuffer buffer, Integer value) {
                 buffer.write(NetworkBuffer.VAR_INT, value == null ? 0 : value);
             }
 
             @Override
-            public Integer read(@NotNull NetworkBuffer buffer) {
+            public Integer read(NetworkBuffer buffer) {
                 int value = buffer.read(NetworkBuffer.VAR_INT);
                 return value == 0 ? null : value;
             }
         });
     }
 
-    public static Entry<BinaryTag> NBT(@NotNull BinaryTag nbt) {
+    public static Entry<BinaryTag> NBT(BinaryTag nbt) {
         return new MetadataImpl.EntryImpl<>(TYPE_NBT, nbt, NetworkBuffer.NBT);
     }
 
-    public static Entry<Particle> Particle(@NotNull Particle particle) {
+    public static Entry<Particle> Particle(Particle particle) {
         return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE, particle, Particle.NETWORK_TYPE);
     }
 
-    public static Entry<List<Particle>> ParticleList(@NotNull List<Particle> particles) {
+    public static Entry<List<Particle>> ParticleList(List<Particle> particles) {
         return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE_LIST, particles, Particle.NETWORK_TYPE.list(Short.MAX_VALUE));
     }
 
-    public static Entry<VillagerMeta.VillagerData> VillagerData(@NotNull VillagerMeta.VillagerData data) {
+    public static Entry<VillagerMeta.VillagerData> VillagerData(VillagerMeta.VillagerData data) {
         return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, data, VillagerMeta.VillagerData.NETWORK_TYPE);
     }
 
     public static Entry<Integer> OptVarInt(@Nullable Integer value) {
         return new MetadataImpl.EntryImpl<>(TYPE_OPT_VARINT, value, new NetworkBuffer.Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+            public void write(NetworkBuffer buffer, Integer value) {
                 buffer.write(NetworkBuffer.VAR_INT, value == null ? 0 : value + 1);
             }
 
             @Override
-            public Integer read(@NotNull NetworkBuffer buffer) {
+            public Integer read(NetworkBuffer buffer) {
                 int value = buffer.read(NetworkBuffer.VAR_INT);
                 return value == 0 ? null : value - 1;
             }
         });
     }
 
-    public static Entry<EntityPose> Pose(@NotNull EntityPose value) {
+    public static Entry<EntityPose> Pose(EntityPose value) {
         return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
-    public static Entry<RegistryKey<CatVariant>> CatVariant(@NotNull RegistryKey<CatVariant> value) {
+    public static Entry<RegistryKey<CatVariant>> CatVariant(RegistryKey<CatVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatVariant.NETWORK_TYPE);
     }
 
-    public static Entry<RegistryKey<CowVariant>> CowVariant(@NotNull RegistryKey<CowVariant> value) {
+    public static Entry<RegistryKey<CowVariant>> CowVariant(RegistryKey<CowVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_COW_VARIANT, value, CowVariant.NETWORK_TYPE);
     }
 
-    public static Entry<RegistryKey<WolfVariant>> WolfVariant(@NotNull RegistryKey<WolfVariant> value) {
+    public static Entry<RegistryKey<WolfVariant>> WolfVariant(RegistryKey<WolfVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_WOLF_VARIANT, value, WolfVariant.NETWORK_TYPE);
     }
 
-    public static Entry<RegistryKey<WolfSoundVariant>> WolfSoundVariant(@NotNull RegistryKey<WolfSoundVariant> value) {
+    public static Entry<RegistryKey<WolfSoundVariant>> WolfSoundVariant(RegistryKey<WolfSoundVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_WOLF_SOUND_VARIANT, value, WolfSoundVariant.NETWORK_TYPE);
     }
 
-    public static Entry<RegistryKey<FrogVariant>> FrogVariant(@NotNull RegistryKey<FrogVariant> value) {
+    public static Entry<RegistryKey<FrogVariant>> FrogVariant(RegistryKey<FrogVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, FrogVariant.NETWORK_TYPE);
     }
 
-    public static Entry<RegistryKey<PigVariant>> PigVariant(@NotNull RegistryKey<PigVariant> value) {
+    public static Entry<RegistryKey<PigVariant>> PigVariant(RegistryKey<PigVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_PIG_VARIANT, value, PigVariant.NETWORK_TYPE);
     }
 
-    public static Entry<RegistryKey<ChickenVariant>> ChickenVariant(@NotNull RegistryKey<ChickenVariant> value) {
+    public static Entry<RegistryKey<ChickenVariant>> ChickenVariant(RegistryKey<ChickenVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_CHICKEN_VARIANT, value, ChickenVariant.NETWORK_TYPE);
     }
 
-    public static Entry<Holder<PaintingVariant>> PaintingVariant(@NotNull Holder<PaintingVariant> value) {
+    public static Entry<Holder<PaintingVariant>> PaintingVariant(Holder<PaintingVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, PaintingVariant.NETWORK_TYPE);
     }
 
-    public static Entry<SnifferMeta.State> SnifferState(@NotNull SnifferMeta.State value) {
+    public static Entry<SnifferMeta.State> SnifferState(SnifferMeta.State value) {
         return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, SnifferMeta.State.NETWORK_TYPE);
     }
 
-    public static Entry<ArmadilloMeta.State> ArmadilloState(@NotNull ArmadilloMeta.State value) {
+    public static Entry<ArmadilloMeta.State> ArmadilloState(ArmadilloMeta.State value) {
         return new MetadataImpl.EntryImpl<>(TYPE_ARMADILLO_STATE, value, ArmadilloMeta.State.NETWORK_TYPE);
     }
 
-    public static Entry<Point> Vector3(@NotNull Point value) {
+    public static Entry<Point> Vector3(Point value) {
         return new MetadataImpl.EntryImpl<>(TYPE_VECTOR3, value, NetworkBuffer.VECTOR3);
     }
 
-    public static Entry<float[]> Quaternion(float @NotNull [] value) {
+    public static Entry<float[]> Quaternion(float [] value) {
         return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
     }
 

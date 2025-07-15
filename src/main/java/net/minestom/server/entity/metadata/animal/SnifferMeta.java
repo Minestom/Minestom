@@ -4,18 +4,17 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
 
 public class SnifferMeta extends AnimalMeta {
-    public SnifferMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public SnifferMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public @NotNull State getState() {
+    public State getState() {
         return metadata.get(MetadataDef.Sniffer.STATE);
     }
 
-    public void setState(@NotNull State value) {
+    public void setState(State value) {
         metadata.set(MetadataDef.Sniffer.STATE, value);
     }
 

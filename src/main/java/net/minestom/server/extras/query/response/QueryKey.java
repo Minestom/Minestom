@@ -2,8 +2,7 @@ package net.minestom.server.extras.query.response;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.ConnectionState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -29,11 +28,11 @@ public enum QueryKey {
     private final String key;
     private final Supplier<String> value;
 
-    QueryKey(@NotNull Supplier<String> value) {
+    QueryKey(Supplier<String> value) {
         this(null, value);
     }
 
-    QueryKey(@Nullable String key, @NotNull Supplier<String> value) {
+    QueryKey(@Nullable String key, Supplier<String> value) {
         this.key = Objects.requireNonNullElse(key, this.name().toLowerCase(Locale.ROOT).replace('_', ' '));
         this.value = value;
     }
@@ -43,7 +42,7 @@ public enum QueryKey {
      *
      * @return the key
      */
-    public @NotNull String getKey() {
+    public String getKey() {
         return this.key;
     }
 
@@ -52,7 +51,7 @@ public enum QueryKey {
      *
      * @return the value
      */
-    public @NotNull String getValue() {
+    public String getValue() {
         return this.value.get();
     }
 }

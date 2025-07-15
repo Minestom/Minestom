@@ -9,18 +9,17 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
-    @NotNull Codec<CowVariant> REGISTRY_CODEC = StructCodec.struct(
+    Codec<CowVariant> REGISTRY_CODEC = StructCodec.struct(
             "model", Model.CODEC.optional(Model.NORMAL), CowVariant::model,
             "asset_id", Codec.KEY, CowVariant::assetId,
             CowVariantImpl::new);
 
-    @NotNull NetworkBuffer.Type<RegistryKey<CowVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::cowVariant);
-    @NotNull Codec<RegistryKey<CowVariant>> CODEC = RegistryKey.codec(Registries::cowVariant);
+    NetworkBuffer.Type<RegistryKey<CowVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::cowVariant);
+    Codec<RegistryKey<CowVariant>> CODEC = RegistryKey.codec(Registries::cowVariant);
 
-    static @NotNull CowVariant create(@NotNull Model model, @NotNull Key assetId) {
+    static CowVariant create(Model model, Key assetId) {
         return new CowVariantImpl(model, assetId);
     }
 
@@ -34,9 +33,9 @@ public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
         return DynamicRegistry.create(Key.key("minecraft:cow_variant"), REGISTRY_CODEC, RegistryData.Resource.COW_VARIANTS);
     }
 
-    @NotNull Model model();
+    Model model();
 
-    @NotNull Key assetId();
+    Key assetId();
 
     enum Model {
         NORMAL,

@@ -6,14 +6,13 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
     private Entity hooked;
     private Entity owner;
 
-    public FishingHookMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public FishingHookMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

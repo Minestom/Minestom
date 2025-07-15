@@ -7,7 +7,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -47,7 +46,7 @@ public enum ServerListPingType {
 
     private final Function<Status, String> pingResponseCreator;
 
-    ServerListPingType(@NotNull Function<Status, String> pingResponseCreator) {
+    ServerListPingType(Function<Status, String> pingResponseCreator) {
         this.pingResponseCreator = pingResponseCreator;
     }
 
@@ -57,7 +56,7 @@ public enum ServerListPingType {
      * @param status the response data
      * @return the response
      */
-    public @NotNull String getPingResponse(@NotNull Status status) {
+    public String getPingResponse(Status status) {
         return this.pingResponseCreator.apply(status);
     }
 
@@ -73,7 +72,7 @@ public enum ServerListPingType {
      * @return the ping
      * @see OpenToLAN
      */
-    public static @NotNull String getOpenToLANPing(@NotNull Status status) {
+    public static String getOpenToLANPing(Status status) {
         return String.format(LAN_PING_FORMAT, SECTION.serialize(status.description()), MinecraftServer.getServer().getPort());
     }
 
@@ -84,7 +83,7 @@ public enum ServerListPingType {
      * @param supportsVersions if the client supports recieving the versions of the server
      * @return the response
      */
-    public static @NotNull String getLegacyPingResponse(@NotNull Status status, boolean supportsVersions) {
+    public static String getLegacyPingResponse(Status status, boolean supportsVersions) {
         final String motd = SECTION.serialize(status.description());
         Status.PlayerInfo playerInfo = status.playerInfo();
         int onlinePlayers = playerInfo == null ? 0 : playerInfo.onlinePlayers();
@@ -109,7 +108,7 @@ public enum ServerListPingType {
      * @param supportsFullRgb if the client supports full RGB colors in text components
      * @return the response
      */
-    public static @NotNull JsonObject getModernPingResponse(@NotNull Status status, boolean supportsFullRgb) {
+    public static JsonObject getModernPingResponse(Status status, boolean supportsFullRgb) {
         JsonObject element = (JsonObject) Status.CODEC.encode(Transcoder.JSON, status).orElseThrow();
 
         // reset description element with downscaled colors if this version does not support RGB
@@ -128,7 +127,7 @@ public enum ServerListPingType {
      * @param version the protocol version
      * @return the corresponding server list ping version
      */
-    public static @NotNull ServerListPingType fromModernProtocolVersion(int version) {
+    public static ServerListPingType fromModernProtocolVersion(int version) {
         return version >= 713 ? MODERN_FULL_RGB : MODERN_NAMED_COLORS;
     }
 }

@@ -6,21 +6,20 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.recipe.display.SlotDisplay;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record Ingredient(@NotNull List<@NotNull Material> items) {
+public record Ingredient(List<Material> items) {
     public static final NetworkBuffer.Type<Ingredient> NETWORK_TYPE = NetworkBufferTemplate.template(
             // FIXME(1.21.2): This is really an ObjectSet, but currently ObjectSet does not properly support
             //  non-dynamic registry types. We need to improve how the tag system works generally.
             new NetworkBuffer.Type<>() {
                 @Override
-                public void write(@NotNull NetworkBuffer buffer, List<Material> value) {
+                public void write(NetworkBuffer buffer, List<Material> value) {
                     // +1 because 0 indicates that an item tag name follows (in this case it does not).
                     buffer.write(VAR_INT, value.size() + 1);
                     for (Material material : value) {
@@ -29,7 +28,7 @@ public record Ingredient(@NotNull List<@NotNull Material> items) {
                 }
 
                 @Override
-                public List<Material> read(@NotNull NetworkBuffer buffer) {
+                public List<Material> read(NetworkBuffer buffer) {
                     int size = buffer.read(VAR_INT) - 1;
                     Check.notNull(size > Short.MAX_VALUE, "too many ingredients");
                     if (size == -1) {
@@ -51,11 +50,11 @@ public record Ingredient(@NotNull List<@NotNull Material> items) {
         Check.argCondition(items.contains(Material.AIR), "Ingredient can't contain air");
     }
 
-    public Ingredient(@NotNull Material @NotNull ... items) {
+    public Ingredient(Material ... items) {
         this(List.of(items));
     }
 
-    public static @Nullable Ingredient fromSlotDisplay(@NotNull SlotDisplay slotDisplay) {
+    public static @Nullable Ingredient fromSlotDisplay(SlotDisplay slotDisplay) {
         return switch (slotDisplay) {
             case SlotDisplay.Item item -> new Ingredient(item.material());
             case SlotDisplay.Tag ignored -> {

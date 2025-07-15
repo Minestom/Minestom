@@ -9,12 +9,11 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.sound.SoundEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record Equippable(
-        @NotNull EquipmentSlot slot,
-        @NotNull SoundEvent equipSound,
+        EquipmentSlot slot,
+        SoundEvent equipSound,
         @Nullable String assetId,
         @Nullable String cameraOverlay,
         @Nullable RegistryTag<EntityType> allowedEntities,
@@ -23,7 +22,7 @@ public record Equippable(
         boolean damageOnHurt,
         boolean equipOnInteract,
         boolean canBeSheared,
-        @NotNull SoundEvent shearingSound
+        SoundEvent shearingSound
 ) {
     public static final SoundEvent DEFAULT_EQUIP_SOUND = SoundEvent.ITEM_ARMOR_EQUIP_GENERIC;
     public static final SoundEvent DEFAULT_SHEARING_SOUND = SoundEvent.ITEM_SHEARS_SNIP;
@@ -55,47 +54,47 @@ public record Equippable(
             "shearing_sound", SoundEvent.CODEC.optional(DEFAULT_SHEARING_SOUND), Equippable::shearingSound,
             Equippable::new);
 
-    public @NotNull Equippable withSlot(@NotNull EquipmentSlot slot) {
+    public Equippable withSlot(EquipmentSlot slot) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withEquipSound(@NotNull SoundEvent equipSound) {
+    public Equippable withEquipSound(SoundEvent equipSound) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withAssetId(@Nullable String assetId) {
+    public Equippable withAssetId(@Nullable String assetId) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withCameraOverlay(@Nullable String cameraOverlay) {
+    public Equippable withCameraOverlay(@Nullable String cameraOverlay) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withAllowedEntities(@Nullable RegistryTag<EntityType> allowedEntities) {
+    public Equippable withAllowedEntities(@Nullable RegistryTag<EntityType> allowedEntities) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withDispensable(boolean dispensable) {
+    public Equippable withDispensable(boolean dispensable) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withSwappable(boolean swappable) {
+    public Equippable withSwappable(boolean swappable) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withDamageOnHurt(boolean damageOnHurt) {
+    public Equippable withDamageOnHurt(boolean damageOnHurt) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withEquipOnInteract(boolean equipOnInteract) {
+    public Equippable withEquipOnInteract(boolean equipOnInteract) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withCanBeSheared(boolean canBeSheared) {
+    public Equippable withCanBeSheared(boolean canBeSheared) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 
-    public @NotNull Equippable withShearingSound(@NotNull SoundEvent shearingSound) {
+    public Equippable withShearingSound(SoundEvent shearingSound) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract, canBeSheared, shearingSound);
     }
 }

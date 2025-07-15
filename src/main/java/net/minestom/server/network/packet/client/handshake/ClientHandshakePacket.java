@@ -4,12 +4,11 @@ import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientHandshakePacket(int protocolVersion, @NotNull String serverAddress,
-                                    int serverPort, @NotNull Intent intent) implements ClientPacket {
+public record ClientHandshakePacket(int protocolVersion, String serverAddress,
+                                    int serverPort, Intent intent) implements ClientPacket {
 
     public ClientHandshakePacket {
         if (serverAddress.length() > maxHandshakeLength()) {
@@ -34,7 +33,7 @@ public record ClientHandshakePacket(int protocolVersion, @NotNull String serverA
         LOGIN,
         TRANSFER;
 
-        public static @NotNull Intent fromId(int id) {
+        public static Intent fromId(int id) {
             return switch (id) {
                 case 1 -> STATUS;
                 case 2 -> LOGIN;

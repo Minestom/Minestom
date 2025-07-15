@@ -7,7 +7,6 @@ import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Used when a player is clicking on a block with an item (but is not a block in item form).
@@ -20,10 +19,10 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
     private final Point position;
     private final BlockFace blockFace;
 
-    public PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull PlayerHand hand,
-                                     @NotNull ItemStack itemStack,
-                                     @NotNull Point position, @NotNull Point cursorPosition,
-                                     @NotNull BlockFace blockFace) {
+    public PlayerUseItemOnBlockEvent(Player player, PlayerHand hand,
+                                     ItemStack itemStack,
+                                     Point position, Point cursorPosition,
+                                     BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
@@ -36,7 +35,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      *
      * @return the block position
      */
-    public @NotNull Point getPosition() {
+    public Point getPosition() {
         return position;
     }
 
@@ -45,7 +44,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      *
      * @return the block face
      */
-    public @NotNull BlockFace getBlockFace() {
+    public BlockFace getBlockFace() {
         return blockFace;
     }
 
@@ -54,7 +53,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      *
      * @return the hand
      */
-    public @NotNull PlayerHand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
@@ -64,12 +63,12 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      * @return the item
      */
     @Override
-    public @NotNull ItemStack getItemStack() {
+    public ItemStack getItemStack() {
         return itemStack;
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

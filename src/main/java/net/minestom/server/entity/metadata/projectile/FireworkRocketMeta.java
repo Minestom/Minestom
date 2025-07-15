@@ -6,22 +6,20 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
     private Entity shooter;
 
-    public FireworkRocketMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public FireworkRocketMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    @NotNull
     public ItemStack getFireworkInfo() {
         return metadata.get(MetadataDef.FireworkRocketEntity.ITEM);
     }
 
-    public void setFireworkInfo(@NotNull ItemStack value) {
+    public void setFireworkInfo(ItemStack value) {
         metadata.set(MetadataDef.FireworkRocketEntity.ITEM, value);
     }
 

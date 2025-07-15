@@ -7,8 +7,7 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 import net.minestom.codegen.MinestomCodeGenerator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +26,7 @@ public class ParticleGenerator extends MinestomCodeGenerator {
     private final InputStream particlesFile;
     private final File outputFolder;
 
-    public ParticleGenerator(@Nullable InputStream particlesFile, @NotNull File outputFolder) {
+    public ParticleGenerator(@Nullable InputStream particlesFile, File outputFolder) {
         this.particlesFile = particlesFile;
         this.outputFolder = outputFolder;
     }
@@ -90,7 +89,7 @@ public class ParticleGenerator extends MinestomCodeGenerator {
                 outputFolder);
     }
 
-    private static String toPascalCase(@NotNull String input) {
+    private static String toPascalCase(String input) {
         String camelCase = Pattern.compile("_([a-z])")
                 .matcher(input)
                 .replaceAll(m -> m.group(1).toUpperCase());

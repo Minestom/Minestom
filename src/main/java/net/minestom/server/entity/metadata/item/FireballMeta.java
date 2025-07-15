@@ -7,22 +7,20 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class FireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
     private Entity shooter;
 
-    public FireballMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public FireballMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    @NotNull
     public ItemStack getItem() {
         return metadata.get(MetadataDef.Fireball.ITEM);
     }
 
-    public void setItem(@NotNull ItemStack value) {
+    public void setItem(ItemStack value) {
         metadata.set(MetadataDef.Fireball.ITEM, value);
     }
 

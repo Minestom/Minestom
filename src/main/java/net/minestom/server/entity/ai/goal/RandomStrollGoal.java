@@ -3,7 +3,6 @@ package net.minestom.server.entity.ai.goal;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class RandomStrollGoal extends GoalSelector {
 
     private long lastStroll;
 
-    public RandomStrollGoal(@NotNull EntityCreature entityCreature, int radius) {
+    public RandomStrollGoal(EntityCreature entityCreature, int radius) {
         super(entityCreature);
         this.radius = radius;
         this.closePositions = getNearbyBlocks(radius);
@@ -64,7 +63,7 @@ public class RandomStrollGoal extends GoalSelector {
         return radius;
     }
 
-    private static @NotNull List<Vec> getNearbyBlocks(int radius) {
+    private static List<Vec> getNearbyBlocks(int radius) {
         List<Vec> blocks = new ArrayList<>();
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {

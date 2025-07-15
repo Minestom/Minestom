@@ -23,6 +23,7 @@ repositories {
 dependencies {
     // Core dependencies
     api(libs.jetbrainsAnnotations)
+    api(libs.jSpecify)
 
     // Testing
     testImplementation(libs.bundles.junit)
@@ -30,6 +31,7 @@ dependencies {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+    modularity.inferModulePath = true
 
     withSourcesJar()
     withJavadocJar()

@@ -8,12 +8,11 @@ import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record AttributeList(@NotNull List<Modifier> modifiers) {
+public record AttributeList(List<Modifier> modifiers) {
     public static final AttributeList EMPTY = new AttributeList(List.of());
 
     public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = Modifier.NETWORK_TYPE.list(Short.MAX_VALUE)
@@ -22,10 +21,10 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
             .transform(AttributeList::new, AttributeList::modifiers);
 
     public record Modifier(
-            @NotNull Attribute attribute,
-            @NotNull AttributeModifier modifier,
-            @NotNull EquipmentSlotGroup slot,
-            @NotNull Display display
+            Attribute attribute,
+            AttributeModifier modifier,
+            EquipmentSlotGroup slot,
+            Display display
     ) {
         public static final NetworkBuffer.Type<Modifier> NETWORK_TYPE = NetworkBufferTemplate.template(
                 Attribute.NETWORK_TYPE, Modifier::attribute,
@@ -41,9 +40,9 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
                 Modifier::new);
 
         public Modifier(
-                @NotNull Attribute attribute,
-                @NotNull AttributeModifier modifier,
-                @NotNull EquipmentSlotGroup slot
+                Attribute attribute,
+                AttributeModifier modifier,
+                EquipmentSlotGroup slot
         ) {
             this(attribute, modifier, slot, Display.Default.INSTANCE);
         }
@@ -54,26 +53,26 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
         modifiers = List.copyOf(modifiers);
     }
 
-    public AttributeList(@NotNull Modifier modifier) {
+    public AttributeList(Modifier modifier) {
         this(List.of(modifier));
     }
 
-    public @NotNull AttributeList with(@NotNull Modifier modifier) {
+    public AttributeList with(Modifier modifier) {
         List<Modifier> newModifiers = new ArrayList<>(modifiers);
         newModifiers.add(modifier);
         return new AttributeList(newModifiers);
     }
 
-    public @NotNull AttributeList remove(@NotNull Modifier modifier) {
+    public AttributeList remove(Modifier modifier) {
         List<Modifier> newModifiers = new ArrayList<>(modifiers);
         newModifiers.remove(modifier);
         return new AttributeList(newModifiers);
     }
 
     public sealed interface Display {
-        @NotNull NetworkBuffer.Type<Display> NETWORK_TYPE = Type.NETWORK_TYPE
+        NetworkBuffer.Type<Display> NETWORK_TYPE = Type.NETWORK_TYPE
                 .unionType(Display::dataSerializer, Display::targetToType);
-        @NotNull Codec<Display> CODEC = Type.CODEC.unionType(Display::codec, Display::targetToType);
+        Codec<Display> CODEC = Type.CODEC.unionType(Display::codec, Display::targetToType);
 
         record Default() implements Display {
             public static final Default INSTANCE = new Default();
@@ -89,7 +88,7 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
             public static final StructCodec<Hidden> CODEC = StructCodec.struct(INSTANCE);
         }
 
-        record Override(@NotNull Component component) implements Display {
+        record Override(Component component) implements Display {
             public static final NetworkBuffer.Type<Override> NETWORK_TYPE = NetworkBufferTemplate.template(
                     NetworkBuffer.COMPONENT, Override::component,
                     Override::new);
@@ -107,7 +106,7 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
         }
 
         @SuppressWarnings({"unchecked", "rawtypes"})
-        private static NetworkBuffer.Type<Display> dataSerializer(@NotNull Type type) {
+        private static NetworkBuffer.Type<Display> dataSerializer(Type type) {
             return (NetworkBuffer.Type) switch (type) {
                 case DEFAULT -> Default.NETWORK_TYPE;
                 case HIDDEN -> Hidden.NETWORK_TYPE;
@@ -115,7 +114,7 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
             };
         }
 
-        private static StructCodec<? extends Display> codec(@NotNull Type type) {
+        private static StructCodec<? extends Display> codec(Type type) {
             return switch (type) {
                 case DEFAULT -> Default.CODEC;
                 case HIDDEN -> Hidden.CODEC;
@@ -123,7 +122,7 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
             };
         }
 
-        private static @NotNull Type targetToType(@NotNull Display display) {
+        private static Type targetToType(Display display) {
             return switch (display) {
                 case Default ignored -> Type.DEFAULT;
                 case Hidden ignored -> Type.HIDDEN;

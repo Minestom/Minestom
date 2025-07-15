@@ -1,8 +1,7 @@
 package net.minestom.server.advancements;
 
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -26,8 +25,7 @@ public class AdvancementManager {
      * @return the newly created {@link AdvancementTab}
      * @throws IllegalStateException if a tab with the identifier {@code rootIdentifier} already exists
      */
-    @NotNull
-    public AdvancementTab createTab(@NotNull String rootIdentifier, @NotNull AdvancementRoot root) {
+    public AdvancementTab createTab(String rootIdentifier, AdvancementRoot root) {
         Check.stateCondition(advancementTabMap.containsKey(rootIdentifier),
                 "A tab with the identifier '" + rootIdentifier + "' already exists");
         final AdvancementTab advancementTab = new AdvancementTab(rootIdentifier, root);
@@ -42,7 +40,7 @@ public class AdvancementManager {
      * @return the {@link AdvancementTab} associated with the identifier, null if not any
      */
     @Nullable
-    public AdvancementTab getTab(@NotNull String rootIdentifier) {
+    public AdvancementTab getTab(String rootIdentifier) {
         return advancementTabMap.get(rootIdentifier);
     }
 
@@ -51,7 +49,6 @@ public class AdvancementManager {
      *
      * @return the collection containing all created {@link AdvancementTab}
      */
-    @NotNull
     public Collection<AdvancementTab> getTabs() {
         return advancementTabMap.values();
     }

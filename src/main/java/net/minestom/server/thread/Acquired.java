@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,7 +24,7 @@ public final class Acquired<T> {
         this.lock = AcquirableImpl.enter(owner, tickThread);
     }
 
-    public @NotNull T get() {
+    public T get() {
         safeCheck();
         return value;
     }

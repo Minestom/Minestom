@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Map;
@@ -32,24 +31,24 @@ public sealed interface SnapshotUpdater permits SnapshotUpdaterImpl {
      * @param <T>          the snapshot type
      * @return the new updated snapshot
      */
-    static <T extends Snapshot> @NotNull T update(@NotNull Snapshotable snapshotable) {
+    static <T extends Snapshot> T update(Snapshotable snapshotable) {
         return SnapshotUpdaterImpl.update(snapshotable);
     }
 
-    <T extends Snapshot> @NotNull AtomicReference<T> reference(@NotNull Snapshotable snapshotable);
+    <T extends Snapshot> AtomicReference<T> reference(Snapshotable snapshotable);
 
     @Contract("!null -> !null")
     default <T extends Snapshot> AtomicReference<T> optionalReference(Snapshotable snapshotable) {
         return snapshotable != null ? reference(snapshotable) : null;
     }
 
-    default <T extends Snapshot, S extends Snapshotable, K> @NotNull Map<K, AtomicReference<T>> referencesMap(@NotNull Collection<S> snapshotables,
-                                                                                                              @NotNull Function<S, K> mappingFunction) {
+    default <T extends Snapshot, S extends Snapshotable, K> Map<K, AtomicReference<T>> referencesMap(Collection<S> snapshotables,
+                                                                                                              Function<S, K> mappingFunction) {
         return snapshotables.stream().collect(Collectors.toUnmodifiableMap(mappingFunction, this::reference));
     }
 
-    default <T extends Snapshot, S extends Snapshotable> @NotNull Map<Long, AtomicReference<T>> referencesMapLong(@NotNull Collection<S> snapshotables,
-                                                                                                                  @NotNull ToLongFunction<S> mappingFunction) {
+    default <T extends Snapshot, S extends Snapshotable> Map<Long, AtomicReference<T>> referencesMapLong(Collection<S> snapshotables,
+                                                                                                                  ToLongFunction<S> mappingFunction) {
         Long2ObjectOpenHashMap<AtomicReference<T>> map = new Long2ObjectOpenHashMap<>(snapshotables.size());
         for (S snapshotable : snapshotables) {
             map.put(mappingFunction.applyAsLong(snapshotable), reference(snapshotable));
@@ -58,8 +57,8 @@ public sealed interface SnapshotUpdater permits SnapshotUpdaterImpl {
         return map;
     }
 
-    default <T extends Snapshot, S extends Snapshotable> @NotNull Map<Integer, AtomicReference<T>> referencesMapInt(@NotNull Collection<S> snapshotables,
-                                                                                                                    @NotNull ToIntFunction<S> mappingFunction) {
+    default <T extends Snapshot, S extends Snapshotable> Map<Integer, AtomicReference<T>> referencesMapInt(Collection<S> snapshotables,
+                                                                                                                    ToIntFunction<S> mappingFunction) {
         Int2ObjectOpenHashMap<AtomicReference<T>> map = new Int2ObjectOpenHashMap<>(snapshotables.size());
         for (S snapshotable : snapshotables) {
             map.put(mappingFunction.applyAsInt(snapshotable), reference(snapshotable));

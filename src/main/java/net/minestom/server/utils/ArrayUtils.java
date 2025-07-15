@@ -2,8 +2,7 @@ package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -15,7 +14,7 @@ public final class ArrayUtils {
     private ArrayUtils() {
     }
 
-    public static boolean isEmpty(@Nullable Object @NotNull [] array) {
+    public static boolean isEmpty(@Nullable Object [] array) {
         for (Object object : array) {
             if (object != null) return false;
         }
@@ -35,7 +34,7 @@ public final class ArrayUtils {
         return result;
     }
 
-    public static <K, V> Map<K, V> toMap(@NotNull K[] keys, @NotNull V[] values, int length) {
+    public static <K, V> Map<K, V> toMap(K[] keys, V[] values, int length) {
         assert keys.length >= length && keys.length == values.length;
         return switch (length) {
             case 0 -> Map.of();

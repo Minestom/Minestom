@@ -7,13 +7,12 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.utils.position.PositionUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class NoPhysicsNodeFollower implements NodeFollower {
     private final Entity entity;
 
-    public NoPhysicsNodeFollower(@NotNull Entity entity) {
+    public NoPhysicsNodeFollower(Entity entity) {
         this.entity = entity;
     }
 
@@ -25,7 +24,7 @@ public class NoPhysicsNodeFollower implements NodeFollower {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
-    public void moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
+    public void moveTowards(Point direction, double speed, Point lookAt) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
@@ -61,7 +60,7 @@ public class NoPhysicsNodeFollower implements NodeFollower {
     }
 
     @Override
-    public boolean isAtPoint(@NotNull Point point) {
+    public boolean isAtPoint(Point point) {
         return entity.getPosition().sameBlock(point);
     }
 

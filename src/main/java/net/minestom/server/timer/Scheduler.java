@@ -1,6 +1,5 @@
 package net.minestom.server.timer;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
@@ -12,7 +11,7 @@ import java.util.function.Supplier;
  * Tasks are by default executed in the caller thread.
  */
 public sealed interface Scheduler extends Executor permits SchedulerImpl, SchedulerManager {
-    static @NotNull Scheduler newScheduler() {
+    static Scheduler newScheduler() {
         return new SchedulerImpl();
     }
 
@@ -48,47 +47,47 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
      * @param executionType the execution type
      * @return the created task
      */
-    @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task, @NotNull ExecutionType executionType);
+    Task submitTask(Supplier<TaskSchedule> task, ExecutionType executionType);
 
-    default @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task) {
+    default Task submitTask(Supplier<TaskSchedule> task) {
         return submitTask(task, ExecutionType.TICK_START);
     }
 
-    default @NotNull Task.Builder buildTask(@NotNull Runnable task) {
+    default Task.Builder buildTask(Runnable task) {
         return new Task.Builder(this, task);
     }
 
-    default @NotNull Task scheduleTask(@NotNull Runnable task,
-                                       @NotNull TaskSchedule delay, @NotNull TaskSchedule repeat,
-                                       @NotNull ExecutionType executionType) {
+    default Task scheduleTask(Runnable task,
+                                       TaskSchedule delay, TaskSchedule repeat,
+                                       ExecutionType executionType) {
         return buildTask(task).delay(delay).repeat(repeat).executionType(executionType).schedule();
     }
 
-    default @NotNull Task scheduleTask(@NotNull Runnable task, @NotNull TaskSchedule delay, @NotNull TaskSchedule repeat) {
+    default Task scheduleTask(Runnable task, TaskSchedule delay, TaskSchedule repeat) {
         return scheduleTask(task, delay, repeat, ExecutionType.TICK_START);
     }
 
-    default @NotNull Task scheduleTask(@NotNull Supplier<TaskSchedule> task, @NotNull TaskSchedule delay) {
+    default Task scheduleTask(Supplier<TaskSchedule> task, TaskSchedule delay) {
         return new Task.Builder(this, task).delay(delay).schedule();
     }
 
-    default @NotNull Task scheduleNextTick(@NotNull Runnable task, @NotNull ExecutionType executionType) {
+    default Task scheduleNextTick(Runnable task, ExecutionType executionType) {
         return buildTask(task).delay(TaskSchedule.nextTick()).executionType(executionType).schedule();
     }
 
-    default @NotNull Task scheduleNextTick(@NotNull Runnable task) {
+    default Task scheduleNextTick(Runnable task) {
         return scheduleNextTick(task, ExecutionType.TICK_START);
     }
 
-    default @NotNull Task scheduleEndOfTick(@NotNull Runnable task) {
+    default Task scheduleEndOfTick(Runnable task) {
         return scheduleNextProcess(task, ExecutionType.TICK_END);
     }
 
-    default @NotNull Task scheduleNextProcess(@NotNull Runnable task, @NotNull ExecutionType executionType) {
+    default Task scheduleNextProcess(Runnable task, ExecutionType executionType) {
         return buildTask(task).delay(TaskSchedule.immediate()).executionType(executionType).schedule();
     }
 
-    default @NotNull Task scheduleNextProcess(@NotNull Runnable task) {
+    default Task scheduleNextProcess(Runnable task) {
         return scheduleNextProcess(task, ExecutionType.TICK_START);
     }
 
@@ -97,7 +96,7 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
      * @param command the task to execute on the next tick
      */
     @Override
-    default void execute(@NotNull Runnable command) {
+    default void execute(Runnable command) {
         scheduleNextTick(command);
     }
 }

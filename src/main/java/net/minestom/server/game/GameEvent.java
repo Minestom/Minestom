@@ -7,8 +7,7 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -24,18 +23,17 @@ public sealed interface GameEvent extends StaticProtocolObject<GameEvent> permit
      * @return the game event registry or null if not found
      */
     @Contract(pure = true)
-    @Nullable
-    RegistryData.GameEventEntry registry();
+    RegistryData.@Nullable GameEventEntry registry();
 
-    static @NotNull Collection<@NotNull GameEvent> values() {
+    static Collection<GameEvent> values() {
         return GameEventImpl.REGISTRY.values();
     }
 
-    static @Nullable GameEvent fromKey(@KeyPattern @NotNull String key) {
+    static @Nullable GameEvent fromKey(@KeyPattern String key) {
         return fromKey(Key.key(key));
     }
 
-    static @Nullable GameEvent fromKey(@NotNull Key key) {
+    static @Nullable GameEvent fromKey(Key key) {
         return GameEventImpl.REGISTRY.get(key);
     }
 
@@ -43,7 +41,7 @@ public sealed interface GameEvent extends StaticProtocolObject<GameEvent> permit
         return GameEventImpl.REGISTRY.get(id);
     }
 
-    static @NotNull Registry<GameEvent> staticRegistry() {
+    static Registry<GameEvent> staticRegistry() {
         return GameEventImpl.REGISTRY;
     }
 

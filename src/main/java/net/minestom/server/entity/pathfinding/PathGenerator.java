@@ -7,17 +7,16 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.pathfinding.generators.NodeGenerator;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
 public final class PathGenerator {
     private static final Comparator<PNode> pNodeComparator = (s1, s2) -> (int) (((s1.g() + s1.h()) - (s2.g() + s2.h())) * 1000);
 
-    public static @NotNull PPath generate(Block.@NotNull Getter getter, @NotNull Pos orgStart, @NotNull Point orgTarget,
+    public static PPath generate(Block.Getter getter, Pos orgStart, Point orgTarget,
                                           double closeDistance, double maxDistance, double pathVariance,
-                                          @NotNull BoundingBox boundingBox, boolean isOnGround, @NotNull NodeGenerator generator,
+                                          BoundingBox boundingBox, boolean isOnGround, NodeGenerator generator,
                                           @Nullable Runnable onComplete) {
         final Point start = (!isOnGround && generator.hasGravitySnap())
                 ? orgStart.withY(generator.gravitySnap(getter, orgStart.x(), orgStart.y(), orgStart.z(), boundingBox, 100).orElse(orgStart.y()))

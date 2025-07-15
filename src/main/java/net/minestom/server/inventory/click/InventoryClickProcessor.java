@@ -11,8 +11,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ import java.util.function.BiFunction;
 @ApiStatus.Internal
 public final class InventoryClickProcessor {
 
-    public @NotNull InventoryClickResult leftClick(@NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    public InventoryClickResult leftClick(ItemStack clicked, ItemStack cursor) {
         if (cursor.isSimilar(clicked)) {
             // Try to stack items
             final int totalAmount = cursor.amount() + clicked.amount();
@@ -46,7 +45,7 @@ public final class InventoryClickProcessor {
         return new InventoryClickResult(clicked, cursor);
     }
 
-    public @NotNull InventoryClickResult rightClick(@NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    public InventoryClickResult rightClick(ItemStack clicked, ItemStack cursor) {
         final var result = new InventoryClickResult(clicked, cursor);
 
         if (clicked.isSimilar(cursor)) {
@@ -82,14 +81,14 @@ public final class InventoryClickProcessor {
         return result;
     }
 
-    public @NotNull InventoryClickResult changeHeld(@NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    public InventoryClickResult changeHeld(ItemStack clicked, ItemStack cursor) {
         return new InventoryClickResult(cursor, clicked); // Swap items
     }
 
-    public @NotNull InventoryClickResult shiftClick(@NotNull AbstractInventory inventory, @NotNull AbstractInventory targetInventory,
+    public InventoryClickResult shiftClick(AbstractInventory inventory, AbstractInventory targetInventory,
                                                     int start, int end, int step,
-                                                    @NotNull Player player, int slot,
-                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+                                                    Player player, int slot,
+                                                    ItemStack clicked, ItemStack cursor) {
         final var clickResult = new InventoryClickResult(clicked, cursor);
         if (clicked.isAir()) return clickResult.cancelled();
 
@@ -125,8 +124,8 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    public @Nullable ItemStack dragging(@NotNull Player player, @NotNull AbstractInventory inventory,
-                                                   @NotNull List<Integer> slots, int button, @NotNull ItemStack cursor) {
+    public @Nullable ItemStack dragging(Player player, AbstractInventory inventory,
+                                                   List<Integer> slots, int button, ItemStack cursor) {
         // Drag instruction
         if (button == 2) {
             // End left
@@ -201,8 +200,8 @@ public final class InventoryClickProcessor {
         return cursor;
     }
 
-    public @NotNull InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot,
-                                                     @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    public InventoryClickResult doubleClick(AbstractInventory clickedInventory, AbstractInventory inventory, Player player, int slot,
+                                                     ItemStack clicked, ItemStack cursor) {
         InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
         if (cursor.isAir()) return clickResult.cancelled();
 
@@ -258,8 +257,8 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    public @NotNull InventoryClickResult drop(@NotNull Player player,
-                                              boolean all, int slot, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    public InventoryClickResult drop(Player player,
+                                              boolean all, int slot, ItemStack clicked, ItemStack cursor) {
         final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
 
         if (slot == -999) {
@@ -314,8 +313,8 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    private void callClickEvent(@NotNull Player player, @NotNull AbstractInventory inventory, int slot,
-                                @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    private void callClickEvent(Player player, AbstractInventory inventory, int slot,
+                                ClickType clickType, ItemStack clicked, ItemStack cursor) {
         EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
     }
 }

@@ -3,7 +3,6 @@ package net.minestom.server.extras.velocity;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -33,7 +32,7 @@ public final class VelocityProxy {
      * @param secret the forwarding secret,
      *               be sure to do not hardcode it in your code but to retrieve it from a file or anywhere else safe
      */
-    public static void enable(@NotNull String secret) {
+    public static void enable(String secret) {
         Check.stateCondition(enabled, "Velocity modern forwarding is already enabled");
         Check.stateCondition(MojangAuth.isEnabled(), "Velocity modern forwarding should not be enabled with MojangAuth");
 
@@ -50,7 +49,7 @@ public final class VelocityProxy {
         return enabled;
     }
 
-    public static boolean checkIntegrity(@NotNull NetworkBuffer buffer) {
+    public static boolean checkIntegrity(NetworkBuffer buffer) {
         final byte[] signature = new byte[32];
         for (int i = 0; i < signature.length; i++) {
             signature[i] = buffer.read(BYTE);

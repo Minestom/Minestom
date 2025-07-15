@@ -7,20 +7,19 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attributes permits AttributeImpl {
-    @NotNull NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Attribute::fromId, Attribute::id);
-    @NotNull Codec<Attribute> CODEC = Codec.STRING.transform(AttributeImpl::get, Attribute::name);
+    NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Attribute::fromId, Attribute::id);
+    Codec<Attribute> CODEC = Codec.STRING.transform(AttributeImpl::get, Attribute::name);
 
     @Contract(pure = true)
-    @NotNull RegistryData.AttributeEntry registry();
+    RegistryData.AttributeEntry registry();
 
     @Override
-    default @NotNull Key key() {
+    default Key key() {
         return registry().key();
     }
 
@@ -45,15 +44,15 @@ public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attri
         return registry().clientSync();
     }
 
-    static @NotNull Collection<@NotNull Attribute> values() {
+    static Collection<Attribute> values() {
         return AttributeImpl.REGISTRY.values();
     }
 
-    static @Nullable Attribute fromKey(@KeyPattern @NotNull String key) {
+    static @Nullable Attribute fromKey(@KeyPattern String key) {
         return fromKey(Key.key(key));
     }
 
-    static @Nullable Attribute fromKey(@NotNull Key key) {
+    static @Nullable Attribute fromKey(Key key) {
         return AttributeImpl.REGISTRY.get(key);
     }
 

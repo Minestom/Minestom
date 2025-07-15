@@ -1,7 +1,6 @@
 package net.minestom.server.utils.callback;
 
 import net.minestom.server.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Functional interface used by the {@link net.minestom.server.command.CommandManager}
@@ -17,6 +16,6 @@ public interface CommandCallback {
      * @param sender  the command sender
      * @param command the complete command string
      */
-    void apply(@NotNull CommandSender sender, @NotNull String command);
+    void apply(CommandSender sender, String command);
 
 }

@@ -5,7 +5,6 @@ import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.network.packet.client.play.ClientNameItemPacket;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called every time a {@link Player} types a letter in an anvil GUI.
@@ -18,23 +17,23 @@ public class PlayerAnvilInputEvent implements PlayerInstanceEvent, InventoryEven
     private final Inventory inventory;
     private final String input;
 
-    public PlayerAnvilInputEvent(@NotNull Player player, @NotNull Inventory inventory, @NotNull String input) {
+    public PlayerAnvilInputEvent(Player player, Inventory inventory, String input) {
         this.player = player;
         this.inventory = inventory;
         this.input = input;
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    public @NotNull String getInput() {
+    public String getInput() {
         return input;
     }
 
     @Override
-    public @NotNull Inventory getInventory() {
+    public Inventory getInventory() {
         return inventory;
     }
 

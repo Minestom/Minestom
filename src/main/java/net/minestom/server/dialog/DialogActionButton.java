@@ -3,11 +3,10 @@ package net.minestom.server.dialog;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record DialogActionButton(
-        @NotNull Component label,
+        Component label,
         @Nullable Component tooltip,
         int width,
         @Nullable DialogAction action

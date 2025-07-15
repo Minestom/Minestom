@@ -2,8 +2,7 @@ package net.minestom.server.utils.collection;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -17,19 +16,19 @@ import java.util.List;
 @ApiStatus.Internal
 public sealed interface ObjectArray<T>
         permits ObjectArrayImpl.SingleThread, ObjectArrayImpl.Concurrent {
-    static <T> @NotNull ObjectArray<T> singleThread(int initialSize) {
+    static <T> ObjectArray<T> singleThread(int initialSize) {
         return new ObjectArrayImpl.SingleThread<>(initialSize);
     }
 
-    static <T> @NotNull ObjectArray<T> singleThread() {
+    static <T> ObjectArray<T> singleThread() {
         return singleThread(0);
     }
 
-    static <T> @NotNull ObjectArray<T> concurrent(int initialSize) {
+    static <T> ObjectArray<T> concurrent(int initialSize) {
         return new ObjectArrayImpl.Concurrent<>(initialSize);
     }
 
-    static <T> @NotNull ObjectArray<T> concurrent() {
+    static <T> ObjectArray<T> concurrent() {
         return concurrent(0);
     }
 
@@ -44,7 +43,7 @@ public sealed interface ObjectArray<T>
     void trim();
 
     @Contract(pure = true)
-    @UnknownNullability T @NotNull [] arrayCopy(@NotNull Class<T> type);
+    @UnknownNullability T [] arrayCopy(Class<T> type);
 
     /**
      * Copies the array into a list.
@@ -53,5 +52,5 @@ public sealed interface ObjectArray<T>
      * @return List of the array elements
      */
     @Contract(pure = true)
-    @NotNull @Unmodifiable List<@NotNull T> toList();
+    @Unmodifiable List<T> toList();
 }

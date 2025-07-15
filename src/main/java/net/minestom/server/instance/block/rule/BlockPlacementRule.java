@@ -6,15 +6,14 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class BlockPlacementRule {
     public static final int DEFAULT_UPDATE_RANGE = 10;
 
     protected final Block block;
 
-    protected BlockPlacementRule(@NotNull Block block) {
+    protected BlockPlacementRule(Block block) {
         this.block = block;
     }
 
@@ -25,7 +24,7 @@ public abstract class BlockPlacementRule {
      * @param updateState The current parameters to the block update
      * @return the updated block
      */
-    public @NotNull Block blockUpdate(@NotNull UpdateState updateState) {
+    public Block blockUpdate(UpdateState updateState) {
         return updateState.currentBlock();
     }
 
@@ -36,13 +35,13 @@ public abstract class BlockPlacementRule {
      * @param placementState The current parameters to the block placement
      * @return the block to place, {@code null} to cancel
      */
-    public abstract @Nullable Block blockPlace(@NotNull PlacementState placementState);
+    public abstract @Nullable Block blockPlace(PlacementState placementState);
 
-    public boolean isSelfReplaceable(@NotNull Replacement replacement) {
+    public boolean isSelfReplaceable(Replacement replacement) {
         return false;
     }
 
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
         return block;
     }
 
@@ -55,10 +54,10 @@ public abstract class BlockPlacementRule {
     }
 
     public record PlacementState(
-            @NotNull Block.Getter instance,
-            @NotNull Block block,
+            Block.Getter instance,
+            Block block,
             @Nullable BlockFace blockFace,
-            @NotNull Point placePosition,
+            Point placePosition,
             @Nullable Point cursorPosition,
             @Nullable Pos playerPosition,
             @Nullable ItemStack usedItemStack,
@@ -66,22 +65,22 @@ public abstract class BlockPlacementRule {
     ) {
     }
 
-    public record UpdateState(@NotNull Block.Getter instance,
-                              @NotNull Point blockPosition,
-                              @NotNull Block currentBlock,
-                              @NotNull BlockFace fromFace) {
+    public record UpdateState(Block.Getter instance,
+                              Point blockPosition,
+                              Block currentBlock,
+                              BlockFace fromFace) {
     }
 
     public record Replacement(
-            @NotNull Block block,
-            @NotNull BlockFace blockFace,
-            @NotNull Point cursorPosition,
+            Block block,
+            BlockFace blockFace,
+            Point cursorPosition,
             /**
 			 * Whether or not the placement position is offset from the clicked block
 			 * position.
 			 */
-            @NotNull boolean isOffset,
-            @NotNull Material material
+            boolean isOffset,
+            Material material
     ) {
     }
 }

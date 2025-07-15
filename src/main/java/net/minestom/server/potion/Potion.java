@@ -5,7 +5,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -18,7 +17,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  * @param duration  the duration (in ticks) that the potion will last
  * @param flags     the flags of the potion, see {@link #flags()}
  */
-public record Potion(@NotNull PotionEffect effect, int amplifier, int duration, byte flags) {
+public record Potion(PotionEffect effect, int amplifier, int duration, byte flags) {
     /**
      * A flag indicating that this Potion is ambient (it came from a beacon).
      *
@@ -59,7 +58,7 @@ public record Potion(@NotNull PotionEffect effect, int amplifier, int duration, 
     /**
      * @see #Potion(PotionEffect, int, int, byte)
      */
-    public Potion(@NotNull PotionEffect effect, int amplifier, int duration, int flags) {
+    public Potion(PotionEffect effect, int amplifier, int duration, int flags) {
         this(effect, amplifier, duration, (byte) flags);
     }
 
@@ -68,7 +67,7 @@ public record Potion(@NotNull PotionEffect effect, int amplifier, int duration, 
      *
      * @see #Potion(PotionEffect, int, int, byte)
      */
-    public Potion(@NotNull PotionEffect effect, int amplifier, int duration) {
+    public Potion(PotionEffect effect, int amplifier, int duration) {
         this(effect, amplifier, duration, (byte) 0);
     }
 
@@ -122,7 +121,7 @@ public record Potion(@NotNull PotionEffect effect, int amplifier, int duration, 
      *
      * @param entity the entity to add the effect to
      */
-    public void sendAddPacket(@NotNull Entity entity) {
+    public void sendAddPacket(Entity entity) {
         entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this));
     }
 
@@ -133,7 +132,7 @@ public record Potion(@NotNull PotionEffect effect, int amplifier, int duration, 
      *
      * @param entity the entity to remove the effect from
      */
-    public void sendRemovePacket(@NotNull Entity entity) {
+    public void sendRemovePacket(Entity entity) {
         entity.sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(entity.getEntityId(), effect));
     }
 

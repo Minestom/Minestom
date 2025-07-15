@@ -6,8 +6,7 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a single word in the command.
@@ -38,7 +37,6 @@ public class ArgumentWord extends Argument<String> {
      * @return 'this' for chaining
      * @throws NullPointerException if {@code restrictions} is not null but contains null value(s)
      */
-    @NotNull
     public ArgumentWord from(@Nullable String... restrictions) {
         if (restrictions != null) {
             for (String restriction : restrictions) {
@@ -51,9 +49,8 @@ public class ArgumentWord extends Argument<String> {
         return this;
     }
 
-    @NotNull
     @Override
-    public String parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public String parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         if (input.contains(StringUtils.SPACE))
             throw new ArgumentSyntaxException("Word cannot contain space character", input, SPACE_ERROR);
 

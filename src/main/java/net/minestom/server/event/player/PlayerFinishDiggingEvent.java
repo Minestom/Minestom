@@ -6,17 +6,16 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a {@link Player} successfully finishes digging a block
  */
 public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent {
     private final Player player;
-    private @NotNull Block block;
+    private Block block;
     private final BlockVec blockPosition;
 
-    public PlayerFinishDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition) {
+    public PlayerFinishDiggingEvent(Player player, Block block, BlockVec blockPosition) {
         this.player = player;
         this.block = block;
         this.blockPosition = blockPosition;
@@ -33,7 +32,7 @@ public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent
      *
      * @param block the block to set the result to
      */
-    public void setBlock(@NotNull Block block) {
+    public void setBlock(Block block) {
         this.block = block;
     }
 
@@ -43,7 +42,7 @@ public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent
      * @return the block
      */
     @Override
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
         return block;
     }
 
@@ -53,12 +52,12 @@ public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent
      * @return the block position
      */
     @Override
-    public @NotNull BlockVec getBlockPosition() {
+    public BlockVec getBlockPosition() {
         return blockPosition;
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

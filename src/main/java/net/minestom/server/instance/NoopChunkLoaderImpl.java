@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 final class NoopChunkLoaderImpl implements IChunkLoader {
     static final NoopChunkLoaderImpl INSTANCE = new NoopChunkLoaderImpl();
@@ -10,12 +9,12 @@ final class NoopChunkLoaderImpl implements IChunkLoader {
     }
 
     @Override
-    public @Nullable Chunk loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public @Nullable Chunk loadChunk(Instance instance, int chunkX, int chunkZ) {
         return null;
     }
 
     @Override
-    public void saveChunk(@NotNull Chunk chunk) {
+    public void saveChunk(Chunk chunk) {
         // Empty
     }
 }

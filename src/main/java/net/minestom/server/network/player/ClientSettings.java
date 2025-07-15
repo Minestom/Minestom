@@ -5,7 +5,6 @@ import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.MathUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -16,7 +15,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
                              ChatMessageType chatMessageType, boolean chatColors,
                              byte displayedSkinParts, MainHand mainHand,
                              boolean enableTextFiltering, boolean allowServerListings,
-                             @NotNull ClientSettings.ParticleSetting particleSetting) {
+                             ClientSettings.ParticleSetting particleSetting) {
     public static ClientSettings DEFAULT = new ClientSettings(
             Locale.US, (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
             ChatMessageType.FULL, true,

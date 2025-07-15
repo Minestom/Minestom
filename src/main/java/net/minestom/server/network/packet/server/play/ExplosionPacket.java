@@ -6,14 +6,13 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.sound.SoundEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
 public record ExplosionPacket(
-        @NotNull Point center, @Nullable Point playerKnockback,
-        @NotNull Particle particle, @NotNull SoundEvent sound
+        Point center, @Nullable Point playerKnockback,
+        Particle particle, SoundEvent sound
 ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ExplosionPacket> SERIALIZER = NetworkBufferTemplate.template(
             VECTOR3D, ExplosionPacket::center,

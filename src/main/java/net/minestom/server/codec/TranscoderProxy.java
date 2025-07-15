@@ -1,6 +1,5 @@
 package net.minestom.server.codec;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,151 +19,151 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
      * @param transcoder The transcoder (possibly proxy) to extract
      * @return The delegate transcoder
      */
-    static @NotNull Transcoder<?> extractDelegate(@NotNull Transcoder<?> transcoder) {
+    static Transcoder<?> extractDelegate(Transcoder<?> transcoder) {
         if (transcoder instanceof TranscoderProxy<?> proxy)
             return extractDelegate(proxy.delegate());
         return transcoder;
     }
 
-    @NotNull Transcoder<D> delegate();
+    Transcoder<D> delegate();
 
     @Override
-    default @NotNull D createNull() {
+    default D createNull() {
         return delegate().createNull();
     }
 
     @Override
-    default @NotNull Result<Boolean> getBoolean(@NotNull D value) {
+    default Result<Boolean> getBoolean(D value) {
         return delegate().getBoolean(value);
     }
 
     @Override
-    default @NotNull D createBoolean(boolean value) {
+    default D createBoolean(boolean value) {
         return delegate().createBoolean(value);
     }
 
     @Override
-    default @NotNull Result<Byte> getByte(@NotNull D value) {
+    default Result<Byte> getByte(D value) {
         return delegate().getByte(value);
     }
 
     @Override
-    default @NotNull D createByte(byte value) {
+    default D createByte(byte value) {
         return delegate().createByte(value);
     }
 
     @Override
-    default @NotNull Result<Short> getShort(@NotNull D value) {
+    default Result<Short> getShort(D value) {
         return delegate().getShort(value);
     }
 
     @Override
-    default @NotNull D createShort(short value) {
+    default D createShort(short value) {
         return delegate().createShort(value);
     }
 
     @Override
-    default @NotNull Result<Integer> getInt(@NotNull D value) {
+    default Result<Integer> getInt(D value) {
         return delegate().getInt(value);
     }
 
     @Override
-    default @NotNull D createInt(int value) {
+    default D createInt(int value) {
         return delegate().createInt(value);
     }
 
     @Override
-    default @NotNull Result<Long> getLong(@NotNull D value) {
+    default Result<Long> getLong(D value) {
         return delegate().getLong(value);
     }
 
     @Override
-    default @NotNull D createLong(long value) {
+    default D createLong(long value) {
         return delegate().createLong(value);
     }
 
     @Override
-    default @NotNull Result<Float> getFloat(@NotNull D value) {
+    default Result<Float> getFloat(D value) {
         return delegate().getFloat(value);
     }
 
     @Override
-    default @NotNull D createFloat(float value) {
+    default D createFloat(float value) {
         return delegate().createFloat(value);
     }
 
     @Override
-    default @NotNull Result<Double> getDouble(@NotNull D value) {
+    default Result<Double> getDouble(D value) {
         return delegate().getDouble(value);
     }
 
     @Override
-    default @NotNull D createDouble(double value) {
+    default D createDouble(double value) {
         return delegate().createDouble(value);
     }
 
     @Override
-    default @NotNull Result<String> getString(@NotNull D value) {
+    default Result<String> getString(D value) {
         return delegate().getString(value);
     }
 
     @Override
-    default @NotNull D createString(@NotNull String value) {
+    default D createString(String value) {
         return delegate().createString(value);
     }
 
     @Override
-    default @NotNull D createByteArray(byte[] value) {
+    default D createByteArray(byte[] value) {
         return delegate().createByteArray(value);
     }
 
     @Override
-    default @NotNull Result<byte[]> getByteArray(@NotNull D value) {
+    default Result<byte[]> getByteArray(D value) {
         return delegate().getByteArray(value);
     }
 
     @Override
-    default @NotNull D createIntArray(int[] value) {
+    default D createIntArray(int[] value) {
         return delegate().createIntArray(value);
     }
 
     @Override
-    default @NotNull Result<int[]> getIntArray(@NotNull D value) {
+    default Result<int[]> getIntArray(D value) {
         return delegate().getIntArray(value);
     }
 
     @Override
-    default @NotNull D createLongArray(long[] value) {
+    default D createLongArray(long[] value) {
         return delegate().createLongArray(value);
     }
 
     @Override
-    default @NotNull Result<long[]> getLongArray(@NotNull D value) {
+    default Result<long[]> getLongArray(D value) {
         return delegate().getLongArray(value);
     }
 
     @Override
-    default @NotNull Result<List<D>> getList(@NotNull D value) {
+    default Result<List<D>> getList(D value) {
         return delegate().getList(value);
     }
 
     @Override
-    default @NotNull Result<MapLike<D>> getMap(@NotNull D value) {
+    default Result<MapLike<D>> getMap(D value) {
         return delegate().getMap(value);
     }
 
     @Override
-    default @NotNull MapBuilder<D> createMap() {
+    default MapBuilder<D> createMap() {
         return delegate().createMap();
     }
 
     @Override
-    default @NotNull ListBuilder<D> createList(int expectedSize) {
+    default ListBuilder<D> createList(int expectedSize) {
         return delegate().createList(expectedSize);
     }
 
     @Override
-    default @NotNull <O> Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull D value) {
+    default <O> Result<O> convertTo(Transcoder<O> coder, D value) {
         return delegate().convertTo(coder, value);
     }
 }

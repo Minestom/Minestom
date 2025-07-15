@@ -13,8 +13,7 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
@@ -81,59 +80,59 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     // Combinators
 
-    static <E extends Enum<E>> @NotNull Type<E> Enum(@NotNull Class<E> enumClass) {
+    static <E extends Enum<E>> Type<E> Enum(Class<E> enumClass) {
         final E[] values = enumClass.getEnumConstants();
         return VAR_INT.transform(integer -> values[integer], Enum::ordinal);
     }
 
-    static <E extends Enum<E>> @NotNull Type<EnumSet<E>> EnumSet(@NotNull Class<E> enumClass) {
+    static <E extends Enum<E>> Type<EnumSet<E>> EnumSet(Class<E> enumClass) {
         return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, enumClass.getEnumConstants());
     }
 
-    static @NotNull Type<BitSet> FixedBitSet(int length) {
+    static Type<BitSet> FixedBitSet(int length) {
         return new NetworkBufferTypeImpl.FixedBitSetType(length);
     }
 
-    static @NotNull Type<byte[]> FixedRawBytes(int length) {
+    static Type<byte[]> FixedRawBytes(int length) {
         return new NetworkBufferTypeImpl.RawBytesType(length);
     }
 
-    static <T> @NotNull Type<T> Lazy(@NotNull Supplier<@NotNull Type<T>> supplier) {
+    static <T> Type<T> Lazy(Supplier<Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
 
-    static <T> @NotNull Type<T> TypedNBT(@NotNull Codec<T> serializer) {
+    static <T> Type<T> TypedNBT(Codec<T> serializer) {
         return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 
-    static <L, R> @NotNull Type<Either<L, R>> Either(@NotNull NetworkBuffer.Type<L> left, @NotNull NetworkBuffer.Type<R> right) {
+    static <L, R> Type<Either<L, R>> Either(NetworkBuffer.Type<L> left, NetworkBuffer.Type<R> right) {
         return new NetworkBufferTypeImpl.EitherType<>(left, right);
     }
 
     <T>
-    void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    void write(Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T read(@NotNull Type<T> type) throws IndexOutOfBoundsException;
+    <T> @UnknownNullability T read(Type<T> type) throws IndexOutOfBoundsException;
 
-    <T> void writeAt(long index, @NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    <T> void writeAt(long index, Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T readAt(long index, @NotNull Type<T> type) throws IndexOutOfBoundsException;
+    <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
-    void copyTo(long srcOffset, byte @NotNull [] dest, long destOffset, long length);
+    void copyTo(long srcOffset, byte [] dest, long destOffset, long length);
 
-    byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor);
+    byte [] extractBytes(Consumer<NetworkBuffer> extractor);
 
-    @NotNull NetworkBuffer clear();
+    NetworkBuffer clear();
 
     long writeIndex();
 
     long readIndex();
 
-    @NotNull NetworkBuffer writeIndex(long writeIndex);
+    NetworkBuffer writeIndex(long writeIndex);
 
-    @NotNull NetworkBuffer readIndex(long readIndex);
+    NetworkBuffer readIndex(long readIndex);
 
-    @NotNull NetworkBuffer index(long readIndex, long writeIndex);
+    NetworkBuffer index(long readIndex, long writeIndex);
 
     long advanceWrite(long length);
 
@@ -174,104 +173,104 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Nullable Registries registries();
 
     interface Type<T> {
-        void write(@NotNull NetworkBuffer buffer, T value);
+        void write(NetworkBuffer buffer, T value);
 
-        T read(@NotNull NetworkBuffer buffer);
+        T read(NetworkBuffer buffer);
 
-        default long sizeOf(@NotNull T value, @Nullable Registries registries) {
+        default long sizeOf(T value, @Nullable Registries registries) {
             return NetworkBufferTypeImpl.sizeOf(this, value, registries);
         }
 
-        default long sizeOf(@NotNull T value) {
+        default long sizeOf(T value) {
             return sizeOf(value, null);
         }
 
-        default <S> @NotNull Type<S> transform(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
+        default <S> Type<S> transform(Function<T, S> to, Function<S, T> from) {
             return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
         }
 
-        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull Type<V> valueType, int maxSize) {
+        default <V> Type<Map<T, V>> mapValue(Type<V> valueType, int maxSize) {
             return new NetworkBufferTypeImpl.MapType<>(this, valueType, maxSize);
         }
 
-        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull Type<V> valueType) {
+        default <V> Type<Map<T, V>> mapValue(Type<V> valueType) {
             return mapValue(valueType, Integer.MAX_VALUE);
         }
 
-        default @NotNull Type<List<T>> list(int maxSize) {
+        default Type<List<T>> list(int maxSize) {
             return new NetworkBufferTypeImpl.ListType<>(this, maxSize);
         }
 
-        default @NotNull Type<List<T>> list() {
+        default Type<List<T>> list() {
             return list(Integer.MAX_VALUE);
         }
 
-        default @NotNull Type<Set<T>> set(int maxSize) {
+        default Type<Set<T>> set(int maxSize) {
             return new NetworkBufferTypeImpl.SetType<>(this, maxSize);
         }
 
-        default @NotNull Type<Set<T>> set() {
+        default Type<Set<T>> set() {
             return set(Integer.MAX_VALUE);
         }
 
-        default @NotNull Type<T> optional() {
+        default Type<T> optional() {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
         }
 
-        default <R> @NotNull Type<R> unionType(@NotNull Function<T, NetworkBuffer.Type<R>> serializers, @NotNull Function<R, T> keyFunc) {
+        default <R> Type<R> unionType(Function<T, NetworkBuffer.Type<R>> serializers, Function<R, T> keyFunc) {
             return new NetworkBufferTypeImpl.UnionType<>(this, keyFunc, serializers);
         }
 
-        default @NotNull Type<T> lengthPrefixed(int maxLength) {
+        default Type<T> lengthPrefixed(int maxLength) {
             return new NetworkBufferTypeImpl.LengthPrefixedType<>(this, maxLength);
         }
     }
 
-    static @NotNull Builder builder(long size) {
+    static Builder builder(long size) {
         return new NetworkBufferImpl.Builder(size);
     }
 
-    static @NotNull NetworkBuffer staticBuffer(long size, Registries registries) {
+    static NetworkBuffer staticBuffer(long size, Registries registries) {
         return builder(size).registry(registries).build();
     }
 
-    static @NotNull NetworkBuffer staticBuffer(long size) {
+    static NetworkBuffer staticBuffer(long size) {
         return staticBuffer(size, null);
     }
 
-    static @NotNull NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
+    static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         return builder(initialSize)
                 .autoResize(AutoResize.DOUBLE)
                 .registry(registries)
                 .build();
     }
 
-    static @NotNull NetworkBuffer resizableBuffer(int initialSize) {
+    static NetworkBuffer resizableBuffer(int initialSize) {
         return resizableBuffer(initialSize, null);
     }
 
-    static @NotNull NetworkBuffer resizableBuffer(Registries registries) {
+    static NetworkBuffer resizableBuffer(Registries registries) {
         return resizableBuffer(256, registries);
     }
 
-    static @NotNull NetworkBuffer resizableBuffer() {
+    static NetworkBuffer resizableBuffer() {
         return resizableBuffer(null);
     }
 
-    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
         return NetworkBufferImpl.wrap(bytes, readIndex, writeIndex, registries);
     }
 
-    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex) {
+    static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex) {
         return wrap(bytes, readIndex, writeIndex, null);
     }
 
     sealed interface Builder permits NetworkBufferImpl.Builder {
-        @NotNull Builder autoResize(@Nullable AutoResize autoResize);
+        Builder autoResize(@Nullable AutoResize autoResize);
 
-        @NotNull Builder registry(@Nullable Registries registries);
+        Builder registry(@Nullable Registries registries);
 
-        @NotNull NetworkBuffer build();
+        NetworkBuffer build();
     }
 
     @FunctionalInterface
@@ -281,21 +280,21 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         long resize(long capacity, long targetSize);
     }
 
-    static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing, @Nullable Registries registries) {
+    static byte[] makeArray(Consumer<NetworkBuffer> writing, @Nullable Registries registries) {
         NetworkBuffer buffer = resizableBuffer(256, registries);
         writing.accept(buffer);
         return buffer.read(RAW_BYTES);
     }
 
-    static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
+    static byte[] makeArray(Consumer<NetworkBuffer> writing) {
         return makeArray(writing, null);
     }
 
-    static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value, @Nullable Registries registries) {
+    static <T> byte[] makeArray(Type<T> type, T value, @Nullable Registries registries) {
         return makeArray(buffer -> buffer.write(type, value), registries);
     }
 
-    static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value) {
+    static <T> byte[] makeArray(Type<T> type, T value) {
         return makeArray(type, value, null);
     }
 

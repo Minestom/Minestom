@@ -6,8 +6,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.PacketWriting;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.SoftReference;
 import java.util.function.Supplier;
@@ -24,11 +23,11 @@ public final class CachedPacket implements SendablePacket {
     private final Supplier<ServerPacket> packetSupplier;
     private volatile SoftReference<FramedPacket> packet;
 
-    public CachedPacket(@NotNull Supplier<@NotNull ServerPacket> packetSupplier) {
+    public CachedPacket(Supplier<ServerPacket> packetSupplier) {
         this.packetSupplier = packetSupplier;
     }
 
-    public CachedPacket(@NotNull ServerPacket packet) {
+    public CachedPacket(ServerPacket packet) {
         this(() -> packet);
     }
 
@@ -36,17 +35,17 @@ public final class CachedPacket implements SendablePacket {
         this.packet = null;
     }
 
-    public @NotNull ServerPacket packet(@NotNull ConnectionState state) {
+    public ServerPacket packet(ConnectionState state) {
         FramedPacket cache = updatedCache(state);
         return cache != null ? cache.packet() : packetSupplier.get();
     }
 
-    public @Nullable NetworkBuffer body(@NotNull ConnectionState state) {
+    public @Nullable NetworkBuffer body(ConnectionState state) {
         FramedPacket cache = updatedCache(state);
         return cache != null ? cache.body() : null;
     }
 
-    private @Nullable FramedPacket updatedCache(@NotNull ConnectionState state) {
+    private @Nullable FramedPacket updatedCache(ConnectionState state) {
         if (!ServerFlag.CACHED_PACKET)
             return null;
         SoftReference<FramedPacket> ref = packet;

@@ -5,7 +5,6 @@ import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a block in an instance is updated.
@@ -18,24 +17,24 @@ public class InstanceBlockUpdateEvent implements InstanceEvent, BlockEvent {
     private final BlockVec blockPosition;
     private final Block block;
 
-    public InstanceBlockUpdateEvent(@NotNull Instance instance, @NotNull BlockVec blockPosition, @NotNull Block block) {
+    public InstanceBlockUpdateEvent(Instance instance, BlockVec blockPosition, Block block) {
         this.instance = instance;
         this.blockPosition = blockPosition;
         this.block = block;
     }
 
     @Override
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
         return block;
     }
 
     @Override
-    public @NotNull BlockVec getBlockPosition() {
+    public BlockVec getBlockPosition() {
         return blockPosition;
     }
 
     @Override
-    public @NotNull Instance getInstance() {
+    public Instance getInstance() {
         return instance;
     }
 }

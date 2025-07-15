@@ -8,8 +8,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +23,7 @@ import java.util.function.IntFunction;
  *
  * @param components The component patch.
  */
-record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implements DataComponentMap {
+record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataComponentMap {
     private static final char REMOVAL_PREFIX = '!';
 
     @Override
@@ -33,18 +32,18 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     }
 
     @Override
-    public boolean has(@NotNull DataComponent<?> component) {
+    public boolean has(DataComponent<?> component) {
         return components.containsKey(component.id()) && components.get(component.id()) != null;
     }
 
     @Override
-    public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    public <T> @Nullable T get(DataComponent<T> component) {
         //noinspection unchecked
         return (T) components.get(component.id());
     }
 
     @Override
-    public boolean has(@NotNull DataComponentMap prototype, @NotNull DataComponent<?> component) {
+    public boolean has(DataComponentMap prototype, DataComponent<?> component) {
         if (components.containsKey(component.id())) {
             return components.get(component.id()) != null;
         } else {
@@ -53,7 +52,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     }
 
     @Override
-    public <T> @Nullable T get(@NotNull DataComponentMap prototype, @NotNull DataComponent<T> component) {
+    public <T> @Nullable T get(DataComponentMap prototype, DataComponent<T> component) {
         if (components.containsKey(component.id())) {
             //noinspection unchecked
             return (T) components.get(component.id());
@@ -63,21 +62,21 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     }
 
     @Override
-    public @NotNull <T> DataComponentMap set(@NotNull DataComponent<T> component, @NotNull T value) {
+    public <T> DataComponentMap set(DataComponent<T> component, T value) {
         Int2ObjectMap<Object> newComponents = new Int2ObjectArrayMap<>(components);
         newComponents.put(component.id(), value);
         return new DataComponentMapImpl(newComponents);
     }
 
     @Override
-    public @NotNull DataComponentMap remove(@NotNull DataComponent<?> component) {
+    public DataComponentMap remove(DataComponent<?> component) {
         Int2ObjectMap<Object> newComponents = new Int2ObjectArrayMap<>(components);
         newComponents.put(component.id(), null);
         return new DataComponentMapImpl(newComponents);
     }
 
     @Override
-    public @NotNull Collection<DataComponent.Value> entrySet() {
+    public Collection<DataComponent.Value> entrySet() {
         if (components.isEmpty()) return List.of();
         final List<DataComponent.Value> entries = new ArrayList<>(components.size());
         for (var entry : components.int2ObjectEntrySet())
@@ -86,77 +85,77 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     }
 
     @Override
-    public @NotNull Builder toBuilder() {
+    public Builder toBuilder() {
         return new BuilderImpl(new Int2ObjectArrayMap<>(components));
     }
 
     @Override
-    public @NotNull PatchBuilder toPatchBuilder() {
+    public PatchBuilder toPatchBuilder() {
         return new PatchBuilderImpl(new Int2ObjectArrayMap<>(components));
     }
 
-    record BuilderImpl(@NotNull Int2ObjectMap<Object> components) implements DataComponentMap.Builder {
+    record BuilderImpl(Int2ObjectMap<Object> components) implements DataComponentMap.Builder {
 
         @Override
-        public boolean has(@NotNull DataComponent<?> component) {
+        public boolean has(DataComponent<?> component) {
             return components.get(component.id()) != null;
         }
 
         @Override
-        public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        public <T> @Nullable T get(DataComponent<T> component) {
             //noinspection unchecked
             return (T) components.get(component.id());
         }
 
         @Override
-        public <T> @NotNull Builder set(@NotNull DataComponent<T> component, @NotNull T value) {
+        public <T> Builder set(DataComponent<T> component, T value) {
             components.put(component.id(), value);
             return this;
         }
 
         @Override
-        public @NotNull DataComponentMap build() {
+        public DataComponentMap build() {
             return new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
         }
     }
 
-    record PatchBuilderImpl(@NotNull Int2ObjectMap<Object> components) implements DataComponentMap.PatchBuilder {
+    record PatchBuilderImpl(Int2ObjectMap<Object> components) implements DataComponentMap.PatchBuilder {
 
         @Override
-        public boolean has(@NotNull DataComponent<?> component) {
+        public boolean has(DataComponent<?> component) {
             return components.get(component.id()) != null;
         }
 
         @Override
-        public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        public <T> @Nullable T get(DataComponent<T> component) {
             //noinspection unchecked
             return (T) components.get(component.id());
         }
 
         @Override
-        public <T> @NotNull PatchBuilder set(@NotNull DataComponent<T> component, @NotNull T value) {
+        public <T> PatchBuilder set(DataComponent<T> component, T value) {
             components.put(component.id(), value);
             return this;
         }
 
         @Override
-        public @NotNull PatchBuilder remove(@NotNull DataComponent<?> component) {
+        public PatchBuilder remove(DataComponent<?> component) {
             components.put(component.id(), null);
             return this;
         }
 
         @Override
-        public @NotNull DataComponentMap build() {
+        public DataComponentMap build() {
             return new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
         }
     }
 
     record NetworkTypeImpl(
-            @NotNull IntFunction<DataComponent<?>> idToType,
+            IntFunction<DataComponent<?>> idToType,
             boolean isPatch, boolean isTrusted
     ) implements NetworkBuffer.Type<DataComponentMap> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, DataComponentMap value) {
+        public void write(NetworkBuffer buffer, DataComponentMap value) {
             final DataComponentMapImpl patch = (DataComponentMapImpl) value;
             int added = 0;
             for (Object o : patch.components.values()) {
@@ -192,7 +191,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         }
 
         @Override
-        public DataComponentMap read(@NotNull NetworkBuffer buffer) {
+        public DataComponentMap read(NetworkBuffer buffer) {
             int added = buffer.read(NetworkBuffer.VAR_INT);
             int removed = isPatch ? buffer.read(NetworkBuffer.VAR_INT) : 0;
             Check.stateCondition(added + removed > 256, "Data component map too large: {0}", added + removed);
@@ -219,12 +218,12 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     }
 
     record CodecImpl(
-            @NotNull IntFunction<DataComponent<?>> idToType,
-            @NotNull Function<String, DataComponent<?>> nameToType,
+            IntFunction<DataComponent<?>> idToType,
+            Function<String, DataComponent<?>> nameToType,
             boolean isPatch
     ) implements Codec<DataComponentMap> {
         @Override
-        public @NotNull <D> Result<DataComponentMap> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public <D> Result<DataComponentMap> decode(Transcoder<D> coder, D value) {
             final Result<MapLike<D>> mapResult = coder.getMap(value);
             if (!(mapResult instanceof Result.Ok(var map)))
                 return mapResult.cast();
@@ -257,7 +256,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable DataComponentMap value) {
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable DataComponentMap value) {
             final DataComponentMapImpl patch = (DataComponentMapImpl) value;
 
             final Transcoder.MapBuilder<D> map = coder.createMap();

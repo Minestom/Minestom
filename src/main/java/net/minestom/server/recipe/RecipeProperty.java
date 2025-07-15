@@ -3,8 +3,7 @@ package net.minestom.server.recipe;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -28,22 +27,22 @@ public enum RecipeProperty implements Keyed {
             key -> Objects.requireNonNull(fromKey(key)),
             recipeProperty -> recipeProperty.key().asMinimalString());
 
-    public static @Nullable RecipeProperty fromKey(@NotNull String key) {
+    public static @Nullable RecipeProperty fromKey(String key) {
         return fromKey(Key.key(key));
     }
 
-    public static @Nullable RecipeProperty fromKey(@NotNull Key key) {
+    public static @Nullable RecipeProperty fromKey(Key key) {
         return BY_KEY.get(key);
     }
 
     private final Key key;
 
-    RecipeProperty(@NotNull String id) {
+    RecipeProperty(String id) {
         this.key = Key.key("minecraft", id);
     }
 
     @Override
-    public @NotNull Key key() {
+    public Key key() {
         return key;
     }
 }

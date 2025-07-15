@@ -5,8 +5,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -28,9 +27,9 @@ public class CommandSyntax {
     private final boolean suggestion;
 
     protected CommandSyntax(@Nullable CommandCondition commandCondition,
-                            @NotNull CommandExecutor commandExecutor,
+                            CommandExecutor commandExecutor,
                             @Nullable Map<String, Function<CommandSender, Object>> defaultValuesMap,
-                            @NotNull Argument<?>... args) {
+                            Argument<?>... args) {
         this.commandCondition = commandCondition;
         this.executor = commandExecutor;
 
@@ -41,8 +40,8 @@ public class CommandSyntax {
     }
 
     protected CommandSyntax(@Nullable CommandCondition commandCondition,
-                            @NotNull CommandExecutor commandExecutor,
-                            @NotNull Argument<?>... args) {
+                            CommandExecutor commandExecutor,
+                            Argument<?>... args) {
         this(commandCondition, commandExecutor, null, args);
     }
 
@@ -74,7 +73,6 @@ public class CommandSyntax {
      *
      * @return the executor of this syntax
      */
-    @NotNull
     public CommandExecutor getExecutor() {
         return executor;
     }
@@ -84,7 +82,7 @@ public class CommandSyntax {
      *
      * @param executor the new executor
      */
-    public void setExecutor(@NotNull CommandExecutor executor) {
+    public void setExecutor(CommandExecutor executor) {
         this.executor = executor;
     }
 
@@ -98,7 +96,6 @@ public class CommandSyntax {
      *
      * @return the required arguments
      */
-    @NotNull
     public Argument<?>[] getArguments() {
         return args;
     }
@@ -107,7 +104,7 @@ public class CommandSyntax {
         return suggestion;
     }
 
-    public @NotNull String getSyntaxString() {
+    public String getSyntaxString() {
         StringBuilder builder = new StringBuilder();
         for (Argument<?> argument : args) {
             builder.append(argument.toString())

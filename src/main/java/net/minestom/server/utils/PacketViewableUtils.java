@@ -17,8 +17,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -29,7 +28,7 @@ public final class PacketViewableUtils {
     // Viewable packets
     private static volatile Map<Viewable, ViewableStorage> storageMap = new WeakHashMap<>();
 
-    public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
+    public static void prepareViewablePacket(Viewable viewable, ServerPacket serverPacket,
                                              @Nullable Entity entity) {
         if (entity != null && !entity.hasPredictableViewers()) {
             // Operation cannot be optimized
@@ -70,7 +69,7 @@ public final class PacketViewableUtils {
                 entry.getValue().process(entry.getKey()));
     }
 
-    public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
+    public static void prepareViewablePacket(Viewable viewable, ServerPacket serverPacket) {
         prepareViewablePacket(viewable, serverPacket, null);
     }
 

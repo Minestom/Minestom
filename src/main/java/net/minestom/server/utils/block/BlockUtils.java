@@ -7,8 +7,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -88,7 +87,7 @@ public class BlockUtils {
         return new Object2ObjectArrayMap<>(keys, values, entryCount);
     }
 
-    public static @Nullable CompoundBinaryTag extractClientNbt(@NotNull Block block) {
+    public static @Nullable CompoundBinaryTag extractClientNbt(Block block) {
         if (!block.registry().isBlockEntity()) return null;
         // Append handler tags
         final BlockHandler handler = block.handler();

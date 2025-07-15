@@ -5,8 +5,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -19,12 +18,12 @@ public class BedPlacementRule extends BlockPlacementRule {
     private static final String PROP_PART = "part";
     private static final String PROP_FACING = "facing";
 
-    public BedPlacementRule(@NotNull Block block) {
+    public BedPlacementRule(Block block) {
         super(block);
     }
 
     @Override
-    public @Nullable Block blockPlace(@NotNull PlacementState placementState) {
+    public @Nullable Block blockPlace(PlacementState placementState) {
         var playerPosition = Objects.requireNonNullElse(placementState.playerPosition(), Pos.ZERO);
         var facing = BlockFace.fromYaw(playerPosition.yaw());
 

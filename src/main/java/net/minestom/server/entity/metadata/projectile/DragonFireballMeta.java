@@ -4,13 +4,12 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class DragonFireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
     private Entity shooter;
 
-    public DragonFireballMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public DragonFireballMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

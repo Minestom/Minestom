@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.NotNull;
 
 public interface UnitModifier extends Block.Setter, Biome.Setter {
     /**
@@ -15,28 +14,28 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      * @param z     the z coordinate
      * @param block the block to set
      */
-    void setRelative(int x, int y, int z, @NotNull Block block);
+    void setRelative(int x, int y, int z, Block block);
 
     /**
      * Sets all blocks within the unit to the block given by the supplier.
      *
      * @param supplier the supplier of the block to set
      */
-    void setAll(@NotNull Supplier supplier);
+    void setAll(Supplier supplier);
 
     /**
      * Sets all blocks within the unit to the block given by the supplier, relative to the absolute position of the unit.
      *
      * @param supplier the supplier of the block to set
      */
-    void setAllRelative(@NotNull Supplier supplier);
+    void setAllRelative(Supplier supplier);
 
     /**
      * Fills the unit with the given block.
      *
      * @param block the block to fill
      */
-    void fill(@NotNull Block block);
+    void fill(Block block);
 
     /**
      * Fills the 3d rectangular area with the given block.
@@ -45,7 +44,7 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      * @param end   the end (max) point of the area
      * @param block the block to fill
      */
-    void fill(@NotNull Point start, @NotNull Point end, @NotNull Block block);
+    void fill(Point start, Point end, Block block);
 
     /**
      * Fills the 3d rectangular area with the given block.
@@ -54,16 +53,16 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      * @param maxHeight the maximum height of the area
      * @param block     the block to fill
      */
-    void fillHeight(int minHeight, int maxHeight, @NotNull Block block);
+    void fillHeight(int minHeight, int maxHeight, Block block);
 
     /**
      * Fills the 3d rectangular area with the given biome.
      *
      * @param biome the biome to fill
      */
-    void fillBiome(@NotNull RegistryKey<Biome> biome);
+    void fillBiome(RegistryKey<Biome> biome);
 
     interface Supplier {
-        @NotNull Block get(int x, int y, int z);
+        Block get(int x, int y, int z);
     }
 }

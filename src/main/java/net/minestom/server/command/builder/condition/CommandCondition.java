@@ -1,8 +1,7 @@
 package net.minestom.server.command.builder.condition;
 
 import net.minestom.server.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Used to know if the {@link CommandSender} is allowed to run the command or a specific syntax.
@@ -27,5 +26,5 @@ public interface CommandCondition {
      *                      null if this is an access request
      * @return true if the sender has the right to use the command, false otherwise
      */
-    boolean canUse(@NotNull CommandSender sender, @Nullable String commandString);
+    boolean canUse(CommandSender sender, @Nullable String commandString);
 }

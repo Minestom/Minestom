@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +108,7 @@ public class CodeGenerator {
                 outputFolder);
     }
 
-    private void writeFiles(@NotNull List<JavaFile> fileList, File outputFolder) {
+    private void writeFiles(List<JavaFile> fileList, File outputFolder) {
         for (JavaFile javaFile : fileList) {
             try {
                 javaFile.writeTo(outputFolder);

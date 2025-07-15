@@ -4,13 +4,12 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.animal.AnimalMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
 public class TameableAnimalMeta extends AnimalMeta {
-    protected TameableAnimalMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    protected TameableAnimalMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

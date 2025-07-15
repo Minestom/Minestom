@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import org.jetbrains.annotations.NotNull;
 
 public enum SuggestionType {
 
@@ -11,11 +10,10 @@ public enum SuggestionType {
 
     private final String identifier;
 
-    SuggestionType(@NotNull String identifier) {
+    SuggestionType(String identifier) {
         this.identifier = identifier;
     }
 
-    @NotNull
     public String getIdentifier() {
         return identifier;
     }

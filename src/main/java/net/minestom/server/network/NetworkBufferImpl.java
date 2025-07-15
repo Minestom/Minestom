@@ -4,8 +4,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
@@ -72,19 +71,19 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public <T> void write(@NotNull Type<T> type, @UnknownNullability T value) {
+    public <T> void write(Type<T> type, @UnknownNullability T value) {
         assertReadOnly();
         type.write(this, value);
     }
 
     @Override
-    public <T> @UnknownNullability T read(@NotNull Type<T> type) {
+    public <T> @UnknownNullability T read(Type<T> type) {
         assertDummy();
         return type.read(this);
     }
 
     @Override
-    public <T> void writeAt(long index, @NotNull Type<T> type, @UnknownNullability T value) {
+    public <T> void writeAt(long index, Type<T> type, @UnknownNullability T value) {
         assertReadOnly();
         final long oldWriteIndex = writeIndex;
         writeIndex = index;
@@ -96,7 +95,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public <T> @UnknownNullability T readAt(long index, @NotNull Type<T> type) {
+    public <T> @UnknownNullability T readAt(long index, Type<T> type) {
         assertDummy();
         final long oldReadIndex = readIndex;
         readIndex = index;
@@ -108,7 +107,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public void copyTo(long srcOffset, byte @NotNull [] dest, long destOffset, long length) {
+    public void copyTo(long srcOffset, byte [] dest, long destOffset, long length) {
         assertDummy();
         assertOverflow(srcOffset + length);
         assertOverflow(destOffset + length);
@@ -119,7 +118,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         UNSAFE.copyMemory(null, address + srcOffset, dest, BYTE_ARRAY_OFFSET + destOffset, length);
     }
 
-    public byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor) {
+    public byte [] extractBytes(Consumer<NetworkBuffer> extractor) {
         assertDummy();
         final long startingPosition = readIndex();
         extractor.accept(this);
@@ -131,7 +130,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return output;
     }
 
-    public @NotNull NetworkBuffer clear() {
+    public NetworkBuffer clear() {
         return index(0, 0);
     }
 
@@ -143,18 +142,18 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return readIndex;
     }
 
-    public @NotNull NetworkBuffer writeIndex(long writeIndex) {
+    public NetworkBuffer writeIndex(long writeIndex) {
         this.writeIndex = writeIndex;
         return this;
     }
 
-    public @NotNull NetworkBuffer readIndex(long readIndex) {
+    public NetworkBuffer readIndex(long readIndex) {
         this.readIndex = readIndex;
         return this;
     }
 
     @Override
-    public @NotNull NetworkBuffer index(long readIndex, long writeIndex) {
+    public NetworkBuffer index(long readIndex, long writeIndex) {
         this.readIndex = readIndex;
         this.writeIndex = writeIndex;
         return this;
@@ -476,7 +475,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return Double.longBitsToDouble(longValue);
     }
 
-    static NetworkBuffer wrap(byte @NotNull [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(byte [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
         var buffer = new Builder(bytes.length).registry(registries).build();
         buffer.writeAt(0, NetworkBuffer.RAW_BYTES, bytes);
         buffer.index(readIndex, writeIndex);
@@ -528,19 +527,19 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
 
         @Override
-        public NetworkBuffer.@NotNull Builder autoResize(@Nullable AutoResize autoResize) {
+        public NetworkBuffer.Builder autoResize(@Nullable AutoResize autoResize) {
             this.autoResize = autoResize;
             return this;
         }
 
         @Override
-        public NetworkBuffer.@NotNull Builder registry(Registries registries) {
+        public NetworkBuffer.Builder registry(Registries registries) {
             this.registries = registries;
             return this;
         }
 
         @Override
-        public @NotNull NetworkBuffer build() {
+        public NetworkBuffer build() {
             final long address = UNSAFE.allocateMemory(initialSize);
             return new NetworkBufferImpl(
                     address, initialSize,

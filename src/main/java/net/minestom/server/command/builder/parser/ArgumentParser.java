@@ -14,8 +14,7 @@ import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVe
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +63,7 @@ public class ArgumentParser {
     }
 
     @ApiStatus.Experimental
-    public static @NotNull Argument<?>[] generate(@NotNull String format) {
+    public static Argument<?>[] generate(String format) {
         List<Argument<?>> result = new ArrayList<>();
 
         // 0 = no state
@@ -138,10 +137,10 @@ public class ArgumentParser {
     }
 
     @Nullable
-    public static ArgumentResult validate(@NotNull CommandSender sender,
-                                          @NotNull Argument<?> argument,
-                                          @NotNull Argument<?>[] arguments, int argIndex,
-                                          @NotNull String[] inputArguments, int inputIndex) {
+    public static ArgumentResult validate(CommandSender sender,
+                                          Argument<?> argument,
+                                          Argument<?>[] arguments, int argIndex,
+                                          String[] inputArguments, int inputIndex) {
         final boolean end = inputIndex == inputArguments.length;
         if (end) // Stop if there is no input to analyze left
             return null;

@@ -2,8 +2,7 @@ package net.minestom.server.entity.pathfinding;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public final class PPath {
         return new Vec(current.x(), current.y(), current.z());
     }
 
-    public void setState(@NotNull PPath.State newState) {
+    public void setState(PPath.State newState) {
         state.set(newState);
     }
 
@@ -34,11 +33,11 @@ public final class PPath {
         TERMINATING, TERMINATED, COMPUTED, BEST_EFFORT, INVALID
     }
 
-    @NotNull State getState() {
+    State getState() {
         return state.get();
     }
 
-    public @NotNull List<PNode> getNodes() {
+    public List<PNode> getNodes() {
         return nodes;
     }
 
@@ -53,11 +52,11 @@ public final class PPath {
     }
 
     @Override
-    public @NotNull String toString() {
+    public String toString() {
         return nodes.toString();
     }
 
-    @Nullable PNode.Type getCurrentType() {
+    PNode.@Nullable Type getCurrentType() {
         if (index >= nodes.size()) return null;
         var current = nodes.get(index);
         return current.getType();

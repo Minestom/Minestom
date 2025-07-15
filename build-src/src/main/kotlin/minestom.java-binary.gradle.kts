@@ -14,6 +14,7 @@ repositories {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+    modularity.inferModulePath = true
 }
 
 tasks.withType<JavaCompile> {

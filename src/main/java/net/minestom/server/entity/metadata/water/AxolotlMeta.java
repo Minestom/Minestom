@@ -8,11 +8,10 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.animal.AnimalMeta;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class AxolotlMeta extends AnimalMeta {
-    public AxolotlMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public AxolotlMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -20,7 +19,7 @@ public class AxolotlMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#AXOLOTL_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull Variant getVariant() {
+    public Variant getVariant() {
         return Variant.VALUES[metadata.get(MetadataDef.Axolotl.VARIANT)];
     }
 
@@ -50,14 +49,14 @@ public class AxolotlMeta extends AnimalMeta {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+    protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.AXOLOTL_VARIANT)
             return (T) getVariant();
         return super.get(component);
     }
 
     @Override
-    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+    protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.AXOLOTL_VARIANT)
             setVariant((Variant) value);
         else super.set(component, value);

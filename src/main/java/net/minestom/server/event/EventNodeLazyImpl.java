@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -25,33 +24,33 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
     @SuppressWarnings("unused")
     private boolean mapped;
 
-    EventNodeLazyImpl(@NotNull EventNodeImpl<? super E> holder,
-                      @NotNull Object owner, @NotNull EventFilter<E, ?> filter) {
+    EventNodeLazyImpl(EventNodeImpl<? super E> holder,
+                      Object owner, EventFilter<E, ?> filter) {
         super(owner.toString(), filter, null);
         this.holder = holder;
         this.owner = new WeakReference<>(owner);
     }
 
     @Override
-    public @NotNull EventNode<E> addChild(@NotNull EventNode<? extends E> child) {
+    public EventNode<E> addChild(EventNode<? extends E> child) {
         ensureMap();
         return super.addChild(child);
     }
 
     @Override
-    public @NotNull EventNode<E> addListener(@NotNull EventListener<? extends E> listener) {
+    public EventNode<E> addListener(EventListener<? extends E> listener) {
         ensureMap();
         return super.addListener(listener);
     }
 
     @Override
-    public @NotNull <E1 extends E> EventNode<E> addListener(@NotNull Class<E1> eventType, @NotNull Consumer<@NotNull E1> listener) {
+    public <E1 extends E> EventNode<E> addListener(Class<E1> eventType, Consumer<E1> listener) {
         ensureMap();
         return super.addListener(eventType, listener);
     }
 
     @Override
-    public @NotNull <E1 extends E, H> EventNode<E1> map(@NotNull H value, @NotNull EventFilter<E1, H> filter) {
+    public <E1 extends E, H> EventNode<E1> map(H value, EventFilter<E1, H> filter) {
         final Object owner = retrieveOwner();
         if (owner != value) {
             throw new IllegalArgumentException("Cannot map an object to an already mapped node.");
@@ -60,7 +59,7 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
     }
 
     @Override
-    public void register(@NotNull EventBinding<? extends E> binding) {
+    public void register(EventBinding<? extends E> binding) {
         ensureMap();
         super.register(binding);
     }

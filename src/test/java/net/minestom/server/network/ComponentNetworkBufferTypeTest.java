@@ -2,7 +2,6 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -77,7 +76,7 @@ public class ComponentNetworkBufferTypeTest {
         assertWriteReadEquality(comp);
     }
 
-    private static void assertWriteReadEquality(@NotNull Component comp) {
+    private static void assertWriteReadEquality(Component comp) {
         var array = NetworkBuffer.makeArray(buffer -> buffer.write(COMPONENT, comp));
         var buffer = NetworkBuffer.wrap(array, 0, array.length);
         var actual = NBT_READER.deserialize(buffer.read(NBT));

@@ -3,7 +3,6 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.tag.Tag;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,12 +21,12 @@ public class SuspiciousGravelBlockHandler implements BlockHandler {
     }
 
     @Override
-    public @NotNull Key getKey() {
+    public Key getKey() {
         return Key.key("minecraft:suspicious_gravel");
     }
 
     @Override
-    public @NotNull Collection<Tag<?>> getBlockEntityTags() {
+    public Collection<Tag<?>> getBlockEntityTags() {
         return hasTags ? List.of(LOOT_TABLE, ITEM) : List.of();
     }
 }

@@ -4,8 +4,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <p>Represents either a reference to a registry entry {@link RegistryKey} or a direct registry value.</p>
@@ -20,16 +19,16 @@ public sealed interface Holder<T> permits RegistryKey, Holder.Direct {
     non-sealed interface Direct<T> extends Holder<T> {
     }
 
-    static <T extends Holder<T>> NetworkBuffer.@NotNull Type<Holder<T>> networkType(
-            @NotNull Registries.Selector<T> selector,
-            @NotNull NetworkBuffer.Type<T> registryNetworkType
+    static <T extends Holder<T>> NetworkBuffer.Type<Holder<T>> networkType(
+            Registries.Selector<T> selector,
+            NetworkBuffer.Type<T> registryNetworkType
     ) {
         return new RegistryNetworkTypes.HolderNetworkTypeImpl<>(selector, registryNetworkType);
     }
 
-    static <T extends Holder<T>> @NotNull Codec<Holder<T>> codec(
-            @NotNull Registries.Selector<T> selector,
-            @NotNull Codec<T> registryCodec
+    static <T extends Holder<T>> Codec<Holder<T>> codec(
+            Registries.Selector<T> selector,
+            Codec<T> registryCodec
     ) {
         return new RegistryCodecs.HolderCodec<>(selector, registryCodec);
     }
@@ -47,7 +46,7 @@ public sealed interface Holder<T> permits RegistryKey, Holder.Direct {
         return this instanceof RegistryKey<T> ? null : (T) this;
     }
 
-    default @NotNull Either<RegistryKey<T>, T> unwrap() {
+    default Either<RegistryKey<T>, T> unwrap() {
         if (this instanceof RegistryKey<T> key) {
             return Either.left(key);
         } else {
@@ -56,7 +55,7 @@ public sealed interface Holder<T> permits RegistryKey, Holder.Direct {
         }
     }
 
-    default @Nullable T resolve(@NotNull DynamicRegistry<T> registry) {
+    default @Nullable T resolve(DynamicRegistry<T> registry) {
         final var key = asKey();
         if (key != null) {
             return registry.get(key);

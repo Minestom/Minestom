@@ -9,16 +9,15 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
 import net.minestom.server.sound.SoundEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public record BlocksAttacks(
         float blockDelaySeconds,
         float disableCooldownScale,
-        @NotNull List<DamageReduction> damageReductions,
-        @NotNull ItemDamageFunction itemDamage,
+        List<DamageReduction> damageReductions,
+        ItemDamageFunction itemDamage,
         @Nullable TagKey<DamageType> bypassedBy,
         @Nullable SoundEvent blockSound,
         @Nullable SoundEvent disableSound

@@ -9,7 +9,6 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player tries placing a block.
@@ -28,9 +27,9 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
 
     private boolean cancelled;
 
-    public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
-                                 @NotNull BlockFace blockFace, @NotNull BlockVec blockPosition,
-                                 @NotNull Point cursorPosition, @NotNull PlayerHand hand) {
+    public PlayerBlockPlaceEvent(Player player, Block block,
+                                 BlockFace blockFace, BlockVec blockPosition,
+                                 Point cursorPosition, PlayerHand hand) {
         this.player = player;
         this.block = block;
         this.blockFace = blockFace;
@@ -47,7 +46,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
      * @return the block to place
      */
     @Override
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
         return block;
     }
 
@@ -56,11 +55,11 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
      *
      * @param block the new block
      */
-    public void setBlock(@NotNull Block block) {
+    public void setBlock(Block block) {
         this.block = block;
     }
 
-    public @NotNull BlockFace getBlockFace() {
+    public BlockFace getBlockFace() {
         return blockFace;
     }
 
@@ -70,11 +69,11 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
      * @return the block position
      */
     @Override
-    public @NotNull BlockVec getBlockPosition() {
+    public BlockVec getBlockPosition() {
         return blockPosition;
     }
 
-    public @NotNull Point getCursorPosition() {
+    public Point getCursorPosition() {
         return cursorPosition;
     }
 
@@ -83,7 +82,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
      *
      * @return the hand used
      */
-    public @NotNull PlayerHand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
@@ -132,7 +131,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

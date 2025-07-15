@@ -2,7 +2,6 @@ package net.minestom.server.thread;
 
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -20,7 +19,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return the entities ticked in the current thread
      */
-    static @NotNull Stream<@NotNull Entity> currentEntities() {
+    static Stream<Entity> currentEntities() {
         final Thread currentThread = Thread.currentThread();
         if (currentThread instanceof TickThread) {
             return ((TickThread) currentThread).entries().stream()
@@ -50,7 +49,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @return a new acquirable object
      */
     @ApiStatus.Internal
-    static <T> @NotNull Acquirable<T> of(@NotNull T value) {
+    static <T> Acquirable<T> of(T value) {
         return new AcquirableImpl<>(value);
     }
 
@@ -63,7 +62,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @return an acquired object
      * @see #sync(Consumer) for auto-closeable capability
      */
-    default @NotNull Acquired<T> lock() {
+    default Acquired<T> lock() {
         return new Acquired<>(unwrap(), assignedThread());
     }
 
@@ -77,7 +76,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @return an optional containing the acquired element if safe,
      * {@link Optional#empty()} otherwise
      */
-    default @NotNull Optional<T> local() {
+    default Optional<T> local() {
         if (isLocal()) return Optional.of(unwrap());
         return Optional.empty();
     }
@@ -98,7 +97,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @param consumer the callback to execute once the element has been safely acquired
      */
-    default void sync(@NotNull Consumer<T> consumer) {
+    default void sync(Consumer<T> consumer) {
         Acquired<T> acquired = lock();
         try {
             consumer.accept(acquired.get());
@@ -114,8 +113,8 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return the unwrapped value
      */
-    @NotNull T unwrap();
+    T unwrap();
 
     @ApiStatus.Internal
-    @NotNull TickThread assignedThread();
+    TickThread assignedThread();
 }

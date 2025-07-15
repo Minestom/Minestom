@@ -3,11 +3,10 @@ package net.minestom.server.instance.block.jukebox;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 record JukeboxSongImpl(
-        @NotNull SoundEvent soundEvent,
-        @NotNull Component description,
+        SoundEvent soundEvent,
+        Component description,
         float lengthInSeconds,
         int comparatorOutput
 ) implements JukeboxSong {

@@ -5,8 +5,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -29,7 +28,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     protected final NetworkBuffer.Type<T> networkType;
     protected final Comparator<T> comparator;
 
-    ArgumentNumber(@NotNull String id, ArgumentParserType parserName, Function<String, T> parser,
+    ArgumentNumber(String id, ArgumentParserType parserName, Function<String, T> parser,
                    BiFunction<String, Integer, T> radixParser, NetworkBuffer.Type<T> networkType,
                    Comparator<T> comparator) {
         super(id);
@@ -41,7 +40,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Override
-    public @NotNull T parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public T parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
             final T value;
             final int radix = getRadix(input);
@@ -81,23 +80,20 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
         });
     }
 
-    @NotNull
-    public ArgumentNumber<T> min(@NotNull T value) {
+    public ArgumentNumber<T> min(T value) {
         this.min = value;
         this.hasMin = true;
         return this;
     }
 
-    @NotNull
-    public ArgumentNumber<T> max(@NotNull T value) {
+    public ArgumentNumber<T> max(T value) {
         this.max = value;
         this.hasMax = true;
 
         return this;
     }
 
-    @NotNull
-    public ArgumentNumber<T> between(@NotNull T min, @NotNull T max) {
+    public ArgumentNumber<T> between(T min, T max) {
         this.min = min;
         this.max = max;
         this.hasMin = true;
@@ -133,7 +129,6 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
      *
      * @return the minimum of this argument
      */
-    @NotNull
     public T getMin() {
         return min;
     }
@@ -152,13 +147,11 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
      *
      * @return the maximum of this argument
      */
-    @NotNull
     public T getMax() {
         return max;
     }
 
-    @NotNull
-    protected String parseValue(@NotNull String value) {
+    protected String parseValue(String value) {
         if (value.startsWith("0b")) {
             value = value.replaceFirst(Pattern.quote("0b"), "");
         } else if (value.startsWith("0x")) {
@@ -170,7 +163,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
         return value;
     }
 
-    protected int getRadix(@NotNull String value) {
+    protected int getRadix(String value) {
         if (value.startsWith("0b")) {
             return 2;
         } else if (value.startsWith("0x")) {
@@ -180,7 +173,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Nullable
-    protected String removeScientificNotation(@NotNull String value) {
+    protected String removeScientificNotation(String value) {
         try {
             return new BigDecimal(value).toPlainString();
         } catch (NumberFormatException e) {

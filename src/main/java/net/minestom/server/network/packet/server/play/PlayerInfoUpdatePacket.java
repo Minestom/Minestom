@@ -7,8 +7,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.GameProfile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.UnaryOperator;
@@ -16,12 +15,12 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record PlayerInfoUpdatePacket(
-        @NotNull EnumSet<@NotNull Action> actions,
-        @NotNull List<@NotNull Entry> entries
+        EnumSet<Action> actions,
+        List<Entry> entries
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ENTRIES = 1024;
 
-    public PlayerInfoUpdatePacket(@NotNull Action action, @NotNull Entry entry) {
+    public PlayerInfoUpdatePacket(Action action, Entry entry) {
         this(EnumSet.of(action), List.of(entry));
     }
 
@@ -32,13 +31,13 @@ public record PlayerInfoUpdatePacket(
 
     public static final NetworkBuffer.Type<PlayerInfoUpdatePacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, PlayerInfoUpdatePacket value) {
+        public void write(NetworkBuffer writer, PlayerInfoUpdatePacket value) {
             writer.write(EnumSet(Action.class), value.actions);
             writer.write(Entry.serializer(value.actions).list(MAX_ENTRIES), value.entries);
         }
 
         @Override
-        public PlayerInfoUpdatePacket read(@NotNull NetworkBuffer reader) {
+        public PlayerInfoUpdatePacket read(NetworkBuffer reader) {
             var actions = reader.read(EnumSet(Action.class));
             var entries = reader.read(Entry.serializer(actions).list(MAX_ENTRIES));
             return new PlayerInfoUpdatePacket(actions, entries);
@@ -46,7 +45,7 @@ public record PlayerInfoUpdatePacket(
     };
 
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         final List<Component> components = new ArrayList<>();
         for (final Entry entry : entries) {
             if (entry.displayName() == null) continue;
@@ -56,7 +55,7 @@ public record PlayerInfoUpdatePacket(
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         final List<Entry> newEntries = new ArrayList<>();
         for (final Entry entry : entries) {
             final Component displayName = entry.displayName();
@@ -83,13 +82,13 @@ public record PlayerInfoUpdatePacket(
         public static NetworkBuffer.Type<Entry> serializer(EnumSet<Action> actions) {
             return new Type<>() {
                 @Override
-                public void write(@NotNull NetworkBuffer buffer, Entry value) {
+                public void write(NetworkBuffer buffer, Entry value) {
                     buffer.write(NetworkBuffer.UUID, value.uuid);
                     for (Action action : actions) action.writer.write(buffer, value);
                 }
 
                 @Override
-                public Entry read(@NotNull NetworkBuffer buffer) {
+                public Entry read(NetworkBuffer buffer) {
                     UUID uuid = buffer.read(NetworkBuffer.UUID);
                     String username = "";
                     List<Property> properties = List.of();
@@ -119,8 +118,8 @@ public record PlayerInfoUpdatePacket(
         }
     }
 
-    public record Property(@NotNull String name, @NotNull String value, @Nullable String signature) {
-        public Property(@NotNull String name, @NotNull String value) {
+    public record Property(String name, String value, @Nullable String signature) {
+        public Property(String name, String value) {
             this(name, value, null);
         }
 

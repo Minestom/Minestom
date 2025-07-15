@@ -3,7 +3,6 @@ package net.minestom.server.extras.query.response;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -41,7 +40,7 @@ public class FullQueryResponse {
      * @param key   the key
      * @param value the value
      */
-    public void put(@NotNull QueryKey key, @NotNull String value) {
+    public void put(QueryKey key, String value) {
         this.put(key.getKey(), value);
     }
 
@@ -51,7 +50,7 @@ public class FullQueryResponse {
      * @param key   the key
      * @param value the value
      */
-    public void put(@NotNull String key, @NotNull String value) {
+    public void put(String key, String value) {
         this.kv.put(key, value);
     }
 
@@ -60,7 +59,7 @@ public class FullQueryResponse {
      *
      * @return the map
      */
-    public @NotNull Map<String, String> getKeyValuesMap() {
+    public Map<String, String> getKeyValuesMap() {
         return this.kv;
     }
 
@@ -69,7 +68,7 @@ public class FullQueryResponse {
      *
      * @param map the map
      */
-    public void setKeyValuesMap(@NotNull Map<String, String> map) {
+    public void setKeyValuesMap(Map<String, String> map) {
         this.kv = Objects.requireNonNull(map, "map");
     }
 
@@ -78,7 +77,7 @@ public class FullQueryResponse {
      *
      * @param players the players
      */
-    public void addPlayers(@NotNull String @NotNull ... players) {
+    public void addPlayers(String ... players) {
         Collections.addAll(this.players, players);
     }
 
@@ -87,7 +86,7 @@ public class FullQueryResponse {
      *
      * @param players the players
      */
-    public void addPlayers(@NotNull Collection<String> players) {
+    public void addPlayers(Collection<String> players) {
         this.players.addAll(players);
     }
 
@@ -96,7 +95,7 @@ public class FullQueryResponse {
      *
      * @return the list
      */
-    public @NotNull List<String> getPlayers() {
+    public List<String> getPlayers() {
         return this.players;
     }
 
@@ -105,7 +104,7 @@ public class FullQueryResponse {
      *
      * @param players the players
      */
-    public void setPlayers(@NotNull List<String> players) {
+    public void setPlayers(List<String> players) {
         this.players = Objects.requireNonNull(players, "players");
     }
 
@@ -125,7 +124,7 @@ public class FullQueryResponse {
 
     public static final NetworkBuffer.Type<FullQueryResponse> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, FullQueryResponse value) {
+        public void write(NetworkBuffer buffer, FullQueryResponse value) {
             buffer.write(NetworkBuffer.RAW_BYTES, PADDING_11);
             // key-values
             for (var entry : value.kv.entrySet()) {
@@ -142,7 +141,7 @@ public class FullQueryResponse {
         }
 
         @Override
-        public FullQueryResponse read(@NotNull NetworkBuffer buffer) {
+        public FullQueryResponse read(NetworkBuffer buffer) {
             throw new UnsupportedOperationException("FullQueryResponse is write-only");
         }
     };

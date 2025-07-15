@@ -1,6 +1,5 @@
 package net.minestom.server.utils.time;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -16,7 +15,7 @@ public final class Cooldown {
     /**
      * Creates a cooldown with a measurement unit of {@link ChronoUnit#MILLIS}
      */
-    public Cooldown(@NotNull Duration duration) {
+    public Cooldown(Duration duration) {
         this(duration, ChronoUnit.MILLIS);
     }
 
@@ -28,7 +27,7 @@ public final class Cooldown {
      * @param duration     the duration of the cooldown
      * @param temporalUnit the unit of measurement
      */
-    public Cooldown(@NotNull Duration duration, @NotNull TemporalUnit temporalUnit) {
+    public Cooldown(Duration duration, TemporalUnit temporalUnit) {
         this.duration = duration;
         this.temporalUnit = temporalUnit;
         this.hasLastUpdate = false;
@@ -37,7 +36,7 @@ public final class Cooldown {
     /**
      * @return the unit of measurement
      */
-    public @NotNull TemporalUnit getTemporalUnit() {
+    public TemporalUnit getTemporalUnit() {
         return temporalUnit;
     }
 
@@ -72,7 +71,7 @@ public final class Cooldown {
      * @param cooldown     the value of the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
-    public static boolean hasCooldown(long currentTime, long lastUpdate, @NotNull TemporalUnit cooldownUnit, long cooldown) {
+    public static boolean hasCooldown(long currentTime, long lastUpdate, TemporalUnit cooldownUnit, long cooldown) {
         return hasCooldown(currentTime, lastUpdate, Duration.of(cooldown, cooldownUnit));
     }
 
@@ -84,7 +83,7 @@ public final class Cooldown {
      * @param duration    the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
-    public static boolean hasCooldown(long currentTime, long lastUpdate, @NotNull Duration duration) {
+    public static boolean hasCooldown(long currentTime, long lastUpdate, Duration duration) {
         return hasCooldown(ChronoUnit.MILLIS, currentTime, lastUpdate, duration);
     }
 
@@ -98,7 +97,7 @@ public final class Cooldown {
      * @param cooldown     the value of the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
-    public static boolean hasCooldown(@NotNull TemporalUnit temporalUnit, long currentTime, long lastUpdate, @NotNull TemporalUnit cooldownUnit, long cooldown) {
+    public static boolean hasCooldown(TemporalUnit temporalUnit, long currentTime, long lastUpdate, TemporalUnit cooldownUnit, long cooldown) {
         return hasCooldown(temporalUnit, currentTime, lastUpdate, Duration.of(cooldown, cooldownUnit));
     }
 
@@ -111,7 +110,7 @@ public final class Cooldown {
      * @param duration     the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
-    public static boolean hasCooldown(@NotNull TemporalUnit temporalUnit, long currentTime, long lastUpdate, @NotNull Duration duration) {
+    public static boolean hasCooldown(TemporalUnit temporalUnit, long currentTime, long lastUpdate, Duration duration) {
         return Duration.of(currentTime - lastUpdate, temporalUnit).compareTo(duration) < 0;
     }
 
@@ -123,7 +122,7 @@ public final class Cooldown {
      * @param cooldown     the value of the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
-    public static boolean hasCooldown(long lastUpdate, @NotNull TemporalUnit temporalUnit, int cooldown) {
+    public static boolean hasCooldown(long lastUpdate, TemporalUnit temporalUnit, int cooldown) {
         return hasCooldown(ChronoUnit.NANOS, System.nanoTime(), lastUpdate, temporalUnit, cooldown);
     }
 }

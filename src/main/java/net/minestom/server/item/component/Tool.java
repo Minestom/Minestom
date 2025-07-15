@@ -7,12 +7,11 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int damagePerBlock,
+public record Tool(List<Rule> rules, float defaultMiningSpeed, int damagePerBlock,
                    boolean canDestroyBlocksInCreative) {
     public static final float DEFAULT_MINING_SPEED = 1.0f;
     public static final int DEFAULT_DAMAGE_PER_BLOCK = 1;
@@ -30,7 +29,7 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
             "can_destroy_blocks_in_creative", Codec.BOOLEAN.optional(true), Tool::canDestroyBlocksInCreative,
             Tool::new);
 
-    public record Rule(@NotNull RegistryTag<Block> blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
+    public record Rule(RegistryTag<Block> blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
 
         public static final NetworkBuffer.Type<Rule> NETWORK_TYPE = NetworkBufferTemplate.template(
                 RegistryTag.networkType(Registries::blocks), Rule::blocks,
@@ -45,7 +44,7 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
                 Rule::new);
     }
 
-    public boolean isCorrectForDrops(@NotNull Block block) {
+    public boolean isCorrectForDrops(Block block) {
         for (Rule rule : rules) {
             if (rule.correctForDrops != null && rule.blocks.contains(block)) {
                 // First matching rule is picked, other rules are ignored
@@ -55,7 +54,7 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
         return false;
     }
 
-    public float getSpeed(@NotNull Block block) {
+    public float getSpeed(Block block) {
         for (Rule rule : rules) {
             if (rule.speed != null && rule.blocks.contains(block)) {
                 // First matching rule is picked, other rules are ignored

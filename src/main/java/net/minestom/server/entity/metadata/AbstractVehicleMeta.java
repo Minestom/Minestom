@@ -3,10 +3,9 @@ package net.minestom.server.entity.metadata;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
 
 public class AbstractVehicleMeta extends EntityMeta {
-    public AbstractVehicleMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public AbstractVehicleMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

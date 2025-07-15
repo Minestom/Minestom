@@ -1,8 +1,7 @@
 package net.minestom.server.message;
 
 import net.kyori.adventure.audience.MessageType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The different positions for chat messages.
@@ -54,7 +53,7 @@ public enum ChatPosition {
      * @param messageType the message type
      * @return the position
      */
-    public static @NotNull ChatPosition fromMessageType(@NotNull MessageType messageType) {
+    public static ChatPosition fromMessageType(MessageType messageType) {
         return switch (messageType) {
             case CHAT -> CHAT;
             case SYSTEM -> SYSTEM_MESSAGE;
@@ -67,7 +66,7 @@ public enum ChatPosition {
      * @param id the id
      * @return the chat position
      */
-    public static @NotNull ChatPosition fromPacketID(int id) {
+    public static ChatPosition fromPacketID(int id) {
         return switch (id) {
             case 0 -> CHAT;
             case 1 -> SYSTEM_MESSAGE;

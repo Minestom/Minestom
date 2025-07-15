@@ -5,12 +5,11 @@ import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.RegistryKey;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public record EnchantmentList(@NotNull Map<RegistryKey<Enchantment>, Integer> enchantments) {
+public record EnchantmentList(Map<RegistryKey<Enchantment>, Integer> enchantments) {
     public static final EnchantmentList EMPTY = new EnchantmentList(Map.of());
 
     public static final NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -23,25 +22,25 @@ public record EnchantmentList(@NotNull Map<RegistryKey<Enchantment>, Integer> en
         enchantments = Map.copyOf(enchantments);
     }
 
-    public EnchantmentList(@NotNull RegistryKey<Enchantment> enchantment, int level) {
+    public EnchantmentList(RegistryKey<Enchantment> enchantment, int level) {
         this(Map.of(enchantment, level));
     }
 
-    public boolean has(@NotNull RegistryKey<Enchantment> enchantment) {
+    public boolean has(RegistryKey<Enchantment> enchantment) {
         return enchantments.containsKey(enchantment);
     }
 
-    public int level(@NotNull RegistryKey<Enchantment> enchantment) {
+    public int level(RegistryKey<Enchantment> enchantment) {
         return enchantments.getOrDefault(enchantment, 0);
     }
 
-    public @NotNull EnchantmentList with(@NotNull RegistryKey<Enchantment> enchantment, int level) {
+    public EnchantmentList with(RegistryKey<Enchantment> enchantment, int level) {
         Map<RegistryKey<Enchantment>, Integer> newEnchantments = new HashMap<>(enchantments);
         newEnchantments.put(enchantment, level);
         return new EnchantmentList(newEnchantments);
     }
 
-    public @NotNull EnchantmentList remove(@NotNull RegistryKey<Enchantment> enchantment) {
+    public EnchantmentList remove(RegistryKey<Enchantment> enchantment) {
         Map<RegistryKey<Enchantment>, Integer> newEnchantments = new HashMap<>(enchantments);
         newEnchantments.remove(enchantment);
         return new EnchantmentList(newEnchantments);

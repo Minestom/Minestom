@@ -6,7 +6,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 public class CookieCommand extends Command {
     public CookieCommand() {
@@ -26,7 +25,7 @@ public class CookieCommand extends Command {
             addSyntax(this::store, keyArg, valueArg);
         }
 
-        private void store(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        private void store(CommandSender sender, CommandContext context) {
             if (!(sender instanceof Player player)) return;
 
             String key = context.get(keyArg);
@@ -46,7 +45,7 @@ public class CookieCommand extends Command {
             addSyntax(this::fetch, keyArg);
         }
 
-        private void fetch(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        private void fetch(CommandSender sender, CommandContext context) {
             if (!(sender instanceof Player player)) return;
 
             String key = context.get(keyArg);

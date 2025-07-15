@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -18,9 +17,8 @@ public record EntityPositionPacket(int entityId, short deltaX, short deltaY, sho
             BOOLEAN, EntityPositionPacket::onGround,
             EntityPositionPacket::new);
 
-    @NotNull
     public static EntityPositionPacket getPacket(int entityId,
-                                                 @NotNull Pos newPosition, @NotNull Pos oldPosition,
+                                                 Pos newPosition, Pos oldPosition,
                                                  boolean onGround) {
         final short deltaX = (short) ((newPosition.x() * 32 - oldPosition.x() * 32) * 128);
         final short deltaY = (short) ((newPosition.y() * 32 - oldPosition.y() * 32) * 128);

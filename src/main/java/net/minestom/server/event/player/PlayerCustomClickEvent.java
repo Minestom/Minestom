@@ -4,8 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Triggered when we receive a custom click packet from the client during the <b>play</b> state.
@@ -17,18 +16,18 @@ public class PlayerCustomClickEvent implements PlayerInstanceEvent {
     private final Key key;
     private final BinaryTag payload;
 
-    public PlayerCustomClickEvent(@NotNull Player player, @NotNull Key key, @Nullable BinaryTag payload) {
+    public PlayerCustomClickEvent(Player player, Key key, @Nullable BinaryTag payload) {
         this.player = player;
         this.key = key;
         this.payload = payload;
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
 
-    public @NotNull Key getKey() {
+    public Key getKey() {
         return this.key;
     }
 

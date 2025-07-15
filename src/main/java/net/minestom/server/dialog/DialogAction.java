@@ -9,8 +9,7 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -21,7 +20,7 @@ import java.util.Map;
  * Until adventure supports these properly they are duplicated.</p>
  */
 public sealed interface DialogAction {
-    @NotNull Registry<StructCodec<? extends DialogAction>> REGISTRY = DynamicRegistry.fromMap(
+    Registry<StructCodec<? extends DialogAction>> REGISTRY = DynamicRegistry.fromMap(
             Key.key("minecraft:dialog_action_type"),
             Map.entry(Key.key("open_url"), OpenUrl.CODEC),
             Map.entry(Key.key("run_command"), RunCommand.CODEC),
@@ -32,48 +31,48 @@ public sealed interface DialogAction {
             Map.entry(Key.key("custom"), Custom.CODEC),
             Map.entry(Key.key("dynamic/run_command"), DynamicRunCommand.CODEC),
             Map.entry(Key.key("dynamic/custom"), DynamicCustom.CODEC));
-    @NotNull StructCodec<DialogAction> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogAction::codec, "type");
+    StructCodec<DialogAction> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogAction::codec, "type");
 
-    record OpenUrl(@NotNull String url) implements DialogAction {
+    record OpenUrl(String url) implements DialogAction {
         public static final StructCodec<OpenUrl> CODEC = StructCodec.struct(
                 "url", StructCodec.STRING, OpenUrl::url,
                 OpenUrl::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogAction> codec() {
+        public StructCodec<? extends DialogAction> codec() {
             return CODEC;
         }
     }
 
-    record RunCommand(@NotNull String command) implements DialogAction {
+    record RunCommand(String command) implements DialogAction {
         public static final StructCodec<RunCommand> CODEC = StructCodec.struct(
                 "command", StructCodec.STRING, RunCommand::command,
                 RunCommand::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogAction> codec() {
+        public StructCodec<? extends DialogAction> codec() {
             return CODEC;
         }
     }
 
-    record SuggestCommand(@NotNull String command) implements DialogAction {
+    record SuggestCommand(String command) implements DialogAction {
         public static final StructCodec<SuggestCommand> CODEC = StructCodec.struct(
                 "command", StructCodec.STRING, SuggestCommand::command,
                 SuggestCommand::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogAction> codec() {
+        public StructCodec<? extends DialogAction> codec() {
             return CODEC;
         }
     }
 
-    record ShowDialog(@NotNull Holder<Dialog> dialog) implements DialogAction {
+    record ShowDialog(Holder<Dialog> dialog) implements DialogAction {
         public static final StructCodec<ShowDialog> CODEC = StructCodec.struct(
                 "dialog", Holder.codec(Registries::dialog, Dialog.REGISTRY_CODEC), ShowDialog::dialog,
                 ShowDialog::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogAction> codec() {
+        public StructCodec<? extends DialogAction> codec() {
             return CODEC;
         }
     }
@@ -84,56 +83,56 @@ public sealed interface DialogAction {
                 ChangePage::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogAction> codec() {
+        public StructCodec<? extends DialogAction> codec() {
             return CODEC;
         }
     }
 
-    record CopyToClipboard(@NotNull String value) implements DialogAction {
+    record CopyToClipboard(String value) implements DialogAction {
         public static final StructCodec<CopyToClipboard> CODEC = StructCodec.struct(
                 "value", StructCodec.STRING, CopyToClipboard::value,
                 CopyToClipboard::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogAction> codec() {
+        public StructCodec<? extends DialogAction> codec() {
             return CODEC;
         }
     }
 
-    record Custom(@NotNull Key key, @Nullable BinaryTag payload) implements DialogAction {
+    record Custom(Key key, @Nullable BinaryTag payload) implements DialogAction {
         public static final StructCodec<Custom> CODEC = StructCodec.struct(
                 "id", Codec.KEY, Custom::key,
                 "payload", Codec.NBT.optional(), Custom::payload,
                 Custom::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogAction> codec() {
+        public StructCodec<? extends DialogAction> codec() {
             return CODEC;
         }
     }
 
-    record DynamicRunCommand(@NotNull String template) implements DialogAction {
+    record DynamicRunCommand(String template) implements DialogAction {
         public static final StructCodec<DynamicRunCommand> CODEC = StructCodec.struct(
                 "template", StructCodec.STRING, DynamicRunCommand::template,
                 DynamicRunCommand::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogAction> codec() {
+        public StructCodec<? extends DialogAction> codec() {
             return CODEC;
         }
     }
 
-    record DynamicCustom(@NotNull Key key, @Nullable CompoundBinaryTag additions) implements DialogAction {
+    record DynamicCustom(Key key, @Nullable CompoundBinaryTag additions) implements DialogAction {
         public static final StructCodec<DynamicCustom> CODEC = StructCodec.struct(
                 "id", Codec.KEY, DynamicCustom::key,
                 "additions", Codec.NBT_COMPOUND.optional(), DynamicCustom::additions,
                 DynamicCustom::new);
 
         @Override
-        public @NotNull StructCodec<? extends DialogAction> codec() {
+        public StructCodec<? extends DialogAction> codec() {
             return CODEC;
         }
     }
 
-    @NotNull StructCodec<? extends DialogAction> codec();
+    StructCodec<? extends DialogAction> codec();
 }

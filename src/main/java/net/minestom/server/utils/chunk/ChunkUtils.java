@@ -5,8 +5,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,7 +30,7 @@ public final class ChunkUtils {
      * @param eachCallback the optional callback when a chunk get loaded
      * @return a {@link CompletableFuture} completed once all chunks have been processed
      */
-    public static @NotNull CompletableFuture<Void> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
+    public static CompletableFuture<Void> optionalLoadAll(Instance instance, long [] chunks,
                                                                    @Nullable Consumer<Chunk> eachCallback) {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         AtomicInteger counter = new AtomicInteger(0);
@@ -61,12 +60,12 @@ public final class ChunkUtils {
      * @param z        instance Z coordinate
      * @return true if the chunk is loaded, false otherwise
      */
-    public static boolean isLoaded(@NotNull Instance instance, double x, double z) {
+    public static boolean isLoaded(Instance instance, double x, double z) {
         final Chunk chunk = instance.getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
         return isLoaded(chunk);
     }
 
-    public static boolean isLoaded(@NotNull Instance instance, @NotNull Point point) {
+    public static boolean isLoaded(Instance instance, Point point) {
         final Chunk chunk = instance.getChunk(point.chunkX(), point.chunkZ());
         return isLoaded(chunk);
     }

@@ -37,8 +37,7 @@ import net.minestom.server.entity.metadata.water.SquidMeta;
 import net.minestom.server.entity.metadata.water.fish.*;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -68,7 +67,7 @@ public final class MetadataHolder {
         this.entity = entity;
     }
 
-    public <T> T get(MetadataDef.@NotNull Entry<T> entry) {
+    public <T> T get(MetadataDef.Entry<T> entry) {
         final int id = entry.index();
 
         final Metadata.Entry<?> value = this.entries.get(id);
@@ -86,7 +85,7 @@ public final class MetadataHolder {
         };
     }
 
-    public <T> void set(MetadataDef.@NotNull Entry<T> entry, T value) {
+    public <T> void set(MetadataDef.Entry<T> entry, T value) {
         final int id = entry.index();
 
         Metadata.Entry<?> result = switch (entry) {
@@ -153,7 +152,7 @@ public final class MetadataHolder {
         entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
     }
 
-    public @NotNull Map<Integer, Metadata.Entry<?>> getEntries() {
+    public Map<Integer, Metadata.Entry<?>> getEntries() {
         return Map.copyOf(this.entries);
     }
 
@@ -161,9 +160,9 @@ public final class MetadataHolder {
 
     @ApiStatus.Internal
     public static EntityMeta createMeta(
-            @NotNull EntityType entityType,
+            EntityType entityType,
             @Nullable Entity entity,
-            @NotNull MetadataHolder metadata
+            MetadataHolder metadata
     ) {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
     }

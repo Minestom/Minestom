@@ -15,8 +15,7 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Range;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -52,22 +51,22 @@ public class EntityFinder {
     private final ToggleableMap<GameMode> gameModes = new ToggleableMap<>();
     private Range.Int level;
 
-    public EntityFinder setTargetSelector(@NotNull TargetSelector targetSelector) {
+    public EntityFinder setTargetSelector(TargetSelector targetSelector) {
         this.targetSelector = targetSelector;
         return this;
     }
 
-    public EntityFinder setEntitySort(@NotNull EntitySort entitySort) {
+    public EntityFinder setEntitySort(EntitySort entitySort) {
         this.entitySort = entitySort;
         return this;
     }
 
-    public EntityFinder setStartPosition(@NotNull Point startPosition) {
+    public EntityFinder setStartPosition(Point startPosition) {
         this.startPosition = startPosition;
         return this;
     }
 
-    public EntityFinder setDistance(@NotNull Range.Int distance) {
+    public EntityFinder setDistance(Range.Int distance) {
         this.distance = distance;
         return this;
     }
@@ -77,37 +76,37 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setLevel(@NotNull Range.Int level) {
+    public EntityFinder setLevel(Range.Int level) {
         this.level = level;
         return this;
     }
 
-    public EntityFinder setEntity(@NotNull EntityType entityType, @NotNull ToggleableType toggleableType) {
+    public EntityFinder setEntity(EntityType entityType, ToggleableType toggleableType) {
         this.entityTypes.put(entityType, toggleableType.getValue());
         return this;
     }
 
-    public EntityFinder setConstantName(@NotNull String constantName) {
+    public EntityFinder setConstantName(String constantName) {
         this.constantName = constantName;
         return this;
     }
 
-    public EntityFinder setConstantUuid(@NotNull UUID constantUuid) {
+    public EntityFinder setConstantUuid(UUID constantUuid) {
         this.constantUuid = constantUuid;
         return this;
     }
 
-    public EntityFinder setName(@NotNull String name, @NotNull ToggleableType toggleableType) {
+    public EntityFinder setName(String name, ToggleableType toggleableType) {
         this.names.put(name, toggleableType.getValue());
         return this;
     }
 
-    public EntityFinder setUuid(@NotNull UUID uuid, @NotNull ToggleableType toggleableType) {
+    public EntityFinder setUuid(UUID uuid, ToggleableType toggleableType) {
         this.uuids.put(uuid, toggleableType.getValue());
         return this;
     }
 
-    public EntityFinder setGameMode(@NotNull GameMode gameMode, @NotNull ToggleableType toggleableType) {
+    public EntityFinder setGameMode(GameMode gameMode, ToggleableType toggleableType) {
         this.gameModes.put(gameMode, toggleableType.getValue());
         return this;
     }
@@ -127,7 +126,7 @@ public class EntityFinder {
      * @param self     the source of the query, null if not any
      * @return all entities validating the conditions, can be empty
      */
-    public @NotNull List<@NotNull Entity> find(@Nullable Instance instance, @Nullable Entity self) {
+    public List<Entity> find(@Nullable Instance instance, @Nullable Entity self) {
         if (targetSelector == TargetSelector.MINESTOM_USERNAME) {
             Check.notNull(constantName, "The player name should not be null when searching for it");
             final Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(constantName);
@@ -244,7 +243,7 @@ public class EntityFinder {
         return result;
     }
 
-    public @NotNull List<@NotNull Entity> find(@NotNull CommandSender sender) {
+    public List<Entity> find(CommandSender sender) {
         return sender instanceof Player player ?
                 find(player.getInstance(), player) : find(null, null);
     }
@@ -266,7 +265,7 @@ public class EntityFinder {
         return null;
     }
 
-    public @Nullable Player findFirstPlayer(@NotNull CommandSender sender) {
+    public @Nullable Player findFirstPlayer(CommandSender sender) {
         return sender instanceof Player player ?
                 findFirstPlayer(player.getInstance(), player) :
                 findFirstPlayer(null, null);
@@ -277,7 +276,7 @@ public class EntityFinder {
         return entities.isEmpty() ? null : entities.get(0);
     }
 
-    public @Nullable Entity findFirstEntity(@NotNull CommandSender sender) {
+    public @Nullable Entity findFirstEntity(CommandSender sender) {
         return sender instanceof Player player ?
                 findFirstEntity(player.getInstance(), player) : findFirstEntity(null, null);
     }
@@ -307,9 +306,9 @@ public class EntityFinder {
     private static class ToggleableMap<T> extends Object2BooleanOpenHashMap<T> {
     }
 
-    private static @NotNull List<@NotNull Entity> findTarget(@Nullable Instance instance,
-                                                             @NotNull TargetSelector targetSelector,
-                                                             @NotNull Point startPosition, @Nullable Entity self) {
+    private static List<Entity> findTarget(@Nullable Instance instance,
+                                                             TargetSelector targetSelector,
+                                                             Point startPosition, @Nullable Entity self) {
         final var players = instance != null ? instance.getPlayers() : CONNECTION_MANAGER.getOnlinePlayers();
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
             return players.stream()
@@ -344,7 +343,7 @@ public class EntityFinder {
         throw new IllegalStateException("Weird thing happened: " + targetSelector);
     }
 
-    private static <T> boolean filterToggleableMap(@NotNull T value, @NotNull ToggleableMap<T> map) {
+    private static <T> boolean filterToggleableMap(T value, ToggleableMap<T> map) {
         for (var entry : Object2BooleanMaps.fastIterable(map)) {
             if (entry.getBooleanValue() != Objects.equals(value, entry.getKey())) {
                 return false;

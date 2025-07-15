@@ -6,7 +6,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
 import java.util.function.BiPredicate;
@@ -18,32 +17,32 @@ import java.util.function.BiPredicate;
  */
 @ApiStatus.Internal
 public final class PacketWriting {
-    public static void writeFramedPacket(@NotNull NetworkBuffer buffer,
-                                         @NotNull ConnectionState state,
-                                         @NotNull ClientPacket packet,
+    public static void writeFramedPacket(NetworkBuffer buffer,
+                                         ConnectionState state,
+                                         ClientPacket packet,
                                          int compressionThreshold) throws IndexOutOfBoundsException {
         writeFramedPacket(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, packet, compressionThreshold);
     }
 
-    public static void writeFramedPacket(@NotNull NetworkBuffer buffer,
-                                         @NotNull ConnectionState state,
-                                         @NotNull ServerPacket packet,
+    public static void writeFramedPacket(NetworkBuffer buffer,
+                                         ConnectionState state,
+                                         ServerPacket packet,
                                          int compressionThreshold) throws IndexOutOfBoundsException {
         writeFramedPacket(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, packet, compressionThreshold);
     }
 
-    public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
-                                             @NotNull PacketParser<T> parser,
-                                             @NotNull ConnectionState state,
-                                             @NotNull T packet,
+    public static <T> void writeFramedPacket(NetworkBuffer buffer,
+                                             PacketParser<T> parser,
+                                             ConnectionState state,
+                                             T packet,
                                              int compressionThreshold) throws IndexOutOfBoundsException {
         final PacketRegistry<T> registry = parser.stateRegistry(state);
         writeFramedPacket(buffer, registry, packet, compressionThreshold);
     }
 
-    public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
-                                             @NotNull PacketRegistry<T> registry,
-                                             @NotNull T packet,
+    public static <T> void writeFramedPacket(NetworkBuffer buffer,
+                                             PacketRegistry<T> registry,
+                                             T packet,
                                              int compressionThreshold) throws IndexOutOfBoundsException {
         final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packet);
         writeFramedPacket(
@@ -53,9 +52,9 @@ public final class PacketWriting {
         );
     }
 
-    public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
-                                             @NotNull PacketRegistry.PacketInfo<T> packetInfo,
-                                             @NotNull T packet,
+    public static <T> void writeFramedPacket(NetworkBuffer buffer,
+                                             PacketRegistry.PacketInfo<T> packetInfo,
+                                             T packet,
                                              int compressionThreshold) throws IndexOutOfBoundsException {
         final int id = packetInfo.id();
         final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
@@ -66,9 +65,9 @@ public final class PacketWriting {
         );
     }
 
-    public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
-                                             @NotNull NetworkBuffer.Type<T> type,
-                                             int id, @NotNull T packet,
+    public static <T> void writeFramedPacket(NetworkBuffer buffer,
+                                             NetworkBuffer.Type<T> type,
+                                             int id, T packet,
                                              int compressionThreshold) throws IndexOutOfBoundsException {
         if (compressionThreshold <= 0) writeUncompressedFormat(buffer, type, id, packet);
         else writeCompressedFormat(buffer, type, id, packet, compressionThreshold);
@@ -115,22 +114,22 @@ public final class PacketWriting {
         buffer.writeAt(uncompressedIndex, NetworkBuffer.VAR_INT_3, compressed ? (int) packetSize : 0);
     }
 
-    public static NetworkBuffer allocateTrimmedPacket(@NotNull ConnectionState state,
-                                                      @NotNull ClientPacket packet,
+    public static NetworkBuffer allocateTrimmedPacket(ConnectionState state,
+                                                      ClientPacket packet,
                                                       int compressionThreshold) {
         return allocateTrimmedPacket(PacketVanilla.CLIENT_PACKET_PARSER, state, packet, compressionThreshold);
     }
 
-    public static NetworkBuffer allocateTrimmedPacket(@NotNull ConnectionState state,
-                                                      @NotNull ServerPacket packet,
+    public static NetworkBuffer allocateTrimmedPacket(ConnectionState state,
+                                                      ServerPacket packet,
                                                       int compressionThreshold) {
         return allocateTrimmedPacket(PacketVanilla.SERVER_PACKET_PARSER, state, packet, compressionThreshold);
     }
 
     public static <T> NetworkBuffer allocateTrimmedPacket(
-            @NotNull PacketParser<T> parser,
-            @NotNull ConnectionState state,
-            @NotNull T packet,
+            PacketParser<T> parser,
+            ConnectionState state,
+            T packet,
             int compressionThreshold) {
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         try {
@@ -141,19 +140,19 @@ public final class PacketWriting {
     }
 
     public static <T> NetworkBuffer allocateTrimmedPacket(
-            @NotNull NetworkBuffer tmpBuffer,
-            @NotNull PacketParser<T> parser,
-            @NotNull ConnectionState state,
-            @NotNull T packet,
+            NetworkBuffer tmpBuffer,
+            PacketParser<T> parser,
+            ConnectionState state,
+            T packet,
             int compressionThreshold) {
         final PacketRegistry<T> registry = parser.stateRegistry(state);
         return allocateTrimmedPacket(tmpBuffer, registry, packet, compressionThreshold);
     }
 
     public static <T> NetworkBuffer allocateTrimmedPacket(
-            @NotNull NetworkBuffer tmpBuffer,
-            @NotNull PacketRegistry<T> registry,
-            @NotNull T packet,
+            NetworkBuffer tmpBuffer,
+            PacketRegistry<T> registry,
+            T packet,
             int compressionThreshold) {
         final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packet);
         final int id = packetInfo.id();

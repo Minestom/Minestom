@@ -1,12 +1,11 @@
 package net.minestom.server.entity.damage;
 
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 record DamageTypeImpl(
-        @NotNull String messageId,
-        @NotNull String scaling,
+        String messageId,
+        String scaling,
         float exhaustion,
         @Nullable String effects,
         @Nullable String deathMessageType

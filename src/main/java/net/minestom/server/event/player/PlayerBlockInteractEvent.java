@@ -9,7 +9,6 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player interacts with a block (right-click).
@@ -32,9 +31,9 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
 
     private boolean cancelled;
 
-    public PlayerBlockInteractEvent(@NotNull Player player, @NotNull PlayerHand hand,
-                                    @NotNull Block block, @NotNull BlockVec blockPosition, @NotNull Point cursorPosition,
-                                    @NotNull BlockFace blockFace) {
+    public PlayerBlockInteractEvent(Player player, PlayerHand hand,
+                                    Block block, BlockVec blockPosition, Point cursorPosition,
+                                    BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
         this.block = block;
@@ -62,7 +61,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     }
 
     @Override
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
         return block;
     }
 
@@ -72,7 +71,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      * @return the block position
      */
     @Override
-    public @NotNull BlockVec getBlockPosition() {
+    public BlockVec getBlockPosition() {
         return blockPosition;
     }
 
@@ -80,14 +79,14 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      * Gets the cursor position of the interacted block
      * @return the cursor position of the interaction
      */
-    public @NotNull Point getCursorPosition() { return cursorPosition; }
+    public Point getCursorPosition() { return cursorPosition; }
 
     /**
      * Gets the hand used for the interaction.
      *
      * @return the hand used
      */
-    public @NotNull PlayerHand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
@@ -96,7 +95,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      *
      * @return the block face
      */
-    public @NotNull BlockFace getBlockFace() {
+    public BlockFace getBlockFace() {
         return blockFace;
     }
 
@@ -111,7 +110,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

@@ -9,8 +9,7 @@ import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -19,9 +18,9 @@ import java.util.Collection;
  */
 public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
-    @NotNull NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+    NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, SoundEvent value) {
+        public void write(NetworkBuffer buffer, SoundEvent value) {
             switch (value) {
                 case BuiltinSoundEvent soundEvent -> buffer.write(NetworkBuffer.VAR_INT, soundEvent.id() + 1);
                 case CustomSoundEvent soundEvent -> {
@@ -33,7 +32,7 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
         }
 
         @Override
-        public SoundEvent read(@NotNull NetworkBuffer buffer) {
+        public SoundEvent read(NetworkBuffer buffer) {
             int id = buffer.read(NetworkBuffer.VAR_INT) - 1;
             if (id != -1) return BuiltinSoundEvent.REGISTRY.get(id);
 
@@ -41,9 +40,9 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
                     buffer.read(NetworkBuffer.FLOAT.optional()));
         }
     };
-    @NotNull Codec<SoundEvent> CODEC = new Codec<>() {
+    Codec<SoundEvent> CODEC = new Codec<>() {
         @Override
-        public @NotNull <D> Result<SoundEvent> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public <D> Result<SoundEvent> decode(Transcoder<D> coder, D value) {
             final Result<String> stringResult = coder.getString(value);
             if (stringResult instanceof Result.Ok(String string)) {
                 final SoundEvent soundEvent = BuiltinSoundEvent.get(string);
@@ -58,7 +57,7 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable SoundEvent value) {
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable SoundEvent value) {
             if (value == null) return new Result.Error<>("null");
             return switch (value) {
                 case BuiltinSoundEvent soundEvent -> new Result.Ok<>(coder.createString(soundEvent.name()));
@@ -70,7 +69,7 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
     /**
      * Get all the builtin sound events. Resource pack sounds will never be returned from this method.
      */
-    static @NotNull Collection<? extends SoundEvent> values() {
+    static Collection<? extends SoundEvent> values() {
         return BuiltinSoundEvent.REGISTRY.values();
     }
 
@@ -80,7 +79,7 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
      * @param key the key of the sound event
      * @return the sound event, or null if not found
      */
-    static @Nullable SoundEvent fromKey(@KeyPattern @NotNull String key) {
+    static @Nullable SoundEvent fromKey(@KeyPattern String key) {
         return fromKey(Key.key(key));
     }
 
@@ -90,7 +89,7 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
      * @param key the key of the sound event
      * @return the sound event, or null if not found
      */
-    static @Nullable SoundEvent fromKey(@NotNull Key key) {
+    static @Nullable SoundEvent fromKey(Key key) {
         return BuiltinSoundEvent.REGISTRY.get(key);
     }
 
@@ -111,7 +110,7 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
      * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
-    static @NotNull SoundEvent of(@NotNull String key, @Nullable Float range) {
+    static SoundEvent of(String key, @Nullable Float range) {
         return new CustomSoundEvent(Key.key(key), range);
     }
 
@@ -122,17 +121,17 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
      * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
-    static @NotNull SoundEvent of(@NotNull Key key, @Nullable Float range) {
+    static SoundEvent of(Key key, @Nullable Float range) {
         return new CustomSoundEvent(key, range);
     }
 
     @Contract(pure = true)
-    default @NotNull String name() {
+    default String name() {
         return key().asString();
     }
 
     @Override
     @Contract(pure = true)
-    @NotNull Key key();
+    Key key();
 
 }
