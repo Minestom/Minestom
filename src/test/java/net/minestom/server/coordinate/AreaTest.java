@@ -3,10 +3,12 @@ package net.minestom.server.coordinate;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static net.minestom.testing.TestUtils.assertPoint;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AreaTest {
 
@@ -158,5 +160,81 @@ public class AreaTest {
         Set<BlockVec> actual = new HashSet<>();
         for (BlockVec v : cube) actual.add(v);
         assertEquals(expected, actual);
+    }
+
+    // Tests for split method
+    @Test
+    public void splitSingleSection() {
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(10, 5, 5));
+        List<Area.Cuboid> splits = cuboid.split();
+        assertEquals(1, splits.size());
+        Area.Cuboid sub = splits.get(0);
+        assertPoint(new BlockVec(0, 0, 0), sub.min());
+        assertPoint(new BlockVec(10, 5, 5), sub.max());
+    }
+
+    @Test
+    public void splitMultiSectionX() {
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(15, 0, 0), new BlockVec(17, 1, 1));
+        List<Area.Cuboid> splits = cuboid.split();
+        assertEquals(2, splits.size());
+        // Check first section
+        boolean found0 = false, found1 = false;
+        for (Area.Cuboid sub : splits) {
+            if (sub.min().equals(new BlockVec(15, 0, 0)) && sub.max().equals(new BlockVec(15, 1, 1))) found0 = true;
+            if (sub.min().equals(new BlockVec(16, 0, 0)) && sub.max().equals(new BlockVec(17, 1, 1))) found1 = true;
+        }
+        assertTrue(found0);
+        assertTrue(found1);
+    }
+
+
+    @Test
+    public void splitOnSingle() {
+        BlockVec point = new BlockVec(5, 5, 5);
+        List<Area.Cuboid> splits = Area.single(point).split();
+        assertEquals(1, splits.size());
+        Area.Cuboid sub = splits.get(0);
+        assertPoint(point, sub.min());
+        assertPoint(point, sub.max());
+    }
+
+    @Test
+    public void splitLineSingleSection() {
+        Area.Line line = Area.line(new BlockVec(1, 2, 3), new BlockVec(2, 2, 3));
+        List<Area.Cuboid> splits = line.split();
+        assertEquals(1, splits.size());
+        Area.Cuboid sub = splits.get(0);
+        assertPoint(new BlockVec(1, 2, 3), sub.min());
+        assertPoint(new BlockVec(2, 2, 3), sub.max());
+    }
+
+    @Test
+    public void splitLineCrossSection() {
+        Area.Line line = Area.line(new BlockVec(15, 0, 0), new BlockVec(17, 0, 0));
+        List<Area.Cuboid> splits = line.split();
+        assertEquals(2, splits.size());
+        boolean sec0 = false, sec1 = false;
+        for (Area.Cuboid sub : splits) {
+            if (sub.min().equals(new BlockVec(15, 0, 0)) && sub.max().equals(new BlockVec(15, 0, 0))) sec0 = true;
+            if (sub.min().equals(new BlockVec(16, 0, 0)) && sub.max().equals(new BlockVec(17, 0, 0))) sec1 = true;
+        }
+        assertTrue(sec0);
+        assertTrue(sec1);
+    }
+
+    @Test
+    public void splitSphere() {
+        Area.Sphere sphere = Area.sphere(new BlockVec(0, 0, 0), 1);
+        List<Area.Cuboid> splits = sphere.split();
+        // Blocks span two sections along x: sections -1 and 0
+        assertEquals(2, splits.size());
+        boolean foundNeg = false, foundZero = false;
+        for (Area.Cuboid sub : splits) {
+            if (sub.min().equals(new BlockVec(-1, -1, -1)) && sub.max().equals(new BlockVec(-1, 1, 1))) foundNeg = true;
+            if (sub.min().equals(new BlockVec(0, -1, -1)) && sub.max().equals(new BlockVec(1, 1, 1))) foundZero = true;
+        }
+        assertTrue(foundNeg);
+        assertTrue(foundZero);
     }
 }

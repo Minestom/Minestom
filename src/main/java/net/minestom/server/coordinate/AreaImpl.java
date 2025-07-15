@@ -2,10 +2,29 @@ package net.minestom.server.coordinate;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 final class AreaImpl {
+    private static List<Area.Cuboid> splitIterable(Area area) {
+        int sectionSize = BlockVec.SECTION.blockX();
+        Map<Integer, List<BlockVec>> groups = new HashMap<>();
+        for (BlockVec v : area) {
+            int sx = Math.floorDiv(v.blockX(), sectionSize);
+            groups.computeIfAbsent(sx, k -> new ArrayList<>()).add(v);
+        }
+        List<Area.Cuboid> result = new ArrayList<>();
+        for (List<BlockVec> list : groups.values()) {
+            // Compute bounding cuboid for this section slice
+            int minX = list.stream().mapToInt(BlockVec::blockX).min().getAsInt();
+            int maxX = list.stream().mapToInt(BlockVec::blockX).max().getAsInt();
+            int minY = list.stream().mapToInt(BlockVec::blockY).min().getAsInt();
+            int maxY = list.stream().mapToInt(BlockVec::blockY).max().getAsInt();
+            int minZ = list.stream().mapToInt(BlockVec::blockZ).min().getAsInt();
+            int maxZ = list.stream().mapToInt(BlockVec::blockZ).max().getAsInt();
+            result.add(Area.cuboid(new BlockVec(minX, minY, minZ), new BlockVec(maxX, maxY, maxZ)));
+        }
+        return result;
+    }
 
     record Single(BlockVec point) implements Area.Single {
         public Single {
@@ -29,6 +48,11 @@ final class AreaImpl {
                     return point;
                 }
             };
+        }
+
+        @Override
+        public List<Area.Cuboid> split() {
+            return List.of(new AreaImpl.Cuboid(point, point));
         }
     }
 
@@ -56,7 +80,6 @@ final class AreaImpl {
                 private final int sz = Integer.compare(z2, z1);
                 private int err1 = (dx >= dy && dx >= dz) ? dx / 2 : 0;
                 private int err2 = (dy >= dx && dy >= dz) ? dy / 2 : 0;
-                private int err3 = (dz >= dx && dz >= dy) ? dz / 2 : 0;
 
                 @Override
                 public boolean hasNext() {
@@ -111,6 +134,11 @@ final class AreaImpl {
                     return result;
                 }
             };
+        }
+
+        @Override
+        public List<Area.Cuboid> split() {
+            return splitIterable(this);
         }
     }
 
@@ -174,6 +202,11 @@ final class AreaImpl {
                 }
             };
         }
+
+        @Override
+        public List<Area.Cuboid> split() {
+            return splitIterable(this);
+        }
     }
 
     record Sphere(BlockVec center, int radius) implements Area.Sphere {
@@ -221,6 +254,11 @@ final class AreaImpl {
                     return vec;
                 }
             };
+        }
+
+        @Override
+        public List<Area.Cuboid> split() {
+            return splitIterable(this);
         }
     }
 }

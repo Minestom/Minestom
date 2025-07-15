@@ -3,6 +3,8 @@ package net.minestom.server.coordinate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNullByDefault;
 
+import java.util.List;
+
 /**
  * Represents a collection of aligned block coordinates in a 3D space.
  * <p>
@@ -20,6 +22,13 @@ public sealed interface Area extends Iterable<BlockVec> {
             case Sphere sphere -> sphere(sphere.center().add(x, y, z), sphere.radius());
         };
     }
+
+    /**
+     * Splits this area into multiple cuboid sections aligned to 16x16x16 blocks and remaining parts.
+     *
+     * @return list of sub-cuboids covering this area
+     */
+    List<Cuboid> split();
 
     default Area offset(Point offset) {
         return offset(offset.blockX(), offset.blockY(), offset.blockZ());
