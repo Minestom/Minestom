@@ -20,7 +20,6 @@ public final class CoordConversion {
     }
 
     public static int globalToChunk(int xz) {
-        // Assume chunk/section size being 16 (4 bits)
         return xz >> 4;
     }
 
@@ -64,7 +63,7 @@ public final class CoordConversion {
     }
 
     public static int ceilSection(int coordinate) {
-        return (coordinate + 15) & ~15;
+        return (coordinate + SECTION_BOUND) & ~SECTION_BOUND;
     }
 
     // CHUNK INDEX
@@ -118,9 +117,9 @@ public final class CoordConversion {
     }
 
     public static Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {
-        final int x = chunkBlockIndexGetX(index) + 16 * chunkX;
+        final int x = chunkBlockIndexGetX(index) + SECTION_SIZE * chunkX;
         final int y = chunkBlockIndexGetY(index);
-        final int z = chunkBlockIndexGetZ(index) + 16 * chunkZ;
+        final int z = chunkBlockIndexGetZ(index) + SECTION_SIZE * chunkZ;
         return new Vec(x, y, z);
     }
 
