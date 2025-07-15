@@ -5,21 +5,22 @@ import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NotNullByDefault;
 
 import java.util.function.Consumer;
 
 import static net.minestom.server.instance.BlockBatchImpl.BuilderImpl;
 
 @ApiStatus.Experimental
+@NotNullByDefault
 public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
     long NO_FLAGS = 0L;               // No flags set
-    long IGNORE_DATA_FLAG = 1L;       // Ignore NBT and handlers
+    long IGNORE_DATA_FLAG = 1L;       // Ignore block NBT and handlers
     long ALIGNED_FLAG = 1L << 1;      // Force section alignment, considering unset blocks as air
     long GENERATE_FLAG = 1L << 2;     // Generate world if unloaded
 
-    static @NotNull BlockBatch batch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
-                                     @NotNull Consumer<@NotNull Builder> consumer) {
+    static BlockBatch batch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
+                            Consumer<Builder> consumer) {
         BuilderImpl builder = new BuilderImpl(flags);
         consumer.accept(builder);
         return builder.build();
@@ -30,31 +31,31 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * <p>
      * Most flexible option, but also the least performant.
      */
-    static @NotNull BlockBatch unaligned(@NotNull Consumer<@NotNull Builder> consumer) {
+    static BlockBatch unaligned(Consumer<Builder> consumer) {
         return batch(GENERATE_FLAG, consumer);
     }
 
     /**
      * Block batch that only place explicitly set blocks, ignoring nbt and handlers.
      */
-    static @NotNull BlockBatch unalignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
+    static BlockBatch unalignedStates(Consumer<Builder> consumer) {
         return batch(IGNORE_DATA_FLAG | GENERATE_FLAG, consumer);
     }
 
-    static @NotNull BlockBatch aligned(@NotNull Consumer<@NotNull Builder> consumer) {
+    static BlockBatch aligned(Consumer<Builder> consumer) {
         return batch(ALIGNED_FLAG | GENERATE_FLAG, consumer);
     }
 
-    static @NotNull BlockBatch alignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
+    static BlockBatch alignedStates(Consumer<Builder> consumer) {
         return batch(IGNORE_DATA_FLAG | ALIGNED_FLAG | GENERATE_FLAG, consumer);
     }
 
-    static @NotNull BlockBatch empty() {
+    static BlockBatch empty() {
         return batch(0, builder -> {
         });
     }
 
-    void getAll(@NotNull EntryConsumer consumer);
+    void getAll(EntryConsumer consumer);
 
     /**
      * Counts the number of blocks in this batch.
@@ -68,7 +69,7 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * Makes a {@link Generator} from this batch. Blocks outside it will not be generated.
      * GENERATE_FLAG is ignored.
      */
-    @NotNull Generator asGenerator();
+    Generator asGenerator();
 
     long flags();
 
@@ -104,10 +105,10 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
 
     @FunctionalInterface
     interface EntryConsumer {
-        void accept(int x, int y, int z, @NotNull Block block);
+        void accept(int x, int y, int z, Block block);
     }
 
     sealed interface Builder extends Block.Setter permits BuilderImpl {
-        void copyPalette(int sectionX, int sectionY, int sectionZ, @NotNull Palette palette);
+        void copyPalette(int sectionX, int sectionY, int sectionZ, Palette palette);
     }
 }
