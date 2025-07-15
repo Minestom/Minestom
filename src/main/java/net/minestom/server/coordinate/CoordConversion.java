@@ -250,4 +250,22 @@ public final class CoordConversion {
     public static long hashGlobalCoord(Point point) {
         return hashGlobalCoord(point.x(), point.y(), point.z());
     }
+
+    // STRING FORMATTING
+
+    public static String formatGlobalCoord(double x, double y, double z) {
+        return "(%.3f, %.3f, %.3f)".formatted(x, y, z);
+    }
+
+    public static String formatGlobalCoord(Point point) {
+        return formatGlobalCoord(point.x(), point.y(), point.z());
+    }
+
+    public static String formatBlockCoord(int x, int y, int z) {
+        return "(%d, %d, %d)".formatted(x, y, z);
+    }
+
+    public static String formatBlockCoord(Point point) {
+        return formatBlockCoord(point.blockX(), point.blockY(), point.blockZ());
+    }
 }

@@ -973,4 +973,287 @@ public class BlockBatchIntegrationTest {
                     "Block at " + vec.add(origin) + " should be " + block);
         }
     }
+
+    @Test
+    public void multiSectionUnalignedComplexOverlap(Env env) {
+        var instance = env.createEmptyInstance();
+
+        // Create a batch that spans multiple sections with complex overlap patterns
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
+            // Create a 3x3x3 cube of sections (48x48x48 blocks) with specific patterns
+            for (int sx = 0; sx < 3; sx++) {
+                for (int sy = 0; sy < 3; sy++) {
+                    for (int sz = 0; sz < 3; sz++) {
+                        int baseX = sx * 16;
+                        int baseY = sy * 16;
+                        int baseZ = sz * 16;
+
+                        // Place blocks at section corners and centers
+                        builder.setBlock(baseX, baseY, baseZ, Block.STONE);
+                        builder.setBlock(baseX + 15, baseY + 15, baseZ + 15, Block.DIRT);
+                        builder.setBlock(baseX + 8, baseY + 8, baseZ + 8, Block.GRASS_BLOCK);
+
+                        // Place unique identifier block based on section coordinates
+                        Block sectionBlock = switch (sx + sy + sz) {
+                            case 0 -> Block.COAL_BLOCK;
+                            case 1 -> Block.IRON_BLOCK;
+                            case 2 -> Block.GOLD_BLOCK;
+                            case 3 -> Block.DIAMOND_BLOCK;
+                            case 4 -> Block.EMERALD_BLOCK;
+                            case 5 -> Block.REDSTONE_BLOCK;
+                            default -> Block.LAPIS_BLOCK;
+                        };
+                        builder.setBlock(baseX + 7, baseY + 7, baseZ + 7, sectionBlock);
+                    }
+                }
+            }
+        });
+
+        // Place batch at unaligned origin
+        instance.setBlockBatch(10, 20, 30, batch);
+
+        // Verify section corners are placed correctly
+        assertEquals(Block.STONE, instance.getBlock(10, 20, 30));
+        assertEquals(Block.DIRT, instance.getBlock(25, 35, 45));
+        assertEquals(Block.STONE, instance.getBlock(26, 36, 46)); // Second section corner
+        assertEquals(Block.DIRT, instance.getBlock(41, 51, 61));
+
+        // Verify section center blocks
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(18, 28, 38));
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(34, 44, 54));
+
+        // Verify unique section identifiers
+        assertEquals(Block.COAL_BLOCK, instance.getBlock(17, 27, 37)); // Section (0,0,0)
+        assertEquals(Block.IRON_BLOCK, instance.getBlock(33, 27, 37)); // Section (1,0,0)
+        assertEquals(Block.IRON_BLOCK, instance.getBlock(17, 43, 37)); // Section (0,1,0)
+        assertEquals(Block.IRON_BLOCK, instance.getBlock(17, 27, 53)); // Section (0,0,1)
+    }
+
+    @Test
+    public void multiSectionUnalignedWithNBT(Env env) {
+        var instance = env.createEmptyInstance();
+
+        // Create blocks with NBT for multi-section testing
+        Block chest1 = Block.CHEST.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:chest")
+                .putString("CustomName", "\"Section 1 Chest\"")
+                .build());
+
+        Block chest2 = Block.CHEST.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:chest")
+                .putString("CustomName", "\"Section 2 Chest\"")
+                .build());
+
+        Block sign = Block.OAK_SIGN.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:sign")
+                .putString("Text1", "{\"text\":\"Multi-Section Test\"}")
+                .build());
+
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
+            // Place NBT blocks across section boundaries
+            builder.setBlock(0, 0, 0, chest1);      // Section (0,0,0)
+            builder.setBlock(16, 0, 0, chest2);     // Section (1,0,0)
+            builder.setBlock(8, 16, 8, sign);       // Section (0,1,0)
+
+            // Add regular blocks to ensure palette works correctly with NBT
+            builder.setBlock(1, 0, 0, Block.STONE);
+            builder.setBlock(17, 0, 0, Block.DIRT);
+            builder.setBlock(9, 16, 8, Block.GRASS_BLOCK);
+        });
+
+        instance.setBlockBatch(5, 10, 15, batch);
+
+        // Verify NBT blocks are preserved across sections
+        assertEquals(chest1, instance.getBlock(5, 10, 15));
+        assertEquals(chest2, instance.getBlock(21, 10, 15));
+        assertEquals(sign, instance.getBlock(13, 26, 23));
+
+        // Verify regular blocks
+        assertEquals(Block.STONE, instance.getBlock(6, 10, 15));
+        assertEquals(Block.DIRT, instance.getBlock(22, 10, 15));
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(14, 26, 23));
+    }
+
+    @Test
+    public void multiSectionUnalignedBoundaryStress(Env env) {
+        var instance = env.createEmptyInstance();
+
+        // Create a batch that stresses section boundaries with dense block placement
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
+            // Place blocks right at section boundaries
+            for (int offset = -2; offset <= 2; offset++) {
+                // X boundary at 16
+                builder.setBlock(16 + offset, 8, 8, Block.STONE);
+                // Y boundary at 16
+                builder.setBlock(8, 16 + offset, 8, Block.DIRT);
+                // Z boundary at 16
+                builder.setBlock(8, 8, 16 + offset, Block.GRASS_BLOCK);
+
+                // Corner intersections
+                builder.setBlock(16 + offset, 16 + offset, 8, Block.GOLD_BLOCK);
+                builder.setBlock(16 + offset, 8, 16 + offset, Block.IRON_BLOCK);
+                builder.setBlock(8, 16 + offset, 16 + offset, Block.DIAMOND_BLOCK);
+
+                // Triple intersection
+                builder.setBlock(16 + offset, 16 + offset, 16 + offset, Block.EMERALD_BLOCK);
+            }
+        });
+
+        instance.setBlockBatch(0, 0, 0, batch);
+
+        // Verify boundary blocks are placed correctly
+        for (int offset = -2; offset <= 2; offset++) {
+            assertEquals(Block.STONE, instance.getBlock(16 + offset, 8, 8));
+            assertEquals(Block.DIRT, instance.getBlock(8, 16 + offset, 8));
+            assertEquals(Block.GRASS_BLOCK, instance.getBlock(8, 8, 16 + offset));
+            assertEquals(Block.GOLD_BLOCK, instance.getBlock(16 + offset, 16 + offset, 8));
+            assertEquals(Block.IRON_BLOCK, instance.getBlock(16 + offset, 8, 16 + offset));
+            assertEquals(Block.DIAMOND_BLOCK, instance.getBlock(8, 16 + offset, 16 + offset));
+            assertEquals(Block.EMERALD_BLOCK, instance.getBlock(16 + offset, 16 + offset, 16 + offset));
+        }
+    }
+
+    @Test
+    public void multiSectionUnalignedSparse(Env env) {
+        var instance = env.createEmptyInstance();
+
+        // Create a sparse batch across many sections with few blocks per section
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
+            // Place single blocks in different sections
+            for (int sx = 0; sx < 5; sx++) {
+                for (int sy = 0; sy < 3; sy++) {
+                    for (int sz = 0; sz < 5; sz++) {
+                        int x = sx * 16 + (sx * 3) % 16;  // Vary position within section
+                        int y = sy * 16 + (sy * 5) % 16;
+                        int z = sz * 16 + (sz * 7) % 16;
+
+                        Block block = switch ((sx + sy + sz) % 4) {
+                            case 0 -> Block.STONE;
+                            case 1 -> Block.DIRT;
+                            case 2 -> Block.GRASS_BLOCK;
+                            default -> Block.COBBLESTONE;
+                        };
+
+                        builder.setBlock(x, y, z, block);
+                    }
+                }
+            }
+        });
+
+        instance.setBlockBatch(7, 11, 13, batch);
+
+        // Verify sparse blocks are placed correctly
+        for (int sx = 0; sx < 5; sx++) {
+            for (int sy = 0; sy < 3; sy++) {
+                for (int sz = 0; sz < 5; sz++) {
+                    int x = sx * 16 + (sx * 3) % 16 + 7;
+                    int y = sy * 16 + (sy * 5) % 16 + 11;
+                    int z = sz * 16 + (sz * 7) % 16 + 13;
+
+                    Block expectedBlock = switch ((sx + sy + sz) % 4) {
+                        case 0 -> Block.STONE;
+                        case 1 -> Block.DIRT;
+                        case 2 -> Block.GRASS_BLOCK;
+                        default -> Block.COBBLESTONE;
+                    };
+
+                    assertEquals(expectedBlock, instance.getBlock(x, y, z),
+                            "Block at (" + x + "," + y + "," + z + ") should be " + expectedBlock);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void multiSectionUnalignedNegativeCoordinates(Env env) {
+        var instance = env.createEmptyInstance();
+
+        // Create batch with blocks in multiple sections
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
+            // Place blocks in a 2x2x2 arrangement of sections
+            for (int sx = 0; sx < 2; sx++) {
+                for (int sy = 0; sy < 2; sy++) {
+                    for (int sz = 0; sz < 2; sz++) {
+                        int baseX = sx * 16;
+                        int baseY = sy * 16;
+                        int baseZ = sz * 16;
+
+                        builder.setBlock(baseX + 5, baseY + 5, baseZ + 5, Block.STONE);
+                        builder.setBlock(baseX + 10, baseY + 10, baseZ + 10, Block.DIRT);
+                    }
+                }
+            }
+        });
+
+        // Place at negative coordinates
+        instance.setBlockBatch(-50, -30, -40, batch);
+
+        // Verify blocks are placed correctly
+        for (int sx = 0; sx < 2; sx++) {
+            for (int sy = 0; sy < 2; sy++) {
+                for (int sz = 0; sz < 2; sz++) {
+                    int globalX = -50 + sx * 16 + 5;
+                    int globalY = -30 + sy * 16 + 5;
+                    int globalZ = -40 + sz * 16 + 5;
+
+                    assertEquals(Block.STONE, instance.getBlock(globalX, globalY, globalZ));
+                    assertEquals(Block.DIRT, instance.getBlock(globalX + 5, globalY + 5, globalZ + 5));
+                }
+            }
+        }
+    }
+
+    @Test
+    public void multiSectionUnalignedOverwrite(Env env) {
+        var instance = env.createEmptyInstance();
+
+        // First set up existing blocks
+        for (int x = 0; x < 48; x++) {
+            for (int y = 0; y < 32; y++) {
+                for (int z = 0; z < 48; z++) {
+                    if ((x + y + z) % 3 == 0) {
+                        instance.setBlock(x, y, z, Block.BEDROCK);
+                    }
+                }
+            }
+        }
+
+        // Create batch that overwrites some existing blocks
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
+            for (int sx = 0; sx < 3; sx++) {
+                for (int sy = 0; sy < 2; sy++) {
+                    for (int sz = 0; sz < 3; sz++) {
+                        int baseX = sx * 16;
+                        int baseY = sy * 16;
+                        int baseZ = sz * 16;
+
+                        // Place new blocks that will overwrite some bedrock
+                        builder.setBlock(baseX + 3, baseY + 3, baseZ + 3, Block.DIAMOND_BLOCK);
+                        builder.setBlock(baseX + 9, baseY + 9, baseZ + 9, Block.GOLD_BLOCK);
+                    }
+                }
+            }
+        });
+
+        instance.setBlockBatch(5, 10, 7, batch);
+
+        // Verify new blocks overwrote the bedrock
+        for (int sx = 0; sx < 3; sx++) {
+            for (int sy = 0; sy < 2; sy++) {
+                for (int sz = 0; sz < 3; sz++) {
+                    int globalX = 5 + sx * 16 + 3;
+                    int globalY = 10 + sy * 16 + 3;
+                    int globalZ = 7 + sz * 16 + 3;
+
+                    assertEquals(Block.DIAMOND_BLOCK, instance.getBlock(globalX, globalY, globalZ));
+                    assertEquals(Block.GOLD_BLOCK, instance.getBlock(globalX + 6, globalY + 6, globalZ + 6));
+                }
+            }
+        }
+
+        // Verify that non-overwritten bedrock is still there
+        assertEquals(Block.AIR, instance.getBlock(5, 10, 7)); // Original position (5+10+7=22, 22%3=1, so no bedrock initially)
+        assertEquals(Block.BEDROCK, instance.getBlock(6, 12, 9)); // (6+12+9=27, 27%3=0, so bedrock should be there)
+        assertEquals(Block.BEDROCK, instance.getBlock(3, 9, 9)); // (3+9+9=21, 21%3=0, so bedrock should be there)
+    }
 }
