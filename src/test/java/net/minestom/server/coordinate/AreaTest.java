@@ -189,7 +189,7 @@ public class AreaTest {
         BlockVec point = new BlockVec(5, 5, 5);
         List<Area.Cuboid> splits = Area.single(point).split();
         assertEquals(1, splits.size());
-        Area.Cuboid sub = splits.get(0);
+        Area.Cuboid sub = splits.getFirst();
         assertPoint(point, sub.min());
         assertPoint(point, sub.max());
     }
