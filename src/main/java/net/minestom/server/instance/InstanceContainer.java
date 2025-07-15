@@ -217,6 +217,46 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
+    public synchronized void setBlockArea(@NotNull Area area, @NotNull Block block) {
+        final boolean data = block.hasNbt() || block.handler() != null;
+        if (data) {
+            super.setBlockArea(area, block);
+            return;
+        }
+        this.version.incrementAndGet();
+        for (Area.Cuboid cuboid : area.split()) {
+            final BlockVec min = cuboid.min(), max = cuboid.max();
+            if (sectionAligned(min, max)) {
+                final int minSectionX = min.chunkX(), minSectionY = min.section(), minSectionZ = min.chunkZ();
+                final int maxSectionX = max.chunkX(), maxSectionY = max.section(), maxSectionZ = max.chunkZ();
+                for (int sectionX = minSectionX; sectionX <= maxSectionX; sectionX++) {
+                    for (int sectionY = minSectionY; sectionY <= maxSectionY; sectionY++) {
+                        for (int sectionZ = minSectionZ; sectionZ <= maxSectionZ; sectionZ++) {
+                            final Chunk chunk = getChunk(sectionX, sectionZ);
+                            if (chunk == null) continue;
+                            synchronized (chunk) {
+                                Section section = chunk.getSection(sectionY);
+                                section.blockPalette().fill(block.stateId());
+                            }
+                            invalidateSection(sectionX, sectionY, sectionZ);
+                        }
+                    }
+                }
+            } else {
+                for (int x = min.blockX(); x <= max.blockX(); x++) {
+                    for (int y = min.blockY(); y <= max.blockY(); y++) {
+                        for (int z = min.blockZ(); z <= max.blockZ(); z++) {
+                            final Chunk chunk = getChunkAt(x, z);
+                            if (chunk == null) continue;
+                            UNSAFE_setBlock(chunk, x, y, z, block, null, null, true, 0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public synchronized @NotNull BlockBatch getBlockBatch(long flags, @NotNull Point origin, @NotNull Area area) {
         EventsJFR.InstanceGetBatch getBatchEvent = new EventsJFR.InstanceGetBatch(
                 getUuid().toString(), origin.toString(), flags, 0);
@@ -230,7 +270,7 @@ public class InstanceContainer extends Instance {
         LongSet sectionIndexes = new LongOpenHashSet();
         Set<BlockVec> blockCoords = new HashSet<>();
         for (Area.Cuboid cuboid : area.split()) {
-            final Point min = cuboid.min(), max = cuboid.max();
+            final BlockVec min = cuboid.min(), max = cuboid.max();
             final int minX = min.blockX(), minY = min.blockY(), minZ = min.blockZ();
             final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
 
