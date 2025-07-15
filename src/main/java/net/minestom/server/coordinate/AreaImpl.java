@@ -205,7 +205,33 @@ final class AreaImpl {
 
         @Override
         public List<Area.Cuboid> split() {
-            return splitIterable(this);
+            // Only extract full 16x16x16 sections fully covered in x,y,z; otherwise no split
+            int sectionSize = BlockVec.SECTION.blockX();
+            int minSecX = Math.floorDiv(min.blockX(), sectionSize);
+            int minSecY = Math.floorDiv(min.blockY(), sectionSize);
+            int minSecZ = Math.floorDiv(min.blockZ(), sectionSize);
+            int maxSecX = Math.floorDiv(max.blockX(), sectionSize);
+            int maxSecY = Math.floorDiv(max.blockY(), sectionSize);
+            int maxSecZ = Math.floorDiv(max.blockZ(), sectionSize);
+            List<Area.Cuboid> sections = new ArrayList<>();
+            for (int sx = minSecX; sx <= maxSecX; sx++) {
+                for (int sy = minSecY; sy <= maxSecY; sy++) {
+                    for (int sz = minSecZ; sz <= maxSecZ; sz++) {
+                        BlockVec secOrigin = BlockVec.SECTION.mul(sx, sy, sz);
+                        BlockVec secEnd = secOrigin.add(sectionSize - 1, sectionSize - 1, sectionSize - 1);
+                        // check full coverage in all axes
+                        if (min.blockX() <= secOrigin.blockX() && max.blockX() >= secEnd.blockX()
+                         && min.blockY() <= secOrigin.blockY() && max.blockY() >= secEnd.blockY()
+                         && min.blockZ() <= secOrigin.blockZ() && max.blockZ() >= secEnd.blockZ()) {
+                            sections.add(Area.cuboid(secOrigin, secEnd));
+                        }
+                    }
+                }
+            }
+            if (sections.isEmpty()) {
+                return List.of(Area.cuboid(min, max));
+            }
+            return sections;
         }
     }
 

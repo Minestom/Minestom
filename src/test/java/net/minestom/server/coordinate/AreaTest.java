@@ -177,15 +177,10 @@ public class AreaTest {
     public void splitMultiSectionX() {
         Area.Cuboid cuboid = Area.cuboid(new BlockVec(15, 0, 0), new BlockVec(17, 1, 1));
         List<Area.Cuboid> splits = cuboid.split();
-        assertEquals(2, splits.size());
-        // Check first section
-        boolean found0 = false, found1 = false;
-        for (Area.Cuboid sub : splits) {
-            if (sub.min().equals(new BlockVec(15, 0, 0)) && sub.max().equals(new BlockVec(15, 1, 1))) found0 = true;
-            if (sub.min().equals(new BlockVec(16, 0, 0)) && sub.max().equals(new BlockVec(17, 1, 1))) found1 = true;
-        }
-        assertTrue(found0);
-        assertTrue(found1);
+        assertEquals(1, splits.size());
+        Area.Cuboid sub = splits.getFirst();
+        assertPoint(new BlockVec(15, 0, 0), sub.min());
+        assertPoint(new BlockVec(17, 1, 1), sub.max());
     }
 
 
@@ -204,7 +199,7 @@ public class AreaTest {
         Area.Line line = Area.line(new BlockVec(1, 2, 3), new BlockVec(2, 2, 3));
         List<Area.Cuboid> splits = line.split();
         assertEquals(1, splits.size());
-        Area.Cuboid sub = splits.get(0);
+        Area.Cuboid sub = splits.getFirst();
         assertPoint(new BlockVec(1, 2, 3), sub.min());
         assertPoint(new BlockVec(2, 2, 3), sub.max());
     }
@@ -236,5 +231,52 @@ public class AreaTest {
         }
         assertTrue(foundNeg);
         assertTrue(foundZero);
+    }
+
+    @Test
+    public void splitSectionArea() {
+        Area.Cuboid section = Area.section(0, 0, 0);
+        Set<Area.Cuboid> expected = Set.of(section);
+        Set<Area.Cuboid> actual = new HashSet<>(section.split());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void splitCuboidMultiSectionsX() {
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(17, 1, 1));
+        // No full 16x16x16 section is fully covered, so no split
+        List<Area.Cuboid> splits = cuboid.split();
+        assertEquals(1, splits.size());
+        Area.Cuboid single = splits.getFirst();
+        assertPoint(new BlockVec(0, 0, 0), single.min());
+        assertPoint(new BlockVec(17, 1, 1), single.max());
+    }
+
+    @Test
+    public void splitTwoFullSectionsX() {
+        // Cuboid covers two full 16x16x16 sections along X
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(31, 15, 15));
+        Set<Area.Cuboid> expected = Set.of(
+                Area.section(0, 0, 0),
+                Area.section(1, 0, 0)
+        );
+        Set<Area.Cuboid> actual = new HashSet<>(cuboid.split());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void splitFullGridSections() {
+        // Cuboid covers a 2x2x2 grid of full sections
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(31, 31, 31));
+        Set<Area.Cuboid> expected = new HashSet<>();
+        for (int x = 0; x <= 1; x++) {
+            for (int y = 0; y <= 1; y++) {
+                for (int z = 0; z <= 1; z++) {
+                    expected.add(Area.section(x, y, z));
+                }
+            }
+        }
+        Set<Area.Cuboid> actual = new HashSet<>(cuboid.split());
+        assertEquals(expected, actual);
     }
 }
