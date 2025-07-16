@@ -11,6 +11,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
@@ -32,6 +33,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
@@ -165,7 +168,10 @@ public class AnvilLoader implements IChunkLoader {
 
     private void loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
         for (BinaryTag sectionTag : chunkData.getList("sections", BinaryTagTypes.COMPOUND)) {
-            final CompoundBinaryTag sectionData = (CompoundBinaryTag) sectionTag;
+            if (!(sectionTag instanceof CompoundBinaryTag sectionData)) {
+                LOGGER.warn("Invalid section tag in chunk data: {}", sectionTag);
+                continue;
+            }
 
             final int sectionY = sectionData.getInt("Y", Integer.MIN_VALUE);
             Check.stateCondition(sectionY == Integer.MIN_VALUE, "Missing section Y value");
@@ -220,24 +226,16 @@ public class AnvilLoader implements IChunkLoader {
                 } else if (blockPaletteTag.size() > 1) {
                     final long[] packedStates = blockStatesTag.getLongArray("data");
                     Check.stateCondition(packedStates.length == 0, "Missing packed states data");
-                    int[] blockStateIndices = new int[Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE];
-                    Palettes.unpack(blockStateIndices, packedStates, packedStates.length * 64 / blockStateIndices.length);
+                    final int bitsPerEntry = packedStates.length * 64 / SECTION_BLOCK_COUNT;
+                    int[] blockStateIndices = new int[SECTION_BLOCK_COUNT];
+                    Palettes.unpack(blockStateIndices, packedStates, bitsPerEntry);
 
-                    for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-                        for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
-                            for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
-                                try {
-                                    final int blockIndex = y * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE + z * Chunk.CHUNK_SECTION_SIZE + x;
-                                    final int paletteIndex = blockStateIndices[blockIndex];
-                                    final Block block = convertedPalette[paletteIndex];
-
-                                    chunk.setBlock(x, y + yOffset, z, block);
-                                } catch (Exception e) {
-                                    MinecraftServer.getExceptionManager().handleException(e);
-                                }
-                            }
-                        }
-                    }
+                    Palette palette = Palette.blocks(bitsPerEntry);
+                    palette.setAll((x, y, z) -> {
+                        final int index = x + z * Chunk.CHUNK_SECTION_SIZE + y * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE;
+                        return convertedPalette[blockStateIndices[index]].stateId();
+                    });
+                    section.blockPalette().copyFrom(palette);
                 }
             }
         }
@@ -292,7 +290,10 @@ public class AnvilLoader implements IChunkLoader {
 
     private void loadBlockEntities(@NotNull Chunk loadedChunk, @NotNull CompoundBinaryTag chunkData) {
         for (BinaryTag blockEntityTag : chunkData.getList("block_entities", BinaryTagTypes.COMPOUND)) {
-            final CompoundBinaryTag blockEntity = (CompoundBinaryTag) blockEntityTag;
+            if (!(blockEntityTag instanceof CompoundBinaryTag blockEntity)) {
+                LOGGER.warn("Invalid block entity tag in chunk data: {}", blockEntityTag);
+                continue;
+            }
 
             final int x = blockEntity.getInt("x");
             final int y = blockEntity.getInt("y");
@@ -306,13 +307,14 @@ public class AnvilLoader implements IChunkLoader {
             }
 
             // Remove anvil tags
-            CompoundBinaryTag trimmedTag = CompoundBinaryTag.builder().put(blockEntity)
+            CompoundBinaryTag trimmedTag = CompoundBinaryTag.builder()
+                    .put(blockEntity)
                     .remove("id").remove("keepPacked")
                     .remove("x").remove("y").remove("z")
                     .build();
 
             // Place block
-            final var finalBlock = trimmedTag.size() > 0 ? block.withNbt(trimmedTag) : block;
+            final Block finalBlock = !trimmedTag.isEmpty() ? block.withNbt(trimmedTag) : block;
             loadedChunk.setBlock(x, y, z, finalBlock);
         }
     }
@@ -320,7 +322,7 @@ public class AnvilLoader implements IChunkLoader {
     @Override
     public void saveInstance(@NotNull Instance instance) {
         final CompoundBinaryTag nbt = instance.tagHandler().asCompound();
-        if (nbt.size() == 0) {
+        if (nbt.isEmpty()) {
             // Instance has no data
             return;
         }
@@ -355,7 +357,7 @@ public class AnvilLoader implements IChunkLoader {
                     mcaFile = new RegionFile(regionFile);
                     alreadyLoaded.put(regionFileName, mcaFile);
                 } catch (IOException e) {
-                    LOGGER.error("Failed to create region file for " + chunkX + ", " + chunkZ, e);
+                    LOGGER.error("Failed to create region file for {}, {}", chunkX, chunkZ, e);
                     MinecraftServer.getExceptionManager().handleException(e);
                     return;
                 }
@@ -366,6 +368,8 @@ public class AnvilLoader implements IChunkLoader {
 
         try {
             final CompoundBinaryTag.Builder chunkData = CompoundBinaryTag.builder();
+
+            chunkData.put(chunk.tagHandler().asCompound());
 
             chunkData.putInt("DataVersion", MinecraftServer.DATA_VERSION);
             chunkData.putInt("xPos", chunkX);
@@ -378,7 +382,7 @@ public class AnvilLoader implements IChunkLoader {
 
             mcaFile.writeChunkData(chunkX, chunkZ, chunkData.build());
         } catch (IOException e) {
-            LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
+            LOGGER.error("Failed to save chunk {}, {}", chunkX, chunkZ, e);
             MinecraftServer.getExceptionManager().handleException(e);
         }
     }
@@ -393,7 +397,7 @@ public class AnvilLoader implements IChunkLoader {
 
         List<BinaryTag> blockPaletteEntries = new ArrayList<>();
         IntList blockPaletteIndices = new IntArrayList(); // Map block indices by state id to avoid doing a deep comparison on every block tag
-        int[] blockIndices = new int[Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE];
+        int[] blockIndices = new int[SECTION_BLOCK_COUNT];
 
         synchronized (chunk) {
             for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
@@ -404,17 +408,15 @@ public class AnvilLoader implements IChunkLoader {
 
                 // Lighting
                 byte[] skyLight = section.skyLight().array();
-                if (skyLight != null && skyLight.length > 0)
-                    sectionData.putByteArray("SkyLight", skyLight);
+                if (skyLight != null && skyLight.length > 0) sectionData.putByteArray("SkyLight", skyLight);
                 byte[] blockLight = section.blockLight().array();
-                if (blockLight != null && blockLight.length > 0)
-                    sectionData.putByteArray("BlockLight", blockLight);
+                if (blockLight != null && blockLight.length > 0) sectionData.putByteArray("BlockLight", blockLight);
 
                 // Build block, biome palettes & collect block entities
                 for (int sectionLocalY = 0; sectionLocalY < Chunk.CHUNK_SECTION_SIZE; sectionLocalY++) {
+                    final int y = sectionLocalY + (sectionY * Chunk.CHUNK_SECTION_SIZE);
                     for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                            final int y = sectionLocalY + (sectionY * Chunk.CHUNK_SECTION_SIZE);
 
                             final int blockIndex = x + sectionLocalY * 16 * 16 + z * 16;
                             final Block block = chunk.getBlock(x, y, z);
@@ -512,8 +514,8 @@ public class AnvilLoader implements IChunkLoader {
 
                     propertiesTag.putString(key, value);
                 }
-                var properties = propertiesTag.build();
-                if (properties.size() > 0) {
+                CompoundBinaryTag properties = propertiesTag.build();
+                if (!properties.isEmpty()) {
                     tag.put("Properties", properties);
                 }
             }
