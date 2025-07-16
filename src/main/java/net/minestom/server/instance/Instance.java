@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.key.Key;
@@ -52,13 +53,11 @@ import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -106,6 +105,9 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private Weather transitioningWeather = Weather.CLEAR;
     private int remainingRainTransitionTicks;
     private int remainingThunderTransitionTicks;
+
+    // Attached boss bars
+    private final Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
 
     // Field for tick events
     private long lastTickAge = TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
@@ -875,6 +877,35 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float) Math.max(1, remainingRainTransitionTicks));
         float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float) Math.max(1, remainingThunderTransitionTicks));
         return new Weather(rainLevel, thunderLevel);
+    }
+
+    /**
+     * Shows a {@link BossBar} to all players in the instance and tracks it.
+     *
+     * @param bar a boss bar
+     */
+    @Override
+    public void showBossBar(@NotNull BossBar bar) {
+        Check.notNull(bar, "Boss bar cannot be null");
+        if (!bossBars.add(bar)) return;
+        PacketGroupingAudience.super.showBossBar(bar);
+    }
+
+    /**
+     * Hides a {@link BossBar} from all players in the instance and stops tracking it.
+     *
+     * @param bar a boss bar
+     */
+    @Override
+    public void hideBossBar(@NotNull BossBar bar) {
+        Check.notNull(bar, "Boss bar cannot be null");
+        if (!bossBars.remove(bar)) return;
+        PacketGroupingAudience.super.hideBossBar(bar);
+    }
+
+    @ApiStatus.Experimental
+    public @UnmodifiableView Set<BossBar> bossBars() {
+        return Collections.unmodifiableSet(bossBars);
     }
 
     @Override

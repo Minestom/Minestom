@@ -39,7 +39,9 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      *
      * @param point the point to convert
      * @return the converted position
+     * @deprecated use {@link Point#asPos()} instead
      */
+    @Deprecated
     public static @NotNull Pos fromPoint(@NotNull Point point) {
         if (point instanceof Pos pos) return pos;
         return new Pos(point.x(), point.y(), point.z());
@@ -117,7 +119,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     @Contract(pure = true)
     public @NotNull Pos withLookAt(@NotNull Point point) {
         if (samePoint(point)) return this;
-        final Vec delta = Vec.fromPoint(point.sub(this)).normalize();
+        final Vec delta = point.sub(this).asVec().normalize();
         return withView(PositionUtils.getLookYaw(delta.x(), delta.z()),
                 PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z()));
     }
@@ -281,11 +283,6 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     @Override
     public @NotNull Pos relative(@NotNull BlockFace face) {
         return (Pos) Point.super.relative(face);
-    }
-
-    @Contract(pure = true)
-    public @NotNull Vec asVec() {
-        return new Vec(x, y, z);
     }
 
     @FunctionalInterface

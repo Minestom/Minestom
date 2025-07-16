@@ -46,28 +46,28 @@ public class AbstractDisplayMeta extends EntityMeta {
     }
 
     public @NotNull Vec getScale() {
-        return Vec.fromPoint(metadata.get(MetadataDef.Display.SCALE));
+        return metadata.get(MetadataDef.Display.SCALE).asVec();
     }
 
     public void setScale(@NotNull Vec value) {
         metadata.set(MetadataDef.Display.SCALE, value);
     }
 
-    public float @NotNull[] getLeftRotation() {
+    public float @NotNull [] getLeftRotation() {
         //todo replace with actual quaternion type
         return metadata.get(MetadataDef.Display.ROTATION_LEFT);
     }
 
-    public void setLeftRotation(float @NotNull[] value) {
+    public void setLeftRotation(float @NotNull [] value) {
         metadata.set(MetadataDef.Display.ROTATION_LEFT, value);
     }
 
-    public float @NotNull[] getRightRotation() {
+    public float @NotNull [] getRightRotation() {
         //todo replace with actual quaternion type
         return metadata.get(MetadataDef.Display.ROTATION_RIGHT);
     }
 
-    public void setRightRotation(float @NotNull[] value) {
+    public void setRightRotation(float @NotNull [] value) {
         metadata.set(MetadataDef.Display.ROTATION_RIGHT, value);
     }
 

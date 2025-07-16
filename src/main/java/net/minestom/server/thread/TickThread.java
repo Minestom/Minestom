@@ -26,8 +26,9 @@ public final class TickThread extends MinestomThread {
     private final ReentrantLock lock = new ReentrantLock();
     private volatile boolean stop;
 
-    private CountDownLatch latch;
-    private long tickTimeNanos;
+    private volatile CountDownLatch latch;
+    private volatile long tickTimeNanos;
+
     private long tickNum = 0;
     private final List<ThreadDispatcher.Partition> entries = new ArrayList<>();
 
@@ -47,18 +48,24 @@ public final class TickThread extends MinestomThread {
 
     @Override
     public void run() {
-        // This is safe to do, as the thread will blow through this first lock during the race, see #park documentation.
-        LockSupport.park(this);
+        LockSupport.park(this); // Wait for first tick
         while (!stop) {
+            final CountDownLatch latch = this.latch;
+            if (latch == null) {
+                // Should not happen, but just in case
+                LockSupport.park(this);
+                continue;
+            }
             this.lock.lock();
             try {
                 tick();
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
+            } finally {
+                this.lock.unlock();
+                // #acquire() callbacks
             }
-            this.lock.unlock();
-            // #acquire() callbacks
-            this.latch.countDown();
+            latch.countDown();
             LockSupport.park(this);
         }
     }
@@ -94,7 +101,6 @@ public final class TickThread extends MinestomThread {
         this.latch = latch;
         this.tickTimeNanos = tickTimeNanos;
         this.tickNum += 1;
-        this.stop = false;
         LockSupport.unpark(this);
     }
 
