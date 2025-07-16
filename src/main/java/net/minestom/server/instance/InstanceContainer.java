@@ -426,7 +426,7 @@ public class InstanceContainer extends Instance {
             }
 
             // Handle block states if present (for blocks with NBT or handlers)
-            if (!batch.ignoreData()) {
+            if (!batch.ignoreData() && !sectionState.blockStates().isEmpty()) {
                 // For blocks with NBT or handlers, we still need to set them individually
                 // as palette copy only handles the state IDs
                 for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {

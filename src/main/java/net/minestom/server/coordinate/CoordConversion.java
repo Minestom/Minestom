@@ -24,7 +24,7 @@ public final class CoordConversion {
     }
 
     public static int globalToSectionRelative(int xyz) {
-        return xyz & 0xF;
+        return xyz & SECTION_BOUND;
     }
 
     public static boolean sectionAligned(int xyz) {
@@ -46,8 +46,8 @@ public final class CoordConversion {
         final int maxX = Math.max(p1.blockX(), p2.blockX());
         final int maxY = Math.max(p1.blockY(), p2.blockY());
         final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
-        return ((minX | minY | minZ) & 0xF) == 0 &&
-                ((maxX | maxY | maxZ) & 0xF) == 0xF;
+        return ((minX | minY | minZ) & SECTION_BOUND) == 0 &&
+                ((maxX | maxY | maxZ) & SECTION_BOUND) == SECTION_BOUND;
     }
 
     public static int chunkToRegion(int chunkCoordinate) {
@@ -59,7 +59,7 @@ public final class CoordConversion {
     }
 
     public static int floorSection(int coordinate) {
-        return coordinate & ~0xF;
+        return coordinate & ~SECTION_BOUND;
     }
 
     public static int ceilSection(int coordinate) {
@@ -166,15 +166,15 @@ public final class CoordConversion {
     }
 
     public static int sectionBlockIndexGetX(int index) {
-        return (index >> 8) & 0xF;
+        return (index >> 8) & SECTION_BOUND;
     }
 
     public static int sectionBlockIndexGetY(int index) {
-        return index & 0xF;
+        return index & SECTION_BOUND;
     }
 
     public static int sectionBlockIndexGetZ(int index) {
-        return (index >> 4) & 0xF;
+        return (index >> 4) & SECTION_BOUND;
     }
 
     public static long encodeSectionBlockChange(int sectionBlockIndex, long value) {
