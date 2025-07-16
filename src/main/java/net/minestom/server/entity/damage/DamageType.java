@@ -43,7 +43,7 @@ public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:damage_type"), REGISTRY_CODEC, RegistryData.Resource.DAMAGE_TYPES);
+        return DynamicRegistry.create(Key.key("damage_type"), REGISTRY_CODEC, RegistryData.Resource.DAMAGE_TYPES);
     }
 
     @NotNull String messageId();

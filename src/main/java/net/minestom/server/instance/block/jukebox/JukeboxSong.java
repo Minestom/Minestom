@@ -58,7 +58,7 @@ public sealed interface JukeboxSong extends Holder.Direct<JukeboxSong>, JukeboxS
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<JukeboxSong> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:jukebox_song"), REGISTRY_CODEC, RegistryData.Resource.JUKEBOX_SONGS);
+        return DynamicRegistry.create(Key.key("jukebox_song"), REGISTRY_CODEC, RegistryData.Resource.JUKEBOX_SONGS);
     }
 
     @NotNull SoundEvent soundEvent();

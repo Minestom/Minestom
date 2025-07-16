@@ -6,12 +6,11 @@ import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
-public record BlockSoundImpl(RegistryData.BlockSoundTypeEntry registry) implements BlockSoundType {
-    static final Registry<BlockSoundType> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:block_sound_type"),
+record BlockSoundImpl(RegistryData.BlockSoundTypeEntry registry) implements BlockSoundType {
+    static final Registry<BlockSoundType> REGISTRY = RegistryData.createStaticRegistry(Key.key("block_sound_type"),
             (namespace, properties) -> new BlockSoundImpl(RegistryData.blockSoundTypeEntry(namespace, properties)));
 
     static @UnknownNullability BlockSoundType get(@NotNull String key) {
         return REGISTRY.get(Key.key(key));
     }
-
 }

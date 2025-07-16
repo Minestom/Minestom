@@ -52,7 +52,7 @@ public sealed interface TrimMaterial extends Holder.Direct<TrimMaterial>, TrimMa
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:trim_material"), REGISTRY_CODEC, RegistryData.Resource.TRIM_MATERIALS);
+        return DynamicRegistry.create(Key.key("trim_material"), REGISTRY_CODEC, RegistryData.Resource.TRIM_MATERIALS);
     }
 
     @NotNull String assetName();

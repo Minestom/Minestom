@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 record FeatureFlagImpl(@NotNull RegistryData.FeatureFlagEntry registry) implements FeatureFlag {
-    static final Registry<FeatureFlag> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:feature_flag"),
+    static final Registry<FeatureFlag> REGISTRY = RegistryData.createStaticRegistry(Key.key("feature_flag"),
             (namespace, properties) -> new FeatureFlagImpl(RegistryData.featureFlag(namespace, properties)));
 
     static @UnknownNullability FeatureFlag get(@NotNull String key) {

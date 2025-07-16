@@ -60,7 +60,7 @@ public class InstanceBlockPacketIntegrationTest {
 
             @Override
             public @NotNull Key getKey() {
-                return Key.key("minecraft:sign");
+                return Key.key("sign");
             }
         };
 

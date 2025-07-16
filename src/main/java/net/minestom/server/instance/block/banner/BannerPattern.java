@@ -44,7 +44,7 @@ public sealed interface BannerPattern extends Holder.Direct<BannerPattern>, Bann
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:banner_pattern"), REGISTRY_CODEC, RegistryData.Resource.BANNER_PATTERNS);
+        return DynamicRegistry.create(Key.key("banner_pattern"), REGISTRY_CODEC, RegistryData.Resource.BANNER_PATTERNS);
     }
 
     @NotNull Key assetId();

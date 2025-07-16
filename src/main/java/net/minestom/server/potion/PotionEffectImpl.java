@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 record PotionEffectImpl(RegistryData.PotionEffectEntry registry) implements PotionEffect {
-    static final Registry<PotionEffect> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:potion_effect"),
+    static final Registry<PotionEffect> REGISTRY = RegistryData.createStaticRegistry(Key.key("potion_effect"),
             (namespace, properties) -> new PotionEffectImpl(RegistryData.potionEffect(namespace, properties)));
 
     static @UnknownNullability PotionEffect get(@NotNull String key) {

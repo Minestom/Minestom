@@ -18,7 +18,7 @@ public sealed interface DialogInput {
     int DEFAULT_WIDTH = 200;
 
     @NotNull Registry<StructCodec<? extends DialogInput>> REGISTRY = DynamicRegistry.fromMap(
-            Key.key("minecraft:input_control_type"),
+            Key.key("input_control_type"),
             Map.entry(Key.key("boolean"), Boolean.CODEC),
             Map.entry(Key.key("number_range"), NumberRange.CODEC),
             Map.entry(Key.key("single_option"), SingleOption.CODEC),

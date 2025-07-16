@@ -13,7 +13,7 @@ import org.jetbrains.annotations.UnknownNullability;
  */
 record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) implements GameEvent {
     static final Registry<GameEvent> REGISTRY = RegistryData.createStaticRegistry(
-            Key.key("minecraft:game_event"), GameEventImpl::createImpl);
+            Key.key("game_event"), GameEventImpl::createImpl);
 
     /**
      * Creates a new {@link GameEventImpl} with the given namespace and properties.
