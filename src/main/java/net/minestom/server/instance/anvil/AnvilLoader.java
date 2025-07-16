@@ -1,6 +1,8 @@
 package net.minestom.server.instance.anvil;
 
-import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -40,6 +42,7 @@ public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
     private final static int PLAINS_ID = BIOME_REGISTRY.getId(Biome.PLAINS);
+    private static final CompoundBinaryTag[] BLOCK_STATE_ID_2_OBJECT_CACHE = new CompoundBinaryTag[Short.MAX_VALUE];
 
     private final ReentrantLock fileCreationLock = new ReentrantLock();
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
@@ -55,9 +58,6 @@ public class AnvilLoader implements IChunkLoader {
      */
     private final RegionCache perRegionLoadedChunks = new RegionCache();
     private final ReentrantLock perRegionLoadedChunksLock = new ReentrantLock();
-
-    // thread local to avoid contention issues with locks
-    private final ThreadLocal<Int2ObjectMap<CompoundBinaryTag>> blockStateId2ObjectCacheTLS = ThreadLocal.withInitial(Int2ObjectArrayMap::new);
 
     public AnvilLoader(@NotNull Path path) {
         this.path = path;
@@ -417,13 +417,12 @@ public class AnvilLoader implements IChunkLoader {
                     final int y = sectionLocalY + (sectionY * Chunk.CHUNK_SECTION_SIZE);
                     for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-
                             final int blockIndex = x + sectionLocalY * 16 * 16 + z * 16;
                             final Block block = chunk.getBlock(x, y, z);
 
                             // Add block state
                             final int blockStateId = block.stateId();
-                            final CompoundBinaryTag blockState = getBlockState(block);
+                            final CompoundBinaryTag blockState = blockStateNbt(block);
                             int blockPaletteIndex = blockPaletteIndices.indexOf(blockStateId);
                             if (blockPaletteIndex == -1) {
                                 blockPaletteIndex = blockPaletteEntries.size();
@@ -499,28 +498,29 @@ public class AnvilLoader implements IChunkLoader {
         chunkData.put("block_entities", blockEntities.build());
     }
 
-    private CompoundBinaryTag getBlockState(final Block block) {
-        return blockStateId2ObjectCacheTLS.get().computeIfAbsent(block.stateId(), _unused -> {
-            final CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
-            tag.putString("Name", block.name());
+    private static CompoundBinaryTag blockStateNbt(final Block block) {
+        final int stateId = block.stateId();
+        CompoundBinaryTag result = BLOCK_STATE_ID_2_OBJECT_CACHE[stateId];
+        if (result == null) result = BLOCK_STATE_ID_2_OBJECT_CACHE[stateId] = blockStateNbtCompute(block);
+        return result;
+    }
 
-            if (!block.properties().isEmpty()) {
-                final Map<String, String> defaultProperties = Block.fromBlockId(block.id()).properties(); // Never null
-                final CompoundBinaryTag.Builder propertiesTag = CompoundBinaryTag.builder();
-                for (var entry : block.properties().entrySet()) {
-                    String key = entry.getKey(), value = entry.getValue();
-                    if (defaultProperties.get(key).equals(value))
-                        continue; // Skip default values
-
-                    propertiesTag.putString(key, value);
-                }
-                CompoundBinaryTag properties = propertiesTag.build();
-                if (!properties.isEmpty()) {
-                    tag.put("Properties", properties);
-                }
+    private static CompoundBinaryTag blockStateNbtCompute(final Block block) {
+        final CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
+        tag.putString("Name", block.name());
+        if (!block.properties().isEmpty()) {
+            final Map<String, String> defaultProperties = block.defaultState().properties();
+            final CompoundBinaryTag.Builder propertiesTag = CompoundBinaryTag.builder();
+            for (Map.Entry<String, String> entry : block.properties().entrySet()) {
+                final String key = entry.getKey(), value = entry.getValue();
+                if (defaultProperties.get(key).equals(value))
+                    continue; // Skip default values
+                propertiesTag.putString(key, value);
             }
-            return tag.build();
-        });
+            CompoundBinaryTag properties = propertiesTag.build();
+            if (!properties.isEmpty()) tag.put("Properties", properties);
+        }
+        return tag.build();
     }
 
     /**
