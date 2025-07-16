@@ -1,6 +1,7 @@
 package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.Contract;
@@ -38,7 +39,9 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      *
      * @param point the point to convert
      * @return the converted position
+     * @deprecated use {@link Point#asPos()} instead
      */
+    @Deprecated
     public static @NotNull Pos fromPoint(@NotNull Point point) {
         if (point instanceof Pos pos) return pos;
         return new Pos(point.x(), point.y(), point.z());
@@ -116,7 +119,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     @Contract(pure = true)
     public @NotNull Pos withLookAt(@NotNull Point point) {
         if (samePoint(point)) return this;
-        final Vec delta = Vec.fromPoint(point.sub(this)).normalize();
+        final Vec delta = point.sub(this).asVec().normalize();
         return withView(PositionUtils.getLookYaw(delta.x(), delta.z()),
                 PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z()));
     }
@@ -155,6 +158,19 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
         return new Vec(-xz * Math.sin(Math.toRadians(rotX)),
                 -Math.sin(Math.toRadians(rotY)),
                 xz * Math.cos(Math.toRadians(rotX)));
+    }
+
+    /**
+     * @return The closest direction {@link #yaw() yaw} and {@link #pitch() pitch} are facing to.
+     */
+    public @NotNull Direction facing() {
+        if (pitch < -45) return Direction.UP;
+        if (pitch > 45) return Direction.DOWN;
+        if (yaw > 135 || yaw <= -135) return Direction.NORTH;
+        if (-135 < yaw && yaw <= -45) return Direction.EAST;
+        if (-45 < yaw && yaw <= 45) return Direction.SOUTH;
+        if (45 < yaw) return Direction.WEST;
+        throw new IllegalStateException("Illegal yaw (%s) or pitch (%s) value.".formatted(this.yaw, pitch));
     }
 
     /**
@@ -267,11 +283,6 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     @Override
     public @NotNull Pos relative(@NotNull BlockFace face) {
         return (Pos) Point.super.relative(face);
-    }
-
-    @Contract(pure = true)
-    public @NotNull Vec asVec() {
-        return new Vec(x, y, z);
     }
 
     @FunctionalInterface

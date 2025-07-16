@@ -6,8 +6,12 @@ import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.*;
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.serializer.nbt.NbtDataComponentValue;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Transcoder;
+import net.minestom.server.dialog.Dialog;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -32,8 +36,10 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
     @Override
     public Component read(@NotNull NetworkBuffer buffer) {
-        final BinaryTag nbt = buffer.read(NBT);
-        return NbtComponentSerializer.nbt().deserialize(nbt);
+        final Transcoder<BinaryTag> coder = buffer.registries() != null
+                ? new RegistryTranscoder<>(Transcoder.NBT, buffer.registries())
+                : Transcoder.NBT;
+        return Codec.COMPONENT.decode(coder, buffer.read(NBT)).orElseThrow();
     }
 
     // WRITING IMPL, pretty gross. Would not recommend reading.
@@ -225,34 +231,74 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
         switch (clickEvent.action()) {
             case OPEN_URL -> {
+                final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "url");
-                buffer.write(STRING_IO_UTF8, clickEvent.value());
+                buffer.write(STRING_IO_UTF8, payload.value());
             }
             case OPEN_FILE -> {
+                final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "path");
-                buffer.write(STRING_IO_UTF8, clickEvent.value());
+                buffer.write(STRING_IO_UTF8, payload.value());
             }
             case RUN_COMMAND, SUGGEST_COMMAND -> {
+                final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "command");
-                buffer.write(STRING_IO_UTF8, clickEvent.value());
+                buffer.write(STRING_IO_UTF8, payload.value());
             }
             case CHANGE_PAGE -> {
+                final ClickEvent.Payload.Int payload = checkPayload(clickEvent, ClickEvent.Payload.Int.class);
                 buffer.write(BYTE, TAG_INT);
                 buffer.write(STRING_IO_UTF8, "page");
-                int page = Integer.parseInt(clickEvent.value());
-                buffer.write(INT, page);
+                buffer.write(INT, payload.integer());
             }
-            default -> { // Includes COPY_TO_CLIPBOARD
+            case COPY_TO_CLIPBOARD -> {
+                final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "value");
-                buffer.write(STRING_IO_UTF8, clickEvent.value());
+                buffer.write(STRING_IO_UTF8, payload.value());
             }
+            case SHOW_DIALOG -> {
+                final ClickEvent.Payload.Dialog payload = checkPayload(clickEvent, ClickEvent.Payload.Dialog.class);
+
+                try {
+                    final Transcoder<BinaryTag> coder = buffer.registries() != null
+                            ? new RegistryTranscoder<>(Transcoder.NBT, buffer.registries())
+                            : Transcoder.NBT;
+                    final BinaryTag dialog = Dialog.CODEC.encode(coder, Dialog.unwrap(payload.dialog())).orElseThrow();
+
+                    final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
+                    nbtWriter.writeNamed("dialog", dialog);
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to write dialog click event payload", e);
+                }
+            }
+            case CUSTOM -> {
+                final ClickEvent.Payload.Custom payload = checkPayload(clickEvent, ClickEvent.Payload.Custom.class);
+                buffer.write(BYTE, TAG_STRING);
+                buffer.write(STRING_IO_UTF8, "id");
+                buffer.write(STRING_IO_UTF8, payload.key().asString());
+
+                try {
+                    final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
+                    nbtWriter.writeNamed("payload", MinestomAdventure.unwrapNbt(payload.nbt()));
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to write custom click event payload", e);
+                }
+            }
+            default -> throw new UnsupportedOperationException("Unknown click event action: " + clickEvent.action());
         }
 
         buffer.write(BYTE, TAG_END);
+    }
+
+    private <T extends ClickEvent.Payload> @NotNull T checkPayload(@NotNull ClickEvent clickEvent, @NotNull Class<T> expected) {
+        final ClickEvent.Payload payload = clickEvent.payload();
+        if (!expected.isInstance(payload))
+            throw new IllegalArgumentException("Expected " + expected.getSimpleName() + " for " + clickEvent.action() + ", got: " + payload.getClass());
+        return expected.cast(payload);
     }
 
     @SuppressWarnings("unchecked")

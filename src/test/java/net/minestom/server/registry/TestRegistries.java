@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -43,6 +44,7 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<CowVariant> cowVariant = null;
     public DynamicRegistry<FrogVariant> frogVariant = null;
     public DynamicRegistry<PigVariant> pigVariant = null;
+    public DynamicRegistry<Dialog> dialog = null;
     public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
     public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
     public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
@@ -144,6 +146,11 @@ public class TestRegistries implements Registries {
     @Override
     public @NotNull DynamicRegistry<Instrument> instrument() {
         return instrument;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Dialog> dialog() {
+        return dialog;
     }
 
     @Override

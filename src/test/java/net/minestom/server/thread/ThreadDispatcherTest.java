@@ -30,16 +30,16 @@ public class ThreadDispatcherTest {
         dispatcher.updateElement(element, partition);
         assertEquals(0, counter.get());
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         dispatcher.updateElement(element, partition); // Should be ignored
         dispatcher.createPartition(partition); // Ignored too
         assertEquals(1, counter.get());
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         assertEquals(2, counter.get());
 
         dispatcher.removeElement(element);
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         assertEquals(2, counter.get());
 
         dispatcher.shutdown();
@@ -62,13 +62,13 @@ public class ThreadDispatcherTest {
         assertEquals(0, counter2.get());
 
         for (int i = 0; i < 100; i++) {
-            dispatcher.updateAndAwait(System.currentTimeMillis());
+            dispatcher.updateAndAwait(System.nanoTime());
             assertEquals(i + 1, counter1.get());
             assertEquals(i + 1, counter2.get());
         }
 
         dispatcher.deletePartition(partition);
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         assertEquals(100, counter1.get());
         assertEquals(100, counter2.get());
 
@@ -99,7 +99,7 @@ public class ThreadDispatcherTest {
         partitions.forEach(dispatcher::createPartition);
         assertEquals(0, counter.get());
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         assertEquals(threadCount, counter.get());
 
         dispatcher.shutdown();
@@ -155,11 +155,11 @@ public class ThreadDispatcherTest {
 
         partitions.forEach(dispatcher::createPartition);
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
 
         dispatcher.refreshThreads();
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
 
         assertEquals(threads2.size(), threads.size());
         assertNotEquals(threads, threads2, "Threads have not been updated at all");

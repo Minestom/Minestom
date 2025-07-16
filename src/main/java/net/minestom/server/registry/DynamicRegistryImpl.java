@@ -15,28 +15,19 @@ import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
+import net.minestom.server.utils.json.JsonUtil;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.*;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ApiStatus.Internal
 final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
-    private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-ops' to 'true'");
+    private static final String UNSAFE_REMOVE_MESSAGE = "Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-ops' to 'true'";
     // Could also just use `this`, but this is a good candidate for identityless classes.
     // Also, what use case requires you to mutate registries faster than one monitor?
     private static final Object REGISTRY_LOCK = new Object();
@@ -46,6 +37,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     private final List<T> idToValue;
     private final List<RegistryKey<T>> idToKey;
+    private final Map<RegistryKey<T>, Integer> keyToId;
     private final Map<Key, T> keyToValue;
     private final Map<T, RegistryKey<T>> valueToKey;
     private final List<DataPack> packById;
@@ -61,6 +53,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         // Expect stale data possibilities with unsafe ops.
         this.idToValue = new ArrayList<>();
         this.idToKey = new ArrayList<>();
+        this.keyToId = new HashMap<>();
         this.keyToValue = new HashMap<>();
         this.valueToKey = new HashMap<>();
         this.packById = new ArrayList<>();
@@ -70,13 +63,14 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     // Used to create compressed registries
     DynamicRegistryImpl(@NotNull Key key, @Nullable Codec<T> codec, @NotNull List<T> idToValue,
-                        @NotNull List<RegistryKey<T>> idToKey, @NotNull Map<Key, T> keyToValue,
-                        @NotNull Map<T, RegistryKey<T>> valueToKey, @NotNull List<DataPack> packById,
-                        @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
+                        @NotNull Map<RegistryKey<T>, Integer> keyToId, @NotNull List<RegistryKey<T>> idToKey,
+                        @NotNull Map<Key, T> keyToValue, @NotNull Map<T, RegistryKey<T>> valueToKey,
+                        @NotNull List<DataPack> packById, @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
         this.key = key;
         this.codec = codec;
         this.idToValue = idToValue;
         this.idToKey = idToKey;
+        this.keyToId = keyToId;
         this.keyToValue = keyToValue;
         this.valueToKey = valueToKey;
         this.packById = packById;
@@ -125,25 +119,27 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public int getId(@NotNull RegistryKey<T> key) {
-        return idToKey.indexOf(key);
+        return keyToId.getOrDefault(key, -1);
     }
 
     @Override
     public @NotNull RegistryKey<T> register(@NotNull Key key, @NotNull T object, @Nullable DataPack pack) {
-        if (isFrozen()) throw UNSAFE_REMOVE_EXCEPTION;
+        if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
-            int id = idToKey.indexOf(registryKey); // Array set at home
+            Integer id = keyToId.get(registryKey); // Array set at home
             keyToValue.put(key, object);
             valueToKey.put(object, registryKey);
-            if (id == -1) {
+            if (id == null) {
                 idToValue.add(object);
                 idToKey.add(registryKey);
+                keyToId.put(registryKey, idToValue.size() - 1);
                 packById.add(pack);
             } else {
                 idToValue.set(id, object);
                 idToKey.set(id, registryKey);
+                keyToId.put(registryKey, id);
                 packById.set(id, pack);
             }
 
@@ -154,16 +150,18 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public boolean remove(@NotNull Key key) throws UnsupportedOperationException {
-        if (isFrozen()) throw UNSAFE_REMOVE_EXCEPTION;
+        if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
-            int id = idToKey.indexOf(registryKey);
-            if (id == -1) return false;
+            Integer idObject = keyToId.get(registryKey);
+            if (idObject == null) return false;
+            int id = idObject;
 
             // Remove value from all mappings (shifting down indices)
             idToValue.remove(id);
             idToKey.remove(registryKey);
+            keyToId.remove(registryKey);
             var value = keyToValue.remove(key);
             valueToKey.remove(value);
             packById.remove(id);
@@ -248,7 +246,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             final int[] entries = new int[tag.size()];
             int i = 0;
             for (var registryKey : tag)
-                entries[i++] = idToKey.indexOf(registryKey);
+                entries[i++] = keyToId.get(registryKey);
             tagList.add(new TagsPacket.Tag(tag.key().key().asString(), entries));
         }
         return new TagsPacket.Registry(key().asString(), tagList);
@@ -306,6 +304,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         // Create new instances so they are trimmed to size without downcasting.
         return new DynamicRegistryImpl<>(key, codec,
                 new ArrayList<>(idToValue),
+                new HashMap<>(keyToId),
                 new ArrayList<>(idToKey),
                 new HashMap<>(keyToValue),
                 new HashMap<>(valueToKey),
@@ -326,7 +325,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
         try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", registry.key().value()))) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-            final JsonElement json = RegistryData.GSON.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8), JsonElement.class);
+            final JsonElement json = JsonUtil.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8));
             if (!(json instanceof JsonObject root))
                 throw new IllegalStateException("Failed to load registry " + registry.key() + ": expected a JSON object, got " + json);
 

@@ -1435,6 +1435,8 @@ interface Blocks {
 
     Block SNIFFER_EGG = BlockImpl.get("sniffer_egg");
 
+    Block DRIED_GHAST = BlockImpl.get("dried_ghast");
+
     Block DEAD_TUBE_CORAL_BLOCK = BlockImpl.get("dead_tube_coral_block");
 
     Block DEAD_BRAIN_CORAL_BLOCK = BlockImpl.get("dead_brain_coral_block");

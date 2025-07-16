@@ -46,7 +46,7 @@ public class ArmorStandMeta extends LivingEntityMeta {
 
     @NotNull
     public Vec getHeadRotation() {
-        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.HEAD_ROTATION));
+        return metadata.get(MetadataDef.ArmorStand.HEAD_ROTATION).asVec();
     }
 
     public void setHeadRotation(@NotNull Vec value) {
@@ -55,7 +55,7 @@ public class ArmorStandMeta extends LivingEntityMeta {
 
     @NotNull
     public Vec getBodyRotation() {
-        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.BODY_ROTATION));
+        return metadata.get(MetadataDef.ArmorStand.BODY_ROTATION).asVec();
     }
 
     public void setBodyRotation(@NotNull Vec value) {
@@ -64,7 +64,7 @@ public class ArmorStandMeta extends LivingEntityMeta {
 
     @NotNull
     public Vec getLeftArmRotation() {
-        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.LEFT_ARM_ROTATION));
+        return metadata.get(MetadataDef.ArmorStand.LEFT_ARM_ROTATION).asVec();
     }
 
     public void setLeftArmRotation(@NotNull Vec value) {
@@ -73,7 +73,7 @@ public class ArmorStandMeta extends LivingEntityMeta {
 
     @NotNull
     public Vec getRightArmRotation() {
-        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.RIGHT_ARM_ROTATION));
+        return metadata.get(MetadataDef.ArmorStand.RIGHT_ARM_ROTATION).asVec();
     }
 
     public void setRightArmRotation(@NotNull Vec value) {
@@ -82,7 +82,7 @@ public class ArmorStandMeta extends LivingEntityMeta {
 
     @NotNull
     public Vec getLeftLegRotation() {
-        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.LEFT_LEG_ROTATION));
+        return metadata.get(MetadataDef.ArmorStand.LEFT_LEG_ROTATION).asVec();
     }
 
     public void setLeftLegRotation(@NotNull Vec value) {
@@ -91,7 +91,7 @@ public class ArmorStandMeta extends LivingEntityMeta {
 
     @NotNull
     public Vec getRightLegRotation() {
-        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.RIGHT_LEG_ROTATION));
+        return metadata.get(MetadataDef.ArmorStand.RIGHT_LEG_ROTATION).asVec();
     }
 
     public void setRightLegRotation(@NotNull Vec value) {

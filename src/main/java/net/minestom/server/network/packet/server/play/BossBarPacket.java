@@ -102,7 +102,7 @@ public record BossBarPacket(@NotNull UUID uuid,
     }
 
     public record RemoveAction() implements Action {
-        public static final NetworkBuffer.Type<RemoveAction> SERIALIZER = NetworkBufferTemplate.template(RemoveAction::new);
+        public static final NetworkBuffer.Type<RemoveAction> SERIALIZER = NetworkBufferTemplate.template(new RemoveAction());
 
         @Override
         public int id() {
