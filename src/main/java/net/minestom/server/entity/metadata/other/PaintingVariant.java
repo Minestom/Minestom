@@ -57,7 +57,7 @@ public sealed interface PaintingVariant extends Holder.Direct<PaintingVariant>, 
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<PaintingVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:painting_variant"), REGISTRY_CODEC, RegistryData.Resource.PAINTING_VARIANTS);
+        return DynamicRegistry.create(Key.key("painting_variant"), REGISTRY_CODEC, RegistryData.Resource.PAINTING_VARIANTS);
     }
 
     @NotNull Key assetId();

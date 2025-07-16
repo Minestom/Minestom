@@ -30,7 +30,7 @@ public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<CatVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:cat_variant"), REGISTRY_CODEC, RegistryData.Resource.CAT_VARIANTS);
+        return DynamicRegistry.create(Key.key("cat_variant"), REGISTRY_CODEC, RegistryData.Resource.CAT_VARIANTS);
     }
 
     @NotNull Key assetId();

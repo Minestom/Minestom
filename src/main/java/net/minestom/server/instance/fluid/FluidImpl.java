@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 record FluidImpl(@NotNull RegistryData.FluidEntry registry) implements Fluid {
-    static final Registry<Fluid> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:fluid"),
+    static final Registry<Fluid> REGISTRY = RegistryData.createStaticRegistry(Key.key("fluid"),
             (namespace, properties) -> new FluidImpl(RegistryData.fluid(namespace, properties)));
 
 
