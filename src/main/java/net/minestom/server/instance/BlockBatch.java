@@ -21,6 +21,9 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
     long ALIGNED_FLAG = 1L << 1;      // Force section alignment, considering unset blocks as air
     long GENERATE_FLAG = 1L << 2;     // Generate world if unloaded
 
+    BlockBatch EMPTY = batch(NO_FLAGS, builder -> {
+    });
+
     static BlockBatch batch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
                             Consumer<Builder> consumer) {
         BuilderImpl builder = new BuilderImpl(flags);
@@ -50,11 +53,6 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
 
     static BlockBatch alignedStates(Consumer<Builder> consumer) {
         return batch(IGNORE_DATA_FLAG | ALIGNED_FLAG | GENERATE_FLAG, consumer);
-    }
-
-    static BlockBatch empty() {
-        return batch(0, builder -> {
-        });
     }
 
     void getAll(EntryConsumer consumer);
