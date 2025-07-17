@@ -18,14 +18,6 @@ public class AbstractHorseMeta extends AnimalMeta {
         metadata.set(MetadataDef.AbstractHorse.IS_TAME, value);
     }
 
-    public boolean isSaddled() {
-        return metadata.get(MetadataDef.AbstractHorse.IS_SADDLED);
-    }
-
-    public void setSaddled(boolean value) {
-        metadata.set(MetadataDef.AbstractHorse.IS_SADDLED, value);
-    }
-
     public boolean isHasBred() {
         return metadata.get(MetadataDef.AbstractHorse.HAS_BRED);
     }

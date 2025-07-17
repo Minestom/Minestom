@@ -22,6 +22,7 @@ import java.util.function.IntFunction;
  * <p>
  * Instances of this class can be obtained by calling {@link ThreadDispatcher#of(ThreadProvider, int)}, or a similar
  * overload.
+ *
  * @see Acquirable
  * @see AcquirableSource
  */
@@ -52,10 +53,10 @@ public final class ThreadDispatcher<P> {
      * Creates a new ThreadDispatcher using default thread names (ex. Ms-Tick-n).
      * <p>Remember to start the dispatcher using {@link #start()}</p>
      *
-     * @param provider the {@link ThreadProvider} instance to be used for defining thread IDs
+     * @param provider    the {@link ThreadProvider} instance to be used for defining thread IDs
      * @param threadCount the number of threads to create for this dispatcher
+     * @param <P>         the dispatcher partition type
      * @return a new ThreadDispatcher instance
-     * @param <P> the dispatcher partition type
      */
     @Contract(pure = true)
     public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider, int threadCount) {
@@ -67,11 +68,11 @@ public final class ThreadDispatcher<P> {
      * useful to disambiguate custom ThreadDispatcher instances from ones used in core Minestom code.
      * <p>Remember to start the dispatcher using {@link #start()}</p>
      *
-     * @param provider the {@link ThreadProvider} instance to be used for defining thread IDs
+     * @param provider      the {@link ThreadProvider} instance to be used for defining thread IDs
      * @param nameGenerator a function that should return unique names, given a thread index
-     * @param threadCount the number of threads to create for this dispatcher
+     * @param threadCount   the number of threads to create for this dispatcher
+     * @param <P>           the dispatcher partition type
      * @return a new ThreadDispatcher instance
-     * @param <P> the dispatcher partition type
      */
     @Contract(pure = true)
     public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider,
@@ -83,8 +84,8 @@ public final class ThreadDispatcher<P> {
      * Creates a single-threaded dispatcher that uses default thread names.
      * <p>Remember to start the dispatcher using {@link #start()}</p>
      *
-     * @return a new ThreadDispatcher instance
      * @param <P> the dispatcher partition type
+     * @return a new ThreadDispatcher instance
      */
     @Contract(pure = true)
     public static <P> @NotNull ThreadDispatcher<P> singleThread() {
@@ -107,7 +108,7 @@ public final class ThreadDispatcher<P> {
     /**
      * Prepares the update by creating the {@link TickThread} tasks.
      *
-     * @param time the tick time in milliseconds
+     * @param time the tick time in nanos
      */
     public synchronized void updateAndAwait(long time) {
         // Update dispatcher
@@ -119,9 +120,8 @@ public final class ThreadDispatcher<P> {
                 case DispatchUpdate.ElementUpdate<P> elementUpdate ->
                         processUpdatedElement(elementUpdate.tickable(), elementUpdate.partition());
                 case DispatchUpdate.ElementRemove<P> elementRemove -> processRemovedElement(elementRemove.tickable());
-                case null, default ->
-                        throw new IllegalStateException("Unknown update type: " +
-                                (update == null ? "null" : update.getClass().getSimpleName()));
+                case null, default -> throw new IllegalStateException("Unknown update type: " +
+                        (update == null ? "null" : update.getClass().getSimpleName()));
             }
         });
         // Tick all partitions
@@ -140,7 +140,7 @@ public final class ThreadDispatcher<P> {
      *
      * @param nanoTimeout max time in nanoseconds to update partitions
      */
-    public void refreshThreads(long nanoTimeout) {
+    public synchronized void refreshThreads(long nanoTimeout) {
         switch (provider.refreshType()) {
             case NEVER -> {
                 // Do nothing
@@ -199,7 +199,7 @@ public final class ThreadDispatcher<P> {
     /**
      * Updates a {@link Tickable}, signalling that it is a part of {@code partition}.
      *
-     * @param tickable the Tickable to update
+     * @param tickable  the Tickable to update
      * @param partition the partition the Tickable is part of
      */
     public void updateElement(@NotNull Tickable tickable, @NotNull P partition) {

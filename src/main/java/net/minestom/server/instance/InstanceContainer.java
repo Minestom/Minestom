@@ -23,6 +23,7 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
@@ -120,6 +121,8 @@ public class InstanceContainer extends Instance {
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
+        // last block change starts at instance creation time
+        refreshLastBlockChangeTime();
     }
 
     @Override
@@ -156,7 +159,7 @@ public class InstanceContainer extends Instance {
 
         synchronized (chunk) {
             // Refresh the last block change time
-            this.lastBlockChangeTime = System.currentTimeMillis();
+            this.lastBlockChangeTime = System.nanoTime();
             final BlockVec blockPosition = new BlockVec(x, y, z);
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
@@ -329,8 +332,11 @@ public class InstanceContainer extends Instance {
         final Consumer<Chunk> generate = chunk -> {
             if (chunk == null) {
                 // Loader couldn't load the chunk, generate it
+                EventsJFR.ChunkGeneration chunkGeneration = new EventsJFR.ChunkGeneration(getUuid().toString(), chunkX, chunkZ);
+                chunkGeneration.begin();
                 chunk = createChunk(chunkX, chunkZ);
                 chunk.onGenerate();
+                chunkGeneration.commit();
             }
 
             // TODO run in the instance thread?
@@ -342,17 +348,25 @@ public class InstanceContainer extends Instance {
             assert future == completableFuture : "Invalid future: " + future;
             completableFuture.complete(chunk);
         };
+        Supplier<Chunk> loaderSupplier = () -> {
+            EventsJFR.ChunkLoading chunkLoading = new EventsJFR.ChunkLoading(getUuid().toString(), loader.getClass(), chunkX, chunkZ);
+            chunkLoading.begin();
+            final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+            chunkLoading.end();
+            if (chunk != null) chunkLoading.commit();
+            return chunk;
+        };
         if (loader.supportsParallelLoading()) {
             Thread.startVirtualThread(() -> {
                 try {
-                    final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+                    final Chunk chunk = loaderSupplier.get();
                     generate.accept(chunk);
                 } catch (Throwable e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             });
         } else {
-            final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+            final Chunk chunk = loaderSupplier.get();
             Thread.startVirtualThread(() -> {
                 try {
                     generate.accept(chunk);
@@ -577,7 +591,7 @@ public class InstanceContainer extends Instance {
     /**
      * Gets the last time at which a block changed.
      *
-     * @return the time at which the last block changed in milliseconds, 0 if never
+     * @return the time at which the last block changed in nanoseconds. Only use this to calculate delta times
      */
     public long getLastBlockChangeTime() {
         return lastBlockChangeTime;
@@ -589,7 +603,7 @@ public class InstanceContainer extends Instance {
      * Useful if you change blocks values directly using a {@link Chunk} object.
      */
     public void refreshLastBlockChangeTime() {
-        this.lastBlockChangeTime = System.currentTimeMillis();
+        this.lastBlockChangeTime = System.nanoTime();
     }
 
     @Override

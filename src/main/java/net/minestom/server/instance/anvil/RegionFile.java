@@ -124,6 +124,7 @@ final class RegionFile implements AutoCloseable {
 
             // Update the header and write it
             locations[chunkIndex] = newLocation;
+            // store timestamps in seconds since epoch
             timestamps[chunkIndex] = (int) (System.currentTimeMillis() / 1000);
             writeHeader();
         } finally {

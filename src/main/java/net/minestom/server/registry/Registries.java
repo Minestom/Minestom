@@ -2,6 +2,8 @@ package net.minestom.server.registry;
 
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.dialog.Dialog;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -103,6 +105,8 @@ public interface Registries {
     @NotNull DynamicRegistry<FrogVariant> frogVariant();
 
     @NotNull DynamicRegistry<PigVariant> pigVariant();
+
+    @NotNull DynamicRegistry<Dialog> dialog();
 
     // The following are _not_ sent to the client.
 
@@ -244,6 +248,11 @@ public interface Registries {
         @Override
         public @NotNull DynamicRegistry<PigVariant> pigVariant() {
             return delegate.pigVariant();
+        }
+
+        @Override
+        public @NotNull DynamicRegistry<Dialog> dialog() {
+            return delegate.dialog();
         }
 
         @Override

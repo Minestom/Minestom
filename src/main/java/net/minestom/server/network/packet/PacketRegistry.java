@@ -107,7 +107,8 @@ public interface PacketRegistry<T> {
                     entry(ClientKeepAlivePacket.class, ClientKeepAlivePacket.SERIALIZER),
                     entry(ClientPongPacket.class, ClientPongPacket.SERIALIZER),
                     entry(ClientResourcePackStatusPacket.class, ClientResourcePackStatusPacket.SERIALIZER),
-                    entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER)
+                    entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER),
+                    entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER)
             );
         }
 
@@ -124,6 +125,7 @@ public interface PacketRegistry<T> {
                     entry(ClientQueryBlockNbtPacket.class, ClientQueryBlockNbtPacket.SERIALIZER),
                     entry(ClientSelectBundleItemPacket.class, ClientSelectBundleItemPacket.SERIALIZER),
                     entry(ClientChangeDifficultyPacket.class, ClientChangeDifficultyPacket.SERIALIZER),
+                    entry(ClientChangeGameModePacket.class, ClientChangeGameModePacket.SERIALIZER),
                     entry(ClientChatAckPacket.class, ClientChatAckPacket.SERIALIZER),
                     entry(ClientCommandChatPacket.class, ClientCommandChatPacket.SERIALIZER),
                     entry(ClientSignedCommandChatPacket.class, ClientSignedCommandChatPacket.SERIALIZER),
@@ -183,7 +185,8 @@ public interface PacketRegistry<T> {
                     entry(ClientSpectatePacket.class, ClientSpectatePacket.SERIALIZER),
                     entry(ClientTestInstanceBlockActionPacket.class, ClientTestInstanceBlockActionPacket.SERIALIZER),
                     entry(ClientPlayerBlockPlacementPacket.class, ClientPlayerBlockPlacementPacket.SERIALIZER),
-                    entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER)
+                    entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER),
+                    entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER)
             );
         }
 
@@ -268,7 +271,9 @@ public interface PacketRegistry<T> {
                     entry(TagsPacket.class, TagsPacket.SERIALIZER),
                     entry(SelectKnownPacksPacket.class, SelectKnownPacksPacket.SERIALIZER),
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
-                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
+                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
+                    entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
+                    entry(ShowDialogPacket.class, ShowDialogPacket.SERIALIZER)
             );
         }
 
@@ -411,7 +416,10 @@ public interface PacketRegistry<T> {
                     entry(TagsPacket.class, TagsPacket.SERIALIZER),
                     entry(ProjectilePowerPacket.class, ProjectilePowerPacket.SERIALIZER),
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
-                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
+                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
+                    entry(TrackedWaypointPacket.class, TrackedWaypointPacket.SERIALIZER),
+                    entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
+                    entry(ShowDialogPacket.class, ShowDialogPacket.SERIALIZER)
             );
         }
 
@@ -469,7 +477,6 @@ public interface PacketRegistry<T> {
             }
             return info;
         }
-
 
 
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {

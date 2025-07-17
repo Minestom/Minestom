@@ -117,6 +117,8 @@ interface EntityTypes {
 
     EntityType GHAST = EntityTypeImpl.get("ghast");
 
+    EntityType HAPPY_GHAST = EntityTypeImpl.get("happy_ghast");
+
     EntityType GIANT = EntityTypeImpl.get("giant");
 
     EntityType GLOW_ITEM_FRAME = EntityTypeImpl.get("glow_item_frame");

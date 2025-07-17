@@ -195,7 +195,7 @@ public class PlayerMovementIntegrationTest {
         assertEquals(new Pos(0, 40, 0), p1.getPosition());
         collector.assertSingle(packet -> {
             assertEquals(0, packet.flags());
-            assertEquals(new Vec(0, 40, 0), Vec.fromPoint(packet.position()));
+            assertEquals(new Vec(0, 40, 0), packet.position().asVec());
             // Must reset velocity or the player will keep moving and create a loop of teleport cancel teleport.
             assertEquals(Vec.ZERO, packet.delta());
         });
