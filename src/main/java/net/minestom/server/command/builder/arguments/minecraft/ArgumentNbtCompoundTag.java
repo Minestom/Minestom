@@ -1,22 +1,21 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
-import java.io.StringReader;
+import java.io.IOException;
 
 /**
- * Argument used to retrieve a {@link NBTCompound} if you need key-value data.
+ * Argument used to retrieve a {@link CompoundBinaryTag} if you need key-value data.
  * <p>
  * Example: {display:{Name:"{\"text\":\"Sword of Power\"}"}}
  */
-public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
+public class ArgumentNbtCompoundTag extends Argument<CompoundBinaryTag> {
 
     public static final int INVALID_NBT = 1;
 
@@ -26,22 +25,17 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
 
     @NotNull
     @Override
-    public NBTCompound parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public CompoundBinaryTag parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         try {
-            NBT nbt = new SNBTParser(new StringReader(input)).parse();
-
-            if (!(nbt instanceof NBTCompound))
-                throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
-
-            return (NBTCompound) nbt;
-        } catch (NBTException e) {
+            return MinestomAdventure.tagStringIO().asCompound(input);
+        } catch (IOException e) {
             throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
         }
     }
 
     @Override
-    public String parser() {
-        return "minecraft:nbt_compound_tag";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.NBT_COMPOUND_TAG;
     }
 
     @Override

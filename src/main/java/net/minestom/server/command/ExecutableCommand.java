@@ -7,7 +7,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Internal
-@ApiStatus.Experimental
 public interface ExecutableCommand {
     @NotNull Result execute(@NotNull CommandSender sender);
 

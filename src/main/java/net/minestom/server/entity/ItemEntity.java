@@ -5,9 +5,11 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.StackingRule;
+import net.minestom.server.thread.Acquirable;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,8 +36,11 @@ public class ItemEntity extends Entity {
     private boolean pickable = true;
     private boolean mergeable = true;
     private float mergeRange = 1;
+    private boolean previousOnGround = false;
 
+    // Spawn time in System#nanoTime
     private long spawnTime;
+    // pickup delay in nanos
     private long pickupDelay;
 
     public ItemEntity(@NotNull ItemStack itemStack) {
@@ -74,16 +79,14 @@ public class ItemEntity extends Entity {
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (itemEntity == this) return;
                         if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;
-                        if (getDistanceSquared(itemEntity) > mergeRange * mergeRange) return;
 
                         final ItemStack itemStackEntity = itemEntity.getItemStack();
-                        final StackingRule stackingRule = StackingRule.get();
-                        final boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
+                        final boolean canStack = itemStack.isSimilar(itemStackEntity);
 
                         if (!canStack) return;
-                        final int totalAmount = stackingRule.getAmount(itemStack) + stackingRule.getAmount(itemStackEntity);
-                        if (!stackingRule.canApply(itemStack, totalAmount)) return;
-                        final ItemStack result = stackingRule.apply(itemStack, totalAmount);
+                        final int totalAmount = itemStack.amount() + itemStackEntity.amount();
+                        if (!MathUtils.isBetween(totalAmount, 0, itemStack.maxStackSize())) return;
+                        final ItemStack result = itemStack.withAmount(totalAmount);
                         EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
                         EventDispatcher.callCancellable(entityItemMergeEvent, () -> {
                             setItemStack(entityItemMergeEvent.getResult());
@@ -94,8 +97,20 @@ public class ItemEntity extends Entity {
     }
 
     @Override
+    public void movementTick() {
+        super.movementTick();
+
+        if (!previousOnGround && onGround) {
+            synchronizePosition();
+            sendPacketToViewers(getVelocityPacket());
+        }
+
+        previousOnGround = onGround;
+    }
+
+    @Override
     public void spawn() {
-        this.spawnTime = System.currentTimeMillis();
+        this.spawnTime = System.nanoTime();
     }
 
     @Override
@@ -132,7 +147,7 @@ public class ItemEntity extends Entity {
      * @return true if the item is pickable, false otherwise
      */
     public boolean isPickable() {
-        return pickable && (System.currentTimeMillis() - getSpawnTime() >= pickupDelay);
+        return pickable && getTimeSinceSpawn() >= pickupDelay;
     }
 
     /**
@@ -210,11 +225,29 @@ public class ItemEntity extends Entity {
     }
 
     /**
-     * Used to know if the ItemEntity can be pickup.
+     * Used to know if the ItemEntity can be picked up.
      *
-     * @return the time in milliseconds since this entity has spawn
+     * @return the elapsed time in milliseconds since this entity has spawned
+     * @deprecated use {@link #getTimeSinceSpawn()} instead, does the same thing with better naming
      */
+    @Deprecated(forRemoval = true)
     public long getSpawnTime() {
-        return spawnTime;
+        return getTimeSinceSpawn();
+    }
+    
+    /**
+     * Used to know if the ItemEntity can be picked up.
+     *
+     * @return the elapsed time in milliseconds since this entity has spawned
+     */
+    public long getTimeSinceSpawn() {
+        return java.util.concurrent.TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - spawnTime);
+    }
+
+    @ApiStatus.Experimental
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull Acquirable<? extends ItemEntity> acquirable() {
+        return (Acquirable<? extends ItemEntity>) super.acquirable();
     }
 }

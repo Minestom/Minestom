@@ -1,14 +1,13 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import net.minestom.server.instance.block.Block;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +20,7 @@ public class GeneratorIntegrationTest {
     @ValueSource(booleans = {false, true})
     public void loader(boolean data, Env env) {
         var manager = env.process().instance();
-        var block = data ? Block.STONE.withNbt(NBT.Compound(Map.of("key", NBT.String("value")))) : Block.STONE;
+        var block = data ? Block.STONE.withNbt(CompoundBinaryTag.builder().putString("key", "value").build()) : Block.STONE;
         var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> unit.modifier().fill(block));
         instance.loadChunk(0, 0).join();

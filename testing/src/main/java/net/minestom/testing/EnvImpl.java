@@ -19,6 +19,13 @@ final class EnvImpl implements Env {
 
     public EnvImpl(ServerProcess process) {
         this.process = process;
+
+        // Start the dispatcher threads if not already started.
+        process().dispatcher().start();
+
+        // Use player provider to disable queued chunk sending.
+        // Set here to allow an individual test to override if they want.
+        process.connection().setPlayerProvider(TestConnectionImpl.TestPlayerImpl::new);
     }
 
     @Override
@@ -50,6 +57,7 @@ final class EnvImpl implements Env {
 
     void cleanup() {
         this.listeners.forEach(FlexibleListenerImpl::check);
+        this.process.stop();
     }
 
     final class EventCollector<E extends Event> implements Collector<E> {

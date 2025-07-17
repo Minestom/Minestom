@@ -3,7 +3,6 @@ package net.minestom.server.command.builder.parser;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
@@ -42,7 +41,6 @@ public class ArgumentParser {
         // TODO enum
         ARGUMENT_FUNCTION_MAP.put("color", ArgumentColor::new);
         ARGUMENT_FUNCTION_MAP.put("time", ArgumentTime::new);
-        ARGUMENT_FUNCTION_MAP.put("enchantment", ArgumentEnchantment::new);
         ARGUMENT_FUNCTION_MAP.put("particle", ArgumentParticle::new);
         ARGUMENT_FUNCTION_MAP.put("resourcelocation", ArgumentResourceLocation::new);
         ARGUMENT_FUNCTION_MAP.put("entitytype", ArgumentEntityType::new);

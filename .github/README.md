@@ -31,19 +31,59 @@ Minestom is not installed like Bukkit/Forge/Sponge.
 As Minestom is a Java library, it must be loaded the same way any other Java library may be loaded.
 This means you need to add Minestom as a dependency, add your code and compile by yourself.
 
-Minestom is available on [Maven Central](https://central.sonatype.com/artifact/net.minestom/minestom-snapshots),
-and can be installed like the following (Gradle/Groovy):
+Minestom is available on [Maven Central](https://mvnrepository.com/artifact/net.minestom/minestom),
+and can be installed like the following (Gradle/Kotlin):
 
-```groovy
+[![](https://img.shields.io/maven-central/v/net.minestom/minestom)](https://mvnrepository.com/artifact/net.minestom/minestom)
+
+```kotlin
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation 'net.minestom:minestom-snapshots:<???>'
+    implementation("net.minestom:minestom:<latest release>")
+    
+    // If you want to use the integration testing library.
+    testImplementation("net.minestom:testing:<latest release>")
 }
 ```
+
+PR branches tagged with the "Publish Pull Request" tag are published to the maven central snapshot repository, which can
+be used to test new features before they are released. The version for these snapshots is `<branch>-SNAPSHOT`, where 
+`<branch>` is the name of the branch.
+
+```kotlin
+repositories {
+    maven(url = "https://central.sonatype.com/repository/maven-snapshots/") {
+        content { // This filtering is optional, but recommended
+            includeModule("net.minestom", "minestom")
+            includeModule("net.minestom", "testing")
+        }
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation("net.minestom:minestom:<branch>-SNAPSHOT")
+    testImplementation("net.minestom:testing:<branch>-SNAPSHOT")
+}
+```
+
+<details>
+<summary>Pinning snapshot versions</summary>
+
+By default, `<branch>-SNAPSHOT` versions will always resolve to the latest snapshot version, meaning the dependency
+can update without you changing anything in your build file (and possibly be inconsistent between people if gradle
+has cached an older version, by default for 24h).
+
+To pin the snapshot version to a specific release you can reference the exact build. There are two places to find this:
+* The maven-metadata.xml, combine the parts of `snapshot.timestamp` and `snapshot.buildNumber`. For example, the 1.21.6
+  branch is currently published as `1_21_6-SNAPSHOT` and `1_21_6-20250707.141325-4`.
+* In the "External Libraries" section of IntelliJ, if you expand the `-SNAPSHOT` jar it will show the pinnable 
+  version which you can use.
+
+</details>
 
 # Usage
 An example of how to use the Minestom library is available [here](/demo).
@@ -99,7 +139,7 @@ Commands are the simplest way of communication between clients and server. Since
 
 # Credits
 * The [contributors](https://github.com/Minestom/Minestom/graphs/contributors) of the project
-* [The Minecraft Coalition](https://wiki.vg/) and [`#mcdevs`](https://github.com/mcdevs) -
+* [The Minecraft Coalition](https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge) and [`#mcdevs`](https://github.com/mcdevs) -
    protocol and file formats research.
 * [The Minecraft Wiki](https://minecraft.wiki) for all their useful info
 * [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html) for their amazing Java profiler

@@ -9,6 +9,7 @@ public class ResourcePackListener {
 
     public static void listener(ClientResourcePackStatusPacket packet, Player player) {
         EventDispatcher.call(new PlayerResourcePackStatusEvent(player, packet.status()));
+        if (!player.isOnline()) return;
 
         // Run adventure callbacks for the resource pack
         player.onResourcePackStatus(packet.id(), packet.status());

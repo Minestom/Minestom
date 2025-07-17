@@ -1,48 +1,91 @@
 package net.minestom.server.item;
 
-import net.minestom.server.ServerFlag;
-import net.minestom.server.item.rule.VanillaStackingRule;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Transcoder;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.component.DataComponents;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.TooltipDisplay;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTByte;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTString;
 
-import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
-record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implements ItemStack {
-    static final @NotNull StackingRule DEFAULT_STACKING_RULE;
+record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
 
-    static {
-        if (ServerFlag.STACKING_RULE == null) {
-            DEFAULT_STACKING_RULE = new VanillaStackingRule();
-        } else {
-            try {
-                DEFAULT_STACKING_RULE = (StackingRule) ClassLoader.getSystemClassLoader()
-                        .loadClass(ServerFlag.STACKING_RULE).getConstructor().newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException("Could not instantiate default stacking rule", e);
+    static @NotNull NetworkBuffer.Type<ItemStack> networkType(@NotNull NetworkBuffer.Type<DataComponentMap> componentPatchType) {
+        return new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
+                if (value.isAir()) {
+                    buffer.write(NetworkBuffer.VAR_INT, 0);
+                    return;
+                }
+
+                buffer.write(NetworkBuffer.VAR_INT, value.amount());
+                buffer.write(NetworkBuffer.VAR_INT, value.material().id());
+                buffer.write(componentPatchType, ((ItemStackImpl) value).components());
             }
-        }
+
+            @Override
+            public ItemStack read(@NotNull NetworkBuffer buffer) {
+                int amount = buffer.read(NetworkBuffer.VAR_INT);
+                if (amount <= 0) return ItemStack.AIR;
+                Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
+                DataComponentMap components = buffer.read(componentPatchType);
+                return ItemStackImpl.create(material, amount, components);
+            }
+        };
     }
 
-    static ItemStack create(Material material, int amount, ItemMetaImpl meta) {
+    static ItemStack create(Material material, int amount, DataComponentMap components) {
         if (amount <= 0) return AIR;
-        return new ItemStackImpl(material, amount, meta);
+        return new ItemStackImpl(material, amount, components);
     }
 
     static ItemStack create(Material material, int amount) {
-        return create(material, amount, ItemMetaImpl.EMPTY);
+        return create(material, amount, DataComponentMap.EMPTY);
+    }
+
+    public ItemStackImpl {
+        Check.notNull(material, "Material cannot be null");
+
+        // It is relevant to create the minimal diff of the prototype so that #isSimilar returns consistent
+        // results for ItemStacks which would resolve to the same thing. For example, consider two items
+        // (name indicating prototype, brackets showing the components given during construction):
+        // 1: apple[max_stack_size=64, custom_name=Hello]
+        // 2: apple[custom_name=Hello]
+        // After resolution the first set of components would turn into the second one because apple already has a
+        // max stack size of 64. If we did not do this, #isSimilar would return false for these two items because of
+        // their different patches.
+        // It is worth noting that the client would handle both cases perfectly fine.
+        if (components != DataComponentMap.EMPTY) {
+            components = DataComponentMap.diff(material.prototype(), components);
+        }
     }
 
     @Override
-    public <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass) {
-        return ItemMetaViewImpl.construct(metaClass, meta);
+    public @NotNull DataComponentMap componentPatch() {
+        return this.components;
+    }
+
+    @Override
+    public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        return components.get(material.prototype(), component);
+    }
+
+    @Override
+    public boolean has(@NotNull DataComponent<?> component) {
+        return components.has(material.prototype(), component);
     }
 
     @Override
@@ -53,68 +96,84 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
     }
 
     @Override
-    public @NotNull <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> ItemStack withMeta(@NotNull Class<T> metaType,
-                                                                                                   @NotNull Consumer<V> consumer) {
-        return builder().meta(metaType, consumer).build();
-    }
-
-    @Override
-    public @NotNull ItemStack withMeta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer) {
-        return builder().meta(consumer).build();
-    }
-
-    @Override
     public @NotNull ItemStack withMaterial(@NotNull Material material) {
-        return new ItemStackImpl(material, amount, meta);
+        return new ItemStackImpl(material, amount, components);
     }
 
     @Override
     public @NotNull ItemStack withAmount(int amount) {
-        return create(material, amount, meta);
+        if (amount <= 0) return ItemStack.AIR;
+        return create(material, amount, components);
+    }
+
+    @Override
+    public @NotNull <T> ItemStack with(@NotNull DataComponent<T> component, @NotNull T value) {
+        return new ItemStackImpl(material, amount, components.set(component, value));
+    }
+
+    @Override
+    public @NotNull ItemStack without(@NotNull DataComponent<?> component) {
+        // We can be slightly smart here. If the component is not present, this will always be a noop.
+        // No need to make a new patch with the removal only for it to be removed again when doing a diff.
+        if (get(component) == null) return this;
+        return new ItemStackImpl(material, amount, components.remove(component));
     }
 
     @Override
     public @NotNull ItemStack consume(int amount) {
-        return DEFAULT_STACKING_RULE.apply(this, currentAmount -> currentAmount - amount);
+        return withAmount(amount() - amount);
     }
 
     @Override
-    public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
-        return new ItemStackImpl(material, amount, (ItemMetaImpl) meta);
+    public @NotNull ItemStack damage(int amount) {
+        final Integer damage = get(DataComponents.DAMAGE);
+        if (damage == null) return this;
+        final Integer maxDamage = get(DataComponents.MAX_DAMAGE);
+        if (maxDamage != null && damage + amount >= maxDamage) {
+            return ItemStack.AIR;
+        } else {
+            return with(DataComponents.DAMAGE, damage + amount);
+        }
     }
 
     @Override
     public boolean isSimilar(@NotNull ItemStack itemStack) {
-        return material == itemStack.material() && meta.equals(itemStack.meta());
+        return material == itemStack.material() && components.equals(((ItemStackImpl) itemStack).components);
     }
 
     @Override
-    public @NotNull NBTCompound toItemNBT() {
-        final NBTString material = NBT.String(material().name());
-        final NBTByte amount = NBT.Byte(amount());
-        final NBTCompound nbt = meta().toNBT();
-        if (nbt.isEmpty()) return NBT.Compound(Map.of("id", material, "Count", amount));
-        return NBT.Compound(Map.of("id", material, "Count", amount, "tag", nbt));
+    public @NotNull CompoundBinaryTag toItemNBT() {
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        return (CompoundBinaryTag) CODEC.encode(coder, this).orElseThrow("Invalid NBT for ItemStack");
     }
 
+    @Override
     @Contract(value = "-> new", pure = true)
-    private @NotNull ItemStack.Builder builder() {
-        return new Builder(material, amount, new ItemMetaImpl.Builder(meta.tagHandler().copy()));
+    public @NotNull ItemStack.Builder builder() {
+        return new Builder(material, amount, components.toPatchBuilder());
     }
 
     static final class Builder implements ItemStack.Builder {
-        final Material material;
-        int amount;
-        ItemMetaImpl.Builder metaBuilder;
+        private Material material;
+        private int amount;
+        private DataComponentMap.PatchBuilder components;
 
-        Builder(Material material, int amount, ItemMetaImpl.Builder metaBuilder) {
+        Builder(Material material, int amount, DataComponentMap.PatchBuilder components) {
             this.material = material;
             this.amount = amount;
-            this.metaBuilder = metaBuilder;
+            this.components = components;
         }
 
         Builder(Material material, int amount) {
-            this(material, amount, new ItemMetaImpl.Builder(TagHandler.newHandler()));
+            this.material = material;
+            this.amount = amount;
+            this.components = DataComponentMap.patchBuilder();
+        }
+
+        @Override
+        public ItemStack.@NotNull Builder material(@NotNull Material material) {
+            this.material = material;
+            return this;
         }
 
         @Override
@@ -124,48 +183,40 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
         }
 
         @Override
-        public ItemStack.@NotNull Builder meta(@NotNull TagHandler tagHandler) {
-            return metaBuilder(new ItemMetaImpl.Builder(tagHandler.copy()));
-        }
-
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull NBTCompound compound) {
-            return metaBuilder(new ItemMetaImpl.Builder(TagHandler.fromCompound(compound)));
-        }
-
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull ItemMeta itemMeta) {
-            final TagHandler tagHandler = ((ItemMetaImpl) itemMeta).tagHandler();
-            return metaBuilder(new ItemMetaImpl.Builder(tagHandler.copy()));
-        }
-
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull Consumer<ItemMeta.Builder> consumer) {
-            consumer.accept(metaBuilder);
+        public <T> ItemStack.@NotNull Builder set(@NotNull DataComponent<T> component, T value) {
+            components.set(component, value);
             return this;
         }
 
         @Override
-        public <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> ItemStack.@NotNull Builder meta(@NotNull Class<T> metaType,
-                                                                                                           @NotNull Consumer<@NotNull V> itemMetaConsumer) {
-            V view = ItemMetaViewImpl.constructBuilder(metaType, metaBuilder.tagHandler());
-            itemMetaConsumer.accept(view);
+        public ItemStack.@NotNull Builder remove(@NotNull DataComponent<?> component) {
+            components.remove(component);
             return this;
         }
 
         @Override
-        public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-            this.metaBuilder.setTag(tag, value);
+        public <T> ItemStack.@NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
+            components.set(DataComponents.CUSTOM_DATA, components.get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
+            return this;
+        }
+
+        @Override
+        public ItemStack.@NotNull Builder hideExtraTooltip() {
+            return set(DataComponents.TOOLTIP_DISPLAY, new TooltipDisplay(false, Set.of(
+                    DataComponents.BANNER_PATTERNS, DataComponents.BEES, DataComponents.BLOCK_ENTITY_DATA,
+                    DataComponents.BLOCK_STATE, DataComponents.BUNDLE_CONTENTS, DataComponents.CHARGED_PROJECTILES,
+                    DataComponents.CONTAINER, DataComponents.CONTAINER_LOOT, DataComponents.FIREWORK_EXPLOSION,
+                    DataComponents.FIREWORKS, DataComponents.INSTRUMENT, DataComponents.MAP_ID,
+                    DataComponents.PAINTING_VARIANT, DataComponents.POT_DECORATIONS, DataComponents.POTION_CONTENTS,
+                    DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT,
+                    DataComponents.UNBREAKABLE, DataComponents.ATTRIBUTE_MODIFIERS
+            )));
         }
 
         @Override
         public @NotNull ItemStack build() {
-            return ItemStackImpl.create(material, amount, metaBuilder.build());
+            return ItemStackImpl.create(material, amount, components.build());
         }
 
-        private ItemStack.@NotNull Builder metaBuilder(@NotNull ItemMetaImpl.Builder builder) {
-            this.metaBuilder = builder;
-            return this;
-        }
     }
 }

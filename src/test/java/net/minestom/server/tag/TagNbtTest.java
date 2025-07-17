@@ -1,13 +1,17 @@
 package net.minestom.server.tag;
 
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTInt;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.IntBinaryTag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
+import static net.kyori.adventure.nbt.IntArrayBinaryTag.intArrayBinaryTag;
+import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
+import static net.kyori.adventure.nbt.ListBinaryTag.listBinaryTag;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -21,7 +25,7 @@ public class TagNbtTest {
     public void list() {
         var handler = TagHandler.newHandler();
         var tag = Tag.NBT("nbt").list();
-        List<NBT> list = List.of(NBT.Int(1), NBT.Int(2), NBT.Int(3));
+        List<BinaryTag> list = List.of(intBinaryTag(1), intBinaryTag(2), intBinaryTag(3));
         handler.setTag(tag, list);
         assertEquals(list, handler.getTag(tag));
         assertEqualsSNBT("""
@@ -37,7 +41,7 @@ public class TagNbtTest {
     @Test
     public void map() {
         var handler = TagHandler.newHandler();
-        var tag = Tag.NBT("nbt").map(nbt -> ((NBTInt) nbt).getValue(), NBT::Int);
+        var tag = Tag.NBT("nbt").map(nbt -> ((IntBinaryTag) nbt).value(), IntBinaryTag::intBinaryTag);
         handler.setTag(tag, 5);
         assertEquals(5, handler.getTag(tag));
         assertEqualsSNBT("""
@@ -52,7 +56,7 @@ public class TagNbtTest {
 
     @Test
     public void fromCompoundModify() {
-        var compound = NBT.Compound(Map.of("key", NBT.Int(5)));
+        var compound = CompoundBinaryTag.builder().putInt("key", 5).build();
         var handler = TagHandler.fromCompound(compound);
         assertEquals(compound, handler.asCompound());
         assertEqualsSNBT("""
@@ -72,7 +76,7 @@ public class TagNbtTest {
 
     @Test
     public void fromCompoundModifyPath() {
-        var compound = NBT.Compound(Map.of("path", NBT.Compound(Map.of("key", NBT.Int(5)))));
+        var compound = CompoundBinaryTag.builder().put("path", CompoundBinaryTag.builder().putInt("key", 5).build()).build();
         var handler = TagHandler.fromCompound(compound);
         var tag = Tag.Integer("key").path("path");
 
@@ -89,8 +93,8 @@ public class TagNbtTest {
 
     @Test
     public void fromCompoundModifyDoublePath() {
-        var compound = NBT.Compound(Map.of("path", NBT.Compound(Map.of("path2",
-                NBT.Compound(Map.of("key", NBT.Int(5)))))));
+        var compound = CompoundBinaryTag.builder().put("path", CompoundBinaryTag.builder()
+                .put("path2", CompoundBinaryTag.builder().putInt("key", 5).build()).build()).build();
         var handler = TagHandler.fromCompound(compound);
         var tag = Tag.Integer("key").path("path", "path2");
 
@@ -110,8 +114,8 @@ public class TagNbtTest {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("path1");
 
-        var nbt1 = NBT.Compound(Map.of("key", NBT.Int(5)));
-        var nbt2 = NBT.Compound(Map.of("other-key", NBT.Int(5)));
+        var nbt1 = CompoundBinaryTag.from(Map.of("key", intBinaryTag(5)));
+        var nbt2 = CompoundBinaryTag.from(Map.of("other-key", intBinaryTag(5)));
         handler.setTag(nbtTag, nbt1);
         assertEquals(nbt1, handler.getTag(nbtTag));
 
@@ -124,7 +128,7 @@ public class TagNbtTest {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("path1");
 
-        var nbt = NBT.Compound(Map.of("key", NBT.Int(5)));
+        var nbt = CompoundBinaryTag.from(Map.of("key", intBinaryTag(5)));
         handler.setTag(nbtTag, nbt);
         assertEquals(nbt, handler.getTag(nbtTag));
 
@@ -137,7 +141,7 @@ public class TagNbtTest {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("compound").path("path");
 
-        var nbt = NBT.Compound(Map.of("key", NBT.Int(5)));
+        var nbt = CompoundBinaryTag.from(Map.of("key", intBinaryTag(5)));
         handler.setTag(nbtTag, nbt);
         assertEquals(nbt, handler.getTag(nbtTag));
 
@@ -150,7 +154,7 @@ public class TagNbtTest {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("path1");
 
-        var nbt = NBT.Compound(Map.of("path2", NBT.Compound(Map.of("key", NBT.Int(5)))));
+        var nbt = CompoundBinaryTag.from(Map.of("path2", CompoundBinaryTag.from(Map.of("key", intBinaryTag(5)))));
         handler.setTag(nbtTag, nbt);
         assertEquals(nbt, handler.getTag(nbtTag));
 
@@ -163,21 +167,21 @@ public class TagNbtTest {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("path1");
 
-        var nbt = NBT.Compound(Map.of("key", NBT.Int(5)));
+        var nbt = CompoundBinaryTag.from(Map.of("key", intBinaryTag(5)));
         handler.setTag(nbtTag, nbt);
         assertEquals(nbt, handler.getTag(nbtTag));
 
         var path = Tag.Integer("key").path("path1");
         handler.setTag(path, 10);
         assertEquals(10, handler.getTag(path));
-        assertEquals(NBT.Compound(Map.of("key", NBT.Int(10))), handler.getTag(nbtTag));
+        assertEquals(CompoundBinaryTag.from(Map.of("key", intBinaryTag(10))), handler.getTag(nbtTag));
     }
 
     @Test
     public void rawList() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("list");
-        var list = NBT.List(NBTType.TAG_Int, NBT.Int(1));
+        var list = listBinaryTag(BinaryTagTypes.INT, List.of(intBinaryTag(1)));
         handler.setTag(nbtTag, list);
         assertEquals(list, handler.getTag(nbtTag));
     }
@@ -187,7 +191,7 @@ public class TagNbtTest {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("list");
         var listTag = Tag.Integer("list").list();
-        var list = NBT.List(NBTType.TAG_Int, NBT.Int(1));
+        var list = listBinaryTag(BinaryTagTypes.INT, List.of(intBinaryTag(1)));
         handler.setTag(nbtTag, list);
 
         assertEquals(list, handler.getTag(nbtTag));
@@ -199,7 +203,7 @@ public class TagNbtTest {
     public void rawArray() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("array");
-        var array = NBT.IntArray(1, 2, 3);
+        var array = intArrayBinaryTag(1, 2, 3);
         handler.setTag(nbtTag, array);
         assertEquals(array, handler.getTag(nbtTag));
     }

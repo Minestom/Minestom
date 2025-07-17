@@ -3,35 +3,57 @@ package net.minestom.server;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.component.DataComponents;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.animal.ChickenVariant;
+import net.minestom.server.entity.metadata.animal.CowVariant;
+import net.minestom.server.entity.metadata.animal.FrogVariant;
+import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.item.armor.TrimManager;
+import net.minestom.server.instance.block.banner.BannerPattern;
+import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.item.armor.TrimMaterial;
+import net.minestom.server.item.armor.TrimPattern;
+import net.minestom.server.item.enchant.*;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.packet.PacketParser;
+import net.minestom.server.network.packet.PacketVanilla;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
+import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.timer.SchedulerManager;
-import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.PropertyUtils;
+import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.collection.MappedCollection;
-import net.minestom.server.world.DimensionTypeManager;
-import net.minestom.server.world.biomes.BiomeManager;
+import net.minestom.server.utils.time.Tick;
+import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,17 +62,43 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class ServerProcessImpl implements ServerProcess {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
-    private static final Boolean SHUTDOWN_ON_SIGNAL = PropertyUtils.getBoolean("minestom.shutdown-on-signal", true);
 
     private final ExceptionManager exception;
+
+    private final DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues;
+    private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
+    private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
+    private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
+
+    private final DynamicRegistry<ChatType> chatType;
+    private final DynamicRegistry<Dialog> dialog;
+    private final DynamicRegistry<DimensionType> dimensionType;
+    private final DynamicRegistry<Biome> biome;
+    private final DynamicRegistry<DamageType> damageType;
+    private final DynamicRegistry<TrimMaterial> trimMaterial;
+    private final DynamicRegistry<TrimPattern> trimPattern;
+    private final DynamicRegistry<BannerPattern> bannerPattern;
+    private final DynamicRegistry<Enchantment> enchantment;
+    private final DynamicRegistry<PaintingVariant> paintingVariant;
+    private final DynamicRegistry<JukeboxSong> jukeboxSong;
+    private final DynamicRegistry<Instrument> instrument;
+    private final DynamicRegistry<WolfVariant> wolfVariant;
+    private final DynamicRegistry<WolfSoundVariant> wolfSoundVariant;
+    private final DynamicRegistry<CatVariant> catVariant;
+    private final DynamicRegistry<ChickenVariant> chickenVariant;
+    private final DynamicRegistry<CowVariant> cowVariant;
+    private final DynamicRegistry<FrogVariant> frogVariant;
+    private final DynamicRegistry<PigVariant> pigVariant;
+
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
-    private final PacketProcessor packetProcessor;
+    private final PacketParser<ClientPacket> packetParser;
     private final InstanceManager instance;
     private final BlockManager block;
     private final CommandManager command;
@@ -59,12 +107,9 @@ final class ServerProcessImpl implements ServerProcess {
     private final GlobalEventHandler eventHandler;
     private final SchedulerManager scheduler;
     private final BenchmarkManager benchmark;
-    private final DimensionTypeManager dimension;
-    private final BiomeManager biome;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
-    private final TagManager tag;
-    private final TrimManager trim;
+
     private final Server server;
 
     private final ThreadDispatcher<Chunk> dispatcher;
@@ -73,12 +118,41 @@ final class ServerProcessImpl implements ServerProcess {
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
-    public ServerProcessImpl() throws IOException {
+    public ServerProcessImpl() {
         this.exception = new ExceptionManager();
+
+        // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
+        var ignoredForInit = DataComponents.ITEM_NAME;
+
+        this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
+        this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
+        this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
+        this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
+
+        this.chatType = ChatType.createDefaultRegistry();
+        this.dialog = Dialog.createDefaultRegistry(this);
+        this.dimensionType = DimensionType.createDefaultRegistry();
+        this.biome = Biome.createDefaultRegistry();
+        this.damageType = DamageType.createDefaultRegistry();
+        this.trimMaterial = TrimMaterial.createDefaultRegistry();
+        this.trimPattern = TrimPattern.createDefaultRegistry();
+        this.bannerPattern = BannerPattern.createDefaultRegistry();
+        this.enchantment = Enchantment.createDefaultRegistry(this);
+        this.paintingVariant = PaintingVariant.createDefaultRegistry();
+        this.jukeboxSong = JukeboxSong.createDefaultRegistry();
+        this.instrument = Instrument.createDefaultRegistry();
+        this.wolfVariant = WolfVariant.createDefaultRegistry();
+        this.wolfSoundVariant = WolfSoundVariant.createDefaultRegistry();
+        this.catVariant = CatVariant.createDefaultRegistry();
+        this.chickenVariant = ChickenVariant.createDefaultRegistry();
+        this.cowVariant = CowVariant.createDefaultRegistry();
+        this.frogVariant = FrogVariant.createDefaultRegistry();
+        this.pigVariant = PigVariant.createDefaultRegistry();
+
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
-        this.packetProcessor = new PacketProcessor(packetListener);
-        this.instance = new InstanceManager();
+        this.packetParser = PacketVanilla.CLIENT_PACKET_PARSER;
+        this.instance = new InstanceManager(this);
         this.block = new BlockManager();
         this.command = new CommandManager();
         this.recipe = new RecipeManager();
@@ -86,16 +160,118 @@ final class ServerProcessImpl implements ServerProcess {
         this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
         this.benchmark = new BenchmarkManager();
-        this.dimension = new DimensionTypeManager();
-        this.biome = new BiomeManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
-        this.tag = new TagManager();
-        this.trim = new TrimManager();
-        this.server = new Server(packetProcessor);
 
-        this.dispatcher = ThreadDispatcher.singleThread();
+        this.server = new Server(packetParser);
+
+        this.dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), ServerFlag.DISPATCHER_THREADS);
         this.ticker = new TickerImpl();
+    }
+
+    @Override
+    public @NotNull ExceptionManager exception() {
+        return exception;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Dialog> dialog() {
+        return dialog;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<DamageType> damageType() {
+        return damageType;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<TrimMaterial> trimMaterial() {
+        return trimMaterial;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<TrimPattern> trimPattern() {
+        return trimPattern;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<BannerPattern> bannerPattern() {
+        return bannerPattern;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Enchantment> enchantment() {
+        return enchantment;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<PaintingVariant> paintingVariant() {
+        return paintingVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<JukeboxSong> jukeboxSong() {
+        return jukeboxSong;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Instrument> instrument() {
+        return instrument;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<WolfVariant> wolfVariant() {
+        return wolfVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
+        return wolfSoundVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<CatVariant> catVariant() {
+        return catVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<ChickenVariant> chickenVariant() {
+        return chickenVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<CowVariant> cowVariant() {
+        return cowVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<FrogVariant> frogVariant() {
+        return frogVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<PigVariant> pigVariant() {
+        return pigVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+        return enchantmentLevelBasedValues;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
+        return enchantmentValueEffects;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
+        return enchantmentEntityEffects;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
+        return enchantmentLocationEffects;
     }
 
     @Override
@@ -144,16 +320,6 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DimensionTypeManager dimension() {
-        return dimension;
-    }
-
-    @Override
-    public @NotNull BiomeManager biome() {
-        return biome;
-    }
-
-    @Override
     public @NotNull AdvancementManager advancement() {
         return advancement;
     }
@@ -164,18 +330,18 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull TagManager tag() {
-        return tag;
+    public @NotNull DynamicRegistry<ChatType> chatType() {
+        return chatType;
     }
 
     @Override
-    public @NotNull TrimManager trim() {
-        return trim;
+    public @NotNull DynamicRegistry<DimensionType> dimensionType() {
+        return dimensionType;
     }
 
     @Override
-    public @NotNull ExceptionManager exception() {
-        return exception;
+    public @NotNull DynamicRegistry<Biome> biome() {
+        return biome;
     }
 
     @Override
@@ -184,8 +350,8 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull PacketProcessor packetProcessor() {
-        return packetProcessor;
+    public @NotNull PacketParser<ClientPacket> packetParser() {
+        return packetParser;
     }
 
     @Override
@@ -209,7 +375,7 @@ final class ServerProcessImpl implements ServerProcess {
             throw new IllegalStateException("Server already started");
         }
 
-        LOGGER.info("Starting " + MinecraftServer.getBrandName() + " server.");
+        LOGGER.info("Starting {} ({}) server.", MinecraftServer.getBrandName(), Git.version());
 
         // Init server
         try {
@@ -225,7 +391,7 @@ final class ServerProcessImpl implements ServerProcess {
         LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
 
         // Stop the server on SIGINT
-        if (SHUTDOWN_ON_SIGNAL) Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
+        if (ServerFlag.SHUTDOWN_ON_SIGNAL) Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
 
     @Override
@@ -263,23 +429,20 @@ final class ServerProcessImpl implements ServerProcess {
     private final class TickerImpl implements Ticker {
         @Override
         public void tick(long nanoTime) {
-            final long msTime = System.currentTimeMillis();
-
+            EventsJFR.ServerTick serverTickEvent = new EventsJFR.ServerTick();
+            serverTickEvent.begin();
             scheduler().processTick();
 
             // Connection tick (let waiting clients in, send keep alives, handle configuration players packets)
-            connection().tick(msTime);
+            connection().tick(nanoTime);
 
             // Server tick (chunks/entities)
-            serverTick(msTime);
+            serverTick(nanoTime);
 
             scheduler().processTickEnd();
 
             // Flush all waiting packets
-            PacketUtils.flush();
-
-            // Server connection tick
-            server().tick();
+            PacketViewableUtils.flush();
 
             // Monitoring
             {
@@ -288,23 +451,27 @@ final class ServerProcessImpl implements ServerProcess {
                 final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
                 EventDispatcher.call(new ServerTickMonitorEvent(tickMonitor));
             }
+            serverTickEvent.commit();
         }
 
-        private void serverTick(long tickStart) {
+        private void serverTick(long nanoStart) {
+            long milliStart = TimeUnit.NANOSECONDS.toMillis(nanoStart);
             // Tick all instances
             for (Instance instance : instance().getInstances()) {
                 try {
-                    instance.tick(tickStart);
+                    instance.tick(milliStart);
                 } catch (Exception e) {
                     exception().handleException(e);
                 }
             }
             // Tick all chunks (and entities inside)
-            dispatcher().updateAndAwait(tickStart);
+            dispatcher().updateAndAwait(nanoStart);
 
             // Clear removed entities & update threads
-            final long tickTime = System.currentTimeMillis() - tickStart;
-            dispatcher().refreshThreads(tickTime);
+            final long tickDuration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - nanoStart);
+            final long remainingTickDuration = Tick.SERVER_TICKS.getDuration().toNanos() - tickDuration;
+            // the nanoTimeout for refreshThreads is the remaining tick duration
+            dispatcher().refreshThreads(remainingTickDuration);
         }
     }
 }

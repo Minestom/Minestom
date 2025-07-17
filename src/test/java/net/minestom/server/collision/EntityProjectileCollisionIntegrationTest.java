@@ -2,8 +2,6 @@ package net.minestom.server.collision;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -16,8 +14,11 @@ import net.minestom.server.event.entity.projectile.ProjectileCollideWithBlockEve
 import net.minestom.server.event.entity.projectile.ProjectileCollideWithEntityEvent;
 import net.minestom.server.event.entity.projectile.ProjectileUncollideEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,7 +31,7 @@ public class EntityProjectileCollisionIntegrationTest {
     @Test
     public void blockShootAndBlockRemoval(Env env) {
         final Instance instance = env.createFlatInstance();
-        instance.getWorldBorder().setDiameter(1000.0);
+        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
 
         final Entity shooter = new Entity(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 40, 0)).join();
@@ -74,7 +75,7 @@ public class EntityProjectileCollisionIntegrationTest {
     @Test
     public void entityShoot(Env env) {
         final Instance instance = env.createFlatInstance();
-        instance.getWorldBorder().setDiameter(1000.0);
+        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
 
         final Entity shooter = new Entity(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 40, 0)).join();
@@ -93,7 +94,7 @@ public class EntityProjectileCollisionIntegrationTest {
         projectile.setInstance(instance, shooter.getPosition().withY(y -> y + shooter.getEyeHeight())).join();
 
         final LivingEntity target = new LivingEntity(EntityType.RABBIT);
-        target.setInstance(instance, Pos.fromPoint(targetPosition)).join();
+        target.setInstance(instance, targetPosition.asPos()).join();
         projectile.shoot(targetPosition, 1, 0);
 
         final var eventRef = new AtomicReference<ProjectileCollideWithEntityEvent>();
@@ -122,7 +123,7 @@ public class EntityProjectileCollisionIntegrationTest {
     @Test
     public void entitySelfShoot(Env env) {
         final Instance instance = env.createFlatInstance();
-        instance.getWorldBorder().setDiameter(1000.0);
+        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
 
         final LivingEntity shooter = new LivingEntity(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 40, 0)).join();

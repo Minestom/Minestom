@@ -40,7 +40,7 @@ public interface Env {
     }
 
     default @NotNull Player createPlayer(@NotNull Instance instance, @NotNull Pos pos) {
-        return createConnection().connect(instance, pos).join();
+        return createConnection().connect(instance, pos);
     }
 
     default @NotNull Instance createFlatInstance() {
@@ -51,6 +51,10 @@ public interface Env {
         var instance = process().instance().createInstanceContainer(chunkLoader);
         instance.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
         return instance;
+    }
+
+    default @NotNull Instance createEmptyInstance() {
+        return process().instance().createInstanceContainer();
     }
 
     default void destroyInstance(Instance instance) {

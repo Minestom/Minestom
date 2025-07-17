@@ -2,40 +2,49 @@ package net.minestom.server.network.packet.client.handshake;
 
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientHandshakePacket(int protocolVersion, @NotNull String serverAddress,
-                                    int serverPort, int intent) implements ClientPacket {
+                                    int serverPort, @NotNull Intent intent) implements ClientPacket {
 
     public ClientHandshakePacket {
-        if (serverAddress.length() > getMaxHandshakeLength()) {
+        if (serverAddress.length() > maxHandshakeLength()) {
             throw new IllegalArgumentException("Server address too long: " + serverAddress.length());
         }
     }
 
-    public ClientHandshakePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(STRING),
-                reader.read(UNSIGNED_SHORT), reader.read(VAR_INT));
-    }
+    public static final NetworkBuffer.Type<ClientHandshakePacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, ClientHandshakePacket::protocolVersion,
+            STRING, ClientHandshakePacket::serverAddress,
+            UNSIGNED_SHORT, ClientHandshakePacket::serverPort,
+            VAR_INT.transform(Intent::fromId, Intent::id), ClientHandshakePacket::intent,
+            ClientHandshakePacket::new);
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, protocolVersion);
-        int maxLength = getMaxHandshakeLength();
-        if (serverAddress.length() > maxLength) {
-            throw new IllegalArgumentException("serverAddress is " + serverAddress.length() + " characters long, maximum allowed is " + maxLength);
-        }
-        writer.write(STRING, serverAddress);
-        writer.write(UNSIGNED_SHORT, serverPort);
-        writer.write(VAR_INT, intent);
-    }
-
-    private static int getMaxHandshakeLength() {
+    private static int maxHandshakeLength() {
         // BungeeGuard limits handshake length to 2500 characters, while vanilla limits it to 255
         return BungeeCordProxy.isEnabled() ? (BungeeCordProxy.isBungeeGuardEnabled() ? 2500 : Short.MAX_VALUE) : 255;
     }
 
+    public enum Intent {
+        STATUS,
+        LOGIN,
+        TRANSFER;
+
+        public static @NotNull Intent fromId(int id) {
+            return switch (id) {
+                case 1 -> STATUS;
+                case 2 -> LOGIN;
+                case 3 -> TRANSFER;
+                default -> throw new IllegalArgumentException("Unknown connection intent: " + id);
+            };
+        }
+
+        public int id() {
+            return ordinal() + 1;
+        }
+    }
 }

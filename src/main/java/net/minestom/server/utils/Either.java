@@ -1,20 +1,21 @@
 package net.minestom.server.utils;
 
-import java.util.function.Function;
+import org.jetbrains.annotations.NotNull;
 
-public record Either<L, R>(boolean isLeft, L left, R right) {
-    public static <T, U> Either<T, U> left(T left) {
-        return new Either<>(true, left, null);
-    }
-    public static <T, U> Either<U, T> right(T right) {
-        return new Either<>(false, null, right);
+public sealed interface Either<L, R> {
+
+    static <L, R> @NotNull Either<L, R> left(@NotNull L value) {
+        return new Left<>(value);
     }
 
-    public <T> T map(Function<L, T> leftMapper, Function<R, T> rightMapper) {
-        if (isLeft) {
-            return leftMapper.apply(left);
-        } else {
-            return rightMapper.apply(right);
-        }
+    static <L, R> @NotNull Either<L, R> right(@NotNull R value) {
+        return new Right<>(value);
     }
+
+    record Left<L, R>(@NotNull L value) implements Either<L, R> {
+    }
+
+    record Right<L, R>(@NotNull R value) implements Either<L, R> {
+    }
+
 }

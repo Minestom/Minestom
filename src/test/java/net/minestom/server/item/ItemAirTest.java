@@ -15,7 +15,7 @@ public class ItemAirTest {
         assertEquals(emptyItem, ItemStack.AIR, "AIR item can be compared to empty item");
         assertSame(emptyItem, ItemStack.AIR, "AIR item identity can be compared to empty item");
 
-        assertSame(ItemStack.AIR, ItemStack.fromNBT(Material.DIAMOND, null, 0));
+        assertSame(ItemStack.AIR, ItemStack.of(Material.DIAMOND, 0));
         assertSame(ItemStack.AIR, ItemStack.builder(Material.DIAMOND).amount(0).build());
     }
 }

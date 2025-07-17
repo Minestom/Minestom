@@ -4,15 +4,10 @@ import net.minestom.server.command.builder.Command;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
-import java.lang.String;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Double;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Long;
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 
 @BenchmarkMode(Mode.AverageTime)
@@ -28,8 +23,8 @@ public class CommandBenchmark {
     public void setup() {
         var graph = Graph.merge(Set.of(
                 new Command("tp", "teleport") {{
-                    addSyntax((sender, context) -> {}, Potion("pos"));
-                    addSyntax((sender, context) -> {}, Entity("entity"), Potion("pos"));
+                    addSyntax((sender, context) -> {}, RelativeVec3("pos"));
+                    addSyntax((sender, context) -> {}, Entity("entity"), RelativeVec3("pos"));
                 }},
                 new Command("setblock", "set") {{
                     addSyntax((sender, context) -> {}, RelativeBlockPosition("pos"), BlockState("block"));
@@ -56,7 +51,7 @@ public class CommandBenchmark {
                 }}
         ));
         final CommandParser commandParser = CommandParser.parser();
-        this.parser = input -> commandParser.parse(graph, input);
+        this.parser = input -> commandParser.parse(null, graph, input);
     }
 
     @Benchmark

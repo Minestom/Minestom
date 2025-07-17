@@ -1,5 +1,6 @@
 package net.minestom.server.coordinate;
 
+import net.minestom.server.utils.Direction;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,5 +42,34 @@ public class PosViewDirectionTest {
         position = initialPosition.withLookAt(new Pos(-25, 42, 4));
         assertEquals(80.90f, position.yaw(), EPSILON);
         assertEquals(-4.57f, position.pitch(), EPSILON);
+    }
+
+    /**
+     * Testing {@link Pos#facing()}
+     */
+    @Test
+    public void facingTest() {
+        Pos pos = new Pos(0, 0, 0);
+
+        assertEquals(Direction.SOUTH, pos.facing());
+
+        assertEquals(Direction.NORTH, pos.withYaw(180 + 360).facing());
+
+        assertEquals(Direction.EAST, pos.withYaw(-90).facing());
+
+        assertEquals(Direction.WEST, pos.withYaw(90).facing());
+
+        assertEquals(Direction.DOWN, pos.withYaw(543210).withPitch(53).facing());
+
+        assertEquals(Direction.UP, pos.withYaw(123456).withPitch(-90).facing());
+
+        // edges
+        assertEquals(Direction.SOUTH, pos.withYaw(45).facing());
+
+        assertEquals(Direction.NORTH, pos.withYaw(-135).facing());
+
+        assertEquals(Direction.EAST, pos.withYaw(-45).facing());
+
+        assertEquals(Direction.WEST, pos.withYaw(135).facing());
     }
 }

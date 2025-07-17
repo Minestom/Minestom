@@ -6,7 +6,6 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
@@ -58,7 +57,7 @@ public class DisplayCommand extends Command {
         var entity = new Entity(EntityType.BLOCK_DISPLAY);
         var meta = (BlockDisplayMeta) entity.getEntityMeta();
         meta.setTransformationInterpolationDuration(20);
-        meta.setBlockState(Block.ORANGE_CANDLE_CAKE.stateId());
+        meta.setBlockState(Block.ORANGE_CANDLE_CAKE);
         entity.setInstance(player.getInstance(), player.getPosition()).join();
 
         if (context.has("follow")) {

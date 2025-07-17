@@ -1,14 +1,15 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.Range;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.entity.EntityFinder;
-import net.minestom.server.utils.math.IntRange;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,9 +32,9 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{1,16}");
     private static final String SELECTOR_PREFIX = "@";
-    private static final List<String> SELECTOR_VARIABLES = Arrays.asList("@p", "@r", "@a", "@e", "@s");
+    private static final List<String> SELECTOR_VARIABLES = Arrays.asList("@p", "@r", "@a", "@e", "@s", "@n");
     private static final List<String> PLAYERS_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@a", "@s");
-    private static final List<String> SINGLE_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@s");
+    private static final List<String> SINGLE_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@s", "@n");
     // List with all the valid arguments
     private static final List<String> VALID_ARGUMENTS = Arrays.asList(
             "x", "y", "z",
@@ -72,13 +73,13 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:entity";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.ENTITY;
     }
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
+        return NetworkBuffer.makeArray(buffer -> {
             byte mask = 0;
             if (this.isOnlySingleEntity()) {
                 mask |= 0x01;
@@ -86,7 +87,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             if (this.isOnlyPlayers()) {
                 mask |= 0x02;
             }
-            packetWriter.writeByte(mask);
+            buffer.write(NetworkBuffer.BYTE, mask);
         });
     }
 
@@ -213,7 +214,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             case "type": {
                 final boolean include = !value.startsWith("!");
                 final String entityName = include ? value : value.substring(1);
-                final EntityType entityType = EntityType.fromNamespaceId(entityName);
+                final EntityType entityType = EntityType.fromKey(entityName);
                 if (entityType == null)
                     throw new ArgumentSyntaxException("Invalid entity name", input, INVALID_ARGUMENT_VALUE);
                 entityFinder.setEntity(entityType, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
@@ -252,7 +253,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             case "level":
                 try {
-                    final IntRange level = Argument.parse(sender, new ArgumentIntRange(value));
+                    final Range.Int level = Argument.parse(sender, new ArgumentIntRange(value));
                     entityFinder.setLevel(level);
                 } catch (ArgumentSyntaxException e) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
@@ -260,7 +261,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             case "distance":
                 try {
-                    final IntRange distance = Argument.parse(sender, new ArgumentIntRange(value));
+                    final Range.Int distance = Argument.parse(sender, new ArgumentIntRange(value));
                     entityFinder.setDistance(distance);
                 } catch (ArgumentSyntaxException e) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
@@ -296,6 +297,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     private static EntityFinder.TargetSelector toTargetSelector(@NotNull String selectorVariable) {
         if (selectorVariable.equals("@p"))
             return EntityFinder.TargetSelector.NEAREST_PLAYER;
+        if (selectorVariable.equals("@n"))
+            return EntityFinder.TargetSelector.NEAREST_ENTITY;
         if (selectorVariable.equals("@r"))
             return EntityFinder.TargetSelector.RANDOM_PLAYER;
         if (selectorVariable.equals("@a"))

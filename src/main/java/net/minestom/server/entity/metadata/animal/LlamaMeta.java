@@ -1,39 +1,65 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class LlamaMeta extends ChestedHorseMeta {
-    public static final byte OFFSET = ChestedHorseMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 3;
-
-    public LlamaMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public LlamaMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getStrength() {
-        return super.metadata.getIndex(OFFSET, 0);
+        return metadata.get(MetadataDef.Llama.STRENGTH);
     }
 
     public void setStrength(int value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Llama.STRENGTH, value);
     }
 
     public int getCarpetColor() {
-        return super.metadata.getIndex(OFFSET + 1, -1);
+        return metadata.get(MetadataDef.Llama.CARPET_COLOR);
     }
 
     public void setCarpetColor(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Llama.CARPET_COLOR, value);
     }
 
-    public Variant getVariant() {
-        return Variant.VALUES[super.metadata.getIndex(OFFSET + 2, 0)];
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#LLAMA_VARIANT} instead.
+     */
+    @Deprecated
+    public @NotNull Variant getVariant() {
+        return Variant.VALUES[metadata.get(MetadataDef.Llama.VARIANT)];
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#LLAMA_VARIANT} instead.
+     */
+    @Deprecated
     public void setVariant(Variant value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value.ordinal()));
+        metadata.set(MetadataDef.Llama.VARIANT, value.ordinal());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.LLAMA_VARIANT)
+            return (T) getVariant();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.LLAMA_VARIANT)
+            setVariant((Variant) value);
+        else super.set(component, value);
     }
 
     public enum Variant {
@@ -41,6 +67,9 @@ public class LlamaMeta extends ChestedHorseMeta {
         WHITE,
         BROWN,
         GRAY;
+
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
+        public static final Codec<Variant> CODEC = Codec.Enum(Variant.class);
 
         private final static Variant[] VALUES = values();
     }

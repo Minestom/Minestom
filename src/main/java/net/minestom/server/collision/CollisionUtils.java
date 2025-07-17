@@ -8,16 +8,16 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.chunk.ChunkCache;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
 @ApiStatus.Internal
-@ApiStatus.Experimental
 public final class CollisionUtils {
 
     /**
@@ -26,10 +26,10 @@ public final class CollisionUtils {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
+     * @param entity            the entity to move
+     * @param entityVelocity    the velocity of the entity
      * @param lastPhysicsResult the last physics result, can be null
-     * @param singleCollision if the entity should only collide with one block
+     * @param singleCollision   if the entity should only collide with one block
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
@@ -43,28 +43,30 @@ public final class CollisionUtils {
     }
 
     /**
+     * Checks for entity collisions
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
-     * @return the closest entity we collide with
-     */
-    public static PhysicsResult checkEntityCollisions(@NotNull Entity entity, @NotNull Vec entityVelocity) {
-        final Instance instance = entity.getInstance();
-        assert instance != null;
-        return checkEntityCollisions(instance, entity.getBoundingBox(), entity.getPosition(), entityVelocity, 3, e -> true, null);
-    }
-
-    /**
-     *
-     * @param velocity the velocity of the entity
+     * @param velocity     the velocity of the entity
      * @param extendRadius the largest entity bounding box we can collide with
      *                     Measured from bottom center to top corner
      *                     This is used to extend the search radius for entities we collide with
      *                     For players this is (0.3^2 + 0.3^2 + 1.8^2) ^ (1/3) ~= 1.51
-     * @return the closest entity we collide with
      */
-    public static PhysicsResult checkEntityCollisions(@NotNull Instance instance, BoundingBox boundingBox, Point pos, @NotNull Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, PhysicsResult blockResult) {
-        return EntityCollision.checkCollision(instance, boundingBox, pos, velocity, extendRadius, entityFilter, blockResult);
+    public static @NotNull Collection<EntityCollisionResult> checkEntityCollisions(@NotNull Instance instance, @NotNull BoundingBox boundingBox, @NotNull Point pos, @NotNull Vec velocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+        return EntityCollision.checkCollision(instance, boundingBox, pos, velocity, extendRadius, entityFilter, physicsResult);
+    }
+
+    /**
+     * Checks for entity collisions
+     *
+     * @param entity        the entity to check collisions for
+     * @param velocity      the velocity of the entity
+     * @param extendRadius  the largest entity bounding box we can collide with
+     * @param entityFilter  the entity filter
+     * @param physicsResult optional physics result
+     * @return the entity collision results
+     */
+    public static @NotNull Collection<EntityCollisionResult> checkEntityCollisions(@NotNull Entity entity, @NotNull Vec velocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+        return EntityCollision.checkCollision(entity.getInstance(), entity.getBoundingBox(), entity.getPosition(), velocity, extendRadius, entityFilter, physicsResult);
     }
 
     /**
@@ -73,8 +75,8 @@ public final class CollisionUtils {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
+     * @param entity            the entity to move
+     * @param entityVelocity    the velocity of the entity
      * @param lastPhysicsResult the last physics result, can be null
      * @return the result of physics simulation
      */
@@ -139,8 +141,7 @@ public final class CollisionUtils {
                                                      @NotNull Point start, @NotNull Point end,
                                                      @NotNull Shape shape) {
         final PhysicsResult result = handlePhysics(instance, chunk,
-                BoundingBox.ZERO,
-                Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
+                BoundingBox.ZERO, start.asPos(), end.sub(start).asVec(),
                 null, false);
 
         return shape.intersectBox(end.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
@@ -162,29 +163,30 @@ public final class CollisionUtils {
      * @param newPosition     the future target position
      * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
      */
-    public static @NotNull Pos applyWorldBorder(@NotNull WorldBorder worldBorder,
-                                                @NotNull Pos currentPosition, @NotNull Pos newPosition) {
-        final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
-        return switch (collisionAxis) {
-            case NONE ->
-                // Apply velocity + gravity
-                    newPosition;
-            case BOTH ->
-                // Apply Y velocity/gravity
-                    new Pos(currentPosition.x(), newPosition.y(), currentPosition.z());
-            case X ->
-                // Apply Y/Z velocity/gravity
-                    new Pos(currentPosition.x(), newPosition.y(), newPosition.z());
-            case Z ->
-                // Apply X/Y velocity/gravity
-                    new Pos(newPosition.x(), newPosition.y(), currentPosition.z());
-        };
+    public static @NotNull Pos applyWorldBorder(@NotNull WorldBorder worldBorder, @NotNull Pos currentPosition, @NotNull Pos newPosition) {
+        double radius = worldBorder.diameter() / 2;
+        // If there is a collision on a given axis prevent the entity
+        // from moving forward by supplying their previous position's value
+        boolean xCollision = newPosition.x() > worldBorder.centerX() + radius || newPosition.x() < worldBorder.centerX() - radius;
+        boolean zCollision = newPosition.z() > worldBorder.centerZ() + radius || newPosition.z() < worldBorder.centerZ() - radius;
+        if (xCollision || zCollision) {
+            return newPosition.withCoord(xCollision ? currentPosition.x() : newPosition.x(), newPosition.y(),
+                    zCollision ? currentPosition.z() : newPosition.z());
+        }
+        return newPosition;
     }
 
-    public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {
-        return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry);
+    public static Shape parseBlockShape(Map<Object, Object> internCache, String collision, String occlusion, boolean occludes, byte lightEmission) {
+        record ShapeEntry(String collision, String occlusion, boolean occludes, byte lightEmission) {
+        } // Easy way to Hashcode
+        ShapeEntry entry = new ShapeEntry(collision, occlusion, occludes, lightEmission);
+        final Shape cachedShape = (Shape) internCache.get(entry);
+        if (cachedShape != null) return cachedShape;
+        final Shape parsedShape = ShapeImpl.parseBlockFromRegistry(collision, occlusion, occludes, lightEmission);
+        internCache.put(entry, parsedShape);
+        return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
     }
-    
+
     /**
      * Simulate the entity's collision physics as if the world had no blocks
      *
@@ -195,6 +197,6 @@ public final class CollisionUtils {
     public static PhysicsResult blocklessCollision(@NotNull Pos entityPosition, @NotNull Vec entityVelocity) {
         return new PhysicsResult(entityPosition.add(entityVelocity), entityVelocity, false,
                 false, false, false, entityVelocity, new Point[3],
-                new Shape[3], false, SweepResult.NO_COLLISION);
+                new Shape[3], new Point[3], false, SweepResult.NO_COLLISION);
     }
 }

@@ -1,23 +1,34 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class HorseMeta extends AbstractHorseMeta {
-    public static final byte OFFSET = AbstractHorseMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
-    public HorseMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public HorseMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public Variant getVariant() {
-        return getVariantFromID(super.metadata.getIndex(OFFSET, 0));
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#HORSE_VARIANT} instead.
+     */
+    @Deprecated
+    public @NotNull Variant getVariant() {
+        return getVariantFromID(metadata.get(MetadataDef.Horse.VARIANT));
     }
 
-    public void setVariant(Variant variant) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(getVariantID(variant.marking, variant.color)));
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#HORSE_VARIANT} instead.
+     */
+    @Deprecated
+    public void setVariant(@NotNull Variant variant) {
+        metadata.set(MetadataDef.Horse.VARIANT, getVariantID(variant.marking, variant.color));
     }
 
     public static int getVariantID(@NotNull Marking marking, @NotNull Color color) {
@@ -29,6 +40,23 @@ public class HorseMeta extends AbstractHorseMeta {
                 Marking.VALUES[variantID >> 8],
                 Color.VALUES[variantID & 0xFF]
         );
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.HORSE_VARIANT)
+            return (T) getVariant().getMarking();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.HORSE_VARIANT) {
+            var variant = getVariant();
+            variant.setMarking((Marking) value);
+            setVariant(variant);
+        } else super.set(component, value);
     }
 
     public static class Variant {
@@ -79,6 +107,9 @@ public class HorseMeta extends AbstractHorseMeta {
         BLACK,
         GRAY,
         DARK_BROWN;
+
+        public static final NetworkBuffer.Type<Color> NETWORK_TYPE = NetworkBuffer.Enum(Color.class);
+        public static final Codec<Color> NBT_TYPE = Codec.Enum(Color.class);
 
         private final static Color[] VALUES = values();
     }

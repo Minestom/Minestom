@@ -1,22 +1,33 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.pointer.Pointers;
+import net.kyori.adventure.pointer.PointersSupplier;
+import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.instance.InstanceSectionInvalidateEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
@@ -24,8 +35,12 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
+import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -33,23 +48,17 @@ import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jetbrains.annotations.*;
 
-import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -65,14 +74,23 @@ import java.util.stream.Collectors;
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
 public abstract class Instance implements Block.Getter, Block.Setter,
-        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience {
+        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience, Pointered, Identified {
+
+    // Adventure pointers
+    protected static final PointersSupplier<Instance> INSTANCE_POINTERS_SUPPLIER = PointersSupplier.<Instance>builder()
+            .resolving(Identity.UUID, Instance::getUuid)
+            .build();
 
     private boolean registered;
 
-    private final DimensionType dimensionType;
+    private final RegistryKey<DimensionType> dimensionType;
+    private final DimensionType cachedDimensionType; // Cached to prevent self-destruction if the registry is changed, and to avoid the lookups.
     private final String dimensionName;
 
-    private final WorldBorder worldBorder;
+    // World border of the instance
+    private WorldBorder worldBorder;
+    private double targetBorderDiameter;
+    private long remainingWorldBorderTransitionTicks;
 
     // Tick since the creation of the instance
     private long worldAge;
@@ -80,8 +98,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     // The time of the instance
     private long time;
     private int timeRate = 1;
-    private Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
-    private long lastTimeUpdate;
+    private int timeSynchronizationTicks = ServerFlag.SERVER_TICKS_PER_SECOND;
 
     // Weather of the instance
     private Weather weather = Weather.CLEAR;
@@ -89,15 +106,18 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private int remainingRainTransitionTicks;
     private int remainingThunderTransitionTicks;
 
+    // Attached boss bars
+    private final Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
+
     // Field for tick events
-    private long lastTickAge = System.currentTimeMillis();
+    private long lastTickAge = TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
 
     private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
 
     // the uuid of this instance
-    protected UUID uniqueId;
+    protected UUID uuid;
 
     // instance custom data
     protected TagHandler tagHandler = TagHandler.newHandler();
@@ -107,40 +127,41 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     // the explosion supplier
     private ExplosionSupplier explosionSupplier;
 
-    // Pathfinder
-    private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
-
-    // Adventure
-    private final Pointers pointers;
-
     /**
      * Creates a new instance.
      *
-     * @param uniqueId      the {@link UUID} of the instance
+     * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
-        this(uniqueId, dimensionType, dimensionType.getName());
+    public Instance(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
+        this(uuid, dimensionType, dimensionType.key());
     }
 
     /**
      * Creates a new instance.
      *
-     * @param uniqueId      the {@link UUID} of the instance
+     * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID dimensionName) {
-        Check.argCondition(!dimensionType.isRegistered(),
-                "The dimension " + dimensionType.getName() + " is not registered! Please use DimensionTypeManager#addDimension");
-        this.uniqueId = uniqueId;
+    public Instance(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @NotNull Key dimensionName) {
+        this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, dimensionName);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param uuid          the {@link UUID} of the instance
+     * @param dimensionType the {@link DimensionType} of the instance
+     */
+    public Instance(@NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry, @NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @NotNull Key dimensionName) {
+        this.uuid = uuid;
         this.dimensionType = dimensionType;
+        this.cachedDimensionType = dimensionTypeRegistry.get(dimensionType);
+        Check.argCondition(cachedDimensionType == null, "The dimension " + dimensionType + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
         this.dimensionName = dimensionName.asString();
 
-        this.worldBorder = new WorldBorder(this);
-
-        this.pointers = Pointers.builder()
-                .withDynamic(Identity.UUID, this::getUniqueId)
-                .build();
+        this.worldBorder = WorldBorder.DEFAULT_BORDER;
+        targetBorderDiameter = this.worldBorder.diameter();
 
         final ServerProcess process = MinecraftServer.process();
         if (process != null) {
@@ -196,8 +217,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
      * and send particle packets
      *
-     * @param player        the {@link Player} who break the block
-     * @param blockPosition the position of the broken block
+     * @param player         the {@link Player} who break the block
+     * @param blockPosition  the position of the broken block
      * @param doBlockUpdates true to do block updates, false otherwise
      * @return true if the block has been broken, false if it has been cancelled
      */
@@ -205,7 +226,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
 
     /**
-     * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
+     * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -264,6 +285,17 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         unloadChunk(chunk);
     }
 
+    public void invalidateSection(int sectionX, int sectionY, int sectionZ) {
+        final Chunk chunk = getChunk(sectionX, sectionZ);
+        if (chunk != null) {
+            Section section = chunk.getSection(sectionY);
+            section.skyLight().invalidate();
+            section.blockLight().invalidate();
+            chunk.invalidate();
+            EventDispatcher.call(new InstanceSectionInvalidateEvent(this, sectionX, sectionY, sectionZ));
+        }
+    }
+
     /**
      * Gets the loaded {@link Chunk} at a position.
      * <p>
@@ -300,7 +332,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the future called once the instance data has been saved
      */
-    @ApiStatus.Experimental
     public abstract @NotNull CompletableFuture<Void> saveInstance();
 
     /**
@@ -318,21 +349,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
-    /**
-     * Changes the instance {@link ChunkGenerator}.
-     *
-     * @param chunkGenerator the new {@link ChunkGenerator} of the instance
-     * @deprecated Use {@link #setGenerator(Generator)}
-     */
-    @Deprecated
-    public void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator) {
-        setGenerator(chunkGenerator != null ? new ChunkGeneratorCompatibilityLayer(chunkGenerator) : null);
-    }
-
     public abstract void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier);
 
     /**
      * Gets the chunk supplier of the instance.
+     *
      * @return the chunk supplier of the instance
      */
     public abstract ChunkSupplier getChunkSupplier();
@@ -406,12 +427,18 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the dimension of the instance
      */
-    public DimensionType getDimensionType() {
+    public RegistryKey<DimensionType> getDimensionType() {
         return dimensionType;
+    }
+
+    @ApiStatus.Internal
+    public @NotNull DimensionType getCachedDimensionType() {
+        return cachedDimensionType;
     }
 
     /**
      * Gets the instance dimension name.
+     *
      * @return the dimension name of the instance
      */
     public @NotNull String getDimensionName() {
@@ -425,6 +452,17 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public long getWorldAge() {
         return worldAge;
+    }
+
+    /**
+     * Sets the age of this instance in tick. It will send the age to all players.
+     * Will send new age to all players in the instance, unaffected by {@link #getTimeSynchronizationTicks()}
+     *
+     * @param worldAge the age of this instance in tick
+     */
+    public void setWorldAge(long worldAge) {
+        this.worldAge = worldAge;
+        PacketSendingUtils.sendGroupedPacket(getPlayers(), createTimePacket());
     }
 
     /**
@@ -448,13 +486,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * <p>
      * This method is unaffected by {@link #getTimeRate()}
      * <p>
-     * It does send the new time to all players in the instance, unaffected by {@link #getTimeUpdate()}
+     * It does send the new time to all players in the instance, unaffected by {@link #getTimeSynchronizationTicks()}
      *
      * @param time the new time of the instance
      */
     public void setTime(long time) {
         this.time = time;
-        PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
+        PacketSendingUtils.sendGroupedPacket(getPlayers(), createTimePacket());
     }
 
     /**
@@ -484,20 +522,21 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the client update rate for time related packet
      */
-    public @Nullable Duration getTimeUpdate() {
-        return timeUpdate;
+    public int getTimeSynchronizationTicks() {
+        return timeSynchronizationTicks;
     }
 
     /**
-     * Changes the rate at which the client is updated about the time
+     * Changes the natural client time packet synchronization period, defaults to {@link ServerFlag#SERVER_TICKS_PER_SECOND}.
      * <p>
-     * Setting it to null means that the client will never know about time change
-     * (but will still change server-side)
+     * Supplying 0 means that the client will never be synchronized with the current natural instance time
+     * (time will still change server-side)
      *
-     * @param timeUpdate the new update rate concerning time
+     * @param timeSynchronizationTicks the rate to update time in ticks
      */
-    public void setTimeUpdate(@Nullable Duration timeUpdate) {
-        this.timeUpdate = timeUpdate;
+    public void setTimeSynchronizationTicks(int timeSynchronizationTicks) {
+        Check.stateCondition(timeSynchronizationTicks < 0, "The time Synchronization ticks cannot be lower than 0");
+        this.timeSynchronizationTicks = timeSynchronizationTicks;
     }
 
     /**
@@ -507,22 +546,70 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     @ApiStatus.Internal
     public @NotNull TimeUpdatePacket createTimePacket() {
-        long time = this.time;
-        if (timeRate == 0) {
-            //Negative values stop the sun and moon from moving
-            //0 as a long cannot be negative
-            time = time == 0 ? -24000L : -Math.abs(time);
-        }
-        return new TimeUpdatePacket(worldAge, time);
+        return new TimeUpdatePacket(worldAge, time, timeRate != 0);
     }
 
     /**
-     * Gets the instance {@link WorldBorder};
+     * Gets the current state of the instance {@link WorldBorder}.
      *
-     * @return the {@link WorldBorder} linked to the instance
+     * @return the {@link WorldBorder} for the instance of the current tick
      */
     public @NotNull WorldBorder getWorldBorder() {
         return worldBorder;
+    }
+
+    /**
+     * Set the instance {@link WorldBorder} with a smooth transition.
+     *
+     * @param worldBorder    the desired final state of the world border
+     * @param transitionTime the time in seconds this world border's diameter
+     *                       will transition for (0 makes this instant)
+     */
+    public void setWorldBorder(@NotNull WorldBorder worldBorder, double transitionTime) {
+        Check.stateCondition(transitionTime < 0, "Transition time cannot be lower than 0");
+        long transitionMilliseconds = (long) (transitionTime * 1000);
+        sendNewWorldBorderPackets(worldBorder, transitionMilliseconds);
+
+        this.targetBorderDiameter = worldBorder.diameter();
+        long transitionTicks = transitionMilliseconds / MinecraftServer.TICK_MS;
+        remainingWorldBorderTransitionTicks = transitionTicks;
+        if (transitionTicks == 0) this.worldBorder = worldBorder;
+        else this.worldBorder = worldBorder.withDiameter(this.worldBorder.diameter());
+    }
+
+    /**
+     * Set the instance {@link WorldBorder} with an instant transition.
+     * see {@link Instance#setWorldBorder(WorldBorder, double)}.
+     */
+    public void setWorldBorder(@NotNull WorldBorder worldBorder) {
+        setWorldBorder(worldBorder, 0);
+    }
+
+    /**
+     * Creates the {@link InitializeWorldBorderPacket} sent to players who join this instance.
+     */
+    public @NotNull InitializeWorldBorderPacket createInitializeWorldBorderPacket() {
+        return worldBorder.createInitializePacket(targetBorderDiameter, remainingWorldBorderTransitionTicks * MinecraftServer.TICK_MS);
+    }
+
+    private void sendNewWorldBorderPackets(@NotNull WorldBorder newBorder, long transitionMilliseconds) {
+        // Only send the relevant border packets
+        if (this.worldBorder.diameter() != newBorder.diameter()) {
+            if (transitionMilliseconds == 0) sendGroupedPacket(newBorder.createSizePacket());
+            else sendGroupedPacket(this.worldBorder.createLerpSizePacket(newBorder.diameter(), transitionMilliseconds));
+        }
+        if (this.worldBorder.centerX() != newBorder.centerX() || this.worldBorder.centerZ() != newBorder.centerZ()) {
+            sendGroupedPacket(newBorder.createCenterPacket());
+        }
+        if (this.worldBorder.warningTime() != newBorder.warningTime())
+            sendGroupedPacket(newBorder.createWarningDelayPacket());
+        if (this.worldBorder.warningDistance() != newBorder.warningDistance())
+            sendGroupedPacket(newBorder.createWarningReachPacket());
+    }
+
+    private @NotNull WorldBorder transitionWorldBorder(long remainingTicks) {
+        if (remainingTicks <= 1) return worldBorder.withDiameter(targetBorderDiameter);
+        return worldBorder.withDiameter(worldBorder.diameter() + (targetBorderDiameter - worldBorder.diameter()) * (1 / (double) remainingTicks));
     }
 
     /**
@@ -532,6 +619,40 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public @NotNull Set<@NotNull Entity> getEntities() {
         return entityTracker.entities();
+    }
+
+    /**
+     * Gets an entity based on its id (from {@link Entity#getEntityId()}).
+     *
+     * @param id the entity id
+     * @return the entity having the specified id, null if not found
+     */
+    public @Nullable Entity getEntityById(int id) {
+        return entityTracker.getEntityById(id);
+    }
+
+    /**
+     * Gets an entity based on its UUID (from {@link Entity#getUuid()}).
+     *
+     * @param uuid the entity UUID
+     * @return the entity having the specified uuid, null if not found
+     */
+    public @Nullable Entity getEntityByUuid(UUID uuid) {
+        return entityTracker.getEntityByUuid(uuid);
+    }
+
+    /**
+     * Gets a player based on its UUID (from {@link Entity#getUuid()}).
+     *
+     * @param uuid the player UUID
+     * @return the player having the specified uuid, null if not found or not a player
+     */
+    public @Nullable Player getPlayerByUuid(UUID uuid) {
+        Entity entity = entityTracker.getEntityByUuid(uuid);
+        if (entity instanceof Player player) {
+            return player;
+        }
+        return null;
     }
 
     /**
@@ -608,7 +729,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param blockPosition the block position
      * @param actionId      the action id, depends on the block
      * @param actionParam   the action parameter, depends on the block
-     * @see <a href="https://wiki.vg/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
+     * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
      */
     public void sendBlockAction(@NotNull Point blockPosition, byte actionId, byte actionParam) {
         final Block block = getBlock(blockPosition);
@@ -625,7 +746,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the chunk at the given position, null if not loaded
      */
     public @Nullable Chunk getChunkAt(double x, double z) {
-        return getChunk(ChunkUtils.getChunkCoordinate(x), ChunkUtils.getChunkCoordinate(z));
+        return getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
     }
 
     /**
@@ -638,7 +759,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return getChunk(point.chunkX(), point.chunkZ());
     }
 
-    @ApiStatus.Experimental
     public EntityTracker getEntityTracker() {
         return entityTracker;
     }
@@ -648,8 +768,19 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the instance unique id
      */
+    public @NotNull UUID getUuid() {
+        return uuid;
+    }
+
+    /**
+     * Gets the instance unique id.
+     *
+     * @return the instance unique id
+     * @deprecated Replace with {@link Instance#getUuid()}
+     */
+    @Deprecated(forRemoval = true)
     public @NotNull UUID getUniqueId() {
-        return uniqueId;
+        return uuid;
     }
 
     /**
@@ -657,7 +788,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * <p>
      * Warning: this does not update chunks and entities.
      *
-     * @param time the tick time in milliseconds
+     * @param time the tick time in milliseconds, which may only be used as a delta and has no meaning in real life
      */
     @Override
     public void tick(long time) {
@@ -668,9 +799,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             this.worldAge++;
             this.time += timeRate;
             // time needs to be sent to players
-            if (timeUpdate != null && !Cooldown.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
-                PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
-                this.lastTimeUpdate = time;
+            if (timeSynchronizationTicks > 0 && this.worldAge % timeSynchronizationTicks == 0) {
+                PacketSendingUtils.sendGroupedPacket(getPlayers(), createTimePacket());
             }
 
         }
@@ -689,7 +819,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             // Set last tick age
             this.lastTickAge = time;
         }
-        this.worldBorder.update();
+        // World border
+        if (remainingWorldBorderTransitionTicks > 0) {
+            worldBorder = transitionWorldBorder(remainingWorldBorderTransitionTicks);
+            if (worldBorder.diameter() == targetBorderDiameter) remainingWorldBorderTransitionTicks = 0;
+            else remainingWorldBorderTransitionTicks--;
+        }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
     }
@@ -706,7 +841,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Sets the weather on this instance, transitions over time
      *
-     * @param weather the new weather
+     * @param weather         the new weather
      * @param transitionTicks the ticks to transition to new weather
      */
     public void setWeather(@NotNull Weather weather, int transitionTicks) {
@@ -730,16 +865,47 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private void sendWeatherPackets(@NotNull Weather previousWeather) {
         boolean toggledRain = (transitioningWeather.isRaining() != previousWeather.isRaining());
         if (toggledRain) sendGroupedPacket(transitioningWeather.createIsRainingPacket());
-        if (transitioningWeather.rainLevel() != previousWeather.rainLevel()) sendGroupedPacket(transitioningWeather.createRainLevelPacket());
-        if (transitioningWeather.thunderLevel() != previousWeather.thunderLevel()) sendGroupedPacket(transitioningWeather.createThunderLevelPacket());
+        if (transitioningWeather.rainLevel() != previousWeather.rainLevel())
+            sendGroupedPacket(transitioningWeather.createRainLevelPacket());
+        if (transitioningWeather.thunderLevel() != previousWeather.thunderLevel())
+            sendGroupedPacket(transitioningWeather.createThunderLevelPacket());
     }
 
     private @NotNull Weather transitionWeather(int remainingRainTransitionTicks, int remainingThunderTransitionTicks) {
         Weather target = weather;
         Weather current = transitioningWeather;
-        float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float)Math.max(1, remainingRainTransitionTicks));
-        float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float)Math.max(1, remainingThunderTransitionTicks));
+        float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float) Math.max(1, remainingRainTransitionTicks));
+        float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float) Math.max(1, remainingThunderTransitionTicks));
         return new Weather(rainLevel, thunderLevel);
+    }
+
+    /**
+     * Shows a {@link BossBar} to all players in the instance and tracks it.
+     *
+     * @param bar a boss bar
+     */
+    @Override
+    public void showBossBar(@NotNull BossBar bar) {
+        Check.notNull(bar, "Boss bar cannot be null");
+        if (!bossBars.add(bar)) return;
+        PacketGroupingAudience.super.showBossBar(bar);
+    }
+
+    /**
+     * Hides a {@link BossBar} from all players in the instance and stops tracking it.
+     *
+     * @param bar a boss bar
+     */
+    @Override
+    public void hideBossBar(@NotNull BossBar bar) {
+        Check.notNull(bar, "Boss bar cannot be null");
+        if (!bossBars.remove(bar)) return;
+        PacketGroupingAudience.super.hideBossBar(bar);
+    }
+
+    @ApiStatus.Experimental
+    public @UnmodifiableView Set<BossBar> bossBars() {
+        return Collections.unmodifiableSet(bossBars);
     }
 
     @Override
@@ -760,11 +926,41 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     @Override
     public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
+        final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(),
+                value -> CoordConversion.chunkIndex(value.getChunkX(), value.getChunkZ()));
         final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
         return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
                 getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
                 tagHandler.readableCopy());
+    }
+
+    /**
+     * Plays a {@link Sound} at a given point, except to the excluded player
+     *
+     * @param excludedPlayer The player in the instance who won't receive the sound
+     * @param sound          The sound to play
+     * @param point          The point in this instance at which to play the sound
+     */
+    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, @NotNull Point point) {
+        playSoundExcept(excludedPlayer, sound, point.x(), point.y(), point.z());
+    }
+
+    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, double x, double y, double z) {
+        ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, x, y, z);
+        PacketSendingUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
+    }
+
+    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, Sound.@NotNull Emitter emitter) {
+        if (emitter != Sound.Emitter.self()) {
+            ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
+            PacketSendingUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
+        } else {
+            // if we're playing on self, we need to delegate to each audience member
+            for (Audience audience : this.audiences()) {
+                if (audience == excludedPlayer) continue;
+                audience.playSound(sound, emitter);
+            }
+        }
     }
 
     /**
@@ -792,7 +988,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param additionalData data to pass to the explosion supplier
      * @throws IllegalStateException If no {@link ExplosionSupplier} was supplied
      */
-    public void explode(float centerX, float centerY, float centerZ, float strength, @Nullable NBTCompound additionalData) {
+    public void explode(float centerX, float centerY, float centerZ, float strength, @Nullable CompoundBinaryTag additionalData) {
         final ExplosionSupplier explosionSupplier = getExplosionSupplier();
         Check.stateCondition(explosionSupplier == null, "Tried to create an explosion with no explosion supplier");
         final Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);
@@ -817,21 +1013,16 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         this.explosionSupplier = supplier;
     }
 
-    /**
-     * Gets the instance space.
-     * <p>
-     * Used by the pathfinder for entities.
-     *
-     * @return the instance space
-     */
-    @ApiStatus.Internal
-    public @NotNull PFInstanceSpace getInstanceSpace() {
-        return instanceSpace;
+    @Override
+    @Contract(pure = true)
+    public @NotNull Pointers pointers() {
+        return INSTANCE_POINTERS_SUPPLIER.view(this);
     }
 
     @Override
-    public @NotNull Pointers pointers() {
-        return this.pointers;
+    @Contract(pure = true)
+    public @NotNull Identity identity() {
+        return Identity.identity(this.uuid); // Warning, do not pull up until this.uuid is final
     }
 
     public int getBlockLight(int blockX, int blockY, int blockZ) {
@@ -839,13 +1030,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.blockLight();
-        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
+        int sectionCoordinate = CoordConversion.globalToChunk(blockY);
 
-        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
-        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
-        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+        int coordX = CoordConversion.globalToSectionRelative(blockX);
+        int coordY = CoordConversion.globalToSectionRelative(blockY);
+        int coordZ = CoordConversion.globalToSectionRelative(blockZ);
 
-        if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
+        if (light.requiresUpdate())
+            LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);
     }
 
@@ -854,13 +1046,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.skyLight();
-        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
+        int sectionCoordinate = CoordConversion.globalToChunk(blockY);
 
-        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
-        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
-        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+        int coordX = CoordConversion.globalToSectionRelative(blockX);
+        int coordY = CoordConversion.globalToSectionRelative(blockY);
+        int coordZ = CoordConversion.globalToSectionRelative(blockZ);
 
-        if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
+        if (light.requiresUpdate())
+            LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);
     }
 }

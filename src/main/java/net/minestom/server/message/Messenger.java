@@ -4,14 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
-import java.io.StringReader;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,46 +22,6 @@ public final class Messenger {
     public static final Component CANNOT_SEND_MESSAGE = Component.translatable("chat.cannotSend", NamedTextColor.RED);
     private static final UUID NO_SENDER = new UUID(0, 0);
     private static final SystemChatPacket CANNOT_SEND_PACKET = new SystemChatPacket(CANNOT_SEND_MESSAGE, false);
-
-    private static final NBTCompound CHAT_REGISTRY;
-
-    static {
-        try {
-            CHAT_REGISTRY = (NBTCompound) new SNBTParser(new StringReader(
-                    """
-                            {
-                                "type": "minecraft:chat_type",
-                                "value": [
-                                     {
-                                        "name":"minecraft:chat",
-                                        "id":1,
-                                        "element":{
-                                           "chat":{
-                                              "translation_key":"chat.type.text",
-                                              "parameters":[
-                                                 "sender",
-                                                 "content"
-                                              ]
-                                           },
-                                           "narration":{
-                                              "translation_key":"chat.type.text.narrate",
-                                              "parameters":[
-                                                 "sender",
-                                                 "content"
-                                              ]
-                                           }
-                                        }
-                                     }    ]
-                            }"""
-            )).parse();
-        } catch (NBTException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static @NotNull NBTCompound chatRegistry() {
-        return CHAT_REGISTRY;
-    }
 
     /**
      * Sends a message to a player, respecting their chat settings.
@@ -94,7 +50,7 @@ public final class Messenger {
      */
     public static void sendMessage(@NotNull Collection<Player> players, @NotNull Component message,
                                    @NotNull ChatPosition position, @Nullable UUID uuid) {
-        PacketUtils.sendGroupedPacket(players, new SystemChatPacket(message, false),
+        PacketSendingUtils.sendGroupedPacket(players, new SystemChatPacket(message, false),
                 player -> getChatMessageType(player).accepts(position));
     }
 
@@ -134,6 +90,6 @@ public final class Messenger {
      * @return the chat message type
      */
     private static @NotNull ChatMessageType getChatMessageType(@NotNull Player player) {
-        return Objects.requireNonNullElse(player.getSettings().getChatMessageType(), ChatMessageType.FULL);
+        return Objects.requireNonNullElse(player.getSettings().chatMessageType(), ChatMessageType.FULL);
     }
 }

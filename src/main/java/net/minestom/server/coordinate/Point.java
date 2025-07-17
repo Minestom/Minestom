@@ -2,17 +2,19 @@ package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
-import org.jetbrains.annotations.ApiStatus;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
+import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
+import static net.minestom.server.coordinate.CoordConversion.globalToChunk;
+
 /**
  * Represents a 3D point.
  */
-public sealed interface Point permits Vec, Pos {
+public sealed interface Point permits Vec, Pos, BlockVec {
 
     /**
      * Gets the X coordinate.
@@ -45,43 +47,42 @@ public sealed interface Point permits Vec, Pos {
      */
     @Contract(pure = true)
     default int blockX() {
-        return (int) Math.floor(x());
+        return globalToBlock(x());
     }
 
     /**
-     * Gets the floored value of the X component
+     * Gets the floored value of the Y component
      *
-     * @return the block X
+     * @return the block Y
      */
     @Contract(pure = true)
     default int blockY() {
-        return (int) Math.floor(y());
+        return globalToBlock(y());
     }
 
     /**
-     * Gets the floored value of the X component
+     * Gets the floored value of the Z component
      *
-     * @return the block X
+     * @return the block Z
      */
     @Contract(pure = true)
     default int blockZ() {
-        return (int) Math.floor(z());
+        return globalToBlock(z());
     }
 
     @Contract(pure = true)
     default int chunkX() {
-        return ChunkUtils.getChunkCoordinate(x());
+        return globalToChunk(x());
     }
 
     @Contract(pure = true)
-    @ApiStatus.Experimental
     default int section() {
-        return ChunkUtils.getChunkCoordinate(y());
+        return globalToChunk(y());
     }
 
     @Contract(pure = true)
     default int chunkZ() {
-        return ChunkUtils.getChunkCoordinate(z());
+        return globalToChunk(z());
     }
 
     /**
@@ -223,7 +224,7 @@ public sealed interface Point permits Vec, Pos {
     }
 
     default boolean samePoint(double x, double y, double z) {
-        return Double.compare(x, x()) == 0 && Double.compare(y, y()) == 0 && Double.compare(z, z()) == 0;
+        return x == x() && y == y() && z == z();
     }
 
     /**
@@ -234,6 +235,33 @@ public sealed interface Point permits Vec, Pos {
      */
     default boolean samePoint(@NotNull Point point) {
         return samePoint(point.x(), point.y(), point.z());
+    }
+
+    /**
+     * Checks it two points have similar (x/y/z) coordinates within a given epsilon.
+     *
+     * @param x       the x coordinate to compare
+     * @param y       the y coordinate to compare
+     * @param z       the z coordinate to compare
+     * @param epsilon the maximum difference allowed between the two points (exclusive)
+     * @return true if the two positions are similar within the epsilon
+     * @throws IllegalArgumentException if epsilon is less than or equal to 0
+     */
+    default boolean samePoint(double x, double y, double z, double epsilon) {
+        Check.argCondition(epsilon <= 0, "Epsilon must be greater than 0 but found {0}", epsilon);
+        return Math.abs(x - x()) < epsilon && Math.abs(y - y()) < epsilon && Math.abs(z - z()) < epsilon;
+    }
+
+    /**
+     * Checks it two points have similar (x/y/z) coordinates within a given epsilon.
+     *
+     * @param point   the point to compare
+     * @param epsilon the maximum difference allowed between the two points (exclusive)
+     * @return true if the two positions are similar within the epsilon
+     * @throws IllegalArgumentException if epsilon is less than or equal to 0
+     */
+    default boolean samePoint(@NotNull Point point, double epsilon) {
+        return samePoint(point.x(), point.y(), point.z(), epsilon);
     }
 
     /**
@@ -268,5 +296,32 @@ public sealed interface Point permits Vec, Pos {
      */
     default boolean sameBlock(@NotNull Point point) {
         return sameBlock(point.blockX(), point.blockY(), point.blockZ());
+    }
+
+    @Contract(pure = true)
+    default @NotNull Pos asPos() {
+        return switch (this) {
+            case Pos pos -> pos;
+            case Vec vec -> new Pos(vec.x(), vec.y(), vec.z());
+            case BlockVec blockVec -> new Pos(blockVec.blockX(), blockVec.blockY(), blockVec.blockZ());
+        };
+    }
+
+    @Contract(pure = true)
+    default @NotNull Vec asVec() {
+        return switch (this) {
+            case Vec vec -> vec;
+            case Pos pos -> new Vec(pos.x(), pos.y(), pos.z());
+            case BlockVec blockVec -> new Vec(blockVec.blockX(), blockVec.blockY(), blockVec.blockZ());
+        };
+    }
+
+    @Contract(pure = true)
+    default @NotNull BlockVec asBlockVec() {
+        return switch (this) {
+            case BlockVec blockVec -> blockVec;
+            case Pos pos -> new BlockVec(pos.blockX(), pos.blockY(), pos.blockZ());
+            case Vec vec -> new BlockVec(vec.blockX(), vec.blockY(), vec.blockZ());
+        };
     }
 }

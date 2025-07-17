@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
@@ -7,9 +8,6 @@ import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
-import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,17 +27,6 @@ import java.util.function.Supplier;
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
-    @ApiStatus.Internal
-    public static final Registry.Container<ArgumentImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.COMMAND_ARGUMENTS,
-            (namespace, properties) -> new ArgumentImpl(NamespaceID.from(namespace), properties.getInt("id")));
-
-    record ArgumentImpl(NamespaceID namespace, int id) implements StaticProtocolObject {
-        @Override
-        public String toString() {
-            return name();
-        }
-    }
-
     private final String id;
     protected final boolean allowSpace;
     protected final boolean useRemaining;
@@ -91,7 +78,6 @@ public abstract class Argument<T> {
      * @return the parsed result
      * @throws ArgumentSyntaxException if the argument cannot be parsed due to a fault input (argument id)
      */
-    @ApiStatus.Experimental
     public static <T> @NotNull T parse(@NotNull CommandSender sender, @NotNull Argument<T> argument) throws ArgumentSyntaxException {
         return argument.parse(sender, argument.getId());
     }
@@ -106,7 +92,7 @@ public abstract class Argument<T> {
      */
     public abstract @NotNull T parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException;
 
-    public abstract String parser();
+    public abstract ArgumentParserType parser();
 
     public byte @Nullable [] nodeProperties() {
         return null;
@@ -267,12 +253,10 @@ public abstract class Argument<T> {
      * @param <O>    The type of output expected.
      * @return A new ArgumentMap that can get this complex object type.
      */
-    @ApiStatus.Experimental
     public <O> @NotNull Argument<O> map(@NotNull Function<T, O> mapper) {
         return new ArgumentMap<>(this, (p, i) -> mapper.apply(i));
     }
 
-    @ApiStatus.Experimental
     public <O> @NotNull Argument<O> map(@NotNull BiFunction<CommandSender, T, O> mapper) {
         return new ArgumentMap<>(this, mapper);
     }
@@ -328,7 +312,7 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public String parser() {
+        public ArgumentParserType parser() {
             return argument.parser();
         }
 
@@ -362,7 +346,7 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public String parser() {
+        public ArgumentParserType parser() {
             return argument.parser();
         }
 

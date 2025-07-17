@@ -2,8 +2,8 @@ package net.minestom.server.instance.block;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -19,18 +19,18 @@ import java.util.function.Supplier;
 public final class BlockManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(BlockManager.class);
     // Namespace -> handler supplier
-    private final Map<String, Supplier<BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
+    private final Map<String, Supplier<? extends BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
     // block id -> block placement rule
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
 
     private final Set<String> dummyWarning = ConcurrentHashMap.newKeySet(); // Prevent warning spam
 
-    public void registerHandler(@NotNull String namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
+    public void registerHandler(@NotNull String namespace, @NotNull Supplier<? extends @NotNull BlockHandler> handlerSupplier) {
         blockHandlerMap.put(namespace, handlerSupplier);
     }
 
-    public void registerHandler(@NotNull NamespaceID namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
-        registerHandler(namespace.toString(), handlerSupplier);
+    public void registerHandler(@NotNull Key key, @NotNull Supplier<? extends @NotNull BlockHandler> handlerSupplier) {
+        registerHandler(key.toString(), handlerSupplier);
     }
 
     public @Nullable BlockHandler getHandler(@NotNull String namespace) {

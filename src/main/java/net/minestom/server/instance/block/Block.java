@@ -1,15 +1,18 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
-import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.*;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
 import java.util.Map;
@@ -23,7 +26,10 @@ import java.util.function.BiPredicate;
  * <p>
  * Implementations are expected to be immutable.
  */
-public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks permits BlockImpl {
+public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, Blocks permits BlockImpl {
+
+    @NotNull
+    NetworkBuffer.Type<Block> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromStateId, Block::stateId);
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.
@@ -67,7 +73,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      * @return a new block with different nbt
      */
     @Contract(pure = true)
-    @NotNull Block withNbt(@Nullable NBTCompound compound);
+    @NotNull Block withNbt(@Nullable CompoundBinaryTag compound);
 
     /**
      * Creates a new block with the specified {@link BlockHandler handler}.
@@ -86,7 +92,16 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      * @return the block nbt, null if not present
      */
     @Contract(pure = true)
-    @Nullable NBTCompound nbt();
+    @Nullable CompoundBinaryTag nbt();
+
+    /**
+     * Returns an unmodifiable view of the block nbt or an empty compound.
+     *
+     * @return the block nbt or an empty compound if not present
+     */
+    default @NotNull CompoundBinaryTag nbtOrEmpty() {
+        return Objects.requireNonNullElse(nbt(), CompoundBinaryTag.empty());
+    }
 
     @Contract(pure = true)
     default boolean hasNbt() {
@@ -111,18 +126,38 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     @NotNull Map<String, String> properties();
 
     /**
+     * Returns the block states as a string.
+     * <p>
+     * The format is `block_name[property1=value1,property2=value2,...]`.
+     * <p>
+     * More portable than {@link #stateId()} across game versions, but less efficient.
+     * Do not rely on exact string comparison as properties order may vary, use {@link #fromState(String)}.
+     *
+     * @return the block properties as a string
+     * @see #fromState(String)
+     */
+    @Contract(pure = true)
+    @NotNull String state();
+
+    /**
+     * Returns this block type with default properties, no tags and no handler.
+     * As found in the {@link Blocks} listing.
+     *
+     * @return the default block
+     */
+    @Contract(pure = true)
+    @NotNull Block defaultState();
+
+    /**
      * Returns a property value from {@link #properties()}.
      *
      * @param property the property name
      * @return the property value, null if not present (due to an invalid property name)
      */
     @Contract(pure = true)
-    default String getProperty(@NotNull String property) {
-        return properties().get(property);
-    }
+    String getProperty(@NotNull String property);
 
     @Contract(pure = true)
-    @ApiStatus.Experimental
     @NotNull Collection<@NotNull Block> possibleStates();
 
     /**
@@ -133,11 +168,11 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      * @return the block registry
      */
     @Contract(pure = true)
-    @NotNull Registry.BlockEntry registry();
+    @NotNull RegistryData.BlockEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -145,8 +180,8 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
         return registry().id();
     }
 
-    default short stateId() {
-        return (short) registry().stateId();
+    default int stateId() {
+        return registry().stateId();
     }
 
     default boolean isAir() {
@@ -170,23 +205,31 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     static @NotNull Collection<@NotNull Block> values() {
-        return BlockImpl.values();
+        return BlockImpl.REGISTRY.values();
     }
 
-    static @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
-        return BlockImpl.getSafe(namespaceID);
+    static @Nullable Block fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
-    static @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Block fromKey(@NotNull Key key) {
+        return BlockImpl.REGISTRY.get(key);
     }
 
-    static @Nullable Block fromStateId(short stateId) {
+    static @Nullable Block fromState(@NotNull String state) {
+        return BlockImpl.parseState(state);
+    }
+
+    static @Nullable Block fromStateId(int stateId) {
         return BlockImpl.getState(stateId);
     }
 
     static @Nullable Block fromBlockId(int blockId) {
-        return BlockImpl.getId(blockId);
+        return BlockImpl.REGISTRY.get(blockId);
+    }
+
+    static @NotNull Registry<Block> staticRegistry() {
+        return BlockImpl.REGISTRY;
     }
 
     @FunctionalInterface
@@ -230,7 +273,6 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
          * Represents a hint to retrieve blocks more efficiently.
          * Implementing interfaces do not have to honor this.
          */
-        @ApiStatus.Experimental
         enum Condition {
             /**
              * Returns a block no matter what.

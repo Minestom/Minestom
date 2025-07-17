@@ -1,7 +1,9 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -16,9 +18,9 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
-    private final Player.Hand hand;
+    private final PlayerHand hand;
     private final Block block;
-    private final Point blockPosition;
+    private final BlockVec blockPosition;
     private final Point cursorPosition;
     private final BlockFace blockFace;
 
@@ -30,8 +32,8 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
 
     private boolean cancelled;
 
-    public PlayerBlockInteractEvent(@NotNull Player player, @NotNull Player.Hand hand,
-                                    @NotNull Block block, @NotNull Point blockPosition, @NotNull Point cursorPosition,
+    public PlayerBlockInteractEvent(@NotNull Player player, @NotNull PlayerHand hand,
+                                    @NotNull Block block, @NotNull BlockVec blockPosition, @NotNull Point cursorPosition,
                                     @NotNull BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
@@ -69,7 +71,8 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      *
      * @return the block position
      */
-    public @NotNull Point getBlockPosition() {
+    @Override
+    public @NotNull BlockVec getBlockPosition() {
         return blockPosition;
     }
 
@@ -84,7 +87,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      *
      * @return the hand used
      */
-    public @NotNull Player.Hand getHand() {
+    public @NotNull PlayerHand getHand() {
         return hand;
     }
 

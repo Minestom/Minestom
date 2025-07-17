@@ -4,7 +4,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -75,7 +75,7 @@ public class BossBarManager {
         BossBarHolder holder = this.getOrCreateHandler(bar);
         Collection<Player> addedPlayers = players.stream().filter(holder::addViewer).toList();
         if (!addedPlayers.isEmpty()) {
-            PacketUtils.sendGroupedPacket(addedPlayers, holder.createAddPacket());
+            PacketSendingUtils.sendGroupedPacket(addedPlayers, holder.createAddPacket());
         }
     }
 
@@ -90,7 +90,7 @@ public class BossBarManager {
         if (holder != null) {
             Collection<Player> removedPlayers = players.stream().filter(holder::removeViewer).toList();
             if (!removedPlayers.isEmpty()) {
-                PacketUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
+                PacketSendingUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
             }
         }
     }
@@ -103,7 +103,7 @@ public class BossBarManager {
     public void destroyBossBar(@NotNull BossBar bossBar) {
         BossBarHolder holder = this.bars.remove(bossBar);
         if (holder != null) {
-            PacketUtils.sendGroupedPacket(holder.players, holder.createRemovePacket());
+            PacketSendingUtils.sendGroupedPacket(holder.players, holder.createRemovePacket());
             for (Player player : holder.players) {
                 this.removePlayer(player, holder);
             }

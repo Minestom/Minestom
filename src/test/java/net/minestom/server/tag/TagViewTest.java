@@ -1,12 +1,9 @@
 package net.minestom.server.tag;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
@@ -150,7 +147,7 @@ public class TagViewTest {
     public void compoundSerializer() {
         var tag = Tag.View(TagSerializer.COMPOUND);
         var handler = TagHandler.newHandler();
-        handler.setTag(tag, NBT.Compound(Map.of("value", NBT.String("hello"))));
+        handler.setTag(tag, CompoundBinaryTag.builder().putString("value", "hello").build());
         assertEqualsSNBT("""
                 {
                   "value":"hello"
@@ -164,7 +161,7 @@ public class TagViewTest {
                 }
                 """, handler.asCompound());
 
-        handler.setTag(tag, NBTCompound.EMPTY);
+        handler.setTag(tag, CompoundBinaryTag.empty());
         assertEqualsSNBT("{}", handler.asCompound());
 
         handler.setTag(tag, null);

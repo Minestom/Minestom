@@ -1,11 +1,11 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -14,30 +14,19 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemStack> items,
+public record WindowItemsPacket(int windowId, int stateId, @NotNull List<ItemStack> items,
                                 @NotNull ItemStack carriedItem) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ENTRIES = 128;
 
+    public static final NetworkBuffer.Type<WindowItemsPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, WindowItemsPacket::windowId,
+            VAR_INT, WindowItemsPacket::stateId,
+            ItemStack.NETWORK_TYPE.list(MAX_ENTRIES), WindowItemsPacket::items,
+            ItemStack.NETWORK_TYPE, WindowItemsPacket::carriedItem,
+            WindowItemsPacket::new);
+
     public WindowItemsPacket {
         items = List.copyOf(items);
-    }
-
-    public WindowItemsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BYTE), reader.read(VAR_INT), reader.readCollection(ITEM, MAX_ENTRIES),
-                reader.read(ITEM));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BYTE, windowId);
-        writer.write(VAR_INT, stateId);
-        writer.writeCollection(ITEM, items);
-        writer.write(ITEM, carriedItem);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.WINDOW_ITEMS;
     }
 
     @Override
@@ -48,12 +37,17 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
         final var components = new ArrayList<Component>();
 
         list.forEach(itemStack -> {
-            components.addAll(itemStack.getLore());
+            components.addAll(itemStack.get(DataComponents.LORE, List.of()));
 
-            final var displayName = itemStack.getDisplayName();
-            if (displayName == null) return;
+            final var customName = itemStack.get(DataComponents.CUSTOM_NAME);
+            if (customName != null) {
+                components.add(customName);
+            }
 
-            components.add(displayName);
+            final var itemName = itemStack.get(DataComponents.ITEM_NAME);
+            if (itemName != null) {
+                components.add(itemName);
+            }
         });
 
         return components;
@@ -61,19 +55,23 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        UnaryOperator<List<Component>> loreOperator = lines -> {
+            final var translatedComponents = new ArrayList<Component>();
+            lines.forEach(component -> translatedComponents.add(operator.apply(component)));
+            return translatedComponents;
+        };
         return new WindowItemsPacket(
                 this.windowId,
                 this.stateId,
-                this.items.stream().map(stack -> stack.withDisplayName(operator).withLore(lines -> {
-                    final var translatedComponents = new ArrayList<Component>();
-                    lines.forEach(component -> translatedComponents.add(operator.apply(component)));
-                    return translatedComponents;
-                })).toList(),
-                this.carriedItem.withDisplayName(operator).withLore(lines -> {
-                    final var translatedComponents = new ArrayList<Component>();
-                    lines.forEach(component -> translatedComponents.add(operator.apply(component)));
-                    return translatedComponents;
-                })
+                this.items.stream().map(stack -> stack
+                                .with(DataComponents.ITEM_NAME, operator)
+                                .with(DataComponents.CUSTOM_NAME, operator)
+                                .with(DataComponents.LORE, loreOperator))
+                        .toList(),
+                this.carriedItem
+                        .with(DataComponents.ITEM_NAME, operator)
+                        .with(DataComponents.CUSTOM_NAME, operator)
+                        .with(DataComponents.LORE, loreOperator)
         );
     }
 }

@@ -19,7 +19,7 @@ public class SpectateListener {
         }
 
         final UUID targetUuid = packet.target();
-        final Entity target = Entity.getEntity(targetUuid);
+        final Entity target = player.getInstance().getEntityByUuid(targetUuid);
 
         // Check if the target is valid
         if (target == null || target == player) {
@@ -35,7 +35,7 @@ public class SpectateListener {
 
         // Ignore if they're not in the same instance. Vanilla actually allows for
         // cross-instance spectating, but it's not really a good idea for Minestom.
-        if (targetInstance.getUniqueId() != playerInstance.getUniqueId()) {
+        if (targetInstance.getUuid() != playerInstance.getUuid()) {
             return;
         }
 

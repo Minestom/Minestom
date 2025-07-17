@@ -2,66 +2,62 @@ package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.packet.PacketParser;
+import net.minestom.server.network.packet.PacketVanilla;
+import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
+import java.nio.channels.AsynchronousCloseException;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class Server {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
-
-    public static final boolean NO_DELAY = true;
-
     private volatile boolean stop;
 
-    private final Selector selector = Selector.open();
-    private final PacketProcessor packetProcessor;
-    private final List<Worker> workers;
-    private int index;
+    private final PacketParser<ClientPacket> packetParser;
 
     private ServerSocketChannel serverSocket;
     private SocketAddress socketAddress;
     private String address;
     private int port;
 
-    public Server(PacketProcessor packetProcessor) throws IOException {
-        this.packetProcessor = packetProcessor;
-        Worker[] workers = new Worker[ServerFlag.WORKER_COUNT];
-        Arrays.setAll(workers, value -> new Worker(this));
-        this.workers = List.of(workers);
+    public Server(PacketParser<ClientPacket> packetParser) {
+        this.packetParser = packetParser;
+    }
+
+    public Server() {
+        this(PacketVanilla.CLIENT_PACKET_PARSER);
     }
 
     @ApiStatus.Internal
     public void init(SocketAddress address) throws IOException {
         ProtocolFamily family;
-        if (address instanceof InetSocketAddress inetSocketAddress) {
-            this.address = inetSocketAddress.getHostString();
-            this.port = inetSocketAddress.getPort();
-            family = inetSocketAddress.getAddress().getAddress().length == 4 ? StandardProtocolFamily.INET : StandardProtocolFamily.INET6;
-        } else if (address instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
-            this.address = "unix://" + unixDomainSocketAddress.getPath();
-            this.port = 0;
-            family = StandardProtocolFamily.UNIX;
-        } else {
-            throw new IllegalArgumentException("Address must be an InetSocketAddress or a UnixDomainSocketAddress");
+        switch (address) {
+            case InetSocketAddress inetSocketAddress -> {
+                this.address = inetSocketAddress.getHostString();
+                this.port = inetSocketAddress.getPort();
+                family = inetSocketAddress.getAddress().getAddress().length == 4 ? StandardProtocolFamily.INET : StandardProtocolFamily.INET6;
+            }
+            case UnixDomainSocketAddress unixDomainSocketAddress -> {
+                this.address = "unix://" + unixDomainSocketAddress.getPath();
+                this.port = 0;
+                family = StandardProtocolFamily.UNIX;
+            }
+            default ->
+                    throw new IllegalArgumentException("Address must be an InetSocketAddress or a UnixDomainSocketAddress");
         }
 
         ServerSocketChannel server = ServerSocketChannel.open(family);
         server.bind(address);
-        server.configureBlocking(false);
-        server.register(selector, SelectionKey.OP_ACCEPT);
         this.serverSocket = server;
         this.socketAddress = address;
 
@@ -72,31 +68,88 @@ public final class Server {
 
     @ApiStatus.Internal
     public void start() {
-        this.workers.forEach(Thread::start);
-        new Thread(() -> {
+        // Use named thread builders for logging
+        var readBuilder = Thread.ofVirtual().name("Ms-Socket-Reader-", 0);
+        var writeBuilder = Thread.ofVirtual().name("Ms-Socket-Writer-", 0);
+        Thread.ofVirtual().name("Ms-Socket-Server").start(() -> {
             while (!stop) {
-                // Busy wait for connections
                 try {
-                    this.selector.select(key -> {
-                        if (!key.isAcceptable()) return;
-                        try {
-                            // Register socket and forward to thread
-                            Worker worker = findWorker();
-                            final SocketChannel client = serverSocket.accept();
-                            worker.receiveConnection(client);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
+                    final SocketChannel client = serverSocket.accept();
+                    configureSocket(client);
+                    AtomicReference<PlayerSocketConnection> reference = new AtomicReference<>(null);
+                    Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
+                    Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
+                    PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
+                    reference.set(connection);
+                    readThread.start();
+                    writeThread.start();
+                } catch (AsynchronousCloseException ignored) {
+                    // We are exiting, bye bye!
                 } catch (IOException e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
+                    throw new RuntimeException(e);
                 }
             }
-        }, "Ms-entrypoint").start();
+        });
     }
 
-    public void tick() {
-        this.workers.forEach(Worker::tick);
+    private void configureSocket(SocketChannel channel) throws IOException {
+        if (channel.getLocalAddress() instanceof InetSocketAddress) {
+            Socket socket = channel.socket();
+            socket.setSendBufferSize(ServerFlag.SOCKET_SEND_BUFFER_SIZE);
+            socket.setReceiveBufferSize(ServerFlag.SOCKET_RECEIVE_BUFFER_SIZE);
+            socket.setTcpNoDelay(ServerFlag.SOCKET_NO_DELAY);
+            socket.setSoTimeout(ServerFlag.SOCKET_TIMEOUT);
+        }
+    }
+
+    private void playerReadLoop(PlayerSocketConnection connection) {
+        Check.notNull(connection, "connection cannot be null");
+        while (!stop) {
+            try {
+                // Read & process packets
+                connection.read(packetParser);
+            } catch (ClosedChannelException ignored) {
+                break; // We closed the socket during read, just exit.
+            } catch (EOFException e) {
+                connection.disconnect();
+                break;
+            } catch (Throwable e) {
+                boolean isExpected = e instanceof SocketException && e.getMessage().equals("Connection reset");
+                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
+                connection.disconnect();
+                break;
+            }
+        }
+    }
+
+    private void playerWriteLoop(PlayerSocketConnection connection) {
+        Check.notNull(connection, "connection cannot be null");
+        while (!stop) {
+            try {
+                connection.flushSync();
+            } catch (ClosedChannelException ignored) {
+                break; // We closed the socket during write, just exit.
+            } catch (EOFException e) {
+                connection.disconnect();
+                break;
+            } catch (Throwable e) {
+                boolean isExpected = e instanceof IOException && e.getMessage().equals("Broken pipe");
+                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
+
+                connection.disconnect();
+                break;
+            }
+            if (!connection.isOnline()) {
+                try {
+                    connection.flushSync();
+                    connection.getChannel().close();
+                    break;
+                } catch (IOException e) {
+                    // Disconnect
+                    break;
+                }
+            }
+        }
     }
 
     public boolean isOpen() {
@@ -106,7 +159,7 @@ public final class Server {
     public void stop() {
         this.stop = true;
         try {
-            if(serverSocket != null) {
+            if (serverSocket != null) {
                 this.serverSocket.close();
             }
 
@@ -116,19 +169,11 @@ public final class Server {
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-        try {
-            this.selector.wakeup();
-            this.selector.close();
-        } catch (IOException e) {
-            LOGGER.error("Server socket selector could not be closed", e);
-            System.exit(-1);
-        }
-        this.workers.forEach(Worker::close);
     }
 
     @ApiStatus.Internal
-    public @NotNull PacketProcessor packetProcessor() {
-        return packetProcessor;
+    public @NotNull PacketParser<ClientPacket> packetParser() {
+        return packetParser;
     }
 
     public SocketAddress socketAddress() {
@@ -141,10 +186,5 @@ public final class Server {
 
     public int getPort() {
         return port;
-    }
-
-    private Worker findWorker() {
-        this.index = ++index % ServerFlag.WORKER_COUNT;
-        return workers.get(index);
     }
 }

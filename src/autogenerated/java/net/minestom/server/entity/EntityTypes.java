@@ -5,255 +5,305 @@ package net.minestom.server.entity;
  */
 @SuppressWarnings("unused")
 interface EntityTypes {
-    EntityType ALLAY = EntityTypeImpl.get("minecraft:allay");
+    EntityType ACACIA_BOAT = EntityTypeImpl.get("acacia_boat");
 
-    EntityType AREA_EFFECT_CLOUD = EntityTypeImpl.get("minecraft:area_effect_cloud");
+    EntityType ACACIA_CHEST_BOAT = EntityTypeImpl.get("acacia_chest_boat");
 
-    EntityType ARMOR_STAND = EntityTypeImpl.get("minecraft:armor_stand");
+    EntityType ALLAY = EntityTypeImpl.get("allay");
 
-    EntityType ARROW = EntityTypeImpl.get("minecraft:arrow");
+    EntityType AREA_EFFECT_CLOUD = EntityTypeImpl.get("area_effect_cloud");
 
-    EntityType AXOLOTL = EntityTypeImpl.get("minecraft:axolotl");
+    EntityType ARMADILLO = EntityTypeImpl.get("armadillo");
 
-    EntityType BAT = EntityTypeImpl.get("minecraft:bat");
+    EntityType ARMOR_STAND = EntityTypeImpl.get("armor_stand");
 
-    EntityType BEE = EntityTypeImpl.get("minecraft:bee");
+    EntityType ARROW = EntityTypeImpl.get("arrow");
 
-    EntityType BLAZE = EntityTypeImpl.get("minecraft:blaze");
+    EntityType AXOLOTL = EntityTypeImpl.get("axolotl");
 
-    EntityType BLOCK_DISPLAY = EntityTypeImpl.get("minecraft:block_display");
+    EntityType BAMBOO_CHEST_RAFT = EntityTypeImpl.get("bamboo_chest_raft");
 
-    EntityType BOAT = EntityTypeImpl.get("minecraft:boat");
+    EntityType BAMBOO_RAFT = EntityTypeImpl.get("bamboo_raft");
 
-    EntityType BREEZE = EntityTypeImpl.get("minecraft:breeze");
+    EntityType BAT = EntityTypeImpl.get("bat");
 
-    EntityType CAMEL = EntityTypeImpl.get("minecraft:camel");
+    EntityType BEE = EntityTypeImpl.get("bee");
 
-    EntityType CAT = EntityTypeImpl.get("minecraft:cat");
+    EntityType BIRCH_BOAT = EntityTypeImpl.get("birch_boat");
 
-    EntityType CAVE_SPIDER = EntityTypeImpl.get("minecraft:cave_spider");
+    EntityType BIRCH_CHEST_BOAT = EntityTypeImpl.get("birch_chest_boat");
 
-    EntityType CHEST_BOAT = EntityTypeImpl.get("minecraft:chest_boat");
+    EntityType BLAZE = EntityTypeImpl.get("blaze");
 
-    EntityType CHEST_MINECART = EntityTypeImpl.get("minecraft:chest_minecart");
+    EntityType BLOCK_DISPLAY = EntityTypeImpl.get("block_display");
 
-    EntityType CHICKEN = EntityTypeImpl.get("minecraft:chicken");
+    EntityType BOGGED = EntityTypeImpl.get("bogged");
 
-    EntityType COD = EntityTypeImpl.get("minecraft:cod");
+    EntityType BREEZE = EntityTypeImpl.get("breeze");
 
-    EntityType COMMAND_BLOCK_MINECART = EntityTypeImpl.get("minecraft:command_block_minecart");
+    EntityType BREEZE_WIND_CHARGE = EntityTypeImpl.get("breeze_wind_charge");
 
-    EntityType COW = EntityTypeImpl.get("minecraft:cow");
+    EntityType CAMEL = EntityTypeImpl.get("camel");
 
-    EntityType CREEPER = EntityTypeImpl.get("minecraft:creeper");
+    EntityType CAT = EntityTypeImpl.get("cat");
 
-    EntityType DOLPHIN = EntityTypeImpl.get("minecraft:dolphin");
+    EntityType CAVE_SPIDER = EntityTypeImpl.get("cave_spider");
 
-    EntityType DONKEY = EntityTypeImpl.get("minecraft:donkey");
+    EntityType CHERRY_BOAT = EntityTypeImpl.get("cherry_boat");
 
-    EntityType DRAGON_FIREBALL = EntityTypeImpl.get("minecraft:dragon_fireball");
+    EntityType CHERRY_CHEST_BOAT = EntityTypeImpl.get("cherry_chest_boat");
 
-    EntityType DROWNED = EntityTypeImpl.get("minecraft:drowned");
+    EntityType CHEST_MINECART = EntityTypeImpl.get("chest_minecart");
 
-    EntityType EGG = EntityTypeImpl.get("minecraft:egg");
+    EntityType CHICKEN = EntityTypeImpl.get("chicken");
 
-    EntityType ELDER_GUARDIAN = EntityTypeImpl.get("minecraft:elder_guardian");
+    EntityType COD = EntityTypeImpl.get("cod");
 
-    EntityType END_CRYSTAL = EntityTypeImpl.get("minecraft:end_crystal");
+    EntityType COMMAND_BLOCK_MINECART = EntityTypeImpl.get("command_block_minecart");
 
-    EntityType ENDER_DRAGON = EntityTypeImpl.get("minecraft:ender_dragon");
+    EntityType COW = EntityTypeImpl.get("cow");
 
-    EntityType ENDER_PEARL = EntityTypeImpl.get("minecraft:ender_pearl");
+    EntityType CREAKING = EntityTypeImpl.get("creaking");
 
-    EntityType ENDERMAN = EntityTypeImpl.get("minecraft:enderman");
+    EntityType CREEPER = EntityTypeImpl.get("creeper");
 
-    EntityType ENDERMITE = EntityTypeImpl.get("minecraft:endermite");
+    EntityType DARK_OAK_BOAT = EntityTypeImpl.get("dark_oak_boat");
 
-    EntityType EVOKER = EntityTypeImpl.get("minecraft:evoker");
+    EntityType DARK_OAK_CHEST_BOAT = EntityTypeImpl.get("dark_oak_chest_boat");
 
-    EntityType EVOKER_FANGS = EntityTypeImpl.get("minecraft:evoker_fangs");
+    EntityType DOLPHIN = EntityTypeImpl.get("dolphin");
 
-    EntityType EXPERIENCE_BOTTLE = EntityTypeImpl.get("minecraft:experience_bottle");
+    EntityType DONKEY = EntityTypeImpl.get("donkey");
 
-    EntityType EXPERIENCE_ORB = EntityTypeImpl.get("minecraft:experience_orb");
+    EntityType DRAGON_FIREBALL = EntityTypeImpl.get("dragon_fireball");
 
-    EntityType EYE_OF_ENDER = EntityTypeImpl.get("minecraft:eye_of_ender");
+    EntityType DROWNED = EntityTypeImpl.get("drowned");
 
-    EntityType FALLING_BLOCK = EntityTypeImpl.get("minecraft:falling_block");
+    EntityType EGG = EntityTypeImpl.get("egg");
 
-    EntityType FIREWORK_ROCKET = EntityTypeImpl.get("minecraft:firework_rocket");
+    EntityType ELDER_GUARDIAN = EntityTypeImpl.get("elder_guardian");
 
-    EntityType FOX = EntityTypeImpl.get("minecraft:fox");
+    EntityType ENDERMAN = EntityTypeImpl.get("enderman");
 
-    EntityType FROG = EntityTypeImpl.get("minecraft:frog");
+    EntityType ENDERMITE = EntityTypeImpl.get("endermite");
 
-    EntityType FURNACE_MINECART = EntityTypeImpl.get("minecraft:furnace_minecart");
+    EntityType ENDER_DRAGON = EntityTypeImpl.get("ender_dragon");
 
-    EntityType GHAST = EntityTypeImpl.get("minecraft:ghast");
+    EntityType ENDER_PEARL = EntityTypeImpl.get("ender_pearl");
 
-    EntityType GIANT = EntityTypeImpl.get("minecraft:giant");
+    EntityType END_CRYSTAL = EntityTypeImpl.get("end_crystal");
 
-    EntityType GLOW_ITEM_FRAME = EntityTypeImpl.get("minecraft:glow_item_frame");
+    EntityType EVOKER = EntityTypeImpl.get("evoker");
 
-    EntityType GLOW_SQUID = EntityTypeImpl.get("minecraft:glow_squid");
+    EntityType EVOKER_FANGS = EntityTypeImpl.get("evoker_fangs");
 
-    EntityType GOAT = EntityTypeImpl.get("minecraft:goat");
+    EntityType EXPERIENCE_BOTTLE = EntityTypeImpl.get("experience_bottle");
 
-    EntityType GUARDIAN = EntityTypeImpl.get("minecraft:guardian");
+    EntityType EXPERIENCE_ORB = EntityTypeImpl.get("experience_orb");
 
-    EntityType HOGLIN = EntityTypeImpl.get("minecraft:hoglin");
+    EntityType EYE_OF_ENDER = EntityTypeImpl.get("eye_of_ender");
 
-    EntityType HOPPER_MINECART = EntityTypeImpl.get("minecraft:hopper_minecart");
+    EntityType FALLING_BLOCK = EntityTypeImpl.get("falling_block");
 
-    EntityType HORSE = EntityTypeImpl.get("minecraft:horse");
+    EntityType FIREBALL = EntityTypeImpl.get("fireball");
 
-    EntityType HUSK = EntityTypeImpl.get("minecraft:husk");
+    EntityType FIREWORK_ROCKET = EntityTypeImpl.get("firework_rocket");
 
-    EntityType ILLUSIONER = EntityTypeImpl.get("minecraft:illusioner");
+    EntityType FOX = EntityTypeImpl.get("fox");
 
-    EntityType INTERACTION = EntityTypeImpl.get("minecraft:interaction");
+    EntityType FROG = EntityTypeImpl.get("frog");
 
-    EntityType IRON_GOLEM = EntityTypeImpl.get("minecraft:iron_golem");
+    EntityType FURNACE_MINECART = EntityTypeImpl.get("furnace_minecart");
 
-    EntityType ITEM = EntityTypeImpl.get("minecraft:item");
+    EntityType GHAST = EntityTypeImpl.get("ghast");
 
-    EntityType ITEM_DISPLAY = EntityTypeImpl.get("minecraft:item_display");
+    EntityType HAPPY_GHAST = EntityTypeImpl.get("happy_ghast");
 
-    EntityType ITEM_FRAME = EntityTypeImpl.get("minecraft:item_frame");
+    EntityType GIANT = EntityTypeImpl.get("giant");
 
-    EntityType FIREBALL = EntityTypeImpl.get("minecraft:fireball");
+    EntityType GLOW_ITEM_FRAME = EntityTypeImpl.get("glow_item_frame");
 
-    EntityType LEASH_KNOT = EntityTypeImpl.get("minecraft:leash_knot");
+    EntityType GLOW_SQUID = EntityTypeImpl.get("glow_squid");
 
-    EntityType LIGHTNING_BOLT = EntityTypeImpl.get("minecraft:lightning_bolt");
+    EntityType GOAT = EntityTypeImpl.get("goat");
 
-    EntityType LLAMA = EntityTypeImpl.get("minecraft:llama");
+    EntityType GUARDIAN = EntityTypeImpl.get("guardian");
 
-    EntityType LLAMA_SPIT = EntityTypeImpl.get("minecraft:llama_spit");
+    EntityType HOGLIN = EntityTypeImpl.get("hoglin");
 
-    EntityType MAGMA_CUBE = EntityTypeImpl.get("minecraft:magma_cube");
+    EntityType HOPPER_MINECART = EntityTypeImpl.get("hopper_minecart");
 
-    EntityType MARKER = EntityTypeImpl.get("minecraft:marker");
+    EntityType HORSE = EntityTypeImpl.get("horse");
 
-    EntityType MINECART = EntityTypeImpl.get("minecraft:minecart");
+    EntityType HUSK = EntityTypeImpl.get("husk");
 
-    EntityType MOOSHROOM = EntityTypeImpl.get("minecraft:mooshroom");
+    EntityType ILLUSIONER = EntityTypeImpl.get("illusioner");
 
-    EntityType MULE = EntityTypeImpl.get("minecraft:mule");
+    EntityType INTERACTION = EntityTypeImpl.get("interaction");
 
-    EntityType OCELOT = EntityTypeImpl.get("minecraft:ocelot");
+    EntityType IRON_GOLEM = EntityTypeImpl.get("iron_golem");
 
-    EntityType PAINTING = EntityTypeImpl.get("minecraft:painting");
+    EntityType ITEM = EntityTypeImpl.get("item");
 
-    EntityType PANDA = EntityTypeImpl.get("minecraft:panda");
+    EntityType ITEM_DISPLAY = EntityTypeImpl.get("item_display");
 
-    EntityType PARROT = EntityTypeImpl.get("minecraft:parrot");
+    EntityType ITEM_FRAME = EntityTypeImpl.get("item_frame");
 
-    EntityType PHANTOM = EntityTypeImpl.get("minecraft:phantom");
+    EntityType JUNGLE_BOAT = EntityTypeImpl.get("jungle_boat");
 
-    EntityType PIG = EntityTypeImpl.get("minecraft:pig");
+    EntityType JUNGLE_CHEST_BOAT = EntityTypeImpl.get("jungle_chest_boat");
 
-    EntityType PIGLIN = EntityTypeImpl.get("minecraft:piglin");
+    EntityType LEASH_KNOT = EntityTypeImpl.get("leash_knot");
 
-    EntityType PIGLIN_BRUTE = EntityTypeImpl.get("minecraft:piglin_brute");
+    EntityType LIGHTNING_BOLT = EntityTypeImpl.get("lightning_bolt");
 
-    EntityType PILLAGER = EntityTypeImpl.get("minecraft:pillager");
+    EntityType LLAMA = EntityTypeImpl.get("llama");
 
-    EntityType POLAR_BEAR = EntityTypeImpl.get("minecraft:polar_bear");
+    EntityType LLAMA_SPIT = EntityTypeImpl.get("llama_spit");
 
-    EntityType POTION = EntityTypeImpl.get("minecraft:potion");
+    EntityType MAGMA_CUBE = EntityTypeImpl.get("magma_cube");
 
-    EntityType PUFFERFISH = EntityTypeImpl.get("minecraft:pufferfish");
+    EntityType MANGROVE_BOAT = EntityTypeImpl.get("mangrove_boat");
 
-    EntityType RABBIT = EntityTypeImpl.get("minecraft:rabbit");
+    EntityType MANGROVE_CHEST_BOAT = EntityTypeImpl.get("mangrove_chest_boat");
 
-    EntityType RAVAGER = EntityTypeImpl.get("minecraft:ravager");
+    EntityType MARKER = EntityTypeImpl.get("marker");
 
-    EntityType SALMON = EntityTypeImpl.get("minecraft:salmon");
+    EntityType MINECART = EntityTypeImpl.get("minecart");
 
-    EntityType SHEEP = EntityTypeImpl.get("minecraft:sheep");
+    EntityType MOOSHROOM = EntityTypeImpl.get("mooshroom");
 
-    EntityType SHULKER = EntityTypeImpl.get("minecraft:shulker");
+    EntityType MULE = EntityTypeImpl.get("mule");
 
-    EntityType SHULKER_BULLET = EntityTypeImpl.get("minecraft:shulker_bullet");
+    EntityType OAK_BOAT = EntityTypeImpl.get("oak_boat");
 
-    EntityType SILVERFISH = EntityTypeImpl.get("minecraft:silverfish");
+    EntityType OAK_CHEST_BOAT = EntityTypeImpl.get("oak_chest_boat");
 
-    EntityType SKELETON = EntityTypeImpl.get("minecraft:skeleton");
+    EntityType OCELOT = EntityTypeImpl.get("ocelot");
 
-    EntityType SKELETON_HORSE = EntityTypeImpl.get("minecraft:skeleton_horse");
+    EntityType OMINOUS_ITEM_SPAWNER = EntityTypeImpl.get("ominous_item_spawner");
 
-    EntityType SLIME = EntityTypeImpl.get("minecraft:slime");
+    EntityType PAINTING = EntityTypeImpl.get("painting");
 
-    EntityType SMALL_FIREBALL = EntityTypeImpl.get("minecraft:small_fireball");
+    EntityType PALE_OAK_BOAT = EntityTypeImpl.get("pale_oak_boat");
 
-    EntityType SNIFFER = EntityTypeImpl.get("minecraft:sniffer");
+    EntityType PALE_OAK_CHEST_BOAT = EntityTypeImpl.get("pale_oak_chest_boat");
 
-    EntityType SNOW_GOLEM = EntityTypeImpl.get("minecraft:snow_golem");
+    EntityType PANDA = EntityTypeImpl.get("panda");
 
-    EntityType SNOWBALL = EntityTypeImpl.get("minecraft:snowball");
+    EntityType PARROT = EntityTypeImpl.get("parrot");
 
-    EntityType SPAWNER_MINECART = EntityTypeImpl.get("minecraft:spawner_minecart");
+    EntityType PHANTOM = EntityTypeImpl.get("phantom");
 
-    EntityType SPECTRAL_ARROW = EntityTypeImpl.get("minecraft:spectral_arrow");
+    EntityType PIG = EntityTypeImpl.get("pig");
 
-    EntityType SPIDER = EntityTypeImpl.get("minecraft:spider");
+    EntityType PIGLIN = EntityTypeImpl.get("piglin");
 
-    EntityType SQUID = EntityTypeImpl.get("minecraft:squid");
+    EntityType PIGLIN_BRUTE = EntityTypeImpl.get("piglin_brute");
 
-    EntityType STRAY = EntityTypeImpl.get("minecraft:stray");
+    EntityType PILLAGER = EntityTypeImpl.get("pillager");
 
-    EntityType STRIDER = EntityTypeImpl.get("minecraft:strider");
+    EntityType POLAR_BEAR = EntityTypeImpl.get("polar_bear");
 
-    EntityType TADPOLE = EntityTypeImpl.get("minecraft:tadpole");
+    EntityType SPLASH_POTION = EntityTypeImpl.get("splash_potion");
 
-    EntityType TEXT_DISPLAY = EntityTypeImpl.get("minecraft:text_display");
+    EntityType LINGERING_POTION = EntityTypeImpl.get("lingering_potion");
 
-    EntityType TNT = EntityTypeImpl.get("minecraft:tnt");
+    EntityType PUFFERFISH = EntityTypeImpl.get("pufferfish");
 
-    EntityType TNT_MINECART = EntityTypeImpl.get("minecraft:tnt_minecart");
+    EntityType RABBIT = EntityTypeImpl.get("rabbit");
 
-    EntityType TRADER_LLAMA = EntityTypeImpl.get("minecraft:trader_llama");
+    EntityType RAVAGER = EntityTypeImpl.get("ravager");
 
-    EntityType TRIDENT = EntityTypeImpl.get("minecraft:trident");
+    EntityType SALMON = EntityTypeImpl.get("salmon");
 
-    EntityType TROPICAL_FISH = EntityTypeImpl.get("minecraft:tropical_fish");
+    EntityType SHEEP = EntityTypeImpl.get("sheep");
 
-    EntityType TURTLE = EntityTypeImpl.get("minecraft:turtle");
+    EntityType SHULKER = EntityTypeImpl.get("shulker");
 
-    EntityType VEX = EntityTypeImpl.get("minecraft:vex");
+    EntityType SHULKER_BULLET = EntityTypeImpl.get("shulker_bullet");
 
-    EntityType VILLAGER = EntityTypeImpl.get("minecraft:villager");
+    EntityType SILVERFISH = EntityTypeImpl.get("silverfish");
 
-    EntityType VINDICATOR = EntityTypeImpl.get("minecraft:vindicator");
+    EntityType SKELETON = EntityTypeImpl.get("skeleton");
 
-    EntityType WANDERING_TRADER = EntityTypeImpl.get("minecraft:wandering_trader");
+    EntityType SKELETON_HORSE = EntityTypeImpl.get("skeleton_horse");
 
-    EntityType WARDEN = EntityTypeImpl.get("minecraft:warden");
+    EntityType SLIME = EntityTypeImpl.get("slime");
 
-    EntityType WIND_CHARGE = EntityTypeImpl.get("minecraft:wind_charge");
+    EntityType SMALL_FIREBALL = EntityTypeImpl.get("small_fireball");
 
-    EntityType WITCH = EntityTypeImpl.get("minecraft:witch");
+    EntityType SNIFFER = EntityTypeImpl.get("sniffer");
 
-    EntityType WITHER = EntityTypeImpl.get("minecraft:wither");
+    EntityType SNOWBALL = EntityTypeImpl.get("snowball");
 
-    EntityType WITHER_SKELETON = EntityTypeImpl.get("minecraft:wither_skeleton");
+    EntityType SNOW_GOLEM = EntityTypeImpl.get("snow_golem");
 
-    EntityType WITHER_SKULL = EntityTypeImpl.get("minecraft:wither_skull");
+    EntityType SPAWNER_MINECART = EntityTypeImpl.get("spawner_minecart");
 
-    EntityType WOLF = EntityTypeImpl.get("minecraft:wolf");
+    EntityType SPECTRAL_ARROW = EntityTypeImpl.get("spectral_arrow");
 
-    EntityType ZOGLIN = EntityTypeImpl.get("minecraft:zoglin");
+    EntityType SPIDER = EntityTypeImpl.get("spider");
 
-    EntityType ZOMBIE = EntityTypeImpl.get("minecraft:zombie");
+    EntityType SPRUCE_BOAT = EntityTypeImpl.get("spruce_boat");
 
-    EntityType ZOMBIE_HORSE = EntityTypeImpl.get("minecraft:zombie_horse");
+    EntityType SPRUCE_CHEST_BOAT = EntityTypeImpl.get("spruce_chest_boat");
 
-    EntityType ZOMBIE_VILLAGER = EntityTypeImpl.get("minecraft:zombie_villager");
+    EntityType SQUID = EntityTypeImpl.get("squid");
 
-    EntityType ZOMBIFIED_PIGLIN = EntityTypeImpl.get("minecraft:zombified_piglin");
+    EntityType STRAY = EntityTypeImpl.get("stray");
 
-    EntityType PLAYER = EntityTypeImpl.get("minecraft:player");
+    EntityType STRIDER = EntityTypeImpl.get("strider");
 
-    EntityType FISHING_BOBBER = EntityTypeImpl.get("minecraft:fishing_bobber");
+    EntityType TADPOLE = EntityTypeImpl.get("tadpole");
+
+    EntityType TEXT_DISPLAY = EntityTypeImpl.get("text_display");
+
+    EntityType TNT = EntityTypeImpl.get("tnt");
+
+    EntityType TNT_MINECART = EntityTypeImpl.get("tnt_minecart");
+
+    EntityType TRADER_LLAMA = EntityTypeImpl.get("trader_llama");
+
+    EntityType TRIDENT = EntityTypeImpl.get("trident");
+
+    EntityType TROPICAL_FISH = EntityTypeImpl.get("tropical_fish");
+
+    EntityType TURTLE = EntityTypeImpl.get("turtle");
+
+    EntityType VEX = EntityTypeImpl.get("vex");
+
+    EntityType VILLAGER = EntityTypeImpl.get("villager");
+
+    EntityType VINDICATOR = EntityTypeImpl.get("vindicator");
+
+    EntityType WANDERING_TRADER = EntityTypeImpl.get("wandering_trader");
+
+    EntityType WARDEN = EntityTypeImpl.get("warden");
+
+    EntityType WIND_CHARGE = EntityTypeImpl.get("wind_charge");
+
+    EntityType WITCH = EntityTypeImpl.get("witch");
+
+    EntityType WITHER = EntityTypeImpl.get("wither");
+
+    EntityType WITHER_SKELETON = EntityTypeImpl.get("wither_skeleton");
+
+    EntityType WITHER_SKULL = EntityTypeImpl.get("wither_skull");
+
+    EntityType WOLF = EntityTypeImpl.get("wolf");
+
+    EntityType ZOGLIN = EntityTypeImpl.get("zoglin");
+
+    EntityType ZOMBIE = EntityTypeImpl.get("zombie");
+
+    EntityType ZOMBIE_HORSE = EntityTypeImpl.get("zombie_horse");
+
+    EntityType ZOMBIE_VILLAGER = EntityTypeImpl.get("zombie_villager");
+
+    EntityType ZOMBIFIED_PIGLIN = EntityTypeImpl.get("zombified_piglin");
+
+    EntityType PLAYER = EntityTypeImpl.get("player");
+
+    EntityType FISHING_BOBBER = EntityTypeImpl.get("fishing_bobber");
 }

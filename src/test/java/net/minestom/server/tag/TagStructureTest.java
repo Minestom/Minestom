@@ -162,16 +162,8 @@ public class TagStructureTest {
         assertEqualsSNBT("""
                 {
                    "SkullOwner":{
-                      "Id":[
-                         I;-1532365849,
-                         -122336370,
-                         -1958889287,
-                         -122029895
-                      ],
-                      "Properties":{
-                         "Signature":"signature",
-                         "Value":"textures"
-                      }
+                      "Id":[I;-1532365849,-122336370,-1958889287,-122029895],
+                      "Properties":{"Signature":"signature","Value":"textures"}
                    }
                 }
                 """, handler.asCompound());

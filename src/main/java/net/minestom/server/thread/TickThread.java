@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,13 +26,18 @@ public final class TickThread extends MinestomThread {
     private final ReentrantLock lock = new ReentrantLock();
     private volatile boolean stop;
 
-    private CountDownLatch latch;
-    private long tickTime;
+    private volatile CountDownLatch latch;
+    private volatile long tickTimeNanos;
+
     private long tickNum = 0;
     private final List<ThreadDispatcher.Partition> entries = new ArrayList<>();
 
     public TickThread(int number) {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
+    }
+
+    public TickThread(@NotNull String name) {
+        super(name);
     }
 
     public static @Nullable TickThread current() {
@@ -42,24 +48,31 @@ public final class TickThread extends MinestomThread {
 
     @Override
     public void run() {
-        LockSupport.park(this);
+        LockSupport.park(this); // Wait for first tick
         while (!stop) {
+            final CountDownLatch latch = this.latch;
+            if (latch == null) {
+                // Should not happen, but just in case
+                LockSupport.park(this);
+                continue;
+            }
             this.lock.lock();
             try {
                 tick();
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
+            } finally {
+                this.lock.unlock();
+                // #acquire() callbacks
             }
-            this.lock.unlock();
-            // #acquire() callbacks
-            this.latch.countDown();
+            latch.countDown();
             LockSupport.park(this);
         }
     }
 
     private void tick() {
         final ReentrantLock lock = this.lock;
-        final long tickTime = this.tickTime;
+        final long tickTime = TimeUnit.NANOSECONDS.toMillis(this.tickTimeNanos);
         for (ThreadDispatcher.Partition entry : entries) {
             assert entry.thread() == this;
             final List<Tickable> elements = entry.elements();
@@ -79,16 +92,15 @@ public final class TickThread extends MinestomThread {
         }
     }
 
-    void startTick(CountDownLatch latch, long tickTime) {
-        if (entries.isEmpty()) {
+    void startTick(CountDownLatch latch, long tickTimeNanos) {
+        if (stop || entries.isEmpty()) {
             // Nothing to tick
             latch.countDown();
             return;
         }
         this.latch = latch;
-        this.tickTime = tickTime;
+        this.tickTimeNanos = tickTimeNanos;
         this.tickNum += 1;
-        this.stop = false;
         LockSupport.unpark(this);
     }
 

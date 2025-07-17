@@ -12,9 +12,8 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.math.IntRange;
+import net.minestom.server.utils.Range;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +37,7 @@ public class EntityFinder {
     // Position
     private Point startPosition;
     private Float dx, dy, dz;
-    private IntRange distance;
+    private Range.Int distance;
 
     // By traits
     private Integer limit;
@@ -51,7 +50,7 @@ public class EntityFinder {
 
     // Players specific
     private final ToggleableMap<GameMode> gameModes = new ToggleableMap<>();
-    private IntRange level;
+    private Range.Int level;
 
     public EntityFinder setTargetSelector(@NotNull TargetSelector targetSelector) {
         this.targetSelector = targetSelector;
@@ -68,7 +67,7 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setDistance(@NotNull IntRange distance) {
+    public EntityFinder setDistance(@NotNull Range.Int distance) {
         this.distance = distance;
         return this;
     }
@@ -78,7 +77,7 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setLevel(@NotNull IntRange level) {
+    public EntityFinder setLevel(@NotNull Range.Int level) {
         this.level = level;
         return this;
     }
@@ -135,7 +134,8 @@ public class EntityFinder {
             return player != null ? List.of(player) : List.of();
         } else if (targetSelector == TargetSelector.MINESTOM_UUID) {
             Check.notNull(constantUuid, "The UUID should not be null when searching for it");
-            final Entity entity = Entity.getEntity(constantUuid);
+            Check.notNull(instance, "The instance should not be null when searching by UUID");
+            final Entity entity = instance.getEntityByUuid(constantUuid);
             return entity != null ? List.of(entity) : List.of();
         }
 
@@ -148,8 +148,8 @@ public class EntityFinder {
 
         // Distance argument
         if (distance != null) {
-            final int minDistance = distance.getMinimum();
-            final int maxDistance = distance.getMaximum();
+            final int minDistance = distance.min();
+            final int maxDistance = distance.max();
             result = result.stream()
                     .filter(entity -> MathUtils.isBetween(entity.getPosition().distanceSquared(pos), minDistance * minDistance, maxDistance * maxDistance))
                     .toList();
@@ -195,8 +195,8 @@ public class EntityFinder {
 
         // Level
         if (level != null) {
-            final int minLevel = level.getMinimum();
-            final int maxLevel = level.getMaximum();
+            final int minLevel = level.min();
+            final int maxLevel = level.max();
             result = result.stream()
                     .filter(Player.class::isInstance)
                     .filter(entity -> MathUtils.isBetween(((Player) entity).getLevel(), minLevel, maxLevel))
@@ -283,7 +283,7 @@ public class EntityFinder {
     }
 
     public enum TargetSelector {
-        NEAREST_PLAYER, RANDOM_PLAYER, ALL_PLAYERS, ALL_ENTITIES, SELF, MINESTOM_USERNAME, MINESTOM_UUID
+        NEAREST_PLAYER, RANDOM_PLAYER, ALL_PLAYERS, ALL_ENTITIES, SELF, MINESTOM_USERNAME, MINESTOM_UUID, NEAREST_ENTITY
     }
 
     public enum EntitySort {
@@ -315,6 +315,12 @@ public class EntityFinder {
             return players.stream()
                     .min(Comparator.comparingDouble(p -> p.getPosition().distanceSquared(startPosition)))
                     .<List<Entity>>map(Collections::singletonList).orElse(List.of());
+        } else if (targetSelector == TargetSelector.NEAREST_ENTITY) {
+            List<Entity> entities = findTarget(instance, TargetSelector.ALL_ENTITIES, startPosition, self);
+
+            return entities.stream()
+                    .min(Comparator.comparingDouble(p -> p.getPosition().distanceSquared(startPosition)))
+                    .map(Collections::singletonList).orElse(List.of());
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
             final int index = ThreadLocalRandom.current().nextInt(players.size());
             final Player player = players.stream().skip(index).findFirst().orElseThrow();

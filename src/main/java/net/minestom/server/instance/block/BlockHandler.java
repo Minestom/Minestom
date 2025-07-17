@@ -1,11 +1,12 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,9 +83,10 @@ public interface BlockHandler {
      * <p>
      * Used to write the block entity in the anvil world format.
      *
-     * @return the namespace id of this handler
+     * @return the key of this handler
      */
-    @NotNull NamespaceID getNamespaceId();
+    @NotNull
+    Key getKey();
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
@@ -116,13 +118,13 @@ public interface BlockHandler {
 
     final class PlayerPlacement extends Placement {
         private final Player player;
-        private final Player.Hand hand;
+        private final PlayerHand hand;
         private final BlockFace blockFace;
         private final float cursorX, cursorY, cursorZ;
 
         @ApiStatus.Internal
         public PlayerPlacement(Block block, Instance instance, Point blockPosition,
-                               Player player, Player.Hand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+                               Player player, PlayerHand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
             super(block, instance, blockPosition);
             this.player = player;
             this.hand = hand;
@@ -136,7 +138,7 @@ public interface BlockHandler {
             return player;
         }
 
-        public @NotNull Player.Hand getHand() {
+        public @NotNull PlayerHand getHand() {
             return hand;
         }
 
@@ -199,15 +201,17 @@ public interface BlockHandler {
     final class Interaction {
         private final Block block;
         private final Instance instance;
+        private final BlockFace blockFace;
         private final Point blockPosition;
         private final Point cursorPosition;
         private final Player player;
-        private final Player.Hand hand;
+        private final PlayerHand hand;
 
         @ApiStatus.Internal
-        public Interaction(Block block, Instance instance, Point blockPosition, Point cursorPosition, Player player, Player.Hand hand) {
+        public Interaction(Block block, Instance instance, BlockFace blockFace, Point blockPosition, Point cursorPosition, Player player, PlayerHand hand) {
             this.block = block;
             this.instance = instance;
+            this.blockFace = blockFace;
             this.blockPosition = blockPosition;
             this.cursorPosition = cursorPosition;
             this.player = player;
@@ -222,6 +226,10 @@ public interface BlockHandler {
             return instance;
         }
 
+        public @NotNull BlockFace getBlockFace() {
+            return blockFace;
+        }
+
         public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
@@ -234,7 +242,7 @@ public interface BlockHandler {
             return player;
         }
 
-        public @NotNull Player.Hand getHand() {
+        public @NotNull PlayerHand getHand() {
             return hand;
         }
     }
@@ -307,15 +315,15 @@ public interface BlockHandler {
             return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
-        private final NamespaceID namespace;
+        private final Key key;
 
         private Dummy(String name) {
-            namespace = NamespaceID.from(name);
+            key = Key.key(name);
         }
 
         @Override
-        public @NotNull NamespaceID getNamespaceId() {
-            return namespace;
+        public @NotNull Key getKey() {
+            return key;
         }
     }
 }

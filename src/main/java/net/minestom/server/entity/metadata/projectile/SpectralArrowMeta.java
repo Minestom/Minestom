@@ -1,18 +1,15 @@
 package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
-    public static final byte OFFSET = AbstractArrowMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
     private Entity shooter;
 
-    public SpectralArrowMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public SpectralArrowMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -29,7 +26,7 @@ public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataPr
 
     @Override
     public int getObjectData() {
-        return this.shooter == null ? 0 : this.shooter.getEntityId() + 1;
+        return this.shooter == null ? 0 : this.shooter.getEntityId();
     }
 
     @Override

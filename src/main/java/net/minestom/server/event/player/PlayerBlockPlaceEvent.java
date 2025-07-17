@@ -1,7 +1,9 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -17,8 +19,9 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
     private final Player player;
     private Block block;
     private final BlockFace blockFace;
-    private final Point blockPosition;
-    private final Player.Hand hand;
+    private final BlockVec blockPosition;
+    private final Point cursorPosition;
+    private final PlayerHand hand;
 
     private boolean consumeBlock;
     private boolean doBlockUpdates;
@@ -26,12 +29,13 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
     private boolean cancelled;
 
     public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
-                                 @NotNull BlockFace blockFace,
-                                 @NotNull Point blockPosition, @NotNull Player.Hand hand) {
+                                 @NotNull BlockFace blockFace, @NotNull BlockVec blockPosition,
+                                 @NotNull Point cursorPosition, @NotNull PlayerHand hand) {
         this.player = player;
         this.block = block;
         this.blockFace = blockFace;
         this.blockPosition = blockPosition;
+        this.cursorPosition = cursorPosition;
         this.hand = hand;
         this.consumeBlock = true;
         this.doBlockUpdates = true;
@@ -65,8 +69,13 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
      *
      * @return the block position
      */
-    public @NotNull Point getBlockPosition() {
+    @Override
+    public @NotNull BlockVec getBlockPosition() {
         return blockPosition;
+    }
+
+    public @NotNull Point getCursorPosition() {
+        return cursorPosition;
     }
 
     /**
@@ -74,7 +83,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
      *
      * @return the hand used
      */
-    public @NotNull Player.Hand getHand() {
+    public @NotNull PlayerHand getHand() {
         return hand;
     }
 

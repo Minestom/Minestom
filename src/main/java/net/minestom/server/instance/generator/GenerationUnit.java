@@ -1,10 +1,12 @@
 package net.minestom.server.instance.generator;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -66,5 +68,27 @@ public interface GenerationUnit {
      */
     default @NotNull List<GenerationUnit> subdivide() {
         return List.of(this);
+    }
+
+    /**
+     * Returns the sections that this unit contains. Coordinates are in section coordinates.
+     *
+     * @return the contained sections
+     */
+    default @NotNull Set<Vec> sections() {
+        final Point start = absoluteStart(), end = absoluteEnd();
+        final int minX = start.chunkX(), minY = start.section(), minZ = start.chunkZ();
+        final int maxX = end.chunkX(), maxY = end.section(), maxZ = end.chunkZ();
+        final int count = (maxX - minX) * (maxY - minY) * (maxZ - minZ);
+        Vec[] sections = new Vec[count];
+        int index = 0;
+        for (int sectionX = minX; sectionX < maxX; sectionX++) {
+            for (int sectionY = minY; sectionY < maxY; sectionY++) {
+                for (int sectionZ = minZ; sectionZ < maxZ; sectionZ++) {
+                    sections[index++] = new Vec(sectionX, sectionY, sectionZ);
+                }
+            }
+        }
+        return Set.of(sections);
     }
 }

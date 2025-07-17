@@ -1,312 +1,310 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.metadata.animal.FrogMeta;
-import net.minestom.server.entity.metadata.animal.SnifferMeta;
-import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.data.WorldPos;
-import net.minestom.server.particle.Particle;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EntityPose;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.ApiStatus;
+import net.minestom.server.utils.Either;
+import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTReader;
-import org.jglrxavpok.hephaistos.nbt.NBTWriter;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import javax.crypto.Cipher;
+import java.io.IOException;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SocketChannel;
+import java.security.PublicKey;
+import java.time.Instant;
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.zip.DataFormatException;
 
-@ApiStatus.Experimental
-public final class NetworkBuffer {
-    public static final Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
-    public static final Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
-    public static final Type<Short> SHORT = new NetworkBufferTypeImpl.ShortType();
-    public static final Type<Integer> UNSIGNED_SHORT = new NetworkBufferTypeImpl.UnsignedShortType();
-    public static final Type<Integer> INT = new NetworkBufferTypeImpl.IntType();
-    public static final Type<Long> LONG = new NetworkBufferTypeImpl.LongType();
-    public static final Type<Float> FLOAT = new NetworkBufferTypeImpl.FloatType();
-    public static final Type<Double> DOUBLE = new NetworkBufferTypeImpl.DoubleType();
-    public static final Type<Integer> VAR_INT = new NetworkBufferTypeImpl.VarIntType();
-    public static final Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
-    public static final Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType();
-    public static final Type<String> STRING = new NetworkBufferTypeImpl.StringType();
-    public static final Type<NBT> NBT = new NetworkBufferTypeImpl.NbtType();
-    public static final Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
-    public static final Type<Component> COMPONENT = new NetworkBufferTypeImpl.ComponentType();
-    public static final Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
-    public static final Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
-    public static final Type<ItemStack> ITEM = new NetworkBufferTypeImpl.ItemType();
+public sealed interface NetworkBuffer permits NetworkBufferImpl {
+    Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
+    Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
+    Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
+    Type<Short> SHORT = new NetworkBufferTypeImpl.ShortType();
+    Type<Integer> UNSIGNED_SHORT = new NetworkBufferTypeImpl.UnsignedShortType();
+    Type<Integer> INT = new NetworkBufferTypeImpl.IntType();
+    Type<Long> LONG = new NetworkBufferTypeImpl.LongType();
+    Type<Float> FLOAT = new NetworkBufferTypeImpl.FloatType();
+    Type<Double> DOUBLE = new NetworkBufferTypeImpl.DoubleType();
+    Type<Integer> VAR_INT = new NetworkBufferTypeImpl.VarIntType();
+    Type<@Nullable Integer> OPTIONAL_VAR_INT = new NetworkBufferTypeImpl.OptionalVarIntType();
+    Type<Integer> VAR_INT_3 = new NetworkBufferTypeImpl.VarInt3Type();
+    Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
+    Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
+    Type<String> STRING = new NetworkBufferTypeImpl.StringType();
+    Type<Key> KEY = STRING.transform(Key::key, Key::asString);
+    Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
+    Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.IOUTF8StringType();
+    Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    Type<CompoundBinaryTag> NBT_COMPOUND = (Type) new NetworkBufferTypeImpl.NbtType();
+    Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
+    Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
+    Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
+    Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
+    Type<Pos> POS = new NetworkBufferTypeImpl.PosType();
 
-    public static final Type<byte[]> BYTE_ARRAY = new NetworkBufferTypeImpl.ByteArrayType();
-    public static final Type<long[]> LONG_ARRAY = new NetworkBufferTypeImpl.LongArrayType();
-    public static final Type<int[]> VAR_INT_ARRAY = new NetworkBufferTypeImpl.VarIntArrayType();
-    public static final Type<long[]> VAR_LONG_ARRAY = new NetworkBufferTypeImpl.VarLongArrayType();
+    Type<byte[]> BYTE_ARRAY = new NetworkBufferTypeImpl.ByteArrayType();
+    Type<long[]> LONG_ARRAY = new NetworkBufferTypeImpl.LongArrayType();
+    Type<int[]> VAR_INT_ARRAY = new NetworkBufferTypeImpl.VarIntArrayType();
+    Type<long[]> VAR_LONG_ARRAY = new NetworkBufferTypeImpl.VarLongArrayType();
 
-    // METADATA
-    public static final Type<Integer> BLOCK_STATE = new NetworkBufferTypeImpl.BlockStateType();
-    public static final Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
-    public static final Type<WorldPos> DEATH_LOCATION = new NetworkBufferTypeImpl.DeathLocationType();
-    public static final Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
-    public static final Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
-    public static final Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
-    public static final Type<Particle> PARTICLE = new NetworkBufferTypeImpl.ParticleType();
+    Type<BitSet> BITSET = LONG_ARRAY.transform(BitSet::valueOf, BitSet::toLongArray);
+    Type<Instant> INSTANT_MS = LONG.transform(Instant::ofEpochMilli, Instant::toEpochMilli);
+    Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.transform(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
 
-    public static final Type<Component> OPT_CHAT = NetworkBufferTypeImpl.fromOptional(COMPONENT);
-    public static final Type<Point> OPT_BLOCK_POSITION = NetworkBufferTypeImpl.fromOptional(BLOCK_POSITION);
-    public static final Type<UUID> OPT_UUID = NetworkBufferTypeImpl.fromOptional(UUID);
-    public static final Type<Integer> OPT_BLOCK_STATE = NetworkBufferTypeImpl.fromOptional(BLOCK_STATE);
-    public static final Type<Integer> OPT_VAR_INT = NetworkBufferTypeImpl.fromOptional(VAR_INT);
+    Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
+    Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
+    Type<Point> VECTOR3I = new NetworkBufferTypeImpl.Vector3IType();
+    Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
+    Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
 
-    public static final Type<Direction> DIRECTION = NetworkBufferTypeImpl.fromEnum(Direction.class);
-    public static final Type<Entity.Pose> POSE = NetworkBufferTypeImpl.fromEnum(Entity.Pose.class);
+    Type<@Nullable Component> OPT_CHAT = COMPONENT.optional();
+    Type<@Nullable Point> OPT_BLOCK_POSITION = BLOCK_POSITION.optional();
+    Type<@Nullable UUID> OPT_UUID = UUID.optional();
 
-    public static final Type<CatMeta.Variant> CAT_VARIANT = NetworkBufferTypeImpl.fromEnum(CatMeta.Variant.class);
-    public static final Type<FrogMeta.Variant> FROG_VARIANT = NetworkBufferTypeImpl.fromEnum(FrogMeta.Variant.class);
-    public static final Type<PaintingMeta.Variant> PAINTING_VARIANT = NetworkBufferTypeImpl.fromEnum(PaintingMeta.Variant.class);
-    public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypeImpl.fromEnum(SnifferMeta.State.class);
+    Type<Direction> DIRECTION = Enum(Direction.class);
+    Type<EntityPose> POSE = Enum(EntityPose.class);
 
+    // Combinators
 
-    ByteBuffer nioBuffer;
-    final boolean resizable;
-    int writeIndex;
-    int readIndex;
-
-    NBTWriter nbtWriter;
-    NBTReader nbtReader;
-
-    public NetworkBuffer(@NotNull ByteBuffer buffer, boolean resizable) {
-        this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);
-        this.resizable = resizable;
-
-        this.writeIndex = buffer.position();
-        this.readIndex = buffer.position();
+    static <E extends Enum<E>> @NotNull Type<E> Enum(@NotNull Class<E> enumClass) {
+        final E[] values = enumClass.getEnumConstants();
+        return VAR_INT.transform(integer -> values[integer], Enum::ordinal);
     }
 
-    public NetworkBuffer(@NotNull ByteBuffer buffer) {
-        this(buffer, true);
+    static <E extends Enum<E>> @NotNull Type<EnumSet<E>> EnumSet(@NotNull Class<E> enumClass) {
+        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, enumClass.getEnumConstants());
     }
 
-    public NetworkBuffer(int initialCapacity) {
-        this(ByteBuffer.allocateDirect(initialCapacity), true);
+    static @NotNull Type<BitSet> FixedBitSet(int length) {
+        return new NetworkBufferTypeImpl.FixedBitSetType(length);
     }
 
-    public NetworkBuffer() {
-        this(1024);
+    static @NotNull Type<byte[]> FixedRawBytes(int length) {
+        return new NetworkBufferTypeImpl.RawBytesType(length);
     }
 
-    public <T> void write(@NotNull Type<T> type, @NotNull T value) {
-        type.write(this, value);
+    static <T> @NotNull Type<T> Lazy(@NotNull Supplier<@NotNull Type<T>> supplier) {
+        return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
 
-    public <T> void write(@NotNull Writer writer) {
-        writer.write(this);
+    static <T> @NotNull Type<T> TypedNBT(@NotNull Codec<T> serializer) {
+        return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 
-    public <T> @NotNull T read(@NotNull Type<T> type) {
-        return type.read(this);
+    static <L, R> @NotNull Type<Either<L, R>> Either(@NotNull NetworkBuffer.Type<L> left, @NotNull NetworkBuffer.Type<R> right) {
+        return new NetworkBufferTypeImpl.EitherType<>(left, right);
     }
 
-    public <T> void writeOptional(@NotNull Type<T> type, @Nullable T value) {
-        write(BOOLEAN, value != null);
-        if (value != null) write(type, value);
+    <T>
+    void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+
+    <T> @UnknownNullability T read(@NotNull Type<T> type) throws IndexOutOfBoundsException;
+
+    <T> void writeAt(long index, @NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+
+    <T> @UnknownNullability T readAt(long index, @NotNull Type<T> type) throws IndexOutOfBoundsException;
+
+    void copyTo(long srcOffset, byte @NotNull [] dest, long destOffset, long length);
+
+    byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor);
+
+    @NotNull NetworkBuffer clear();
+
+    long writeIndex();
+
+    long readIndex();
+
+    @NotNull NetworkBuffer writeIndex(long writeIndex);
+
+    @NotNull NetworkBuffer readIndex(long readIndex);
+
+    @NotNull NetworkBuffer index(long readIndex, long writeIndex);
+
+    long advanceWrite(long length);
+
+    long advanceRead(long length);
+
+    long readableBytes();
+
+    long writableBytes();
+
+    long capacity();
+
+    void readOnly();
+
+    boolean isReadOnly();
+
+    void resize(long newSize);
+
+    void ensureWritable(long length);
+
+    void compact();
+
+    NetworkBuffer copy(long index, long length, long readIndex, long writeIndex);
+
+    default NetworkBuffer copy(long index, long length) {
+        return copy(index, length, readIndex(), writeIndex());
     }
 
-    public void writeOptional(@Nullable Writer writer) {
-        write(BOOLEAN, writer != null);
-        if (writer != null) write(writer);
-    }
+    int readChannel(ReadableByteChannel channel) throws IOException;
 
-    public <T> @Nullable T readOptional(@NotNull Type<T> type) {
-        return read(BOOLEAN) ? read(type) : null;
-    }
+    boolean writeChannel(SocketChannel channel) throws IOException;
 
-    public <T> @Nullable T readOptional(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function) {
-        return read(BOOLEAN) ? function.apply(this) : null;
-    }
+    void cipher(Cipher cipher, long start, long length);
 
-    public <T> void writeCollection(@NotNull Type<T> type, @Nullable Collection<@NotNull T> values) {
-        if (values == null) {
-            write(BYTE, (byte) 0);
-            return;
-        }
-        write(VAR_INT, values.size());
-        for (T value : values) write(type, value);
-    }
+    long compress(long start, long length, NetworkBuffer output);
 
-    @SafeVarargs
-    public final <T> void writeCollection(@NotNull Type<T> type, @NotNull T @Nullable ... values) {
-        writeCollection(type, values == null ? null : List.of(values));
-    }
+    long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
-    public <T extends Writer> void writeCollection(@Nullable Collection<@NotNull T> values) {
-        if (values == null) {
-            write(BYTE, (byte) 0);
-            return;
-        }
-        write(VAR_INT, values.size());
-        for (T value : values) write(value);
-    }
+    @Nullable Registries registries();
 
-    public <T> void writeCollection(@Nullable Collection<@NotNull T> values,
-                                    @NotNull BiConsumer<@NotNull NetworkBuffer, @NotNull T> consumer) {
-        if (values == null) {
-            write(BYTE, (byte) 0);
-            return;
-        }
-        write(VAR_INT, values.size());
-        for (T value : values) consumer.accept(this, value);
-    }
-
-    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Type<T> type, int maxSize) {
-        final int size = read(VAR_INT);
-        Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-        final List<T> values = new java.util.ArrayList<>(size);
-        for (int i = 0; i < size; i++) values.add(read(type));
-        return values;
-    }
-
-    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function, int maxSize) {
-        final int size = read(VAR_INT);
-        Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-        final List<T> values = new java.util.ArrayList<>(size);
-        for (int i = 0; i < size; i++) values.add(function.apply(this));
-        return values;
-    }
-
-    public <E extends Enum<?>> void writeEnum(@NotNull Class<E> enumClass, @NotNull E value) {
-        write(VAR_INT, value.ordinal());
-    }
-
-    public <E extends Enum<?>> @NotNull E readEnum(@NotNull Class<@NotNull E> enumClass) {
-        return enumClass.getEnumConstants()[read(VAR_INT)];
-    }
-
-    public <E extends Enum<E>> void writeEnumSet(EnumSet<E> enumSet, Class<E> enumType) {
-        final E[] values = enumType.getEnumConstants();
-        BitSet bitSet = new BitSet(values.length);
-        for (int i = 0; i < values.length; ++i) {
-            bitSet.set(i, enumSet.contains(values[i]));
-        }
-        writeFixedBitSet(bitSet, values.length);
-    }
-
-    public <E extends Enum<E>> @NotNull EnumSet<E> readEnumSet(Class<E> enumType) {
-        final E[] values = enumType.getEnumConstants();
-        BitSet bitSet = readFixedBitSet(values.length);
-        EnumSet<E> enumSet = EnumSet.noneOf(enumType);
-        for (int i = 0; i < values.length; ++i) {
-            if (bitSet.get(i)) {
-                enumSet.add(values[i]);
-            }
-        }
-        return enumSet;
-    }
-
-    public void writeFixedBitSet(BitSet set, int length) {
-        final int setLength = set.length();
-        if (setLength > length) {
-            throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
-        } else {
-            final byte[] array = set.toByteArray();
-            write(RAW_BYTES, array);
-        }
-    }
-
-    @NotNull
-    public BitSet readFixedBitSet(int length) {
-        final byte[] array = readBytes((length + 7) / 8);
-        return BitSet.valueOf(array);
-    }
-
-    public byte[] readBytes(int length) {
-        byte[] bytes = new byte[length];
-        nioBuffer.get(readIndex, bytes, 0, length);
-        readIndex += length;
-        return bytes;
-    }
-
-    public void copyTo(int srcOffset, byte @NotNull [] dest, int destOffset, int length) {
-        this.nioBuffer.get(srcOffset, dest, destOffset, length);
-    }
-
-    public byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor) {
-        final int startingPosition = readIndex();
-        extractor.accept(this);
-        final int endingPosition = readIndex();
-        byte[] output = new byte[endingPosition - startingPosition];
-        copyTo(startingPosition, output, 0, output.length);
-        return output;
-    }
-
-    public void clear() {
-        this.writeIndex = 0;
-        this.readIndex = 0;
-    }
-
-    public int writeIndex() {
-        return writeIndex;
-    }
-
-    public int readIndex() {
-        return readIndex;
-    }
-
-    public void writeIndex(int writeIndex) {
-        this.writeIndex = writeIndex;
-    }
-
-    public void readIndex(int readIndex) {
-        this.readIndex = readIndex;
-    }
-
-    public int skipWrite(int length) {
-        final int oldWriteIndex = writeIndex;
-        writeIndex += length;
-        return oldWriteIndex;
-    }
-
-    public int readableBytes() {
-        return writeIndex - readIndex;
-    }
-
-    void ensureSize(int length) {
-        if (!resizable) return;
-        if (nioBuffer.capacity() < writeIndex + length) {
-            final int newCapacity = Math.max(nioBuffer.capacity() * 2, writeIndex + length);
-            ByteBuffer newBuffer = ByteBuffer.allocateDirect(newCapacity);
-            nioBuffer.position(0);
-            newBuffer.put(nioBuffer);
-            nioBuffer = newBuffer.clear();
-        }
-    }
-
-
-    public interface Type<T> {
+    interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
 
         T read(@NotNull NetworkBuffer buffer);
+
+        default long sizeOf(@NotNull T value, @Nullable Registries registries) {
+            return NetworkBufferTypeImpl.sizeOf(this, value, registries);
+        }
+
+        default long sizeOf(@NotNull T value) {
+            return sizeOf(value, null);
+        }
+
+        default <S> @NotNull Type<S> transform(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
+            return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
+        }
+
+        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull Type<V> valueType, int maxSize) {
+            return new NetworkBufferTypeImpl.MapType<>(this, valueType, maxSize);
+        }
+
+        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull Type<V> valueType) {
+            return mapValue(valueType, Integer.MAX_VALUE);
+        }
+
+        default @NotNull Type<List<T>> list(int maxSize) {
+            return new NetworkBufferTypeImpl.ListType<>(this, maxSize);
+        }
+
+        default @NotNull Type<List<T>> list() {
+            return list(Integer.MAX_VALUE);
+        }
+
+        default @NotNull Type<Set<T>> set(int maxSize) {
+            return new NetworkBufferTypeImpl.SetType<>(this, maxSize);
+        }
+
+        default @NotNull Type<Set<T>> set() {
+            return set(Integer.MAX_VALUE);
+        }
+
+        default @NotNull Type<T> optional() {
+            return new NetworkBufferTypeImpl.OptionalType<>(this);
+        }
+
+        default <R> @NotNull Type<R> unionType(@NotNull Function<T, NetworkBuffer.Type<R>> serializers, @NotNull Function<R, T> keyFunc) {
+            return new NetworkBufferTypeImpl.UnionType<>(this, keyFunc, serializers);
+        }
+
+        default @NotNull Type<T> lengthPrefixed(int maxLength) {
+            return new NetworkBufferTypeImpl.LengthPrefixedType<>(this, maxLength);
+        }
+    }
+
+    static @NotNull Builder builder(long size) {
+        return new NetworkBufferImpl.Builder(size);
+    }
+
+    static @NotNull NetworkBuffer staticBuffer(long size, Registries registries) {
+        return builder(size).registry(registries).build();
+    }
+
+    static @NotNull NetworkBuffer staticBuffer(long size) {
+        return staticBuffer(size, null);
+    }
+
+    static @NotNull NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
+        return builder(initialSize)
+                .autoResize(AutoResize.DOUBLE)
+                .registry(registries)
+                .build();
+    }
+
+    static @NotNull NetworkBuffer resizableBuffer(int initialSize) {
+        return resizableBuffer(initialSize, null);
+    }
+
+    static @NotNull NetworkBuffer resizableBuffer(Registries registries) {
+        return resizableBuffer(256, registries);
+    }
+
+    static @NotNull NetworkBuffer resizableBuffer() {
+        return resizableBuffer(null);
+    }
+
+    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
+        return NetworkBufferImpl.wrap(bytes, readIndex, writeIndex, registries);
+    }
+
+    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex) {
+        return wrap(bytes, readIndex, writeIndex, null);
+    }
+
+    sealed interface Builder permits NetworkBufferImpl.Builder {
+        @NotNull Builder autoResize(@Nullable AutoResize autoResize);
+
+        @NotNull Builder registry(@Nullable Registries registries);
+
+        @NotNull NetworkBuffer build();
     }
 
     @FunctionalInterface
-    public interface Writer {
-        void write(@NotNull NetworkBuffer writer);
+    interface AutoResize {
+        AutoResize DOUBLE = (capacity, targetSize) -> Math.max(capacity * 2, targetSize);
+
+        long resize(long capacity, long targetSize);
     }
 
-    public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
-        NetworkBuffer writer = new NetworkBuffer();
-        writing.accept(writer);
-        byte[] bytes = new byte[writer.writeIndex];
-        writer.copyTo(0, bytes, 0, bytes.length);
-        return bytes;
+    static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing, @Nullable Registries registries) {
+        NetworkBuffer buffer = resizableBuffer(256, registries);
+        writing.accept(buffer);
+        return buffer.read(RAW_BYTES);
+    }
+
+    static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
+        return makeArray(writing, null);
+    }
+
+    static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value, @Nullable Registries registries) {
+        return makeArray(buffer -> buffer.write(type, value), registries);
+    }
+
+    static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value) {
+        return makeArray(type, value, null);
+    }
+
+    static void copy(NetworkBuffer srcBuffer, long srcOffset,
+                     NetworkBuffer dstBuffer, long dstOffset, long length) {
+        NetworkBufferImpl.copy(srcBuffer, srcOffset, dstBuffer, dstOffset, length);
+    }
+
+    static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
+        return NetworkBufferImpl.equals(buffer1, buffer2);
     }
 }

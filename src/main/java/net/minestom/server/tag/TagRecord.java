@@ -1,11 +1,11 @@
 package net.minestom.server.tag;
 
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -44,7 +44,7 @@ final class TagRecord {
                         final Tag<?> tag;
                         if (componentType.isRecord()) {
                             tag = Tag.Structure(componentName, serializers.get(componentType));
-                        } else if (NBT.class.isAssignableFrom(componentType)) {
+                        } else if (BinaryTag.class.isAssignableFrom(componentType)) {
                             tag = Tag.NBT(componentName);
                         } else {
                             final var fun = SUPPORTED_TYPES.get(componentType);
@@ -73,7 +73,7 @@ final class TagRecord {
     static final class Serializer<T extends Record> implements TagSerializer<T> {
         final Constructor<T> constructor;
         final Entry[] entries;
-        final Serializers.Entry<T, NBTCompound> serializerEntry;
+        final Serializers.Entry<T, CompoundBinaryTag> serializerEntry;
 
         Serializer(Constructor<T> constructor, Entry[] entries) {
             this.constructor = constructor;

@@ -2,11 +2,10 @@ package net.minestom.server.potion;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -19,8 +18,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  * @param duration  the duration (in ticks) that the potion will last
  * @param flags     the flags of the potion, see {@link #flags()}
  */
-public record Potion(@NotNull PotionEffect effect, byte amplifier,
-                     int duration, byte flags) implements NetworkBuffer.Writer {
+public record Potion(@NotNull PotionEffect effect, int amplifier, int duration, byte flags) {
     /**
      * A flag indicating that this Potion is ambient (it came from a beacon).
      *
@@ -49,22 +47,29 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
     public static final byte ICON_FLAG = 0x04;
 
     /**
+     * A flag instructing the client to use its builtin blending effect, only used with the darkness effect currently.
+     */
+    public static final byte BLEND_FLAG = 0x08;
+
+    /**
      * A duration constant which sets a Potion duration to infinite.
      */
     public static final int INFINITE_DURATION = -1;
 
     /**
-     * Creates a new Potion with no flags.
-     *
-     * @see #Potion(PotionEffect, byte, int, byte)
+     * @see #Potion(PotionEffect, int, int, byte)
      */
-    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration) {
-        this(effect, amplifier, duration, (byte) 0);
+    public Potion(@NotNull PotionEffect effect, int amplifier, int duration, int flags) {
+        this(effect, amplifier, duration, (byte) flags);
     }
 
-    public Potion(@NotNull NetworkBuffer reader) {
-        this(Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))), reader.read(BYTE),
-                reader.read(VAR_INT), reader.read(BYTE));
+    /**
+     * Creates a new Potion with no flags.
+     *
+     * @see #Potion(PotionEffect, int, int, byte)
+     */
+    public Potion(@NotNull PotionEffect effect, int amplifier, int duration) {
+        this(effect, amplifier, duration, (byte) 0);
     }
 
     /**
@@ -106,6 +111,10 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
         return (flags & ICON_FLAG) == ICON_FLAG;
     }
 
+    public boolean hasBlend() {
+        return (flags & BLEND_FLAG) == BLEND_FLAG;
+    }
+
     /**
      * Sends a packet that a potion effect has been applied to the entity.
      * <p>
@@ -114,7 +123,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
      * @param entity the entity to add the effect to
      */
     public void sendAddPacket(@NotNull Entity entity) {
-        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this, null));
+        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this));
     }
 
     /**
@@ -128,11 +137,11 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
         entity.sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(entity.getEntityId(), effect));
     }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, effect.id());
-        writer.write(BYTE, amplifier);
-        writer.write(VAR_INT, duration);
-        writer.write(BYTE, flags);
-    }
+    public static final NetworkBuffer.Type<Potion> NETWORK_TYPE = NetworkBufferTemplate.template(
+            PotionEffect.NETWORK_TYPE, Potion::effect,
+            VAR_INT, Potion::amplifier,
+            VAR_INT, Potion::duration,
+            BYTE, Potion::flags,
+            Potion::new
+    );
 }

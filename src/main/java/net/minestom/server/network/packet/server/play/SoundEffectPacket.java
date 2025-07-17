@@ -5,19 +5,13 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record SoundEffectPacket(
-        // only one of soundEvent and soundName may be present
-        @Nullable SoundEvent soundEvent,
-        @Nullable String soundName,
-        @Nullable Float range, // Only allowed with soundName
+        @NotNull SoundEvent soundEvent,
         @NotNull Source source,
         int x,
         int y,
@@ -26,79 +20,33 @@ public record SoundEffectPacket(
         float pitch,
         long seed
 ) implements ServerPacket.Play {
-
-    public SoundEffectPacket {
-        Check.argCondition(soundEvent == null && soundName == null, "soundEvent and soundName cannot both be null");
-        Check.argCondition(soundEvent != null && soundName != null, "soundEvent and soundName cannot both be present");
-        Check.argCondition(soundName == null && range != null, "range cannot be present if soundName is null");
-    }
-
-    private static @NotNull SoundEffectPacket fromReader(@NotNull NetworkBuffer reader) {
-        int soundId = reader.read(VAR_INT);
-        SoundEvent soundEvent;
-        String soundName;
-        Float range = null;
-        if (soundId == 0) {
-            soundEvent = null;
-            soundName = reader.read(STRING);
-            range = reader.readOptional(FLOAT);
-        } else {
-            soundEvent = SoundEvent.fromId(soundId - 1);
-            soundName = null;
+    public static final NetworkBuffer.Type<SoundEffectPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, SoundEffectPacket value) {
+            buffer.write(SoundEvent.NETWORK_TYPE, value.soundEvent());
+            buffer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source()));
+            buffer.write(INT, value.x() * 8);
+            buffer.write(INT, value.y() * 8);
+            buffer.write(INT, value.z() * 8);
+            buffer.write(FLOAT, value.volume());
+            buffer.write(FLOAT, value.pitch());
+            buffer.write(LONG, value.seed());
         }
-        return new SoundEffectPacket(
-                soundEvent,
-                soundName,
-                range,
-                reader.readEnum(Source.class),
-                reader.read(INT) * 8,
-                reader.read(INT) * 8,
-                reader.read(INT) * 8,
-                reader.read(FLOAT),
-                reader.read(FLOAT),
-                reader.read(LONG)
-        );
-    }
 
-    public SoundEffectPacket(@NotNull SoundEvent soundEvent, @Nullable Float range, @NotNull Source source,
-                             @NotNull Point position, float volume, float pitch, long seed) {
-        this(soundEvent, null, range, source, position.blockX(), position.blockY(), position.blockZ(), volume, pitch, seed);
-    }
-
-    public SoundEffectPacket(@NotNull String soundName, @Nullable Float range, @NotNull Source source,
-                             @NotNull Point position, float volume, float pitch, long seed) {
-        this(null, soundName, range, source, position.blockX(), position.blockY(), position.blockZ(), volume, pitch, seed);
-    }
-
-    public SoundEffectPacket(@NotNull NetworkBuffer reader) {
-        this(fromReader(reader));
-    }
-
-    private SoundEffectPacket(@NotNull SoundEffectPacket packet) {
-        this(packet.soundEvent, packet.soundName, packet.range, packet.source,
-                packet.x, packet.y, packet.z, packet.volume, packet.pitch, packet.seed);
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        if (soundEvent != null) {
-            writer.write(VAR_INT, soundEvent.id() + 1);
-        } else {
-            writer.write(VAR_INT, 0);
-            writer.write(STRING, soundName);
-            writer.writeOptional(FLOAT, range);
+        @Override
+        public SoundEffectPacket read(@NotNull NetworkBuffer buffer) {
+            return new SoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
+                    buffer.read(NetworkBuffer.Enum(Source.class)),
+                    buffer.read(INT) * 8,
+                    buffer.read(INT) * 8,
+                    buffer.read(INT) * 8,
+                    buffer.read(FLOAT),
+                    buffer.read(FLOAT),
+                    buffer.read(LONG));
         }
-        writer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(source));
-        writer.write(INT, x * 8);
-        writer.write(INT, y * 8);
-        writer.write(INT, z * 8);
-        writer.write(FLOAT, volume);
-        writer.write(FLOAT, pitch);
-        writer.write(LONG, seed);
-    }
+    };
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SOUND_EFFECT;
+    public SoundEffectPacket(@NotNull SoundEvent soundEvent, @NotNull Source source, @NotNull Point position, float volume, float pitch, long seed) {
+        this(soundEvent, source, position.blockX(), position.blockY(), position.blockZ(), volume, pitch, seed);
     }
 }

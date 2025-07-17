@@ -2,7 +2,7 @@ package net.minestom.server.snapshot;
 
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

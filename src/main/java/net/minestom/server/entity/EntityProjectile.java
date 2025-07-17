@@ -13,6 +13,8 @@ import net.minestom.server.event.entity.projectile.ProjectileUncollideEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.thread.Acquirable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,8 +93,12 @@ public class EntityProjectile extends Entity {
     public void tick(long time) {
         final Pos posBefore = getPosition();
         super.tick(time);
+        if (super.isRemoved()) return;
+
         final Pos posNow = getPosition();
-        if (isStuck(posBefore, posNow)) {
+        boolean isStuck = isStuck(posBefore, posNow);
+        if (isRemoved()) return;
+        if (isStuck) {
             if (super.onGround) {
                 return;
             }
@@ -135,7 +141,7 @@ public class EntityProjectile extends Entity {
         final double part = bb.width() / 2;
         final Vec dir = posNow.sub(pos).asVec();
         final int parts = (int) Math.ceil(dir.length() / part);
-        final Pos direction = dir.normalize().mul(part).asPosition();
+        final Pos direction = dir.normalize().mul(part).asPos();
         final long aliveTicks = getAliveTicks();
         Block block = null;
         Point blockPos = null;
@@ -149,6 +155,7 @@ public class EntityProjectile extends Entity {
             if (block.isSolid()) {
                 final ProjectileCollideWithBlockEvent event = new ProjectileCollideWithBlockEvent(this, pos, block);
                 EventDispatcher.call(event);
+                if (isRemoved()) return true;
                 if (!event.isCancelled()) {
                     teleport(pos);
                     return true;
@@ -183,5 +190,12 @@ public class EntityProjectile extends Entity {
             }
         }
         return false;
+    }
+
+    @ApiStatus.Experimental
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull Acquirable<? extends EntityProjectile> acquirable() {
+        return (Acquirable<? extends EntityProjectile>) super.acquirable();
     }
 }

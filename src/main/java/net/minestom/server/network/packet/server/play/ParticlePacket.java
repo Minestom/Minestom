@@ -3,77 +3,62 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.data.ParticleData;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ParticlePacket(int particleId, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount, @Nullable ParticleData data) implements ServerPacket.Play {
-    private ParticlePacket(ParticlePacket copy) {
-        this(copy.particleId, copy.longDistance, copy.x, copy.y, copy.z, copy.offsetX, copy.offsetY, copy.offsetZ, copy.maxSpeed, copy.particleCount, copy.data);
-    }
-
-    public ParticlePacket(@NotNull NetworkBuffer reader) {
-        this(readPacket(reader));
-    }
-
-    public ParticlePacket(@NotNull Particle particle, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
-        this(particle.id(), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
-    }
-
+public record ParticlePacket(@NotNull Particle particle, boolean overrideLimiter, boolean longDistance, double x, double y, double z,
+                             float offsetX, float offsetY, float offsetZ, float maxSpeed,
+                             int particleCount) implements ServerPacket.Play {
     public ParticlePacket(@NotNull Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
-        this(particle.id(), false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
+        this(particle, false, false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
     }
 
-    public ParticlePacket(@NotNull Particle particle, boolean longDistance, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
-        this(particle, longDistance, position.x(), position.y(), position.z(), (float)offset.x(), (float)offset.y(), (float)offset.z(), maxSpeed, particleCount);
+    public ParticlePacket(@NotNull Particle particle, boolean overrideLimiter, boolean longDistance, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
+        this(particle, overrideLimiter, longDistance, position.x(), position.y(), position.z(), (float) offset.x(), (float) offset.y(), (float) offset.z(), maxSpeed, particleCount);
     }
 
     public ParticlePacket(@NotNull Particle particle, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
-        this(particle, false, position, offset, maxSpeed, particleCount);
+        this(particle, false, false, position, offset, maxSpeed, particleCount);
     }
 
-    private static ParticlePacket readPacket(NetworkBuffer reader) {
-        int particleId = reader.read(VAR_INT);
-        Boolean longDistance = reader.read(BOOLEAN);
-        Double x = reader.read(DOUBLE);
-        Double y = reader.read(DOUBLE);
-        Double z = reader.read(DOUBLE);
-        Float offsetX = reader.read(FLOAT);
-        Float offsetY = reader.read(FLOAT);
-        Float offsetZ = reader.read(FLOAT);
-        Float maxSpeed = reader.read(FLOAT);
-        Integer particleCount = reader.read(INT);
-        ParticleData data = ParticleData.read(particleId, reader);
+    public static final NetworkBuffer.Type<ParticlePacket> SERIALIZER = new Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ParticlePacket value) {
+            buffer.write(BOOLEAN, value.overrideLimiter);
+            buffer.write(BOOLEAN, value.longDistance);
+            buffer.write(DOUBLE, value.x);
+            buffer.write(DOUBLE, value.y);
+            buffer.write(DOUBLE, value.z);
+            buffer.write(FLOAT, value.offsetX);
+            buffer.write(FLOAT, value.offsetY);
+            buffer.write(FLOAT, value.offsetZ);
+            buffer.write(FLOAT, value.maxSpeed);
+            buffer.write(INT, value.particleCount);
+            buffer.write(VAR_INT, value.particle.id());
+            value.particle.writeData(buffer);
+        }
 
-        return new ParticlePacket(particleId, longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, data);
-    }
+        @Override
+        public ParticlePacket read(@NotNull NetworkBuffer buffer) {
+            Boolean overrideLimiter = buffer.read(BOOLEAN);
+            Boolean longDistance = buffer.read(BOOLEAN);
+            Double x = buffer.read(DOUBLE);
+            Double y = buffer.read(DOUBLE);
+            Double z = buffer.read(DOUBLE);
+            Float offsetX = buffer.read(FLOAT);
+            Float offsetY = buffer.read(FLOAT);
+            Float offsetZ = buffer.read(FLOAT);
+            Float maxSpeed = buffer.read(FLOAT);
+            Integer particleCount = buffer.read(INT);
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        Check.stateCondition(data != null && !data.validate(particleId), "Particle data {0} is not valid for this particle type {1}", data, Particle.fromId(particleId));
-        Check.stateCondition(data == null && ParticleData.requiresData(particleId), "Particle data is required for this particle type {0}", Particle.fromId(particleId));
+            Particle particle = Particle.fromId(buffer.read(VAR_INT));
+            Objects.requireNonNull(particle);
 
-        writer.write(VAR_INT, particleId);
-        writer.write(BOOLEAN, longDistance);
-        writer.write(DOUBLE, x);
-        writer.write(DOUBLE, y);
-        writer.write(DOUBLE, z);
-        writer.write(FLOAT, offsetX);
-        writer.write(FLOAT, offsetY);
-        writer.write(FLOAT, offsetZ);
-        writer.write(FLOAT, maxSpeed);
-        writer.write(INT, particleCount);
-
-        if (data != null) data.write(writer);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.PARTICLE;
-    }
+            return new ParticlePacket(particle.readData(buffer), overrideLimiter, longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
+        }
+    };
 }

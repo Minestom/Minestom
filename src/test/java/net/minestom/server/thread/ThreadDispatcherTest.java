@@ -20,6 +20,7 @@ public class ThreadDispatcherTest {
     public void elementTick() {
         final AtomicInteger counter = new AtomicInteger();
         ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
+        dispatcher.start();
         assertEquals(1, dispatcher.threads().size());
         assertThrows(Exception.class, () -> dispatcher.threads().add(new TickThread(1)));
 
@@ -29,16 +30,16 @@ public class ThreadDispatcherTest {
         dispatcher.updateElement(element, partition);
         assertEquals(0, counter.get());
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         dispatcher.updateElement(element, partition); // Should be ignored
         dispatcher.createPartition(partition); // Ignored too
         assertEquals(1, counter.get());
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         assertEquals(2, counter.get());
 
         dispatcher.removeElement(element);
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         assertEquals(2, counter.get());
 
         dispatcher.shutdown();
@@ -50,6 +51,7 @@ public class ThreadDispatcherTest {
         final AtomicInteger counter1 = new AtomicInteger();
         final AtomicInteger counter2 = new AtomicInteger();
         ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.singleThread();
+        dispatcher.start();
         assertEquals(1, dispatcher.threads().size());
 
         Tickable partition = (time) -> counter1.incrementAndGet();
@@ -60,13 +62,13 @@ public class ThreadDispatcherTest {
         assertEquals(0, counter2.get());
 
         for (int i = 0; i < 100; i++) {
-            dispatcher.updateAndAwait(System.currentTimeMillis());
+            dispatcher.updateAndAwait(System.nanoTime());
             assertEquals(i + 1, counter1.get());
             assertEquals(i + 1, counter2.get());
         }
 
         dispatcher.deletePartition(partition);
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         assertEquals(100, counter1.get());
         assertEquals(100, counter2.get());
 
@@ -79,6 +81,7 @@ public class ThreadDispatcherTest {
         final int threadCount = 10;
         ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), threadCount);
         assertEquals(threadCount, dispatcher.threads().size());
+        dispatcher.start();
 
         final AtomicInteger counter = new AtomicInteger();
         Set<Thread> threads = new CopyOnWriteArraySet<>();
@@ -96,7 +99,7 @@ public class ThreadDispatcherTest {
         partitions.forEach(dispatcher::createPartition);
         assertEquals(0, counter.get());
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         assertEquals(threadCount, counter.get());
 
         dispatcher.shutdown();
@@ -123,6 +126,7 @@ public class ThreadDispatcherTest {
             }
         }, threadCount);
         assertEquals(threadCount, dispatcher.threads().size());
+        dispatcher.start();
 
         Map<Updater, Thread> threads = new ConcurrentHashMap<>();
         Map<Updater, Thread> threads2 = new ConcurrentHashMap<>();
@@ -151,11 +155,11 @@ public class ThreadDispatcherTest {
 
         partitions.forEach(dispatcher::createPartition);
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
 
         dispatcher.refreshThreads();
 
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
 
         assertEquals(threads2.size(), threads.size());
         assertNotEquals(threads, threads2, "Threads have not been updated at all");

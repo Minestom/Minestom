@@ -1,17 +1,18 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.Tag;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BlockTest {
 
@@ -21,7 +22,7 @@ public class BlockTest {
         assertFalse(block.hasNbt());
         assertNull(block.nbt());
 
-        var nbt = new NBTCompound(Map.of("key", NBT.Int(5)));
+        var nbt = CompoundBinaryTag.builder().putInt("key", 5).build();
         block = block.withNbt(nbt);
         assertTrue(block.hasNbt());
         assertEquals(block.nbt(), nbt);
@@ -53,6 +54,15 @@ public class BlockTest {
     }
 
     @Test
+    public void testState() {
+        assertEquals("minecraft:dirt", Block.DIRT.state());
+        assertEquals(Block.DIRT, Block.fromState("minecraft:dirt"));
+        assertEquals(Block.CHEST, Block.fromState("minecraft:chest"));
+        assertEquals(Block.CHEST, Block.fromState("minecraft:chest[]"));
+        assertEquals(Block.CHEST.withProperty("facing", "north"), Block.fromState("minecraft:chest[facing=north]"));
+    }
+
+    @Test
     public void invalidProperties() {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.withProperty("random", "randomKey"));
@@ -61,7 +71,7 @@ public class BlockTest {
 
     @Test
     public void testEquality() {
-        var nbt = new NBTCompound(Map.of("key", NBT.Int(5)));
+        var nbt = CompoundBinaryTag.builder().putInt("key", 5).build();
         Block b1 = Block.CHEST;
         Block b2 = Block.CHEST;
         assertEquals(b1.withNbt(nbt), b2.withNbt(nbt));
@@ -84,5 +94,24 @@ public class BlockTest {
 
         assertEquals(start, new Vec(0.3125, 0, 0.3125));
         assertEquals(end, new Vec(0.6875, 0.5625, 0.6875));
+    }
+
+    @Test
+    public void testDuplicateProperties() {
+        HashSet<Integer> assignedStates = new HashSet<>();
+        for (Block block : Block.values()) {
+            for (Block blockWithState : block.possibleStates()) {
+                assertTrue(assignedStates.add(blockWithState.stateId()));
+            }
+        }
+    }
+
+    @Test
+    public void testStateIdConversion() {
+        for (Block block : Block.values()) {
+            for (Block blockWithState : block.possibleStates()) {
+                assertEquals(blockWithState, Block.fromStateId(blockWithState.stateId()));
+            }
+        }
     }
 }

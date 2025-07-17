@@ -1,127 +1,131 @@
 package net.minestom.server.entity.metadata.water.fish;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.color.DyeColor;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.ObjectDataProvider;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class TropicalFishMeta extends AbstractFishMeta implements ObjectDataProvider {
-    public static final byte OFFSET = AbstractFishMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
-    public TropicalFishMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+public class TropicalFishMeta extends AbstractFishMeta {
+    public TropicalFishMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public Variant getVariant() {
-        return getVariantFromID(super.metadata.getIndex(OFFSET, 0));
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents} instead.
+     */
+    @Deprecated
+    public @NotNull Variant getVariant() {
+        return Variant.fromPackedId(metadata.get(MetadataDef.TropicalFish.VARIANT));
     }
 
-    public void setVariant(Variant variant) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(getVariantID(variant)));
-    }
-
-    public static int getVariantID(Variant variant) {
-        int id = 0;
-        id |= variant.patternColor;
-        id <<= 8;
-        id |= variant.bodyColor;
-        id <<= 8;
-        id |= variant.pattern.ordinal();
-        id <<= 8;
-        id |= variant.type.ordinal();
-        return id;
-    }
-
-    public static Variant getVariantFromID(int variantID) {
-        Type type = Type.VALUES[variantID & 0xFF];
-        variantID >>= 8;
-        Pattern pattern = Pattern.VALUES[variantID & 0xFF];
-        variantID >>= 8;
-        byte bodyColor = (byte) (variantID & 0xFF);
-        variantID >>= 8;
-        byte patternColor = (byte) (variantID & 0xFF);
-        return new Variant(type, pattern, bodyColor, patternColor);
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents} instead.
+     */
+    @Deprecated
+    public void setVariant(@NotNull Variant variant) {
+        metadata.set(MetadataDef.TropicalFish.VARIANT, variant.packedId());
     }
 
     @Override
-    public int getObjectData() {
-        // TODO: returns Entity ID of the owner (???)
-        return 0;
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.TROPICAL_FISH_PATTERN)
+            return (T) getVariant().pattern();
+        if (component == DataComponents.TROPICAL_FISH_BASE_COLOR)
+            return (T) getVariant().baseColor();
+        if (component == DataComponents.TROPICAL_FISH_PATTERN_COLOR)
+            return (T) getVariant().patternColor();
+        return super.get(component);
     }
 
     @Override
-    public boolean requiresVelocityPacketAtSpawn() {
-        return false;
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.TROPICAL_FISH_PATTERN)
+            setVariant(getVariant().withPattern((Pattern) value));
+        else if (component == DataComponents.TROPICAL_FISH_BASE_COLOR)
+            setVariant(getVariant().withBodyColor((DyeColor) value));
+        else if (component == DataComponents.TROPICAL_FISH_PATTERN_COLOR)
+            setVariant(getVariant().withPatternColor((DyeColor) value));
+        else super.set(component, value);
     }
 
-    public static class Variant {
+    public record Variant(@NotNull Pattern pattern, @NotNull DyeColor baseColor, @NotNull DyeColor patternColor) {
+        public static final Variant DEFAULT = new Variant(Pattern.KOB, DyeColor.WHITE, DyeColor.WHITE);
 
-        private Type type;
-        private Pattern pattern;
-        private byte bodyColor;
-        private byte patternColor;
+        public static @NotNull Variant fromPackedId(int packedId) {
+            int patternColorId = (packedId >> 24) & 0xFF;
+            int bodyColorId = (packedId >> 16) & 0xFF;
+            int patternId = packedId & 0xFF;
 
-        public Variant(@NotNull Type type, @NotNull Pattern pattern, byte bodyColor, byte patternColor) {
-            this.type = type;
-            this.pattern = pattern;
-            this.bodyColor = bodyColor;
-            this.patternColor = patternColor;
+            DyeColor patternColor = DyeColor.values()[patternColorId];
+            DyeColor bodyColor = DyeColor.values()[bodyColorId];
+            Pattern pattern = Pattern.fromId(patternId);
+
+            return new Variant(pattern, bodyColor, patternColor);
         }
 
-        @NotNull
-        public Type getType() {
-            return this.type;
+        public int packedId() {
+            return (patternColor.ordinal() << 24)
+                    | (baseColor.ordinal() << 16)
+                    | pattern.id();
         }
 
-        public void setType(@NotNull Type type) {
-            this.type = type;
+        public @NotNull Variant withPattern(@NotNull Pattern newPattern) {
+            return new Variant(newPattern, this.baseColor, this.patternColor);
         }
 
-        @NotNull
-        public Pattern getPattern() {
-            return this.pattern;
+        public @NotNull Variant withBodyColor(@NotNull DyeColor newBodyColor) {
+            return new Variant(this.pattern, newBodyColor, this.patternColor);
         }
 
-        public void setPattern(@NotNull Pattern pattern) {
-            this.pattern = pattern;
+        public @NotNull Variant withPatternColor(@NotNull DyeColor newPatternColor) {
+            return new Variant(this.pattern, this.baseColor, newPatternColor);
         }
-
-        public byte getBodyColor() {
-            return this.bodyColor;
-        }
-
-        public void setBodyColor(byte bodyColor) {
-            this.bodyColor = bodyColor;
-        }
-
-        public byte getPatternColor() {
-            return this.patternColor;
-        }
-
-        public void setPatternColor(byte patternColor) {
-            this.patternColor = patternColor;
-        }
-    }
-
-    public enum Type {
-        SMALL,
-        LARGE,
-        INVISIBLE;
-
-        private final static Type[] VALUES = values();
     }
 
     public enum Pattern {
-        KOB, // FLOPPER for LARGE fish
-        SUNSTREAK, // STRIPEY for LARGE fish
-        SNOOPER, // GLITTER for LARGE fish
-        DASHER, // BLOCKFISH for LARGE fish
-        BRINELY, // BETTY for LARGE fish
-        SPOTTY, // CLAYFISH for LARGE fish
-        NONE;
+        KOB(false, 0),
+        SUNSTREAK(false, 1),
+        SNOOPER(false, 2),
+        DASHER(false, 3),
+        BRINELY(false, 4),
+        SPOTTY(false, 5),
+        FLOPPER(true, 0),
+        STRIPEY(true, 1),
+        GLITTER(true, 2),
+        BLOCKFISH(true, 3),
+        BETTY(true, 4),
+        CLAYFISH(true, 5);
+
+        public static final NetworkBuffer.Type<Pattern> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Pattern::fromId, Pattern::id);
+        public static final Codec<Pattern> CODEC = Codec.Enum(Pattern.class);
 
         private final static Pattern[] VALUES = values();
+
+        public static @NotNull Pattern fromId(int id) {
+            for (Pattern pattern : VALUES) {
+                if (pattern.id() == id) {
+                    return pattern;
+                }
+            }
+            throw new IllegalArgumentException("Invalid pattern id: " + id);
+        }
+
+        private final int id;
+
+        Pattern(boolean isLarge, int id) {
+            this.id = (isLarge ? 1 : 0) | (id << 8);
+        }
+
+        public int id() {
+            return this.id;
+        }
     }
 
 }

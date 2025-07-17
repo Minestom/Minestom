@@ -1,10 +1,10 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +20,9 @@ public class EntityMetaIntegrationTest {
     public void notifyAboutChanges(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var otherPlayer = connection.connect(instance, new Pos(0, 42, 0)).join();
-        var player = connection.connect(instance, new Pos(0, 42, 1)).join();
+        var connection2 = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 1));
+        var otherPlayer = connection2.connect(instance, new Pos(0, 42, 0));
 
         assertTrue(player.getViewers().contains(otherPlayer));
 
@@ -38,15 +39,17 @@ public class EntityMetaIntegrationTest {
         player.getEntityMeta().setNotifyAboutChanges(true);
 
         var packets = incomingPackets.collect();
-        // Two packets should be received: One for the player, one for the viewer
-        assertEquals(2, packets.size());
+        assertEquals(1, packets.size());
         validMetaDataPackets(packets, player.getEntityId(), entry -> {
             final Object content = entry.value();
-            switch (entry.type()) {
-                case Metadata.TYPE_BYTE -> assertEquals((byte) 34, content);
-                case Metadata.TYPE_BOOLEAN -> assertTrue((boolean) content);
-                case Metadata.TYPE_POSE -> assertEquals(Entity.Pose.SNEAKING, content);
-                default -> Assertions.fail("Invalid MetaData entry");
+            if (entry.type() == Metadata.TYPE_BYTE) {
+                assertEquals((byte) 34, content);
+            } else if (entry.type() == Metadata.TYPE_BOOLEAN) {
+                assertTrue((boolean) content);
+            } else if (entry.type() == Metadata.TYPE_POSE) {
+                assertEquals(EntityPose.SNEAKING, content);
+            } else {
+                Assertions.fail("Invalid MetaData entry");
             }
         });
 
@@ -58,15 +61,17 @@ public class EntityMetaIntegrationTest {
         packets = incomingPackets.collect();
         validMetaDataPackets(packets, player.getEntityId(), entry -> {
             final Object content = entry.value();
-            switch (entry.type()) {
-                case Metadata.TYPE_BYTE -> assertTrue(content.equals((byte) 2) || content.equals((byte) 0));
-                case Metadata.TYPE_BOOLEAN -> assertFalse((boolean) content);
-                case Metadata.TYPE_POSE -> assertEquals(Entity.Pose.STANDING, content);
-                default -> Assertions.fail("Invalid MetaData entry");
+            if (entry.type() == Metadata.TYPE_BYTE) {
+                assertTrue(content.equals((byte) 2) || content.equals((byte) 0));
+            } else if (entry.type() == Metadata.TYPE_BOOLEAN) {
+                assertFalse((boolean) content);
+            } else if (entry.type() == Metadata.TYPE_POSE) {
+                assertEquals(EntityPose.STANDING, content);
+            } else {
+                Assertions.fail("Invalid MetaData entry");
             }
         });
-        // 4 changes, for two viewers
-        assertEquals(4 * 2, packets.size());
+        assertEquals(4, packets.size());
     }
 
     private void validMetaDataPackets(List<EntityMetaDataPacket> packets, int entityId, Consumer<Metadata.Entry<?>> contentChecker) {
@@ -86,7 +91,7 @@ public class EntityMetaIntegrationTest {
         Pos startPos = new Pos(0, 42, 1);
 
         //Viewer.
-        var player = connection.connect(instance, startPos).join();
+        var player = connection.connect(instance, startPos);
 
         //Tracks incoming packets.
         var incomingPackets = connection.trackIncoming(EntityMetaDataPacket.class);
@@ -105,7 +110,7 @@ public class EntityMetaIntegrationTest {
         //This is first test, and it is not related to "custom name" bug. Therefore, it should work.
         var packets = incomingPackets.collect();
         validMetaDataPackets(packets, entity.getEntityId(), entry -> {
-            if (entry.type() != Metadata.TYPE_OPTCHAT) return;
+            if (entry.type() != Metadata.TYPE_OPT_CHAT) return;
             assertEquals(Component.text("Custom Name"), entry.value());
         });
 
@@ -127,7 +132,7 @@ public class EntityMetaIntegrationTest {
         //Listen packets to check if entity name is "Custom Name 2".
         packets = incomingPackets.collect();
         validMetaDataPackets(packets, entity.getEntityId(), entry -> {
-            if (entry.type() != Metadata.TYPE_OPTCHAT) return;
+            if (entry.type() != Metadata.TYPE_OPT_CHAT) return;
             assertEquals(Component.text("Custom Name 2"), entry.value());
         });
     }

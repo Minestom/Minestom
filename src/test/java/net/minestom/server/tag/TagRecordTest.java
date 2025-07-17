@@ -1,10 +1,10 @@
 package net.minestom.server.tag;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.item.ItemStack;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -27,21 +27,23 @@ public class TagRecordTest {
 
     @Test
     public void fromNBT() {
-        var vecCompound = NBT.Compound(Map.of(
-                "x", NBT.Double(1),
-                "y", NBT.Double(2),
-                "z", NBT.Double(3)));
-        var handler = TagHandler.fromCompound(NBT.Compound(Map.of("vec", vecCompound)));
+        var vecCompound = CompoundBinaryTag.builder()
+                .putDouble("x", 1)
+                .putDouble("y", 2)
+                .putDouble("z", 3)
+                .build();
+        var handler = TagHandler.fromCompound(CompoundBinaryTag.from(Map.of("vec", vecCompound)));
         var tag = Tag.Structure("vec", Vec.class);
         assertEquals(new Vec(1, 2, 3), handler.getTag(tag));
     }
 
     @Test
     public void fromNBTView() {
-        var handler = TagHandler.fromCompound(NBT.Compound(Map.of(
-                "x", NBT.Double(1),
-                "y", NBT.Double(2),
-                "z", NBT.Double(3))));
+        var handler = TagHandler.fromCompound(CompoundBinaryTag.builder()
+                .putDouble("x", 1)
+                .putDouble("y", 2)
+                .putDouble("z", 3)
+                .build());
         var tag = Tag.View(Vec.class);
         assertEquals(new Vec(1, 2, 3), handler.getTag(tag));
     }
@@ -75,9 +77,9 @@ public class TagRecordTest {
 
     @Test
     public void nbtSerializer() {
-        record CompoundRecord(NBTCompound compound) {
+        record CompoundRecord(CompoundBinaryTag compound) {
         }
-        var test = new CompoundRecord(NBT.Compound(Map.of("key", NBT.String("value"))));
+        var test = new CompoundRecord(CompoundBinaryTag.from(Map.of("key", StringBinaryTag.stringBinaryTag("value"))));
         var handler = TagHandler.newHandler();
         var serializer = TagRecord.serializer(CompoundRecord.class);
         serializer.write(handler, test);

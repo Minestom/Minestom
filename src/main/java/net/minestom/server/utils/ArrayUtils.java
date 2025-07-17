@@ -22,20 +22,6 @@ public final class ArrayUtils {
         return true;
     }
 
-    public static int[] concatenateIntArrays(int @NotNull []... arrays) {
-        int totalLength = 0;
-        for (int[] array : arrays) {
-            totalLength += array.length;
-        }
-        int[] result = new int[totalLength];
-        int startingPos = 0;
-        for (int[] array : arrays) {
-            System.arraycopy(array, 0, result, startingPos, array.length);
-            startingPos += array.length;
-        }
-        return result;
-    }
-
     public static <T> int[] mapToIntArray(Collection<T> collection, ToIntFunction<T> function) {
         final int size = collection.size();
         if (size == 0)

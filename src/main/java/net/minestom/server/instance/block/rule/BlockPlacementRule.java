@@ -4,7 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,7 +61,7 @@ public abstract class BlockPlacementRule {
             @NotNull Point placePosition,
             @Nullable Point cursorPosition,
             @Nullable Pos playerPosition,
-            @Nullable ItemMeta usedItemMeta,
+            @Nullable ItemStack usedItemStack,
             boolean isPlayerShifting
     ) {
     }
@@ -76,6 +76,11 @@ public abstract class BlockPlacementRule {
             @NotNull Block block,
             @NotNull BlockFace blockFace,
             @NotNull Point cursorPosition,
+            /**
+			 * Whether or not the placement position is offset from the clicked block
+			 * position.
+			 */
+            @NotNull boolean isOffset,
             @NotNull Material material
     ) {
     }

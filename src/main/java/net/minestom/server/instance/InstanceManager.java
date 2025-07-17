@@ -1,12 +1,14 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceRegisterEvent;
 import net.minestom.server.event.instance.InstanceUnregisterEvent;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +23,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public final class InstanceManager {
 
+    private final Registries registries;
     private final Set<Instance> instances = new CopyOnWriteArraySet<>();
+
+    public InstanceManager(@NotNull Registries registries) {
+        this.registries = registries;
+    }
 
     /**
      * Registers an {@link Instance} internally.
@@ -44,18 +51,16 @@ public final class InstanceManager {
      * @param loader        the chunk loader
      * @return the created {@link InstanceContainer}
      */
-    @ApiStatus.Experimental
-    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
-        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, loader);
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
+        final InstanceContainer instanceContainer = new InstanceContainer(registries.dimensionType(), UUID.randomUUID(), dimensionType, loader, dimensionType.key());
         registerInstance(instanceContainer);
         return instanceContainer;
     }
 
-    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType) {
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull RegistryKey<DimensionType> dimensionType) {
         return createInstanceContainer(dimensionType, null);
     }
 
-    @ApiStatus.Experimental
     public @NotNull InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
         return createInstanceContainer(DimensionType.OVERWORLD, loader);
     }
@@ -110,7 +115,8 @@ public final class InstanceManager {
      * @param instance the {@link Instance} to unregister
      */
     public void unregisterInstance(@NotNull Instance instance) {
-        Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players inside.");
+        long onlinePlayers = instance.getPlayers().stream().filter(Player::isOnline).count();
+        Check.stateCondition(onlinePlayers > 0, "You cannot unregister an instance with players inside.");
         synchronized (instance) {
             InstanceUnregisterEvent event = new InstanceUnregisterEvent(instance);
             EventDispatcher.call(event);
@@ -145,7 +151,7 @@ public final class InstanceManager {
     public @Nullable Instance getInstance(@NotNull UUID uuid) {
         Optional<Instance> instance = getInstances()
                 .stream()
-                .filter(someInstance -> someInstance.getUniqueId().equals(uuid))
+                .filter(someInstance -> someInstance.getUuid().equals(uuid))
                 .findFirst();
         return instance.orElse(null);
     }

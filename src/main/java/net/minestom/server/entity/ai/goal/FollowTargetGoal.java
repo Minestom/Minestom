@@ -75,7 +75,7 @@ public class FollowTargetGoal extends GoalSelector {
             return;
         }
         final Pos targetPos = entityCreature.getTarget() != null ? entityCreature.getTarget().getPosition() : null;
-        if (targetPos != null && !targetPos.samePoint(lastTargetPos)) {
+        if (targetPos != null && !targetPos.sameBlock(lastTargetPos)) {
             this.lastUpdateTime = time;
             this.lastTargetPos = targetPos;
             this.entityCreature.getNavigator().setPathTo(targetPos);

@@ -4,11 +4,13 @@ import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
 import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.identity.Identified;
+import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.pointer.Pointers;
+import net.kyori.adventure.pointer.PointersSupplier;
 import net.kyori.adventure.resource.ResourcePackCallback;
+import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.resource.ResourcePackRequest;
 import net.kyori.adventure.resource.ResourcePackStatus;
 import net.kyori.adventure.sound.Sound;
@@ -18,43 +20,46 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.advancements.AdvancementTab;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.AdventurePacketConvertor;
-import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
-import net.minestom.server.effects.Effects;
-import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.component.DataComponents;
+import net.minestom.server.coordinate.*;
+import net.minestom.server.dialog.Dialog;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
-import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
+import net.minestom.server.entity.vehicle.PlayerInputs;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
-import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
+import net.minestom.server.event.item.PlayerFinishItemUseEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.click.ClickPreprocessor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.WrittenBookMeta;
+import net.minestom.server.item.component.WrittenBookContent;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
@@ -62,14 +67,14 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
-import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
+import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.snapshot.EntitySnapshot;
@@ -77,28 +82,25 @@ import net.minestom.server.snapshot.PlayerSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.PropertyUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
-import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
-import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpscUnboundedXaddArrayQueue;
+import net.minestom.server.worldevent.WorldEvent;
+import org.intellij.lang.annotations.MagicConstant;
+import org.jctools.queues.MpscArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -115,34 +117,38 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
-    private static final Logger logger = LoggerFactory.getLogger(Player.class);
+public class Player extends LivingEntity implements CommandSender, HoverEventSource<ShowEntity>, NamedAndIdentified {
+    private static final DynamicRegistry<DimensionType> DIMENSION_TYPE_REGISTRY = MinecraftServer.getDimensionTypeRegistry();
 
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
+    private static final Component MISSING_REQUIRED_RESOURCE_PACK = Component.text("Required resource pack was not loaded.", NamedTextColor.RED);
 
-    private static final float MIN_CHUNKS_PER_TICK = PropertyUtils.getFloat("minestom.chunk-queue.min-per-tick", 0.01f);
-    private static final float MAX_CHUNKS_PER_TICK = PropertyUtils.getFloat("minestom.chunk-queue.max-per-tick", 64.0f);
-    private static final float CHUNKS_PER_TICK_MULTIPLIER = PropertyUtils.getFloat("minestom.chunk-queue.multiplier", 1f);
+    // Adventure pointer supplier
+    protected static final PointersSupplier<Player> PLAYER_POINTERS_SUPPLIER = PointersSupplier.<Player>builder()
+            .parent(ENTITY_POINTERS_SUPPLIER)
+            .resolving(Identity.NAME, Player::getUsername)
+            .resolving(Identity.DISPLAY_NAME, Player::getDisplayName)
+            .resolving(Identity.LOCALE, Player::getLocale)
+            .build();
 
-    public static final boolean EXPERIMENT_PERFORM_POSE_UPDATES = Boolean.getBoolean("minestom.experiment.pose-updates");
-    // Magic values: https://wiki.vg/Entity_statuses#Player
-    private static final int STATUS_ENABLE_REDUCED_DEBUG_INFO = 22;
-    private static final int STATUS_DISABLE_REDUCED_DEBUG_INFO = 23;
-    private static final int STATUS_PERMISSION_LEVEL_OFFSET = 24;
+    // This probably should be configurable (eg an instance field). However I(matt) am unclear
+    // on what it actually does so am holding off on adding API for this until I understand.
+    private static final int DEFAULT_SEA_LEVEL = 63;
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
 
+    private final GameProfile gameProfile;
     private String username;
     private Component usernameComponent;
     protected final PlayerConnection playerConnection;
 
-    private int latency;
+    private volatile int latency;
     private Component displayName;
     private PlayerSkin skin;
 
     private Instance pendingInstance = null;
-    private DimensionType dimensionType;
+    private int dimensionTypeId;
     private GameMode gameMode;
     private WorldPos deathLocation;
 
@@ -153,16 +159,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private Vec chunksLoadedByClient = Vec.ZERO;
     private final ReentrantLock chunkQueueLock = new ReentrantLock();
     private final LongPriorityQueue chunkQueue = new LongArrayPriorityQueue(this::compareChunkDistance);
+    private boolean needsChunkPositionSync = true;
     private float targetChunksPerTick = 9f; // Always send 9 chunks immediately
     private float pendingChunkCount = 0f; // Number of chunks to send on the current tick (ie 0.5 means we cannot send a chunk yet, 1.5 would send a single chunk with a 0.5 remainder)
     private int maxChunkBatchLead = 1; // Maximum number of batches to send before waiting for a reply
     private int chunkBatchLead = 0; // Number of batches sent without a reply
 
-    final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
+    final ChunkRange.ChunkConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
         this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(this::sendChunk);
     };
-    final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
+    final ChunkRange.ChunkConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
         sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
         EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
@@ -171,15 +178,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final MessagePassingQueue<ClientPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
+    private final MpscArrayQueue<ClientPacket> packets = new MpscArrayQueue<>(ServerFlag.PLAYER_PACKET_QUEUE_SIZE);
     private final boolean levelFlat;
-    private final PlayerSettings settings;
+    private ClientSettings settings = ClientSettings.DEFAULT;
     private float exp;
     private int level;
     private int portalCooldown = 0;
 
+    protected ClickPreprocessor clickPreprocessor = new ClickPreprocessor();
     protected PlayerInventory inventory;
-    private Inventory openInventory;
+    private AbstractInventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
 
@@ -189,14 +197,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private int food;
     private float foodSaturation;
-    private long startEatingTime;
-    private long defaultEatingTime = 1000L;
-    private long eatingTime;
-    private Hand eatingHand;
 
-    // Game state (https://wiki.vg/Protocol#Change_Game_State)
+    private long startItemUseTime;
+    private long itemUseTime;
+    private PlayerHand itemUseHand;
+
+    // Game state (https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Game_Event)
     private boolean enableRespawnScreen;
-    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(6);
+    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(ServerFlag.PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE);
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
@@ -215,31 +223,28 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private float flyingSpeed = 0.05f;
     private float fieldViewModifier = 0.1f;
 
-    // Statistics
     private final Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
 
-    // Vehicle
-    private final PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
-
-    // Adventure
-    private Identity identity;
-    private final Pointers pointers;
+    private final PlayerInputs inputs = new PlayerInputs();
 
     // Resource packs
-    private final Map<UUID, ResourcePackCallback> resourcePackCallbacks = new HashMap<>();
+    record PendingResourcePack(boolean required, @NotNull ResourcePackCallback callback) {
+    }
+
+    private final Map<UUID, PendingResourcePack> pendingResourcePacks = new HashMap<>();
     // The future is non-null when a resource pack is in-flight, and completed when all statuses have been received.
     private CompletableFuture<Void> resourcePackFuture = null;
 
-    public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
-        super(EntityType.PLAYER, uuid);
-        this.username = username;
+    public Player(@NotNull PlayerConnection playerConnection, @NotNull GameProfile gameProfile) {
+        super(EntityType.PLAYER, gameProfile.uuid());
+        this.gameProfile = gameProfile;
+        this.username = gameProfile.name();
         this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
 
         setRespawnPoint(Pos.ZERO);
 
-        this.settings = new PlayerSettings();
-        this.inventory = new PlayerInventory(this);
+        this.inventory = new PlayerInventory();
 
         setCanPickupItem(true); // By default
 
@@ -247,19 +252,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshAnswerKeepAlive(true);
 
         this.gameMode = GameMode.SURVIVAL;
-        this.dimensionType = DimensionType.OVERWORLD; // Default dimension
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(DimensionType.OVERWORLD); // Default dimension
         this.levelFlat = true;
-        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1f);
+        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
 
         // FakePlayer init its connection there
         playerConnectionInit();
-
-        this.identity = Identity.identity(uuid);
-        this.pointers = Pointers.builder()
-                .withDynamic(Identity.UUID, this::getUuid)
-                .withDynamic(Identity.NAME, this::getUsername)
-                .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
-                .build();
 
         // When in configuration state no metadata updates can be sent.
         metadata.setNotifyAboutChanges(false);
@@ -286,14 +284,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.pendingInstance = null;
 
         this.removed = false;
-        this.dimensionType = spawnInstance.getDimensionType();
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType());
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
                 ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
-                false, true, false, dimensionType.toString(), spawnInstance.getDimensionName(),
-                0, gameMode, null, false, levelFlat, deathLocation, portalCooldown);
+                false, true, false,
+                dimensionTypeId, spawnInstance.getDimensionName(), 0,
+                gameMode, null, false, levelFlat,
+                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL,
+                true);
         sendPacket(joinGamePacket);
+
+        // Start sending inventory updates
+        inventory.addViewer(this);
 
         // Difficulty
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), true));
@@ -306,22 +310,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Add player to list with spawning skin
         PlayerSkin profileSkin = null;
-        if (playerConnection instanceof PlayerSocketConnection socketConnection) {
-            final GameProfile gameProfile = socketConnection.gameProfile();
-            if (gameProfile != null) {
-                for (GameProfile.Property property : gameProfile.properties()) {
-                    if (property.name().equals("textures")) {
-                        profileSkin = new PlayerSkin(property.value(), property.signature());
-                        break;
-                    }
-                }
+        for (GameProfile.Property property : gameProfile.properties()) {
+            if (property.name().equals("textures")) {
+                profileSkin = new PlayerSkin(property.value(), property.signature());
+                break;
             }
         }
         PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, profileSkin);
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        PacketUtils.broadcastPlayPacket(getAddPlayerToList());
+        PacketSendingUtils.broadcastPlayPacket(getAddPlayerToList());
 
         var connectionManager = MinecraftServer.getConnectionManager();
         for (var player : connectionManager.getOnlinePlayers()) {
@@ -341,32 +340,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Commands
         refreshCommands();
 
-        // Recipes start
-        {
-            RecipeManager recipeManager = MinecraftServer.getRecipeManager();
-            sendPacket(recipeManager.getDeclareRecipesPacket());
-
-            List<String> recipesIdentifier = new ArrayList<>();
-            for (Recipe recipe : recipeManager.getRecipes()) {
-                if (!recipe.shouldShow(this))
-                    continue;
-                recipesIdentifier.add(recipe.getRecipeId());
-            }
-            if (!recipesIdentifier.isEmpty()) {
-                UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket(0,
-                        false, false,
-                        false, false,
-                        false, false,
-                        false, false,
-                        recipesIdentifier, recipesIdentifier);
-                sendPacket(unlockRecipesPacket);
-            }
-        }
-        // Recipes end
+        // Recipes
+        refreshRecipes();
 
         // Some client updates
         sendPacket(getPropertiesPacket()); // Send default properties
-        triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
+        triggerStatus((byte) (EntityStatuses.Player.PERMISSION_LEVEL_0 + permissionLevel)); // Set permission level
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
@@ -383,13 +362,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void startConfigurationPhase() {
         Check.stateCondition(playerConnection.getConnectionState() != ConnectionState.PLAY,
                 "Player must be in the play state for reconfiguration.");
-
         // Remove the player, then send them back to configuration
         remove(false);
-
-        var connectionManager = MinecraftServer.getConnectionManager();
-        connectionManager.transitionPlayToConfig(this);
-
+        MinecraftServer.getConnectionManager().transitionPlayToConfig(this);
     }
 
     /**
@@ -415,44 +390,43 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Experience orb pickup
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
-            final Point loweredPosition = position.sub(0, .5, 0);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
-                        if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
-                            PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
-                            EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
-                                short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
-                                experienceOrb.remove();
-                            });
-                        }
+                        if (!expandedBoundingBox.intersectEntity(position, experienceOrb)) return;
+                        final PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
+                        EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
+                            short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
+                            experienceOrb.remove();
+                        });
                     });
         }
 
         // Eating animation
-        if (isEating()) {
-            if (time - startEatingTime >= eatingTime) {
-                triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(eatingHand);
+        if (isUsingItem()) {
+            final PlayerHand itemUseHand = this.itemUseHand;
+            if (itemUseTime > 0 && getCurrentItemUseTime() >= itemUseTime) {
+                final ItemStack itemStack = getItemInHand(itemUseHand);
+                PlayerFinishItemUseEvent finishUseEvent = new PlayerFinishItemUseEvent(this, itemUseHand, itemStack, itemUseTime);
+                EventDispatcher.call(finishUseEvent);
 
-                Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
+                // Reset client state
+                triggerStatus((byte) EntityStatuses.Player.MARK_ITEM_FINISHED);
 
-                // Refresh hand
-                final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
-                refreshActiveHand(false, isOffHand, false);
+                // Reset server state
+                final boolean isOffHand = itemUseHand == PlayerHand.OFF;
+                refreshActiveHand(false, isOffHand, finishUseEvent.isRiptideSpinAttack());
+                clearItemUse();
 
-                final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = foodItem.material().isFood();
-
-                if (isFood) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
-                    EventDispatcher.call(playerEatEvent);
+                // The client has predicted that the itemstack will have its count reduced, if the server
+                // has not changed the item (the default behavior) we need to refresh the slot.
+                if (itemStack.equals(getItemInHand(itemUseHand))) {
+                    final int slot = isOffHand ? PlayerInventoryUtils.OFFHAND_SLOT : getHeldSlot();
+                    inventory.sendSlotRefresh(slot, itemStack);
                 }
-
-                refreshEating(null);
             }
         }
 
-        if (EXPERIMENT_PERFORM_POSE_UPDATES) updatePose();
+        updatePose();
 
         // Tick event
         EventDispatcher.call(new PlayerTickEvent(this));
@@ -502,7 +476,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // Set death location
             if (getInstance() != null)
-                setDeathLocation(getInstance().getDimensionType(), getPosition());
+                setDeathLocation(getInstance().getDimensionName(), getPosition());
         }
         super.kill();
     }
@@ -515,12 +489,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (!isDead())
             return;
 
-        setFireForDuration(0);
-        setOnFire(false);
+        setFireTicks(0);
+        entityMeta.setOnFire(false);
         refreshHealth();
 
-        sendPacket(new RespawnPacket(getDimensionType().toString(), instance.getDimensionName(),
-                0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
+        sendPacket(new RespawnPacket(dimensionTypeId, instance.getDimensionName(),
+                0, gameMode, gameMode, false, levelFlat,
+                deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL,
+                DEFAULT_SEA_LEVEL));
         refreshClientStateAfterRespawn();
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
@@ -531,13 +507,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Pos respawnPosition = respawnEvent.getRespawnPosition();
 
         // The client unloads chunks when respawning, so resend all chunks next to spawn
-        ChunkUtils.forChunksInRange(respawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
+        ChunkRange.chunksInRange(respawnPosition, settings.effectiveViewDistance(), chunkAdder);
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         // Client also needs all entities resent to them, since those are unloaded as well
-        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.getEffectiveViewDistance(),
+        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.effectiveViewDistance(),
                 EntityTracker.Target.ENTITIES, entity -> {
                     // Skip refreshing self with a new viewer
-                    if (!entity.getUuid().equals(uuid) && entity.isViewer(this)) {
+                    if (!entity.getUuid().equals(getUuid()) && entity.isViewer(this)) {
                         entity.updateNewViewer(this);
                     }
                 });
@@ -552,7 +528,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), false));
         sendPacket(new UpdateHealthPacket(this.getHealth(), food, foodSaturation));
         sendPacket(new SetExperiencePacket(exp, level, 0));
-        triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
+        triggerStatus((byte) (EntityStatuses.Player.PERMISSION_LEVEL_0 + permissionLevel)); // Set permission level
         refreshAbilities();
     }
 
@@ -563,6 +539,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshCommands() {
         sendPacket(MinecraftServer.getCommandManager().createDeclareCommandsPacket(this));
+    }
+
+    /**
+     * Refreshes the recipes and recipe book for this player, testing recipe predicates again.
+     */
+    public void refreshRecipes() {
+        RecipeManager recipeManager = MinecraftServer.getRecipeManager();
+        sendPackets(
+                recipeManager.getDeclareRecipesPacket(),
+                recipeManager.createRecipeBookResetPacket(this)
+        );
     }
 
     @Override
@@ -577,12 +564,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (permanent) {
             this.packets.clear();
             EventDispatcher.call(new PlayerDisconnectEvent(this));
+            new EventsJFR.PlayerLeave(getUuid().toString()).commit();
         }
 
-        super.remove(permanent);
 
-        final Inventory currentInventory = getOpenInventory();
+        final AbstractInventory currentInventory = getOpenInventory();
         if (currentInventory != null) currentInventory.removeViewer(this);
+
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
         // Advancement tabs cache
         {
@@ -597,22 +585,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int chunkX = position.chunkX();
         final int chunkZ = position.chunkZ();
         // Clear all viewable chunks
-        ChunkUtils.forChunksInRange(chunkX, chunkZ, settings.getEffectiveViewDistance(), chunkRemover);
+        ChunkRange.chunksInRange(chunkX, chunkZ, settings.effectiveViewDistance(), chunkRemover);
         // Remove from the tab-list
-        PacketUtils.broadcastPlayPacket(getRemovePlayerToList());
+        PacketSendingUtils.broadcastPlayPacket(getRemovePlayerToList());
 
+        super.remove(permanent);
         // Prevent the player from being stuck in loading screen, or just unable to interact with the server
         // This should be considered as a bug, since the player will ultimately time out anyway.
         if (permanent && playerConnection.isOnline()) kick(REMOVE_MESSAGE);
-    }
-
-    @Override
-    public void updateOldViewer(@NotNull Player player) {
-        super.updateOldViewer(player);
-        // Team
-        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
-            player.sendPacket(this.getTeam().createTeamDestructionPacket());
-        }
     }
 
     @Override
@@ -635,7 +615,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         final Instance currentInstance = this.instance;
         Check.argCondition(currentInstance == instance, "Instance should be different than the current one");
-        if (InstanceUtils.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
+        if (SharedInstance.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
             spawnPlayer(instance, spawnPosition, false, false, false);
@@ -647,9 +627,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
                 currentInstance == null, dimensionChange, true);
 
+        // Reset chunk queue state
+        needsChunkPositionSync = true;
+        targetChunksPerTick = 9f;
+        pendingChunkCount = 0f;
+
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), (chunkX, chunkZ) -> {
+        ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), (chunkX, chunkZ) -> {
             final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
@@ -722,7 +707,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
-                ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkRemover);
+                ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkRemover);
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
@@ -737,15 +722,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
 
             // Load the nearby chunks and queue them to be sent to them
-            ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
+            ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkAdder);
+            sendPendingChunks(); // Send available first chunk immediately to prevent falling through the floor
         }
 
-        synchronizePositionAfterTeleport(spawnPosition, 0); // So the player doesn't get stuck
+        synchronizePositionAfterTeleport(spawnPosition, Vec.ZERO, RelativeFlags.NONE, true); // So the player doesn't get stuck
 
         if (dimensionChange) {
             sendPacket(new SpawnPositionPacket(spawnPosition, 0));
-            instance.getWorldBorder().init(this);
-            sendPacket(new TimeUpdatePacket(instance.getWorldAge(), instance.getTime()));
+            sendPacket(instance.createInitializeWorldBorderPacket());
+            sendPacket(instance.createTimePacket());
         }
 
         if (dimensionChange || firstSpawn) {
@@ -757,14 +743,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
+        if (firstSpawn) new EventsJFR.PlayerJoin(getUuid().toString()).commit();
     }
 
     @ApiStatus.Internal
     public void onChunkBatchReceived(float newTargetChunksPerTick) {
 //        logger.debug("chunk batch received player={} chunks/tick={} lead={}", username, newTargetChunksPerTick, chunkBatchLead);
         chunkBatchLead -= 1;
-        targetChunksPerTick = Float.isNaN(newTargetChunksPerTick) ? MIN_CHUNKS_PER_TICK : MathUtils.clamp(
-                newTargetChunksPerTick * CHUNKS_PER_TICK_MULTIPLIER, MIN_CHUNKS_PER_TICK, MAX_CHUNKS_PER_TICK);
+        targetChunksPerTick = Float.isNaN(newTargetChunksPerTick) ? ServerFlag.MIN_CHUNKS_PER_TICK : MathUtils.clamp(
+                newTargetChunksPerTick * ServerFlag.CHUNKS_PER_TICK_MULTIPLIER, ServerFlag.MIN_CHUNKS_PER_TICK, ServerFlag.MAX_CHUNKS_PER_TICK);
 
         // Beyond the first batch we can preemptively send up to 10 (matching mojang server)
         if (maxChunkBatchLead == 1) maxChunkBatchLead = 10;
@@ -779,7 +766,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (!chunk.isLoaded()) return;
         chunkQueueLock.lock();
         try {
-            chunkQueue.enqueue(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ()));
+            chunkQueue.enqueue(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()));
         } finally {
             chunkQueueLock.unlock();
         }
@@ -790,7 +777,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (chunkQueue.isEmpty() || chunkBatchLead >= maxChunkBatchLead) return;
 
         // Increment the pending chunk count by the target chunks per tick
-        pendingChunkCount = Math.min(pendingChunkCount + targetChunksPerTick, MAX_CHUNKS_PER_TICK);
+        pendingChunkCount = Math.min(pendingChunkCount + targetChunksPerTick, ServerFlag.MAX_CHUNKS_PER_TICK);
         if (pendingChunkCount < 1) return; // Cant send anything
 
         chunkQueueLock.lock();
@@ -799,7 +786,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(new ChunkBatchStartPacket());
             while (!chunkQueue.isEmpty() && pendingChunkCount >= 1f) {
                 long chunkIndex = chunkQueue.dequeueLong();
-                int chunkX = ChunkUtils.getChunkCoordX(chunkIndex), chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                int chunkX = CoordConversion.chunkIndexGetX(chunkIndex), chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
                 var chunk = instance.getChunk(chunkX, chunkZ);
                 if (chunk == null || !chunk.isLoaded()) continue;
 
@@ -812,6 +799,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(new ChunkBatchFinishedPacket(batchSize));
             chunkBatchLead += 1;
 //            logger.debug("chunk batch sent player={} chunks={} lead={}", username, batchSize, chunkBatchLead);
+
+            // After sending the first chunk we always send a synchronize position to the client. This is to prevent
+            // cases where the client falls through the floor slightly while loading the first chunk.
+            // In the vanilla server they have an anticheat which teleports the client back if they enter the floor,
+            // but since Minestom does not have an anticheat this provides a similar effect.
+            if (needsChunkPositionSync) {
+                synchronizePositionAfterTeleport(getPosition(), Vec.ZERO, RelativeFlags.NONE, true);
+                needsChunkPositionSync = false;
+            }
         } finally {
             chunkQueueLock.unlock();
         }
@@ -819,54 +815,62 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     protected void updatePose() {
-        Pose oldPose = getPose();
-        Pose newPose;
+        EntityPose oldPose = getPose();
+        EntityPose newPose;
 
         // Figure out their expected state
         var meta = getEntityMeta();
         if (meta.isFlyingWithElytra()) {
-            newPose = Pose.FALL_FLYING;
-        } else if (false) { // When should they be sleeping? We don't have any in-bed state...
-            newPose = Pose.SLEEPING;
+            newPose = EntityPose.FALL_FLYING;
+        } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.getBedInWhichSleepingPosition() != null) {
+            newPose = EntityPose.SLEEPING;
         } else if (meta.isSwimming()) {
-            newPose = Pose.SWIMMING;
+            newPose = EntityPose.SWIMMING;
         } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) {
-            newPose = Pose.SPIN_ATTACK;
+            newPose = EntityPose.SPIN_ATTACK;
         } else if (isSneaking() && !isFlying()) {
-            newPose = Pose.SNEAKING;
+            newPose = EntityPose.SNEAKING;
         } else {
-            newPose = Pose.STANDING;
+            newPose = EntityPose.STANDING;
         }
 
         // Try to put them in their expected state, or the closest if they don't fit.
         if (canFitWithBoundingBox(newPose)) {
             // Use expected state
-        } else if (canFitWithBoundingBox(Pose.SNEAKING)) {
-            newPose = Pose.SNEAKING;
-        } else if (canFitWithBoundingBox(Pose.SWIMMING)) {
-            newPose = Pose.SWIMMING;
+        } else if (canFitWithBoundingBox(EntityPose.SNEAKING)) {
+            newPose = EntityPose.SNEAKING;
+        } else if (canFitWithBoundingBox(EntityPose.SWIMMING)) {
+            newPose = EntityPose.SWIMMING;
         } else {
             // If they can't fit anywhere, just use standing
-            newPose = Pose.STANDING;
+            newPose = EntityPose.STANDING;
         }
 
         if (newPose != oldPose) setPose(newPose);
     }
 
     /**
-     * Returns true if the player can fit at the current position with the given {@link net.minestom.server.entity.Entity.Pose}, false otherwise.
+     * Returns true if the player can fit at the current position with the given {@link EntityPose}, false otherwise.
      *
      * @param pose The pose to check
      */
-    private boolean canFitWithBoundingBox(@NotNull Pose pose) {
-        BoundingBox bb = pose == Pose.STANDING ? boundingBox : BoundingBox.fromPose(pose);
+    private boolean canFitWithBoundingBox(@NotNull EntityPose pose) {
+        BoundingBox bb = pose == EntityPose.STANDING ? boundingBox : BoundingBox.fromPose(pose);
         if (bb == null) return false;
 
         var position = getPosition();
         var iter = bb.getBlocks(getPosition());
         while (iter.hasNext()) {
             var pos = iter.next();
-            var block = instance.getBlock(pos, Block.Getter.Condition.TYPE);
+            Block block;
+            try {
+                block = instance.getBlock(pos.blockX(), pos.blockY(), pos.blockZ(), Block.Getter.Condition.TYPE);
+            } catch (NullPointerException ignored) {
+                block = null;
+            }
+
+            // Block was in unloaded chunk, no bounding box.
+            if (block == null) continue;
 
             // For now just ignore scaffolding. It seems to have a dynamic bounding box, or is just parsed
             // incorrectly in MinestomDataGenerator.
@@ -878,6 +882,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         return true;
+    }
+
+    @Override
+    @SuppressWarnings({"UnstableApiUsage", "deprecation"})
+    public void sendMessage(final @NotNull Identity source, final @NotNull Component message, final @NotNull MessageType type) {
+        // Note to readers: this method may be deprecated, however it is in fact required.
+        Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
     }
 
     /**
@@ -900,18 +911,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void sendPluginMessage(@NotNull String channel, @NotNull String message) {
         sendPluginMessage(channel, message.getBytes(StandardCharsets.UTF_8));
-    }
-
-    /**
-     * Deprecated, as the Adventure library has deprecated this method in the Audience class
-     * @param source the identity of the source of the message
-     * @param message a message
-     * @param type the type
-     */
-    @Override
-    @Deprecated
-    public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
     }
 
     @Override
@@ -945,17 +944,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Plays a given effect at the given position for this player.
+     * Plays a given worldEvent at the given position for this player.
      *
-     * @param effect                the effect to play
-     * @param x                     x position of the effect
-     * @param y                     y position of the effect
-     * @param z                     z position of the effect
-     * @param data                  data for the effect
+     * @param worldEvent            the worldEvent to play
+     * @param x                     x position of the worldEvent
+     * @param y                     y position of the worldEvent
+     * @param z                     z position of the worldEvent
+     * @param data                  data for the worldEvent
      * @param disableRelativeVolume disable volume scaling based on distance
      */
-    public void playEffect(@NotNull Effects effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
-        sendPacket(new EffectPacket(effect.getId(), new Vec(x, y, z), data, disableRelativeVolume));
+    public void playEffect(@NotNull WorldEvent worldEvent, int x, int y, int z, int data, boolean disableRelativeVolume) {
+        sendPacket(new WorldEventPacket(worldEvent.id(), new Vec(x, y, z), data, disableRelativeVolume));
     }
 
     @Override
@@ -1000,33 +999,35 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             closeInventory();
         }
 
+        // TODO: when adventure updates, delete this
+        String title = PlainTextComponentSerializer.plainText().serialize(book.title());
+        String author = PlainTextComponentSerializer.plainText().serialize(book.author());
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .meta(WrittenBookMeta.class, builder -> builder.resolved(false)
-                        .generation(WrittenBookMeta.WrittenBookGeneration.ORIGINAL)
-                        .author(book.author())
-                        .title(book.title())
-                        .pages(book.pages()))
+                .set(DataComponents.WRITTEN_BOOK_CONTENT, new WrittenBookContent(title, author, 0, book.pages(), false))
                 .build();
+
         // Set book in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, writtenBook));
         // Open the book
-        sendPacket(new OpenBookPacket(Hand.OFF));
+        sendPacket(new OpenBookPacket(PlayerHand.OFF));
         // Restore the item in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, getItemInOffHand()));
     }
 
     @Override
-    public boolean isImmune(@NotNull DamageType type) {
-        if (!getGameMode().canTakeDamage()) {
-            return type != DamageType.OUT_OF_WORLD;
-        }
-        return super.isImmune(type);
+    public void showDialog(@NotNull DialogLike dialog) {
+        sendPacket(new ShowDialogPacket(Dialog.unwrap(dialog)));
+    }
+
+    // TODO(1.21.6): Implementation for pending adventure method in 4.24.0.
+    public void closeDialog() {
+        sendPacket(new ClearDialogPacket());
     }
 
     @Override
     public void setHealth(float health) {
-        super.setHealth(health);
         sendPacket(new UpdateHealthPacket(health, food, foodSaturation));
+        super.setHealth(health);
     }
 
     /**
@@ -1109,34 +1110,37 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return true if the player is eating, false otherwise
      */
     public boolean isEating() {
-        return eatingHand != null;
+        if (!isUsingItem()) return false;
+        final ItemStack itemStack = getItemInHand(itemUseHand);
+        return itemStack.has(DataComponents.FOOD) || itemStack.material() == Material.POTION;
     }
 
     /**
-     * Gets the hand which the player is eating from.
+     * Gets if the player is using an item.
      *
-     * @return the eating hand, null if none
+     * @return true if the player is using an item, false otherwise
      */
-    public @Nullable Hand getEatingHand() {
-        return eatingHand;
+    public boolean isUsingItem() {
+        return itemUseHand != null;
     }
 
     /**
-     * Gets the player default eating time.
+     * Gets the hand which the player is using an item from.
      *
-     * @return the player default eating time
+     * @return the item use hand, null if none
      */
-    public long getDefaultEatingTime() {
-        return defaultEatingTime;
+    public @Nullable PlayerHand getItemUseHand() {
+        return itemUseHand;
     }
 
     /**
-     * Used to change the default eating time animation.
+     * Gets the amount of ticks which have passed since the player started using an item.
      *
-     * @param defaultEatingTime the default eating time in milliseconds
+     * @return the amount of ticks which have passed, or zero if the player is not using an item
      */
-    public void setDefaultEatingTime(long defaultEatingTime) {
-        this.defaultEatingTime = defaultEatingTime;
+    public long getCurrentItemUseTime() {
+        if (!isUsingItem()) return 0;
+        return getAliveTicks() - startItemUseTime;
     }
 
     @Override
@@ -1167,7 +1171,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
+        PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
     }
 
     /**
@@ -1198,8 +1202,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoRemovePacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
 
-        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), instance.getDimensionName(),
-                0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL);
+        final RespawnPacket respawnPacket = new RespawnPacket(dimensionTypeId,
+                instance.getDimensionName(), 0, gameMode, gameMode,
+                false, levelFlat, deathLocation, portalCooldown,
+                (byte) RespawnPacket.COPY_ALL, DEFAULT_SEA_LEVEL);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -1209,11 +1215,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         {
             // Remove player
-            PacketUtils.broadcastPlayPacket(removePlayerPacket);
+            PacketSendingUtils.broadcastPlayPacket(removePlayerPacket);
             sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
-            PacketUtils.broadcastPlayPacket(addPlayerPacket);
+            PacketSendingUtils.broadcastPlayPacket(addPlayerPacket);
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
@@ -1221,8 +1227,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         teleport(getPosition());
     }
 
-    public void setDeathLocation(@NotNull DimensionType type, @NotNull Pos position) {
-        this.deathLocation = new WorldPos(type.getName().asString(), position);
+    public void setDeathLocation(@NotNull Pos position) {
+        setDeathLocation(getInstance().getDimensionName(), position);
+    }
+
+    public void setDeathLocation(@NotNull String dimension, @NotNull Pos position) {
+        this.deathLocation = new WorldPos(dimension, position);
     }
 
     public @Nullable WorldPos getDeathLocation() {
@@ -1269,17 +1279,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Changes the internal player name, used for the {@link AsyncPlayerPreLoginEvent}
-     * mostly unsafe outside of it.
-     *
-     * @param username the new player name
-     */
-    public void setUsernameField(@NotNull String username) {
-        this.username = username;
-        this.usernameComponent = Component.text(username);
-    }
-
-    /**
      * Calls an {@link ItemDropEvent} with a specified item.
      * <p>
      * Returns false if {@code item} is air.
@@ -1298,9 +1297,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void sendResourcePacks(@NotNull ResourcePackRequest request) {
         if (request.replace()) clearResourcePacks();
 
-        for (var pack : request.packs()) {
+        for (final ResourcePackInfo pack : request.packs()) {
             sendPacket(new ResourcePackPushPacket(pack, request.required(), request.prompt()));
-            resourcePackCallbacks.put(pack.id(), request.callback());
+            pendingResourcePacks.put(pack.id(), new PendingResourcePack(request.required(), request.callback()));
             if (resourcePackFuture == null) {
                 resourcePackFuture = new CompletableFuture<>();
             }
@@ -1331,15 +1330,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @ApiStatus.Internal
     public void onResourcePackStatus(@NotNull UUID id, @NotNull ResourcePackStatus status) {
-        var callback = resourcePackCallbacks.get(id);
-        if (callback == null) return;
+        var pendingPack = pendingResourcePacks.get(id);
+        if (pendingPack == null) return;
 
-        callback.packEventReceived(id, status, this);
+        pendingPack.callback().packEventReceived(id, status, this);
         if (!status.intermediate()) {
             // Remove the callback and finish the future if relevant
-            resourcePackCallbacks.remove(id);
+            pendingResourcePacks.remove(id);
 
-            if (resourcePackCallbacks.isEmpty() && resourcePackFuture != null) {
+            // If the resource pack is required and failed to load, bye bye!
+            if (pendingPack.required() && status != ResourcePackStatus.SUCCESSFULLY_LOADED) {
+                kick(MISSING_REQUIRED_RESOURCE_PACK);
+            }
+
+            if (pendingResourcePacks.isEmpty() && resourcePackFuture != null) {
                 resourcePackFuture.complete(null);
                 resourcePackFuture = null;
             }
@@ -1384,7 +1388,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param entity the entity to spectate
      */
     public void spectate(@NotNull Entity entity) {
-        sendPacket(new CameraPacket(entity));
+        sendPacket(new CameraPacket(entity.getEntityId()));
     }
 
     /**
@@ -1419,7 +1423,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * and send data to his new viewers.
      */
     protected void refreshAfterTeleport() {
-        sendPacketsToViewers(getEntityType().registry().spawnType().getSpawnPacket(this));
+        sendPacketsToViewers(getSpawnPacket());
 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
@@ -1506,17 +1510,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param packet the packet to send
      */
-    @ApiStatus.Experimental
     public void sendPacket(@NotNull SendablePacket packet) {
         this.playerConnection.sendPacket(packet);
     }
 
-    @ApiStatus.Experimental
     public void sendPackets(@NotNull SendablePacket... packets) {
         this.playerConnection.sendPackets(packets);
     }
 
-    @ApiStatus.Experimental
     public void sendPackets(@NotNull Collection<SendablePacket> packets) {
         this.playerConnection.sendPackets(packets);
     }
@@ -1535,8 +1536,47 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the player settings
      */
-    public @NotNull PlayerSettings getSettings() {
+    public @NotNull ClientSettings getSettings() {
         return settings;
+    }
+
+    /**
+     * Changes the player settings internally.
+     * <p>
+     * WARNING: the player will not be noticed by this change, probably unsafe.
+     */
+    public void refreshSettings(ClientSettings settings) {
+        final ClientSettings previous = this.settings;
+        this.settings = settings;
+        boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
+        PlayerMeta playerMeta = getPlayerMeta();
+        if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
+        playerMeta.setDisplayedSkinParts(settings.displayedSkinParts());
+        playerMeta.setRightMainHand(settings.mainHand() == ClientSettings.MainHand.RIGHT);
+        if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
+
+        final byte previousViewDistance = previous.viewDistance();
+        final byte newViewDistance = settings.viewDistance();
+        // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
+        if (instance != null) {
+            // Load/unload chunks if necessary due to view distance changes
+            if (previousViewDistance < newViewDistance) {
+                // View distance expanded, send chunks
+                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), newViewDistance, (chunkX, chunkZ) -> {
+                    if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
+                        chunkAdder.accept(chunkX, chunkZ);
+                    }
+                });
+            } else if (previousViewDistance > newViewDistance) {
+                // View distance shrunk, unload chunks
+                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
+                    if (Math.abs(chunkX - position.chunkX()) > newViewDistance || Math.abs(chunkZ - position.chunkZ()) > newViewDistance) {
+                        chunkRemover.accept(chunkX, chunkZ);
+                    }
+                });
+            }
+            // Else previous and current are equal, do nothing
+        }
     }
 
     /**
@@ -1545,7 +1585,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the player current dimension
      */
     public DimensionType getDimensionType() {
-        return dimensionType;
+        return DIMENSION_TYPE_REGISTRY.get(dimensionTypeId);
     }
 
     public @NotNull PlayerInventory getInventory() {
@@ -1590,53 +1630,30 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.gameMode = gameMode;
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
-            sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.id()));
-            PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, infoEntry()));
+            sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.ordinal()));
+            PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, infoEntry()));
         }
 
         // The client updates their abilities based on the GameMode as follows
-        switch (gameMode) {
-            case CREATIVE -> {
-                this.allowFlying = true;
-                this.instantBreak = true;
-                this.invulnerable = true;
-            }
-            case SPECTATOR -> {
-                this.allowFlying = true;
-                this.instantBreak = false;
-                this.invulnerable = true;
-                if (isActive()) {
-                    refreshFlying(true);
-                } else {
-                    this.flying = true;
-                }
-            }
-            default -> {
-                this.allowFlying = false;
-                this.instantBreak = false;
-                this.invulnerable = false;
-                if (isActive()) {
-                    refreshFlying(false);
-                } else {
-                    this.flying = false;
-                }
+        this.allowFlying = gameMode.allowFlying();
+        this.instantBreak = gameMode.instantBreak();
+        this.invulnerable = gameMode.invulnerable();
+        // Spectator automatically enables flying
+        // If new game mode cannot fly, disable it
+        if (gameMode == GameMode.SPECTATOR || !gameMode.allowFlying()) {
+            if (isActive()) {
+                refreshFlying(gameMode.allowFlying());
+            } else {
+                this.flying = gameMode.allowFlying();
             }
         }
         // Make sure that the player is in the PLAY state and synchronize their flight speed.
         if (isActive()) {
             refreshAbilities();
+            updateCollisions();
         }
 
         return true;
-    }
-
-    /**
-     * Gets if this player is in creative. Used for code readability.
-     *
-     * @return true if the player is in creative mode
-     */
-    public boolean isCreative() {
-        return gameMode == GameMode.CREATIVE;
     }
 
     /**
@@ -1645,13 +1662,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param dimensionType the new player dimension
      */
-    protected void sendDimension(@NotNull DimensionType dimensionType, @NotNull String dimensionName) {
+    protected void sendDimension(@NotNull RegistryKey<DimensionType> dimensionType, @NotNull String dimensionName) {
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
-        this.dimensionType = dimensionType;
-        sendPacket(new RespawnPacket(dimensionType.toString(), dimensionName,
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
+        sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
+                deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL,
+                DEFAULT_SEA_LEVEL));
         refreshClientStateAfterRespawn();
     }
 
@@ -1661,15 +1679,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param component the reason
      */
     public void kick(@NotNull Component component) {
-        // Packet type depends on the current player connection state
-        final ServerPacket disconnectPacket;
-        if (playerConnection.getConnectionState() == ConnectionState.LOGIN) {
-            disconnectPacket = new LoginDisconnectPacket(component);
-        } else {
-            disconnectPacket = new DisconnectPacket(component);
-        }
-        sendPacket(disconnectPacket);
-        playerConnection.disconnect();
+        this.getPlayerConnection().kick(component);
     }
 
     /**
@@ -1717,12 +1727,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.belowNameTag = belowNameTag;
     }
 
+    public @NotNull ClickPreprocessor getClickPreprocessor() {
+        return clickPreprocessor;
+    }
+
     /**
      * Gets the player open inventory.
      *
      * @return the currently open inventory, null if there is not (player inventory is not detected)
      */
-    public @Nullable Inventory getOpenInventory() {
+    public @Nullable AbstractInventory getOpenInventory() {
         return openInventory;
     }
 
@@ -1736,19 +1750,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
-            Inventory openInventory = getOpenInventory();
+            AbstractInventory openInventory = getOpenInventory();
             if (openInventory != null) {
                 openInventory.removeViewer(this);
             }
 
-            Inventory newInventory = inventoryOpenEvent.getInventory();
-            if (newInventory == null) {
-                // just close the inventory
-                return;
-            }
+            AbstractInventory newInventory = inventoryOpenEvent.getInventory();
 
-            sendPacket(new OpenWindowPacket(newInventory.getWindowId(),
-                    newInventory.getInventoryType().getWindowType(), newInventory.getTitle()));
             newInventory.addViewer(this);
             this.openInventory = newInventory;
         });
@@ -1765,53 +1773,37 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @ApiStatus.Internal
     public void closeInventory(boolean fromClient) {
-        Inventory openInventory = getOpenInventory();
+        AbstractInventory openInventory = getOpenInventory();
+        if (openInventory == null) return;
 
-        // Drop cursor item when closing inventory
-        ItemStack cursorItem;
-        if (openInventory == null) {
-            cursorItem = getInventory().getCursorItem();
-            getInventory().setCursorItem(ItemStack.AIR);
-        } else {
-            cursorItem = openInventory.getCursorItem(this);
-            openInventory.setCursorItem(this, ItemStack.AIR);
-        }
-        if (!cursorItem.isAir()) {
-            // Add item to inventory if he hasn't been able to drop it
-            if (!dropItem(cursorItem)) {
-                getInventory().addItemStack(cursorItem);
-            }
+        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(openInventory, this, fromClient);
+        EventDispatcher.call(inventoryCloseEvent);
+
+        if (!fromClient) {
+            didCloseInventory = true;
         }
 
-        if (openInventory == getOpenInventory()) {
-            CloseWindowPacket closeWindowPacket;
-            if (openInventory == null) {
-                closeWindowPacket = new CloseWindowPacket((byte) 0);
-            } else {
-                closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
-                openInventory.removeViewer(this); // Clear cache
-                this.openInventory = null;
-            }
-            if (!fromClient) sendPacket(closeWindowPacket);
-            inventory.update();
-            this.didCloseInventory = true;
-        }
+        this.openInventory = null;
+        openInventory.removeViewer(this);
+        inventory.update();
+
+        didCloseInventory = false;
+
+        Inventory newInventory = inventoryCloseEvent.getNewInventory();
+        if (newInventory != null)
+            openInventory(newInventory);
     }
 
     /**
-     * Used internally to prevent an inventory click to be processed
-     * when the inventory listeners closed the inventory.
-     * <p>
-     * Should only be used within an inventory listener (event or condition).
-     *
-     * @return true if the inventory has been closed, false otherwise
+     * Used internally to determine when sending the close inventory packet should be skipped.
      */
     public boolean didCloseInventory() {
         return didCloseInventory;
     }
 
     /**
-     * Used internally to reset the didCloseInventory field.
+     * Used internally to reset the skipClosePacket field, which determines when sending the close inventory packet
+     * should be skipped.
      * <p>
      * Shouldn't be used externally without proper understanding of its consequence.
      *
@@ -1835,20 +1827,25 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     public void refreshReceivedTeleportId(int receivedTeleportId) {
+        if (receivedTeleportId < 0) return;
         this.receivedTeleportId = receivedTeleportId;
     }
 
     /**
      * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], int)}
-     * in cases where a {@link PlayerPositionAndLookPacket} is required
+     * in properties where a {@link PlayerPositionAndLookPacket} is required
      *
-     * @param position the position used by {@link PlayerPositionAndLookPacket}
-     *                 this may not be the same as the {@link Entity#position}
+     * @param position      the position used by {@link PlayerPositionAndLookPacket}
+     *                      this may not be the same as the {@link Entity#position}
      * @param relativeFlags byte flags used by {@link PlayerPositionAndLookPacket}
+     * @param shouldConfirm if false, the teleportation will be done without confirmation
      */
     @ApiStatus.Internal
-    void synchronizePositionAfterTeleport(@NotNull Pos position, int relativeFlags) {
-        sendPacket(new PlayerPositionAndLookPacket(position, (byte) relativeFlags, getNextTeleportId()));
+    void synchronizePositionAfterTeleport(@NotNull Pos position, @NotNull Point velocity,
+                                          @MagicConstant(flagsFromClass = RelativeFlags.class) int relativeFlags,
+                                          boolean shouldConfirm) {
+        int teleportId = shouldConfirm ? getNextTeleportId() : -1;
+        sendPacket(new PlayerPositionAndLookPacket(teleportId, position, velocity, position.yaw(), position.pitch(), relativeFlags));
         super.synchronizePosition();
     }
 
@@ -1914,7 +1911,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
 
-            final byte permissionLevelStatus = (byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel);
+            final byte permissionLevelStatus = (byte) (EntityStatuses.Player.PERMISSION_LEVEL_0 + permissionLevel);
             triggerStatus(permissionLevelStatus);
         }
     }
@@ -1927,7 +1924,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void setReducedDebugScreenInformation(boolean reduced) {
         this.reducedDebugScreenInformation = reduced;
 
-        final byte debugScreenStatus = (byte) (reduced ? STATUS_ENABLE_REDUCED_DEBUG_INFO : STATUS_DISABLE_REDUCED_DEBUG_INFO);
+        final byte debugScreenStatus = (byte) (reduced ? EntityStatuses.Player.ENABLE_DEBUG_SCREEN : EntityStatuses.Player.DISABLE_DEBUG_SCREEN);
         triggerStatus(debugScreenStatus);
     }
 
@@ -1938,15 +1935,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public boolean hasReducedDebugScreenInformation() {
         return reducedDebugScreenInformation;
-    }
-
-    /**
-     * The invulnerable field appear in the {@link PlayerAbilitiesPacket} packet.
-     *
-     * @return true if the player is invulnerable, false otherwise
-     */
-    public boolean isInvulnerable() {
-        return super.isInvulnerable();
     }
 
     /**
@@ -1999,12 +1987,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshFlying(boolean flying) {
         //When the player starts or stops flying, their pose needs to change
         if (this.flying != flying) {
-            Pose pose = getPose();
+            EntityPose pose = getPose();
 
-            if (this.isSneaking() && pose == Pose.STANDING) {
-                setPose(Pose.SNEAKING);
-            } else if (pose == Pose.SNEAKING) {
-                setPose(Pose.STANDING);
+            if (this.isSneaking() && pose == EntityPose.STANDING) {
+                setPose(EntityPose.SNEAKING);
+            } else if (pose == EntityPose.SNEAKING) {
+                setPose(EntityPose.STANDING);
             }
         }
 
@@ -2038,7 +2026,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Changes the player ability "Creative Mode".
      *
      * @param instantBreak true to allow instant break
-     * @see <a href="https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">player abilities</a>
+     * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Player_Abilities_(clientbound)">player abilities</a>
      */
     public void setInstantBreak(boolean instantBreak) {
         this.instantBreak = instantBreak;
@@ -2084,12 +2072,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Gets the player vehicle information.
+     * Gets the last reported set of player inputs.
      *
-     * @return the player vehicle information
+     * <p>This information comes from the client so should be considered as such.</p>
      */
-    public @NotNull PlayerVehicleInformation getVehicleInformation() {
-        return vehicleInformation;
+    public @NotNull PlayerInputs inputs() {
+        return inputs;
     }
 
     /**
@@ -2116,19 +2104,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param packet the packet to add in the queue
      */
     public void addPacketToQueue(@NotNull ClientPacket packet) {
-        this.packets.offer(packet);
+        final boolean success = packets.offer(packet);
+        if (!success) {
+            kick(Component.text("Too Many Packets", NamedTextColor.RED));
+        }
     }
 
     @ApiStatus.Internal
-    @ApiStatus.Experimental
     public void interpretPacketQueue() {
-        if (this.packets.size() >= ServerFlag.PLAYER_PACKET_QUEUE_SIZE) {
-            kick(Component.text("Too Many Packets", NamedTextColor.RED));
-            return;
-        }
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> manager.processClientPacket(packet, playerConnection), ServerFlag.PLAYER_PACKET_PER_TICK);
+        this.packets.drain(packet -> manager.processClientPacket(packet, playerConnection,
+                getPlayerConnection().getConnectionState()), ServerFlag.PLAYER_PACKET_PER_TICK);
     }
 
     /**
@@ -2139,7 +2126,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshLatency(int latency) {
         this.latency = latency;
         if (getPlayerConnection().getConnectionState() == ConnectionState.PLAY) {
-            PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
+            PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
         }
     }
 
@@ -2173,7 +2160,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Changes the held item for the player viewers
-     * Also cancel eating if {@link #isEating()} was true.
+     * Also cancel item usage if {@link #isUsingItem()} was true.
      * <p>
      * Warning: the player will not be noticed by this chance, only his viewers,
      * see instead: {@link #setHeldItemSlot(byte)}.
@@ -2181,64 +2168,38 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param slot the new held slot
      */
     public void refreshHeldSlot(byte slot) {
+        byte oldHeldSlot = this.heldSlot;
         this.heldSlot = slot;
         syncEquipment(EquipmentSlot.MAIN_HAND);
-        refreshEating(null);
+        updateEquipmentAttributes(inventory.getItemStack(oldHeldSlot), inventory.getItemStack(this.heldSlot), EquipmentSlot.MAIN_HAND);
     }
 
-    public void refreshEating(@Nullable Hand eatingHand, long eatingTime) {
-        this.eatingHand = eatingHand;
-        if (eatingHand != null) {
-            this.startEatingTime = System.currentTimeMillis();
-            this.eatingTime = eatingTime;
+    public void refreshItemUse(@Nullable PlayerHand itemUseHand, long itemUseTimeTicks) {
+        this.itemUseHand = itemUseHand;
+        if (itemUseHand != null) {
+            this.startItemUseTime = getAliveTicks();
+            this.itemUseTime = itemUseTimeTicks;
         } else {
-            this.startEatingTime = 0;
+            this.startItemUseTime = 0;
         }
     }
 
-    public void refreshEating(@Nullable Hand eatingHand) {
-        refreshEating(eatingHand, defaultEatingTime);
+    public void clearItemUse() {
+        refreshItemUse(null, 0);
     }
 
-    /**
-     * Used to call {@link ItemUpdateStateEvent} with the proper item
-     * It does check which hand to get the item to update.
-     *
-     * @param allowFood true if food should be updated, false otherwise
-     * @return the called {@link ItemUpdateStateEvent},
-     * null if there is no item to update the state
-     * @deprecated Use {@link #callItemUpdateStateEvent(Hand)} instead
-     */
-    @Deprecated
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
-        if (hand == null)
-            return null;
+    public void refreshInput(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
+        this.inputs.refresh(forward, backward, left, right, jump, shift, sprint);
 
-        final ItemStack updatedItem = getItemInHand(hand);
-        final boolean isFood = updatedItem.material().isFood();
-
-        if (isFood && !allowFood)
-            return null;
-
-        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
-        EventDispatcher.call(itemUpdateStateEvent);
-
-        return itemUpdateStateEvent;
-    }
-
-    /**
-     * Used to call {@link ItemUpdateStateEvent} with the proper item
-     * It does check which hand to get the item to update. Allows food.
-     *
-     * @return the called {@link ItemUpdateStateEvent},
-     * null if there is no item to update the state
-     */
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
-        return callItemUpdateStateEvent(true, hand);
-    }
-
-    public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {
-        this.vehicleInformation.refresh(sideways, forward, jump, unmount);
+        boolean oldSneakingState = isSneaking();
+        setSneaking(shift);
+        if (oldSneakingState != shift) {
+            if (shift) {
+                EventDispatcher.call(new PlayerStartSneakingEvent(this));
+            } else {
+                EventDispatcher.call(new PlayerStopSneakingEvent(this));
+            }
+        }
     }
 
     /**
@@ -2252,7 +2213,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
-        return HoverEvent.showEntity(ShowEntity.showEntity(EntityType.PLAYER, this.uuid, this.displayName));
+        return HoverEvent.showEntity(ShowEntity.showEntity(EntityType.PLAYER, getUuid(), this.displayName));
     }
 
     /**
@@ -2280,7 +2241,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
         return new PlayerInfoUpdatePacket.Entry(getUuid(), getUsername(), prop,
-                true, getLatency(), getGameMode(), displayName, null);
+                true, getLatency(), getGameMode(), displayName, null, 0);
     }
 
     /**
@@ -2292,7 +2253,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
+        connection.sendPacket(getSpawnPacket());
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
         connection.sendPacket(getEquipmentsPacket());
@@ -2303,70 +2264,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public @NotNull ItemStack getItemInMainHand() {
-        return inventory.getItemInMainHand();
+    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
+        return inventory.getEquipment(slot, heldSlot);
     }
 
     @Override
-    public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInMainHand(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getItemInOffHand() {
-        return inventory.getItemInOffHand();
-    }
-
-    @Override
-    public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInOffHand(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getHelmet() {
-        return inventory.getHelmet();
-    }
-
-    @Override
-    public void setHelmet(@NotNull ItemStack itemStack) {
-        inventory.setHelmet(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getChestplate() {
-        return inventory.getChestplate();
-    }
-
-    @Override
-    public void setChestplate(@NotNull ItemStack itemStack) {
-        inventory.setChestplate(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getLeggings() {
-        return inventory.getLeggings();
-    }
-
-    @Override
-    public void setLeggings(@NotNull ItemStack itemStack) {
-        inventory.setLeggings(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getBoots() {
-        return inventory.getBoots();
-    }
-
-    @Override
-    public void setBoots(@NotNull ItemStack itemStack) {
-        inventory.setBoots(itemStack);
-    }
-
-    @Override
-    public Locale getLocale() {
-        final String locale = settings.locale;
-        if (locale == null) return null;
-        return Locale.forLanguageTag(locale.replace("_", "-"));
+    public void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
+        inventory.setEquipment(slot, heldSlot, itemStack);
     }
 
     @Override
@@ -2375,42 +2279,35 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return new SnapshotImpl.Player(snapshot, username, gameMode);
     }
 
+    public Locale getLocale() {
+        return settings.locale();
+    }
+
     /**
      * Sets the player's locale. This will only set the locale of the player as it
      * is stored in the server. This will also be reset if the settings are refreshed.
      *
      * @param locale the new locale
      */
-    @Override
-    public void setLocale(@Nullable Locale locale) {
-        settings.locale = locale == null ? null : locale.toLanguageTag();
+    public void setLocale(@NotNull Locale locale) {
+        final ClientSettings settings = this.settings;
+        refreshSettings(new ClientSettings(
+                locale, settings.viewDistance(), settings.chatMessageType(), settings.chatColors(),
+                settings.displayedSkinParts(), settings.mainHand(), settings.enableTextFiltering(),
+                settings.allowServerListings(), settings.particleSetting()
+        ));
     }
 
     @Override
-    public @NotNull Identity identity() {
-        return this.identity;
-    }
-
-    @Override
+    @Contract(pure = true)
     public @NotNull Pointers pointers() {
-        return this.pointers;
+        return PLAYER_POINTERS_SUPPLIER.view(this);
     }
 
     @Override
-    public void setUuid(@NotNull UUID uuid) {
-        super.setUuid(uuid);
-        // update identity
-        this.identity = Identity.identity(uuid);
-    }
-
-    @Override
-    public boolean isPlayer() {
-        return true;
-    }
-
-    @Override
-    public Player asPlayer() {
-        return this;
+    protected void updateCollisions() {
+        preventBlockPlacement = gameMode != GameMode.SPECTATOR;
+        collidesWithEntities = gameMode != GameMode.SPECTATOR;
     }
 
     protected void sendChunkUpdates(Chunk newChunk) {
@@ -2419,8 +2316,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int newZ = newChunk.getChunkZ();
             final Vec old = chunksLoadedByClient;
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
-            ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
-                    settings.getEffectiveViewDistance(), chunkAdder, chunkRemover);
+            ChunkRange.chunksInRangeDiffering(newX, newZ, (int) old.x(), (int) old.z(),
+                    settings.effectiveViewDistance(), chunkAdder, chunkRemover);
             this.chunksLoadedByClient = new Vec(newX, newZ);
         }
     }
@@ -2435,11 +2332,23 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Represents the main or off hand of the player.
+     * Send a {@link Notification} to the player.
+     *
+     * @param notification the {@link Notification} to send
      */
-    public enum Hand {
-        MAIN,
-        OFF
+    public void sendNotification(@NotNull Notification notification) {
+        sendPacket(notification.buildAddPacket());
+        sendPacket(notification.buildRemovePacket());
+    }
+
+    /**
+     * Sends a {@link EntityAnimationPacket} to clear remove the sleep darkness.
+     */
+    @Override
+    public void leaveBed() {
+        EntityAnimationPacket packet = new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.LEAVE_BED);
+        sendPacket(packet);
+        super.leaveBed();
     }
 
     public enum FacePoint {
@@ -2449,132 +2358,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Settings enum
 
-    /**
-     * Represents where is located the main hand of the player (can be changed in Minecraft option).
-     */
-    public enum MainHand {
-        LEFT,
-        RIGHT
-    }
-
-    public class PlayerSettings {
-
-        private String locale;
-        private byte viewDistance;
-        private ChatMessageType chatMessageType;
-        private boolean chatColors;
-        private byte displayedSkinParts;
-        private MainHand mainHand;
-        private boolean enableTextFiltering;
-        private boolean allowServerListings;
-
-        public PlayerSettings() {
-            viewDistance = (byte) ServerFlag.CHUNK_VIEW_DISTANCE;
-        }
-
-        /**
-         * The player game language.
-         *
-         * @return the player locale
-         */
-        public String getLocale() {
-            return locale;
-        }
-
-        /**
-         * Gets the player view distance.
-         *
-         * @return the player view distance
-         */
-        public byte getViewDistance() {
-            return viewDistance;
-        }
-
-        public int getEffectiveViewDistance() {
-            return Math.min(getViewDistance(), ServerFlag.CHUNK_VIEW_DISTANCE);
-        }
-
-        /**
-         * Gets the messages this player wants to receive.
-         *
-         * @return the messages
-         */
-        public @Nullable ChatMessageType getChatMessageType() {
-            return chatMessageType;
-        }
-
-        /**
-         * Gets if the player has chat colors enabled.
-         *
-         * @return true if chat colors are enabled, false otherwise
-         */
-        public boolean hasChatColors() {
-            return chatColors;
-        }
-
-        public byte getDisplayedSkinParts() {
-            return displayedSkinParts;
-        }
-
-        /**
-         * Gets the player main hand.
-         *
-         * @return the player main hand
-         */
-        public MainHand getMainHand() {
-            return mainHand;
-        }
-
-        public boolean enableTextFiltering() {
-            return enableTextFiltering;
-        }
-
-        public boolean allowServerListings() {
-            return allowServerListings;
-        }
-
-        /**
-         * Changes the player settings internally.
-         * <p>
-         * WARNING: the player will not be noticed by this change, probably unsafe.
-         *
-         * @param locale             the player locale
-         * @param viewDistance       the player view distance
-         * @param chatMessageType    the chat messages the player wishes to receive
-         * @param chatColors         if chat colors should be displayed
-         * @param displayedSkinParts the player displayed skin parts
-         * @param mainHand           the player main hand
-         */
-        public void refresh(String locale, byte viewDistance, ChatMessageType chatMessageType, boolean chatColors,
-                            byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
-            this.locale = locale;
-            // Clamp viewDistance to valid bounds
-            this.viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
-            this.chatMessageType = chatMessageType;
-            this.chatColors = chatColors;
-            this.displayedSkinParts = displayedSkinParts;
-            this.mainHand = mainHand;
-            this.enableTextFiltering = enableTextFiltering;
-            this.allowServerListings = allowServerListings;
-
-            boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
-            PlayerMeta playerMeta = getPlayerMeta();
-            if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
-            playerMeta.setDisplayedSkinParts(displayedSkinParts);
-            playerMeta.setRightMainHand(this.mainHand == MainHand.RIGHT);
-            if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
-        }
-
-    }
-
     private int compareChunkDistance(long chunkIndexA, long chunkIndexB) {
-        int chunkAX = ChunkUtils.getChunkCoordX(chunkIndexA);
-        int chunkAZ = ChunkUtils.getChunkCoordZ(chunkIndexA);
-        int chunkBX = ChunkUtils.getChunkCoordX(chunkIndexB);
-        int chunkBZ = ChunkUtils.getChunkCoordZ(chunkIndexB);
+        int chunkAX = CoordConversion.chunkIndexGetX(chunkIndexA);
+        int chunkAZ = CoordConversion.chunkIndexGetZ(chunkIndexA);
+        int chunkBX = CoordConversion.chunkIndexGetX(chunkIndexB);
+        int chunkBZ = CoordConversion.chunkIndexGetZ(chunkIndexB);
         int chunkDistanceA = Math.abs(chunkAX - chunksLoadedByClient.blockX()) + Math.abs(chunkAZ - chunksLoadedByClient.blockZ());
         int chunkDistanceB = Math.abs(chunkBX - chunksLoadedByClient.blockX()) + Math.abs(chunkBZ - chunksLoadedByClient.blockZ());
         return Integer.compare(chunkDistanceA, chunkDistanceB);
     }
 
+    @SuppressWarnings("unchecked")
+    @ApiStatus.Experimental
+    @Override
+    public @NotNull Acquirable<? extends Player> acquirable() {
+        return (Acquirable<? extends Player>) super.acquirable();
+    }
 }

@@ -159,6 +159,20 @@ public class Sidebar implements Scoreboard {
     }
 
     /**
+     * Updates a {@link ScoreboardLine} number format through the given identifier.
+     *
+     * @param id           The identifier of the {@link ScoreboardLine}
+     * @param numberFormat The new number format for the {@link ScoreboardLine}
+     */
+    public void updateLineNumberFormat(@NotNull String id, NumberFormat numberFormat) {
+        final ScoreboardLine scoreboardLine = getLine(id);
+        if (scoreboardLine != null) {
+            scoreboardLine.numberFormat = numberFormat;
+            sendPacketsToViewers(scoreboardLine.getNumberFormatPacket(objectiveName, numberFormat));
+        }
+    }
+
+    /**
      * Gets a {@link ScoreboardLine} through the given identifier
      *
      * @param id The identifier of the line
@@ -205,11 +219,11 @@ public class Sidebar implements Scoreboard {
     @Override
     public boolean addViewer(@NotNull Player player) {
         final boolean result = this.viewers.add(player);
-
-        ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
+        if (result) {
+            ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
+            player.sendPacket(scoreboardObjectivePacket);
+        }
         DisplayScoreboardPacket displayScoreboardPacket = this.getDisplayScoreboardPacket((byte) 1);
-
-        player.sendPacket(scoreboardObjectivePacket); // Creative objective
         player.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
         for (ScoreboardLine line : lines) {
             player.sendPacket(line.sidebarTeam.getCreationPacket());
@@ -221,13 +235,14 @@ public class Sidebar implements Scoreboard {
     @Override
     public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);
+        if (!result) return false;
         ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
         player.sendPacket(scoreboardObjectivePacket);
         for (ScoreboardLine line : lines) {
             player.sendPacket(line.getScoreDestructionPacket(objectiveName)); // Is it necessary?
             player.sendPacket(line.sidebarTeam.getDestructionPacket());
         }
-        return result;
+        return true;
     }
 
     @NotNull
@@ -369,6 +384,17 @@ public class Sidebar implements Scoreboard {
         }
 
         /**
+         * Gets a number format update packet
+         *
+         * @param objectiveName The objective name to be updated
+         * @param numberFormat  The new number format
+         * @return a {@link UpdateScorePacket}
+         */
+        private UpdateScorePacket getNumberFormatPacket(String objectiveName, NumberFormat numberFormat) {
+            return new UpdateScorePacket(entityName, objectiveName, line, Component.empty(), numberFormat);
+        }
+
+        /**
          * Refresh the prefix of the {@link SidebarTeam}
          *
          * @param content The new content
@@ -392,7 +418,7 @@ public class Sidebar implements Scoreboard {
         private final byte friendlyFlags = 0x00;
         private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
         private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private final NamedTextColor teamColor = NamedTextColor.DARK_GREEN;
+        private final NamedTextColor teamColor = NamedTextColor.WHITE;
 
 
         /**
@@ -471,38 +497,31 @@ public class Sidebar implements Scoreboard {
     }
 
 
-    public static class NumberFormat implements NetworkBuffer.Writer {
-        private final FormatType formatType;
-        private final Component content;
-
+    public record NumberFormat(FormatType formatType, Component content) {
         private NumberFormat() {
-            this.content = null;
-            this.formatType = FormatType.BLANK;
+            this(FormatType.BLANK, null);
         }
 
-        private NumberFormat(@NotNull Component content, @NotNull FormatType formatType) {
-            this.content = content;
-            this.formatType = formatType;
-        }
-
-        public NumberFormat(NetworkBuffer reader) {
-            this.formatType = FormatType.values()[reader.read(NetworkBuffer.VAR_INT)];
-            if (formatType != FormatType.BLANK) this.content = reader.read(NetworkBuffer.COMPONENT);
-            else this.content = null;
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, formatType.ordinal());
-            if (formatType == FormatType.STYLED) {
-                assert content != null;
-                writer.write(NetworkBuffer.COMPONENT, content);
+        public static final NetworkBuffer.Type<NumberFormat> SERIALIZER = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, NumberFormat value) {
+                buffer.write(NetworkBuffer.Enum(FormatType.class), value.formatType);
+                if (value.formatType == FormatType.STYLED) {
+                    assert value.content != null;
+                    buffer.write(NetworkBuffer.COMPONENT, value.content);
+                } else if (value.formatType == FormatType.FIXED) {
+                    assert value.content != null;
+                    buffer.write(NetworkBuffer.COMPONENT, value.content);
+                }
             }
-            else if (formatType == FormatType.FIXED) {
-                assert content != null;
-                writer.write(NetworkBuffer.COMPONENT, content);
+
+            @Override
+            public NumberFormat read(@NotNull NetworkBuffer buffer) {
+                final FormatType formatType = buffer.read(NetworkBuffer.Enum(FormatType.class));
+                final Component content = formatType != FormatType.BLANK ? buffer.read(NetworkBuffer.COMPONENT) : null;
+                return new NumberFormat(formatType, content);
             }
-        }
+        };
 
         /**
          * A number format which has no sidebar score displayed
@@ -519,7 +538,7 @@ public class Sidebar implements Scoreboard {
          * @param style a styled component
          */
         public static @NotNull NumberFormat styled(@NotNull Component style) {
-            return new NumberFormat(style, FormatType.STYLED);
+            return new NumberFormat(FormatType.STYLED, style);
         }
 
         /**
@@ -528,7 +547,7 @@ public class Sidebar implements Scoreboard {
          * @param content the fixed component
          */
         public static @NotNull NumberFormat fixed(@NotNull Component content) {
-            return new NumberFormat(content, FormatType.FIXED);
+            return new NumberFormat(FormatType.FIXED, content);
         }
 
         private enum FormatType {

@@ -1,60 +1,99 @@
 package net.minestom.server.entity.damage;
 
-import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.Contract;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Collection;
+public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
+    @NotNull Codec<DamageType> REGISTRY_CODEC = StructCodec.struct(
+            "message_id", Codec.STRING, DamageType::messageId,
+            "scaling", Codec.STRING, DamageType::scaling,
+            "exhaustion", Codec.FLOAT, DamageType::exhaustion,
+            "effects", Codec.STRING.optional("hurt"), DamageType::effects,
+            "death_message_type", Codec.STRING.optional("default"), DamageType::deathMessageType,
+            DamageType::create);
 
-public sealed interface DamageType extends StaticProtocolObject, DamageTypes permits DamageTypeImpl {
+    @NotNull Codec<RegistryKey<DamageType>> CODEC = RegistryKey.codec(Registries::damageType);
+
+    static @NotNull DamageType create(
+            @NotNull String messageId,
+            @NotNull String scaling,
+            float exhaustion,
+            @Nullable String effects,
+            @Nullable String deathMessageType
+    ) {
+        return new DamageTypeImpl(messageId, scaling, exhaustion, effects, deathMessageType);
+    }
+
+    static @NotNull Builder builder() {
+        return new Builder();
+    }
+
     /**
-     * Returns the damage type registry.
+     * <p>Creates a new registry for damage types, loading the vanilla damage types.</p>
      *
-     * @return the damage type registry
+     * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
-    @Contract(pure = true)
-    @NotNull Registry.DamageTypeEntry registry();
-
-    @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    @ApiStatus.Internal
+    static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
+        return DynamicRegistry.create(Key.key("minecraft:damage_type"), REGISTRY_CODEC, RegistryData.Resource.DAMAGE_TYPES);
     }
 
-    default double exhaustion() {
-        return registry().exhaustion();
+    @NotNull String messageId();
+
+    @NotNull String scaling();
+
+    float exhaustion();
+
+    @Nullable String effects();
+
+    @Nullable String deathMessageType();
+
+    final class Builder {
+        private String messageId;
+        private String scaling;
+        private float exhaustion = 0f;
+        private String effects;
+        private String deathMessageType;
+
+        private Builder() {
+        }
+
+        public @NotNull Builder messageId(@NotNull String messageId) {
+            this.messageId = messageId;
+            return this;
+        }
+
+        public @NotNull Builder scaling(@NotNull String scaling) {
+            this.scaling = scaling;
+            return this;
+        }
+
+        public @NotNull Builder exhaustion(float exhaustion) {
+            this.exhaustion = exhaustion;
+            return this;
+        }
+
+        public @NotNull Builder effects(@Nullable String effects) {
+            this.effects = effects;
+            return this;
+        }
+
+        public @NotNull Builder deathMessageType(@Nullable String deathMessageType) {
+            this.deathMessageType = deathMessageType;
+            return this;
+        }
+
+        public @NotNull DamageType build() {
+            return new DamageTypeImpl(messageId, scaling, exhaustion, effects, deathMessageType);
+        }
     }
 
-    default String messageId() {
-        return registry().messageId();
-    }
-
-    default String scaling() {
-        return registry().scaling();
-    }
-
-    NBTCompound asNBT();
-
-    static @NotNull Collection<@NotNull DamageType> values() {
-        return DamageTypeImpl.values();
-    }
-
-    static DamageType fromNamespaceId(@NotNull String namespaceID) {
-        return DamageTypeImpl.getSafe(namespaceID);
-    }
-
-    static DamageType fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
-    }
-
-    static @Nullable DamageType fromId(int id) {
-        return DamageTypeImpl.getId(id);
-    }
-
-    static NBTCompound getNBT() {
-        return DamageTypeImpl.getNBT();
-    }
 }

@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.kyori.adventure.key.InvalidKeyException;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -24,8 +26,8 @@ public class ArgumentBlockState extends Argument<Block> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:block_state";
+    public @NotNull ArgumentParserType parser() {
+        return ArgumentParserType.BLOCK_STATE;
     }
 
     /**
@@ -39,7 +41,12 @@ public class ArgumentBlockState extends Argument<Block> {
 
         if (nbtIndex == -1) {
             // Only block name
-            final Block block = Block.fromNamespaceId(input);
+            Block block;
+            try {
+                block = Block.fromKey(input);
+            } catch (InvalidKeyException ignored) {
+                block = null;
+            }
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
             return block;
@@ -48,7 +55,7 @@ public class ArgumentBlockState extends Argument<Block> {
                 throw new ArgumentSyntaxException("Property list need to end with ]", input, INVALID_PROPERTY);
             // Block state
             final String blockName = input.substring(0, nbtIndex);
-            Block block = Block.fromNamespaceId(blockName);
+            Block block = Block.fromKey(blockName);
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
 

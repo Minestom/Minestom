@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,13 +14,13 @@ public class ArgumentParticle extends ArgumentRegistry<Particle> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:particle";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.PARTICLE;
     }
 
     @Override
     public Particle getRegistry(@NotNull String value) {
-        return Particle.fromNamespaceId(value);
+        return Particle.fromKey(value);
     }
 
     @Override

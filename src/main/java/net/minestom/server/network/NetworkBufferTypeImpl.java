@@ -1,43 +1,65 @@
 package net.minestom.server.network;
 
+import com.google.gson.JsonElement;
+import it.unimi.dsi.fastutil.bytes.ByteArrayList;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.data.WorldPos;
-import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.data.ParticleData;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.server.utils.Either;
+import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.json.JsonUtil;
+import net.minestom.server.utils.nbt.BinaryTagReader;
+import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.*;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBufferImpl.impl;
 
 interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
 
+    record UnitType() implements NetworkBufferTypeImpl<Unit> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Unit value) {
+        }
+
+        @Override
+        public Unit read(@NotNull NetworkBuffer buffer) {
+            return Unit.INSTANCE;
+        }
+    }
+
     record BooleanType() implements NetworkBufferTypeImpl<Boolean> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Boolean value) {
-            buffer.ensureSize(1);
-            buffer.nioBuffer.put(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
-            buffer.writeIndex += 1;
+            buffer.ensureWritable(1);
+            impl(buffer)._putByte(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
+            buffer.advanceWrite(1);
         }
 
         @Override
         public Boolean read(@NotNull NetworkBuffer buffer) {
-            final byte value = buffer.nioBuffer.get(buffer.readIndex());
-            buffer.readIndex += 1;
+            final byte value = impl(buffer)._getByte(buffer.readIndex());
+            buffer.advanceRead(1);
             return value == 1;
         }
     }
@@ -45,15 +67,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record ByteType() implements NetworkBufferTypeImpl<Byte> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Byte value) {
-            buffer.ensureSize(1);
-            buffer.nioBuffer.put(buffer.writeIndex(), value);
-            buffer.writeIndex += 1;
+            buffer.ensureWritable(1);
+            impl(buffer)._putByte(buffer.writeIndex(), value);
+            buffer.advanceWrite(1);
         }
 
         @Override
         public Byte read(@NotNull NetworkBuffer buffer) {
-            final byte value = buffer.nioBuffer.get(buffer.readIndex());
-            buffer.readIndex += 1;
+            final byte value = impl(buffer)._getByte(buffer.readIndex());
+            buffer.advanceRead(1);
             return value;
         }
     }
@@ -61,15 +83,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record ShortType() implements NetworkBufferTypeImpl<Short> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Short value) {
-            buffer.ensureSize(2);
-            buffer.nioBuffer.putShort(buffer.writeIndex(), value);
-            buffer.writeIndex += 2;
+            buffer.ensureWritable(2);
+            impl(buffer)._putShort(buffer.writeIndex(), value);
+            buffer.advanceWrite(2);
         }
 
         @Override
         public Short read(@NotNull NetworkBuffer buffer) {
-            final short value = buffer.nioBuffer.getShort(buffer.readIndex());
-            buffer.readIndex += 2;
+            final short value = impl(buffer)._getShort(buffer.readIndex());
+            buffer.advanceRead(2);
             return value;
         }
     }
@@ -77,15 +99,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record UnsignedShortType() implements NetworkBufferTypeImpl<Integer> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Integer value) {
-            buffer.ensureSize(2);
-            buffer.nioBuffer.putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
-            buffer.writeIndex += 2;
+            buffer.ensureWritable(2);
+            impl(buffer)._putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
+            buffer.advanceWrite(2);
         }
 
         @Override
         public Integer read(@NotNull NetworkBuffer buffer) {
-            final short value = buffer.nioBuffer.getShort(buffer.readIndex());
-            buffer.readIndex += 2;
+            final short value = impl(buffer)._getShort(buffer.readIndex());
+            buffer.advanceRead(2);
             return value & 0xFFFF;
         }
     }
@@ -93,15 +115,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record IntType() implements NetworkBufferTypeImpl<Integer> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Integer value) {
-            buffer.ensureSize(4);
-            buffer.nioBuffer.putInt(buffer.writeIndex(), value);
-            buffer.writeIndex += 4;
+            buffer.ensureWritable(4);
+            impl(buffer)._putInt(buffer.writeIndex(), value);
+            buffer.advanceWrite(4);
         }
 
         @Override
         public Integer read(@NotNull NetworkBuffer buffer) {
-            final int value = buffer.nioBuffer.getInt(buffer.readIndex());
-            buffer.readIndex += 4;
+            final int value = impl(buffer)._getInt(buffer.readIndex());
+            buffer.advanceRead(4);
             return value;
         }
     }
@@ -109,15 +131,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record LongType() implements NetworkBufferTypeImpl<Long> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Long value) {
-            buffer.ensureSize(8);
-            buffer.nioBuffer.putLong(buffer.writeIndex(), value);
-            buffer.writeIndex += 8;
+            buffer.ensureWritable(8);
+            impl(buffer)._putLong(buffer.writeIndex(), value);
+            buffer.advanceWrite(8);
         }
 
         @Override
         public Long read(@NotNull NetworkBuffer buffer) {
-            final long value = buffer.nioBuffer.getLong(buffer.readIndex());
-            buffer.readIndex += 8;
+            final long value = impl(buffer)._getLong(buffer.readIndex());
+            buffer.advanceRead(8);
             return value;
         }
     }
@@ -125,15 +147,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record FloatType() implements NetworkBufferTypeImpl<Float> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Float value) {
-            buffer.ensureSize(4);
-            buffer.nioBuffer.putFloat(buffer.writeIndex(), value);
-            buffer.writeIndex += 4;
+            buffer.ensureWritable(4);
+            impl(buffer)._putFloat(buffer.writeIndex(), value);
+            buffer.advanceWrite(4);
         }
 
         @Override
         public Float read(@NotNull NetworkBuffer buffer) {
-            final float value = buffer.nioBuffer.getFloat(buffer.readIndex());
-            buffer.readIndex += 4;
+            final float value = impl(buffer)._getFloat(buffer.readIndex());
+            buffer.advanceRead(4);
             return value;
         }
     }
@@ -141,15 +163,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record DoubleType() implements NetworkBufferTypeImpl<Double> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Double value) {
-            buffer.ensureSize(8);
-            buffer.nioBuffer.putDouble(buffer.writeIndex(), value);
-            buffer.writeIndex += 8;
+            buffer.ensureWritable(8);
+            impl(buffer)._putDouble(buffer.writeIndex(), value);
+            buffer.advanceWrite(8);
         }
 
         @Override
         public Double read(@NotNull NetworkBuffer buffer) {
-            final double value = buffer.nioBuffer.getDouble(buffer.readIndex());
-            buffer.readIndex += 8;
+            final double value = impl(buffer)._getDouble(buffer.readIndex());
+            buffer.advanceRead(8);
             return value;
         }
     }
@@ -157,67 +179,86 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record VarIntType() implements NetworkBufferTypeImpl<Integer> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Integer boxed) {
-            final int value = boxed;
-            final int index = buffer.writeIndex();
-            if ((value & (0xFFFFFFFF << 7)) == 0) {
-                buffer.ensureSize(1);
-                buffer.nioBuffer.put(index, (byte) value);
-                buffer.writeIndex += 1;
-            } else if ((value & (0xFFFFFFFF << 14)) == 0) {
-                buffer.ensureSize(2);
-                buffer.nioBuffer.putShort(index, (short) ((value & 0x7F | 0x80) << 8 | (value >>> 7)));
-                buffer.writeIndex += 2;
-            } else if ((value & (0xFFFFFFFF << 21)) == 0) {
-                buffer.ensureSize(3);
-                var nio = buffer.nioBuffer;
-                nio.put(index, (byte) (value & 0x7F | 0x80));
-                nio.put(index + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
-                nio.put(index + 2, (byte) (value >>> 14));
-                buffer.writeIndex += 3;
-            } else if ((value & (0xFFFFFFFF << 28)) == 0) {
-                buffer.ensureSize(4);
-                var nio = buffer.nioBuffer;
-                nio.putInt(index, (value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16)
-                        | ((value >>> 14) & 0x7F | 0x80) << 8 | (value >>> 21));
-                buffer.writeIndex += 4;
-            } else {
-                buffer.ensureSize(5);
-                var nio = buffer.nioBuffer;
-                nio.putInt(index, (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
-                        | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80));
-                nio.put(index + 4, (byte) (value >>> 28));
-                buffer.writeIndex += 5;
+            buffer.ensureWritable(5);
+            long index = buffer.writeIndex();
+            int value = boxed;
+            var nio = impl(buffer);
+            while (true) {
+                if ((value & ~SEGMENT_BITS) == 0) {
+                    nio._putByte(index++, (byte) value);
+                    buffer.advanceWrite(index - buffer.writeIndex());
+                    return;
+                }
+                nio._putByte(index++, (byte) ((byte) (value & SEGMENT_BITS) | CONTINUE_BIT));
+                // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
+                value >>>= 7;
             }
         }
 
         @Override
         public Integer read(@NotNull NetworkBuffer buffer) {
-            int index = buffer.readIndex();
+            long index = buffer.readIndex();
             // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L393
             int result = 0;
             for (int shift = 0; ; shift += 7) {
-                byte b = buffer.nioBuffer.get(index++);
+                byte b = impl(buffer)._getByte(index++);
                 result |= (b & 0x7f) << shift;
                 if (b >= 0) {
-                    buffer.readIndex += index - buffer.readIndex();
+                    buffer.advanceRead(index - buffer.readIndex());
                     return result;
                 }
             }
         }
     }
 
+    record OptionalVarIntType() implements NetworkBufferTypeImpl<@Nullable Integer> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, @Nullable Integer value) {
+            buffer.write(VAR_INT, value == null ? 0 : value + 1);
+        }
+
+        @Override
+        public @Nullable Integer read(@NotNull NetworkBuffer buffer) {
+            final int value = buffer.read(VAR_INT);
+            return value == 0 ? null : value - 1;
+        }
+    }
+
+    record VarInt3Type() implements NetworkBufferTypeImpl<Integer> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Integer boxed) {
+            final int value = boxed;
+            // Value must be between 0 and 2^21
+            Check.argCondition(value < 0 || value >= (1 << 21), "VarInt3 out of bounds: {0}", value);
+            buffer.ensureWritable(3);
+            final long startIndex = buffer.writeIndex();
+            var impl = impl(buffer);
+            impl._putByte(startIndex, (byte) (value & 0x7F | 0x80));
+            impl._putByte(startIndex + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
+            impl._putByte(startIndex + 2, (byte) (value >>> 14));
+            buffer.advanceWrite(3);
+        }
+
+        @Override
+        public Integer read(@NotNull NetworkBuffer buffer) {
+            // Ensure that the buffer can read other var-int sizes
+            // The optimization is mostly relevant for writing
+            return buffer.read(VAR_INT);
+        }
+    }
+
     record VarLongType() implements NetworkBufferTypeImpl<Long> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Long value) {
-            buffer.ensureSize(10);
+            buffer.ensureWritable(10);
             int size = 0;
             while (true) {
                 if ((value & ~((long) SEGMENT_BITS)) == 0) {
-                    buffer.nioBuffer.put(buffer.writeIndex() + size, (byte) value.intValue());
-                    buffer.writeIndex += size + 1;
+                    impl(buffer)._putByte(buffer.writeIndex() + size, (byte) value.intValue());
+                    buffer.advanceWrite(size + 1);
                     return;
                 }
-                buffer.nioBuffer.put(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
+                impl(buffer)._putByte(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
                 size++;
                 // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
                 value >>>= 7;
@@ -231,34 +272,44 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             int position = 0;
             byte currentByte;
             while (true) {
-                currentByte = buffer.nioBuffer.get(buffer.readIndex() + length);
+                currentByte = impl(buffer)._getByte(buffer.readIndex() + length);
                 length++;
                 value |= (long) (currentByte & SEGMENT_BITS) << position;
                 if ((currentByte & CONTINUE_BIT) == 0) break;
                 position += 7;
                 if (position >= 64) throw new RuntimeException("VarLong is too big");
             }
-            buffer.readIndex += length;
+            buffer.advanceRead(length);
             return value;
         }
     }
 
-    record RawBytesType() implements NetworkBufferTypeImpl<byte[]> {
+    record RawBytesType(int length) implements NetworkBufferTypeImpl<byte[]> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, byte[] value) {
-            buffer.ensureSize(value.length);
-            buffer.nioBuffer.put(buffer.writeIndex(), value);
-            buffer.writeIndex += value.length;
+            if (length != -1 && value.length != length) {
+                throw new IllegalArgumentException("Invalid length: " + value.length + " != " + length);
+            }
+            final int length = value.length;
+            if (length == 0) return;
+            buffer.ensureWritable(length);
+            impl(buffer)._putBytes(buffer.writeIndex(), value);
+            buffer.advanceWrite(length);
         }
 
         @Override
         public byte[] read(@NotNull NetworkBuffer buffer) {
-            final int limit = buffer.nioBuffer.limit();
-            final int length = limit - buffer.readIndex();
+            long length = buffer.readableBytes();
+            if (this.length != -1) {
+                length = Math.min(length, this.length);
+            }
+            if (length == 0) return new byte[0];
             assert length > 0 : "Invalid remaining: " + length;
-            final byte[] bytes = new byte[length];
-            buffer.nioBuffer.get(buffer.readIndex(), bytes);
-            buffer.readIndex += length;
+
+            final int arrayLength = Math.toIntExact(length);
+            final byte[] bytes = new byte[arrayLength];
+            impl(buffer)._getBytes(buffer.readIndex(), bytes);
+            buffer.advanceRead(arrayLength);
             return bytes;
         }
     }
@@ -267,71 +318,54 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, String value) {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
-            buffer.write(VAR_INT, bytes.length);
-            buffer.write(RAW_BYTES, bytes);
+            buffer.write(BYTE_ARRAY, bytes);
         }
 
         @Override
         public String read(@NotNull NetworkBuffer buffer) {
-            final int length = buffer.read(VAR_INT);
-            final int remaining = buffer.nioBuffer.limit() - buffer.readIndex();
-            Check.argCondition(length > remaining, "String is too long (length: {0}, readable: {1})", length, remaining);
-            byte[] bytes = new byte[length];
-            buffer.nioBuffer.get(buffer.readIndex(), bytes);
-            buffer.readIndex += length;
+            final byte[] bytes = buffer.read(BYTE_ARRAY);
             return new String(bytes, StandardCharsets.UTF_8);
         }
     }
 
-    record NbtType() implements NetworkBufferTypeImpl<NBT> {
+    record StringTerminatedType() implements NetworkBufferTypeImpl<String> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, org.jglrxavpok.hephaistos.nbt.NBT value) {
-            NBTWriter nbtWriter = buffer.nbtWriter;
-            if (nbtWriter == null) {
-                nbtWriter = new NBTWriter(new OutputStream() {
-                    @Override
-                    public void write(int b) {
-                        buffer.write(BYTE, (byte) b);
-                    }
-                }, CompressedProcesser.NONE);
-                buffer.nbtWriter = nbtWriter;
+        public void write(@NotNull NetworkBuffer buffer, String value) {
+            final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
+            byte[] terminated = new byte[bytes.length + 1];
+            System.arraycopy(bytes, 0, terminated, 0, bytes.length);
+            terminated[terminated.length - 1] = 0;
+            buffer.write(RAW_BYTES, terminated);
+        }
+
+        @Override
+        public String read(@NotNull NetworkBuffer buffer) {
+            ByteArrayList bytes = new ByteArrayList();
+            byte b;
+            while ((b = buffer.read(BYTE)) != 0) {
+                bytes.add(b);
             }
+            return new String(bytes.elements(), StandardCharsets.UTF_8);
+        }
+    }
+
+    record NbtType() implements NetworkBufferTypeImpl<BinaryTag> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, BinaryTag value) {
+            BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
             try {
-                if (value == NBTEnd.INSTANCE) {
-                    // Kotlin - https://discord.com/channels/706185253441634317/706186227493109860/1163703658341478462
-                    buffer.write(BYTE, (byte) NBTType.TAG_End.getOrdinal());
-                } else {
-                    buffer.write(BYTE, (byte) value.getID().getOrdinal());
-                    nbtWriter.writeRaw(value);
-                }
+                nbtWriter.writeNameless(value);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
         @Override
-        public org.jglrxavpok.hephaistos.nbt.NBT read(@NotNull NetworkBuffer buffer) {
-            NBTReader nbtReader = buffer.nbtReader;
-            if (nbtReader == null) {
-                nbtReader = new NBTReader(new InputStream() {
-                    @Override
-                    public int read() {
-                        return buffer.read(BYTE) & 0xFF;
-                    }
-
-                    @Override
-                    public int available() {
-                        return buffer.readableBytes();
-                    }
-                }, CompressedProcesser.NONE);
-                buffer.nbtReader = nbtReader;
-            }
+        public BinaryTag read(@NotNull NetworkBuffer buffer) {
+            BinaryTagReader nbtReader = impl(buffer).nbtReader();
             try {
-                byte tagId = buffer.read(BYTE);
-                if (tagId == NBTType.TAG_End.getOrdinal())
-                    return NBTEnd.INSTANCE;
-                return nbtReader.readRaw(tagId);
-            } catch (IOException | NBTException e) {
+                return nbtReader.readNameless();
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -359,31 +393,23 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record ComponentType() implements NetworkBufferTypeImpl<Component> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Component value) {
-            final NBT nbt = NbtComponentSerializer.nbt().serialize(value);
-            buffer.write(NBT, nbt);
-        }
-
-        @Override
-        public Component read(@NotNull NetworkBuffer buffer) {
-            final NBT nbt = buffer.read(NBT);
-            return NbtComponentSerializer.nbt().deserialize(nbt);
-        }
-    }
-
     record JsonComponentType() implements NetworkBufferTypeImpl<Component> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Component value) {
-            final String json = GsonComponentSerializer.gson().serialize(value);
+            final Transcoder<JsonElement> coder = buffer.registries() != null
+                    ? new RegistryTranscoder<>(Transcoder.JSON, buffer.registries())
+                    : Transcoder.JSON;
+            final String json = JsonUtil.toJson(Codec.COMPONENT.encode(coder, value).orElseThrow());
             buffer.write(STRING, json);
         }
 
         @Override
         public Component read(@NotNull NetworkBuffer buffer) {
-            final String json = buffer.read(STRING);
-            return GsonComponentSerializer.gson().deserialize(json);
+            final Transcoder<JsonElement> coder = buffer.registries() != null
+                    ? new RegistryTranscoder<>(Transcoder.JSON, buffer.registries())
+                    : Transcoder.JSON;
+            final JsonElement json = JsonUtil.fromJson(buffer.read(STRING));
+            return Codec.COMPONENT.decode(coder, json).orElseThrow();
         }
     }
 
@@ -402,36 +428,24 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record ItemType() implements NetworkBufferTypeImpl<ItemStack> {
+    record PosType() implements NetworkBufferTypeImpl<Pos> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
-            if (value.isAir()) {
-                buffer.write(BOOLEAN, false);
-                return;
-            }
-            buffer.write(BOOLEAN, true);
-            buffer.write(VAR_INT, value.material().id());
-            buffer.write(BYTE, (byte) value.amount());
-            // Vanilla does not write an empty object, just an end tag.
-            NBTCompound nbt = value.meta().toNBT();
-            buffer.write(NBT, nbt.isEmpty() ? NBTEnd.INSTANCE : nbt);
+        public void write(@NotNull NetworkBuffer buffer, Pos value) {
+            buffer.write(DOUBLE, value.x());
+            buffer.write(DOUBLE, value.y());
+            buffer.write(DOUBLE, value.z());
+            buffer.write(FLOAT, value.yaw());
+            buffer.write(FLOAT, value.pitch());
         }
 
         @Override
-        public ItemStack read(@NotNull NetworkBuffer buffer) {
-            final boolean present = buffer.read(BOOLEAN);
-            if (!present) return ItemStack.AIR;
-
-            final int id = buffer.read(VAR_INT);
-            final Material material = Material.fromId(id);
-            if (material == null) throw new RuntimeException("Unknown material id: " + id);
-
-            final int amount = buffer.read(BYTE);
-            final NBT nbt = buffer.read(NBT);
-            if (!(nbt instanceof NBTCompound compound)) {
-                return ItemStack.of(material, amount);
-            }
-            return ItemStack.fromNBT(material, compound, amount);
+        public Pos read(@NotNull NetworkBuffer buffer) {
+            final double x = buffer.read(DOUBLE);
+            final double y = buffer.read(DOUBLE);
+            final double z = buffer.read(DOUBLE);
+            final float yaw = buffer.read(FLOAT);
+            final float pitch = buffer.read(FLOAT);
+            return new Pos(x, y, z, yaw, pitch);
         }
     }
 
@@ -445,10 +459,10 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public byte[] read(@NotNull NetworkBuffer buffer) {
             final int length = buffer.read(VAR_INT);
-            final byte[] bytes = new byte[length];
-            buffer.nioBuffer.get(buffer.readIndex(), bytes);
-            buffer.readIndex += length;
-            return bytes;
+            if (length == 0) return new byte[0];
+            final long remaining = buffer.readableBytes();
+            Check.argCondition(length > remaining, "String is too long (length: {0}, readable: {1})", length, remaining);
+            return buffer.read(FixedRawBytes(length));
         }
     }
 
@@ -500,50 +514,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    // METADATA
-
-    record BlockStateType() implements NetworkBufferTypeImpl<Integer> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Integer value) {
-            buffer.write(VAR_INT, value);
-        }
-
-        @Override
-        public Integer read(@NotNull NetworkBuffer buffer) {
-            return buffer.read(VAR_INT);
-        }
-    }
-
-    record VillagerDataType() implements NetworkBufferTypeImpl<int[]> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, int[] value) {
-            buffer.write(VAR_INT, value[0]);
-            buffer.write(VAR_INT, value[1]);
-            buffer.write(VAR_INT, value[2]);
-        }
-
-        @Override
-        public int[] read(@NotNull NetworkBuffer buffer) {
-            final int[] value = new int[3];
-            value[0] = buffer.read(VAR_INT);
-            value[1] = buffer.read(VAR_INT);
-            value[2] = buffer.read(VAR_INT);
-            return value;
-        }
-    }
-
-    record DeathLocationType() implements NetworkBufferTypeImpl<WorldPos> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, WorldPos value) {
-            buffer.writeOptional(value);
-        }
-
-        @Override
-        public WorldPos read(@NotNull NetworkBuffer buffer) {
-            return buffer.readOptional(WorldPos::new);
-        }
-    }
-
     record Vector3Type() implements NetworkBufferTypeImpl<Point> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Point value) {
@@ -578,6 +548,40 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record Vector3IType() implements NetworkBufferTypeImpl<Point> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Point value) {
+            buffer.write(VAR_INT, (int) value.x());
+            buffer.write(VAR_INT, (int) value.y());
+            buffer.write(VAR_INT, (int) value.z());
+        }
+
+        @Override
+        public Point read(@NotNull NetworkBuffer buffer) {
+            final int x = buffer.read(VAR_INT);
+            final int y = buffer.read(VAR_INT);
+            final int z = buffer.read(VAR_INT);
+            return new Vec(x, y, z);
+        }
+    }
+
+    record Vector3BType() implements NetworkBufferTypeImpl<Point> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Point value) {
+            buffer.write(BYTE, (byte) value.x());
+            buffer.write(BYTE, (byte) value.y());
+            buffer.write(BYTE, (byte) value.z());
+        }
+
+        @Override
+        public Point read(@NotNull NetworkBuffer buffer) {
+            final byte x = buffer.read(BYTE);
+            final byte y = buffer.read(BYTE);
+            final byte z = buffer.read(BYTE);
+            return new Vec(x, y, z);
+        }
+    }
+
     record QuaternionType() implements NetworkBufferTypeImpl<float[]> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, float[] value) {
@@ -597,46 +601,386 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record ParticleType() implements NetworkBufferTypeImpl<Particle> {
+    // Combinators
+
+    record EnumSetType<E extends Enum<E>>(@NotNull Class<E> enumType,
+                                          E[] values) implements NetworkBufferTypeImpl<EnumSet<E>> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, Particle value) {
-            Check.stateCondition(value.data() != null && !value.data().validate(value.id()), "Particle data {0} is not valid for this particle type {1}", value.data(), value.namespace());
-            Check.stateCondition(value.data() == null && ParticleData.requiresData(value.id()), "Particle data is required for this particle type {0}", value.namespace());
-            buffer.write(VAR_INT, value.id());
-            if (value.data() != null) value.data().write(buffer);
+        public void write(@NotNull NetworkBuffer buffer, EnumSet<E> value) {
+            BitSet bitSet = new BitSet(values.length);
+            for (int i = 0; i < values.length; ++i) {
+                bitSet.set(i, value.contains(values[i]));
+            }
+            final byte[] array = bitSet.toByteArray();
+            buffer.write(RAW_BYTES, array);
         }
 
         @Override
-        public Particle read(@NotNull NetworkBuffer buffer) {
-            throw new UnsupportedOperationException("Cannot read a particle from the network buffer");
+        public EnumSet<E> read(@NotNull NetworkBuffer buffer) {
+            final byte[] array = buffer.read(FixedRawBytes((values.length + 7) / 8));
+            BitSet bitSet = BitSet.valueOf(array);
+            EnumSet<E> enumSet = EnumSet.noneOf(enumType);
+            for (int i = 0; i < values.length; ++i) {
+                if (bitSet.get(i)) {
+                    enumSet.add(values[i]);
+                }
+            }
+            return enumSet;
         }
     }
 
-    static <T extends Enum<?>> NetworkBufferTypeImpl<T> fromEnum(Class<T> enumClass) {
-        return new NetworkBufferTypeImpl<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, T value) {
-                buffer.writeEnum(enumClass, value);
+    record FixedBitSetType(int length) implements NetworkBufferTypeImpl<BitSet> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, BitSet value) {
+            final int setLength = value.length();
+            if (setLength > length) {
+                throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
+            } else {
+                final byte[] array = value.toByteArray();
+                buffer.write(RAW_BYTES, array);
             }
+        }
 
-            @Override
-            public T read(@NotNull NetworkBuffer buffer) {
-                return buffer.readEnum(enumClass);
-            }
-        };
+        @Override
+        public BitSet read(@NotNull NetworkBuffer buffer) {
+            final byte[] array = buffer.read(FixedRawBytes((length + 7) / 8));
+            return BitSet.valueOf(array);
+        }
     }
 
-    static <T> NetworkBufferTypeImpl<T> fromOptional(Type<T> optionalType) {
-        return new NetworkBufferTypeImpl<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, T value) {
-                buffer.writeOptional(optionalType, value);
+    record OptionalType<T>(@NotNull Type<T> parent) implements NetworkBufferTypeImpl<@Nullable T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            buffer.write(BOOLEAN, value != null);
+            if (value != null) buffer.write(parent, value);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            return buffer.read(BOOLEAN) ? buffer.read(parent) : null;
+        }
+    }
+
+    record LengthPrefixedType<T>(@NotNull Type<T> parent, int maxLength) implements NetworkBufferTypeImpl<T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            // Write to another buffer and copy (kinda inefficient, but currently unused serverside so its ok for now)
+            final byte[] componentData = NetworkBuffer.makeArray(b -> parent.write(b, value), buffer.registries());
+            buffer.write(NetworkBuffer.BYTE_ARRAY, componentData);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            final int length = buffer.read(VAR_INT);
+            Check.argCondition(length > maxLength, "Value is too long (length: {0}, max: {1})", length, maxLength);
+
+            final long availableBytes = buffer.readableBytes();
+            Check.argCondition(length > availableBytes, "Value is too long (length: {0}, available: {1})", length, availableBytes);
+            final T value = parent.read(buffer);
+            Check.argCondition(buffer.readableBytes() != availableBytes - length, "Value is too short (length: {0}, available: {1})", length, availableBytes);
+
+            return value;
+        }
+    }
+
+    final class LazyType<T> implements NetworkBufferTypeImpl<T> {
+        private final @NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier;
+        private Type<T> type;
+
+        public LazyType(@NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier) {
+            this.supplier = supplier;
+        }
+
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            if (type == null) type = supplier.get();
+            type.write(buffer, value);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            if (type == null) type = supplier.get();
+            return null;
+        }
+    }
+
+    record TypedNbtType<T>(@NotNull Codec<T> nbtType) implements NetworkBufferTypeImpl<T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            final Registries registries = impl(buffer).registries;
+            Check.stateCondition(registries == null, "Buffer does not have registries");
+            final Result<BinaryTag> result = nbtType.encode(new RegistryTranscoder<>(Transcoder.NBT, registries), value);
+            switch (result) {
+                case Result.Ok(BinaryTag tag) -> buffer.write(NBT, tag);
+                case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
+            }
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            final Registries registries = impl(buffer).registries;
+            Check.stateCondition(registries == null, "Buffer does not have registries");
+            final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), buffer.read(NBT));
+            return switch (result) {
+                case Result.Ok(T value) -> value;
+                case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
+            };
+        }
+    }
+
+    record EitherType<L, R>(
+            @NotNull NetworkBuffer.Type<L> left,
+            @NotNull NetworkBuffer.Type<R> right
+    ) implements NetworkBuffer.Type<Either<L, R>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Either<L, R> value) {
+            switch (value) {
+                case Either.Left(L leftValue) -> {
+                    buffer.write(BOOLEAN, true);
+                    buffer.write(left, leftValue);
+                }
+                case Either.Right(R rightValue) -> {
+                    buffer.write(BOOLEAN, false);
+                    buffer.write(right, rightValue);
+                }
+            }
+        }
+
+        @Override
+        public Either<L, R> read(@NotNull NetworkBuffer buffer) {
+            if (buffer.read(BOOLEAN))
+                return Either.left(buffer.read(left));
+            return Either.right(buffer.read(right));
+        }
+    }
+
+    record TransformType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to,
+                               @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, S value) {
+            parent.write(buffer, from.apply(value));
+        }
+
+        @Override
+        public S read(@NotNull NetworkBuffer buffer) {
+            return to.apply(parent.read(buffer));
+        }
+    }
+
+    record MapType<K, V>(@NotNull Type<K> parent, @NotNull NetworkBuffer.Type<V> valueType,
+                         int maxSize) implements NetworkBufferTypeImpl<Map<K, V>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Map<K, V> map) {
+            buffer.write(VAR_INT, map.size());
+            for (Map.Entry<K, V> entry : map.entrySet()) {
+                buffer.write(parent, entry.getKey());
+                buffer.write(valueType, entry.getValue());
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public Map<K, V> read(@NotNull NetworkBuffer buffer) {
+            final int size = buffer.read(VAR_INT);
+            Check.argCondition(size > maxSize, "Map size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+            K[] keys = (K[]) new Object[size];
+            V[] values = (V[]) new Object[size];
+            for (int i = 0; i < size; i++) {
+                keys[i] = buffer.read(parent);
+                values[i] = buffer.read(valueType);
+            }
+            return Map.copyOf(new Object2ObjectArrayMap<>(keys, values, size));
+        }
+    }
+
+    record ListType<T>(@NotNull Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, List<T> values) {
+            if (values == null) {
+                buffer.write(BYTE, (byte) 0);
+                return;
+            }
+            buffer.write(VAR_INT, values.size());
+            for (T value : values) buffer.write(parent, value);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public List<T> read(@NotNull NetworkBuffer buffer) {
+            final int size = buffer.read(VAR_INT);
+            Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+            T[] values = (T[]) new Object[size];
+            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
+            return List.of(values);
+        }
+    }
+
+    record SetType<T>(@NotNull Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<Set<T>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Set<T> values) {
+            if (values == null) {
+                buffer.write(BYTE, (byte) 0);
+                return;
+            }
+            buffer.write(VAR_INT, values.size());
+            for (T value : values) buffer.write(parent, value);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public Set<T> read(@NotNull NetworkBuffer buffer) {
+            final int size = buffer.read(VAR_INT);
+            Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+            T[] values = (T[]) new Object[size];
+            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
+            return Set.of(values);
+        }
+    }
+
+    record UnionType<K, T>(
+            @NotNull Type<K> keyType, @NotNull Function<T, K> keyFunc,
+            @NotNull Function<K, NetworkBuffer.Type<T>> serializers
+    ) implements NetworkBufferTypeImpl<T> {
+
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            final K key = keyFunc.apply(value);
+            buffer.write(keyType, key);
+            var serializer = serializers.apply(key);
+            if (serializer == null)
+                throw new UnsupportedOperationException("Unrecognized type: " + key);
+            serializer.write(buffer, value);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            final K key = buffer.read(keyType);
+            var serializer = serializers.apply(key);
+            if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + key);
+            return serializer.read(buffer);
+        }
+    }
+
+    /**
+     * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)} & ${@link DataInputStream#readUTF()}. We need the data in the java
+     * modified utf-8 format for Component, and I couldnt find a method without creating a new buffer for it.
+     */
+    record IOUTF8StringType() implements NetworkBufferTypeImpl<String> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, String value) {
+            final int strlen = value.length();
+            int utflen = strlen; // optimized for ASCII
+
+            for (int i = 0; i < strlen; i++) {
+                int c = value.charAt(i);
+                if (c >= 0x80 || c == 0)
+                    utflen += (c >= 0x800) ? 2 : 1;
             }
 
-            @Override
-            public T read(@NotNull NetworkBuffer buffer) {
-                return buffer.readOptional(optionalType);
+            if (utflen > 65535 || /* overflow */ utflen < strlen)
+                throw new RuntimeException("UTF-8 string too long");
+
+            buffer.write(SHORT, (short) utflen);
+            buffer.ensureWritable(utflen);
+            var impl = (NetworkBufferImpl) buffer;
+            int i;
+            for (i = 0; i < strlen; i++) { // optimized for initial run of ASCII
+                int c = value.charAt(i);
+                if (c >= 0x80 || c == 0) break;
+                impl._putByte(buffer.writeIndex(), (byte) c);
+                impl.advanceWrite(1);
             }
-        };
+
+            for (; i < strlen; i++) {
+                int c = value.charAt(i);
+                if (c < 0x80 && c != 0) {
+                    impl._putByte(buffer.writeIndex(), (byte) c);
+                    impl.advanceWrite(1);
+                } else if (c >= 0x800) {
+                    impl._putByte(buffer.writeIndex(), (byte) (0xE0 | ((c >> 12) & 0x0F)));
+                    impl._putByte(buffer.writeIndex() + 1, (byte) (0x80 | ((c >> 6) & 0x3F)));
+                    impl._putByte(buffer.writeIndex() + 2, (byte) (0x80 | ((c >> 0) & 0x3F)));
+                    impl.advanceWrite(3);
+                } else {
+                    impl._putByte(buffer.writeIndex(), (byte) (0xC0 | ((c >> 6) & 0x1F)));
+                    impl._putByte(buffer.writeIndex() + 1, (byte) (0x80 | ((c >> 0) & 0x3F)));
+                    impl.advanceWrite(2);
+                }
+            }
+        }
+
+        @Override
+        public String read(@NotNull NetworkBuffer buffer) {
+            int utflen = buffer.read(UNSIGNED_SHORT);
+            if (buffer.readableBytes() < utflen) throw new IllegalArgumentException("Invalid String size.");
+            byte[] bytearr = buffer.read(FixedRawBytes(utflen));
+            final char[] chararr = new char[utflen];
+
+            int c, char2, char3;
+            int count = 0;
+            int chararr_count = 0;
+
+            while (count < utflen) {
+                c = (int) bytearr[count] & 0xff;
+                if (c > 127) break;
+                count++;
+                chararr[chararr_count++] = (char) c;
+            }
+
+            while (count < utflen) {
+                c = (int) bytearr[count] & 0xff;
+                try { // Surround in try catch to throw a runtime exception instead of a checked one
+                    switch (c >> 4) {
+                        case 0, 1, 2, 3, 4, 5, 6, 7 -> {
+                            /* 0xxxxxxx*/
+                            count++;
+                            chararr[chararr_count++] = (char) c;
+                        }
+                        case 12, 13 -> {
+                            /* 110x xxxx   10xx xxxx*/
+                            count += 2;
+                            if (count > utflen)
+                                throw new UTFDataFormatException(
+                                        "malformed input: partial character at end");
+                            char2 = bytearr[count - 1];
+                            if ((char2 & 0xC0) != 0x80)
+                                throw new UTFDataFormatException(
+                                        "malformed input around byte " + count);
+                            chararr[chararr_count++] = (char) (((c & 0x1F) << 6) |
+                                    (char2 & 0x3F));
+                        }
+                        case 14 -> {
+                            /* 1110 xxxx  10xx xxxx  10xx xxxx */
+                            count += 3;
+                            if (count > utflen)
+                                throw new UTFDataFormatException(
+                                        "malformed input: partial character at end");
+                            char2 = bytearr[count - 2];
+                            char3 = bytearr[count - 1];
+                            if (((char2 & 0xC0) != 0x80) || ((char3 & 0xC0) != 0x80))
+                                throw new UTFDataFormatException(
+                                        "malformed input around byte " + (count - 1));
+                            chararr[chararr_count++] = (char) (((c & 0x0F) << 12) |
+                                    ((char2 & 0x3F) << 6) |
+                                    ((char3 & 0x3F) << 0));
+                        }
+                        default ->
+                            /* 10xx xxxx,  1111 xxxx */
+                                throw new UTFDataFormatException(
+                                        "malformed input around byte " + count);
+                    }
+                } catch (UTFDataFormatException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+            // The number of chars produced may be less than utflen
+            return new String(chararr, 0, chararr_count);
+        }
+    }
+
+    static <T> long sizeOf(Type<T> type, T value, Registries registries) {
+        NetworkBuffer buffer = NetworkBufferImpl.dummy(registries);
+        type.write(buffer, value);
+        return buffer.writeIndex();
     }
 }
