@@ -27,6 +27,7 @@ public interface TransactionType {
             if (inventoryItem.isAir()) {
                 continue;
             }
+
             if (itemStack.isSimilar(inventoryItem)) {
                 final int itemAmount = inventoryItem.amount();
                 final int maxSize = inventoryItem.maxStackSize();
@@ -50,6 +51,7 @@ public interface TransactionType {
                 }
             }
         }
+
         // Check air slot to fill
         for (int i = start; step > 0 ? i < end : i > end; i += step) {
             ItemStack inventoryItem = inventory.getItemStack(i);
@@ -73,6 +75,7 @@ public interface TransactionType {
                 break;
             }
         }
+
         return Pair.of(itemStack, itemChangesMap);
     };
 

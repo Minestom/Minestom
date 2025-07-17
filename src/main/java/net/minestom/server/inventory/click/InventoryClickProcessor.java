@@ -90,17 +90,21 @@ public final class InventoryClickProcessor {
                                                     int start, int end, int step,
                                                     @NotNull Player player, int slot,
                                                     @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        final var clickResult = new InventoryClickResult(clicked, cursor);
+        final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
         if (clicked.isAir()) return clickResult.cancelled();
 
-        // Handle armor equip
+        final boolean craftingGridClick = slot >= 36 && slot <= 40;
+
+        // Handle armor and off-hand equippables
         if (inventory instanceof PlayerInventory && targetInventory instanceof PlayerInventory) {
             final Material material = clicked.material();
             final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
-            if (equipmentSlot != null && equipmentSlot.isArmor()) {
+            if (equipmentSlot != null
+                    && (equipmentSlot.isArmor() || equipmentSlot == EquipmentSlot.OFF_HAND)
+                    && !craftingGridClick) {
                 // Shift-click equip
-                final ItemStack currentArmor = player.getEquipment(equipmentSlot);
-                if (currentArmor.isAir()) {
+                final ItemStack currentItem = player.getEquipment(equipmentSlot);
+                if (currentItem.isAir()) {
                     player.setEquipment(equipmentSlot, clicked);
                     return new InventoryClickResult(ItemStack.AIR, cursor);
                 }
@@ -109,8 +113,10 @@ public final class InventoryClickProcessor {
 
         clickResult.setCancel(true);
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
-            if (inventory == targetInventory && index == slot)
+            if (inventory == targetInventory && index == slot) {
                 return false; // Prevent item lose/duplication
+            }
+
             clickResult.setCancel(false);
             return true;
         }, start, end, step);
@@ -121,12 +127,13 @@ public final class InventoryClickProcessor {
             targetInventory.setItemStack(s, itemStack);
             callClickEvent(player, targetInventory, s, ClickType.SHIFT_CLICK, itemStack, cursor);
         });
+
         clickResult.setClicked(itemResult);
         return clickResult;
     }
 
     public @Nullable ItemStack dragging(@NotNull Player player, @NotNull AbstractInventory inventory,
-                                                   @NotNull List<Integer> slots, int button, @NotNull ItemStack cursor) {
+                                        @NotNull List<Integer> slots, int button, @NotNull ItemStack cursor) {
         // Drag instruction
         if (button == 2) {
             // End left
