@@ -2,10 +2,7 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.longs.*;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
@@ -15,6 +12,8 @@ import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static net.minestom.server.coordinate.CoordConversion.*;
@@ -103,6 +102,20 @@ record BlockBatchImpl(
             }
             return count;
         }
+    }
+
+    @Override
+    public @NotNull List<BlockBatch> split() {
+        List<BlockBatch> result = new ArrayList<>();
+        for (Long2ObjectMap.Entry<SectionState> entry : sectionStates.long2ObjectEntrySet()) {
+            final SectionState sectionState = entry.getValue();
+            if (sectionState.palette.count() == 0 && sectionState.blockStates.isEmpty()) continue;
+            BlockBatchImpl batch = new BlockBatchImpl(flags,
+                    Long2ObjectMaps.singleton(entry.getLongKey(), sectionState)
+            );
+            result.add(batch);
+        }
+        return List.copyOf(result);
     }
 
     @Override

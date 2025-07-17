@@ -2,7 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Area;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.world.DimensionType;
 import org.openjdk.jmh.annotations.*;
@@ -116,13 +116,13 @@ public class BlockBatchBenchmark {
         }
 
         // Initialize areas
-        smallArea = Area.cuboid(Vec.ZERO, new Vec(SMALL_SIZE - 1, SMALL_SIZE - 1, SMALL_SIZE - 1));
-        mediumArea = Area.cuboid(Vec.ZERO, new Vec(MEDIUM_SIZE - 1, MEDIUM_SIZE - 1, MEDIUM_SIZE - 1));
-        largeArea = Area.cuboid(Vec.ZERO, new Vec(LARGE_SIZE - 1, LARGE_SIZE - 1, LARGE_SIZE - 1));
-        hugeArea = Area.cuboid(Vec.ZERO, new Vec(HUGE_SIZE - 1, HUGE_SIZE - 1, HUGE_SIZE - 1));
-        crossChunkArea = Area.cuboid(new Vec(CROSS_CHUNK_START_X, CROSS_CHUNK_START_Y, CROSS_CHUNK_START_Z),
-                new Vec(CROSS_CHUNK_END_X, CROSS_CHUNK_END_Y, CROSS_CHUNK_END_Z));
-        multiSectionArea = Area.cuboid(new Vec(0, 0, 0), new Vec(MEDIUM_SIZE - 1, MULTI_SECTION_END_Y, MEDIUM_SIZE - 1));
+        smallArea = Area.cuboid(BlockVec.ZERO, new BlockVec(SMALL_SIZE - 1, SMALL_SIZE - 1, SMALL_SIZE - 1));
+        mediumArea = Area.cuboid(BlockVec.ZERO, new BlockVec(MEDIUM_SIZE - 1, MEDIUM_SIZE - 1, MEDIUM_SIZE - 1));
+        largeArea = Area.cuboid(BlockVec.ZERO, new BlockVec(LARGE_SIZE - 1, LARGE_SIZE - 1, LARGE_SIZE - 1));
+        hugeArea = Area.cuboid(BlockVec.ZERO, new BlockVec(HUGE_SIZE - 1, HUGE_SIZE - 1, HUGE_SIZE - 1));
+        crossChunkArea = Area.cuboid(new BlockVec(CROSS_CHUNK_START_X, CROSS_CHUNK_START_Y, CROSS_CHUNK_START_Z),
+                new BlockVec(CROSS_CHUNK_END_X, CROSS_CHUNK_END_Y, CROSS_CHUNK_END_Z));
+        multiSectionArea = Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(MEDIUM_SIZE - 1, MULTI_SECTION_END_Y, MEDIUM_SIZE - 1));
 
         // Fill instance with some blocks for getBlockBatch tests
         fillInstanceWithBlocks();
@@ -616,67 +616,67 @@ public class BlockBatchBenchmark {
 
     @Benchmark
     public void getBlockBatchSmallArea(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, smallArea);
+        BlockBatch batch = instance.getBlockBatch(BlockVec.ZERO, smallArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchSmallAreaStatesOnly(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(BlockBatch.IGNORE_DATA_FLAG, Vec.ZERO, smallArea);
+        BlockBatch batch = instance.getBlockBatch(BlockBatch.IGNORE_DATA_FLAG, BlockVec.ZERO, smallArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchMediumArea(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, mediumArea);
+        BlockBatch batch = instance.getBlockBatch(BlockVec.ZERO, mediumArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchMediumAreaStatesOnly(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(BlockBatch.IGNORE_DATA_FLAG, Vec.ZERO, mediumArea);
+        BlockBatch batch = instance.getBlockBatch(BlockBatch.IGNORE_DATA_FLAG, BlockVec.ZERO, mediumArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchLargeArea(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, largeArea);
+        BlockBatch batch = instance.getBlockBatch(BlockVec.ZERO, largeArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchCrossChunk(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, crossChunkArea);
+        BlockBatch batch = instance.getBlockBatch(BlockVec.ZERO, crossChunkArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchMultiSection(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, multiSectionArea);
+        BlockBatch batch = instance.getBlockBatch(BlockVec.ZERO, multiSectionArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchUnalignedOrigin(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(new Vec(SMALL_UNALIGNED_X, SMALL_UNALIGNED_Y, SMALL_UNALIGNED_Z), smallArea);
+        BlockBatch batch = instance.getBlockBatch(new BlockVec(SMALL_UNALIGNED_X, SMALL_UNALIGNED_Y, SMALL_UNALIGNED_Z), smallArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchAlignedOrigin(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(new Vec(MEDIUM_SIZE, MEDIUM_SIZE, MEDIUM_SIZE), smallArea);
+        BlockBatch batch = instance.getBlockBatch(new BlockVec(MEDIUM_SIZE, MEDIUM_SIZE, MEDIUM_SIZE), smallArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchHugeArea(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, hugeArea);
+        BlockBatch batch = instance.getBlockBatch(BlockVec.ZERO, hugeArea);
         bh.consume(batch);
     }
 
     @Benchmark
     public void getBlockBatchHugeAreaStatesOnly(Blackhole bh) {
-        BlockBatch batch = instance.getBlockBatch(BlockBatch.IGNORE_DATA_FLAG, Vec.ZERO, hugeArea);
+        BlockBatch batch = instance.getBlockBatch(BlockBatch.IGNORE_DATA_FLAG, BlockVec.ZERO, hugeArea);
         bh.consume(batch);
     }
 
@@ -731,7 +731,7 @@ public class BlockBatchBenchmark {
     @Benchmark
     public void roundtripSmallBatch(Blackhole bh) {
         // Get a batch from the instance, then set it back
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, smallArea);
+        BlockBatch batch = instance.getBlockBatch(BlockVec.ZERO, smallArea);
         instance.setBlockBatch(ALT_ORIGIN_X, ALT_ORIGIN_Y, ALT_ORIGIN_Z, batch);
         bh.consume(batch);
     }
@@ -739,7 +739,7 @@ public class BlockBatchBenchmark {
     @Benchmark
     public void roundtripMediumBatch(Blackhole bh) {
         // Get a batch from the instance, then set it back
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, mediumArea);
+        BlockBatch batch = instance.getBlockBatch(BlockVec.ZERO, mediumArea);
         instance.setBlockBatch(ALT_ORIGIN_X, ALT_ORIGIN_Y, ALT_ORIGIN_Z, batch);
         bh.consume(batch);
     }
@@ -747,7 +747,7 @@ public class BlockBatchBenchmark {
     @Benchmark
     public void roundtripHugeBatch(Blackhole bh) {
         // Get a batch from the instance, then set it back
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, hugeArea);
+        BlockBatch batch = instance.getBlockBatch(BlockVec.ZERO, hugeArea);
         instance.setBlockBatch(HUGE_ALT_ORIGIN_X, HUGE_ALT_ORIGIN_Y, HUGE_ALT_ORIGIN_Z, batch);
         bh.consume(batch);
     }

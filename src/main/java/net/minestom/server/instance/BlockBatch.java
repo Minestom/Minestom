@@ -6,7 +6,9 @@ import net.minestom.server.instance.palette.Palette;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNullByDefault;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import static net.minestom.server.instance.BlockBatchImpl.BuilderImpl;
@@ -64,6 +66,9 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * the number of sections or palette entries.
      */
     int count();
+
+    @Unmodifiable
+    List<BlockBatch> split();
 
     /**
      * Makes a {@link Generator} from this batch. Blocks outside it will not be generated.
