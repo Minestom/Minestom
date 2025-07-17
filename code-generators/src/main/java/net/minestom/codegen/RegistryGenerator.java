@@ -15,19 +15,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-public class CodeGenerator {
-    protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final Logger LOGGER = LoggerFactory.getLogger(CodeGenerator.class);
-
-    private final File outputFolder;
-
-    public CodeGenerator(File outputFolder) {
-        this.outputFolder = outputFolder;
-    }
+public record RegistryGenerator(File outputFolder) {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistryGenerator.class);
 
     public void generate(InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
         if (resourceFile == null) {
-            LOGGER.error("Failed to find resource file for " + typeName);
+            LOGGER.error("Failed to find resource file for {}", typeName);
             return;
         }
         ClassName typeClass = ClassName.get(packageName, typeName);

@@ -1,10 +1,9 @@
-package net.minestom.codegen.color;
+package net.minestom.codegen;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
-import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public class DyeColorGenerator extends MinestomCodeGenerator {
+public final class DyeColorGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(DyeColorGenerator.class);
     private final InputStream dyeColorsFile;
     private final File outputFolder;
