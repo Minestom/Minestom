@@ -5,6 +5,7 @@ import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.instance.Instance;
@@ -262,6 +263,11 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
         default void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
             batch.getAll((x1, y1, z1, block) -> setBlock(x + x1, y + y1, z + z1, block));
+        }
+
+        default void setBlockBatchAligned(int sectionX, int sectionY, int sectionZ, @NotNull BlockBatch batch) {
+            final int sectionSize = CoordConversion.SECTION_SIZE;
+            setBlockBatch(sectionX * sectionSize, sectionY * sectionSize, sectionZ * sectionSize, batch);
         }
 
         default void setBlockBatch(@NotNull BlockBatch batch) {
