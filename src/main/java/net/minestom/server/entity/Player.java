@@ -1774,7 +1774,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @ApiStatus.Internal
     public void closeInventory(boolean fromClient) {
         AbstractInventory openInventory = getOpenInventory();
-        if (openInventory == null) return;
+
+        // If there's no inventory, if it's from the client it means they're
+        // closing the player inventory. If it's not, nothing should happen.
+        if (openInventory == null) {
+            if (fromClient) {
+                openInventory = getInventory();
+            } else {
+                return;
+            }
+        }
 
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(openInventory, this, fromClient);
         EventDispatcher.call(inventoryCloseEvent);
@@ -1784,7 +1793,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         this.openInventory = null;
-        openInventory.removeViewer(this);
+        if (openInventory != inventory) openInventory.removeViewer(this);
         inventory.update();
 
         didCloseInventory = false;
