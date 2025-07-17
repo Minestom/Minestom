@@ -1,10 +1,5 @@
 package net.minestom.codegen;
 
-import net.minestom.codegen.color.DyeColorGenerator;
-import net.minestom.codegen.particle.ParticleGenerator;
-import net.minestom.codegen.recipe.RecipeTypeGenerator;
-import net.minestom.codegen.util.GenericEnumGenerator;
-import net.minestom.codegen.worldevent.WorldEventGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +37,10 @@ public final class Generators {
                 resource("villager_types.json"), outputFolder).generate();
         new WorldEventGenerator("net.minestom.server.worldevent", "WorldEvent",
                 resource("world_events.json"), outputFolder).generate();
+        new ItemStackGenerator(resource("item.json"), "net.minestom.server.item", "ItemStacks",
+                outputFolder).generate();
 
-        var generator = new CodeGenerator(outputFolder);
+        var generator = new RegistryGenerator(outputFolder);
 
         // Static registries
         generator.generate(resource("block.json"), "net.minestom.server.instance.block", "Block", "BlockImpl", "Blocks");

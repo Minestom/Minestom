@@ -1,4 +1,4 @@
-package net.minestom.codegen.particle;
+package net.minestom.codegen;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -6,7 +6,6 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
-import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class ParticleGenerator extends MinestomCodeGenerator {
+public final class ParticleGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ParticleGenerator.class);
 
     private final InputStream particlesFile;
