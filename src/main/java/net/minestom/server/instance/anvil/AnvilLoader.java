@@ -106,6 +106,7 @@ public class AnvilLoader implements IChunkLoader {
         // Load the chunk data (assuming it is fully generated)
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
         synchronized (chunk) { // todo: boo, synchronized
+            chunk.tagHandler().updateContent(chunkData); // TODO: should it really use the entire compound?
             final String status = chunkData.getString("status");
 
             // TODO: Should we handle other statuses?
@@ -175,8 +176,6 @@ public class AnvilLoader implements IChunkLoader {
 
             final int sectionY = sectionData.getInt("Y", Integer.MIN_VALUE);
             Check.stateCondition(sectionY == Integer.MIN_VALUE, "Missing section Y value");
-            final int yOffset = Chunk.CHUNK_SECTION_SIZE * sectionY;
-
             if (sectionY < chunk.getMinSection() || sectionY >= chunk.getMaxSection()) {
                 // Vanilla stores a section below and above the world for lighting, throw it out.
                 continue;
