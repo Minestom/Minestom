@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public sealed interface DialogAction {
     @NotNull Registry<StructCodec<? extends DialogAction>> REGISTRY = DynamicRegistry.fromMap(
-            Key.key("minecraft:dialog_action_type"),
+            Key.key("dialog_action_type"),
             Map.entry(Key.key("open_url"), OpenUrl.CODEC),
             Map.entry(Key.key("run_command"), RunCommand.CODEC),
             Map.entry(Key.key("suggest_command"), SuggestCommand.CODEC),

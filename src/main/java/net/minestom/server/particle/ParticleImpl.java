@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 final class ParticleImpl {
-    static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:particle"),
+    static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(Key.key("particle"),
             (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
 
     static @UnknownNullability Particle get(@NotNull String key) {

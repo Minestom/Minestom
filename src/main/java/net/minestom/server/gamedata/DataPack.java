@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 @ApiStatus.Experimental
 public sealed interface DataPack permits DataPackImpl {
 
-    @NotNull DataPack MINECRAFT_CORE = new DataPackImpl(Key.key("minecraft:core"), true);
+    @NotNull DataPack MINECRAFT_CORE = new DataPackImpl(Key.key("core"), true);
 
     /**
      * <p>Returns true if this data pack is synced with the client. The null data pack is never synced.</p>

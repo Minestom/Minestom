@@ -27,7 +27,7 @@ public sealed interface PigVariant extends PigVariants permits PigVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<PigVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:pig_variant"), REGISTRY_CODEC, RegistryData.Resource.PIG_VARIANTS);
+        return DynamicRegistry.create(Key.key("pig_variant"), REGISTRY_CODEC, RegistryData.Resource.PIG_VARIANTS);
     }
 
     static @NotNull PigVariant create(@NotNull Model model, @NotNull Key assetId) {

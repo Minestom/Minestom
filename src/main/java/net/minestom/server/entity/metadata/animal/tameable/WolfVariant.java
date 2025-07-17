@@ -41,7 +41,7 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
      */
     @ApiStatus.Internal
     static DynamicRegistry<WolfVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:wolf_variant"), REGISTRY_CODEC, RegistryData.Resource.WOLF_VARIANTS);
+        return DynamicRegistry.create(Key.key("wolf_variant"), REGISTRY_CODEC, RegistryData.Resource.WOLF_VARIANTS);
     }
 
     @NotNull Assets assets();

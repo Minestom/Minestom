@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 record AttributeImpl(@NotNull RegistryData.AttributeEntry registry) implements Attribute {
-    static final Registry<Attribute> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:attribute"),
+    static final Registry<Attribute> REGISTRY = RegistryData.createStaticRegistry(Key.key("attribute"),
             (namespace, properties) -> new AttributeImpl(RegistryData.attribute(namespace, properties)));
 
     static @UnknownNullability Attribute get(@NotNull String namespace) {

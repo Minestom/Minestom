@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 public record VillagerProfessionImpl(RegistryData.VillagerProfessionEntry registry) implements VillagerProfession {
-    static final Registry<VillagerProfession> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:villager_profession"),
+    static final Registry<VillagerProfession> REGISTRY = RegistryData.createStaticRegistry(Key.key("villager_profession"),
             (namespace, properties) -> new VillagerProfessionImpl(RegistryData.villagerProfession(namespace, properties)));
 
     static @UnknownNullability VillagerProfession get(@NotNull String key) {
