@@ -82,7 +82,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     /**
      * Constant AIR item. Should be used instead of 'null'.
      */
-    @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
+    @NotNull ItemStack AIR = new ItemStackImpl(Material.AIR, 0, DataComponentMap.EMPTY);
 
     @Contract(value = "_ -> new", pure = true)
     static @NotNull Builder builder(@NotNull Material material) {
