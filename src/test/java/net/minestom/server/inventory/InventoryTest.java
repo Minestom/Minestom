@@ -28,8 +28,8 @@ public class InventoryTest {
 
     @Test
     public void testEntry() {
-        var item1 = ItemStack.of(Material.DIAMOND);
-        var item2 = ItemStack.of(Material.GOLD_INGOT);
+        var item1 = ItemStack.DIAMOND;
+        var item2 = ItemStack.GOLD_INGOT;
 
         Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
         assertSame(ItemStack.AIR, inventory.getItemStack(0));

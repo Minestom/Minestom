@@ -169,14 +169,14 @@ public class InventoryIntegrationTest {
         final var firstInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
         player.openInventory(firstInventory);
         assertSame(firstInventory, player.getOpenInventory());
-        player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
+        player.getInventory().setCursorItem(ItemStack.STONE);
 
         listener.followup();
         player.closeInventory();
         assertNull(player.getOpenInventory());
 
         player.openInventory(firstInventory);
-        player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
+        player.getInventory().setCursorItem(ItemStack.STONE);
         final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
         listener.followup(event -> event.getPlayer().openInventory(secondInventory));
         player.closeInventory();

@@ -133,8 +133,8 @@ public class TestInstabreakCommand extends Command {
         items.add(ItemStack.builder(Material.SHEARS).set(DataComponents.ENCHANTMENTS, EnchantmentList.EMPTY.with(Enchantment.EFFICIENCY, 5)).build());
         items.add(ItemStack.builder(Material.WHITE_WOOL).amount(64).build());
         items.add(ItemStack.builder(Material.STONE).amount(64).build());
-        items.add(ItemStack.of(Material.DIAMOND_SWORD));
-        items.add(ItemStack.of(Material.DIAMOND_PICKAXE));
+        items.add(ItemStack.DIAMOND_SWORD);
+        items.add(ItemStack.DIAMOND_PICKAXE);
         for (ItemStack item : items) {
             player.getInventory().addItemStack(item);
         }

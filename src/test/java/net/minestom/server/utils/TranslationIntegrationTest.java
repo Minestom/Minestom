@@ -80,7 +80,7 @@ public class TranslationIntegrationTest {
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
         final var message = Component.translatable("test.key");
-        final var itemStack = ItemStack.of(Material.STONE)
+        final var itemStack = ItemStack.STONE
                 .with(DataComponents.ITEM_NAME, message)
                 .with(DataComponents.CUSTOM_NAME, message);
         final var packet = new SetSlotPacket((byte) 0x01, 1, (short) 1, itemStack);

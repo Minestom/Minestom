@@ -107,7 +107,7 @@ public class AreaEffectCloudTest {
 
     @Test
     public void createWithItemParticle() {
-        Particle particle = Particle.ITEM.withItem(ItemStack.of(Material.ACACIA_LOG));
+        Particle particle = Particle.ITEM.withItem(ItemStack.ACACIA_LOG);
 
         Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
         AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();
