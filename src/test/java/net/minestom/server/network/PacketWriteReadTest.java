@@ -100,7 +100,7 @@ public class PacketWriteReadTest {
                 RecipeProperty.SMOKER_INPUT, List.of(Material.STONE),
                 RecipeProperty.CAMPFIRE_INPUT, List.of(Material.STONE)),
                 List.of(new DeclareRecipesPacket.StonecutterRecipe(new Ingredient(Material.DIAMOND),
-                        new SlotDisplay.ItemStack(ItemStack.of(Material.GOLD_BLOCK))))
+                        new SlotDisplay.ItemStack(ItemStack.GOLD_BLOCK)))
         ));
         SERVER_PACKETS.add(new RecipeBookAddPacket(List.of(new RecipeBookAddPacket.Entry(1, recipeDisplay, null,
                 RecipeBookCategory.CRAFTING_MISC, List.of(new Ingredient(Material.STONE)), true, true)), false));
@@ -113,7 +113,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new EndCombatEventPacket(5));
         SERVER_PACKETS.add(new EnterCombatEventPacket());
         SERVER_PACKETS.add(new EntityAnimationPacket(5, EntityAnimationPacket.Animation.TAKE_DAMAGE));
-        SERVER_PACKETS.add(new EntityEquipmentPacket(6, Map.of(EquipmentSlot.MAIN_HAND, ItemStack.of(Material.DIAMOND_SWORD))));
+        SERVER_PACKETS.add(new EntityEquipmentPacket(6, Map.of(EquipmentSlot.MAIN_HAND, ItemStack.DIAMOND_SWORD)));
         SERVER_PACKETS.add(new EntityHeadLookPacket(5, 90f));
         SERVER_PACKETS.add(new EntityMetaDataPacket(5, Map.of()));
         SERVER_PACKETS.add(new EntityMetaDataPacket(5, Map.of(1, Metadata.VarInt(5))));

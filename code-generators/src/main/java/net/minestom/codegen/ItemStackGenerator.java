@@ -53,7 +53,7 @@ public final class ItemStackGenerator extends MinestomCodeGenerator {
                     FieldSpec.builder(typeClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
-                                    // ItemStack STONE = ItemStack.of(Material.STONE)
+                                    // ItemStack STONE = ItemStack.STONE
                                     "ItemStack.of(Material." + constantName + ")"
                             )
                             .build()

@@ -22,14 +22,14 @@ public class PlayerHeldIntegrationTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0));
 
-        player.getInventory().setItemStack(1, ItemStack.of(Material.STONE));
+        player.getInventory().setItemStack(1, ItemStack.STONE);
         assertEquals(ItemStack.AIR, player.getItemInMainHand());
         assertEquals(0, player.getHeldSlot());
 
         player.addPacketToQueue(new ClientHeldItemChangePacket((short) 1));
         player.interpretPacketQueue();
 
-        assertEquals(ItemStack.of(Material.STONE), player.getItemInMainHand());
+        assertEquals(ItemStack.STONE, player.getItemInMainHand());
         assertEquals(1, player.getHeldSlot());
     }
 
@@ -39,7 +39,7 @@ public class PlayerHeldIntegrationTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0));
 
-        player.getInventory().setItemStack(1, ItemStack.of(Material.STONE));
+        player.getInventory().setItemStack(1, ItemStack.STONE);
         assertEquals(ItemStack.AIR, player.getItemInMainHand());
         assertEquals(0, player.getHeldSlot());
 
@@ -51,7 +51,7 @@ public class PlayerHeldIntegrationTest {
             assertEquals(1, event.getNewSlot());
         });
         player.interpretPacketQueue();
-        assertEquals(ItemStack.of(Material.STONE), player.getItemInMainHand());
+        assertEquals(ItemStack.STONE, player.getItemInMainHand());
         assertEquals(1, player.getHeldSlot());
     }
 
@@ -61,8 +61,8 @@ public class PlayerHeldIntegrationTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0));
 
-        player.getInventory().setItemStack(1, ItemStack.of(Material.STONE));
-        player.getInventory().setItemStack(3, ItemStack.of(Material.OAK_PLANKS));
+        player.getInventory().setItemStack(1, ItemStack.STONE);
+        player.getInventory().setItemStack(3, ItemStack.OAK_PLANKS);
 
         player.addPacketToQueue(new ClientHeldItemChangePacket((short) 1));
         var listener = env.listen(PlayerChangeHeldSlotEvent.class);
@@ -71,7 +71,7 @@ public class PlayerHeldIntegrationTest {
             assertEquals(0, event.getOldSlot());
             assertEquals(1, event.getNewSlot());
             assertEquals(ItemStack.AIR, event.getItemInOldSlot());
-            assertEquals(ItemStack.of(Material.STONE), event.getItemInNewSlot());
+            assertEquals(ItemStack.STONE, event.getItemInNewSlot());
         });
         player.interpretPacketQueue();
 
@@ -80,8 +80,8 @@ public class PlayerHeldIntegrationTest {
             assertEquals(player, event.getPlayer());
             assertEquals(1, event.getOldSlot());
             assertEquals(3, event.getNewSlot());
-            assertEquals(ItemStack.of(Material.STONE), event.getItemInOldSlot());
-            assertEquals(ItemStack.of(Material.OAK_PLANKS), event.getItemInNewSlot());
+            assertEquals(ItemStack.STONE, event.getItemInOldSlot());
+            assertEquals(ItemStack.OAK_PLANKS, event.getItemInNewSlot());
         });
         player.interpretPacketQueue();
     }

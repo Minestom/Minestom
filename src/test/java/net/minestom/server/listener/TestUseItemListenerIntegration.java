@@ -29,7 +29,7 @@ public class TestUseItemListenerIntegration {
 
         var useItemCollector = env.trackEvent(PlayerUseItemEvent.class, EventFilter.PLAYER, player);
 
-        var itemStack = ItemStack.of(Material.DIAMOND);
+        var itemStack = ItemStack.DIAMOND;
         player.setItemInMainHand(itemStack);
         UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f), player);
 
@@ -45,7 +45,7 @@ public class TestUseItemListenerIntegration {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 41, 0));
 
-        var boots = ItemStack.of(Material.DIAMOND_BOOTS);
+        var boots = ItemStack.DIAMOND_BOOTS;
         player.setItemInMainHand(boots);
         UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f), player);
 
@@ -58,10 +58,10 @@ public class TestUseItemListenerIntegration {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 41, 0));
 
-        var oldBoots = ItemStack.of(Material.GOLDEN_BOOTS);
+        var oldBoots = ItemStack.GOLDEN_BOOTS;
         player.setEquipment(EquipmentSlot.BOOTS, oldBoots);
 
-        var boots = ItemStack.of(Material.DIAMOND_BOOTS);
+        var boots = ItemStack.DIAMOND_BOOTS;
         player.setItemInMainHand(boots);
         UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f), player);
 
@@ -74,7 +74,7 @@ public class TestUseItemListenerIntegration {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 41, 0));
 
-        var badBoots = ItemStack.of(Material.GOLDEN_BOOTS).without(DataComponents.EQUIPPABLE);
+        var badBoots = ItemStack.GOLDEN_BOOTS.without(DataComponents.EQUIPPABLE);
         player.setItemInMainHand(badBoots);
         UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f), player);
 
@@ -87,10 +87,10 @@ public class TestUseItemListenerIntegration {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 41, 0));
 
-        var oldBoots = ItemStack.of(Material.GOLDEN_BOOTS);
+        var oldBoots = ItemStack.GOLDEN_BOOTS;
         player.setEquipment(EquipmentSlot.BOOTS, oldBoots);
 
-        var boots = ItemStack.of(Material.DIAMOND_BOOTS).with(DataComponents.EQUIPPABLE,
+        var boots = ItemStack.DIAMOND_BOOTS.with(DataComponents.EQUIPPABLE,
                 (UnaryOperator<Equippable>) (eq) -> eq.withSwappable(false));
         player.setItemInMainHand(boots);
         UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f), player);
