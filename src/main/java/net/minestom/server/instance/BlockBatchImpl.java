@@ -54,9 +54,9 @@ record BlockBatchImpl(
             if (aligned()) {
                 // Direct palette copies
                 palette.getAll((x, y, z, value) -> {
-                    final int globalX = sectionX * 16 + x;
-                    final int globalY = sectionY * 16 + y;
-                    final int globalZ = sectionZ * 16 + z;
+                    final int globalX = sectionX * SECTION_SIZE + x;
+                    final int globalY = sectionY * SECTION_SIZE + y;
+                    final int globalZ = sectionZ * SECTION_SIZE + z;
                     if (!ignoreData() && !sectionState.blockStates.isEmpty()) {
                         final int sectionBlockIndex = sectionBlockIndex(x, y, z);
                         Block block = sectionState.blockStates.get(sectionBlockIndex);
@@ -72,9 +72,9 @@ record BlockBatchImpl(
             } else {
                 // Palette values are +1
                 palette.getAllPresent((x, y, z, value) -> {
-                    final int globalX = sectionX * 16 + x;
-                    final int globalY = sectionY * 16 + y;
-                    final int globalZ = sectionZ * 16 + z;
+                    final int globalX = sectionX * SECTION_SIZE + x;
+                    final int globalY = sectionY * SECTION_SIZE + y;
+                    final int globalZ = sectionZ * SECTION_SIZE + z;
                     if (!ignoreData() && !sectionState.blockStates.isEmpty()) {
                         final int sectionBlockIndex = sectionBlockIndex(x, y, z);
                         Block block = sectionState.blockStates.get(sectionBlockIndex);
@@ -138,9 +138,9 @@ record BlockBatchImpl(
                 final Int2ObjectMap<Block> blockStates = sectionState.blockStates;
                 if (palette.count() == 0 && blockStates.isEmpty()) continue;
                 palette.getAllPresent((x, y, z, value) -> {
-                    final int globalX = x + sectionX * 16;
-                    final int globalY = y + sectionY * 16;
-                    final int globalZ = z + sectionZ * 16;
+                    final int globalX = x + sectionX * SECTION_SIZE;
+                    final int globalY = y + sectionY * SECTION_SIZE;
+                    final int globalZ = z + sectionZ * SECTION_SIZE;
                     if (!aligned() && --value < 0) return;
                     final Block block = Block.fromStateId(value);
                     assert block != null;
@@ -153,9 +153,9 @@ record BlockBatchImpl(
                         final int localX = sectionBlockIndexGetX(sectionBlockIndex);
                         final int localY = sectionBlockIndexGetY(sectionBlockIndex);
                         final int localZ = sectionBlockIndexGetZ(sectionBlockIndex);
-                        final int globalX = localX + sectionX * 16;
-                        final int globalY = localY + sectionY * 16;
-                        final int globalZ = localZ + sectionZ * 16;
+                        final int globalX = localX + sectionX * SECTION_SIZE;
+                        final int globalY = localY + sectionY * SECTION_SIZE;
+                        final int globalZ = localZ + sectionZ * SECTION_SIZE;
                         unit.modifier().setBlock(globalX, globalY, globalZ, block);
                     }
                 }
