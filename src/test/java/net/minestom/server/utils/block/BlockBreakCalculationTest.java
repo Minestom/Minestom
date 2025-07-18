@@ -31,7 +31,7 @@ public class BlockBreakCalculationTest {
 
     @Test
     public void testWoolWithShears() {
-        player.setItemInMainHand(ItemStack.of(Material.SHEARS));
+        player.setItemInMainHand(ItemStack.SHEARS);
         assertInstabreak = this::assertWoolInstabreak;
         assertNotQuiteInstabreak = this::assertWoolNotQuiteInstabreak;
         assertBreak(4.8, 19, 115, 115, 595);
@@ -47,7 +47,7 @@ public class BlockBreakCalculationTest {
 
     @Test
     public void testStoneWithDiamondPickaxe() {
-        player.setItemInMainHand(ItemStack.of(Material.DIAMOND_PICKAXE));
+        player.setItemInMainHand(ItemStack.DIAMOND_PICKAXE);
         assertInstabreak = this::assertStoneInstabreak;
         assertNotQuiteInstabreak = this::assertStoneNotQuiteInstabreak;
         assertBreak(5.625, 37, 217, 217, -1);

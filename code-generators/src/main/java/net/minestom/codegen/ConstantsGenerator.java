@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-public class ConstantsGenerator extends MinestomCodeGenerator {
+public final class ConstantsGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConstantsGenerator.class);
     private final InputStream constantsFile;
     private final File outputFolder;

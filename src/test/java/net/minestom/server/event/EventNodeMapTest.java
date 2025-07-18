@@ -17,7 +17,7 @@ public class EventNodeMapTest {
 
     @Test
     public void uniqueMapping() {
-        var item = ItemStack.of(Material.DIAMOND);
+        var item = ItemStack.DIAMOND;
         var node = EventNode.all("main");
         var itemNode1 = node.map(item, EventFilter.ITEM);
         var itemNode2 = node.map(item, EventFilter.ITEM);
@@ -32,7 +32,7 @@ public class EventNodeMapTest {
 
     @Test
     public void lazyRegistration() {
-        var item = ItemStack.of(Material.DIAMOND);
+        var item = ItemStack.DIAMOND;
         var node = (EventNodeImpl<Event>) EventNode.all("main");
         var itemNode = node.map(item, EventFilter.ITEM);
         assertFalse(node.registeredMappedNode.containsKey(item));
@@ -43,7 +43,7 @@ public class EventNodeMapTest {
 
     @Test
     public void secondMap() {
-        var item = ItemStack.of(Material.DIAMOND);
+        var item = ItemStack.DIAMOND;
         var node = (EventNodeImpl<Event>) EventNode.all("main");
         var itemNode = node.map(item, EventFilter.ITEM);
         assertSame(itemNode, itemNode.map(item, EventFilter.ITEM));
@@ -52,7 +52,7 @@ public class EventNodeMapTest {
 
     @Test
     public void map() {
-        var item = ItemStack.of(Material.DIAMOND);
+        var item = ItemStack.DIAMOND;
         var node = EventNode.all("main");
 
         AtomicBoolean result = new AtomicBoolean(false);
@@ -66,7 +66,7 @@ public class EventNodeMapTest {
         assertTrue(result.get());
 
         result.set(false);
-        node.call(new EventNodeTest.ItemTestEvent(ItemStack.of(Material.GOLD_INGOT)));
+        node.call(new EventNodeTest.ItemTestEvent(ItemStack.GOLD_INGOT));
         assertFalse(result.get());
 
         result.set(false);
