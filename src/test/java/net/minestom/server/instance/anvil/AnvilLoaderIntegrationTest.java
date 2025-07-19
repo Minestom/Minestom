@@ -27,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
 public class AnvilLoaderIntegrationTest {
-
-    private static final Path testRoot = Path.of("src", "test", "resources", "net", "minestom", "server", "instance");
+    private static final Path WORLD_RESOURCES = Path.of("src", "test", "resources", "net", "minestom", "server", "instance");
 
     @Test
     public void loadVanillaRegion(Env env) throws IOException {
@@ -223,26 +222,24 @@ public class AnvilLoaderIntegrationTest {
     }
 
     private static Path extractWorld(@NotNull String resourceName) throws IOException {
-        var worldFolder = Files.createTempDirectory("minestom-test-world-" + resourceName);
+        final Path worldFolder = Files.createTempDirectory("minestom-test-world-" + resourceName);
 
         // https://stackoverflow.com/a/60621544
-        Files.walkFileTree(testRoot.resolve(resourceName), new SimpleFileVisitor<>() {
-
+        Files.walkFileTree(WORLD_RESOURCES.resolve(resourceName), new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
                     throws IOException {
-                Files.createDirectories(worldFolder.resolve(testRoot.relativize(dir)));
+                Files.createDirectories(worldFolder.resolve(WORLD_RESOURCES.relativize(dir)));
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
                     throws IOException {
-                Files.copy(file, worldFolder.resolve(testRoot.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(file, worldFolder.resolve(WORLD_RESOURCES.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
                 return FileVisitResult.CONTINUE;
             }
         });
-
         return worldFolder.resolve(resourceName);
     }
 }
