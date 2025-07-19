@@ -61,6 +61,8 @@ public sealed interface Palette permits PaletteImpl {
 
     void fill(int value);
 
+    void load(int[] palette, long[] values);
+
     void offset(int offset);
 
     void replace(int oldValue, int newValue);

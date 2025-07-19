@@ -105,6 +105,31 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public void load(int[] palette, long[] values) {
+        int bpe = palette.length * 64 / values.length;
+        if (bpe < minBitsPerEntry) {
+            bpe = minBitsPerEntry;
+        } else if (bpe > maxBitsPerEntry) {
+            bpe = maxBitsPerEntry;
+        }
+        if (bpe > maxBitsPerEntry) {
+            throw new IllegalArgumentException("Palette size exceeds maximum bits per entry: " + bpe + " > " + maxBitsPerEntry);
+        }
+        if (palette.length == 0) {
+            throw new IllegalArgumentException("Palette cannot be empty");
+        }
+        this.bitsPerEntry = (byte) bpe;
+        this.count = Palettes.count(bpe, values);
+        this.paletteToValueList = new IntArrayList(palette);
+        this.valueToPaletteMap = new Int2IntOpenHashMap(palette.length);
+        this.valueToPaletteMap.defaultReturnValue(-1);
+        for (int i = 0; i < palette.length; i++) {
+            this.valueToPaletteMap.put(palette[i], i);
+        }
+        this.values = values.clone();
+    }
+
+    @Override
     public void offset(int offset) {
         if (offset == 0) return;
         if (bitsPerEntry == 0) {

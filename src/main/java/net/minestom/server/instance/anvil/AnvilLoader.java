@@ -13,11 +13,9 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -199,23 +197,13 @@ public class AnvilLoader implements IChunkLoader {
                 final CompoundBinaryTag biomesTag = sectionData.getCompound("biomes");
                 final ListBinaryTag biomePaletteTag = biomesTag.getList("palette", BinaryTagTypes.STRING);
                 int[] convertedBiomePalette = loadBiomePalette(biomePaletteTag);
-
                 if (convertedBiomePalette.length == 1) {
                     // One solid block, no need to check the data
                     section.biomePalette().fill(convertedBiomePalette[0]);
                 } else if (convertedBiomePalette.length > 1) {
                     final long[] packedIndices = biomesTag.getLongArray("data");
                     Check.stateCondition(packedIndices.length == 0, "Missing packed biomes data");
-                    int[] biomeIndices = new int[64];
-
-                    int bitsPerEntry = packedIndices.length * 64 / biomeIndices.length;
-                    if (bitsPerEntry > 3) bitsPerEntry = MathUtils.bitsToRepresent(convertedBiomePalette.length);
-                    Palettes.unpack(biomeIndices, packedIndices, bitsPerEntry);
-
-                    section.biomePalette().setAll((x, y, z) -> {
-                        final int index = x + z * 4 + y * 16;
-                        return convertedBiomePalette[biomeIndices[index]];
-                    });
+                    section.blockPalette().load(convertedBiomePalette, packedIndices);
                 }
             }
 
@@ -229,16 +217,7 @@ public class AnvilLoader implements IChunkLoader {
                 } else if (blockPaletteTag.size() > 1) {
                     final long[] packedStates = blockStatesTag.getLongArray("data");
                     Check.stateCondition(packedStates.length == 0, "Missing packed states data");
-                    final int bitsPerEntry = packedStates.length * 64 / SECTION_BLOCK_COUNT;
-                    int[] blockStateIndices = new int[SECTION_BLOCK_COUNT];
-                    Palettes.unpack(blockStateIndices, packedStates, bitsPerEntry);
-
-                    Palette palette = Palette.blocks(bitsPerEntry);
-                    palette.setAll((x, y, z) -> {
-                        final int index = x + z * Chunk.CHUNK_SECTION_SIZE + y * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE;
-                        return convertedPalette[blockStateIndices[index]];
-                    });
-                    section.blockPalette().copyFrom(palette);
+                    section.blockPalette().load(convertedPalette, packedStates);
                 }
             }
         }
@@ -283,8 +262,9 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private int[] loadBiomePalette(@NotNull ListBinaryTag paletteTag) {
-        int[] convertedPalette = new int[paletteTag.size()];
-        for (int i = 0; i < convertedPalette.length; i++) {
+        final int length = paletteTag.size();
+        int[] convertedPalette = new int[length];
+        for (int i = 0; i < length; i++) {
             final String name = paletteTag.getString(i);
             int biomeId = BIOME_REGISTRY.getId(RegistryKey.unsafeOf(name));
             if (biomeId == -1) biomeId = PLAINS_ID;
