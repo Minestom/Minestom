@@ -18,6 +18,9 @@ public final class EventsJFR {
     public static final String INSTANCE_JOIN = "minestom.InstanceJoin";
     public static final String INSTANCE_LEAVE = "minestom.InstanceLeave";
 
+    public static final String INSTANCE_SET_BATCH = "minestom.InstanceSetBatch";
+    public static final String INSTANCE_GET_BATCH = "minestom.InstanceGetBatch";
+
     public static final String PLAYER_JOIN = "minestom.PlayerJoin";
     public static final String PLAYER_LEAVE = "minestom.PlayerLeave";
     public static final String PLAYER_COMMAND = "minestom.PlayerCommand";
@@ -113,6 +116,42 @@ public final class EventsJFR {
         public InstanceLeave(String entity, String instance) {
             this.entity = entity;
             this.instance = instance;
+        }
+    }
+
+    @Name(INSTANCE_SET_BATCH)
+    @Label("Instance Set Batch")
+    @Category({"Minestom", "Instance"})
+    @Description("A batch has been placed into an instance")
+    public static final class InstanceSetBatch extends Event {
+        String instance;
+        String origin;
+        long batchFlags;
+        int batchCount;
+
+        public InstanceSetBatch(String instance, String origin, long batchFlags, int batchCount) {
+            this.instance = instance;
+            this.origin = origin;
+            this.batchFlags = batchFlags;
+            this.batchCount = batchCount;
+        }
+    }
+
+    @Name(INSTANCE_GET_BATCH)
+    @Label("Instance Get Batch")
+    @Category({"Minestom", "Instance"})
+    @Description("A batch has been retrieved from an instance")
+    public static final class InstanceGetBatch extends Event {
+        String instance;
+        String origin;
+        long batchFlags;
+        public int batchCount;
+
+        public InstanceGetBatch(String instance, String origin, long batchFlags, int batchCount) {
+            this.instance = instance;
+            this.origin = origin;
+            this.batchFlags = batchFlags;
+            this.batchCount = batchCount;
         }
     }
 

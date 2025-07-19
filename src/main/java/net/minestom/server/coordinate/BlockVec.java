@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
 import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
 
 /**
@@ -18,7 +19,7 @@ import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
 public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     public static final BlockVec ZERO = new BlockVec(0);
     public static final BlockVec ONE = new BlockVec(1);
-    public static final BlockVec SECTION = new BlockVec(16);
+    public static final BlockVec SECTION = new BlockVec(SECTION_SIZE);
 
     public BlockVec(double x, double y, double z) {
         this(globalToBlock(x), globalToBlock(y), globalToBlock(z));
@@ -161,6 +162,11 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
         return new Vec(blockX * x, blockY * y, blockZ * z);
     }
 
+    @Contract(pure = true)
+    public @NotNull BlockVec mul(int x, int y, int z) {
+        return new BlockVec(blockX * x, blockY * y, blockZ * z);
+    }
+
     @Override
     public @NotNull Point mul(@NotNull Point point) {
         return mul(point.x(), point.y(), point.z());
@@ -176,9 +182,19 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
         return mul(value, value, value);
     }
 
+    @Contract(pure = true)
+    public @NotNull BlockVec mul(int value) {
+        return mul(value, value, value);
+    }
+
     @Override
     public @NotNull Point div(double x, double y, double z) {
         return new Vec(blockX / x, blockY / y, blockZ / z);
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec div(int x, int y, int z) {
+        return new BlockVec(blockX / x, blockY / y, blockZ / z);
     }
 
     @Override
@@ -196,6 +212,11 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
         return div(value, value, value);
     }
 
+    @Contract(pure = true)
+    public @NotNull BlockVec div(int value) {
+        return div(value, value, value);
+    }
+
     @Override
     @Contract(pure = true)
     public @NotNull BlockVec relative(@NotNull BlockFace face) {
@@ -207,5 +228,15 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
             case WEST -> sub(1, 0, 0);
             case EAST -> add(1, 0, 0);
         };
+    }
+
+    @Contract(pure = true)
+    public boolean samePoint(int x, int y, int z) {
+        return blockX == x && blockY == y && blockZ == z;
+    }
+
+    @Contract(pure = true)
+    public boolean samePoint(@NotNull BlockVec blockVec) {
+        return blockX == blockVec.blockX && blockY == blockVec.blockY && blockZ == blockVec.blockZ;
     }
 }
