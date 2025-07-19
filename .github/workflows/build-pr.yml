@@ -2,7 +2,7 @@ name: Build PR
 on: [ pull_request ]
 jobs:
   build_pr:
-    name: Build PR
+    name: Build & Test PR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository

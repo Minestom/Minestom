@@ -7,6 +7,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
@@ -20,6 +21,7 @@ public class ChatMessageListener {
 
     public static void commandChatListener(ClientCommandChatPacket packet, Player player) {
         final String command = packet.message();
+        new EventsJFR.PlayerCommand(player.getUuid().toString(), command).commit();
         if (Messenger.canReceiveCommand(player)) {
             COMMAND_MANAGER.execute(player, command);
         } else {
@@ -31,6 +33,7 @@ public class ChatMessageListener {
         // Intentionally do the same thing as commandChatListener. We don't use signed commands, but Geyser
         // and Gate (the proxy) always send them so this is for compatibility with them.
         final String command = packet.message();
+        new EventsJFR.PlayerCommand(player.getUuid().toString(), command).commit();
         if (Messenger.canReceiveCommand(player)) {
             COMMAND_MANAGER.execute(player, command);
         } else {
@@ -40,6 +43,7 @@ public class ChatMessageListener {
 
     public static void chatMessageListener(ClientChatMessagePacket packet, Player player) {
         final String message = packet.message();
+        new EventsJFR.PlayerChat(player.getUuid().toString(), message).commit();
         if (!Messenger.canReceiveMessage(player)) {
             Messenger.sendRejectionMessage(player);
             return;

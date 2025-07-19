@@ -21,6 +21,24 @@ public class Color implements RGBLike {
             Color::new,
             color -> Color.fromRGBLike(color).asRGB()
     );
+
+    public static final NetworkBuffer.Type<RGBLike> RGB_BYTE_NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, @NotNull RGBLike value) {
+            buffer.write(NetworkBuffer.BYTE, (byte) value.red());
+            buffer.write(NetworkBuffer.BYTE, (byte) value.green());
+            buffer.write(NetworkBuffer.BYTE, (byte) value.blue());
+        }
+
+        @Override
+        public @NotNull RGBLike read(@NotNull NetworkBuffer buffer) {
+            final int red = buffer.read(NetworkBuffer.BYTE);
+            final int green = buffer.read(NetworkBuffer.BYTE);
+            final int blue = buffer.read(NetworkBuffer.BYTE);
+            return new Color(red, green, blue);
+        }
+    };
+
     public static final Codec<RGBLike> CODEC = Codec.INT
             .transform(Color::new, color -> Color.fromRGBLike(color).asRGB());
 

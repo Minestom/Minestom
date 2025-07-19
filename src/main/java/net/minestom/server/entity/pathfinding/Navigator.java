@@ -164,7 +164,7 @@ public final class Navigator {
 
             computingPath = PathGenerator.generate(entity.getInstance(),
                     entity.getPosition(),
-                    Pos.fromPoint(goalPosition),
+                    goalPosition.asPos(),
                     minimumDistance, path.maxDistance(),
                     path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), nodeGenerator, null);
 

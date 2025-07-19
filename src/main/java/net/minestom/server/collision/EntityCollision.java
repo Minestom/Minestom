@@ -1,7 +1,6 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Instance;
@@ -18,7 +17,7 @@ final class EntityCollision {
 
         List<EntityCollisionResult> result = new ArrayList<>();
 
-        var maxDistance = Math.pow(boundingBox.height() * boundingBox.height() + boundingBox.depth()/2 * boundingBox.depth()/2 + boundingBox.width()/2 * boundingBox.width()/2, 1/3.0);
+        var maxDistance = Math.pow(boundingBox.height() * boundingBox.height() + boundingBox.depth() / 2 * boundingBox.depth() / 2 + boundingBox.width() / 2 * boundingBox.width() / 2, 1 / 3.0);
         double projectileDistance = entityVelocity.length();
 
         for (Entity e : instance.getNearbyEntities(point, extendRadius + maxDistance + projectileDistance)) {
@@ -29,7 +28,7 @@ final class EntityCollision {
 
             // Overlapping with entity, math can't be done we return the entity
             if (e.getBoundingBox().intersectBox(e.getPosition().sub(point), boundingBox)) {
-                var p = Pos.fromPoint(point);
+                var p = point.asPos();
                 result.add(new EntityCollisionResult(p, e, Vec.ZERO, 0));
                 continue;
             }
@@ -38,7 +37,7 @@ final class EntityCollision {
             boolean intersected = e.getBoundingBox().intersectBoxSwept(point, entityVelocity, e.getPosition(), boundingBox, sweepResult);
 
             if (intersected && sweepResult.res < 1) {
-                var p = Pos.fromPoint(point).add(entityVelocity.mul(sweepResult.res));
+                var p = point.asPos().add(entityVelocity.mul(sweepResult.res));
                 Vec direction = new Vec(sweepResult.collidedPositionX, sweepResult.collidedPositionY, sweepResult.collidedPositionZ);
                 result.add(new EntityCollisionResult(p, e, direction, sweepResult.res));
             }

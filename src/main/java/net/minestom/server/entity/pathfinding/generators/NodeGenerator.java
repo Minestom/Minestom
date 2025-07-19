@@ -4,8 +4,6 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +59,7 @@ public interface NodeGenerator {
 
         if (getter.getBlock(end) != Block.AIR) return false;
         PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox,
-                Pos.fromPoint(start), Vec.fromPoint(diff), null, false);
+                start.asPos(), diff.asVec(), null, false);
         return !res.collisionZ() && !res.collisionY() && !res.collisionX();
     }
 

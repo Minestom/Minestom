@@ -44,7 +44,9 @@ public record Vec(double x, double y, double z) implements Point {
      *
      * @param point the point to convert
      * @return the converted vector
+     * @deprecated use {@link Point#asVec()} instead
      */
+    @Deprecated
     public static @NotNull Vec fromPoint(@NotNull Point point) {
         if (point instanceof Vec vec) return vec;
         return new Vec(point.x(), point.y(), point.z());
@@ -202,6 +204,10 @@ public record Vec(double x, double y, double z) implements Point {
         return new Vec(Math.max(x, value), Math.max(y, value), Math.max(z, value));
     }
 
+    /**
+     * @deprecated use {@link Point#asPos()} instead.
+     */
+    @Deprecated
     @Contract(pure = true)
     public @NotNull Pos asPosition() {
         return new Pos(x, y, z);
