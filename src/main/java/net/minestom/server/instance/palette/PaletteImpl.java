@@ -106,7 +106,8 @@ final class PaletteImpl implements Palette {
 
     @Override
     public void load(int[] palette, long[] values) {
-        int bpe = Math.max(minBitsPerEntry, MathUtils.bitsToRepresent(palette.length));
+        int bpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
+        bpe = Math.max(minBitsPerEntry, bpe);
         if (bpe > maxBitsPerEntry) bpe = directBits;
         this.bitsPerEntry = (byte) bpe;
         this.count = Palettes.count(bpe, values);

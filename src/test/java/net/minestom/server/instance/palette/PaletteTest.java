@@ -647,6 +647,167 @@ public class PaletteTest {
         assertTrue(palette.compare(deserialized));
     }
 
+    @Test
+    public void loadBelowMinBitsPerEntry() {
+        // Test loading with bpe below minBitsPerEntry - should resize to minBitsPerEntry
+        Palette palette = Palette.sized(4, 4, 8, 15, 4); // min=4, max=8, direct=15
+        
+        int[] paletteData = {0, 1, 2, 3}; // 4 values need 2 bits, but min is 4
+        long[] values = new long[]{0x3210L}; // packed with 2 bits per entry
+        
+        palette.load(paletteData, values);
+        
+        // Should be resized to minBitsPerEntry (4)
+        assertEquals(4, palette.bitsPerEntry());
+        
+        // Values should still be accessible correctly
+        assertEquals(0, palette.get(0, 0, 0));
+        assertEquals(1, palette.get(1, 0, 0));
+        assertEquals(2, palette.get(2, 0, 0));
+        assertEquals(3, palette.get(3, 0, 0));
+    }
+
+    @Test
+    public void loadAboveMaxBitsPerEntry() {
+        // Test loading with bpe above maxBitsPerEntry - should become direct palette
+        Palette palette = Palette.sized(4, 1, 3, 15, 1); // min=1, max=3, direct=15
+        
+        // Create palette that would need more than 3 bits (max) - 16 values need 4 bits
+        int[] paletteData = new int[16];
+        for (int i = 0; i < 16; i++) {
+            paletteData[i] = i + 100; // arbitrary values
+        }
+        
+        // Create values array with 4 bits per entry
+        long[] values = new long[4]; // 64 entries, 4 bits each = 16 longs per entry, 4 longs total
+        for (int i = 0; i < 64; i++) {
+            int longIndex = i / 16;
+            int bitIndex = (i % 16) * 4;
+            values[longIndex] |= ((long)(i % 16)) << bitIndex;
+        }
+        
+        palette.load(paletteData, values);
+        
+        // Should become direct palette (directBits = 15)
+        assertEquals(15, palette.bitsPerEntry());
+        
+        // Should not have a palette anymore (direct mode)
+        assertNull(((PaletteImpl) palette).paletteToValueList);
+    }
+
+    @Test
+    public void loadWithinRange() {
+        // Test loading with bpe within min-max range - should use calculated bpe
+        Palette palette = Palette.sized(4, 2, 6, 15, 2); // min=2, max=6, direct=15
+        
+        int[] paletteData = {0, 10, 20, 30, 40}; // 5 values need 3 bits
+        long[] values = new long[12]; // 64 entries, 3 bits each
+        
+        // Fill with some test pattern
+        for (int i = 0; i < 64; i++) {
+            int longIndex = i / 21; // 21 values per long with 3 bits each (63 bits used)
+            int bitIndex = (i % 21) * 3;
+            if (longIndex < values.length) {
+                values[longIndex] |= ((long)(i % 5)) << bitIndex;
+            }
+        }
+        
+        palette.load(paletteData, values);
+        
+        // Should use 3 bits (calculated from palette size)
+        assertEquals(3, palette.bitsPerEntry());
+        
+        // Should have palette
+        assertNotNull(((PaletteImpl) palette).paletteToValueList);
+        
+        // Verify palette contents
+        assertEquals(5, ((PaletteImpl) palette).paletteToValueList.size());
+        assertEquals(0, ((PaletteImpl) palette).paletteToValueList.getInt(0));
+        assertEquals(10, ((PaletteImpl) palette).paletteToValueList.getInt(1));
+        assertEquals(20, ((PaletteImpl) palette).paletteToValueList.getInt(2));
+        assertEquals(30, ((PaletteImpl) palette).paletteToValueList.getInt(3));
+        assertEquals(40, ((PaletteImpl) palette).paletteToValueList.getInt(4));
+    }
+
+    @Test
+    public void loadExactlyMinBitsPerEntry() {
+        // Test loading where calculated bpe equals minBitsPerEntry
+        Palette palette = Palette.sized(4, 3, 8, 15, 3); // min=3, max=8, direct=15
+        
+        int[] paletteData = {0, 1, 2, 3, 4, 5, 6, 7}; // 8 values need exactly 3 bits
+        long[] values = new long[12]; // 64 entries, 3 bits each
+        
+        palette.load(paletteData, values);
+        
+        // Should use exactly minBitsPerEntry (3)
+        assertEquals(3, palette.bitsPerEntry());
+        
+        // Should have palette
+        assertNotNull(((PaletteImpl) palette).paletteToValueList);
+        assertEquals(8, ((PaletteImpl) palette).paletteToValueList.size());
+    }
+
+    @Test
+    public void loadExactlyMaxBitsPerEntry() {
+        // Test loading where calculated bpe equals maxBitsPerEntry
+        Palette palette = Palette.sized(4, 2, 4, 15, 2); // min=2, max=4, direct=15
+        
+        int[] paletteData = new int[16]; // 16 values need exactly 4 bits
+        for (int i = 0; i < 16; i++) {
+            paletteData[i] = i * 10;
+        }
+        long[] values = new long[16]; // 64 entries, 4 bits each
+        
+        palette.load(paletteData, values);
+        
+        // Should use exactly maxBitsPerEntry (4)
+        assertEquals(4, palette.bitsPerEntry());
+        
+        // Should still have palette (not direct)
+        assertNotNull(((PaletteImpl) palette).paletteToValueList);
+        assertEquals(16, ((PaletteImpl) palette).paletteToValueList.size());
+    }
+
+    @Test
+    public void loadEmptyPalette() {
+        // Test loading with empty palette
+        Palette palette = Palette.sized(4, 1, 8, 15, 1);
+        
+        int[] paletteData = {0}; // Single value palette
+        long[] values = new long[4]; // All zeros
+        
+        palette.load(paletteData, values);
+        
+        // Should use minBitsPerEntry since 1 value needs 0 bits but min is 1
+        assertEquals(1, palette.bitsPerEntry());
+        
+        // Should have palette with single entry
+        assertNotNull(((PaletteImpl) palette).paletteToValueList);
+        assertEquals(1, ((PaletteImpl) palette).paletteToValueList.size());
+        assertEquals(0, ((PaletteImpl) palette).paletteToValueList.getInt(0));
+    }
+
+    @Test
+    public void loadValuesCloned() {
+        // Test that values array is properly cloned
+        Palette palette = Palette.sized(4, 2, 6, 15, 2);
+        
+        int[] paletteData = {0, 1, 2};
+        long[] originalValues = {0x123456789ABCDEFL, 0xFEDCBA9876543210L};
+        
+        palette.load(paletteData, originalValues);
+        
+        // Modify original array
+        originalValues[0] = 0L;
+        originalValues[1] = 0L;
+        
+        // Palette should still have the original values
+        long[] paletteValues = palette.indexedValues();
+        assertNotNull(paletteValues);
+        assertEquals(0x123456789ABCDEFL, paletteValues[0]);
+        assertEquals(0xFEDCBA9876543210L, paletteValues[1]);
+    }
+
     private static List<Palette> testPalettes() {
         return List.of(
                 Palette.sized(2, 1, 5, 15, 3),
