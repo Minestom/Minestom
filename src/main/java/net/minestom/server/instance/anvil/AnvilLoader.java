@@ -413,46 +413,54 @@ public class AnvilLoader implements IChunkLoader {
 
                 final int globalSectionY = sectionY * 16;
                 // Retrieve block data
-                section.blockPalette().getAll((x, y, z, value) -> {
-                    Block block = chunk.getBlock(x, globalSectionY + y, z, Block.Getter.Condition.CACHED);
-                    if (block == null) block = Block.fromStateId(value);
-                    assert block != null;
-                    final CompoundBinaryTag blockState = blockStateNbt(block);
-                    int blockPaletteIndex = blockPaletteIndices.indexOf(value);
-                    if (blockPaletteIndex == -1) {
-                        blockPaletteIndex = blockPaletteEntries.size();
-                        blockPaletteEntries.add(blockState);
-                        blockPaletteIndices.add(value);
-                    }
-                    final int blockIndex = x + y * 16 * 16 + z * 16;
-                    blockIndices[blockIndex] = blockPaletteIndex;
+                if (section.blockPalette().singleValue() != -1) {
+                    blockPaletteIndices.add(section.blockPalette().singleValue());
+                } else {
+                    section.blockPalette().getAll((x, y, z, value) -> {
+                        Block block = chunk.getBlock(x, globalSectionY + y, z, Block.Getter.Condition.CACHED);
+                        if (block == null) block = Block.fromStateId(value);
+                        assert block != null;
+                        final CompoundBinaryTag blockState = blockStateNbt(block);
+                        int blockPaletteIndex = blockPaletteIndices.indexOf(value);
+                        if (blockPaletteIndex == -1) {
+                            blockPaletteIndex = blockPaletteEntries.size();
+                            blockPaletteEntries.add(blockState);
+                            blockPaletteIndices.add(value);
+                        }
+                        final int blockIndex = x + y * 16 * 16 + z * 16;
+                        blockIndices[blockIndex] = blockPaletteIndex;
 
-                    // Add block entity if present
-                    final BlockHandler handler = block.handler();
-                    final CompoundBinaryTag originalNBT = block.nbt();
-                    if (originalNBT != null || handler != null) {
-                        CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
-                        if (originalNBT != null) blockEntityTag.put(originalNBT);
-                        if (handler != null) blockEntityTag.putString("id", handler.getKey().asString());
-                        blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
-                        blockEntityTag.putInt("y", y);
-                        blockEntityTag.putInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
-                        blockEntityTag.putByte("keepPacked", (byte) 0);
-                        blockEntities.add(blockEntityTag.build());
-                    }
-                });
+                        // Add block entity if present
+                        final BlockHandler handler = block.handler();
+                        final CompoundBinaryTag originalNBT = block.nbt();
+                        if (originalNBT != null || handler != null) {
+                            CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
+                            if (originalNBT != null) blockEntityTag.put(originalNBT);
+                            if (handler != null) blockEntityTag.putString("id", handler.getKey().asString());
+                            blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
+                            blockEntityTag.putInt("y", y);
+                            blockEntityTag.putInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
+                            blockEntityTag.putByte("keepPacked", (byte) 0);
+                            blockEntities.add(blockEntityTag.build());
+                        }
+                    });
+                }
                 // Retrieve biome data
-                section.biomePalette().getAll((x, y, z, value) -> {
-                    int biomeIndex = (x / 4) + (y / 4) * 4 * 4 + (z / 4) * 4;
-                    final RegistryKey<Biome> biomeKey = chunk.getBiome(x, y, z);
-                    final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
-                    int biomePaletteIndex = biomePalette.indexOf(biomeName);
-                    if (biomePaletteIndex == -1) {
-                        biomePaletteIndex = biomePalette.size();
-                        biomePalette.add(biomeName);
-                    }
-                    biomeIndices[biomeIndex] = biomePaletteIndex;
-                });
+                if (section.biomePalette().singleValue() != -1) {
+                    blockPaletteIndices.add(section.biomePalette().singleValue());
+                } else {
+                    section.biomePalette().getAll((x, y, z, value) -> {
+                        int biomeIndex = (x / 4) + (y / 4) * 4 * 4 + (z / 4) * 4;
+                        final RegistryKey<Biome> biomeKey = chunk.getBiome(x, y, z);
+                        final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
+                        int biomePaletteIndex = biomePalette.indexOf(biomeName);
+                        if (biomePaletteIndex == -1) {
+                            biomePaletteIndex = biomePalette.size();
+                            biomePalette.add(biomeName);
+                        }
+                        biomeIndices[biomeIndex] = biomePaletteIndex;
+                    });
+                }
 
                 // Save the block and biome palettes
                 final CompoundBinaryTag.Builder blockStates = CompoundBinaryTag.builder();
