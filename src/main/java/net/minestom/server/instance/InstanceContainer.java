@@ -392,24 +392,17 @@ public class InstanceContainer extends Instance {
     }
 
     private void setBlockBatchAligned(int x, int y, int z, BlockBatchImpl batch, Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry, LongSet sectionIndexes) {
-        // Each batch section map to a single instance section
         final long sectionIndex = entry.getLongKey();
         final BlockBatchImpl.SectionState sectionState = entry.getValue();
-
-        // Extract section coordinates from the batch
-        final int batchSectionX = sectionIndexGetX(sectionIndex);
-        final int batchSectionY = sectionIndexGetY(sectionIndex);
-        final int batchSectionZ = sectionIndexGetZ(sectionIndex);
-
-        // Calculate target section coordinates with offset
-        final int targetSectionX = batchSectionX + globalToChunk(x);
-        final int targetSectionY = batchSectionY + globalToChunk(y);
-        final int targetSectionZ = batchSectionZ + globalToChunk(z);
-
-        // Get the target chunk
+        final int targetSectionX = sectionIndexGetX(sectionIndex) + globalToChunk(x);
+        final int targetSectionY = sectionIndexGetY(sectionIndex) + globalToChunk(y);
+        final int targetSectionZ = sectionIndexGetZ(sectionIndex) + globalToChunk(z);
         final Chunk targetChunk = batch.generate() ? loadOptionalChunk(targetSectionX, targetSectionZ).join() : getChunk(targetSectionX, targetSectionZ);
         if (targetChunk == null) return;
         sectionIndexes.add(sectionIndex(targetSectionX, targetSectionY, targetSectionZ));
+        final int globalSectionX = targetSectionX * SECTION_SIZE;
+        final int globalSectionY = targetSectionY * SECTION_SIZE;
+        final int globalSectionZ = targetSectionZ * SECTION_SIZE;
         synchronized (targetChunk) {
             final Section targetSection = targetChunk.getSection(targetSectionY);
             if (batch.aligned()) {
@@ -417,9 +410,9 @@ public class InstanceContainer extends Instance {
                 targetSection.blockPalette().copyFrom(sectionState.palette());
             } else {
                 sectionState.palette().getAllPresent((localX, localY, localZ, value) -> {
-                    final int globalBlockX = (targetSectionX * SECTION_SIZE) + localX;
-                    final int globalBlockY = (targetSectionY * SECTION_SIZE) + localY;
-                    final int globalBlockZ = (targetSectionZ * SECTION_SIZE) + localZ;
+                    final int globalBlockX = globalSectionX + localX;
+                    final int globalBlockY = globalSectionY + localY;
+                    final int globalBlockZ = globalSectionZ + localZ;
                     clearBlockNbtData(targetChunk, globalBlockX, globalBlockY, globalBlockZ);
                     targetSection.blockPalette().set(localX, localY, localZ, value - 1);
                 });
@@ -427,20 +420,17 @@ public class InstanceContainer extends Instance {
 
             // Handle block states if present (for blocks with NBT or handlers)
             if (!batch.ignoreData() && !sectionState.blockStates().isEmpty()) {
-                // For blocks with NBT or handlers, we still need to set them individually
-                // as palette copy only handles the state IDs
                 for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
                     final int blockIndex = blockEntry.getIntKey();
                     final Block block = blockEntry.getValue();
 
-                    // Convert section block index back to coordinates
                     final int localX = sectionBlockIndexGetX(blockIndex);
                     final int localY = sectionBlockIndexGetY(blockIndex);
                     final int localZ = sectionBlockIndexGetZ(blockIndex);
 
-                    final int globalBlockX = (targetSectionX * SECTION_SIZE) + localX;
-                    final int globalBlockY = (targetSectionY * SECTION_SIZE) + localY;
-                    final int globalBlockZ = (targetSectionZ * SECTION_SIZE) + localZ;
+                    final int globalBlockX = globalSectionX + localX;
+                    final int globalBlockY = globalSectionY + localY;
+                    final int globalBlockZ = globalSectionZ + localZ;
                     setBlock(globalBlockX, globalBlockY, globalBlockZ, block);
                 }
             }
@@ -502,13 +492,11 @@ public class InstanceContainer extends Instance {
                         final int localX = globalX - globalSectionX;
                         final int localY = globalY - globalSectionY;
                         final int localZ = globalZ - globalSectionZ;
-
                         final int value = sectionState.palette().get(localX, localY, localZ);
 
                         final int targetX = globalX - instanceGlobalX;
                         final int targetY = globalY - instanceGlobalY;
                         final int targetZ = globalZ - instanceGlobalZ;
-
                         if (!ignoreData) clearBlockNbtData(targetChunk, globalX, globalY, globalZ);
                         targetSection.blockPalette().set(targetX, targetY, targetZ, value);
                     }
