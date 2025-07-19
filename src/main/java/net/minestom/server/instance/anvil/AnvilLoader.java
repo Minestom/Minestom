@@ -222,10 +222,10 @@ public class AnvilLoader implements IChunkLoader {
             {   // Blocks
                 final CompoundBinaryTag blockStatesTag = sectionData.getCompound("block_states");
                 final ListBinaryTag blockPaletteTag = blockStatesTag.getList("palette", BinaryTagTypes.COMPOUND);
-                Block[] convertedPalette = loadBlockPalette(blockPaletteTag);
+                final int[] convertedPalette = loadBlockPalette(blockPaletteTag);
                 if (blockPaletteTag.size() == 1) {
                     // One solid block, no need to check the data
-                    section.blockPalette().fill(convertedPalette[0].stateId());
+                    section.blockPalette().fill(convertedPalette[0]);
                 } else if (blockPaletteTag.size() > 1) {
                     final long[] packedStates = blockStatesTag.getLongArray("data");
                     Check.stateCondition(packedStates.length == 0, "Missing packed states data");
@@ -236,7 +236,7 @@ public class AnvilLoader implements IChunkLoader {
                     Palette palette = Palette.blocks(bitsPerEntry);
                     palette.setAll((x, y, z) -> {
                         final int index = x + z * Chunk.CHUNK_SECTION_SIZE + y * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE;
-                        return convertedPalette[blockStateIndices[index]].stateId();
+                        return convertedPalette[blockStateIndices[index]];
                     });
                     section.blockPalette().copyFrom(palette);
                 }
@@ -244,37 +244,39 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private Block[] loadBlockPalette(@NotNull ListBinaryTag paletteTag) {
-        Block[] convertedPalette = new Block[paletteTag.size()];
-        for (int i = 0; i < convertedPalette.length; i++) {
+    private int[] loadBlockPalette(@NotNull ListBinaryTag paletteTag) {
+        final int length = paletteTag.size();
+        int[] convertedPalette = new int[length];
+        for (int i = 0; i < length; i++) {
             CompoundBinaryTag paletteEntry = paletteTag.getCompound(i);
-            String blockName = paletteEntry.getString("Name");
+            final String blockName = paletteEntry.getString("Name");
             if (blockName.equals("minecraft:air")) {
-                convertedPalette[i] = Block.AIR;
+                convertedPalette[i] = Block.AIR.stateId();
             } else {
                 Block block = Objects.requireNonNull(Block.fromKey(blockName), "Unknown block " + blockName);
                 // Properties
-                final Map<String, String> properties = new HashMap<>();
-                CompoundBinaryTag propertiesNBT = paletteEntry.getCompound("Properties");
-                for (var property : propertiesNBT) {
-                    if (property.getValue() instanceof StringBinaryTag propertyValue) {
-                        properties.put(property.getKey(), propertyValue.value());
-                    } else {
-                        try {
-                            LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were {}",
-                                    propertiesNBT, property.getKey(), MinestomAdventure.tagStringIO().asString(property.getValue()));
-                        } catch (IOException e) {
-                            LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were a {} tag", propertiesNBT, property.getKey(), property.getValue().examinableName());
+                final CompoundBinaryTag propertiesNBT = paletteEntry.getCompound("Properties");
+                if (!propertiesNBT.isEmpty()) {
+                    final Map<String, String> properties = HashMap.newHashMap(propertiesNBT.size());
+                    for (var property : propertiesNBT) {
+                        if (property.getValue() instanceof StringBinaryTag propertyValue) {
+                            properties.put(property.getKey(), propertyValue.value());
+                        } else {
+                            try {
+                                LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were {}",
+                                        propertiesNBT, property.getKey(), MinestomAdventure.tagStringIO().asString(property.getValue()));
+                            } catch (IOException e) {
+                                LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were a {} tag", propertiesNBT, property.getKey(), property.getValue().examinableName());
+                            }
                         }
                     }
+                    block = block.withProperties(properties);
                 }
-                if (!properties.isEmpty()) block = block.withProperties(properties);
-
                 // Handler
                 final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(block.name());
                 if (handler != null) block = block.withHandler(handler);
 
-                convertedPalette[i] = block;
+                convertedPalette[i] = block.stateId();
             }
         }
         return convertedPalette;
