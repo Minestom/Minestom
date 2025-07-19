@@ -106,21 +106,25 @@ public class AnvilLoader implements IChunkLoader {
         // Load the chunk data (assuming it is fully generated)
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
         synchronized (chunk) { // todo: boo, synchronized
-            chunk.tagHandler().updateContent(chunkData); // TODO: should it really use the entire compound?
             final String status = chunkData.getString("status");
-
             // TODO: Should we handle other statuses?
             if (status.isEmpty() || "minecraft:full".equals(status)) {
-                // TODO: Parallelize block, block entities and biome loading
                 // Blocks + Biomes
                 loadSections(chunk, chunkData);
                 // Block entities
                 loadBlockEntities(chunk, chunkData);
-
                 chunk.loadHeightmapsFromNBT(chunkData.getCompound("Heightmaps"));
             } else {
                 LOGGER.warn("Skipping partially generated chunk at {}, {} with status {}", chunkX, chunkZ, status);
             }
+            CompoundBinaryTag handlerData = CompoundBinaryTag.builder()
+                    .put(chunkData)
+                    .remove("Heightmaps")
+                    .remove("sections")
+                    .remove("sections")
+                    .remove("block_entities")
+                    .build();
+            chunk.tagHandler().updateContent(handlerData);
         }
 
         // Cache the index of the loaded chunk
