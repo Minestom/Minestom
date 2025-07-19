@@ -2,6 +2,7 @@ package net.minestom.server.instance.heightmap;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,7 @@ public abstract class Heightmap {
 
     public Heightmap(Chunk chunk) {
         this.chunk = chunk;
-        minHeight = chunk.getInstance().getCachedDimensionType().minY() - 1;
+        this.minHeight = chunk.getInstance().getCachedDimensionType().minY() - 1;
     }
 
     public abstract @NotNull Type type();
@@ -36,18 +37,16 @@ public abstract class Heightmap {
     protected abstract boolean checkBlock(@NotNull Block block);
 
     public void refresh(int x, int y, int z, Block block) {
+        final int height = getHeight(x, z);
         if (checkBlock(block)) {
-            if (getHeight(x, z) < y) {
-                setHeightY(x, z, y);
-            }
-        } else if (y == getHeight(x, z)) {
+            if (height < y) setHeightY(x, z, y);
+        } else if (y == height) {
             refresh(x, z, y - 1);
         }
     }
 
     public void refresh(int startY) {
         if (!needsRefresh) return;
-
         synchronized (chunk) {
             for (int x = 0; x < CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < CHUNK_SIZE_Z; z++) {
@@ -87,12 +86,9 @@ public abstract class Heightmap {
         int containerIndex = 0;
         for (int i = 0; i < heights.length; i++) {
             final int indexInContainer = i % entriesPerLong;
-
             heights[i] = (short) ((int) (data[containerIndex] >> (indexInContainer * bitsPerEntry)) & entryMask);
-
             if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
         }
-
         needsRefresh = false;
     }
 
@@ -108,11 +104,10 @@ public abstract class Heightmap {
 
     public static int getHighestBlockSection(Chunk chunk) {
         int y = chunk.getInstance().getCachedDimensionType().maxY();
-
         final int sectionsCount = chunk.getMaxSection() - chunk.getMinSection();
         for (int i = 0; i < sectionsCount; i++) {
-            int sectionY = chunk.getMaxSection() - i - 1;
-            var blockPalette = chunk.getSection(sectionY).blockPalette();
+            final int sectionY = chunk.getMaxSection() - i - 1;
+            final Palette blockPalette = chunk.getSection(sectionY).blockPalette();
             if (blockPalette.count() != 0) break;
             y -= 16;
         }
@@ -140,12 +135,9 @@ public abstract class Heightmap {
         for (int i = 0; i < heights.length; i++) {
             final int indexInContainer = i % entriesPerLong;
             final int entry = heights[i];
-
             data[containerIndex] |= ((long) (entry & entryMask)) << (indexInContainer * bitsPerEntry);
-
             if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
         }
-
         return data;
     }
 }
