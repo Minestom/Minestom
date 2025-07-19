@@ -443,24 +443,24 @@ public class InstanceContainer extends Instance {
         final int globalSectionX = batchSectionX * SECTION_SIZE + x, globalSectionY = batchSectionY * SECTION_SIZE + y, globalSectionZ = batchSectionZ * SECTION_SIZE + z;
 
         // Find all instance sections that this batch section affects
-        final int minInstanceSectionX = globalToChunk(globalSectionX);
-        final int maxInstanceSectionX = globalToChunk(globalSectionX + SECTION_BOUND);
-        final int minInstanceSectionY = globalToChunk(globalSectionY);
-        final int maxInstanceSectionY = globalToChunk(globalSectionY + SECTION_BOUND);
-        final int minInstanceSectionZ = globalToChunk(globalSectionZ);
-        final int maxInstanceSectionZ = globalToChunk(globalSectionZ + SECTION_BOUND);
+        final int minSectionX = globalToChunk(globalSectionX);
+        final int maxSectionX = globalToChunk(globalSectionX + SECTION_BOUND);
+        final int minSectionY = globalToChunk(globalSectionY);
+        final int maxSectionY = globalToChunk(globalSectionY + SECTION_BOUND);
+        final int minSectionZ = globalToChunk(globalSectionZ);
+        final int maxSectionZ = globalToChunk(globalSectionZ + SECTION_BOUND);
 
         final BlockBatchImpl.SectionState sectionState = entry.getValue();
         final boolean ignoreData = batch.ignoreData();
         final boolean isAligned = batch.aligned();
-        for (int instanceSectionX = minInstanceSectionX; instanceSectionX <= maxInstanceSectionX; instanceSectionX++) {
-            for (int instanceSectionY = minInstanceSectionY; instanceSectionY <= maxInstanceSectionY; instanceSectionY++) {
-                for (int instanceSectionZ = minInstanceSectionZ; instanceSectionZ <= maxInstanceSectionZ; instanceSectionZ++) {
-                    final Chunk targetChunk = batch.generate() ? loadOptionalChunk(instanceSectionX, instanceSectionZ).join() : getChunk(instanceSectionX, instanceSectionZ);
+        for (int sectionX = minSectionX; sectionX <= maxSectionX; sectionX++) {
+            for (int sectionY = minSectionY; sectionY <= maxSectionY; sectionY++) {
+                for (int sectionZ = minSectionZ; sectionZ <= maxSectionZ; sectionZ++) {
+                    final Chunk targetChunk = batch.generate() ? loadOptionalChunk(sectionX, sectionZ).join() : getChunk(sectionX, sectionZ);
                     if (targetChunk == null) continue;
-                    sectionIndexes.add(sectionIndex(instanceSectionX, instanceSectionY, instanceSectionZ));
+                    sectionIndexes.add(sectionIndex(sectionX, sectionY, sectionZ));
                     synchronized (targetChunk) {
-                        processUnalignedSection(targetChunk, instanceSectionX, instanceSectionY, instanceSectionZ,
+                        processUnalignedSection(targetChunk, sectionX, sectionY, sectionZ,
                                 globalSectionX, globalSectionY, globalSectionZ, sectionState, isAligned, ignoreData);
                     }
                 }
