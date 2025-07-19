@@ -1,6 +1,8 @@
 package net.minestom.server.instance.anvil;
 
-import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -11,6 +13,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
@@ -33,10 +36,13 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
+
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
     private final static int PLAINS_ID = BIOME_REGISTRY.getId(Biome.PLAINS);
+    private static final CompoundBinaryTag[] BLOCK_STATE_ID_2_OBJECT_CACHE = new CompoundBinaryTag[Block.statesCount()];
 
     private final ReentrantLock fileCreationLock = new ReentrantLock();
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
@@ -52,9 +58,6 @@ public class AnvilLoader implements IChunkLoader {
      */
     private final RegionCache perRegionLoadedChunks = new RegionCache();
     private final ReentrantLock perRegionLoadedChunksLock = new ReentrantLock();
-
-    // thread local to avoid contention issues with locks
-    private final ThreadLocal<Int2ObjectMap<CompoundBinaryTag>> blockStateId2ObjectCacheTLS = ThreadLocal.withInitial(Int2ObjectArrayMap::new);
 
     public AnvilLoader(@NotNull Path path) {
         this.path = path;
@@ -103,6 +106,7 @@ public class AnvilLoader implements IChunkLoader {
         // Load the chunk data (assuming it is fully generated)
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
         synchronized (chunk) { // todo: boo, synchronized
+            chunk.tagHandler().updateContent(chunkData); // TODO: should it really use the entire compound?
             final String status = chunkData.getString("status");
 
             // TODO: Should we handle other statuses?
@@ -165,12 +169,13 @@ public class AnvilLoader implements IChunkLoader {
 
     private void loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
         for (BinaryTag sectionTag : chunkData.getList("sections", BinaryTagTypes.COMPOUND)) {
-            final CompoundBinaryTag sectionData = (CompoundBinaryTag) sectionTag;
+            if (!(sectionTag instanceof CompoundBinaryTag sectionData)) {
+                LOGGER.warn("Invalid section tag in chunk data: {}", sectionTag);
+                continue;
+            }
 
             final int sectionY = sectionData.getInt("Y", Integer.MIN_VALUE);
             Check.stateCondition(sectionY == Integer.MIN_VALUE, "Missing section Y value");
-            final int yOffset = Chunk.CHUNK_SECTION_SIZE * sectionY;
-
             if (sectionY < chunk.getMinSection() || sectionY >= chunk.getMaxSection()) {
                 // Vanilla stores a section below and above the world for lighting, throw it out.
                 continue;
@@ -220,24 +225,16 @@ public class AnvilLoader implements IChunkLoader {
                 } else if (blockPaletteTag.size() > 1) {
                     final long[] packedStates = blockStatesTag.getLongArray("data");
                     Check.stateCondition(packedStates.length == 0, "Missing packed states data");
-                    int[] blockStateIndices = new int[Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE];
-                    Palettes.unpack(blockStateIndices, packedStates, packedStates.length * 64 / blockStateIndices.length);
+                    final int bitsPerEntry = packedStates.length * 64 / SECTION_BLOCK_COUNT;
+                    int[] blockStateIndices = new int[SECTION_BLOCK_COUNT];
+                    Palettes.unpack(blockStateIndices, packedStates, bitsPerEntry);
 
-                    for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-                        for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
-                            for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
-                                try {
-                                    final int blockIndex = y * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE + z * Chunk.CHUNK_SECTION_SIZE + x;
-                                    final int paletteIndex = blockStateIndices[blockIndex];
-                                    final Block block = convertedPalette[paletteIndex];
-
-                                    chunk.setBlock(x, y + yOffset, z, block);
-                                } catch (Exception e) {
-                                    MinecraftServer.getExceptionManager().handleException(e);
-                                }
-                            }
-                        }
-                    }
+                    Palette palette = Palette.blocks(bitsPerEntry);
+                    palette.setAll((x, y, z) -> {
+                        final int index = x + z * Chunk.CHUNK_SECTION_SIZE + y * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE;
+                        return convertedPalette[blockStateIndices[index]].stateId();
+                    });
+                    section.blockPalette().copyFrom(palette);
                 }
             }
         }
@@ -292,7 +289,10 @@ public class AnvilLoader implements IChunkLoader {
 
     private void loadBlockEntities(@NotNull Chunk loadedChunk, @NotNull CompoundBinaryTag chunkData) {
         for (BinaryTag blockEntityTag : chunkData.getList("block_entities", BinaryTagTypes.COMPOUND)) {
-            final CompoundBinaryTag blockEntity = (CompoundBinaryTag) blockEntityTag;
+            if (!(blockEntityTag instanceof CompoundBinaryTag blockEntity)) {
+                LOGGER.warn("Invalid block entity tag in chunk data: {}", blockEntityTag);
+                continue;
+            }
 
             final int x = blockEntity.getInt("x");
             final int y = blockEntity.getInt("y");
@@ -306,13 +306,14 @@ public class AnvilLoader implements IChunkLoader {
             }
 
             // Remove anvil tags
-            CompoundBinaryTag trimmedTag = CompoundBinaryTag.builder().put(blockEntity)
+            CompoundBinaryTag trimmedTag = CompoundBinaryTag.builder()
+                    .put(blockEntity)
                     .remove("id").remove("keepPacked")
                     .remove("x").remove("y").remove("z")
                     .build();
 
             // Place block
-            final var finalBlock = trimmedTag.size() > 0 ? block.withNbt(trimmedTag) : block;
+            final Block finalBlock = !trimmedTag.isEmpty() ? block.withNbt(trimmedTag) : block;
             loadedChunk.setBlock(x, y, z, finalBlock);
         }
     }
@@ -320,7 +321,7 @@ public class AnvilLoader implements IChunkLoader {
     @Override
     public void saveInstance(@NotNull Instance instance) {
         final CompoundBinaryTag nbt = instance.tagHandler().asCompound();
-        if (nbt.size() == 0) {
+        if (nbt.isEmpty()) {
             // Instance has no data
             return;
         }
@@ -355,7 +356,7 @@ public class AnvilLoader implements IChunkLoader {
                     mcaFile = new RegionFile(regionFile);
                     alreadyLoaded.put(regionFileName, mcaFile);
                 } catch (IOException e) {
-                    LOGGER.error("Failed to create region file for " + chunkX + ", " + chunkZ, e);
+                    LOGGER.error("Failed to create region file for {}, {}", chunkX, chunkZ, e);
                     MinecraftServer.getExceptionManager().handleException(e);
                     return;
                 }
@@ -366,6 +367,8 @@ public class AnvilLoader implements IChunkLoader {
 
         try {
             final CompoundBinaryTag.Builder chunkData = CompoundBinaryTag.builder();
+
+            chunkData.put(chunk.tagHandler().asCompound());
 
             chunkData.putInt("DataVersion", MinecraftServer.DATA_VERSION);
             chunkData.putInt("xPos", chunkX);
@@ -378,7 +381,7 @@ public class AnvilLoader implements IChunkLoader {
 
             mcaFile.writeChunkData(chunkX, chunkZ, chunkData.build());
         } catch (IOException e) {
-            LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
+            LOGGER.error("Failed to save chunk {}, {}", chunkX, chunkZ, e);
             MinecraftServer.getExceptionManager().handleException(e);
         }
     }
@@ -393,7 +396,7 @@ public class AnvilLoader implements IChunkLoader {
 
         List<BinaryTag> blockPaletteEntries = new ArrayList<>();
         IntList blockPaletteIndices = new IntArrayList(); // Map block indices by state id to avoid doing a deep comparison on every block tag
-        int[] blockIndices = new int[Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE];
+        int[] blockIndices = new int[SECTION_BLOCK_COUNT];
 
         synchronized (chunk) {
             for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
@@ -404,74 +407,59 @@ public class AnvilLoader implements IChunkLoader {
 
                 // Lighting
                 byte[] skyLight = section.skyLight().array();
-                if (skyLight != null && skyLight.length > 0)
-                    sectionData.putByteArray("SkyLight", skyLight);
+                if (skyLight != null && skyLight.length > 0) sectionData.putByteArray("SkyLight", skyLight);
                 byte[] blockLight = section.blockLight().array();
-                if (blockLight != null && blockLight.length > 0)
-                    sectionData.putByteArray("BlockLight", blockLight);
+                if (blockLight != null && blockLight.length > 0) sectionData.putByteArray("BlockLight", blockLight);
 
-                // Build block, biome palettes & collect block entities
-                for (int sectionLocalY = 0; sectionLocalY < Chunk.CHUNK_SECTION_SIZE; sectionLocalY++) {
-                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                            final int y = sectionLocalY + (sectionY * Chunk.CHUNK_SECTION_SIZE);
-
-                            final int blockIndex = x + sectionLocalY * 16 * 16 + z * 16;
-                            final Block block = chunk.getBlock(x, y, z);
-
-                            // Add block state
-                            final int blockStateId = block.stateId();
-                            final CompoundBinaryTag blockState = getBlockState(block);
-                            int blockPaletteIndex = blockPaletteIndices.indexOf(blockStateId);
-                            if (blockPaletteIndex == -1) {
-                                blockPaletteIndex = blockPaletteEntries.size();
-                                blockPaletteEntries.add(blockState);
-                                blockPaletteIndices.add(blockStateId);
-                            }
-                            blockIndices[blockIndex] = blockPaletteIndex;
-
-                            // Add biome (biome are stored for 4x4x4 volumes, avoid unnecessary work)
-                            if (x % 4 == 0 && sectionLocalY % 4 == 0 && z % 4 == 0) {
-                                int biomeIndex = (x / 4) + (sectionLocalY / 4) * 4 * 4 + (z / 4) * 4;
-                                final RegistryKey<Biome> biomeKey = chunk.getBiome(x, y, z);
-                                final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
-
-                                int biomePaletteIndex = biomePalette.indexOf(biomeName);
-                                if (biomePaletteIndex == -1) {
-                                    biomePaletteIndex = biomePalette.size();
-                                    biomePalette.add(biomeName);
-                                }
-
-                                biomeIndices[biomeIndex] = biomePaletteIndex;
-                            }
-
-                            // Add block entity if present
-                            final BlockHandler handler = block.handler();
-                            final CompoundBinaryTag originalNBT = block.nbt();
-                            if (originalNBT != null || handler != null) {
-                                CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
-                                if (originalNBT != null) {
-                                    blockEntityTag.put(originalNBT);
-                                }
-                                if (handler != null) {
-                                    blockEntityTag.putString("id", handler.getKey().asString());
-                                }
-                                blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
-                                blockEntityTag.putInt("y", y);
-                                blockEntityTag.putInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
-                                blockEntityTag.putByte("keepPacked", (byte) 0);
-                                blockEntities.add(blockEntityTag.build());
-                            }
-                        }
+                final int globalSectionY = sectionY * 16;
+                // Retrieve block data
+                section.blockPalette().getAll((x, y, z, value) -> {
+                    Block block = chunk.getBlock(x, globalSectionY + y, z, Block.Getter.Condition.CACHED);
+                    if (block == null) block = Block.fromStateId(value);
+                    assert block != null;
+                    final CompoundBinaryTag blockState = blockStateNbt(block);
+                    int blockPaletteIndex = blockPaletteIndices.indexOf(value);
+                    if (blockPaletteIndex == -1) {
+                        blockPaletteIndex = blockPaletteEntries.size();
+                        blockPaletteEntries.add(blockState);
+                        blockPaletteIndices.add(value);
                     }
-                }
+                    final int blockIndex = x + y * 16 * 16 + z * 16;
+                    blockIndices[blockIndex] = blockPaletteIndex;
+
+                    // Add block entity if present
+                    final BlockHandler handler = block.handler();
+                    final CompoundBinaryTag originalNBT = block.nbt();
+                    if (originalNBT != null || handler != null) {
+                        CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
+                        if (originalNBT != null) blockEntityTag.put(originalNBT);
+                        if (handler != null) blockEntityTag.putString("id", handler.getKey().asString());
+                        blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
+                        blockEntityTag.putInt("y", y);
+                        blockEntityTag.putInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
+                        blockEntityTag.putByte("keepPacked", (byte) 0);
+                        blockEntities.add(blockEntityTag.build());
+                    }
+                });
+                // Retrieve biome data
+                section.biomePalette().getAll((x, y, z, value) -> {
+                    int biomeIndex = (x / 4) + (y / 4) * 4 * 4 + (z / 4) * 4;
+                    final RegistryKey<Biome> biomeKey = chunk.getBiome(x, y, z);
+                    final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
+                    int biomePaletteIndex = biomePalette.indexOf(biomeName);
+                    if (biomePaletteIndex == -1) {
+                        biomePaletteIndex = biomePalette.size();
+                        biomePalette.add(biomeName);
+                    }
+                    biomeIndices[biomeIndex] = biomePaletteIndex;
+                });
 
                 // Save the block and biome palettes
                 final CompoundBinaryTag.Builder blockStates = CompoundBinaryTag.builder();
                 blockStates.put("palette", ListBinaryTag.listBinaryTag(BinaryTagTypes.COMPOUND, blockPaletteEntries));
                 if (blockPaletteEntries.size() > 1) {
                     // If there is only one entry we do not need to write the packed indices
-                    var bitsPerEntry = (int) Math.max(4, Math.ceil(Math.log(blockPaletteEntries.size()) / Math.log(2)));
+                    final int bitsPerEntry = (int) Math.max(4, Math.ceil(Math.log(blockPaletteEntries.size()) / Math.log(2)));
                     blockStates.putLongArray("data", Palettes.pack(blockIndices, bitsPerEntry));
                 }
                 sectionData.put("block_states", blockStates.build());
@@ -480,7 +468,7 @@ public class AnvilLoader implements IChunkLoader {
                 biomes.put("palette", ListBinaryTag.listBinaryTag(BinaryTagTypes.STRING, biomePalette));
                 if (biomePalette.size() > 1) {
                     // If there is only one entry we do not need to write the packed indices
-                    var bitsPerEntry = (int) Math.max(1, Math.ceil(Math.log(biomePalette.size()) / Math.log(2)));
+                    final int bitsPerEntry = (int) Math.max(1, Math.ceil(Math.log(biomePalette.size()) / Math.log(2)));
                     biomes.putLongArray("data", Palettes.pack(biomeIndices, bitsPerEntry));
                 }
                 sectionData.put("biomes", biomes.build());
@@ -497,28 +485,29 @@ public class AnvilLoader implements IChunkLoader {
         chunkData.put("block_entities", blockEntities.build());
     }
 
-    private CompoundBinaryTag getBlockState(final Block block) {
-        return blockStateId2ObjectCacheTLS.get().computeIfAbsent(block.stateId(), _unused -> {
-            final CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
-            tag.putString("Name", block.name());
+    private static CompoundBinaryTag blockStateNbt(final Block block) {
+        final int stateId = block.stateId();
+        CompoundBinaryTag result = BLOCK_STATE_ID_2_OBJECT_CACHE[stateId];
+        if (result == null) result = BLOCK_STATE_ID_2_OBJECT_CACHE[stateId] = blockStateNbtCompute(block);
+        return result;
+    }
 
-            if (!block.properties().isEmpty()) {
-                final Map<String, String> defaultProperties = Block.fromBlockId(block.id()).properties(); // Never null
-                final CompoundBinaryTag.Builder propertiesTag = CompoundBinaryTag.builder();
-                for (var entry : block.properties().entrySet()) {
-                    String key = entry.getKey(), value = entry.getValue();
-                    if (defaultProperties.get(key).equals(value))
-                        continue; // Skip default values
-
-                    propertiesTag.putString(key, value);
-                }
-                var properties = propertiesTag.build();
-                if (properties.size() > 0) {
-                    tag.put("Properties", properties);
-                }
+    private static CompoundBinaryTag blockStateNbtCompute(final Block block) {
+        final CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
+        tag.putString("Name", block.name());
+        if (!block.properties().isEmpty()) {
+            final Map<String, String> defaultProperties = block.defaultState().properties();
+            final CompoundBinaryTag.Builder propertiesTag = CompoundBinaryTag.builder();
+            for (Map.Entry<String, String> entry : block.properties().entrySet()) {
+                final String key = entry.getKey(), value = entry.getValue();
+                if (defaultProperties.get(key).equals(value))
+                    continue; // Skip default values
+                propertiesTag.putString(key, value);
             }
-            return tag.build();
-        });
+            CompoundBinaryTag properties = propertiesTag.build();
+            if (!properties.isEmpty()) tag.put("Properties", properties);
+        }
+        return tag.build();
     }
 
     /**

@@ -117,6 +117,10 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         return REGISTRY.get(Key.key(key));
     }
 
+    static int statesCount() {
+        return BLOCK_STATE_MAP.size();
+    }
+
     static Block getState(int stateId) {
         return BLOCK_STATE_MAP.get(stateId);
     }
