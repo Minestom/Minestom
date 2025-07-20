@@ -300,7 +300,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         EventDispatcher.call(new InstanceSectionInvalidateEvent(this, sectionX, sectionY, sectionZ));
     }
 
-    public synchronized void invalidateSections(int chunkX, int chunkZ) {
+    public synchronized void invalidateChunk(int chunkX, int chunkZ) {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk == null) return;
         this.version.incrementAndGet();
@@ -326,7 +326,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the instance version
      * @see #setBlock(int, int, int, Block) 
      * @see #invalidateSection(int, int, int)
-     * @see #invalidateSections(int, int) 
+     * @see #invalidateChunk(int, int)
      */
     public long version() {
         return version.get();

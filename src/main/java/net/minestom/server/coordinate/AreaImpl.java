@@ -28,7 +28,7 @@ final class AreaImpl {
 
     record Single(BlockVec point) implements Area.Single {
         public Single {
-            if (point == null) throw new IllegalArgumentException("Point cannot be null");
+            Objects.requireNonNull(point, "Point cannot be null");
         }
 
         @Override
@@ -58,9 +58,8 @@ final class AreaImpl {
 
     record Line(BlockVec start, BlockVec end) implements Area.Line {
         public Line {
-            if (start == null || end == null) {
-                throw new IllegalArgumentException("Points cannot be null");
-            }
+            Objects.requireNonNull(start, "Start point cannot be null");
+            Objects.requireNonNull(end, "End point cannot be null");
         }
 
         @Override
@@ -144,9 +143,8 @@ final class AreaImpl {
 
     record Cuboid(BlockVec min, BlockVec max) implements Area.Cuboid {
         public Cuboid {
-            if (min == null || max == null) {
-                throw new IllegalArgumentException("Points cannot be null");
-            }
+            Objects.requireNonNull(min, "min cannot be null");
+            Objects.requireNonNull(max, "max cannot be null");
             // Preserve original parameters for correct comparison
             BlockVec origMin = min;
             BlockVec origMax = max;
@@ -221,8 +219,8 @@ final class AreaImpl {
                         BlockVec secEnd = secOrigin.add(sectionSize - 1, sectionSize - 1, sectionSize - 1);
                         // check full coverage in all axes
                         if (min.blockX() <= secOrigin.blockX() && max.blockX() >= secEnd.blockX()
-                         && min.blockY() <= secOrigin.blockY() && max.blockY() >= secEnd.blockY()
-                         && min.blockZ() <= secOrigin.blockZ() && max.blockZ() >= secEnd.blockZ()) {
+                                && min.blockY() <= secOrigin.blockY() && max.blockY() >= secEnd.blockY()
+                                && min.blockZ() <= secOrigin.blockZ() && max.blockZ() >= secEnd.blockZ()) {
                             sections.add(Area.cuboid(secOrigin, secEnd));
                         }
                     }
@@ -237,9 +235,8 @@ final class AreaImpl {
 
     record Sphere(BlockVec center, int radius) implements Area.Sphere {
         public Sphere {
-            if (center == null || radius < 0) {
-                throw new IllegalArgumentException("Center cannot be null and radius must be non-negative");
-            }
+            Objects.requireNonNull(center, "Center cannot be null");
+            if (radius < 0) throw new IllegalArgumentException("Radius must be non-negative");
         }
 
         @Override

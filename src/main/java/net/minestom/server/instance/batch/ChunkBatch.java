@@ -191,7 +191,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                     sections.add(section);
                 }
             }
-            instance.invalidateSections(chunk.getChunkX(), chunk.getChunkZ());
+            instance.invalidateChunk(chunk.getChunkX(), chunk.getChunkZ());
 
             if (inverse != null) inverse.readyLatch.countDown();
             updateChunk(instance, chunk, sections, callback, safeCallback);
