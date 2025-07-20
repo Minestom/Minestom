@@ -419,8 +419,8 @@ public class InstanceContainer extends Instance {
             }
 
             // Handle block states if present (for blocks with NBT or handlers)
-            if (!batch.ignoreData() && !sectionState.blockStates().isEmpty()) {
-                for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
+            if (!batch.ignoreData() && !sectionState.blockData().isEmpty()) {
+                for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockData().int2ObjectEntrySet()) {
                     final int blockIndex = blockEntry.getIntKey();
                     final Block block = blockEntry.getValue();
 
@@ -521,8 +521,8 @@ public class InstanceContainer extends Instance {
         }
 
         // Handle block states (NBT and handlers) - only for overlap region
-        if (!ignoreData && !sectionState.blockStates().isEmpty()) {
-            for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
+        if (!ignoreData && !sectionState.blockData().isEmpty()) {
+            for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockData().int2ObjectEntrySet()) {
                 final int blockIndex = blockEntry.getIntKey();
                 final int globalBlockX = globalSectionX + sectionBlockIndexGetX(blockIndex);
                 final int globalBlockY = globalSectionY + sectionBlockIndexGetY(blockIndex);

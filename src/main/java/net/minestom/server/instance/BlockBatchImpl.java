@@ -32,9 +32,9 @@ record BlockBatchImpl(
         final int localX = globalToSectionRelative(x);
         final int localY = globalToSectionRelative(y);
         final int localZ = globalToSectionRelative(z);
-        if (condition != Condition.TYPE && !ignoreData() && !sectionState.blockStates.isEmpty()) {
+        if (condition != Condition.TYPE && !ignoreData() && !sectionState.blockData.isEmpty()) {
             final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
-            Block block = sectionState.blockStates.get(sectionBlockIndex);
+            Block block = sectionState.blockData.get(sectionBlockIndex);
             if (block != null) return block;
         }
         // Stateless block
@@ -59,9 +59,9 @@ record BlockBatchImpl(
                     final int globalX = sectionX * SECTION_SIZE + x;
                     final int globalY = sectionY * SECTION_SIZE + y;
                     final int globalZ = sectionZ * SECTION_SIZE + z;
-                    if (!ignoreData() && !sectionState.blockStates.isEmpty()) {
+                    if (!ignoreData() && !sectionState.blockData.isEmpty()) {
                         final int sectionBlockIndex = sectionBlockIndex(x, y, z);
-                        Block block = sectionState.blockStates.get(sectionBlockIndex);
+                        Block block = sectionState.blockData.get(sectionBlockIndex);
                         if (block != null) {
                             consumer.accept(globalX, globalY, globalZ, block);
                             return;
@@ -77,9 +77,9 @@ record BlockBatchImpl(
                     final int globalX = sectionX * SECTION_SIZE + x;
                     final int globalY = sectionY * SECTION_SIZE + y;
                     final int globalZ = sectionZ * SECTION_SIZE + z;
-                    if (!ignoreData() && !sectionState.blockStates.isEmpty()) {
+                    if (!ignoreData() && !sectionState.blockData.isEmpty()) {
                         final int sectionBlockIndex = sectionBlockIndex(x, y, z);
-                        Block block = sectionState.blockStates.get(sectionBlockIndex);
+                        Block block = sectionState.blockData.get(sectionBlockIndex);
                         if (block != null) {
                             consumer.accept(globalX, globalY, globalZ, block);
                             return;
@@ -111,7 +111,7 @@ record BlockBatchImpl(
         List<BlockBatch> result = new ArrayList<>();
         for (Long2ObjectMap.Entry<SectionState> entry : sectionStates.long2ObjectEntrySet()) {
             final SectionState sectionState = entry.getValue();
-            if (sectionState.palette.count() == 0 && sectionState.blockStates.isEmpty()) continue;
+            if (sectionState.palette.count() == 0 && sectionState.blockData.isEmpty()) continue;
             BlockBatchImpl batch = new BlockBatchImpl(flags,
                     Long2ObjectMaps.singleton(entry.getLongKey(), sectionState)
             );
@@ -137,8 +137,8 @@ record BlockBatchImpl(
                 final SectionState sectionState = sectionStates.get(sectionIndex);
                 if (sectionState == null) continue;
                 final Palette palette = sectionState.palette;
-                final Int2ObjectMap<Block> blockStates = sectionState.blockStates;
-                if (palette.count() == 0 && blockStates.isEmpty()) continue;
+                final Int2ObjectMap<Block> blockData = sectionState.blockData;
+                if (palette.count() == 0 && blockData.isEmpty()) continue;
                 palette.getAllPresent((x, y, z, value) -> {
                     final int globalX = x + sectionX * SECTION_SIZE;
                     final int globalY = y + sectionY * SECTION_SIZE;
@@ -148,8 +148,8 @@ record BlockBatchImpl(
                     assert block != null;
                     unit.modifier().setBlock(globalX, globalY, globalZ, block);
                 });
-                if (!ignoreData() && blockStates.isEmpty()) {
-                    for (Int2ObjectMap.Entry<Block> entry : blockStates.int2ObjectEntrySet()) {
+                if (!ignoreData() && blockData.isEmpty()) {
+                    for (Int2ObjectMap.Entry<Block> entry : blockData.int2ObjectEntrySet()) {
                         final int sectionBlockIndex = entry.getIntKey();
                         final Block block = entry.getValue();
                         final int localX = sectionBlockIndexGetX(sectionBlockIndex);
@@ -205,10 +205,10 @@ record BlockBatchImpl(
                 final BlockHandler handler = block.handler();
                 final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
                 if (compound != null || handler != null) {
-                    sectionState.blockStates.put(sectionBlockIndex, block);
+                    sectionState.blockData.put(sectionBlockIndex, block);
                 } else {
                     // Necessary overhead to support overwriting blocks
-                    sectionState.blockStates.remove(sectionBlockIndex);
+                    sectionState.blockData.remove(sectionBlockIndex);
                 }
             }
         }
@@ -226,6 +226,6 @@ record BlockBatchImpl(
         }
     }
 
-    record SectionState(Palette palette, @UnknownNullability Int2ObjectMap<@Nullable Block> blockStates) {
+    record SectionState(Palette palette, @UnknownNullability Int2ObjectMap<@Nullable Block> blockData) {
     }
 }
