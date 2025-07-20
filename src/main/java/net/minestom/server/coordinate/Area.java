@@ -57,7 +57,9 @@ public sealed interface Area extends Iterable<BlockVec> {
     }
 
     /**
-     * Splits this area into multiple cuboid sections aligned to 16x16x16 blocks and remaining parts.
+     * Splits this area into multiple section aligned cuboids.
+     * <p>
+     * Single sections may have multiple cuboids if they are not perfect cuboids.
      *
      * @return list of sub-cuboids covering this area
      */

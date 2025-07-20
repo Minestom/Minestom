@@ -17,18 +17,14 @@ public class AreaTest {
         Area.Line line = Area.line(new BlockVec(0, 0, 0), new BlockVec(3, 0, 0));
         Set<BlockVec> actual = new HashSet<>();
         for (BlockVec v : line) actual.add(v);
-        Set<BlockVec> expected = Set.of(
-                new BlockVec(0, 0, 0), new BlockVec(1, 0, 0), new BlockVec(2, 0, 0), new BlockVec(3, 0, 0)
-        );
+        Set<BlockVec> expected = Set.of(new BlockVec(0, 0, 0), new BlockVec(1, 0, 0), new BlockVec(2, 0, 0), new BlockVec(3, 0, 0));
         assertEquals(expected, actual);
 
         // Diagonal line
         Area.Line diag = Area.line(new BlockVec(0, 0, 0), new BlockVec(2, 2, 2));
         actual.clear();
         for (BlockVec v : diag) actual.add(v);
-        expected = Set.of(
-                new BlockVec(0, 0, 0), new BlockVec(1, 1, 1), new BlockVec(2, 2, 2)
-        );
+        expected = Set.of(new BlockVec(0, 0, 0), new BlockVec(1, 1, 1), new BlockVec(2, 2, 2));
         assertEquals(expected, actual);
     }
 
@@ -75,9 +71,7 @@ public class AreaTest {
     @Test
     public void lineAreaReverse() {
         Area.Line line = Area.line(new BlockVec(3, 0, 0), new BlockVec(0, 0, 0));
-        Set<BlockVec> expected = Set.of(
-                new BlockVec(0, 0, 0), new BlockVec(1, 0, 0), new BlockVec(2, 0, 0), new BlockVec(3, 0, 0)
-        );
+        Set<BlockVec> expected = Set.of(new BlockVec(0, 0, 0), new BlockVec(1, 0, 0), new BlockVec(2, 0, 0), new BlockVec(3, 0, 0));
         Set<BlockVec> actual = new HashSet<>();
         for (BlockVec v : line) actual.add(v);
         assertEquals(expected, actual);
@@ -90,8 +84,7 @@ public class AreaTest {
                 new BlockVec(0, 0, 0), new BlockVec(0, 0, 1),
                 new BlockVec(0, 1, 0), new BlockVec(0, 1, 1),
                 new BlockVec(1, 0, 0), new BlockVec(1, 0, 1),
-                new BlockVec(1, 1, 0), new BlockVec(1, 1, 1)
-        );
+                new BlockVec(1, 1, 0), new BlockVec(1, 1, 1));
         Set<BlockVec> actual = new HashSet<>();
         for (BlockVec v : cuboid) actual.add(v);
         assertEquals(expected, actual);
@@ -168,7 +161,7 @@ public class AreaTest {
         Area.Cuboid cuboid = Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(10, 5, 5));
         List<Area.Cuboid> splits = cuboid.split();
         assertEquals(1, splits.size());
-        Area.Cuboid sub = splits.get(0);
+        Area.Cuboid sub = splits.getFirst();
         assertPoint(new BlockVec(0, 0, 0), sub.min());
         assertPoint(new BlockVec(10, 5, 5), sub.max());
     }
@@ -177,12 +170,17 @@ public class AreaTest {
     public void splitMultiSectionX() {
         Area.Cuboid cuboid = Area.cuboid(new BlockVec(15, 0, 0), new BlockVec(17, 1, 1));
         List<Area.Cuboid> splits = cuboid.split();
-        assertEquals(1, splits.size());
-        Area.Cuboid sub = splits.getFirst();
-        assertPoint(new BlockVec(15, 0, 0), sub.min());
-        assertPoint(new BlockVec(17, 1, 1), sub.max());
+        assertEquals(2, splits.size());
+        boolean foundSec0 = false, foundSec1 = false;
+        for (Area.Cuboid sub : splits) {
+            if (sub.min().equals(new BlockVec(15, 0, 0)) && sub.max().equals(new BlockVec(15, 1, 1)))
+                foundSec0 = true;
+            if (sub.min().equals(new BlockVec(16, 0, 0)) && sub.max().equals(new BlockVec(17, 1, 1)))
+                foundSec1 = true;
+        }
+        assertTrue(foundSec0);
+        assertTrue(foundSec1);
     }
-
 
     @Test
     public void splitOnSingle() {
@@ -211,8 +209,10 @@ public class AreaTest {
         assertEquals(2, splits.size());
         boolean sec0 = false, sec1 = false;
         for (Area.Cuboid sub : splits) {
-            if (sub.min().equals(new BlockVec(15, 0, 0)) && sub.max().equals(new BlockVec(15, 0, 0))) sec0 = true;
-            if (sub.min().equals(new BlockVec(16, 0, 0)) && sub.max().equals(new BlockVec(17, 0, 0))) sec1 = true;
+            if (sub.min().equals(new BlockVec(15, 0, 0)) && sub.max().equals(new BlockVec(15, 0, 0)))
+                sec0 = true;
+            if (sub.min().equals(new BlockVec(16, 0, 0)) && sub.max().equals(new BlockVec(17, 0, 0)))
+                sec1 = true;
         }
         assertTrue(sec0);
         assertTrue(sec1);
@@ -222,15 +222,24 @@ public class AreaTest {
     public void splitSphere() {
         Area.Sphere sphere = Area.sphere(new BlockVec(0, 0, 0), 1);
         List<Area.Cuboid> splits = sphere.split();
-        // Blocks span two sections along x: sections -1 and 0
-        assertEquals(2, splits.size());
-        boolean foundNeg = false, foundZero = false;
-        for (Area.Cuboid sub : splits) {
-            if (sub.min().equals(new BlockVec(-1, -1, -1)) && sub.max().equals(new BlockVec(-1, 1, 1))) foundNeg = true;
-            if (sub.min().equals(new BlockVec(0, -1, -1)) && sub.max().equals(new BlockVec(1, 1, 1))) foundZero = true;
+        // Sphere blocks span multiple sections in all dimensions, should be grouped by
+        // section coordinates
+        assertEquals(6, splits.size());
+
+        // Verify that each split contains only blocks from the sphere
+        Set<BlockVec> allSplitBlocks = new HashSet<>();
+        for (Area.Cuboid split : splits) {
+            for (BlockVec block : split) {
+                allSplitBlocks.add(block);
+            }
         }
-        assertTrue(foundNeg);
-        assertTrue(foundZero);
+
+        Set<BlockVec> sphereBlocks = new HashSet<>();
+        for (BlockVec block : sphere) {
+            sphereBlocks.add(block);
+        }
+
+        assertEquals(sphereBlocks, allSplitBlocks);
     }
 
     @Test
@@ -244,12 +253,18 @@ public class AreaTest {
     @Test
     public void splitCuboidMultiSectionsX() {
         Area.Cuboid cuboid = Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(17, 1, 1));
-        // No full 16x16x16 section is fully covered, so no split
+        // Spans two sections, should be split into 2 cuboids
         List<Area.Cuboid> splits = cuboid.split();
-        assertEquals(1, splits.size());
-        Area.Cuboid single = splits.getFirst();
-        assertPoint(new BlockVec(0, 0, 0), single.min());
-        assertPoint(new BlockVec(17, 1, 1), single.max());
+        assertEquals(2, splits.size());
+        boolean foundSec0 = false, foundSec1 = false;
+        for (Area.Cuboid sub : splits) {
+            if (sub.min().equals(new BlockVec(0, 0, 0)) && sub.max().equals(new BlockVec(15, 1, 1)))
+                foundSec0 = true;
+            if (sub.min().equals(new BlockVec(16, 0, 0)) && sub.max().equals(new BlockVec(17, 1, 1)))
+                foundSec1 = true;
+        }
+        assertTrue(foundSec0);
+        assertTrue(foundSec1);
     }
 
     @Test

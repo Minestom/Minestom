@@ -4,28 +4,10 @@ import org.jetbrains.annotations.NotNullByDefault;
 
 import java.util.*;
 
+import static net.minestom.server.coordinate.CoordConversion.sectionIndex;
+
 @NotNullByDefault
 final class AreaImpl {
-    private static List<Area.Cuboid> splitIterable(Area area) {
-        int sectionSize = BlockVec.SECTION.blockX();
-        Map<Integer, List<BlockVec>> groups = new HashMap<>();
-        for (BlockVec v : area) {
-            int sx = Math.floorDiv(v.blockX(), sectionSize);
-            groups.computeIfAbsent(sx, k -> new ArrayList<>()).add(v);
-        }
-        List<Area.Cuboid> result = new ArrayList<>();
-        for (List<BlockVec> list : groups.values()) {
-            // Compute bounding cuboid for this section slice
-            int minX = list.stream().mapToInt(BlockVec::blockX).min().getAsInt();
-            int maxX = list.stream().mapToInt(BlockVec::blockX).max().getAsInt();
-            int minY = list.stream().mapToInt(BlockVec::blockY).min().getAsInt();
-            int maxY = list.stream().mapToInt(BlockVec::blockY).max().getAsInt();
-            int minZ = list.stream().mapToInt(BlockVec::blockZ).min().getAsInt();
-            int maxZ = list.stream().mapToInt(BlockVec::blockZ).max().getAsInt();
-            result.add(Area.cuboid(new BlockVec(minX, minY, minZ), new BlockVec(maxX, maxY, maxZ)));
-        }
-        return result;
-    }
 
     record Single(BlockVec point) implements Area.Single {
         public Single {
@@ -138,7 +120,29 @@ final class AreaImpl {
 
         @Override
         public List<Area.Cuboid> split() {
-            return splitIterable(this);
+            // Group actual line blocks by section coordinates
+            int sectionSize = BlockVec.SECTION.blockX();
+            Map<Long, List<BlockVec>> sectionGroups = new HashMap<>();
+
+            for (BlockVec block : this) {
+                int sectionX = Math.floorDiv(block.blockX(), sectionSize);
+                int sectionY = Math.floorDiv(block.blockY(), sectionSize);
+                int sectionZ = Math.floorDiv(block.blockZ(), sectionSize);
+                long sectionKey = sectionIndex(sectionX, sectionY, sectionZ);
+                sectionGroups.computeIfAbsent(sectionKey, k -> new ArrayList<>()).add(block);
+            }
+
+            List<Area.Cuboid> result = new ArrayList<>();
+            for (List<BlockVec> blocks : sectionGroups.values()) {
+                int minX = blocks.stream().mapToInt(BlockVec::blockX).min().getAsInt();
+                int maxX = blocks.stream().mapToInt(BlockVec::blockX).max().getAsInt();
+                int minY = blocks.stream().mapToInt(BlockVec::blockY).min().getAsInt();
+                int maxY = blocks.stream().mapToInt(BlockVec::blockY).max().getAsInt();
+                int minZ = blocks.stream().mapToInt(BlockVec::blockZ).min().getAsInt();
+                int maxZ = blocks.stream().mapToInt(BlockVec::blockZ).max().getAsInt();
+                result.add(Area.cuboid(new BlockVec(minX, minY, minZ), new BlockVec(maxX, maxY, maxZ)));
+            }
+            return result;
         }
     }
 
@@ -146,10 +150,8 @@ final class AreaImpl {
         public Cuboid {
             Objects.requireNonNull(min, "min cannot be null");
             Objects.requireNonNull(max, "max cannot be null");
-            // Preserve original parameters for correct comparison
-            BlockVec origMin = min;
-            BlockVec origMax = max;
-            // Compute sorted bounds
+            final BlockVec origMin = min;
+            final BlockVec origMax = max;
             BlockVec sortedMin = new BlockVec(
                     Math.min(origMin.blockX(), origMax.blockX()),
                     Math.min(origMin.blockY(), origMax.blockY()),
@@ -160,7 +162,6 @@ final class AreaImpl {
                     Math.max(origMin.blockY(), origMax.blockY()),
                     Math.max(origMin.blockZ(), origMax.blockZ())
             );
-            // Assign to record components
             min = sortedMin;
             max = sortedMax;
         }
@@ -204,7 +205,6 @@ final class AreaImpl {
 
         @Override
         public List<Area.Cuboid> split() {
-            // Only extract full 16x16x16 sections fully covered in x,y,z; otherwise no split
             int sectionSize = BlockVec.SECTION.blockX();
             int minSecX = Math.floorDiv(min.blockX(), sectionSize);
             int minSecY = Math.floorDiv(min.blockY(), sectionSize);
@@ -212,25 +212,42 @@ final class AreaImpl {
             int maxSecX = Math.floorDiv(max.blockX(), sectionSize);
             int maxSecY = Math.floorDiv(max.blockY(), sectionSize);
             int maxSecZ = Math.floorDiv(max.blockZ(), sectionSize);
-            List<Area.Cuboid> sections = new ArrayList<>();
+
+            List<Area.Cuboid> result = new ArrayList<>();
+
+            // Split into cuboids per section
             for (int sx = minSecX; sx <= maxSecX; sx++) {
                 for (int sy = minSecY; sy <= maxSecY; sy++) {
                     for (int sz = minSecZ; sz <= maxSecZ; sz++) {
-                        BlockVec secOrigin = BlockVec.SECTION.mul(sx, sy, sz);
-                        BlockVec secEnd = secOrigin.add(sectionSize - 1, sectionSize - 1, sectionSize - 1);
-                        // check full coverage in all axes
-                        if (min.blockX() <= secOrigin.blockX() && max.blockX() >= secEnd.blockX()
-                                && min.blockY() <= secOrigin.blockY() && max.blockY() >= secEnd.blockY()
-                                && min.blockZ() <= secOrigin.blockZ() && max.blockZ() >= secEnd.blockZ()) {
-                            sections.add(Area.cuboid(secOrigin, secEnd));
+                        int sectionMinX = sx * sectionSize;
+                        int sectionMinY = sy * sectionSize;
+                        int sectionMinZ = sz * sectionSize;
+                        int sectionMaxX = sectionMinX + sectionSize - 1;
+                        int sectionMaxY = sectionMinY + sectionSize - 1;
+                        int sectionMaxZ = sectionMinZ + sectionSize - 1;
+
+                        // Calculate intersection with this section
+                        int intersectMinX = Math.max(min.blockX(), sectionMinX);
+                        int intersectMinY = Math.max(min.blockY(), sectionMinY);
+                        int intersectMinZ = Math.max(min.blockZ(), sectionMinZ);
+                        int intersectMaxX = Math.min(max.blockX(), sectionMaxX);
+                        int intersectMaxY = Math.min(max.blockY(), sectionMaxY);
+                        int intersectMaxZ = Math.min(max.blockZ(), sectionMaxZ);
+
+                        // Only add if there's a valid intersection
+                        if (intersectMinX <= intersectMaxX &&
+                                intersectMinY <= intersectMaxY &&
+                                intersectMinZ <= intersectMaxZ) {
+                            result.add(Area.cuboid(
+                                    new BlockVec(intersectMinX, intersectMinY, intersectMinZ),
+                                    new BlockVec(intersectMaxX, intersectMaxY, intersectMaxZ)
+                            ));
                         }
                     }
                 }
             }
-            if (sections.isEmpty()) {
-                return List.of(Area.cuboid(min, max));
-            }
-            return sections;
+
+            return result;
         }
     }
 
@@ -282,7 +299,29 @@ final class AreaImpl {
 
         @Override
         public List<Area.Cuboid> split() {
-            return splitIterable(this);
+            // Group actual sphere blocks by section coordinates
+            int sectionSize = BlockVec.SECTION.blockX();
+            Map<Long, List<BlockVec>> sectionGroups = new HashMap<>();
+
+            for (BlockVec block : this) {
+                int sectionX = Math.floorDiv(block.blockX(), sectionSize);
+                int sectionY = Math.floorDiv(block.blockY(), sectionSize);
+                int sectionZ = Math.floorDiv(block.blockZ(), sectionSize);
+                long sectionKey = sectionIndex(sectionX, sectionY, sectionZ);
+                sectionGroups.computeIfAbsent(sectionKey, k -> new ArrayList<>()).add(block);
+            }
+
+            List<Area.Cuboid> result = new ArrayList<>();
+            for (List<BlockVec> blocks : sectionGroups.values()) {
+                int minX = blocks.stream().mapToInt(BlockVec::blockX).min().getAsInt();
+                int maxX = blocks.stream().mapToInt(BlockVec::blockX).max().getAsInt();
+                int minY = blocks.stream().mapToInt(BlockVec::blockY).min().getAsInt();
+                int maxY = blocks.stream().mapToInt(BlockVec::blockY).max().getAsInt();
+                int minZ = blocks.stream().mapToInt(BlockVec::blockZ).min().getAsInt();
+                int maxZ = blocks.stream().mapToInt(BlockVec::blockZ).max().getAsInt();
+                result.add(Area.cuboid(new BlockVec(minX, minY, minZ), new BlockVec(maxX, maxY, maxZ)));
+            }
+            return result;
         }
     }
 }
