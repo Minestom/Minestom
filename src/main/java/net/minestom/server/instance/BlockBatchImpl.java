@@ -9,7 +9,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NotNullByDefault;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.ArrayList;
@@ -18,12 +19,13 @@ import java.util.Set;
 
 import static net.minestom.server.coordinate.CoordConversion.*;
 
+@NotNullByDefault
 record BlockBatchImpl(
         long flags,
-        Long2ObjectMap<SectionState> sectionStates
+        Long2ObjectMap<@Nullable SectionState> sectionStates
 ) implements BlockBatch {
     @Override
-    public @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+    public @UnknownNullability Block getBlock(int x, int y, int z, Condition condition) {
         final long sectionIndex = sectionIndexGlobal(x, y, z);
         final SectionState sectionState = sectionStates.get(sectionIndex);
         if (sectionState == null) return Block.AIR;
@@ -43,7 +45,7 @@ record BlockBatchImpl(
     }
 
     @Override
-    public void getAll(@NotNull EntryConsumer consumer) {
+    public void getAll(EntryConsumer consumer) {
         for (Long2ObjectMap.Entry<SectionState> entry : sectionStates.long2ObjectEntrySet()) {
             final long sectionIndex = entry.getLongKey();
             final SectionState sectionState = entry.getValue();
@@ -105,7 +107,7 @@ record BlockBatchImpl(
     }
 
     @Override
-    public @NotNull List<BlockBatch> split() {
+    public List<BlockBatch> split() {
         List<BlockBatch> result = new ArrayList<>();
         for (Long2ObjectMap.Entry<SectionState> entry : sectionStates.long2ObjectEntrySet()) {
             final SectionState sectionState = entry.getValue();
@@ -119,7 +121,7 @@ record BlockBatchImpl(
     }
 
     @Override
-    public @NotNull Generator asGenerator() {
+    public Generator asGenerator() {
         LongSet sectionIndices = new LongOpenHashSet(sectionStates.keySet());
         return unit -> {
             synchronized (sectionIndices) {
@@ -187,7 +189,7 @@ record BlockBatchImpl(
         }
 
         @Override
-        public void setBlock(int x, int y, int z, @NotNull Block block) {
+        public void setBlock(int x, int y, int z, Block block) {
             final long sectionIndex = sectionIndexGlobal(x, y, z);
             SectionState sectionState = sectionState(sectionIndex);
             final Palette palette = sectionState.palette;
@@ -212,7 +214,7 @@ record BlockBatchImpl(
         }
 
         @Override
-        public void copyPalette(int sectionX, int sectionY, int sectionZ, @NotNull Palette palette) {
+        public void copyPalette(int sectionX, int sectionY, int sectionZ, Palette palette) {
             final long sectionIndex = sectionIndex(sectionX, sectionY, sectionZ);
             palette = palette.clone();
             if (!aligned()) palette.offset(1);
@@ -224,6 +226,6 @@ record BlockBatchImpl(
         }
     }
 
-    record SectionState(Palette palette, Int2ObjectMap<Block> blockStates) {
+    record SectionState(Palette palette, @UnknownNullability Int2ObjectMap<@Nullable Block> blockStates) {
     }
 }

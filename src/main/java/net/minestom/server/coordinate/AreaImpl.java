@@ -1,9 +1,10 @@
 package net.minestom.server.coordinate;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NotNullByDefault;
 
 import java.util.*;
 
+@NotNullByDefault
 final class AreaImpl {
     private static List<Area.Cuboid> splitIterable(Area area) {
         int sectionSize = BlockVec.SECTION.blockX();
@@ -32,7 +33,7 @@ final class AreaImpl {
         }
 
         @Override
-        public @NotNull Iterator<BlockVec> iterator() {
+        public Iterator<BlockVec> iterator() {
             return new Iterator<>() {
                 private boolean hasNext = true;
 
@@ -63,7 +64,7 @@ final class AreaImpl {
         }
 
         @Override
-        public @NotNull Iterator<BlockVec> iterator() {
+        public Iterator<BlockVec> iterator() {
             return new Iterator<>() {
                 private final int x1 = start.blockX(), y1 = start.blockY(), z1 = start.blockZ();
                 private final int x2 = end.blockX(), y2 = end.blockY(), z2 = end.blockZ();
@@ -165,7 +166,7 @@ final class AreaImpl {
         }
 
         @Override
-        public @NotNull Iterator<BlockVec> iterator() {
+        public Iterator<BlockVec> iterator() {
             final int minX = min.blockX(), minY = min.blockY(), minZ = min.blockZ();
             final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
             return new Iterator<>() {
@@ -240,7 +241,7 @@ final class AreaImpl {
         }
 
         @Override
-        public @NotNull Iterator<BlockVec> iterator() {
+        public Iterator<BlockVec> iterator() {
             final int minX = center.blockX() - radius;
             final int minY = center.blockY() - radius;
             final int minZ = center.blockZ() - radius;
