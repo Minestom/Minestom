@@ -41,7 +41,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public sealed interface ItemStack extends ItemStacks, TagReadable, DataComponent.Holder, HoverEventSource<HoverEvent.ShowItem>
+public sealed interface ItemStack extends TagReadable, DataComponent.Holder, HoverEventSource<HoverEvent.ShowItem>
         permits ItemStackImpl {
 
     @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = ItemStackImpl.networkType(DataComponent.PATCH_NETWORK_TYPE);
@@ -78,6 +78,11 @@ public sealed interface ItemStack extends ItemStacks, TagReadable, DataComponent
             return ENCODER.encodeToMap(coder, value, map);
         }
     };
+
+    /**
+     * Constant AIR item. Should be used instead of 'null'.
+     */
+    @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
     @Contract(value = "_ -> new", pure = true)
     static @NotNull Builder builder(@NotNull Material material) {
