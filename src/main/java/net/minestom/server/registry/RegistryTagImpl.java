@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -50,7 +51,7 @@ final class RegistryTagImpl {
             this(key, Set.of());
         }
 
-        Backed(@NotNull TagKey<T> key, @NotNull Set<RegistryKey<T>> entries) {
+        Backed(@NotNull TagKey<T> key, @NotNull Collection<RegistryKey<T>> entries) {
             this.key = key;
             this.entries = ServerFlag.REGISTRY_FREEZING_TAGS ? Set.copyOf(entries) : new CopyOnWriteArraySet<>(entries);
         }
@@ -90,7 +91,6 @@ final class RegistryTagImpl {
         }
 
         private void invalidate() {
-            if (MinecraftServer.isInitializing()) return;
             MinecraftServer.getConnectionManager().invalidateTags();
         }
     }
@@ -131,18 +131,18 @@ final class RegistryTagImpl {
         }
 
         public boolean add(@NotNull RegistryKey<T> key) {
-            Check.notNull(key, "key");
+            Check.notNull(key, "Registry key cannot be null");
             return entries.add(key);
         }
 
         public boolean remove(@NotNull RegistryKey<T> key) {
-            Check.notNull(key, "key");
+            Check.notNull(key, "Registry key cannot be null");
             return entries.remove(key);
         }
 
         RegistryTag<T> build() {
             if (key != null) {
-                return new Backed<>(key, Set.copyOf(entries));
+                return new Backed<>(key, entries);
             } else if (entries.isEmpty()) {
                 return RegistryTag.empty();
             }  else {

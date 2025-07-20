@@ -17,14 +17,18 @@ import java.util.function.Function;
  *     This way they can be "frozen", which prohibits further modifications to the registry entries.
  * </p>
  * <p>
- *     Note: The detour registry can only be used during the pre-initialization phase of the server.
- *     See {@link MinecraftServer#detourRegistryInit()} for more information.
+ *     Note: The detour registry is only used during the pre-initialization phase of the server.
  * </p>
  */
 public sealed interface DetourRegistry permits DetourRegistryImpl {
-    @ApiStatus.Internal
+    /**
+     * Returns the singleton instance of the {@link DetourRegistry}.
+     * Used to register detours for registry keys and tags.
+     * <p>
+     * @return the singleton instance of the DetourRegistry
+     */
     static @NotNull DetourRegistry detourRegistry() {
-        return new DetourRegistryImpl();
+        return DetourRegistryImpl.INSTANCE;
     }
 
     /**
@@ -42,7 +46,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * @param detour the detour to register
      * @param <T> the type of the registry entry
      */
-    <T> void registerTag(@NotNull TagKey<T> key, @NotNull Detour<RegistryTag.Builder<T>> detour);
+    <T> void register(@NotNull TagKey<T> key, @NotNull Detour<RegistryTag.Builder<T>> detour);
 
     /**
      * Checks if a detour is registered for the given registry key.
@@ -67,8 +71,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * @return the modified value after applying the detour
      * @param <T> the type of the registry entry
      */
-    @ApiStatus.Experimental
-    @Contract(mutates = "param2")
+    @ApiStatus.Internal
     <T> @NotNull T consume(@NotNull RegistryKey<T> key, @NotNull T value);
 
     /**
@@ -76,9 +79,9 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * @param key the registry key to consume the detour for
      * @param <T> the type of the registry entry
      */
-    @ApiStatus.Experimental
+    @ApiStatus.Internal
     @Contract(mutates = "param2")
-    <T> void consumeTag(@NotNull TagKey<T> key, @NotNull RegistryTag.Builder<T> builder);
+    <T> void consume(@NotNull TagKey<T> key, @NotNull RegistryTag.Builder<T> builder);
 
     /**
      * A functional interface representing a detour that can be applied to a value.

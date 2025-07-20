@@ -6,15 +6,17 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @ApiStatus.Internal
 final class DetourRegistryImpl implements DetourRegistry {
+    static final DetourRegistryImpl INSTANCE = new DetourRegistryImpl();
+
     private final Map<Key, Detour<?>> detours;
 
     DetourRegistryImpl() {
-        detours = new ConcurrentHashMap<>();
+        this.detours = new HashMap<>(0);
     }
 
     @Override
@@ -23,8 +25,8 @@ final class DetourRegistryImpl implements DetourRegistry {
     }
 
     @Override
-    public <T> void registerTag(@NotNull TagKey<T> key, @NotNull Detour<RegistryTag.Builder<T>> detour) {
-        this.registerKeyed(key, detour);
+    public <T> void register(@NotNull TagKey<T> tagKey, @NotNull Detour<RegistryTag.Builder<T>> detour) {
+        this.registerKeyed(tagKey, detour);
     }
 
     @Override
@@ -44,7 +46,7 @@ final class DetourRegistryImpl implements DetourRegistry {
     }
 
     @Override
-    public <T> void consumeTag(@NotNull TagKey<T> key, RegistryTag.@NotNull Builder<T> builder) {
+    public <T> void consume(@NotNull TagKey<T> key, RegistryTag.@NotNull Builder<T> builder) {
         this.consumeKeyed(key, builder);
     }
 

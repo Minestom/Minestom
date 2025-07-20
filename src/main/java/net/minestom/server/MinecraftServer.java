@@ -40,7 +40,6 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.net.InetSocketAddress;
@@ -71,7 +70,6 @@ public final class MinecraftServer implements MinecraftConstants {
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
     private static volatile boolean unsealed = false; // This could be moved into ServerProcess as a sentinel. Requires casting.
-    private static volatile DetourRegistry detourRegistry;
 
     private static int compressionThreshold = 256;
     private static String brandName = "Minestom";
@@ -88,9 +86,7 @@ public final class MinecraftServer implements MinecraftConstants {
         serverProcess = null;
         ServerProcess process = new ServerProcessImpl();
         serverProcess = process;
-        // Finalize the detour registry if it has been used
-        Check.stateCondition(detourRegistry != null && detourRegistry.hasDetours(), "Detour registry has not fully been consumed!");
-        detourRegistry = null; // Reset the detour registry after initialization
+        Check.stateCondition(DetourRegistry.detourRegistry().hasDetours(), "There are still detours registered, this is not allowed after the server has been initialized.");
         return process;
     }
 
@@ -348,23 +344,13 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     /**
-     * Initializes the detour registry, used to register detours for built-in registries.
-     * @return the detour registry
-     */
-    public static @NotNull DetourRegistry detourRegistryInit() {
-        Check.stateCondition(hasStartedSafe(), "Cannot use the detour registry after the server has started.");
-        return (detourRegistry = DetourRegistry.detourRegistry());
-    }
-
-    /**
-     * Gets the detour registry, used to register detours for built-in registries. See {@link DetourRegistry}
-     * <p>Requires {@link #detourRegistryInit()}</p>
+     * Gets the detour registry, used to register detours for built-in registries.
+     * A shortcut to {@link DetourRegistry#detourRegistry()}
      *
      * @return the detour registry
-     * @throws IllegalStateException if called after the server has started
      */
-    public static @Nullable DetourRegistry detourRegistry() {
-        return detourRegistry;
+    public static @NotNull DetourRegistry detourRegistry() {
+        return DetourRegistry.detourRegistry();
     }
 
     /**

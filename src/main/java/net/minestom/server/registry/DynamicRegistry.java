@@ -66,28 +66,17 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      */
     @ApiStatus.Internal
     static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key, @Nullable Codec<T> codec, @Nullable Consumer<DynamicRegistry<T>> consumer) {
-        return create(key, codec, consumer, MinecraftServer.detourRegistry());
-    }
-
-    /**
-     * Creates a new empty registry of the given type. Should only be used internally.
-     *
-     * @see Registries
-     */
-    @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key, @Nullable Codec<T> codec, @Nullable Consumer<DynamicRegistry<T>> consumer, @Nullable DetourRegistry detourRegistry) {
         var registry = new DynamicRegistryImpl<>(key, codec);
         if (consumer != null) consumer.accept(registry);
-        if (detourRegistry != null)
-            registry = (DynamicRegistryImpl<T>) detourRegistry.consume(registry.registryKey(), registry);
-        return registry.compact();
+        final DetourRegistry detourRegistry = DetourRegistry.detourRegistry();
+        return ((DynamicRegistryImpl<T>) detourRegistry.consume(registry.registryKey(), registry)).compact();
     }
 
     /**
      * Creates a new empty registry of the given type. Should only be used internally.
      *
      * @see Registries
-     */
+     *      */
     @ApiStatus.Internal
     static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec) {
         return load(key, codec, (Registries) null);
@@ -120,14 +109,12 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      */
     @ApiStatus.Internal
     static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Function<DynamicRegistry<T>, Registries> registryFunction, @Nullable Comparator<RegistryKey<T>> idComparator, @Nullable Codec<T> readCodec) {
-        final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
         return create(key, codec, registry -> DynamicRegistryImpl.loadStaticJsonRegistry(
                 registryFunction != null ? registryFunction.apply(registry) : null, // Gross but self-referential loading nightmare requirement.
                 (DynamicRegistryImpl<T>) registry,
                 idComparator,
-                Objects.requireNonNullElse(readCodec, ((DynamicRegistryImpl<T>) registry).codec()),
-                detourRegistry
-        ), detourRegistry);
+                Objects.requireNonNullElse(readCodec, ((DynamicRegistryImpl<T>) registry).codec())
+        ));
     }
 
     /**

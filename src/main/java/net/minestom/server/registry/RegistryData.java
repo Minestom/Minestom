@@ -23,6 +23,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
+import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -157,27 +158,25 @@ public final class RegistryData {
         var entries = RegistryData.load(String.format("%s.json", registryKey.key().value()), true);
         Map<Key, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
-        final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
+        final DetourRegistry detourRegistry = DetourRegistry.detourRegistry();
         for (var entry : entries.asMap().keySet()) {
             final RegistryKey<T> key = RegistryKey.unsafeOf(entry);
             final Properties properties = entries.section(entry);
             T value = loader.get(key, properties);
-            if (detourRegistry != null) value = detourRegistry.consume(key, value);
+            value = detourRegistry.consume(key, value);
             ids.set(value.id(), value);
             namespaces.put(value.key(), value);
         }
         // Load tags if they exist
-        Map<TagKey<T>, RegistryTag<T>> tags = loadTags(registryKey.key());
+        Map<TagKey<T>, RegistryTag<T>> tags = loadTags(detourRegistry, registryKey.key());
         final Registry<T> staticRegistry = new StaticRegistry<>(registryKey, namespaces, ids, tags);
-        if (detourRegistry != null) detourRegistry.consume(registryKey, staticRegistry);
-        return staticRegistry;
+        return detourRegistry.consume(registryKey, staticRegistry);
     }
 
     @ApiStatus.Internal
-    static <T> @Unmodifiable Map<TagKey<T>, RegistryTag<T>> loadTags(@NotNull Key registryKey) {
+    static <T> @Unmodifiable Map<TagKey<T>, RegistryTag<T>> loadTags(@NotNull DetourRegistry detourRegistry, @NotNull Key registryKey) {
         final var tagJson = RegistryData.load(String.format("tags/%s.json", registryKey.value()), false);
         final Map<TagKey<T>, RegistryTag<T>> tags = new HashMap<>(tagJson.size());
-        final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
         for (String tagName : tagJson.asMap().keySet()) {
             final TagKey<T> tagKey = new TagKeyImpl<>(Key.key(tagName)); // Value excludes hash.
             loadTag(detourRegistry, tags, tagKey, tagJson); // loadTag will add the tag to the map if it doesn't exist
@@ -185,7 +184,7 @@ public final class RegistryData {
         return Map.copyOf(tags);
     }
 
-    private static <T> @NotNull RegistryTag<T> loadTag(@Nullable DetourRegistry detourRegistry, Map<TagKey<T>, RegistryTag<T>> currentTags, TagKey<T> tagKey, Properties main) {
+    private static <T> @NotNull RegistryTag<T> loadTag(@NotNull DetourRegistry detourRegistry, Map<TagKey<T>, RegistryTag<T>> currentTags, TagKey<T> tagKey, Properties main) {
         final RegistryTag<T> registryTag = currentTags.get(tagKey);
         if (registryTag != null) return registryTag;
         // If the tag doesnt exist, we create it
@@ -200,7 +199,7 @@ public final class RegistryData {
                     builder.add(RegistryKey.unsafeOf(tagString));
                 }
             }
-            if (detourRegistry != null) detourRegistry.consumeTag(tagKey, builder);
+            detourRegistry.consume(tagKey, builder);
         });
         currentTags.put(tagKey, computedTag);
         return computedTag;

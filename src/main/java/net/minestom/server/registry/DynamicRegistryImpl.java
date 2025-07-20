@@ -338,15 +338,16 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @Nullable Comparator<RegistryKey<T>> idComparator, @NotNull Codec<T> codec, @Nullable DetourRegistry detourRegistry) {
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @Nullable Comparator<RegistryKey<T>> idComparator, @NotNull Codec<T> codec) {
         try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", registry.key().value()))) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", registry.key().value());
             final JsonElement json = JsonUtil.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8));
             if (!(json instanceof JsonObject root))
                 throw new IllegalStateException("Failed to load registry " + registry.key() + ": expected a JSON object, got " + json);
 
+            final DetourRegistry detourRegistry = DetourRegistry.detourRegistry();
             // Load tags if present, Required here because the transcoder will try and read them while parsing the registry.
-            Map<TagKey<T>, RegistryTag<T>> tags = RegistryData.loadTags(registry.key());
+            Map<TagKey<T>, RegistryTag<T>> tags = RegistryData.loadTags(detourRegistry, registry.key());
             registry.tags.putAll(tags);
 
             final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false) : Transcoder.JSON;
@@ -361,7 +362,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                 final RegistryKey<T> key = RegistryKey.unsafeOf(entry.getKey());
                 final Result<T> valueResult = codec.decode(transcoder, entry.getValue());
                 if (valueResult instanceof Result.Ok(T value)) {
-                    if (detourRegistry != null) value = detourRegistry.consume(key, value);
+                    value = detourRegistry.consume(key, value);
                     registry.register(key, value, DataPack.MINECRAFT_CORE);
                 } else {
                     throw new IllegalStateException("Failed to decode registry entry " + key.name() + " for registry " + registry.key() + ": " + valueResult);
