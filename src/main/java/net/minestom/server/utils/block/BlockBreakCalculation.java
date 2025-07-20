@@ -91,6 +91,16 @@ public class BlockBreakCalculation {
 
         double damage = speedMultiplier / blockHardness;
 
+        // if speed multiplier is 0, the block is unbreakable
+        if (speedMultiplier == 0) {
+            return UNBREAKABLE;
+        }
+
+        // prevent division by zero
+        if (blockHardness == 0) {
+            return 0;
+        }
+
         if (isBestTool) {
             damage /= 30;
         } else {
