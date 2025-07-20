@@ -6,6 +6,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +19,7 @@ public sealed interface DialogInput {
     int DEFAULT_WIDTH = 200;
 
     @NotNull Registry<StructCodec<? extends DialogInput>> REGISTRY = DynamicRegistry.fromMap(
-            Key.key("minecraft:input_control_type"),
+            RegistryKey.unsafeOf("minecraft:input_control_type"),
             Map.entry(Key.key("boolean"), Boolean.CODEC),
             Map.entry(Key.key("number_range"), NumberRange.CODEC),
             Map.entry(Key.key("single_option"), SingleOption.CODEC),

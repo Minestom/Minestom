@@ -1,10 +1,13 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.MinecraftServer;
-import org.jetbrains.annotations.ApiStatus;
+import net.minestom.server.ServerFlag;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -40,14 +43,20 @@ final class RegistryTagImpl {
     /**
      * A tag that is backed by a registry.
      */
-    static final class Backed<T> implements RegistryTag<T> {
+    static final class Backed<T> implements RegistryTag<T>, RegistryTag.Builder<T> {
         private final TagKey<T> key;
-        private final Set<RegistryKey<T>> entries = new CopyOnWriteArraySet<>();
+        private final Set<RegistryKey<T>> entries;
 
         Backed(@NotNull TagKey<T> key) {
-            this.key = key;
+            this(key, Set.of());
         }
 
+        Backed(@NotNull TagKey<T> key, @NotNull Collection<RegistryKey<T>> entries) {
+            this.key = key;
+            this.entries = ServerFlag.REGISTRY_FREEZING_TAGS ? Set.copyOf(entries) : new CopyOnWriteArraySet<>(entries);
+        }
+
+        @Override
         public @NotNull TagKey<T> key() {
             return key;
         }
@@ -67,22 +76,22 @@ final class RegistryTagImpl {
             return entries.iterator();
         }
 
-        @ApiStatus.Internal
-        void add(@NotNull RegistryKey<T> key) {
-            if (entries.add(key))
-                invalidate();
+        @Override
+        public boolean add(@NotNull RegistryKey<T> key) {
+            var added = entries.add(key);
+            if (added) invalidate();
+            return added;
         }
 
-        @ApiStatus.Internal
-        void remove(@NotNull RegistryKey<T> key) {
-            if (entries.remove(key))
-                invalidate();
+        @Override
+        public boolean remove(@NotNull RegistryKey<T> key) {
+            boolean removed = entries.remove(key);
+            if (removed) invalidate();
+            return removed;
         }
 
         private void invalidate() {
-            var process = MinecraftServer.process();
-            if (process == null) return;
-            process.connection().invalidateTags();
+            MinecraftServer.getConnectionManager().invalidateTags();
         }
     }
 
@@ -109,6 +118,36 @@ final class RegistryTagImpl {
         @Override
         public int size() {
             return keys.size();
+        }
+    }
+
+    static final class BuilderImpl<T> implements RegistryTag.Builder<T> {
+        private final TagKey<T> key;
+        private final List<RegistryKey<T>> entries;
+
+        BuilderImpl(@Nullable TagKey<T> key) {
+            this.key = key;
+            this.entries = new ArrayList<>();
+        }
+
+        public boolean add(@NotNull RegistryKey<T> key) {
+            Check.notNull(key, "Registry key cannot be null");
+            return entries.add(key);
+        }
+
+        public boolean remove(@NotNull RegistryKey<T> key) {
+            Check.notNull(key, "Registry key cannot be null");
+            return entries.remove(key);
+        }
+
+        RegistryTag<T> build() {
+            if (key != null) {
+                return new Backed<>(key, entries);
+            } else if (entries.isEmpty()) {
+                return RegistryTag.empty();
+            }  else {
+                return new Direct<T>(entries);
+            }
         }
     }
 

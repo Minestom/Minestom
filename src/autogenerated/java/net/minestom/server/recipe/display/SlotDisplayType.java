@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -38,7 +39,7 @@ public enum SlotDisplayType implements StaticProtocolObject<SlotDisplayType> {
 
     private final Key key;
 
-    SlotDisplayType(@NotNull String key) {
+    SlotDisplayType(@NotNull @KeyPattern String key) {
         this.key = Key.key(key);
     }
 

@@ -1,9 +1,12 @@
 package net.minestom.server.registry;
 
+import net.kyori.adventure.key.Keyed;
+import net.minestom.server.FeatureFlag;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.dialog.Dialog;
-import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.VillagerProfession;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -15,6 +18,7 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.game.GameEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.instance.fluid.Fluid;
@@ -28,10 +32,20 @@ import net.minestom.server.item.enchant.LocationEffect;
 import net.minestom.server.item.enchant.ValueEffect;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.PotionType;
+import net.minestom.server.recipe.RecipeType;
+import net.minestom.server.recipe.display.RecipeDisplayType;
+import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.statistic.StatisticType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * <p>Provides access to all the dynamic registries. {@link net.minestom.server.ServerProcess} is the most relevant
@@ -66,6 +80,38 @@ public interface Registries {
 
     default @NotNull Registry<GameEvent> gameEvent() {
         return GameEvent.staticRegistry();
+    }
+
+    default @NotNull Registry<PotionType> potionType() {
+        return PotionType.staticRegistry();
+    }
+
+    default @NotNull Registry<? extends SoundEvent> soundEvent() {
+        return SoundEvent.staticRegistry();
+    }
+
+    default @NotNull Registry<Attribute> attribute() {
+        return Attribute.staticRegistry();
+    }
+
+    default @NotNull Registry<FeatureFlag> featureFlag() {
+        return FeatureFlag.staticRegistry();
+    }
+
+    default @NotNull Registry<VillagerProfession> villagerProfession() {
+        return VillagerProfession.staticRegistry();
+    }
+
+    default @NotNull Registry<BlockSoundType> blockSoundType() {
+        return BlockSoundType.staticRegistry();
+    }
+
+    default @NotNull Registry<Particle> particle() {
+        return Particle.staticRegistry();
+    }
+
+    default @NotNull Registry<StatisticType> statisticType() {
+        return StatisticType.staticRegistry();
     }
 
     // Dynamic registries
@@ -118,6 +164,27 @@ public interface Registries {
 
     @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects();
 
+    // The following are used as collections of registries.
+    @SuppressWarnings("unchecked")
+    default @Unmodifiable @NotNull Collection<Registry<? extends StaticProtocolObject<?>>> staticRegistries() {
+        return List.of(
+                blocks(),
+                material(),
+                potionEffect(),
+                entityType(),
+                fluid(),
+                gameEvent(),
+                potionType(),
+                (Registry<? extends StaticProtocolObject<?>>) soundEvent(), // BuiltinSoundEvent is a StaticProtocolObject
+                attribute(),
+                featureFlag(),
+                villagerProfession(),
+                blockSoundType(),
+                particle(),
+                statisticType()
+        );
+    }
+
     @FunctionalInterface
     interface Selector<T> {
         @NotNull Registry<T> select(@NotNull Registries registries);
@@ -158,6 +225,46 @@ public interface Registries {
         @Override
         public @NotNull Registry<GameEvent> gameEvent() {
             return delegate.gameEvent();
+        }
+
+        @Override
+        public @NotNull Registry<PotionType> potionType() {
+            return delegate.potionType();
+        }
+
+        @Override
+        public @NotNull Registry<? extends SoundEvent> soundEvent() {
+            return delegate.soundEvent();
+        }
+
+        @Override
+        public @NotNull Registry<Attribute> attribute() {
+            return delegate.attribute();
+        }
+
+        @Override
+        public @NotNull Registry<FeatureFlag> featureFlag() {
+            return delegate.featureFlag();
+        }
+
+        @Override
+        public @NotNull Registry<VillagerProfession> villagerProfession() {
+            return delegate.villagerProfession();
+        }
+
+        @Override
+        public @NotNull Registry<BlockSoundType> blockSoundType() {
+            return delegate.blockSoundType();
+        }
+
+        @Override
+        public @NotNull Registry<Particle> particle() {
+            return delegate.particle();
+        }
+
+        @Override
+        public @NotNull Registry<StatisticType> statisticType() {
+            return delegate.statisticType();
         }
 
         @Override

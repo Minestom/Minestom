@@ -123,6 +123,8 @@ final class ServerProcessImpl implements ServerProcess {
 
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
         var ignoredForInit = DataComponents.ITEM_NAME;
+        // Force load all static registries to ensure they are loaded before we return.
+        var ignoredForInit2 = staticRegistries();
 
         this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
