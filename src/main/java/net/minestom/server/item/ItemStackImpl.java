@@ -48,7 +48,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     static ItemStack create(Material material, int amount, DataComponentMap components) {
-        if (amount <= 0) return AIR;
+        if (amount <= 0 || material == Material.AIR) return AIR;
         return new ItemStackImpl(material, amount, components);
     }
 
