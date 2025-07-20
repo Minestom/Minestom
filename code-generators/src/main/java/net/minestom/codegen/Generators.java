@@ -37,8 +37,6 @@ public final class Generators {
                 resource("villager_types.json"), outputFolder).generate();
         new WorldEventGenerator("net.minestom.server.worldevent", "WorldEvent",
                 resource("world_events.json"), outputFolder).generate();
-        new ItemStackGenerator(resource("item.json"), "net.minestom.server.item", "ItemStacks",
-                outputFolder).generate();
 
         var generator = new RegistryGenerator(outputFolder);
 
