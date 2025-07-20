@@ -75,7 +75,7 @@ public class EntityBoundingBoxIntegrationTest {
     }
 
     private void dropItem(final Instance instance, final Pos position) {
-        final var entity = new ItemEntity(ItemStack.STONE);
+        final var entity = new ItemEntity(ItemStack.of(Material.STONE));
         entity.hasPhysics = false;
         entity.setNoGravity(true);
         entity.setInstance(instance, position).join();

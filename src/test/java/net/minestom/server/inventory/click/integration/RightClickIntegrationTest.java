@@ -29,8 +29,8 @@ public class RightClickIntegrationTest {
         var player = env.createPlayer(instance, new Pos(0, 40, 0));
         var inventory = player.getInventory();
         var listener = env.listen(InventoryPreClickEvent.class);
-        inventory.setItemStack(1, ItemStack.DIAMOND);
-        inventory.setItemStack(2, ItemStack.DIAMOND);
+        inventory.setItemStack(1, ItemStack.of(Material.DIAMOND));
+        inventory.setItemStack(2, ItemStack.of(Material.DIAMOND));
         // Empty click
         {
             listener.followup(event -> {
@@ -45,40 +45,40 @@ public class RightClickIntegrationTest {
             listener.followup(event -> {
                 assertEquals(new Click.Right(1), event.getClick());
                 assertEquals(ItemStack.AIR, inventory.getCursorItem());
-                assertEquals(ItemStack.DIAMOND, inventory.getItemStack(1));
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
             });
             rightClick(player, 1);
-            assertEquals(ItemStack.DIAMOND, inventory.getCursorItem());
+            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
             assertEquals(ItemStack.AIR, inventory.getItemStack(1));
         }
         // Place it back
         {
             listener.followup(event -> {
                 assertEquals(new Click.Right(1), event.getClick());
-                assertEquals(ItemStack.DIAMOND, inventory.getCursorItem());
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
                 assertEquals(ItemStack.AIR, inventory.getItemStack(1));
             });
             rightClick(player, 1);
             assertEquals(ItemStack.AIR, inventory.getCursorItem());
-            assertEquals(ItemStack.DIAMOND, inventory.getItemStack(1));
+            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
         }
         // Pickup diamond
         {
             listener.followup(event -> {
                 assertEquals(new Click.Right(1), event.getClick());
                 assertEquals(ItemStack.AIR, inventory.getCursorItem());
-                assertEquals(ItemStack.DIAMOND, inventory.getItemStack(1));
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
             });
             rightClick(player, 1);
-            assertEquals(ItemStack.DIAMOND, inventory.getCursorItem());
+            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
             assertEquals(ItemStack.AIR, inventory.getItemStack(1));
         }
         // Stack diamond
         {
             listener.followup(event -> {
                 assertEquals(new Click.Right(2), event.getClick());
-                assertEquals(ItemStack.DIAMOND, inventory.getCursorItem());
-                assertEquals(ItemStack.DIAMOND, inventory.getItemStack(2));
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(2));
             });
             rightClick(player, 2);
             assertEquals(ItemStack.AIR, inventory.getCursorItem());
@@ -97,7 +97,7 @@ public class RightClickIntegrationTest {
                 Click.Right right = assertInstanceOf(Click.Right.class, event.getClick());
 
                 inventory.setItemStack(right.slot(), ItemStack.of(Material.DIAMOND, 5));
-                inventory.setCursorItem(ItemStack.DIAMOND);
+                inventory.setCursorItem(ItemStack.of(Material.DIAMOND));
             });
             rightClick(player, 1);
             assertEquals(ItemStack.AIR, inventory.getCursorItem());
@@ -112,7 +112,7 @@ public class RightClickIntegrationTest {
         var inventory = new Inventory(InventoryType.HOPPER, "test");
         player.openInventory(inventory);
         var listener = env.listen(InventoryPreClickEvent.class);
-        inventory.setItemStack(1, ItemStack.DIAMOND);
+        inventory.setItemStack(1, ItemStack.of(Material.DIAMOND));
         // Empty click in player inv
         {
             listener.followup(event -> {
@@ -128,10 +128,10 @@ public class RightClickIntegrationTest {
                 assertEquals(inventory, event.getInventory());
                 assertEquals(new Click.Right(1), event.getClick());
                 assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
-                assertEquals(ItemStack.DIAMOND, inventory.getItemStack(1));
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
             });
             rightClickOpenInventory(player, 1);
-            assertEquals(ItemStack.DIAMOND, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.of(Material.DIAMOND), player.getInventory().getCursorItem());
             assertEquals(ItemStack.AIR, inventory.getItemStack(1));
         }
         // Place back to player inv
@@ -139,19 +139,19 @@ public class RightClickIntegrationTest {
             listener.followup(event -> {
                 assertEquals(player.getInventory(), event.getInventory());
                 assertEquals(new Click.Right(1), event.getClick());
-                assertEquals(ItemStack.DIAMOND, player.getInventory().getCursorItem());
+                assertEquals(ItemStack.of(Material.DIAMOND), player.getInventory().getCursorItem());
                 assertEquals(ItemStack.AIR, inventory.getItemStack(1));
                 assertEquals(ItemStack.AIR, player.getInventory().getItemStack(1));
             });
             rightClick(player, 1);
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
-            assertEquals(ItemStack.DIAMOND, player.getInventory().getItemStack(1));
+            assertEquals(ItemStack.of(Material.DIAMOND), player.getInventory().getItemStack(1));
         }
         // Cancel event
         {
             listener.followup(event -> event.setCancelled(true));
             rightClick(player, 1);
-            assertEquals(ItemStack.DIAMOND, player.getInventory().getItemStack(1), "Left click cancellation did not work");
+            assertEquals(ItemStack.of(Material.DIAMOND), player.getInventory().getItemStack(1), "Left click cancellation did not work");
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
         }
         // Change items
@@ -163,7 +163,7 @@ public class RightClickIntegrationTest {
                 Click.Right right = assertInstanceOf(Click.Right.class, event.getClick());
 
                 event.getInventory().setItemStack(right.slot(), ItemStack.of(Material.DIAMOND, 5));
-                player.getInventory().setCursorItem(ItemStack.DIAMOND);
+                player.getInventory().setCursorItem(ItemStack.of(Material.DIAMOND));
             });
             rightClick(player, 9);
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());

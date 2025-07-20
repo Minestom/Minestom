@@ -163,10 +163,10 @@ public class ArgumentTypeTest {
     public void testArgumentItemStack() {
         var arg = ArgumentType.ItemStack("item_stack");
         assertArg(arg, ItemStack.AIR, "air");
-        assertArg(arg, ItemStack.GLASS_PANE.withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
-        assertArg(arg, ItemStack.GLASS_PANE.with(DataComponents.REPAIR_COST, 5), "glass_pane[repair_cost=5]");
-        assertArg(arg, ItemStack.GLASS_PANE.with(DataComponents.REPAIR_COST, 5).withTag(Tag.String("tag"), "value"), "glass_pane[repair_cost=5]{tag:value}");
-        assertArg(arg, ItemStack.GLASS_PANE.with(DataComponents.REPAIR_COST, 5).with(DataComponents.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5), "glass_pane[repair_cost=5]");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).withTag(Tag.String("tag"), "value"), "glass_pane[repair_cost=5]{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).with(DataComponents.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
                 "glass_pane[repair_cost=5,minecraft:custom_data={hi:232}]{tag:value}");
     }
 

@@ -216,13 +216,13 @@ public class EventNodeTest {
 
         var listener = EventListener.of(ItemTestEvent.class, event -> fail("The event should not be called"));
         node.addListener(listener);
-        node.call(new ItemTestEvent(ItemStack.GOLD_BLOCK));
+        node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_BLOCK)));
         assertFalse(childResult.get());
 
         node.removeListener(listener);
         listener = EventListener.of(ItemTestEvent.class, event -> result.set(true));
         node.addListener(listener);
-        node.call(new ItemTestEvent(ItemStack.DIAMOND));
+        node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
         assertTrue(result.get(), "The event should be called");
         assertTrue(childResult.get(), "The child event should be called");
     }
@@ -236,16 +236,16 @@ public class EventNodeTest {
                 .map(ItemTestEvent.class, (itemStack, itemTestEvent) -> result.set(true))
                 .build();
         node.register(binding);
-        node.call(new ItemTestEvent(ItemStack.GOLD_BLOCK));
+        node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_BLOCK)));
         assertFalse(result.get());
 
         result.set(false);
-        node.call(new ItemTestEvent(ItemStack.DIAMOND));
+        node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
         assertTrue(result.get());
 
         result.set(false);
         node.unregister(binding);
-        node.call(new ItemTestEvent(ItemStack.DIAMOND));
+        node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
         assertFalse(result.get());
     }
 

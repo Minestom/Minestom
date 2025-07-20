@@ -145,7 +145,7 @@ public class PlayerInit {
                 inventory.addItemStack(getFoodItem(20));
                 inventory.addItemStack(getFoodItem(10000));
                 inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
-                inventory.addItemStack(ItemStack.PURPLE_BED);
+                inventory.addItemStack(ItemStack.of(Material.PURPLE_BED));
 
                 if (event.isFirstSpawn()) {
                     event.getPlayer().sendNotification(new Notification(
@@ -158,7 +158,7 @@ public class PlayerInit {
 
                     var happyGhast = new LivingEntity(EntityType.HAPPY_GHAST);
                     happyGhast.setNoGravity(true);
-                    happyGhast.setBodyEquipment(ItemStack.GREEN_HARNESS);
+                    happyGhast.setBodyEquipment(ItemStack.of(Material.GREEN_HARNESS));
                     happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
 
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
@@ -308,7 +308,7 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 final ItemStack itemStack = event.getItemStack();
                 if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
-                    player.setItemInHand(event.getHand(), itemStack.with(DataComponents.CHARGED_PROJECTILES, List.of(ItemStack.ARROW)));
+                    player.setItemInHand(event.getHand(), itemStack.with(DataComponents.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
                     return;
                 }
             })

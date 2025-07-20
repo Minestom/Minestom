@@ -47,7 +47,7 @@ public class BlockPredicateTest {
 
         @Test
         public void testEmptySource() {
-            var itemNbt = ItemStack.STONE.toItemNBT();
+            var itemNbt = ItemStack.of(Material.STONE).toItemNBT();
             var predicate = new BlockPredicate(CompoundBinaryTag.builder()
                     .putString("LootTable", "minecraft:test")
                     .put("item", itemNbt)
@@ -61,8 +61,8 @@ public class BlockPredicateTest {
 
         @Test
         public void testNoMatchDeep() {
-            var itemNbt1 = ItemStack.STONE.toItemNBT();
-            var itemNbt2 = ItemStack.STONE.withAmount(2).toItemNBT();
+            var itemNbt1 = ItemStack.of(Material.STONE).toItemNBT();
+            var itemNbt2 = ItemStack.of(Material.STONE).withAmount(2).toItemNBT();
             var predicate = new BlockPredicate(CompoundBinaryTag.builder()
                     .putString("LootTable", "minecraft:test")
                     .put("item", itemNbt1)

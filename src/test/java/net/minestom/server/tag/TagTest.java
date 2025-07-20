@@ -108,7 +108,7 @@ public class TagTest {
 
     @Test
     public void item() {
-        var item = ItemStack.DIAMOND;
+        var item = ItemStack.of(Material.DIAMOND);
         var tag = Tag.ItemStack("item");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, item);

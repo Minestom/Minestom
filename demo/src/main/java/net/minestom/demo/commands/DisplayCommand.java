@@ -42,7 +42,7 @@ public class DisplayCommand extends Command {
         var entity = new Entity(EntityType.ITEM_DISPLAY);
         var meta = (ItemDisplayMeta) entity.getEntityMeta();
         meta.setTransformationInterpolationDuration(20);
-        meta.setItemStack(ItemStack.STICK);
+        meta.setItemStack(ItemStack.of(Material.STICK));
         entity.setInstance(player.getInstance(), player.getPosition());
 
         if (context.has("follow")) {
