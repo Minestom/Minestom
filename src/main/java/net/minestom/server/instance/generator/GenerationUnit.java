@@ -77,8 +77,8 @@ public interface GenerationUnit {
      */
     default @NotNull Set<Vec> sections() {
         final Point start = absoluteStart(), end = absoluteEnd();
-        final int minX = start.chunkX(), minY = start.section(), minZ = start.chunkZ();
-        final int maxX = end.chunkX(), maxY = end.section(), maxZ = end.chunkZ();
+        final int minX = start.sectionX(), minY = start.sectionY(), minZ = start.sectionZ();
+        final int maxX = end.sectionX(), maxY = end.sectionY(), maxZ = end.sectionZ();
         final int count = (maxX - minX) * (maxY - minY) * (maxZ - minZ);
         Vec[] sections = new Vec[count];
         int index = 0;

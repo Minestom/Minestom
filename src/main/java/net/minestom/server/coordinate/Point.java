@@ -71,18 +71,37 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     }
 
     @Contract(pure = true)
-    default int chunkX() {
+    default int sectionX() {
         return globalToChunk(x());
     }
 
     @Contract(pure = true)
-    default int section() {
+    default int sectionY() {
         return globalToChunk(y());
     }
 
     @Contract(pure = true)
-    default int chunkZ() {
+    default int sectionZ() {
         return globalToChunk(z());
+    }
+
+    @Contract(pure = true)
+    default int chunkX() {
+        return sectionX();
+    }
+
+    @Contract(pure = true)
+    default int chunkZ() {
+        return sectionZ();
+    }
+
+    /**
+     * @deprecated use {@link #sectionY()} instead.
+     */
+    @Deprecated
+    @Contract(pure = true)
+    default int section() {
+        return sectionY();
     }
 
     /**
