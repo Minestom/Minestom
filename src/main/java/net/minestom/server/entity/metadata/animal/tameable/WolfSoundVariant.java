@@ -32,7 +32,7 @@ public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfS
      */
     @ApiStatus.Internal
     static DynamicRegistry<WolfSoundVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:wolf_sound_variant"), REGISTRY_CODEC, RegistryData.Resource.WOLF_SOUND_VARIANTS);
+        return DynamicRegistry.create(Key.key("wolf_sound_variant"), REGISTRY_CODEC, RegistryData.Resource.WOLF_SOUND_VARIANTS);
     }
 
     static @NotNull WolfSoundVariant create(

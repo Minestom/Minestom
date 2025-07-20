@@ -31,7 +31,7 @@ public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<CowVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:cow_variant"), REGISTRY_CODEC, RegistryData.Resource.COW_VARIANTS);
+        return DynamicRegistry.create(Key.key("cow_variant"), REGISTRY_CODEC, RegistryData.Resource.COW_VARIANTS);
     }
 
     @NotNull Model model();
