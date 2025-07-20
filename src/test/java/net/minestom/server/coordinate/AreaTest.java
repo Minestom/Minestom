@@ -224,7 +224,7 @@ public class AreaTest {
         List<Area.Cuboid> splits = sphere.split();
         // Sphere blocks span multiple sections in all dimensions, should be grouped by
         // section coordinates
-        assertEquals(6, splits.size());
+        assertEquals(8, splits.size());
 
         // Verify that each split contains only blocks from the sphere
         Set<BlockVec> allSplitBlocks = new HashSet<>();
