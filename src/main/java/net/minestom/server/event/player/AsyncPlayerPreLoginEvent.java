@@ -1,6 +1,5 @@
 package net.minestom.server.event.player;
 
-import net.minestom.server.event.Event;
 import net.minestom.server.event.trait.AsyncEvent;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
@@ -15,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
  * Called before the player initialization, it can be used to kick the player before any connection
  * or to change his final username/uuid.
  */
-public class AsyncPlayerPreLoginEvent implements Event, AsyncEvent {
+public class AsyncPlayerPreLoginEvent implements AsyncEvent {
 
     private final PlayerConnection connection;
     private GameProfile gameProfile;
