@@ -93,9 +93,8 @@ public record TrackedWaypointPacket(
             public static final NetworkBuffer.Type<Type> NETWORK_TYPE = NetworkBuffer.Enum(Type.class);
         }
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        private static NetworkBuffer.Type<Target> dataSerializer(@NotNull Type type) {
-            return (NetworkBuffer.Type) switch (type) {
+        private static NetworkBuffer.Type<? extends Target> dataSerializer(@NotNull Type type) {
+            return switch (type) {
                 case EMPTY -> Empty.NETWORK_TYPE;
                 case VEC3I -> Vec3i.NETWORK_TYPE;
                 case CHUNK -> Chunk.NETWORK_TYPE;

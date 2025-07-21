@@ -146,9 +146,8 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
         return this;
     }
 
-    private static NetworkBuffer.Type<SlotDisplay> dataSerializer(@NotNull SlotDisplayType type) {
-        //noinspection unchecked
-        return (NetworkBuffer.Type<SlotDisplay>) switch (type) {
+    private static NetworkBuffer.Type<? extends SlotDisplay> dataSerializer(@NotNull SlotDisplayType type) {
+        return switch (type) {
             case EMPTY -> Empty.NETWORK_TYPE;
             case ANY_FUEL -> AnyFuel.NETWORK_TYPE;
             case ITEM -> Item.NETWORK_TYPE;
