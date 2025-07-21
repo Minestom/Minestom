@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
@@ -62,7 +63,7 @@ public final class HandshakeListener {
 
         if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
             // Incorrect client version
-            disconnect(connection, INVALID_VERSION_TEXT);
+            connection.kick(INVALID_VERSION_TEXT);
         }
 
         if (packet.intent() == ClientHandshakePacket.Intent.TRANSFER) {
