@@ -2,6 +2,7 @@ package net.minestom.server.event;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.event.trait.AsyncEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
@@ -343,6 +344,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         @Override
         public void call(@NotNull E event) {
+            assert !(event instanceof AsyncEvent) || Thread.currentThread().isVirtual() :
+                    "AsyncEvent must be called within a Virtual Thread, got " + Thread.currentThread();
             final Consumer<E> listener = updatedListener();
             if (listener == null) return;
             try {
