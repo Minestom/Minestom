@@ -1768,22 +1768,18 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * It closes the player inventory (when opened) if {@link #getOpenInventory()} returns null.
      */
     public void closeInventory() {
-        closeInventory(false);
+        AbstractInventory open = getOpenInventory();
+        byte id = (open == null ? getInventory() : open).getWindowId();
+
+        closeInventory(false, id);
     }
 
     @ApiStatus.Internal
-    public void closeInventory(boolean fromClient) {
-        AbstractInventory openInventory = getOpenInventory();
+    public void closeInventory(boolean fromClient, byte windowId) {
+        AbstractInventory openInventory = windowId == 0 ? getInventory() : getOpenInventory();
 
-        // If there's no inventory, if it's from the client it means they're
-        // closing the player inventory. If it's not, nothing should happen.
-        if (openInventory == null) {
-            if (fromClient) {
-                openInventory = getInventory();
-            } else {
-                return;
-            }
-        }
+        // Nothing happens if it has the wrong ID or if there's no inventory
+        if (openInventory == null || windowId != openInventory.getWindowId()) return;
 
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(openInventory, this, fromClient);
         EventDispatcher.call(inventoryCloseEvent);
