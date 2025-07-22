@@ -517,12 +517,12 @@ public class GeneratorTest {
         Point end = unit.absoluteEnd();
 
         // Calculate expected section bounds
-        int expectedMinX = start.chunkX();
-        int expectedMinY = start.section();
-        int expectedMinZ = start.chunkZ();
-        int expectedMaxX = end.chunkX();
-        int expectedMaxY = end.section();
-        int expectedMaxZ = end.chunkZ();
+        int expectedMinX = start.sectionX();
+        int expectedMinY = start.sectionY();
+        int expectedMinZ = start.sectionZ();
+        int expectedMaxX = end.sectionX();
+        int expectedMaxY = end.sectionY();
+        int expectedMaxZ = end.sectionZ();
 
         // Verify all sections are within the expected bounds
         for (Point section : sections) {

@@ -35,7 +35,7 @@ public sealed interface ChatType extends Holder.Direct<ChatType>, ChatTypes perm
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:chat_type"), REGISTRY_CODEC, RegistryData.Resource.CHAT_TYPES);
+        return DynamicRegistry.create(Key.key("chat_type"), REGISTRY_CODEC, RegistryData.Resource.CHAT_TYPES);
     }
 
     @NotNull ChatTypeDecoration chat();

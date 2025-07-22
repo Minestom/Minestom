@@ -14,7 +14,7 @@ import java.util.Map;
 
 public sealed interface DialogBody {
     @NotNull Registry<StructCodec<? extends DialogBody>> REGISTRY = DynamicRegistry.fromMap(
-            Key.key("minecraft:dialog_body_type"),
+            Key.key("dialog_body_type"),
             Map.entry(Key.key("item"), Item.CODEC),
             Map.entry(Key.key("plain_message"), PlainMessage.CODEC));
     @NotNull StructCodec<DialogBody> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogBody::codec, "type");

@@ -63,9 +63,9 @@ public final class GeneratorImpl {
         for (int i = 0; i < sectionCount; i++) {
             GenSection section = areaSections[i];
             final Vec point = to3D(i, width, height, depth);
-            final int sectionX = (int) point.x() + start.chunkX();
-            final int sectionY = (int) point.y() + start.section();
-            final int sectionZ = (int) point.z() + start.chunkZ();
+            final int sectionX = (int) point.x() + start.sectionX();
+            final int sectionY = (int) point.y() + start.sectionY();
+            final int sectionZ = (int) point.z() + start.sectionZ();
             final GenerationUnit sectionUnit = section(biomeRegistry, section, sectionX, sectionY, sectionZ);
             sectionsArray[i] = sectionUnit;
         }
@@ -105,9 +105,9 @@ public final class GeneratorImpl {
         public void setBlock(int x, int y, int z, @NotNull Block block) {
             resize(x, y, z);
             GenerationUnit section = findAbsolute(sections, minSection, width, height, depth, x, y, z);
-            assert section.absoluteStart().chunkX() == globalToChunk(x) &&
-                    section.absoluteStart().section() == globalToChunk(y) &&
-                    section.absoluteStart().chunkZ() == globalToChunk(z) :
+            assert section.absoluteStart().sectionX() == globalToChunk(x) &&
+                    section.absoluteStart().sectionY() == globalToChunk(y) &&
+                    section.absoluteStart().sectionZ() == globalToChunk(z) :
                     "Invalid section " + section.absoluteStart() + " for " + x + ", " + y + ", " + z;
             section.modifier().setBlock(x, y, z, block);
         }
@@ -146,9 +146,9 @@ public final class GeneratorImpl {
                     newSections[index] = s;
                 }
                 // Fill new sections
-                final int startX = newMin.chunkX();
-                final int startY = newMin.section();
-                final int startZ = newMin.chunkZ();
+                final int startX = newMin.sectionX();
+                final int startY = newMin.sectionY();
+                final int startZ = newMin.sectionZ();
                 for (int i = 0; i < newSections.length; i++) {
                     if (newSections[i] == null) {
                         final Vec coordinates = to3D(i, newWidth, newHeight, newDepth);
