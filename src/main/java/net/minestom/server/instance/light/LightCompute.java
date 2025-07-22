@@ -19,11 +19,19 @@ public final class LightCompute {
     static final int LIGHT_LENGTH = SECTION_BLOCK_COUNT / 2;
     static final int SECTION_SIZE = 16;
 
+    public static final byte[] UNSET_CONTENT = new byte[0];
     public static final byte[] EMPTY_CONTENT = new byte[LIGHT_LENGTH];
     public static final byte[] CONTENT_FULLY_LIT = new byte[LIGHT_LENGTH];
 
     static {
         Arrays.fill(CONTENT_FULLY_LIT, (byte) -1);
+    }
+
+    static byte[] lazyArray(byte[] content) {
+        if (content == null || content.length == 0) return EMPTY_CONTENT;
+        else if (Arrays.equals(content, EMPTY_CONTENT)) return EMPTY_CONTENT;
+        else if (Arrays.equals(content, CONTENT_FULLY_LIT)) return CONTENT_FULLY_LIT;
+        else return content.clone();
     }
 
     /**

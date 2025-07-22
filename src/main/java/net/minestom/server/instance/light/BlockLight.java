@@ -131,7 +131,7 @@ final class BlockLight implements Light {
     @Override
     @ApiStatus.Internal
     public void set(byte[] copyArray) {
-        this.content = copyArray.clone();
+        this.content = lazyArray(copyArray);
         this.contentPropagation = this.content;
         this.isValidBorders = true;
         this.needsSend.set(true);
@@ -144,10 +144,10 @@ final class BlockLight implements Light {
 
     @Override
     public byte[] array() {
-        if (content == null) return new byte[0];
+        if (content == null) return UNSET_CONTENT;
         if (contentPropagation == null) return content;
         var res = LightCompute.bake(contentPropagation, content);
-        if (res == EMPTY_CONTENT) return new byte[0];
+        if (res == EMPTY_CONTENT) return UNSET_CONTENT;
         return res;
     }
 
