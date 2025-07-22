@@ -7,6 +7,8 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.coordinate.CoordConversion.globalToChunk;
+import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
@@ -58,14 +60,34 @@ public abstract class Heightmap {
     }
 
     public void refresh(int x, int z, int startY) {
-        int y = startY;
-        while (y > minHeight) {
-            Block block = chunk.getBlock(x, y, z, Block.Getter.Condition.TYPE);
-            if (block == null) continue;
-            if (checkBlock(block)) break;
-            y--;
+        final int localX = globalToSectionRelative(x);
+        final int localZ = globalToSectionRelative(z);
+
+        int foundHeight = minHeight;
+        int currentY = startY;
+        while (currentY > minHeight) {
+            final int sectionY = globalToChunk(currentY);
+            if (sectionY < chunk.getMinSection() || sectionY >= chunk.getMaxSection()) {
+                currentY = (sectionY << 4) - 1; // Move to the bottom of the previous section
+                continue;
+            }
+
+            final Palette blockPalette = chunk.getSection(sectionY).blockPalette();
+            final int localHeight = blockPalette.height(localX, localZ, (px, py, pz, value) -> {
+                if (value == 0) return false;
+                final Block block = Block.fromStateId(value);
+                return block != null && checkBlock(block);
+            });
+            if (localHeight >= 0) {
+                // Found a matching block, convert local Y back to world Y
+                foundHeight = (sectionY << 4) + localHeight;
+                break;
+            }
+
+            // No matching block found in this section, move to the section below
+            currentY = (sectionY << 4) - 1;
         }
-        setHeightY(x, z, y);
+        setHeightY(x, z, foundHeight);
     }
 
     public long[] getNBT() {
@@ -117,9 +139,13 @@ public abstract class Heightmap {
     /**
      * Creates compressed longs array from uncompressed heights array.
      *
-     * @param heights      array of heights. Note that for this method it doesn't matter what size this array will be.
-     *                     But to get correct heights, array must be 256 elements long, and at index `i` must be height of (z=i/16, x=i%16).
-     * @param bitsPerEntry bits that each entry from height will take in `long` container.
+     * @param heights      array of heights. Note that for this method it doesn't
+     *                     matter what size this array will be.
+     *                     But to get correct heights, array must be 256 elements
+     *                     long, and at index `i` must be height of (z=i/16,
+     *                     x=i%16).
+     * @param bitsPerEntry bits that each entry from height will take in `long`
+     *                     container.
      * @return array of encoded heights.
      */
     static long[] encode(short[] heights, int bitsPerEntry) {

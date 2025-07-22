@@ -86,6 +86,29 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public int height(int x, int z, @NotNull EntryPredicate predicate) {
+        validateCoord(dimension, x, 0, z);
+        final int dimension = this.dimension;
+        final int startY = dimension - 1;
+        if (bitsPerEntry == 0) return predicate.get(x, startY, z, count) ? startY : -1;
+        final long[] values = this.values;
+        final int bitsPerEntry = this.bitsPerEntry;
+        final int valuesPerLong = 64 / bitsPerEntry;
+        final int mask = (1 << bitsPerEntry) - 1;
+        final int[] paletteIds = hasPalette() ? paletteToValueList.elements() : null;
+        for (int y = startY; y >= 0; y--) {
+            final int index = sectionIndex(dimension, x, y, z);
+            final int longIndex = index / valuesPerLong;
+            final int bitIndex = (index % valuesPerLong) * bitsPerEntry;
+            final int paletteIndex = (int) (values[longIndex] >> bitIndex) & mask;
+            final int value = paletteIds != null && paletteIndex < paletteIds.length ? paletteIds[paletteIndex]
+                    : paletteIndex;
+            if (predicate.get(x, y, z, value)) return y;
+        }
+        return -1;
+    }
+
+    @Override
     public void set(int x, int y, int z, int value) {
         validateCoord(dimension, x, y, z);
         value = valueToPaletteIndex(value);

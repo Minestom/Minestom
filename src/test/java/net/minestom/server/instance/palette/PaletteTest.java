@@ -94,7 +94,6 @@ public class PaletteTest {
         assertEquals(4, palette.get(0, 0, 3));
     }
 
-
     @Test
     public void fill() {
         for (Palette palette : testPalettes()) {
@@ -859,6 +858,99 @@ public class PaletteTest {
         // Verify the palette has proper count (non-zero blocks)
         assertTrue(palette.count() > 0, "Palette should have non-zero count");
         assertTrue(palette.count() <= palette.maxSize(), "Count should not exceed max size");
+    }
+
+    @Test
+    public void height() {
+        for (Palette palette : testPalettes()) {
+            final int dimension = palette.dimension();
+
+            // Test with empty palette - predicate that always returns true should find the
+            // top
+            assertEquals(dimension - 1, palette.height(0, 0, (x, y, z, value) -> true));
+            // Predicate that always returns false should return -1
+            assertEquals(-1, palette.height(0, 0, (x, y, z, value) -> false));
+
+            // Set a block at the top
+            palette.set(0, dimension - 1, 0, 1);
+            assertEquals(dimension - 1, palette.height(0, 0, (x, y, z, value) -> value != 0));
+
+            // Set a block in the middle
+            if (dimension > 1) {
+                palette.set(1, dimension / 2, 1, 2);
+                assertEquals(dimension / 2, palette.height(1, 1, (x, y, z, value) -> value != 0));
+            }
+
+            // Set blocks at multiple heights - should return the highest one
+            if (dimension > 2) {
+                palette.set(2, 1, 2, 3);
+                palette.set(2, dimension - 2, 2, 4);
+                assertEquals(dimension - 2, palette.height(2, 2, (x, y, z, value) -> value != 0));
+            }
+
+            // Test with predicate that matches air (value 0)
+            palette.fill(5); // Fill with non-zero value
+            int testX = Math.min(1, dimension - 1);
+            int testZ = Math.min(1, dimension - 1);
+            palette.set(testX, dimension / 2, testZ, 0); // Set one block to air
+            assertEquals(dimension / 2, palette.height(testX, testZ, (x, y, z, value) -> value == 0));
+
+            // Test edge cases - coordinates at boundaries
+            palette.fill(0);
+            palette.set(dimension - 1, dimension - 1, dimension - 1, 10);
+            assertEquals(dimension - 1, palette.height(dimension - 1, dimension - 1, (x, y, z, value) -> value != 0));
+
+            // Test with complex predicate
+            palette.fill(0);
+            for (int y = 0; y < dimension; y++) {
+                palette.set(0, y, 0, y + 1);
+            }
+            // Find highest block with value > 5
+            int expectedHeight = -1;
+            for (int y = dimension - 1; y >= 0; y--) {
+                if (y + 1 > 5) {
+                    expectedHeight = y;
+                    break;
+                }
+            }
+            assertEquals(expectedHeight, palette.height(0, 0, (x, y, z, value) -> value > 5));
+        }
+    }
+
+    @Test
+    public void heightValidation() {
+        Palette palette = Palette.blocks();
+        final int dimension = palette.dimension();
+
+        // Test invalid coordinates
+        assertThrows(IllegalArgumentException.class, () -> palette.height(-1, 0, (x, y, z, value) -> true));
+        assertThrows(IllegalArgumentException.class, () -> palette.height(0, -1, (x, y, z, value) -> true));
+        assertThrows(IllegalArgumentException.class, () -> palette.height(dimension, 0, (x, y, z, value) -> true));
+        assertThrows(IllegalArgumentException.class, () -> palette.height(0, dimension, (x, y, z, value) -> true));
+    }
+
+    @Test
+    public void heightOptimization() {
+        // Test single-value palette optimization
+        Palette singleValuePalette = Palette.blocks();
+        singleValuePalette.fill(42);
+        
+        // Should find the value at the top
+        assertEquals(15, singleValuePalette.height(0, 0, (x, y, z, value) -> value == 42));
+        assertEquals(-1, singleValuePalette.height(0, 0, (x, y, z, value) -> value == 0));
+        
+        // Test multi-value palette optimization
+        Palette multiValuePalette = Palette.blocks();
+        multiValuePalette.set(5, 10, 5, 100);
+        multiValuePalette.set(5, 8, 5, 200);
+        multiValuePalette.set(5, 12, 5, 300);
+        
+        // Should find the highest matching block
+        assertEquals(12, multiValuePalette.height(5, 5, (x, y, z, value) -> value != 0));
+        assertEquals(10, multiValuePalette.height(5, 5, (x, y, z, value) -> value == 100));
+        assertEquals(8, multiValuePalette.height(5, 5, (x, y, z, value) -> value == 200));
+        assertEquals(12, multiValuePalette.height(5, 5, (x, y, z, value) -> value == 300));
+        assertEquals(-1, multiValuePalette.height(5, 5, (x, y, z, value) -> value == 999));
     }
 
     private static List<Palette> testPalettes() {
