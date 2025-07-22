@@ -248,7 +248,7 @@ public class AnvilLoaderIntegrationTest {
                 return Key.key("test");
             }
         };
-        env.process().block().registerHandler("stone", () -> handler);
+        env.process().block().registerHandler(Block.STONE.key(), () -> handler);
 
         var nbt = CompoundBinaryTag.builder()
                 .putString("hello", "world")
