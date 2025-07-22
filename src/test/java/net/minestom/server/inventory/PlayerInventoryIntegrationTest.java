@@ -199,7 +199,7 @@ public class PlayerInventoryIntegrationTest {
     }
 
     @Test
-    public void serverClosingInventoryWithNoneOpenDoesNotSendEventTest(Env env) {
+    public void closeInventoryWithNoneOpenSendsPlayerInventoryClose(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0));
@@ -208,7 +208,10 @@ public class PlayerInventoryIntegrationTest {
 
         player.closeInventory();
 
-        listener.assertEmpty();
+        listener.assertSingle(event -> {
+            assertEquals(0, event.getInventory().getWindowId());
+            assertFalse(event.isFromClient());
+        });
     }
 
 }
