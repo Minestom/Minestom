@@ -16,6 +16,17 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ThreadDispatcherTest {
+    record World() {
+    }
+
+    static abstract class Element implements Tickable, AcquirableSource<Element> {
+        final Acquirable<Element> acquirable = Acquirable.unassigned(this);
+
+        @Override
+        public @NotNull Acquirable<? extends Element> acquirable() {
+            return acquirable;
+        }
+    }
 
     @Test
     public void basic() {
@@ -32,7 +43,7 @@ public class ThreadDispatcherTest {
         World world = new World();
         Element element = new Element();
 
-        ThreadDispatcher<World> dispatcher = ThreadDispatcher.singleThread();
+        ThreadDispatcher<World, Element> dispatcher = ThreadDispatcher.singleThread();
         dispatcher.createPartition(world);
         dispatcher.updateElement(element, world);
         dispatcher.start();
@@ -46,24 +57,14 @@ public class ThreadDispatcherTest {
 
     @Test
     public void basicAcquirable() {
-        record World() {
-        }
-        final class Element implements Tickable, AcquirableSource<Element> {
-            final Acquirable<Element> acquirable = Acquirable.unassigned(this);
-
+        World world = new World();
+        Element element = new Element() {
             @Override
             public void tick(long time) {
             }
+        };
 
-            @Override
-            public @NotNull Acquirable<? extends Element> acquirable() {
-                return acquirable;
-            }
-        }
-        World world = new World();
-        Element element = new Element();
-
-        ThreadDispatcher<World> dispatcher = ThreadDispatcher.singleThread();
+        ThreadDispatcher<World, Element> dispatcher = ThreadDispatcher.singleThread();
         dispatcher.createPartition(world);
         dispatcher.updateElement(element, world);
         dispatcher.start();
@@ -78,12 +79,12 @@ public class ThreadDispatcherTest {
     @Test
     public void elementTick() {
         final AtomicInteger counter = new AtomicInteger();
-        ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
+        ThreadDispatcher<World, Tickable> dispatcher = ThreadDispatcher.singleThread();
         dispatcher.start();
         assertEquals(1, dispatcher.threads().size());
         assertThrows(Exception.class, () -> dispatcher.threads().add(new TickThread(1)));
 
-        var partition = new Object();
+        var partition = new World();
         Tickable element = (time) -> counter.incrementAndGet();
         dispatcher.createPartition(partition);
         dispatcher.updateElement(element, partition);
@@ -107,10 +108,10 @@ public class ThreadDispatcherTest {
     @Test
     public void elementTickLoop() {
         final AtomicInteger counter = new AtomicInteger();
-        ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
+        ThreadDispatcher<World, Tickable> dispatcher = ThreadDispatcher.singleThread();
         dispatcher.start();
 
-        var partition = new Object();
+        var partition = new World();
         Tickable element = (time) -> counter.incrementAndGet();
         dispatcher.createPartition(partition);
         dispatcher.updateElement(element, partition);
@@ -127,10 +128,10 @@ public class ThreadDispatcherTest {
     @Test
     public void elementTickLoopAsync() {
         final AtomicInteger counter = new AtomicInteger();
-        ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
+        ThreadDispatcher<World, Tickable> dispatcher = ThreadDispatcher.singleThread();
         dispatcher.start();
 
-        var partition = new Object();
+        var partition = new World();
         Tickable element = (time) -> counter.incrementAndGet();
         dispatcher.createPartition(partition);
         dispatcher.updateElement(element, partition);
@@ -160,7 +161,7 @@ public class ThreadDispatcherTest {
         // Partitions implementing Tickable should be ticked same as elements
         final AtomicInteger counter1 = new AtomicInteger();
         final AtomicInteger counter2 = new AtomicInteger();
-        ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.singleThread();
+        ThreadDispatcher<Tickable, Tickable> dispatcher = ThreadDispatcher.singleThread();
         dispatcher.start();
         assertEquals(1, dispatcher.threads().size());
 
@@ -189,7 +190,7 @@ public class ThreadDispatcherTest {
     public void uniqueThread() {
         // Ensure that partitions are properly dispatched across threads
         final int threadCount = 10;
-        ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.dispatcher(ThreadProvider.counter(), threadCount);
+        ThreadDispatcher<Tickable, Tickable> dispatcher = ThreadDispatcher.dispatcher(ThreadProvider.counter(), threadCount);
         assertEquals(threadCount, dispatcher.threads().size());
         dispatcher.start();
 
@@ -224,7 +225,7 @@ public class ThreadDispatcherTest {
         }
 
         final int threadCount = 10;
-        ThreadDispatcher<Updater> dispatcher = ThreadDispatcher.dispatcher(new ThreadProvider<>() {
+        ThreadDispatcher<Updater, Tickable> dispatcher = ThreadDispatcher.dispatcher(new ThreadProvider<>() {
             @Override
             public int findThread(@NotNull Updater partition) {
                 return partition.getValue();

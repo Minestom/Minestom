@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.IntFunction;
 
-final class ThreadDispatcherImpl<P> implements ThreadDispatcher<P> {
+final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatcher<P, E> {
     private final ThreadProvider<P> provider;
     private final List<TickThread> threads;
 
@@ -24,7 +24,7 @@ final class ThreadDispatcherImpl<P> implements ThreadDispatcher<P> {
     private final ArrayDeque<P> partitionUpdateQueue = new ArrayDeque<>();
 
     // Requests consumed at the end of each tick
-    private final MessagePassingQueue<Update<P>> updates = new MpscUnboundedArrayQueue<>(1024);
+    private final MessagePassingQueue<Update<P, E>> updates = new MpscUnboundedArrayQueue<>(1024);
 
     ThreadDispatcherImpl(ThreadProvider<P> provider, int threadCount,
                          @NotNull IntFunction<? extends TickThread> threadGenerator) {
@@ -46,11 +46,12 @@ final class ThreadDispatcherImpl<P> implements ThreadDispatcher<P> {
         // Update dispatcher
         this.updates.drain(update -> {
             switch (update) {
-                case Update.PartitionLoad<P> chunkUpdate -> processLoadedPartition(chunkUpdate.partition());
-                case Update.PartitionUnload<P> partitionUnload -> processUnloadedPartition(partitionUnload.partition());
-                case Update.ElementUpdate<P> elementUpdate ->
-                        processUpdatedElement(elementUpdate.tickable(), elementUpdate.partition());
-                case Update.ElementRemove<P> elementRemove -> processRemovedElement(elementRemove.tickable());
+                case Update.PartitionLoad<P, E> chunkUpdate -> processLoadedPartition(chunkUpdate.partition());
+                case Update.PartitionUnload<P, E> partitionUnload ->
+                        processUnloadedPartition(partitionUnload.partition());
+                case Update.ElementUpdate<P, E> elementUpdate ->
+                        processUpdatedElement(elementUpdate.element(), elementUpdate.partition());
+                case Update.ElementRemove<P, E> elementRemove -> processRemovedElement(elementRemove.element());
                 case null, default -> throw new IllegalStateException("Unknown update type: " +
                         (update == null ? "null" : update.getClass().getSimpleName()));
             }
@@ -128,7 +129,7 @@ final class ThreadDispatcherImpl<P> implements ThreadDispatcher<P> {
     }
 
     @Override
-    public void signalUpdate(@NotNull ThreadDispatcher.Update<P> update) {
+    public void signalUpdate(@NotNull ThreadDispatcher.Update<P, E> update) {
         this.updates.relaxedOffer(update);
     }
 
