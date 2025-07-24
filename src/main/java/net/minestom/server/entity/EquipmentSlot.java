@@ -27,7 +27,7 @@ public enum EquipmentSlot {
     private static final Map<Integer, EquipmentSlot> BY_PROTOCOL_ID = Arrays.stream(values())
             .collect(Collectors.toMap(EquipmentSlot::protocolId, slot -> slot));
     private static final Map<Integer, EquipmentSlot> BY_LEGACY_PROTOCOL_ID = Arrays.stream(values())
-            .collect(Collectors.toMap(EquipmentSlot::protocolId, slot -> slot));
+            .collect(Collectors.toMap(EquipmentSlot::legacyProtocolId, slot -> slot));
 
     public static final NetworkBuffer.Type<EquipmentSlot> NETWORK_TYPE = NetworkBuffer.VAR_INT
             .transform(BY_PROTOCOL_ID::get, EquipmentSlot::protocolId);
