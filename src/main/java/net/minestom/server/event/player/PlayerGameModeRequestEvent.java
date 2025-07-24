@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player uses the F3+F4 menu to try and change their gamemode.
  */
-public class PlayerGameModeSwitcherEvent implements PlayerInstanceEvent {
+public class PlayerGameModeRequestEvent implements PlayerInstanceEvent {
 
     private final Player player;
     private final GameMode requestedGameMode;
 
-    public PlayerGameModeSwitcherEvent(@NotNull Player player, @NotNull GameMode requestedGameMode) {
+    public PlayerGameModeRequestEvent(@NotNull Player player, @NotNull GameMode requestedGameMode) {
         this.player = player;
         this.requestedGameMode = requestedGameMode;
     }
