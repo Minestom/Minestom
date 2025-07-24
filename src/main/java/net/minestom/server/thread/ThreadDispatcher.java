@@ -23,7 +23,7 @@ import java.util.function.IntFunction;
  * @see Acquirable
  * @see AcquirableSource
  */
-public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
+public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDispatcherImpl {
     /**
      * Creates a new ThreadDispatcher using default thread names (ex. Ms-Tick-n).
      * <p>Remember to start the dispatcher using {@link #start()}</p>
@@ -34,7 +34,7 @@ public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
      * @return a new ThreadDispatcher instance
      */
     @Contract(pure = true)
-    static <P> @NotNull ThreadDispatcher<P> dispatcher(@NotNull ThreadProvider<P> provider, int threadCount) {
+    static <P, E extends Tickable> @NotNull ThreadDispatcher<P, E> dispatcher(@NotNull ThreadProvider<P> provider, int threadCount) {
         return new ThreadDispatcherImpl<>(provider, threadCount, TickThread::new);
     }
 
@@ -50,8 +50,8 @@ public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
      * @return a new ThreadDispatcher instance
      */
     @Contract(pure = true)
-    static <P> @NotNull ThreadDispatcher<P> dispatcher(@NotNull ThreadProvider<P> provider,
-                                                       @NotNull IntFunction<String> nameGenerator, int threadCount) {
+    static <P, E extends Tickable> @NotNull ThreadDispatcher<P, E> dispatcher(@NotNull ThreadProvider<P> provider,
+                                                                              @NotNull IntFunction<String> nameGenerator, int threadCount) {
         return new ThreadDispatcherImpl<>(provider, threadCount, index -> new TickThread(nameGenerator.apply(index)));
     }
 
@@ -63,7 +63,7 @@ public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
      * @return a new ThreadDispatcher instance
      */
     @Contract(pure = true)
-    static <P> @NotNull ThreadDispatcher<P> singleThread() {
+    static <P, E extends Tickable> @NotNull ThreadDispatcher<P, E> singleThread() {
         return dispatcher(ThreadProvider.counter(), 1);
     }
 
@@ -111,7 +111,7 @@ public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
      *
      * @param update the update to signal
      */
-    void signalUpdate(@NotNull ThreadDispatcher.Update<P> update);
+    void signalUpdate(@NotNull ThreadDispatcher.Update<P, E> update);
 
     default void createPartition(@NotNull P partition) {
         signalUpdate(new Update.PartitionLoad<>(partition));
@@ -121,12 +121,12 @@ public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
         signalUpdate(new Update.PartitionUnload<>(partition));
     }
 
-    default void updateElement(@NotNull Tickable tickable, @NotNull P partition) {
-        signalUpdate(new Update.ElementUpdate<>(tickable, partition));
+    default void updateElement(@NotNull E element, @NotNull P partition) {
+        signalUpdate(new Update.ElementUpdate<>(element, partition));
     }
 
-    default void removeElement(@NotNull Tickable tickable) {
-        signalUpdate(new Update.ElementRemove<>(tickable));
+    default void removeElement(@NotNull E element) {
+        signalUpdate(new Update.ElementRemove<>(element));
     }
 
     /**
@@ -152,14 +152,14 @@ public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
 
     @ApiStatus.Internal
     @SuppressWarnings("unused")
-    sealed interface Update<P> {
+    sealed interface Update<P, E extends Tickable> {
 
         /**
          * Registers a new partition.
          *
          * @param partition the partition to register
          */
-        record PartitionLoad<P>(@NotNull P partition) implements Update<P> {
+        record PartitionLoad<P, E extends Tickable>(@NotNull P partition) implements Update<P, E> {
         }
 
         /**
@@ -167,24 +167,24 @@ public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
          *
          * @param partition the partition to delete
          */
-        record PartitionUnload<P>(@NotNull P partition) implements Update<P> {
+        record PartitionUnload<P, E extends Tickable>(@NotNull P partition) implements Update<P, E> {
         }
 
         /**
-         * Updates a {@link Tickable}, signalling that it is a part of {@code partition}.
+         * Updates an element}, signalling that it is a part of {@code partition}.
          *
-         * @param tickable  the Tickable to update
+         * @param element   the element to update
          * @param partition the partition the Tickable is part of
          */
-        record ElementUpdate<P>(@NotNull Tickable tickable, P partition) implements Update<P> {
+        record ElementUpdate<P, E extends Tickable>(@NotNull E element, P partition) implements Update<P, E> {
         }
 
         /**
-         * Removes a {@link Tickable}.
+         * Removes an element.
          *
-         * @param tickable the Tickable to remove
+         * @param element the element to remove
          */
-        record ElementRemove<P>(@NotNull Tickable tickable) implements Update<P> {
+        record ElementRemove<P, E extends Tickable>(@NotNull E element) implements Update<P, E> {
         }
     }
 }
