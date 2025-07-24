@@ -96,65 +96,17 @@ final class ThreadDispatcherImpl<P> implements ThreadDispatcher<P> {
         }
     }
 
-    /**
-     * Refreshes all thread as per {@link ThreadDispatcher#refreshThreads(long)}, with a timeout of
-     * {@link Long#MAX_VALUE}.
-     */
+    @Override
     public void refreshThreads() {
         refreshThreads(Long.MAX_VALUE);
     }
 
-    /**
-     * Registers a new partition.
-     *
-     * @param partition the partition to register
-     */
-    public void createPartition(@NotNull P partition) {
-        signalUpdate(new Update.PartitionLoad<>(partition));
-    }
-
-    /**
-     * Deletes an existing partition.
-     *
-     * @param partition the partition to delete
-     */
-    public void deletePartition(@NotNull P partition) {
-        signalUpdate(new Update.PartitionUnload<>(partition));
-    }
-
-    /**
-     * Updates a {@link Tickable}, signalling that it is a part of {@code partition}.
-     *
-     * @param tickable  the Tickable to update
-     * @param partition the partition the Tickable is part of
-     */
-    public void updateElement(@NotNull Tickable tickable, @NotNull P partition) {
-        signalUpdate(new Update.ElementUpdate<>(tickable, partition));
-    }
-
-    /**
-     * Removes a {@link Tickable}.
-     *
-     * @param tickable the Tickable to remove
-     */
-    public void removeElement(@NotNull Tickable tickable) {
-        signalUpdate(new Update.ElementRemove<>(tickable));
-    }
-
-    /**
-     * Starts all the {@link TickThread tick threads}.
-     * <p>
-     * This will throw an {@link IllegalThreadStateException} if the threads have already been started.
-     */
+    @Override
     public void start() {
         this.threads.forEach(Thread::start);
     }
 
-    /**
-     * Checks if all the {@link TickThread tick threads} are alive.
-     *
-     * @return true if all threads are alive, false otherwise
-     */
+    @Override
     public boolean isAlive() {
         for (TickThread thread : threads) {
             if (!thread.isAlive()) {
@@ -164,11 +116,7 @@ final class ThreadDispatcherImpl<P> implements ThreadDispatcher<P> {
         return !threads.isEmpty();
     }
 
-    /**
-     * Shutdowns all the {@link TickThread tick threads}.
-     * <p>
-     * Action is irreversible.
-     */
+    @Override
     public void shutdown() {
         this.threads.forEach(TickThread::shutdown);
     }
@@ -179,7 +127,8 @@ final class ThreadDispatcherImpl<P> implements ThreadDispatcher<P> {
         return threads.get(index);
     }
 
-    private void signalUpdate(@NotNull ThreadDispatcher.Update<P> update) {
+    @Override
+    public void signalUpdate(@NotNull ThreadDispatcher.Update<P> update) {
         this.updates.relaxedOffer(update);
     }
 

@@ -102,33 +102,32 @@ public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
     }
 
     /**
-     * Registers a new partition.
+     * Signals an update to the dispatcher.
+     * <p>
+     * This method is used to notify the dispatcher of changes that need to be processed, such as partition loads,
+     * unloads, or element updates.
+     * <p>
+     * Updates are processed at the start of each tick, before the actual ticking of elements.
      *
-     * @param partition the partition to register
+     * @param update the update to signal
      */
-    void createPartition(@NotNull P partition);
+    void signalUpdate(@NotNull ThreadDispatcher.Update<P> update);
 
-    /**
-     * Deletes an existing partition.
-     *
-     * @param partition the partition to delete
-     */
-    void deletePartition(@NotNull P partition);
+    default void createPartition(@NotNull P partition) {
+        signalUpdate(new Update.PartitionLoad<>(partition));
+    }
 
-    /**
-     * Updates a {@link Tickable}, signalling that it is a part of {@code partition}.
-     *
-     * @param tickable  the Tickable to update
-     * @param partition the partition the Tickable is part of
-     */
-    void updateElement(@NotNull Tickable tickable, @NotNull P partition);
+    default void deletePartition(@NotNull P partition) {
+        signalUpdate(new Update.PartitionUnload<>(partition));
+    }
 
-    /**
-     * Removes a {@link Tickable}.
-     *
-     * @param tickable the Tickable to remove
-     */
-    void removeElement(@NotNull Tickable tickable);
+    default void updateElement(@NotNull Tickable tickable, @NotNull P partition) {
+        signalUpdate(new Update.ElementUpdate<>(tickable, partition));
+    }
+
+    default void removeElement(@NotNull Tickable tickable) {
+        signalUpdate(new Update.ElementRemove<>(tickable));
+    }
 
     /**
      * Starts all the {@link TickThread tick threads}.
@@ -154,15 +153,37 @@ public sealed interface ThreadDispatcher<P> permits ThreadDispatcherImpl {
     @ApiStatus.Internal
     @SuppressWarnings("unused")
     sealed interface Update<P> {
+
+        /**
+         * Registers a new partition.
+         *
+         * @param partition the partition to register
+         */
         record PartitionLoad<P>(@NotNull P partition) implements Update<P> {
         }
 
+        /**
+         * Deletes an existing partition.
+         *
+         * @param partition the partition to delete
+         */
         record PartitionUnload<P>(@NotNull P partition) implements Update<P> {
         }
 
+        /**
+         * Updates a {@link Tickable}, signalling that it is a part of {@code partition}.
+         *
+         * @param tickable  the Tickable to update
+         * @param partition the partition the Tickable is part of
+         */
         record ElementUpdate<P>(@NotNull Tickable tickable, P partition) implements Update<P> {
         }
 
+        /**
+         * Removes a {@link Tickable}.
+         *
+         * @param tickable the Tickable to remove
+         */
         record ElementRemove<P>(@NotNull Tickable tickable) implements Update<P> {
         }
     }
