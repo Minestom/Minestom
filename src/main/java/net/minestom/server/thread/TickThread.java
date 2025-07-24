@@ -6,7 +6,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,12 +38,6 @@ public class TickThread extends MinestomThread {
 
     public TickThread(@NotNull String name) {
         super(name);
-    }
-
-    public static @Nullable TickThread current() {
-        if (Thread.currentThread() instanceof TickThread current)
-            return current;
-        return null;
     }
 
     @Override
@@ -83,7 +76,7 @@ public class TickThread extends MinestomThread {
             for (Tickable element : elements) {
                 if (lock.hasQueuedThreads()) {
                     lock.unlock();
-                    // #acquire() callbacks should be called here
+                    // #acquire() callbacks
                     lock.lock();
                 }
                 try {
@@ -121,7 +114,7 @@ public class TickThread extends MinestomThread {
             return;
         }
         this.tickTimeNanos = tickTimeNanos;
-        this.tickNum += 1;
+        this.tickNum++;
         LockSupport.unpark(this);
     }
 
