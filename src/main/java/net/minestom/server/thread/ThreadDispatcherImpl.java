@@ -1,0 +1,268 @@
+package net.minestom.server.thread;
+
+import net.minestom.server.Tickable;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedArrayQueue;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.function.IntFunction;
+
+final class ThreadDispatcherImpl<P> implements ThreadDispatcher<P> {
+    private final ThreadProvider<P> provider;
+    private final List<TickThread> threads;
+
+    // Partition -> dispatching context
+    // Defines how computation is dispatched to the threads
+    private final Map<P, Partition> partitions = new WeakHashMap<>();
+    // Cache to retrieve the threading context from a tickable element
+    private final Map<Tickable, Partition> elements = new WeakHashMap<>();
+    // Queue to update partition linked thread
+    private final ArrayDeque<P> partitionUpdateQueue = new ArrayDeque<>();
+
+    // Requests consumed at the end of each tick
+    private final MessagePassingQueue<Update<P>> updates = new MpscUnboundedArrayQueue<>(1024);
+
+    ThreadDispatcherImpl(ThreadProvider<P> provider, int threadCount,
+                         @NotNull IntFunction<? extends TickThread> threadGenerator) {
+        this.provider = provider;
+        TickThread[] threads = new TickThread[threadCount];
+        Arrays.setAll(threads, threadGenerator);
+        this.threads = List.of(threads);
+    }
+
+    @Unmodifiable
+    @ApiStatus.Internal
+    @Override
+    public @NotNull List<@NotNull TickThread> threads() {
+        return threads;
+    }
+
+    @Override
+    public synchronized void updateAndAwait(long time) {
+        // Update dispatcher
+        this.updates.drain(update -> {
+            switch (update) {
+                case Update.PartitionLoad<P> chunkUpdate -> processLoadedPartition(chunkUpdate.partition());
+                case Update.PartitionUnload<P> partitionUnload -> processUnloadedPartition(partitionUnload.partition());
+                case Update.ElementUpdate<P> elementUpdate ->
+                        processUpdatedElement(elementUpdate.tickable(), elementUpdate.partition());
+                case Update.ElementRemove<P> elementRemove -> processRemovedElement(elementRemove.tickable());
+                case null, default -> throw new IllegalStateException("Unknown update type: " +
+                        (update == null ? "null" : update.getClass().getSimpleName()));
+            }
+        });
+        // Tick all partitions
+        CountDownLatch latch = new CountDownLatch(threads.size());
+        for (TickThread thread : threads) thread.startTick(latch, time);
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public synchronized void refreshThreads(long nanoTimeout) {
+        switch (provider.refreshType()) {
+            case NEVER -> {
+                // Do nothing
+            }
+            case ALWAYS -> {
+                final long currentTime = System.nanoTime();
+                int counter = partitionUpdateQueue.size();
+                while (true) {
+                    final P partition = partitionUpdateQueue.pollFirst();
+                    if (partition == null) break;
+                    // Update chunk's thread
+                    Partition partitionEntry = partitions.get(partition);
+                    assert partitionEntry != null;
+                    final TickThread previous = partitionEntry.thread;
+                    final TickThread next = retrieveThread(partition);
+                    if (next != previous) {
+                        partitionEntry.thread = next;
+                        previous.entries.remove(partitionEntry);
+                        next.entries.add(partitionEntry);
+                    }
+                    this.partitionUpdateQueue.addLast(partition);
+                    if (--counter <= 0 || System.nanoTime() - currentTime >= nanoTimeout) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Refreshes all thread as per {@link ThreadDispatcher#refreshThreads(long)}, with a timeout of
+     * {@link Long#MAX_VALUE}.
+     */
+    public void refreshThreads() {
+        refreshThreads(Long.MAX_VALUE);
+    }
+
+    /**
+     * Registers a new partition.
+     *
+     * @param partition the partition to register
+     */
+    public void createPartition(@NotNull P partition) {
+        signalUpdate(new Update.PartitionLoad<>(partition));
+    }
+
+    /**
+     * Deletes an existing partition.
+     *
+     * @param partition the partition to delete
+     */
+    public void deletePartition(@NotNull P partition) {
+        signalUpdate(new Update.PartitionUnload<>(partition));
+    }
+
+    /**
+     * Updates a {@link Tickable}, signalling that it is a part of {@code partition}.
+     *
+     * @param tickable  the Tickable to update
+     * @param partition the partition the Tickable is part of
+     */
+    public void updateElement(@NotNull Tickable tickable, @NotNull P partition) {
+        signalUpdate(new Update.ElementUpdate<>(tickable, partition));
+    }
+
+    /**
+     * Removes a {@link Tickable}.
+     *
+     * @param tickable the Tickable to remove
+     */
+    public void removeElement(@NotNull Tickable tickable) {
+        signalUpdate(new Update.ElementRemove<>(tickable));
+    }
+
+    /**
+     * Starts all the {@link TickThread tick threads}.
+     * <p>
+     * This will throw an {@link IllegalThreadStateException} if the threads have already been started.
+     */
+    public void start() {
+        this.threads.forEach(Thread::start);
+    }
+
+    /**
+     * Checks if all the {@link TickThread tick threads} are alive.
+     *
+     * @return true if all threads are alive, false otherwise
+     */
+    public boolean isAlive() {
+        for (TickThread thread : threads) {
+            if (!thread.isAlive()) {
+                return false;
+            }
+        }
+        return !threads.isEmpty();
+    }
+
+    /**
+     * Shutdowns all the {@link TickThread tick threads}.
+     * <p>
+     * Action is irreversible.
+     */
+    public void shutdown() {
+        this.threads.forEach(TickThread::shutdown);
+    }
+
+    private TickThread retrieveThread(P partition) {
+        final int threadId = provider.findThread(partition);
+        final int index = Math.abs(threadId) % threads.size();
+        return threads.get(index);
+    }
+
+    private void signalUpdate(@NotNull ThreadDispatcher.Update<P> update) {
+        this.updates.relaxedOffer(update);
+    }
+
+    private void processLoadedPartition(P partition) {
+        if (partitions.containsKey(partition)) return;
+        final TickThread thread = retrieveThread(partition);
+        final Partition partitionEntry = new Partition(thread);
+        thread.entries.add(partitionEntry);
+        this.partitions.put(partition, partitionEntry);
+        this.partitionUpdateQueue.add(partition);
+        if (partition instanceof Tickable tickable) {
+            processUpdatedElement(tickable, partition);
+        }
+    }
+
+    private void processUnloadedPartition(P partition) {
+        final Partition partitionEntry = partitions.remove(partition);
+        if (partitionEntry != null) {
+            TickThread thread = partitionEntry.thread;
+            thread.entries.remove(partitionEntry);
+        }
+        this.partitionUpdateQueue.remove(partition);
+        if (partition instanceof Tickable tickable) {
+            processRemovedElement(tickable);
+        }
+    }
+
+    private void processRemovedElement(Tickable tickable) {
+        Partition partition = elements.get(tickable);
+        if (partition != null) {
+            partition.elements.remove(tickable);
+        }
+    }
+
+    private void processUpdatedElement(Tickable tickable, P partition) {
+        Partition partitionEntry;
+
+        partitionEntry = elements.get(tickable);
+        // Remove from previous list
+        if (partitionEntry != null) {
+            partitionEntry.elements.remove(tickable);
+        }
+        // Add to new list
+        partitionEntry = partitions.get(partition);
+        if (partitionEntry != null) {
+            this.elements.put(tickable, partitionEntry);
+            partitionEntry.elements.add(tickable);
+            if (tickable instanceof AcquirableSource<?> acquirableSource) {
+                ((AcquirableImpl<?>) acquirableSource.acquirable()).assign(partitionEntry.thread());
+            }
+        }
+    }
+
+    /**
+     * A data structure which may contain {@link Tickable}s, and is assigned a single {@link TickThread}.
+     */
+    public static final class Partition {
+        private TickThread thread;
+        private final List<Tickable> elements = new ArrayList<>();
+
+        private Partition(TickThread thread) {
+            this.thread = thread;
+        }
+
+        /**
+         * The {@link TickThread} used by this partition.
+         * <p>
+         * This method is marked internal to reflect {@link TickThread}s own internal status.
+         *
+         * @return the TickThread used by this partition
+         */
+        @ApiStatus.Internal
+        public @NotNull TickThread thread() {
+            return thread;
+        }
+
+        /**
+         * The {@link Tickable}s assigned to this partition.
+         *
+         * @return the tickables assigned to this partition
+         */
+        public @NotNull List<Tickable> elements() {
+            return elements;
+        }
+    }
+}

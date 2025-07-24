@@ -1,6 +1,5 @@
 package net.minestom.server.thread;
 
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.testing.Env;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @EnvTest
 public class AcquirableEntityIntegrationTest {

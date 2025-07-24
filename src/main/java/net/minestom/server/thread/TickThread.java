@@ -8,7 +8,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +29,7 @@ public class TickThread extends MinestomThread {
     private volatile long tickTimeNanos;
 
     private long tickNum = 0;
-    private final List<ThreadDispatcher.Partition> entries = new ArrayList<>();
+    final List<ThreadDispatcherImpl.Partition> entries = new ArrayList<>();
 
     public TickThread(int number) {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
@@ -69,7 +68,7 @@ public class TickThread extends MinestomThread {
     protected void tick() {
         final ReentrantLock lock = this.lock;
         final long tickTime = TimeUnit.NANOSECONDS.toMillis(this.tickTimeNanos);
-        for (ThreadDispatcher.Partition entry : entries) {
+        for (ThreadDispatcherImpl.Partition entry : entries) {
             assert entry.thread() == this;
             final List<Tickable> elements = entry.elements();
             if (elements.isEmpty()) continue;
@@ -116,10 +115,6 @@ public class TickThread extends MinestomThread {
         this.tickTimeNanos = tickTimeNanos;
         this.tickNum++;
         LockSupport.unpark(this);
-    }
-
-    public Collection<ThreadDispatcher.Partition> entries() {
-        return entries;
     }
 
     /**

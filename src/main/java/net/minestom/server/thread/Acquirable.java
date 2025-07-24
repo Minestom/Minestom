@@ -24,7 +24,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      */
     static @NotNull Stream<@NotNull Entity> locals() {
         if (!(Thread.currentThread() instanceof TickThread tickThread)) return Stream.empty();
-        return tickThread.entries().stream()
+        return tickThread.entries.stream()
                 .flatMap(partitionEntry -> partitionEntry.elements().stream())
                 .filter(tickable -> tickable instanceof Entity)
                 .map(tickable -> (Entity) tickable);

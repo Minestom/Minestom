@@ -189,7 +189,7 @@ public class ThreadDispatcherTest {
     public void uniqueThread() {
         // Ensure that partitions are properly dispatched across threads
         final int threadCount = 10;
-        ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), threadCount);
+        ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.dispatcher(ThreadProvider.counter(), threadCount);
         assertEquals(threadCount, dispatcher.threads().size());
         dispatcher.start();
 
@@ -199,7 +199,7 @@ public class ThreadDispatcherTest {
                 .mapToObj(value -> (Tickable) (time) -> {
                     final Thread thread = Thread.currentThread();
                     assertInstanceOf(TickThread.class, thread);
-                    assertEquals(1, ((TickThread) thread).entries().size());
+                    assertEquals(1, ((TickThread) thread).entries.size());
                     assertTrue(threads.add(thread));
                     counter.getAndIncrement();
                 })
@@ -224,7 +224,7 @@ public class ThreadDispatcherTest {
         }
 
         final int threadCount = 10;
-        ThreadDispatcher<Updater> dispatcher = ThreadDispatcher.of(new ThreadProvider<>() {
+        ThreadDispatcher<Updater> dispatcher = ThreadDispatcher.dispatcher(new ThreadProvider<>() {
             @Override
             public int findThread(@NotNull Updater partition) {
                 return partition.getValue();
