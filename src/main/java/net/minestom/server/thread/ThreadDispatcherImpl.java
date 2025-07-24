@@ -103,22 +103,20 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
     }
 
     @Override
-    public void start() {
+    public synchronized void start() {
         this.threads.forEach(Thread::start);
     }
 
     @Override
     public boolean isAlive() {
         for (TickThread thread : threads) {
-            if (!thread.isAlive()) {
-                return false;
-            }
+            if (!thread.isAlive()) return false;
         }
         return !threads.isEmpty();
     }
 
     @Override
-    public void shutdown() {
+    public synchronized void shutdown() {
         this.threads.forEach(TickThread::shutdown);
     }
 

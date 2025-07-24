@@ -152,14 +152,14 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
 
     @ApiStatus.Internal
     @SuppressWarnings("unused")
-    sealed interface Update<P, E extends Tickable> {
+    sealed interface Update<P, E> {
 
         /**
          * Registers a new partition.
          *
          * @param partition the partition to register
          */
-        record PartitionLoad<P, E extends Tickable>(@NotNull P partition) implements Update<P, E> {
+        record PartitionLoad<P, E>(@NotNull P partition) implements Update<P, E> {
         }
 
         /**
@@ -167,7 +167,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param partition the partition to delete
          */
-        record PartitionUnload<P, E extends Tickable>(@NotNull P partition) implements Update<P, E> {
+        record PartitionUnload<P, E>(@NotNull P partition) implements Update<P, E> {
         }
 
         /**
@@ -176,7 +176,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          * @param element   the element to update
          * @param partition the partition the Tickable is part of
          */
-        record ElementUpdate<P, E extends Tickable>(@NotNull E element, P partition) implements Update<P, E> {
+        record ElementUpdate<P, E>(@NotNull E element, P partition) implements Update<P, E> {
         }
 
         /**
@@ -184,7 +184,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param element the element to remove
          */
-        record ElementRemove<P, E extends Tickable>(@NotNull E element) implements Update<P, E> {
+        record ElementRemove<P, E>(@NotNull E element) implements Update<P, E> {
         }
     }
 }
