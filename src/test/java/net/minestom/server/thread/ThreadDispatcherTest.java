@@ -30,8 +30,6 @@ public class ThreadDispatcherTest {
 
     @Test
     public void basic() {
-        record World() {
-        }
         final class Element implements Tickable {
             int value;
 
