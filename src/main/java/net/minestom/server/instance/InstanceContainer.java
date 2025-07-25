@@ -229,8 +229,8 @@ public class InstanceContainer extends Instance {
             synchronized (this) {
                 this.version.incrementAndGet();
                 if (sectionAligned) {
-                    final int minSectionX = min.chunkX(), minSectionY = min.section(), minSectionZ = min.chunkZ();
-                    final int maxSectionX = max.chunkX(), maxSectionY = max.section(), maxSectionZ = max.chunkZ();
+                    final int minSectionX = min.sectionX(), minSectionY = min.sectionY(), minSectionZ = min.sectionZ();
+                    final int maxSectionX = max.sectionX(), maxSectionY = max.sectionY(), maxSectionZ = max.sectionZ();
                     for (int sectionX = minSectionX; sectionX <= maxSectionX; sectionX++) {
                         for (int sectionY = minSectionY; sectionY <= maxSectionY; sectionY++) {
                             for (int sectionZ = minSectionZ; sectionZ <= maxSectionZ; sectionZ++) {
@@ -275,8 +275,8 @@ public class InstanceContainer extends Instance {
         for (Area.Cuboid cuboid : area.split()) {
             final BlockVec min = cuboid.min(), max = cuboid.max();
             if (sectionAligned(min, max)) {
-                final int minSectionX = min.chunkX(), minSectionY = min.section(), minSectionZ = min.chunkZ();
-                final int maxSectionX = max.chunkX(), maxSectionY = max.section(), maxSectionZ = max.chunkZ();
+                final int minSectionX = min.sectionX(), minSectionY = min.sectionY(), minSectionZ = min.sectionZ();
+                final int maxSectionX = max.sectionX(), maxSectionY = max.sectionY(), maxSectionZ = max.sectionZ();
                 for (int sectionX = minSectionX; sectionX <= maxSectionX; sectionX++) {
                     for (int sectionY = minSectionY; sectionY <= maxSectionY; sectionY++) {
                         for (int sectionZ = minSectionZ; sectionZ <= maxSectionZ; sectionZ++) {
@@ -303,9 +303,7 @@ public class InstanceContainer extends Instance {
                     Section section = chunk.getSection(sectionY);
                     Palette palette = section.blockPalette();
                     if (originAligned) {
-                        final int offsetX = origin.chunkX();
-                        final int offsetY = origin.section();
-                        final int offsetZ = origin.chunkZ();
+                        final int offsetX = origin.sectionX(), offsetY = origin.sectionY(), offsetZ = origin.sectionZ();
                         builder.copyPalette(sectionX - offsetX, sectionY - offsetY, sectionZ - offsetZ, palette);
                     } else {
                         // Unaligned: copy palette with offset
