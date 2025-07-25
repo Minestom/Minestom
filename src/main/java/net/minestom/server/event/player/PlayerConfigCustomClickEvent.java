@@ -25,7 +25,7 @@ public class PlayerConfigCustomClickEvent implements PlayerEvent {
 
     @Override
     public @NotNull Player getPlayer() {
-        return null;
+        return this.player;
     }
 
     public @NotNull Key getKey() {
