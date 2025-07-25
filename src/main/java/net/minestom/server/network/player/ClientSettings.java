@@ -12,9 +12,9 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientSettings(Locale locale, byte viewDistance,
-                             ChatMessageType chatMessageType, boolean chatColors,
-                             byte displayedSkinParts, MainHand mainHand,
+public record ClientSettings(@NotNull Locale locale, byte viewDistance,
+                             @NotNull ChatMessageType chatMessageType, boolean chatColors,
+                             byte displayedSkinParts, @NotNull MainHand mainHand,
                              boolean enableTextFiltering, boolean allowServerListings,
                              ClientSettings.ParticleSetting particleSetting) {
     public static final ClientSettings DEFAULT = new ClientSettings(
@@ -51,6 +51,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
         viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
         Objects.requireNonNull(chatMessageType);
         Objects.requireNonNull(mainHand);
+        Objects.requireNonNull(particleSetting);
     }
 
     /**

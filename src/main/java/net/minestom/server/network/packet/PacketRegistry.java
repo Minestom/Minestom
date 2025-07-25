@@ -20,6 +20,10 @@ import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collection;
+import java.util.List;
 
 public interface PacketRegistry<T> {
     @UnknownNullability
@@ -36,6 +40,8 @@ public interface PacketRegistry<T> {
     ConnectionState state();
 
     ConnectionSide side();
+
+    @NotNull @Unmodifiable Collection<PacketInfo<? extends T>> packets();
 
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
@@ -476,6 +482,10 @@ public interface PacketRegistry<T> {
             return info;
         }
 
+        @Override
+        public @NotNull @Unmodifiable Collection<PacketInfo<? extends T>> packets() {
+            return List.of(suppliers);
+        }
 
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
         }
