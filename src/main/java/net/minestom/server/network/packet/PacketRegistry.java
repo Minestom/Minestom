@@ -273,7 +273,7 @@ public interface PacketRegistry<T> {
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
                     entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
                     entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
-                    entry(ShowDialogPacket.class, ShowDialogPacket.SERIALIZER)
+                    entry(ShowDialogPacket.class, ShowDialogPacket.INLINE_SERIALIZER)
             );
         }
 

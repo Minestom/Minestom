@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public sealed interface DimensionType extends DimensionTypes permits DimensionTypeImpl {
 
-    @NotNull Key OVERWORLD_EFFECTS = Key.key("minecraft:overworld");
+    @NotNull Key OVERWORLD_EFFECTS = Key.key("overworld");
 
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
@@ -65,7 +65,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:dimension_type"), REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
+        return DynamicRegistry.create(Key.key("dimension_type"), REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
     }
 
     boolean ultrawarm();

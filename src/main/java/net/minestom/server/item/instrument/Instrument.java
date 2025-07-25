@@ -52,7 +52,7 @@ public sealed interface Instrument extends Holder.Direct<Instrument>, Instrument
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Instrument> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:instrument"), REGISTRY_CODEC, RegistryData.Resource.INSTRUMENTS);
+        return DynamicRegistry.create(Key.key("instrument"), REGISTRY_CODEC, RegistryData.Resource.INSTRUMENTS);
     }
 
     @NotNull SoundEvent soundEvent();

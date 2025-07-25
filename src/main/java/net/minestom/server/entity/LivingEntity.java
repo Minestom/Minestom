@@ -47,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
-    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("minecraft:sprinting"), 0.3, AttributeOperation.ADD_MULTIPLIED_TOTAL);
+    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("sprinting"), 0.3, AttributeOperation.ADD_MULTIPLIED_TOTAL);
 
     /**
      * IDs of modifiers that are protected from removal by methods like {@link AttributeInstance#clearModifiers()}.

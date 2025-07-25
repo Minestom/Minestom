@@ -18,6 +18,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
     private final PlayerHand hand;
     private final ItemStack itemStack;
     private final Point position;
+    private final Point cursorPosition;
     private final BlockFace blockFace;
 
     public PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull PlayerHand hand,
@@ -28,6 +29,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
         this.hand = hand;
         this.itemStack = itemStack;
         this.position = position;
+        this.cursorPosition = cursorPosition;
         this.blockFace = blockFace;
     }
 
@@ -39,6 +41,13 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
     public @NotNull Point getPosition() {
         return position;
     }
+
+    /**
+     * Gets the cursor position of the interacted block
+     *
+     * @return the cursor position of the interaction
+     */
+    public @NotNull Point getCursorPosition() { return cursorPosition; }
 
     /**
      * Gets which face the player has interacted with.

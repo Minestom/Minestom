@@ -31,7 +31,7 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
      */
     @ApiStatus.Internal
     static DynamicRegistry<ChickenVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:chicken_variant"), REGISTRY_CODEC, RegistryData.Resource.CHICKEN_VARIANTS);
+        return DynamicRegistry.create(Key.key("chicken_variant"), REGISTRY_CODEC, RegistryData.Resource.CHICKEN_VARIANTS);
     }
 
     @NotNull Model model();

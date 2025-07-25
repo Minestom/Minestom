@@ -46,7 +46,7 @@ public sealed interface Enchantment extends Enchantments permits EnchantmentImpl
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry(@NotNull Registries registries) {
         return DynamicRegistry.createForEnchantmentsWithSelfReferentialLoadingNightmare(
-                Key.key("minecraft:enchantment"), REGISTRY_CODEC, RegistryData.Resource.ENCHANTMENTS, registries
+                Key.key("enchantment"), REGISTRY_CODEC, RegistryData.Resource.ENCHANTMENTS, registries
         );
     }
 

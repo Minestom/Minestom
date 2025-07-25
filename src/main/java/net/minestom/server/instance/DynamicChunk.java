@@ -324,12 +324,10 @@ public class DynamicChunk extends Chunk {
     }
 
     private void calculateFullHeightmap() {
-        int startY = Heightmap.getHighestBlockSection(this);
-
-        motionBlocking.refresh(startY);
-        worldSurface.refresh(startY);
-
-        needsCompleteHeightmapRefresh = false;
+        final int startY = Heightmap.getHighestBlockSection(this);
+        this.motionBlocking.refresh(startY);
+        this.worldSurface.refresh(startY);
+        this.needsCompleteHeightmapRefresh = false;
     }
 
     @Override

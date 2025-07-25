@@ -106,9 +106,8 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
             public static final Codec<Type> CODEC = Codec.Enum(Type.class);
         }
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        private static NetworkBuffer.Type<Display> dataSerializer(@NotNull Type type) {
-            return (NetworkBuffer.Type) switch (type) {
+        private static NetworkBuffer.Type<? extends Display> dataSerializer(@NotNull Type type) {
+            return switch (type) {
                 case DEFAULT -> Default.NETWORK_TYPE;
                 case HIDDEN -> Hidden.NETWORK_TYPE;
                 case OVERRIDE -> Override.NETWORK_TYPE;

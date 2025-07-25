@@ -837,11 +837,12 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record UnionType<K, T>(
-            @NotNull Type<K> keyType, @NotNull Function<T, K> keyFunc,
-            @NotNull Function<K, NetworkBuffer.Type<T>> serializers
+    record UnionType<T, K, TR extends T>(
+            @NotNull Type<K> keyType, @NotNull Function<T, ? extends K> keyFunc,
+            @NotNull Function<K, NetworkBuffer.Type<TR>> serializers
     ) implements NetworkBufferTypeImpl<T> {
 
+        @SuppressWarnings("unchecked") // Much nicer than using the correct wildcard type for returns, pretty much ensuring T has subtypes already.
         @Override
         public void write(@NotNull NetworkBuffer buffer, T value) {
             final K key = keyFunc.apply(value);
@@ -849,7 +850,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             var serializer = serializers.apply(key);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
-            serializer.write(buffer, value);
+            serializer.write(buffer, (TR) value);
         }
 
         @Override

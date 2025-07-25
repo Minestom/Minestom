@@ -182,9 +182,8 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static NetworkBuffer.Type<RecipeDisplay> dataSerializer(@NotNull RecipeDisplayType type) {
-        return (NetworkBuffer.Type) switch (type) {
+    private static NetworkBuffer.Type<? extends RecipeDisplay> dataSerializer(@NotNull RecipeDisplayType type) {
+        return switch (type) {
             case CRAFTING_SHAPELESS -> CraftingShapeless.NETWORK_TYPE;
             case CRAFTING_SHAPED -> CraftingShaped.NETWORK_TYPE;
             case FURNACE -> Furnace.NETWORK_TYPE;

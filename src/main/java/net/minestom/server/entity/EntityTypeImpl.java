@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 record EntityTypeImpl(RegistryData.EntityEntry registry) implements EntityType {
-    static final Registry<EntityType> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:entity_type"),
+    static final Registry<EntityType> REGISTRY = RegistryData.createStaticRegistry(Key.key("entity_type"),
             (namespace, properties) -> new EntityTypeImpl(RegistryData.entity(namespace, properties)));
 
     static @UnknownNullability EntityType get(@NotNull String key) {

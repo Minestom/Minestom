@@ -26,7 +26,7 @@ public sealed interface FrogVariant extends FrogVariants permits FrogVariantImpl
      */
     @ApiStatus.Internal
     static DynamicRegistry<FrogVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:frog_variant"), REGISTRY_CODEC, RegistryData.Resource.FROG_VARIANTS);
+        return DynamicRegistry.create(Key.key("frog_variant"), REGISTRY_CODEC, RegistryData.Resource.FROG_VARIANTS);
     }
 
     static @NotNull FrogVariant create(@NotNull Key assetId) {

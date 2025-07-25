@@ -85,9 +85,8 @@ public sealed interface ConsumeEffect {
                 PlaySound::new);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static NetworkBuffer.Type<ConsumeEffect> networkType(@NotNull ConsumeEffectType type) {
-        return (NetworkBuffer.Type) switch (type) {
+    private static NetworkBuffer.Type<? extends ConsumeEffect> networkType(@NotNull ConsumeEffectType type) {
+        return switch (type) {
             case APPLY_EFFECTS -> ApplyEffects.NETWORK_TYPE;
             case REMOVE_EFFECTS -> RemoveEffects.NETWORK_TYPE;
             case CLEAR_ALL_EFFECTS -> ClearAllEffects.NETWORK_TYPE;
