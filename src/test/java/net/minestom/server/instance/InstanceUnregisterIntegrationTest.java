@@ -30,7 +30,9 @@ public class InstanceUnregisterIntegrationTest {
         listener.followup();
         env.tick();
 
+        var acquired = player.acquirable().lock();
         player.setInstance(instanceManager.createSharedInstance(instance)).join();
+        acquired.unlock();
         listener.followup();
         env.tick();
 
