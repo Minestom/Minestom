@@ -22,7 +22,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return the entities ticked in the current thread
      */
-    static @NotNull Stream<@NotNull Entity> locals() {
+    static @NotNull Stream<@NotNull Entity> localEntities() {
         if (!(Thread.currentThread() instanceof TickThread tickThread)) return Stream.empty();
         return tickThread.entries.stream()
                 .flatMap(partitionEntry -> partitionEntry.elements().stream())

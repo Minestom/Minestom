@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 final class AcquirableImpl<T> implements Acquirable<T> {
+    private static final boolean ASSERTIONS_ENABLED = AcquirableImpl.class.desiredAssertionStatus();
     static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
 
     /**
@@ -102,8 +103,6 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     void assign(@NotNull TickThread thread) {
         this.assignedThread = thread;
     }
-
-    private static final boolean ASSERTIONS_ENABLED = AcquirableImpl.class.desiredAssertionStatus();
 
     @Override
     public void assertOwnership() {
