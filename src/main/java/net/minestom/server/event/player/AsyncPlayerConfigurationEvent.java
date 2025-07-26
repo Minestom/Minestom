@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.AsyncEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
@@ -24,7 +25,7 @@ import java.util.Set;
  *
  * <p>It is valid to kick a player using {@link Player#kick(net.kyori.adventure.text.Component)} during this event.</p>
  */
-public class AsyncPlayerConfigurationEvent implements PlayerEvent {
+public class AsyncPlayerConfigurationEvent implements PlayerEvent, AsyncEvent {
     private final Player player;
     private final boolean isFirstConfig;
 
