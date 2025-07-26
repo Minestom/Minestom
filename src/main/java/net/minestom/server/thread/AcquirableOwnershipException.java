@@ -1,5 +1,6 @@
 package net.minestom.server.thread;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,7 @@ public final class AcquirableOwnershipException extends RuntimeException {
     private final Thread assignedThread;
     private final Object value;
 
+    @ApiStatus.Internal
     public AcquirableOwnershipException(@NotNull Thread currentThread,
                                         @NotNull Thread initThread,
                                         @Nullable Thread assignedThread,
