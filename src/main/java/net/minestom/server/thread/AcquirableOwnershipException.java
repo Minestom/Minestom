@@ -29,7 +29,7 @@ public final class AcquirableOwnershipException extends RuntimeException {
                       Current thread:  %s
                       Assigned thread: %s
                       Problem: The element is assigned to a different thread and not currently owned.
-                      Solution: Use sync() or lock() to acquire ownership before accessing the element.
+                      Solution: Use Acquirable#sync() or Acquirable#lock() to acquire ownership before accessing the element.
                     """.formatted(valueString,
                     Thread.currentThread().getName(),
                     assignedThread.getName()
