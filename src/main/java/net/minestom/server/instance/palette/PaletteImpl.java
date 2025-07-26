@@ -63,6 +63,7 @@ final class PaletteImpl implements Palette {
     public int get(int x, int y, int z) {
         validateCoord(dimension, x, y, z);
         if (bitsPerEntry == 0) return count;
+        if (values == null) return 0;
         final int value = read(dimension(), bitsPerEntry, values, x, y, z);
         return paletteIndexToValue(value);
     }
@@ -634,7 +635,11 @@ final class PaletteImpl implements Palette {
 
     @Override
     public int paletteIndexToValue(int value) {
-        return hasPalette() ? paletteToValueList.elements()[value] : value;
+        if (hasPalette() && paletteToValueList != null) {
+            return paletteToValueList.elements()[value];
+        } else {
+            return value;
+        }
     }
 
     @Override
