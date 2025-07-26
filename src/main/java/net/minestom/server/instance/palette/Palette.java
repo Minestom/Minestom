@@ -57,9 +57,13 @@ public sealed interface Palette permits PaletteImpl {
 
     void getAllPresent(@NotNull EntryConsumer consumer);
 
+    int height(int x, int z, @NotNull EntryPredicate predicate);
+
     void set(int x, int y, int z, int value);
 
     void fill(int value);
+
+    void load(int[] palette, long[] values);
 
     void offset(int offset);
 
@@ -182,6 +186,11 @@ public sealed interface Palette permits PaletteImpl {
     @FunctionalInterface
     interface EntryFunction {
         int apply(int x, int y, int z, int value);
+    }
+
+    @FunctionalInterface
+    interface EntryPredicate {
+        boolean get(int x, int y, int z, int value);
     }
 
     NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS);
