@@ -86,6 +86,29 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public int height(int x, int z, @NotNull EntryPredicate predicate) {
+        validateCoord(dimension, x, 0, z);
+        final int dimension = this.dimension;
+        final int startY = dimension - 1;
+        if (bitsPerEntry == 0) return predicate.get(x, startY, z, count) ? startY : -1;
+        final long[] values = this.values;
+        final int bitsPerEntry = this.bitsPerEntry;
+        final int valuesPerLong = 64 / bitsPerEntry;
+        final int mask = (1 << bitsPerEntry) - 1;
+        final int[] paletteIds = hasPalette() ? paletteToValueList.elements() : null;
+        for (int y = startY; y >= 0; y--) {
+            final int index = sectionIndex(dimension, x, y, z);
+            final int longIndex = index / valuesPerLong;
+            final int bitIndex = (index % valuesPerLong) * bitsPerEntry;
+            final int paletteIndex = (int) (values[longIndex] >> bitIndex) & mask;
+            final int value = paletteIds != null && paletteIndex < paletteIds.length ? paletteIds[paletteIndex]
+                    : paletteIndex;
+            if (predicate.get(x, y, z, value)) return y;
+        }
+        return -1;
+    }
+
+    @Override
     public void set(int x, int y, int z, int value) {
         validateCoord(dimension, x, y, z);
         value = valueToPaletteIndex(value);
@@ -102,6 +125,60 @@ final class PaletteImpl implements Palette {
         this.values = null;
         this.paletteToValueList = null;
         this.valueToPaletteMap = null;
+    }
+
+    @Override
+    public void load(int[] palette, long[] values) {
+        int bpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
+        bpe = Math.max(minBitsPerEntry, bpe);
+        boolean useDirectMode = bpe > maxBitsPerEntry;
+        if (useDirectMode) bpe = directBits;
+        this.bitsPerEntry = (byte) bpe;
+
+        if (useDirectMode) {
+            // Direct mode: convert from palette indices to direct values
+            this.paletteToValueList = null;
+            this.valueToPaletteMap = null;
+            this.values = new long[arrayLength(dimension, directBits)];
+
+            final int originalBpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
+            final int actualOriginalBpe = Math.max(minBitsPerEntry, originalBpe);
+            final int originalMask = (1 << actualOriginalBpe) - 1;
+            final int originalValuesPerLong = 64 / actualOriginalBpe;
+
+            int nonZeroCount = 0;
+            final int dimension = this.dimension;
+            for (int y = 0; y < dimension; y++) {
+                for (int z = 0; z < dimension; z++) {
+                    for (int x = 0; x < dimension; x++) {
+                        final int index = sectionIndex(dimension, x, y, z);
+
+                        // Read palette index from original values
+                        final int longIndex = index / originalValuesPerLong;
+                        final int bitIndex = (index % originalValuesPerLong) * actualOriginalBpe;
+                        final int paletteIndex = (int) (values[longIndex] >> bitIndex) & originalMask;
+
+                        // Convert to direct value
+                        final int directValue = paletteIndex < palette.length ? palette[paletteIndex] : 0;
+                        if (directValue != 0) nonZeroCount++;
+
+                        // Write direct value to new values array using coordinates
+                        write(dimension, directBits, this.values, x, y, z, directValue);
+                    }
+                }
+            }
+            this.count = nonZeroCount;
+        } else {
+            // Indirect mode: use palette
+            this.count = Palettes.count(bpe, values);
+            this.paletteToValueList = new IntArrayList(palette);
+            this.valueToPaletteMap = new Int2IntOpenHashMap(palette.length);
+            this.valueToPaletteMap.defaultReturnValue(-1);
+            for (int i = 0; i < palette.length; i++) {
+                this.valueToPaletteMap.put(palette[i], i);
+            }
+            this.values = values.clone();
+        }
     }
 
     @Override

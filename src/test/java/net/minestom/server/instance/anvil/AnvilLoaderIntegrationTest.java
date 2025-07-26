@@ -1,10 +1,14 @@
 package net.minestom.server.instance.anvil;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryKey;
@@ -27,13 +31,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
 public class AnvilLoaderIntegrationTest {
-
-    private static final Path testRoot = Path.of("src", "test", "resources", "net", "minestom", "server", "instance");
+    private static final Path WORLD_RESOURCES = Path.of("src", "test", "resources", "net", "minestom", "server", "instance");
 
     @Test
     public void loadVanillaRegion(Env env) throws IOException {
         // load a full vanilla region, not checking any content just making sure it loads without issues.
-
         var worldFolder = extractWorld("anvil_vanilla_sample");
         AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
             // Force loads inside current thread
@@ -170,12 +172,10 @@ public class AnvilLoaderIntegrationTest {
         // flower pot
         assertEquals(Block.OAK_PLANKS, instance.getBlock(-1, 1, -3));
         assertEquals(Block.POTTED_POPPY, instance.getBlock(-1, 2, -3));
-
-        env.destroyInstance(instance);
     }
 
     @Test
-    public void loadAndSaveChunk(Env env) throws IOException, InterruptedException {
+    public void loadAndSaveChunk(Env env) throws IOException {
         var worldFolder = extractWorld("anvil_loader");
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
             // Force loads inside current thread
@@ -191,13 +191,9 @@ public class AnvilLoaderIntegrationTest {
         });
         Chunk originalChunk = instance.loadChunk(0, 0).join();
 
-        synchronized (originalChunk) {
-            instance.saveChunkToStorage(originalChunk);
-            instance.unloadChunk(originalChunk);
-            while (originalChunk.isLoaded()) {
-                Thread.sleep(1);
-            }
-        }
+        instance.saveChunkToStorage(originalChunk);
+        instance.unloadChunk(originalChunk);
+        assertNull(instance.getChunk(0, 0));
 
         Chunk reloadedChunk = instance.loadChunk(0, 0).join();
         for (int section = reloadedChunk.getMinSection(); section < reloadedChunk.getMaxSection(); section++) {
@@ -218,31 +214,75 @@ public class AnvilLoaderIntegrationTest {
             });
             Assertions.assertArrayEquals(original, reloaded);
         }
+    }
 
-        env.destroyInstance(instance);
+    @Test
+    public void loadAndSaveBlockNBT(Env env) throws IOException {
+        var worldFolder = extractWorld("anvil_loader");
+        Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
+        Chunk originalChunk = instance.loadChunk(0, 0).join();
+
+        var nbt = CompoundBinaryTag.builder()
+                .putString("hello", "world")
+                .build();
+        var block = Block.STONE.withNbt(nbt);
+        instance.setBlock(BlockVec.ZERO, block);
+
+        instance.saveChunkToStorage(originalChunk).join();
+        instance.unloadChunk(originalChunk);
+        assertNull(instance.getChunk(0, 0));
+
+        instance.loadChunk(0, 0).join();
+        assertEquals(block, instance.getBlock(BlockVec.ZERO));
+    }
+
+    @Test
+    public void loadAndSaveBlockHandler(Env env) throws IOException, InterruptedException {
+        var worldFolder = extractWorld("anvil_loader");
+        Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
+        Chunk originalChunk = instance.loadChunk(0, 0).join();
+
+        var handler = new BlockHandler() {
+            @Override
+            public @NotNull Key getKey() {
+                return Key.key("test");
+            }
+        };
+        env.process().block().registerHandler(Block.STONE.key(), () -> handler);
+
+        var nbt = CompoundBinaryTag.builder()
+                .putString("hello", "world")
+                .build();
+        var block = Block.STONE.withNbt(nbt);
+        instance.setBlock(BlockVec.ZERO, block);
+
+        instance.saveChunkToStorage(originalChunk).join();
+        instance.unloadChunk(originalChunk);
+        assertNull(instance.getChunk(0, 0));
+
+        instance.loadChunk(0, 0).join();
+        assertEquals(block, instance.getBlock(BlockVec.ZERO));
     }
 
     private static Path extractWorld(@NotNull String resourceName) throws IOException {
-        var worldFolder = Files.createTempDirectory("minestom-test-world-" + resourceName);
+        final Path worldFolder = Files.createTempDirectory("minestom-test-world-" + resourceName);
 
         // https://stackoverflow.com/a/60621544
-        Files.walkFileTree(testRoot.resolve(resourceName), new SimpleFileVisitor<>() {
-
+        Files.walkFileTree(WORLD_RESOURCES.resolve(resourceName), new SimpleFileVisitor<>() {
             @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+            public @NotNull FileVisitResult preVisitDirectory(@NotNull Path dir, @NotNull BasicFileAttributes attrs)
                     throws IOException {
-                Files.createDirectories(worldFolder.resolve(testRoot.relativize(dir)));
+                Files.createDirectories(worldFolder.resolve(WORLD_RESOURCES.relativize(dir)));
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+            public @NotNull FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes attrs)
                     throws IOException {
-                Files.copy(file, worldFolder.resolve(testRoot.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(file, worldFolder.resolve(WORLD_RESOURCES.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
                 return FileVisitResult.CONTINUE;
             }
         });
-
         return worldFolder.resolve(resourceName);
     }
 }
