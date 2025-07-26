@@ -9,15 +9,15 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class AcquirableOwnershipException extends RuntimeException {
     private final Thread initThread, assignedThread;
-    private final Object value;
+    private final Object element;
 
     @ApiStatus.Internal
     public AcquirableOwnershipException(@NotNull Thread initThread, @Nullable Thread assignedThread,
-                                        @NotNull Object value) {
-        super(buildMessage(initThread, assignedThread, value));
+                                        @NotNull Object element) {
+        super(buildMessage(initThread, assignedThread, element));
         this.initThread = initThread;
         this.assignedThread = assignedThread;
-        this.value = value;
+        this.element = element;
     }
 
     private static String buildMessage(@NotNull Thread initThread, @Nullable Thread assignedThread,
@@ -28,7 +28,7 @@ public final class AcquirableOwnershipException extends RuntimeException {
                     Thread ownership assertion failed for %s:
                       Current thread:  %s
                       Assigned thread: %s
-                      Problem: The element is assigned to a different thread and not currently owned.
+                      Problem: The element is assigned to a different thread and is not currently owned.
                       Solution: Use Acquirable#sync() or Acquirable#lock() to acquire ownership before accessing the element.
                     """.formatted(valueString,
                     Thread.currentThread().getName(),
@@ -64,9 +64,9 @@ public final class AcquirableOwnershipException extends RuntimeException {
     }
 
     /**
-     * The value of the acquirable element that caused the ownership failure.
+     * The acquirable element that caused the ownership failure.
      */
-    public @NotNull Object value() {
-        return value;
+    public @NotNull Object element() {
+        return element;
     }
 }
