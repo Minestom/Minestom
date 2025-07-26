@@ -4,12 +4,11 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
 
 /**
  * A Batch used when all of the block changed are contained inside a single chunk.
@@ -29,7 +29,9 @@ import java.util.concurrent.CountDownLatch;
  * Coordinates are relative to the chunk (0-15) instead of world coordinates.
  *
  * @see Batch
+ * @deprecated Use {@link net.minestom.server.instance.BlockBatch#aligned(Consumer)}
  */
+@Deprecated
 public class ChunkBatch implements Batch<ChunkCallback> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
@@ -176,7 +178,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
             if (blocks.isEmpty()) {
                 // Nothing to flush
-                OptionalCallback.execute(callback, chunk);
+                if (callback != null) callback.accept(chunk);
                 return;
             }
 
@@ -189,11 +191,12 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                     sections.add(section);
                 }
             }
+            instance.invalidateChunk(chunk.getChunkX(), chunk.getChunkZ());
 
             if (inverse != null) inverse.readyLatch.countDown();
             updateChunk(instance, chunk, sections, callback, safeCallback);
         } catch (Exception e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 
@@ -225,11 +228,6 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         if (options.shouldSendUpdate()) {
             // TODO update all sections from `updatedSections`
             chunk.sendChunk();
-        }
-
-        if (instance instanceof InstanceContainer) {
-            // FIXME: put method in Instance instead
-            ((InstanceContainer) instance).refreshLastBlockChangeTime();
         }
 
         if (callback != null) {

@@ -55,7 +55,7 @@ public class DynamicChunk extends Chunk {
     protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
     protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
 
-    // Key = ChunkUtils#getBlockIndex
+    // Key = CoordConversion#chunkBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
