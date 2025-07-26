@@ -108,10 +108,9 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     public void assertOwnership() {
         if (!ASSERTIONS_ENABLED && !ServerFlag.ACQUIRABLE_STRICT) return;
         if (isOwned()) return;
-        Thread currentThread = Thread.currentThread();
-        Thread initThread = this.initThread;
         TickThread assignedThread = this.assignedThread;
-        if (assignedThread == null && currentThread == initThread) return;
+        Thread initThread = this.initThread;
+        if (assignedThread == null && Thread.currentThread() == initThread) return;
         throw new AcquirableOwnershipException(initThread, assignedThread, unwrap().toString());
     }
 
