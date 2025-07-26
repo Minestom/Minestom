@@ -17,11 +17,13 @@ final class AcquiredImpl<T> implements Acquired<T> {
         this.lock = lock;
     }
 
+    @Override
     public @NotNull T get() {
         safeCheck();
         return value;
     }
 
+    @Override
     public void unlock() {
         safeCheck();
         this.unlocked = true;
