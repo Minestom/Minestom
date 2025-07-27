@@ -18,7 +18,6 @@ import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -137,10 +136,8 @@ public class InstanceContainer extends Instance {
      * Unsafe because the method is not synchronized and it does not verify if the chunk is loaded or not.
      *
      * @param chunk the {@link Chunk} which should be loaded
-     * @param x     the block X
-     * @param y     the block Y
-     * @param z     the block Z
-     * @param block the block to place
+     * @param mutation the {@link BlockChange} being applied to the block
+     * @param doBlockUpdates whether this should update blocks around it
      */
     private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, @NotNull BlockChange mutation, boolean doBlockUpdates) {
         if (chunk.isReadOnly()) return;
