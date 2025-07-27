@@ -203,7 +203,7 @@ public class AnvilLoader implements IChunkLoader {
                 } else if (convertedBiomePalette.length > 1) {
                     final long[] packedIndices = biomesTag.getLongArray("data");
                     Check.stateCondition(packedIndices.length == 0, "Missing packed biomes data");
-                    section.blockPalette().load(convertedBiomePalette, packedIndices);
+                    section.biomePalette().load(convertedBiomePalette, packedIndices);
                 }
             }
 
@@ -251,9 +251,6 @@ public class AnvilLoader implements IChunkLoader {
                     }
                     block = block.withProperties(properties);
                 }
-                // Handler
-                final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(block.name());
-                if (handler != null) block = block.withHandler(handler);
 
                 convertedPalette[i] = block.stateId();
             }
