@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record DamageTypeImpl(
-        @NotNull String messageId,
-        @NotNull String scaling,
-        float exhaustion,
-        @Nullable String effects,
-        @Nullable String deathMessageType
+    @NotNull String messageId,
+    @NotNull String scaling,
+    float exhaustion,
+    @Nullable String effects,
+    @Nullable String deathMessageType
 ) implements DamageType {
 
     @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints

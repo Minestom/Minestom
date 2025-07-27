@@ -13,21 +13,21 @@ import org.jetbrains.annotations.Nullable;
 
 public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
     @NotNull Codec<DamageType> REGISTRY_CODEC = StructCodec.struct(
-            "message_id", Codec.STRING, DamageType::messageId,
-            "scaling", Codec.STRING, DamageType::scaling,
-            "exhaustion", Codec.FLOAT, DamageType::exhaustion,
-            "effects", Codec.STRING.optional("hurt"), DamageType::effects,
-            "death_message_type", Codec.STRING.optional("default"), DamageType::deathMessageType,
-            DamageType::create);
+        "message_id", Codec.STRING, DamageType::messageId,
+        "scaling", Codec.STRING, DamageType::scaling,
+        "exhaustion", Codec.FLOAT, DamageType::exhaustion,
+        "effects", Codec.STRING.optional("hurt"), DamageType::effects,
+        "death_message_type", Codec.STRING.optional("default"), DamageType::deathMessageType,
+        DamageType::create);
 
     @NotNull Codec<RegistryKey<DamageType>> CODEC = RegistryKey.codec(Registries::damageType);
 
     static @NotNull DamageType create(
-            @NotNull String messageId,
-            @NotNull String scaling,
-            float exhaustion,
-            @Nullable String effects,
-            @Nullable String deathMessageType
+        @NotNull String messageId,
+        @NotNull String scaling,
+        float exhaustion,
+        @Nullable String effects,
+        @Nullable String deathMessageType
     ) {
         return new DamageTypeImpl(messageId, scaling, exhaustion, effects, deathMessageType);
     }
