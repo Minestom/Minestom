@@ -8,8 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
-import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
-import static net.minestom.server.coordinate.CoordConversion.globalToChunk;
+import static net.minestom.server.coordinate.CoordConversion.*;
 
 /**
  * Represents a 3D point.
@@ -72,17 +71,17 @@ public sealed interface Point permits Vec, Pos, BlockVec {
 
     @Contract(pure = true)
     default int sectionX() {
-        return globalToChunk(x());
+        return globalToSection(blockX());
     }
 
     @Contract(pure = true)
     default int sectionY() {
-        return globalToChunk(y());
+        return globalToSection(blockY());
     }
 
     @Contract(pure = true)
     default int sectionZ() {
-        return globalToChunk(z());
+        return globalToSection(blockZ());
     }
 
     @Contract(pure = true)
@@ -93,6 +92,16 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     @Contract(pure = true)
     default int chunkZ() {
         return sectionZ();
+    }
+
+    @Contract(pure = true)
+    default int regionX() {
+        return globalToRegion(blockX());
+    }
+
+    @Contract(pure = true)
+    default int regionZ() {
+        return globalToRegion(blockZ());
     }
 
     /**
