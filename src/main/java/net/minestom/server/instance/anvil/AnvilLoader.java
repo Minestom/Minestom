@@ -416,15 +416,16 @@ public class AnvilLoader implements IChunkLoader {
                         // Add block entity if present
                         final BlockHandler handler = block.handler();
                         final CompoundBinaryTag originalNBT = block.nbt();
-                        if (originalNBT != null || handler != null) {
-                            CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
-                            if (originalNBT != null) blockEntityTag.put(originalNBT);
-                            if (handler != null) blockEntityTag.putString("id", handler.getKey().asString());
-                            blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
-                            blockEntityTag.putInt("y", y);
-                            blockEntityTag.putInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
-                            blockEntityTag.putByte("keepPacked", (byte) 0);
-                            blockEntities.add(blockEntityTag.build());
+                        final boolean saveHandler = handler != null && (!handler.defaultHandler() || !handler.getKey().equals(block.key()));
+                        if (originalNBT != null || saveHandler) {
+                                final CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
+                                if (originalNBT != null) blockEntityTag.put(originalNBT);
+                                if (handler != null) blockEntityTag.putString("id", handler.getKey().asString());
+                                blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
+                                blockEntityTag.putInt("y", y);
+                                blockEntityTag.putInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
+                                blockEntityTag.putByte("keepPacked", (byte) 0);
+                                blockEntities.add(blockEntityTag.build());
                         }
                     });
                 }

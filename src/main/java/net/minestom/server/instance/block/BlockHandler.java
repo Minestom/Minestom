@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
  * Interface used to provide block behavior. Set with {@link Block#withHandler(BlockHandler)}.
@@ -87,6 +88,16 @@ public interface BlockHandler {
      */
     @NotNull
     Key getKey();
+
+    /**
+     * @return true if this block handler is the default handler for a block
+     * and should not be saved to the world file. This should only be used if you
+     * register the handler using {@link BlockManager#registerHandler} and {@link #getKey()} is
+     * the same as the block's key.
+     */
+    default boolean defaultHandler() {
+        return false;
+    }
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
