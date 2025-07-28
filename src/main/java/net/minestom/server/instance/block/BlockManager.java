@@ -38,6 +38,10 @@ public final class BlockManager {
         return handler != null ? handler.get() : null;
     }
 
+    public @Nullable BlockHandler getHandler(@NotNull Key key) {
+        return getHandler(key.asString());
+    }
+
     @ApiStatus.Internal
     public @NotNull BlockHandler getHandlerOrDummy(@NotNull String namespace) {
         BlockHandler handler = getHandler(namespace);
@@ -73,4 +77,9 @@ public final class BlockManager {
     public synchronized @Nullable BlockPlacementRule getBlockPlacementRule(@NotNull Block block) {
         return placementRuleMap.get(block.id());
     }
+
+    public boolean hasHandler(String namespace) {
+        return blockHandlerMap.containsKey(namespace);
+    }
+
 }

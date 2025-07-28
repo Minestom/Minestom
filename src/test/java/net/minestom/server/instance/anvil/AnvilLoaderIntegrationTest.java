@@ -248,12 +248,12 @@ public class AnvilLoaderIntegrationTest {
                 return Key.key("test");
             }
         };
-        env.process().block().registerHandler(Block.STONE.key(), () -> handler);
+        env.process().block().registerHandler(handler.getKey(), () -> handler);
 
         var nbt = CompoundBinaryTag.builder()
                 .putString("hello", "world")
                 .build();
-        var block = Block.STONE.withNbt(nbt);
+        var block = Block.STONE.withNbt(nbt).withHandler(handler);
         instance.setBlock(BlockVec.ZERO, block);
 
         instance.saveChunkToStorage(originalChunk).join();
@@ -262,6 +262,109 @@ public class AnvilLoaderIntegrationTest {
 
         instance.loadChunk(0, 0).join();
         assertEquals(block, instance.getBlock(BlockVec.ZERO));
+    }
+
+    @Test
+    public void loadAndSaveBlockWithDefaultHandlerHandler(Env env) throws IOException, InterruptedException {
+        final Path worldFolder = extractWorld("anvil_loader");
+        final Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
+        final Chunk originalChunk = instance.loadChunk(0, 0).join();
+
+        final BlockHandler handler = new BlockHandler() {
+            @Override
+            public @NotNull Key getKey() {
+                return Block.STONE.key();
+            }
+
+            @Override
+            public boolean defaultHandler() {
+                return true;
+            }
+        };
+        env.process().block().registerHandler(handler.getKey(), () -> handler);
+
+        final Block block = Block.STONE.withHandler(handler);
+        instance.setBlock(BlockVec.ZERO, block);
+
+        instance.saveChunkToStorage(originalChunk).join();
+        instance.unloadChunk(originalChunk);
+        assertNull(instance.getChunk(0, 0));
+
+        instance.loadChunk(0, 0).join();
+        assertEquals(block, instance.getBlock(BlockVec.ZERO));
+    }
+
+    @Test
+    public void loadAndSaveBlockWithDefaultHandlerHandlerFromVanilla(Env env) throws IOException, InterruptedException {
+        final BlockHandler handler = new BlockHandler() {
+            @Override
+            public @NotNull Key getKey() {
+                return Block.DEEPSLATE.key();
+            }
+
+            @Override
+            public boolean defaultHandler() {
+                return true;
+            }
+        };
+        // register handler before loading world
+        env.process().block().registerHandler(handler.getKey(), () -> handler);
+
+        final Path worldFolder = extractWorld("anvil_vanilla_sample");
+        final Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
+        final Chunk originalChunk = instance.loadChunk(0, 0).join();
+
+        final Block block = Block.DEEPSLATE.withHandler(handler);
+
+        assertEquals(block, instance.getBlock(BlockVec.ZERO));
+    }
+
+    // make sure default handler doesn't override other handlers
+    @Test
+    public void loadAndSaveBlockWithoutDefaultHandlerHandlerFromVanilla(Env env) throws IOException, InterruptedException {
+        final BlockHandler defaultHandler = new BlockHandler() {
+            @Override
+            public @NotNull Key getKey() {
+                return Block.DEEPSLATE.key();
+            }
+
+            @Override
+            public boolean defaultHandler() {
+                return true;
+            }
+        };
+        final BlockHandler notDefaultHandler = new BlockHandler() {
+            @Override
+            public @NotNull Key getKey() {
+                return Key.key("deepslate_not_default");
+            }
+
+            @Override
+            public boolean defaultHandler() {
+                return false;
+            }
+        };
+        env.process().block().registerHandler(defaultHandler.getKey(), () -> defaultHandler);
+        env.process().block().registerHandler(notDefaultHandler.getKey(), () -> notDefaultHandler);
+
+        final Path worldFolder = extractWorld("anvil_vanilla_sample");
+        final Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
+        final Chunk originalChunk = instance.loadChunk(0, 0).join();
+        final BlockVec defaultPoint = BlockVec.ZERO;
+        final BlockVec notDefaultPoint = defaultPoint.add(0, 1, 0);
+
+        final Block defaultBlock = Block.DEEPSLATE.withHandler(defaultHandler);
+        final Block notDefaultBlock = Block.DEEPSLATE.withHandler(notDefaultHandler);
+
+        instance.setBlock(notDefaultPoint, notDefaultBlock);
+
+        instance.saveChunkToStorage(originalChunk).join();
+        instance.unloadChunk(originalChunk);
+        assertNull(instance.getChunk(0, 0));
+
+        instance.loadChunk(0, 0).join();
+        assertEquals(notDefaultBlock, instance.getBlock(notDefaultPoint));
+        assertEquals(defaultBlock, instance.getBlock(defaultPoint));
     }
 
     private static Path extractWorld(@NotNull String resourceName) throws IOException {
