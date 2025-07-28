@@ -1,8 +1,6 @@
 package net.minestom.server.instance.anvil;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
-import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.*;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -112,7 +110,7 @@ public class AnvilLoader implements IChunkLoader {
             // TODO: Should we handle other statuses?
             if (status.isEmpty() || "minecraft:full".equals(status)) {
                 // Blocks + Biomes
-                final Set<Integer> blocksWithHandlers = loadSections(chunk, chunkData);
+                final IntSet blocksWithHandlers = loadSections(chunk, chunkData);
                 // Block entities
                 loadBlockEntities(chunk, chunkData, blocksWithHandlers);
                 chunk.loadHeightmapsFromNBT(chunkData.getCompound("Heightmaps"));
@@ -177,8 +175,8 @@ public class AnvilLoader implements IChunkLoader {
     /**
      * @return a set of block state ids that have handlers registered
      */
-    private @Unmodifiable Set<Integer> loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
-        final Set<Integer> blocksWithHandlers = new HashSet<>();
+    private IntSet loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
+        final IntSet blocksWithHandlers = new IntOpenHashSet();
         for (BinaryTag sectionTag : chunkData.getList("sections", BinaryTagTypes.COMPOUND)) {
             if (!(sectionTag instanceof CompoundBinaryTag sectionData)) {
                 LOGGER.warn("Invalid section tag in chunk data: {}", sectionTag);
@@ -239,7 +237,7 @@ public class AnvilLoader implements IChunkLoader {
                 }
             }
         }
-        return Set.copyOf(blocksWithHandlers);
+        return blocksWithHandlers;
     }
 
     private int[] loadBlockPalette(@NotNull ListBinaryTag paletteTag) {
@@ -289,7 +287,7 @@ public class AnvilLoader implements IChunkLoader {
         return convertedPalette;
     }
 
-    private void loadBlockEntities(@NotNull Chunk loadedChunk, @NotNull CompoundBinaryTag chunkData, @NotNull Set<Integer> blocksWithHandlers) {
+    private void loadBlockEntities(@NotNull Chunk loadedChunk, @NotNull CompoundBinaryTag chunkData, @NotNull IntSet blocksWithHandlers) {
         for (BinaryTag blockEntityTag : chunkData.getList("block_entities", BinaryTagTypes.COMPOUND)) {
             if (!(blockEntityTag instanceof CompoundBinaryTag blockEntity)) {
                 LOGGER.warn("Invalid block entity tag in chunk data: {}", blockEntityTag);
@@ -324,7 +322,7 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private void loadDefaultBlockHandlers(@NotNull Chunk loadedChunk, @NotNull Set<Integer> blocksWithHandlers) {
+    private void loadDefaultBlockHandlers(@NotNull Chunk loadedChunk, @NotNull IntSet blocksWithHandlers) {
         for (int sectionIndex = loadedChunk.getMinSection(); sectionIndex < loadedChunk.getMaxSection(); sectionIndex++) {
             final Section section = loadedChunk.getSection(sectionIndex);
             final Palette blockPalette = section.blockPalette();
