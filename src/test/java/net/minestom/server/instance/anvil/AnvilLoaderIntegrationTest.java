@@ -4,7 +4,6 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
@@ -223,20 +222,18 @@ public class AnvilLoaderIntegrationTest {
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
         Chunk originalChunk = instance.loadChunk(0, 0).join();
 
-        final Point blockPos = BlockVec.ZERO.add(0, 64, 0);
-
         var nbt = CompoundBinaryTag.builder()
                 .putString("hello", "world")
                 .build();
         var block = Block.STONE.withNbt(nbt);
-        instance.setBlock(blockPos, block);
+        instance.setBlock(BlockVec.ZERO, block);
 
         instance.saveChunkToStorage(originalChunk).join();
         instance.unloadChunk(originalChunk);
         assertNull(instance.getChunk(0, 0));
 
         instance.loadChunk(0, 0).join();
-        assertEquals(block, instance.getBlock(blockPos));
+        assertEquals(block, instance.getBlock(BlockVec.ZERO));
     }
 
     @Test
