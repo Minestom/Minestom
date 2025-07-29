@@ -335,7 +335,13 @@ public class PlayerInit {
                 Block block = event.getBlock();
                 BlockHandler handler = block.handler();
                 if (handler != null) return;
-                event.setBlock(event.getBlock().withHandler(MinecraftServer.getBlockManager().getHandler(block.key().asString())));
+                // backwards compatibility, if you want a default block handler to be used then just don't register a handler
+                // with the block key
+                final BlockHandler registeredHandler = MinecraftServer.getBlockManager().getHandler(block.key().asString());
+                if (registeredHandler == null) {
+                    return;
+                }
+                event.setBlock(event.getBlock().withHandler(registeredHandler));
             })
             .addListener(PlayerEditSignEvent.class, event -> {
                 event.getLines()

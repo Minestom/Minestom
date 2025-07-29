@@ -674,7 +674,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 for (int z = minZ; z <= maxZ; z++) {
                     final Block block = cache.getBlock(x, y, z, Block.Getter.Condition.CACHED);
                     if (block == null) continue;
-                    final BlockHandler handler = block.handler();
+                    final BlockHandler handler = MinecraftServer.getBlockManager().getBlockHandler(block);
                     if (handler != null) {
                         // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
                         Vec blockPos = new Vec(x, y, z);

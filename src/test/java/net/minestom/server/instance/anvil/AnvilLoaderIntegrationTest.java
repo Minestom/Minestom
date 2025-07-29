@@ -281,9 +281,9 @@ public class AnvilLoaderIntegrationTest {
                 return true;
             }
         };
-        env.process().block().registerHandler(handler.getKey(), () -> handler);
+        env.process().block().registerDefaultHandlerForAllStates(handler);
 
-        final Block block = Block.STONE.withHandler(handler);
+        final Block block = Block.STONE;
         instance.setBlock(BlockVec.ZERO, block);
 
         instance.saveChunkToStorage(originalChunk).join();
@@ -292,6 +292,7 @@ public class AnvilLoaderIntegrationTest {
 
         instance.loadChunk(0, 0).join();
         assertEquals(block, instance.getBlock(BlockVec.ZERO));
+        assertEquals(handler, env.process().block().getBlockHandler(block));
     }
 
     @Test
@@ -308,18 +309,18 @@ public class AnvilLoaderIntegrationTest {
             }
         };
         // register handler before loading world
-        env.process().block().registerHandler(handler.getKey(), () -> handler);
+        env.process().block().registerDefaultHandlerForAllStates(handler);
 
         final Path worldFolder = extractWorld("anvil_vanilla_sample");
         final Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
         final Chunk originalChunk = instance.loadChunk(0, 0).join();
 
-        final Block block = Block.DEEPSLATE.withHandler(handler);
+        final Block block = Block.DEEPSLATE;
 
         assertEquals(block, instance.getBlock(BlockVec.ZERO));
+        assertEquals(handler, env.process().block().getBlockHandler(block));
     }
 
-    // make sure default handler doesn't override other handlers
     @Test
     public void loadAndSaveBlockWithoutDefaultHandlerHandlerFromVanilla(Env env) throws IOException, InterruptedException {
         final BlockHandler defaultHandler = new BlockHandler() {
@@ -344,7 +345,7 @@ public class AnvilLoaderIntegrationTest {
                 return false;
             }
         };
-        env.process().block().registerHandler(defaultHandler.getKey(), () -> defaultHandler);
+        env.process().block().registerDefaultHandlerForAllStates(defaultHandler);
         env.process().block().registerHandler(notDefaultHandler.getKey(), () -> notDefaultHandler);
 
         final Path worldFolder = extractWorld("anvil_vanilla_sample");
@@ -353,7 +354,7 @@ public class AnvilLoaderIntegrationTest {
         final BlockVec defaultPoint = BlockVec.ZERO;
         final BlockVec notDefaultPoint = defaultPoint.add(0, 1, 0);
 
-        final Block defaultBlock = Block.DEEPSLATE.withHandler(defaultHandler);
+        final Block defaultBlock = Block.DEEPSLATE;
         final Block notDefaultBlock = Block.DEEPSLATE.withHandler(notDefaultHandler);
 
         instance.setBlock(notDefaultPoint, notDefaultBlock);

@@ -103,7 +103,7 @@ public class DynamicChunk extends Chunk {
 
         final int index = CoordConversion.chunkBlockIndex(x, y, z);
         // Handler
-        final BlockHandler handler = block.handler();
+        final BlockHandler handler = MinecraftServer.getBlockManager().getBlockHandler(block);
         final Block lastCachedBlock;
         if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
             lastCachedBlock = this.entries.put(index, block);
@@ -119,10 +119,13 @@ public class DynamicChunk extends Chunk {
 
         // Update block handlers
         var blockPosition = new Vec(x, y, z);
-        if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
-            // Previous destroy
-            lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
+        if (lastCachedBlock != null) {
+            final BlockHandler lastCachedHandler = MinecraftServer.getBlockManager().getBlockHandler(lastCachedBlock);
+            if (lastCachedHandler != null) {
+                // Previous destroy
+                lastCachedHandler.onDestroy(Objects.requireNonNullElseGet(destroy,
+                        () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
+            }
         }
         if (handler != null) {
             // New placement
@@ -134,7 +137,9 @@ public class DynamicChunk extends Chunk {
         }
 
         // UpdateHeightMaps
-        if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
+        if (needsCompleteHeightmapRefresh)
+
+            calculateFullHeightmap();
         motionBlocking.refresh(sectionRelativeX, y, sectionRelativeZ, block);
         worldSurface.refresh(sectionRelativeX, y, sectionRelativeZ, block);
     }
@@ -191,7 +196,7 @@ public class DynamicChunk extends Chunk {
         tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
             final int index = entry.getIntKey();
             final Block block = entry.getValue();
-            final BlockHandler handler = block.handler();
+            final BlockHandler handler = MinecraftServer.getBlockManager().getBlockHandler(block);
             if (handler == null) return;
             final Point blockPosition = CoordConversion.chunkBlockIndexGetGlobal(index, chunkX, chunkZ);
             handler.tick(new BlockHandler.Tick(block, instance, blockPosition));

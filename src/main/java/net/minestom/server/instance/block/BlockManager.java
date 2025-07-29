@@ -20,8 +20,11 @@ public final class BlockManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(BlockManager.class);
     // Namespace -> handler supplier
     private final Map<String, Supplier<? extends BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
+    // state id -> block handler
+    private final Map<Integer, BlockHandler> defaultBlockHandlers = new ConcurrentHashMap<>();
     // block id -> block placement rule
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
+
 
     private final Set<String> dummyWarning = ConcurrentHashMap.newKeySet(); // Prevent warning spam
 
@@ -40,6 +43,47 @@ public final class BlockManager {
 
     public @Nullable BlockHandler getHandler(@NotNull Key key) {
         return getHandler(key.asString());
+    }
+
+    public void registerDefaultHandlerForAllStates(@NotNull BlockHandler blockHandler) {
+        Check.argCondition(!blockHandler.defaultHandler(), "Block handler must be a default handler for %s", blockHandler.getKey().asString());
+        final Block block = Block.fromKey(blockHandler.getKey());
+        Check.argCondition(block == null, "Block handler must be registered for a valid block, got: %s", blockHandler.getKey().asString());
+        for (final Block state : block.possibleStates()) {
+            this.defaultBlockHandlers.put(state.stateId(), blockHandler);
+        }
+    }
+
+    public void registerDefaultHandlerForAllStates(@NotNull Key key, @NotNull BlockHandler blockHandler) {
+        Check.argCondition(!blockHandler.defaultHandler(), "Block handler must be a default handler for %s", blockHandler.getKey().asString());
+        final Block block = Block.fromKey(key);
+        Check.argCondition(block == null, "Block handler must be registered for a valid block, got: %s", key.asString());
+        for (final Block state : block.possibleStates()) {
+            this.defaultBlockHandlers.put(state.stateId(), blockHandler);
+        }
+    }
+
+    public void registerDefaultHandlerForState(@NotNull BlockHandler blockHandler, int stateId) {
+        Check.argCondition(!blockHandler.defaultHandler(), "Block handler must be a default handler for %s", blockHandler.getKey().asString());
+        Check.argCondition(Block.fromStateId(stateId) == null, "Block handler must be registered for a valid block state, got: %d", stateId);
+        this.defaultBlockHandlers.put(stateId, blockHandler);
+    }
+
+    public void registerDefaultHandlerForState(@NotNull BlockHandler blockHandler, @NotNull Block block) {
+        Check.argCondition(!blockHandler.defaultHandler(), "Block handler must be a default handler for %s", blockHandler.getKey().asString());
+        this.defaultBlockHandlers.put(block.stateId(), blockHandler);
+    }
+
+    public @Nullable BlockHandler getBlockHandler(Block block) {
+        final BlockHandler currentHandler = block.handler();
+        if (currentHandler != null || block.explicitlyNoHandler()) {
+            return currentHandler;
+        }
+        return this.getDefaultHandlerFor(block.stateId());
+    }
+
+    public @Nullable BlockHandler getDefaultHandlerFor(int blockStateId) {
+        return this.defaultBlockHandlers.get(blockStateId);
     }
 
     @ApiStatus.Internal

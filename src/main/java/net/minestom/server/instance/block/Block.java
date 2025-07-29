@@ -236,6 +236,13 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         return BlockImpl.REGISTRY;
     }
 
+    /**
+     *
+     * @return true if this block is explicitly set to not have a handler to prevent
+     * default handler from being used
+     */
+    boolean explicitlyNoHandler();
+
     @FunctionalInterface
     interface Comparator extends BiPredicate<Block, Block> {
         Comparator IDENTITY = (b1, b2) -> b1 == b2;

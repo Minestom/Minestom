@@ -62,7 +62,7 @@ public class BlockPlacementListener {
         EventDispatcher.call(playerBlockInteractEvent);
         boolean blockUse = playerBlockInteractEvent.isBlockingItemUse();
         if (!playerBlockInteractEvent.isCancelled()) {
-            final var handler = interactedBlock.handler();
+            final var handler = MinecraftServer.getBlockManager().getBlockHandler(interactedBlock);
             if (handler != null) {
                 blockUse |= !handler.onInteract(new BlockHandler.Interaction(interactedBlock, instance, blockFace, blockPosition, cursorPosition, player, hand));
             }

@@ -20,7 +20,9 @@ import java.util.*;
 record BlockImpl(@NotNull RegistryData.BlockEntry registry,
                  long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
-                 @Nullable BlockHandler handler) implements Block {
+                 @Nullable BlockHandler handler,
+                 boolean explicitlyNoHandler) implements Block {
+
     /**
      * Number of bits used to store the index of a property value.
      * <p>
@@ -97,7 +99,7 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
 
                             final RegistryData.BlockEntry entryOverride = RegistryData.block(namespace, RegistryData.Properties.fromMap(stateOverride), internCache, baseBlockEntry, properties);
                             final BlockImpl block = new BlockImpl(entryOverride,
-                                    propertiesValue, null, null);
+                                    propertiesValue, null, null, false);
                             blockStateMap.set(block.stateId(), block);
                             propertiesKeys[propertiesOffset] = propertiesValue;
                             blocksValues[propertiesOffset++] = block;
@@ -176,17 +178,17 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         tag.write(builder, value);
         final CompoundBinaryTag temporaryNbt = builder.build();
         final CompoundBinaryTag finalNbt = temporaryNbt.size() > 0 ? temporaryNbt : null;
-        return new BlockImpl(registry, propertiesArray, finalNbt, handler);
+        return new BlockImpl(registry, propertiesArray, finalNbt, handler, explicitlyNoHandler);
     }
 
     @Override
     public @NotNull Block withNbt(@Nullable CompoundBinaryTag compound) {
-        return new BlockImpl(registry, propertiesArray, compound, handler);
+        return new BlockImpl(registry, propertiesArray, compound, handler, explicitlyNoHandler);
     }
 
     @Override
     public @NotNull Block withHandler(@Nullable BlockHandler handler) {
-        return new BlockImpl(registry, propertiesArray, nbt, handler);
+        return new BlockImpl(registry, propertiesArray, nbt, handler, handler == null);
     }
 
     @Override
@@ -275,7 +277,7 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         // Reuse the same block instance if possible
         if (nbt == null && handler == null) return block;
         // Otherwise copy with the nbt and handler
-        return new BlockImpl(block.registry(), block.propertiesArray, nbt, handler);
+        return new BlockImpl(block.registry(), block.propertiesArray, nbt, handler, explicitlyNoHandler);
     }
 
     private static byte findKeyIndex(PropertyType[] properties, String key) {

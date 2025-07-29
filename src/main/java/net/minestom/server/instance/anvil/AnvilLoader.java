@@ -110,9 +110,9 @@ public class AnvilLoader implements IChunkLoader {
             // TODO: Should we handle other statuses?
             if (status.isEmpty() || "minecraft:full".equals(status)) {
                 // Blocks + Biomes
-                final IntSet blocksWithHandlers = loadSections(chunk, chunkData);
+                loadSections(chunk, chunkData);
                 // Block entities
-                loadBlockEntities(chunk, chunkData, blocksWithHandlers);
+                loadBlockEntities(chunk, chunkData);
                 chunk.loadHeightmapsFromNBT(chunkData.getCompound("Heightmaps"));
             } else {
                 LOGGER.warn("Skipping partially generated chunk at {}, {} with status {}", chunkX, chunkZ, status);
@@ -172,11 +172,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
 
-    /**
-     * @return a set of block state ids that have handlers registered
-     */
-    private IntSet loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
-        final IntSet blocksWithHandlers = new IntOpenHashSet();
+    private void loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
         for (BinaryTag sectionTag : chunkData.getList("sections", BinaryTagTypes.COMPOUND)) {
             if (!(sectionTag instanceof CompoundBinaryTag sectionData)) {
                 LOGGER.warn("Invalid section tag in chunk data: {}", sectionTag);
@@ -218,15 +214,6 @@ public class AnvilLoader implements IChunkLoader {
                 final CompoundBinaryTag blockStatesTag = sectionData.getCompound("block_states");
                 final ListBinaryTag blockPaletteTag = blockStatesTag.getList("palette", BinaryTagTypes.COMPOUND);
                 final int[] convertedPalette = loadBlockPalette(blockPaletteTag);
-                for (final int id : convertedPalette) {
-                    final Block block = Block.fromStateId(id);
-                    if (block == null) {
-                        continue;
-                    }
-                    if (MinecraftServer.getBlockManager().hasHandler(block.key().asString())) {
-                        blocksWithHandlers.add(id);
-                    }
-                }
                 if (blockPaletteTag.size() == 1) {
                     // One solid block, no need to check the data
                     section.blockPalette().fill(convertedPalette[0]);
@@ -237,7 +224,6 @@ public class AnvilLoader implements IChunkLoader {
                 }
             }
         }
-        return blocksWithHandlers;
     }
 
     private int[] loadBlockPalette(@NotNull ListBinaryTag paletteTag) {
@@ -287,7 +273,7 @@ public class AnvilLoader implements IChunkLoader {
         return convertedPalette;
     }
 
-    private void loadBlockEntities(@NotNull Chunk loadedChunk, @NotNull CompoundBinaryTag chunkData, @NotNull IntSet blocksWithHandlers) {
+    private void loadBlockEntities(@NotNull Chunk loadedChunk, @NotNull CompoundBinaryTag chunkData) {
         for (BinaryTag blockEntityTag : chunkData.getList("block_entities", BinaryTagTypes.COMPOUND)) {
             if (!(blockEntityTag instanceof CompoundBinaryTag blockEntity)) {
                 LOGGER.warn("Invalid block entity tag in chunk data: {}", blockEntityTag);
@@ -315,38 +301,6 @@ public class AnvilLoader implements IChunkLoader {
             // Place block
             final Block finalBlock = !trimmedTag.isEmpty() ? block.withNbt(trimmedTag) : block;
             loadedChunk.setBlock(x, y, z, finalBlock);
-        }
-        // if there are no blocks with handlers, no need to load default handlers
-        if (!blocksWithHandlers.isEmpty()) {
-            this.loadDefaultBlockHandlers(loadedChunk, blocksWithHandlers);
-        }
-    }
-
-    private void loadDefaultBlockHandlers(@NotNull Chunk loadedChunk, @NotNull IntSet blocksWithHandlers) {
-        for (int sectionIndex = loadedChunk.getMinSection(); sectionIndex < loadedChunk.getMaxSection(); sectionIndex++) {
-            final Section section = loadedChunk.getSection(sectionIndex);
-            final Palette blockPalette = section.blockPalette();
-            final int dimension = blockPalette.dimension();
-            for (int x = 0; x < dimension; x++) {
-                for (int y = 0; y < dimension; y++) {
-                    for (int z = 0; z < dimension; z++) {
-                        final int yOffset = dimension * sectionIndex;
-                        final Block currentBlock = loadedChunk.getBlock(x, y + yOffset, z);
-                        // skip blocks that already have handlers
-                        if (currentBlock.handler() != null) {
-                            continue;
-                        }
-                        if (!blocksWithHandlers.contains(currentBlock.stateId())) {
-                            continue;
-                        }
-                        final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(currentBlock.key().asString());
-                        if (handler == null) {
-                            continue;
-                        }
-                        loadedChunk.setBlock(x, y + yOffset, z, currentBlock.withHandler(handler));
-                    }
-                }
-            }
         }
     }
 
