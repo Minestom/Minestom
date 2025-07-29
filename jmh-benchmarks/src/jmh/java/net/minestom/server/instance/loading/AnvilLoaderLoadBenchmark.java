@@ -1,10 +1,12 @@
 package net.minestom.server.instance.loading;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 import org.openjdk.jmh.annotations.*;
@@ -33,7 +35,17 @@ public class AnvilLoaderLoadBenchmark {
             if (block.isAir()) {
                 continue;
             }
-            MinecraftServer.getBlockManager().registerHandler(block.key(), () -> block::key);
+            MinecraftServer.getBlockManager().registerDefaultHandlerForAllStates(new BlockHandler() {
+                @Override
+                public @NotNull Key getKey() {
+                    return block.key();
+                }
+
+                @Override
+                public boolean defaultHandler() {
+                    return true;
+                }
+            });
         }
     }
 
