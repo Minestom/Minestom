@@ -266,6 +266,14 @@ public class AnvilLoaderIntegrationTest {
 
     @Test
     public void loadBlockHandlerFromVanilla(Env env) throws IOException {
+        final BlockHandler handler = new BlockHandler() {
+            @Override
+            public @NotNull Key getKey() {
+                return Block.DEEPSLATE.key();
+            }
+        };
+        env.process().block().registerHandler(handler.getKey(), () -> handler);
+
         var worldFolder = extractWorld("anvil_vanilla_sample");
         AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
             // Force loads inside current thread
@@ -281,14 +289,6 @@ public class AnvilLoaderIntegrationTest {
         };
         Instance instance = env.createFlatInstance(chunkLoader);
         Chunk originalChunk = instance.loadChunk(0, 0).join();
-
-        final BlockHandler handler = new BlockHandler() {
-            @Override
-            public @NotNull Key getKey() {
-                return Block.DEEPSLATE.key();
-            }
-        };
-        env.process().block().registerHandler(handler.getKey(), () -> handler);
 
         var block = Block.DEEPSLATE.withHandler(handler);
         assertEquals(block, instance.getBlock(BlockVec.ZERO));

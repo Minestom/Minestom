@@ -175,7 +175,7 @@ public class AnvilLoader implements IChunkLoader {
     /**
      * @return a set of block state ids that have handlers registered
      */
-    private IntSet loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
+    private @Unmodifiable IntSet loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
         final IntSet blocksWithHandlers = new IntOpenHashSet();
         for (BinaryTag sectionTag : chunkData.getList("sections", BinaryTagTypes.COMPOUND)) {
             if (!(sectionTag instanceof CompoundBinaryTag sectionData)) {
@@ -224,7 +224,12 @@ public class AnvilLoader implements IChunkLoader {
                         continue;
                     }
                     if (MinecraftServer.getBlockManager().hasHandler(block.key().asString())) {
-                        blocksWithHandlers.add(id);
+                        for (final Block possibleBlock : block.possibleStates()) {
+                            // if already added this state, then all states from this block have been added so can skip it
+                            if (!blocksWithHandlers.add(possibleBlock.stateId())) {
+                                break;
+                            }
+                        }
                     }
                 }
                 if (blockPaletteTag.size() == 1) {
@@ -237,7 +242,7 @@ public class AnvilLoader implements IChunkLoader {
                 }
             }
         }
-        return blocksWithHandlers;
+        return IntSets.unmodifiable(blocksWithHandlers);
     }
 
     private int[] loadBlockPalette(@NotNull ListBinaryTag paletteTag) {

@@ -30,7 +30,7 @@ public final class BlockManager {
     }
 
     public void registerHandler(@NotNull Key key, @NotNull Supplier<? extends @NotNull BlockHandler> handlerSupplier) {
-        registerHandler(key.toString(), handlerSupplier);
+        registerHandler(key.asString(), handlerSupplier);
     }
 
     public @Nullable BlockHandler getHandler(@NotNull String namespace) {
