@@ -1,5 +1,6 @@
 package net.minestom.server.event.server;
 
+import net.minestom.server.event.trait.AsyncEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
@@ -14,7 +15,7 @@ import java.time.Duration;
  *
  * @see ServerListPingEvent
  */
-public class ClientPingServerEvent implements CancellableEvent {
+public class ClientPingServerEvent implements CancellableEvent, AsyncEvent {
     private static final Duration DEFAULT_DELAY = Duration.of(0, TimeUnit.MILLISECOND);
 
     private final PlayerConnection connection;

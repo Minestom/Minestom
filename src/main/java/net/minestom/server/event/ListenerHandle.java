@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -11,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <E> the event type
  */
-@ApiStatus.Experimental
 public sealed interface ListenerHandle<E extends Event> permits EventNodeImpl.Handle {
     /**
      * Calls the given event.
