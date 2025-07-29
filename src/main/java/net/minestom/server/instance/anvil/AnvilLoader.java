@@ -465,8 +465,7 @@ public class AnvilLoader implements IChunkLoader {
                         // Add block entity if present
                         final BlockHandler handler = block.handler();
                         final CompoundBinaryTag originalNBT = block.nbt();
-                        final boolean saveHandler = handler != null && (!handler.defaultHandler() || !handler.getKey().equals(block.key()));
-                        if (originalNBT != null || saveHandler) {
+                        if (originalNBT != null || handler != null) {
                             final CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
                             if (originalNBT != null) blockEntityTag.put(originalNBT);
                             if (handler != null) blockEntityTag.putString("id", handler.getKey().asString());

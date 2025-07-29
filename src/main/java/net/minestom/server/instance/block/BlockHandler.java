@@ -90,16 +90,6 @@ public interface BlockHandler {
     Key getKey();
 
     /**
-     * @return true if this block handler is the default handler for a block
-     * and should not be saved to the world file. This should only be used if you
-     * register the handler using {@link BlockManager#registerHandler} and {@link #getKey()} is
-     * the same as the block's key.
-     */
-    default boolean defaultHandler() {
-        return false;
-    }
-
-    /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
      */
     sealed class Placement permits PlayerPlacement {
