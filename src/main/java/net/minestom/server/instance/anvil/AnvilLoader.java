@@ -399,6 +399,7 @@ public class AnvilLoader implements IChunkLoader {
                 if (section.blockPalette().singleValue() != -1) {
                     blockPaletteIndices.add(section.blockPalette().singleValue());
                 } else {
+                    final int finalSectionY = sectionY;
                     section.blockPalette().getAll((x, y, z, value) -> {
                         Block block = chunk.getBlock(x, globalSectionY + y, z, Block.Getter.Condition.CACHED);
                         if (block == null) block = Block.fromStateId(value);
@@ -421,7 +422,7 @@ public class AnvilLoader implements IChunkLoader {
                             if (originalNBT != null) blockEntityTag.put(originalNBT);
                             if (handler != null) blockEntityTag.putString("id", handler.getKey().asString());
                             blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
-                            blockEntityTag.putInt("y", y);
+                            blockEntityTag.putInt("y", y + (finalSectionY * Chunk.CHUNK_SECTION_SIZE));
                             blockEntityTag.putInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
                             blockEntityTag.putByte("keepPacked", (byte) 0);
                             blockEntities.add(blockEntityTag.build());
