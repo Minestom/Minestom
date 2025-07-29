@@ -1,5 +1,6 @@
 package net.minestom.server.event.server;
 
+import net.minestom.server.event.trait.AsyncEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ServerListPingType;
@@ -13,7 +14,7 @@ import java.util.Objects;
  * Called when a {@link PlayerConnection} sends a status packet,
  * usually to display information on the server list.
  */
-public class ServerListPingEvent implements CancellableEvent {
+public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
     private final PlayerConnection connection;
     private final ServerListPingType type;
 
