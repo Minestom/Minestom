@@ -55,4 +55,13 @@ public class DefaultBlockHandlerTest {
         assertEquals(noteBlockHandler, env.process().block().getBlockHandler(Block.NOTE_BLOCK.withNbt(CompoundBinaryTag.builder().putString("test", "test").build())));
     }
 
+    @Test
+    public void explicitNoHandler(Env env) {
+        final BlockHandler noteBlockHandler = BLOCK_HANDLER_SUPPLIER.apply(Block.NOTE_BLOCK.key(), true);
+        env.process().block().registerDefaultHandlerForState(noteBlockHandler, Block.NOTE_BLOCK);
+        assertNull(Block.NOTE_BLOCK.handler());
+        assertEquals(noteBlockHandler, env.process().block().getBlockHandler(Block.NOTE_BLOCK));
+        assertNull(env.process().block().getBlockHandler(Block.NOTE_BLOCK.withHandler(null)));
+    }
+
 }
