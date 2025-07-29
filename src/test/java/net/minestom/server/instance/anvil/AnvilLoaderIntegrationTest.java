@@ -4,6 +4,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
+import net.minestom.server.coordinate.CoordConversion;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
@@ -237,10 +239,23 @@ public class AnvilLoaderIntegrationTest {
     }
 
     @Test
-    public void loadAndSaveBlockHandler(Env env) throws IOException, InterruptedException {
+    public void loadAndSaveBlockHandler(Env env) throws IOException {
+        loadAndSaveBlockHandler(env, BlockVec.ZERO);
+        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, 15, 0));
+        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, 16, 0));
+        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, -15, 0));
+        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, -16, 0));
+        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, 64, 0));
+        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(15, 0, 15));
+        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(16, 0, 16));
+        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(-15, 0, -15));
+        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(-16, 0, -16));
+    }
+
+    private static void loadAndSaveBlockHandler(Env env, Point point) throws IOException {
         var worldFolder = extractWorld("anvil_loader");
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
-        Chunk originalChunk = instance.loadChunk(0, 0).join();
+        Chunk originalChunk = instance.loadChunk(point).join();
 
         var handler = new BlockHandler() {
             @Override
@@ -254,14 +269,14 @@ public class AnvilLoaderIntegrationTest {
                 .putString("hello", "world")
                 .build();
         var block = Block.STONE.withNbt(nbt);
-        instance.setBlock(BlockVec.ZERO, block);
+        instance.setBlock(point, block);
 
         instance.saveChunkToStorage(originalChunk).join();
         instance.unloadChunk(originalChunk);
-        assertNull(instance.getChunk(0, 0));
+        assertNull(instance.getChunkAt(point));
 
-        instance.loadChunk(0, 0).join();
-        assertEquals(block, instance.getBlock(BlockVec.ZERO));
+        instance.loadChunk(point).join();
+        assertEquals(block, instance.getBlock(point));
     }
 
     private static Path extractWorld(@NotNull String resourceName) throws IOException {
