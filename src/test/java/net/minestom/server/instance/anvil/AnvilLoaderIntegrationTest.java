@@ -289,7 +289,7 @@ public class AnvilLoaderIntegrationTest {
 
     @Test
     public void loadAndSaveBlockHandlerWithPlacement(Env env) throws IOException {
-        final Point point = new BlockVec(16, 16, 16);
+        final Point point = new BlockVec(100_000, 16, 100_000);
         var worldFolder = extractWorld("anvil_loader");
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
         Chunk originalChunk = instance.loadChunk(point).join();
@@ -297,7 +297,7 @@ public class AnvilLoaderIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public @NotNull Key getKey() {
-                return Key.key("stone");
+                return Block.DIAMOND_BLOCK.key();
             }
 
             @Override
@@ -307,9 +307,9 @@ public class AnvilLoaderIntegrationTest {
                 assertEquals(point.z(), placement.getBlockPosition().z());
             }
         };
-        env.process().block().registerHandler(Block.STONE.key(), () -> handler);
+        env.process().block().registerHandler(Block.DIAMOND_BLOCK.key(), () -> handler);
 
-        final Block block = Block.STONE.withHandler(handler);
+        final Block block = Block.DIAMOND_BLOCK.withHandler(handler);
         instance.setBlock(point, block);
 
         instance.saveChunkToStorage(originalChunk).join();
