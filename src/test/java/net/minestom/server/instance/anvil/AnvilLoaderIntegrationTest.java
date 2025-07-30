@@ -279,6 +279,38 @@ public class AnvilLoaderIntegrationTest {
         assertEquals(block, instance.getBlock(point));
     }
 
+    @Test
+    public void loadAndSaveBlockHandlerWithPlacement(Env env) throws IOException {
+        final Point point = BlockVec.ZERO.add(16, 16, 16);
+        var worldFolder = extractWorld("anvil_loader");
+        Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
+        Chunk originalChunk = instance.loadChunk(point).join();
+
+        var handler = new BlockHandler() {
+            @Override
+            public @NotNull Key getKey() {
+                return Key.key("stone");
+            }
+
+            @Override
+            public void onPlace(@NotNull Placement placement) {
+                assertEquals(point.x(), placement.getBlockPosition().x());
+                assertEquals(point.y(), placement.getBlockPosition().y());
+                assertEquals(point.z(), placement.getBlockPosition().z());
+            }
+        };
+        env.process().block().registerHandler(Block.STONE.key(), () -> handler);
+
+        final Block block = Block.STONE.withHandler(handler);
+        instance.setBlock(point, block);
+
+        instance.saveChunkToStorage(originalChunk).join();
+        instance.unloadChunk(originalChunk);
+        assertNull(instance.getChunkAt(point));
+
+        instance.loadChunk(point).join();
+    }
+
     private static Path extractWorld(@NotNull String resourceName) throws IOException {
         final Path worldFolder = Files.createTempDirectory("minestom-test-world-" + resourceName);
 

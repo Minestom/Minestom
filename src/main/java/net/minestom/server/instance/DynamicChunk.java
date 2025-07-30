@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -118,7 +119,7 @@ public class DynamicChunk extends Chunk {
         }
 
         // Update block handlers
-        var blockPosition = new Vec(x, y, z);
+        var blockPosition = new BlockVec(x, y, z);
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
@@ -127,10 +128,9 @@ public class DynamicChunk extends Chunk {
         if (handler != null) {
             // New placement
 
-            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
             final Block finalBlock = block;
             handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, absoluteBlockPosition)));
+                    () -> new BlockHandler.Placement(finalBlock, instance, blockPosition)));
         }
 
         // UpdateHeightMaps
