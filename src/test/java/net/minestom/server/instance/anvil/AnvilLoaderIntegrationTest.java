@@ -4,6 +4,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
+import net.minestom.server.coordinate.CoordConversion;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
@@ -18,10 +20,16 @@ import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.ValueSources;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -236,11 +244,26 @@ public class AnvilLoaderIntegrationTest {
         assertEquals(block, instance.getBlock(BlockVec.ZERO));
     }
 
-    @Test
-    public void loadAndSaveBlockHandler(Env env) throws IOException, InterruptedException {
+    private static Collection<BlockVec> provideLocationsForLoadAndSaveBlockHandler() {
+        return List.of(BlockVec.ZERO,
+                new BlockVec(0, 15, 0),
+                new BlockVec(0, 16, 0),
+                new BlockVec(0, -15, 0),
+                new BlockVec(0, -16, 0),
+                new BlockVec(0, 64, 0),
+                new BlockVec(15, 0, 15),
+                new BlockVec(16, 0, 16),
+                new BlockVec(-15, 0, -15),
+                new BlockVec(-16, 0, -16)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideLocationsForLoadAndSaveBlockHandler")
+    public void loadAndSaveBlockHandler(Point point, Env env) throws IOException {
         var worldFolder = extractWorld("anvil_loader");
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
-        Chunk originalChunk = instance.loadChunk(0, 0).join();
+        Chunk originalChunk = instance.loadChunk(point).join();
 
         var handler = new BlockHandler() {
             @Override
@@ -254,14 +277,46 @@ public class AnvilLoaderIntegrationTest {
                 .putString("hello", "world")
                 .build();
         var block = Block.STONE.withNbt(nbt);
-        instance.setBlock(BlockVec.ZERO, block);
+        instance.setBlock(point, block);
 
         instance.saveChunkToStorage(originalChunk).join();
         instance.unloadChunk(originalChunk);
-        assertNull(instance.getChunk(0, 0));
+        assertNull(instance.getChunkAt(point));
 
-        instance.loadChunk(0, 0).join();
-        assertEquals(block, instance.getBlock(BlockVec.ZERO));
+        instance.loadChunk(point).join();
+        assertEquals(block, instance.getBlock(point));
+    }
+
+    @Test
+    public void loadAndSaveBlockHandlerWithPlacement(Env env) throws IOException {
+        final Point point = new BlockVec(100_000, 16, 100_000);
+        var worldFolder = extractWorld("anvil_loader");
+        Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
+        Chunk originalChunk = instance.loadChunk(point).join();
+
+        var handler = new BlockHandler() {
+            @Override
+            public @NotNull Key getKey() {
+                return Block.DIAMOND_BLOCK.key();
+            }
+
+            @Override
+            public void onPlace(@NotNull Placement placement) {
+                assertEquals(point.x(), placement.getBlockPosition().x());
+                assertEquals(point.y(), placement.getBlockPosition().y());
+                assertEquals(point.z(), placement.getBlockPosition().z());
+            }
+        };
+        env.process().block().registerHandler(Block.DIAMOND_BLOCK.key(), () -> handler);
+
+        final Block block = Block.DIAMOND_BLOCK.withHandler(handler);
+        instance.setBlock(point, block);
+
+        instance.saveChunkToStorage(originalChunk).join();
+        instance.unloadChunk(originalChunk);
+        assertNull(instance.getChunkAt(point));
+
+        instance.loadChunk(point).join();
     }
 
     @Test
