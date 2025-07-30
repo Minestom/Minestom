@@ -248,12 +248,12 @@ public class AnvilLoaderIntegrationTest {
                 return Key.key("test");
             }
         };
-        env.process().block().registerHandler(Block.STONE.key(), () -> handler);
+        env.process().block().registerHandler(handler.getKey(), () -> handler);
 
         var nbt = CompoundBinaryTag.builder()
                 .putString("hello", "world")
                 .build();
-        var block = Block.STONE.withNbt(nbt);
+        var block = Block.STONE.withNbt(nbt).withHandler(handler);
         instance.setBlock(BlockVec.ZERO, block);
 
         instance.saveChunkToStorage(originalChunk).join();
@@ -261,6 +261,36 @@ public class AnvilLoaderIntegrationTest {
         assertNull(instance.getChunk(0, 0));
 
         instance.loadChunk(0, 0).join();
+        assertEquals(block, instance.getBlock(BlockVec.ZERO));
+    }
+
+    @Test
+    public void loadBlockHandlerFromVanilla(Env env) throws IOException {
+        final BlockHandler handler = new BlockHandler() {
+            @Override
+            public @NotNull Key getKey() {
+                return Block.DEEPSLATE.key();
+            }
+        };
+        env.process().block().registerHandler(handler.getKey(), () -> handler);
+
+        var worldFolder = extractWorld("anvil_vanilla_sample");
+        AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
+            // Force loads inside current thread
+            @Override
+            public boolean supportsParallelLoading() {
+                return false;
+            }
+
+            @Override
+            public boolean supportsParallelSaving() {
+                return false;
+            }
+        };
+        Instance instance = env.createFlatInstance(chunkLoader);
+        Chunk originalChunk = instance.loadChunk(0, 0).join();
+
+        var block = Block.DEEPSLATE.withHandler(handler);
         assertEquals(block, instance.getBlock(BlockVec.ZERO));
     }
 

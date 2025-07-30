@@ -30,12 +30,16 @@ public final class BlockManager {
     }
 
     public void registerHandler(@NotNull Key key, @NotNull Supplier<? extends @NotNull BlockHandler> handlerSupplier) {
-        registerHandler(key.toString(), handlerSupplier);
+        registerHandler(key.asString(), handlerSupplier);
     }
 
     public @Nullable BlockHandler getHandler(@NotNull String namespace) {
         final var handler = blockHandlerMap.get(namespace);
         return handler != null ? handler.get() : null;
+    }
+
+    public @Nullable BlockHandler getHandler(@NotNull Key key) {
+        return getHandler(key.asString());
     }
 
     @ApiStatus.Internal
@@ -73,4 +77,9 @@ public final class BlockManager {
     public synchronized @Nullable BlockPlacementRule getBlockPlacementRule(@NotNull Block block) {
         return placementRuleMap.get(block.id());
     }
+
+    public boolean hasHandler(String namespace) {
+        return blockHandlerMap.containsKey(namespace);
+    }
+
 }

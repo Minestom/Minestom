@@ -1,8 +1,6 @@
 package net.minestom.server.instance.anvil;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
-import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.*;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -13,6 +11,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
@@ -20,6 +19,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +33,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
+import static net.minestom.server.coordinate.CoordConversion.sectionBlockIndex;
 
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
@@ -108,9 +110,9 @@ public class AnvilLoader implements IChunkLoader {
             // TODO: Should we handle other statuses?
             if (status.isEmpty() || "minecraft:full".equals(status)) {
                 // Blocks + Biomes
-                loadSections(chunk, chunkData);
+                final IntSet blocksWithHandlers = loadSections(chunk, chunkData);
                 // Block entities
-                loadBlockEntities(chunk, chunkData);
+                loadBlockEntities(chunk, chunkData, blocksWithHandlers);
                 chunk.loadHeightmapsFromNBT(chunkData.getCompound("Heightmaps"));
             } else {
                 LOGGER.warn("Skipping partially generated chunk at {}, {} with status {}", chunkX, chunkZ, status);
@@ -169,7 +171,12 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private void loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
+
+    /**
+     * @return a set of block state ids that have handlers registered
+     */
+    private @Unmodifiable IntSet loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
+        final IntSet blocksWithHandlers = new IntOpenHashSet();
         for (BinaryTag sectionTag : chunkData.getList("sections", BinaryTagTypes.COMPOUND)) {
             if (!(sectionTag instanceof CompoundBinaryTag sectionData)) {
                 LOGGER.warn("Invalid section tag in chunk data: {}", sectionTag);
@@ -211,6 +218,20 @@ public class AnvilLoader implements IChunkLoader {
                 final CompoundBinaryTag blockStatesTag = sectionData.getCompound("block_states");
                 final ListBinaryTag blockPaletteTag = blockStatesTag.getList("palette", BinaryTagTypes.COMPOUND);
                 final int[] convertedPalette = loadBlockPalette(blockPaletteTag);
+                for (final int id : convertedPalette) {
+                    final Block block = Block.fromStateId(id);
+                    if (block == null) {
+                        continue;
+                    }
+                    if (MinecraftServer.getBlockManager().hasHandler(block.key().asString())) {
+                        for (final Block possibleBlock : block.possibleStates()) {
+                            // if already added this state, then all states from this block have been added so can skip it
+                            if (!blocksWithHandlers.add(possibleBlock.stateId())) {
+                                break;
+                            }
+                        }
+                    }
+                }
                 if (blockPaletteTag.size() == 1) {
                     // One solid block, no need to check the data
                     section.blockPalette().fill(convertedPalette[0]);
@@ -221,6 +242,7 @@ public class AnvilLoader implements IChunkLoader {
                 }
             }
         }
+        return IntSets.unmodifiable(blocksWithHandlers);
     }
 
     private int[] loadBlockPalette(@NotNull ListBinaryTag paletteTag) {
@@ -270,7 +292,7 @@ public class AnvilLoader implements IChunkLoader {
         return convertedPalette;
     }
 
-    private void loadBlockEntities(@NotNull Chunk loadedChunk, @NotNull CompoundBinaryTag chunkData) {
+    private void loadBlockEntities(@NotNull Chunk loadedChunk, @NotNull CompoundBinaryTag chunkData, @NotNull IntSet blocksWithHandlers) {
         for (BinaryTag blockEntityTag : chunkData.getList("block_entities", BinaryTagTypes.COMPOUND)) {
             if (!(blockEntityTag instanceof CompoundBinaryTag blockEntity)) {
                 LOGGER.warn("Invalid block entity tag in chunk data: {}", blockEntityTag);
@@ -298,6 +320,38 @@ public class AnvilLoader implements IChunkLoader {
             // Place block
             final Block finalBlock = !trimmedTag.isEmpty() ? block.withNbt(trimmedTag) : block;
             loadedChunk.setBlock(x, y, z, finalBlock);
+        }
+        // if there are no blocks with handlers, no need to load default handlers
+        if (!blocksWithHandlers.isEmpty()) {
+            this.loadDefaultBlockHandlers(loadedChunk, blocksWithHandlers);
+        }
+    }
+
+    private void loadDefaultBlockHandlers(@NotNull Chunk loadedChunk, @NotNull IntSet blocksWithHandlers) {
+        for (int sectionIndex = loadedChunk.getMinSection(); sectionIndex < loadedChunk.getMaxSection(); sectionIndex++) {
+            final Section section = loadedChunk.getSection(sectionIndex);
+            final Palette blockPalette = section.blockPalette();
+            final int dimension = blockPalette.dimension();
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++) {
+                        final int yOffset = dimension * sectionIndex;
+                        final Block currentBlock = loadedChunk.getBlock(x, y + yOffset, z);
+                        // skip blocks that already have handlers
+                        if (currentBlock.handler() != null) {
+                            continue;
+                        }
+                        if (!blocksWithHandlers.contains(currentBlock.stateId())) {
+                            continue;
+                        }
+                        final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(currentBlock.key().asString());
+                        if (handler == null) {
+                            continue;
+                        }
+                        loadedChunk.setBlock(x, y + yOffset, z, currentBlock.withHandler(handler));
+                    }
+                }
+            }
         }
     }
 
@@ -417,7 +471,7 @@ public class AnvilLoader implements IChunkLoader {
                         final BlockHandler handler = block.handler();
                         final CompoundBinaryTag originalNBT = block.nbt();
                         if (originalNBT != null || handler != null) {
-                            CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
+                            final CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
                             if (originalNBT != null) blockEntityTag.put(originalNBT);
                             if (handler != null) blockEntityTag.putString("id", handler.getKey().asString());
                             blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
