@@ -399,7 +399,6 @@ public class AnvilLoader implements IChunkLoader {
                 if (section.blockPalette().singleValue() != -1) {
                     blockPaletteIndices.add(section.blockPalette().singleValue());
                 } else {
-                    final int finalSectionY = sectionY;
                     section.blockPalette().getAll((x, y, z, value) -> {
                         Block block = chunk.getBlock(x, globalSectionY + y, z, Block.Getter.Condition.CACHED);
                         if (block == null) block = Block.fromStateId(value);
