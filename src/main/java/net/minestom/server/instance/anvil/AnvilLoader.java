@@ -321,21 +321,14 @@ public class AnvilLoader implements IChunkLoader {
         final int chunkZ = chunk.getChunkZ();
 
         // Find the region file or create an empty one if missing
+
+        final int regionX = CoordConversion.chunkToRegion(chunkX);
+        final int regionZ = CoordConversion.chunkToRegion(chunkZ);
+
         RegionFile mcaFile;
         fileCreationLock.lock();
         try {
             mcaFile = getMCAFile(chunkX, chunkZ);
-
-            final int regionX = CoordConversion.chunkToRegion(chunkX);
-            final int regionZ = CoordConversion.chunkToRegion(chunkZ);
-
-            this.perRegionLoadedChunksLock.lock();
-            try {
-                this.perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), k -> new HashSet<>())
-                        .add(new IntIntImmutablePair(chunkX, chunkZ));
-            } finally {
-                this.perRegionLoadedChunksLock.unlock();
-            }
 
             if (mcaFile == null) {
                 final String regionFileName = RegionFile.getFileName(regionX, regionZ);
@@ -356,6 +349,14 @@ public class AnvilLoader implements IChunkLoader {
             }
         } finally {
             fileCreationLock.unlock();
+
+            this.perRegionLoadedChunksLock.lock();
+            try {
+                this.perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), k -> new HashSet<>())
+                        .add(new IntIntImmutablePair(chunkX, chunkZ));
+            } finally {
+                this.perRegionLoadedChunksLock.unlock();
+            }
         }
 
         try {
