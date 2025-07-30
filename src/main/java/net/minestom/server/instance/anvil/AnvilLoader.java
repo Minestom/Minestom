@@ -343,8 +343,8 @@ public class AnvilLoader implements IChunkLoader {
                     MinecraftServer.getExceptionManager().handleException(e);
                     return;
                 }
+                this.perRegionLoadedChunksLock.lock();
                 try {
-                    this.perRegionLoadedChunksLock.lock();
                     this.perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), k -> new HashSet<>())
                             .add(new IntIntImmutablePair(chunkX, chunkZ));
                 } finally {
