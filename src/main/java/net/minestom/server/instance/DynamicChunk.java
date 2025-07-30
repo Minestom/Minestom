@@ -119,7 +119,7 @@ public class DynamicChunk extends Chunk {
         }
 
         // Update block handlers
-        var blockPosition = new BlockVec(x, y, z);
+        var blockPosition = new Vec(x, y, z);
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
