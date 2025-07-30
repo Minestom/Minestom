@@ -20,10 +20,16 @@ import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.ValueSources;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -238,21 +244,23 @@ public class AnvilLoaderIntegrationTest {
         assertEquals(block, instance.getBlock(BlockVec.ZERO));
     }
 
-    @Test
-    public void loadAndSaveBlockHandler(Env env) throws IOException {
-        loadAndSaveBlockHandler(env, BlockVec.ZERO);
-        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, 15, 0));
-        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, 16, 0));
-        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, -15, 0));
-        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, -16, 0));
-        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(0, 64, 0));
-        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(15, 0, 15));
-        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(16, 0, 16));
-        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(-15, 0, -15));
-        loadAndSaveBlockHandler(env, BlockVec.ZERO.add(-16, 0, -16));
+    private static Collection<BlockVec> provideLocationsForLoadAndSaveBlockHandler() {
+        return List.of(BlockVec.ZERO,
+                new BlockVec(0, 15, 0),
+                new BlockVec(0, 16, 0),
+                new BlockVec(0, -15, 0),
+                new BlockVec(0, -16, 0),
+                new BlockVec(0, 64, 0),
+                new BlockVec(15, 0, 15),
+                new BlockVec(16, 0, 16),
+                new BlockVec(-15, 0, -15),
+                new BlockVec(-16, 0, -16)
+        );
     }
 
-    private static void loadAndSaveBlockHandler(Env env, Point point) throws IOException {
+    @ParameterizedTest
+    @MethodSource("provideLocationsForLoadAndSaveBlockHandler")
+    public void loadAndSaveBlockHandler(Point point, Env env) throws IOException {
         var worldFolder = extractWorld("anvil_loader");
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
         Chunk originalChunk = instance.loadChunk(point).join();
@@ -281,7 +289,7 @@ public class AnvilLoaderIntegrationTest {
 
     @Test
     public void loadAndSaveBlockHandlerWithPlacement(Env env) throws IOException {
-        final Point point = BlockVec.ZERO.add(16, 16, 16);
+        final Point point = new BlockVec(16, 16, 16);
         var worldFolder = extractWorld("anvil_loader");
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder));
         Chunk originalChunk = instance.loadChunk(point).join();
