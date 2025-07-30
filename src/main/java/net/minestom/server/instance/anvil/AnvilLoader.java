@@ -325,9 +325,19 @@ public class AnvilLoader implements IChunkLoader {
         fileCreationLock.lock();
         try {
             mcaFile = getMCAFile(chunkX, chunkZ);
+
+            final int regionX = CoordConversion.chunkToRegion(chunkX);
+            final int regionZ = CoordConversion.chunkToRegion(chunkZ);
+
+            this.perRegionLoadedChunksLock.lock();
+            try {
+                this.perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), k -> new HashSet<>())
+                        .add(new IntIntImmutablePair(chunkX, chunkZ));
+            } finally {
+                this.perRegionLoadedChunksLock.unlock();
+            }
+
             if (mcaFile == null) {
-                final int regionX = CoordConversion.chunkToRegion(chunkX);
-                final int regionZ = CoordConversion.chunkToRegion(chunkZ);
                 final String regionFileName = RegionFile.getFileName(regionX, regionZ);
                 try {
                     Path regionFile = regionPath.resolve(regionFileName);
@@ -342,13 +352,6 @@ public class AnvilLoader implements IChunkLoader {
                     LOGGER.error("Failed to create region file for {}, {}", chunkX, chunkZ, e);
                     MinecraftServer.getExceptionManager().handleException(e);
                     return;
-                }
-                this.perRegionLoadedChunksLock.lock();
-                try {
-                    this.perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), k -> new HashSet<>())
-                            .add(new IntIntImmutablePair(chunkX, chunkZ));
-                } finally {
-                    this.perRegionLoadedChunksLock.unlock();
                 }
             }
         } finally {
