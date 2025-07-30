@@ -264,6 +264,61 @@ public class AnvilLoaderIntegrationTest {
         assertEquals(block, instance.getBlock(BlockVec.ZERO));
     }
 
+    @Test
+    public void saveChunks(Env env) throws IOException {
+        // load a full vanilla region, not checking any content just making sure it loads without issues.
+        var worldFolder = Files.createTempDirectory("minestom-test-world-save-chunks");
+        AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
+            // Force loads inside current thread
+            @Override
+            public boolean supportsParallelLoading() {
+                return false;
+            }
+
+            @Override
+            public boolean supportsParallelSaving() {
+                return false;
+            }
+        };
+        Instance instance = env.createFlatInstance(chunkLoader);
+
+        for (int chunkX = 0; chunkX < 16; chunkX++) {
+            for (int chunkZ = 0; chunkZ < 16; chunkZ++) {
+                Chunk chunk = instance.loadChunk(chunkX, chunkZ).join();
+                instance.saveChunkToStorage(chunk).join();
+                instance.unloadChunk(chunk);
+            }
+        }
+        final AnvilLoader secondChunkLoader = new AnvilLoader(worldFolder) {
+            // Force loads inside current thread
+            @Override
+            public boolean supportsParallelLoading() {
+                return false;
+            }
+
+            @Override
+            public boolean supportsParallelSaving() {
+                return false;
+            }
+        };
+        final var secondInstance = env.createEmptyInstance(secondChunkLoader);
+        for (int chunkX = 0; chunkX < 16; chunkX++) {
+            for (int chunkZ = 0; chunkZ < 16; chunkZ++) {
+                final Chunk originalChunk = instance.loadChunk(chunkX, chunkZ).join();
+                final Chunk chunk = secondInstance.loadChunk(chunkX, chunkZ).join();
+                for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                    for (int y = secondInstance.getCachedDimensionType().minY(); y < secondInstance.getCachedDimensionType().maxY(); y++) {
+                        for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                            final Block originalBlock = instance.getBlock(x, y, z);
+                            final Block block = secondInstance.getBlock(x, y, z);
+                            assertEquals(originalBlock, block);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private static Path extractWorld(@NotNull String resourceName) throws IOException {
         final Path worldFolder = Files.createTempDirectory("minestom-test-world-" + resourceName);
 
