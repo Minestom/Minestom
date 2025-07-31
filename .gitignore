@@ -1,4 +1,5 @@
 .DS_Store
+**.hprof
 
 # Registry files
 /minecraft_data/
