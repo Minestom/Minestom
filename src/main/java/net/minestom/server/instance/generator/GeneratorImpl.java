@@ -311,7 +311,7 @@ public final class GeneratorImpl {
         }
 
         private boolean requireCache(Block block) {
-            return block.hasNbt() || block.handler() != null || block.registry().isBlockEntity();
+            return block.hasNbt() || block.handler() != null;
         }
     }
 
