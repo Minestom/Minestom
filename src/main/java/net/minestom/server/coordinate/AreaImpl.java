@@ -173,18 +173,8 @@ final class AreaImpl {
             Objects.requireNonNull(max, "max cannot be null");
             final BlockVec origMin = min;
             final BlockVec origMax = max;
-            BlockVec sortedMin = new BlockVec(
-                    Math.min(origMin.blockX(), origMax.blockX()),
-                    Math.min(origMin.blockY(), origMax.blockY()),
-                    Math.min(origMin.blockZ(), origMax.blockZ())
-            );
-            BlockVec sortedMax = new BlockVec(
-                    Math.max(origMin.blockX(), origMax.blockX()),
-                    Math.max(origMin.blockY(), origMax.blockY()),
-                    Math.max(origMin.blockZ(), origMax.blockZ())
-            );
-            min = sortedMin;
-            max = sortedMax;
+            min = origMin.min(origMax);
+            max = origMin.max(origMax);
         }
 
         @Override
