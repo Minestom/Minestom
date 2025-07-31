@@ -48,7 +48,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     static ItemStack create(Material material, int amount, DataComponentMap components) {
-        if (amount <= 0) return AIR;
+        if (amount <= 0 || material == Material.AIR) return AIR;
         return new ItemStackImpl(material, amount, components);
     }
 
@@ -208,7 +208,8 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
                     DataComponents.CONTAINER, DataComponents.CONTAINER_LOOT, DataComponents.FIREWORK_EXPLOSION,
                     DataComponents.FIREWORKS, DataComponents.INSTRUMENT, DataComponents.MAP_ID,
                     DataComponents.PAINTING_VARIANT, DataComponents.POT_DECORATIONS, DataComponents.POTION_CONTENTS,
-                    DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT
+                    DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT,
+                    DataComponents.UNBREAKABLE, DataComponents.ATTRIBUTE_MODIFIERS
             )));
         }
 

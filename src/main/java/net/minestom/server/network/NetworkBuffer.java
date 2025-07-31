@@ -218,8 +218,12 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
         }
 
-        default <R> @NotNull Type<R> unionType(@NotNull Function<T, NetworkBuffer.Type<R>> serializers, @NotNull Function<R, T> keyFunc) {
+        default <R, TR extends R> @NotNull Type<R> unionType(@NotNull Function<T, NetworkBuffer.Type<TR>> serializers, @NotNull Function<R, ? extends T> keyFunc) {
             return new NetworkBufferTypeImpl.UnionType<>(this, keyFunc, serializers);
+        }
+
+        default @NotNull Type<T> lengthPrefixed(int maxLength) {
+            return new NetworkBufferTypeImpl.LengthPrefixedType<>(this, maxLength);
         }
     }
 

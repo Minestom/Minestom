@@ -12,8 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface ChickenVariant extends ChickenVariants permits ChickenVariantImpl {
-
-    Codec<ChickenVariant> REGISTRY_CODEC = StructCodec.struct(
+    @NotNull Codec<ChickenVariant> REGISTRY_CODEC = StructCodec.struct(
             "model", Model.CODEC.optional(Model.NORMAL), ChickenVariant::model,
             "asset_id", Codec.KEY, ChickenVariant::assetId,
             ChickenVariantImpl::new);
@@ -32,7 +31,7 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
      */
     @ApiStatus.Internal
     static DynamicRegistry<ChickenVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:chicken_variant"), REGISTRY_CODEC, RegistryData.Resource.CHICKEN_VARIANTS);
+        return DynamicRegistry.create(Key.key("chicken_variant"), REGISTRY_CODEC, RegistryData.Resource.CHICKEN_VARIANTS);
     }
 
     @NotNull Model model();

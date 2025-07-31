@@ -19,17 +19,17 @@ import java.util.function.Supplier;
 public final class BlockManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(BlockManager.class);
     // Namespace -> handler supplier
-    private final Map<String, Supplier<BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
+    private final Map<String, Supplier<? extends BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
     // block id -> block placement rule
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
 
     private final Set<String> dummyWarning = ConcurrentHashMap.newKeySet(); // Prevent warning spam
 
-    public void registerHandler(@NotNull String namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
+    public void registerHandler(@NotNull String namespace, @NotNull Supplier<? extends @NotNull BlockHandler> handlerSupplier) {
         blockHandlerMap.put(namespace, handlerSupplier);
     }
 
-    public void registerHandler(@NotNull Key key, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
+    public void registerHandler(@NotNull Key key, @NotNull Supplier<? extends @NotNull BlockHandler> handlerSupplier) {
         registerHandler(key.toString(), handlerSupplier);
     }
 

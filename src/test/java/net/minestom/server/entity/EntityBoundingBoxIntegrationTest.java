@@ -62,7 +62,8 @@ public class EntityBoundingBoxIntegrationTest {
         entity.setCanPickupItem(true);
         entity.setInstance(instance, spawnPos).join();
 
-        var time = System.currentTimeMillis();
+        // 0 is fine here, it's just a delta
+        var time = 0L;
 
         dropItem(instance, spawnPos);
         listener.followup();

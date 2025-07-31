@@ -9,7 +9,6 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,9 +54,8 @@ public sealed interface ConsumeEffect {
     final class ClearAllEffects implements ConsumeEffect {
         public static final ClearAllEffects INSTANCE = new ClearAllEffects();
 
-        public static final NetworkBuffer.Type<ClearAllEffects> NETWORK_TYPE = NetworkBuffer.UNIT
-                .transform(buffer -> INSTANCE, ignored -> Unit.INSTANCE);
-        public static final StructCodec<ClearAllEffects> CODEC = StructCodec.struct(() -> INSTANCE);
+        public static final NetworkBuffer.Type<ClearAllEffects> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
+        public static final StructCodec<ClearAllEffects> CODEC = StructCodec.struct(INSTANCE);
 
         private ClearAllEffects() {
         }
@@ -87,9 +85,8 @@ public sealed interface ConsumeEffect {
                 PlaySound::new);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static NetworkBuffer.Type<ConsumeEffect> networkType(@NotNull ConsumeEffectType type) {
-        return (NetworkBuffer.Type) switch (type) {
+    private static NetworkBuffer.Type<? extends ConsumeEffect> networkType(@NotNull ConsumeEffectType type) {
+        return switch (type) {
             case APPLY_EFFECTS -> ApplyEffects.NETWORK_TYPE;
             case REMOVE_EFFECTS -> RemoveEffects.NETWORK_TYPE;
             case CLEAR_ALL_EFFECTS -> ClearAllEffects.NETWORK_TYPE;

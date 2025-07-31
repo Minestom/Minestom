@@ -71,18 +71,37 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     }
 
     @Contract(pure = true)
-    default int chunkX() {
+    default int sectionX() {
         return globalToChunk(x());
     }
 
     @Contract(pure = true)
-    default int section() {
+    default int sectionY() {
         return globalToChunk(y());
     }
 
     @Contract(pure = true)
-    default int chunkZ() {
+    default int sectionZ() {
         return globalToChunk(z());
+    }
+
+    @Contract(pure = true)
+    default int chunkX() {
+        return sectionX();
+    }
+
+    @Contract(pure = true)
+    default int chunkZ() {
+        return sectionZ();
+    }
+
+    /**
+     * @deprecated use {@link #sectionY()} instead.
+     */
+    @Deprecated
+    @Contract(pure = true)
+    default int section() {
+        return sectionY();
     }
 
     /**
@@ -239,12 +258,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
 
     /**
      * Checks it two points have similar (x/y/z) coordinates within a given epsilon.
-     * @param x the x coordinate to compare
-     * @param y the y coordinate to compare
-     * @param z the z coordinate to compare
+     *
+     * @param x       the x coordinate to compare
+     * @param y       the y coordinate to compare
+     * @param z       the z coordinate to compare
      * @param epsilon the maximum difference allowed between the two points (exclusive)
-     * @throws IllegalArgumentException if epsilon is less than or equal to 0
      * @return true if the two positions are similar within the epsilon
+     * @throws IllegalArgumentException if epsilon is less than or equal to 0
      */
     default boolean samePoint(double x, double y, double z, double epsilon) {
         Check.argCondition(epsilon <= 0, "Epsilon must be greater than 0 but found {0}", epsilon);
@@ -253,10 +273,11 @@ public sealed interface Point permits Vec, Pos, BlockVec {
 
     /**
      * Checks it two points have similar (x/y/z) coordinates within a given epsilon.
-     * @param point the point to compare
+     *
+     * @param point   the point to compare
      * @param epsilon the maximum difference allowed between the two points (exclusive)
-     * @throws IllegalArgumentException if epsilon is less than or equal to 0
      * @return true if the two positions are similar within the epsilon
+     * @throws IllegalArgumentException if epsilon is less than or equal to 0
      */
     default boolean samePoint(@NotNull Point point, double epsilon) {
         return samePoint(point.x(), point.y(), point.z(), epsilon);
@@ -294,5 +315,32 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      */
     default boolean sameBlock(@NotNull Point point) {
         return sameBlock(point.blockX(), point.blockY(), point.blockZ());
+    }
+
+    @Contract(pure = true)
+    default @NotNull Pos asPos() {
+        return switch (this) {
+            case Pos pos -> pos;
+            case Vec vec -> new Pos(vec.x(), vec.y(), vec.z());
+            case BlockVec blockVec -> new Pos(blockVec.blockX(), blockVec.blockY(), blockVec.blockZ());
+        };
+    }
+
+    @Contract(pure = true)
+    default @NotNull Vec asVec() {
+        return switch (this) {
+            case Vec vec -> vec;
+            case Pos pos -> new Vec(pos.x(), pos.y(), pos.z());
+            case BlockVec blockVec -> new Vec(blockVec.blockX(), blockVec.blockY(), blockVec.blockZ());
+        };
+    }
+
+    @Contract(pure = true)
+    default @NotNull BlockVec asBlockVec() {
+        return switch (this) {
+            case BlockVec blockVec -> blockVec;
+            case Pos pos -> new BlockVec(pos.blockX(), pos.blockY(), pos.blockZ());
+            case Vec vec -> new BlockVec(vec.blockX(), vec.blockY(), vec.blockZ());
+        };
     }
 }

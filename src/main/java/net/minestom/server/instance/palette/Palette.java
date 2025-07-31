@@ -57,9 +57,13 @@ public sealed interface Palette permits PaletteImpl {
 
     void getAllPresent(@NotNull EntryConsumer consumer);
 
+    int height(int x, int z, @NotNull EntryPredicate predicate);
+
     void set(int x, int y, int z, int value);
 
     void fill(int value);
+
+    void load(int[] palette, long[] values);
 
     void offset(int offset);
 
@@ -106,6 +110,10 @@ public sealed interface Palette permits PaletteImpl {
      * @return the number of entries matching the value
      */
     int count(int value);
+
+    default boolean isEmpty() {
+        return count() == 0;
+    }
 
     /**
      * Checks if the palette contains the given value.
@@ -180,6 +188,11 @@ public sealed interface Palette permits PaletteImpl {
         int apply(int x, int y, int z, int value);
     }
 
+    @FunctionalInterface
+    interface EntryPredicate {
+        boolean get(int x, int y, int z, int value);
+    }
+
     NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS);
 
     static NetworkBuffer.Type<Palette> biomeSerializer(int biomeCount) {
@@ -222,8 +235,7 @@ public sealed interface Palette permits PaletteImpl {
                 } else if (bitsPerEntry >= minIndirect && bitsPerEntry <= maxIndirect) {
                     // Indirect palette
                     final int[] palette = buffer.read(VAR_INT_ARRAY);
-                    int entriesPerLong = 64 / bitsPerEntry;
-                    final long[] data = new long[(dimension * dimension * dimension) / entriesPerLong + 1];
+                    final long[] data = new long[Palettes.arrayLength(dimension, bitsPerEntry)];
                     for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
                     return new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),

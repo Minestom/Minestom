@@ -6,7 +6,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.TagKey;
-import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -22,8 +21,7 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
     final class Empty implements SlotDisplay {
         public static final Empty INSTANCE = new Empty();
 
-        public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBuffer.UNIT.transform(
-                buffer -> INSTANCE, empty -> Unit.INSTANCE);
+        public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
 
         private Empty() {
         }
@@ -32,8 +30,7 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
     final class AnyFuel implements SlotDisplay {
         public static final AnyFuel INSTANCE = new AnyFuel();
 
-        public static final NetworkBuffer.Type<AnyFuel> NETWORK_TYPE = NetworkBuffer.UNIT.transform(
-                buffer -> INSTANCE, empty -> Unit.INSTANCE);
+        public static final NetworkBuffer.Type<AnyFuel> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
 
         private AnyFuel() {
         }
@@ -149,9 +146,8 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
         return this;
     }
 
-    private static NetworkBuffer.Type<SlotDisplay> dataSerializer(@NotNull SlotDisplayType type) {
-        //noinspection unchecked
-        return (NetworkBuffer.Type<SlotDisplay>) switch (type) {
+    private static NetworkBuffer.Type<? extends SlotDisplay> dataSerializer(@NotNull SlotDisplayType type) {
+        return switch (type) {
             case EMPTY -> Empty.NETWORK_TYPE;
             case ANY_FUEL -> AnyFuel.NETWORK_TYPE;
             case ITEM -> Item.NETWORK_TYPE;

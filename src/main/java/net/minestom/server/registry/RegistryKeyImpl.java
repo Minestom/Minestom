@@ -17,5 +17,5 @@ record RegistryKeyImpl<T>(@NotNull Key key) implements RegistryKey<T> {
     public int hashCode() {
         return Objects.hashCode(key);
     }
-    
+
 }

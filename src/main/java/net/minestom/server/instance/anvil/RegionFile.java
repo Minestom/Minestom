@@ -1,7 +1,5 @@
 package net.minestom.server.instance.anvil;
 
-import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
-import it.unimi.dsi.fastutil.booleans.BooleanList;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.CoordConversion;
@@ -13,7 +11,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.file.Path;
+import java.util.BitSet;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -45,11 +45,14 @@ final class RegionFile implements AutoCloseable {
 
     private final int[] locations = new int[MAX_ENTRY_COUNT];
     private final int[] timestamps = new int[MAX_ENTRY_COUNT];
-    private final BooleanList freeSectors = new BooleanArrayList(2);
+    private final BitSet freeSectors = new BitSet(2);
+
+    // Cache header data to avoid repeated file I/O
+    private final ByteBuffer headerBuffer = ByteBuffer.allocate(HEADER_LENGTH);
+    private boolean headerDirty = false;
 
     public RegionFile(@NotNull Path path) throws IOException {
         this.file = new RandomAccessFile(path.toFile(), "rw");
-
         readHeader();
     }
 
@@ -124,6 +127,7 @@ final class RegionFile implements AutoCloseable {
 
             // Update the header and write it
             locations[chunkIndex] = newLocation;
+            // store timestamps in seconds since epoch
             timestamps[chunkIndex] = (int) (System.currentTimeMillis() / 1000);
             writeHeader();
         } finally {
@@ -147,48 +151,65 @@ final class RegionFile implements AutoCloseable {
             file.write(new byte[HEADER_LENGTH]);
         }
 
-        //todo: addPadding()
-
         final long totalSectors = ((file.length() - 1) / SECTOR_SIZE) + 1; // Round up, last sector does not need to be full size
-        for (int i = 0; i < totalSectors; i++) freeSectors.add(true);
-        freeSectors.set(0, false); // First sector is locations
-        freeSectors.set(1, false); // Second sector is timestamps
+        freeSectors.set(0, (int) totalSectors); // Set all sectors as free initially
+        freeSectors.clear(0); // First sector is locations
+        freeSectors.clear(1); // Second sector is timestamps
 
-        // Read locations
+        // Read entire header in one operation
         file.seek(0);
+        byte[] headerData = new byte[HEADER_LENGTH];
+        file.readFully(headerData);
+        headerBuffer.clear();
+        headerBuffer.put(headerData);
+        headerBuffer.flip();
+
+        // Parse locations from buffer
         for (int i = 0; i < MAX_ENTRY_COUNT; i++) {
-            int location = locations[i] = file.readInt();
+            int location = locations[i] = headerBuffer.getInt();
             if (location != 0) {
-                markLocation(location, false);
+                markLocationInBitSet(location, false);
             }
         }
 
-        // Read timestamps
+        // Parse timestamps from buffer
         for (int i = 0; i < MAX_ENTRY_COUNT; i++) {
-            timestamps[i] = file.readInt();
+            timestamps[i] = headerBuffer.getInt();
         }
+
+        headerDirty = false;
     }
 
     private void writeHeader() throws IOException {
-        file.seek(0);
+        if (!headerDirty) return; // Skip if header hasn't changed
+
+        headerBuffer.clear();
+
+        // Write locations to buffer
         for (int location : locations) {
-            file.writeInt(location);
+            headerBuffer.putInt(location);
         }
+
+        // Write timestamps to buffer
         for (int timestamp : timestamps) {
-            file.writeInt(timestamp);
+            headerBuffer.putInt(timestamp);
         }
+
+        // Write entire header in one operation
+        file.seek(0);
+        file.write(headerBuffer.array());
+        headerDirty = false;
     }
 
     private int findFreeSectors(int length) {
-        for (int start = 0; start < freeSectors.size() - length; start++) {
-            boolean found = true;
-            for (int i = 0; i < length; i++) {
-                if (!freeSectors.getBoolean(start++)) {
-                    found = false;
-                    break;
-                }
+        int start = freeSectors.nextSetBit(0);
+        while (start != -1 && start + length <= freeSectors.size()) {
+            // Check if we have 'length' consecutive free sectors starting at 'start'
+            int nextClear = freeSectors.nextClearBit(start);
+            if (nextClear >= start + length) {
+                return start;
             }
-            if (found) return start - length;
+            start = freeSectors.nextSetBit(nextClear);
         }
         return -1;
     }
@@ -198,20 +219,23 @@ final class RegionFile implements AutoCloseable {
         file.seek(eof);
 
         byte[] emptySector = new byte[SECTOR_SIZE];
+        int startSector = (int) (eof / SECTOR_SIZE);
         for (int i = 0; i < count; i++) {
-            freeSectors.add(true);
+            freeSectors.set(startSector + i, true);
             file.write(emptySector);
         }
-
-        return (int) (eof / SECTOR_SIZE);
+        return startSector;
     }
 
     private void markLocation(int location, boolean free) {
+        markLocationInBitSet(location, free);
+        headerDirty = true;
+    }
+
+    private void markLocationInBitSet(int location, boolean free) {
         int sectorCount = location & 0xFF;
         int sectorStart = location >> 8;
         Check.stateCondition(sectorStart + sectorCount > freeSectors.size(), "Invalid sector count");
-        for (int i = sectorStart; i < sectorStart + sectorCount; i++) {
-            freeSectors.set(i, free);
-        }
+        freeSectors.set(sectorStart, sectorStart + sectorCount, free);
     }
 }

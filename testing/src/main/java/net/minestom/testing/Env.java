@@ -57,6 +57,10 @@ public interface Env {
         return process().instance().createInstanceContainer();
     }
 
+    default @NotNull Instance createEmptyInstance(IChunkLoader chunkLoader) {
+        return process().instance().createInstanceContainer(chunkLoader);
+    }
+
     default void destroyInstance(Instance instance) {
         process().instance().unregisterInstance(instance);
     }

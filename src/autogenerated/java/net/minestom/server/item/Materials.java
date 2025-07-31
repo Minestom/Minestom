@@ -1243,6 +1243,8 @@ interface Materials {
 
     Material SNIFFER_EGG = MaterialImpl.get("sniffer_egg");
 
+    Material DRIED_GHAST = MaterialImpl.get("dried_ghast");
+
     Material DEAD_TUBE_CORAL_BLOCK = MaterialImpl.get("dead_tube_coral_block");
 
     Material DEAD_BRAIN_CORAL_BLOCK = MaterialImpl.get("dead_brain_coral_block");
@@ -1606,6 +1608,38 @@ interface Materials {
     Material ACTIVATOR_RAIL = MaterialImpl.get("activator_rail");
 
     Material SADDLE = MaterialImpl.get("saddle");
+
+    Material WHITE_HARNESS = MaterialImpl.get("white_harness");
+
+    Material ORANGE_HARNESS = MaterialImpl.get("orange_harness");
+
+    Material MAGENTA_HARNESS = MaterialImpl.get("magenta_harness");
+
+    Material LIGHT_BLUE_HARNESS = MaterialImpl.get("light_blue_harness");
+
+    Material YELLOW_HARNESS = MaterialImpl.get("yellow_harness");
+
+    Material LIME_HARNESS = MaterialImpl.get("lime_harness");
+
+    Material PINK_HARNESS = MaterialImpl.get("pink_harness");
+
+    Material GRAY_HARNESS = MaterialImpl.get("gray_harness");
+
+    Material LIGHT_GRAY_HARNESS = MaterialImpl.get("light_gray_harness");
+
+    Material CYAN_HARNESS = MaterialImpl.get("cyan_harness");
+
+    Material PURPLE_HARNESS = MaterialImpl.get("purple_harness");
+
+    Material BLUE_HARNESS = MaterialImpl.get("blue_harness");
+
+    Material BROWN_HARNESS = MaterialImpl.get("brown_harness");
+
+    Material GREEN_HARNESS = MaterialImpl.get("green_harness");
+
+    Material RED_HARNESS = MaterialImpl.get("red_harness");
+
+    Material BLACK_HARNESS = MaterialImpl.get("black_harness");
 
     Material MINECART = MaterialImpl.get("minecart");
 
@@ -2193,6 +2227,8 @@ interface Materials {
 
     Material GHAST_SPAWN_EGG = MaterialImpl.get("ghast_spawn_egg");
 
+    Material HAPPY_GHAST_SPAWN_EGG = MaterialImpl.get("happy_ghast_spawn_egg");
+
     Material GLOW_SQUID_SPAWN_EGG = MaterialImpl.get("glow_squid_spawn_egg");
 
     Material GOAT_SPAWN_EGG = MaterialImpl.get("goat_spawn_egg");
@@ -2481,6 +2517,8 @@ interface Materials {
 
     Material MUSIC_DISC_FAR = MaterialImpl.get("music_disc_far");
 
+    Material MUSIC_DISC_LAVA_CHICKEN = MaterialImpl.get("music_disc_lava_chicken");
+
     Material MUSIC_DISC_MALL = MaterialImpl.get("music_disc_mall");
 
     Material MUSIC_DISC_MELLOHI = MaterialImpl.get("music_disc_mellohi");
@@ -2504,6 +2542,8 @@ interface Materials {
     Material MUSIC_DISC_PIGSTEP = MaterialImpl.get("music_disc_pigstep");
 
     Material MUSIC_DISC_PRECIPICE = MaterialImpl.get("music_disc_precipice");
+
+    Material MUSIC_DISC_TEARS = MaterialImpl.get("music_disc_tears");
 
     Material DISC_FRAGMENT_5 = MaterialImpl.get("disc_fragment_5");
 

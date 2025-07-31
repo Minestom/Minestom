@@ -26,12 +26,4 @@ public class StriderMeta extends AnimalMeta {
         metadata.set(MetadataDef.Strider.IS_SHAKING, value);
     }
 
-    public boolean isHasSaddle() {
-        return metadata.get(MetadataDef.Strider.HAS_SADDLE);
-    }
-
-    public void setHasSaddle(boolean value) {
-        metadata.set(MetadataDef.Strider.HAS_SADDLE, value);
-    }
-
 }

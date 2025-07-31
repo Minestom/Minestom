@@ -1,11 +1,9 @@
-package net.minestom.codegen.util;
+package net.minestom.codegen;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
-import net.minestom.codegen.Generators;
-import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

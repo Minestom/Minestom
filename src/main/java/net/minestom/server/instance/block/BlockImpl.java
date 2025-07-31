@@ -47,7 +47,7 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         HashMap<Object, Object> internCache = new HashMap<>();
 
         REGISTRY = RegistryData.createStaticRegistry(
-                Key.key("minecraft:block"),
+                Key.key("block"),
                 (namespace, properties) -> {
                     final int blockId = properties.getInt("id");
                     final RegistryData.Properties stateObject = properties.section("states");
@@ -115,6 +115,10 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
 
     static @UnknownNullability Block get(@NotNull String key) {
         return REGISTRY.get(Key.key(key));
+    }
+
+    static int statesCount() {
+        return BLOCK_STATE_MAP.size();
     }
 
     static Block getState(int stateId) {

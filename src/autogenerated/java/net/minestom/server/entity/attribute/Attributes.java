@@ -21,6 +21,8 @@ interface Attributes {
 
     Attribute BURNING_TIME = AttributeImpl.get("burning_time");
 
+    Attribute CAMERA_DISTANCE = AttributeImpl.get("camera_distance");
+
     Attribute EXPLOSION_KNOCKBACK_RESISTANCE = AttributeImpl.get("explosion_knockback_resistance");
 
     Attribute ENTITY_INTERACTION_RANGE = AttributeImpl.get("entity_interaction_range");
@@ -68,4 +70,8 @@ interface Attributes {
     Attribute TEMPT_RANGE = AttributeImpl.get("tempt_range");
 
     Attribute WATER_MOVEMENT_EFFICIENCY = AttributeImpl.get("water_movement_efficiency");
+
+    Attribute WAYPOINT_TRANSMIT_RANGE = AttributeImpl.get("waypoint_transmit_range");
+
+    Attribute WAYPOINT_RECEIVE_RANGE = AttributeImpl.get("waypoint_receive_range");
 }

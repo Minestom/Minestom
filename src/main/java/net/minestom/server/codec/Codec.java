@@ -4,9 +4,11 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
 import net.minestom.server.utils.UUIDUtils;
@@ -40,7 +42,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<RawValue> RAW_VALUE = new CodecImpl.RawValueCodecImpl();
 
-    @NotNull Codec<Unit> UNIT = StructCodec.struct(() -> Unit.INSTANCE);
+    @NotNull Codec<Unit> UNIT = StructCodec.struct(Unit.INSTANCE);
 
     @NotNull Codec<Boolean> BOOLEAN = new PrimitiveImpl<>(Transcoder::createBoolean, Transcoder::getBoolean);
 
@@ -68,9 +70,13 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<UUID> UUID = Codec.INT_ARRAY.transform(UUIDUtils::intArrayToUuid, UUIDUtils::uuidToIntArray);
 
-    @NotNull Codec<UUID> UUID_COERCED = UUID.orElse(Codec.STRING.transform(java.util.UUID::fromString, java.util.UUID::toString));
+    @NotNull Codec<UUID> UUID_STRING = STRING.transform(java.util.UUID::fromString, java.util.UUID::toString);
+
+    @NotNull Codec<UUID> UUID_COERCED = UUID.orElse(UUID_STRING);
 
     @NotNull Codec<Component> COMPONENT = ComponentCodecs.COMPONENT;
+
+    @NotNull Codec<Style> COMPONENT_STYLE = ComponentCodecs.STYLE;
 
     @NotNull Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
 
@@ -98,6 +104,14 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     static <T> @NotNull Codec<T> ForwardRef(@NotNull Supplier<Codec<T>> func) {
         return new CodecImpl.ForwardRefImpl<>(func);
+    }
+
+    static <T> @NotNull StructCodec<T> RegistryTaggedUnion(
+            @NotNull Registry<StructCodec<? extends T>> registry,
+            @NotNull Function<T, StructCodec<? extends T>> serializerGetter,
+            @NotNull String key
+    ) {
+        return Codec.RegistryTaggedUnion((ignored) -> registry, serializerGetter, key);
     }
 
     static <T> @NotNull StructCodec<T> RegistryTaggedUnion(

@@ -4,10 +4,11 @@ import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
 import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.identity.Identified;
+import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.pointer.Pointers;
+import net.kyori.adventure.pointer.PointersSupplier;
 import net.kyori.adventure.resource.ResourcePackCallback;
 import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.resource.ResourcePackRequest;
@@ -31,6 +32,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.*;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
@@ -57,16 +59,14 @@ import net.minestom.server.item.component.WrittenBookContent;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.common.KeepAlivePacket;
-import net.minestom.server.network.packet.server.common.PluginMessagePacket;
-import net.minestom.server.network.packet.server.common.ResourcePackPopPacket;
-import net.minestom.server.network.packet.server.common.ResourcePackPushPacket;
+import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
@@ -98,6 +98,7 @@ import net.minestom.server.worldevent.WorldEvent;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jctools.queues.MpscArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -116,11 +117,19 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
+public class Player extends LivingEntity implements CommandSender, HoverEventSource<ShowEntity>, NamedAndIdentified {
     private static final DynamicRegistry<DimensionType> DIMENSION_TYPE_REGISTRY = MinecraftServer.getDimensionTypeRegistry();
 
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final Component MISSING_REQUIRED_RESOURCE_PACK = Component.text("Required resource pack was not loaded.", NamedTextColor.RED);
+
+    // Adventure pointer supplier
+    protected static final PointersSupplier<Player> PLAYER_POINTERS_SUPPLIER = PointersSupplier.<Player>builder()
+            .parent(ENTITY_POINTERS_SUPPLIER)
+            .resolving(Identity.NAME, Player::getUsername)
+            .resolving(Identity.DISPLAY_NAME, Player::getDisplayName)
+            .resolving(Identity.LOCALE, Player::getLocale)
+            .build();
 
     // This probably should be configurable (eg an instance field). However I(matt) am unclear
     // on what it actually does so am holding off on adding API for this until I understand.
@@ -218,10 +227,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private final PlayerInputs inputs = new PlayerInputs();
 
-    // Adventure
-    private final Identity identity;
-    private final Pointers pointers;
-
     // Resource packs
     record PendingResourcePack(boolean required, @NotNull ResourcePackCallback callback) {
     }
@@ -253,14 +258,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         // FakePlayer init its connection there
         playerConnectionInit();
-
-        this.identity = Identity.identity(gameProfile.uuid());
-        this.pointers = Pointers.builder()
-                .withDynamic(Identity.UUID, this::getUuid)
-                .withDynamic(Identity.NAME, this::getUsername)
-                .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
-                .withDynamic(Identity.LOCALE, this::getLocale)
-                .build();
 
         // When in configuration state no metadata updates can be sent.
         metadata.setNotifyAboutChanges(false);
@@ -567,6 +564,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (permanent) {
             this.packets.clear();
             EventDispatcher.call(new PlayerDisconnectEvent(this));
+            new EventsJFR.PlayerLeave(getUuid().toString()).commit();
         }
 
 
@@ -745,6 +743,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
+        if (firstSpawn) new EventsJFR.PlayerJoin(getUuid().toString()).commit();
     }
 
     @ApiStatus.Internal
@@ -1013,6 +1012,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacket(new OpenBookPacket(PlayerHand.OFF));
         // Restore the item in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, getItemInOffHand()));
+    }
+
+    @Override
+    public void showDialog(@NotNull DialogLike dialog) {
+        sendPacket(new ShowDialogPacket(Dialog.unwrap(dialog)));
+    }
+
+    // TODO(1.21.6): Implementation for pending adventure method in 4.24.0.
+    public void closeDialog() {
+        sendPacket(new ClearDialogPacket());
     }
 
     @Override
@@ -1759,13 +1768,18 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * It closes the player inventory (when opened) if {@link #getOpenInventory()} returns null.
      */
     public void closeInventory() {
-        closeInventory(false);
+        AbstractInventory open = getOpenInventory();
+        byte id = (open == null ? getInventory() : open).getWindowId();
+
+        closeInventory(false, id);
     }
 
     @ApiStatus.Internal
-    public void closeInventory(boolean fromClient) {
-        AbstractInventory openInventory = getOpenInventory();
-        if (openInventory == null) return;
+    public void closeInventory(boolean fromClient, byte windowId) {
+        AbstractInventory openInventory = windowId == 0 ? getInventory() : getOpenInventory();
+
+        // Nothing happens if it has the wrong ID or if there's no inventory
+        if (openInventory == null || windowId != openInventory.getWindowId()) return;
 
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(openInventory, this, fromClient);
         EventDispatcher.call(inventoryCloseEvent);
@@ -1775,7 +1789,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         this.openInventory = null;
-        openInventory.removeViewer(this);
+        if (openInventory != inventory) openInventory.removeViewer(this);
         inventory.update();
 
         didCloseInventory = false;
@@ -2181,6 +2195,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     public void refreshInput(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
         this.inputs.refresh(forward, backward, left, right, jump, shift, sprint);
+
+        boolean oldSneakingState = isSneaking();
+        setSneaking(shift);
+        if (oldSneakingState != shift) {
+            if (shift) {
+                EventDispatcher.call(new PlayerStartSneakingEvent(this));
+            } else {
+                EventDispatcher.call(new PlayerStopSneakingEvent(this));
+            }
+        }
     }
 
     /**
@@ -2280,13 +2304,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     @Override
-    public @NotNull Identity identity() {
-        return this.identity;
-    }
-
-    @Override
+    @Contract(pure = true)
     public @NotNull Pointers pointers() {
-        return this.pointers;
+        return PLAYER_POINTERS_SUPPLIER.view(this);
     }
 
     @Override

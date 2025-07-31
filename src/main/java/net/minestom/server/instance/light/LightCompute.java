@@ -15,14 +15,23 @@ import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT
 
 public final class LightCompute {
     static final Direction[] DIRECTIONS = Direction.values();
+    static final BlockFace[] FACES = BlockFace.values();
     static final int LIGHT_LENGTH = SECTION_BLOCK_COUNT / 2;
     static final int SECTION_SIZE = 16;
 
+    public static final byte[] UNSET_CONTENT = new byte[0];
     public static final byte[] EMPTY_CONTENT = new byte[LIGHT_LENGTH];
     public static final byte[] CONTENT_FULLY_LIT = new byte[LIGHT_LENGTH];
 
     static {
         Arrays.fill(CONTENT_FULLY_LIT, (byte) -1);
+    }
+
+    static byte[] lazyArray(byte[] content) {
+        if (content == null || content.length == 0) return EMPTY_CONTENT;
+        else if (Arrays.equals(content, EMPTY_CONTENT)) return EMPTY_CONTENT;
+        else if (Arrays.equals(content, CONTENT_FULLY_LIT)) return CONTENT_FULLY_LIT;
+        else return content.clone();
     }
 
     /**
@@ -35,9 +44,7 @@ public final class LightCompute {
      * @return lighting wrapped in Result
      */
     static byte @NotNull [] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
-        if (lightPre.isEmpty()) {
-            return EMPTY_CONTENT;
-        }
+        if (lightPre.isEmpty()) return EMPTY_CONTENT;
 
         final byte[] lightArray = new byte[LIGHT_LENGTH];
 
@@ -154,7 +161,6 @@ public final class LightCompute {
             case WEST, BOTTOM, NORTH -> 0;
             case EAST, TOP, SOUTH -> 15;
         };
-
         for (int bx = 0; bx < SECTION_SIZE; bx++) {
             for (int by = 0; by < SECTION_SIZE; by++) {
                 final int posFrom = switch (face) {
@@ -164,14 +170,12 @@ public final class LightCompute {
                 };
 
                 int valueFrom;
-
                 if (content == null && contentPropagation == null) valueFrom = 0;
                 else if (content != null && contentPropagation == null) valueFrom = getLight(content, posFrom);
                 else if (content == null) valueFrom = getLight(contentPropagation, posFrom);
                 else valueFrom = Math.max(getLight(content, posFrom), getLight(contentPropagation, posFrom));
 
                 final int valueTo = getLight(contentPropagationTemp, posFrom);
-
                 if (valueFrom < valueTo) return false;
             }
         }

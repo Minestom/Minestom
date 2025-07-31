@@ -102,21 +102,26 @@ public class OpenToLAN {
      * Performs the ping.
      */
     private static void ping() {
-        if (!MinecraftServer.getServer().isOpen()) return;
-        if (packet == null || eventCooldown.isReady(System.currentTimeMillis())) {
-            final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
-            EventDispatcher.call(event);
+        Thread.startVirtualThread(() -> {
+            try {
+                if (!MinecraftServer.getServer().isOpen()) return;
+                if (packet == null || eventCooldown.isReady(System.nanoTime())) {
+                    final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
+                    EventDispatcher.call(event);
 
-            final byte[] data = OPEN_TO_LAN.getPingResponse(event.getResponseData()).getBytes(StandardCharsets.UTF_8);
-            packet = new DatagramPacket(data, data.length, PING_ADDRESS);
+                    final byte[] data = OPEN_TO_LAN.getPingResponse(event.getStatus()).getBytes(StandardCharsets.UTF_8);
+                    packet = new DatagramPacket(data, data.length, PING_ADDRESS);
+                    eventCooldown.refreshLastUpdate(System.nanoTime());
+                }
 
-            eventCooldown.refreshLastUpdate(System.currentTimeMillis());
-        }
-
-        try {
-            socket.send(packet);
-        } catch (IOException e) {
-            LOGGER.warn("Could not send Open to LAN packet!", e);
-        }
+                try {
+                    socket.send(packet);
+                } catch (IOException e) {
+                    LOGGER.warn("Could not send Open to LAN packet!", e);
+                }
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+        });
     }
 }

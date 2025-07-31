@@ -1,6 +1,5 @@
 package net.minestom.server.inventory.click.integration;
 
-
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -31,6 +30,8 @@ public class LeftClickIntegrationTest {
         var inventory = player.getInventory();
         var listener = env.listen(InventoryPreClickEvent.class);
         inventory.setItemStack(1, ItemStack.of(Material.DIAMOND));
+        inventory.setItemStack(2, ItemStack.of(Material.DIAMOND_HELMET));
+        inventory.setItemStack(3, ItemStack.of(Material.SHIELD));
         // Empty click
         {
             listener.followup(event -> {
@@ -61,6 +62,80 @@ public class LeftClickIntegrationTest {
             leftClick(player, 1);
             assertEquals(ItemStack.AIR, inventory.getCursorItem());
             assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
+        }
+        // Shift click an armor item into the armor slot
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(2), event.getClick());
+                assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getInventory().getItemStack(2));
+            });
+            shiftClick(player, 2);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(2));
+            assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getHelmet());
+        }
+        // Shift click an armor slot item back into the inventory
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(41), event.getClick());
+                assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getHelmet());
+            });
+            shiftClick(player, 41);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.of(Material.AIR), player.getHelmet());
+            assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getInventory().getItemStack(9));
+        }
+        // Shift click a shield into the off-hand slot
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(3), event.getClick());
+                assertEquals(ItemStack.of(Material.SHIELD), player.getInventory().getItemStack(3));
+            });
+            shiftClick(player, 3);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(3));
+            assertEquals(ItemStack.of(Material.SHIELD), player.getInventory().getItemStack(45));
+        }
+        // Shift click a shield in the off-hand slot to the inventory
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(45), event.getClick());
+                assertEquals(ItemStack.of(Material.SHIELD), player.getInventory().getItemStack(45));
+            });
+            shiftClick(player, 45);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(45));
+            assertEquals(ItemStack.of(Material.SHIELD), player.getInventory().getItemStack(10));
+        }
+        // Shift click a player crafting inventory ingredient to the player inventory
+        {
+            player.getInventory().setItemStack(37, ItemStack.of(Material.GOLDEN_HELMET));
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(37), event.getClick());
+                assertEquals(ItemStack.of(Material.GOLDEN_HELMET), player.getInventory().getItemStack(37));
+            });
+            shiftClick(player, 37);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(37));
+            assertEquals(ItemStack.of(Material.GOLDEN_HELMET), player.getInventory().getItemStack(11));
+        }
+        // Shift click a player crafting inventory result to the player hotbar
+        {
+            player.getInventory().setItemStack(36, ItemStack.of(Material.IRON_HELMET));
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(36), event.getClick());
+                assertEquals(ItemStack.of(Material.IRON_HELMET), player.getInventory().getItemStack(36));
+            });
+            shiftClick(player, 36);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(36));
+            assertEquals(ItemStack.of(Material.IRON_HELMET), player.getInventory().getItemStack(8));
         }
         // Cancel event
         {
