@@ -1,6 +1,7 @@
 package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -220,14 +221,48 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     @Override
     @Contract(pure = true)
     public @NotNull BlockVec relative(@NotNull BlockFace face) {
-        return switch (face) {
-            case BOTTOM -> sub(0, 1, 0);
-            case TOP -> add(0, 1, 0);
-            case NORTH -> sub(0, 0, 1);
-            case SOUTH -> add(0, 0, 1);
-            case WEST -> sub(1, 0, 0);
-            case EAST -> add(1, 0, 0);
-        };
+        final Direction direction = face.toDirection();
+        return add(direction.normalX(), direction.normalY(), direction.normalZ());
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec neg() {
+        return new BlockVec(-blockX, -blockY, -blockZ);
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec abs() {
+        return new BlockVec(Math.abs(blockX), Math.abs(blockY), Math.abs(blockZ));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec min(@NotNull Point point) {
+        return new BlockVec(Math.min(blockX, point.blockX()), Math.min(blockY, point.blockY()), Math.min(blockZ, point.blockZ()));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec min(int x, int y, int z) {
+        return new BlockVec(Math.min(blockX, x), Math.min(blockY, y), Math.min(blockZ, z));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec min(int value) {
+        return new BlockVec(Math.min(blockX, value), Math.min(blockY, value), Math.min(blockZ, value));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec max(@NotNull Point point) {
+        return new BlockVec(Math.max(blockX, point.blockX()), Math.max(blockY, point.blockY()), Math.max(blockZ, point.blockZ()));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec max(int x, int y, int z) {
+        return new BlockVec(Math.max(blockX, x), Math.max(blockY, y), Math.max(blockZ, z));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec max(int value) {
+        return new BlockVec(Math.max(blockX, value), Math.max(blockY, value), Math.max(blockZ, value));
     }
 
     @Contract(pure = true)

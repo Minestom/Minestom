@@ -1,6 +1,7 @@
 package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
@@ -205,14 +206,8 @@ public sealed interface Point permits Vec, Pos, BlockVec {
 
     @Contract(pure = true)
     default @NotNull Point relative(@NotNull BlockFace face) {
-        return switch (face) {
-            case BOTTOM -> sub(0, 1, 0);
-            case TOP -> add(0, 1, 0);
-            case NORTH -> sub(0, 0, 1);
-            case SOUTH -> add(0, 0, 1);
-            case WEST -> sub(1, 0, 0);
-            case EAST -> add(1, 0, 0);
-        };
+        final Direction direction = face.toDirection();
+        return add(direction.normalX(), direction.normalY(), direction.normalZ());
     }
 
     @Contract(pure = true)
