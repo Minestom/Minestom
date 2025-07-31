@@ -17,7 +17,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
                              byte displayedSkinParts, MainHand mainHand,
                              boolean enableTextFiltering, boolean allowServerListings,
                              @NotNull ClientSettings.ParticleSetting particleSetting) {
-    public static ClientSettings DEFAULT = new ClientSettings(
+    public static final ClientSettings DEFAULT = new ClientSettings(
             Locale.US, (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
             ChatMessageType.FULL, true,
             (byte) 0x7F, MainHand.RIGHT,
