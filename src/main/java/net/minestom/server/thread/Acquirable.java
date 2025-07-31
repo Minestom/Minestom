@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 @ApiStatus.Experimental
@@ -63,7 +62,6 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return an acquired object
      * @see #sync(Consumer) for auto-closeable capability
-     * @see #applySync(Function) for auto-closeable capability
      */
     default @NotNull Acquired<T> lock() {
         return new Acquired<>(unwrap(), assignedThread());
@@ -108,23 +106,6 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
             acquired.unlock();
         }
     }
-
-    /**
-     * Locks the acquirable element, execute {@code function} synchronously and unlock the thread.
-     * <p>
-     * Free if the element is already present in the current thread, blocking otherwise.
-     *
-     * @param function the function to execute once the element has been safely acquired
-     */
-    default <R> R applySync(@NotNull Function<T, R> function) {
-        Acquired<T> acquired = lock();
-        try {
-            return function.apply(acquired.get());
-        } finally {
-            acquired.unlock();
-        }
-    }
-
 
     /**
      * Unwrap the contained object unsafely.
