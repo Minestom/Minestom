@@ -3,6 +3,8 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.Area;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
@@ -256,10 +258,15 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         default void setBlock(@NotNull Point blockPosition, @NotNull Block block) {
             setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block);
         }
+
+        default void setBlockArea(@NotNull Area area, @NotNull Block block) {
+            for (BlockVec vec : area) setBlock(vec.blockX(), vec.blockY(), vec.blockZ(), block);
+        }
     }
 
     interface Getter {
-        @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition);
+        @UnknownNullability
+        Block getBlock(int x, int y, int z, @NotNull Condition condition);
 
         default @UnknownNullability Block getBlock(@NotNull Point point, @NotNull Condition condition) {
             return getBlock(point.blockX(), point.blockY(), point.blockZ(), condition);

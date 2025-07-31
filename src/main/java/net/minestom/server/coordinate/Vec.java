@@ -1,11 +1,14 @@
 package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
+
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
 
 /**
  * Represents an immutable 3D vector.
@@ -15,7 +18,7 @@ import java.util.function.DoubleUnaryOperator;
 public record Vec(double x, double y, double z) implements Point {
     public static final Vec ZERO = new Vec(0);
     public static final Vec ONE = new Vec(1);
-    public static final Vec SECTION = new Vec(16);
+    public static final Vec SECTION = new Vec(SECTION_SIZE);
 
     public static final double EPSILON = 0.000001;
 
@@ -161,7 +164,8 @@ public record Vec(double x, double y, double z) implements Point {
 
     @Override
     public @NotNull Vec relative(@NotNull BlockFace face) {
-        return (Vec) Point.super.relative(face);
+        final Direction direction = face.toDirection();
+        return add(direction.normalX(), direction.normalY(), direction.normalZ());
     }
 
     @Contract(pure = true)
