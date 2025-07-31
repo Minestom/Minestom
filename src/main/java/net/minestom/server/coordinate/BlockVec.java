@@ -236,7 +236,12 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     }
 
     @Contract(pure = true)
-    public @NotNull BlockVec min(@NotNull Point point) {
+    public @NotNull Point min(@NotNull Point point) {
+        return new Vec(Math.min(blockX, point.x()), Math.min(blockY, point.y()), Math.min(blockZ, point.z()));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec min(@NotNull BlockVec point) {
         return new BlockVec(Math.min(blockX, point.blockX()), Math.min(blockY, point.blockY()), Math.min(blockZ, point.blockZ()));
     }
 
@@ -251,7 +256,12 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     }
 
     @Contract(pure = true)
-    public @NotNull BlockVec max(@NotNull Point point) {
+    public @NotNull Point max(@NotNull Point point) {
+        return new Vec(Math.max(blockX, point.x()), Math.max(blockY, point.y()), Math.max(blockZ, point.z()));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec max(@NotNull BlockVec point) {
         return new BlockVec(Math.max(blockX, point.blockX()), Math.max(blockY, point.blockY()), Math.max(blockZ, point.blockZ()));
     }
 
