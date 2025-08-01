@@ -284,14 +284,4 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     public boolean samePoint(@NotNull BlockVec blockVec) {
         return blockX == blockVec.blockX && blockY == blockVec.blockY && blockZ == blockVec.blockZ;
     }
-
-    @Contract(pure = true)
-    public boolean samePoint(int x, int y, int z) {
-        return blockX == x && blockY == y && blockZ == z;
-    }
-
-    @Contract(pure = true)
-    public boolean samePoint(@NotNull BlockVec blockVec) {
-        return blockX == blockVec.blockX && blockY == blockVec.blockY && blockZ == blockVec.blockZ;
-    }
 }
