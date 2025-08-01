@@ -1,16 +1,16 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 
 record BlockVersionImpl(long instance,
                         // Null if global
-                        @Nullable Long2ObjectOpenHashMap<ChunkVersion> chunkVersions
+                        @Nullable Long2LongOpenHashMap sectionVersions
 ) implements BlockVersion {
     @Override
     public boolean global() {
-        return chunkVersions == null;
+        return sectionVersions == null;
     }
 
     @Override
@@ -18,9 +18,13 @@ record BlockVersionImpl(long instance,
         BlockVersionImpl impl = (BlockVersionImpl) other;
         if (instance == impl.instance) return true;
         if (global() || impl.global()) return false;
-        return chunkVersions.equals(impl.chunkVersions);
-    }
-
-    record ChunkVersion(long chunk, Long2LongOpenHashMap sectionVersions) {
+        for (Long2LongMap.Entry entry : sectionVersions.long2LongEntrySet()) {
+            final long section = entry.getLongKey();
+            final long version = entry.getLongValue();
+            if (impl.sectionVersions.get(section) != version) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -58,7 +58,6 @@ final class ChunkImpl implements Chunk {
     final DimensionType dimension;
     private final int minSection, maxSection;
     private final List<Section> sections;
-    final AtomicLong version = new AtomicLong(1);
 
     boolean needsCompleteHeightmapRefresh = true;
     final Heightmap motionBlocking;
@@ -262,7 +261,6 @@ final class ChunkImpl implements Chunk {
 
     @Override
     public void invalidate() {
-        this.version.incrementAndGet();
         for (Section section : sections) section.invalidate();
         this.needsCompleteHeightmapRefresh = true;
         this.chunkCache.invalidate();

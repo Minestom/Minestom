@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
@@ -337,17 +336,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public synchronized BlockVersion version(Area area) {
         LongSet sections = new LongOpenHashSet();
         area.forEach(vec -> sections.add(sectionIndex(vec.sectionX(), vec.sectionY(), vec.sectionZ())));
-        Long2ObjectOpenHashMap<BlockVersionImpl.ChunkVersion> chunkVersions = new Long2ObjectOpenHashMap<>();
+        Long2LongOpenHashMap sectionVersions = new Long2LongOpenHashMap();
         for (long sectionIndex : sections) {
             final int sectionX = sectionIndexGetX(sectionIndex);
             final int sectionY = sectionIndexGetY(sectionIndex);
             final int sectionZ = sectionIndexGetZ(sectionIndex);
-            final long chunkIndex = chunkIndex(sectionX, sectionZ);
             final Chunk chunk = getChunk(sectionX, sectionZ);
-            BlockVersionImpl.ChunkVersion chunkVersion = chunkVersions.computeIfAbsent(chunkIndex, aLong -> {
-                final long version = chunk != null ? ((ChunkImpl) chunk).version.get() : 0;
-                return new BlockVersionImpl.ChunkVersion(version, new Long2LongOpenHashMap());
-            });
             final long version;
             if (chunk != null) {
                 final Section section = chunk.getSection(sectionY);
@@ -355,9 +349,9 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             } else {
                 version = 0;
             }
-            chunkVersion.sectionVersions().put(sectionIndex, version);
+            sectionVersions.put(sectionIndex, version);
         }
-        return new BlockVersionImpl(version.get(), chunkVersions);
+        return new BlockVersionImpl(version.get(), sectionVersions);
     }
 
     public synchronized BlockVersion version() {
