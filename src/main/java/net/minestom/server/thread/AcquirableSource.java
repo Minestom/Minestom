@@ -4,6 +4,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * An object that is a source of {@link Acquirable} objects, and can be synchronized within a {@link ThreadDispatcher}.
@@ -14,7 +15,7 @@ import java.util.function.Consumer;
 public interface AcquirableSource<T> {
     /**
      * Obtains an {@link Acquirable}. To safely perform operations on this object, the user must call
-     * {@link Acquirable#sync(Consumer)} or {@link Acquirable#lock()} (followed by
+     * {@link Acquirable#sync(Consumer)}, {@link Acquirable#applySync(Function)}, or {@link Acquirable#lock()} (followed by
      * a subsequent unlock) on the Acquirable instance.
      *
      * @return an Acquirable which can be used to synchronize access to this object

@@ -1,12 +1,13 @@
 package net.minestom.server.instance.anvil;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
 import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
-import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
@@ -34,7 +35,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
+import static net.minestom.server.coordinate.CoordConversion.*;
+import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
+import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
@@ -48,13 +51,12 @@ public class AnvilLoader implements IChunkLoader {
     private final Path levelPath;
     private final Path regionPath;
 
-    private static class RegionCache extends ConcurrentHashMap<IntIntImmutablePair, Set<IntIntImmutablePair>> {
-    }
-
     /**
      * Represents the chunks currently loaded per region. Used to determine when a region file can be unloaded.
+     * <p>
+     * RegionIndex = Set<ChunkIndex>
      */
-    private final RegionCache perRegionLoadedChunks = new RegionCache();
+    private final Long2ObjectOpenHashMap<LongSet> perRegionLoadedChunks = new Long2ObjectOpenHashMap<>();
     private final ReentrantLock perRegionLoadedChunksLock = new ReentrantLock();
 
     public AnvilLoader(@NotNull Path path) {
@@ -128,10 +130,11 @@ public class AnvilLoader implements IChunkLoader {
         // Cache the index of the loaded chunk
         perRegionLoadedChunksLock.lock();
         try {
-            int regionX = CoordConversion.chunkToRegion(chunkX);
-            int regionZ = CoordConversion.chunkToRegion(chunkZ);
-            var chunks = perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), r -> new HashSet<>()); // region cache may have been removed on another thread due to unloadChunk
-            chunks.add(new IntIntImmutablePair(chunkX, chunkZ));
+            final int regionX = chunkToRegion(chunkX), regionZ = chunkToRegion(chunkZ);
+            final long regionIndex = regionIndex(regionX, regionZ);
+            var chunks = perRegionLoadedChunks.computeIfAbsent(regionIndex, r -> new LongOpenHashSet()); // region cache may have been removed on another thread due to unloadChunk
+            final long chunkIndex = chunkIndex(chunkX, chunkZ);
+            chunks.add(chunkIndex);
         } finally {
             perRegionLoadedChunksLock.unlock();
         }
@@ -139,12 +142,10 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private @Nullable RegionFile getMCAFile(int chunkX, int chunkZ) {
-        final int regionX = CoordConversion.chunkToRegion(chunkX);
-        final int regionZ = CoordConversion.chunkToRegion(chunkZ);
+        final int regionX = chunkToRegion(chunkX), regionZ = chunkToRegion(chunkZ);
         final String fileName = RegionFile.getFileName(regionX, regionZ);
 
         final RegionFile loadedFile = alreadyLoaded.get(fileName);
-
         if (loadedFile != null) return loadedFile;
 
         perRegionLoadedChunksLock.lock();
@@ -156,7 +157,8 @@ public class AnvilLoader implements IChunkLoader {
                 }
 
                 try {
-                    Set<IntIntImmutablePair> previousVersion = perRegionLoadedChunks.put(new IntIntImmutablePair(regionX, regionZ), new HashSet<>());
+                    final long regionIndex = regionIndex(regionX, regionZ);
+                    LongSet previousVersion = perRegionLoadedChunks.put(regionIndex, new LongOpenHashSet());
                     assert previousVersion == null : "The AnvilLoader cache should not already have data for this region.";
                     return new RegionFile(regionPath);
                 } catch (IOException e) {
@@ -187,10 +189,10 @@ public class AnvilLoader implements IChunkLoader {
 
             // Lighting
             if (sectionData.get("SkyLight") instanceof ByteArrayBinaryTag skyLightTag && skyLightTag.size() == 2048) {
-                section.setSkyLight(skyLightTag.value());
+                section.skyLight().set(skyLightTag.value());
             }
             if (sectionData.get("BlockLight") instanceof ByteArrayBinaryTag blockLightTag && blockLightTag.size() == 2048) {
-                section.setBlockLight(blockLightTag.value());
+                section.blockLight().set(blockLightTag.value());
             }
 
             {   // Biomes
@@ -276,18 +278,17 @@ public class AnvilLoader implements IChunkLoader {
                 LOGGER.warn("Invalid block entity tag in chunk data: {}", blockEntityTag);
                 continue;
             }
-
-            final int x = blockEntity.getInt("x");
-            final int y = blockEntity.getInt("y");
-            final int z = blockEntity.getInt("z");
-            Block block = loadedChunk.getBlock(x, y, z);
-
+            final int x = blockEntity.getInt("x"), y = blockEntity.getInt("y"), z = blockEntity.getInt("z");
+            final int localX = globalToSectionRelative(x), localY = globalToSectionRelative(y), localZ = globalToSectionRelative(z);
+            Section section = loadedChunk.getSectionAt(y);
+            final int stateId = section.blockPalette().get(localX, localY, localZ);
+            Block block = Block.fromStateId(stateId);
+            assert block != null;
             // Load the block handler if the id is present
             if (blockEntity.get("id") instanceof StringBinaryTag blockEntityId) {
                 final BlockHandler handler = MinecraftServer.getBlockManager().getHandlerOrDummy(blockEntityId.value());
                 block = block.withHandler(handler);
             }
-
             // Remove anvil tags
             CompoundBinaryTag trimmedTag = CompoundBinaryTag.builder()
                     .put(blockEntity)
@@ -317,14 +318,12 @@ public class AnvilLoader implements IChunkLoader {
 
     @Override
     public void saveChunk(@NotNull Chunk chunk) {
-        final int chunkX = chunk.getChunkX();
-        final int chunkZ = chunk.getChunkZ();
+        final int chunkX = chunk.getChunkX(), chunkZ = chunk.getChunkZ();
+        final int regionX = chunkToRegion(chunkX), regionZ = chunkToRegion(chunkZ);
+        final long chunkIndex = chunkIndex(chunkX, chunkZ);
+        final long regionIndex = regionIndex(regionX, regionZ);
 
         // Find the region file or create an empty one if missing
-
-        final int regionX = CoordConversion.chunkToRegion(chunkX);
-        final int regionZ = CoordConversion.chunkToRegion(chunkZ);
-
         RegionFile mcaFile;
         fileCreationLock.lock();
         try {
@@ -352,8 +351,8 @@ public class AnvilLoader implements IChunkLoader {
 
             this.perRegionLoadedChunksLock.lock();
             try {
-                this.perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), k -> new HashSet<>())
-                        .add(new IntIntImmutablePair(chunkX, chunkZ));
+                this.perRegionLoadedChunks.computeIfAbsent(regionIndex, k -> new LongOpenHashSet())
+                        .add(chunkIndex);
             } finally {
                 this.perRegionLoadedChunksLock.unlock();
             }
@@ -431,9 +430,9 @@ public class AnvilLoader implements IChunkLoader {
                             CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();
                             if (originalNBT != null) blockEntityTag.put(originalNBT);
                             if (handler != null) blockEntityTag.putString("id", handler.getKey().asString());
-                            blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
+                            blockEntityTag.putInt("x", x + CHUNK_SIZE_X * chunk.getChunkX());
                             blockEntityTag.putInt("y", y + globalSectionY);
-                            blockEntityTag.putInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
+                            blockEntityTag.putInt("z", z + CHUNK_SIZE_Z * chunk.getChunkZ());
                             blockEntityTag.putByte("keepPacked", (byte) 0);
                             blockEntities.add(blockEntityTag.build());
                         }
@@ -445,7 +444,8 @@ public class AnvilLoader implements IChunkLoader {
                 } else {
                     section.biomePalette().getAll((x, y, z, value) -> {
                         int biomeIndex = (x / 4) + (y / 4) * 4 * 4 + (z / 4) * 4;
-                        final RegistryKey<Biome> biomeKey = chunk.getBiome(x, y, z);
+                        final RegistryKey<Biome> biomeKey = MinecraftServer.getBiomeRegistry().getKey(value);
+                        assert biomeKey != null;
                         final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
                         int biomePaletteIndex = biomePalette.indexOf(biomeName);
                         if (biomePaletteIndex == -1) {
@@ -518,20 +518,20 @@ public class AnvilLoader implements IChunkLoader {
      * @param chunk the chunk to unload
      */
     @Override
-    public void unloadChunk(Chunk chunk) {
-        final int regionX = CoordConversion.chunkToRegion(chunk.getChunkX());
-        final int regionZ = CoordConversion.chunkToRegion(chunk.getChunkZ());
-        final IntIntImmutablePair regionKey = new IntIntImmutablePair(regionX, regionZ);
+    public void unloadChunk(@NotNull Chunk chunk) {
+        final int regionX = chunkToRegion(chunk.getChunkX()), regionZ = chunkToRegion(chunk.getChunkZ());
+        final long regionIndex = regionIndex(regionX, regionZ);
 
         perRegionLoadedChunksLock.lock();
         try {
-            Set<IntIntImmutablePair> chunks = perRegionLoadedChunks.get(regionKey);
+            LongSet chunks = perRegionLoadedChunks.get(regionIndex);
             if (chunks != null) { // if null, trying to unload a chunk from a region that was not created by the AnvilLoader
                 // don't check return value, trying to unload a chunk not created by the AnvilLoader is valid
-                chunks.remove(new IntIntImmutablePair(chunk.getChunkX(), chunk.getChunkZ()));
+                final long chunkIndex = chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+                chunks.remove(chunkIndex);
 
                 if (chunks.isEmpty()) {
-                    perRegionLoadedChunks.remove(regionKey);
+                    perRegionLoadedChunks.remove(regionIndex);
                     RegionFile regionFile = alreadyLoaded.remove(RegionFile.getFileName(regionX, regionZ));
                     if (regionFile != null) {
                         try {
