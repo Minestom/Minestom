@@ -3,6 +3,7 @@ package net.minestom.server;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.instance.Chunk;
@@ -108,7 +109,7 @@ public interface ServerProcess extends Registries, Snapshotable {
     /**
      * Dispatcher for tickable game objects.
      */
-    @NotNull ThreadDispatcher<Chunk> dispatcher();
+    @NotNull ThreadDispatcher<Chunk, Entity> dispatcher();
 
     /**
      * Handles the server ticks.

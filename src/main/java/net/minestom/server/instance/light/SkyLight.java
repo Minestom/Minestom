@@ -3,7 +3,6 @@ package net.minestom.server.instance.light;
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
@@ -45,77 +44,6 @@ final class SkyLight implements Light {
                 }
             }
         }
-        return lightSources;
-    }
-
-    private ShortArrayFIFOQueue buildExternalQueue(Palette blockPalette,
-                                                   Point[] neighbors, byte[] content,
-                                                   LightLookup lightLookup,
-                                                   PaletteLookup paletteLookup) {
-        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
-        for (int i = 0; i < neighbors.length; i++) {
-            Point neighborSection = neighbors[i];
-            if (neighborSection == null) continue;
-            Palette otherPalette = paletteLookup.palette(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
-            if (otherPalette == null) continue;
-            Light otherLight = lightLookup.light(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
-            if (otherLight == null) continue;
-
-            final BlockFace face = FACES[i];
-            final int k = switch (face) {
-                case WEST, BOTTOM, NORTH -> 0;
-                case EAST, TOP, SOUTH -> 15;
-            };
-            for (int bx = 0; bx < 16; bx++) {
-                for (int by = 0; by < 16; by++) {
-                    final byte lightEmission = (byte) Math.max(switch (face) {
-                        case NORTH, SOUTH -> (byte) otherLight.getLevel(bx, by, 15 - k);
-                        case WEST, EAST -> (byte) otherLight.getLevel(15 - k, bx, by);
-                        default -> (byte) otherLight.getLevel(bx, 15 - k, by);
-                    } - 1, 0);
-
-                    final int posTo = switch (face) {
-                        case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
-                        case WEST, EAST -> k | (by << 4) | (bx << 8);
-                        default -> bx | (by << 4) | (k << 8);
-                    };
-
-                    if (content != null) {
-                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
-                        if (lightEmission <= internalEmission) continue;
-                    }
-
-                    final Block blockTo = switch (face) {
-                        case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
-                        case WEST, EAST -> getBlock(blockPalette, k, bx, by);
-                        default -> getBlock(blockPalette, bx, k, by);
-                    };
-
-                    final Block blockFrom = switch (face) {
-                        case NORTH, SOUTH -> getBlock(otherPalette, bx, by, 15 - k);
-                        case WEST, EAST -> getBlock(otherPalette, 15 - k, bx, by);
-                        default -> getBlock(otherPalette, bx, 15 - k, by);
-                    };
-
-                    if (blockTo == null && blockFrom != null) {
-                        if (blockFrom.registry().collisionShape().isOccluded(Block.AIR.registry().collisionShape(), face.getOppositeFace()))
-                            continue;
-                    } else if (blockTo != null && blockFrom == null) {
-                        if (Block.AIR.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face))
-                            continue;
-                    } else if (blockTo != null && blockFrom != null) {
-                        if (blockFrom.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face.getOppositeFace()))
-                            continue;
-                    }
-
-                    if (lightEmission > 0) {
-                        final int index = posTo | (lightEmission << 12);
-                        lightSources.enqueue((short) index);
-                    }
-                }
-            }
-        }
-
         return lightSources;
     }
 
