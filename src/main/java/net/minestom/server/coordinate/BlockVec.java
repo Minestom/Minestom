@@ -1,11 +1,13 @@
 package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
 import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
 
 /**
@@ -18,7 +20,7 @@ import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
 public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     public static final BlockVec ZERO = new BlockVec(0);
     public static final BlockVec ONE = new BlockVec(1);
-    public static final BlockVec SECTION = new BlockVec(16);
+    public static final BlockVec SECTION = new BlockVec(SECTION_SIZE);
 
     public BlockVec(double x, double y, double z) {
         this(globalToBlock(x), globalToBlock(y), globalToBlock(z));
@@ -161,6 +163,11 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
         return new Vec(blockX * x, blockY * y, blockZ * z);
     }
 
+    @Contract(pure = true)
+    public @NotNull BlockVec mul(int x, int y, int z) {
+        return new BlockVec(blockX * x, blockY * y, blockZ * z);
+    }
+
     @Override
     public @NotNull Point mul(@NotNull Point point) {
         return mul(point.x(), point.y(), point.z());
@@ -176,9 +183,19 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
         return mul(value, value, value);
     }
 
+    @Contract(pure = true)
+    public @NotNull BlockVec mul(int value) {
+        return mul(value, value, value);
+    }
+
     @Override
     public @NotNull Point div(double x, double y, double z) {
         return new Vec(blockX / x, blockY / y, blockZ / z);
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec div(int x, int y, int z) {
+        return new BlockVec(blockX / x, blockY / y, blockZ / z);
     }
 
     @Override
@@ -196,16 +213,75 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
         return div(value, value, value);
     }
 
+    @Contract(pure = true)
+    public @NotNull BlockVec div(int value) {
+        return div(value, value, value);
+    }
+
     @Override
     @Contract(pure = true)
     public @NotNull BlockVec relative(@NotNull BlockFace face) {
-        return switch (face) {
-            case BOTTOM -> sub(0, 1, 0);
-            case TOP -> add(0, 1, 0);
-            case NORTH -> sub(0, 0, 1);
-            case SOUTH -> add(0, 0, 1);
-            case WEST -> sub(1, 0, 0);
-            case EAST -> add(1, 0, 0);
-        };
+        final Direction direction = face.toDirection();
+        return add(direction.normalX(), direction.normalY(), direction.normalZ());
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec neg() {
+        return new BlockVec(-blockX, -blockY, -blockZ);
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec abs() {
+        return new BlockVec(Math.abs(blockX), Math.abs(blockY), Math.abs(blockZ));
+    }
+
+    @Contract(pure = true)
+    public @NotNull Point min(@NotNull Point point) {
+        return new Vec(Math.min(blockX, point.x()), Math.min(blockY, point.y()), Math.min(blockZ, point.z()));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec min(@NotNull BlockVec point) {
+        return new BlockVec(Math.min(blockX, point.blockX()), Math.min(blockY, point.blockY()), Math.min(blockZ, point.blockZ()));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec min(int x, int y, int z) {
+        return new BlockVec(Math.min(blockX, x), Math.min(blockY, y), Math.min(blockZ, z));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec min(int value) {
+        return new BlockVec(Math.min(blockX, value), Math.min(blockY, value), Math.min(blockZ, value));
+    }
+
+    @Contract(pure = true)
+    public @NotNull Point max(@NotNull Point point) {
+        return new Vec(Math.max(blockX, point.x()), Math.max(blockY, point.y()), Math.max(blockZ, point.z()));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec max(@NotNull BlockVec point) {
+        return new BlockVec(Math.max(blockX, point.blockX()), Math.max(blockY, point.blockY()), Math.max(blockZ, point.blockZ()));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec max(int x, int y, int z) {
+        return new BlockVec(Math.max(blockX, x), Math.max(blockY, y), Math.max(blockZ, z));
+    }
+
+    @Contract(pure = true)
+    public @NotNull BlockVec max(int value) {
+        return new BlockVec(Math.max(blockX, value), Math.max(blockY, value), Math.max(blockZ, value));
+    }
+
+    @Contract(pure = true)
+    public boolean samePoint(int x, int y, int z) {
+        return blockX == x && blockY == y && blockZ == z;
+    }
+
+    @Contract(pure = true)
+    public boolean samePoint(@NotNull BlockVec blockVec) {
+        return blockX == blockVec.blockX && blockY == blockVec.blockY && blockZ == blockVec.blockZ;
     }
 }
