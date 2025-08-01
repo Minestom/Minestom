@@ -1,67 +1,62 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NotNullByDefault;
+import org.jetbrains.annotations.Nullable;
 
-public final class Section {
-    private final Palette blockPalette;
-    private final Palette biomePalette;
-    private final Light skyLight;
-    private final Light blockLight;
+import java.util.concurrent.atomic.AtomicLong;
 
-    private Section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
-        this.blockPalette = blockPalette;
-        this.biomePalette = biomePalette;
-        this.skyLight = skyLight;
-        this.blockLight = blockLight;
+@NotNullByDefault
+public sealed interface Section extends Cloneable permits SectionImpl {
+    static Section section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
+        return new SectionImpl(
+                blockPalette, biomePalette,
+                skyLight, blockLight,
+                new Int2ObjectOpenHashMap<>(), new Int2ObjectOpenHashMap<>(),
+                new AtomicLong()
+        );
     }
 
-    private Section(Palette blockPalette, Palette biomePalette) {
-        this(blockPalette, biomePalette, Light.sky(), Light.block());
+    static Section section(Palette blockPalette, Palette biomePalette) {
+        return section(blockPalette, biomePalette, Light.sky(), Light.block());
     }
 
-    public Section() {
-        this(Palette.blocks(), Palette.biomes());
+    static Section section() {
+        return section(Palette.blocks(), Palette.biomes());
     }
 
-    public Palette blockPalette() {
-        return blockPalette;
-    }
+    Palette blockPalette();
 
-    public Palette biomePalette() {
-        return biomePalette;
-    }
+    Palette biomePalette();
 
-    public void clear() {
-        this.blockPalette.fill(0);
-        this.biomePalette.fill(0);
-    }
+    void clear();
 
-    @Override
-    public @NotNull Section clone() {
+    Light skyLight();
+
+    Light blockLight();
+
+    Int2ObjectOpenHashMap<Block> entries();
+
+    @Nullable Block cacheBlock(int x, int y, int z, Block block);
+
+    void invalidate();
+
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    default Section clone() {
+        SectionImpl impl = (SectionImpl) this;
         final Light skyLight = Light.sky();
         final Light blockLight = Light.block();
-
-        skyLight.set(this.skyLight.array());
-        blockLight.set(this.blockLight.array());
-
-        return new Section(this.blockPalette.clone(), this.biomePalette.clone(), skyLight, blockLight);
-    }
-
-    public void setSkyLight(byte[] copyArray) {
-        this.skyLight.set(copyArray);
-    }
-
-    public void setBlockLight(byte[] copyArray) {
-        this.blockLight.set(copyArray);
-    }
-
-    public Light skyLight() {
-        return skyLight;
-    }
-
-    public Light blockLight() {
-        return blockLight;
+        skyLight.set(impl.skyLight().array());
+        blockLight.set(impl.blockLight().array());
+        return new SectionImpl(
+                impl.blockPalette().clone(), impl.biomePalette().clone(),
+                skyLight, blockLight,
+                new Int2ObjectOpenHashMap<>(impl.entries()),
+                new Int2ObjectOpenHashMap<>(impl.tickableMap()),
+                new AtomicLong()
+        );
     }
 }

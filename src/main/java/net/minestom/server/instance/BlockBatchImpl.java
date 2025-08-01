@@ -10,7 +10,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNullByDefault;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
 @NotNullByDefault
 record BlockBatchImpl(
         long flags,
-        Long2ObjectMap<@Nullable SectionState> sectionStates
+        Long2ObjectMap<@UnknownNullability SectionState> sectionStates
 ) implements BlockBatch {
     @Override
     public @UnknownNullability Block getBlock(int x, int y, int z, Condition condition) {
@@ -226,6 +225,6 @@ record BlockBatchImpl(
         }
     }
 
-    record SectionState(Palette palette, @UnknownNullability Int2ObjectMap<@Nullable Block> blockData) {
+    record SectionState(Palette palette, @UnknownNullability Int2ObjectMap<@UnknownNullability Block> blockData) {
     }
 }

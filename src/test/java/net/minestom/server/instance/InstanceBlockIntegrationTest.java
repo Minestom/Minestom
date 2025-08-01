@@ -1,6 +1,6 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.SuspiciousGravelBlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -66,7 +66,7 @@ public class InstanceBlockIntegrationTest {
 
         var tag = Tag.Integer("key");
         var block = Block.STONE.withTag(tag, 5);
-        var point = new Vec(0, 50, 0);
+        var point = new BlockVec(0, 50, 0);
         // Initial placement
         instance.setBlock(point, block);
         assertEquals(5, instance.getBlock(point).getTag(tag));

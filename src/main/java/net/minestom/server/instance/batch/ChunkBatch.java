@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
+import static net.minestom.server.coordinate.CoordConversion.*;
+
 /**
  * A Batch used when all of the block changed are contained inside a single chunk.
  * If more than one chunk is needed, use an {@link AbsoluteBlockBatch} instead.
@@ -56,7 +58,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        final int index = CoordConversion.chunkBlockIndex(x, y, z);
+        final int index = chunkBlockIndex(x, y, z);
         synchronized (blocks) {
             this.blocks.put(index, block);
         }
@@ -209,15 +211,15 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @return The chunk section which the block was placed
      */
     private int apply(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
-        final int x = CoordConversion.chunkBlockIndexGetX(index);
-        final int y = CoordConversion.chunkBlockIndexGetY(index);
-        final int z = CoordConversion.chunkBlockIndexGetZ(index);
+        final int x = chunkBlockIndexGetX(index), y = chunkBlockIndexGetY(index), z = chunkBlockIndexGetZ(index);
+        final int globalX = chunk.getChunkX() * SECTION_SIZE + x,
+                globalY = globalToChunk(y), globalZ = chunk.getChunkZ() * SECTION_SIZE + z;
         if (inverse != null) {
-            Block prevBlock = chunk.getBlock(x, y, z);
-            inverse.setBlock(x, y, z, prevBlock);
+            Block prevBlock = chunk.getInstance().getBlock(globalX, globalY, globalZ);
+            inverse.setBlock(globalX, globalY, globalZ, prevBlock);
         }
-        chunk.setBlock(x, y, z, block);
-        return CoordConversion.globalToChunk(y);
+        chunk.getInstance().setBlock(globalX, globalY, globalZ, block);
+        return globalToChunk(y);
     }
 
     /**

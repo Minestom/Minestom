@@ -2,7 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.anvil.AnvilLoader;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NotNullByDefault;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -13,9 +13,10 @@ import java.util.concurrent.Phaser;
  * <p>
  * See {@link AnvilLoader} for the default implementation used in {@link InstanceContainer}.
  */
+@NotNullByDefault
 public interface IChunkLoader {
 
-    static @NotNull IChunkLoader noop() {
+    static IChunkLoader noop() {
         return NoopChunkLoaderImpl.INSTANCE;
     }
 
@@ -24,7 +25,10 @@ public interface IChunkLoader {
      *
      * @param instance the instance to retrieve the data from
      */
-    default void loadInstance(@NotNull Instance instance) {
+    default void loadInstance(Instance instance) {
+    }
+
+    default void saveInstance(Instance instance) {
     }
 
     /**
@@ -35,17 +39,14 @@ public interface IChunkLoader {
      * @param chunkZ   the chunk Z
      * @return the chunk, or null if not present
      */
-    @Nullable Chunk loadChunk(@NotNull Instance instance, int chunkX, int chunkZ);
-
-    default void saveInstance(@NotNull Instance instance) {
-    }
+    @Nullable Chunk loadChunk(Instance instance, int chunkX, int chunkZ);
 
     /**
      * Saves a {@link Chunk} with an optional callback for when it is done.
      *
      * @param chunk the {@link Chunk} to save
      */
-    void saveChunk(@NotNull Chunk chunk);
+    void saveChunk(Chunk chunk);
 
     /**
      * Saves multiple chunks with an optional callback for when it is done.
@@ -54,7 +55,7 @@ public interface IChunkLoader {
      *
      * @param chunks the chunks to save
      */
-    default void saveChunks(@NotNull Collection<Chunk> chunks) {
+    default void saveChunks(Collection<Chunk> chunks) {
         if (supportsParallelSaving()) {
             Phaser phaser = new Phaser(1);
             for (Chunk chunk : chunks) {
@@ -70,10 +71,18 @@ public interface IChunkLoader {
             }
             phaser.arriveAndAwaitAdvance();
         } else {
-            for (Chunk chunk : chunks) {
-                saveChunk(chunk);
-            }
+            for (Chunk chunk : chunks) saveChunk(chunk);
         }
+    }
+
+    /**
+     * Called when a chunk is unloaded, so that this chunk loader can unload any resource it is holding.
+     * Note: Minestom currently has no way to determine whether the chunk comes from this loader, so you may get
+     * unload requests for chunks not created by the loader.
+     *
+     * @param chunk the chunk to unload
+     */
+    default void unloadChunk(Chunk chunk) {
     }
 
     /**
@@ -92,15 +101,5 @@ public interface IChunkLoader {
      */
     default boolean supportsParallelLoading() {
         return false;
-    }
-
-    /**
-     * Called when a chunk is unloaded, so that this chunk loader can unload any resource it is holding.
-     * Note: Minestom currently has no way to determine whether the chunk comes from this loader, so you may get
-     * unload requests for chunks not created by the loader.
-     *
-     * @param chunk the chunk to unload
-     */
-    default void unloadChunk(Chunk chunk) {
     }
 }
