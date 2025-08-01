@@ -8,6 +8,7 @@ import net.minestom.server.entity.metadata.animal.FrogVariant;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
@@ -55,6 +56,8 @@ final class MetadataImpl {
         // OptGlobalPos
         EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(PaintingVariant.KEBAB));
         EMPTY_VALUES.set(TYPE_SNIFFER_STATE, SnifferState(SnifferMeta.State.IDLING));
+        EMPTY_VALUES.set(TYPE_WEATHER_STATE, WeatherState(CopperGolemMeta.WeatherState.UNAFFECTED));
+        EMPTY_VALUES.set(TYPE_COPPER_GOLEM_STATE, CopperGolemState(CopperGolemMeta.State.IDLE));
         EMPTY_VALUES.set(TYPE_ARMADILLO_STATE, ArmadilloState(ArmadilloMeta.State.IDLE));
         EMPTY_VALUES.set(TYPE_VECTOR3, Vector3(Vec.ZERO));
         EMPTY_VALUES.set(TYPE_QUATERNION, Quaternion(new float[]{0, 0, 0, 0}));

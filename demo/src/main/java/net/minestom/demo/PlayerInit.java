@@ -18,6 +18,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.Damage;
+import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -163,6 +164,15 @@ public class PlayerInit {
                     happyGhast.setNoGravity(true);
                     happyGhast.setBodyEquipment(ItemStack.of(Material.GREEN_HARNESS));
                     happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
+
+                    var copperGolem = new LivingEntity(EntityType.COPPER_GOLEM);
+                    copperGolem.setNoGravity(true);
+                    copperGolem.setItemInMainHand(ItemStack.of(Material.STICK));
+                    ((CopperGolemMeta) copperGolem.getEntityMeta()).setState(CopperGolemMeta.State.GETTING_ITEM);
+                    copperGolem.setInstance(player.getInstance(), new Pos(-10, 40, 5, -133, 0));
+
+                    player.getInstance().setBlock(new Vec(-12, 40, 5), Block.WEATHERED_COPPER_GOLEM_STATUE.withProperty("copper_golem_pose", "star"));
+
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
                             Either.left(happyGhast.getUuid()),
                             TrackedWaypointPacket.Icon.DEFAULT,

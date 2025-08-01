@@ -61,6 +61,8 @@ sealed interface EntityTypes permits EntityType {
 
     EntityType COD = EntityTypeImpl.get("cod");
 
+    EntityType COPPER_GOLEM = EntityTypeImpl.get("copper_golem");
+
     EntityType COMMAND_BLOCK_MINECART = EntityTypeImpl.get("command_block_minecart");
 
     EntityType COW = EntityTypeImpl.get("cow");

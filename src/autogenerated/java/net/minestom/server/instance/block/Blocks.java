@@ -365,6 +365,30 @@ sealed interface Blocks permits Block {
 
     Block CHISELED_BOOKSHELF = BlockImpl.get("chiseled_bookshelf");
 
+    Block ACACIA_SHELF = BlockImpl.get("acacia_shelf");
+
+    Block BAMBOO_SHELF = BlockImpl.get("bamboo_shelf");
+
+    Block BIRCH_SHELF = BlockImpl.get("birch_shelf");
+
+    Block CHERRY_SHELF = BlockImpl.get("cherry_shelf");
+
+    Block CRIMSON_SHELF = BlockImpl.get("crimson_shelf");
+
+    Block DARK_OAK_SHELF = BlockImpl.get("dark_oak_shelf");
+
+    Block JUNGLE_SHELF = BlockImpl.get("jungle_shelf");
+
+    Block MANGROVE_SHELF = BlockImpl.get("mangrove_shelf");
+
+    Block OAK_SHELF = BlockImpl.get("oak_shelf");
+
+    Block PALE_OAK_SHELF = BlockImpl.get("pale_oak_shelf");
+
+    Block SPRUCE_SHELF = BlockImpl.get("spruce_shelf");
+
+    Block WARPED_SHELF = BlockImpl.get("warped_shelf");
+
     Block MOSSY_COBBLESTONE = BlockImpl.get("mossy_cobblestone");
 
     Block OBSIDIAN = BlockImpl.get("obsidian");
@@ -2089,7 +2113,53 @@ sealed interface Blocks permits Block {
 
     Block WAXED_OXIDIZED_COPPER_BULB = BlockImpl.get("waxed_oxidized_copper_bulb");
 
+    Block COPPER_CHEST = BlockImpl.get("copper_chest");
+
+    Block EXPOSED_COPPER_CHEST = BlockImpl.get("exposed_copper_chest");
+
+    Block WEATHERED_COPPER_CHEST = BlockImpl.get("weathered_copper_chest");
+
+    Block OXIDIZED_COPPER_CHEST = BlockImpl.get("oxidized_copper_chest");
+
+    Block WAXED_COPPER_CHEST = BlockImpl.get("waxed_copper_chest");
+
+    Block WAXED_EXPOSED_COPPER_CHEST = BlockImpl.get("waxed_exposed_copper_chest");
+
+    Block WAXED_WEATHERED_COPPER_CHEST = BlockImpl.get("waxed_weathered_copper_chest");
+
+    Block WAXED_OXIDIZED_COPPER_CHEST = BlockImpl.get("waxed_oxidized_copper_chest");
+
+    Block COPPER_GOLEM_STATUE = BlockImpl.get("copper_golem_statue");
+
+    Block EXPOSED_COPPER_GOLEM_STATUE = BlockImpl.get("exposed_copper_golem_statue");
+
+    Block WEATHERED_COPPER_GOLEM_STATUE = BlockImpl.get("weathered_copper_golem_statue");
+
+    Block OXIDIZED_COPPER_GOLEM_STATUE = BlockImpl.get("oxidized_copper_golem_statue");
+
+    Block WAXED_COPPER_GOLEM_STATUE = BlockImpl.get("waxed_copper_golem_statue");
+
+    Block WAXED_EXPOSED_COPPER_GOLEM_STATUE = BlockImpl.get("waxed_exposed_copper_golem_statue");
+
+    Block WAXED_WEATHERED_COPPER_GOLEM_STATUE = BlockImpl.get("waxed_weathered_copper_golem_statue");
+
+    Block WAXED_OXIDIZED_COPPER_GOLEM_STATUE = BlockImpl.get("waxed_oxidized_copper_golem_statue");
+
     Block LIGHTNING_ROD = BlockImpl.get("lightning_rod");
+
+    Block EXPOSED_LIGHTNING_ROD = BlockImpl.get("exposed_lightning_rod");
+
+    Block WEATHERED_LIGHTNING_ROD = BlockImpl.get("weathered_lightning_rod");
+
+    Block OXIDIZED_LIGHTNING_ROD = BlockImpl.get("oxidized_lightning_rod");
+
+    Block WAXED_LIGHTNING_ROD = BlockImpl.get("waxed_lightning_rod");
+
+    Block WAXED_EXPOSED_LIGHTNING_ROD = BlockImpl.get("waxed_exposed_lightning_rod");
+
+    Block WAXED_WEATHERED_LIGHTNING_ROD = BlockImpl.get("waxed_weathered_lightning_rod");
+
+    Block WAXED_OXIDIZED_LIGHTNING_ROD = BlockImpl.get("waxed_oxidized_lightning_rod");
 
     Block POINTED_DRIPSTONE = BlockImpl.get("pointed_dripstone");
 

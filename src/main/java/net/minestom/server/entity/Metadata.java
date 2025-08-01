@@ -7,6 +7,7 @@ import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
@@ -170,6 +171,14 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, SnifferMeta.State.NETWORK_TYPE);
     }
 
+    public static Entry<CopperGolemMeta.WeatherState> WeatherState(CopperGolemMeta.WeatherState value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_WEATHER_STATE, value, CopperGolemMeta.WeatherState.NETWORK_TYPE);
+    }
+
+    public static Entry<CopperGolemMeta.State> CopperGolemState(CopperGolemMeta.State value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_COPPER_GOLEM_STATE, value, CopperGolemMeta.State.NETWORK_TYPE);
+    }
+
     public static Entry<ArmadilloMeta.State> ArmadilloState(ArmadilloMeta.State value) {
         return new MetadataImpl.EntryImpl<>(TYPE_ARMADILLO_STATE, value, ArmadilloMeta.State.NETWORK_TYPE);
     }
@@ -216,6 +225,8 @@ public final class Metadata {
     public static final byte TYPE_OPT_GLOBAL_POSITION = nextId(); // Unused by protocol it seems
     public static final byte TYPE_PAINTING_VARIANT = nextId();
     public static final byte TYPE_SNIFFER_STATE = nextId();
+    public static final byte TYPE_WEATHER_STATE = nextId();
+    public static final byte TYPE_COPPER_GOLEM_STATE = nextId();
     public static final byte TYPE_ARMADILLO_STATE = nextId();
     public static final byte TYPE_VECTOR3 = nextId();
     public static final byte TYPE_QUATERNION = nextId();

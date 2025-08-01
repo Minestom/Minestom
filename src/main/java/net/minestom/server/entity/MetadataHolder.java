@@ -14,6 +14,7 @@ import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
 import net.minestom.server.entity.metadata.flying.GhastMeta;
 import net.minestom.server.entity.metadata.flying.PhantomMeta;
+import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
 import net.minestom.server.entity.metadata.golem.IronGolemMeta;
 import net.minestom.server.entity.metadata.golem.ShulkerMeta;
 import net.minestom.server.entity.metadata.golem.SnowGolemMeta;
@@ -195,6 +196,7 @@ public final class MetadataHolder {
         map.put("minecraft:cherry_chest_boat", BoatMeta::new);
         map.put("minecraft:chicken", ChickenMeta::new);
         map.put("minecraft:cod", CodMeta::new);
+        map.put("minecraft:copper_golem", CopperGolemMeta::new);
         map.put("minecraft:cow", CowMeta::new);
         map.put("minecraft:creaking", CreakingMeta::new);
         map.put("minecraft:creeper", CreeperMeta::new);

@@ -9,6 +9,7 @@ import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
@@ -489,6 +490,11 @@ public sealed class MetadataDef {
         public static final Entry<Direction> ATTACH_FACE = index(0, Metadata::Direction, Direction.DOWN);
         public static final Entry<Byte> SHIELD_HEIGHT = index(1, Metadata::Byte, (byte) 0);
         public static final Entry<Byte> COLOR = index(2, Metadata::Byte, (byte) 16);
+    }
+
+    public static final class CopperGolem extends Mob {
+        public static final Entry<CopperGolemMeta.WeatherState> WEATHER_STATE = index(0, Metadata::WeatherState, CopperGolemMeta.WeatherState.UNAFFECTED);
+        public static final Entry<CopperGolemMeta.State> STATE = index(1, Metadata::CopperGolemState, CopperGolemMeta.State.IDLE);
     }
 
     public static sealed class BasePiglin extends Mob {

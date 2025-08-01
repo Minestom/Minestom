@@ -17,6 +17,9 @@ configurations.all {
 }
 
 repositories {
+    val dataVersion = libs.minestomData.get().version ?: ""
+    if (dataVersion.endsWith("-dev"))
+        mavenLocal()
     mavenCentral()
 }
 
