@@ -58,7 +58,7 @@ final class ChunkImpl implements Chunk {
     final DimensionType dimension;
     private final int minSection, maxSection;
     private final List<Section> sections;
-    private final AtomicLong version = new AtomicLong(1);
+    final AtomicLong version = new AtomicLong(1);
 
     boolean needsCompleteHeightmapRefresh = true;
     final Heightmap motionBlocking;

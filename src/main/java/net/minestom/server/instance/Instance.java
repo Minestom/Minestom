@@ -1,5 +1,9 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
@@ -17,6 +21,7 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
@@ -116,7 +121,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
 
-    protected final AtomicLong version = new AtomicLong(0);
+    final AtomicLong version = new AtomicLong(1);
 
     // the uuid of this instance
     protected UUID uuid;
@@ -319,19 +324,44 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
-     * Retrieves the instance state version, incremented every time a block change is detected/signaled.
+     * Retrieves the block version at a specific {@link Area}.
+     * Updated whenever a section is mutated (or simply assumed to have been mutated).
      * <p>
-     * You shouldn't interpolate the importance of a change through version delta.
-     * <p>
-     * TODO: should chunk loading/generation affect version?
+     * You can retrieve and store the version to check if the instance has been modified at a later time.
      *
-     * @return the instance version
+     * @return the area block version
      * @see #setBlock(int, int, int, Block)
      * @see #invalidateSection(int, int, int)
      * @see #invalidateChunk(int, int)
      */
-    public long version() {
-        return version.get();
+    public synchronized BlockVersion version(Area area) {
+        LongSet sections = new LongOpenHashSet();
+        area.forEach(vec -> sections.add(sectionIndex(vec.sectionX(), vec.sectionY(), vec.sectionZ())));
+        Long2ObjectOpenHashMap<BlockVersionImpl.ChunkVersion> chunkVersions = new Long2ObjectOpenHashMap<>();
+        for (long sectionIndex : sections) {
+            final int sectionX = sectionIndexGetX(sectionIndex);
+            final int sectionY = sectionIndexGetY(sectionIndex);
+            final int sectionZ = sectionIndexGetZ(sectionIndex);
+            final long chunkIndex = chunkIndex(sectionX, sectionZ);
+            final Chunk chunk = getChunk(sectionX, sectionZ);
+            BlockVersionImpl.ChunkVersion chunkVersion = chunkVersions.computeIfAbsent(chunkIndex, aLong -> {
+                final long version = chunk != null ? ((ChunkImpl) chunk).version.get() : 0;
+                return new BlockVersionImpl.ChunkVersion(version, new Long2LongOpenHashMap());
+            });
+            final long version;
+            if (chunk != null) {
+                final Section section = chunk.getSection(sectionY);
+                version = ((SectionImpl) section).version().get();
+            } else {
+                version = 0;
+            }
+            chunkVersion.sectionVersions().put(sectionIndex, version);
+        }
+        return new BlockVersionImpl(version.get(), chunkVersions);
+    }
+
+    public synchronized BlockVersion version() {
+        return new BlockVersionImpl(version.get(), null);
     }
 
     /**

@@ -364,7 +364,6 @@ public class InstanceContainer extends Instance {
         LongSet sectionIndexes = new LongOpenHashSet();
         for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batchImpl.sectionStates().long2ObjectEntrySet()) {
             synchronized (this) {
-                this.version.incrementAndGet();
                 if (originAligned) setBlockBatchAligned(x, y, z, batchImpl, entry, sectionIndexes);
                 else setBlockBatchUnaligned(x, y, z, batchImpl, entry, sectionIndexes);
             }
@@ -406,7 +405,6 @@ public class InstanceContainer extends Instance {
                 targetSection.blockPalette().set(localX, localY, localZ, value - 1);
             });
         }
-
         // Handle block states if present (for blocks with NBT or handlers)
         if (!batch.ignoreData() && !sectionState.blockData().isEmpty()) {
             for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockData().int2ObjectEntrySet()) {
@@ -423,6 +421,7 @@ public class InstanceContainer extends Instance {
                 setBlock(globalBlockX, globalBlockY, globalBlockZ, block);
             }
         }
+        invalidateSection(targetSectionX, targetSectionY, targetSectionZ);
     }
 
     private void setBlockBatchUnaligned(int x, int y, int z, BlockBatchImpl batch, Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry, LongSet sectionIndexes) {
@@ -449,6 +448,7 @@ public class InstanceContainer extends Instance {
                     sectionIndexes.add(sectionIndex(sectionX, sectionY, sectionZ));
                     processUnalignedSection(targetChunk, sectionX, sectionY, sectionZ,
                             globalSectionX, globalSectionY, globalSectionZ, sectionState, isAligned, ignoreData);
+                    invalidateSection(sectionX, sectionY, sectionZ);
                 }
             }
         }
