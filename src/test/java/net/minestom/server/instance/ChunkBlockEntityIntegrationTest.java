@@ -48,7 +48,7 @@ public class ChunkBlockEntityIntegrationTest {
     @Test
     public void generator(Env env) {
         var instance = env.createEmptyInstance();
-        instance.setGenerator(unit -> unit.modifier().fill(Block.CHEST));
+        instance.setGenerator(unit -> unit.modifier().setRelative(0, 5, 0, Block.CHEST));
 
         var chunk = instance.loadChunk(0, 0).join();
         ChunkDataPacket packet = (ChunkDataPacket) SendablePacket.extractServerPacket(ConnectionState.PLAY, chunk.getFullDataPacket());
