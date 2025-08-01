@@ -592,12 +592,11 @@ final class ChunkImpl implements Chunk {
 
     void onGenerate() {
         for (int section = minSection; section < maxSection; section++) {
-            getSection(section).blockLight().invalidate();
-            getSection(section).skyLight().invalidate();
+            Section sectionImpl = getSection(section);
+            sectionImpl.blockLight().invalidate();
+            sectionImpl.skyLight().invalidate();
         }
-
         invalidate();
-
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
