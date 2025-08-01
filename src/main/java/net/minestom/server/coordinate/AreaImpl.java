@@ -47,21 +47,35 @@ final class AreaImpl {
 
         @Override
         public Iterator<BlockVec> iterator() {
+            if (start.samePoint(end)) return List.of(start).iterator();
             return new Iterator<>() {
                 private final int x1 = start.blockX(), y1 = start.blockY(), z1 = start.blockZ();
                 private final int x2 = end.blockX(), y2 = end.blockY(), z2 = end.blockZ();
                 private int x = x1, y = y1, z = z1;
                 private boolean done = false;
 
-                // Bresenham setup
+                // 3D Bresenham algorithm
                 private final int dx = Math.abs(x2 - x1);
                 private final int dy = Math.abs(y2 - y1);
                 private final int dz = Math.abs(z2 - z1);
-                private final int sx = Integer.compare(x2, x1);
-                private final int sy = Integer.compare(y2, y1);
-                private final int sz = Integer.compare(z2, z1);
-                private int err1 = (dx >= dy && dx >= dz) ? dx / 2 : 0;
-                private int err2 = (dy >= dx && dy >= dz) ? dy / 2 : 0;
+                private final int sx = x1 < x2 ? 1 : -1;
+                private final int sy = y1 < y2 ? 1 : -1;
+                private final int sz = z1 < z2 ? 1 : -1;
+                private int err1, err2;
+
+                {
+                    // Initialize error terms based on the dominant axis
+                    if (dx >= dy && dx >= dz) {
+                        err1 = dx / 2;
+                        err2 = dx / 2;
+                    } else if (dy >= dx && dy >= dz) {
+                        err1 = dy / 2;
+                        err2 = dy / 2;
+                    } else {
+                        err1 = dz / 2;
+                        err2 = dz / 2;
+                    }
+                }
 
                 @Override
                 public boolean hasNext() {
@@ -72,11 +86,14 @@ final class AreaImpl {
                 public BlockVec next() {
                     if (done) throw new NoSuchElementException();
                     BlockVec result = new BlockVec(x, y, z);
+                    // Check if we've reached the end
                     if (x == x2 && y == y2 && z == z2) {
                         done = true;
                         return result;
                     }
+                    // Move to next position using 3D Bresenham
                     if (dx >= dy && dx >= dz) {
+                        // X is the dominant axis
                         x += sx;
                         err1 -= dy;
                         err2 -= dz;
@@ -89,6 +106,7 @@ final class AreaImpl {
                             err2 += dx;
                         }
                     } else if (dy >= dx && dy >= dz) {
+                        // Y is the dominant axis
                         y += sy;
                         err1 -= dx;
                         err2 -= dz;
@@ -101,6 +119,7 @@ final class AreaImpl {
                             err2 += dy;
                         }
                     } else {
+                        // Z is the dominant axis
                         z += sz;
                         err1 -= dx;
                         err2 -= dy;
@@ -120,27 +139,29 @@ final class AreaImpl {
 
         @Override
         public List<Area.Cuboid> split() {
-            // Group actual line blocks by section coordinates
-            int sectionSize = BlockVec.SECTION.blockX();
-            Map<Long, List<BlockVec>> sectionGroups = new HashMap<>();
-
+            // Collect all actual line blocks
+            Set<BlockVec> lineBlocks = new HashSet<>();
             for (BlockVec block : this) {
+                lineBlocks.add(block);
+            }
+
+            // Group blocks by section coordinates
+            int sectionSize = BlockVec.SECTION.blockX();
+            Map<Long, Set<BlockVec>> sectionGroups = new HashMap<>();
+
+            for (BlockVec block : lineBlocks) {
                 int sectionX = Math.floorDiv(block.blockX(), sectionSize);
                 int sectionY = Math.floorDiv(block.blockY(), sectionSize);
                 int sectionZ = Math.floorDiv(block.blockZ(), sectionSize);
                 long sectionKey = sectionIndex(sectionX, sectionY, sectionZ);
-                sectionGroups.computeIfAbsent(sectionKey, k -> new ArrayList<>()).add(block);
+                sectionGroups.computeIfAbsent(sectionKey, k -> new HashSet<>()).add(block);
             }
 
             List<Area.Cuboid> result = new ArrayList<>();
-            for (List<BlockVec> blocks : sectionGroups.values()) {
-                int minX = blocks.stream().mapToInt(BlockVec::blockX).min().getAsInt();
-                int maxX = blocks.stream().mapToInt(BlockVec::blockX).max().getAsInt();
-                int minY = blocks.stream().mapToInt(BlockVec::blockY).min().getAsInt();
-                int maxY = blocks.stream().mapToInt(BlockVec::blockY).max().getAsInt();
-                int minZ = blocks.stream().mapToInt(BlockVec::blockZ).min().getAsInt();
-                int maxZ = blocks.stream().mapToInt(BlockVec::blockZ).max().getAsInt();
-                result.add(Area.cuboid(new BlockVec(minX, minY, minZ), new BlockVec(maxX, maxY, maxZ)));
+            for (Set<BlockVec> blocks : sectionGroups.values()) {
+                for (BlockVec block : blocks) {
+                    result.add(Area.cuboid(block, block));
+                }
             }
             return result;
         }
@@ -152,18 +173,8 @@ final class AreaImpl {
             Objects.requireNonNull(max, "max cannot be null");
             final BlockVec origMin = min;
             final BlockVec origMax = max;
-            BlockVec sortedMin = new BlockVec(
-                    Math.min(origMin.blockX(), origMax.blockX()),
-                    Math.min(origMin.blockY(), origMax.blockY()),
-                    Math.min(origMin.blockZ(), origMax.blockZ())
-            );
-            BlockVec sortedMax = new BlockVec(
-                    Math.max(origMin.blockX(), origMax.blockX()),
-                    Math.max(origMin.blockY(), origMax.blockY()),
-                    Math.max(origMin.blockZ(), origMax.blockZ())
-            );
-            min = sortedMin;
-            max = sortedMax;
+            min = origMin.min(origMax);
+            max = origMin.max(origMax);
         }
 
         @Override
@@ -265,61 +276,123 @@ final class AreaImpl {
             final int maxX = center.blockX() + radius;
             final int maxY = center.blockY() + radius;
             final int maxZ = center.blockZ() + radius;
+            final double radiusSquared = radius * radius;
             return new Iterator<>() {
                 private int x = minX;
                 private int y = minY;
                 private int z = minZ;
-                private boolean hasNext = true;
+                private boolean hasNextValue = true;
+                private BlockVec nextVec = findNext();
+
+                private BlockVec findNext() {
+                    while (z <= maxZ) {
+                        while (y <= maxY) {
+                            while (x <= maxX) {
+                                // Check if this block is within the sphere
+                                double dx = x - center.blockX();
+                                double dy = y - center.blockY();
+                                double dz = z - center.blockZ();
+                                double distanceSquared = dx * dx + dy * dy + dz * dz;
+
+                                if (distanceSquared <= radiusSquared) {
+                                    BlockVec result = new BlockVec(x, y, z);
+                                    // Advance to next position
+                                    x++;
+                                    return result;
+                                }
+                                x++;
+                            }
+                            x = minX;
+                            y++;
+                        }
+                        y = minY;
+                        z++;
+                    }
+                    hasNextValue = false;
+                    return new BlockVec(0, 0, 0); // dummy value, won't be used
+                }
 
                 @Override
                 public boolean hasNext() {
-                    return hasNext;
+                    return hasNextValue;
                 }
 
                 @Override
                 public BlockVec next() {
-                    if (!hasNext) throw new NoSuchElementException();
-                    BlockVec vec = new BlockVec(x, y, z);
-                    if (x == maxX && y == maxY && z == maxZ) {
-                        hasNext = false;
-                    } else if (x < maxX) {
-                        x++;
-                    } else if (y < maxY) {
-                        x = minX;
-                        y++;
-                    } else if (z < maxZ) {
-                        x = minX;
-                        y = minY;
-                        z++;
-                    }
-                    return vec;
+                    if (!hasNextValue) throw new NoSuchElementException();
+                    BlockVec result = nextVec;
+                    nextVec = findNext();
+                    return result;
                 }
             };
         }
 
         @Override
         public List<Area.Cuboid> split() {
-            // Group actual sphere blocks by section coordinates
             int sectionSize = BlockVec.SECTION.blockX();
-            Map<Long, List<BlockVec>> sectionGroups = new HashMap<>();
 
-            for (BlockVec block : this) {
-                int sectionX = Math.floorDiv(block.blockX(), sectionSize);
-                int sectionY = Math.floorDiv(block.blockY(), sectionSize);
-                int sectionZ = Math.floorDiv(block.blockZ(), sectionSize);
-                long sectionKey = sectionIndex(sectionX, sectionY, sectionZ);
-                sectionGroups.computeIfAbsent(sectionKey, k -> new ArrayList<>()).add(block);
-            }
+            // Calculate the bounding sections for the sphere
+            int minSecX = Math.floorDiv(center.blockX() - radius, sectionSize);
+            int maxSecX = Math.floorDiv(center.blockX() + radius, sectionSize);
+            int minSecY = Math.floorDiv(center.blockY() - radius, sectionSize);
+            int maxSecY = Math.floorDiv(center.blockY() + radius, sectionSize);
+            int minSecZ = Math.floorDiv(center.blockZ() - radius, sectionSize);
+            int maxSecZ = Math.floorDiv(center.blockZ() + radius, sectionSize);
 
             List<Area.Cuboid> result = new ArrayList<>();
-            for (List<BlockVec> blocks : sectionGroups.values()) {
-                int minX = blocks.stream().mapToInt(BlockVec::blockX).min().getAsInt();
-                int maxX = blocks.stream().mapToInt(BlockVec::blockX).max().getAsInt();
-                int minY = blocks.stream().mapToInt(BlockVec::blockY).min().getAsInt();
-                int maxY = blocks.stream().mapToInt(BlockVec::blockY).max().getAsInt();
-                int minZ = blocks.stream().mapToInt(BlockVec::blockZ).min().getAsInt();
-                int maxZ = blocks.stream().mapToInt(BlockVec::blockZ).max().getAsInt();
-                result.add(Area.cuboid(new BlockVec(minX, minY, minZ), new BlockVec(maxX, maxY, maxZ)));
+            double radiusSquared = radius * radius;
+
+            // For each section that might contain sphere blocks
+            for (int sx = minSecX; sx <= maxSecX; sx++) {
+                for (int sy = minSecY; sy <= maxSecY; sy++) {
+                    for (int sz = minSecZ; sz <= maxSecZ; sz++) {
+                        int sectionMinX = sx * sectionSize;
+                        int sectionMinY = sy * sectionSize;
+                        int sectionMinZ = sz * sectionSize;
+                        int sectionMaxX = sectionMinX + sectionSize - 1;
+                        int sectionMaxY = sectionMinY + sectionSize - 1;
+                        int sectionMaxZ = sectionMinZ + sectionSize - 1;
+
+                        // Check if this entire section is within the sphere
+                        boolean fullSection = true;
+                        for (int x = sectionMinX; x <= sectionMaxX && fullSection; x++) {
+                            for (int y = sectionMinY; y <= sectionMaxY && fullSection; y++) {
+                                for (int z = sectionMinZ; z <= sectionMaxZ && fullSection; z++) {
+                                    double dx = x - center.blockX();
+                                    double dy = y - center.blockY();
+                                    double dz = z - center.blockZ();
+                                    if (dx * dx + dy * dy + dz * dz > radiusSquared) {
+                                        fullSection = false;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (fullSection) {
+                            // Entire section is within sphere
+                            result.add(Area.cuboid(
+                                    new BlockVec(sectionMinX, sectionMinY, sectionMinZ),
+                                    new BlockVec(sectionMaxX, sectionMaxY, sectionMaxZ)
+                            ));
+                        } else {
+                            // Partial section - create individual cuboids for each sphere block
+                            // This ensures we only include blocks that are actually part of the sphere
+                            for (int x = sectionMinX; x <= sectionMaxX; x++) {
+                                for (int y = sectionMinY; y <= sectionMaxY; y++) {
+                                    for (int z = sectionMinZ; z <= sectionMaxZ; z++) {
+                                        double dx = x - center.blockX();
+                                        double dy = y - center.blockY();
+                                        double dz = z - center.blockZ();
+                                        if (dx * dx + dy * dy + dz * dz <= radiusSquared) {
+                                            BlockVec block = new BlockVec(x, y, z);
+                                            result.add(Area.cuboid(block, block));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             return result;
         }

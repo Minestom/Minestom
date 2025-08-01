@@ -36,21 +36,14 @@ public sealed interface Area extends Iterable<BlockVec> {
         return switch (this) {
             case Single single -> cuboid(single.point(), single.point());
             case Line line -> {
-                BlockVec start = line.start();
-                BlockVec end = line.end();
-                yield cuboid(
-                        new BlockVec(Math.min(start.blockX(), end.blockX()),
-                                Math.min(start.blockY(), end.blockY()),
-                                Math.min(start.blockZ(), end.blockZ())),
-                        new BlockVec(Math.max(start.blockX(), end.blockX()),
-                                Math.max(start.blockY(), end.blockY()),
-                                Math.max(start.blockZ(), end.blockZ()))
-                );
+                final BlockVec start = line.start();
+                final BlockVec end = line.end();
+                yield cuboid(start.min(end), start.max(end));
             }
             case Cuboid cuboid -> cuboid;
             case Sphere sphere -> {
-                BlockVec center = sphere.center();
-                int radius = sphere.radius();
+                final BlockVec center = sphere.center();
+                final int radius = sphere.radius();
                 yield cuboid(center.sub(radius, radius, radius), center.add(radius, radius, radius));
             }
         };

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNullByDefault;
 
 @NotNullByDefault
 public final class CoordConversion {
+    public static final int REGION_SIZE = 512;
     public static final int SECTION_SIZE = 16;
     public static final int SECTION_BOUND = 15;
     public static final int SECTION_BLOCK_COUNT = SECTION_SIZE * SECTION_SIZE * SECTION_SIZE;
@@ -14,13 +15,26 @@ public final class CoordConversion {
         return (int) Math.floor(xyz);
     }
 
+    public static int globalToRegion(int xz) {
+        return xz >> 9;
+    }
+
+    public static int globalToRegion(double xz) {
+        final int block = globalToBlock(xz);
+        return globalToRegion(block);
+    }
+
+    public static int globalToChunk(int xz) {
+        return globalToSection(xz);
+    }
+
     public static int globalToChunk(double xz) {
         final int block = globalToBlock(xz);
         return globalToChunk(block);
     }
 
-    public static int globalToChunk(int xz) {
-        return xz >> 4;
+    public static int globalToSection(int xyz) {
+        return xyz >> 4;
     }
 
     public static int globalToSectionRelative(int xyz) {
@@ -64,6 +78,24 @@ public final class CoordConversion {
 
     public static int ceilSection(int coordinate) {
         return (coordinate + SECTION_BOUND) & ~SECTION_BOUND;
+    }
+
+    // REGION INDEX
+
+    public static long regionIndex(int regionX, int regionZ) {
+        return (((long) regionX) << 32) | (regionZ & 0xffffffffL);
+    }
+
+    public static long regionIndex(Point point) {
+        return regionIndex(point.regionX(), point.regionZ());
+    }
+
+    public static int regionIndexGetX(long index) {
+        return (int) (index >> 32);
+    }
+
+    public static int regionIndexGetZ(long index) {
+        return (int) index;
     }
 
     // CHUNK INDEX
@@ -120,6 +152,12 @@ public final class CoordConversion {
         final int x = chunkBlockIndexGetX(index) + SECTION_SIZE * chunkX;
         final int y = chunkBlockIndexGetY(index);
         final int z = chunkBlockIndexGetZ(index) + SECTION_SIZE * chunkZ;
+        return new Vec(x, y, z);
+    }
+
+    public static Point chunkBlockRelativeGetGlobal(int sectionRelativeX, int y, int sectionRelativeZ, int chunkX, int chunkZ) {
+        final int x = sectionRelativeX + 16 * chunkX;
+        final int z = sectionRelativeZ + 16 * chunkZ;
         return new Vec(x, y, z);
     }
 

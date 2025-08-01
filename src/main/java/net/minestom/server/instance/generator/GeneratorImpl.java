@@ -388,10 +388,8 @@ public final class GeneratorImpl {
         @Override
         public void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
             final Vec start = this.start;
-            final int width = this.width;
-            final int depth = this.depth;
-            final int startX = start.blockX();
-            final int startZ = start.blockZ();
+            final int width = this.width, depth = this.depth;
+            final int startX = start.blockX(), startZ = start.blockZ();
             final int minMultiple = floorSection(minHeight);
             final int maxMultiple = ceilSection(maxHeight);
             final boolean startOffset = minMultiple != minHeight;
@@ -457,8 +455,7 @@ public final class GeneratorImpl {
 
         @Override
         default void setAll(@NotNull Supplier supplier) {
-            final Vec start = start();
-            final Vec end = end();
+            final Vec start = start(), end = end();
             final int endX = end.blockX();
             final int endY = end.blockY();
             final int endZ = end.blockZ();
@@ -493,12 +490,11 @@ public final class GeneratorImpl {
 
         @Override
         default void fill(@NotNull Point start, @NotNull Point end, @NotNull Block block) {
-            final int endX = end.blockX();
-            final int endY = end.blockY();
-            final int endZ = end.blockZ();
-            for (int x = start.blockX(); x < endX; x++) {
-                for (int y = start.blockY(); y < endY; y++) {
-                    for (int z = start.blockZ(); z < endZ; z++) {
+            final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
+            final int endX = end.blockX(), endY = end.blockY(), endZ = end.blockZ();
+            for (int x = startX; x < endX; x++) {
+                for (int y = startY; y < endY; y++) {
+                    for (int z = startZ; z < endZ; z++) {
                         setBlock(x, y, z, block);
                     }
                 }

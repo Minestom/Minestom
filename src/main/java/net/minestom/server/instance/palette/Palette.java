@@ -235,8 +235,7 @@ public sealed interface Palette permits PaletteImpl {
                 } else if (bitsPerEntry >= minIndirect && bitsPerEntry <= maxIndirect) {
                     // Indirect palette
                     final int[] palette = buffer.read(VAR_INT_ARRAY);
-                    int entriesPerLong = 64 / bitsPerEntry;
-                    final long[] data = new long[(dimension * dimension * dimension) / entriesPerLong + 1];
+                    final long[] data = new long[Palettes.arrayLength(dimension, bitsPerEntry)];
                     for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
                     return new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),
