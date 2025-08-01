@@ -574,12 +574,12 @@ final class ChunkImpl implements Chunk {
         Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
         int i = 0;
         for (Section section : sections) {
-            int sectionIndex = (i++) - minSection;
+            final int sectionY = i++ + minSection;
             section.entries().forEach((index, block) -> {
-                final int x = sectionIndexGetX(index);
-                final int y = sectionIndexGetY(index) + (sectionIndex * SECTION_SIZE);
-                final int z = sectionIndexGetZ(index);
-                final int globalIndex = chunkBlockIndex(x, y, z);
+                final int localX = sectionBlockIndexGetX(index);
+                final int localY = sectionBlockIndexGetY(index);
+                final int localZ = sectionBlockIndexGetZ(index);
+                final int globalIndex = chunkBlockIndex(localX, localY + sectionY * SECTION_SIZE, localZ);
                 entries.put(globalIndex, block);
             });
         }
