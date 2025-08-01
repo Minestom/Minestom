@@ -15,9 +15,7 @@ public class InstanceVersionIntegrationTest {
     @Test
     public void global(Env env) {
         var instance = env.createFlatInstance();
-        var version = instance.version();
-        var version2 = instance.version();
-        assertCompatible(version, version2);
+        assertCompatible(instance.version(), instance.version());
     }
 
     @Test
@@ -25,6 +23,15 @@ public class InstanceVersionIntegrationTest {
         var instance = env.createFlatInstance();
         var version = instance.version();
         instance.setBlock(BlockVec.ZERO, Block.STONE);
+        var version2 = instance.version();
+        assertNotCompatible(version, version2);
+    }
+
+    @Test
+    public void globalGen(Env env) {
+        var instance = env.createFlatInstance();
+        var version = instance.version();
+        instance.loadChunk(0, 0).join();
         var version2 = instance.version();
         assertNotCompatible(version, version2);
     }
@@ -59,10 +66,10 @@ public class InstanceVersionIntegrationTest {
     }
 
     private void assertCompatible(BlockVersion v1, BlockVersion v2) {
-        assertTrue(v1.compatible(v2), "Versions should be compatible");
+        assertTrue(v1.compatible(v2), "Versions should be compatible: " + v1 + " vs " + v2);
     }
 
     private void assertNotCompatible(BlockVersion v1, BlockVersion v2) {
-        assertFalse(v1.compatible(v2), "Versions should not be compatible");
+        assertFalse(v1.compatible(v2), "Versions should not be compatible: " + v1 + " vs " + v2);
     }
 }

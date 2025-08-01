@@ -761,7 +761,6 @@ public class InstanceContainer extends Instance {
     }
 
     private synchronized void applyFork(Chunk chunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
-        this.version.incrementAndGet();
         Section section = chunk.getSectionAt(sectionModifier.start().blockY());
         Palette currentBlocks = section.blockPalette();
         // -1 is necessary because forked units handle explicit changes by changing AIR 0 to 1
@@ -770,6 +769,7 @@ public class InstanceContainer extends Instance {
     }
 
     private synchronized void applyGenerationData(Chunk chunk, GeneratorImpl.SectionModifierImpl section) {
+        this.version.incrementAndGet();
         var cache = section.genSection().specials();
         if (cache.isEmpty()) return;
         final int height = section.start().blockY();
