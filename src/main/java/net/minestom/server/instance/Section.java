@@ -16,7 +16,7 @@ public sealed interface Section extends Cloneable permits SectionImpl {
                 blockPalette, biomePalette,
                 skyLight, blockLight,
                 new Int2ObjectOpenHashMap<>(), new Int2ObjectOpenHashMap<>(),
-                new AtomicLong()
+                new AtomicLong(1)
         );
     }
 

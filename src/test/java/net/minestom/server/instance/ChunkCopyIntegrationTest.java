@@ -13,7 +13,7 @@ public class ChunkCopyIntegrationTest {
     public void copyViewer(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(0, 0).join();
-        var player = env.createPlayer(instance, new Pos(0, 40, 0));
+        env.createPlayer(instance, new Pos(0, 40, 0));
 
         var chunk = instance.getChunk(0, 0);
         assert chunk != null;
