@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static net.minestom.server.coordinate.CoordConversion.chunkBlockIndex;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @EnvTest
 public class ChunkBlockEntityIntegrationTest {
@@ -42,5 +43,17 @@ public class ChunkBlockEntityIntegrationTest {
         chunkBlockIndex = chunkBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
         assertEquals(Block.CHEST, blockEntities.get(chunkBlockIndex),
                 "Expected block entity at " + vec + " to be a chest, but got: " + blockEntities);
+    }
+
+    @Test
+    public void generator(Env env) {
+        var instance = env.createEmptyInstance();
+        instance.setGenerator(unit -> unit.modifier().fill(Block.CHEST));
+
+        var chunk = instance.loadChunk(0, 0).join();
+        ChunkDataPacket packet = (ChunkDataPacket) SendablePacket.extractServerPacket(ConnectionState.PLAY, chunk.getFullDataPacket());
+        assert packet != null;
+        Map<Integer, Block> blockEntities = packet.chunkData().blockEntities();
+        assertNotEquals(0, blockEntities.size());
     }
 }

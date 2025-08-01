@@ -782,7 +782,7 @@ public class InstanceContainer extends Instance {
             final int sectionY = globalToChunk(y);
             SectionImpl sec = (SectionImpl) chunk.getSection(sectionY);
             sec.blockPalette().set(x, globalToSectionRelative(y), z, block.stateId());
-            if (block.hasNbt() || block.handler() != null) {
+            if (block.hasNbt() || block.handler() != null || block.registry().isBlockEntity()) {
                 final int blockIndex = sectionBlockIndex(x, globalToSectionRelative(y), z);
                 sec.entries().put(blockIndex, block);
                 if (block.handler() != null && block.handler().isTickable()) {
