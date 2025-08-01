@@ -20,28 +20,28 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void testPropagationAir(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
             }
         }
 
-        instance.setBlock(8, 100,8 , Block.TORCH);
+        instance.setBlock(8, 100, 8, Block.TORCH);
 
         Map<Vec, Integer> expectedLights = new HashMap<>();
         for (int y = -15; y <= 15; ++y) {
             expectedLights.put(new Vec(8, 100 + y, 8), Math.max(0, 14 - Math.abs(y)));
         }
 
-        LightingChunk.relightSection(instance, 0, 6, 0);
+        ChunkLight.relightSection(instance, 0, 6, 0);
         assertLightInstance(instance, expectedLights);
     }
 
     @Test
     public void testTorch(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         instance.setGenerator(unit -> {
             unit.modifier().fillHeight(39, 40, Block.STONE);
             unit.modifier().fillHeight(50, 51, Block.STONE);
@@ -53,13 +53,13 @@ public class BlockLightMergeIntegrationTest {
             }
         }
 
-        instance.setBlock(1, 40,1 , Block.TORCH);
+        instance.setBlock(1, 40, 1, Block.TORCH);
 
         Map<Vec, Integer> expectedLights = Map.ofEntries(
                 entry(new Vec(2, 40, 2), 12)
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -67,7 +67,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void testTorch2(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
 
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
@@ -75,32 +75,32 @@ public class BlockLightMergeIntegrationTest {
             }
         }
 
-        instance.setBlock(1, 40,1 , Block.TORCH);
+        instance.setBlock(1, 40, 1, Block.TORCH);
         Map<Vec, Integer> expectedLights = Map.ofEntries(
                 entry(new Vec(2, 40, 2), 12)
         );
-        LightingChunk.relightSection(instance, 1, 2, 1);
+        ChunkLight.relightSection(instance, 1, 2, 1);
         assertLightInstance(instance, expectedLights);
 
-        instance.setBlock(-2, 40,-2, Block.TORCH);
+        instance.setBlock(-2, 40, -2, Block.TORCH);
         expectedLights = Map.ofEntries(
                 entry(new Vec(2, 40, 2), 12)
         );
-        LightingChunk.relightSection(instance, -1, 2, -1);
+        ChunkLight.relightSection(instance, -1, 2, -1);
         assertLightInstance(instance, expectedLights);
     }
 
     @Test
     public void testPropagationAir2(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
             }
         }
 
-        instance.setBlock(4, 60,8 , Block.TORCH);
+        instance.setBlock(4, 60, 8, Block.TORCH);
 
         Map<Vec, Integer> expectedLights = new HashMap<>();
         for (int y = -15; y <= 15; ++y) {
@@ -110,7 +110,7 @@ public class BlockLightMergeIntegrationTest {
             expectedLights.put(new Vec(-2, 60 + y, 8), Math.max(0, 8 - Math.abs(y)));
         }
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -118,18 +118,18 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void testPropagationAirRemoval(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
             }
         }
 
-        instance.setBlock(4, 100,8 , Block.TORCH);
+        instance.setBlock(4, 100, 8, Block.TORCH);
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
-        instance.setBlock(4, 100,8 , Block.AIR);
+        instance.setBlock(4, 100, 8, Block.AIR);
 
         Map<Vec, Integer> expectedLights = new HashMap<>();
         for (int y = -15; y <= 15; ++y) {
@@ -139,7 +139,7 @@ public class BlockLightMergeIntegrationTest {
             expectedLights.put(new Vec(-2, 100 + y, 8), 0);
         }
 
-        LightingChunk.relightSection(instance, 0, 6, 0);
+        ChunkLight.relightSection(instance, 0, 6, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -147,7 +147,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void testBorderOcclusion(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
@@ -172,7 +172,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(0, 40, 4), 2)
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -180,7 +180,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void testBorderOcclusion2(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
@@ -205,14 +205,14 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
     }
 
     @Test
     public void testBorderOcclusion3(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
@@ -236,14 +236,14 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
     }
 
     @Test
     public void testBorderCrossing(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
@@ -288,14 +288,14 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
     }
 
     @Test
     public void testBorderOcclusionRemoval(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
@@ -315,7 +315,7 @@ public class BlockLightMergeIntegrationTest {
 
         instance.setBlock(-2, 40, 4, Block.TORCH);
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         instance.setBlock(-2, 40, 4, Block.STONE);
 
@@ -326,7 +326,7 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -334,7 +334,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void chunkIntersection(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = 4; x <= 7; x++) {
             for (int z = 6; z <= 8; z++) {
                 instance.loadChunk(x, z).join();
@@ -343,7 +343,7 @@ public class BlockLightMergeIntegrationTest {
 
         instance.setBlock(94, -35, 128, Block.GLOW_LICHEN.withProperties(Map.of("west", "true")));
 
-        LightingChunk.relight(instance, instance.getChunks());
+        ChunkLight.relight(instance, instance.getChunks());
 
         var val = instance.getChunk(5, 8).getSection(-2).blockLight().getLevel(14, 0, 0);
         assertEquals(4, val);
@@ -355,7 +355,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void lightLookupTest(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = 4; x <= 7; x++) {
             for (int z = 6; z <= 8; z++) {
                 instance.loadChunk(x, z).join();
@@ -380,7 +380,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void lightLookupTestCrossBorder(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = 4; x <= 7; x++) {
             for (int z = 6; z <= 8; z++) {
                 instance.loadChunk(x, z).join();
@@ -399,7 +399,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void skylight(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = 4; x <= 7; x++) {
             for (int z = 6; z <= 8; z++) {
                 instance.loadChunk(x, z).join();
@@ -408,7 +408,7 @@ public class BlockLightMergeIntegrationTest {
 
         instance.setBlock(94, 50, 128, Block.STONE);
 
-        LightingChunk.relight(instance, instance.getChunks());
+        ChunkLight.relight(instance, instance.getChunks());
 
         var val = lightValSky(instance, new Vec(94, 41, 128));
         assertEquals(14, val);
@@ -418,7 +418,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void skylightShortGrass(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = 4; x <= 7; x++) {
             for (int z = 6; z <= 8; z++) {
                 instance.loadChunk(x, z).join();
@@ -427,7 +427,7 @@ public class BlockLightMergeIntegrationTest {
 
         instance.setBlock(94, 50, 128, Block.SHORT_GRASS);
 
-        LightingChunk.relight(instance, instance.getChunks());
+        ChunkLight.relight(instance, instance.getChunks());
 
         var val = lightValSky(instance, new Vec(94, 50, 128));
         assertEquals(15, val);
@@ -436,7 +436,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void skylightContained(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = 4; x <= 7; x++) {
             for (int z = 6; z <= 8; z++) {
                 instance.loadChunk(x, z).join();
@@ -451,7 +451,7 @@ public class BlockLightMergeIntegrationTest {
         instance.setBlock(93, 51, 128, Block.STONE);
         instance.setBlock(95, 51, 128, Block.STONE);
 
-        LightingChunk.relight(instance, instance.getChunks());
+        ChunkLight.relight(instance, instance.getChunks());
 
         var val = lightValSky(instance, new Vec(94, 51, 128));
         var val2 = lightValSky(instance, new Vec(94, 52, 128));
@@ -462,7 +462,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void testDiagonalRemoval(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
@@ -478,7 +478,7 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
 
         instance.setBlock(-2, 40, 14, Block.AIR);
@@ -489,14 +489,14 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(2, 40, 18), 0)
 
         );
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
     }
 
     @Test
     public void testDiagonalRemoval2(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
@@ -506,7 +506,7 @@ public class BlockLightMergeIntegrationTest {
         instance.setBlock(1, 40, 1, Block.TORCH);
         instance.setBlock(1, 40, 17, Block.TORCH);
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         instance.setBlock(1, 40, 17, Block.AIR);
 
@@ -514,7 +514,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-3, 40, 2), 9)
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -522,7 +522,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void testDouble(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
@@ -537,7 +537,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-4, 40, 18), 8)
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
 
@@ -548,7 +548,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-4, 40, 18), 0)
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -556,7 +556,7 @@ public class BlockLightMergeIntegrationTest {
     @Test
     public void testBlockRemoval(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
@@ -574,7 +574,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-2, 40, -1), 0)
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
 
@@ -584,7 +584,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-2, 40, -1), 13)
         );
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        ChunkLight.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }

@@ -5,15 +5,17 @@ import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.*;
 
 import java.util.Collection;
@@ -250,7 +252,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     /**
      * Represents an element which can place blocks at position.
      * <p>
-     * Notably used by {@link Instance}, {@link Batch}.
+     * Notably used by {@link Instance}, {@link BlockBatch}.
      */
     interface Setter {
         void setBlock(int x, int y, int z, @NotNull Block block);
@@ -261,6 +263,23 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
         default void setBlockArea(@NotNull Area area, @NotNull Block block) {
             for (BlockVec vec : area) setBlock(vec.blockX(), vec.blockY(), vec.blockZ(), block);
+        }
+
+        default void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
+            batch.getAll((x1, y1, z1, block) -> setBlock(x + x1, y + y1, z + z1, block));
+        }
+
+        default void setBlockBatchAligned(int sectionX, int sectionY, int sectionZ, @NotNull BlockBatch batch) {
+            final int sectionSize = CoordConversion.SECTION_SIZE;
+            setBlockBatch(sectionX * sectionSize, sectionY * sectionSize, sectionZ * sectionSize, batch);
+        }
+
+        default void setBlockBatch(@NotNull BlockBatch batch) {
+            setBlockBatch(0, 0, 0, batch);
+        }
+
+        default void setBlockBatch(@NotNull Point blockPosition, @NotNull BlockBatch batch) {
+            setBlockBatch(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), batch);
         }
     }
 
@@ -278,6 +297,31 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
         default @NotNull Block getBlock(@NotNull Point point) {
             return Objects.requireNonNull(getBlock(point, Condition.NONE));
+        }
+
+        default @NotNull BlockBatch getBlockBatch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
+                                                  @NotNull Point origin, @NotNull Area area) {
+            final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
+            final Condition condition = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0 ? Condition.TYPE : Condition.NONE;
+            return BlockBatch.batch(flags, builder -> {
+                for (BlockVec vec : area) {
+                    final int x = vec.blockX(), y = vec.blockY(), z = vec.blockZ();
+                    final int bX = x - originX, bY = y - originY, bZ = z - originZ;
+                    try {
+                        final Block block = getBlock(x, y, z, condition);
+                        builder.setBlock(bX, bY, bZ, block);
+                    } catch (NullPointerException ignored) {
+                    }
+                }
+            });
+        }
+
+        default @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Area area) {
+            return getBlockBatch(BlockBatch.NO_FLAGS, origin, area);
+        }
+
+        default @NotNull BlockBatch getBlockBatch(@NotNull Area area) {
+            return getBlockBatch(BlockBatch.NO_FLAGS, BlockVec.ZERO, area);
         }
 
         /**

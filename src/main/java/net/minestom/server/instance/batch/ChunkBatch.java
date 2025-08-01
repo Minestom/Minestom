@@ -4,12 +4,11 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
+
+import static net.minestom.server.coordinate.CoordConversion.*;
 
 /**
  * A Batch used when all of the block changed are contained inside a single chunk.
@@ -29,7 +31,9 @@ import java.util.concurrent.CountDownLatch;
  * Coordinates are relative to the chunk (0-15) instead of world coordinates.
  *
  * @see Batch
+ * @deprecated Use {@link net.minestom.server.instance.BlockBatch#aligned(Consumer)}
  */
+@Deprecated
 public class ChunkBatch implements Batch<ChunkCallback> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
@@ -54,7 +58,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        final int index = CoordConversion.chunkBlockIndex(x, y, z);
+        final int index = chunkBlockIndex(x, y, z);
         synchronized (blocks) {
             this.blocks.put(index, block);
         }
@@ -176,7 +180,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
             if (blocks.isEmpty()) {
                 // Nothing to flush
-                OptionalCallback.execute(callback, chunk);
+                if (callback != null) callback.accept(chunk);
                 return;
             }
 
@@ -189,11 +193,12 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                     sections.add(section);
                 }
             }
+            instance.invalidateChunk(chunk.getChunkX(), chunk.getChunkZ());
 
             if (inverse != null) inverse.readyLatch.countDown();
             updateChunk(instance, chunk, sections, callback, safeCallback);
         } catch (Exception e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 
@@ -206,15 +211,15 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @return The chunk section which the block was placed
      */
     private int apply(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
-        final int x = CoordConversion.chunkBlockIndexGetX(index);
-        final int y = CoordConversion.chunkBlockIndexGetY(index);
-        final int z = CoordConversion.chunkBlockIndexGetZ(index);
+        final int x = chunkBlockIndexGetX(index), y = chunkBlockIndexGetY(index), z = chunkBlockIndexGetZ(index);
+        final int globalX = chunk.getChunkX() * SECTION_SIZE + x,
+                globalY = globalToChunk(y), globalZ = chunk.getChunkZ() * SECTION_SIZE + z;
         if (inverse != null) {
-            Block prevBlock = chunk.getBlock(x, y, z);
-            inverse.setBlock(x, y, z, prevBlock);
+            Block prevBlock = chunk.getInstance().getBlock(globalX, globalY, globalZ);
+            inverse.setBlock(globalX, globalY, globalZ, prevBlock);
         }
-        chunk.setBlock(x, y, z, block);
-        return CoordConversion.globalToChunk(y);
+        chunk.getInstance().setBlock(globalX, globalY, globalZ, block);
+        return globalToChunk(y);
     }
 
     /**
@@ -225,11 +230,6 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         if (options.shouldSendUpdate()) {
             // TODO update all sections from `updatedSections`
             chunk.sendChunk();
-        }
-
-        if (instance instanceof InstanceContainer) {
-            // FIXME: put method in Instance instead
-            ((InstanceContainer) instance).refreshLastBlockChangeTime();
         }
 
         if (callback != null) {

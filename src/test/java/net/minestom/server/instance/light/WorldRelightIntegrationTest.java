@@ -2,8 +2,9 @@ package net.minestom.server.instance.light;
 
 import net.minestom.server.ServerProcess;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.ChunkLight;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -30,7 +31,7 @@ public class WorldRelightIntegrationTest {
     @Test
     public void testBorderLava(Env env) {
         Instance instance = env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         instance.loadChunk(6, 16).join();
         instance.loadChunk(6, 15).join();
 
@@ -41,21 +42,21 @@ public class WorldRelightIntegrationTest {
                 entry(new Vec(105, 72, 256), 6)
         );
 
-        LightingChunk.relight(instance, instance.getChunks());
+        ChunkLight.relight(instance, instance.getChunks());
         assertLightInstance(instance, expectedLights);
     }
 
     @Test
     public void testBlockRemoval(Env env) {
         Instance instance = createLightingInstance(env.process());
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
             }
         }
 
-        LightingChunk.relight(instance, instance.getChunks());
+        ChunkLight.relight(instance, instance.getChunks());
 
         var expectedLights = Map.ofEntries(
                 entry(new Vec(-1, 40, 0), 12),

@@ -24,10 +24,10 @@ import net.minestom.server.event.inventory.CreativeInventoryActionEvent;
 import net.minestom.server.event.item.*;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
@@ -355,7 +355,7 @@ public class PlayerInit {
                 unit.modifier().setBlock(unit.absoluteStart().blockX(), 40, unit.absoluteStart().blockZ(), Block.TORCH);
             }
         });
-        instanceContainer.setChunkSupplier(LightingChunk::new);
+        instanceContainer.setChunkSupplier(Chunk::chunkLight);
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
 
