@@ -239,8 +239,18 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
             }
             case JsonPrimitive primitive when primitive.isBoolean() ->
                     new Result.Ok<>(coder.createBoolean(primitive.getAsBoolean()));
-            case JsonPrimitive primitive when primitive.isNumber() ->
-                    new Result.Ok<>(coder.createDouble(primitive.getAsDouble()));
+            case JsonPrimitive primitive when primitive.isNumber() -> {
+                final Number number = primitive.getAsNumber();
+                yield switch (number) {
+                    case Byte b -> new Result.Ok<>(coder.createByte(b));
+                    case Short s -> new Result.Ok<>(coder.createShort(s));
+                    case Integer i -> new Result.Ok<>(coder.createInt(i));
+                    case Long l -> new Result.Ok<>(coder.createLong(l));
+                    case Float f -> new Result.Ok<>(coder.createFloat(f));
+                    case Double d -> new Result.Ok<>(coder.createDouble(d));
+                    default -> new Result.Ok<>(coder.createDouble(primitive.getAsDouble()));
+                };
+            }
             case JsonPrimitive primitive when primitive.isString() ->
                     new Result.Ok<>(coder.createString(primitive.getAsString()));
             case JsonNull jsonNull -> new Result.Ok<>(coder.createNull());
