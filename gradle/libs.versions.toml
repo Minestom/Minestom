@@ -6,7 +6,6 @@ metadata.format.version = "1.1"
 data = "1.21.8-rv1"
 adventure = "4.24.0"
 jetbrainsAnnotations = "26.0.1"
-jSpecify = "1.0.0"
 slf4j = "2.0.16"
 
 # Performance / Data Structures

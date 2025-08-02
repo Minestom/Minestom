@@ -8,7 +8,6 @@ dependencies {
 
     // Common
     implementation(libs.jetbrainsAnnotations)
-    implementation(libs.jSpecify)
     implementation(libs.slf4j)
     implementation(libs.bundles.adventure)
     runtimeOnly(libs.bundles.logback)
