@@ -2,7 +2,6 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player indicates that they have finished loading into the world.
@@ -17,7 +16,7 @@ public class PlayerLoadedEvent implements PlayerInstanceEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

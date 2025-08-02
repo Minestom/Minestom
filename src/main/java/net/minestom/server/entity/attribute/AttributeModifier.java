@@ -6,12 +6,11 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represent an attribute modifier.
  */
-public record AttributeModifier(@NotNull Key id, double amount, @NotNull AttributeOperation operation) {
+public record AttributeModifier(Key id, double amount, AttributeOperation operation) {
     public static final NetworkBuffer.Type<AttributeModifier> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.KEY, AttributeModifier::id,
             NetworkBuffer.DOUBLE, AttributeModifier::amount,
@@ -30,7 +29,7 @@ public record AttributeModifier(@NotNull Key id, double amount, @NotNull Attribu
      * @param amount    the value of this modifier
      * @param operation the operation to apply this modifier with
      */
-    public AttributeModifier(@NotNull @KeyPattern String id, double amount, @NotNull AttributeOperation operation) {
+    public AttributeModifier(@KeyPattern String id, double amount, AttributeOperation operation) {
         this(Key.key(id), amount, operation);
     }
 

@@ -13,7 +13,6 @@ import net.minestom.server.adventure.serializer.nbt.NbtDataComponentValue;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.registry.RegistryTranscoder;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -22,13 +21,13 @@ import static net.kyori.adventure.text.event.DataComponentValueConverterRegistry
 public class MinestomDataComponentValueConverterProvider implements DataComponentValueConverterRegistry.Provider {
 
     @Override
-    public @NotNull Key id() {
+    public Key id() {
         return Key.key("minestom", "data_component_value_converter");
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Iterable<DataComponentValueConverterRegistry.Conversion<?, ?>> conversions() {
+    public Iterable<DataComponentValueConverterRegistry.Conversion<?, ?>> conversions() {
         return List.of(
                 // GSON
                 convert(GsonDataComponentValue.class, MinestomDataComponentValue.class, (key, gsonValue) -> {

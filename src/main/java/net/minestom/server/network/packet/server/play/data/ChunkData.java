@@ -7,7 +7,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.block.BlockUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +14,8 @@ import java.util.stream.Collectors;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ChunkData(@NotNull Map<Heightmap.Type, long[]> heightmaps, byte @NotNull [] data,
-                        @NotNull Map<Integer, Block> blockEntities) {
+public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte [] data,
+                        Map<Integer, Block> blockEntities) {
     public ChunkData {
         heightmaps = Map.copyOf(heightmaps);
         blockEntities = blockEntities.entrySet()
@@ -30,7 +29,7 @@ public record ChunkData(@NotNull Map<Heightmap.Type, long[]> heightmaps, byte @N
                 .mapValue(LONG_ARRAY, Heightmap.Type.values().length);
 
         @Override
-        public void write(@NotNull NetworkBuffer buffer, ChunkData value) {
+        public void write(NetworkBuffer buffer, ChunkData value) {
             // Heightmaps
             buffer.write(HEIGHTMAPS, value.heightmaps);
             // Data
@@ -54,13 +53,13 @@ public record ChunkData(@NotNull Map<Heightmap.Type, long[]> heightmaps, byte @N
         }
 
         @Override
-        public ChunkData read(@NotNull NetworkBuffer buffer) {
+        public ChunkData read(NetworkBuffer buffer) {
             return new ChunkData(buffer.read(HEIGHTMAPS), buffer.read(BYTE_ARRAY),
                     readBlockEntities(buffer));
         }
     };
 
-    private static Map<Integer, Block> readBlockEntities(@NotNull NetworkBuffer reader) {
+    private static Map<Integer, Block> readBlockEntities(NetworkBuffer reader) {
         final Map<Integer, Block> blockEntities = new HashMap<>();
         final int size = reader.read(VAR_INT);
         for (int i = 0; i < size; i++) {

@@ -5,7 +5,6 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.UnaryOperator;
@@ -14,7 +13,7 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record EntityEquipmentPacket(int entityId,
-                                    @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+                                    Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public EntityEquipmentPacket {
         equipments = Map.copyOf(equipments);
         if (equipments.isEmpty())
@@ -23,7 +22,7 @@ public record EntityEquipmentPacket(int entityId,
 
     public static final NetworkBuffer.Type<EntityEquipmentPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, EntityEquipmentPacket value) {
+        public void write(NetworkBuffer buffer, EntityEquipmentPacket value) {
             buffer.write(VAR_INT, value.entityId);
             int index = 0;
             for (var entry : value.equipments.entrySet()) {
@@ -36,13 +35,13 @@ public record EntityEquipmentPacket(int entityId,
         }
 
         @Override
-        public EntityEquipmentPacket read(@NotNull NetworkBuffer buffer) {
+        public EntityEquipmentPacket read(NetworkBuffer buffer) {
             return new EntityEquipmentPacket(buffer.read(VAR_INT), readEquipments(buffer));
         }
     };
 
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         final var components = new ArrayList<Component>();
         for (var itemStack : this.equipments.values())
             components.addAll(ItemStack.textComponents(itemStack));
@@ -50,14 +49,14 @@ public record EntityEquipmentPacket(int entityId,
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         final var newEquipment = new EnumMap<EquipmentSlot, ItemStack>(EquipmentSlot.class);
         for (var entry : this.equipments.entrySet())
             newEquipment.put(entry.getKey(), ItemStack.copyWithOperator(entry.getValue(), operator));
         return new EntityEquipmentPacket(this.entityId, newEquipment);
     }
 
-    private static Map<EquipmentSlot, ItemStack> readEquipments(@NotNull NetworkBuffer reader) {
+    private static Map<EquipmentSlot, ItemStack> readEquipments(NetworkBuffer reader) {
         Map<EquipmentSlot, ItemStack> equipments = new EnumMap<>(EquipmentSlot.class);
         byte slot;
         do {

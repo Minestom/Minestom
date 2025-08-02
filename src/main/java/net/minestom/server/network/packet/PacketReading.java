@@ -6,7 +6,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,26 +71,26 @@ public final class PacketReading {
     }
 
     public static Result<ClientPacket> readClients(
-            @NotNull NetworkBuffer buffer,
-            @NotNull ConnectionState state,
+            NetworkBuffer buffer,
+            ConnectionState state,
             boolean compressed
     ) throws DataFormatException {
         return readPackets(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
     }
 
     public static Result<ServerPacket> readServers(
-            @NotNull NetworkBuffer buffer,
-            @NotNull ConnectionState state,
+            NetworkBuffer buffer,
+            ConnectionState state,
             boolean compressed
     ) throws DataFormatException {
         return readPackets(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, PacketVanilla::nextServerState, compressed);
     }
 
     public static <T> Result<T> readPackets(
-            @NotNull NetworkBuffer buffer,
-            @NotNull PacketParser<T> parser,
-            @NotNull ConnectionState state,
-            @NotNull BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            NetworkBuffer buffer,
+            PacketParser<T> parser,
+            ConnectionState state,
+            BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
             boolean compressed
     ) throws DataFormatException {
         List<ParsedPacket<T>> packets = new ArrayList<>();
@@ -118,26 +117,26 @@ public final class PacketReading {
     }
 
     public static Result<ClientPacket> readClient(
-            @NotNull NetworkBuffer buffer,
-            @NotNull ConnectionState state,
+            NetworkBuffer buffer,
+            ConnectionState state,
             boolean compressed
     ) throws DataFormatException {
         return readPacket(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
     }
 
     public static Result<ServerPacket> readServer(
-            @NotNull NetworkBuffer buffer,
-            @NotNull ConnectionState state,
+            NetworkBuffer buffer,
+            ConnectionState state,
             boolean compressed
     ) throws DataFormatException {
         return readPacket(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, PacketVanilla::nextServerState, compressed);
     }
 
     public static <T> Result<T> readPacket(
-            @NotNull NetworkBuffer buffer,
-            @NotNull PacketParser<T> parser,
-            @NotNull ConnectionState state,
-            @NotNull BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            NetworkBuffer buffer,
+            PacketParser<T> parser,
+            ConnectionState state,
+            BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
             boolean compressed
     ) throws DataFormatException {
         final long beginMark = buffer.readIndex();

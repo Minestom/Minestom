@@ -4,12 +4,11 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 public record ClientSetTestBlockPacket(
-        @NotNull Point blockPosition,
-        @NotNull TestBlockMode mode,
-        @NotNull String message
+        Point blockPosition,
+        TestBlockMode mode,
+        String message
 ) implements ClientPacket {
 
     public static final NetworkBuffer.Type<ClientSetTestBlockPacket> SERIALIZER = NetworkBufferTemplate.template(

@@ -3,10 +3,9 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
 
 public class ChestedHorseMeta extends AbstractHorseMeta {
-    protected ChestedHorseMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    protected ChestedHorseMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

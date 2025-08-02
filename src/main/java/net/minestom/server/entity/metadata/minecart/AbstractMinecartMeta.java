@@ -5,10 +5,9 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.AbstractVehicleMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractMinecartMeta extends AbstractVehicleMeta implements ObjectDataProvider {
-    protected AbstractMinecartMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    protected AbstractMinecartMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

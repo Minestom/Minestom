@@ -13,18 +13,16 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.json.JsonUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class ArgumentComponent extends Argument<Component> {
     public static final int INVALID_JSON_ERROR = 1;
 
-    public ArgumentComponent(@NotNull String id) {
+    public ArgumentComponent(String id) {
         super(id, true);
     }
 
-    @NotNull
     @Override
-    public Component parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public Component parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
             final Transcoder<JsonElement> coder = new RegistryTranscoder<>(Transcoder.JSON, MinecraftServer.process());
             final Result<Component> result = Codec.COMPONENT.decode(coder, JsonUtil.fromJson(input));
