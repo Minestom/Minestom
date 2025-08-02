@@ -6,34 +6,27 @@ import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class GenericEnumGenerator extends MinestomCodeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenericEnumGenerator.class);
-
+public class GenericEnumGenerator implements MinestomCodeGenerator {
     private final String packageName;
     private final String className;
     private final InputStream entriesFile;
-    private final File outputFolder;
+    private final Path outputFolder;
 
     private boolean isPackagePrivate = false;
 
     public GenericEnumGenerator(
             @NotNull String packageName, @NotNull String className,
-            @Nullable InputStream entriesFile, @NotNull File outputFolder
+            @Nullable InputStream entriesFile, @NotNull Path outputFolder
     ) {
         this.packageName = packageName;
         this.className = className;
@@ -47,16 +40,14 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
     }
 
     @Override
+    public @NotNull Path outputFolder() {
+        return outputFolder;
+    }
+
+    @Override
     public void generate() {
-        if (entriesFile == null) {
-            LOGGER.error("Failed to find entries file.");
-            LOGGER.error("Stopped code generation for {}.", className);
-            return;
-        }
-        if (!outputFolder.exists() && !outputFolder.mkdirs()) {
-            LOGGER.error("Output folder for code generation does not exist and could not be created.");
-            return;
-        }
+        Objects.requireNonNull(entriesFile, "Nothing to generate, entriesFile is null");
+        ensureDirectory(outputFolder);
 
         // Important classes we use alot
         JsonArray entryList = GSON.fromJson(new InputStreamReader(entriesFile), JsonArray.class);
@@ -120,25 +111,17 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
         // Use data
         for (JsonObject entryObject : StreamSupport.stream(entryList.spliterator(), true).map(JsonElement::getAsJsonObject).sorted(Comparator.comparingInt(o -> o.get("id").getAsInt())).toList()) {
             final String entryName = entryObject.get("name").getAsString();
-            final String namespaceString = Generators.namespaceShort(entryName);
-            entryEnum.addEnumConstant(nameGenerator(entryName), TypeSpec.anonymousClassBuilder(
+            final String namespaceString = namespaceShort(entryName);
+            entryEnum.addEnumConstant(toConstant(entryName), TypeSpec.anonymousClassBuilder(
                     "$S", namespaceString
             ).build());
         }
 
-        // Write files to outputFolder
-        writeFiles(
-                List.of(
-                        JavaFile.builder(packageName, entryEnum.build())
-                                .indent("    ")
-                                .skipJavaLangImports(true)
-                                .build()
-                ),
-                outputFolder
+        // Write files
+        writeFiles(JavaFile.builder(packageName, entryEnum.build())
+                .indent("    ")
+                .skipJavaLangImports(true)
+                .build()
         );
-    }
-
-    protected @NotNull String nameGenerator(@NotNull String namespaceId) {
-        return toConstant(namespaceId);
     }
 }

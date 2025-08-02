@@ -4,33 +4,61 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.palantir.javapoet.JavaFile;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import javax.lang.model.SourceVersion;
 import java.io.IOException;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Locale;
+import java.util.Objects;
 
-public abstract class MinestomCodeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MinestomCodeGenerator.class);
-    protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+public interface MinestomCodeGenerator {
+    Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    public abstract void generate();
+    default String toConstant(@NotNull String namespace) {
+        String constant = namespaceShort(namespace)
+                .replaceFirst("brigadier:", "") // Not implicit, do not put into namespaceShort
+                .replace(".", "_")
+                .toUpperCase(Locale.ROOT);
+        if (!SourceVersion.isName(constant)) {
+            constant = "_" + constant;
+        }
+        return constant;
+    }
 
-    protected void writeFiles(@NotNull List<JavaFile> fileList, File outputFolder) {
+    default String namespaceShort(@NotNull String namespace) {
+        return namespace.replaceFirst("minecraft:", "");
+    }
+
+    default void ensureDirectory(@NotNull Path directory) throws IllegalStateException {
+        Objects.requireNonNull(directory, "Directory is null");
+        if (Files.isDirectory(directory)) return;
+        try {
+            Files.createDirectories(directory);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to create folder for %s".formatted(directory), e);
+        }
+    }
+
+    default void writeFiles(@NotNull Path to, @NotNull JavaFile... fileList) {
+        Objects.requireNonNull(fileList, "File list cannot be null");
+        Objects.requireNonNull(to, "Output folder cannot be null");
         for (JavaFile javaFile : fileList) {
             try {
-                javaFile.writeTo(outputFolder);
+                javaFile.writeTo(to);
             } catch (IOException e) {
-                LOGGER.error("An error occured while writing source code to the file system.", e);
+                throw new IllegalStateException("Failed to write all the output!", e);
             }
         }
     }
 
-    protected static String toConstant(String namespace) {
-        return namespace.replace("minecraft:", "")
-                .replace("brigadier:", "")
-                .toUpperCase(Locale.ROOT);
+    default void writeFiles(@NotNull JavaFile... files) {
+        writeFiles(outputFolder(), files);
+    }
+
+    @NotNull Path outputFolder();
+
+    default void generate() {
+        throw new UnsupportedOperationException("This generator `%s` does not implement the generate method".formatted(getClass().getSimpleName()));
     }
 }

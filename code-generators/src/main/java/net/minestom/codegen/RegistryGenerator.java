@@ -1,34 +1,27 @@
 package net.minestom.codegen;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
+import java.nio.file.Path;
+import java.util.Objects;
 
-public record RegistryGenerator(File outputFolder) {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final Logger LOGGER = LoggerFactory.getLogger(RegistryGenerator.class);
+public record RegistryGenerator(@NotNull Path outputFolder) implements MinestomCodeGenerator {
+    public RegistryGenerator {
+        Objects.requireNonNull(outputFolder, "Output folder cannot be null");
+    }
 
-    public void generate(InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
-        if (resourceFile == null) {
-            LOGGER.error("Failed to find resource file for {}", typeName);
-            return;
-        }
+    public void generate(@NotNull InputStream resourceFile, @NotNull String packageName, @NotNull String typeName, @NotNull String loaderName, @NotNull String generatedName) {
+        Objects.requireNonNull(resourceFile, "Nothing to generate, resourceFile is null");
+        ensureDirectory(outputFolder);
+
         ClassName typeClass = ClassName.get(packageName, typeName);
         ClassName loaderClass = ClassName.get(packageName, loaderName);
-
-        JsonObject json;
-        json = GSON.fromJson(new InputStreamReader(resourceFile), JsonObject.class);
+        JsonObject json = GSON.fromJson(new InputStreamReader(resourceFile), JsonObject.class);
         ClassName materialsCN = ClassName.get(packageName, generatedName);
         // BlockConstants class
         TypeSpec.Builder blockConstantsClass = TypeSpec.interfaceBuilder(materialsCN)
@@ -38,8 +31,8 @@ public record RegistryGenerator(File outputFolder) {
 
         // Use data
         json.keySet().forEach(namespace -> {
-            final String constantName = Generators.namespaceToConstant(namespace);
-            final String namespaceString = Generators.namespaceShort(namespace);
+            final String constantName = toConstant(namespace);
+            final String namespaceString = namespaceShort(namespace);
             blockConstantsClass.addField(
                     FieldSpec.builder(typeClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
@@ -52,26 +45,22 @@ public record RegistryGenerator(File outputFolder) {
                             .build()
             );
         });
-        writeFiles(
-                List.of(JavaFile.builder(packageName, blockConstantsClass.build())
-                        .indent("    ")
-                        .skipJavaLangImports(true)
-                        .build()),
-                outputFolder);
+        writeFiles(JavaFile.builder(packageName, blockConstantsClass.build())
+                .indent("    ")
+                .skipJavaLangImports(true)
+                .build()
+        );
     }
 
-    public void generateKeys(InputStream resourceFile, String packageName, String typeName) {
-        if (resourceFile == null) {
-            LOGGER.error("Failed to find (keys) resource file for " + typeName);
-            return;
-        }
+    public void generateKeys(@NotNull InputStream resourceFile, @NotNull String packageName, @NotNull String typeName) {
+        Objects.requireNonNull(resourceFile, "Nothing to generate, resourceFile is null");
+        ensureDirectory(outputFolder);
 
         ClassName typeClass = ClassName.bestGuess(packageName + "." + typeName); // Use bestGuess to handle nested class
         ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "RegistryKey");
         ParameterizedTypeName typedRegistryKeyClass = ParameterizedTypeName.get(registryKeyClass, typeClass);
 
-        JsonObject json;
-        json = GSON.fromJson(new InputStreamReader(resourceFile), JsonObject.class);
+        JsonObject json = GSON.fromJson(new InputStreamReader(resourceFile), JsonObject.class);
         ClassName materialsCN = ClassName.get(packageName, typeName + "s");
         // BlockConstants class
         TypeSpec.Builder blockConstantsClass = TypeSpec.interfaceBuilder(materialsCN)
@@ -81,8 +70,8 @@ public record RegistryGenerator(File outputFolder) {
 
         // Use data
         json.keySet().forEach(namespace -> {
-            final String constantName = Generators.namespaceToConstant(namespace);
-            final String namespaceString = Generators.namespaceShort(namespace);
+            final String constantName = toConstant(namespace);
+            final String namespaceString = namespaceShort(namespace);
             blockConstantsClass.addField(
                     FieldSpec.builder(typedRegistryKeyClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
@@ -95,21 +84,17 @@ public record RegistryGenerator(File outputFolder) {
                             .build()
             );
         });
-        writeFiles(
-                List.of(JavaFile.builder(packageName, blockConstantsClass.build())
-                        .indent("    ")
-                        .skipJavaLangImports(true)
-                        .build()),
-                outputFolder);
+
+        // Write files
+        writeFiles(JavaFile.builder(packageName, blockConstantsClass.build())
+                .indent("    ")
+                .skipJavaLangImports(true)
+                .build()
+        );
     }
 
-    private void writeFiles(@NotNull List<JavaFile> fileList, File outputFolder) {
-        for (JavaFile javaFile : fileList) {
-            try {
-                javaFile.writeTo(outputFolder);
-            } catch (IOException e) {
-                LOGGER.error("An error occured while writing source code to the file system.", e);
-            }
-        }
+    @Override
+    public void generate() {
+        throw new UnsupportedOperationException("Use generate(InputStream, String, String, String, String) instead");
     }
 }
