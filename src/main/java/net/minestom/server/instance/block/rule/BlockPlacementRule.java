@@ -55,7 +55,8 @@ public abstract class BlockPlacementRule {
     }
 
     public record PlacementState(
-            @NotNull Block.Getter instance,
+            @NotNull Block.Getter blockGetter,
+            @NotNull Block.Setter blockSetter,
             @NotNull Block block,
             @Nullable BlockFace blockFace,
             @NotNull Point placePosition,
@@ -64,12 +65,27 @@ public abstract class BlockPlacementRule {
             @Nullable ItemStack usedItemStack,
             boolean isPlayerShifting
     ) {
+        @Deprecated
+        /**
+         * @deprecated Use {@link #blockGetter()} instead
+         */
+        public Block.Getter instance() {
+            return this.blockGetter;
+        }
     }
 
-    public record UpdateState(@NotNull Block.Getter instance,
+    public record UpdateState(@NotNull Block.Getter blockGetter,
+                              @NotNull Block.Setter blockSetter,
                               @NotNull Point blockPosition,
                               @NotNull Block currentBlock,
                               @NotNull BlockFace fromFace) {
+        @Deprecated
+        /**
+         * @deprecated Use {@link #blockGetter()} instead
+         */
+        public Block.Getter instance() {
+            return this.blockGetter;
+        }
     }
 
     public record Replacement(
