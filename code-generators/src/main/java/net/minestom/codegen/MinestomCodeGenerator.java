@@ -40,20 +40,17 @@ public interface MinestomCodeGenerator {
         }
     }
 
-    default void writeFiles(@NotNull Path to, @NotNull JavaFile... fileList) {
-        Objects.requireNonNull(fileList, "File list cannot be null");
+    default void writeFiles(@NotNull JavaFile... files) {
+        Objects.requireNonNull(files, "File list cannot be null");
+        final Path to = outputFolder();
         Objects.requireNonNull(to, "Output folder cannot be null");
-        for (JavaFile javaFile : fileList) {
+        for (JavaFile javaFile : files) {
             try {
                 javaFile.writeTo(to);
             } catch (IOException e) {
                 throw new IllegalStateException("Failed to write all the output!", e);
             }
         }
-    }
-
-    default void writeFiles(@NotNull JavaFile... files) {
-        writeFiles(outputFolder(), files);
     }
 
     @NotNull Path outputFolder();
