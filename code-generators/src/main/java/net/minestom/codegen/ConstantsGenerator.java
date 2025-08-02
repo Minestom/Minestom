@@ -2,7 +2,6 @@ package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,7 @@ public final class ConstantsGenerator extends MinestomCodeGenerator {
     private final InputStream constantsFile;
     private final File outputFolder;
 
-    public ConstantsGenerator(@Nullable InputStream constantsFile, @NotNull File outputFolder) {
+    public ConstantsGenerator(@Nullable InputStream constantsFile, File outputFolder) {
         this.constantsFile = constantsFile;
         this.outputFolder = outputFolder;
     }
