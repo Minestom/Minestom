@@ -3,40 +3,28 @@ package net.minestom.codegen;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.StreamSupport;
 
-public final class DyeColorGenerator extends MinestomCodeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DyeColorGenerator.class);
-    private final InputStream dyeColorsFile;
-    private final File outputFolder;
-
-    public DyeColorGenerator(@Nullable InputStream dyeColorsFile, File outputFolder) {
-        this.dyeColorsFile = dyeColorsFile;
-        this.outputFolder = outputFolder;
+public record DyeColorGenerator(@Nullable InputStream dyeColorsFile,
+                                Path outputFolder) implements MinestomCodeGenerator {
+    public DyeColorGenerator {
+        Objects.requireNonNull(outputFolder, "Output folder cannot be null");
     }
 
     @Override
     public void generate() {
-        if (dyeColorsFile == null) {
-            LOGGER.error("Failed to find dye_colors.json.");
-            LOGGER.error("Stopped code generation for dye colors.");
-            return;
-        }
-        if (!outputFolder.exists() && !outputFolder.mkdirs()) {
-            LOGGER.error("Output folder for code generation does not exist and could not be created.");
-            return;
-        }
+        Objects.requireNonNull(dyeColorsFile, "Nothing to generate, dyeColorsFile is null");
+        ensureDirectory(outputFolder);
         // Important classes we use alot
         ClassName colorCN = ClassName.get("net.minestom.server.color", "Color");
 
@@ -142,14 +130,10 @@ public final class DyeColorGenerator extends MinestomCodeGenerator {
         }
 
         // Write files to outputFolder
-        writeFiles(
-                List.of(
-                        JavaFile.builder("net.minestom.server.color", dyeColorEnum.build())
-                                .indent("    ")
-                                .skipJavaLangImports(true)
-                                .build()
-                ),
-                outputFolder
+        writeFiles(JavaFile.builder("net.minestom.server.color", dyeColorEnum.build())
+                .indent("    ")
+                .skipJavaLangImports(true)
+                .build()
         );
     }
 }
