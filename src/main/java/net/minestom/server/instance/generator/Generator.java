@@ -1,7 +1,5 @@
 package net.minestom.server.instance.generator;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 
 @FunctionalInterface
@@ -11,14 +9,14 @@ public interface Generator {
      *
      * @param unit the unit to fill
      */
-    void generate(@NotNull GenerationUnit unit);
+    void generate(GenerationUnit unit);
 
     /**
      * Runs {@link #generate(GenerationUnit)} on each unit in the collection.
      *
      * @param units the list of units to fill
      */
-    default void generateAll(@NotNull Collection<@NotNull GenerationUnit> units) {
+    default void generateAll(Collection<GenerationUnit> units) {
         units.forEach(this::generate);
     }
 }

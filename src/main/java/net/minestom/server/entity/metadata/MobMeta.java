@@ -3,10 +3,9 @@ package net.minestom.server.entity.metadata;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
 
 public class MobMeta extends LivingEntityMeta {
-    protected MobMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    protected MobMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

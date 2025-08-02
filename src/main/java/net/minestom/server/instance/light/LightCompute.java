@@ -7,7 +7,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -113,7 +112,7 @@ public final class LightCompute {
      * @param lightPre     shorts queue in format: [4bit light level][4bit y][4bit z][4bit x]
      * @return lighting wrapped in Result
      */
-    static byte @NotNull [] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
+    static byte [] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
         if (lightPre.isEmpty()) return EMPTY_CONTENT;
 
         final byte[] lightArray = new byte[LIGHT_LENGTH];

@@ -2,7 +2,6 @@ package net.minestom.server.command.builder.arguments.relative;
 
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.coordinate.Vec;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -13,7 +12,7 @@ import java.util.function.Function;
  */
 public class ArgumentRelativeVec2 extends ArgumentRelativeVec {
 
-    public ArgumentRelativeVec2(@NotNull String id) {
+    public ArgumentRelativeVec2(String id) {
         super(id, 2);
     }
 

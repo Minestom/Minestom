@@ -3,7 +3,6 @@ package net.minestom.server.event.player;
 import net.minestom.server.advancements.AdvancementAction;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a {@link Player} opens the advancement screens or switch the tab
@@ -15,7 +14,7 @@ public class AdvancementTabEvent implements PlayerInstanceEvent {
     private final AdvancementAction action;
     private final String tabId;
 
-    public AdvancementTabEvent(@NotNull Player player, @NotNull AdvancementAction action, @NotNull String tabId) {
+    public AdvancementTabEvent(Player player, AdvancementAction action, String tabId) {
         this.player = player;
         this.action = action;
         this.tabId = tabId;
@@ -26,7 +25,6 @@ public class AdvancementTabEvent implements PlayerInstanceEvent {
      *
      * @return the action
      */
-    @NotNull
     public AdvancementAction getAction() {
         return action;
     }
@@ -38,13 +36,12 @@ public class AdvancementTabEvent implements PlayerInstanceEvent {
      *
      * @return the tab id
      */
-    @NotNull
     public String getTabId() {
         return tabId;
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

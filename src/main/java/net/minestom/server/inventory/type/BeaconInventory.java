@@ -5,7 +5,6 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
 
 public class BeaconInventory extends Inventory {
 
@@ -13,11 +12,11 @@ public class BeaconInventory extends Inventory {
     private PotionEffect firstPotionEffect;
     private PotionEffect secondPotionEffect;
 
-    public BeaconInventory(@NotNull Component title) {
+    public BeaconInventory(Component title) {
         super(InventoryType.BEACON, title);
     }
 
-    public BeaconInventory(@NotNull String title) {
+    public BeaconInventory(String title) {
         super(InventoryType.BEACON, title);
     }
 

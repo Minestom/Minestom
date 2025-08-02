@@ -3,7 +3,6 @@ package net.minestom.server.timer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import net.minestom.server.MinecraftServer;
 import org.jctools.queues.MpscUnboundedArrayQueue;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -72,8 +71,8 @@ final class SchedulerImpl implements Scheduler {
     }
 
     @Override
-    public @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task,
-                                    @NotNull ExecutionType executionType) {
+    public Task submitTask(Supplier<TaskSchedule> task,
+                                    ExecutionType executionType) {
         final TaskImpl taskRef = new TaskImpl(TASK_COUNTER.getAndIncrement(), task,
                 executionType, this);
         handleTask(taskRef);

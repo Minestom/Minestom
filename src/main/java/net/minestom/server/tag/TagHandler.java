@@ -1,7 +1,6 @@
 package net.minestom.server.tag;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an element which can read and write {@link Tag tags}.
@@ -16,7 +15,7 @@ public interface TagHandler extends TagReadable, TagWritable {
      *
      * @return a copy of this handler
      */
-    @NotNull TagReadable readableCopy();
+    TagReadable readableCopy();
 
     /**
      * Creates a copy of this handler.
@@ -26,7 +25,7 @@ public interface TagHandler extends TagReadable, TagWritable {
      *
      * @return a copy of this handler
      */
-    @NotNull TagHandler copy();
+    TagHandler copy();
 
     /**
      * Updates the content of this handler.
@@ -35,16 +34,16 @@ public interface TagHandler extends TagReadable, TagWritable {
      *
      * @param compound the new content of this handler
      */
-    void updateContent(@NotNull CompoundBinaryTag compound);
+    void updateContent(CompoundBinaryTag compound);
 
     /**
      * Converts the content of this handler into a {@link CompoundBinaryTag}.
      *
      * @return a nbt compound representation of this handler
      */
-    @NotNull CompoundBinaryTag asCompound();
+    CompoundBinaryTag asCompound();
 
-    static @NotNull TagHandler newHandler() {
+    static TagHandler newHandler() {
         return new TagHandlerImpl();
     }
 
@@ -54,7 +53,7 @@ public interface TagHandler extends TagReadable, TagWritable {
      * @param compound the compound to read tags from
      * @return a new tag handler with the content of the given compound
      */
-    static @NotNull TagHandler fromCompound(@NotNull CompoundBinaryTag compound) {
+    static TagHandler fromCompound(CompoundBinaryTag compound) {
         return TagHandlerImpl.fromCompound(compound);
     }
 }

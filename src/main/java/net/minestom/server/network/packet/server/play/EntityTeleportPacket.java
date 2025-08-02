@@ -6,7 +6,6 @@ import net.minestom.server.entity.RelativeFlags;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -16,7 +15,7 @@ public record EntityTeleportPacket(
         boolean onGround) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<EntityTeleportPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, @NotNull EntityTeleportPacket value) {
+        public void write(NetworkBuffer buffer, EntityTeleportPacket value) {
             buffer.write(VAR_INT, value.entityId);
             buffer.write(VECTOR3D, value.position.asVec());
             buffer.write(VECTOR3D, value.delta);
@@ -27,7 +26,7 @@ public record EntityTeleportPacket(
         }
 
         @Override
-        public @NotNull EntityTeleportPacket read(@NotNull NetworkBuffer buffer) {
+        public EntityTeleportPacket read(NetworkBuffer buffer) {
             int entityId = buffer.read(VAR_INT);
             // Order is x,y,z for position, then x,y,z for delta move, then yaw and pitch
             Point absPosition = buffer.read(VECTOR3D);

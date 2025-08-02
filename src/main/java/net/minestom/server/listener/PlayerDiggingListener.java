@@ -25,7 +25,6 @@ import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePack
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.utils.block.BlockBreakCalculation;
 import net.minestom.server.utils.block.BlockUtils;
-import org.jetbrains.annotations.NotNull;
 
 public final class PlayerDiggingListener {
 
@@ -119,7 +118,7 @@ public final class PlayerDiggingListener {
         return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);
     }
 
-    private static boolean shouldPreventBreaking(@NotNull Player player, Block block) {
+    private static boolean shouldPreventBreaking(Player player, Block block) {
         final ItemStack itemInMainHand = player.getItemInMainHand();
 
         return switch (player.getGameMode()) {
@@ -199,8 +198,8 @@ public final class PlayerDiggingListener {
         return new DiggingResult(updatedBlock, success);
     }
 
-    private static void dropItem(@NotNull Player player,
-                                 @NotNull ItemStack droppedItem, @NotNull ItemStack handItem) {
+    private static void dropItem(Player player,
+                                 ItemStack droppedItem, ItemStack handItem) {
         if (player.dropItem(droppedItem)) {
             player.setItemInMainHand(handItem);
         } else {

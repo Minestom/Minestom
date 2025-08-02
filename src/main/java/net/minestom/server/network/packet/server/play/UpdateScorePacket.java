@@ -5,14 +5,13 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.scoreboard.Sidebar;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record UpdateScorePacket(
-        @NotNull String entityName,
-        @NotNull String objectiveName,
+        String entityName,
+        String objectiveName,
         int score,
         @Nullable Component displayName,
         @Nullable Sidebar.NumberFormat numberFormat

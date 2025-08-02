@@ -1,7 +1,6 @@
 package net.minestom.server.coordinate;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNullByDefault;
 
 import java.util.List;
 
@@ -11,7 +10,6 @@ import java.util.List;
  * If switched over, consider a fallback to the iterator as more implementations may be added in the future.
  */
 @ApiStatus.Experimental
-@NotNullByDefault
 public sealed interface Area extends Iterable<BlockVec> {
 
     default Area offset(int x, int y, int z) {

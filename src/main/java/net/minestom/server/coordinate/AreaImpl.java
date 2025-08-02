@@ -1,12 +1,9 @@
 package net.minestom.server.coordinate;
 
-import org.jetbrains.annotations.NotNullByDefault;
-
 import java.util.*;
 
 import static net.minestom.server.coordinate.CoordConversion.sectionIndex;
 
-@NotNullByDefault
 final class AreaImpl {
 
     record Single(BlockVec point) implements Area.Single {

@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.doubles.DoubleList;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.BlockFace;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
@@ -56,17 +55,17 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
     }
 
     @Override
-    public @NotNull Point relativeStart() {
+    public Point relativeStart() {
         return collisionData.relativeStart;
     }
 
     @Override
-    public @NotNull Point relativeEnd() {
+    public Point relativeEnd() {
         return collisionData.relativeEnd;
     }
 
     @Override
-    public boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face) {
+    public boolean isOccluded(Shape shape, BlockFace face) {
         final LightData lightData = this.lightData;
         final LightData otherLightData = ((ShapeImpl) shape).lightData;
         final boolean hasBlockOcclusion = (((lightData.blockOcclusion >> face.ordinal()) & 1) == 1);
@@ -90,12 +89,12 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
     }
 
     @Override
-    public boolean isFaceFull(@NotNull BlockFace face) {
+    public boolean isFaceFull(BlockFace face) {
         return (((collisionData.fullFaces >> face.ordinal()) & 1) == 1);
     }
 
     @Override
-    public boolean intersectBox(@NotNull Point position, @NotNull BoundingBox boundingBox) {
+    public boolean intersectBox(Point position, BoundingBox boundingBox) {
         for (BoundingBox blockSection : collisionData.collisionBoundingBoxes) {
             if (boundingBox.intersectBox(position, blockSection)) return true;
         }
@@ -103,8 +102,8 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
     }
 
     @Override
-    public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection,
-                                     @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection,
+                                     Point shapePos, BoundingBox moving, SweepResult finalResult) {
         boolean hitBlock = false;
         for (BoundingBox blockSection : collisionData.collisionBoundingBoxes) {
             // Update final result if the temp result collision is sooner than the current final result
@@ -128,7 +127,7 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
      *
      * @return the collision bounding boxes for this block
      */
-    public @NotNull @Unmodifiable List<BoundingBox> collisionBoundingBoxes() {
+    public @Unmodifiable List<BoundingBox> collisionBoundingBoxes() {
         return collisionData.collisionBoundingBoxes;
     }
 
@@ -137,7 +136,7 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
      *
      * @return the occlusion bounding boxes for this block
      */
-    public @NotNull @Unmodifiable List<BoundingBox> occlusionBoundingBoxes() {
+    public @Unmodifiable List<BoundingBox> occlusionBoundingBoxes() {
         return lightData.occlusionBoundingBoxes;
     }
 
@@ -222,7 +221,7 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
         return new LightData(occlusionBoundingBoxes, fullFaces, airFaces, lightEmission);
     }
 
-    private static @NotNull List<Rectangle> computeOcclusionSet(BlockFace face, List<BoundingBox> boundingBoxes) {
+    private static List<Rectangle> computeOcclusionSet(BlockFace face, List<BoundingBox> boundingBoxes) {
         List<Rectangle> rSet = new ArrayList<>();
         for (BoundingBox boundingBox : boundingBoxes) {
             switch (face) {

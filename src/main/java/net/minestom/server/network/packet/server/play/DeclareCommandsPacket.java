@@ -4,14 +4,13 @@ import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Function;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record DeclareCommandsPacket(@NotNull List<Node> nodes,
+public record DeclareCommandsPacket(List<Node> nodes,
                                     int rootIndex) implements ServerPacket.Play {
     public static final int MAX_NODES = Short.MAX_VALUE;
 
@@ -41,7 +40,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
 
         public static final NetworkBuffer.Type<Node> SERIALIZER = new Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer writer, Node value) {
+            public void write(NetworkBuffer writer, Node value) {
                 writer.write(BYTE, value.flags);
 
                 if (value.children != null && value.children.length > 262114) {
@@ -69,7 +68,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                 }
             }
 
-            public Node read(@NotNull NetworkBuffer reader) {
+            public Node read(NetworkBuffer reader) {
                 Node node = new Node();
                 node.flags = reader.read(BYTE);
                 node.children = reader.read(VAR_INT_ARRAY);
@@ -93,7 +92,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             }
         };
 
-        private byte[] getProperties(@NotNull NetworkBuffer reader, @NotNull ArgumentParserType parser) {
+        private byte[] getProperties(NetworkBuffer reader, ArgumentParserType parser) {
             final Function<Function<NetworkBuffer, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes((extractor) -> {
                 byte flags = extractor.read(BYTE);
                 if ((flags & 0x01) == 0x01) {
@@ -125,7 +124,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
         }
     }
 
-    public static byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
+    public static byte getFlag(NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
         byte result = (byte) type.ordinal();
         if (executable) result |= 0x04;
         if (redirect) result |= 0x08;

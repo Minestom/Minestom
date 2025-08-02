@@ -6,13 +6,12 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.color.Color;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public record CustomModelData(
-        @NotNull List<Float> floats, @NotNull List<Boolean> flags,
-        @NotNull List<String> strings, @NotNull List<RGBLike> colors
+        List<Float> floats, List<Boolean> flags,
+        List<String> strings, List<RGBLike> colors
 ) {
     public static final NetworkBuffer.Type<CustomModelData> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.FLOAT.list(), CustomModelData::floats,

@@ -3,14 +3,13 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.potion.Potion;
-import org.jetbrains.annotations.NotNull;
 
 public class EntityPotionRemoveEvent implements EntityInstanceEvent {
 
     private final Entity entity;
     private final Potion potion;
 
-    public EntityPotionRemoveEvent(@NotNull Entity entity, @NotNull Potion potion) {
+    public EntityPotionRemoveEvent(Entity entity, Potion potion) {
         this.entity = entity;
         this.potion = potion;
     }
@@ -20,13 +19,12 @@ public class EntityPotionRemoveEvent implements EntityInstanceEvent {
      *
      * @return the removed potion.
      */
-    @NotNull
     public Potion getPotion() {
         return potion;
     }
 
     @Override
-    public @NotNull Entity getEntity() {
+    public Entity getEntity() {
         return entity;
     }
 }

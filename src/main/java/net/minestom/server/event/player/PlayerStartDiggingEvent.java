@@ -1,14 +1,12 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a {@link Player} start digging a block,
@@ -27,8 +25,8 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
 
     private boolean cancelled;
 
-    public PlayerStartDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition,
-                                   @NotNull BlockFace blockFace) {
+    public PlayerStartDiggingEvent(Player player, Block block, BlockVec blockPosition,
+                                   BlockFace blockFace) {
         this.player = player;
         this.block = block;
         this.blockPosition = blockPosition;
@@ -41,7 +39,7 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
      * @return the block
      */
     @Override
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
         return block;
     }
 
@@ -51,7 +49,7 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
      * @return the block position
      */
     @Override
-    public @NotNull BlockVec getBlockPosition() {
+    public BlockVec getBlockPosition() {
         return blockPosition;
     }
 
@@ -60,7 +58,7 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
      *
      * @return the block face
      */
-    public @NotNull BlockFace getBlockFace() {
+    public BlockFace getBlockFace() {
         return blockFace;
     }
 
@@ -75,7 +73,7 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

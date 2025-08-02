@@ -7,7 +7,6 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called before {@link InventoryClickEvent}, used to potentially cancel the click.
@@ -20,9 +19,9 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
 
     private boolean cancelled;
 
-    public InventoryPreClickEvent(@NotNull AbstractInventory inventory,
-                                  @NotNull Player player,
-                                  @NotNull Click click) {
+    public InventoryPreClickEvent(AbstractInventory inventory,
+                                  Player player,
+                                  Click click) {
         this.inventory = inventory;
         this.player = player;
         this.click = click;
@@ -33,7 +32,6 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
      *
      * @return the player who clicked
      */
-    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -41,14 +39,14 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     /**
      * Gets the player's click.
      */
-    public @NotNull Click getClick() {
+    public Click getClick() {
         return click;
     }
 
     /**
      * Sets the player's click.
      */
-    public void setClick(@NotNull Click click) {
+    public void setClick(Click click) {
         this.click = click;
     }
 
@@ -64,7 +62,7 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
      * Returns the clicked item. Some clicks involve more than a single item, like drops or clicks outside the inventory
      * menu; in these cases, the cursor is returned.
      */
-    public @NotNull ItemStack getClickedItem() {
+    public ItemStack getClickedItem() {
         int slot = getSlot();
 
         return slot == -999 ? player.getInventory().getCursorItem()
@@ -82,7 +80,7 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     }
 
     @Override
-    public @NotNull AbstractInventory getInventory() {
+    public AbstractInventory getInventory() {
         return inventory;
     }
 }

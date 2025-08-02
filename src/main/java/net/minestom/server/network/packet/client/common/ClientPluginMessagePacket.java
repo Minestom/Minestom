@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.client.common;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -11,7 +10,7 @@ import java.util.Objects;
 import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record ClientPluginMessagePacket(@NotNull String channel, byte[] data) implements ClientPacket {
+public record ClientPluginMessagePacket(String channel, byte[] data) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientPluginMessagePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientPluginMessagePacket::channel,
             RAW_BYTES, ClientPluginMessagePacket::data,

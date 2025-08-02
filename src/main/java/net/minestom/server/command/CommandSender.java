@@ -5,7 +5,6 @@ import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.tag.Taggable;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents something which can send commands to the server.
@@ -19,7 +18,7 @@ public interface CommandSender extends Audience, Taggable, Identified {
      *
      * @param message the message to send
      */
-    default void sendMessage(@NotNull String message) {
+    default void sendMessage(String message) {
         this.sendMessage(Component.text(message));
     }
 
@@ -28,7 +27,7 @@ public interface CommandSender extends Audience, Taggable, Identified {
      *
      * @param messages the messages to send
      */
-    default void sendMessage(@NotNull String @NotNull [] messages) {
+    default void sendMessage(String [] messages) {
         for (String message : messages) {
             sendMessage(message);
         }

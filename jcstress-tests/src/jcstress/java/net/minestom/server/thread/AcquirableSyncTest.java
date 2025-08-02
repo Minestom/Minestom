@@ -12,7 +12,7 @@ import static org.openjdk.jcstress.annotations.Expect.ACCEPTABLE;
 @State
 public class AcquirableSyncTest {
 
-    private final ThreadDispatcher<World> dispatcher = ThreadDispatcher.singleThread();
+    private final ThreadDispatcher<World, Element> dispatcher = ThreadDispatcher.singleThread();
     private final World world = new World();
     private final Element element = new Element();
 

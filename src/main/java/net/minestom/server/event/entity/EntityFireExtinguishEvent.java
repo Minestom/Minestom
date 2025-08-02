@@ -3,7 +3,6 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
-import org.jetbrains.annotations.NotNull;
 
 public class EntityFireExtinguishEvent implements EntityInstanceEvent, CancellableEvent {
 
@@ -32,7 +31,7 @@ public class EntityFireExtinguishEvent implements EntityInstanceEvent, Cancellab
     }
 
     @Override
-    public @NotNull Entity getEntity() {
+    public Entity getEntity() {
         return entity;
     }
 }

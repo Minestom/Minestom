@@ -3,13 +3,12 @@ package net.minestom.server.item.instrument;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 public record InstrumentImpl(
-        @NotNull SoundEvent soundEvent,
+        SoundEvent soundEvent,
         float useDuration,
         float range,
-        @NotNull Component description
+        Component description
 ) implements Instrument {
 
     @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints

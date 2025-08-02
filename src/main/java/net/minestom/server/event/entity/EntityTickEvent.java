@@ -2,7 +2,6 @@ package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.EntityInstanceEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when an entity ticks itself.
@@ -12,12 +11,12 @@ public class EntityTickEvent implements EntityInstanceEvent {
 
     private final Entity entity;
 
-    public EntityTickEvent(@NotNull Entity entity) {
+    public EntityTickEvent(Entity entity) {
         this.entity = entity;
     }
 
     @Override
-    public @NotNull Entity getEntity() {
+    public Entity getEntity() {
         return entity;
     }
 }

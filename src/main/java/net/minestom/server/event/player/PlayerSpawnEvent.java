@@ -3,7 +3,6 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.Instance;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a new instance is set for a player.
@@ -13,7 +12,7 @@ public class PlayerSpawnEvent implements PlayerInstanceEvent {
     private final Instance spawnInstance;
     private final boolean firstSpawn;
 
-    public PlayerSpawnEvent(@NotNull Player player, @NotNull Instance spawnInstance, boolean firstSpawn) {
+    public PlayerSpawnEvent(Player player, Instance spawnInstance, boolean firstSpawn) {
         this.player = player;
         this.spawnInstance = spawnInstance;
         this.firstSpawn = firstSpawn;
@@ -24,7 +23,6 @@ public class PlayerSpawnEvent implements PlayerInstanceEvent {
      *
      * @return the instance
      */
-    @NotNull
     @Deprecated
     public Instance getSpawnInstance() {
         return spawnInstance;
@@ -40,7 +38,7 @@ public class PlayerSpawnEvent implements PlayerInstanceEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

@@ -9,7 +9,6 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -48,7 +47,7 @@ public class CombinedAttackGoal extends GoalSelector {
      * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
      * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
      */
-    public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
+    public CombinedAttackGoal(EntityCreature entityCreature,
                               int meleeRange, int rangedRange, double rangedPower, double rangedSpread,
                               int delay, TemporalUnit timeUnit,
                               int desirableRange, boolean comeClose) {
@@ -70,7 +69,7 @@ public class CombinedAttackGoal extends GoalSelector {
      * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
      * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
      */
-    public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
+    public CombinedAttackGoal(EntityCreature entityCreature,
                               int meleeRange, int rangedRange, double rangedPower, double rangedSpread,
                               Duration delay,
                               int desirableRange, boolean comeClose) {
@@ -95,7 +94,7 @@ public class CombinedAttackGoal extends GoalSelector {
      * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
      * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
      */
-    public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
+    public CombinedAttackGoal(EntityCreature entityCreature,
                               int meleeRange, int meleeDelay, TemporalUnit meleeTimeUnit,
                               int rangedRange, double rangedPower, double rangedSpread, int rangedDelay, TemporalUnit rangedTimeUnit,
                               int desirableRange, boolean comeClose) {
@@ -114,7 +113,7 @@ public class CombinedAttackGoal extends GoalSelector {
      * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
      * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
      */
-    public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
+    public CombinedAttackGoal(EntityCreature entityCreature,
                               int meleeRange, Duration meleeDelay,
                               int rangedRange, double rangedPower, double rangedSpread, Duration rangedDelay,
                               int desirableRange, boolean comeClose) {

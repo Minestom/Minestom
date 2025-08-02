@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.ServerFlag;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -23,12 +22,12 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     private final Thread initThread = Thread.currentThread();
     private volatile TickThread assignedThread;
 
-    public AcquirableImpl(@NotNull T value) {
+    public AcquirableImpl(T value) {
         this.value = value;
     }
 
     @Override
-    public @NotNull Acquired<T> lock() {
+    public Acquired<T> lock() {
         final TickThread assignedThread = this.assignedThread;
         if (assignedThread == null) {
             assertInitThread();
@@ -53,7 +52,7 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     }
 
     @Override
-    public void sync(@NotNull Consumer<T> consumer) {
+    public void sync(Consumer<T> consumer) {
         final TickThread assignedThread = this.assignedThread;
         if (assignedThread == null) {
             assertInitThread();
@@ -70,7 +69,7 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     }
 
     @Override
-    public boolean trySync(@NotNull Consumer<T> consumer) {
+    public boolean trySync(Consumer<T> consumer) {
         if (isOwned()) {
             consumer.accept(unwrap());
             return true;
@@ -91,7 +90,7 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     }
 
     @Override
-    public @NotNull T unwrap() {
+    public T unwrap() {
         return value;
     }
 
@@ -100,7 +99,7 @@ final class AcquirableImpl<T> implements Acquirable<T> {
         return assignedThread;
     }
 
-    void assign(@NotNull TickThread thread) {
+    void assign(TickThread thread) {
         this.assignedThread = thread;
     }
 
@@ -119,12 +118,12 @@ final class AcquirableImpl<T> implements Acquirable<T> {
             throw new IllegalStateException("Cannot lock an uninitialized Acquirable from a different thread");
     }
 
-    static boolean isOwnedImpl(@NotNull TickThread elementThread) {
+    static boolean isOwnedImpl(TickThread elementThread) {
         if (Thread.currentThread() == elementThread) return true;
         return elementThread.lock().isHeldByCurrentThread();
     }
 
-    static @Nullable ReentrantLock enter(@NotNull TickThread elementThread) {
+    static @Nullable ReentrantLock enter(TickThread elementThread) {
         if (isOwnedImpl(elementThread)) return null; // Nothing to lock, already owned by the current thread.
         final long time = System.nanoTime();
         // Enter the target thread

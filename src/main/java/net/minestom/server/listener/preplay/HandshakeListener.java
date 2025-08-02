@@ -12,7 +12,6 @@ import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,7 @@ public final class HandshakeListener {
      */
     private static final Component INVALID_BUNGEE_FORWARDING = Component.text("Invalid connection, please connect through the BungeeCord proxy. If you believe this is an error, contact a server administrator.", NamedTextColor.RED);
 
-    public static void listener(@NotNull ClientHandshakePacket packet, @NotNull PlayerConnection connection) {
+    public static void listener(ClientHandshakePacket packet, PlayerConnection connection) {
         String address = packet.serverAddress();
         switch (packet.intent()) {
             case STATUS -> {
@@ -126,7 +125,7 @@ public final class HandshakeListener {
         }
     }
 
-    private static void bungeeDisconnect(@NotNull PlayerConnection connection) {
+    private static void bungeeDisconnect(PlayerConnection connection) {
         LOGGER.warn("{} tried to log in without valid BungeeGuard forwarding information.", connection.getIdentifier());
         connection.kick(INVALID_BUNGEE_FORWARDING);
     }

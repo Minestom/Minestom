@@ -6,7 +6,6 @@ import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.sound.SoundEvent;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -21,13 +20,12 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
 
     private boolean cancelled;
 
-    public EntityDamageEvent(@NotNull LivingEntity entity, @NotNull Damage damage, @Nullable SoundEvent sound) {
+    public EntityDamageEvent(LivingEntity entity, Damage damage, @Nullable SoundEvent sound) {
         this.entity = entity;
         this.damage = damage;
         this.sound = sound;
     }
 
-    @NotNull
     @Override
     public LivingEntity getEntity() {
         return (LivingEntity) entity;
@@ -38,7 +36,6 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
      *
      * @return the damage type
      */
-    @NotNull
     public Damage getDamage() {
         return damage;
     }

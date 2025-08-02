@@ -1,7 +1,6 @@
 package net.minestom.server.snapshot;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an object which is regularly saved into a snapshot.
@@ -22,7 +21,7 @@ public interface Snapshotable {
      * @param updater the snapshot updater/context
      * @return the updated snapshot
      */
-    default @NotNull Snapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+    default Snapshot updateSnapshot(SnapshotUpdater updater) {
         throw new UnsupportedOperationException("Snapshot is not supported for this object");
     }
 }

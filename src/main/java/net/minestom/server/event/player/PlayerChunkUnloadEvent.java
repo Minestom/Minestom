@@ -2,7 +2,6 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called after a chunk being unload to a certain player.
@@ -14,7 +13,7 @@ public class PlayerChunkUnloadEvent implements PlayerInstanceEvent {
     private final Player player;
     private final int chunkX, chunkZ;
 
-    public PlayerChunkUnloadEvent(@NotNull Player player, int chunkX, int chunkZ) {
+    public PlayerChunkUnloadEvent(Player player, int chunkX, int chunkZ) {
         this.player = player;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
@@ -39,7 +38,7 @@ public class PlayerChunkUnloadEvent implements PlayerInstanceEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

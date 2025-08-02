@@ -4,19 +4,17 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.MobMeta;
-import org.jetbrains.annotations.NotNull;
 
 public class EnderDragonMeta extends MobMeta {
-    public EnderDragonMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public EnderDragonMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    @NotNull
     public Phase getPhase() {
         return Phase.VALUES[metadata.get(MetadataDef.EnderDragon.DRAGON_PHASE)];
     }
 
-    public void setPhase(@NotNull Phase value) {
+    public void setPhase(Phase value) {
         metadata.set(MetadataDef.EnderDragon.DRAGON_PHASE, value.ordinal());
     }
 

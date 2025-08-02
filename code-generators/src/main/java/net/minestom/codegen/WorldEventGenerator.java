@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +25,8 @@ public final class WorldEventGenerator extends MinestomCodeGenerator {
     private final File outputFolder;
 
     public WorldEventGenerator(
-            @NotNull String packageName, @NotNull String worldEventClassName,
-            @Nullable InputStream entriesFile, @NotNull File outputFolder
+            String packageName, String worldEventClassName,
+            @Nullable InputStream entriesFile, File outputFolder
     ) {
         this.packageName = packageName;
         this.worldEventClassName = worldEventClassName;

@@ -5,7 +5,6 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, CancellableEvent {
 
@@ -14,17 +13,16 @@ public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, Cancellabl
 
     private boolean cancelled;
 
-    public ItemDropEvent(@NotNull Player player, @NotNull ItemStack itemStack) {
+    public ItemDropEvent(Player player, ItemStack itemStack) {
         this.player = player;
         this.itemStack = itemStack;
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    @NotNull
     public ItemStack getItemStack() {
         return itemStack;
     }

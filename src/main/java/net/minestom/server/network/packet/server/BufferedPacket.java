@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server;
 
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a buffer to directly write to the network.
@@ -10,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * May contain multiple packets.
  */
 @ApiStatus.Internal
-public record BufferedPacket(@NotNull NetworkBuffer buffer,
+public record BufferedPacket(NetworkBuffer buffer,
                              long index, long length) implements SendablePacket {
     public BufferedPacket {
         buffer.readOnly();

@@ -10,7 +10,7 @@ import static org.openjdk.jcstress.annotations.Expect.ACCEPTABLE;
 @Outcome(id = "301", expect = ACCEPTABLE)
 @State
 public class ThreadDispatcherSyncTest {
-    private final ThreadDispatcher<World> dispatcher = ThreadDispatcher.singleThread();
+    private final ThreadDispatcher<World, Element> dispatcher = ThreadDispatcher.singleThread();
     private final World world = new World();
     private final Element element = new Element();
 

@@ -4,10 +4,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import org.jetbrains.annotations.NotNull;
 
 public class LlamaSpitMeta extends EntityMeta implements ObjectDataProvider {
-    public LlamaSpitMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public LlamaSpitMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

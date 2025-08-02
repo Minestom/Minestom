@@ -6,13 +6,12 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.sound.SoundEvent;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record SoundEffectPacket(
-        @NotNull SoundEvent soundEvent,
-        @NotNull Source source,
+        SoundEvent soundEvent,
+        Source source,
         int x,
         int y,
         int z,
@@ -22,7 +21,7 @@ public record SoundEffectPacket(
 ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<SoundEffectPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, SoundEffectPacket value) {
+        public void write(NetworkBuffer buffer, SoundEffectPacket value) {
             buffer.write(SoundEvent.NETWORK_TYPE, value.soundEvent());
             buffer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source()));
             buffer.write(INT, value.x() * 8);
@@ -34,7 +33,7 @@ public record SoundEffectPacket(
         }
 
         @Override
-        public SoundEffectPacket read(@NotNull NetworkBuffer buffer) {
+        public SoundEffectPacket read(NetworkBuffer buffer) {
             return new SoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
                     buffer.read(NetworkBuffer.Enum(Source.class)),
                     buffer.read(INT) * 8,
@@ -46,7 +45,7 @@ public record SoundEffectPacket(
         }
     };
 
-    public SoundEffectPacket(@NotNull SoundEvent soundEvent, @NotNull Source source, @NotNull Point position, float volume, float pitch, long seed) {
+    public SoundEffectPacket(SoundEvent soundEvent, Source source, Point position, float volume, float pitch, long seed) {
         this(soundEvent, source, position.blockX(), position.blockY(), position.blockZ(), volume, pitch, seed);
     }
 }

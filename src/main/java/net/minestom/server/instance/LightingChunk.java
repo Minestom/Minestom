@@ -15,7 +15,6 @@ import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -95,11 +94,11 @@ public class LightingChunk extends DynamicChunk {
         this.fullLightData = null;
     }
 
-    public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public LightingChunk(Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ);
     }
 
-    protected LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ, @NotNull List<Section> sections) {
+    protected LightingChunk(Instance instance, int chunkX, int chunkZ, List<Section> sections) {
         super(instance, chunkX, chunkZ, sections);
     }
 
@@ -158,7 +157,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
+    public void setBlock(int x, int y, int z, Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
         super.setBlock(x, y, z, block, placement, destroy);
@@ -564,7 +563,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public Chunk copy(Instance instance, int chunkX, int chunkZ) {
         var sections = this.sections.stream().map(Section::clone).toList();
         LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
         lightingChunk.entries.putAll(entries);

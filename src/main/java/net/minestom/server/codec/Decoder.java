@@ -1,20 +1,19 @@
 package net.minestom.server.codec;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Experimental
 public interface Decoder<T> {
 
-    static @NotNull <T> Decoder<T> unit(@NotNull T value) {
+    static <T> Decoder<T> unit(T value) {
         return new Decoder<>() {
             @Override
-            public @NotNull <D> Result<T> decode(@NotNull Transcoder<D> coder, @NotNull D ignored) {
+            public <D> Result<T> decode(Transcoder<D> coder, D ignored) {
                 return new Result.Ok<>(value);
             }
         };
     }
 
-    <D> @NotNull Result<T> decode(@NotNull Transcoder<D> coder, @NotNull D value);
+    <D> Result<T> decode(Transcoder<D> coder, D value);
 
 }

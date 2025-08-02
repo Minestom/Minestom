@@ -4,7 +4,6 @@ import net.minestom.server.Tickable;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
@@ -27,7 +26,7 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
     private final MessagePassingQueue<Update<P, E>> updates = new MpscUnboundedArrayQueue<>(1024);
 
     ThreadDispatcherImpl(ThreadProvider<P> provider, int threadCount,
-                         @NotNull IntFunction<? extends TickThread> threadGenerator) {
+                         IntFunction<? extends TickThread> threadGenerator) {
         this.provider = provider;
         TickThread[] threads = new TickThread[threadCount];
         Arrays.setAll(threads, threadGenerator);
@@ -37,7 +36,7 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
     @Unmodifiable
     @ApiStatus.Internal
     @Override
-    public @NotNull List<@NotNull TickThread> threads() {
+    public List<TickThread> threads() {
         return threads;
     }
 
@@ -127,7 +126,7 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
     }
 
     @Override
-    public void signalUpdate(@NotNull ThreadDispatcher.Update<P, E> update) {
+    public void signalUpdate(ThreadDispatcher.Update<P, E> update) {
         this.updates.relaxedOffer(update);
     }
 
@@ -200,7 +199,7 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
          * @return the TickThread used by this partition
          */
         @ApiStatus.Internal
-        public @NotNull TickThread thread() {
+        public TickThread thread() {
             return thread;
         }
 
@@ -209,7 +208,7 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
          *
          * @return the tickables assigned to this partition
          */
-        public @NotNull List<Tickable> elements() {
+        public List<Tickable> elements() {
             return elements;
         }
     }

@@ -5,10 +5,9 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 public class PrimedTntMeta extends EntityMeta {
-    public PrimedTntMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public PrimedTntMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

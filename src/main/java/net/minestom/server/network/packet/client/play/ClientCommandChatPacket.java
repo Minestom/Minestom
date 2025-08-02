@@ -4,11 +4,10 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record ClientCommandChatPacket(@NotNull String message) implements ClientPacket {
+public record ClientCommandChatPacket(String message) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientCommandChatPacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientCommandChatPacket::message,
             ClientCommandChatPacket::new);

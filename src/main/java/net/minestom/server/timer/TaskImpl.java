@@ -1,7 +1,6 @@
 package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.HashCommon;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -19,17 +18,17 @@ final class TaskImpl implements Task {
     }
 
     private final int id;
-    private final @NotNull Supplier<TaskSchedule> task;
-    private final @NotNull ExecutionType executionType;
-    private final @NotNull SchedulerImpl owner;
+    private final Supplier<TaskSchedule> task;
+    private final ExecutionType executionType;
+    private final SchedulerImpl owner;
 
     volatile boolean alive;
     volatile boolean parked;
 
     TaskImpl(int id,
-             @NotNull Supplier<TaskSchedule> task,
-             @NotNull ExecutionType executionType,
-             @NotNull SchedulerImpl owner) {
+             Supplier<TaskSchedule> task,
+             ExecutionType executionType,
+             SchedulerImpl owner) {
         this.id = id;
         this.task = task;
         this.executionType = executionType;
@@ -65,15 +64,15 @@ final class TaskImpl implements Task {
         return id;
     }
 
-    public @NotNull Supplier<TaskSchedule> task() {
+    public Supplier<TaskSchedule> task() {
         return task;
     }
 
-    public @NotNull ExecutionType executionType() {
+    public ExecutionType executionType() {
         return executionType;
     }
 
-    public @NotNull SchedulerImpl owner() {
+    public SchedulerImpl owner() {
         return owner;
     }
 

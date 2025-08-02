@@ -2,7 +2,6 @@ package net.minestom.server.instance;
 
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
-import org.jetbrains.annotations.NotNull;
 
 public final class Section {
     private final Palette blockPalette;
@@ -39,7 +38,7 @@ public final class Section {
     }
 
     @Override
-    public @NotNull Section clone() {
+    public Section clone() {
         final Light skyLight = Light.sky();
         final Light blockLight = Light.block();
 

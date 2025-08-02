@@ -1,7 +1,6 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.coordinate.Vec;
-import org.jetbrains.annotations.NotNull;
 
 public enum Direction {
     DOWN(0, -1, 0),
@@ -61,7 +60,7 @@ public enum Direction {
         return !vertical();
     }
 
-    public @NotNull Direction opposite() {
+    public Direction opposite() {
         return switch (this) {
             case UP -> DOWN;
             case DOWN -> UP;

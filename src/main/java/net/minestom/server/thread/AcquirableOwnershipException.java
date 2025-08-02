@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -12,16 +11,16 @@ public final class AcquirableOwnershipException extends RuntimeException {
     private final Object element;
 
     @ApiStatus.Internal
-    public AcquirableOwnershipException(@NotNull Thread initThread, @Nullable Thread assignedThread,
-                                        @NotNull Object element) {
+    public AcquirableOwnershipException(Thread initThread, @Nullable Thread assignedThread,
+                                        Object element) {
         super(buildMessage(initThread, assignedThread, element));
         this.initThread = initThread;
         this.assignedThread = assignedThread;
         this.element = element;
     }
 
-    private static String buildMessage(@NotNull Thread initThread, @Nullable Thread assignedThread,
-                                       @NotNull Object value) {
+    private static String buildMessage(Thread initThread, @Nullable Thread assignedThread,
+                                       Object value) {
         final String valueString = value.toString();
         if (assignedThread != null) {
             return """
@@ -51,7 +50,7 @@ public final class AcquirableOwnershipException extends RuntimeException {
     /**
      * The thread that initialized the acquirable element.
      */
-    public @NotNull Thread initThread() {
+    public Thread initThread() {
         return initThread;
     }
 
@@ -66,7 +65,7 @@ public final class AcquirableOwnershipException extends RuntimeException {
     /**
      * The acquirable element that caused the ownership failure.
      */
-    public @NotNull Object element() {
+    public Object element() {
         return element;
     }
 }

@@ -3,7 +3,6 @@ package net.minestom.server.registry;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +10,9 @@ import java.util.Objects;
 
 final class RegistryNetworkTypes {
 
-    record RegistryKeyImpl<T>(@NotNull Registries.Selector<T> selector) implements NetworkBuffer.Type<RegistryKey<T>> {
+    record RegistryKeyImpl<T>(Registries.Selector<T> selector) implements NetworkBuffer.Type<RegistryKey<T>> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, RegistryKey<T> value) {
+        public void write(NetworkBuffer buffer, RegistryKey<T> value) {
             final var registries = Objects.requireNonNull(buffer.registries(), "Buffer is missing registries");
             final var registry = selector.select(registries);
             final int id = registry.getId(value);
@@ -22,7 +21,7 @@ final class RegistryNetworkTypes {
         }
 
         @Override
-        public RegistryKey<T> read(@NotNull NetworkBuffer buffer) {
+        public RegistryKey<T> read(NetworkBuffer buffer) {
             final var registries = Objects.requireNonNull(buffer.registries(), "Buffer is missing registries");
             final var registry = selector.select(registries);
             final int id = buffer.read(NetworkBuffer.VAR_INT);
@@ -33,11 +32,11 @@ final class RegistryNetworkTypes {
     }
 
     record HolderNetworkTypeImpl<T>(
-            @NotNull Registries.Selector<T> selector,
-            @NotNull NetworkBuffer.Type<T> registryNetworkType
+            Registries.Selector<T> selector,
+            NetworkBuffer.Type<T> registryNetworkType
     ) implements NetworkBuffer.Type<Holder<T>> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, Holder<T> value) {
+        public void write(NetworkBuffer buffer, Holder<T> value) {
             final var registries = Objects.requireNonNull(buffer.registries(), "Buffer is missing registries");
             final var registry = selector.select(registries);
             switch (value.unwrap()) {
@@ -54,7 +53,7 @@ final class RegistryNetworkTypes {
         }
 
         @Override
-        public Holder<T> read(@NotNull NetworkBuffer buffer) {
+        public Holder<T> read(NetworkBuffer buffer) {
             final var registries = Objects.requireNonNull(buffer.registries(), "Buffer is missing registries");
             final var registry = selector.select(registries);
             final int id = buffer.read(NetworkBuffer.VAR_INT);
@@ -67,9 +66,9 @@ final class RegistryNetworkTypes {
         }
     }
 
-    record RegistryTagImpl<T>(@NotNull Registries.Selector<T> selector) implements NetworkBuffer.Type<RegistryTag<T>> {
+    record RegistryTagImpl<T>(Registries.Selector<T> selector) implements NetworkBuffer.Type<RegistryTag<T>> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, RegistryTag<T> value) {
+        public void write(NetworkBuffer buffer, RegistryTag<T> value) {
             switch (value) {
                 case net.minestom.server.registry.RegistryTagImpl.Backed<T> backed -> {
                     buffer.write(NetworkBuffer.VAR_INT, 0);
@@ -90,7 +89,7 @@ final class RegistryNetworkTypes {
         }
 
         @Override
-        public RegistryTag<T> read(@NotNull NetworkBuffer buffer) {
+        public RegistryTag<T> read(NetworkBuffer buffer) {
             final var registries = Objects.requireNonNull(buffer.registries(), "Buffer is missing registries");
             final var registry = selector.select(registries);
             int count = buffer.read(NetworkBuffer.VAR_INT) - 1;

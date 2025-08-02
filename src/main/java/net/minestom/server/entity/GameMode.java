@@ -1,7 +1,6 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 
@@ -47,12 +46,12 @@ public enum GameMode {
 
     public static final NetworkBuffer.Type<GameMode> OPT_NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, GameMode value) {
+        public void write(NetworkBuffer buffer, GameMode value) {
             buffer.write(BYTE, value != null ? (byte) value.ordinal() : -1);
         }
 
         @Override
-        public GameMode read(@NotNull NetworkBuffer buffer) {
+        public GameMode read(NetworkBuffer buffer) {
             final byte id = buffer.read(BYTE);
             return id != -1 ? VALUES[id] : null;
         }

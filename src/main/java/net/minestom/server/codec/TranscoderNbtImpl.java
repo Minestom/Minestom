@@ -1,7 +1,6 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.nbt.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -11,110 +10,110 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     private static final Set<String> WRAPPED_ELEMENT_KEYS = Set.of("");
 
     @Override
-    public @NotNull BinaryTag createNull() {
+    public BinaryTag createNull() {
         return EndBinaryTag.endBinaryTag();
     }
 
     @Override
-    public @NotNull Result<Boolean> getBoolean(@NotNull BinaryTag value) {
+    public Result<Boolean> getBoolean(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.byteValue() != 0)
                 : new Result.Error<>("Not a boolean: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createBoolean(boolean value) {
+    public BinaryTag createBoolean(boolean value) {
         return value ? ByteBinaryTag.ONE : ByteBinaryTag.ZERO;
     }
 
     @Override
-    public @NotNull Result<Byte> getByte(@NotNull BinaryTag value) {
+    public Result<Byte> getByte(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.byteValue())
                 : new Result.Error<>("Not a byte: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createByte(byte value) {
+    public BinaryTag createByte(byte value) {
         if (value == 0) return ByteBinaryTag.ZERO;
         if (value == 1) return ByteBinaryTag.ONE;
         return ByteBinaryTag.byteBinaryTag(value);
     }
 
     @Override
-    public @NotNull Result<Short> getShort(@NotNull BinaryTag value) {
+    public Result<Short> getShort(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.shortValue())
                 : new Result.Error<>("Not a short: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createShort(short value) {
+    public BinaryTag createShort(short value) {
         return ShortBinaryTag.shortBinaryTag(value);
     }
 
     @Override
-    public @NotNull Result<Integer> getInt(@NotNull BinaryTag value) {
+    public Result<Integer> getInt(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.intValue())
                 : new Result.Error<>("Not an int: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createInt(int value) {
+    public BinaryTag createInt(int value) {
         return IntBinaryTag.intBinaryTag(value);
     }
 
     @Override
-    public @NotNull Result<Long> getLong(@NotNull BinaryTag value) {
+    public Result<Long> getLong(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.longValue())
                 : new Result.Error<>("Not a long: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createLong(long value) {
+    public BinaryTag createLong(long value) {
         return LongBinaryTag.longBinaryTag(value);
     }
 
     @Override
-    public @NotNull Result<Float> getFloat(@NotNull BinaryTag value) {
+    public Result<Float> getFloat(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.floatValue())
                 : new Result.Error<>("Not a float: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createFloat(float value) {
+    public BinaryTag createFloat(float value) {
         return FloatBinaryTag.floatBinaryTag(value);
     }
 
     @Override
-    public @NotNull Result<Double> getDouble(@NotNull BinaryTag value) {
+    public Result<Double> getDouble(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.doubleValue())
                 : new Result.Error<>("Not a double: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createDouble(double value) {
+    public BinaryTag createDouble(double value) {
         return DoubleBinaryTag.doubleBinaryTag(value);
     }
 
     @Override
-    public @NotNull Result<String> getString(@NotNull BinaryTag value) {
+    public Result<String> getString(BinaryTag value) {
         return value instanceof StringBinaryTag string
                 ? new Result.Ok<>(string.value())
                 : new Result.Error<>("Not a string: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createString(@NotNull String value) {
+    public BinaryTag createString(String value) {
         return StringBinaryTag.stringBinaryTag(value);
     }
 
     @Override
-    public @NotNull Result<List<BinaryTag>> getList(@NotNull BinaryTag value) {
+    public Result<List<BinaryTag>> getList(BinaryTag value) {
         if (!(value instanceof ListBinaryTag listTagWrapped))
             return new Result.Error<>("Not a list: " + value);
         final ListBinaryTag listTag = listTagWrapped.unwrapHeterogeneity();
@@ -132,16 +131,16 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     }
 
     @Override
-    public @NotNull BinaryTag emptyList() {
+    public BinaryTag emptyList() {
         return ListBinaryTag.empty();
     }
 
     @Override
-    public @NotNull ListBuilder<BinaryTag> createList(int expectedSize) {
+    public ListBuilder<BinaryTag> createList(int expectedSize) {
         final ListBinaryTag.Builder<BinaryTag> elements = ListBinaryTag.heterogeneousListBinaryTag();
         return new ListBuilder<>() {
             @Override
-            public @NotNull ListBuilder<BinaryTag> add(BinaryTag value) {
+            public ListBuilder<BinaryTag> add(BinaryTag value) {
                 elements.add(value);
                 return this;
             }
@@ -154,22 +153,22 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     }
 
     @Override
-    public @NotNull Result<MapLike<BinaryTag>> getMap(@NotNull BinaryTag value) {
+    public Result<MapLike<BinaryTag>> getMap(BinaryTag value) {
         if (!(value instanceof CompoundBinaryTag compoundTag))
             return new Result.Error<>("Not a compound: " + value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
-            public @NotNull Collection<String> keys() {
+            public Collection<String> keys() {
                 return compoundTag.keySet();
             }
 
             @Override
-            public boolean hasValue(@NotNull String key) {
+            public boolean hasValue(String key) {
                 return compoundTag.get(key) != null;
             }
 
             @Override
-            public @NotNull Result<BinaryTag> getValue(@NotNull String key) {
+            public Result<BinaryTag> getValue(String key) {
                 final BinaryTag tag = compoundTag.get(key);
                 if (tag == null) return new Result.Error<>("No such key: " + key);
                 return new Result.Ok<>(tag);
@@ -183,23 +182,23 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     }
 
     @Override
-    public @NotNull BinaryTag emptyMap() {
+    public BinaryTag emptyMap() {
         return CompoundBinaryTag.empty();
     }
 
     @Override
-    public @NotNull MapBuilder<BinaryTag> createMap() {
+    public MapBuilder<BinaryTag> createMap() {
         final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
         return new MapBuilder<>() {
             @Override
-            public @NotNull MapBuilder<BinaryTag> put(@NotNull BinaryTag key, BinaryTag value) {
+            public MapBuilder<BinaryTag> put(BinaryTag key, BinaryTag value) {
                 if (!(value instanceof EndBinaryTag) && key instanceof StringBinaryTag string)
                     builder.put(string.value(), value);
                 return this;
             }
 
             @Override
-            public @NotNull MapBuilder<BinaryTag> put(@NotNull String key, BinaryTag value) {
+            public MapBuilder<BinaryTag> put(String key, BinaryTag value) {
                 if (!(value instanceof EndBinaryTag))
                     builder.put(key, value);
                 return this;
@@ -213,43 +212,43 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     }
 
     @Override
-    public @NotNull Result<byte[]> getByteArray(@NotNull BinaryTag value) {
+    public Result<byte[]> getByteArray(BinaryTag value) {
         return value instanceof ByteArrayBinaryTag byteArray
                 ? new Result.Ok<>(byteArray.value())
                 : new Result.Error<>("Not a byte array: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createByteArray(byte[] value) {
+    public BinaryTag createByteArray(byte[] value) {
         return ByteArrayBinaryTag.byteArrayBinaryTag(value);
     }
 
     @Override
-    public @NotNull Result<int[]> getIntArray(@NotNull BinaryTag value) {
+    public Result<int[]> getIntArray(BinaryTag value) {
         return value instanceof IntArrayBinaryTag intArray
                 ? new Result.Ok<>(intArray.value())
                 : new Result.Error<>("Not an int array: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createIntArray(int[] value) {
+    public BinaryTag createIntArray(int[] value) {
         return IntArrayBinaryTag.intArrayBinaryTag(value);
     }
 
     @Override
-    public @NotNull Result<long[]> getLongArray(@NotNull BinaryTag value) {
+    public Result<long[]> getLongArray(BinaryTag value) {
         return value instanceof LongArrayBinaryTag longArray
                 ? new Result.Ok<>(longArray.value())
                 : new Result.Error<>("Not a long array: " + value);
     }
 
     @Override
-    public @NotNull BinaryTag createLongArray(long[] value) {
+    public BinaryTag createLongArray(long[] value) {
         return LongArrayBinaryTag.longArrayBinaryTag(value);
     }
 
     @Override
-    public @NotNull <O> Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull BinaryTag value) {
+    public <O> Result<O> convertTo(Transcoder<O> coder, BinaryTag value) {
         return switch (value) {
             case EndBinaryTag ignored -> new Result.Ok<>(coder.createNull());
             case ByteBinaryTag byteTag -> new Result.Ok<>(coder.createByte(byteTag.byteValue()));

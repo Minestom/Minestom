@@ -4,11 +4,10 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public record FireworkList(int flightDuration, @NotNull List<FireworkExplosion> explosions) {
+public record FireworkList(int flightDuration, List<FireworkExplosion> explosions) {
     public static final FireworkList EMPTY = new FireworkList(0, List.of());
 
     public static final NetworkBuffer.Type<FireworkList> NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -25,11 +24,11 @@ public record FireworkList(int flightDuration, @NotNull List<FireworkExplosion> 
         explosions = List.copyOf(explosions);
     }
 
-    public @NotNull FireworkList withFlightDuration(int flightDuration) {
+    public FireworkList withFlightDuration(int flightDuration) {
         return new FireworkList(flightDuration, explosions);
     }
 
-    public @NotNull FireworkList withExplosions(@NotNull List<FireworkExplosion> explosions) {
+    public FireworkList withExplosions(List<FireworkExplosion> explosions) {
         return new FireworkList(flightDuration, explosions);
     }
 }

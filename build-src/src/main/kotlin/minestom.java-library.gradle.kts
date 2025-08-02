@@ -30,6 +30,7 @@ dependencies {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+    modularity.inferModulePath = true
 
     withSourcesJar()
     withJavadocJar()

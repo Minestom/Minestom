@@ -1,8 +1,5 @@
 package net.minestom.server.coordinate;
 
-import org.jetbrains.annotations.NotNullByDefault;
-
-@NotNullByDefault
 public final class CoordConversion {
     public static final int REGION_SIZE = 512;
     public static final int SECTION_SIZE = 16;

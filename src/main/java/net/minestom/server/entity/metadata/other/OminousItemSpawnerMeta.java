@@ -5,18 +5,17 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public class OminousItemSpawnerMeta extends EntityMeta {
-    public OminousItemSpawnerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public OminousItemSpawnerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public @NotNull ItemStack getItem() {
+    public ItemStack getItem() {
         return metadata.get(MetadataDef.OminousItemSpawner.ITEM);
     }
 
-    public void setItem(@NotNull ItemStack value) {
+    public void setItem(ItemStack value) {
         metadata.set(MetadataDef.OminousItemSpawner.ITEM, value);
     }
 

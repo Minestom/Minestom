@@ -2,7 +2,6 @@ package net.minestom.server.instance.heightmap;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 public class MotionBlockingHeightmap extends Heightmap {
     public MotionBlockingHeightmap(Chunk attachedChunk) {
@@ -10,14 +9,14 @@ public class MotionBlockingHeightmap extends Heightmap {
     }
 
     @Override
-    protected boolean checkBlock(@NotNull Block block) {
+    protected boolean checkBlock(Block block) {
         return (block.isSolid() && !block.compare(Block.COBWEB) && !block.compare(Block.BAMBOO_SAPLING))
                 || block.isLiquid()
                 || "true".equals(block.getProperty("waterlogged"));
     }
 
     @Override
-    public @NotNull Type type() {
+    public Type type() {
         return Type.MOTION_BLOCKING;
     }
 }

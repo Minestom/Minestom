@@ -4,12 +4,11 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public record BlockPredicates(@NotNull List<BlockPredicate> predicates) implements Predicate<Block> {
+public record BlockPredicates(List<BlockPredicate> predicates) implements Predicate<Block> {
     /**
      * Will never match any block.
      */
@@ -24,7 +23,7 @@ public record BlockPredicates(@NotNull List<BlockPredicate> predicates) implemen
         predicates = List.copyOf(predicates);
     }
 
-    public BlockPredicates(@NotNull BlockPredicate predicate) {
+    public BlockPredicates(BlockPredicate predicate) {
         this(List.of(predicate));
     }
 
