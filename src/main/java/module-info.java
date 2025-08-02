@@ -7,6 +7,7 @@ module net.minestom.server {
     requires net.kyori.adventure.nbt;
     requires net.kyori.adventure.key;
     requires net.kyori.examination.api;
+    requires net.kyori.adventure.text.logger.slf4j;
     requires org.slf4j;
     requires org.jctools.core;
     requires jdk.jfr;
