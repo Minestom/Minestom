@@ -1,15 +1,15 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when {@link Player#respawn()} is executed (for custom respawn or as a result of
  * {@link net.minestom.server.network.packet.client.play.ClientStatusPacket}
  */
-public class PlayerRespawnEvent implements PlayerEvent {
+public class PlayerRespawnEvent implements PlayerInstanceEvent {
 
     private final Player player;
     private Pos respawnPosition;
