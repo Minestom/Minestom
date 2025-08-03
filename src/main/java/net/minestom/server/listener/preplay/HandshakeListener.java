@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
@@ -47,12 +47,13 @@ public final class HandshakeListener {
                 }
 
                 // Bungee support (IP forwarding)
-                if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection socketConnection) {
+                final Auth auth = MinecraftServer.process().auth();
+                if (auth instanceof Auth.Bungee bungee && connection instanceof PlayerSocketConnection socketConnection) {
                     final String[] split = address.split("\00");
 
                     if (split.length == 3 || split.length == 4) {
                         boolean hasProperties = split.length == 4;
-                        if (BungeeCordProxy.isBungeeGuardEnabled() && !hasProperties) {
+                        if (bungee.guard() && !hasProperties) {
                             bungeeDisconnect(socketConnection);
                             return;
                         }
@@ -86,8 +87,8 @@ public final class HandshakeListener {
                                 final String valueString = value.getAsString();
                                 final String signatureString = signature == null ? null : signature.getAsString();
 
-                                if (BungeeCordProxy.isBungeeGuardEnabled() && nameString.equals("bungeeguard-token")) {
-                                    if (foundBungeeGuardToken || !BungeeCordProxy.isValidBungeeGuardToken(valueString)) {
+                                if (bungee.guard() && nameString.equals("bungeeguard-token")) {
+                                    if (foundBungeeGuardToken || !bungee.validToken(valueString)) {
                                         bungeeDisconnect(socketConnection);
                                         return;
                                     }
@@ -98,7 +99,7 @@ public final class HandshakeListener {
                                 properties.add(new GameProfile.Property(nameString, valueString, signatureString));
                             }
 
-                            if (BungeeCordProxy.isBungeeGuardEnabled() && !foundBungeeGuardToken) {
+                            if (bungee.guard() && !foundBungeeGuardToken) {
                                 bungeeDisconnect(socketConnection);
                                 return;
                             }

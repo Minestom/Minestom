@@ -54,6 +54,7 @@ import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.time.Tick;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +68,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 final class ServerProcessImpl implements ServerProcess {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
+
+    private final Auth auth;
 
     private final ExceptionManager exception;
 
@@ -117,7 +120,8 @@ final class ServerProcessImpl implements ServerProcess {
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
-    public ServerProcessImpl() {
+    public ServerProcessImpl(Auth auth) {
+        this.auth = auth;
         this.exception = new ExceptionManager();
 
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
@@ -169,212 +173,231 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public ExceptionManager exception() {
+    public @NotNull Auth auth() {
+        return auth;
+    }
+
+    @Override
+    public @NotNull ExceptionManager exception() {
         return exception;
     }
 
     @Override
-    public DynamicRegistry<Dialog> dialog() {
+    public @NotNull DynamicRegistry<Dialog> dialog() {
         return dialog;
     }
 
     @Override
-    public DynamicRegistry<DamageType> damageType() {
+    public @NotNull DynamicRegistry<DamageType> damageType() {
         return damageType;
     }
 
     @Override
-    public DynamicRegistry<TrimMaterial> trimMaterial() {
+    public @NotNull DynamicRegistry<TrimMaterial> trimMaterial() {
         return trimMaterial;
     }
 
     @Override
-    public DynamicRegistry<TrimPattern> trimPattern() {
+    public @NotNull DynamicRegistry<TrimPattern> trimPattern() {
         return trimPattern;
     }
 
     @Override
-    public DynamicRegistry<BannerPattern> bannerPattern() {
+    public @NotNull DynamicRegistry<BannerPattern> bannerPattern() {
         return bannerPattern;
     }
 
     @Override
-    public DynamicRegistry<Enchantment> enchantment() {
+    public @NotNull DynamicRegistry<Enchantment> enchantment() {
         return enchantment;
     }
 
     @Override
-    public DynamicRegistry<PaintingVariant> paintingVariant() {
+    public @NotNull DynamicRegistry<PaintingVariant> paintingVariant() {
         return paintingVariant;
     }
 
     @Override
-    public DynamicRegistry<JukeboxSong> jukeboxSong() {
+    public @NotNull DynamicRegistry<JukeboxSong> jukeboxSong() {
         return jukeboxSong;
     }
 
     @Override
-    public DynamicRegistry<Instrument> instrument() {
+    public @NotNull DynamicRegistry<Instrument> instrument() {
         return instrument;
     }
 
     @Override
-    public DynamicRegistry<WolfVariant> wolfVariant() {
+    public @NotNull DynamicRegistry<WolfVariant> wolfVariant() {
         return wolfVariant;
     }
 
     @Override
-    public DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
+    public @NotNull DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
         return wolfSoundVariant;
     }
 
     @Override
-    public DynamicRegistry<CatVariant> catVariant() {
+    public @NotNull DynamicRegistry<CatVariant> catVariant() {
         return catVariant;
     }
 
     @Override
-    public DynamicRegistry<ChickenVariant> chickenVariant() {
+    public @NotNull DynamicRegistry<ChickenVariant> chickenVariant() {
         return chickenVariant;
     }
 
     @Override
-    public DynamicRegistry<CowVariant> cowVariant() {
+    public @NotNull DynamicRegistry<CowVariant> cowVariant() {
         return cowVariant;
     }
 
     @Override
-    public DynamicRegistry<FrogVariant> frogVariant() {
+    public @NotNull DynamicRegistry<FrogVariant> frogVariant() {
         return frogVariant;
     }
 
     @Override
-    public DynamicRegistry<PigVariant> pigVariant() {
+    public @NotNull DynamicRegistry<PigVariant> pigVariant() {
         return pigVariant;
     }
 
     @Override
-    public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return enchantmentLevelBasedValues;
     }
 
     @Override
-    public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return enchantmentValueEffects;
     }
 
     @Override
-    public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
         return enchantmentEntityEffects;
     }
 
     @Override
-    public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return enchantmentLocationEffects;
     }
 
     @Override
-    public ConnectionManager connection() {
+    public @NotNull ConnectionManager connection() {
         return connection;
     }
 
     @Override
-    public InstanceManager instance() {
+    public @NotNull InstanceManager instance() {
         return instance;
     }
 
     @Override
-    public BlockManager block() {
+    public @NotNull BlockManager block() {
         return block;
     }
 
     @Override
-    public CommandManager command() {
+    public @NotNull CommandManager command() {
         return command;
     }
 
     @Override
-    public RecipeManager recipe() {
+    public @NotNull RecipeManager recipe() {
         return recipe;
     }
 
     @Override
-    public TeamManager team() {
+    public @NotNull TeamManager team() {
         return team;
     }
 
     @Override
-    public GlobalEventHandler eventHandler() {
+    public @NotNull GlobalEventHandler eventHandler() {
         return eventHandler;
     }
 
     @Override
-    public SchedulerManager scheduler() {
+    public @NotNull SchedulerManager scheduler() {
         return scheduler;
     }
 
     @Override
-    public BenchmarkManager benchmark() {
+    public @NotNull BenchmarkManager benchmark() {
         return benchmark;
     }
 
     @Override
-    public AdvancementManager advancement() {
+    public @NotNull AdvancementManager advancement() {
         return advancement;
     }
 
     @Override
-    public BossBarManager bossBar() {
+    public @NotNull BossBarManager bossBar() {
         return bossBar;
     }
 
     @Override
-    public DynamicRegistry<ChatType> chatType() {
+    public @NotNull DynamicRegistry<ChatType> chatType() {
         return chatType;
     }
 
     @Override
-    public DynamicRegistry<DimensionType> dimensionType() {
+    public @NotNull DynamicRegistry<DimensionType> dimensionType() {
         return dimensionType;
     }
 
     @Override
-    public DynamicRegistry<Biome> biome() {
+    public @NotNull DynamicRegistry<Biome> biome() {
         return biome;
     }
 
     @Override
-    public PacketListenerManager packetListener() {
+    public @NotNull PacketListenerManager packetListener() {
         return packetListener;
     }
 
     @Override
-    public PacketParser<ClientPacket> packetParser() {
+    public @NotNull PacketParser<ClientPacket> packetParser() {
         return packetParser;
     }
 
     @Override
-    public Server server() {
+    public @NotNull Server server() {
         return server;
     }
 
     @Override
-    public ThreadDispatcher<Chunk, Entity> dispatcher() {
+    public @NotNull ThreadDispatcher<Chunk, Entity> dispatcher() {
         return dispatcher;
     }
 
     @Override
-    public Ticker ticker() {
+    public @NotNull Ticker ticker() {
         return ticker;
     }
 
     @Override
-    public void start(SocketAddress socketAddress) {
+    public void start(@NotNull SocketAddress socketAddress) {
         if (!started.compareAndSet(false, true)) {
             throw new IllegalStateException("Server already started");
         }
 
-        LOGGER.info("Starting {} ({}) server.", MinecraftServer.getBrandName(), Git.version());
+        final String brand = MinecraftServer.getBrandName();
+        LOGGER.info("Starting {} ({}) server.", brand, Git.version());
+        switch (auth) {
+            case Auth.Offline ignored ->
+                    LOGGER.info("Running in offline mode. Beware that this is not secure and players can impersonate each other.");
+            case Auth.Online ignored -> LOGGER.info("Running in online mode with Mojang's authentication.");
+            case Auth.Velocity ignored -> LOGGER.info("Running in Velocity mode with modern IP forwarding.");
+            case Auth.Bungee bungee -> {
+                if (bungee.guard()) {
+                    LOGGER.info("Running in BungeeCord mode, using legacy IP forwarding with Guard enabled.");
+                } else {
+                    LOGGER.info("Running in BungeeCord mode without BungeeGuard. Be sure to configure your firewall to prevent direct connections.");
+                }
+            }
+        }
 
         // Init server
         try {
@@ -387,7 +410,7 @@ final class ServerProcessImpl implements ServerProcess {
         // Start server
         server.start();
 
-        LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
+        LOGGER.info("{} server started successfully.", brand);
 
         // Stop the server on SIGINT
         if (ServerFlag.SHUTDOWN_ON_SIGNAL) Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
@@ -395,16 +418,16 @@ final class ServerProcessImpl implements ServerProcess {
 
     @Override
     public void stop() {
-        if (!stopped.compareAndSet(false, true))
-            return;
-        LOGGER.info("Stopping " + MinecraftServer.getBrandName() + " server.");
+        if (!stopped.compareAndSet(false, true)) return;
+        final String brand = MinecraftServer.getBrandName();
+        LOGGER.info("Stopping {} server.", brand);
         scheduler.shutdown();
         connection.shutdown();
         server.stop();
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
         dispatcher.shutdown();
-        LOGGER.info(MinecraftServer.getBrandName() + " server stopped successfully.");
+        LOGGER.info("{} server stopped successfully.", brand);
     }
 
     @Override
@@ -413,7 +436,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public ServerSnapshot updateSnapshot(SnapshotUpdater updater) {
+    public @NotNull ServerSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         List<AtomicReference<InstanceSnapshot>> instanceRefs = new ArrayList<>();
         Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs = new Int2ObjectOpenHashMap<>();
         for (Instance instance : instance.getInstances()) {

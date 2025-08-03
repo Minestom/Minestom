@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.client.handshake;
 
-import net.minestom.server.extras.bungee.BungeeCordProxy;
+import net.minestom.server.Auth;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -25,7 +26,7 @@ public record ClientHandshakePacket(int protocolVersion, String serverAddress,
 
     private static int maxHandshakeLength() {
         // BungeeGuard limits handshake length to 2500 characters, while vanilla limits it to 255
-        return BungeeCordProxy.isEnabled() ? (BungeeCordProxy.isBungeeGuardEnabled() ? 2500 : Short.MAX_VALUE) : 255;
+        return MinecraftServer.process().auth() instanceof Auth.Bungee bungee ? (bungee.guard() ? 2500 : Short.MAX_VALUE) : 255;
     }
 
     public enum Intent {

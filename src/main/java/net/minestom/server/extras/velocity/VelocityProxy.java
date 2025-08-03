@@ -1,11 +1,12 @@
 package net.minestom.server.extras.velocity;
 
+import net.minestom.server.Auth;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
@@ -17,9 +18,13 @@ import static net.minestom.server.network.NetworkBuffer.*;
  * Support for <a href="https://velocitypowered.com/">Velocity</a> modern forwarding.
  * <p>
  * Can be enabled by simply calling {@link #enable(String)}.
+ *
+ * @deprecated Use {@link net.minestom.server.MinecraftServer#init(Auth)}
  */
+@SuppressWarnings("removal")
+@Deprecated(forRemoval = true)
 public final class VelocityProxy {
-    public static final String PLAYER_INFO_CHANNEL = "velocity:player_info";
+    public static final String PLAYER_INFO_CHANNEL = Auth.Velocity.PLAYER_INFO_CHANNEL;
     private static final int SUPPORTED_FORWARDING_VERSION = 1;
     private static final String MAC_ALGORITHM = "HmacSHA256";
 
@@ -32,12 +37,12 @@ public final class VelocityProxy {
      * @param secret the forwarding secret,
      *               be sure to do not hardcode it in your code but to retrieve it from a file or anywhere else safe
      */
-    public static void enable(String secret) {
+    public static void enable(@NotNull String secret) {
         Check.stateCondition(enabled, "Velocity modern forwarding is already enabled");
         Check.stateCondition(MojangAuth.isEnabled(), "Velocity modern forwarding should not be enabled with MojangAuth");
 
         VelocityProxy.enabled = true;
-        VelocityProxy.key = new SecretKeySpec(secret.getBytes(), MAC_ALGORITHM);
+        VelocityProxy.key = Auth.Velocity.secretKey(secret);
     }
 
     /**
@@ -49,7 +54,11 @@ public final class VelocityProxy {
         return enabled;
     }
 
-    public static boolean checkIntegrity(NetworkBuffer buffer) {
+    public static Key getKey() {
+        return key;
+    }
+
+    public static boolean checkIntegrity(@NotNull NetworkBuffer buffer) {
         final byte[] signature = new byte[32];
         for (int i = 0; i < signature.length; i++) {
             signature[i] = buffer.read(BYTE);
