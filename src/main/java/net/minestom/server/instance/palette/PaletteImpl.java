@@ -46,6 +46,7 @@ final class PaletteImpl implements Palette {
             if (hasPalette()) {
                 this.paletteToValueList = new IntArrayList();
                 this.valueToPaletteMap = new Int2IntOpenHashMap();
+                this.valueToPaletteMap.defaultReturnValue(-1);
                 this.paletteToValueList.add(0);
                 this.valueToPaletteMap.put(0, 0);
             }
@@ -338,7 +339,7 @@ final class PaletteImpl implements Palette {
                     for (int x = 0; x < maxX; x++) {
                         final int targetX = offsetX + x;
                         final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, airPaletteIndex);
-                        if (oldValue != 0) removedBlocks++;
+                        if (paletteIndexToValue(oldValue) != 0) removedBlocks++;
                     }
                 }
             }
@@ -377,7 +378,7 @@ final class PaletteImpl implements Palette {
 
                     // Update count
                     final boolean wasAir = paletteIndexToValue(oldValue) == 0;
-                    final boolean isAir = targetPaletteIndex == 0;
+                    final boolean isAir = sourceValue == 0;
                     if (wasAir != isAir) {
                         countDelta += wasAir ? 1 : -1;
                     }
@@ -425,6 +426,7 @@ final class PaletteImpl implements Palette {
 
         if (sourcePalette.valueToPaletteMap != null) {
             this.valueToPaletteMap = new Int2IntOpenHashMap(sourcePalette.valueToPaletteMap);
+            this.valueToPaletteMap.defaultReturnValue(-1);
         } else {
             this.valueToPaletteMap = null;
         }
@@ -624,6 +626,7 @@ final class PaletteImpl implements Palette {
 
         // Fill new palette <-> value objects
         final Int2IntOpenHashMap newValueToPaletteMap = new Int2IntOpenHashMap();
+        newValueToPaletteMap.defaultReturnValue(-1);
         final AtomicInteger index = new AtomicInteger();
         palette.forEach(v -> {
             final int plainIndex = index.getPlain();
@@ -679,6 +682,7 @@ final class PaletteImpl implements Palette {
     void initIndirect() {
         final int fillValue = this.count;
         this.valueToPaletteMap = new Int2IntOpenHashMap();
+        this.valueToPaletteMap.defaultReturnValue(-1);
         this.paletteToValueList = new IntArrayList();
         this.valueToPaletteMap.put(fillValue, 0);
         paletteToValueList.add(fillValue);
@@ -697,22 +701,21 @@ final class PaletteImpl implements Palette {
         if (!hasPalette()) return value;
         if (values == null) initIndirect();
 
-        return valueToPaletteMap.computeIfAbsent(value, (v) -> {
-            final int lastPaletteIndex = this.paletteToValueList.size();
-            final byte bpe = this.bitsPerEntry;
-            if (lastPaletteIndex >= maxPaletteSize(bpe)) {
-                // Palette is full, must resize
-                upsize();
-                if (!hasPalette()) return v;
-            }
-            this.paletteToValueList.add(v);
-            return lastPaletteIndex;
-        });
+        final int lastPaletteIndex = this.paletteToValueList.size();
+        final int lookup = valueToPaletteMap.putIfAbsent(value, lastPaletteIndex);
+        if (lookup != -1) return lookup;
+        if (lastPaletteIndex >= maxPaletteSize(bitsPerEntry)) {
+            // Palette is full, must resize
+            upsize();
+            if (!hasPalette()) return value;
+        }
+        this.paletteToValueList.add(value);
+        return lastPaletteIndex;
     }
 
     /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
     int valueToPalettIndexOrDefault(int value) {
-        return hasPalette() ? valueToPaletteMap.getOrDefault(value, -1) : value;
+        return hasPalette() ? valueToPaletteMap.get(value) : value;
     }
 
     @Override
