@@ -450,7 +450,7 @@ public class AnvilLoader implements IChunkLoader {
                     biomePalette.add(biomeName);
                 } else {
                     section.biomePalette().getAll((x, y, z, value) -> {
-                        int biomeIndex = (x / 4) + (y / 4) * 4 * 4 + (z / 4) * 4;
+                        int biomeIndex = x + y * 4 * 4 + z * 4;
                         final RegistryKey<Biome> biomeKey = MinecraftServer.getBiomeRegistry().getKey(value);
                         assert biomeKey != null;
                         final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
