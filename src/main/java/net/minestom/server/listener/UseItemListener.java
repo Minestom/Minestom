@@ -11,6 +11,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.BlocksAttacks;
 import net.minestom.server.item.component.Consumable;
 import net.minestom.server.item.component.Equippable;
 import net.minestom.server.item.component.InstrumentComponent;
@@ -25,6 +26,7 @@ public class UseItemListener {
         final ItemStack itemStack = player.getItemInHand(hand);
         final Material material = itemStack.material();
         final Consumable consumable = itemStack.get(DataComponents.CONSUMABLE);
+        final BlocksAttacks blocksAttacks = itemStack.get(DataComponents.BLOCKS_ATTACKS);
 
         // The following item animations and use item times come from vanilla.
         // These items do not yet use components, but hopefully they will in the future
@@ -39,7 +41,7 @@ public class UseItemListener {
             // client they can hold it forever
             useItemTime = 7200;
             useAnimation = ItemAnimation.CROSSBOW;
-        } else if (material == Material.SHIELD) {
+        } else if (blocksAttacks != null) {
             useItemTime = 72000;
             useAnimation = ItemAnimation.BLOCK;
         } else if (material == Material.TRIDENT) {
