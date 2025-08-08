@@ -11,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 public final class EventsJFR {
     public static final String SERVER_PING = "minestom.ServerPing";
     public static final String SERVER_TICK = "minestom.ServerTickTime";
+    public static final String SERVER_IMMUTABLE = "minestom.ServerImmutable";
 
     public static final String CHUNK_GENERATION = "minestom.ChunkGeneration";
     public static final String CHUNK_LOADING = "minestom.ChunkLoading";
@@ -41,6 +42,13 @@ public final class EventsJFR {
     @Category({"Minestom", "Server"})
     @Description("Time spent ticking the server once")
     public static final class ServerTick extends Event {
+    }
+
+    @Name(SERVER_IMMUTABLE)
+    @Label("Server Immutable")
+    @Category({"Minestom", "Server"})
+    @Description("Called when the server process is frozen")
+    public static final class ServerImmutable extends Event {
     }
 
     @Name(CHUNK_GENERATION)

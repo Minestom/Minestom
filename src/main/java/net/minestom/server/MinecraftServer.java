@@ -21,6 +21,7 @@ import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -66,6 +67,7 @@ public final class MinecraftServer implements MinecraftConstants {
     @Deprecated
     public static final int TICK_PER_SECOND = ServerFlag.SERVER_TICKS_PER_SECOND;
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
+    private static final boolean IMMUTABLE_SERVER_PROCESS = ServerFlag.IMMUTABLE_SERVER_PROCESS && !ServerFlag.INSIDE_TEST;
 
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
@@ -82,6 +84,7 @@ public final class MinecraftServer implements MinecraftConstants {
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
+        Check.stateCondition(unsealed && IMMUTABLE_SERVER_PROCESS, "The server process is immutable, cannot update it.");
         unsealed = true;
         serverProcess = null;
         ServerProcess process = new ServerProcessImpl();
@@ -132,6 +135,7 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public static @UnknownNullability ServerProcess process() {
+        if (IMMUTABLE_SERVER_PROCESS) return ImmutableServerHolder.INSTANCE.process();
         return serverProcess;
     }
 
@@ -354,7 +358,7 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     /**
-     * Checks to see if the server is allowed to start class loading, sealed classes.
+     * Checks to see if the server is allowed to start class loading.
      * @return true if the server is initializing, false otherwise.
      */
     @ApiStatus.Internal
@@ -377,5 +381,18 @@ public final class MinecraftServer implements MinecraftConstants {
     private static boolean hasStartedSafe() {
         // Used for anything that can be called before the server is initialized.
         return serverProcess != null && serverProcess.isAlive();
+    }
+
+    // We use a record here as it provides better inlining.
+    private record ImmutableServerHolder(@NotNull ServerProcess process) {
+        static final ImmutableServerHolder INSTANCE = new ImmutableServerHolder(serverProcess);
+
+        private ImmutableServerHolder {
+            Check.notNull(process, "The server process is not initialized, did you forget to call MinecraftServer#init?.");
+            Check.stateCondition(!ServerFlag.IMMUTABLE_SERVER_PROCESS, "The server process is mutable, this should not be called.");
+            Check.stateCondition(!isUnsealed(), "The server is not unsealed, cannot create an ImmutableServerHolder.");
+
+            new EventsJFR.ServerImmutable().commit();
+        }
     }
 }
