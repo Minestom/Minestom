@@ -3,10 +3,11 @@ package net.minestom.server.instance.block;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -15,7 +16,11 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 record BlockImpl(@NotNull RegistryData.BlockEntry registry,
                  long propertiesArray,
@@ -44,10 +49,10 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         ObjectArray<Block> blockStateMap = ObjectArray.singleThread();
         ObjectArray<PropertyType[]> propertiesType = ObjectArray.singleThread();
         ObjectArray<Long2ObjectArrayMap<BlockImpl>> possibleStates = ObjectArray.singleThread();
-        HashMap<Object, Object> internCache = new HashMap<>();
+        Map<Object, Object> internCache = new HashMap<>();
 
         REGISTRY = RegistryData.createStaticRegistry(
-                Key.key("minecraft:block"),
+                BuiltinRegistries.BLOCK,
                 (namespace, properties) -> {
                     final int blockId = properties.getInt("id");
                     final RegistryData.Properties stateObject = properties.section("states");
@@ -113,8 +118,8 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         POSSIBLE_STATES = possibleStates.toList();
     }
 
-    static @UnknownNullability Block get(@NotNull String key) {
-        return REGISTRY.get(Key.key(key));
+    static @UnknownNullability Block get(@NotNull RegistryKey<Block> key) {
+        return REGISTRY.get(key);
     }
 
     static Block getState(int stateId) {

@@ -21,6 +21,7 @@ import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -28,6 +29,7 @@ import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.DetourRegistry;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
@@ -65,9 +67,11 @@ public final class MinecraftServer implements MinecraftConstants {
     @Deprecated
     public static final int TICK_PER_SECOND = ServerFlag.SERVER_TICKS_PER_SECOND;
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
+    private static final boolean IMMUTABLE_SERVER_PROCESS = ServerFlag.IMMUTABLE_SERVER_PROCESS && !ServerFlag.INSIDE_TEST;
 
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
+    private static volatile boolean unsealed = false; // This could be moved into ServerProcess as a sentinel. Requires casting.
 
     private static int compressionThreshold = 256;
     private static String brandName = "Minestom";
@@ -80,8 +84,12 @@ public final class MinecraftServer implements MinecraftConstants {
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
+        Check.stateCondition(unsealed && IMMUTABLE_SERVER_PROCESS, "The server process is immutable, cannot update it.");
+        unsealed = true;
+        serverProcess = null;
         ServerProcess process = new ServerProcessImpl();
         serverProcess = process;
+        Check.stateCondition(DetourRegistry.detourRegistry().hasDetours(), "There are still detours registered, this is not allowed after the server has been initialized.");
         return process;
     }
 
@@ -103,7 +111,7 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
-        PacketSendingUtils.broadcastPlayPacket(PluginMessagePacket.brandPacket(brandName));
+        if (hasStartedSafe()) PacketSendingUtils.broadcastPlayPacket(PluginMessagePacket.brandPacket(brandName));
     }
 
     /**
@@ -123,10 +131,11 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
-        PacketSendingUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
+        if (hasStartedSafe()) PacketSendingUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
     public static @UnknownNullability ServerProcess process() {
+        if (IMMUTABLE_SERVER_PROCESS) return ImmutableServerHolder.INSTANCE.process();
         return serverProcess;
     }
 
@@ -237,7 +246,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * @throws IllegalStateException if this is called after the server started
      */
     public static void setCompressionThreshold(int compressionThreshold) {
-        Check.stateCondition(serverProcess != null && serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
+        Check.stateCondition(hasStartedSafe(), "The compression threshold cannot be changed after the server has been started.");
         MinecraftServer.compressionThreshold = compressionThreshold;
     }
 
@@ -336,5 +345,54 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void stopCleanly() {
         serverProcess.stop();
+    }
+
+    /**
+     * Gets the detour registry, used to register detours for built-in registries.
+     * A shortcut to {@link DetourRegistry#detourRegistry()}
+     *
+     * @return the detour registry
+     */
+    public static @NotNull DetourRegistry detourRegistry() {
+        return DetourRegistry.detourRegistry();
+    }
+
+    /**
+     * Checks to see if the server is allowed to start class loading.
+     * @return true if the server is initializing, false otherwise.
+     */
+    @ApiStatus.Internal
+    public static boolean isInitializing() {
+        return serverProcess == null && isUnsealed();
+    }
+
+    /**
+     * Checks if the server is unsealed, meaning that it is allowed to start class loading.
+     * <p>
+     *     This is true after {@link #init()} has been called, and false before that.
+     *     This is used to unseal static variables that are not allowed to be initialized before the server is unsealed.
+     * </p>
+     * @return true if the server is unsealed, false otherwise.
+     */
+    public static boolean isUnsealed() {
+        return unsealed;
+    }
+
+    private static boolean hasStartedSafe() {
+        // Used for anything that can be called before the server is initialized.
+        return serverProcess != null && serverProcess.isAlive();
+    }
+
+    // We use a record here as it provides better inlining.
+    private record ImmutableServerHolder(@NotNull ServerProcess process) {
+        static final ImmutableServerHolder INSTANCE = new ImmutableServerHolder(serverProcess);
+
+        private ImmutableServerHolder {
+            Check.notNull(process, "The server process is not initialized, did you forget to call MinecraftServer#init?.");
+            Check.stateCondition(!ServerFlag.IMMUTABLE_SERVER_PROCESS, "The server process is mutable, this should not be called.");
+            Check.stateCondition(!isUnsealed(), "The server is not unsealed, cannot create an ImmutableServerHolder.");
+
+            new EventsJFR.ServerImmutable().commit();
+        }
     }
 }

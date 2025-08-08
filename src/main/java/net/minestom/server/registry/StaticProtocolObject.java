@@ -1,11 +1,13 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface StaticProtocolObject<T> extends RegistryKey<T> {
+@ApiStatus.Internal
+public non-sealed interface StaticProtocolObject<T> extends RegistryKey<T> {
 
     @Contract(pure = true)
     default @NotNull String name() {

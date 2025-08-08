@@ -6,7 +6,11 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.BuiltinRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +61,7 @@ public sealed interface PaintingVariant extends Holder.Direct<PaintingVariant>, 
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<PaintingVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:painting_variant"), REGISTRY_CODEC, RegistryData.Resource.PAINTING_VARIANTS);
+        return DynamicRegistry.load(BuiltinRegistries.PAINTING_VARIANT, REGISTRY_CODEC);
     }
 
     @NotNull Key assetId();
