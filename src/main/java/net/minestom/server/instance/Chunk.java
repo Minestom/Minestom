@@ -70,6 +70,8 @@ public sealed interface Chunk extends Viewable, Tickable, Taggable, Snapshotable
         default void generate() {
             generate(true);
         }
+
+        void sections(List<Section> sections);
     }
 
     List<Section> getSections();

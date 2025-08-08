@@ -58,6 +58,7 @@ final class ChunkImpl implements Chunk {
 
     static final class Builder implements Chunk.Builder {
         private boolean lightEngine, readOnly, generate = true;
+        private @Nullable List<Section> sections;
 
         @Override
         public void lightEngine(boolean lightEngine) {
@@ -74,13 +75,18 @@ final class ChunkImpl implements Chunk {
             this.generate = generate;
         }
 
+        @Override
+        public void sections(List<Section> sections) {
+            this.sections = sections;
+        }
+
         ChunkImpl build(Instance instance, int chunkX, int chunkZ) {
             Viewable viewable = instanceChunkView(instance, chunkX, chunkZ);
             long flags = NO_FLAGS;
             if (lightEngine) flags |= LIGHT_ENGINE_FLAG;
             if (readOnly) flags |= READONLY_FLAG;
             if (generate) flags |= GENERATE_FLAG;
-            return new ChunkImpl(instance, chunkX, chunkZ, flags, viewable);
+            return new ChunkImpl(instance, chunkX, chunkZ, flags, viewable, sections);
         }
     }
 
@@ -116,7 +122,7 @@ final class ChunkImpl implements Chunk {
     // Data
     private final TagHandler tagHandler = TagHandler.newHandler();
 
-    ChunkImpl(Instance instance, int chunkX, int chunkZ, long flags, Viewable viewable, List<Section> sections) {
+    ChunkImpl(Instance instance, int chunkX, int chunkZ, long flags, Viewable viewable, @Nullable List<Section> sections) {
         this.instance = instance;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
@@ -126,28 +132,17 @@ final class ChunkImpl implements Chunk {
         this.maxSection = (dimension.minY() + dimension.height()) / SECTION_SIZE;
         this.flags = flags;
         this.viewable = viewable;
-        if (sections.size() != maxSection - minSection) {
-            throw new IllegalArgumentException("Invalid sections size: " + sections.size() + ", expected: " + (maxSection - minSection));
+        final int sectionCount = maxSection - minSection;
+        if (sections != null) {
+            if (sections.size() != sectionCount) {
+                throw new IllegalArgumentException("Invalid sections size: " + sections.size() + ", expected: " + sectionCount);
+            }
+            this.sections = List.copyOf(sections);
+        } else {
+            Section[] sectionsTemp = new Section[sectionCount];
+            Arrays.setAll(sectionsTemp, value -> Section.section());
+            this.sections = List.of(sectionsTemp);
         }
-        this.sections = List.copyOf(sections);
-
-        motionBlocking = Heightmap.motionBlocking(this);
-        worldSurface = Heightmap.worldSurface(this);
-    }
-
-    ChunkImpl(Instance instance, int chunkX, int chunkZ, long flags, Viewable viewable) {
-        this.instance = instance;
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
-        final DimensionType dimension = instance.getCachedDimensionType();
-        this.dimension = dimension;
-        this.minSection = dimension.minY() / SECTION_SIZE;
-        this.maxSection = (dimension.minY() + dimension.height()) / SECTION_SIZE;
-        this.flags = flags;
-        this.viewable = viewable;
-        var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> Section.section());
-        this.sections = List.of(sectionsTemp);
 
         motionBlocking = Heightmap.motionBlocking(this);
         worldSurface = Heightmap.worldSurface(this);
