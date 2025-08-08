@@ -26,8 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
 
-@ApiStatus.NonExtendable
-public interface ServerProcess extends Registries, Snapshotable {
+public sealed interface ServerProcess extends Registries, Snapshotable permits ServerProcessImpl {
     /**
      * Handles incoming connections/players.
      */
