@@ -55,20 +55,25 @@ public record ChunkData(@NotNull Map<Heightmap.Type, long[]> heightmaps, byte @N
 
         @Override
         public ChunkData read(@NotNull NetworkBuffer buffer) {
-            return new ChunkData(buffer.read(HEIGHTMAPS), buffer.read(BYTE_ARRAY),
-                    readBlockEntities(buffer));
+            return new ChunkData(buffer.read(HEIGHTMAPS), buffer.read(BYTE_ARRAY), readBlockEntities(buffer));
         }
     };
 
     private static Map<Integer, Block> readBlockEntities(@NotNull NetworkBuffer reader) {
-        final Map<Integer, Block> blockEntities = new HashMap<>();
         final int size = reader.read(VAR_INT);
+        final Map<Integer, Block> blockEntities = HashMap.newHashMap(size);
         for (int i = 0; i < size; i++) {
             final byte xz = reader.read(BYTE);
             final short y = reader.read(SHORT);
             final int blockEntityId = reader.read(VAR_INT);
             final CompoundBinaryTag nbt = reader.read(NBT_COMPOUND);
-            // TODO create block object
+            final int index = CoordConversion.chunkBlockIndex(xz >> 4, y, xz & 15);
+            // Find the block entity
+            for (Block block : blockEntities.values()) {
+                if (block.registry().blockEntityId() != blockEntityId) continue;
+                blockEntities.put(index, block.withNbt(nbt));
+                break;
+            }
         }
         return blockEntities;
     }
