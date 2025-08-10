@@ -82,6 +82,7 @@ tasks.register<Test>("testWithAgent") {
 {
   "rules": [
     {"excludeClasses": "org.junit.**"},
+    {"excludeClasses": "org.opentest4j.**"},
     {"excludeClasses": "org.gradle.**"}
   ]
 }""")
