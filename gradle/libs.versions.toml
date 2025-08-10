@@ -85,4 +85,3 @@ jmh-plugin = { id = "me.champeau.jmh", version.ref = "jmh-plugin" }
 jcstress-plugin = { id = "io.github.reyerizo.gradle.jcstress", version.ref = "jcstress-plugin" }
 nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
 nmcp-aggregation = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }
-graalvm-native = { id = "org.graalvm.buildtools.native", version.ref = "graalvm-native" }
