@@ -1,89 +1,52 @@
 [
 {
-  "name":"com.github.benmanes.caffeine.cache.BBHeader$ReadAndWriteCounterRef",
-  "fields":[{"name":"writeCounter"}]
+  "name":"[Ljava.lang.Object;"
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.BBHeader$ReadCounterRef",
-  "fields":[{"name":"readCounter"}]
+  "name":"java.io.Serializable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.BLCHeader$DrainStatusRef",
-  "fields":[{"name":"drainStatus"}]
+  "name":"java.lang.Class",
+  "methods":[{"name":"getRecordComponents","parameterTypes":[] }, {"name":"isRecord","parameterTypes":[] }]
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.BaseMpscLinkedArrayQueueColdProducerFields",
-  "fields":[{"name":"producerLimit"}]
+  "name":"java.lang.Comparable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.BaseMpscLinkedArrayQueueConsumerFields",
-  "fields":[{"name":"consumerIndex"}]
+  "name":"java.lang.Enum",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.BaseMpscLinkedArrayQueueProducerFields",
-  "fields":[{"name":"producerIndex"}]
+  "name":"java.lang.Record",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.BoundedLocalCache",
-  "fields":[{"name":"refreshes"}]
+  "name":"java.lang.Thread",
+  "fields":[{"name":"threadLocalRandomProbe"}]
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.FS",
-  "fields":[
-    {"name":"key"}, 
-    {"name":"value"}
-  ],
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "name":"java.lang.constant.Constable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.FW",
-  "fields":[{"name":"value"}],
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "name":"java.lang.invoke.MethodHandle"
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.PS",
-  "fields":[
-    {"name":"key"}, 
-    {"name":"value"}
-  ]
+  "name":"java.lang.reflect.RecordComponent",
+  "methods":[{"name":"getName","parameterTypes":[] }, {"name":"getType","parameterTypes":[] }]
 },
 {
-  "name":"com.github.benmanes.caffeine.cache.PSW",
-  "fields":[{"name":"writeTime"}],
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.benmanes.caffeine.cache.PW",
-  "fields":[{"name":"value"}]
-},
-{
-  "name":"com.github.benmanes.caffeine.cache.PWW",
-  "fields":[{"name":"writeTime"}],
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.benmanes.caffeine.cache.SIW",
-  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.AsyncCacheLoader","boolean"] }]
-},
-{
-  "name":"com.github.benmanes.caffeine.cache.SSW",
-  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.AsyncCacheLoader","boolean"] }]
-},
-{
-  "name":"com.github.benmanes.caffeine.cache.StripedBuffer",
-  "fields":[{"name":"tableBusy"}]
-},
-{
-  "name":"com.github.benmanes.caffeine.cache.WI",
-  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.AsyncCacheLoader","boolean"] }]
-},
-{
-  "name":"com.github.benmanes.caffeine.cache.WS",
-  "methods":[{"name":"<init>","parameterTypes":["com.github.benmanes.caffeine.cache.Caffeine","com.github.benmanes.caffeine.cache.AsyncCacheLoader","boolean"] }]
-},
-{
-  "name":"java.lang.ProcessHandle",
-  "methods":[{"name":"current","parameterTypes":[] }]
+  "name":"java.nio.Buffer",
+  "fields":[{"name":"address"}, {"name":"capacity"}]
 },
 {
   "name":"java.security.SecureRandomParameters"
@@ -92,31 +55,2701 @@
   "name":"java.sql.Date"
 },
 {
-  "name":"kotlin.jvm.internal.DefaultConstructorMarker"
+  "name":"java.util.HashSet"
 },
 {
-  "name":"kotlin.reflect.jvm.internal.ReflectionFactoryImpl",
+  "name":"java.util.LinkedHashSet"
+},
+{
+  "name":"java.util.concurrent.ArrayBlockingQueue"
+},
+{
+  "name":"java.util.concurrent.ForkJoinTask",
+  "fields":[{"name":"aux"}, {"name":"status"}]
+},
+{
+  "name":"java.util.concurrent.atomic.AtomicBoolean",
+  "fields":[{"name":"value"}]
+},
+{
+  "name":"java.util.concurrent.atomic.AtomicReference",
+  "fields":[{"name":"value"}]
+},
+{
+  "name":"java.util.concurrent.atomic.Striped64",
+  "fields":[{"name":"base"}, {"name":"cellsBusy"}]
+},
+{
+  "name":"java.util.concurrent.locks.AbstractOwnableSynchronizer"
+},
+{
+  "name":"java.util.concurrent.locks.AbstractQueuedSynchronizer"
+},
+{
+  "name":"java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject"
+},
+{
+  "name":"java.util.concurrent.locks.ReentrantLock"
+},
+{
+  "name":"java.util.concurrent.locks.ReentrantLock$NonfairSync"
+},
+{
+  "name":"java.util.concurrent.locks.ReentrantLock$Sync"
+},
+{
+  "name":"java.util.function.Consumer",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"jdk.internal.misc.Unsafe"
+},
+{
+  "name":"net.kyori.adventure.audience.Audience",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.kyori.adventure.identity.Identified",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.kyori.adventure.pointer.Pointered",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.kyori.adventure.sound.Sound$Emitter",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.kyori.adventure.text.event.HoverEventSource",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.InsideTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"inside","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.ServerProcessTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"init","parameterTypes":[] }, {"name":"tick","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.Tickable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.Viewable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.advancements.AdvancementIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"addAndRemoveViewer","parameterTypes":["net.minestom.testing.Env"] }, {"name":"removeViewerOnDisconnect","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.adventure.nbt.TestNbtComponentSerializer",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testReadStringChildren","parameterTypes":[] }, {"name":"testWriteRead","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.adventure.provider.TranslationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testUnregisteredTranslation","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.codec.CodecAssertions",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.codec.ComponentCodecsTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"readCustomClickEvent","parameterTypes":[] }, {"name":"readExpandFromStringInList","parameterTypes":[] }, {"name":"writeCustomClickEvent","parameterTypes":[] }, {"name":"writeFlattenToInList","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"emptyObject","parameterTypes":[] }, {"name":"inlineField","parameterTypes":[] }, {"name":"inlineFieldEmpty","parameterTypes":[] }, {"name":"singleField","parameterTypes":[] }, {"name":"singleFieldMissing","parameterTypes":[] }, {"name":"singleFieldOptionalIncorrectTypeButNotMissing","parameterTypes":[] }, {"name":"singleFieldOptionalMissing","parameterTypes":[] }, {"name":"singleFieldOptionalMissingDefault","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$1Empty"
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$1InnerObject"
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$1TheObject"
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$2InnerObject"
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$2TheObject"
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$3TheObject"
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$4TheObject"
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$5TheObject"
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$6TheObject"
+},
+{
+  "name":"net.minestom.server.codec.StructCodecTest$7TheObject"
+},
+{
+  "name":"net.minestom.server.collision.EntityBlockPhysicsIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"entityBlockPositionTestFarAbove","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityBlockPositionTestSlightlyAbove","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCacheTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckBlockDirections","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckBlockMiss","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckCollision","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckCollisionDownCache","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckCorner","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDiagonal","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDiagonalCarpetedFenceX","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDiagonalCarpetedFenceXZ","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDiagonalCarpetedFenceZ","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDirectSlide","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDoorSubBlockDown","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDoorSubBlockEast","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDoorSubBlockNorth","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDoorSubBlockSouth","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDoorSubBlockSouthRepeat","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDoorSubBlockUp","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckDoorSubBlockWest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckEdgeClip","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckEdgeClipSmall","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckEnclosedHit","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckEnclosedHitSubBlock","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckEnclosedMiss","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckEntityHit","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckFallFence","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckFallHitCarpet","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckFallHitFence","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckFallHitFenceLongMove","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckFenceAboveHead","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckGravityCached","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckHorizontalCarpetedFence","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckHorizontalFence","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckLargeVelocityHit","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckLargeVelocityHitNoMove","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckLargeVelocityMiss","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckMultipleBlocksHitFirst","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckMultipleBlocksPassFirst","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckNoCollision","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckNoMove","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckNoMoveCache","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckNoMoveLargeVelocityHit","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckNotOnGround","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckNotOnGroundHitUp","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckOnGround","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckShallowAngle","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckShortDiagonal","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckSlab","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckSlide","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckStairTop","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckStairTopSmall","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsRepeatedCollision","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC0","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC0E","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC1","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC1E","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC2","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC2E","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC3","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC4","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC5","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC6","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveC7","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsSmallMoveCollide","parameterTypes":["net.minestom.testing.Env"] }, {"name":"tmp","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.collision.EntityBlockTouchTickIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"entityPhysicsCheckTouchTick","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckTouchTickFarNegative","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckTouchTickFarX","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckTouchTickFarZ","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.collision.EntityEntityCollisionIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"entityMultipleCollisionTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entitySingleCollisionTest","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.collision.EntityProjectileCollisionIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"blockShootAndBlockRemoval","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entitySelfShoot","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityShoot","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.collision.PlacementCollisionIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"belowPlayer","parameterTypes":["net.minestom.testing.Env"] }, {"name":"empty","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityBlock","parameterTypes":["net.minestom.testing.Env"] }, {"name":"slab","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.collision.Shape",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.collision.TestShape",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isFullFace","parameterTypes":["net.minestom.server.instance.block.Block","net.minestom.server.instance.block.BlockFace","boolean"] }, {"name":"isFullFaceCases","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.ArgumentParserTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testArgumentParser","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.ArgumentTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testCallback","parameterTypes":[] }, {"name":"testDefaultValue","parameterTypes":[] }, {"name":"testParseSelf","parameterTypes":[] }, {"name":"testSuggestionCallback","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.ArgumentTypeTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testArgumentBlockState","parameterTypes":[] }, {"name":"testArgumentBoolean","parameterTypes":[] }, {"name":"testArgumentColor","parameterTypes":[] }, {"name":"testArgumentComponent","parameterTypes":[] }, {"name":"testArgumentDouble","parameterTypes":[] }, {"name":"testArgumentEntity","parameterTypes":[] }, {"name":"testArgumentEntityType","parameterTypes":[] }, {"name":"testArgumentEnum","parameterTypes":[] }, {"name":"testArgumentFloat","parameterTypes":[] }, {"name":"testArgumentFloatRange","parameterTypes":[] }, {"name":"testArgumentGroup","parameterTypes":[] }, {"name":"testArgumentIntRange","parameterTypes":[] }, {"name":"testArgumentInteger","parameterTypes":[] }, {"name":"testArgumentItemStack","parameterTypes":[] }, {"name":"testArgumentLiteral","parameterTypes":[] }, {"name":"testArgumentLong","parameterTypes":[] }, {"name":"testArgumentLoop","parameterTypes":[] }, {"name":"testArgumentNbtCompoundTag","parameterTypes":[] }, {"name":"testArgumentNbtTag","parameterTypes":[] }, {"name":"testArgumentParticle","parameterTypes":[] }, {"name":"testArgumentRelativeBlockPosition","parameterTypes":[] }, {"name":"testArgumentRelativeVec2","parameterTypes":[] }, {"name":"testArgumentRelativeVec3","parameterTypes":[] }, {"name":"testArgumentResource","parameterTypes":[] }, {"name":"testArgumentResourceLocation","parameterTypes":[] }, {"name":"testArgumentResourceOrTag","parameterTypes":[] }, {"name":"testArgumentString","parameterTypes":[] }, {"name":"testArgumentStringArray","parameterTypes":[] }, {"name":"testArgumentTime","parameterTypes":[] }, {"name":"testArgumentTransformWithSender","parameterTypes":[] }, {"name":"testArgumentUUID","parameterTypes":[] }, {"name":"testArgumentWord","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.ArgumentTypeTest$1ExampleEnum"
+},
+{
+  "name":"net.minestom.server.command.CommandConditionTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"mainCondition","parameterTypes":[] }, {"name":"subCondition","parameterTypes":[] }, {"name":"subConditionOverride","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.CommandConditionTest$Sender"
+},
+{
+  "name":"net.minestom.server.command.CommandManagerTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testCommandRegistration","parameterTypes":[] }, {"name":"testSharedArgumentSyntaxABFirst","parameterTypes":[] }, {"name":"testSharedArgumentSyntaxAFirst","parameterTypes":[] }, {"name":"testUnknownCommandCallback","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.CommandPacketFilteringTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"singleCommandConditionalArgGroupFalse","parameterTypes":[] }, {"name":"singleCommandConditionalArgGroupFalse2","parameterTypes":[] }, {"name":"singleCommandConditionalArgGroupTrue","parameterTypes":[] }, {"name":"singleCommandConditionalArgGroupTrue2","parameterTypes":[] }, {"name":"singleCommandConditionalArgLoopFalse","parameterTypes":[] }, {"name":"singleCommandConditionalArgLoopTrue","parameterTypes":[] }, {"name":"singleCommandFilteredFalse","parameterTypes":[] }, {"name":"singleCommandFilteredTrue","parameterTypes":[] }, {"name":"singleCommandFilteredTrueWithFilteredSubcommandFalse","parameterTypes":[] }, {"name":"singleCommandFilteredTrueWithFilteredSubcommandTrue","parameterTypes":[] }, {"name":"singleCommandFilteredTrueWithFilteredSubcommandTrueWithFilteredSyntaxBoth","parameterTypes":[] }, {"name":"singleCommandFilteredTrueWithFilteredSubcommandTrueWithFilteredSyntaxFalse","parameterTypes":[] }, {"name":"singleCommandUnconditionalArgGroup","parameterTypes":[] }, {"name":"singleCommandUnconditionalArgGroup2","parameterTypes":[] }, {"name":"singleCommandUnconditionalArgLoop","parameterTypes":[] }, {"name":"singleCommandUnfiltered","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.CommandPacketTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"cmdArgShortcut","parameterTypes":[] }, {"name":"cmdArgShortcutWithPartialArg","parameterTypes":[] }, {"name":"commandAliasWithArg","parameterTypes":[] }, {"name":"commandAliasWithoutArg","parameterTypes":[] }, {"name":"executeLike","parameterTypes":[] }, {"name":"singleCommandCommandAfterEnum","parameterTypes":[] }, {"name":"singleCommandRestrictedWord","parameterTypes":[] }, {"name":"singleCommandTwoEnum","parameterTypes":[] }, {"name":"singleCommandTwoGroupOfIntInt","parameterTypes":[] }, {"name":"singleCommandWithOneSyntax","parameterTypes":[] }, {"name":"singleCommandWord","parameterTypes":[] }, {"name":"twoCommandIntEnumInt","parameterTypes":[] }, {"name":"twoEnumAndOneLiteralChild","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.CommandPacketTest$1Dimension"
+},
+{
+  "name":"net.minestom.server.command.CommandPacketTest$A",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.command.CommandPacketTest$B",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.command.CommandPacketTest$C",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.command.CommandParseTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"aliasWithArgs","parameterTypes":[] }, {"name":"aliasWithoutArgs","parameterTypes":[] }, {"name":"emptyCommand","parameterTypes":[] }, {"name":"singleCommandOptionalArgs","parameterTypes":[] }, {"name":"singleCommandSingleEnumArg","parameterTypes":[] }, {"name":"singleCommandWithMultipleSyntax","parameterTypes":[] }, {"name":"singleParameterlessCommand","parameterTypes":[] }, {"name":"twoParameterlessCommand","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.CommandParseTest$1A"
+},
+{
+  "name":"net.minestom.server.command.CommandSender",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.command.CommandSenderTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testMessageSending","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.CommandSenderTest$SenderTest"
+},
+{
+  "name":"net.minestom.server.command.CommandSuggestionIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"suggestion","parameterTypes":["net.minestom.testing.Env"] }, {"name":"suggestionWithDefaults","parameterTypes":["net.minestom.testing.Env"] }, {"name":"suggestionWithSubcommand","parameterTypes":["net.minestom.testing.Env"] }, {"name":"suggestionWithTwoLiterals","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.command.CommandSyntaxMultiTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"argPriority","parameterTypes":[] }, {"name":"integerFloat","parameterTypes":[] }, {"name":"similarArgs","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.CommandSyntaxMultiTest$ExpectedExecution",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.command.CommandSyntaxSingleTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"singleGroup","parameterTypes":[] }, {"name":"singleInteger","parameterTypes":[] }, {"name":"singleIntegerInteger","parameterTypes":[] }, {"name":"singleLoop","parameterTypes":[] }, {"name":"singleLoopDoubleGroup","parameterTypes":[] }, {"name":"singleLoopGroup","parameterTypes":[] }, {"name":"singleString","parameterTypes":[] }, {"name":"singleStringString","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.CommandSyntaxSingleTest$ExpectedExecution",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.command.CommandTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testGlobalListener","parameterTypes":[] }, {"name":"testNames","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.CommandTestUtils",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.command.CommandTestUtils$NodeStructure",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.command.CommandTestUtils$NodeStructure$TestNode",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.command.GraphConversionExecutorTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"commandConditionFalse","parameterTypes":[] }, {"name":"defaultCondition","parameterTypes":[] }, {"name":"emptySyntaxCondition","parameterTypes":[] }, {"name":"syntaxConditionFalse","parameterTypes":[] }, {"name":"syntaxConditionTrue","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.GraphConversionTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"alias","parameterTypes":[] }, {"name":"aliases","parameterTypes":[] }, {"name":"doubleSyntax","parameterTypes":[] }, {"name":"doubleSyntaxMerge","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"literalsPath","parameterTypes":[] }, {"name":"singleLiteral","parameterTypes":[] }, {"name":"subcommand","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.GraphConversionTest$1A"
+},
+{
+  "name":"net.minestom.server.command.GraphMergeTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"commands","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"literals","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.GraphTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"immutableNextBuilder","parameterTypes":[] }, {"name":"immutableNextCommand","parameterTypes":[] }, {"name":"immutableNextCommands","parameterTypes":[] }, {"name":"next","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.command.SubcommandTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testSubCommandConditions","parameterTypes":[] }, {"name":"testSubCommands","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.component.DataComponent$Holder",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.component.DataComponentMapTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testBasicGet","parameterTypes":[] }, {"name":"testBuilder","parameterTypes":[] }, {"name":"testDiffCompleteDifference","parameterTypes":[] }, {"name":"testDiffEmpty","parameterTypes":[] }, {"name":"testDiffFlatten","parameterTypes":[] }, {"name":"testPatchedGet","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.coordinate.AreaTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"boundCuboid","parameterTypes":[] }, {"name":"boundCuboidUnordered","parameterTypes":[] }, {"name":"boundLine","parameterTypes":[] }, {"name":"boundLineDiagonal","parameterTypes":[] }, {"name":"boundLineReversed","parameterTypes":[] }, {"name":"boundSingle","parameterTypes":[] }, {"name":"boundSphere","parameterTypes":[] }, {"name":"boundSphereOffset","parameterTypes":[] }, {"name":"boundSphereZeroRadius","parameterTypes":[] }, {"name":"cubeArea","parameterTypes":[] }, {"name":"cuboidArea","parameterTypes":[] }, {"name":"cuboidIteration","parameterTypes":[] }, {"name":"cuboidIterationUnorderedEndpoints","parameterTypes":[] }, {"name":"cuboidIteratorLargeArea","parameterTypes":[] }, {"name":"cuboidSingle","parameterTypes":[] }, {"name":"iteratorAndSplitConsistency","parameterTypes":[] }, {"name":"lineArea","parameterTypes":[] }, {"name":"lineAreaReverse","parameterTypes":[] }, {"name":"lineIteratorEdgeCases","parameterTypes":[] }, {"name":"offsetCuboidIteration","parameterTypes":[] }, {"name":"sectionArea","parameterTypes":[] }, {"name":"singleAreaIteration","parameterTypes":[] }, {"name":"sphereArea","parameterTypes":[] }, {"name":"sphereIterationRadius1","parameterTypes":[] }, {"name":"sphereIteratorVariousRadii","parameterTypes":[] }, {"name":"splitCuboidFullSectionOptimization","parameterTypes":[] }, {"name":"splitCuboidMultiSectionsX","parameterTypes":[] }, {"name":"splitCuboidPartialSections","parameterTypes":[] }, {"name":"splitFullGridSections","parameterTypes":[] }, {"name":"splitLineCrossSection","parameterTypes":[] }, {"name":"splitLineSingleSection","parameterTypes":[] }, {"name":"splitMultiSectionX","parameterTypes":[] }, {"name":"splitNegativeCoordinates","parameterTypes":[] }, {"name":"splitOnSingle","parameterTypes":[] }, {"name":"splitSectionAlignment","parameterTypes":[] }, {"name":"splitSectionArea","parameterTypes":[] }, {"name":"splitSingleInDifferentSections","parameterTypes":[] }, {"name":"splitSingleSection","parameterTypes":[] }, {"name":"splitSphere","parameterTypes":[] }, {"name":"splitSphereFullAndPartialSections","parameterTypes":[] }, {"name":"splitSphereZeroRadius","parameterTypes":[] }, {"name":"splitTwoFullSectionsX","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.coordinate.CoordinateHashTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testhashBlockCoordAvalanche","parameterTypes":[] }, {"name":"testhashBlockCoordBasic","parameterTypes":[] }, {"name":"testhashBlockCoordBoundaries","parameterTypes":["int"] }, {"name":"testhashBlockCoordCollisions","parameterTypes":[] }, {"name":"testhashBlockCoordDistribution","parameterTypes":[] }, {"name":"testhashBlockCoordEdgeCases","parameterTypes":[] }, {"name":"testhashBlockCoordOrderIndependence","parameterTypes":[] }, {"name":"testhashBlockCoordRandomized","parameterTypes":[] }, {"name":"testhashBlockCoordSensitivity","parameterTypes":[] }, {"name":"testhashGlobalCoordAvalanche","parameterTypes":[] }, {"name":"testhashGlobalCoordBasic","parameterTypes":[] }, {"name":"testhashGlobalCoordCollisions","parameterTypes":[] }, {"name":"testhashGlobalCoordEdgeCases","parameterTypes":[] }, {"name":"testhashGlobalCoordOrderIndependence","parameterTypes":[] }, {"name":"testhashGlobalCoordPrecision","parameterTypes":["double","double","double"] }, {"name":"testhashGlobalCoordRandomized","parameterTypes":[] }, {"name":"testhashGlobalCoordSensitivity","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.coordinate.CoordinateTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"blockIndex","parameterTypes":[] }, {"name":"blockIndexDuplicate","parameterTypes":[] }, {"name":"blockIndexZero","parameterTypes":[] }, {"name":"chunkCoordinate","parameterTypes":[] }, {"name":"chunkCount","parameterTypes":[] }, {"name":"chunkIndex","parameterTypes":[] }, {"name":"toSectionRelativeCoordinate","parameterTypes":[] }, {"name":"vecAddition","parameterTypes":[] }, {"name":"vecNanCompare","parameterTypes":[] }, {"name":"vecNegCompare","parameterTypes":[] }, {"name":"vecSameEpsilon","parameterTypes":[] }, {"name":"vecWith","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.coordinate.PosViewDirectionTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"facingTest","parameterTypes":[] }, {"name":"withLookAtPos","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.coordinate.Vec",
+  "allRecordComponents":true,
+  "methods":[{"name":"<init>","parameterTypes":["double","double","double"] }, {"name":"x","parameterTypes":[] }, {"name":"y","parameterTypes":[] }, {"name":"z","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.dialog.DialogInputTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"validateKey_keyWithMixedValidCharacters_doesNotThrow","parameterTypes":[] }, {"name":"validateKey_keyWithNumbersOnly_doesNotThrow","parameterTypes":[] }, {"name":"validateKey_keyWithSpaces_throwsException","parameterTypes":[] }, {"name":"validateKey_keyWithSpecialCharacters_throwsException","parameterTypes":[] }, {"name":"validateKey_keyWithUnderscoresOnly_doesNotThrow","parameterTypes":[] }, {"name":"validateKey_validKey_doesNotThrow","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.entity.AreaEffectCloudTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"createWithBlockMarkerParticle","parameterTypes":[] }, {"name":"createWithBlockParticle","parameterTypes":[] }, {"name":"createWithDustParticle","parameterTypes":[] }, {"name":"createWithDustTransition","parameterTypes":[] }, {"name":"createWithItemParticle","parameterTypes":[] }, {"name":"createWithSculkChargeParticle","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.entity.Entity",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.entity.EntityAttributeTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testDirectlyAddAttributes","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testEntityUpdatesAttributes","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testPlayerUpdatesAttributes","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityBoundingBoxIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"eyeHeight","parameterTypes":["net.minestom.testing.Env"] }, {"name":"pickupItem","parameterTypes":["net.minestom.testing.Env"] }, {"name":"pose","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityCancellableEffectTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"cancelEffect","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityFireTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"duration","parameterTypes":["net.minestom.testing.Env"] }, {"name":"extinguishEvent","parameterTypes":["net.minestom.testing.Env"] }, {"name":"nonNegativeFireDuration","parameterTypes":["net.minestom.testing.Env"] }, {"name":"setFireMetadata","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityInstanceIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"entityJoin","parameterTypes":["net.minestom.testing.Env"] }, {"name":"playerJoin","parameterTypes":["net.minestom.testing.Env"] }, {"name":"playerSwitch","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityLineOfSightIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"entityPhysicsCheckLineOfSight","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckLineOfSightBehind","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckLineOfSightBigMiss","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckLineOfSightCorrectOrder","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckLineOfSightLargeBoundingBox","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckLineOfSightNearHit","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityPhysicsCheckLineOfSightNearMiss","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityMetaIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"customName","parameterTypes":["net.minestom.testing.Env"] }, {"name":"notifyAboutChanges","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityMetaTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"ensureRegistration","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityPhysicsIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"onGround","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityProjectileIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"gravityVelocity","parameterTypes":["net.minestom.testing.Env"] }, {"name":"noGravityVelocity","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityRemovalIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"destructionPacket","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityGC","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityNodeGC","parameterTypes":["net.minestom.testing.Env"] }, {"name":"instanceRemoval","parameterTypes":["net.minestom.testing.Env"] }, {"name":"tickTimedRemoval","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityRemovalIntegrationTest$TestEntity",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.entity.EntityTeleportIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"entityChunkTeleport","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityTeleport","parameterTypes":["net.minestom.testing.Env"] }, {"name":"entityTeleportToInfinity","parameterTypes":["net.minestom.testing.Env"] }, {"name":"playerChunkTeleport","parameterTypes":["net.minestom.testing.Env"] }, {"name":"playerTeleport","parameterTypes":["net.minestom.testing.Env"] }, {"name":"playerTeleportWithFlagsTest","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityTypes",
+  "allDeclaredFields":true
+},
+{
+  "name":"net.minestom.server.entity.EntityVelocityIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"countVelocityPackets","parameterTypes":["net.minestom.testing.Env"] }, {"name":"doubleKnockback","parameterTypes":["net.minestom.testing.Env"] }, {"name":"flyingPlayerMovement","parameterTypes":["net.minestom.testing.Env"] }, {"name":"flyingVelocity","parameterTypes":["net.minestom.testing.Env"] }, {"name":"gravity","parameterTypes":["net.minestom.testing.Env"] }, {"name":"singleKnockback","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testHasVelocity","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityView$Option",
+  "fields":[{"name":"auto"}]
+},
+{
+  "name":"net.minestom.server.entity.EntityViewDirectionIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"lookAtEntityDifferentType","parameterTypes":["net.minestom.testing.Env"] }, {"name":"lookAtEntitySameType","parameterTypes":["net.minestom.testing.Env"] }, {"name":"lookAtPos","parameterTypes":["net.minestom.testing.Env"] }, {"name":"viewYawAndPitch","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityViewIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"autoViewable","parameterTypes":["net.minestom.testing.Env"] }, {"name":"emptyEntity","parameterTypes":["net.minestom.testing.Env"] }, {"name":"emptyPlayer","parameterTypes":["net.minestom.testing.Env"] }, {"name":"livingVehicle","parameterTypes":["net.minestom.testing.Env"] }, {"name":"manualViewers","parameterTypes":["net.minestom.testing.Env"] }, {"name":"movements","parameterTypes":["net.minestom.testing.Env"] }, {"name":"multiPlayers","parameterTypes":["net.minestom.testing.Env"] }, {"name":"predictableViewers","parameterTypes":["net.minestom.testing.Env"] }, {"name":"vehicleInheritance","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.EntityViewerRuleIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"viewableRule","parameterTypes":["net.minestom.testing.Env"] }, {"name":"viewableRuleDouble","parameterTypes":["net.minestom.testing.Env"] }, {"name":"viewableRuleUpdate","parameterTypes":["net.minestom.testing.Env"] }, {"name":"viewerRule","parameterTypes":["net.minestom.testing.Env"] }, {"name":"viewerRuleDouble","parameterTypes":["net.minestom.testing.Env"] }, {"name":"viewerRuleUpdate","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.GameModeTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"toId","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.entity.LivingEntity",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.entity.MetadataDef"
+},
+{
+  "name":"net.minestom.server.entity.MetadataDef$AgeableMob"
+},
+{
+  "name":"net.minestom.server.entity.MetadataDef$AreaEffectCloud"
+},
+{
+  "name":"net.minestom.server.entity.MetadataDef$Frog"
+},
+{
+  "name":"net.minestom.server.entity.MetadataDef$ItemEntity"
+},
+{
+  "name":"net.minestom.server.entity.MetadataDef$LivingEntity"
+},
+{
+  "name":"net.minestom.server.entity.MetadataDef$Mob"
+},
+{
+  "name":"net.minestom.server.entity.MetadataDef$Player"
+},
+{
+  "name":"net.minestom.server.entity.MetadataDef$Slime"
+},
+{
+  "name":"net.minestom.server.entity.MetadataHolder",
+  "fields":[{"name":"notifyAboutChanges"}]
+},
+{
+  "name":"net.minestom.server.entity.PassengerIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"passenger","parameterTypes":["net.minestom.testing.Env"] }, {"name":"passengerPacketOrder","parameterTypes":["net.minestom.testing.Env"] }, {"name":"passengerTeleport","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.Player",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.entity.PlayerHeldIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"eventChangeIsReflectedOnClient","parameterTypes":["net.minestom.testing.Env"] }, {"name":"playerChangingSlots","parameterTypes":["net.minestom.testing.Env"] }, {"name":"playerHeld","parameterTypes":["net.minestom.testing.Env"] }, {"name":"playerHeldEvent","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.PlayerSkinTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"net.minestom.server.entity.Metadata",
-  "fields":[{"name":"notifyAboutChanges"}]
+  "name":"net.minestom.server.entity.ai.ClosestEntityTargetTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"validFindTarget","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.attribute.AttributeInstanceTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testReplaceAttributeNewValue","parameterTypes":[] }, {"name":"testReplaceAttributeSameValue","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.entity.metadata.animal.FrogMetaTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testSerializeVariant","parameterTypes":[] }, {"name":"testSetVariant","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.entity.pathfinding.PathfinderIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testBug","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testGravitySnap","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testPFNodeEqual","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testShort","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testStraightLine","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testStraightLineBlocked","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testTall","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.player.PlayerBlockPlacementIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"placeBlockFromAdventureMode","parameterTypes":["net.minestom.server.instance.block.Block","net.minestom.server.item.component.BlockPredicates","net.minestom.testing.Env"] }, {"name":"placeBlockFromAdventureModeParams","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.entity.player.PlayerIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"deathLocationTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"displayNameTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"gamemodeTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"handSwapTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"lookAt","parameterTypes":["net.minestom.testing.Env"] }, {"name":"playerJoinPackets","parameterTypes":["net.minestom.testing.Env"] }, {"name":"refreshPlayerTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"removePlayer","parameterTypes":["net.minestom.testing.Env"] }, {"name":"setView","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.player.PlayerMovementIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"chunkUpdateDebounceTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"teleportConfirm","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testCancelledMove","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testClientViewDistanceSettings","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testSettingsViewDistanceExpansionAndShrink","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.player.PlayerResourcePackIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"applyCallbackOnSuccess","parameterTypes":["net.minestom.testing.Env"] }, {"name":"applyFailNotRequiredDoesNotKickPlayer","parameterTypes":["net.minestom.testing.Env"] }, {"name":"applyFailRequiredKicksPlayer","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.entity.player.PlayerRespawnChunkIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testChunkReloadCount","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testChunkUnloadsOnRespawn","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testPlayerTryRespawn","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.event.Event",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.EventHandler",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.EventNodeGraphTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"childrenPriority","parameterTypes":[] }, {"name":"single","parameterTypes":[] }, {"name":"singleChild","parameterTypes":[] }]
 },
 {
   "name":"net.minestom.server.event.EventNodeLazyImpl",
   "fields":[{"name":"mapped"}]
 },
 {
-  "name":"net.minestom.server.item.metadata.BundleMeta$Builder",
-  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.tag.TagHandler"] }]
+  "name":"net.minestom.server.event.EventNodeMapTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"entityLocal","parameterTypes":[] }, {"name":"lazyRegistration","parameterTypes":[] }, {"name":"map","parameterTypes":[] }, {"name":"ownerGC","parameterTypes":[] }, {"name":"secondMap","parameterTypes":[] }, {"name":"uniqueMapping","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.event.EventNodeQueryTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"find","parameterTypes":[] }, {"name":"findType","parameterTypes":[] }, {"name":"replace","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.event.EventNodeTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"nodeEmptyGC","parameterTypes":[] }, {"name":"nodeGC","parameterTypes":[] }, {"name":"nodeMapGC","parameterTypes":[] }, {"name":"recursiveSub","parameterTypes":[] }, {"name":"recursiveSuper","parameterTypes":[] }, {"name":"testBinding","parameterTypes":[] }, {"name":"testCall","parameterTypes":[] }, {"name":"testCancellable","parameterTypes":[] }, {"name":"testChildren","parameterTypes":[] }, {"name":"testFiltering","parameterTypes":[] }, {"name":"testHandle","parameterTypes":[] }, {"name":"testRecursiveChild","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.event.EventNodeTest$CancellableTest",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.EventNodeTest$EntityTestEvent",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.EventNodeTest$EventTest",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.EventNodeTest$ItemTestEvent",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.EventNodeTest$Recursive1",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.EventNodeTest$Recursive2",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.trait.CancellableEvent",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.trait.EntityEvent",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.trait.ItemEvent",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.event.trait.RecursiveEvent",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.instance.BlockClientNbtTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":[] }, {"name":"handler","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.BlockLightMergeIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"chunkIntersection","parameterTypes":["net.minestom.testing.Env"] }, {"name":"lightLookupTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"lightLookupTestCrossBorder","parameterTypes":["net.minestom.testing.Env"] }, {"name":"skylight","parameterTypes":["net.minestom.testing.Env"] }, {"name":"skylightContained","parameterTypes":["net.minestom.testing.Env"] }, {"name":"skylightShortGrass","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testBlockRemoval","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testBorderCrossing","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testBorderOcclusion","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testBorderOcclusion2","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testBorderOcclusion3","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testBorderOcclusionRemoval","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testDiagonalRemoval","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testDiagonalRemoval2","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testDouble","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testPropagationAir","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testPropagationAir2","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testPropagationAirRemoval","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testTorch","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testTorch2","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.BlockPlaceIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testPlacementAtMinus64","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testPlacementOutOfBorder","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testPlacementOutOfLimit","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.BlockPropertiesTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"allLengths","parameterTypes":[] }, {"name":"comma","parameterTypes":[] }, {"name":"corrupted","parameterTypes":[] }, {"name":"doubleSpace","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"noBrackets","parameterTypes":[] }, {"name":"single","parameterTypes":[] }, {"name":"spaces","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.BlockTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"invalidProperties","parameterTypes":[] }, {"name":"testDuplicateProperties","parameterTypes":[] }, {"name":"testEquality","parameterTypes":[] }, {"name":"testMutability","parameterTypes":[] }, {"name":"testNBT","parameterTypes":[] }, {"name":"testShape","parameterTypes":[] }, {"name":"testState","parameterTypes":[] }, {"name":"testStateIdConversion","parameterTypes":[] }, {"name":"validProperties","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.ChunkHeightmapIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"heightMapPlaceTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"heightMapRemoveTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testChunkHeightmap","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.ChunkViewerIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basicJoin","parameterTypes":["boolean","net.minestom.testing.Env"] }, {"name":"renderDistance","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.EntityTrackerIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"cornerInstanceSwap","parameterTypes":["net.minestom.testing.Env"] }, {"name":"maxDistance","parameterTypes":["net.minestom.testing.Env"] }, {"name":"viewable","parameterTypes":["net.minestom.testing.Env"] }, {"name":"viewableShared","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.EntityTrackerTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"collectionView","parameterTypes":[] }, {"name":"move","parameterTypes":[] }, {"name":"nearby","parameterTypes":[] }, {"name":"nearbySingleChunk","parameterTypes":[] }, {"name":"register","parameterTypes":[] }, {"name":"tracking","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.GeneratorForkIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"air","parameterTypes":["net.minestom.testing.Env"] }, {"name":"biome","parameterTypes":["net.minestom.testing.Env"] }, {"name":"fillHeight","parameterTypes":["net.minestom.testing.Env"] }, {"name":"local","parameterTypes":["net.minestom.testing.Env"] }, {"name":"signal","parameterTypes":["net.minestom.testing.Env"] }, {"name":"size","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.GeneratorIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"exceptionCatch","parameterTypes":["net.minestom.testing.Env"] }, {"name":"fillHeightNegative","parameterTypes":["net.minestom.testing.Env"] }, {"name":"fillHeightOverride","parameterTypes":["net.minestom.testing.Env"] }, {"name":"fillHeightSingleSection","parameterTypes":["net.minestom.testing.Env"] }, {"name":"fillHeightSingleSectionFull","parameterTypes":["net.minestom.testing.Env"] }, {"name":"loader","parameterTypes":["boolean","net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.InstanceBlockIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":["net.minestom.testing.Env"] }, {"name":"blockNbt","parameterTypes":["net.minestom.testing.Env"] }, {"name":"handlerPresentInPlacementRuleUpdate","parameterTypes":["net.minestom.testing.Env"] }, {"name":"unloadCache","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.InstanceBlockPacketIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"placeBlockEntity","parameterTypes":["net.minestom.testing.Env"] }, {"name":"replaceAir","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.InstanceBossBarAttachIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"attachReturn","parameterTypes":["net.minestom.testing.Env"] }, {"name":"hideOnDetach","parameterTypes":["net.minestom.testing.Env"] }, {"name":"hideOnRemove","parameterTypes":["net.minestom.testing.Env"] }, {"name":"showOnAdd","parameterTypes":["net.minestom.testing.Env"] }, {"name":"showOnAttach","parameterTypes":["net.minestom.testing.Env"] }, {"name":"update","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.InstanceContainerTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"copyPreservesTag","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.InstanceEventsIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"registerAndUnregisterInstance","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.InstanceUnregisterIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"chunkGC","parameterTypes":["net.minestom.testing.Env"] }, {"name":"instanceGC","parameterTypes":["net.minestom.testing.Env"] }, {"name":"instanceNodeGC","parameterTypes":["net.minestom.testing.Env"] }, {"name":"sharedInstance","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testGCWithEventsLambda","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.InstanceUnregisterIntegrationTest$1Game"
+},
+{
+  "name":"net.minestom.server.instance.WeatherTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"weatherTest","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.WorldBorderIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"invalidArguments","parameterTypes":["net.minestom.testing.Env"] }, {"name":"resizeWorldBorder","parameterTypes":["net.minestom.testing.Env"] }, {"name":"setWorldborderSize","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.anvil.AnvilLoaderIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"loadAndSaveBlockHandler","parameterTypes":["net.minestom.server.coordinate.Point","net.minestom.testing.Env"] }, {"name":"loadAndSaveBlockHandlerWithPlacement","parameterTypes":["net.minestom.testing.Env"] }, {"name":"loadAndSaveBlockNBT","parameterTypes":["net.minestom.testing.Env"] }, {"name":"loadAndSaveChunk","parameterTypes":["net.minestom.testing.Env"] }, {"name":"loadHouse","parameterTypes":["net.minestom.testing.Env"] }, {"name":"loadVanillaRegion","parameterTypes":["net.minestom.testing.Env"] }, {"name":"parallelSaveNonexistentFiles","parameterTypes":["net.minestom.testing.Env"] }, {"name":"provideLocationsForLoadAndSaveBlockHandler","parameterTypes":[] }, {"name":"saveChunks","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.block.BlockHandler",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.instance.block.SuspiciousGravelBlockHandler",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.instance.block.handler.BlockHandlerIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testOnDestroy","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testOnInteract","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testOnPlace","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testTick","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testTickRemoved","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.block.predicate.BlockPredicateTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"blockAlone","parameterTypes":[] }, {"name":"emptyMatchAnything","parameterTypes":[] }, {"name":"nbtAlone","parameterTypes":[] }, {"name":"propsAlone","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.block.predicate.BlockPredicateTest$NbtPredicate",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.instance.block.predicate.BlockPredicateTest"] }, {"name":"testEmptySource","parameterTypes":[] }, {"name":"testEmptyTarget","parameterTypes":[] }, {"name":"testMatching","parameterTypes":[] }, {"name":"testNoBlockEntity","parameterTypes":[] }, {"name":"testNoExposedTags","parameterTypes":[] }, {"name":"testNoMatchDeep","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.block.predicate.PropertiesPredicateTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testMultiMatch","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.block.predicate.PropertiesPredicateTest$ValuePredicate",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.instance.block.predicate.PropertiesPredicateTest"] }, {"name":"exactTests","parameterTypes":[] }, {"name":"matchExact","parameterTypes":["java.lang.String","java.lang.String","java.lang.String","boolean"] }, {"name":"matchRange","parameterTypes":["java.lang.String","java.lang.String","java.lang.String","java.lang.String","boolean"] }, {"name":"rangeTests","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.generator.BiomeIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"chunkBiomeFill","parameterTypes":["net.minestom.testing.Env"] }, {"name":"chunkBiomeSet","parameterTypes":["net.minestom.testing.Env"] }, {"name":"prepareTest","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.generator.GeneratorForkConsumerIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"doubleLocal","parameterTypes":["net.minestom.testing.Env"] }, {"name":"empty","parameterTypes":["net.minestom.testing.Env"] }, {"name":"local","parameterTypes":["net.minestom.testing.Env"] }, {"name":"neighborX","parameterTypes":["net.minestom.testing.Env"] }, {"name":"neighborY","parameterTypes":["net.minestom.testing.Env"] }, {"name":"neighborZ","parameterTypes":["net.minestom.testing.Env"] }, {"name":"verticalAndHorizontalSectionBorders","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.generator.GeneratorTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"chunkAbsolute","parameterTypes":[] }, {"name":"chunkAbsoluteAll","parameterTypes":[] }, {"name":"chunkFillHeightExact","parameterTypes":[] }, {"name":"chunkFillHeightOneOff","parameterTypes":[] }, {"name":"chunkRelative","parameterTypes":[] }, {"name":"chunkRelativeAll","parameterTypes":[] }, {"name":"chunkSize","parameterTypes":[] }, {"name":"chunkSizeNeg","parameterTypes":[] }, {"name":"chunkSubdivide","parameterTypes":[] }, {"name":"sectionCeil","parameterTypes":["int","int"] }, {"name":"sectionCeilParam","parameterTypes":[] }, {"name":"sectionFill","parameterTypes":[] }, {"name":"sectionFloor","parameterTypes":["int","int"] }, {"name":"sectionFloorParam","parameterTypes":[] }, {"name":"sectionSize","parameterTypes":[] }, {"name":"sectionsAsymmetricUnit","parameterTypes":[] }, {"name":"sectionsChunkUnit","parameterTypes":[] }, {"name":"sectionsCoordinateConsistency","parameterTypes":[] }, {"name":"sectionsLargeUnit","parameterTypes":[] }, {"name":"sectionsMultipleSections","parameterTypes":[] }, {"name":"sectionsNegativeCoordinates","parameterTypes":[] }, {"name":"sectionsOffsetCoordinates","parameterTypes":[] }, {"name":"sectionsReturnType","parameterTypes":[] }, {"name":"sectionsSingleSection","parameterTypes":[] }, {"name":"sectionsSingleSectionUnit","parameterTypes":[] }, {"name":"testForkAcrossBorders","parameterTypes":[] }, {"name":"unitSize","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.light.BlockIsOccludedTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"blockAir","parameterTypes":[] }, {"name":"blockCauldron","parameterTypes":[] }, {"name":"blockLantern","parameterTypes":[] }, {"name":"blockSlab","parameterTypes":[] }, {"name":"blockSlabBottomAir","parameterTypes":[] }, {"name":"blockSlabBottomAndSlabBottom","parameterTypes":[] }, {"name":"blockSlabBottomAndSlabTop","parameterTypes":[] }, {"name":"blockSlabBottomStone","parameterTypes":[] }, {"name":"blockSlabTopEnchantingTable","parameterTypes":[] }, {"name":"blockSpruceLeaves","parameterTypes":[] }, {"name":"blockStair","parameterTypes":[] }, {"name":"blockStairAndSlabBottom","parameterTypes":[] }, {"name":"blockStairAndSlabTop","parameterTypes":[] }, {"name":"blockStairWest","parameterTypes":[] }, {"name":"blockStone","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.light.BlockLightTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"doubleGlowstone","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"glowstone","parameterTypes":[] }, {"name":"glowstoneBlock","parameterTypes":[] }, {"name":"glowstoneBorder","parameterTypes":[] }, {"name":"isolated","parameterTypes":[] }, {"name":"isolatedStair","parameterTypes":[] }, {"name":"isolatedStairOpposite","parameterTypes":[] }, {"name":"isolatedStairSouth","parameterTypes":[] }, {"name":"isolatedStairWest","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.light.LightParityIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"test","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.light.LightParityIntegrationTest$SectionEntry",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.instance.light.WorldRelightIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testBlockRemoval","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testBorderLava","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteCloneTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basicClone","parameterTypes":[] }, {"name":"cloneAfterResize","parameterTypes":[] }, {"name":"cloneAndModifyBothDirections","parameterTypes":[] }, {"name":"cloneDifferentPaletteTypes","parameterTypes":[] }, {"name":"cloneEmptyPalette","parameterTypes":[] }, {"name":"cloneFullPalette","parameterTypes":[] }, {"name":"cloneIndependence","parameterTypes":[] }, {"name":"cloneOptimization","parameterTypes":[] }, {"name":"cloneWithOffset","parameterTypes":[] }, {"name":"cloneWithPatternData","parameterTypes":[] }, {"name":"cloneWithReplace","parameterTypes":[] }, {"name":"multipleClonesIndependence","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteCopyTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteCopyTest$BasicCopyOperations",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.instance.palette.PaletteCopyTest"] }, {"name":"copyEmptyToEmpty","parameterTypes":[] }, {"name":"copyMultiValueToEmpty","parameterTypes":[] }, {"name":"copySingleValueToEmpty","parameterTypes":[] }, {"name":"copyToNonEmptyPalette","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteCopyTest$DifferentPaletteTypes",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.instance.palette.PaletteCopyTest"] }, {"name":"copyBetweenBiomePalettes","parameterTypes":[] }, {"name":"copyBetweenBlockPalettes","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteCopyTest$EdgeCasesAndErrorConditions",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.instance.palette.PaletteCopyTest"] }, {"name":"copyDimensionMismatchThrowsException","parameterTypes":[] }, {"name":"copyFromZeroBitsPerEntry","parameterTypes":[] }, {"name":"copyFromZeroCount","parameterTypes":[] }, {"name":"copyHighValueEntries","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteCopyTest$InternalDataStructureIntegrity",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.instance.palette.PaletteCopyTest"] }, {"name":"copiedPaletteMaintainsIndependence","parameterTypes":[] }, {"name":"copyHandlesPaletteResizeScenarios","parameterTypes":[] }, {"name":"copyPreservesExactPaletteState","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteCopyTest$MultipleCopyOperations",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.instance.palette.PaletteCopyTest"] }, {"name":"chainMultipleCopyOperations","parameterTypes":[] }, {"name":"copyOperationIsIdempotent","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteCopyTest$PerformanceAndStressTests",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.instance.palette.PaletteCopyTest"] }, {"name":"copyFullyPopulatedPalette","parameterTypes":[] }, {"name":"copySparsePalette","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteIndirectTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"constructor","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteOptimizationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"manualFill","parameterTypes":[] }, {"name":"random","parameterTypes":[] }, {"name":"single","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.instance.palette.PaletteTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"anyValue","parameterTypes":[] }, {"name":"bulk","parameterTypes":[] }, {"name":"bulkAll","parameterTypes":[] }, {"name":"bulkAllOrder","parameterTypes":[] }, {"name":"countValue","parameterTypes":[] }, {"name":"countValueEdgeCases","parameterTypes":[] }, {"name":"dimension","parameterTypes":[] }, {"name":"fill","parameterTypes":[] }, {"name":"getAllEmpty","parameterTypes":[] }, {"name":"getAllPresent","parameterTypes":[] }, {"name":"height","parameterTypes":[] }, {"name":"heightOptimization","parameterTypes":[] }, {"name":"heightValidation","parameterTypes":[] }, {"name":"loadAboveMaxBitsPerEntry","parameterTypes":[] }, {"name":"loadBelowMinBitsPerEntry","parameterTypes":[] }, {"name":"loadEmptyPalette","parameterTypes":[] }, {"name":"loadExactlyMaxBitsPerEntry","parameterTypes":[] }, {"name":"loadExactlyMinBitsPerEntry","parameterTypes":[] }, {"name":"loadThousandsOfIndicesBecomesDirectPalette","parameterTypes":[] }, {"name":"loadValuesCloned","parameterTypes":[] }, {"name":"loadWithinRange","parameterTypes":[] }, {"name":"negPlacement","parameterTypes":[] }, {"name":"offset","parameterTypes":[] }, {"name":"offsetCount","parameterTypes":[] }, {"name":"placement","parameterTypes":[] }, {"name":"placementHighValue","parameterTypes":[] }, {"name":"replace","parameterTypes":[] }, {"name":"replaceAll","parameterTypes":[] }, {"name":"replaceCount","parameterTypes":[] }, {"name":"replaceLoop","parameterTypes":[] }, {"name":"replaceUnary","parameterTypes":[] }, {"name":"resize","parameterTypes":[] }, {"name":"serializationBiomeDirect","parameterTypes":[] }, {"name":"serializationBiomeEmpty","parameterTypes":[] }, {"name":"serializationBiomePalette","parameterTypes":[] }, {"name":"serializationBlockDirect","parameterTypes":[] }, {"name":"serializationBlockEmpty","parameterTypes":[] }, {"name":"serializationBlockPalette","parameterTypes":[] }, {"name":"setAllBig","parameterTypes":[] }, {"name":"setAllConstant","parameterTypes":[] }, {"name":"singlePlacement","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.inventory.EquipmentHandler",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.inventory.InventoryCloseStateTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"doNotReceiveClosePacketFromServerWhenSendingClientCloseWindowPacket","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.inventory.InventoryIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"clearInventoryTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"clearingPlayerInventoryClearsCursorTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"closeInventoryTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"openInventoryOnItemDropFromInventoryClosingTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"setCursorItemDuplicateTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"setSlotDuplicateTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testEventNode","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testInnerInventorySlotSending","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.inventory.InventoryTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testAdd","parameterTypes":[] }, {"name":"testCreation","parameterTypes":[] }, {"name":"testEntry","parameterTypes":[] }, {"name":"testIds","parameterTypes":[] }, {"name":"testStackSize99","parameterTypes":[] }, {"name":"testStackSize99OnSmaller","parameterTypes":[] }, {"name":"testTake","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.inventory.PlayerCreativeSlotTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testBoundsCheck","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testCreativeSlots","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.inventory.PlayerInventoryIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"clearInventoryTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"closeInventoryWithNoneOpenSendsPlayerInventoryClose","parameterTypes":["net.minestom.testing.Env"] }, {"name":"closingPlayerInventorySendsEventTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"equipmentViewTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"heldItemViewTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"setCursorItemDuplicateTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"setSlotDuplicateTest","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.inventory.PlayerSlotConversionTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"armor","parameterTypes":[] }, {"name":"craft","parameterTypes":[] }, {"name":"hotbar","parameterTypes":[] }, {"name":"mainInventory","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.inventory.click.ClickPreprocessorTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testCloneType","parameterTypes":[] }, {"name":"testCreativeClicks","parameterTypes":[] }, {"name":"testPickupType","parameterTypes":[] }, {"name":"testQuickCraft","parameterTypes":[] }, {"name":"testQuickMoveType","parameterTypes":[] }, {"name":"testSwapType","parameterTypes":[] }, {"name":"testThrowType","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.inventory.click.ClickUtils",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.inventory.click.integration.HeldClickIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"heldExternal","parameterTypes":["net.minestom.testing.Env"] }, {"name":"heldSelf","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.inventory.click.integration.LeftClickIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"leftExternal","parameterTypes":["net.minestom.testing.Env"] }, {"name":"leftSelf","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.inventory.click.integration.RightClickIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"rightExternal","parameterTypes":["net.minestom.testing.Env"] }, {"name":"rightSelf","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.item.ItemAirTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testAir","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.ItemTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"amountUpdate","parameterTypes":[] }, {"name":"defaultBuilder","parameterTypes":[] }, {"name":"materialUpdate","parameterTypes":[] }, {"name":"testBuilderReuse","parameterTypes":[] }, {"name":"testEntityType","parameterTypes":[] }, {"name":"testEquality","parameterTypes":[] }, {"name":"testFields","parameterTypes":[] }, {"name":"testFromNbt","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.item.MaterialReadTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"loadAllMaterials","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.AbstractItemComponentTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"directReadWriteMethodSource","parameterTypes":[] }, {"name":"directReadWriteTest","parameterTypes":["java.lang.String","java.lang.Object","net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.item.component.BeesTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.BlockPredicatesTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testMultiMatch","parameterTypes":[] }, {"name":"testSingleBlockNbtInput","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.BoolTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.ColorTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"namedTextColor","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.ComponentTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testItemNameParseRegression","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.CustomDataTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"customDataTagPath","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.DebugStickStateTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.EnchantmentListTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testShorthandNbtSyntax","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.item.component.IntTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.ItemAttributeTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.ItemComponentReadWriteTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testReadWrite","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.ItemRarityTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testReadFromNbtInt","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.LodestoneTrackerTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.MapDecorationsTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.MapPostProcessingTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.PotDecorationsTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.PotionContentsTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"alternativeNbtSyntax","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.SeededContainerLootTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.StringTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.SuspiciousStewEffectsTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"nbtReadDefaultDuration","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.component.UnitTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"ensureUnitComponentsPresent","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.enchant.Enchantment$Effect",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.item.enchant.LevelBasedValue",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.item.enchant.SerializationContextTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testValueEffectSerializationCompoundCustom","parameterTypes":[] }, {"name":"testValueEffectSerializationCustom","parameterTypes":[] }, {"name":"testValueEffectSerializationCustomInList","parameterTypes":[] }, {"name":"testValueEffectSerializationVanilla","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.item.enchant.SerializationContextTest$MyEffect",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.item.enchant.SerializationContextTest$MyLevelBasedValue",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.item.enchant.ValueEffect",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.listener.PacketListenerIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"gameModePairs","parameterTypes":[] }, {"name":"testGameModeSwitchSame","parameterTypes":["net.minestom.server.entity.GameMode","net.minestom.server.entity.GameMode","net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.listener.TestUseItemListenerIntegration",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testDoNotEquipNonEquippableArmor","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testDoNotSwapNonSwappableArmor","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testEquipArmorSwap","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testEquipArmorToAir","parameterTypes":["net.minestom.testing.Env"] }, {"name":"useItemNonSpecial","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.listener.UseEntityListenerTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setup","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testInteractionConsideringEyeHeight","parameterTypes":[] }, {"name":"testInteractionConsideringHitboxAndEyePosition","parameterTypes":[] }, {"name":"testInteractionOutOfRange","parameterTypes":[] }, {"name":"testInteractionWithinRange","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.network.ComponentNetworkBufferTypeTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"hoverAction","parameterTypes":[] }, {"name":"keybind","parameterTypes":[] }, {"name":"score","parameterTypes":[] }, {"name":"selector","parameterTypes":[] }, {"name":"text","parameterTypes":[] }, {"name":"textChildren","parameterTypes":[] }, {"name":"textModifiedUtf8","parameterTypes":[] }, {"name":"translatable","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.network.NetworkBufferTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"arrayWrap","parameterTypes":[] }, {"name":"collection","parameterTypes":[] }, {"name":"collectionMaxSize","parameterTypes":[] }, {"name":"compact","parameterTypes":[] }, {"name":"component","parameterTypes":[] }, {"name":"copyClone","parameterTypes":[] }, {"name":"copyDirectIndex","parameterTypes":[] }, {"name":"copyDirectIndexOffset","parameterTypes":[] }, {"name":"copyDirectZeroIndex","parameterTypes":[] }, {"name":"extractBytes","parameterTypes":[] }, {"name":"item","parameterTypes":[] }, {"name":"makeArray","parameterTypes":[] }, {"name":"nbt","parameterTypes":[] }, {"name":"numbers","parameterTypes":[] }, {"name":"oomStringRegression","parameterTypes":[] }, {"name":"oomStringUtf8ModfiedRegression","parameterTypes":[] }, {"name":"oomStringUtf8Regression","parameterTypes":[] }, {"name":"optional","parameterTypes":[] }, {"name":"outOfBound","parameterTypes":[] }, {"name":"rawBytes","parameterTypes":[] }, {"name":"readableBytes","parameterTypes":[] }, {"name":"resize","parameterTypes":[] }, {"name":"resizeRead","parameterTypes":[] }, {"name":"sizeOfCompounds","parameterTypes":[] }, {"name":"sizeOfPrimitives","parameterTypes":[] }, {"name":"sizeOfThrow","parameterTypes":[] }, {"name":"string","parameterTypes":[] }, {"name":"testStringUtf8ModifiedRead","parameterTypes":[] }, {"name":"testStringUtf8ModifiedWrite","parameterTypes":[] }, {"name":"uuid","parameterTypes":[] }, {"name":"varInt","parameterTypes":[] }, {"name":"varLong","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.network.NetworkBufferTest$Action"
+},
+{
+  "name":"net.minestom.server.network.PacketWriteReadTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"clientTest","parameterTypes":[] }, {"name":"serverTest","parameterTypes":[] }, {"name":"setupClient","parameterTypes":[] }, {"name":"setupServer","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.network.SendablePacketTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"cached","parameterTypes":[] }, {"name":"lazy","parameterTypes":[] }, {"name":"trimmed","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.network.SocketReadTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"complete","parameterTypes":["boolean"] }, {"name":"completeTwo","parameterTypes":["boolean"] }, {"name":"incomplete","parameterTypes":["boolean"] }, {"name":"insufficientLength","parameterTypes":["boolean"] }, {"name":"resize","parameterTypes":["boolean"] }, {"name":"resizeHeader","parameterTypes":["boolean"] }]
+},
+{
+  "name":"net.minestom.server.network.SocketWriteTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"writeMultiCompressedSmall","parameterTypes":[] }, {"name":"writeMultiUncompressed","parameterTypes":[] }, {"name":"writeSingleCompressed","parameterTypes":[] }, {"name":"writeSingleCompressedSmall","parameterTypes":[] }, {"name":"writeSingleUncompressed","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.network.SocketWriteTest$CompressiblePacket",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.network.SocketWriteTest$IntPacket",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.network.packet.ClientPluginMessagePacketTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testClientPluginMessagePacket","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.network.packet.DeclareCommandsPacketTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testWriteGameProfileArg","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.network.packet.client.handshake.ClientHandshakePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.client.play.ClientVehicleMovePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.SendablePacket",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.network.packet.server.ServerPacket",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.network.packet.server.ServerPacket$Play",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.network.packet.server.common.DisconnectPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.common.PingResponsePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.login.LoginDisconnectPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.login.LoginSuccessPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.login.SetCompressionPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.ActionBarPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.AttachEntityPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.BlockActionPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.BlockChangePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.BlockEntityDataPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.BossBarPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.CameraPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.ChangeGameStatePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.ClearTitlesPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.CloseWindowPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.CollectItemPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.DeathCombatEventPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.DeclareRecipesPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.DestroyEntitiesPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.DisplayScoreboardPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EndCombatEventPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EnterCombatEventPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EntityAnimationPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EntityAttributesPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EntityEquipmentPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EntityHeadLookPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EntityMetaDataPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EntityPositionAndRotationPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EntityPositionPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.EntityRotationPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.PlaceGhostRecipePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.PlayerInfoRemovePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.RecipeBookAddPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.RecipeBookRemovePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.SystemChatPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.play.WorldEventPacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.packet.server.status.ResponsePacket",
+  "fields":[{"name":"SERIALIZER"}]
+},
+{
+  "name":"net.minestom.server.network.socket.ServerAddressTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"inetAddressDynamicTest","parameterTypes":[] }, {"name":"inetAddressTest","parameterTypes":[] }, {"name":"noAddressTest","parameterTypes":[] }, {"name":"unixAddressTest","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.particle.ParticleDataTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"invalidBlock","parameterTypes":[] }, {"name":"testDustParticleDefault","parameterTypes":[] }, {"name":"testDustParticleInvalid","parameterTypes":[] }, {"name":"testParticleData","parameterTypes":[] }, {"name":"testParticleValid","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.ping.StatusIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testPlayerInfoSamples","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.recipe.IngredientTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"cannotCreateAirIngredient","parameterTypes":[] }, {"name":"cannotCreateEmptyIngredient","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.registry.Registries",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.registry.TestRegistries",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.snapshot.ChunkSnapshotIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"blocks","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.snapshot.EntitySnapshotIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.snapshot.InstanceSnapshotIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.snapshot.Snapshotable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.tag.TagComponentTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"get","parameterTypes":[] }, {"name":"invalidTag","parameterTypes":[] }, {"name":"nbtFallback","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagEqualityTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"differentKey","parameterTypes":[] }, {"name":"differentList","parameterTypes":[] }, {"name":"differentPath","parameterTypes":[] }, {"name":"sameList","parameterTypes":[] }, {"name":"samePath","parameterTypes":[] }, {"name":"sameType","parameterTypes":[] }, {"name":"unmatchedList","parameterTypes":[] }, {"name":"unmatchedPath","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagHandlerCopyTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"copy","parameterTypes":[] }, {"name":"copyCache","parameterTypes":[] }, {"name":"copyCachePath","parameterTypes":[] }, {"name":"copyRehashing","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagHandlerReadableCopyTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"copyCache","parameterTypes":[] }, {"name":"copyCachePath","parameterTypes":[] }, {"name":"copyCacheReuse","parameterTypes":[] }, {"name":"copyRehashing","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagItemTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"differentTagInvalidation","parameterTypes":[] }, {"name":"gc","parameterTypes":[] }, {"name":"get","parameterTypes":[] }, {"name":"getDifferentObject","parameterTypes":[] }, {"name":"invalidation","parameterTypes":[] }, {"name":"remove","parameterTypes":[] }, {"name":"snbt","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagListTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":[] }, {"name":"cache","parameterTypes":[] }, {"name":"chaining","parameterTypes":[] }, {"name":"chainingImmutability","parameterTypes":[] }, {"name":"chainingImmutabilitySnbt","parameterTypes":[] }, {"name":"chainingSnbt","parameterTypes":[] }, {"name":"defaultValue","parameterTypes":[] }, {"name":"defaultValueReset","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"emptySnbt","parameterTypes":[] }, {"name":"immutability","parameterTypes":[] }, {"name":"immutabilitySnbt","parameterTypes":[] }, {"name":"recursiveCache","parameterTypes":[] }, {"name":"recursiveCacheIncorrect","parameterTypes":[] }, {"name":"removal","parameterTypes":[] }, {"name":"removalSnbt","parameterTypes":[] }, {"name":"snbt","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagMapTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"map","parameterTypes":[] }, {"name":"mapDefault","parameterTypes":[] }, {"name":"mapDefaultAbsent","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagMapTest$Entry"
+},
+{
+  "name":"net.minestom.server.tag.TagNbtSeparatorTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"compound","parameterTypes":[] }, {"name":"compoundMultiple","parameterTypes":[] }, {"name":"list","parameterTypes":[] }, {"name":"primitives","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagNbtTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"compoundOverride","parameterTypes":[] }, {"name":"compoundPathRead","parameterTypes":[] }, {"name":"compoundRead","parameterTypes":[] }, {"name":"compoundWrite","parameterTypes":[] }, {"name":"doubleCompoundRead","parameterTypes":[] }, {"name":"fromCompoundModify","parameterTypes":[] }, {"name":"fromCompoundModifyDoublePath","parameterTypes":[] }, {"name":"fromCompoundModifyPath","parameterTypes":[] }, {"name":"list","parameterTypes":[] }, {"name":"listConversion","parameterTypes":[] }, {"name":"map","parameterTypes":[] }, {"name":"rawArray","parameterTypes":[] }, {"name":"rawList","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagPathTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":[] }, {"name":"chaining","parameterTypes":[] }, {"name":"chainingDouble","parameterTypes":[] }, {"name":"differentPath","parameterTypes":[] }, {"name":"doubleSnbt","parameterTypes":[] }, {"name":"emptyRemoval","parameterTypes":[] }, {"name":"forgetPath","parameterTypes":[] }, {"name":"invalidPath","parameterTypes":[] }, {"name":"overrideSnbt","parameterTypes":[] }, {"name":"pathInvalidClear","parameterTypes":[] }, {"name":"secondPathClearSnbt","parameterTypes":[] }, {"name":"snbt","parameterTypes":[] }, {"name":"structureObstruction","parameterTypes":[] }, {"name":"tagObstruction","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagPathTest$1Entry"
+},
+{
+  "name":"net.minestom.server.tag.TagReadable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.tag.TagRecordTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":[] }, {"name":"basicSerializer","parameterTypes":[] }, {"name":"basicSnbt","parameterTypes":[] }, {"name":"forceRecord","parameterTypes":[] }, {"name":"fromNBT","parameterTypes":[] }, {"name":"fromNBTView","parameterTypes":[] }, {"name":"invalidItem","parameterTypes":[] }, {"name":"nbtSerializer","parameterTypes":[] }, {"name":"unsupportedArray","parameterTypes":[] }, {"name":"unsupportedList","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagRecordTest$1CompoundRecord",
+  "allRecordComponents":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.kyori.adventure.nbt.CompoundBinaryTag"] }, {"name":"compound","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagRecordTest$1Test",
+  "allRecordComponents":true
+},
+{
+  "name":"net.minestom.server.tag.TagRecordTest$2Test",
+  "allRecordComponents":true
+},
+{
+  "name":"net.minestom.server.tag.TagSerializerTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"fromCompound","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagStructureTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":[] }, {"name":"overrideBasic","parameterTypes":[] }, {"name":"overrideNbt","parameterTypes":[] }, {"name":"pathOverride","parameterTypes":[] }, {"name":"snbt","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagStructureTest$Entry"
+},
+{
+  "name":"net.minestom.server.tag.TagTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"defaultValue","parameterTypes":[] }, {"name":"fromNbt","parameterTypes":[] }, {"name":"fromNbtCache","parameterTypes":[] }, {"name":"getAndSet","parameterTypes":[] }, {"name":"intGet","parameterTypes":[] }, {"name":"intNull","parameterTypes":[] }, {"name":"intRemove","parameterTypes":[] }, {"name":"invalidType","parameterTypes":[] }, {"name":"item","parameterTypes":[] }, {"name":"nbtResizing","parameterTypes":[] }, {"name":"rehashing","parameterTypes":[] }, {"name":"snbt","parameterTypes":[] }, {"name":"tagResizing","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagTransientTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"asCompoundDoesNotPreserveTransient","parameterTypes":[] }, {"name":"tagHandlerCopyPreservesTransient","parameterTypes":[] }, {"name":"twoTransientTags","parameterTypes":[] }, {"name":"twoTransientTagsEqual","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagUpdateTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getAndUpdate","parameterTypes":[] }, {"name":"update","parameterTypes":[] }, {"name":"updateAndGet","parameterTypes":[] }, {"name":"updateDefault","parameterTypes":[] }, {"name":"updateHiddenSimilarity","parameterTypes":[] }, {"name":"updateIncompatible","parameterTypes":[] }, {"name":"updateInner","parameterTypes":[] }, {"name":"updateRemoval","parameterTypes":[] }, {"name":"updateRemovalPath","parameterTypes":[] }, {"name":"updateStructureConversion","parameterTypes":[] }, {"name":"updateStructureConversionPath","parameterTypes":[] }, {"name":"updateStructureConversionPathDouble","parameterTypes":[] }, {"name":"updateViewConversion","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagUpdateTest$1Structure",
+  "allRecordComponents":true,
+  "methods":[{"name":"<init>","parameterTypes":["net.minestom.server.tag.TagUpdateTest$3Test"] }, {"name":"test","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagUpdateTest$1Test",
+  "allRecordComponents":true,
+  "methods":[{"name":"<init>","parameterTypes":["int"] }, {"name":"coin","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagUpdateTest$2Test",
+  "allRecordComponents":true,
+  "methods":[{"name":"<init>","parameterTypes":["int"] }, {"name":"coin","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagUpdateTest$3Test",
+  "allRecordComponents":true,
+  "methods":[{"name":"<init>","parameterTypes":["int"] }, {"name":"coin","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagUpdateTest$4Test",
+  "allRecordComponents":true,
+  "methods":[{"name":"<init>","parameterTypes":["int"] }, {"name":"coin","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagUuidTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"fromNbt","parameterTypes":[] }, {"name":"get","parameterTypes":[] }, {"name":"invalidTag","parameterTypes":[] }, {"name":"toNbt","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagValueShareTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"differentDefault","parameterTypes":[] }, {"name":"differentList","parameterTypes":[] }, {"name":"differentListType","parameterTypes":[] }, {"name":"differentType","parameterTypes":[] }, {"name":"list","parameterTypes":[] }, {"name":"listScope","parameterTypes":[] }, {"name":"mapChild","parameterTypes":[] }, {"name":"mapSame","parameterTypes":[] }, {"name":"recordStructure","parameterTypes":[] }, {"name":"recordStructureList","parameterTypes":[] }, {"name":"same","parameterTypes":[] }, {"name":"similar","parameterTypes":[] }, {"name":"similarList","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagValueShareTest$Entry",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.tag.TagViewTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":[] }, {"name":"compoundSerializer","parameterTypes":[] }, {"name":"empty","parameterTypes":[] }, {"name":"path","parameterTypes":[] }, {"name":"pathSnbt","parameterTypes":[] }, {"name":"snbt","parameterTypes":[] }, {"name":"snbtOverride","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.tag.TagViewTest$Entry"
+},
+{
+  "name":"net.minestom.server.tag.TagWritable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.tag.Taggable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.test.EnvTestPlayerProviderTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testPlayerProviderUsedInEnvTest","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.test.EnvTestPlayerProviderTest$CustomPlayer",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.thread.AcquirableBasicIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"acquireBeforeInit","parameterTypes":["net.minestom.testing.Env"] }, {"name":"acquireSingleThreadInit","parameterTypes":["net.minestom.testing.Env"] }, {"name":"localTest","parameterTypes":["net.minestom.testing.Env"] }, {"name":"ownedTest","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.thread.AcquirableEntityIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"instanceSet","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.thread.AcquirableLocalsIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"empty","parameterTypes":["net.minestom.testing.Env"] }, {"name":"localTest","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.thread.AcquirableSource",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.thread.AcquirableTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"assignation","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.thread.ThreadDispatcherTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"basic","parameterTypes":[] }, {"name":"basicAcquirable","parameterTypes":[] }, {"name":"elementTick","parameterTypes":[] }, {"name":"elementTickLoop","parameterTypes":[] }, {"name":"elementTickLoopAsync","parameterTypes":[] }, {"name":"partitionTick","parameterTypes":[] }, {"name":"threadUpdate","parameterTypes":[] }, {"name":"uniqueThread","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.thread.ThreadDispatcherTest$1Element"
+},
+{
+  "name":"net.minestom.server.thread.ThreadDispatcherTest$1Updater"
+},
+{
+  "name":"net.minestom.server.thread.ThreadDispatcherTest$Element"
+},
+{
+  "name":"net.minestom.server.thread.ThreadDispatcherTest$World",
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.timer.Schedulable",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
 },
 {
   "name":"net.minestom.server.timer.TaskImpl",
   "fields":[{"name":"parked"}]
 },
 {
-  "name": "net.minestom.server.terminal.MinestomConsoleWriter",
-  "methods": [{"name":"<init>","parameterTypes":["java.util.Map"] }]
+  "name":"net.minestom.server.timer.TestScheduler",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"cancelTask","parameterTypes":[] }, {"name":"delayedEndOfTick","parameterTypes":[] }, {"name":"durationEndOfTick","parameterTypes":[] }, {"name":"durationTask","parameterTypes":[] }, {"name":"exceptionTask","parameterTypes":[] }, {"name":"futureTask","parameterTypes":[] }, {"name":"immediateTask","parameterTypes":[] }, {"name":"parkTask","parameterTypes":[] }, {"name":"repeatingEndOfTick","parameterTypes":[] }, {"name":"scheduleEndOfTick","parameterTypes":[] }, {"name":"tickTask","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.ChunkUtilsTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testForDifferingChunksInRange","parameterTypes":["int","int","int","int","int"] }, {"name":"testForDifferingChunksInRangeParams","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.ChunkUtilsTest$ChunkCoordinate"
+},
+{
+  "name":"net.minestom.server.utils.ObjectPoolTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"autoClose","parameterTypes":[] }, {"name":"pool","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.PositionUtilsTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"highPitch","parameterTypes":[] }, {"name":"yaw","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.TestMojangUtils",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.TranslationIntegrationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testItemStackTranslation","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testTranslationDisabled","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testTranslationEnabled","parameterTypes":["net.minestom.testing.Env"] }, {"name":"translator","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.UUIDUtilsTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"intArrayToUuid","parameterTypes":[] }, {"name":"isUuid","parameterTypes":[] }, {"name":"uuidToIntArray","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.block.BlockBreakCalculationTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"setupPlayer","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testBedrock","parameterTypes":[] }, {"name":"testStone","parameterTypes":[] }, {"name":"testStoneWithDiamondPickaxe","parameterTypes":[] }, {"name":"testWool","parameterTypes":[] }, {"name":"testWoolWithShears","parameterTypes":[] }, {"name":"testZeroHardnessBlock","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.block.BlockIteratorTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"falling","parameterTypes":[] }, {"name":"test2dOffsetnnp","parameterTypes":[] }, {"name":"test2dOffsetnpp","parameterTypes":[] }, {"name":"test2dOffsetppn","parameterTypes":[] }, {"name":"test2dOffsetppp","parameterTypes":[] }, {"name":"test2dnn","parameterTypes":[] }, {"name":"test2dpn","parameterTypes":[] }, {"name":"test2dpp","parameterTypes":[] }, {"name":"test3dExtraCollection","parameterTypes":[] }, {"name":"testExactEnd","parameterTypes":[] }, {"name":"testLongDistance","parameterTypes":[] }, {"name":"testSameEnd","parameterTypes":[] }, {"name":"testSkipping","parameterTypes":[] }, {"name":"testZeroVelocity","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.chunk.ChunkUpdateLimitCheckerTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testDisabling","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testHistory","parameterTypes":["net.minestom.testing.Env"] }, {"name":"testOneSlotHistory","parameterTypes":["net.minestom.testing.Env"] }]
+},
+{
+  "name":"net.minestom.server.utils.collection.AutoIncrementMapTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"test","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.server.utils.collection.ObjectArrayTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"arrayCopy","parameterTypes":["boolean"] }, {"name":"objectArray","parameterTypes":["boolean"] }, {"name":"trim","parameterTypes":["boolean"] }]
+},
+{
+  "name":"net.minestom.server.utils.identity.NamedAndIdentified",
+  "allDeclaredClasses":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.server.utils.time.CooldownTest",
+  "allDeclaredFields":true,
+  "allDeclaredClasses":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"testConstructorAndIsReady","parameterTypes":[] }, {"name":"testHasCooldown","parameterTypes":[] }, {"name":"testReadySinceBeginning","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.testing.EnvTest",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.minestom.testing.EnvTest$EnvBefore",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.testing.EnvTest$EnvCleaner",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.minestom.testing.EnvTest$EnvParameterResolver",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.gradle.api.internal.file.temp.GradleUserHomeTemporaryFileProvider",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.TestClassProcessor",
+  "methods":[{"name":"processTestClass","parameterTypes":["org.gradle.api.internal.tasks.testing.TestClassRunInfo"] }, {"name":"startProcessing","parameterTypes":["org.gradle.api.internal.tasks.testing.TestResultProcessor"] }, {"name":"stop","parameterTypes":[] }]
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.TestClassRunInfo"
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.TestResultProcessor",
+  "methods":[{"name":"completed","parameterTypes":["java.lang.Object","org.gradle.api.internal.tasks.testing.TestCompleteEvent"] }, {"name":"failure","parameterTypes":["java.lang.Object","org.gradle.api.tasks.testing.TestFailure"] }, {"name":"started","parameterTypes":["org.gradle.api.internal.tasks.testing.TestDescriptorInternal","org.gradle.api.internal.tasks.testing.TestStartEvent"] }]
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.filter.TestFilterSpec"
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformSpec"
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor",
+  "methods":[{"name":"<init>","parameterTypes":["org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformSpec","org.gradle.internal.id.IdGenerator","org.gradle.internal.actor.ActorFactory","org.gradle.internal.time.Clock"] }]
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessorFactory"
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.worker.RemoteTestClassProcessor",
+  "methods":[{"name":"processTestClass","parameterTypes":["org.gradle.api.internal.tasks.testing.TestClassRunInfo"] }, {"name":"startProcessing","parameterTypes":[] }, {"name":"stop","parameterTypes":[] }]
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.worker.TestWorker"
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.worker.TestWorker$State"
+},
+{
+  "name":"org.gradle.api.internal.tasks.testing.worker.TestWorker$TestFrameworkServiceRegistry",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"createActorFactory","parameterTypes":["org.gradle.internal.concurrent.ExecutorFactory"] }, {"name":"createClock","parameterTypes":[] }, {"name":"createExecutorFactory","parameterTypes":[] }, {"name":"createIdGenerator","parameterTypes":[] }]
+},
+{
+  "name":"org.gradle.internal.file.StatStatistics$Collector",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.gradle.internal.logging.services.LoggingServiceRegistry",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"createLoggingManagerFactory","parameterTypes":["org.gradle.internal.time.Clock"] }, {"name":"createTimeProvider","parameterTypes":[] }]
+},
+{
+  "name":"org.gradle.internal.logging.services.LoggingServiceRegistry$CommandLineLogging",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.gradle.internal.nativeintegration.filesystem.services.FileSystemServices",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"configure","parameterTypes":["org.gradle.internal.service.ServiceRegistration"] }]
+},
+{
+  "name":"org.gradle.internal.nativeintegration.filesystem.services.GenericFileSystem$Factory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.gradle.internal.nativeintegration.services.NativeServices",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"createNativeCapabilities","parameterTypes":[] }, {"name":"createSystemInfo","parameterTypes":["org.gradle.internal.os.OperatingSystem"] }]
+},
+{
+  "name":"org.gradle.internal.nativeintegration.services.NativeServices$1",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"configure","parameterTypes":["org.gradle.internal.service.ServiceRegistration"] }]
+},
+{
+  "name":"org.gradle.internal.nativeintegration.services.NativeServices$NativeFeatures$1$2",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.gradle.internal.remote.services.MessagingServices",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"createMessagingClient","parameterTypes":["org.gradle.internal.remote.internal.OutgoingConnector","org.gradle.internal.concurrent.ExecutorFactory"] }, {"name":"createOutgoingConnector","parameterTypes":[] }]
+},
+{
+  "name":"org.gradle.internal.service.MethodHandleBasedServiceMethodFactory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker",
+  "methods":[{"name":"<init>","parameterTypes":["java.io.DataInputStream"] }]
+},
+{
+  "name":"org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker$2",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"configure","parameterTypes":["org.gradle.internal.service.ServiceRegistration"] }]
+},
+{
+  "name":"org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker$WorkerServices",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"createGradleUserHomeDirProvider","parameterTypes":[] }, {"name":"createWorkerDirectoryProvider","parameterTypes":["org.gradle.initialization.GradleUserHomeDirProvider"] }, {"name":"createWorkerLogEventListener","parameterTypes":[] }]
 },
 {
   "name":"org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
@@ -132,17 +2765,11 @@
 },
 {
   "name":"org.jctools.queues.MpUnboundedXaddArrayQueueConsumerFields",
-  "fields":[
-    {"name":"consumerChunk"}, 
-    {"name":"consumerIndex"}
-  ]
+  "fields":[{"name":"consumerChunk"}, {"name":"consumerIndex"}]
 },
 {
   "name":"org.jctools.queues.MpUnboundedXaddArrayQueueProducerChunk",
-  "fields":[
-    {"name":"producerChunk"}, 
-    {"name":"producerChunkIndex"}
-  ]
+  "fields":[{"name":"producerChunk"}, {"name":"producerChunkIndex"}]
 },
 {
   "name":"org.jctools.queues.MpUnboundedXaddArrayQueueProducerFields",
@@ -150,11 +2777,19 @@
 },
 {
   "name":"org.jctools.queues.MpUnboundedXaddChunk",
-  "fields":[
-    {"name":"index"}, 
-    {"name":"next"}, 
-    {"name":"prev"}
-  ]
+  "fields":[{"name":"index"}, {"name":"next"}, {"name":"prev"}]
+},
+{
+  "name":"org.jctools.queues.MpscArrayQueueConsumerIndexField",
+  "fields":[{"name":"consumerIndex"}]
+},
+{
+  "name":"org.jctools.queues.MpscArrayQueueProducerIndexField",
+  "fields":[{"name":"producerIndex"}]
+},
+{
+  "name":"org.jctools.queues.MpscArrayQueueProducerLimitField",
+  "fields":[{"name":"producerLimit"}]
 },
 {
   "name":"org.jctools.queues.SpscArrayQueueConsumerIndexField",
@@ -165,46 +2800,134 @@
   "fields":[{"name":"producerIndex"}]
 },
 {
-  "name":"org.tinylog.configuration.PropertiesConfigurationLoader",
+  "name":"org.junit.internal.AssumptionViolatedException"
+},
+{
+  "name":"org.junit.jupiter.api.Disabled",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.api.DisplayName",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.api.Nested",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.api.RepeatedTest",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.api.Test",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.api.TestInstance",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.api.TestTemplate",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.api.extension.ExtendWith",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.api.extension.Extensions",
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"value","parameterTypes":[] }]
+},
+{
+  "name":"org.junit.jupiter.params.ParameterizedTest",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.params.ParameterizedTestExtension",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.tinylog.core.TinylogLoggingProvider",
+  "name":"org.junit.jupiter.params.provider.AnnotationBasedArgumentsProvider",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.params.provider.ArgumentsProvider",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.params.provider.ArgumentsSource",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.params.provider.CsvArgumentsProvider",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.tinylog.writers.ConsoleWriter",
-  "methods":[{"name":"<init>","parameterTypes":["java.util.Map"] }]
+  "name":"org.junit.jupiter.params.provider.CsvSource",
+  "queryAllPublicMethods":true
 },
 {
-  "name":"sun.misc.Signal",
-  "methods":[
-    {"name":"<init>","parameterTypes":["java.lang.String"] }, 
-    {"name":"handle","parameterTypes":["sun.misc.Signal","sun.misc.SignalHandler"] }
-  ]
+  "name":"org.junit.jupiter.params.provider.MethodArgumentsProvider",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"sun.misc.SignalHandler",
-  "fields":[{"name":"SIG_DFL"}]
+  "name":"org.junit.jupiter.params.provider.MethodSource",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.params.provider.ValueArgumentsProvider",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.junit.jupiter.params.provider.ValueSource",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.jupiter.params.support.AnnotationConsumer",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.platform.commons.annotation.Testable",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.junit.vintage.engine.VintageTestEngine"
+},
+{
+  "name":"org.opentest4j.TestAbortedException",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"space.vectrix.flare.fastutil.Int2ObjectSyncMapImpl$ExpungingEntryImpl",
+  "fields":[{"name":"value"}]
+},
+{
+  "name":"space.vectrix.flare.fastutil.Long2ObjectSyncMapImpl$ExpungingEntryImpl",
+  "fields":[{"name":"value"}]
 },
 {
   "name":"sun.misc.Unsafe",
   "fields":[{"name":"theUnsafe"}],
-  "queriedMethods":[
-    {"name":"getAndAddLong","parameterTypes":["java.lang.Object","long","long"] }, 
-    {"name":"getAndSetObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }
-  ]
+  "methods":[{"name":"getAndAddLong","parameterTypes":["java.lang.Object","long","long"] }, {"name":"getAndSetObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }]
 },
 {
-  "name":"sun.security.provider.DRBG",
-  "methods":[{"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
+  "name":"sun.security.provider.NativePRNG",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
+},
+{
+  "name":"sun.security.provider.NativePRNG$NonBlocking",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
 },
 {
   "name":"sun.security.provider.SHA",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"sun.security.provider.SHA2$SHA256",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 }
 ]

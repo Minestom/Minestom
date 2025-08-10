@@ -1,5 +1,14 @@
 [
   {
-    "interfaces":["sun.misc.SignalHandler"]}
-  
+    "interfaces":["org.gradle.api.internal.tasks.testing.TestClassProcessor"]
+  },
+  {
+    "interfaces":["org.gradle.api.internal.tasks.testing.TestResultProcessor","org.gradle.internal.concurrent.ThreadSafe"]
+  },
+  {
+    "interfaces":["org.gradle.internal.logging.events.OutputEventListener"]
+  },
+  {
+    "interfaces":["org.gradle.process.internal.worker.child.WorkerLoggingProtocol","org.gradle.internal.concurrent.ThreadSafe"]
+  }
 ]

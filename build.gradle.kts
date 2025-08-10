@@ -56,6 +56,38 @@ tasks.jar {
     }
 }
 
+// GraalVM Native Image configuration
+tasks.register<Test>("testWithAgent") {
+    group = "verification"
+    description = "Runs all tests with GraalVM native-image agent to generate metadata."
+
+    val metadataOutputDir = layout.buildDirectory.dir("native-image-metadata").get().asFile
+    val resourcesTargetDir = file("src/main/resources/META-INF/native-image/minestom")
+
+    // Same test sources and classpath as normal test task
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+
+    // Configure the native-image agent
+    jvmArgs(
+            "-agentlib:native-image-agent=config-output-dir=${metadataOutputDir.absolutePath}"
+    )
+
+    doFirst {
+        delete(metadataOutputDir)
+        metadataOutputDir.mkdirs()
+    }
+
+    doLast {
+        resourcesTargetDir.mkdirs()
+        copy {
+            from(metadataOutputDir)
+            into(resourcesTargetDir)
+        }
+        println("✅ GraalVM metadata generated and copied to: $resourcesTargetDir")
+    }
+}
+
 // Publishing configuration below
 
 nmcpAggregation {
