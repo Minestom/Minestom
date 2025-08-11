@@ -44,7 +44,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @throws IllegalArgumentException if the property or value are invalid
      */
     @Contract(pure = true)
-    @NotNull Block withProperty(@NotNull String property, @NotNull String value);
+    Block withProperty(String property, String value);
 
     /**
      * Changes multiple properties at once.
@@ -57,7 +57,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @see #withProperty(String, String)
      */
     @Contract(pure = true)
-    @NotNull Block withProperties(@NotNull Map<@NotNull String, @NotNull String> properties);
+    Block withProperties(Map<String, String> properties);
 
     /**
      * Creates a new block with a tag modified.
@@ -68,7 +68,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return a new block with the modified tag
      */
     @Contract(pure = true)
-    <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value);
+    <T> Block withTag(Tag<T> tag, @Nullable T value);
 
     /**
      * Creates a new block with different nbt data.
@@ -77,7 +77,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return a new block with different nbt
      */
     @Contract(pure = true)
-    @NotNull Block withNbt(@Nullable CompoundBinaryTag compound);
+    Block withNbt(@Nullable CompoundBinaryTag compound);
 
     /**
      * Creates a new block with the specified {@link BlockHandler handler}.
@@ -86,7 +86,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return a new block with the specified handler
      */
     @Contract(pure = true)
-    @NotNull Block withHandler(@Nullable BlockHandler handler);
+    Block withHandler(@Nullable BlockHandler handler);
 
     /**
      * Returns an unmodifiable view to the block nbt.
@@ -103,7 +103,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      *
      * @return the block nbt or an empty compound if not present
      */
-    default @NotNull CompoundBinaryTag nbtOrEmpty() {
+    default CompoundBinaryTag nbtOrEmpty() {
         return Objects.requireNonNullElse(nbt(), CompoundBinaryTag.empty());
     }
 
@@ -127,7 +127,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      */
     @Unmodifiable
     @Contract(pure = true)
-    @NotNull Map<String, String> properties();
+    Map<String, String> properties();
 
     /**
      * Returns the block states as a string.
@@ -141,7 +141,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @see #fromState(String)
      */
     @Contract(pure = true)
-    @NotNull String state();
+    String state();
 
     /**
      * Returns this block type with default properties, no tags and no handler.
@@ -150,7 +150,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return the default block
      */
     @Contract(pure = true)
-    @NotNull Block defaultState();
+    Block defaultState();
 
     /**
      * Returns a property value from {@link #properties()}.
@@ -159,10 +159,10 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return the property value, null if not present (due to an invalid property name)
      */
     @Contract(pure = true)
-    String getProperty(@NotNull String property);
+    String getProperty(String property);
 
     @Contract(pure = true)
-    @NotNull Collection<@NotNull Block> possibleStates();
+    Collection<Block> possibleStates();
 
     /**
      * Returns the block registry.
@@ -172,10 +172,10 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return the block registry
      */
     @Contract(pure = true)
-    @NotNull RegistryData.BlockEntry registry();
+    RegistryData.BlockEntry registry();
 
     @Override
-    default @NotNull Key key() {
+    default Key key() {
         return registry().key();
     }
 
@@ -200,27 +200,27 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         return registry().isLiquid();
     }
 
-    default boolean compare(@NotNull Block block, @NotNull Comparator comparator) {
+    default boolean compare(Block block, Comparator comparator) {
         return comparator.test(this, block);
     }
 
-    default boolean compare(@NotNull Block block) {
+    default boolean compare(Block block) {
         return compare(block, Comparator.ID);
     }
 
-    static @NotNull Collection<@NotNull Block> values() {
+    static Collection<Block> values() {
         return BlockImpl.REGISTRY.values();
     }
 
-    static @Nullable Block fromKey(@KeyPattern @NotNull String key) {
+    static @Nullable Block fromKey(@KeyPattern String key) {
         return fromKey(Key.key(key));
     }
 
-    static @Nullable Block fromKey(@NotNull Key key) {
+    static @Nullable Block fromKey(Key key) {
         return BlockImpl.REGISTRY.get(key);
     }
 
-    static @Nullable Block fromState(@NotNull String state) {
+    static @Nullable Block fromState(String state) {
         return BlockImpl.parseState(state);
     }
 
@@ -236,7 +236,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         return BlockImpl.REGISTRY.get(blockId);
     }
 
-    static @NotNull Registry<Block> staticRegistry() {
+    static Registry<Block> staticRegistry() {
         return BlockImpl.REGISTRY;
     }
 
@@ -255,52 +255,52 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * Notably used by {@link Instance}, {@link BlockBatch}.
      */
     interface Setter {
-        void setBlock(int x, int y, int z, @NotNull Block block);
+        void setBlock(int x, int y, int z, Block block);
 
-        default void setBlock(@NotNull Point blockPosition, @NotNull Block block) {
+        default void setBlock(Point blockPosition, Block block) {
             setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block);
         }
 
-        default void setBlockArea(@NotNull Area area, @NotNull Block block) {
+        default void setBlockArea(Area area, Block block) {
             for (BlockVec vec : area) setBlock(vec.blockX(), vec.blockY(), vec.blockZ(), block);
         }
 
-        default void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
+        default void setBlockBatch(int x, int y, int z, BlockBatch batch) {
             batch.getAll((x1, y1, z1, block) -> setBlock(x + x1, y + y1, z + z1, block));
         }
 
-        default void setBlockBatchAligned(int sectionX, int sectionY, int sectionZ, @NotNull BlockBatch batch) {
+        default void setBlockBatchAligned(int sectionX, int sectionY, int sectionZ, BlockBatch batch) {
             final int sectionSize = CoordConversion.SECTION_SIZE;
             setBlockBatch(sectionX * sectionSize, sectionY * sectionSize, sectionZ * sectionSize, batch);
         }
 
-        default void setBlockBatch(@NotNull BlockBatch batch) {
+        default void setBlockBatch(BlockBatch batch) {
             setBlockBatch(0, 0, 0, batch);
         }
 
-        default void setBlockBatch(@NotNull Point blockPosition, @NotNull BlockBatch batch) {
+        default void setBlockBatch(Point blockPosition, BlockBatch batch) {
             setBlockBatch(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), batch);
         }
     }
 
     interface Getter {
         @UnknownNullability
-        Block getBlock(int x, int y, int z, @NotNull Condition condition);
+        Block getBlock(int x, int y, int z, Condition condition);
 
-        default @UnknownNullability Block getBlock(@NotNull Point point, @NotNull Condition condition) {
+        default @UnknownNullability Block getBlock(Point point, Condition condition) {
             return getBlock(point.blockX(), point.blockY(), point.blockZ(), condition);
         }
 
-        default @NotNull Block getBlock(int x, int y, int z) {
+        default Block getBlock(int x, int y, int z) {
             return Objects.requireNonNull(getBlock(x, y, z, Condition.NONE));
         }
 
-        default @NotNull Block getBlock(@NotNull Point point) {
+        default Block getBlock(Point point) {
             return Objects.requireNonNull(getBlock(point, Condition.NONE));
         }
 
-        default @NotNull BlockBatch getBlockBatch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
-                                                  @NotNull Point origin, @NotNull Area area) {
+        default BlockBatch getBlockBatch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
+                                                  Point origin, Area area) {
             final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
             final Condition condition = (flags & BlockBatch.IGNORE_DATA_FLAG) != 0 ? Condition.TYPE : Condition.NONE;
             return BlockBatch.batch(flags, builder -> {
@@ -316,11 +316,11 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
             });
         }
 
-        default @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Area area) {
+        default BlockBatch getBlockBatch(Point origin, Area area) {
             return getBlockBatch(BlockBatch.NO_FLAGS, origin, area);
         }
 
-        default @NotNull BlockBatch getBlockBatch(@NotNull Area area) {
+        default BlockBatch getBlockBatch(Area area) {
             return getBlockBatch(BlockBatch.NO_FLAGS, BlockVec.ZERO, area);
         }
 

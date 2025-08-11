@@ -4,7 +4,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
@@ -50,7 +49,7 @@ public final class Heightmap {
         this.minHeight = this.chunk.dimension.minY() - 1;
     }
 
-    public @NotNull Type type() {
+    public Type type() {
         return type;
     }
 

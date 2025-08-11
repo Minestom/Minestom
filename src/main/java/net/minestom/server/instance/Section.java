@@ -4,12 +4,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
-import org.jetbrains.annotations.NotNullByDefault;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-@NotNullByDefault
 public sealed interface Section extends Cloneable permits SectionImpl {
     static Section section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
         return new SectionImpl(
