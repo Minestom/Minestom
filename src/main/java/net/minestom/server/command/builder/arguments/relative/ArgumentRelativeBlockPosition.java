@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder.arguments.relative;
 
 import net.minestom.server.command.ArgumentParserType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -12,7 +11,7 @@ import java.util.function.Function;
  */
 public class ArgumentRelativeBlockPosition extends ArgumentRelativeVec {
 
-    public ArgumentRelativeBlockPosition(@NotNull String id) {
+    public ArgumentRelativeBlockPosition(String id) {
         super(id, 3);
     }
 

@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +31,8 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
     private boolean isPackagePrivate = false;
 
     public GenericEnumGenerator(
-            @NotNull String packageName, @NotNull String className,
-            @Nullable InputStream entriesFile, @NotNull File outputFolder
+            String packageName, String className,
+            @Nullable InputStream entriesFile, File outputFolder
     ) {
         this.packageName = packageName;
         this.className = className;
@@ -98,12 +97,11 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
                 List.of(
                         // Constructor
                         MethodSpec.constructorBuilder()
-                                .addParameter(ParameterSpec.builder(String.class, "key").addAnnotation(NotNull.class).build())
+                                .addParameter(ParameterSpec.builder(String.class, "key").build())
                                 .addStatement("this.key = $T.key(key)", keyCN)
                                 .build(),
                         MethodSpec.methodBuilder("key")
                                 .addModifiers(Modifier.PUBLIC)
-                                .addAnnotation(NotNull.class)
                                 .addAnnotation(Override.class)
                                 .returns(keyCN)
                                 .addStatement("return this.key")
@@ -138,7 +136,7 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
         );
     }
 
-    protected @NotNull String nameGenerator(@NotNull String namespaceId) {
+    protected String nameGenerator(String namespaceId) {
         return toConstant(namespaceId);
     }
 }

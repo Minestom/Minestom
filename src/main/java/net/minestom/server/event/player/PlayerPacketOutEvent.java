@@ -5,7 +5,6 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Listen to outgoing packets asynchronously.
@@ -24,11 +23,11 @@ public class PlayerPacketOutEvent implements PlayerEvent, CancellableEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    public @NotNull ServerPacket getPacket() {
+    public ServerPacket getPacket() {
         return packet;
     }
 

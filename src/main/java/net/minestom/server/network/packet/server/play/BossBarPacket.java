@@ -7,7 +7,6 @@ import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,11 +15,11 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record BossBarPacket(@NotNull UUID uuid,
-                            @NotNull Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public record BossBarPacket(UUID uuid,
+                            Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<BossBarPacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, BossBarPacket value) {
+        public void write(NetworkBuffer buffer, BossBarPacket value) {
             buffer.write(NetworkBuffer.UUID, value.uuid);
             buffer.write(VAR_INT, value.action.id());
             @SuppressWarnings("unchecked") final Type<Action> serializer = (Type<Action>) actionSerializer(value.action.id());
@@ -28,7 +27,7 @@ public record BossBarPacket(@NotNull UUID uuid,
         }
 
         @Override
-        public BossBarPacket read(@NotNull NetworkBuffer buffer) {
+        public BossBarPacket read(NetworkBuffer buffer) {
             final UUID uuid = buffer.read(NetworkBuffer.UUID);
             final int id = buffer.read(VAR_INT);
             final Type<? extends Action> serializer = actionSerializer(id);
@@ -37,7 +36,7 @@ public record BossBarPacket(@NotNull UUID uuid,
     };
 
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         return this.action instanceof ComponentHolder<?> holder
                 ? holder.components()
                 : List.of();
@@ -56,7 +55,7 @@ public record BossBarPacket(@NotNull UUID uuid,
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         return this.action instanceof ComponentHolder<?> holder
                 ? new BossBarPacket(this.uuid, (Action) holder.copyWithOperator(operator))
                 : this;
@@ -68,10 +67,10 @@ public record BossBarPacket(@NotNull UUID uuid,
         int id();
     }
 
-    public record AddAction(@NotNull Component title, float health, @NotNull BossBar.Color color,
-                            @NotNull BossBar.Overlay overlay,
+    public record AddAction(Component title, float health, BossBar.Color color,
+                            BossBar.Overlay overlay,
                             byte flags) implements Action, ComponentHolder<AddAction> {
-        public AddAction(@NotNull BossBar bar) {
+        public AddAction(BossBar bar) {
             this(bar.name(), bar.progress(), bar.color(), bar.overlay(),
                     AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
         }
@@ -91,12 +90,12 @@ public record BossBarPacket(@NotNull UUID uuid,
         }
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return List.of(this.title);
         }
 
         @Override
-        public @NotNull AddAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public AddAction copyWithOperator(UnaryOperator<Component> operator) {
             return new AddAction(operator.apply(this.title), this.health, this.color, this.overlay, this.flags);
         }
     }
@@ -111,7 +110,7 @@ public record BossBarPacket(@NotNull UUID uuid,
     }
 
     public record UpdateHealthAction(float health) implements Action {
-        public UpdateHealthAction(@NotNull BossBar bar) {
+        public UpdateHealthAction(BossBar bar) {
             this(bar.progress());
         }
 
@@ -126,8 +125,8 @@ public record BossBarPacket(@NotNull UUID uuid,
         }
     }
 
-    public record UpdateTitleAction(@NotNull Component title) implements Action, ComponentHolder<UpdateTitleAction> {
-        public UpdateTitleAction(@NotNull BossBar bar) {
+    public record UpdateTitleAction(Component title) implements Action, ComponentHolder<UpdateTitleAction> {
+        public UpdateTitleAction(BossBar bar) {
             this(bar.name());
         }
 
@@ -142,19 +141,19 @@ public record BossBarPacket(@NotNull UUID uuid,
         }
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return List.of(this.title);
         }
 
         @Override
-        public @NotNull UpdateTitleAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public UpdateTitleAction copyWithOperator(UnaryOperator<Component> operator) {
             return new UpdateTitleAction(operator.apply(this.title));
         }
     }
 
-    public record UpdateStyleAction(@NotNull BossBar.Color color,
-                                    @NotNull BossBar.Overlay overlay) implements Action {
-        public UpdateStyleAction(@NotNull BossBar bar) {
+    public record UpdateStyleAction(BossBar.Color color,
+                                    BossBar.Overlay overlay) implements Action {
+        public UpdateStyleAction(BossBar bar) {
             this(bar.color(), bar.overlay());
         }
 
@@ -171,7 +170,7 @@ public record BossBarPacket(@NotNull UUID uuid,
     }
 
     public record UpdateFlagsAction(byte flags) implements Action {
-        public UpdateFlagsAction(@NotNull BossBar bar) {
+        public UpdateFlagsAction(BossBar bar) {
             this(AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
         }
 

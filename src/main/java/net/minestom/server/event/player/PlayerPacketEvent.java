@@ -4,7 +4,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 public class PlayerPacketEvent implements PlayerInstanceEvent, CancellableEvent {
 
@@ -18,11 +17,11 @@ public class PlayerPacketEvent implements PlayerInstanceEvent, CancellableEvent 
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    public @NotNull ClientPacket getPacket() {
+    public ClientPacket getPacket() {
         return packet;
     }
 

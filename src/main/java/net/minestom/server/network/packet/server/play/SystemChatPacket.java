@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
-public record SystemChatPacket(@NotNull Component message,
+public record SystemChatPacket(Component message,
                                boolean overlay) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<SystemChatPacket> SERIALIZER = NetworkBufferTemplate.template(
             COMPONENT, SystemChatPacket::message,
@@ -21,12 +20,12 @@ public record SystemChatPacket(@NotNull Component message,
             SystemChatPacket::new);
 
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         return List.of(message);
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         return new SystemChatPacket(operator.apply(message), overlay);
     }
 }

@@ -2,7 +2,6 @@ package net.minestom.server.thread;
 
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Optional;
@@ -22,7 +21,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return the entities ticked in the current thread
      */
-    static @NotNull Stream<@NotNull Entity> localEntities() {
+    static Stream<Entity> localEntities() {
         if (!(Thread.currentThread() instanceof TickThread tickThread)) return Stream.empty();
         return tickThread.entries.stream()
                 .flatMap(partitionEntry -> partitionEntry.elements().stream())
@@ -49,7 +48,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @return a new acquirable object
      */
     @ApiStatus.Internal
-    static <T> @NotNull Acquirable<T> unassigned(@NotNull T value) {
+    static <T> Acquirable<T> unassigned(T value) {
         return new AcquirableImpl<>(value);
     }
 
@@ -64,7 +63,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @see #sync(Consumer) for auto-closeable capability
      * @see #applySync(Function) for auto-closeable capability
      */
-    @NotNull Acquired<T> lock();
+    Acquired<T> lock();
 
     /**
      * Retrieves the acquirable value if and only if the element
@@ -76,7 +75,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @return an optional containing the acquired element if safe
      * {@link Optional#empty()} otherwise
      */
-    default @NotNull Optional<T> local() {
+    default Optional<T> local() {
         return isLocal() ? Optional.of(unwrap()) : Optional.empty();
     }
 
@@ -99,7 +98,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @return an optional containing the acquired element if safe
      * {@link Optional#empty()} otherwise
      */
-    default @NotNull Optional<T> owned() {
+    default Optional<T> owned() {
         return isOwned() ? Optional.of(unwrap()) : Optional.empty();
     }
 
@@ -118,7 +117,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @param consumer the callback to execute once the element has been safely acquired
      */
-    void sync(@NotNull Consumer<T> consumer);
+    void sync(Consumer<T> consumer);
 
     /**
      * Try to cheaply lock the acquirable element, execute {@code consumer} synchronously and unlock the thread.
@@ -128,7 +127,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @param consumer the callback to execute once the element has been safely acquired
      * @return true if the consumer was executed, false otherwise
      */
-    boolean trySync(@NotNull Consumer<T> consumer);
+    boolean trySync(Consumer<T> consumer);
 
     /**
      * Locks the acquirable element, execute {@code function} synchronously and unlock the thread.
@@ -137,7 +136,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @param function the function to execute once the element has been safely acquired
      */
-    default <R> R applySync(@NotNull Function<T, R> function) {
+    default <R> R applySync(Function<T, R> function) {
         Acquired<T> acquired = lock();
         try {
             return function.apply(acquired.get());
@@ -154,7 +153,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return the unwrapped value
      */
-    @NotNull T unwrap();
+    T unwrap();
 
     /**
      * Gets the thread to which this acquirable element is assigned.

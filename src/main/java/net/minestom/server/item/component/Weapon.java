@@ -4,7 +4,6 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
 
 public record Weapon(int itemDamagePerAttack, float disableBlockingForSeconds) {
     public static final Weapon DEFAULT = new Weapon(1, 0.0f);
@@ -22,11 +21,11 @@ public record Weapon(int itemDamagePerAttack, float disableBlockingForSeconds) {
         this(itemDamagePerAttack, 0.0f);
     }
 
-    public @NotNull Weapon withItemDamagePerAttack(int itemDamagePerAttack) {
+    public Weapon withItemDamagePerAttack(int itemDamagePerAttack) {
         return new Weapon(itemDamagePerAttack, this.disableBlockingForSeconds);
     }
 
-    public @NotNull Weapon withDisableBlockingForSeconds(float disableBlockingForSeconds) {
+    public Weapon withDisableBlockingForSeconds(float disableBlockingForSeconds) {
         return new Weapon(this.itemDamagePerAttack, disableBlockingForSeconds);
     }
 

@@ -1,7 +1,6 @@
 package net.minestom.server.world;
 
 import net.kyori.adventure.key.Key;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record DimensionTypeImpl(
@@ -19,8 +18,8 @@ record DimensionTypeImpl(
         int logicalHeight,
         int minY,
         int height,
-        @NotNull String infiniburn,
-        @NotNull Key effects,
+        String infiniburn,
+        Key effects,
         int monsterSpawnBlockLightLimit,
         int monsterSpawnLightLevel
 ) implements DimensionType {

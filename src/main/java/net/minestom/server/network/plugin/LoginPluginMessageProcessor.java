@@ -3,7 +3,6 @@ package net.minestom.server.network.plugin;
 import net.minestom.server.network.packet.server.login.LoginPluginRequestPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -18,11 +17,11 @@ public class LoginPluginMessageProcessor {
     private final Map<Integer, LoginPlugin.Request> requestByMsgId = new ConcurrentHashMap<>();
     private final PlayerConnection connection;
 
-    public LoginPluginMessageProcessor(@NotNull PlayerConnection connection) {
+    public LoginPluginMessageProcessor(PlayerConnection connection) {
         this.connection = connection;
     }
 
-    public @NotNull CompletableFuture<LoginPlugin.Response> request(@NotNull String channel, byte @NotNull [] requestPayload) {
+    public CompletableFuture<LoginPlugin.Response> request(String channel, byte [] requestPayload) {
         LoginPlugin.Request request = new LoginPlugin.Request(channel, requestPayload);
 
         final int messageId = nextMessageId();
@@ -46,7 +45,7 @@ public class LoginPluginMessageProcessor {
         }
     }
 
-    public void awaitReplies(long timeout, @NotNull TimeUnit timeUnit) throws Exception {
+    public void awaitReplies(long timeout, TimeUnit timeUnit) throws Exception {
         if (requestByMsgId.isEmpty()) {
             return;
         }

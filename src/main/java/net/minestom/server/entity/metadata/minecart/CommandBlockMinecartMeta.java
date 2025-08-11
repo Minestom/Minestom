@@ -4,26 +4,25 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
 
 public class CommandBlockMinecartMeta extends AbstractMinecartMeta {
-    public CommandBlockMinecartMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public CommandBlockMinecartMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public @NotNull String getCommand() {
+    public String getCommand() {
         return metadata.get(MetadataDef.MinecartCommandBlock.COMMAND);
     }
 
-    public void setCommand(@NotNull String value) {
+    public void setCommand(String value) {
         metadata.set(MetadataDef.MinecartCommandBlock.COMMAND, value);
     }
 
-    public @NotNull Component getLastOutput() {
+    public Component getLastOutput() {
         return metadata.get(MetadataDef.MinecartCommandBlock.LAST_OUTPUT);
     }
 
-    public void setLastOutput(@NotNull Component value) {
+    public void setLastOutput(Component value) {
         metadata.set(MetadataDef.MinecartCommandBlock.LAST_OUTPUT, value);
     }
 

@@ -6,7 +6,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the world border state of an {@link Instance},
@@ -38,22 +37,22 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
     }
 
     @Contract(pure = true)
-    public @NotNull WorldBorder withDiameter(double diameter) {
+    public WorldBorder withDiameter(double diameter) {
         return new WorldBorder(diameter, centerX, centerZ, warningDistance, warningTime, dimensionTeleportBoundary);
     }
 
     @Contract(pure = true)
-    public @NotNull WorldBorder withCenter(double centerX, double centerZ) {
+    public WorldBorder withCenter(double centerX, double centerZ) {
         return new WorldBorder(diameter, centerX, centerZ, warningDistance, warningTime, dimensionTeleportBoundary);
     }
 
     @Contract(pure = true)
-    public @NotNull WorldBorder withWarningDistance(int warningDistance) {
+    public WorldBorder withWarningDistance(int warningDistance) {
         return new WorldBorder(diameter, centerX, centerZ, warningDistance, warningTime, dimensionTeleportBoundary);
     }
 
     @Contract(pure = true)
-    public @NotNull WorldBorder withWarningTime(int warningTime) {
+    public WorldBorder withWarningTime(int warningTime) {
         return new WorldBorder(diameter, centerX, centerZ, warningDistance, warningTime, dimensionTeleportBoundary);
     }
 
@@ -63,7 +62,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      * @param point the point to check
      * @return true if {@code position} is inside the world border, false otherwise
      */
-    public boolean inBounds(@NotNull Point point) {
+    public boolean inBounds(Point point) {
         double radius = diameter / 2;
         return point.x() <= centerX + radius && point.x() >= centerX - radius &&
                 point.z() <= centerZ + radius && point.z() >= centerZ - radius;
@@ -75,7 +74,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      * @param entity the entity to check
      * @return true if {@code entity} is inside the world border, false otherwise
      */
-    public boolean inBounds(@NotNull Entity entity) {
+    public boolean inBounds(Entity entity) {
         return inBounds(entity.getPosition());
     }
 
@@ -89,7 +88,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      * @return               an {@link InitializeWorldBorderPacket} reflecting the
      *                       properties of this border
      */
-    public @NotNull InitializeWorldBorderPacket createInitializePacket(double targetDiameter, long transitionTime) {
+    public InitializeWorldBorderPacket createInitializePacket(double targetDiameter, long transitionTime) {
         return new InitializeWorldBorderPacket(centerX, centerZ, diameter, targetDiameter, transitionTime, dimensionTeleportBoundary, warningTime, warningDistance);
     }
 
@@ -98,7 +97,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      *
      * @return the {@link WorldBorderSizePacket} with the center values of this world border
      */
-    public @NotNull WorldBorderCenterPacket createCenterPacket() {
+    public WorldBorderCenterPacket createCenterPacket() {
         return new WorldBorderCenterPacket(centerX, centerZ);
     }
 
@@ -110,7 +109,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      * @param transitionTime the transition time in milliseconds for this lerp
      * @return               the {@link WorldBorderLerpSizePacket} representing this lerp
      */
-    public @NotNull WorldBorderLerpSizePacket createLerpSizePacket(double targetDiameter, long transitionTime) {
+    public WorldBorderLerpSizePacket createLerpSizePacket(double targetDiameter, long transitionTime) {
         return new WorldBorderLerpSizePacket(diameter, targetDiameter, transitionTime);
     }
 
@@ -119,7 +118,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      *
      * @return the {@link WorldBorderSizePacket} with this world border's diameter
      */
-    public @NotNull WorldBorderSizePacket createSizePacket() {
+    public WorldBorderSizePacket createSizePacket() {
         return new WorldBorderSizePacket(diameter);
     }
 
@@ -128,7 +127,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      *
      * @return the {@link WorldBorderWarningDelayPacket} with this world border's warning time
      */
-    public @NotNull WorldBorderWarningDelayPacket createWarningDelayPacket() {
+    public WorldBorderWarningDelayPacket createWarningDelayPacket() {
         return new WorldBorderWarningDelayPacket(warningTime);
     }
 
@@ -137,7 +136,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      *
      * @return the {@link WorldBorderWarningReachPacket} with this world border's warning distance
      */
-    public @NotNull WorldBorderWarningReachPacket createWarningReachPacket() {
+    public WorldBorderWarningReachPacket createWarningReachPacket() {
         return new WorldBorderWarningReachPacket(warningDistance);
     }
 }

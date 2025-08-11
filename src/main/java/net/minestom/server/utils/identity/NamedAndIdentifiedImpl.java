@@ -1,7 +1,6 @@
 package net.minestom.server.utils.identity;
 
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -23,7 +22,7 @@ class NamedAndIdentifiedImpl implements NamedAndIdentified {
      * @param uuid the uuid
      * @see NamedAndIdentified#of(String, UUID)
      */
-    NamedAndIdentifiedImpl(@NotNull String name, @NotNull UUID uuid) {
+    NamedAndIdentifiedImpl(String name, UUID uuid) {
         this(Component.text(name), uuid);
     }
 
@@ -34,18 +33,18 @@ class NamedAndIdentifiedImpl implements NamedAndIdentified {
      * @param uuid the uuid
      * @see NamedAndIdentified#of(Component, UUID)
      */
-    NamedAndIdentifiedImpl(@NotNull Component name, @NotNull UUID uuid) {
+    NamedAndIdentifiedImpl(Component name, UUID uuid) {
         this.name = Objects.requireNonNull(name, "name cannot be null");
         this.uuid = Objects.requireNonNull(uuid, "uuid cannot be null");
     }
 
     @Override
-    public @NotNull Component getName() {
+    public Component getName() {
         return this.name;
     }
 
     @Override
-    public @NotNull UUID getUuid() {
+    public UUID getUuid() {
         return this.uuid;
     }
 
