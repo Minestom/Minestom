@@ -23,7 +23,6 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.plugin.LoginPlugin;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.utils.mojang.MojangUtils;
-import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
@@ -50,7 +49,7 @@ public final class LoginListener {
 
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
-    public static void loginStartListener(@NotNull ClientLoginStartPacket packet, @NotNull PlayerConnection connection) {
+    public static void loginStartListener(ClientLoginStartPacket packet, PlayerConnection connection) {
         final Auth auth = MinecraftServer.process().auth();
         final boolean isSocketConnection = connection instanceof PlayerSocketConnection;
         // Proxy support (only for socket clients) and cache the login username
@@ -95,7 +94,7 @@ public final class LoginListener {
         }
     }
 
-    public static void loginEncryptionResponseListener(@NotNull ClientEncryptionResponsePacket packet, @NotNull PlayerConnection connection) {
+    public static void loginEncryptionResponseListener(ClientEncryptionResponsePacket packet, PlayerConnection connection) {
         if (!(MinecraftServer.process().auth() instanceof Auth.Online(KeyPair keyPair))) {
             connection.kick(Component.text("Encryption is not supported in offline mode", NamedTextColor.RED));
             return;
@@ -192,7 +191,7 @@ public final class LoginListener {
         enterConfig(socketConnection, gameProfile);
     }
 
-    public static void loginPluginResponseListener(@NotNull ClientLoginPluginResponsePacket packet, @NotNull PlayerConnection connection) {
+    public static void loginPluginResponseListener(ClientLoginPluginResponsePacket packet, PlayerConnection connection) {
         try {
             LoginPluginMessageProcessor messageProcessor = connection.loginPluginMessageProcessor();
             messageProcessor.handleResponse(packet.messageId(), packet.data());
@@ -203,7 +202,7 @@ public final class LoginListener {
         }
     }
 
-    public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket ignored, @NotNull PlayerConnection connection) {
+    public static void loginAckListener(ClientLoginAcknowledgedPacket ignored, PlayerConnection connection) {
         if (!(connection instanceof PlayerSocketConnection socketConnection))
             throw new UnsupportedOperationException("Only socket");
         final GameProfile gameProfile = socketConnection.gameProfile();
@@ -217,15 +216,15 @@ public final class LoginListener {
         }
     }
 
-    public static void configAckListener(@NotNull ClientConfigurationAckPacket packet, @NotNull Player player) {
+    public static void configAckListener(ClientConfigurationAckPacket packet, Player player) {
         executeConfig(player, false);
     }
 
-    public static void selectKnownPacks(@NotNull ClientSelectKnownPacksPacket packet, @NotNull Player player) {
+    public static void selectKnownPacks(ClientSelectKnownPacksPacket packet, Player player) {
         player.getPlayerConnection().receiveKnownPacksResponse(packet.entries());
     }
 
-    public static void finishConfigListener(@NotNull ClientFinishConfigurationPacket packet, @NotNull Player player) {
+    public static void finishConfigListener(ClientFinishConfigurationPacket packet, Player player) {
         MinecraftServer.getConnectionManager().transitionConfigToPlay(player);
     }
 
