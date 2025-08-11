@@ -2,7 +2,6 @@ package net.minestom.server.utils;
 
 import net.kyori.adventure.nbt.IntArrayBinaryTag;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -24,11 +23,11 @@ public final class UUIDUtils {
         return UNIQUE_ID_PATTERN.matcher(input).matches();
     }
 
-    public static @NotNull UUID fromNbt(@NotNull IntArrayBinaryTag tag) {
+    public static UUID fromNbt(IntArrayBinaryTag tag) {
         return intArrayToUuid(tag.value());
     }
 
-    public static @NotNull IntArrayBinaryTag toNbt(@NotNull UUID uuid) {
+    public static IntArrayBinaryTag toNbt(UUID uuid) {
         return IntArrayBinaryTag.intArrayBinaryTag(uuidToIntArray(uuid));
     }
 

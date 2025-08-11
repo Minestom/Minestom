@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +33,7 @@ public enum EquipmentSlotGroup implements Predicate<EquipmentSlot> {
     private final String nbtName;
     private final List<EquipmentSlot> equipmentSlots;
 
-    EquipmentSlotGroup(@NotNull String nbtName, @NotNull EquipmentSlot... equipmentSlots) {
+    EquipmentSlotGroup(String nbtName, EquipmentSlot... equipmentSlots) {
         this.equipmentSlots = List.of(equipmentSlots);
         this.nbtName = nbtName;
     }
@@ -42,18 +41,18 @@ public enum EquipmentSlotGroup implements Predicate<EquipmentSlot> {
     /**
      * Returns the (potentially multiple) equipment slots associated with this attribute slot.
      */
-    public @NotNull List<EquipmentSlot> equipmentSlots() {
+    public List<EquipmentSlot> equipmentSlots() {
         return this.equipmentSlots;
     }
 
-    public @NotNull String nbtName() {
+    public String nbtName() {
         return this.nbtName;
     }
 
     /**
      * Returns true if this attribute slot has an effect on the given {@link EquipmentSlot}, false otherwise.
      */
-    public boolean contains(@NotNull EquipmentSlot equipmentSlot) {
+    public boolean contains(EquipmentSlot equipmentSlot) {
         return this.equipmentSlots.contains(equipmentSlot);
     }
 

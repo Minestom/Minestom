@@ -7,12 +7,11 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
     private Block block = Block.STONE;
 
-    public FallingBlockMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public FallingBlockMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -24,7 +23,6 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
         metadata.set(MetadataDef.FallingBlock.SPAWN_POSITION, value);
     }
 
-    @NotNull
     public Block getBlock() {
         return block;
     }
@@ -35,7 +33,7 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
      *
      * @param block which block to display.
      */
-    public void setBlock(@NotNull Block block) {
+    public void setBlock(Block block) {
         this.block = block;
     }
 

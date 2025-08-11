@@ -8,7 +8,6 @@ import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CountDownLatch;
@@ -52,7 +51,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
+    public void setBlock(int x, int y, int z, Block block) {
         final int chunkX = CoordConversion.globalToChunk(x);
         final int chunkZ = CoordConversion.globalToChunk(z);
         final long chunkIndex = CoordConversion.chunkIndex(chunkX, chunkZ);
@@ -96,7 +95,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Override
-    public AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback) {
+    public AbsoluteBlockBatch apply(Instance instance, @Nullable Runnable callback) {
         return apply(instance, callback, true);
     }
 
@@ -108,7 +107,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public AbsoluteBlockBatch unsafeApply(@NotNull Instance instance, @Nullable Runnable callback) {
+    public AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Runnable callback) {
         return apply(instance, callback, false);
     }
 
@@ -121,7 +120,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      *                     Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    protected AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback, boolean safeCallback) {
+    protected AbsoluteBlockBatch apply(Instance instance, @Nullable Runnable callback, boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
 
         final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch(inverseOption) : null;
@@ -153,11 +152,11 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         return inverse;
     }
 
-    public @NotNull BatchOption getInverseOption() {
+    public BatchOption getInverseOption() {
         return inverseOption;
     }
 
-    public void setInverseOption(@NotNull BatchOption inverseOption) {
+    public void setInverseOption(BatchOption inverseOption) {
         this.inverseOption = inverseOption;
     }
 }

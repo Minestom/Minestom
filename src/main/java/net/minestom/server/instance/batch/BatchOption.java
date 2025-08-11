@@ -2,7 +2,6 @@ package net.minestom.server.instance.batch;
 
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents options for {@link Batch}s.
@@ -73,7 +72,6 @@ public class BatchOption {
      * @return 'this' for chaining
      * @see #isFullChunk()
      */
-    @NotNull
     @Contract("_ -> this")
     public BatchOption setFullChunk(boolean fullChunk) {
         this.fullChunk = fullChunk;
@@ -85,7 +83,6 @@ public class BatchOption {
      * @return 'this' for chaining
      * @see #shouldCalculateInverse()
      */
-    @NotNull
     @Contract("_ -> this")
     public BatchOption setCalculateInverse(boolean calculateInverse) {
         this.calculateInverse = calculateInverse;
@@ -98,7 +95,6 @@ public class BatchOption {
      * @see #isUnsafeApply()
      * @see Batch#isReady()
      */
-    @NotNull
     @Contract("_ -> this")
     public BatchOption setUnsafeApply(boolean unsafeApply) {
         this.unsafeApply = unsafeApply;

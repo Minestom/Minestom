@@ -6,7 +6,6 @@ import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.OptionalDouble;
@@ -23,8 +22,8 @@ public interface NodeGenerator {
      * @param boundingBox the bounding box
      * @return the walkable nodes
      */
-    @NotNull Collection<? extends PNode> getWalkable(Block.@NotNull Getter getter, @NotNull Set<PNode> visited,
-                                                     @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox);
+    Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited,
+                                                     PNode current, Point goal, BoundingBox boundingBox);
 
     /**
      * @return snap start and end points to the ground
@@ -42,8 +41,8 @@ public interface NodeGenerator {
      * @param maxFall     the maximum fall distance
      * @return the snapped y coordinate. Empty if the snap point is not found
      */
-    @NotNull OptionalDouble gravitySnap(Block.@NotNull Getter getter, double pointX, double pointY, double pointZ,
-                                        @NotNull BoundingBox boundingBox, double maxFall);
+    OptionalDouble gravitySnap(Block.Getter getter, double pointX, double pointY, double pointZ,
+                                        BoundingBox boundingBox, double maxFall);
 
     /**
      * Check if we can move directly from one point to another
@@ -54,7 +53,7 @@ public interface NodeGenerator {
      * @param boundingBox
      * @return true if we can move directly from start to end
      */
-    default boolean canMoveTowards(Block.@NotNull Getter getter, @NotNull Point start, @NotNull Point end, @NotNull BoundingBox boundingBox) {
+    default boolean canMoveTowards(Block.Getter getter, Point start, Point end, BoundingBox boundingBox) {
         final Point diff = end.sub(start);
 
         if (getter.getBlock(end) != Block.AIR) return false;
@@ -71,7 +70,7 @@ public interface NodeGenerator {
      * @param boundingBox
      * @return true if the point is invalid
      */
-    default boolean pointInvalid(Block.@NotNull Getter getter, @NotNull Point point, @NotNull BoundingBox boundingBox) {
+    default boolean pointInvalid(Block.Getter getter, Point point, BoundingBox boundingBox) {
         var iterator = boundingBox.getBlocks(point);
         while (iterator.hasNext()) {
             var block = iterator.next();
@@ -90,7 +89,7 @@ public interface NodeGenerator {
      * @param target
      * @return the heuristic
      */
-    default double heuristic(@NotNull Point node, @NotNull Point target) {
+    default double heuristic(Point node, Point target) {
         return node.distance(target);
     }
 }
