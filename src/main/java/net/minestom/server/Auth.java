@@ -2,7 +2,6 @@ package net.minestom.server;
 
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNullByDefault;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.Mac;
@@ -13,7 +12,6 @@ import java.util.Set;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-@NotNullByDefault
 public sealed interface Auth {
     record Offline() implements Auth {
     }
