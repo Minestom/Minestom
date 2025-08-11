@@ -28,7 +28,7 @@ import java.net.SocketAddress;
 
 @ApiStatus.NonExtendable
 public interface ServerProcess extends Registries, Snapshotable {
-    @NotNull Auth auth();
+    Auth auth();
 
     /**
      * Handles incoming connections/players.
