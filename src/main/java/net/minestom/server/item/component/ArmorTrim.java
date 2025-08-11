@@ -7,11 +7,10 @@ import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Holder;
-import org.jetbrains.annotations.NotNull;
 
 public record ArmorTrim(
-        @NotNull Holder<TrimMaterial> material,
-        @NotNull Holder<TrimPattern> pattern
+        Holder<TrimMaterial> material,
+        Holder<TrimPattern> pattern
 ) {
 
     public static final NetworkBuffer.Type<ArmorTrim> NETWORK_TYPE = NetworkBufferTemplate.template(

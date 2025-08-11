@@ -4,7 +4,6 @@ import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
@@ -36,7 +35,7 @@ final class RegionFile implements AutoCloseable {
     private static final BinaryTagIO.Reader TAG_READER = BinaryTagIO.unlimitedReader();
     private static final BinaryTagIO.Writer TAG_WRITER = BinaryTagIO.writer();
 
-    public static @NotNull String getFileName(int regionX, int regionZ) {
+    public static String getFileName(int regionX, int regionZ) {
         return "r." + regionX + "." + regionZ + ".mca";
     }
 
@@ -51,7 +50,7 @@ final class RegionFile implements AutoCloseable {
     private final ByteBuffer headerBuffer = ByteBuffer.allocate(HEADER_LENGTH);
     private boolean headerDirty = false;
 
-    public RegionFile(@NotNull Path path) throws IOException {
+    public RegionFile(Path path) throws IOException {
         this.file = new RandomAccessFile(path.toFile(), "rw");
         readHeader();
     }
@@ -92,7 +91,7 @@ final class RegionFile implements AutoCloseable {
         }
     }
 
-    public void writeChunkData(int chunkX, int chunkZ, @NotNull CompoundBinaryTag data) throws IOException {
+    public void writeChunkData(int chunkX, int chunkZ, CompoundBinaryTag data) throws IOException {
         // Write the data (compressed)
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         TAG_WRITER.writeNamed(Map.entry("", data), out, BinaryTagIO.Compression.ZLIB);

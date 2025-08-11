@@ -5,7 +5,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 @ApiStatus.Internal
@@ -27,7 +26,7 @@ public final class ChunkCache implements Block.Getter {
     }
 
     @Override
-    public @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+    public @UnknownNullability Block getBlock(int x, int y, int z, Condition condition) {
         Chunk chunk = this.chunk;
         final int chunkX = CoordConversion.globalToChunk(x);
         final int chunkZ = CoordConversion.globalToChunk(z);

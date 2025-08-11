@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,7 @@ public final class DyeColorGenerator extends MinestomCodeGenerator {
     private final InputStream dyeColorsFile;
     private final File outputFolder;
 
-    public DyeColorGenerator(@Nullable InputStream dyeColorsFile, @NotNull File outputFolder) {
+    public DyeColorGenerator(@Nullable InputStream dyeColorsFile, File outputFolder) {
         this.dyeColorsFile = dyeColorsFile;
         this.outputFolder = outputFolder;
     }
@@ -76,9 +75,9 @@ public final class DyeColorGenerator extends MinestomCodeGenerator {
                         MethodSpec.constructorBuilder()
                                 .addParameters(
                                         List.of(
-                                                ParameterSpec.builder(colorCN, "textureDiffuseColor").addAnnotation(NotNull.class).build(),
-                                                ParameterSpec.builder(colorCN, "textColor").addAnnotation(NotNull.class).build(),
-                                                ParameterSpec.builder(colorCN, "fireworkColor").addAnnotation(NotNull.class).build(),
+                                                ParameterSpec.builder(colorCN, "textureDiffuseColor").build(),
+                                                ParameterSpec.builder(colorCN, "textColor").build(),
+                                                ParameterSpec.builder(colorCN, "fireworkColor").build(),
                                                 ParameterSpec.builder(TypeName.INT, "mapColorId").build()
                                         )
                                 )
@@ -89,17 +88,17 @@ public final class DyeColorGenerator extends MinestomCodeGenerator {
                                 .build(),
                         MethodSpec.methodBuilder("color")
                                 .addModifiers(Modifier.PUBLIC)
-                                .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
+                                .returns(colorCN)
                                 .addStatement("return this.textureDiffuseColor")
                                 .build(),
                         MethodSpec.methodBuilder("textColor")
                                 .addModifiers(Modifier.PUBLIC)
-                                .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
+                                .returns(colorCN)
                                 .addStatement("return this.textColor")
                                 .build(),
                         MethodSpec.methodBuilder("fireworkColor")
                                 .addModifiers(Modifier.PUBLIC)
-                                .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
+                                .returns(colorCN)
                                 .addStatement("return this.fireworkColor")
                                 .build(),
                         MethodSpec.methodBuilder("red")

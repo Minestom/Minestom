@@ -6,12 +6,11 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientPlayerBlockPlacementPacket(
-        @NotNull PlayerHand hand, @NotNull Point blockPosition, @NotNull BlockFace blockFace,
+        PlayerHand hand, Point blockPosition, BlockFace blockFace,
         float cursorPositionX, float cursorPositionY, float cursorPositionZ,
         boolean insideBlock, boolean hitWorldBorder, int sequence) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientPlayerBlockPlacementPacket> SERIALIZER = NetworkBufferTemplate.template(

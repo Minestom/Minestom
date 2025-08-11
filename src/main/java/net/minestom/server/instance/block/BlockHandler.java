@@ -8,7 +8,6 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +26,7 @@ public interface BlockHandler {
      *
      * @param placement the placement details
      */
-    default void onPlace(@NotNull Placement placement) {
+    default void onPlace(Placement placement) {
     }
 
     /**
@@ -35,7 +34,7 @@ public interface BlockHandler {
      *
      * @param destroy the destroy details
      */
-    default void onDestroy(@NotNull Destroy destroy) {
+    default void onDestroy(Destroy destroy) {
     }
 
     /**
@@ -45,7 +44,7 @@ public interface BlockHandler {
      * @param interaction the interaction details
      * @return true to let the block interaction happens, false to cancel
      */
-    default boolean onInteract(@NotNull Interaction interaction) {
+    default boolean onInteract(Interaction interaction) {
         return true;
     }
 
@@ -54,10 +53,10 @@ public interface BlockHandler {
      *
      * @param touch the contact details
      */
-    default void onTouch(@NotNull Touch touch) {
+    default void onTouch(Touch touch) {
     }
 
-    default void tick(@NotNull Tick tick) {
+    default void tick(Tick tick) {
     }
 
     default boolean isTickable() {
@@ -70,7 +69,7 @@ public interface BlockHandler {
      * @return The list of tags from this block's block entity that should be sent to the player
      * @see <a href="https://minecraft.wiki/w/Block_entity">Block entity on the Minecraft wiki</a>
      */
-    default @NotNull Collection<Tag<?>> getBlockEntityTags() {
+    default Collection<Tag<?>> getBlockEntityTags() {
         return List.of();
     }
 
@@ -85,7 +84,6 @@ public interface BlockHandler {
      *
      * @return the key of this handler
      */
-    @NotNull
     Key getKey();
 
     /**
@@ -103,15 +101,15 @@ public interface BlockHandler {
             this.blockPosition = blockPosition;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
     }
@@ -134,15 +132,15 @@ public interface BlockHandler {
             this.cursorZ = cursorZ;
         }
 
-        public @NotNull Player getPlayer() {
+        public Player getPlayer() {
             return player;
         }
 
-        public @NotNull PlayerHand getHand() {
+        public PlayerHand getHand() {
             return hand;
         }
 
-        public @NotNull BlockFace getBlockFace() {
+        public BlockFace getBlockFace() {
             return blockFace;
         }
 
@@ -171,15 +169,15 @@ public interface BlockHandler {
             this.blockPosition = blockPosition;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
     }
@@ -193,7 +191,7 @@ public interface BlockHandler {
             this.player = player;
         }
 
-        public @NotNull Player getPlayer() {
+        public Player getPlayer() {
             return player;
         }
     }
@@ -218,31 +216,31 @@ public interface BlockHandler {
             this.hand = hand;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull BlockFace getBlockFace() {
+        public BlockFace getBlockFace() {
             return blockFace;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
 
-        public @NotNull Point getCursorPosition() {
+        public Point getCursorPosition() {
             return cursorPosition;
         }
 
-        public @NotNull Player getPlayer() {
+        public Player getPlayer() {
             return player;
         }
 
-        public @NotNull PlayerHand getHand() {
+        public PlayerHand getHand() {
             return hand;
         }
     }
@@ -261,19 +259,19 @@ public interface BlockHandler {
             this.touching = touching;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
 
-        public @NotNull Entity getTouching() {
+        public Entity getTouching() {
             return touching;
         }
     }
@@ -290,15 +288,15 @@ public interface BlockHandler {
             this.blockPosition = blockPosition;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
     }
@@ -311,7 +309,7 @@ public interface BlockHandler {
     final class Dummy implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
-        public static @NotNull BlockHandler get(@NotNull String namespace) {
+        public static BlockHandler get(String namespace) {
             return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
@@ -322,7 +320,7 @@ public interface BlockHandler {
         }
 
         @Override
-        public @NotNull Key getKey() {
+        public Key getKey() {
             return key;
         }
     }

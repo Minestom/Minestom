@@ -19,7 +19,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,18 +58,18 @@ public class AnvilLoader implements IChunkLoader {
     private final Long2ObjectOpenHashMap<LongSet> perRegionLoadedChunks = new Long2ObjectOpenHashMap<>();
     private final ReentrantLock perRegionLoadedChunksLock = new ReentrantLock();
 
-    public AnvilLoader(@NotNull Path path) {
+    public AnvilLoader(Path path) {
         this.path = path;
         this.levelPath = path.resolve("level.dat");
         this.regionPath = path.resolve("region");
     }
 
-    public AnvilLoader(@NotNull String path) {
+    public AnvilLoader(String path) {
         this(Path.of(path));
     }
 
     @Override
-    public void loadInstance(@NotNull Instance instance) {
+    public void loadInstance(Instance instance) {
         if (!Files.exists(levelPath)) {
             return;
         }
@@ -84,7 +83,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
-    public @Nullable Chunk loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public @Nullable Chunk loadChunk(Instance instance, int chunkX, int chunkZ) {
         if (!Files.exists(path)) {
             // No world folder
             return null;
@@ -171,7 +170,7 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private void loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
+    private void loadSections(Chunk chunk, CompoundBinaryTag chunkData) {
         for (BinaryTag sectionTag : chunkData.getList("sections", BinaryTagTypes.COMPOUND)) {
             if (!(sectionTag instanceof CompoundBinaryTag sectionData)) {
                 LOGGER.warn("Invalid section tag in chunk data: {}", sectionTag);
@@ -225,7 +224,7 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private int[] loadBlockPalette(@NotNull ListBinaryTag paletteTag) {
+    private int[] loadBlockPalette(ListBinaryTag paletteTag) {
         final int length = paletteTag.size();
         int[] convertedPalette = new int[length];
         for (int i = 0; i < length; i++) {
@@ -260,7 +259,7 @@ public class AnvilLoader implements IChunkLoader {
         return convertedPalette;
     }
 
-    private int[] loadBiomePalette(@NotNull ListBinaryTag paletteTag) {
+    private int[] loadBiomePalette(ListBinaryTag paletteTag) {
         final int length = paletteTag.size();
         int[] convertedPalette = new int[length];
         for (int i = 0; i < length; i++) {
@@ -272,7 +271,7 @@ public class AnvilLoader implements IChunkLoader {
         return convertedPalette;
     }
 
-    private void loadBlockEntities(@NotNull Chunk loadedChunk, @NotNull CompoundBinaryTag chunkData) {
+    private void loadBlockEntities(Chunk loadedChunk, CompoundBinaryTag chunkData) {
         for (BinaryTag blockEntityTag : chunkData.getList("block_entities", BinaryTagTypes.COMPOUND)) {
             if (!(blockEntityTag instanceof CompoundBinaryTag blockEntity)) {
                 LOGGER.warn("Invalid block entity tag in chunk data: {}", blockEntityTag);
@@ -303,7 +302,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
-    public void saveInstance(@NotNull Instance instance) {
+    public void saveInstance(Instance instance) {
         final CompoundBinaryTag nbt = instance.tagHandler().asCompound();
         if (nbt.isEmpty()) {
             // Instance has no data
@@ -317,7 +316,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
-    public void saveChunk(@NotNull Chunk chunk) {
+    public void saveChunk(Chunk chunk) {
         final int chunkX = chunk.getChunkX(), chunkZ = chunk.getChunkZ();
         final int regionX = chunkToRegion(chunkX), regionZ = chunkToRegion(chunkZ);
         final long chunkIndex = chunkIndex(chunkX, chunkZ);
@@ -379,7 +378,7 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private void saveSectionData(@NotNull Chunk chunk, @NotNull CompoundBinaryTag.Builder chunkData) {
+    private void saveSectionData(Chunk chunk, CompoundBinaryTag.Builder chunkData) {
         final ListBinaryTag.Builder<CompoundBinaryTag> sections = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
         final ListBinaryTag.Builder<CompoundBinaryTag> blockEntities = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
 
@@ -518,7 +517,7 @@ public class AnvilLoader implements IChunkLoader {
      * @param chunk the chunk to unload
      */
     @Override
-    public void unloadChunk(@NotNull Chunk chunk) {
+    public void unloadChunk(Chunk chunk) {
         final int regionX = chunkToRegion(chunk.getChunkX()), regionZ = chunkToRegion(chunk.getChunkZ());
         final long regionIndex = regionIndex(regionX, regionZ);
 

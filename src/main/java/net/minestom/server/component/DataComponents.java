@@ -22,14 +22,9 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Holder;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.*;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Unit;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -136,7 +131,7 @@ public class DataComponents {
     public static final DataComponent<DyeColor> SHULKER_COLOR = register("shulker/color", DyeColor.NETWORK_TYPE, DyeColor.CODEC);
 
     // There are some components that are serialized to codec as an object containing a single field, for now we just inline them here.
-    private static <T> @NotNull Codec<T> wrapObject(@NotNull String fieldName, @NotNull Codec<T> serializer) {
+    private static <T> Codec<T> wrapObject(String fieldName, Codec<T> serializer) {
         return StructCodec.struct(fieldName, serializer, t -> t, t -> t);
     }
 }
