@@ -3,7 +3,6 @@ package net.minestom.codegen;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
-import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.InputStream;
@@ -15,17 +14,17 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public record ParticleGenerator(@Nullable InputStream particleFile,
+public record ParticleGenerator(InputStream particleFile,
                                 Path outputFolder) implements MinestomCodeGenerator {
     public static final Pattern PASCAL_PATTERN = Pattern.compile("_([a-z])");
 
     public ParticleGenerator {
+        Objects.requireNonNull(particleFile, "Particle file cannot be null");
         Objects.requireNonNull(outputFolder, "Output folder cannot be null");
     }
 
     @Override
     public void generate() {
-        Objects.requireNonNull(particleFile, "Nothing to generate, particleFile is null");
         ensureDirectory(outputFolder);
 
         // Important classes we use alot

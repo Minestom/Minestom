@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
-import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.InputStream;
@@ -15,15 +14,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 
-public record DyeColorGenerator(@Nullable InputStream dyeColorsFile,
+public record DyeColorGenerator(InputStream dyeColorsFile,
                                 Path outputFolder) implements MinestomCodeGenerator {
     public DyeColorGenerator {
+        Objects.requireNonNull(dyeColorsFile, "Dye colors file cannot be null");
         Objects.requireNonNull(outputFolder, "Output folder cannot be null");
     }
 
     @Override
     public void generate() {
-        Objects.requireNonNull(dyeColorsFile, "Nothing to generate, dyeColorsFile is null");
         ensureDirectory(outputFolder);
         // Important classes we use alot
         ClassName colorCN = ClassName.get("net.minestom.server.color", "Color");

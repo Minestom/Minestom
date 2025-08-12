@@ -16,17 +16,17 @@ import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public record WorldEventGenerator(String packageName, String worldEventClassName,
-                                  @Nullable InputStream entriesFile,
+                                  InputStream entriesFile,
                                   Path outputFolder) implements MinestomCodeGenerator {
     public WorldEventGenerator {
         Objects.requireNonNull(packageName, "packageName cannot be null");
         Objects.requireNonNull(worldEventClassName, "worldEventClassName cannot be null");
+        Objects.requireNonNull(entriesFile, "entriesFile cannot be null");
         Objects.requireNonNull(outputFolder, "outputFolder cannot be null");
     }
 
     @Override
     public void generate() {
-        Objects.requireNonNull(entriesFile, "Nothing to generate, entriesFile is null");
         ensureDirectory(outputFolder);
 
         // Important classes we use alot

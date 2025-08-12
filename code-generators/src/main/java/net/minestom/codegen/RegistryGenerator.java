@@ -2,7 +2,6 @@ package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
-import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.InputStream;
@@ -15,8 +14,7 @@ public record RegistryGenerator(Path outputFolder) implements MinestomCodeGenera
         Objects.requireNonNull(outputFolder, "Output folder cannot be null");
     }
 
-    public void generate(@Nullable InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
-        Objects.requireNonNull(resourceFile, "Nothing to generate, resourceFile is null");
+    public void generate(InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
         ensureDirectory(outputFolder);
 
         ClassName typeClass = ClassName.get(packageName, typeName);
@@ -54,8 +52,7 @@ public record RegistryGenerator(Path outputFolder) implements MinestomCodeGenera
         );
     }
 
-    public void generateKeys(@Nullable InputStream resourceFile, String packageName, String typeName) {
-        Objects.requireNonNull(resourceFile, "Nothing to generate, resourceFile is null");
+    public void generateKeys(InputStream resourceFile, String packageName, String typeName) {
         ensureDirectory(outputFolder);
 
         ClassName typeClass = ClassName.bestGuess(packageName + "." + typeName); // Use bestGuess to handle nested class

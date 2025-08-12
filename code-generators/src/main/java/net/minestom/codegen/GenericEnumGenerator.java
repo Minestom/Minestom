@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
-import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.InputStream;
@@ -18,19 +17,19 @@ import java.util.stream.StreamSupport;
 public class GenericEnumGenerator implements MinestomCodeGenerator {
     private final String packageName;
     private final String className;
-    private final @Nullable InputStream entriesFile;
+    private final InputStream entriesFile;
     private final Path outputFolder;
 
     private boolean isPackagePrivate = false;
 
     public GenericEnumGenerator(
             String packageName, String className,
-            @Nullable InputStream entriesFile, Path outputFolder
+            InputStream entriesFile, Path outputFolder
     ) {
-        this.packageName = packageName;
-        this.className = className;
-        this.entriesFile = entriesFile;
-        this.outputFolder = outputFolder;
+        this.packageName = Objects.requireNonNull(packageName, "Package name cannot be null");
+        this.className = Objects.requireNonNull(className, "Class name cannot be null");
+        this.entriesFile = Objects.requireNonNull(entriesFile, "Entries file cannot be null");
+        this.outputFolder = Objects.requireNonNull(outputFolder, "Output folder cannot be null");
     }
 
     public GenericEnumGenerator packagePrivate() {
@@ -45,7 +44,6 @@ public class GenericEnumGenerator implements MinestomCodeGenerator {
 
     @Override
     public void generate() {
-        Objects.requireNonNull(entriesFile, "Nothing to generate, entriesFile is null");
         ensureDirectory(outputFolder);
 
         // Important classes we use alot

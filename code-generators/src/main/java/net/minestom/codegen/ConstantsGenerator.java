@@ -2,7 +2,6 @@ package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
-import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.InputStream;
@@ -10,15 +9,15 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public record ConstantsGenerator(@Nullable InputStream constantsFile,
+public record ConstantsGenerator(InputStream constantsFile,
                                  Path outputFolder) implements MinestomCodeGenerator {
     public ConstantsGenerator {
+        Objects.requireNonNull(constantsFile, "Constants file cannot be null");
         Objects.requireNonNull(outputFolder, "Output folder cannot be null");
     }
 
     @Override
     public void generate() {
-        Objects.requireNonNull(constantsFile, "Nothing to generate, constantsFile is null");
         ensureDirectory(outputFolder);
 
         final ClassName implCN = ClassName.get("net.minestom.server", "MinecraftServer");

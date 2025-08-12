@@ -1,9 +1,8 @@
 package net.minestom.codegen;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public final class Generators {
 
@@ -74,7 +73,7 @@ public final class Generators {
         System.out.println("Finished generating code");
     }
 
-    private static @Nullable InputStream resource(String name) {
-        return Generators.class.getResourceAsStream("/" + name);
+    private static InputStream resource(String name) {
+        return Objects.requireNonNull(Generators.class.getResourceAsStream("/" + name), "Cannot find resource: %s".formatted(name));
     }
 }
