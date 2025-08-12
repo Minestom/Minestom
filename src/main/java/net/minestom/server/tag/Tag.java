@@ -153,7 +153,7 @@ public class Tag<T> {
         PathEntry[] pathEntries = new PathEntry[path.length];
         for (int i = 0; i < path.length; i++) {
             final String name = path[i];
-            if (name.isEmpty()) throw new IllegalArgumentException("Path must not be empty: " + Arrays.toString(path));
+            if (name == null || name.isEmpty()) throw new IllegalArgumentException("Path must not be empty: " + Arrays.toString(path));
             pathEntries[i] = new PathEntry(name, INDEX_MAP.get(name));
         }
         return new Tag<>(index, key, readComparator, entry, defaultValue, pathEntries, copy, listScope);
