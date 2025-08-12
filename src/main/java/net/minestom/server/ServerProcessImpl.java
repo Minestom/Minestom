@@ -68,6 +68,8 @@ import java.util.concurrent.atomic.AtomicReference;
 final class ServerProcessImpl implements ServerProcess {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
 
+    private final Auth auth;
+
     private final ExceptionManager exception;
 
     private final DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues;
@@ -117,7 +119,8 @@ final class ServerProcessImpl implements ServerProcess {
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
-    public ServerProcessImpl() {
+    public ServerProcessImpl(Auth auth) {
+        this.auth = auth;
         this.exception = new ExceptionManager();
 
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
@@ -166,6 +169,11 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.dispatcher = ThreadDispatcher.dispatcher(ThreadProvider.counter(), ServerFlag.DISPATCHER_THREADS);
         this.ticker = new TickerImpl();
+    }
+
+    @Override
+    public Auth auth() {
+        return auth;
     }
 
     @Override
@@ -374,7 +382,21 @@ final class ServerProcessImpl implements ServerProcess {
             throw new IllegalStateException("Server already started");
         }
 
-        LOGGER.info("Starting {} ({}) server.", MinecraftServer.getBrandName(), Git.version());
+        final String brand = MinecraftServer.getBrandName();
+        LOGGER.info("Starting {} ({}) server.", brand, Git.version());
+        switch (auth) {
+            case Auth.Offline ignored ->
+                    LOGGER.info("Running in offline mode. Beware that this is not secure and players can impersonate each other.");
+            case Auth.Online ignored -> LOGGER.info("Running in online mode with Mojang's authentication.");
+            case Auth.Velocity ignored -> LOGGER.info("Running in Velocity mode with modern IP forwarding.");
+            case Auth.Bungee bungee -> {
+                if (bungee.guard()) {
+                    LOGGER.info("Running in BungeeCord mode, using legacy IP forwarding with Guard enabled.");
+                } else {
+                    LOGGER.info("Running in BungeeCord mode without BungeeGuard. Be sure to configure your firewall to prevent direct connections.");
+                }
+            }
+        }
 
         // Init server
         try {
@@ -387,7 +409,7 @@ final class ServerProcessImpl implements ServerProcess {
         // Start server
         server.start();
 
-        LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
+        LOGGER.info("{} server started successfully.", brand);
 
         // Stop the server on SIGINT
         if (ServerFlag.SHUTDOWN_ON_SIGNAL) Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
@@ -395,16 +417,16 @@ final class ServerProcessImpl implements ServerProcess {
 
     @Override
     public void stop() {
-        if (!stopped.compareAndSet(false, true))
-            return;
-        LOGGER.info("Stopping " + MinecraftServer.getBrandName() + " server.");
+        if (!stopped.compareAndSet(false, true)) return;
+        final String brand = MinecraftServer.getBrandName();
+        LOGGER.info("Stopping {} server.", brand);
         scheduler.shutdown();
         connection.shutdown();
         server.stop();
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
         dispatcher.shutdown();
-        LOGGER.info(MinecraftServer.getBrandName() + " server stopped successfully.");
+        LOGGER.info("{} server stopped successfully.", brand);
     }
 
     @Override

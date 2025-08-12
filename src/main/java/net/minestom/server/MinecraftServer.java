@@ -11,6 +11,9 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
+import net.minestom.server.extras.MojangAuth;
+import net.minestom.server.extras.bungee.BungeeCordProxy;
+import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -73,16 +76,33 @@ public final class MinecraftServer implements MinecraftConstants {
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
-    public static MinecraftServer init() {
-        updateProcess();
+    public static MinecraftServer init(Auth auth) {
+        updateProcess(auth);
         return new MinecraftServer();
+    }
+
+    public static MinecraftServer init() {
+        return init(defaultAuth());
+    }
+
+    @ApiStatus.Internal
+    public static ServerProcess updateProcess(Auth auth) {
+        ServerProcess process = new ServerProcessImpl(auth);
+        serverProcess = process;
+        return process;
     }
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
-        ServerProcess process = new ServerProcessImpl();
-        serverProcess = process;
-        return process;
+        return updateProcess(defaultAuth());
+    }
+
+    @SuppressWarnings("removal")
+    private static Auth defaultAuth() {
+        if (MojangAuth.isEnabled()) return new Auth.Online(MojangAuth.getKeyPair());
+        if (VelocityProxy.isEnabled()) return new Auth.Velocity(VelocityProxy.getKey());
+        if (BungeeCordProxy.isEnabled()) return new Auth.Bungee(BungeeCordProxy.getBungeeGuardTokens());
+        return new Auth.Offline();
     }
 
     /**
