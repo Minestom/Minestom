@@ -8,6 +8,7 @@ import net.minestom.server.event.EventFilter;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.util.function.BooleanSupplier;
@@ -25,7 +26,7 @@ public interface Env {
         process().ticker().tick(System.nanoTime());
     }
 
-    default boolean tickWhile(BooleanSupplier condition, Duration timeout) {
+    default boolean tickWhile(BooleanSupplier condition, @Nullable Duration timeout) {
         var ticker = process().ticker();
         final long start = System.nanoTime();
         while (condition.getAsBoolean()) {
@@ -46,7 +47,7 @@ public interface Env {
         return createFlatInstance(null);
     }
 
-    default Instance createFlatInstance(IChunkLoader chunkLoader) {
+    default Instance createFlatInstance(@Nullable IChunkLoader chunkLoader) {
         var instance = process().instance().createInstanceContainer(chunkLoader);
         instance.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
         return instance;

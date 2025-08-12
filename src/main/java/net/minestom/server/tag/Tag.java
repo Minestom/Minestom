@@ -33,18 +33,20 @@ public class Tag<T> {
     final int index;
     private final String key;
     final Serializers.Entry<T, BinaryTag> entry;
-    private final Supplier<T> defaultValue;
+    private final @Nullable Supplier<@Nullable T> defaultValue;
 
     final Function<?, ?> readComparator;
     // Optional properties
-    final PathEntry[] path;
-    final UnaryOperator<T> copy;
+    final PathEntry @Nullable [] path;
+    final @Nullable UnaryOperator<T> copy;
     final int listScope;
 
     Tag(int index, String key,
         Function<?, ?> readComparator,
         Serializers.Entry<T, BinaryTag> entry,
-        Supplier<T> defaultValue, PathEntry[] path, UnaryOperator<T> copy, int listScope) {
+        @Nullable Supplier<@Nullable T> defaultValue,
+        PathEntry @Nullable [] path,
+        @Nullable UnaryOperator<T> copy, int listScope) {
         assert index == INDEX_MAP.get(key);
         this.index = index;
         this.key = key;
@@ -117,14 +119,14 @@ public class Tag<T> {
         var listEntry = new Serializers.Entry<List<T>, ListBinaryTag>(
                 BinaryTagTypes.LIST,
                 read -> {
-                    if (read.size() == 0) return List.of();
+                    if (read.isEmpty()) return List.of();
                     return read.stream().map(readFunction).toList();
                 },
                 write -> {
                     if (write.isEmpty())
                         return ListBinaryTag.empty();
                     final List<BinaryTag> list = write.stream().map(writeFunction).toList();
-                    final BinaryTagType<?> type = list.get(0).type();
+                    final BinaryTagType<?> type = list.getFirst().type();
                     return ListBinaryTag.listBinaryTag(type, list);
                 });
         UnaryOperator<List<T>> co = this.copy != null ? ts -> {
@@ -139,7 +141,7 @@ public class Tag<T> {
             }
             return shallowCopy ? List.copyOf(ts) : List.of(array);
         } : List::copyOf;
-        return new Tag<>(index, key, readComparator, Serializers.Entry.class.cast(listEntry),
+        return new Tag<>(index, key, readComparator, (Serializers.Entry) listEntry,
                 null, path, co, listScope + 1);
     }
 
@@ -151,8 +153,7 @@ public class Tag<T> {
         PathEntry[] pathEntries = new PathEntry[path.length];
         for (int i = 0; i < path.length; i++) {
             final String name = path[i];
-            if (name == null || name.isEmpty())
-                throw new IllegalArgumentException("Path must not be empty: " + Arrays.toString(path));
+            if (name.isEmpty()) throw new IllegalArgumentException("Path must not be empty: " + Arrays.toString(path));
             pathEntries[i] = new PathEntry(name, INDEX_MAP.get(name));
         }
         return new Tag<>(index, key, readComparator, entry, defaultValue, pathEntries, copy, listScope);
@@ -195,12 +196,11 @@ public class Tag<T> {
     final boolean shareValue(Tag<?> other) {
         if (this == other) return true;
         // Tags are not strictly the same, compare readers
-        if (this.listScope != other.listScope)
-            return false;
+        if (this.listScope != other.listScope) return false;
         return this.readComparator == other.readComparator;
     }
 
-    final T createDefault() {
+    final @Nullable T createDefault() {
         final Supplier<T> supplier = defaultValue;
         return supplier != null ? supplier.get() : null;
     }
@@ -313,17 +313,17 @@ public class Tag<T> {
     public static <T extends Record> Tag<T> View(Class<T> type) {
         return View(TagRecord.serializer(type));
     }
-    
+
     /**
-    * Creates a transient tag with the specified key. This tag does not get serialized
-    * to NBT (Named Binary Tag) format and is not sent to the client. Unlike other tags,
-    * which are serialized, transient tags are used for temporary data
-    * that only needs to exist on the server side.
-    *
-    * @param <T> The type of the tag's value.
-    * @param key The key.
-    * @return A transient tag with the key.
-    */    
+     * Creates a transient tag with the specified key. This tag does not get serialized
+     * to NBT (Named Binary Tag) format and is not sent to the client. Unlike other tags,
+     * which are serialized, transient tags are used for temporary data
+     * that only needs to exist on the server side.
+     *
+     * @param <T> The type of the tag's value.
+     * @param key The key.
+     * @return A transient tag with the key.
+     */
     public static <T> Tag<T> Transient(String key) {
         //noinspection unchecked
         return (Tag<T>) tag(key, Serializers.EMPTY);

@@ -42,7 +42,7 @@ public class CommandTestUtils {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
                     for (String s1 : strings[0].split(" ")) {
-                        result.add(s1+"="+(strings[1].replaceAll("!", s1)));
+                        result.add(s1 + "=" + (strings[1].replaceAll("!", s1)));
                     }
                     return result;
                 },
@@ -50,7 +50,7 @@ public class CommandTestUtils {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
                     for (String s1 : strings[0].split(" ")) {
-                        result.add(s1+"="+(strings[1].replaceAll("%", "'"+s1+"'")));
+                        result.add(s1 + "=" + (strings[1].replaceAll("%", "'" + s1 + "'")));
                     }
                     return result;
                 },
@@ -58,7 +58,7 @@ public class CommandTestUtils {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
                     for (String s1 : strings[0].split(" ")) {
-                        result.add(s1+"="+(strings[1].replaceAll("§", "'"+(s1.toUpperCase(Locale.ROOT))+"'")));
+                        result.add(s1 + "=" + (strings[1].replaceAll("§", "'" + (s1.toUpperCase(Locale.ROOT)) + "'")));
                     }
                     return result;
                 }
@@ -140,7 +140,7 @@ public class CommandTestUtils {
                         if (spaceIndex > -1 && spaceIndex < s.indexOf('=')) {
                             final String[] split = s.split("=", 2);
                             for (String s1 : split[0].split(" ")) {
-                                result.add(s1+"="+split[1]);
+                                result.add(s1 + "=" + split[1]);
                             }
                         } else {
                             result.add(s);
@@ -151,12 +151,12 @@ public class CommandTestUtils {
                     if (spaceIndex > -1 && spaceIndex < s.indexOf('-')) {
                         final String[] split = s.split("-", 2);
                         for (String s1 : split[0].split(" ")) {
-                            result.add(s1+"-"+split[1]);
+                            result.add(s1 + "-" + split[1]);
                         }
                     } else if (spaceIndex > -1 && spaceIndex < s.indexOf('+')) {
                         final String[] split = s.split("\\+", 2);
                         for (String s1 : split[0].split(" ")) {
-                            result.add(s1+"+"+split[1]);
+                            result.add(s1 + "+" + split[1]);
                         }
                     } else {
                         result.add(s);
@@ -170,7 +170,7 @@ public class CommandTestUtils {
             Map<String, String[]> references = new HashMap<>();
             Map<String, TestNode> nodes = new HashMap<>();
             final List<String> strings = preProcessString(input);
-            String rootId = strings.get(0);
+            final String rootId = strings.getFirst();
 
             for (String s : strings.stream().skip(0).toList()) {
                 if (s.length() < 3) continue; //invalid line
@@ -197,9 +197,9 @@ public class CommandTestUtils {
         }
 
         private static String resolveNode(String id, Map<String, String[]> references,
-                                              Map<String, TestNode> nodes, ArrayList<TestNode> result,
-                                              Map<String, String> nameToMetaPath,
-                                              List<Runnable> redirectSetters, String metaPath) {
+                                          Map<String, TestNode> nodes, ArrayList<TestNode> result,
+                                          Map<String, String> nameToMetaPath,
+                                          List<Runnable> redirectSetters, String metaPath) {
             final TestNode node = nodes.get(id);
             final String[] refs = references.get(id);
             final String path = metaPath + "#" + node.meta;
@@ -208,7 +208,7 @@ public class CommandTestUtils {
                 nameToMetaPath.put(id, path);
                 return path;
             } else if (refs[0] == null) {
-                 redirectSetters.add(() -> node.redirect.set(nameToMetaPath.get(refs[1])));
+                redirectSetters.add(() -> node.redirect.set(nameToMetaPath.get(refs[1])));
             } else {
                 for (String ref : refs) {
                     node.children.add(resolveNode(ref, references, nodes, result, nameToMetaPath, redirectSetters, path));
