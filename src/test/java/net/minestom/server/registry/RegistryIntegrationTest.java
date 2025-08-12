@@ -14,30 +14,26 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RegistryIntegrationTest {
 
     @Test
-    void testNullPack(Env env) {
+    void testUnnamedPack(Env env) {
         DynamicRegistry<DimensionType> dimensionRegistry = env.process().dimensionType();
         DimensionType dimensionType = DimensionType.builder()
                 .ambientLight(2f)
                 .build();
-        var registryKey = dimensionRegistry.register(Key.key("toocool:fortests"), dimensionType, null);
+        var registryKey = dimensionRegistry.register(Key.key("toocool:fortests"), dimensionType, DataPack.MINESTOM_UNNAMED);
         assertEquals(dimensionType, dimensionRegistry.get(registryKey));
-        assertNull(dimensionRegistry.getPack(registryKey));
+        assertEquals(DataPack.MINESTOM_UNNAMED, dimensionRegistry.getPack(registryKey));
         assertDoesNotThrow(() -> {
             dimensionRegistry.registryDataPacket(env.process(), false);
         }, "Registry data packet should not throw for null pack");
     }
 
     @Test
-    void testNullPackInterlaced(Env env) {
+    void testDifferentPacksInterlaced(Env env) {
         DynamicRegistry<DimensionType> dimensionRegistry = env.process().dimensionType();
         DimensionType dimensionType = DimensionType.builder()
                 .ambientLight(2f)
                 .build();
-        assertDoesNotThrow(()-> {
-            dimensionRegistry.register(Key.key("toocool:fortests"), dimensionType, null);
-        });
-        assertThrows(IllegalStateException.class, () -> {
-            dimensionRegistry.register(Key.key("toocool:fortests2"), dimensionType, DataPack.MINECRAFT_CORE);
-        });
+        assertDoesNotThrow(()-> dimensionRegistry.register(Key.key("toocool:fortests"), dimensionType, DataPack.MINESTOM_UNNAMED));
+        assertDoesNotThrow(() -> dimensionRegistry.register(Key.key("toocool:fortests2"), dimensionType, DataPack.MINECRAFT_CORE));
     }
 }

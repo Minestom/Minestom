@@ -126,8 +126,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public RegistryKey<T> register(Key key, T object, @Nullable DataPack pack) {
+    public RegistryKey<T> register(Key key, T object, DataPack pack) {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
+        Check.notNull(key, "Key cannot be null");
+        Check.notNull(object, "Object cannot be null");
+        Check.notNull(pack, "Pack cannot be null");
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
@@ -139,16 +142,12 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                 idToKey.add(registryKey);
                 id = idToValue.size() - 1;
                 keyToId.put(registryKey, id);
-                if (pack != null) {
-                    Check.stateCondition(packById.size() != id,
-                            "Registry `{0}` tried to register `{1}` with a not null pack, but is padded with null packs. Make sure to register all entries with null packs at the end!", registryKey.name(), key);
-                    packById.add(pack); // Dont add null packs, handled by getPack
-                }
+                packById.add(pack);
             } else {
                 idToValue.set(id, object);
                 idToKey.set(id, registryKey);
                 keyToId.put(registryKey, id);
-                packById.set(id, pack); //TODO determine way to handle this better if null.
+                packById.set(id, pack);
             }
 
             vanillaRegistryDataPacket.invalidate();
@@ -159,6 +158,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Override
     public boolean remove(Key key) throws UnsupportedOperationException {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
+        Check.notNull(key, "Key cannot be null");
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
@@ -276,7 +276,6 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             packById = this.packById;
         }
         List<RegistryDataPacket.Entry> entries = new ArrayList<>(idToValue.size());
-        final int packByIdSize = packById.size();
         for (int i = 0; i < idToValue.size(); i++) {
             CompoundBinaryTag data = null;
             // sorta todo, sorta just a note:
@@ -288,7 +287,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             // like material, block, etc generate entries which are behind feature flags, whereas the ones which inspect
             // static assets (the traditionally dynamic registries), do not generate those assets.
             T entry = idToValue.get(i);
-            DataPack pack = i < packByIdSize ? packById.get(i) : null;
+            DataPack pack = packById.get(i);
             if (!excludeVanilla || pack != DataPack.MINECRAFT_CORE) {
                 final Result<BinaryTag> entryResult = codec.encode(transcoder, entry);
                 if (entryResult instanceof Result.Ok(BinaryTag tag)) {
