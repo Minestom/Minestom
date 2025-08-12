@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.Tickable;
-import org.jetbrains.annotations.NotNull;
 import org.openjdk.jcstress.annotations.*;
 import org.openjdk.jcstress.infra.results.L_Result;
 
@@ -33,7 +32,7 @@ public class AcquirableSyncTest {
         }
 
         @Override
-        public @NotNull Acquirable<? extends Element> acquirable() {
+        public Acquirable<? extends Element> acquirable() {
             return acquirable;
         }
     }

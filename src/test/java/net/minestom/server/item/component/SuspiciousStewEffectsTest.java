@@ -5,7 +5,6 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SuspiciousStewEffectsTest extends AbstractItemComponentTest<SuspiciousStewEffects> {
 
     @Override
-    protected @NotNull DataComponent<SuspiciousStewEffects> component() {
+    protected DataComponent<SuspiciousStewEffects> component() {
         return DataComponents.SUSPICIOUS_STEW_EFFECTS;
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, SuspiciousStewEffects>> directReadWriteEntries() {
+    protected List<Map.Entry<String, SuspiciousStewEffects>> directReadWriteEntries() {
         return List.of(
                 Map.entry("empty", SuspiciousStewEffects.EMPTY),
                 Map.entry("single", new SuspiciousStewEffects(new SuspiciousStewEffects.Effect(PotionEffect.ABSORPTION, 100))),

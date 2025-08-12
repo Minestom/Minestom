@@ -1,7 +1,6 @@
 package net.minestom.server.command;
 
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import org.jetbrains.annotations.NotNull;
 import org.opentest4j.AssertionFailedError;
 
 import java.math.BigInteger;
@@ -71,7 +70,7 @@ public class CommandTestUtils {
             final StringBuilder builder = new StringBuilder();
             builder.append(packet.rootIndex());
             builder.append(lineSeparator);
-            @NotNull List<DeclareCommandsPacket.Node> nodes = packet.nodes();
+            List<DeclareCommandsPacket.Node> nodes = packet.nodes();
             for (int i = 0; i < nodes.size(); i++) {
                 DeclareCommandsPacket.Node node = nodes.get(i);
                 builder.append(i);
@@ -242,7 +241,7 @@ public class CommandTestUtils {
         builder.append(packet.rootIndex());
         builder.append(" [label=\"root\",shape=rectangle]");
         builder.append(statementSeparator);
-        @NotNull List<DeclareCommandsPacket.Node> nodes = packet.nodes();
+        List<DeclareCommandsPacket.Node> nodes = packet.nodes();
         for (int i = 0; i < nodes.size(); i++) {
             DeclareCommandsPacket.Node node = nodes.get(i);
             if ((node.flags & 0x3) != 0) {
