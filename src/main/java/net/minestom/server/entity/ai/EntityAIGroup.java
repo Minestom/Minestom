@@ -1,7 +1,6 @@
 package net.minestom.server.entity.ai;
 
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ public class EntityAIGroup {
      *
      * @return a modifiable list containing this group goal selectors
      */
-    @NotNull
     public List<GoalSelector> getGoalSelectors() {
         return this.goalSelectors;
     }
@@ -35,7 +33,6 @@ public class EntityAIGroup {
      *
      * @return a modifiable list containing this group target selectors
      */
-    @NotNull
     public List<TargetSelector> getTargetSelectors() {
         return this.targetSelectors;
     }

@@ -1,8 +1,6 @@
 package net.minestom.server.extras.bungee;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.Auth;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -12,7 +10,11 @@ import java.util.Set;
  * but managing your firewall is still recommended.
  * <p>
  * Please consider using {@link net.minestom.server.extras.velocity.VelocityProxy} instead.
+ *
+ * @deprecated Use {@link net.minestom.server.MinecraftServer#init(Auth)}
  */
+@SuppressWarnings("removal")
+@Deprecated(forRemoval = true)
 public final class BungeeCordProxy {
 
     private static Set<String> bungeeGuardTokens = null;
@@ -55,14 +57,17 @@ public final class BungeeCordProxy {
         return bungeeGuardTokens != null;
     }
 
+    public static Set<String> getBungeeGuardTokens() {
+        return bungeeGuardTokens;
+    }
+
     /**
      * Checks whether a token is one of the valid BungeeGuard tokens
      *
      * @param token The token to test
      * @return Whether the token is a valid BungeeGuard token
      */
-    public static boolean isValidBungeeGuardToken(@NotNull String token) {
+    public static boolean isValidBungeeGuardToken(String token) {
         return isBungeeGuardEnabled() && bungeeGuardTokens.contains(token);
     }
-
 }

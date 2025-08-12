@@ -1,7 +1,6 @@
 package net.minestom.server.codec;
 
 import com.google.gson.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.AbstractList;
 import java.util.Collection;
@@ -12,108 +11,108 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     public static final TranscoderJsonImpl INSTANCE = new TranscoderJsonImpl();
 
     @Override
-    public @NotNull JsonElement createNull() {
+    public JsonElement createNull() {
         return JsonNull.INSTANCE;
     }
 
     @Override
-    public @NotNull Result<Boolean> getBoolean(@NotNull JsonElement value) {
+    public Result<Boolean> getBoolean(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive))
             return new Result.Error<>("Not a boolean: " + value);
         return new Result.Ok<>(primitive.getAsBoolean());
     }
 
     @Override
-    public @NotNull JsonElement createBoolean(boolean value) {
+    public JsonElement createBoolean(boolean value) {
         return new JsonPrimitive(value);
     }
 
     @Override
-    public @NotNull Result<Byte> getByte(@NotNull JsonElement value) {
+    public Result<Byte> getByte(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive) || !primitive.isNumber())
             return new Result.Error<>("Not a byte: " + value);
         return new Result.Ok<>(primitive.getAsByte());
     }
 
     @Override
-    public @NotNull JsonElement createByte(byte value) {
+    public JsonElement createByte(byte value) {
         return new JsonPrimitive(value);
     }
 
     @Override
-    public @NotNull Result<Short> getShort(@NotNull JsonElement value) {
+    public Result<Short> getShort(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive) || !primitive.isNumber())
             return new Result.Error<>("Not a short: " + value);
         return new Result.Ok<>(primitive.getAsShort());
     }
 
     @Override
-    public @NotNull JsonElement createShort(short value) {
+    public JsonElement createShort(short value) {
         return new JsonPrimitive(value);
     }
 
     @Override
-    public @NotNull Result<Integer> getInt(@NotNull JsonElement value) {
+    public Result<Integer> getInt(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive) || !primitive.isNumber())
             return new Result.Error<>("Not an int: " + value);
         return new Result.Ok<>(primitive.getAsInt());
     }
 
     @Override
-    public @NotNull JsonElement createInt(int value) {
+    public JsonElement createInt(int value) {
         return new JsonPrimitive(value);
     }
 
     @Override
-    public @NotNull Result<Long> getLong(@NotNull JsonElement value) {
+    public Result<Long> getLong(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive) || !primitive.isNumber())
             return new Result.Error<>("Not a long: " + value);
         return new Result.Ok<>(primitive.getAsLong());
     }
 
     @Override
-    public @NotNull JsonElement createLong(long value) {
+    public JsonElement createLong(long value) {
         return new JsonPrimitive(value);
     }
 
     @Override
-    public @NotNull Result<Float> getFloat(@NotNull JsonElement value) {
+    public Result<Float> getFloat(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive) || !primitive.isNumber())
             return new Result.Error<>("Not a float: " + value);
         return new Result.Ok<>(primitive.getAsFloat());
     }
 
     @Override
-    public @NotNull JsonElement createFloat(float value) {
+    public JsonElement createFloat(float value) {
         return new JsonPrimitive(value);
     }
 
     @Override
-    public @NotNull Result<Double> getDouble(@NotNull JsonElement value) {
+    public Result<Double> getDouble(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive) || !primitive.isNumber())
             return new Result.Error<>("Not a double: " + value);
         return new Result.Ok<>(primitive.getAsDouble());
     }
 
     @Override
-    public @NotNull JsonElement createDouble(double value) {
+    public JsonElement createDouble(double value) {
         return new JsonPrimitive(value);
     }
 
     @Override
-    public @NotNull Result<String> getString(@NotNull JsonElement value) {
+    public Result<String> getString(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive))
             return new Result.Error<>("Not a string: " + value);
         return new Result.Ok<>(primitive.getAsString());
     }
 
     @Override
-    public @NotNull JsonElement createString(@NotNull String value) {
+    public JsonElement createString(String value) {
         return new JsonPrimitive(value);
     }
 
     @Override
-    public @NotNull Result<List<JsonElement>> getList(@NotNull JsonElement value) {
+    public Result<List<JsonElement>> getList(JsonElement value) {
         if (!(value instanceof JsonArray array)) return new Result.Error<>("Not a list: " + value);
         if (array.isEmpty()) return new Result.Ok<>(List.of());
         return new Result.Ok<>(new AbstractList<>() {
@@ -130,16 +129,16 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
-    public @NotNull JsonElement emptyList() {
+    public JsonElement emptyList() {
         return new JsonArray();
     }
 
     @Override
-    public @NotNull ListBuilder<JsonElement> createList(int expectedSize) {
+    public ListBuilder<JsonElement> createList(int expectedSize) {
         final JsonArray list = new JsonArray(expectedSize);
         return new ListBuilder<>() {
             @Override
-            public @NotNull ListBuilder<JsonElement> add(JsonElement value) {
+            public ListBuilder<JsonElement> add(JsonElement value) {
                 list.add(value);
                 return this;
             }
@@ -152,22 +151,22 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
-    public @NotNull Result<MapLike<JsonElement>> getMap(@NotNull JsonElement value) {
+    public Result<MapLike<JsonElement>> getMap(JsonElement value) {
         if (!(value instanceof JsonObject object))
             return new Result.Error<>("Not an object: " + value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
-            public @NotNull Collection<String> keys() {
+            public Collection<String> keys() {
                 return object.keySet();
             }
 
             @Override
-            public boolean hasValue(@NotNull String key) {
+            public boolean hasValue(String key) {
                 return object.has(key);
             }
 
             @Override
-            public @NotNull Result<JsonElement> getValue(@NotNull String key) {
+            public Result<JsonElement> getValue(String key) {
                 final JsonElement element = object.get(key);
                 if (element == null) return new Result.Error<>("No such key: " + key);
                 return new Result.Ok<>(element);
@@ -181,21 +180,21 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
-    public @NotNull JsonElement emptyMap() {
+    public JsonElement emptyMap() {
         return new JsonObject();
     }
 
     @Override
-    public @NotNull MapBuilder<JsonElement> createMap() {
+    public MapBuilder<JsonElement> createMap() {
         final JsonObject object = new JsonObject();
         return new MapBuilder<>() {
             @Override
-            public @NotNull MapBuilder<JsonElement> put(@NotNull JsonElement key, JsonElement value) {
+            public MapBuilder<JsonElement> put(JsonElement key, JsonElement value) {
                 return put(key.getAsString(), value);
             }
 
             @Override
-            public @NotNull MapBuilder<JsonElement> put(@NotNull String key, JsonElement value) {
+            public MapBuilder<JsonElement> put(String key, JsonElement value) {
                 if (value != JsonNull.INSTANCE)
                     object.add(key, value);
                 return this;
@@ -209,7 +208,7 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
-    public @NotNull <O> Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull JsonElement value) {
+    public <O> Result<O> convertTo(Transcoder<O> coder, JsonElement value) {
         return switch (value) {
             case JsonObject object -> {
                 final MapBuilder<O> mapBuilder = coder.createMap();

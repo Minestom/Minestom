@@ -7,7 +7,6 @@ import net.minestom.server.inventory.click.Click;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * @param click the click that occurred
      * @return whether or not the click was a success
      */
-    default boolean handleClick(@NotNull Player player, @NotNull Click click) {
+    default boolean handleClick(Player player, Click click) {
         // Maps a click back into the click handler interface.
         // This is so that we can maintain normal
         return switch (click) {
@@ -61,7 +60,7 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * @param slot   the slot number
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean leftClick(@NotNull Player player, int slot);
+    boolean leftClick(Player player, int slot);
 
     /**
      * Called when a {@link Player} right click in the inventory. Can also be to drop the cursor item
@@ -70,7 +69,7 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * @param slot   the slot number
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean rightClick(@NotNull Player player, int slot);
+    boolean rightClick(Player player, int slot);
 
     /**
      * Called when a {@link Player} shift click in the inventory
@@ -80,7 +79,7 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * @param button the button (same behaviour in vanilla, but can be used for custom behaviour)
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean shiftClick(@NotNull Player player, int slot, int button);
+    boolean shiftClick(Player player, int slot, int button);
 
     /**
      * Called when a {@link Player} held click in the inventory
@@ -90,9 +89,9 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * @param key    the held slot (0-8) pressed
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean changeHeld(@NotNull Player player, int slot, int key);
+    boolean changeHeld(Player player, int slot, int key);
 
-    boolean middleClick(@NotNull Player player, int slot);
+    boolean middleClick(Player player, int slot);
 
     /**
      * Called when a {@link Player} press the drop button
@@ -102,9 +101,9 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * @param slot   the slot number (-999 if clicking outside, i.e. dropping cursor)
      * @return true if the drop hasn't been cancelled, false otherwise
      */
-    boolean drop(@NotNull Player player, boolean all, int slot);
+    boolean drop(Player player, boolean all, int slot);
 
-    boolean dragging(@NotNull Player player, List<Integer> slots, int button);
+    boolean dragging(Player player, List<Integer> slots, int button);
 
     /**
      * Called when a {@link Player} double click in the inventory
@@ -113,10 +112,10 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * @param slot   the slot number
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean doubleClick(@NotNull Player player, int slot);
+    boolean doubleClick(Player player, int slot);
 
-    default void callClickEvent(@NotNull Player player, @NotNull AbstractInventory inventory, int slot,
-                                @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    default void callClickEvent(Player player, AbstractInventory inventory, int slot,
+                                ClickType clickType, ItemStack clicked, ItemStack cursor) {
         EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
     }
 }

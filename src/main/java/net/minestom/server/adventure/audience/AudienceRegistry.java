@@ -3,7 +3,6 @@ package net.minestom.server.adventure.audience;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -24,7 +23,7 @@ public class AudienceRegistry {
      * @param backingMap        the backing map
      * @param backingCollection a provider for the backing collection
      */
-    public AudienceRegistry(@NotNull Map<Key, Collection<Audience>> backingMap, @NotNull Supplier<Collection<Audience>> backingCollection) {
+    public AudienceRegistry(Map<Key, Collection<Audience>> backingMap, Supplier<Collection<Audience>> backingCollection) {
         this.registry = backingMap;
         this.provider = key -> backingCollection.get();
     }
@@ -44,7 +43,7 @@ public class AudienceRegistry {
      * @param keyed     the provider of the key
      * @param audiences the audiences
      */
-    public void register(@NotNull Keyed keyed, @NotNull Audience... audiences) {
+    public void register(Keyed keyed, Audience... audiences) {
         this.register(keyed.key(), audiences);
     }
 
@@ -54,7 +53,7 @@ public class AudienceRegistry {
      * @param keyed     the provider of the key
      * @param audiences the audiences
      */
-    public void register(@NotNull Keyed keyed, @NotNull Collection<Audience> audiences) {
+    public void register(Keyed keyed, Collection<Audience> audiences) {
         this.register(keyed.key(), audiences);
     }
 
@@ -64,7 +63,7 @@ public class AudienceRegistry {
      * @param key       the key to store the audiences under
      * @param audiences the audiences
      */
-    public void register(@NotNull Key key, @NotNull Audience... audiences) {
+    public void register(Key key, Audience... audiences) {
         if (audiences == null || audiences.length == 0) {
             return;
         }
@@ -78,7 +77,7 @@ public class AudienceRegistry {
      * @param key       the key to store the audiences under
      * @param audiences the audiences
      */
-    public void register(@NotNull Key key, @NotNull Collection<Audience> audiences) {
+    public void register(Key key, Collection<Audience> audiences) {
         if (!audiences.isEmpty()) {
             this.registry.computeIfAbsent(key, this.provider).addAll(audiences);
         }
@@ -89,7 +88,7 @@ public class AudienceRegistry {
      *
      * @return an iterable containing every audience member
      */
-    public @NotNull Iterable<? extends Audience> all() {
+    public Iterable<? extends Audience> all() {
         if (this.isEmpty()) {
             return List.of();
         } else {
@@ -103,7 +102,7 @@ public class AudienceRegistry {
      * @param keyed the key provider
      * @return an iterable containing the audience members
      */
-    public @NotNull Iterable<? extends Audience> of(@NotNull Keyed keyed) {
+    public Iterable<? extends Audience> of(Keyed keyed) {
         return this.of(keyed.key());
     }
 
@@ -113,7 +112,7 @@ public class AudienceRegistry {
      * @param key the key
      * @return an iterable containing the audience members
      */
-    public @NotNull Iterable<? extends Audience> of(@NotNull Key key) {
+    public Iterable<? extends Audience> of(Key key) {
         return Collections.unmodifiableCollection(this.registry.getOrDefault(key, this.provider.apply(null)));
     }
 
@@ -123,7 +122,7 @@ public class AudienceRegistry {
      * @param filter the predicate
      * @return the matching audience members
      */
-    public @NotNull Iterable<? extends Audience> of(@NotNull Predicate<Audience> filter) {
+    public Iterable<? extends Audience> of(Predicate<Audience> filter) {
         return this.registry.values().stream().flatMap(Collection::stream).filter(filter).toList();
     }
 }

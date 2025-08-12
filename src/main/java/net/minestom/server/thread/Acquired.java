@@ -1,7 +1,5 @@
 package net.minestom.server.thread;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Represents an object that has been safely acquired and can be freed again.
  * <p>
@@ -11,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <T> the type of the acquired object
  */
 public sealed interface Acquired<T> permits AcquiredImpl {
-    @NotNull T get();
+    T get();
 
     void unlock();
 }

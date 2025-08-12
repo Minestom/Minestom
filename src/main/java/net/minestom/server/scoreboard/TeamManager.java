@@ -6,7 +6,6 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.UUIDUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public final class TeamManager {
      *
      * @param team The team to be registered
      */
-    protected void registerNewTeam(@NotNull Team team) {
+    protected void registerNewTeam(Team team) {
         this.teams.add(team);
         PacketSendingUtils.broadcastPlayPacket(team.createTeamsCreationPacket());
     }
@@ -46,7 +45,7 @@ public final class TeamManager {
      * @param registryName The registry name of team
      * @return {@code true} if the team was deleted, otherwise {@code false}
      */
-    public boolean deleteTeam(@NotNull String registryName) {
+    public boolean deleteTeam(String registryName) {
         Team team = this.getTeam(registryName);
         if (team == null) return false;
         return this.deleteTeam(team);
@@ -58,7 +57,7 @@ public final class TeamManager {
      * @param team The team to be deleted
      * @return {@code true} if the team was deleted, otherwise {@code false}
      */
-    public boolean deleteTeam(@NotNull Team team) {
+    public boolean deleteTeam(Team team) {
         // Sends to all online players a team destroy packet
         PacketSendingUtils.broadcastPlayPacket(team.createTeamDestructionPacket());
         return this.teams.remove(team);
@@ -70,7 +69,7 @@ public final class TeamManager {
      * @param name The registry name of the team
      * @return the team builder
      */
-    public TeamBuilder createBuilder(@NotNull String name) {
+    public TeamBuilder createBuilder(String name) {
         return new TeamBuilder(name, this);
     }
 
@@ -80,7 +79,7 @@ public final class TeamManager {
      * @param name The registry name
      * @return the created {@link Team}
      */
-    public Team createTeam(@NotNull String name) {
+    public Team createTeam(String name) {
         return this.createBuilder(name).build();
     }
 

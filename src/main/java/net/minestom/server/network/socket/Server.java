@@ -8,7 +8,6 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -172,7 +171,7 @@ public final class Server {
     }
 
     @ApiStatus.Internal
-    public @NotNull PacketParser<ClientPacket> packetParser() {
+    public PacketParser<ClientPacket> packetParser() {
         return packetParser;
     }
 

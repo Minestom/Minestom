@@ -5,9 +5,8 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.NotNull;
 
-public record WorldPos(@NotNull String dimension, @NotNull Point blockPosition) {
+public record WorldPos(String dimension, Point blockPosition) {
     public static final NetworkBuffer.Type<WorldPos> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, WorldPos::dimension,
             NetworkBuffer.BLOCK_POSITION, WorldPos::blockPosition,
@@ -18,11 +17,11 @@ public record WorldPos(@NotNull String dimension, @NotNull Point blockPosition) 
             WorldPos::new
     );
 
-    public @NotNull WorldPos withDimension(@NotNull String dimension) {
+    public WorldPos withDimension(String dimension) {
         return new WorldPos(dimension, blockPosition);
     }
 
-    public @NotNull WorldPos withBlockPosition(@NotNull Point blockPosition) {
+    public WorldPos withBlockPosition(Point blockPosition) {
         return new WorldPos(dimension, blockPosition);
     }
 }

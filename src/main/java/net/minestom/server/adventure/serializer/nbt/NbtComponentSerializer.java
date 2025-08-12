@@ -9,10 +9,9 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.registry.RegistryTranscoder;
-import org.jetbrains.annotations.NotNull;
 
 public interface NbtComponentSerializer extends ComponentSerializer<Component, Component, BinaryTag> {
-    static @NotNull NbtComponentSerializer nbt() {
+    static NbtComponentSerializer nbt() {
         return NbtComponentSerializerImpl.INSTANCE;
     }
 
@@ -20,7 +19,7 @@ public interface NbtComponentSerializer extends ComponentSerializer<Component, C
      * @deprecated use {@link Codec#COMPONENT_STYLE} instead.
      */
     @Deprecated(forRemoval = true)
-    default @NotNull Style deserializeStyle(@NotNull BinaryTag tag) {
+    default Style deserializeStyle(BinaryTag tag) {
         final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
         return Codec.COMPONENT_STYLE.decode(coder, tag).orElseThrow();
     }
@@ -29,7 +28,7 @@ public interface NbtComponentSerializer extends ComponentSerializer<Component, C
      * @deprecated use {@link Codec#COMPONENT_STYLE} instead.
      */
     @Deprecated(forRemoval = true)
-    default @NotNull CompoundBinaryTag serializeStyle(@NotNull Style style) {
+    default CompoundBinaryTag serializeStyle(Style style) {
         final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
         return (CompoundBinaryTag) Codec.COMPONENT_STYLE.encode(coder, style).orElseThrow();
     }
