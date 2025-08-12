@@ -140,8 +140,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             if (id == null) {
                 idToValue.add(object);
                 idToKey.add(registryKey);
-                id = idToValue.size() - 1;
-                keyToId.put(registryKey, id);
+                keyToId.put(registryKey, idToValue.size() - 1);
                 packById.add(pack);
             } else {
                 idToValue.set(id, object);
