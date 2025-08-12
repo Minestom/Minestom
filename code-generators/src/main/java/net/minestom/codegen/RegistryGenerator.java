@@ -2,6 +2,7 @@ package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
+import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.io.InputStream;
@@ -9,12 +10,12 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public record RegistryGenerator(@NotNull Path outputFolder) implements MinestomCodeGenerator {
+public record RegistryGenerator(Path outputFolder) implements MinestomCodeGenerator {
     public RegistryGenerator {
         Objects.requireNonNull(outputFolder, "Output folder cannot be null");
     }
 
-    public void generate(InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
+    public void generate(@Nullable InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
         Objects.requireNonNull(resourceFile, "Nothing to generate, resourceFile is null");
         ensureDirectory(outputFolder);
 
@@ -53,7 +54,7 @@ public record RegistryGenerator(@NotNull Path outputFolder) implements MinestomC
         );
     }
 
-    public void generateKeys(@NotNull InputStream resourceFile, @NotNull String packageName, @NotNull String typeName) {
+    public void generateKeys(@Nullable InputStream resourceFile, String packageName, String typeName) {
         Objects.requireNonNull(resourceFile, "Nothing to generate, resourceFile is null");
         ensureDirectory(outputFolder);
 

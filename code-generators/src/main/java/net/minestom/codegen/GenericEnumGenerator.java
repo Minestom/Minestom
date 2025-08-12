@@ -18,7 +18,7 @@ import java.util.stream.StreamSupport;
 public class GenericEnumGenerator implements MinestomCodeGenerator {
     private final String packageName;
     private final String className;
-    private final InputStream entriesFile;
+    private final @Nullable InputStream entriesFile;
     private final Path outputFolder;
 
     private boolean isPackagePrivate = false;
@@ -39,7 +39,7 @@ public class GenericEnumGenerator implements MinestomCodeGenerator {
     }
 
     @Override
-    public @NotNull Path outputFolder() {
+    public Path outputFolder() {
         return outputFolder;
     }
 
@@ -121,9 +121,5 @@ public class GenericEnumGenerator implements MinestomCodeGenerator {
                 .skipJavaLangImports(true)
                 .build()
         );
-    }
-
-    protected String nameGenerator(String namespaceId) {
-        return toConstant(namespaceId);
     }
 }
