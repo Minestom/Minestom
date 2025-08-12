@@ -2,6 +2,7 @@ package net.minestom.server.command.builder;
 
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
