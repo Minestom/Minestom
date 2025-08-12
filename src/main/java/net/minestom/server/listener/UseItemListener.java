@@ -39,7 +39,7 @@ public class UseItemListener {
             // client they can hold it forever
             useItemTime = 7200;
             useAnimation = ItemAnimation.CROSSBOW;
-        } else if (material == Material.SHIELD) {
+        } else if (itemStack.has(DataComponents.BLOCKS_ATTACKS)) {
             useItemTime = 72000;
             useAnimation = ItemAnimation.BLOCK;
         } else if (material == Material.TRIDENT) {
