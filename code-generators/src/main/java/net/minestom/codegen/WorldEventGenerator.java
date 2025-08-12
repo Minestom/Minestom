@@ -3,47 +3,31 @@ package net.minestom.codegen;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.StreamSupport;
 
-public final class WorldEventGenerator extends MinestomCodeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WorldEventGenerator.class);
-
-    private final String packageName;
-    private final String worldEventClassName;
-    private final InputStream entriesFile;
-    private final File outputFolder;
-
-    public WorldEventGenerator(
-            String packageName, String worldEventClassName,
-            @Nullable InputStream entriesFile, File outputFolder
-    ) {
-        this.packageName = packageName;
-        this.worldEventClassName = worldEventClassName;
-        this.entriesFile = entriesFile;
-        this.outputFolder = outputFolder;
+public record WorldEventGenerator(String packageName, String worldEventClassName,
+                                  InputStream entriesFile,
+                                  Path outputFolder) implements MinestomCodeGenerator {
+    public WorldEventGenerator {
+        Objects.requireNonNull(packageName, "packageName cannot be null");
+        Objects.requireNonNull(worldEventClassName, "worldEventClassName cannot be null");
+        Objects.requireNonNull(entriesFile, "entriesFile cannot be null");
+        Objects.requireNonNull(outputFolder, "outputFolder cannot be null");
     }
 
+    @Override
     public void generate() {
-        if (entriesFile == null) {
-            LOGGER.error("Failed to find entries file.");
-            LOGGER.error("Stopped code generation for {}.", worldEventClassName);
-            return;
-        }
-        if (!outputFolder.exists() && !outputFolder.mkdirs()) {
-            LOGGER.error("Output folder for code generation does not exist and could not be created.");
-            return;
-        }
+        ensureDirectory(outputFolder);
 
         // Important classes we use alot
         JsonArray entryList = GSON.fromJson(new InputStreamReader(entriesFile), JsonArray.class);
@@ -104,14 +88,10 @@ public final class WorldEventGenerator extends MinestomCodeGenerator {
         }
 
         // Write files to outputFolder
-        writeFiles(
-                List.of(
-                        JavaFile.builder(packageName, entryEnum.build())
-                                .indent("    ")
-                                .skipJavaLangImports(true)
-                                .build()
-                ),
-                outputFolder
+        writeFiles(JavaFile.builder(packageName, entryEnum.build())
+                .indent("    ")
+                .skipJavaLangImports(true)
+                .build()
         );
     }
 }

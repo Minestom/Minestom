@@ -15,7 +15,7 @@ import java.util.Collection;
  * Represents a game event.
  * Used for a wide variety of events, from weather to bed use to game mode to demo messages.
  */
-public sealed interface GameEvent extends StaticProtocolObject<GameEvent> permits GameEventImpl {
+public sealed interface GameEvent extends StaticProtocolObject<GameEvent>, GameEvents permits GameEventImpl {
 
     /**
      * Returns the game event registry.
