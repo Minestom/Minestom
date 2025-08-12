@@ -145,7 +145,6 @@ public class CommandParseTest {
         return CommandParser.parser().parse(new ServerSender(), graph, input);
     }
 
-   
     private static Graph.Execution createExecutor(AtomicBoolean atomicBoolean) {
         return new GraphImpl.ExecutionImpl(null, null, null, (sender, context) -> atomicBoolean.set(true), null);
     }
