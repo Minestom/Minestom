@@ -2,6 +2,7 @@ module net.minestom.server {
     requires static org.jetbrains.annotations;  // TODO remove this when jspecify matures.
     requires com.google.gson;
     requires it.unimi.dsi.fastutil;
+    requires space.vectrix.flare.fastutil;
     requires jdk.unsupported; // Unsafe
     requires net.kyori.adventure;
     requires net.kyori.adventure.nbt;
