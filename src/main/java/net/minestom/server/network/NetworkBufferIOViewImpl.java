@@ -1,7 +1,6 @@
 package net.minestom.server.network;
 
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -13,13 +12,14 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 /**
  * Implementation of the {@link NetworkBuffer.IOView} interface.
- * @param buffer the buffer to read from and write to
- * @implNote Big endian byte order is used for all read/write operations.
+ * <br>
+ * Note: Big endian byte order is used for all read/write operations.
  *
+ * @param buffer the buffer to read from and write to
  */
-record NetworkBufferIOViewImpl(@NotNull NetworkBuffer buffer) implements NetworkBuffer.IOView {
+record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IOView {
     @Override
-    public @NotNull OutputStream outputStream() {
+    public OutputStream outputStream() {
         return new OutputStream() {
             @Override
             public void write(int b) {
@@ -27,14 +27,14 @@ record NetworkBufferIOViewImpl(@NotNull NetworkBuffer buffer) implements Network
             }
 
             @Override
-            public void write(byte @NotNull [] b, int off, int len) {
+            public void write(byte[] b, int off, int len) {
                 buffer.write(RAW_BYTES, Arrays.copyOfRange(b, off, len));
             }
         };
     }
 
     @Override
-    public @NotNull InputStream inputStream() {
+    public InputStream inputStream() {
         return new InputStream() {
             @Override
             public int read() {
@@ -42,7 +42,7 @@ record NetworkBufferIOViewImpl(@NotNull NetworkBuffer buffer) implements Network
             }
 
             @Override
-            public int read(byte @NotNull [] b, int off, int len) {
+            public int read(byte[] b, int off, int len) {
                 // We will let the caller get an exception if the length is invalid.
                 // TODO Not a compliant impl of InputStream.
                 var newBytes = buffer.read(NetworkBuffer.FixedRawBytes(len - off));
@@ -80,13 +80,13 @@ record NetworkBufferIOViewImpl(@NotNull NetworkBuffer buffer) implements Network
     }
 
     @Override
-    public void readFully(byte @NotNull [] b) {
+    public void readFully(byte[] b) {
         var newBytes = buffer.read(RAW_BYTES);
         System.arraycopy(newBytes, 0, b, 0, b.length);
     }
 
     @Override
-    public void readFully(byte @NotNull [] b, int off, int len) {
+    public void readFully(byte[] b, int off, int len) {
         var newBytes = buffer.read(RAW_BYTES);
         System.arraycopy(newBytes, 0, b, off, len);
     }
@@ -159,7 +159,7 @@ record NetworkBufferIOViewImpl(@NotNull NetworkBuffer buffer) implements Network
     }
 
     @Override
-    @NotNull
+
     public String readUTF() {
         return buffer.read(STRING_IO_UTF8);
     }
@@ -170,12 +170,12 @@ record NetworkBufferIOViewImpl(@NotNull NetworkBuffer buffer) implements Network
     }
 
     @Override
-    public void write(byte @NotNull [] b) {
+    public void write(byte[] b) {
         buffer.write(RAW_BYTES, b);
     }
 
     @Override
-    public void write(byte @NotNull [] b, int off, int len) {
+    public void write(byte[] b, int off, int len) {
         buffer.write(RAW_BYTES, Arrays.copyOfRange(b, off, len));
     }
 
@@ -220,7 +220,7 @@ record NetworkBufferIOViewImpl(@NotNull NetworkBuffer buffer) implements Network
     }
 
     @Override
-    public void writeBytes(@NotNull String string) {
+    public void writeBytes(String string) {
         Check.notNull(string, "String cannot be null!");
         for (int i = 0; i < string.length(); i++) {
             buffer.write(BYTE, (byte) string.charAt(i)); // Low byte only
@@ -228,7 +228,7 @@ record NetworkBufferIOViewImpl(@NotNull NetworkBuffer buffer) implements Network
     }
 
     @Override
-    public void writeChars(@NotNull String string) {
+    public void writeChars(String string) {
         Check.notNull(string, "String cannot be null!");
         for (int i = 0; i < string.length(); i++) {
             buffer.write(SHORT, (short) string.charAt(i));
@@ -236,7 +236,7 @@ record NetworkBufferIOViewImpl(@NotNull NetworkBuffer buffer) implements Network
     }
 
     @Override
-    public void writeUTF(@NotNull String string) {
+    public void writeUTF(String string) {
         Check.notNull(string, "String cannot be null!");
         buffer.write(STRING_IO_UTF8, string);
     }

@@ -334,18 +334,15 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * <p>
      * This interface is separate from {@link NetworkBuffer}
      * because we don't want DataInput and DataOutput to be part of the public API.
-     * You should use {@link NetworkBuffer} instead if possible.
-     * <p>
-     * @implNote The backing implementation of this interface is {@link NetworkBufferIOViewImpl}.
-     * This holds the actual {@link NetworkBuffer} and implements the methods of this interface.
+     * You should use {@link NetworkBuffer} instead where possible.
      */
     sealed interface IOView extends DataInput, DataOutput permits NetworkBufferIOViewImpl {
         /**
          * Creates a new {@link IOView} for the given {@link NetworkBuffer}.
          * @param buffer the buffer to read from and write to
          * @return the view of the buffer
-         * @implNote The backing buffer is used for index tracking.
-         * No offsets can be applied, Use a {@link NetworkBuffer#slice(long, long)} for that
+         * <br>
+         * Note: The backing buffer is used for index tracking.
          */
         @ApiStatus.Experimental
         static IOView of(NetworkBuffer buffer) {
