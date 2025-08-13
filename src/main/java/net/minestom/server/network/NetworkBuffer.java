@@ -29,6 +29,46 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.zip.DataFormatException;
 
+/**
+ * A {@link NetworkBuffer} is a mutable byte buffer that can be used to read and write various types of data.
+ * <p>
+ * It provides a set of predefined types for reading and writing data, as well as methods for resizing, copying, and slicing the buffer.
+ * <p>
+ * The buffer supports both reading and writing operations, with separate indices for read and write operations.
+ * <p>
+ * This interface is designed to be used in junction with the protocol directly, but can also be used for other purposes.
+ * <p>
+ * We provide basic {@link NetworkBuffer.Type} here, which can be used to read and write data in a bidirectional way.
+ * For example, you can write an integer to the buffer and then read it back:
+ * <pre><code>
+ * NetworkBuffer buffer = NetworkBuffer.staticBuffer(1024);
+ * buffer.write(NetworkBuffer.INT, 42);
+ * int value = buffer.read(NetworkBuffer.INT);
+ * System.out.println("Value: " + value); // Output: Value: 42
+ * </code></pre>
+ * Or make an array of bytes with {@link NetworkBuffer#makeArray(Type, Object)} by a {@link NetworkBuffer.Type}:
+ * <pre><code>
+ *     byte[] bytes = NetworkBuffer.makeArray(NetworkBuffer.STRING, "Hello, World!");
+ *     System.out.println("Bytes: " + Arrays.toString(bytes));
+ * </code></pre>
+ * Or use a {@link NetworkBufferTemplate} to function as a bidirectional serializer/deserializer for your objects:
+ * <pre><code>
+ *     record MyData(int id, String name) {
+ *         static final NetworkBuffer.Type<MyData> SERIALIZER = NetworkBufferTemplate.template(
+ *          NetworkBuffer.INT, MyData::id,
+ *          NetworkBuffer.STRING, MyData::name,
+ *          MyData::new
+ *         );
+ *     }
+ *     ...
+ *     MyData data = new MyData(1, "Test");
+ *     byte[] bytes = NetworkBuffer.makeArray(MyData.SERIALIZER, data);
+ *     System.out.println("Bytes: " + Arrays.toString(bytes));
+ *     NetworkBuffer buffer = NetworkBuffer.wrap(bytes, 0, bytes.length);
+ *     MyData value = buffer.read(MyData.SERIALIZER);
+ *     System.out.println("Value: " + value); // Output: Value: MyData
+ * </code></pre>
+ */
 public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
     Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
@@ -287,21 +327,38 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return wrap(bytes, readIndex, writeIndex, null);
     }
 
+    /**
+     * Builder for creating a {@link NetworkBuffer} through {@link NetworkBuffer#builder(long)}.
+     * <br>
+     *  Useful for creating buffers with specific configurations, arenas, and registries.
+     */
     sealed interface Builder permits NetworkBufferImpl.Builder {
         @ApiStatus.Experimental
+        @Contract(pure = true)
         Builder arena(Arena arena);
 
+        @Contract(pure = true)
         Builder autoResize(@Nullable AutoResize autoResize);
 
+        @Contract(pure = true)
         Builder registry(@Nullable Registries registries);
 
         NetworkBuffer build();
     }
 
+    /**
+     * Resize strategy for a {@link NetworkBuffer}.
+     */
     @FunctionalInterface
     interface AutoResize {
         AutoResize DOUBLE = (capacity, targetSize) -> Math.max(capacity * 2, targetSize);
 
+        /**
+         * Provide the buffer a new size, guaranteeing that the new size is greater than its original.
+         * @param capacity the current capacity of the buffer
+         * @param targetSize the target size of the buffer
+         * @return the new capacity of the buffer
+         */
         long resize(long capacity, long targetSize);
     }
 

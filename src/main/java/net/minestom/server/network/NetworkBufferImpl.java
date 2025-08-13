@@ -27,14 +27,14 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     // Nullable for dummy buffers.
     private final @Nullable Arena arena;
-    private @Nullable MemorySegment segment;
+    private MemorySegment segment; // final when autoResize is null
 
     private final @Nullable AutoResize autoResize;
     private final @Nullable Registries registries;
 
     private long readIndex, writeIndex;
 
-    NetworkBufferImpl(@Nullable Arena arena, @Nullable MemorySegment segment, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
+    NetworkBufferImpl(@Nullable Arena arena, MemorySegment segment, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
         this.arena = arena;
         this.segment = segment;
         this.readIndex = readIndex;
@@ -44,7 +44,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     NetworkBufferImpl(@Nullable Arena arena, long capacity, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
-        this(arena, arena != null ? arena.allocate(capacity) : null, readIndex, writeIndex, autoResize, registries);
+        this(arena, arena != null ? arena.allocate(capacity) : MemorySegment.NULL, readIndex, writeIndex, autoResize, registries);
     }
 
     @Override
@@ -193,7 +193,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         if (strategy == null)
             throw new IndexOutOfBoundsException("Buffer is full and cannot be resized: " + capacity + " -> " + targetSize);
         final long newCapacity = strategy.resize(capacity, targetSize);
-        if (newCapacity == capacity)
+        if (newCapacity <= capacity)
             throw new IndexOutOfBoundsException("Buffer is full has been resized to the same capacity: " + capacity + " -> " + targetSize);
         return newCapacity;
     }
@@ -241,7 +241,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         final var newWriteIndex = Math.max(writeIndex - index, 0);
         // We won't use the same arena so this arena can get deallocated.
         final var newBuffer = new NetworkBufferImpl(Arena.ofAuto(), length, newReadIndex, newWriteIndex, autoResize, registries);
-        assert !newBuffer.isDummy() && newBuffer.segment != null : "Dummy active for a newly created buffer";
+        assert !newBuffer.isDummy() : "Dummy active for a newly created buffer";
 
         MemorySegment.copy(this.segment, index, newBuffer.segment, 0, length);
 
@@ -359,7 +359,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     private boolean isDummy() {
-        return arena == null || segment == null;
+        return arena == null; // Or segment is null (Likely arena)
     }
 
     // Internal writing methods
@@ -466,7 +466,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         if (impl1 == impl2) return true;
         if (impl1.capacity() != impl2.capacity()) return false;
         if (impl1.isDummy() || impl2.isDummy()) return false;
-        assert impl1.segment != null && impl2.segment != null : "Dummy active for a non-dummy buffer";
+
         return impl1.segment.mismatch(impl2.segment) == -1;
     }
 
@@ -490,7 +490,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         @Override
         public NetworkBuffer.Builder arena(Arena arena) {
-            Check.notNull(arena, "Arena cannot be null");
+            Check.notNull(arena, "Arena cannot be null, use NetworkBuffer#sizeOf instead.");
             this.arena = arena;
             return this;
         }
