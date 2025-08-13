@@ -18,6 +18,7 @@ import org.jetbrains.annotations.*;
 
 import javax.crypto.Cipher;
 import java.io.*;
+import java.lang.foreign.Arena;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.security.PublicKey;
@@ -287,6 +288,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     sealed interface Builder permits NetworkBufferImpl.Builder {
+        @ApiStatus.Experimental
+        Builder arena(Arena arena);
+
         Builder autoResize(@Nullable AutoResize autoResize);
 
         Builder registry(@Nullable Registries registries);

@@ -2,13 +2,13 @@ package net.minestom.server.network;
 
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
-import java.io.*;
 import java.io.IOException;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -239,7 +239,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         final var newReadIndex = Math.max(readIndex - index, 0);
         final var newWriteIndex = Math.max(writeIndex - index, 0);
-
         // We won't use the same arena so this arena can get deallocated.
         final var newBuffer = new NetworkBufferImpl(Arena.ofAuto(), length, newReadIndex, newWriteIndex, autoResize, registries);
         assert !newBuffer.isDummy() && newBuffer.segment != null : "Dummy active for a newly created buffer";
@@ -482,10 +481,18 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     static final class Builder implements NetworkBuffer.Builder {
         private final long initialSize;
+        private @Nullable Arena arena;
         private @Nullable AutoResize autoResize;
         private @Nullable Registries registries;
         public Builder(long initialSize) {
             this.initialSize = initialSize;
+        }
+
+        @Override
+        public NetworkBuffer.Builder arena(Arena arena) {
+            Check.notNull(arena, "Arena cannot be null");
+            this.arena = arena;
+            return this;
         }
 
         @Override
@@ -502,8 +509,9 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         @Override
         public NetworkBuffer build() {
+            if (this.arena == null) this.arena = Arena.ofAuto();
             return new NetworkBufferImpl(
-                    Arena.ofAuto(), initialSize,
+                    arena, initialSize,
                     0, 0,
                     autoResize, registries);
         }
