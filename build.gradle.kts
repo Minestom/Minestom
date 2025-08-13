@@ -1,60 +1,9 @@
-import java.time.Duration
-
 plugins {
-    `java-library`
+    id("minestom.java-library")
+    id("minestom.publishing")
     alias(libs.plugins.blossom)
 
-    `maven-publish`
-    signing
-    alias(libs.plugins.nexuspublish)
-}
-
-// Read env vars (used for publishing generally)
-version = System.getenv("MINESTOM_VERSION") ?: "dev"
-val channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
-
-val shortDescription = "1.21 Lightweight Minecraft server"
-
-allprojects {
-    apply(plugin = "java")
-
-    group = "net.minestom"
-    version = rootProject.version
-    description = shortDescription
-
-    repositories {
-        mavenCentral()
-    }
-
-    configurations.all {
-        // We only use Jetbrains Annotations
-        exclude("org.checkerframework", "checker-qual")
-    }
-
-    java {
-        withSourcesJar()
-        withJavadocJar()
-
-        toolchain.languageVersion = JavaLanguageVersion.of(22)
-    }
-
-    tasks.withType<Zip> {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
-
-    tasks.withType<Test> {
-        useJUnitPlatform()
-
-        // Viewable packets make tracking harder. Could be re-enabled later.
-        jvmArgs("-Dminestom.viewable-packet=false")
-        jvmArgs("-Dminestom.inside-test=true")
-        minHeapSize = "512m"
-        maxHeapSize = "1024m"
-    }
-
-    tasks.withType<JavaCompile> {
-        options.encoding = "UTF-8"
-    }
+    alias(libs.plugins.nmcp.aggregation)
 }
 
 sourceSets {
@@ -65,25 +14,31 @@ sourceSets {
         }
         blossom {
             javaSources {
-
-                val gitCommit = System.getenv("GITHUB_SHA")
-                val gitBranch = System.getenv("GITHUB_REF")
-                val group = project.group as String?
-                val artifact = project.name as String?
-                property("COMMIT", gitCommit ?: "LOCAL")
-                property("BRANCH", gitBranch ?: "LOCAL")
-                property("GROUP", group ?: "UNKNOWN")
-                property("ARTIFACT", artifact ?: "UNKNOWN")
+                property("COMMIT", System.getenv("GITHUB_SHA") ?: "LOCAL")
+                property("BRANCH", System.getenv("GITHUB_REF") ?: "LOCAL")
+                property("GROUP", project.group.toString())
+                property("ARTIFACT", project.name)
+                property("VERSION", project.version.toString())
             }
         }
     }
 }
 
+tasks.register<Task>("determineMinecraftVersion") {
+    outputs.upToDateWhen { false } // Never cache
+
+    doLast {
+        val minestomDataVersion = libs.minestomData.get().version
+        if (minestomDataVersion == null || "-" !in minestomDataVersion)
+            throw IllegalStateException("Unable to determine Minecraft version from minestomData dependency")
+        println(minestomDataVersion.split("-")[0])
+    }
+}
+
 dependencies {
     // Core dependencies
-    api(libs.slf4j)
-    api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
+    implementation(libs.slf4j)
     implementation(libs.minestomData)
 
     // Performance/data structures
@@ -92,107 +47,26 @@ dependencies {
     api(libs.gson)
     implementation(libs.jcTools)
 
-    // Testing
-    testImplementation(libs.bundles.junit)
     testImplementation(project(":testing"))
 }
 
-tasks {
-    jar {
-        manifest {
-            attributes("Automatic-Module-Name" to "net.minestom.server")
-        }
+tasks.jar {
+    manifest {
+        attributes("Automatic-Module-Name" to "net.minestom.server")
     }
-    withType<Javadoc> {
-        (options as? StandardJavadocDocletOptions)?.apply {
-            encoding = "UTF-8"
+}
 
-            // Custom options
-            addBooleanOption("html5", true)
-            addStringOption("-release", "21")
-            // Links to external javadocs
-            links("https://docs.oracle.com/en/java/javase/21/docs/api/")
-            links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
-        }
+// Publishing configuration below
+
+nmcpAggregation {
+    centralPortal {
+        username = System.getenv("SONATYPE_USERNAME")
+        password = System.getenv("SONATYPE_PASSWORD")
+        publishingType = "AUTOMATIC"
     }
+}
 
-    nexusPublishing {
-        useStaging.set(true)
-        this.packageGroup.set("net.minestom")
-
-        transitionCheckOptions {
-            maxRetries.set(360) // 1 hour
-            delayBetween.set(Duration.ofSeconds(10))
-        }
-
-        repositories.sonatype {
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-
-            if (System.getenv("SONATYPE_USERNAME") != null) {
-                username.set(System.getenv("SONATYPE_USERNAME"))
-                password.set(System.getenv("SONATYPE_PASSWORD"))
-            }
-        }
-    }
-
-    publishing.publications.create<MavenPublication>("maven") {
-        groupId = "net.minestom"
-        // todo: decide on publishing scheme
-        artifactId = if (channel == "snapshot") "minestom-snapshots" else "minestom-snapshots"
-        version = project.version.toString()
-
-        from(project.components["java"])
-
-        pom {
-            name.set(this@create.artifactId)
-            description.set(shortDescription)
-            url.set("https://github.com/minestom/minestom")
-
-            licenses {
-                license {
-                    name.set("Apache 2.0")
-                    url.set("https://github.com/minestom/minestom/blob/main/LICENSE")
-                }
-            }
-
-            developers {
-                developer {
-                    id.set("TheMode")
-                }
-                developer {
-                    id.set("mworzala")
-                    name.set("Matt Worzala")
-                    email.set("matt@hollowcube.dev")
-                }
-            }
-
-            issueManagement {
-                system.set("GitHub")
-                url.set("https://github.com/minestom/minestom/issues")
-            }
-
-            scm {
-                connection.set("scm:git:git://github.com/minestom/minestom.git")
-                developerConnection.set("scm:git:git@github.com:minestom/minestom.git")
-                url.set("https://github.com/minestom/minestom")
-                tag.set("HEAD")
-            }
-
-            ciManagement {
-                system.set("Github Actions")
-                url.set("https://github.com/minestom/minestom/actions")
-            }
-        }
-    }
-
-    signing {
-        isRequired = System.getenv("CI") != null
-
-        val privateKey = System.getenv("GPG_PRIVATE_KEY")
-        val keyPassphrase = System.getenv()["GPG_PASSPHRASE"]
-        useInMemoryPgpKeys(privateKey, keyPassphrase)
-
-        sign(publishing.publications)
-    }
+dependencies {
+    nmcpAggregation(rootProject)
+    nmcpAggregation(project(":testing"))
 }
