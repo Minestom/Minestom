@@ -149,11 +149,6 @@ public final class PacketWriting {
         return allocateTrimmedPacket(tmpBuffer, registry, packet, compressionThreshold);
     }
 
-    /*
-        IMPLEMENTATION DETAILS
-
-        Framed packets lock the network buffer as read-only so we have to create a copy here.
-     */
     public static <T> NetworkBuffer allocateTrimmedPacket(
             NetworkBuffer tmpBuffer,
             PacketRegistry<T> registry,
