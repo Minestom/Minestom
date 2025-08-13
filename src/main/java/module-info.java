@@ -8,6 +8,11 @@ module net.minestom.server {
     requires net.kyori.adventure.key;
     requires net.kyori.examination.api;
     requires net.kyori.adventure.text.logger.slf4j;
+    requires net.kyori.adventure.text.serializer.legacy;
+    requires net.kyori.adventure.text.serializer.gson;
+    requires net.kyori.adventure.text.serializer.plain;
+    requires net.kyori.adventure.text.serializer.json;
+    requires net.kyori.adventure.text.serializer.ansi;
     requires org.slf4j;
     requires org.jctools.core;
     requires jdk.jfr;
