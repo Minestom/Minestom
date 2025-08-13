@@ -250,7 +250,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferImpl.Builder(size);
     }
 
-    static NetworkBuffer staticBuffer(long size, Registries registries) {
+    static NetworkBuffer staticBuffer(long size, @Nullable Registries registries) {
         return builder(size).registry(registries).build();
     }
 
@@ -259,7 +259,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
 
-    static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
+    static NetworkBuffer resizableBuffer(long initialSize, @Nullable Registries registries) {
         return builder(initialSize)
                 .autoResize(AutoResize.DOUBLE)
                 .registry(registries)
@@ -270,7 +270,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(initialSize, null);
     }
 
-    static NetworkBuffer resizableBuffer(Registries registries) {
+    static NetworkBuffer resizableBuffer(@Nullable Registries registries) {
         return resizableBuffer(256, registries);
     }
 
@@ -348,7 +348,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * No offsets can be applied, Use a {@link NetworkBuffer#slice(long, long)} for that
          */
         @ApiStatus.Experimental
-        static @NotNull IOView of(@NotNull NetworkBuffer buffer) {
+        static IOView of(NetworkBuffer buffer) {
             Check.notNull(buffer, "buffer cannot be null");
             return new NetworkBufferIOViewImpl(buffer);
         }
@@ -357,13 +357,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * Creates a new {@link InputStream} for this {@link NetworkBuffer}.
          * @return the view of the buffer as an input stream
          */
-        @NotNull InputStream inputStream();
+        InputStream inputStream();
 
         /**
          * Creates a new {@link OutputStream} for this {@link NetworkBuffer}.
          * @return the view of the buffer as an output stream
          */
-        @NotNull OutputStream outputStream();
+        OutputStream outputStream();
 
         /**
          * @throws UnsupportedOperationException not implemented.

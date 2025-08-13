@@ -2,18 +2,15 @@ package net.minestom.server.network;
 
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
-import net.minestom.server.utils.nbt.BinaryTagReader;
-import net.minestom.server.utils.nbt.BinaryTagWriter;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
 import java.io.*;
-import java.lang.ref.Cleaner;
 import java.io.IOException;
 import java.lang.foreign.Arena;
-import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
 import java.io.EOFException;
 import java.nio.ByteBuffer;
@@ -29,15 +26,15 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     private static final long DUMMY_CAPACITY = Long.MAX_VALUE;
 
     // Nullable for dummy buffers.
-    private final Arena arena;
-    private MemorySegment segment;
+    private final @Nullable Arena arena;
+    private @Nullable MemorySegment segment;
 
     private final @Nullable AutoResize autoResize;
     private final @Nullable Registries registries;
 
     private long readIndex, writeIndex;
 
-    NetworkBufferImpl(@Nullable Arena arena, MemorySegment segment, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
+    NetworkBufferImpl(@Nullable Arena arena, @Nullable MemorySegment segment, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
         this.arena = arena;
         this.segment = segment;
         this.readIndex = readIndex;
@@ -363,7 +360,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     private boolean isDummy() {
-        return arena == null && segment == null;
+        return arena == null || segment == null;
     }
 
     // Internal writing methods
@@ -470,7 +467,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         if (impl1 == impl2) return true;
         if (impl1.capacity() != impl2.capacity()) return false;
         if (impl1.isDummy() || impl2.isDummy()) return false;
-
+        assert impl1.segment != null && impl2.segment != null : "Dummy active for a non-dummy buffer";
         return impl1.segment.mismatch(impl2.segment) == -1;
     }
 
@@ -478,14 +475,15 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         if (!isDummy() && isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
     }
 
+    @Contract("-> fail")
     void assertDummy() {
         if (isDummy()) throw new UnsupportedOperationException("Buffer is a dummy buffer");
     }
 
     static final class Builder implements NetworkBuffer.Builder {
         private final long initialSize;
-        private AutoResize autoResize;
-        private Registries registries;
+        private @Nullable AutoResize autoResize;
+        private @Nullable Registries registries;
         public Builder(long initialSize) {
             this.initialSize = initialSize;
         }
@@ -497,7 +495,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         }
 
         @Override
-        public NetworkBuffer.Builder registry(Registries registries) {
+        public NetworkBuffer.Builder registry(@Nullable Registries registries) {
             this.registries = registries;
             return this;
         }
@@ -512,7 +510,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     }
 
-    static NetworkBufferImpl dummy(Registries registries) {
+    static NetworkBufferImpl dummy(@Nullable Registries registries) {
         // Dummy buffer with no memory allocated
         // Useful for size calculations
         return new NetworkBufferImpl(
