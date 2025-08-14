@@ -96,7 +96,7 @@ public interface BlockHandler {
         private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Placement(Block block, Block previousBlock,  Instance instance, Point blockPosition) {
+        public Placement(Block block, Block previousBlock, Instance instance, Point blockPosition) {
             this.block = block;
             this.previousBlock = previousBlock;
             this.instance = instance;
@@ -198,7 +198,7 @@ public interface BlockHandler {
         private final Player player;
 
         @ApiStatus.Internal
-        public PlayerDestroy(Block block, Block  newBlock, Instance instance, Point blockPosition, Player player) {
+        public PlayerDestroy(Block block, Block newBlock, Instance instance, Point blockPosition, Player player) {
             super(block, newBlock, instance, blockPosition);
             this.player = player;
         }
