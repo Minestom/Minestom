@@ -72,7 +72,7 @@ public class PassengerIntegrationTest {
         var passengerPackets = passengerTracker.collect();
         for (int i = 0; i < passengerPackets.size(); i++) {
             // Passenger packet order will be sent backwards down the chain of passenger vehicles
-            assertEquals(startingId - i, passengerPackets.get(i).passengersId().get(0));
+            assertEquals(startingId - i, passengerPackets.get(i).passengersId().getFirst());
         }
 
         // Ensure spawn packets are never sent more than once per entity

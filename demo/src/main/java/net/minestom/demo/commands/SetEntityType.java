@@ -6,7 +6,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 public class SetEntityType extends Command {
     private final ArgumentEntityType entityTypeArg = ArgumentType.EntityType("type");
@@ -17,7 +16,7 @@ public class SetEntityType extends Command {
         addSyntax(this::execute, entityTypeArg);
     }
 
-    private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    private void execute(CommandSender sender, CommandContext context) {
         if (!(sender instanceof Player player)) {
             return;
         }

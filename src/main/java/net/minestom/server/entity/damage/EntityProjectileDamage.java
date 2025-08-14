@@ -1,7 +1,6 @@
 package net.minestom.server.entity.damage;
 
 import net.minestom.server.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EntityProjectileDamage extends Damage {
 
-    public EntityProjectileDamage(@Nullable Entity shooter, @NotNull Entity projectile, float amount) {
+    public EntityProjectileDamage(@Nullable Entity shooter, Entity projectile, float amount) {
         super(DamageType.MOB_PROJECTILE, projectile, shooter, null, amount);
     }
 
@@ -18,7 +17,6 @@ public class EntityProjectileDamage extends Damage {
      *
      * @return the projectile
      */
-    @NotNull
     public Entity getProjectile() {
         return getSource();
     }
@@ -34,7 +32,7 @@ public class EntityProjectileDamage extends Damage {
     }
 
     @Override
-    public @NotNull Entity getSource() {
+    public Entity getSource() {
         return super.getSource();
     }
 }

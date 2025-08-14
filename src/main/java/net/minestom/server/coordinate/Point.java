@@ -5,7 +5,6 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -121,7 +120,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return a new point
      */
     @Contract(pure = true)
-    @NotNull Point withX(@NotNull DoubleUnaryOperator operator);
+    Point withX(DoubleUnaryOperator operator);
 
     /**
      * Creates a point with the specified X coordinate.
@@ -130,7 +129,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return a new point
      */
     @Contract(pure = true)
-    @NotNull Point withX(double x);
+    Point withX(double x);
 
     /**
      * Creates a point with a modified Y coordinate based on its value.
@@ -139,7 +138,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return a new point
      */
     @Contract(pure = true)
-    @NotNull Point withY(@NotNull DoubleUnaryOperator operator);
+    Point withY(DoubleUnaryOperator operator);
 
     /**
      * Creates a point with the specified Y coordinate.
@@ -148,7 +147,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return a new point
      */
     @Contract(pure = true)
-    @NotNull Point withY(double y);
+    Point withY(double y);
 
     /**
      * Creates a point with a modified Z coordinate based on its value.
@@ -157,7 +156,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return a new point
      */
     @Contract(pure = true)
-    @NotNull Point withZ(@NotNull DoubleUnaryOperator operator);
+    Point withZ(DoubleUnaryOperator operator);
 
     /**
      * Creates a point with the specified Z coordinate.
@@ -166,46 +165,46 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return a new point
      */
     @Contract(pure = true)
-    @NotNull Point withZ(double z);
+    Point withZ(double z);
 
     @Contract(pure = true)
-    @NotNull Point add(double x, double y, double z);
+    Point add(double x, double y, double z);
 
     @Contract(pure = true)
-    @NotNull Point add(@NotNull Point point);
+    Point add(Point point);
 
     @Contract(pure = true)
-    @NotNull Point add(double value);
+    Point add(double value);
 
     @Contract(pure = true)
-    @NotNull Point sub(double x, double y, double z);
+    Point sub(double x, double y, double z);
 
     @Contract(pure = true)
-    @NotNull Point sub(@NotNull Point point);
+    Point sub(Point point);
 
     @Contract(pure = true)
-    @NotNull Point sub(double value);
+    Point sub(double value);
 
     @Contract(pure = true)
-    @NotNull Point mul(double x, double y, double z);
+    Point mul(double x, double y, double z);
 
     @Contract(pure = true)
-    @NotNull Point mul(@NotNull Point point);
+    Point mul(Point point);
 
     @Contract(pure = true)
-    @NotNull Point mul(double value);
+    Point mul(double value);
 
     @Contract(pure = true)
-    @NotNull Point div(double x, double y, double z);
+    Point div(double x, double y, double z);
 
     @Contract(pure = true)
-    @NotNull Point div(@NotNull Point point);
+    Point div(Point point);
 
     @Contract(pure = true)
-    @NotNull Point div(double value);
+    Point div(double value);
 
     @Contract(pure = true)
-    default @NotNull Point relative(@NotNull BlockFace face) {
+    default Point relative(BlockFace face) {
         final Direction direction = face.toDirection();
         return add(direction.normalX(), direction.normalY(), direction.normalZ());
     }
@@ -222,7 +221,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return the squared distance
      */
     @Contract(pure = true)
-    default double distanceSquared(@NotNull Point point) {
+    default double distanceSquared(Point point) {
         return distanceSquared(point.x(), point.y(), point.z());
     }
 
@@ -242,7 +241,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return the distance
      */
     @Contract(pure = true)
-    default double distance(@NotNull Point point) {
+    default double distance(Point point) {
         return distance(point.x(), point.y(), point.z());
     }
 
@@ -256,7 +255,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point to compare
      * @return true if the two positions are similar
      */
-    default boolean samePoint(@NotNull Point point) {
+    default boolean samePoint(Point point) {
         return samePoint(point.x(), point.y(), point.z());
     }
 
@@ -283,7 +282,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return true if the two positions are similar within the epsilon
      * @throws IllegalArgumentException if epsilon is less than or equal to 0
      */
-    default boolean samePoint(@NotNull Point point, double epsilon) {
+    default boolean samePoint(Point point, double epsilon) {
         return samePoint(point.x(), point.y(), point.z(), epsilon);
     }
 
@@ -303,7 +302,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point to compare to
      * @return true if 'this' is in the same chunk as {@code point}
      */
-    default boolean sameChunk(@NotNull Point point) {
+    default boolean sameChunk(Point point) {
         return chunkX() == point.chunkX() && chunkZ() == point.chunkZ();
     }
 
@@ -317,12 +316,12 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point to compare to
      * @return true if 'this' is in the same block as {@code point}
      */
-    default boolean sameBlock(@NotNull Point point) {
+    default boolean sameBlock(Point point) {
         return sameBlock(point.blockX(), point.blockY(), point.blockZ());
     }
 
     @Contract(pure = true)
-    default @NotNull Pos asPos() {
+    default Pos asPos() {
         return switch (this) {
             case Pos pos -> pos;
             case Vec vec -> new Pos(vec.x(), vec.y(), vec.z());
@@ -331,7 +330,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     }
 
     @Contract(pure = true)
-    default @NotNull Vec asVec() {
+    default Vec asVec() {
         return switch (this) {
             case Vec vec -> vec;
             case Pos pos -> new Vec(pos.x(), pos.y(), pos.z());
@@ -340,7 +339,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     }
 
     @Contract(pure = true)
-    default @NotNull BlockVec asBlockVec() {
+    default BlockVec asBlockVec() {
         return switch (this) {
             case BlockVec blockVec -> blockVec;
             case Pos pos -> new BlockVec(pos.blockX(), pos.blockY(), pos.blockZ());

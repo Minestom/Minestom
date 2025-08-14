@@ -1,7 +1,6 @@
 package net.minestom.server.codec;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
@@ -12,7 +11,7 @@ public sealed interface Result<T> {
     record Ok<T>(T value) implements Result<T> {
     }
 
-    record Error<T>(@NotNull String message) implements Result<T> {
+    record Error<T>(String message) implements Result<T> {
     }
 
     default <S> Result<S> map(Function<T, Result<S>> mapper) {

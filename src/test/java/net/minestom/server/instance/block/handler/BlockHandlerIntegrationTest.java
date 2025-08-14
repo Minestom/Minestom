@@ -10,7 +10,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,12 +26,12 @@ class BlockHandlerIntegrationTest {
 
         var handler = new BlockHandler() {
             @Override
-            public void onPlace(@NotNull Placement placement) {
+            public void onPlace(Placement placement) {
                 assertEquals(blockPosition, placement.getBlockPosition());
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minestom:test");
             }
         };
@@ -47,12 +46,12 @@ class BlockHandlerIntegrationTest {
 
         var handler = new BlockHandler() {
             @Override
-            public void onDestroy(@NotNull Destroy destroy) {
+            public void onDestroy(Destroy destroy) {
                 assertEquals(blockPosition, destroy.getBlockPosition());
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minestom:test");
             }
         };
@@ -69,14 +68,14 @@ class BlockHandlerIntegrationTest {
         AtomicBoolean interacted = new AtomicBoolean(false);
         var handler = new BlockHandler() {
             @Override
-            public boolean onInteract(@NotNull Interaction interaction) {
+            public boolean onInteract(Interaction interaction) {
                 interacted.set(true);
                 assertEquals(blockPosition, interaction.getBlockPosition());
                 return false;
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minestom:test");
             }
         };
@@ -97,13 +96,13 @@ class BlockHandlerIntegrationTest {
         AtomicBoolean ticked = new AtomicBoolean(false);
         var handler = new BlockHandler() {
             @Override
-            public void tick(@NotNull Tick tick) {
+            public void tick(Tick tick) {
                 ticked.set(true);
                 assertEquals(tick.getBlockPosition(), blockPosition.asVec());
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minestom:test");
             }
 
@@ -130,13 +129,13 @@ class BlockHandlerIntegrationTest {
         AtomicBoolean ticked = new AtomicBoolean(false);
         var handler = new BlockHandler() {
             @Override
-            public void tick(@NotNull Tick tick) {
+            public void tick(Tick tick) {
                 ticked.set(true);
                 assertEquals(tick.getBlockPosition(), blockPosition.asVec());
             }
 
             @Override
-            public @NotNull Key getKey() {
+            public Key getKey() {
                 return Key.key("minestom:test");
             }
 

@@ -7,7 +7,6 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public class PickupItemEvent implements EntityInstanceEvent, ItemEvent, CancellableEvent {
 
@@ -16,22 +15,19 @@ public class PickupItemEvent implements EntityInstanceEvent, ItemEvent, Cancella
 
     private boolean cancelled;
 
-    public PickupItemEvent(@NotNull LivingEntity livingEntity, @NotNull ItemEntity itemEntity) {
+    public PickupItemEvent(LivingEntity livingEntity, ItemEntity itemEntity) {
         this.livingEntity = livingEntity;
         this.itemEntity = itemEntity;
     }
 
-    @NotNull
     public LivingEntity getLivingEntity() {
         return livingEntity;
     }
 
-    @NotNull
     public ItemEntity getItemEntity() {
         return itemEntity;
     }
 
-    @NotNull
     public ItemStack getItemStack() {
         return getItemEntity().getItemStack();
     }
@@ -47,7 +43,7 @@ public class PickupItemEvent implements EntityInstanceEvent, ItemEvent, Cancella
     }
 
     @Override
-    public @NotNull Entity getEntity() {
+    public Entity getEntity() {
         return livingEntity;
     }
 }

@@ -5,7 +5,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -25,17 +24,17 @@ public class PlayerEditSignEvent implements PlayerInstanceEvent, BlockEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
     @Override
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
         return block;
     }
 
     @Override
-    public @NotNull BlockVec getBlockPosition() {
+    public BlockVec getBlockPosition() {
         return blockPosition;
     }
 

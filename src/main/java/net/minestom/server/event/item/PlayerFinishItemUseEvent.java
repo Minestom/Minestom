@@ -5,7 +5,6 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player completely finishes using an item.
@@ -19,7 +18,7 @@ public class PlayerFinishItemUseEvent implements PlayerInstanceEvent, ItemEvent 
     private final long useDuration;
     private boolean isRiptideSpinAttack = false;
 
-    public PlayerFinishItemUseEvent(@NotNull Player player, @NotNull PlayerHand hand, @NotNull ItemStack itemStack, long useDuration) {
+    public PlayerFinishItemUseEvent(Player player, PlayerHand hand, ItemStack itemStack, long useDuration) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
@@ -27,16 +26,16 @@ public class PlayerFinishItemUseEvent implements PlayerInstanceEvent, ItemEvent 
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    public @NotNull PlayerHand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
     @Override
-    public @NotNull ItemStack getItemStack() {
+    public ItemStack getItemStack() {
         return itemStack;
     }
 

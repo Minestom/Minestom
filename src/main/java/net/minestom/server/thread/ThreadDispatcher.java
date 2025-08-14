@@ -3,7 +3,6 @@ package net.minestom.server.thread;
 import net.minestom.server.Tickable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      * @return a new ThreadDispatcher instance
      */
     @Contract(pure = true)
-    static <P, E extends Tickable> @NotNull ThreadDispatcher<P, E> dispatcher(@NotNull ThreadProvider<P> provider, int threadCount) {
+    static <P, E extends Tickable> ThreadDispatcher<P, E> dispatcher(ThreadProvider<P> provider, int threadCount) {
         return new ThreadDispatcherImpl<>(provider, threadCount, TickThread::new);
     }
 
@@ -50,8 +49,8 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      * @return a new ThreadDispatcher instance
      */
     @Contract(pure = true)
-    static <P, E extends Tickable> @NotNull ThreadDispatcher<P, E> dispatcher(@NotNull ThreadProvider<P> provider,
-                                                                              @NotNull IntFunction<String> nameGenerator, int threadCount) {
+    static <P, E extends Tickable> ThreadDispatcher<P, E> dispatcher(ThreadProvider<P> provider,
+                                                                              IntFunction<String> nameGenerator, int threadCount) {
         return new ThreadDispatcherImpl<>(provider, threadCount, index -> new TickThread(nameGenerator.apply(index)));
     }
 
@@ -63,7 +62,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      * @return a new ThreadDispatcher instance
      */
     @Contract(pure = true)
-    static <P, E extends Tickable> @NotNull ThreadDispatcher<P, E> singleThread() {
+    static <P, E extends Tickable> ThreadDispatcher<P, E> singleThread() {
         return dispatcher(ThreadProvider.counter(), 1);
     }
 
@@ -76,7 +75,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      */
     @Unmodifiable
     @ApiStatus.Internal
-    @NotNull List<@NotNull TickThread> threads();
+    List<TickThread> threads();
 
     /**
      * Prepares the update by creating the {@link TickThread} tasks.
@@ -111,21 +110,21 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      *
      * @param update the update to signal
      */
-    void signalUpdate(@NotNull ThreadDispatcher.Update<P, E> update);
+    void signalUpdate(ThreadDispatcher.Update<P, E> update);
 
-    default void createPartition(@NotNull P partition) {
+    default void createPartition(P partition) {
         signalUpdate(new Update.PartitionLoad<>(partition));
     }
 
-    default void deletePartition(@NotNull P partition) {
+    default void deletePartition(P partition) {
         signalUpdate(new Update.PartitionUnload<>(partition));
     }
 
-    default void updateElement(@NotNull E element, @NotNull P partition) {
+    default void updateElement(E element, P partition) {
         signalUpdate(new Update.ElementUpdate<>(element, partition));
     }
 
-    default void removeElement(@NotNull E element) {
+    default void removeElement(E element) {
         signalUpdate(new Update.ElementRemove<>(element));
     }
 
@@ -159,7 +158,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param partition the partition to register
          */
-        record PartitionLoad<P, E>(@NotNull P partition) implements Update<P, E> {
+        record PartitionLoad<P, E>(P partition) implements Update<P, E> {
         }
 
         /**
@@ -167,7 +166,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param partition the partition to delete
          */
-        record PartitionUnload<P, E>(@NotNull P partition) implements Update<P, E> {
+        record PartitionUnload<P, E>(P partition) implements Update<P, E> {
         }
 
         /**
@@ -176,7 +175,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          * @param element   the element to update
          * @param partition the partition the Tickable is part of
          */
-        record ElementUpdate<P, E>(@NotNull E element, P partition) implements Update<P, E> {
+        record ElementUpdate<P, E>(E element, P partition) implements Update<P, E> {
         }
 
         /**
@@ -184,7 +183,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param element the element to remove
          */
-        record ElementRemove<P, E>(@NotNull E element) implements Update<P, E> {
+        record ElementRemove<P, E>(E element) implements Update<P, E> {
         }
     }
 }

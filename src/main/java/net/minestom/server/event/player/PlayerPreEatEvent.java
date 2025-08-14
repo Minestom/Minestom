@@ -6,7 +6,6 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called before the PlayerEatEvent and can be used to change the eating time
@@ -22,7 +21,7 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
 
     private boolean cancelled;
 
-    public PlayerPreEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, @NotNull PlayerHand hand, long eatingTime) {
+    public PlayerPreEatEvent(Player player, ItemStack foodItem, PlayerHand hand, long eatingTime) {
         this.player = player;
         this.foodItem = foodItem;
         this.hand = hand;
@@ -36,11 +35,11 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
      * @deprecated use getItemStack() for the eaten item
      */
     @Deprecated
-    public @NotNull ItemStack getFoodItem() {
+    public ItemStack getFoodItem() {
         return foodItem;
     }
 
-    public @NotNull PlayerHand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
@@ -73,7 +72,7 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -83,5 +82,5 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
      * @return the food item
      */
     @Override
-    public @NotNull ItemStack getItemStack() { return foodItem; }
+    public ItemStack getItemStack() { return foodItem; }
 }

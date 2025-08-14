@@ -1,7 +1,6 @@
 package net.minestom.server.instance.block;
 
 import net.minestom.server.utils.Direction;
-import org.jetbrains.annotations.NotNull;
 
 public enum BlockFace {
     BOTTOM(Direction.DOWN),
@@ -21,7 +20,6 @@ public enum BlockFace {
         return direction;
     }
 
-    @NotNull
     public BlockFace getOppositeFace() {
         return switch (this) {
             case BOTTOM -> TOP;
@@ -33,7 +31,7 @@ public enum BlockFace {
         };
     }
 
-    public boolean isSimilar(@NotNull BlockFace other) {
+    public boolean isSimilar(BlockFace other) {
         return this == other || this == other.getOppositeFace();
     }
 
