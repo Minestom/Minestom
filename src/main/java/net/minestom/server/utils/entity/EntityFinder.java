@@ -273,7 +273,7 @@ public class EntityFinder {
 
     public @Nullable Entity findFirstEntity(@Nullable Instance instance, @Nullable Entity self) {
         final List<Entity> entities = find(instance, self);
-        return entities.isEmpty() ? null : entities.get(0);
+        return entities.isEmpty() ? null : entities.getFirst();
     }
 
     public @Nullable Entity findFirstEntity(CommandSender sender) {

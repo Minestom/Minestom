@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.Tickable;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -23,7 +22,7 @@ public class ThreadDispatcherTest {
         final Acquirable<Element> acquirable = Acquirable.unassigned(this);
 
         @Override
-        public @NotNull Acquirable<? extends Element> acquirable() {
+        public Acquirable<? extends Element> acquirable() {
             return acquirable;
         }
     }
@@ -225,12 +224,12 @@ public class ThreadDispatcherTest {
         final int threadCount = 10;
         ThreadDispatcher<Updater, Tickable> dispatcher = ThreadDispatcher.dispatcher(new ThreadProvider<>() {
             @Override
-            public int findThread(@NotNull Updater partition) {
+            public int findThread(Updater partition) {
                 return partition.getValue();
             }
 
             @Override
-            public @NotNull RefreshType refreshType() {
+            public RefreshType refreshType() {
                 return RefreshType.ALWAYS;
             }
         }, threadCount);
