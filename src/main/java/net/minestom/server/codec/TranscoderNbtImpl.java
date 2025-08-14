@@ -7,8 +7,6 @@ import java.util.*;
 final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     static final TranscoderNbtImpl INSTANCE = new TranscoderNbtImpl();
 
-    private static final Set<String> WRAPPED_ELEMENT_KEYS = Set.of("");
-
     @Override
     public BinaryTag createNull() {
         return EndBinaryTag.endBinaryTag();
