@@ -41,7 +41,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
         <D> Result<D> convertTo(Transcoder<D> coder);
     }
 
-    Codec<RawValue> RAW_VALUE = new CodecImpl.RawValueCodecImpl();
+    Codec<@UnknownNullability RawValue> RAW_VALUE = new CodecImpl.RawValueCodecImpl();
 
     Codec<Unit> UNIT = StructCodec.struct(Unit.INSTANCE);
 
