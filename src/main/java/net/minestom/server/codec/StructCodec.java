@@ -4,6 +4,7 @@ import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.network.NetworkBufferTemplate.*;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -83,7 +84,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             F1<P1, R> ctor
     ) {
@@ -105,7 +106,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             F2<P1, P2, R> ctor
@@ -133,7 +134,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -167,7 +168,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -207,7 +208,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -253,7 +254,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -305,7 +306,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -363,7 +364,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -427,7 +428,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -497,7 +498,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -573,7 +574,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -655,7 +656,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -743,7 +744,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -837,7 +838,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -937,7 +938,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -1043,7 +1044,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -1155,7 +1156,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -1273,7 +1274,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -1397,7 +1398,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -1527,7 +1528,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20> StructCodec<R> struct(
+    static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, P20 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
@@ -1663,7 +1664,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    private static <D, T> Result<T> get(Transcoder<D> coder, Codec<T> codec, String key, MapLike<D> map) {
+    private static <D, T> Result<@Nullable T> get(Transcoder<D> coder, Codec<T> codec, String key, MapLike<D> map) {
         if (INLINE.equals(key)) {
             final Codec<T> decodeCodec = codec instanceof CodecImpl.OptionalImpl<T>(
                     Codec<T> inner, T ignored

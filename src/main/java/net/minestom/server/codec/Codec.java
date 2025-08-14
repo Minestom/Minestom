@@ -14,7 +14,9 @@ import net.minestom.server.utils.ThrowingFunction;
 import net.minestom.server.utils.UUIDUtils;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.*;
 import java.util.function.Function;
@@ -29,7 +31,7 @@ import java.util.function.Supplier;
  * @param <T> The type to be represented by this codec
  */
 @ApiStatus.Experimental
-public interface Codec<T> extends Encoder<T>, Decoder<T> {
+public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>, Decoder<T> {
 
     sealed interface RawValue permits CodecImpl.RawValueImpl {
         static <D> RawValue of(Transcoder<D> coder, D value) {
@@ -91,20 +93,24 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         return compound;
     }, compound -> compound);
 
+    @Contract(pure = true)
     static <E extends Enum<E>> Codec<E> Enum(Class<E> enumClass) {
         return STRING.transform(
                 value -> Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT)),
                 value -> value.name().toLowerCase(Locale.ROOT));
     }
 
+    @Contract(pure = true)
     static <T> Codec<T> Recursive(Function<Codec<T>, Codec<T>> func) {
         return new CodecImpl.RecursiveImpl<>(func).delegate;
     }
 
+    @Contract(pure = true)
     static <T> Codec<T> ForwardRef(Supplier<Codec<T>> func) {
         return new CodecImpl.ForwardRefImpl<>(func);
     }
 
+    @Contract(pure = true)
     static <T> StructCodec<T> RegistryTaggedUnion(
             Registry<StructCodec<? extends T>> registry,
             Function<T, StructCodec<? extends T>> serializerGetter,
@@ -113,6 +119,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         return Codec.RegistryTaggedUnion((ignored) -> registry, serializerGetter, key);
     }
 
+    @Contract(pure = true)
     static <T> StructCodec<T> RegistryTaggedUnion(
             Registries.Selector<StructCodec<? extends T>> registrySelector,
             Function<T, StructCodec<? extends T>> serializerGetter,
@@ -121,63 +128,79 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         return new CodecImpl.RegistryTaggedUnionImpl<>(registrySelector, serializerGetter, key);
     }
 
+    @Contract(pure = true)
     static <L, R> Codec<Either<L, R>> Either(Codec<L> leftCodec, Codec<R> rightCodec) {
         return new CodecImpl.EitherImpl<>(leftCodec, rightCodec);
     }
 
+    @Contract(pure = true)
     default Codec<@Nullable T> optional() {
         return new CodecImpl.OptionalImpl<>(this, null);
     }
 
-    default Codec<T> optional(T defaultValue) {
-        return new CodecImpl.OptionalImpl<>(this, defaultValue);
+    @Contract(pure = true)
+    default Codec<@UnknownNullability T> optional(T defaultValue) {
+        // We really have no idea what nullability this will have as optional still accepts null values, but we may never return null
+        return new CodecImpl.OptionalImpl<>(this, Objects.requireNonNull(defaultValue, "Default value cannot be null"));
     }
 
-    default <S> Codec<S> transform(ThrowingFunction<T, S> to, ThrowingFunction<S, T> from) {
+    @Contract(pure = true)
+    default <S> Codec<@UnknownNullability S> transform(ThrowingFunction<T, @UnknownNullability S> to, ThrowingFunction<@Nullable S, T> from) {
         return new CodecImpl.TransformImpl<>(this, to, from);
     }
 
+    @Contract(pure = true)
     default Codec<List<T>> list(int maxSize) {
         return new CodecImpl.ListImpl<>(this, maxSize);
     }
 
+    @Contract(pure = true)
     default Codec<List<T>> list() {
         return list(Integer.MAX_VALUE);
     }
 
+    @Contract(pure = true)
     default Codec<List<T>> listOrSingle(int maxSize) {
         return Codec.this.list(maxSize).orElse(Codec.this.transform(
                 List::of, list -> list.isEmpty() ? null : list.getFirst()));
     }
 
+    @Contract(pure = true)
     default Codec<List<T>> listOrSingle() {
         return this.listOrSingle(Integer.MAX_VALUE);
     }
 
+    @Contract(pure = true)
     default Codec<Set<T>> set(int maxSize) {
         return new CodecImpl.SetImpl<>(Codec.this, maxSize);
     }
 
+    @Contract(pure = true)
     default Codec<Set<T>> set() {
         return set(Integer.MAX_VALUE);
     }
 
+    @Contract(pure = true)
     default <V> Codec<Map<T, V>> mapValue(Codec<V> valueCodec, int maxSize) {
         return new CodecImpl.MapImpl<>(Codec.this, valueCodec, maxSize);
     }
 
+    @Contract(pure = true)
     default <V> Codec<Map<T, V>> mapValue(Codec<V> valueCodec) {
         return mapValue(valueCodec, Integer.MAX_VALUE);
     }
 
-    default <R, T1 extends T, TR extends R> StructCodec<R> unionType(Function<T, StructCodec<TR>> serializers, Function<R, T1> keyFunc) {
+    @Contract(pure = true)
+    default <R, TR extends R> StructCodec<R> unionType(Function<T, StructCodec<TR>> serializers, Function<R, ? extends T> keyFunc) {
         return unionType("type", serializers, keyFunc);
     }
 
-    default <R, T1 extends T, TR extends R> StructCodec<R> unionType(String keyField, Function<T, StructCodec<TR>> serializers, Function<R, T1> keyFunc) {
+    @Contract(pure = true)
+    default <R, TR extends R> StructCodec<R> unionType(String keyField, Function<T, StructCodec<TR>> serializers, Function<R, ? extends T> keyFunc) {
         return new CodecImpl.UnionImpl<>(keyField, this, serializers, keyFunc);
     }
 
+    @Contract(pure = true)
     default Codec<T> orElse(Codec<T> other) {
         return new CodecImpl.OrElseImpl<>(this, other);
     }

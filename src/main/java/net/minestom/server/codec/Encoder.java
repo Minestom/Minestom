@@ -2,9 +2,10 @@ package net.minestom.server.codec;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 @ApiStatus.Experimental
-public interface Encoder<T> {
+public interface Encoder<T extends @UnknownNullability Object> {
 
     static <T> Encoder<T> empty() {
         return new Encoder<>() {
