@@ -18,23 +18,22 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 final class TestConnectionImpl implements TestConnection {
-    private final Env env;
     private final ServerProcess process;
+    private final GameProfile gameProfile;
     private final PlayerConnectionImpl playerConnection = new PlayerConnectionImpl();
 
     private final AtomicBoolean connected = new AtomicBoolean(false);
 
     private final List<IncomingCollector<ServerPacket>> incomingTrackers = new CopyOnWriteArrayList<>();
 
-    TestConnectionImpl(Env env) {
-        this.env = env;
+    TestConnectionImpl(Env env, GameProfile gameProfile) {
         this.process = env.process();
+        this.gameProfile = gameProfile;
     }
 
     @Override
@@ -43,7 +42,6 @@ final class TestConnectionImpl implements TestConnection {
             throw new IllegalStateException("Already connected");
         }
 
-        final GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "RandName");
         var player = process.connection().createPlayer(playerConnection, gameProfile);
         player.eventNode().addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(instance);
