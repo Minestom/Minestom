@@ -91,18 +91,24 @@ public interface BlockHandler {
      */
     sealed class Placement permits PlayerPlacement {
         private final Block block;
+        private final Block previousBlock;
         private final Instance instance;
         private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Placement(Block block, Instance instance, Point blockPosition) {
+        public Placement(Block block, Block previousBlock, Instance instance, Point blockPosition) {
             this.block = block;
+            this.previousBlock = previousBlock;
             this.instance = instance;
             this.blockPosition = blockPosition;
         }
 
         public Block getBlock() {
             return block;
+        }
+
+        public Block getPreviousBlock() {
+            return previousBlock;
         }
 
         public Instance getInstance() {
@@ -121,9 +127,9 @@ public interface BlockHandler {
         private final float cursorX, cursorY, cursorZ;
 
         @ApiStatus.Internal
-        public PlayerPlacement(Block block, Instance instance, Point blockPosition,
+        public PlayerPlacement(Block block, Block previousBlock, Instance instance, Point blockPosition,
                                Player player, PlayerHand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
-            super(block, instance, blockPosition);
+            super(block, previousBlock, instance, blockPosition);
             this.player = player;
             this.hand = hand;
             this.blockFace = blockFace;
@@ -159,18 +165,24 @@ public interface BlockHandler {
 
     sealed class Destroy permits PlayerDestroy {
         private final Block block;
+        private final Block newBlock;
         private final Instance instance;
         private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Destroy(Block block, Instance instance, Point blockPosition) {
+        public Destroy(Block block, Block newBlock, Instance instance, Point blockPosition) {
             this.block = block;
+            this.newBlock = newBlock;
             this.instance = instance;
             this.blockPosition = blockPosition;
         }
 
         public Block getBlock() {
             return block;
+        }
+
+        public Block getNewBlock() {
+            return newBlock;
         }
 
         public Instance getInstance() {
@@ -186,8 +198,8 @@ public interface BlockHandler {
         private final Player player;
 
         @ApiStatus.Internal
-        public PlayerDestroy(Block block, Instance instance, Point blockPosition, Player player) {
-            super(block, instance, blockPosition);
+        public PlayerDestroy(Block block, Block newBlock, Instance instance, Point blockPosition, Player player) {
+            super(block, newBlock, instance, blockPosition);
             this.player = player;
         }
 
