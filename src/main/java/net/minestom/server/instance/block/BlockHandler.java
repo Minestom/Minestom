@@ -8,7 +8,6 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -97,7 +96,7 @@ public interface BlockHandler {
         private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Placement(Block block, @Nullable Block previousBlock,  Instance instance, Point blockPosition) {
+        public Placement(Block block, Block previousBlock,  Instance instance, Point blockPosition) {
             this.block = block;
             this.previousBlock = previousBlock;
             this.instance = instance;
@@ -108,7 +107,7 @@ public interface BlockHandler {
             return block;
         }
 
-        public @Nullable Block getPreviousBlock() {
+        public Block getPreviousBlock() {
             return previousBlock;
         }
 
@@ -182,7 +181,7 @@ public interface BlockHandler {
             return block;
         }
 
-        public @NotNull Block getNewBlock() {
+        public Block getNewBlock() {
             return newBlock;
         }
 
