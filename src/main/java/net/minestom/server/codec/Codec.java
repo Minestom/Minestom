@@ -129,7 +129,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     }
 
     @Contract(pure = true)
-    static <L, R> Codec<Either<L, R>> Either(Codec<L> leftCodec, Codec<R> rightCodec) {
+    static <L, R> Codec<@UnknownNullability Either<L, R>> Either(Codec<L> leftCodec, Codec<R> rightCodec) {
         return new CodecImpl.EitherImpl<>(leftCodec, rightCodec);
     }
 
