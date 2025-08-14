@@ -1,5 +1,8 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
@@ -17,7 +20,7 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
-import net.minestom.server.coordinate.CoordConversion;
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
@@ -35,6 +38,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
@@ -49,22 +53,21 @@ import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketSendingUtils;
-import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static net.minestom.server.coordinate.CoordConversion.*;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -117,7 +120,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
 
-    private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
+    final AtomicLong version = new AtomicLong(1);
 
     // the uuid of this instance
     protected UUID uuid;
@@ -228,6 +231,16 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @ApiStatus.Internal
     public abstract boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates);
 
+    @ApiStatus.Experimental
+    public synchronized void updateSection(int sectionX, int sectionY, int sectionZ, Consumer<Palette> consumer) {
+        Chunk chunk = getChunk(sectionX, sectionZ);
+        if (chunk == null || chunk.isReadOnly()) return;
+        SectionImpl section = (SectionImpl) chunk.getSection(sectionY);
+        consumer.accept(section.blockPalette());
+        // We cannot/shouldn't verify if the palette has been modified
+        invalidateSection(sectionX, sectionY, sectionZ);
+    }
+
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
      *
@@ -288,15 +301,61 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         unloadChunk(chunk);
     }
 
-    public void invalidateSection(int sectionX, int sectionY, int sectionZ) {
+    public synchronized void invalidateSection(int sectionX, int sectionY, int sectionZ) {
         final Chunk chunk = getChunk(sectionX, sectionZ);
-        if (chunk != null) {
-            Section section = chunk.getSection(sectionY);
-            section.skyLight().invalidate();
-            section.blockLight().invalidate();
-            chunk.invalidate();
-            EventDispatcher.call(new InstanceSectionInvalidateEvent(this, sectionX, sectionY, sectionZ));
+        if (chunk == null) return;
+        this.version.incrementAndGet();
+        chunk.invalidate();
+        EventDispatcher.call(new InstanceSectionInvalidateEvent(this, sectionX, sectionY, sectionZ));
+    }
+
+    public synchronized void invalidateChunk(int chunkX, int chunkZ) {
+        final Chunk chunk = getChunk(chunkX, chunkZ);
+        if (chunk == null) return;
+        this.version.incrementAndGet();
+        chunk.invalidate();
+        final DimensionType dimension = cachedDimensionType;
+        final int minSection = dimension.minY() / SECTION_SIZE;
+        final int maxSection = (dimension.minY() + dimension.height()) / SECTION_SIZE;
+        for (int sectionY = minSection; sectionY < maxSection; sectionY++) {
+            EventDispatcher.call(new InstanceSectionInvalidateEvent(this, chunkX, sectionY, chunkZ));
         }
+    }
+
+    /**
+     * Retrieves the block version at a specific {@link Area}.
+     * Updated whenever a section is mutated (or simply assumed to have been mutated).
+     * <p>
+     * You can retrieve and store the version to check if the instance has been modified at a later time.
+     *
+     * @return the area block version
+     * @see #setBlock(int, int, int, Block)
+     * @see #invalidateSection(int, int, int)
+     * @see #invalidateChunk(int, int)
+     */
+    public synchronized BlockVersion version(Area area) {
+        LongSet sections = new LongOpenHashSet();
+        area.forEach(vec -> sections.add(sectionIndex(vec.sectionX(), vec.sectionY(), vec.sectionZ())));
+        Long2LongOpenHashMap sectionVersions = new Long2LongOpenHashMap();
+        for (long sectionIndex : sections) {
+            final int sectionX = sectionIndexGetX(sectionIndex);
+            final int sectionY = sectionIndexGetY(sectionIndex);
+            final int sectionZ = sectionIndexGetZ(sectionIndex);
+            final Chunk chunk = getChunk(sectionX, sectionZ);
+            final long version;
+            if (chunk != null) {
+                final Section section = chunk.getSection(sectionY);
+                version = ((SectionImpl) section).version().get();
+            } else {
+                version = 0;
+            }
+            sectionVersions.put(sectionIndex, version);
+        }
+        return new BlockVersionImpl(version.get(), sectionVersions);
+    }
+
+    public synchronized BlockVersion version() {
+        return new BlockVersionImpl(version.get(), null);
     }
 
     /**
@@ -721,9 +780,19 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     @Override
     public @Nullable Block getBlock(int x, int y, int z, Condition condition) {
-        final Block block = blockRetriever.getBlock(x, y, z, condition);
-        if (block == null) throw new NullPointerException("Unloaded chunk at " + x + "," + y + "," + z);
-        return block;
+        final Chunk chunk = getChunkAt(x, z);
+        if (chunk == null) throw new NullPointerException("Unloaded chunk at " + x + "," + z);
+        final int localX = globalToSectionRelative(x), localY = globalToSectionRelative(y), localZ = globalToSectionRelative(z);
+        SectionImpl section = (SectionImpl) chunk.getSectionAt(y);
+        // Verify if the block object is present
+        if (condition != Condition.TYPE) {
+            final int blockIndex = sectionBlockIndex(localX, localY, localZ);
+            final Block entry = !section.entries().isEmpty() ? section.entries().get(blockIndex) : null;
+            if (entry != null || condition == Condition.CACHED) return entry;
+        }
+        // Retrieve the block from state id
+        final int blockStateId = section.blockPalette().get(localX, localY, localZ);
+        return Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR);
     }
 
     /**
@@ -749,7 +818,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the chunk at the given position, null if not loaded
      */
     public @Nullable Chunk getChunkAt(double x, double z) {
-        return getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
+        return getChunk(globalToChunk(x), globalToChunk(z));
     }
 
     /**
@@ -930,7 +999,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     public InstanceSnapshot updateSnapshot(SnapshotUpdater updater) {
         final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(),
-                value -> CoordConversion.chunkIndex(value.getChunkX(), value.getChunkZ()));
+                value -> chunkIndex(value.getChunkX(), value.getChunkZ()));
         final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
         return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
                 getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
@@ -1033,14 +1102,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.blockLight();
-        int sectionCoordinate = CoordConversion.globalToChunk(blockY);
-
-        int coordX = CoordConversion.globalToSectionRelative(blockX);
-        int coordY = CoordConversion.globalToSectionRelative(blockY);
-        int coordZ = CoordConversion.globalToSectionRelative(blockZ);
+        final int sectionCoordinate = globalToChunk(blockY);
+        final int coordX = globalToSectionRelative(blockX);
+        final int coordY = globalToSectionRelative(blockY);
+        final int coordZ = globalToSectionRelative(blockZ);
 
         if (light.requiresUpdate())
-            LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
+            ChunkLight.relightSection(this, chunk.getChunkX(), sectionCoordinate, chunk.getChunkZ());
         return light.getLevel(coordX, coordY, coordZ);
     }
 
@@ -1049,14 +1117,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.skyLight();
-        int sectionCoordinate = CoordConversion.globalToChunk(blockY);
-
-        int coordX = CoordConversion.globalToSectionRelative(blockX);
-        int coordY = CoordConversion.globalToSectionRelative(blockY);
-        int coordZ = CoordConversion.globalToSectionRelative(blockZ);
+        final int sectionCoordinate = globalToChunk(blockY);
+        final int coordX = globalToSectionRelative(blockX);
+        final int coordY = globalToSectionRelative(blockY);
+        final int coordZ = globalToSectionRelative(blockZ);
 
         if (light.requiresUpdate())
-            LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
+            ChunkLight.relightSection(this, chunk.getChunkX(), sectionCoordinate, chunk.getChunkZ());
         return light.getLevel(coordX, coordY, coordZ);
     }
 }

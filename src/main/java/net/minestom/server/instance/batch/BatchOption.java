@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Contract;
 /**
  * Represents options for {@link Batch}s.
  */
+@Deprecated
 public class BatchOption {
 
     private boolean fullChunk = false;

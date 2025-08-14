@@ -1,6 +1,5 @@
 package net.minestom.server.utils.chunk;
 
-import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -27,17 +26,10 @@ public final class ChunkCache implements Block.Getter {
 
     @Override
     public @UnknownNullability Block getBlock(int x, int y, int z, Condition condition) {
-        Chunk chunk = this.chunk;
-        final int chunkX = CoordConversion.globalToChunk(x);
-        final int chunkZ = CoordConversion.globalToChunk(z);
-        if (chunk == null || !chunk.isLoaded() ||
-                chunk.getChunkX() != chunkX || chunk.getChunkZ() != chunkZ) {
-            this.chunk = chunk = this.instance.getChunk(chunkX, chunkZ);
+        try {
+            return instance.getBlock(x, y, z, condition);
+        } catch (NullPointerException e) {
+            return defaultBlock;
         }
-        if (chunk != null) {
-            synchronized (chunk) {
-                return chunk.getBlock(x, y, z, condition);
-            }
-        } else return defaultBlock;
     }
 }

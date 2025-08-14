@@ -3,29 +3,23 @@ package net.minestom.server.instance;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
-import net.minestom.server.coordinate.CoordConversion;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
-import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNullByDefault;
 
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.function.Consumer;
 
-// TODO light data & API
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
+import static net.minestom.server.coordinate.CoordConversion.globalToChunk;
 
 /**
  * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
@@ -38,74 +32,60 @@ import java.util.UUID;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter, Biome.Setter, Viewable, Tickable, Taggable, Snapshotable {
-    public static final int CHUNK_SIZE_X = 16;
-    public static final int CHUNK_SIZE_Z = 16;
-    public static final int CHUNK_SECTION_SIZE = 16;
+@NotNullByDefault
+public sealed interface Chunk extends Viewable, Tickable, Taggable, Snapshotable permits ChunkImpl {
+    int CHUNK_SIZE_X = SECTION_SIZE;
+    int CHUNK_SIZE_Z = SECTION_SIZE;
+    int CHUNK_SECTION_SIZE = SECTION_SIZE;
 
-    private final UUID identifier;
-
-    protected Instance instance;
-    protected final int chunkX, chunkZ;
-    protected final int minSection, maxSection;
-
-    // Options
-    private final boolean shouldGenerate;
-    private boolean readOnly;
-
-    protected volatile boolean loaded = true;
-    private final Viewable viewable;
-
-    // Data
-    private final TagHandler tagHandler = TagHandler.newHandler();
-
-    public Chunk(Instance instance, int chunkX, int chunkZ, boolean shouldGenerate) {
-        this.identifier = UUID.randomUUID();
-        this.instance = instance;
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
-        this.shouldGenerate = shouldGenerate;
-        final DimensionType instanceDim = instance.getCachedDimensionType();
-        this.minSection = instanceDim.minY() / CHUNK_SECTION_SIZE;
-        this.maxSection = (instanceDim.minY() + instanceDim.height()) / CHUNK_SECTION_SIZE;
-        final List<SharedInstance> shared = instance instanceof InstanceContainer instanceContainer ?
-                instanceContainer.getSharedInstances() : List.of();
-        this.viewable = instance.getEntityTracker().viewable(shared, chunkX, chunkZ);
+    static Chunk chunk(Instance instance, int chunkX, int chunkZ, Consumer<Builder> consumer) {
+        var builder = new ChunkImpl.Builder();
+        consumer.accept(builder);
+        return builder.build(instance, chunkX, chunkZ);
     }
 
-    /**
-     * Sets a block at a position.
-     * <p>
-     * This is used when the previous block has to be destroyed/replaced, meaning that it clears the previous data and update method.
-     * <p>
-     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link net.minestom.server.instance.batch.Batch batches})
-     * The thread-safe version is {@link Instance#setBlock(int, int, int, Block)} (or any similar instance methods)
-     * Otherwise, you can simply do not forget to have this chunk synchronized when this is called.
-     *
-     * @param x     the block X
-     * @param y     the block Y
-     * @param z     the block Z
-     * @param block the block to place
-     */
-    @Override
-    public void setBlock(int x, int y, int z, Block block) {
-        setBlock(x, y, z, block, null, null);
+    static Chunk chunk(Instance instance, int chunkX, int chunkZ) {
+        return new ChunkImpl.Builder().build(instance, chunkX, chunkZ);
     }
 
-    protected abstract void setBlock(int x, int y, int z, Block block,
-                                     @Nullable BlockHandler.Placement placement,
-                                     @Nullable BlockHandler.Destroy destroy);
+    static Chunk chunkLight(Instance instance, int chunkX, int chunkZ) {
+        return chunk(instance, chunkX, chunkZ, Builder::lightEngine);
+    }
 
-    public abstract List<Section> getSections();
+    sealed interface Builder permits ChunkImpl.Builder {
+        void lightEngine(boolean lightEngine);
 
-    public abstract Section getSection(int section);
+        default void lightEngine() {
+            lightEngine(true);
+        }
 
-    public abstract Heightmap motionBlockingHeightmap();
-    public abstract Heightmap worldSurfaceHeightmap();
-    public abstract void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
+        void readOnly(boolean readOnly);
 
-    public Section getSectionAt(int blockY) {
-        return getSection(CoordConversion.globalToChunk(blockY));
+        default void readOnly() {
+            readOnly(true);
+        }
+
+        void generate(boolean generate);
+
+        default void generate() {
+            generate(true);
+        }
+
+        void sections(List<Section> sections);
+    }
+
+    List<Section> getSections();
+
+    Section getSection(int section);
+
+    Heightmap motionBlockingHeightmap();
+
+    Heightmap worldSurfaceHeightmap();
+
+    void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
+
+    default Section getSectionAt(int blockY) {
+        return getSection(globalToChunk(blockY));
     }
 
     /**
@@ -118,23 +98,23 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param time the time of the update in milliseconds
      */
     @Override
-    public abstract void tick(long time);
+    void tick(long time);
 
     /**
      * Sends the chunk data to {@code player}.
      *
      * @param player the player
      */
-    public void sendChunk(Player player) {
+    default void sendChunk(Player player) {
         player.sendChunk(this);
     }
 
-    public void sendChunk() {
+    default void sendChunk() {
         getViewers().forEach(this::sendChunk);
     }
 
     @ApiStatus.Internal
-    public abstract SendablePacket getFullDataPacket();
+    SendablePacket getFullDataPacket();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
@@ -146,77 +126,32 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param chunkZ   the chunk Z of the copy
      * @return a copy of this chunk with a potentially new instance and position
      */
-    public abstract Chunk copy(Instance instance, int chunkX, int chunkZ);
+    Chunk copy(Instance instance, int chunkX, int chunkZ);
 
     /**
      * Resets the chunk, this means clearing all the data making it empty.
      */
-    public abstract void reset();
+    void reset();
 
-    /**
-     * Gets the unique identifier of this chunk.
-     * <p>
-     * WARNING: this UUID is not persistent but randomized once the object is instantiated.
-     *
-     * @return the chunk identifier
-     */
-    public UUID getIdentifier() {
-        return identifier;
-    }
+    Instance getInstance();
 
-    /**
-     * Gets the instance where this chunk is stored
-     *
-     * @return the linked instance
-     */
-    public Instance getInstance() {
-        return instance;
-    }
+    int getChunkX();
 
-    /**
-     * Gets the chunk X.
-     *
-     * @return the chunk X
-     */
-    public int getChunkX() {
-        return chunkX;
-    }
-
-    /**
-     * Gets the chunk Z.
-     *
-     * @return the chunk Z
-     */
-    public int getChunkZ() {
-        return chunkZ;
-    }
+    int getChunkZ();
 
     /**
      * Gets the lowest (inclusive) section Y available in this chunk
      *
      * @return the lowest (inclusive) section Y available in this chunk
      */
-    public int getMinSection() {
-        return minSection;
-    }
+    int getMinSection();
 
     /**
      * Gets the highest (exclusive) section Y available in this chunk
      *
      * @return the highest (exclusive) section Y available in this chunk
      */
-    public int getMaxSection() {
-        return maxSection;
-    }
-
-    /**
-     * Gets the world position of this chunk.
-     *
-     * @return the position of this chunk
-     */
-    public Point toPosition() {
-        return new Vec(CHUNK_SIZE_X * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
-    }
+    int getMaxSection();
 
     /**
      * Gets if this chunk will or had been loaded with a {@link Generator}.
@@ -225,8 +160,15 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return true if this chunk is affected by a {@link Generator}
      */
-    public boolean shouldGenerate() {
-        return shouldGenerate;
+    boolean shouldGenerate();
+
+    /**
+     * Gets the world position of this chunk.
+     *
+     * @return the position of this chunk
+     */
+    default Point toPosition() {
+        return new BlockVec(CHUNK_SIZE_X * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
 
     /**
@@ -237,75 +179,33 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return true if the chunk is read-only
      */
-    public boolean isReadOnly() {
-        return readOnly;
-    }
+    boolean isReadOnly();
 
     /**
-     * Changes the read state of the chunk.
+     * Gets if this chunk has a light engine.
      * <p>
-     * Being read-only should prevent block placing/breaking and setting block from an {@link Instance}.
-     * It does not affect {@link IChunkLoader} and {@link Generator}.
+     * If true, the chunk will be able to calculate light updates and send them to players.
      *
-     * @param readOnly true to make the chunk read-only, false otherwise
+     * @return true if the chunk has a light engine
      */
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
-    }
+    boolean hasLightEngine();
 
     /**
      * Used to verify if the chunk should still be kept in memory.
      *
      * @return true if the chunk is loaded
      */
-    public boolean isLoaded() {
-        return loaded;
-    }
-
-    /**
-     * Called when the chunk has been successfully loaded.
-     */
-    protected void onLoad() {}
-
-    /**
-     * Called when the chunk generator has finished generating the chunk.
-     */
-    public void onGenerate() {}
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
-    }
-
-    @Override
-    public boolean addViewer(Player player) {
-        return viewable.addViewer(player);
-    }
-
-    @Override
-    public boolean removeViewer(Player player) {
-        return viewable.removeViewer(player);
-    }
-
-    @Override
-    public Set<Player> getViewers() {
-        return viewable.getViewers();
-    }
-
-    @Override
-    public TagHandler tagHandler() {
-        return tagHandler;
-    }
+    boolean isLoaded();
 
     /**
      * Sets the chunk as "unloaded".
      */
-    protected void unload() {
-        this.loaded = false;
-    }
+    void unload();
+
+    TagHandler tagHandler();
 
     /**
      * Invalidate the chunk caches
      */
-    public abstract void invalidate();
+    void invalidate();
 }

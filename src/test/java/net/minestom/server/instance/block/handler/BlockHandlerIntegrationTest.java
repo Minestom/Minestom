@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static net.minestom.testing.TestUtils.assertPoint;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -28,7 +29,7 @@ class BlockHandlerIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onPlace(@NotNull Placement placement) {
-                assertEquals(blockPosition, placement.getBlockPosition());
+                assertPoint(blockPosition, placement.getBlockPosition());
             }
 
             @Override
@@ -48,7 +49,7 @@ class BlockHandlerIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onDestroy(@NotNull Destroy destroy) {
-                assertEquals(blockPosition, destroy.getBlockPosition());
+                assertPoint(blockPosition, destroy.getBlockPosition());
             }
 
             @Override
@@ -71,7 +72,7 @@ class BlockHandlerIntegrationTest {
             @Override
             public boolean onInteract(@NotNull Interaction interaction) {
                 interacted.set(true);
-                assertEquals(blockPosition, interaction.getBlockPosition());
+                assertPoint(blockPosition, interaction.getBlockPosition());
                 return false;
             }
 
@@ -99,7 +100,7 @@ class BlockHandlerIntegrationTest {
             @Override
             public void tick(@NotNull Tick tick) {
                 ticked.set(true);
-                assertEquals(tick.getBlockPosition(), blockPosition.asVec());
+                assertPoint(blockPosition.asVec(), tick.getBlockPosition());
             }
 
             @Override
@@ -132,7 +133,7 @@ class BlockHandlerIntegrationTest {
             @Override
             public void tick(@NotNull Tick tick) {
                 ticked.set(true);
-                assertEquals(tick.getBlockPosition(), blockPosition.asVec());
+                assertPoint(blockPosition.asVec(), tick.getBlockPosition());
             }
 
             @Override

@@ -8,6 +8,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 /**
  * A {@link Batch} which can be used when changes are required across chunk borders, and
  * are going to be reused in different places. If translation is not required, {@link AbsoluteBlockBatch}
@@ -26,7 +28,9 @@ import org.jetbrains.annotations.Nullable;
  *
  * @see Batch
  * @see AbsoluteBlockBatch
+ * @deprecated Use {@link net.minestom.server.instance.BlockBatch#unaligned(Consumer)}
  */
+@Deprecated
 public class RelativeBlockBatch implements Batch<Runnable> {
     // relative pos format: nothing/relative x/relative y/relative z (16/16/16/16 bits)
 

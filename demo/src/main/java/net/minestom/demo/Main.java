@@ -90,6 +90,7 @@ public class Main {
         commandManager.register(new AttributeCommand());
         commandManager.register(new PrimedTNTCommand());
         commandManager.register(new SleepCommand());
+        commandManager.register(new BatchCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

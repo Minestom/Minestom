@@ -2,8 +2,8 @@ package net.minestom.server.instance.light;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.ChunkLight;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.palette.Palette;
@@ -31,7 +31,7 @@ public class LightParityIntegrationTest {
         // Generate our own light
 
         InstanceContainer instance = (InstanceContainer) env.createFlatInstance();
-        instance.setChunkSupplier(LightingChunk::new);
+        instance.setChunkSupplier(Chunk::chunkLight);
         instance.setChunkLoader(new AnvilLoader(Path.of("./src/test/resources/net/minestom/server/instance/lighting")));
 
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
@@ -48,7 +48,7 @@ public class LightParityIntegrationTest {
             future.join();
         }
 
-        LightingChunk.relight(instance, instance.getChunks());
+        ChunkLight.relight(instance, instance.getChunks());
 
         int differences = 0;
         int differencesZero = 0;

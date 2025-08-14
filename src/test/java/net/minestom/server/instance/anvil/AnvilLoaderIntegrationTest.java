@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
 import static net.minestom.server.network.NetworkBuffer.SHORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -108,16 +109,15 @@ public class AnvilLoaderIntegrationTest {
         Instance instance = env.createFlatInstance(chunkLoader);
 
         Consumer<Chunk> checkChunk = chunk -> {
-            synchronized (chunk) {
-                assertEquals(-4, chunk.getMinSection());
-                assertEquals(20, chunk.getMaxSection());
-
-                for (int y = 0; y < 16; y++) {
-                    for (int x = 0; x < 16; x++) {
-                        for (int z = 0; z < 16; z++) {
-                            RegistryKey<Biome> b = chunk.getBiome(x, y, z);
-                            assertEquals(Biome.PLAINS, b);
-                        }
+            assertEquals(-4, chunk.getMinSection());
+            assertEquals(20, chunk.getMaxSection());
+            Section section = chunk.getSection(0);
+            for (int y = 0; y < SECTION_SIZE; y++) {
+                for (int x = 0; x < SECTION_SIZE; x++) {
+                    for (int z = 0; z < SECTION_SIZE; z++) {
+                        final int biome = section.biomePalette().get(x / 4, y / 4, z / 4);
+                        RegistryKey<Biome> b = MinecraftServer.getBiomeRegistry().getKey(biome);
+                        assertEquals(Biome.PLAINS, b);
                     }
                 }
             }

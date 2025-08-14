@@ -142,17 +142,6 @@ public class SharedInstance extends Instance {
             final InstanceContainer container2 = ((SharedInstance) instance2).getInstanceContainer();
             return container1.equals(container2);
         }
-
-        // InstanceContainer check (copied from)
-        if (instance1 instanceof InstanceContainer container1 && instance2 instanceof InstanceContainer container2) {
-            if (container1.getSrcInstance() != null) {
-                return container1.getSrcInstance().equals(container2)
-                        && container1.getLastBlockChangeTime() == container2.getLastBlockChangeTime();
-            } else if (container2.getSrcInstance() != null) {
-                return container2.getSrcInstance().equals(container1)
-                        && container2.getLastBlockChangeTime() == container1.getLastBlockChangeTime();
-            }
-        }
         return false;
     }
 }
