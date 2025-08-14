@@ -50,12 +50,6 @@ dependencies {
     testImplementation(project(":testing"))
 }
 
-tasks.jar {
-    manifest {
-        attributes("Automatic-Module-Name" to "net.minestom.server")
-    }
-}
-
 // Publishing configuration below
 
 nmcpAggregation {
