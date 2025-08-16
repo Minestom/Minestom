@@ -1,7 +1,12 @@
 package net.minestom.server.monitoring;
 
-import jdk.jfr.*;
+import jdk.jfr.Category;
+import jdk.jfr.Description;
+import jdk.jfr.Label;
+import jdk.jfr.Name;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.UUID;
 
 /**
  * JFR events for monitoring Minestom server activities.
@@ -9,6 +14,22 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 @SuppressWarnings("ALL")
 public final class EventsJFR {
+    public static final boolean JFR_AVAILABLE = jfrAvailable();
+
+    private static boolean jfrAvailable() {
+        try {
+            Class<?> vmClass = Class.forName("org.graalvm.nativeimage.VMRuntime");
+            return false;
+        } catch (ClassNotFoundException e) {
+        }
+        try {
+            Class.forName("jdk.jfr.Event");
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
     public static final String SERVER_PING = "minestom.ServerPing";
     public static final String SERVER_TICK = "minestom.ServerTickTime";
 
@@ -23,15 +44,55 @@ public final class EventsJFR {
     public static final String PLAYER_COMMAND = "minestom.PlayerCommand";
     public static final String PLAYER_CHAT = "minestom.PlayerChat";
 
+    public static EventMarker newServerPing(String remoteAddress) {
+        return JFR_AVAILABLE ? new ServerPing(remoteAddress) : NO_OP;
+    }
+
+    public static EventMarker newServerTick() {
+        return JFR_AVAILABLE ? new ServerTick() : NO_OP;
+    }
+
+    public static EventMarker newChunkGeneration(UUID instance, int chunkX, int chunkZ) {
+        return JFR_AVAILABLE ? new ChunkGeneration(instance.toString(), chunkX, chunkZ) : NO_OP;
+    }
+
+    public static EventMarker newChunkLoading(UUID instance, Class loader, int chunkX, int chunkZ) {
+        return JFR_AVAILABLE ? new ChunkLoading(instance.toString(), loader, chunkX, chunkZ) : NO_OP;
+    }
+
+    public static EventMarker newInstanceJoin(UUID entity, UUID instance) {
+        return JFR_AVAILABLE ? new InstanceJoin(entity.toString(), instance.toString()) : NO_OP;
+    }
+
+    public static EventMarker newInstanceLeave(UUID entity, UUID instance) {
+        return JFR_AVAILABLE ? new InstanceLeave(entity.toString(), instance.toString()) : NO_OP;
+    }
+
+    public static EventMarker newPlayerJoin(UUID player) {
+        return JFR_AVAILABLE ? new PlayerJoin(player.toString()) : NO_OP;
+    }
+
+    public static EventMarker newPlayerLeave(UUID player) {
+        return JFR_AVAILABLE ? new PlayerLeave(player.toString()) : NO_OP;
+    }
+
+    public static EventMarker newPlayerCommand(UUID player, String command) {
+        return JFR_AVAILABLE ? new PlayerCommand(player.toString(), command) : NO_OP;
+    }
+
+    public static EventMarker newPlayerChat(UUID player, String message) {
+        return JFR_AVAILABLE ? new PlayerChat(player.toString(), message) : NO_OP;
+    }
+
     @Name(SERVER_PING)
     @Label("Server Ping")
     @Category({"Minestom", "Server"})
     @Description("A server ping (status query) was received")
-    public static final class ServerPing extends Event {
+    private static final class ServerPing extends JFREventWrapper {
         @Label("Remote Address")
         String remoteAddress;
 
-        public ServerPing(String remoteAddress) {
+        private ServerPing(String remoteAddress) {
             this.remoteAddress = remoteAddress;
         }
     }
@@ -40,14 +101,14 @@ public final class EventsJFR {
     @Label("Server Tick")
     @Category({"Minestom", "Server"})
     @Description("Time spent ticking the server once")
-    public static final class ServerTick extends Event {
+    private static final class ServerTick extends JFREventWrapper {
     }
 
     @Name(CHUNK_GENERATION)
     @Label("Chunk Generation")
     @Category({"Minestom", "World"})
     @Description("Chunk generation from instances' Generator")
-    public static final class ChunkGeneration extends Event {
+    private static final class ChunkGeneration extends JFREventWrapper {
         @Label("Instance UUID")
         String instance;
         @Label("Chunk X")
@@ -55,7 +116,7 @@ public final class EventsJFR {
         @Label("Chunk Z")
         int chunkZ;
 
-        public ChunkGeneration(String instance, int chunkX, int chunkZ) {
+        private ChunkGeneration(String instance, int chunkX, int chunkZ) {
             this.instance = instance;
             this.chunkX = chunkX;
             this.chunkZ = chunkZ;
@@ -66,7 +127,7 @@ public final class EventsJFR {
     @Label("Chunk Loading")
     @Category({"Minestom", "World"})
     @Description("Chunk loading from the instances' IChunkLoader")
-    public static final class ChunkLoading extends Event {
+    private static final class ChunkLoading extends JFREventWrapper {
         @Label("Instance UUID")
         String instance;
         @Label("Loader Class")
@@ -76,7 +137,7 @@ public final class EventsJFR {
         @Label("Chunk Z")
         int chunkZ;
 
-        public ChunkLoading(String instance, Class loader, int chunkX, int chunkZ) {
+        private ChunkLoading(String instance, Class loader, int chunkX, int chunkZ) {
             this.instance = instance;
             this.loader = loader;
             this.chunkX = chunkX;
@@ -88,13 +149,13 @@ public final class EventsJFR {
     @Label("Instance Join")
     @Category({"Minestom", "Instance"})
     @Description("An Entity has joined an instance")
-    public static final class InstanceJoin extends Event {
+    private static final class InstanceJoin extends JFREventWrapper {
         @Label("Entity UUID")
         String entity;
         @Label("Instance UUID")
         String instance;
 
-        public InstanceJoin(String entity, String instance) {
+        private InstanceJoin(String entity, String instance) {
             this.entity = entity;
             this.instance = instance;
         }
@@ -104,13 +165,13 @@ public final class EventsJFR {
     @Label("Instance Leave")
     @Category({"Minestom", "Instance"})
     @Description("An Entity has left an instance")
-    public static final class InstanceLeave extends Event {
+    private static final class InstanceLeave extends JFREventWrapper {
         @Label("Entity UUID")
         String entity;
         @Label("Instance UUID")
         String instance;
 
-        public InstanceLeave(String entity, String instance) {
+        private InstanceLeave(String entity, String instance) {
             this.entity = entity;
             this.instance = instance;
         }
@@ -120,11 +181,11 @@ public final class EventsJFR {
     @Label("Player Join")
     @Category({"Minestom", "Player"})
     @Description("A player joined the server")
-    public static final class PlayerJoin extends Event {
+    private static final class PlayerJoin extends JFREventWrapper {
         @Label("Player UUID")
         String player;
 
-        public PlayerJoin(String player) {
+        private PlayerJoin(String player) {
             this.player = player;
         }
     }
@@ -133,11 +194,11 @@ public final class EventsJFR {
     @Label("Player Leave")
     @Category({"Minestom", "Player"})
     @Description("A player left the server")
-    public static final class PlayerLeave extends Event {
+    private static final class PlayerLeave extends JFREventWrapper {
         @Label("Player UUID")
         String player;
 
-        public PlayerLeave(String player) {
+        private PlayerLeave(String player) {
             this.player = player;
         }
     }
@@ -146,13 +207,13 @@ public final class EventsJFR {
     @Label("Player Command")
     @Category({"Minestom", "Player"})
     @Description("A player executed a command")
-    public static final class PlayerCommand extends Event {
+    private static final class PlayerCommand extends JFREventWrapper {
         @Label("Player UUID")
         String player;
         @Label("Command")
         String command;
 
-        public PlayerCommand(String player, String command) {
+        private PlayerCommand(String player, String command) {
             this.player = player;
             this.command = command;
         }
@@ -162,15 +223,38 @@ public final class EventsJFR {
     @Label("Player Chat")
     @Category({"Minestom", "Player"})
     @Description("A player sent a chat message")
-    public static final class PlayerChat extends Event {
+    private static final class PlayerChat extends JFREventWrapper {
         @Label("Player UUID")
         String player;
         @Label("Message")
         String message;
 
-        public PlayerChat(String player, String message) {
+        private PlayerChat(String player, String message) {
             this.player = player;
             this.message = message;
+        }
+    }
+
+    public interface EventMarker {
+        default void begin() {
+        }
+
+        default void end() {
+        }
+
+        default void commit() {
+        }
+    }
+
+    private static class JFREventWrapper extends jdk.jfr.Event implements EventMarker {
+    }
+
+    private static final EventMarker NO_OP = new NoOpEvent();
+
+    private static class NoOpEvent implements EventMarker {
+        @Override
+        public void commit() {
+            // do nothing
         }
     }
 }

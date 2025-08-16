@@ -450,7 +450,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final class TickerImpl implements Ticker {
         @Override
         public void tick(long nanoTime) {
-            EventsJFR.ServerTick serverTickEvent = new EventsJFR.ServerTick();
+            var serverTickEvent = EventsJFR.newServerTick();
             serverTickEvent.begin();
             scheduler().processTick();
 
