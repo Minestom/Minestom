@@ -3,7 +3,6 @@ package net.minestom.server.utils.collection;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Internal
 public final class AutoIncrementMap<K> {
@@ -17,7 +16,7 @@ public final class AutoIncrementMap<K> {
     }
 
     @Contract(pure = true)
-    public int get(@NotNull K key) {
+    public int get(K key) {
         int index = read.getInt(key);
         if (index == -1) {
             synchronized (write) {

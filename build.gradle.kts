@@ -50,12 +50,6 @@ dependencies {
     testImplementation(project(":testing"))
 }
 
-tasks.jar {
-    manifest {
-        attributes("Automatic-Module-Name" to "net.minestom.server")
-    }
-}
-
 // GraalVM Native Image configuration
 tasks.register<Test>("testWithAgent") {
     group = "verification"

@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -16,7 +15,7 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
         this.acquirableCollection = acquirableCollection;
     }
 
-    public void acquireSync(@NotNull Consumer<E> consumer) {
+    public void acquireSync(Consumer<E> consumer) {
         final Map<TickThread, List<E>> threadEntitiesMap = retrieveOptionalThreadMap(acquirableCollection, consumer);
         // Acquire all the threads one by one
         for (Map.Entry<TickThread, List<E>> entry : threadEntitiesMap.entrySet()) {
@@ -33,7 +32,7 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
         }
     }
 
-    public @NotNull Stream<E> unwrap() {
+    public Stream<E> unwrap() {
         return acquirableCollection.stream().map(Acquirable::unwrap);
     }
 
@@ -52,21 +51,18 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
         return acquirableCollection.contains(o);
     }
 
-    @NotNull
     @Override
     public Iterator<Acquirable<E>> iterator() {
         return acquirableCollection.iterator();
     }
 
-    @NotNull
     @Override
     public Object[] toArray() {
         return acquirableCollection.toArray();
     }
 
-    @NotNull
     @Override
-    public <T> T[] toArray(@NotNull T[] a) {
+    public <T> T[] toArray(T[] a) {
         return acquirableCollection.toArray(a);
     }
 
@@ -81,22 +77,22 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
     }
 
     @Override
-    public boolean containsAll(@NotNull Collection<?> c) {
+    public boolean containsAll(Collection<?> c) {
         return acquirableCollection.containsAll(c);
     }
 
     @Override
-    public boolean addAll(@NotNull Collection<? extends Acquirable<E>> c) {
+    public boolean addAll(Collection<? extends Acquirable<E>> c) {
         return acquirableCollection.addAll(c);
     }
 
     @Override
-    public boolean removeAll(@NotNull Collection<?> c) {
+    public boolean removeAll(Collection<?> c) {
         return acquirableCollection.removeAll(c);
     }
 
     @Override
-    public boolean retainAll(@NotNull Collection<?> c) {
+    public boolean retainAll(Collection<?> c) {
         return acquirableCollection.retainAll(c);
     }
 
@@ -110,8 +106,8 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
      * @param consumer   the consumer to execute when an element is already in the current thread
      * @return a new Thread to acquirable elements map
      */
-    protected static <T> Map<TickThread, List<T>> retrieveOptionalThreadMap(@NotNull Collection<Acquirable<T>> collection,
-                                                                            @NotNull Consumer<T> consumer) {
+    protected static <T> Map<TickThread, List<T>> retrieveOptionalThreadMap(Collection<Acquirable<T>> collection,
+                                                                            Consumer<T> consumer) {
         // Separate a collection of acquirable elements into a map of thread->elements
         // Useful to reduce the number of acquisition
         Map<TickThread, List<T>> threadCacheMap = new HashMap<>();

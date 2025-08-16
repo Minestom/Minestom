@@ -6,7 +6,6 @@ import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.tag.TagHandler;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the console when sending a command to the server.
@@ -22,27 +21,27 @@ public class ConsoleSender implements CommandSender {
             .build();
 
     @Override
-    public void sendMessage(@NotNull String message) {
+    public void sendMessage(String message) {
         LOGGER.info(message);
     }
 
     @Override
-    public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
+    public void sendMessage(Identity source, Component message, MessageType type) {
         LOGGER.info(message);
     }
 
     @Override
-    public @NotNull TagHandler tagHandler() {
+    public TagHandler tagHandler() {
         return tagHandler;
     }
 
     @Override
-    public @NotNull Identity identity() {
+    public Identity identity() {
         return this.identity;
     }
 
     @Override
-    public @NotNull Pointers pointers() {
+    public Pointers pointers() {
         return this.pointers;
     }
 }

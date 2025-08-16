@@ -4,10 +4,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -31,7 +29,6 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +60,7 @@ public class DynamicChunk extends Chunk {
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
-    public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public DynamicChunk(Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
@@ -71,13 +68,13 @@ public class DynamicChunk extends Chunk {
         this.sections = List.of(sectionsTemp);
     }
 
-    protected DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ, @NotNull List<Section> sections) {
+    protected DynamicChunk(Instance instance, int chunkX, int chunkZ, List<Section> sections) {
         super(instance, chunkX, chunkZ, true);
         this.sections = List.copyOf(sections);
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
+    public void setBlock(int x, int y, int z, Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
         final DimensionType instanceDim = instance.getCachedDimensionType();
@@ -138,7 +135,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome) {
+    public void setBiome(int x, int y, int z, RegistryKey<Biome> biome) {
         assertLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
@@ -153,22 +150,22 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull List<Section> getSections() {
+    public List<Section> getSections() {
         return sections;
     }
 
     @Override
-    public @NotNull Section getSection(int section) {
+    public Section getSection(int section) {
         return sections.get(section - minSection);
     }
 
     @Override
-    public @NotNull Heightmap motionBlockingHeightmap() {
+    public Heightmap motionBlockingHeightmap() {
         return motionBlocking;
     }
 
     @Override
-    public @NotNull Heightmap worldSurfaceHeightmap() {
+    public Heightmap worldSurfaceHeightmap() {
         return worldSurface;
     }
 
@@ -197,7 +194,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+    public @Nullable Block getBlock(int x, int y, int z, Condition condition) {
         assertLock();
         if (y < minSection * CHUNK_SECTION_SIZE || y >= maxSection * CHUNK_SECTION_SIZE)
             return Block.AIR; // Out of bounds
@@ -218,7 +215,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull RegistryKey<Biome> getBiome(int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(int x, int y, int z) {
         assertLock();
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
@@ -230,12 +227,12 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull SendablePacket getFullDataPacket() {
+    public SendablePacket getFullDataPacket() {
         return chunkCache;
     }
 
     @Override
-    public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public Chunk copy(Instance instance, int chunkX, int chunkZ) {
         var sections = this.sections.stream().map(Section::clone).toList();
         DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ, sections);
         dynamicChunk.entries.putAll(entries);
@@ -254,7 +251,7 @@ public class DynamicChunk extends Chunk {
         this.chunkCache.invalidate();
     }
 
-    private @NotNull ChunkDataPacket createChunkPacket() {
+    private ChunkDataPacket createChunkPacket() {
         final byte[] data;
         final Map<Heightmap.Type, long[]> heightmaps;
         synchronized (this) {
@@ -276,7 +273,7 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    @NotNull UpdateLightPacket createLightPacket() {
+    UpdateLightPacket createLightPacket() {
         return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
     }
 
@@ -329,7 +326,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull ChunkSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+    public ChunkSnapshot updateSnapshot(SnapshotUpdater updater) {
         Section[] clonedSections = new Section[sections.size()];
         for (int i = 0; i < clonedSections.length; i++)
             clonedSections[i] = sections.get(i).clone();

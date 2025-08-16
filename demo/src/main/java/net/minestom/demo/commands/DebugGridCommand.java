@@ -13,7 +13,6 @@ import net.minestom.server.instance.batch.RelativeBlockBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.location.RelativeVec;
 
-import org.jetbrains.annotations.NotNull;
 
 public class DebugGridCommand extends Command {
     private final Argument<RelativeVec> center = new ArgumentRelativeBlockPosition("center")
@@ -27,7 +26,7 @@ public class DebugGridCommand extends Command {
         addSyntax(this::execute, radius, center);
     }
 
-    private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    private void execute(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         final RelativeBlockBatch relativeBlockBatch = new RelativeBlockBatch();
         final Integer radius = context.get(this.radius);

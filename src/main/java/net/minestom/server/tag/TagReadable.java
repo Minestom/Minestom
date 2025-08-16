@@ -1,6 +1,5 @@
 package net.minestom.server.tag;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 /**
@@ -15,7 +14,7 @@ public interface TagReadable {
      * @param <T> the tag type
      * @return the read tag, null if not present
      */
-    <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
+    <T> @UnknownNullability T getTag(Tag<T> tag);
 
     /**
      * Returns if a tag is present.
@@ -23,7 +22,7 @@ public interface TagReadable {
      * @param tag the tag to check
      * @return true if the tag is present, false otherwise
      */
-    default boolean hasTag(@NotNull Tag<?> tag) {
+    default boolean hasTag(Tag<?> tag) {
         return getTag(tag) != null;
     }
 }
