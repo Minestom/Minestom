@@ -563,7 +563,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (permanent) {
             this.packets.clear();
             EventDispatcher.call(new PlayerDisconnectEvent(this));
-            new EventsJFR.PlayerLeave(getUuid().toString()).commit();
+            EventsJFR.newPlayerLeave(getUuid()).commit();
         }
 
 
@@ -742,7 +742,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
-        if (firstSpawn) new EventsJFR.PlayerJoin(getUuid().toString()).commit();
+        if (firstSpawn) EventsJFR.newPlayerJoin(getUuid()).commit();
     }
 
     @ApiStatus.Internal
@@ -896,7 +896,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param channel the message channel
      * @param data    the message data
      */
-    public void sendPluginMessage(String channel, byte [] data) {
+    public void sendPluginMessage(String channel, byte[] data) {
         sendPacket(new PluginMessagePacket(channel, data));
     }
 
@@ -1306,7 +1306,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     @Override
-    public void removeResourcePacks(UUID id, UUID ... others) {
+    public void removeResourcePacks(UUID id, UUID... others) {
         sendPacket(new ResourcePackPopPacket(id));
         for (var other : others) {
             sendPacket(new ResourcePackPopPacket(other));

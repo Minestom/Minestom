@@ -19,7 +19,7 @@ public final class StatusListener {
         final ServerListPingEvent serverListPingEvent = new ServerListPingEvent(connection, pingVersion);
         EventDispatcher.callCancellable(serverListPingEvent, () ->
                 connection.sendPacket(new ResponsePacket(pingVersion.getPingResponse(serverListPingEvent.getStatus()))));
-        new EventsJFR.ServerPing(connection.getRemoteAddress().toString()).commit();
+        EventsJFR.newServerPing(connection.getRemoteAddress().toString()).commit();
     }
 
     public static void pingRequestListener(ClientPingRequestPacket packet, PlayerConnection connection) {

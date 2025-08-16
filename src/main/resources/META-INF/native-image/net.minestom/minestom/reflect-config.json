@@ -41,6 +41,9 @@
   "name":"jdk.internal.misc.Unsafe"
 },
 {
+  "name":"jdk.jfr.Event"
+},
+{
   "name":"net.minestom.server.coordinate.Vec",
   "allRecordComponents":true,
   "methods":[{"name":"<init>","parameterTypes":["double","double","double"] }, {"name":"x","parameterTypes":[] }, {"name":"y","parameterTypes":[] }, {"name":"z","parameterTypes":[] }]
