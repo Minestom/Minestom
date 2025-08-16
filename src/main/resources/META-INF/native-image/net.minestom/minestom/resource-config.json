@@ -13,9 +13,9 @@
   }, {
     "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider\\E"
   }, {
-    "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.gson.GsonComponentSerializer$Provider\\E"
+    "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer$Provider\\E"
   }, {
-    "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer$Provider\\E"
+    "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.gson.GsonComponentSerializer$Provider\\E"
   }, {
     "pattern":"\\QMETA-INF/services/org.junit.platform.engine.TestEngine\\E"
   }, {
@@ -60,6 +60,8 @@
     "pattern":"\\Qfluid.json\\E"
   }, {
     "pattern":"\\Qfrog_variant.json\\E"
+  }, {
+    "pattern":"\\Qgame_event.json\\E"
   }, {
     "pattern":"\\Qinstrument.json\\E"
   }, {
@@ -116,6 +118,8 @@
     "pattern":"\\Qtags/fluid.json\\E"
   }, {
     "pattern":"\\Qtags/frog_variant.json\\E"
+  }, {
+    "pattern":"\\Qtags/game_event.json\\E"
   }, {
     "pattern":"\\Qtags/instrument.json\\E"
   }, {
