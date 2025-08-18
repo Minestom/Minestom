@@ -145,7 +145,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     }
 
     @Contract(pure = true)
-    default <S> Codec<@UnknownNullability S> transform(ThrowingFunction<T, @UnknownNullability S> to, ThrowingFunction<@Nullable S, T> from) {
+    default <S extends @UnknownNullability Object> Codec<S> transform(ThrowingFunction<T, S> to, ThrowingFunction<S, T> from) {
         return new CodecImpl.TransformImpl<>(this, to, from);
     }
 
