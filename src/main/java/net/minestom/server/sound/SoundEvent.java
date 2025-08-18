@@ -42,8 +42,7 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
     };
     Codec<SoundEvent> CODEC = new Codec<>() {
         @Override
-        public <D> Result<SoundEvent> decode(Transcoder<D> coder, @Nullable D value) {
-            if (value == null) return new Result.Error<>("null");
+        public <D> Result<SoundEvent> decode(Transcoder<D> coder, D value) {
             final Result<String> stringResult = coder.getString(value);
             if (stringResult instanceof Result.Ok(String string)) {
                 final SoundEvent soundEvent = BuiltinSoundEvent.get(string);

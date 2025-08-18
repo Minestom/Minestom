@@ -64,7 +64,7 @@ public record PropertiesPredicate(Map<String, ValuePredicate> properties) implem
         };
         Codec<ValuePredicate> CODEC = new Codec<>() {
             @Override
-            public <D> Result<ValuePredicate> decode(Transcoder<D> coder, @Nullable D value) {
+            public <D> Result<ValuePredicate> decode(Transcoder<D> coder, D value) {
                 final Result<Exact> exactResult = Exact.CODEC.decode(coder, value);
                 if (exactResult instanceof Result.Ok(Exact exact))
                     return new Result.Ok<>(exact);

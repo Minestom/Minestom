@@ -43,7 +43,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     };
     Codec<Particle> CODEC = new Codec<>() {
         @Override
-        public <D> Result<Particle> decode(Transcoder<D> coder, @Nullable D value) {
+        public <D> Result<Particle> decode(Transcoder<D> coder, D value) {
             return new Result.Error<>("particles cannot be decoded");
         }
 

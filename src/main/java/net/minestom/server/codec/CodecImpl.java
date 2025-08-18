@@ -40,8 +40,7 @@ final class CodecImpl {
 
     record RawValueCodecImpl() implements Codec<Codec.RawValue> {
         @Override
-        public <D> Result<RawValue> decode(Transcoder<D> coder, @Nullable D value) {
-            if (value == null) return new Result.Error<>("null");
+        public <D> Result<RawValue> decode(Transcoder<D> coder, D value) {
             return new Result.Ok<>(new RawValueImpl<>(coder, value));
         }
 
@@ -58,7 +57,7 @@ final class CodecImpl {
 
     record PrimitiveImpl<T>(PrimitiveEncoder<T> encoder, Decoder<T> decoder) implements Codec<T> {
         @Override
-        public <D> Result<T> decode(Transcoder<D> coder, @Nullable D value) {
+        public <D> Result<T> decode(Transcoder<D> coder, D value) {
             return decoder.decode(coder, value);
         }
 
@@ -71,7 +70,7 @@ final class CodecImpl {
 
     record OptionalImpl<T>(Codec<T> inner, @Nullable T defaultValue) implements Codec<T> {
         @Override
-        public <D> Result<T> decode(Transcoder<D> coder, @Nullable D value) {
+        public <D> Result<T> decode(Transcoder<D> coder, D value) {
             return new Result.Ok<>(inner.decode(coder, value).orElse(defaultValue));
         }
 
@@ -86,7 +85,7 @@ final class CodecImpl {
     record TransformImpl<T, S>(Codec<T> inner, ThrowingFunction<T, S> to,
                                ThrowingFunction<@Nullable S, T> from) implements Codec<S> {
         @Override
-        public <D> Result<S> decode(Transcoder<D> coder, @Nullable D value) {
+        public <D> Result<S> decode(Transcoder<D> coder, D value) {
             try {
                 final Result<T> innerResult = inner.decode(coder, value);
                 return switch (innerResult) {
@@ -110,8 +109,7 @@ final class CodecImpl {
 
     record ListImpl<T>(Codec<T> inner, int maxSize) implements Codec<List<T>> {
         @Override
-        public <D> Result<List<T>> decode(Transcoder<D> coder, @Nullable D value) {
-            if (value == null) return new Result.Error<>("null");
+        public <D> Result<List<T>> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
             if (!(listResult instanceof Result.Ok(List<D> list)))
                 return listResult.cast();
@@ -147,8 +145,7 @@ final class CodecImpl {
 
     record SetImpl<T>(Codec<T> inner, int maxSize) implements Codec<Set<T>> {
         @Override
-        public <D> Result<Set<T>> decode(Transcoder<D> coder, @Nullable D value) {
-            if (value == null) return new Result.Error<>("null");
+        public <D> Result<Set<T>> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
             if (!(listResult instanceof Result.Ok(List<D> list)))
                 return listResult.cast();
@@ -184,8 +181,7 @@ final class CodecImpl {
     record MapImpl<K, V>(Codec<K> keyCodec, Codec<V> valueCodec,
                          int maxSize) implements Codec<Map<K, V>> {
         @Override
-        public <D> Result<Map<K, V>> decode(Transcoder<D> coder, @Nullable D value) {
-            if (value == null) return new Result.Error<>("null");
+        public <D> Result<Map<K, V>> decode(Transcoder<D> coder, D value) {
             final Result<MapLike<D>> mapResult = coder.getMap(value);
             if (!(mapResult instanceof Result.Ok(MapLike<D> map)))
                 return mapResult.cast();
@@ -309,7 +305,7 @@ final class CodecImpl {
         }
 
         @Override
-        public <D> Result<T> decode(Transcoder<D> coder, @Nullable D value) {
+        public <D> Result<T> decode(Transcoder<D> coder, D value) {
             return delegate.decode(coder, value);
         }
 
@@ -328,7 +324,7 @@ final class CodecImpl {
         }
 
         @Override
-        public <D> Result<T> decode(Transcoder<D> coder, @Nullable D value) {
+        public <D> Result<T> decode(Transcoder<D> coder, D value) {
             if (delegate == null) delegate = delegateFunc.get();
             return delegate.decode(coder, value);
         }
@@ -342,7 +338,7 @@ final class CodecImpl {
 
     record OrElseImpl<T>(Codec<T> primary, Codec<T> secondary) implements Codec<T> {
         @Override
-        public <D> Result<T> decode(Transcoder<D> coder, @Nullable D value) {
+        public <D> Result<T> decode(Transcoder<D> coder, D value) {
             final Result<T> primaryResult = primary.decode(coder, value);
             if (primaryResult instanceof Result.Ok<T> primaryOk)
                 return primaryOk;
@@ -374,8 +370,7 @@ final class CodecImpl {
 
     record BlockPositionImpl() implements Codec<Point> {
         @Override
-        public <D> Result<Point> decode(Transcoder<D> coder, @Nullable D value) {
-            if (value == null) return new Result.Error<>("null");
+        public <D> Result<Point> decode(Transcoder<D> coder, D value) {
             final Result<int[]> intArrayResult = coder.getIntArray(value);
             if (!(intArrayResult instanceof Result.Ok(int[] intArray)))
                 return intArrayResult.cast();
@@ -397,7 +392,7 @@ final class CodecImpl {
 
     record EitherImpl<L, R>(Codec<L> leftCodec, Codec<R> rightCodec) implements Codec<Either<L, R>> {
         @Override
-        public <D> Result<Either<L, R>> decode(Transcoder<D> coder, @Nullable D value) {
+        public <D> Result<Either<L, R>> decode(Transcoder<D> coder, D value) {
             final Result<L> leftResult = leftCodec.decode(coder, value);
             if (leftResult instanceof Result.Ok(L leftValue))
                 return new Result.Ok<>(Either.left(leftValue));
@@ -419,8 +414,7 @@ final class CodecImpl {
 
     record Vector3DImpl() implements Codec<Point> {
         @Override
-        public <D> Result<Point> decode(Transcoder<D> coder, @Nullable D value) {
-            if (value == null) return new Result.Error<>("null");
+        public <D> Result<Point> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
             if (!(listResult instanceof Result.Ok(List<D> list)))
                 return listResult.cast();

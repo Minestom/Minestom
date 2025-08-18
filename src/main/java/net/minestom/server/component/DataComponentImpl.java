@@ -39,7 +39,7 @@ record DataComponentImpl<T>(
     }
 
     @Override
-    public <D> Result<T> decode(Transcoder<D> coder, @Nullable D value) {
+    public <D> Result<T> decode(Transcoder<D> coder, D value) {
         Check.notNull(codec, "{0} cannot be deserialized from Codec", this);
         return this.codec.decode(coder, value);
     }
