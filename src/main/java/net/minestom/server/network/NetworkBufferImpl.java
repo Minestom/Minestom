@@ -25,7 +25,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     // Dummy constants
     private static final long DUMMY_CAPACITY = Long.MAX_VALUE;
     // Arena
-    private static final Arena DEFAULT_ARENA = Arena.ofAuto();
+    static final Arena DEFAULT_ARENA = Arena.ofAuto();
 
     // Nullable for dummy buffers.
     private final @Nullable Arena arena;
@@ -236,7 +236,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     @Override
-    public NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
+    public NetworkBuffer copy(Arena arena, long index, long length, long readIndex, long writeIndex) {
         assertDummy();
 
         final var newReadIndex = Math.max(readIndex - index, 0);

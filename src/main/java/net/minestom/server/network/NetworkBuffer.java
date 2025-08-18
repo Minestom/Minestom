@@ -206,12 +206,18 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void trim();
 
     @Contract(pure = true)
-    NetworkBuffer copy(long index, long length, long readIndex, long writeIndex);
-
-    @Contract(pure = true)
     default NetworkBuffer copy(long index, long length) {
         return copy(index, length, readIndex(), writeIndex());
     }
+
+    @Contract(pure = true)
+    default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex){
+        return copy(NetworkBufferImpl.DEFAULT_ARENA, index, length, readIndex, writeIndex);
+    }
+
+    @ApiStatus.Experimental
+    @Contract(pure = true)
+    NetworkBuffer copy(Arena arena, long index, long length, long readIndex, long writeIndex);
 
     @Contract(pure = true)
     NetworkBuffer slice(long index, long length, long readIndex, long writeIndex);
