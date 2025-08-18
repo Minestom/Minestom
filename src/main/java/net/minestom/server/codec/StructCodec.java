@@ -1664,7 +1664,7 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
-    private static <D, T> Result<@Nullable T> get(Transcoder<D> coder, Codec<T> codec, String key, MapLike<D> map) {
+    private static <D, T> Result<@UnknownNullability T> get(Transcoder<D> coder, Codec<T> codec, String key, MapLike<D> map) {
         if (INLINE.equals(key)) {
             final Codec<T> decodeCodec = codec instanceof CodecImpl.OptionalImpl<T>(
                     Codec<T> inner, T ignored
