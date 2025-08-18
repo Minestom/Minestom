@@ -27,8 +27,7 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public <D> Result<LevelBasedValue> decode(Transcoder<D> coder, @Nullable D value) {
-            if (value == null) return new Result.Error<>("null");
+        public <D> Result<LevelBasedValue> decode(Transcoder<D> coder, D value) {
             final Result<Float> numberResult = coder.getFloat(value);
             if (numberResult instanceof Result.Ok(Float number))
                 return new Result.Ok<>(new Constant(number));

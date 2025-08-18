@@ -23,7 +23,7 @@ public final class ComponentCodecs {
 
     public static final Codec<TextColor> TEXT_COLOR = new Codec<>() {
         @Override
-        public <D> Result<TextColor> decode(Transcoder<D> coder, @Nullable D value) {
+        public <D> Result<TextColor> decode(Transcoder<D> coder, D value) {
             final Result<String> colorResult = coder.getString(value);
             if (!(colorResult instanceof Result.Ok(String colorString)))
                 return colorResult.cast();
@@ -241,7 +241,7 @@ public final class ComponentCodecs {
                 children -> children);
         return new Codec<>() {
             @Override
-            public <D> Result<Component> decode(Transcoder<D> coder, @Nullable D value) {
+            public <D> Result<Component> decode(Transcoder<D> coder, D value) {
                 // A single string is a valid serialized form of a text component, try it.
                 final Result<String> stringResult = coder.getString(value);
                 if (stringResult instanceof Result.Ok(String string))
