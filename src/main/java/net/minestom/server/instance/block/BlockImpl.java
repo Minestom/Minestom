@@ -226,7 +226,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     }
 
     @Override
-    public String getProperty(String property) {
+    public @Nullable String getProperty(String property) {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         final int length = propertyTypes.length;
         if (length == 0) return null;

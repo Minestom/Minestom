@@ -30,12 +30,12 @@ public abstract class Argument<T> {
     protected final boolean allowSpace;
     protected final boolean useRemaining;
 
-    private ArgumentCallback callback;
+    private @Nullable ArgumentCallback callback;
 
-    private Function<CommandSender, T> defaultValue;
+    private @Nullable Function<CommandSender, T> defaultValue;
 
-    private SuggestionCallback suggestionCallback;
-    protected SuggestionType suggestionType;
+    private @Nullable SuggestionCallback suggestionCallback;
+    protected @Nullable SuggestionType suggestionType;
 
     /**
      * Creates a new argument.
@@ -187,7 +187,7 @@ public abstract class Argument<T> {
      * @return 'this' for chaining
      */
     public Argument<T> setDefaultValue(@Nullable Supplier<T> defaultValue) {
-        this.defaultValue = unused -> defaultValue.get();
+        this.defaultValue = defaultValue == null ? null : unused -> defaultValue.get();
         return this;
     }
 

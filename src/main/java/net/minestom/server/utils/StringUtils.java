@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import org.jetbrains.annotations.Nullable;
+
 public class StringUtils {
 
     public static final String SPACE = " ";
@@ -28,7 +30,7 @@ public class StringUtils {
      * @return The Jaro-Winkler score (between 0.0 and 1.0), with a higher value indicating larger similarity.
      * @author Thomas Trojer thomas@trojer.net
      */
-    public static double jaroWinklerScore(final String s1, final String s2) {
+    public static double jaroWinklerScore(final @Nullable String s1, final @Nullable String s2) {
         // lowest score on empty strings
         if (s1 == null || s2 == null || s1.isEmpty() || s2.isEmpty()) {
             return 0;
