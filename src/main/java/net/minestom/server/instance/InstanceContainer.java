@@ -245,7 +245,7 @@ public class InstanceContainer extends Instance {
             // Break or change the broken block based on event result
             final Block resultBlock = blockBreakEvent.getResultBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
-                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
+                    new BlockHandler.PlayerDestroy(block, resultBlock, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
             PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
                     new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), blockPosition, block.stateId(), false),
