@@ -449,25 +449,4 @@ final class CodecImpl {
         }
     }
 
-    /**
-     * @deprecated Remove once adventure is updated to have change_page be an int.
-     */
-    @Deprecated
-    record IntAsStringImpl() implements Codec<String> {
-        @Override
-        public <D> Result<String> decode(Transcoder<D> coder, D value) {
-            return coder.getInt(value).mapResult(String::valueOf);
-        }
-
-        @Override
-        public <D> Result<D> encode(Transcoder<D> coder, @Nullable String value) {
-            if (value == null) return new Result.Error<>("null");
-            try {
-                return new Result.Ok<>(coder.createInt(Integer.parseInt(value)));
-            } catch (NumberFormatException ignored) {
-                return new Result.Error<>("not an integer: " + value);
-            }
-        }
-    }
-
 }
