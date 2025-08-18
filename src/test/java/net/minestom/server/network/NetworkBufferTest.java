@@ -12,6 +12,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.foreign.Arena;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -493,6 +494,45 @@ public class NetworkBufferTest {
         assertBufferType(STRING_IO_UTF8, "Hello", stream.toByteArray());
     }
 
+    @Test
+    public void testConfinedArena() {
+        final NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            buffer = NetworkBuffer.builder(256).arena(arena).build();
+            buffer.write(VAR_INT, Integer.MAX_VALUE);
+            buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
+            assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
+        }
+        assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
+    }
+
+    @Test
+    public void testConfinedArenaCopy() {
+        final NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            var confinedBuffer = NetworkBuffer.builder(256).arena(arena).build();
+            confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
+            confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
+            assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
+            buffer = confinedBuffer.copy(arena, confinedBuffer.readIndex(), confinedBuffer.readableBytes());
+        }
+        assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
+    }
+
+    @Test
+    public void testConfinedArenaGlobalCopy() {
+        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
+        final NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            var confinedBuffer = NetworkBuffer.builder(256).arena(arena).build();
+            confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
+            confinedBuffer.write(RAW_BYTES, stringBytes);
+            assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
+            buffer = confinedBuffer.copy(confinedBuffer.readIndex(), confinedBuffer.readableBytes());
+        }
+        var bytes = buffer.read(RAW_BYTES);
+        assertArrayEquals(stringBytes, bytes);
+    }
 
     @Test
     public void testStringUtf8ModifiedRead() throws IOException {
