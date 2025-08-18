@@ -24,6 +24,8 @@ import java.util.zip.Inflater;
 final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     // Dummy constants
     private static final long DUMMY_CAPACITY = Long.MAX_VALUE;
+    // Arena
+    private static final Arena DEFAULT_ARENA = Arena.ofAuto();
 
     // Nullable for dummy buffers.
     private final @Nullable Arena arena;
@@ -239,8 +241,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         final var newReadIndex = Math.max(readIndex - index, 0);
         final var newWriteIndex = Math.max(writeIndex - index, 0);
-        // We won't use the same arena so this arena can get deallocated.
-        final var newBuffer = new NetworkBufferImpl(Arena.ofAuto(), length, newReadIndex, newWriteIndex, autoResize, registries);
+        final var newBuffer = new NetworkBufferImpl(arena, length, newReadIndex, newWriteIndex, autoResize, registries);
         assert !newBuffer.isDummy() : "Dummy active for a newly created buffer";
 
         MemorySegment.copy(this.segment, index, newBuffer.segment, 0, length);
@@ -509,7 +510,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         @Override
         public NetworkBuffer build() {
-            if (this.arena == null) this.arena = Arena.ofAuto();
+            if (this.arena == null) this.arena = DEFAULT_ARENA;
             return new NetworkBufferImpl(
                     arena, initialSize,
                     0, 0,
