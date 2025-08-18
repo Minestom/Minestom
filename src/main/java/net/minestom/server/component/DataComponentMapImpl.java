@@ -223,7 +223,8 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
             boolean isPatch
     ) implements Codec<DataComponentMap> {
         @Override
-        public <D> Result<DataComponentMap> decode(Transcoder<D> coder, D value) {
+        public <D> Result<DataComponentMap> decode(Transcoder<D> coder, @Nullable D value) {
+            if (value == null) return new Result.Error<>("null");
             final Result<MapLike<D>> mapResult = coder.getMap(value);
             if (!(mapResult instanceof Result.Ok(var map)))
                 return mapResult.cast();
@@ -257,6 +258,7 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
 
         @Override
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable DataComponentMap value) {
+            if (value == null) return new Result.Error<>("null");
             final DataComponentMapImpl patch = (DataComponentMapImpl) value;
 
             final Transcoder.MapBuilder<D> map = coder.createMap();
