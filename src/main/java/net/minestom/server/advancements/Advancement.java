@@ -93,7 +93,7 @@ public class Advancement {
         return tab;
     }
 
-    protected void setTab(AdvancementTab tab) {
+    protected void setTab(@Nullable AdvancementTab tab) {
         this.tab = tab;
     }
 
@@ -283,7 +283,7 @@ public class Advancement {
         return parent;
     }
 
-    protected void setParent(Advancement parent) {
+    protected void setParent(@Nullable Advancement parent) {
         this.parent = parent;
     }
 

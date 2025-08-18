@@ -76,7 +76,7 @@ public class EnchantmentTableInventory extends Inventory {
      * @param enchantmentSlot the enchantment slot
      * @return the enchantment shown in the slot, null if it is hidden
      */
-    public RegistryKey<Enchantment> getEnchantmentShown(EnchantmentSlot enchantmentSlot) {
+    public @Nullable RegistryKey<Enchantment> getEnchantmentShown(EnchantmentSlot enchantmentSlot) {
         final int id = enchantmentShown[enchantmentSlot.ordinal()];
         if (id == -1) return null;
         return ENCHANTMENT_REGISTRY.getKey(id);

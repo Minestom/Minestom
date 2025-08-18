@@ -283,7 +283,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public Chunk getChunk(int chunkX, int chunkZ) {
+    public @Nullable Chunk getChunk(int chunkX, int chunkZ) {
         return chunks.get(CoordConversion.chunkIndex(chunkX, chunkZ));
     }
 

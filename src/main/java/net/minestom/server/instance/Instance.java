@@ -261,7 +261,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * at the given {@link Point} with a callback.
      *
      * @param point the chunk position
-     * @return a {@link CompletableFuture} completed once the chunk has been processed, null if not loaded
+     * @return a {@link CompletableFuture} completed once the chunk has been processed, can be null if not loaded
      */
     public CompletableFuture<@Nullable Chunk> loadOptionalChunk(Point point) {
         return loadOptionalChunk(point.chunkX(), point.chunkZ());
