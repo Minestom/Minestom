@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public final class CodecTest {
@@ -31,7 +32,7 @@ public final class CodecTest {
     @MethodSource("optionalResults")
     public <D, T> void testOptionalNullDecode(Transcoder<D> transcoder, Codec<T> codec, T expected) {
         var optionalCodec = codec.optional(expected);
-        var result = optionalCodec.decode(transcoder, null);
+        var result = optionalCodec.decode(transcoder, transcoder.createNull());
         CodecAssertions.assertOk(result);
         Assertions.assertEquals(expected, result.orElseThrow());
     }
