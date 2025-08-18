@@ -4,6 +4,7 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventListener;
+import net.minestom.server.network.player.GameProfile;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,8 +34,8 @@ final class EnvImpl implements Env {
     }
 
     @Override
-    public TestConnection createConnection() {
-        return new TestConnectionImpl(this);
+    public TestConnection createConnection(GameProfile gameProfile) {
+        return new TestConnectionImpl(this, gameProfile);
     }
 
     @Override

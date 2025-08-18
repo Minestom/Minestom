@@ -8,15 +8,21 @@ import net.minestom.server.event.EventFilter;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.player.GameProfile;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
+import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
 public interface Env {
     ServerProcess process();
 
-    TestConnection createConnection();
+    TestConnection createConnection(GameProfile gameProfile);
+
+    default TestConnection createConnection() {
+        return createConnection(new GameProfile(UUID.randomUUID(), "RandName"));
+    }
 
     <E extends Event, H> Collector<E> trackEvent(Class<E> eventType, EventFilter<? super E, H> filter, H actor);
 
