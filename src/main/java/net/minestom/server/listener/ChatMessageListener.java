@@ -21,7 +21,7 @@ public class ChatMessageListener {
 
     public static void commandChatListener(ClientCommandChatPacket packet, Player player) {
         final String command = packet.message();
-        new EventsJFR.PlayerCommand(player.getUuid().toString(), command).commit();
+        EventsJFR.newPlayerCommand(player.getUuid(), command).commit();
         if (Messenger.canReceiveCommand(player)) {
             COMMAND_MANAGER.execute(player, command);
         } else {
@@ -33,7 +33,7 @@ public class ChatMessageListener {
         // Intentionally do the same thing as commandChatListener. We don't use signed commands, but Geyser
         // and Gate (the proxy) always send them so this is for compatibility with them.
         final String command = packet.message();
-        new EventsJFR.PlayerCommand(player.getUuid().toString(), command).commit();
+        EventsJFR.newPlayerCommand(player.getUuid(), command).commit();
         if (Messenger.canReceiveCommand(player)) {
             COMMAND_MANAGER.execute(player, command);
         } else {
@@ -43,7 +43,7 @@ public class ChatMessageListener {
 
     public static void chatMessageListener(ClientChatMessagePacket packet, Player player) {
         final String message = packet.message();
-        new EventsJFR.PlayerChat(player.getUuid().toString(), message).commit();
+        EventsJFR.newPlayerChat(player.getUuid(), message).commit();
         if (!Messenger.canReceiveMessage(player)) {
             Messenger.sendRejectionMessage(player);
             return;

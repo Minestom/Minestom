@@ -6,6 +6,7 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.UUIDUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,7 @@ public final class TeamManager {
      * @param teamName The registry name of the team
      * @return a registered {@link Team} or {@code null}
      */
-    public Team getTeam(String teamName) {
+    public @Nullable Team getTeam(String teamName) {
         for (Team team : this.teams) {
             if (team.getTeamName().equals(teamName)) return team;
         }
