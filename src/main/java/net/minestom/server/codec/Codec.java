@@ -23,10 +23,20 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * <p>A {@link Codec} represents a combined {@link Encoder} and {@link Decoder} for a value.</p>
- *
- * <p>Heavily inspired by <a href="https://github.com/Mojang/DataFixerUpper">Mojang/DataFixerUpper</a>,
- * licensed under the MIT license.</p>
+ * <p>
+ *     A {@link Codec} represents a combined {@link Encoder} and {@link Decoder} for a value.
+ *     Enabling easy encoding and decoding of values to and from a between formats, making serialization simple, reuseable and type safe.
+ * </p>
+ * <p>
+ *     Most of the primitive or commonly used codecs are provided as static fields in this interface.
+ *     For example, {@link Codec#INT} is a codec for integers, and {@link Codec#STRING} is a codec for strings.
+ *     You can even use {@link Codec#Enum(Class)} for enums, which will convert the enum to a string
+ *     representation and back.
+ * </p>
+ * <p>
+ *     Heavily inspired by <a href="https://github.com/Mojang/DataFixerUpper">Mojang/DataFixerUpper</a>,
+ *     licensed under the MIT license.
+ * </p>
  *
  * @param <T> The type to be represented by this codec
  */

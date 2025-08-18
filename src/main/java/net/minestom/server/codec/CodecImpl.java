@@ -51,6 +51,7 @@ final class CodecImpl {
         }
     }
 
+    @FunctionalInterface
     interface PrimitiveEncoder<T> {
         <D> D encode(Transcoder<D> coder, T value);
     }
