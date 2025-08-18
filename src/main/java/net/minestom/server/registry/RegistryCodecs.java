@@ -17,7 +17,7 @@ final class RegistryCodecs {
 
     record RegistryKeyImpl<T>(Registries.Selector<T> selector) implements Codec<RegistryKey<T>> {
         @Override
-        public <D> Result<RegistryKey<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<RegistryKey<T>> decode(Transcoder<D> coder, @Nullable D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = selector.select(context.registries());
@@ -43,7 +43,7 @@ final class RegistryCodecs {
             Codec<T> registryCodec
     ) implements Codec<Holder<T>> {
         @Override
-        public <D> Result<Holder<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<Holder<T>> decode(Transcoder<D> coder, @Nullable D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = selector.select(context.registries());
@@ -73,7 +73,7 @@ final class RegistryCodecs {
 
     record TagKeyImpl<T>(Registries.Selector<T> selector, boolean hash) implements Codec<TagKey<T>> {
         @Override
-        public <D> Result<TagKey<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<TagKey<T>> decode(Transcoder<D> coder, @Nullable D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = selector.select(context.registries());
@@ -104,7 +104,7 @@ final class RegistryCodecs {
         // Per vanilla, this codec supports registryless context, in which case it can only decode direct tags.
 
         @Override
-        public <D> Result<RegistryTag<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<RegistryTag<T>> decode(Transcoder<D> coder, @Nullable D value) {
             final var context = coder instanceof RegistryTranscoder<D> transcoder ? transcoder : null;
             final var registry = context != null ? selector.select(context.registries()) : null;
             final Result<String> tagKeyResult = coder.getString(value);
@@ -161,13 +161,14 @@ final class RegistryCodecs {
             Codec<T> directCodec
     ) implements Codec<HolderSet<T>> {
         @Override
-        public <D> Result<HolderSet<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<HolderSet<T>> decode(Transcoder<D> coder, @Nullable D value) {
             // First try to decode as a tag
             final Result<RegistryTag<T>> tagResult = tagCodec.decode(coder, value);
             if (tagResult instanceof Result.Ok(RegistryTag<T> tag))
                 return new Result.Ok<>(tag);
 
             // Otherwise try to decode as a direct holder set
+            if (value == null) return new Result.Error<>("null");
             final Result<List<D>> entriesResult = coder.getList(value);
             if (!(entriesResult instanceof Result.Ok(List<D> entries)))
                 return entriesResult.mapError(e -> "Invalid holder set value: " + e).cast();
@@ -188,6 +189,7 @@ final class RegistryCodecs {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable HolderSet<T> value) {
             if (value == null) return new Result.Error<>("null");
             return switch (value) {

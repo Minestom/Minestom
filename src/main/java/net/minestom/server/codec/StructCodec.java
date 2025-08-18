@@ -21,7 +21,8 @@ public interface StructCodec<R> extends Codec<R> {
     <D> Result<D> encodeToMap(Transcoder<D> coder, R value, MapBuilder<D> map);
 
     @Override
-    default <D> Result<R> decode(Transcoder<D> coder, D value) {
+    default <D> Result<R> decode(Transcoder<D> coder, @Nullable D value) {
+        if (value == null) return new Result.Error<>("null");
         return coder.getMap(value).map(map -> decodeFromMap(coder, map));
     }
 
