@@ -159,7 +159,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return the property value, null if not present (due to an invalid property name)
      */
     @Contract(pure = true)
-    String getProperty(String property);
+    @Nullable String getProperty(String property);
 
     @Contract(pure = true)
     Collection<Block> possibleStates();
