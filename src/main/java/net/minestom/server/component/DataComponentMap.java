@@ -1,6 +1,7 @@
 package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Unit;
@@ -19,7 +20,7 @@ import java.util.function.IntFunction;
  */
 @ApiStatus.Experimental
 public sealed interface DataComponentMap extends DataComponent.Holder permits DataComponentMapImpl {
-    DataComponentMap EMPTY = new DataComponentMapImpl(new Int2ObjectArrayMap<>(0));
+    DataComponentMap EMPTY = new DataComponentMapImpl(Int2ObjectMaps.emptyMap());
 
     static DataComponentMap.Builder builder() {
         return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>());
@@ -71,7 +72,7 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
 
         final DataComponentMapImpl protoImpl = (DataComponentMapImpl) prototype;
 
-        final Int2ObjectArrayMap<Object> diff = new Int2ObjectArrayMap<>(patchImpl.components());
+        final Int2ObjectArrayMap<@Nullable Object> diff = new Int2ObjectArrayMap<>(patchImpl.components());
         var iter = diff.int2ObjectEntrySet().fastIterator();
         while (iter.hasNext()) {
             final var entry = iter.next(); // Entry in patch
