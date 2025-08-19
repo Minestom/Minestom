@@ -45,10 +45,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         this.registries = registries;
     }
 
-    NetworkBufferImpl(@Nullable Arena arena, long capacity, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
-        this(arena, arena != null ? arena.allocate(capacity) : MemorySegment.NULL, readIndex, writeIndex, autoResize, registries);
-    }
-
     @Override
     public <T> void write(Type<T> type, @UnknownNullability T value) {
         assertReadOnly();
@@ -178,7 +174,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     @Override
     public boolean isReadOnly() {
-        if (isDummy()) return true;
+        if (isDummy()) return false; // Returns false for null segment regardless.
         return segment.isReadOnly();
     }
 
@@ -204,6 +200,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     public void resize(long newSize) {
         assertDummy();
         assertReadOnly();
+        if (arena == null) throw new IllegalStateException("Buffer cannot be resized without an arena");
         final long capacity = capacity();
         if (newSize < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (newSize == capacity) throw new IllegalArgumentException("New size is the same as the current size");
@@ -241,7 +238,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         final var newReadIndex = Math.max(readIndex - index, 0);
         final var newWriteIndex = Math.max(writeIndex - index, 0);
-        final var newBuffer = new NetworkBufferImpl(arena, length, newReadIndex, newWriteIndex, autoResize, registries);
+        final var newBuffer = new NetworkBufferImpl(arena, arena.allocate(length), newReadIndex, newWriteIndex, autoResize, registries);
         assert !newBuffer.isDummy() : "Dummy active for a newly created buffer";
 
         MemorySegment.copy(this.segment, index, newBuffer.segment, 0, length);
@@ -360,7 +357,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     private boolean isDummy() {
-        return arena == null; // Or segment is null (Likely arena)
+        return segment == MemorySegment.NULL;
     }
 
     // Internal writing methods
@@ -373,6 +370,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         assertDummy();
         MemorySegment.copy(this.segment, index, MemorySegment.ofArray(value), 0, value.length);
     }
+
     void _putByte(long index, byte value) {
         if (isDummy()) return;
         segment.set(JAVA_BYTE, index, value);
@@ -461,7 +459,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         MemorySegment.copy(src.segment, srcOffset, dst.segment, dstOffset, length);
     }
 
-    public static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
+    public static boolean contentEquals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
         var impl1 = impl(buffer1);
         var impl2 = impl(buffer2);
         if (impl1 == impl2) return true;
@@ -472,7 +470,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     void assertReadOnly() {
-        if (!isDummy() && isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
+        if (isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
     }
 
     @Contract("-> fail")
@@ -512,7 +510,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         public NetworkBuffer build() {
             if (this.arena == null) this.arena = DEFAULT_ARENA;
             return new NetworkBufferImpl(
-                    arena, initialSize,
+                    arena, arena.allocate(initialSize),
                     0, 0,
                     autoResize, registries);
         }
@@ -523,7 +521,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         // Dummy buffer with no memory allocated
         // Useful for size calculations
         return new NetworkBufferImpl(
-                null, DUMMY_CAPACITY,
+                null, MemorySegment.NULL,
                 0, 0,
                 null, registries);
     }

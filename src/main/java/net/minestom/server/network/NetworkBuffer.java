@@ -397,8 +397,29 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         NetworkBufferImpl.copy(srcBuffer, srcOffset, dstBuffer, dstOffset, length);
     }
 
+    /**
+     * @deprecated Use contentEquals instead.
+     * @param buffer1 the buffer
+     * @param buffer2 the buffer
+     * @return if they are equals
+     */
+    @Deprecated(forRemoval = true)
     static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
-        return NetworkBufferImpl.equals(buffer1, buffer2);
+        return contentEquals(buffer1, buffer2);
+    }
+
+    /**
+     * Checks if the contents of one buffer in its entirety.
+     * Buffers with the same address and capacity will always be true.
+     * <br>
+     * Note: Dummy buffers are never equal in content.
+     *
+     * @param buffer1 the left buffer
+     * @param buffer2 the right buffer
+     * @return true if the content is equal
+     */
+    static boolean contentEquals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
+        return NetworkBufferImpl.contentEquals(buffer1, buffer2);
     }
 
     /**
@@ -418,6 +439,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * Note: The backing buffer is used for index tracking.
          */
         @ApiStatus.Experimental
+        @Contract(pure = true)
         static IOView of(NetworkBuffer buffer) {
             Check.notNull(buffer, "buffer cannot be null");
             return new NetworkBufferIOViewImpl(buffer);
@@ -427,12 +449,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * Creates a new {@link InputStream} for this {@link NetworkBuffer}.
          * @return the view of the buffer as an input stream
          */
+        @Contract(pure = true)
         InputStream inputStream();
 
         /**
          * Creates a new {@link OutputStream} for this {@link NetworkBuffer}.
          * @return the view of the buffer as an output stream
          */
+        @Contract(pure = true)
         OutputStream outputStream();
 
         /**

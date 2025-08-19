@@ -77,7 +77,7 @@ public class NetworkBufferTest {
         assertEquals(10, copy.writeIndex());
         assertEquals(10, copy.capacity());
 
-        assertTrue(NetworkBuffer.equals(buffer, copy));
+        assertTrue(NetworkBuffer.contentEquals(buffer, copy));
     }
 
     @Test
