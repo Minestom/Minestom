@@ -444,10 +444,10 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     static NetworkBuffer wrap(byte [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
-        var buffer = new Builder(bytes.length).registry(registries).build();
-        buffer.writeAt(0, NetworkBuffer.RAW_BYTES, bytes);
-        buffer.index(readIndex, writeIndex);
-        return buffer;
+        return new NetworkBufferImpl(
+                null, MemorySegment.ofArray(bytes),
+                readIndex, writeIndex, null, registries
+        );
     }
 
     static void copy(NetworkBuffer srcBuffer, long srcOffset,
