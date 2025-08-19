@@ -311,7 +311,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return staticBuffer(size, null);
     }
 
-
     static NetworkBuffer resizableBuffer(long initialSize, @Nullable Registries registries) {
         return builder(initialSize)
                 .autoResize(AutoResize.DOUBLE)
@@ -441,7 +440,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         @ApiStatus.Experimental
         @Contract(pure = true)
         static IOView of(NetworkBuffer buffer) {
-            Check.notNull(buffer, "buffer cannot be null");
             return new NetworkBufferIOViewImpl(buffer);
         }
 

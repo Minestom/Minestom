@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -18,6 +19,10 @@ import static net.minestom.server.network.NetworkBuffer.*;
  * @param buffer the buffer to read from and write to
  */
 record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IOView {
+    NetworkBufferIOViewImpl {
+        Check.notNull(buffer, "Buffer cannot be null");
+    }
+
     @Override
     public OutputStream outputStream() {
         return new OutputStream() {
