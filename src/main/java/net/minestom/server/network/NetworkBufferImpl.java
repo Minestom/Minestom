@@ -82,7 +82,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     @Override
     public void copyTo(long srcOffset, byte [] dest, long destOffset, long length) {
         assertDummy();
-        if (length == 0) return;
         MemorySegment.copy(this.segment, srcOffset, MemorySegment.ofArray(dest), destOffset, length);
     }
 
