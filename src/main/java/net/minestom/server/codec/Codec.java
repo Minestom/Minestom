@@ -348,26 +348,28 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param keyFunc
      * @return
      * @param <R>
-     * @param <TR>
      */
     @Contract(pure = true)
-    default <R, TR extends R> StructCodec<R> unionType(Function<T, StructCodec<TR>> serializers, Function<R, ? extends T> keyFunc) {
+    default <R> StructCodec<R> unionType(Function<T, StructCodec<? extends R>> serializers, Function<R, ? extends T> keyFunc) {
         return unionType("type", serializers, keyFunc);
     }
 
     /**
-     * Creates a union type of type R
+     * Creates a union type of type {@link R}
      * <br>
-     * Useful when you have an interface of {@link T} and want a codec of {@link T}
+     * Useful when you have an interface of {@link T} and want a codec subclasses of {@link T}
      * @param keyField the map key
-     * @param serializers
-     * @param keyFunc
-     * @return
-     * @param <R>
-     * @param <TR>
+     * @param serializers the map from {@link T} value to its serializer
+     * @param keyFunc to map from {@link R} to its value of {@link T}
+     * @return the struct codec union of {@link T}
+     * @param <R> the return type; T or a subclass
      */
     @Contract(pure = true)
-    default <R, TR extends R> StructCodec<R> unionType(String keyField, Function<T, StructCodec<TR>> serializers, Function<R, ? extends T> keyFunc) {
+    default <R> StructCodec<R> unionType(
+            String keyField,
+            Function<T, StructCodec<? extends R>> serializers,
+            Function<R, ? extends T> keyFunc
+    ) {
         return new CodecImpl.UnionImpl<>(keyField, this, serializers, keyFunc);
     }
 
