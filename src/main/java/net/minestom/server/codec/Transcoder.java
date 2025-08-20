@@ -7,6 +7,13 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Transcoders are responsible for converting "primitive" java objects into their respective {@link D} types.
+ * They are also responsible for unwrapping these objects back to their primitives.
+ * <br>
+ * Commonly used transcoders are accessible through static fields like {@link Transcoder#JSON}
+ * @param <D> the intermediary type used by the transcoder
+ */
 @ApiStatus.Experimental
 public interface Transcoder<D> {
 
