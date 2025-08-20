@@ -18,7 +18,7 @@
  * A quick example is below; keep in mind this is a simplified example of the possibilities.
  * <pre>{@code
  * record MyType(int id, @Nullable String name) {
- *     static final Codec<MyType> CODEC = StructCodec.struct(
+ *     static final StructCodec<MyType> CODEC = StructCodec.struct(
  *             "id", Codec.INT, MyType::id,
  *             "name", Codec.STRING.optional(), MyType::name,
  *             MyType::new
