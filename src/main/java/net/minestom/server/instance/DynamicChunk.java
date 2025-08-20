@@ -30,6 +30,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -335,6 +336,11 @@ public class DynamicChunk extends Chunk {
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),
                 tagHandler().readableCopy());
+    }
+
+    @Override
+    public @UnmodifiableView Collection<Block> getBlockEntities() {
+        return Collections.unmodifiableCollection(this.entries.values());
     }
 
     private void assertLock() {
