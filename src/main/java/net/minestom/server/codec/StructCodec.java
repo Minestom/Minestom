@@ -17,6 +17,27 @@ import java.util.function.Supplier;
  * similar to {@link net.minestom.server.network.NetworkBufferTemplate}
  * <p>
  * {@inheritDoc}
+ * <br>
+ * You can use structs to create complex objects
+ * <pre>{@code
+ * record MyObject(double coolnessFactor, @Nullable String of) {
+ *     static final StructCodec<MyObject> CODEC = StructCodec.struct(
+ *             "id", Codec.DOUBLE, MyObject::coolnessFactor,
+ *             "name", Codec.STRING.optional(), MyObject::of,
+ *             MyObject::new
+ *     );
+ *
+ *     public MyObject {
+ *         coolnessFactor = Math.clamp(coolnessFactor, 0.0, 2.0); // Too powerful
+ *     }
+ * }
+ *
+ * MyObject value = new MyObject(7.8d, "me"); // Or use a null name for no name.
+ * // Encoding to JSON
+ * JsonElement encoded = MyObject.CODEC.encode(Transcoder.JSON, value).orElseThrow();
+ * // Decoding from JSON
+ * MyObject decoded = MyObject.CODEC.decode(Transcoder.JSON, encoded).orElseThrow();
+ * }</pre>
  *
  * @param <R> the return type, never null.
  */
