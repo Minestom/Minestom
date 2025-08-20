@@ -227,8 +227,8 @@ final class CodecImpl {
         }
     }
 
-    record UnionImpl<T, R, TR extends R>(String keyField, Codec<T> keyCodec,
-                                         Function<T, @Nullable StructCodec<TR>> serializers,
+    record UnionImpl<T, R>(String keyField, Codec<T> keyCodec,
+                                         Function<T, @Nullable StructCodec<? extends R>> serializers,
                                          Function<R, ? extends T> keyFunc) implements StructCodec<R> {
 
         @SuppressWarnings("unchecked")
@@ -237,7 +237,7 @@ final class CodecImpl {
             final Result<T> keyResult = map.getValue(keyField).map(key -> keyCodec.decode(coder, key));
             if (!(keyResult instanceof Result.Ok(T key)))
                 return keyResult.cast();
-            final StructCodec<TR> serializer = serializers.apply(key);
+            final StructCodec<? extends R> serializer = serializers.apply(key);
             if (serializer == null) return new Result.Error<>("no union value: " + key);
             return (Result<R>) serializer.decodeFromMap(coder, map);
         }
@@ -246,7 +246,7 @@ final class CodecImpl {
         @Override
         public <D> Result<D> encodeToMap(Transcoder<D> coder, R value, MapBuilder<D> map) {
             final T key = keyFunc.apply(value);
-            var serializer = serializers.apply(key);
+            final StructCodec<R> serializer = (StructCodec<R>) serializers.apply(key);
             if (serializer == null) return new Result.Error<>("no union value: " + key);
 
             final Result<D> keyResult = keyCodec.encode(coder, key);
@@ -255,7 +255,7 @@ final class CodecImpl {
             if (keyValue == null) return new Result.Error<>("null");
 
             map.put(keyField, keyValue);
-            return serializer.encodeToMap(coder, (TR) value, map);
+            return serializer.encodeToMap(coder, value, map);
         }
     }
 
