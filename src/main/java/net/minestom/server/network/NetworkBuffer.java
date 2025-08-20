@@ -13,7 +13,6 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.*;
 
 import javax.crypto.Cipher;
@@ -218,7 +217,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     @Contract(pure = true)
     default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex){
-        return copy(NetworkBufferImpl.DEFAULT_ARENA, index, length, readIndex, writeIndex);
+        return copy(Arena.ofAuto(), index, length, readIndex, writeIndex);
     }
 
     @ApiStatus.Experimental

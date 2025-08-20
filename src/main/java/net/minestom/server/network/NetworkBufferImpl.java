@@ -24,8 +24,6 @@ import java.util.zip.Inflater;
 final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     // Dummy constants
     private static final long DUMMY_CAPACITY = Long.MAX_VALUE;
-    // Arena
-    static final Arena DEFAULT_ARENA = Arena.ofAuto();
 
     // Nullable for dummy buffers.
     private final @Nullable Arena arena;
@@ -508,7 +506,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         @Override
         public NetworkBuffer build() {
-            if (this.arena == null) this.arena = DEFAULT_ARENA;
+            if (this.arena == null) this.arena = Arena.ofAuto();
             return new NetworkBufferImpl(
                     arena, arena.allocate(initialSize),
                     0, 0,
