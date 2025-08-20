@@ -95,9 +95,9 @@ public final class PacketViewableUtils {
 
         private synchronized void process(Viewable viewable) {
             if (buffer.writeIndex() == 0) return;
-            final NetworkBuffer slice = buffer.slice(0, buffer.writeIndex());
-            slice.readOnly();
-            viewable.getViewers().forEach(player -> processPlayer(player, slice));
+            final NetworkBuffer copy = buffer.copy(0, buffer.writeIndex()); // Used after release for writing (copy)
+            copy.readOnly();
+            viewable.getViewers().forEach(player -> processPlayer(player, copy));
             this.buffer.clear();
             this.entityIdMap.clear();
         }
