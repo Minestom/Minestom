@@ -21,7 +21,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.*;
-import static net.minestom.server.network.NetworkBufferImpl.impl;
 
 record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
 
@@ -268,7 +267,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                             : Transcoder.NBT;
                     final BinaryTag dialog = Dialog.CODEC.encode(coder, Dialog.unwrap(payload.dialog())).orElseThrow();
 
-                    final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
+                    final BinaryTagWriter nbtWriter = new BinaryTagWriter(IOView.of(buffer));
                     nbtWriter.writeNamed("dialog", dialog);
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to write dialog click event payload", e);
@@ -281,7 +280,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 buffer.write(STRING_IO_UTF8, payload.key().asString());
 
                 try {
-                    final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
+                    final BinaryTagWriter nbtWriter = new BinaryTagWriter(IOView.of(buffer));
                     nbtWriter.writeNamed("payload", MinestomAdventure.unwrapNbt(payload.nbt()));
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to write custom click event payload", e);
@@ -328,7 +327,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             buffer.write(STRING_IO_UTF8, "components");
             final Map<Key, NbtDataComponentValue> dataComponents = value.dataComponentsAs(NbtDataComponentValue.class);
             if (!dataComponents.isEmpty()) {
-                final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
+                final BinaryTagWriter nbtWriter = new BinaryTagWriter(IOView.of(buffer));
                 try {
                     for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
                         final BinaryTag dataComponentValue = entry.getValue().value();
