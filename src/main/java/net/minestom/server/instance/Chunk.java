@@ -20,6 +20,7 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -275,7 +276,12 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public void onGenerate() {
     }
 
-    @UnmodifiableView
+    /**
+     *
+     * @return the current block entities in this chunk, not guaranteed to stay consistent with the chunk's
+     * block entities if block entities are added/removed from the chunk after calling this method.
+     */
+    @Unmodifiable
     public Collection<Block> getBlockEntities() {
         return Collections.emptyList();
     }

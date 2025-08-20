@@ -338,12 +338,19 @@ public class DynamicChunk extends Chunk {
                 tagHandler().readableCopy());
     }
 
+    /**
+     *
+     * @return a copy of the block entities currently in this chunk
+     */
     @Override
     public @UnmodifiableView Collection<Block> getBlockEntities() {
-        return Collections.unmodifiableCollection(this.entries.values());
+        synchronized (this) {
+            return Set.copyOf(this.entries.values());
+        }
     }
 
     private void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
     }
+
 }
