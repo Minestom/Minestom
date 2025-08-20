@@ -1,5 +1,7 @@
 package net.minestom.server.codec;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Comparator;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.CRC32C;
 
+@ApiStatus.Internal
 final class TranscoderCrc32Impl implements Transcoder<Integer> {
     static final TranscoderCrc32Impl INSTANCE = new TranscoderCrc32Impl();
 

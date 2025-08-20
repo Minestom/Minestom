@@ -13,12 +13,14 @@ import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@ApiStatus.Internal
 final class CodecImpl {
 
     record RawValueImpl<D>(Transcoder<D> coder, D value) implements Codec.RawValue {
