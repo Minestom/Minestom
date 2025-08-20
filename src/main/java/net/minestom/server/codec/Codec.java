@@ -26,6 +26,7 @@ import java.util.function.Supplier;
  * <p>
  *     A {@link Codec} represents a combined {@link Encoder} and {@link Decoder} for a value.
  *     Enabling easy encoding and decoding of values to and from a between formats, making serialization simple, reusable and type safe.
+ *     Going between formats is handled by {@link Transcoder}.
  * </p>
  * <p>
  *     Most of the primitive or commonly used codecs are provided as static fields in this interface.
@@ -36,7 +37,8 @@ import java.util.function.Supplier;
  * <p>
  *     Codecs are immutable, you must chain methods to create a codec that you want. For example
  *     <pre>{@code
- *         Codec<@Nullable String> optionalStringCodec = Codec.STRING.optional()
+ *         Codec<@Nullable String> codec = Codec.STRING.optional()
+ *         Codec<Set<@Nullable String>> setCodec = codec.set();
  *     }</pre>
  * </p>
  * <p>
@@ -44,7 +46,7 @@ import java.util.function.Supplier;
  *     licensed under the MIT license.
  * </p>
  *
- * @param <T> The type to be represented by this codec
+ * @param <T> The type to be represented by this codec, nullable T will provide nullable results.
  */
 @ApiStatus.Experimental
 public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>, Decoder<T> {
@@ -343,11 +345,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     }
 
     /**
-     *
-     * @param serializers
-     * @param keyFunc
-     * @return
-     * @param <R>
+     * Creates a union type of type {@link R}. See {@link #unionType(String, Function, Function)}
+     * <br>
+     * Useful when you have an interface of {@link T} and want a codec subclasses of {@link T}
+     * @param serializers the map from {@link T} value to its serializer
+     * @param keyFunc to map from {@link R} to its value of {@link T}
+     * @return the struct codec union of {@link R}
+     * @param <R> the return type; {@link T} or a subclass
      */
     @Contract(pure = true)
     default <R> StructCodec<R> unionType(Function<T, StructCodec<? extends R>> serializers, Function<R, ? extends T> keyFunc) {
@@ -361,8 +365,8 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param keyField the map key
      * @param serializers the map from {@link T} value to its serializer
      * @param keyFunc to map from {@link R} to its value of {@link T}
-     * @return the struct codec union of {@link T}
-     * @param <R> the return type; T or a subclass
+     * @return the struct codec union of {@link R}
+     * @param <R> the return type; {@link T} or a subclass
      */
     @Contract(pure = true)
     default <R> StructCodec<R> unionType(
@@ -373,6 +377,14 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
         return new CodecImpl.UnionImpl<>(keyField, this, serializers, keyFunc);
     }
 
+    /**
+     * Creates a or else codec where it will attempt to use the first codec
+     * then use the second one if it fails.
+     * <br>
+     * If both codecs fail the first error will be returned instead.
+     * @param other the other codec
+     * @return the or else codec of {@link T}
+     */
     @Contract(pure = true)
     default Codec<T> orElse(Codec<T> other) {
         return new CodecImpl.OrElseImpl<>(this, other);
