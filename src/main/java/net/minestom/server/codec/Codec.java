@@ -13,7 +13,6 @@ import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
 import net.minestom.server.utils.UUIDUtils;
 import net.minestom.server.utils.Unit;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -24,26 +23,25 @@ import java.util.function.Supplier;
 
 /**
  * <p>
- *     A {@link Codec} represents a combined {@link Encoder} and {@link Decoder} for a value.
- *     Enabling easy encoding and decoding of values to and from a between formats, making serialization simple, reusable and type safe.
- *     Going between formats is handled by {@link Transcoder}.
+ * A {@link Codec} represents a combined {@link Encoder} and {@link Decoder} for a value.
+ * Enabling easy encoding and decoding of values to and from a between formats, making serialization simple, reusable and type safe.
+ * Going between formats is handled by {@link Transcoder}.
  * </p>
  * <p>
- *     Most of the primitive or commonly used codecs are provided as static fields in this interface.
- *     For example, {@link Codec#INT} is a codec for integers, and {@link Codec#STRING} is a codec for strings.
- *     You can even use {@link Codec#Enum(Class)} for enums, which will convert the enum to a string
- *     representation and back.
+ * Most of the primitive or commonly used codecs are provided as static fields in this interface.
+ * For example, {@link Codec#INT} is a codec for integers, and {@link Codec#STRING} is a codec for strings.
+ * You can even use {@link Codec#Enum(Class)} for enums, which will convert the enum to a string
+ * representation and back.
  * </p>
- * <p>
- *     Codecs are immutable, you must chain methods to create a codec that you want. For example
- *     <pre>{@code
+ * Codecs are immutable, you must chain methods to create a codec that you want. For example
+ * <pre>{@code
  *         Codec<@Nullable String> codec = Codec.STRING.optional()
  *         Codec<Set<@Nullable String>> setCodec = codec.set();
- *     }</pre>
- * </p>
+ *     }
+ * </pre>
  * <p>
- *     Heavily inspired by <a href="https://github.com/Mojang/DataFixerUpper">Mojang/DataFixerUpper</a>,
- *     licensed under the MIT license.
+ * Heavily inspired by <a href="https://github.com/Mojang/DataFixerUpper">Mojang/DataFixerUpper</a>,
+ * licensed under the MIT license.
  * </p>
  *
  * @param <T> The type to be represented by this codec, nullable T will provide nullable results.
@@ -60,10 +58,11 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     sealed interface RawValue permits CodecImpl.RawValueImpl {
         /**
          * Creates a RawValue instance
+         *
          * @param coder the transcoder
          * @param value the value
+         * @param <D>   The Object type
          * @return the new raw value instance
-         * @param <D> The Object type
          */
         @Contract(pure = true)
         static <D> RawValue of(Transcoder<D> coder, D value) {
@@ -72,9 +71,10 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
         /**
          * Converts the current value into another transcoder
+         *
          * @param coder the transcoder to convert the object into
+         * @param <D>   the resultant type; transcoder type.
          * @return the {@link Result} of converting to {@code coder}.
-         * @param <D> the resultant type; transcoder type.
          */
         @Contract(pure = true)
         <D> Result<D> convertTo(Transcoder<D> coder);
@@ -137,9 +137,10 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * <br>
      * Converts the {@link Enum#name()} into lowercase when encoding
      * and uppercase into decoding then passing it to {@link Enum#valueOf(Class, String)}
+     *
      * @param enumClass the enum class
+     * @param <E>       Enum type, E must be an enum
      * @return the codec enum
-     * @param <E> Enum type, E must be an enum
      */
     @Contract(pure = true)
     static <E extends Enum<E>> Codec<E> Enum(Class<E> enumClass) {
@@ -152,9 +153,10 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * Create a recursive codec from the parent codec
      * <br>
      * Useful when you want to keep encoding/decoding until there is nothing left.
+     *
      * @param func the function to get the codec from.
+     * @param <T>  The codec Type
      * @return the recursive codec
-     * @param <T> The codec Type
      */
     @Contract(pure = true)
     static <T> Codec<T> Recursive(Function<Codec<T>, Codec<T>> func) {
@@ -166,9 +168,10 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * <br>
      * Useful for breaking possible cyclic loading of recursive codecs.
      * This may become a stable value in the future; don't rely on supplier getting called multiple times.
+     *
      * @param supplier the supplier to load the codec from.
+     * @param <T>      the codec type
      * @return the supplier
-     * @param <T> the codec type
      */
     @Contract(pure = true)
     static <T> Codec<T> ForwardRef(Supplier<Codec<T>> supplier) {
@@ -177,11 +180,12 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Shortcut for {@link Codec#RegistryTaggedUnion(Registries.Selector, Function, String)}
-     * @param registry the codec registry
+     *
+     * @param registry         the codec registry
      * @param serializerGetter the codec getter
-     * @param key the map key
+     * @param key              the map key
+     * @param <T>              the struct codec type.
      * @return a {@link StructCodec}
-     * @param <T> the struct codec type.
      */
     @Contract(pure = true)
     static <T> StructCodec<T> RegistryTaggedUnion(
@@ -197,11 +201,12 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * <br>
      * Registry selectors will be used to lookup values of codecs of {@link T}.
      * Then will be used to map to object {@link T} from {@code key}
+     *
      * @param registrySelector the registery selector used during lookup.
      * @param serializerGetter the serializer for each value of {@link T}
-     * @param key the map key for {@link T}
+     * @param key              the map key for {@link T}
+     * @param <T>              the codec type
      * @return a {@link StructCodec} bidirectionally mapping values of {@link T}
-     * @param <T> the codec type
      */
     @Contract(pure = true)
     static <T> StructCodec<T> RegistryTaggedUnion(
@@ -214,11 +219,12 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Creates an Either Codec, depending on the value of Either decides which codec to use.
-     * @param leftCodec the left codec
+     *
+     * @param leftCodec  the left codec
      * @param rightCodec the right codec
+     * @param <L>        the left type
+     * @param <R>        the right type
      * @return a {@link Codec} with {@link Either} of {@link L} and {@link R}
-     * @param <L> the left type
-     * @param <R> the right type
      */
     @Contract(pure = true)
     static <L, R> Codec<Either<L, R>> Either(Codec<L> leftCodec, Codec<R> rightCodec) {
@@ -227,6 +233,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Creates an optional codec, where null is encodable into {@link Transcoder#createNull()}.
+     *
      * @return the optional codec of type {@link T}
      */
     @Contract(pure = true)
@@ -239,9 +246,10 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * and is encoded when value equals {@code defaultValue} or null through {@link Transcoder#createNull()}.
      * <br>
      * The default value will be used if the decoding is null or fails to decode.
+     *
      * @param defaultValue the default value
-     * @throws NullPointerException if defaultValue is null, use {@link #optional()} instead.
      * @return the optional codec of type {@link T}
+     * @throws NullPointerException if defaultValue is null, use {@link #optional()} instead.
      */
     @Contract(pure = true)
     default Codec<@UnknownNullability T> optional(T defaultValue) {
@@ -251,10 +259,11 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Transforms an object from {@link S} to {@link T} or from {@link T} to {@link S}
-     * @param to the function to {@link S} from {@link T}
+     *
+     * @param to   the function to {@link S} from {@link T}
      * @param from the function from {@link S} to {@link T}
+     * @param <S>  the type
      * @return the transforming codec of {@link S}
-     * @param <S> the type
      */
     @Contract(pure = true)
     default <S extends @UnknownNullability Object> Codec<S> transform(ThrowingFunction<T, S> to, ThrowingFunction<S, T> from) {
@@ -263,6 +272,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Creates a list codec of {@link T} where its size is no larger than {@code maxSize}.
+     *
      * @param maxSize the max size of the list before returning an error result.
      * @return the list codec of type {@link T}
      */
@@ -273,6 +283,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Creates an unbounded list codec. See {@link #list(int)}
+     *
      * @return the unbounded list codec of type {@link T}
      */
     @Contract(pure = true)
@@ -282,6 +293,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Returns a list or the first element or null if no such element exists.
+     *
      * @param maxSize the max size of the list before returning an error result
      * @return the list codec of type {@link T}
      */
@@ -294,6 +306,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     /**
      * Returns an unbounded list or the first element or null if no such element exists.
      * See {@link #listOrSingle(int)}
+     *
      * @return the list codec of type {@link T}
      */
     @Contract(pure = true)
@@ -303,6 +316,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Creates a set where its max is no larger than {@code maxSize}
+     *
      * @param maxSize the max size before returning an error result
      * @return the set codec of type {@link T}
      */
@@ -313,6 +327,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Creates an unbounded set. See {@link #set(int)}
+     *
      * @return the set codec of type {@link T}
      */
     @Contract(pure = true)
@@ -322,10 +337,11 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Creates a map of key {@link T} and value of {@link V}
+     *
      * @param valueCodec the codec to use for {@link V}
-     * @param maxSize the max size before returning an error result.
+     * @param maxSize    the max size before returning an error result.
+     * @param <V>        the value type
      * @return the map codec of type {@link T} and {@link V}
-     * @param <V> the value type
      */
     @Contract(pure = true)
     default <V> Codec<Map<T, V>> mapValue(Codec<V> valueCodec, int maxSize) {
@@ -334,9 +350,10 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     /**
      * Creates a map of key {@link T} and value of {@link V}. See {@link #mapValue(Codec, int)}
+     *
      * @param valueCodec the codec to use for {@link V}
+     * @param <V>        the value type
      * @return the map codec of type {@link T} and {@link V}
-     * @param <V> the value type
      */
     @Contract(pure = true)
     default <V> Codec<Map<T, V>> mapValue(Codec<V> valueCodec) {
@@ -347,10 +364,11 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * Creates a union type of type {@link R}. See {@link #unionType(String, Function, Function)}
      * <br>
      * Useful when you have an interface of {@link T} and want a codec subclasses of {@link T}
+     *
      * @param serializers the map from {@link T} value to its serializer
-     * @param keyFunc to map from {@link R} to its value of {@link T}
+     * @param keyFunc     to map from {@link R} to its value of {@link T}
+     * @param <R>         the return type; {@link T} or a subclass
      * @return the struct codec union of {@link R}
-     * @param <R> the return type; {@link T} or a subclass
      */
     @Contract(pure = true)
     default <R> StructCodec<R> unionType(Function<T, StructCodec<? extends R>> serializers, Function<R, ? extends T> keyFunc) {
@@ -361,11 +379,12 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * Creates a union type of type {@link R}
      * <br>
      * Useful when you have an interface of {@link T} and want a codec subclasses of {@link T}
-     * @param keyField the map key
+     *
+     * @param keyField    the map key
      * @param serializers the map from {@link T} value to its serializer
-     * @param keyFunc to map from {@link R} to its value of {@link T}
+     * @param keyFunc     to map from {@link R} to its value of {@link T}
+     * @param <R>         the return type; {@link T} or a subclass
      * @return the struct codec union of {@link R}
-     * @param <R> the return type; {@link T} or a subclass
      */
     @Contract(pure = true)
     default <R> StructCodec<R> unionType(
@@ -381,6 +400,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * then use the second one if it fails.
      * <br>
      * If both codecs fail the first error will be returned instead.
+     *
      * @param other the other codec
      * @return the or else codec of {@link T}
      */
