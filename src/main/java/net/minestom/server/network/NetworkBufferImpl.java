@@ -3,7 +3,6 @@ package net.minestom.server.network;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -171,7 +170,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     @Override
     public boolean isReadOnly() {
-        if (isDummy()) return false; // Returns false for null segment regardless.
         return segment.isReadOnly();
     }
 
@@ -201,9 +199,9 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         final long capacity = capacity();
         if (newSize < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (newSize == capacity) throw new IllegalArgumentException("New size is the same as the current size");
-        final var oldSegment = this.segment;
-        this.segment = arena.allocate(newSize);
-        MemorySegment.copy(oldSegment, 0, this.segment, 0, capacity);
+        final var newSegment = arena.allocate(newSize);
+        MemorySegment.copy(this.segment, 0, newSegment, 0, capacity);
+        this.segment = newSegment;
     }
 
     @Override
@@ -211,8 +209,8 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         assertDummy();
         assertReadOnly();
         if (readIndex == 0) return;
-        MemorySegment.copy(this.segment, readIndex, this.segment, 0, readableBytes());
-
+        final var segment = this.segment;
+        MemorySegment.copy(segment, readIndex, segment, 0, readableBytes());
         writeIndex -= readIndex;
         readIndex = 0;
     }
@@ -224,7 +222,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         final var readableBytes = readableBytes();
         if (readableBytes == capacity()) return;
         this.segment = this.segment.asSlice(readIndex, readableBytes);
-
         writeIndex -= readIndex;
         readIndex = 0;
     }
@@ -232,15 +229,9 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     @Override
     public NetworkBuffer copy(Arena arena, long index, long length, long readIndex, long writeIndex) {
         assertDummy();
-
-        final var newReadIndex = Math.max(readIndex - index, 0);
-        final var newWriteIndex = Math.max(writeIndex - index, 0);
-        final var newBuffer = new NetworkBufferImpl(arena, arena.allocate(length), newReadIndex, newWriteIndex, autoResize, registries);
-        assert !newBuffer.isDummy() : "Dummy active for a newly created buffer";
-
-        MemorySegment.copy(this.segment, index, newBuffer.segment, 0, length);
-
-        return newBuffer;
+        final var copySegment = arena.allocate(length);
+        MemorySegment.copy(this.segment, index, copySegment, 0, length);
+        return new NetworkBufferImpl(arena, copySegment, readIndex, writeIndex, autoResize, registries);
     }
 
     @Override
@@ -292,7 +283,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     // Use the JVM lazy loading to ignore these until compression is required.
-    static class CompressionHolder {
+    static final class CompressionHolder {
         private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
         private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
     }
@@ -303,6 +294,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         final var outImpl = impl(output);
         outImpl.assertDummy();
+        outImpl.assertReadOnly();
 
         final ByteBuffer input = segment.asSlice(start, length).asByteBuffer().order(BYTE_ORDER);
         final ByteBuffer outputBuffer = outImpl.segment.asSlice(output.writeIndex(), output.writableBytes()).asByteBuffer().order(BYTE_ORDER);
@@ -326,6 +318,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         final var outImpl = impl(output);
         outImpl.assertDummy();
+        outImpl.assertReadOnly();
 
         final ByteBuffer input = segment.asSlice(start, length).asByteBuffer().order(BYTE_ORDER);
         final ByteBuffer outputBuffer = outImpl.segment.asSlice(output.writeIndex(), output.writableBytes()).asByteBuffer().order(BYTE_ORDER);
@@ -453,6 +446,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         var dst = impl(dstBuffer);
         src.assertDummy();
         dst.assertDummy();
+        dst.assertReadOnly();
         MemorySegment.copy(src.segment, srcOffset, dst.segment, dstOffset, length);
     }
 
@@ -466,11 +460,10 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         return impl1.segment.mismatch(impl2.segment) == -1;
     }
 
-    void assertReadOnly() {
+    void assertReadOnly() { // These are already handled; but we can do these sooner before going into the types.
         if (isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
     }
 
-    @Contract("-> fail")
     void assertDummy() {
         if (isDummy()) throw new UnsupportedOperationException("Buffer is a dummy buffer");
     }

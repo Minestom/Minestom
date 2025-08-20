@@ -194,7 +194,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void ensureWritable(long length);
 
     /**
-     * Compact all the data from the readIndex to the writing index to zero align.
+     * Compact all the data from the readIndex to the writing index to be zero aligned.
      * This does not change the buffer capacity.
      */
     void compact();
