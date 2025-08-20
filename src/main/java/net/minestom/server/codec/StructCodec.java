@@ -9,6 +9,16 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * A struct codec is a map backed {@link Codec}, where the keys are strings.
+ * See {@link Codec}, {@link Decoder} and {@link Encoder}
+ * <br>
+ * You can also use {@link #struct(String, Codec, Function, F1)} to create as templating
+ * similar to {@link net.minestom.server.network.NetworkBufferTemplate}
+ *
+ * {@inheritDoc}
+ * @param <R> the return type, never null.
+ */
 public interface StructCodec<R> extends Codec<R> {
     /**
      * A special key used to instruct the codec to inline the value instead of wrapping it in a map.
@@ -16,21 +26,58 @@ public interface StructCodec<R> extends Codec<R> {
      */
     String INLINE = "$$inline$$";
 
+    /**
+     * Decode a value {@link R} from the backing map of {@link D}
+     * @param coder the transcoder for {@link D}
+     * @param map the map to decode from
+     * @return the result of decoding
+     * @param <D> the transcoder type
+     */
     <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map);
 
+    /**
+     * Decode a value {@link R} into the backing map of {@link D}
+     * @param coder the transcoder for {@link D}
+     * @param value the value of {@link R} to encode
+     * @param map the map to decode from
+     * @return the result of encoding
+     * @param <D> the transcoder type
+     */
     <D> Result<D> encodeToMap(Transcoder<D> coder, R value, MapBuilder<D> map);
 
+    /**
+     * {@inheritDoc}
+     * @param coder the transcoder to use
+     * @param value the value to decode
+     * @return the result from decoding
+     * @param <D> the transcoder type
+     */
     @Override
     default <D> Result<R> decode(Transcoder<D> coder, D value) {
         return coder.getMap(value).map(map -> decodeFromMap(coder, map));
     }
 
+    /**
+     * {@inheritDoc}
+     * @param coder the transcoder to use
+     * @param value the value to encode, if null returns error
+     * @return the result from encoding
+     * @param <D> the transcoder type
+     */
     @Override
     default <D> Result<D> encode(Transcoder<D> coder, @Nullable R value) {
         if (value == null) return new Result.Error<>("null");
         return encodeToMap(coder, value, coder.createMap());
     }
 
+    /**
+     * Similar to {@link #orElse(Codec)} but uses the map backing instead.
+     * <br>
+     * For decoding it attempts to use the current codec or uses the other codec,
+     * if neither work returns the firsts error.
+     * @param other the other struct codec
+     * @return the new or else struct
+     */
     default StructCodec<R> orElseStruct(StructCodec<R> other) {
         return new StructCodec<>() {
             @Override
@@ -55,6 +102,12 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
+    /**
+     * Returns the value in any struct.
+     * @param value the value to return of {@link R}
+     * @return the new struct codec for value
+     * @param <R> the return type
+     */
     static <R> StructCodec<R> struct(R value) {
         final Result<R> ok = new Result.Ok<>(value);
         return new StructCodec<>() {
@@ -70,6 +123,12 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
+    /**
+     * Lazily returns the value in any struct.
+     * @param ctor the value to return of {@link R}
+     * @return the new struct codec for value
+     * @param <R> the return type
+     */
     static <R> StructCodec<R> struct(Supplier<R> ctor) {
         return new StructCodec<>() {
             @Override
@@ -84,6 +143,16 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
+    /**
+     * Creates a struct template. See {@link StructCodec}
+     * @param name1 the name/key for {@link P1}
+     * @param codec1 the codec for {@link P1}
+     * @param getter1 the getter for {@link P1}
+     * @param ctor the constructor for {@link R}
+     * @return the new {@link StructCodec} template.
+     * @param <R> the return type
+     * @param <P1> the first parameter type
+     */
     static <R, P1 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             F1<P1, R> ctor
@@ -106,6 +175,20 @@ public interface StructCodec<R> extends Codec<R> {
         };
     }
 
+    /**
+     * Creates a struct template. See {@link StructCodec}
+     * @param name1 the name/key for {@link P1}
+     * @param codec1 the codec for {@link P1}
+     * @param getter1 the getter for {@link P1}
+     * @param name2 the name/key for {@link P2}
+     * @param codec2 the codec for {@link P2}
+     * @param getter2 the getter for {@link P2}
+     * @param ctor the constructor for {@link R}
+     * @return the new {@link StructCodec} template.
+     * @param <R> the return type
+     * @param <P1> the first parameter type
+     * @param <P2> the second parameter type
+     */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
