@@ -20,6 +20,7 @@ import org.jetbrains.annotations.UnknownNullability;
  * Result<BinaryTag> result = encoder.encode(Transcoder.NBT, new Name("me")); // Result.OK(StringBinaryTag("me"))
  * Result<BinaryTag> errorResult = encoder.encode(Transcoder.NBT, null); // Result.Error("null")
  * }</pre>
+ *
  * @param <T> the value type
  */
 @FunctionalInterface
@@ -27,8 +28,9 @@ public interface Encoder<T extends @UnknownNullability Object> {
 
     /**
      * Creates an empty encoder that only encodes null
-     * @return the empty encoder
+     *
      * @param <T> the encoder type
+     * @return the empty encoder
      */
     static <T> Encoder<T> empty() {
         return new Encoder<>() {
@@ -43,10 +45,11 @@ public interface Encoder<T extends @UnknownNullability Object> {
      * Encodes a value of {@link T} using the specific {@link Transcoder}
      * <br>
      * The {@link Result} will be of {@link Result.Ok} or {@link Result.Error} and its typed {@link D}
+     *
      * @param coder the transcoder to use
      * @param value the value to encode
+     * @param <D>   The resultant type
      * @return the {@link Result} of the encoding with its type determined by the transcoder
-     * @param <D> The resultant type
      */
     <D> Result<D> encode(Transcoder<D> coder, @Nullable T value);
 

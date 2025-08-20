@@ -13,22 +13,25 @@ import java.util.function.Function;
  * or use some of the helper methods provided like {@link #orElseThrow()} or {@link #mapResult(Function)}.
  * <br>
  * To construct simply just do {@code new Result.Ok<>(value) } and {@code new Result.Error<>("Error message!") }
+ *
  * @param <T> the type, can be nullable.
  */
 public sealed interface Result<T extends @UnknownNullability Object> {
 
     /**
      * {@inheritDoc}
+     *
      * @param value the value of {@link T}
-     * @param <T> the value type
+     * @param <T>   the value type
      */
     record Ok<T extends @UnknownNullability Object>(T value) implements Result<T> {
     }
 
     /**
      * {@inheritDoc}
+     *
      * @param message the message
-     * @param <T> the type
+     * @param <T>     the type
      */
     record Error<T>(String message) implements Result<T> {
         public Error {
@@ -39,9 +42,10 @@ public sealed interface Result<T extends @UnknownNullability Object> {
     /**
      * Map the {@link Ok} result into the mapper function that creates a new result.
      * Otherwise, returns the error.
+     *
      * @param mapper the new result
+     * @param <S>    the type of the result.
      * @return the new result or the error.
-     * @param <S> the type of the result.
      */
     @Contract(pure = true)
     default <S extends @UnknownNullability Object> Result<S> map(Function<T, Result<S>> mapper) {
@@ -53,19 +57,22 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * Otherwise, returns the error.
      * <br>
      * Similar to {@link #map(Function)} but instead constructs the result instead.
+     *
      * @param mapper the new result
+     * @param <S>    the type of the result.
      * @return the new result or the error.
-     * @param <S> the type of the result.
      */
     @Contract(pure = true)
     default <S extends @UnknownNullability Object> Result<S> mapResult(Function<T, S> mapper) {
         return this instanceof Ok<T>(T value) ? new Ok<>(mapper.apply(value)) : cast();
     }
 
-    /** Maps the {@link Error} result to the mapper function and creates a new {@link Error} result
+    /**
+     * Maps the {@link Error} result to the mapper function and creates a new {@link Error} result
      * Otherwise, returns {@link Ok}.
      * <br>
      * Similar to {@link #map(Function)} but instead constructs the result instead.
+     *
      * @param mapper the new result
      * @return the new result or the error.
      */
@@ -76,6 +83,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
 
     /**
      * If the resultant is not {@link Ok}, returns the other value
+     *
      * @param other value to be returned
      * @return the resultant
      */
@@ -87,8 +95,9 @@ public sealed interface Result<T extends @UnknownNullability Object> {
 
     /**
      * Attempts to get the value inside {@link Ok} or throws.
-     * @throws IllegalStateException if this instance of {@link Error}
+     *
      * @return the value
+     * @throws IllegalStateException if this instance of {@link Error}
      */
     @Contract(pure = true)
     default @UnknownNullability T orElseThrow() {
@@ -100,9 +109,10 @@ public sealed interface Result<T extends @UnknownNullability Object> {
 
     /**
      * Attempts to get the value inside {@link Ok} or throws.
-     * @throws IllegalStateException if this instance of {@link Error}
+     *
      * @param message the message prefix
      * @return the value
+     * @throws IllegalStateException if this instance of {@link Error}
      */
     @Contract(pure = true)
     default @UnknownNullability T orElseThrow(String message) {
@@ -118,9 +128,10 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * Casts the error to any type if present.
      * <br>
      * Useful to return the error if it is not the correct type.
+     *
+     * @param <S> the new result type
      * @return the error
      * @throws ClassCastException if the result is not {@link Error}
-     * @param <S> the new result type
      */
     @Contract(pure = true)
     @SuppressWarnings("unchecked")

@@ -228,8 +228,8 @@ final class CodecImpl {
     }
 
     record UnionImpl<T, R>(String keyField, Codec<T> keyCodec,
-                                         Function<T, @Nullable StructCodec<? extends R>> serializers,
-                                         Function<R, ? extends T> keyFunc) implements StructCodec<R> {
+                           Function<T, @Nullable StructCodec<? extends R>> serializers,
+                           Function<R, ? extends T> keyFunc) implements StructCodec<R> {
 
         @SuppressWarnings("unchecked")
         @Override

@@ -15,8 +15,9 @@ import java.util.function.Supplier;
  * <br>
  * You can also use {@link #struct(String, Codec, Function, F1)} to create as templating
  * similar to {@link net.minestom.server.network.NetworkBufferTemplate}
- *
+ * <p>
  * {@inheritDoc}
+ *
  * @param <R> the return type, never null.
  */
 public interface StructCodec<R> extends Codec<R> {
@@ -28,29 +29,32 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Decode a value {@link R} from the backing map of {@link D}
+     *
      * @param coder the transcoder for {@link D}
-     * @param map the map to decode from
+     * @param map   the map to decode from
+     * @param <D>   the transcoder type
      * @return the result of decoding
-     * @param <D> the transcoder type
      */
     <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map);
 
     /**
      * Decode a value {@link R} into the backing map of {@link D}
+     *
      * @param coder the transcoder for {@link D}
      * @param value the value of {@link R} to encode
-     * @param map the map to decode from
+     * @param map   the map to decode from
+     * @param <D>   the transcoder type
      * @return the result of encoding
-     * @param <D> the transcoder type
      */
     <D> Result<D> encodeToMap(Transcoder<D> coder, R value, MapBuilder<D> map);
 
     /**
      * {@inheritDoc}
+     *
      * @param coder the transcoder to use
      * @param value the value to decode
+     * @param <D>   the transcoder type
      * @return the result from decoding
-     * @param <D> the transcoder type
      */
     @Override
     default <D> Result<R> decode(Transcoder<D> coder, D value) {
@@ -59,10 +63,11 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * {@inheritDoc}
+     *
      * @param coder the transcoder to use
      * @param value the value to encode, if null returns error
+     * @param <D>   the transcoder type
      * @return the result from encoding
-     * @param <D> the transcoder type
      */
     @Override
     default <D> Result<D> encode(Transcoder<D> coder, @Nullable R value) {
@@ -75,6 +80,7 @@ public interface StructCodec<R> extends Codec<R> {
      * <br>
      * For decoding it attempts to use the current codec or uses the other codec,
      * if neither work returns the firsts error.
+     *
      * @param other the other struct codec
      * @return the new or else struct
      */
@@ -104,9 +110,10 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Returns the value in any struct.
+     *
      * @param value the value to return of {@link R}
+     * @param <R>   the return type
      * @return the new struct codec for value
-     * @param <R> the return type
      */
     static <R> StructCodec<R> struct(R value) {
         final Result<R> ok = new Result.Ok<>(value);
@@ -125,9 +132,10 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Lazily returns the value in any struct.
+     *
      * @param ctor the value to return of {@link R}
+     * @param <R>  the return type
      * @return the new struct codec for value
-     * @param <R> the return type
      */
     static <R> StructCodec<R> struct(Supplier<R> ctor) {
         return new StructCodec<>() {
@@ -145,13 +153,14 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
+     *
+     * @param name1   the name/key for {@link P1}
+     * @param codec1  the codec for {@link P1}
      * @param getter1 the getter for {@link P1}
-     * @param ctor the constructor for {@link R}
+     * @param ctor    the constructor for {@link R}
+     * @param <R>     the return type
+     * @param <P1>    the first parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
      */
     static <R, P1 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -177,17 +186,18 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
+     *
+     * @param name1   the name/key for {@link P1}
+     * @param codec1  the codec for {@link P1}
      * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
+     * @param name2   the name/key for {@link P2}
+     * @param codec2  the codec for {@link P2}
      * @param getter2 the getter for {@link P2}
-     * @param ctor the constructor for {@link R}
+     * @param ctor    the constructor for {@link R}
+     * @param <R>     the return type
+     * @param <P1>    the first parameter type
+     * @param <P2>    the second parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -219,21 +229,22 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
+     *
+     * @param name1   the name/key for {@link P1}
+     * @param codec1  the codec for {@link P1}
      * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
+     * @param name2   the name/key for {@link P2}
+     * @param codec2  the codec for {@link P2}
      * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
+     * @param name3   the name/key for {@link P3}
+     * @param codec3  the codec for {@link P3}
      * @param getter3 the getter for {@link P3}
-     * @param ctor the constructor for {@link R}
+     * @param ctor    the constructor for {@link R}
+     * @param <R>     the return type
+     * @param <P1>    the first parameter type
+     * @param <P2>    the second parameter type
+     * @param <P3>    the third parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -271,25 +282,26 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
+     *
+     * @param name1   the name/key for {@link P1}
+     * @param codec1  the codec for {@link P1}
      * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
+     * @param name2   the name/key for {@link P2}
+     * @param codec2  the codec for {@link P2}
      * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
+     * @param name3   the name/key for {@link P3}
+     * @param codec3  the codec for {@link P3}
      * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
+     * @param name4   the name/key for {@link P4}
+     * @param codec4  the codec for {@link P4}
      * @param getter4 the getter for {@link P4}
-     * @param ctor the constructor for {@link R}
+     * @param ctor    the constructor for {@link R}
+     * @param <R>     the return type
+     * @param <P1>    the first parameter type
+     * @param <P2>    the second parameter type
+     * @param <P3>    the third parameter type
+     * @param <P4>    the fourth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -333,29 +345,30 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
+     *
+     * @param name1   the name/key for {@link P1}
+     * @param codec1  the codec for {@link P1}
      * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
+     * @param name2   the name/key for {@link P2}
+     * @param codec2  the codec for {@link P2}
      * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
+     * @param name3   the name/key for {@link P3}
+     * @param codec3  the codec for {@link P3}
      * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
+     * @param name4   the name/key for {@link P4}
+     * @param codec4  the codec for {@link P4}
      * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
+     * @param name5   the name/key for {@link P5}
+     * @param codec5  the codec for {@link P5}
      * @param getter5 the getter for {@link P5}
-     * @param ctor the constructor for {@link R}
+     * @param ctor    the constructor for {@link R}
+     * @param <R>     the return type
+     * @param <P1>    the first parameter type
+     * @param <P2>    the second parameter type
+     * @param <P3>    the third parameter type
+     * @param <P4>    the fourth parameter type
+     * @param <P5>    the fifth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -405,33 +418,34 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
+     *
+     * @param name1   the name/key for {@link P1}
+     * @param codec1  the codec for {@link P1}
      * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
+     * @param name2   the name/key for {@link P2}
+     * @param codec2  the codec for {@link P2}
      * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
+     * @param name3   the name/key for {@link P3}
+     * @param codec3  the codec for {@link P3}
      * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
+     * @param name4   the name/key for {@link P4}
+     * @param codec4  the codec for {@link P4}
      * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
+     * @param name5   the name/key for {@link P5}
+     * @param codec5  the codec for {@link P5}
      * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
+     * @param name6   the name/key for {@link P6}
+     * @param codec6  the codec for {@link P6}
      * @param getter6 the getter for {@link P6}
-     * @param ctor the constructor for {@link R}
+     * @param ctor    the constructor for {@link R}
+     * @param <R>     the return type
+     * @param <P1>    the first parameter type
+     * @param <P2>    the second parameter type
+     * @param <P3>    the third parameter type
+     * @param <P4>    the fourth parameter type
+     * @param <P5>    the fifth parameter type
+     * @param <P6>    the sixth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -487,37 +501,38 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
+     *
+     * @param name1   the name/key for {@link P1}
+     * @param codec1  the codec for {@link P1}
      * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
+     * @param name2   the name/key for {@link P2}
+     * @param codec2  the codec for {@link P2}
      * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
+     * @param name3   the name/key for {@link P3}
+     * @param codec3  the codec for {@link P3}
      * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
+     * @param name4   the name/key for {@link P4}
+     * @param codec4  the codec for {@link P4}
      * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
+     * @param name5   the name/key for {@link P5}
+     * @param codec5  the codec for {@link P5}
      * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
+     * @param name6   the name/key for {@link P6}
+     * @param codec6  the codec for {@link P6}
      * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
+     * @param name7   the name/key for {@link P7}
+     * @param codec7  the codec for {@link P7}
      * @param getter7 the getter for {@link P7}
-     * @param ctor the constructor for {@link R}
+     * @param ctor    the constructor for {@link R}
+     * @param <R>     the return type
+     * @param <P1>    the first parameter type
+     * @param <P2>    the second parameter type
+     * @param <P3>    the third parameter type
+     * @param <P4>    the fourth parameter type
+     * @param <P5>    the fifth parameter type
+     * @param <P6>    the sixth parameter type
+     * @param <P7>    the seventh parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -580,41 +595,42 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
+     *
+     * @param name1   the name/key for {@link P1}
+     * @param codec1  the codec for {@link P1}
      * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
+     * @param name2   the name/key for {@link P2}
+     * @param codec2  the codec for {@link P2}
      * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
+     * @param name3   the name/key for {@link P3}
+     * @param codec3  the codec for {@link P3}
      * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
+     * @param name4   the name/key for {@link P4}
+     * @param codec4  the codec for {@link P4}
      * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
+     * @param name5   the name/key for {@link P5}
+     * @param codec5  the codec for {@link P5}
      * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
+     * @param name6   the name/key for {@link P6}
+     * @param codec6  the codec for {@link P6}
      * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
+     * @param name7   the name/key for {@link P7}
+     * @param codec7  the codec for {@link P7}
      * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
+     * @param name8   the name/key for {@link P8}
+     * @param codec8  the codec for {@link P8}
      * @param getter8 the getter for {@link P8}
-     * @param ctor the constructor for {@link R}
+     * @param ctor    the constructor for {@link R}
+     * @param <R>     the return type
+     * @param <P1>    the first parameter type
+     * @param <P2>    the second parameter type
+     * @param <P3>    the third parameter type
+     * @param <P4>    the fourth parameter type
+     * @param <P5>    the fifth parameter type
+     * @param <P6>    the sixth parameter type
+     * @param <P7>    the seventh parameter type
+     * @param <P8>    the eighth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -682,45 +698,46 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
+     *
+     * @param name1   the name/key for {@link P1}
+     * @param codec1  the codec for {@link P1}
      * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
+     * @param name2   the name/key for {@link P2}
+     * @param codec2  the codec for {@link P2}
      * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
+     * @param name3   the name/key for {@link P3}
+     * @param codec3  the codec for {@link P3}
      * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
+     * @param name4   the name/key for {@link P4}
+     * @param codec4  the codec for {@link P4}
      * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
+     * @param name5   the name/key for {@link P5}
+     * @param codec5  the codec for {@link P5}
      * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
+     * @param name6   the name/key for {@link P6}
+     * @param codec6  the codec for {@link P6}
      * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
+     * @param name7   the name/key for {@link P7}
+     * @param codec7  the codec for {@link P7}
      * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
+     * @param name8   the name/key for {@link P8}
+     * @param codec8  the codec for {@link P8}
      * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
+     * @param name9   the name/key for {@link P9}
+     * @param codec9  the codec for {@link P9}
      * @param getter9 the getter for {@link P9}
-     * @param ctor the constructor for {@link R}
+     * @param ctor    the constructor for {@link R}
+     * @param <R>     the return type
+     * @param <P1>    the first parameter type
+     * @param <P2>    the second parameter type
+     * @param <P3>    the third parameter type
+     * @param <P4>    the fourth parameter type
+     * @param <P5>    the fifth parameter type
+     * @param <P6>    the sixth parameter type
+     * @param <P7>    the seventh parameter type
+     * @param <P8>    the eighth parameter type
+     * @param <P9>    the ninth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -794,49 +811,50 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -916,53 +934,54 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -1049,57 +1068,58 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param name12 the name/key for {@link P12}
-     * @param codec12 the codec for {@link P12}
+     * @param name12   the name/key for {@link P12}
+     * @param codec12  the codec for {@link P12}
      * @param getter12 the getter for {@link P12}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
+     * @param <P12>    the twelfth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
-     * @param <P12> the twelfth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -1191,61 +1211,62 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param name12 the name/key for {@link P12}
-     * @param codec12 the codec for {@link P12}
+     * @param name12   the name/key for {@link P12}
+     * @param codec12  the codec for {@link P12}
      * @param getter12 the getter for {@link P12}
-     * @param name13 the name/key for {@link P13}
-     * @param codec13 the codec for {@link P13}
+     * @param name13   the name/key for {@link P13}
+     * @param codec13  the codec for {@link P13}
      * @param getter13 the getter for {@link P13}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
+     * @param <P12>    the twelfth parameter type
+     * @param <P13>    the thirteenth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
-     * @param <P12> the twelfth parameter type
-     * @param <P13> the thirteenth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -1343,65 +1364,66 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param name12 the name/key for {@link P12}
-     * @param codec12 the codec for {@link P12}
+     * @param name12   the name/key for {@link P12}
+     * @param codec12  the codec for {@link P12}
      * @param getter12 the getter for {@link P12}
-     * @param name13 the name/key for {@link P13}
-     * @param codec13 the codec for {@link P13}
+     * @param name13   the name/key for {@link P13}
+     * @param codec13  the codec for {@link P13}
      * @param getter13 the getter for {@link P13}
-     * @param name14 the name/key for {@link P14}
-     * @param codec14 the codec for {@link P14}
+     * @param name14   the name/key for {@link P14}
+     * @param codec14  the codec for {@link P14}
      * @param getter14 the getter for {@link P14}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
+     * @param <P12>    the twelfth parameter type
+     * @param <P13>    the thirteenth parameter type
+     * @param <P14>    the fourteenth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
-     * @param <P12> the twelfth parameter type
-     * @param <P13> the thirteenth parameter type
-     * @param <P14> the fourteenth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -1505,69 +1527,70 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param name12 the name/key for {@link P12}
-     * @param codec12 the codec for {@link P12}
+     * @param name12   the name/key for {@link P12}
+     * @param codec12  the codec for {@link P12}
      * @param getter12 the getter for {@link P12}
-     * @param name13 the name/key for {@link P13}
-     * @param codec13 the codec for {@link P13}
+     * @param name13   the name/key for {@link P13}
+     * @param codec13  the codec for {@link P13}
      * @param getter13 the getter for {@link P13}
-     * @param name14 the name/key for {@link P14}
-     * @param codec14 the codec for {@link P14}
+     * @param name14   the name/key for {@link P14}
+     * @param codec14  the codec for {@link P14}
      * @param getter14 the getter for {@link P14}
-     * @param name15 the name/key for {@link P15}
-     * @param codec15 the codec for {@link P15}
+     * @param name15   the name/key for {@link P15}
+     * @param codec15  the codec for {@link P15}
      * @param getter15 the getter for {@link P15}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
+     * @param <P12>    the twelfth parameter type
+     * @param <P13>    the thirteenth parameter type
+     * @param <P14>    the fourteenth parameter type
+     * @param <P15>    the fifteenth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
-     * @param <P12> the twelfth parameter type
-     * @param <P13> the thirteenth parameter type
-     * @param <P14> the fourteenth parameter type
-     * @param <P15> the fifteenth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -1677,73 +1700,74 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param name12 the name/key for {@link P12}
-     * @param codec12 the codec for {@link P12}
+     * @param name12   the name/key for {@link P12}
+     * @param codec12  the codec for {@link P12}
      * @param getter12 the getter for {@link P12}
-     * @param name13 the name/key for {@link P13}
-     * @param codec13 the codec for {@link P13}
+     * @param name13   the name/key for {@link P13}
+     * @param codec13  the codec for {@link P13}
      * @param getter13 the getter for {@link P13}
-     * @param name14 the name/key for {@link P14}
-     * @param codec14 the codec for {@link P14}
+     * @param name14   the name/key for {@link P14}
+     * @param codec14  the codec for {@link P14}
      * @param getter14 the getter for {@link P14}
-     * @param name15 the name/key for {@link P15}
-     * @param codec15 the codec for {@link P15}
+     * @param name15   the name/key for {@link P15}
+     * @param codec15  the codec for {@link P15}
      * @param getter15 the getter for {@link P15}
-     * @param name16 the name/key for {@link P16}
-     * @param codec16 the codec for {@link P16}
+     * @param name16   the name/key for {@link P16}
+     * @param codec16  the codec for {@link P16}
      * @param getter16 the getter for {@link P16}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
+     * @param <P12>    the twelfth parameter type
+     * @param <P13>    the thirteenth parameter type
+     * @param <P14>    the fourteenth parameter type
+     * @param <P15>    the fifteenth parameter type
+     * @param <P16>    the sixteenth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
-     * @param <P12> the twelfth parameter type
-     * @param <P13> the thirteenth parameter type
-     * @param <P14> the fourteenth parameter type
-     * @param <P15> the fifteenth parameter type
-     * @param <P16> the sixteenth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -1859,77 +1883,78 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param name12 the name/key for {@link P12}
-     * @param codec12 the codec for {@link P12}
+     * @param name12   the name/key for {@link P12}
+     * @param codec12  the codec for {@link P12}
      * @param getter12 the getter for {@link P12}
-     * @param name13 the name/key for {@link P13}
-     * @param codec13 the codec for {@link P13}
+     * @param name13   the name/key for {@link P13}
+     * @param codec13  the codec for {@link P13}
      * @param getter13 the getter for {@link P13}
-     * @param name14 the name/key for {@link P14}
-     * @param codec14 the codec for {@link P14}
+     * @param name14   the name/key for {@link P14}
+     * @param codec14  the codec for {@link P14}
      * @param getter14 the getter for {@link P14}
-     * @param name15 the name/key for {@link P15}
-     * @param codec15 the codec for {@link P15}
+     * @param name15   the name/key for {@link P15}
+     * @param codec15  the codec for {@link P15}
      * @param getter15 the getter for {@link P15}
-     * @param name16 the name/key for {@link P16}
-     * @param codec16 the codec for {@link P16}
+     * @param name16   the name/key for {@link P16}
+     * @param codec16  the codec for {@link P16}
      * @param getter16 the getter for {@link P16}
-     * @param name17 the name/key for {@link P17}
-     * @param codec17 the codec for {@link P17}
+     * @param name17   the name/key for {@link P17}
+     * @param codec17  the codec for {@link P17}
      * @param getter17 the getter for {@link P17}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
+     * @param <P12>    the twelfth parameter type
+     * @param <P13>    the thirteenth parameter type
+     * @param <P14>    the fourteenth parameter type
+     * @param <P15>    the fifteenth parameter type
+     * @param <P16>    the sixteenth parameter type
+     * @param <P17>    the seventeenth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
-     * @param <P12> the twelfth parameter type
-     * @param <P13> the thirteenth parameter type
-     * @param <P14> the fourteenth parameter type
-     * @param <P15> the fifteenth parameter type
-     * @param <P16> the sixteenth parameter type
-     * @param <P17> the seventeenth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -2051,81 +2076,82 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param name12 the name/key for {@link P12}
-     * @param codec12 the codec for {@link P12}
+     * @param name12   the name/key for {@link P12}
+     * @param codec12  the codec for {@link P12}
      * @param getter12 the getter for {@link P12}
-     * @param name13 the name/key for {@link P13}
-     * @param codec13 the codec for {@link P13}
+     * @param name13   the name/key for {@link P13}
+     * @param codec13  the codec for {@link P13}
      * @param getter13 the getter for {@link P13}
-     * @param name14 the name/key for {@link P14}
-     * @param codec14 the codec for {@link P14}
+     * @param name14   the name/key for {@link P14}
+     * @param codec14  the codec for {@link P14}
      * @param getter14 the getter for {@link P14}
-     * @param name15 the name/key for {@link P15}
-     * @param codec15 the codec for {@link P15}
+     * @param name15   the name/key for {@link P15}
+     * @param codec15  the codec for {@link P15}
      * @param getter15 the getter for {@link P15}
-     * @param name16 the name/key for {@link P16}
-     * @param codec16 the codec for {@link P16}
+     * @param name16   the name/key for {@link P16}
+     * @param codec16  the codec for {@link P16}
      * @param getter16 the getter for {@link P16}
-     * @param name17 the name/key for {@link P17}
-     * @param codec17 the codec for {@link P17}
+     * @param name17   the name/key for {@link P17}
+     * @param codec17  the codec for {@link P17}
      * @param getter17 the getter for {@link P17}
-     * @param name18 the name/key for {@link P18}
-     * @param codec18 the codec for {@link P18}
+     * @param name18   the name/key for {@link P18}
+     * @param codec18  the codec for {@link P18}
      * @param getter18 the getter for {@link P18}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
+     * @param <P12>    the twelfth parameter type
+     * @param <P13>    the thirteenth parameter type
+     * @param <P14>    the fourteenth parameter type
+     * @param <P15>    the fifteenth parameter type
+     * @param <P16>    the sixteenth parameter type
+     * @param <P17>    the seventeenth parameter type
+     * @param <P18>    the eighteenth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
-     * @param <P12> the twelfth parameter type
-     * @param <P13> the thirteenth parameter type
-     * @param <P14> the fourteenth parameter type
-     * @param <P15> the fifteenth parameter type
-     * @param <P16> the sixteenth parameter type
-     * @param <P17> the seventeenth parameter type
-     * @param <P18> the eighteenth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -2253,85 +2279,86 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param name12 the name/key for {@link P12}
-     * @param codec12 the codec for {@link P12}
+     * @param name12   the name/key for {@link P12}
+     * @param codec12  the codec for {@link P12}
      * @param getter12 the getter for {@link P12}
-     * @param name13 the name/key for {@link P13}
-     * @param codec13 the codec for {@link P13}
+     * @param name13   the name/key for {@link P13}
+     * @param codec13  the codec for {@link P13}
      * @param getter13 the getter for {@link P13}
-     * @param name14 the name/key for {@link P14}
-     * @param codec14 the codec for {@link P14}
+     * @param name14   the name/key for {@link P14}
+     * @param codec14  the codec for {@link P14}
      * @param getter14 the getter for {@link P14}
-     * @param name15 the name/key for {@link P15}
-     * @param codec15 the codec for {@link P15}
+     * @param name15   the name/key for {@link P15}
+     * @param codec15  the codec for {@link P15}
      * @param getter15 the getter for {@link P15}
-     * @param name16 the name/key for {@link P16}
-     * @param codec16 the codec for {@link P16}
+     * @param name16   the name/key for {@link P16}
+     * @param codec16  the codec for {@link P16}
      * @param getter16 the getter for {@link P16}
-     * @param name17 the name/key for {@link P17}
-     * @param codec17 the codec for {@link P17}
+     * @param name17   the name/key for {@link P17}
+     * @param codec17  the codec for {@link P17}
      * @param getter17 the getter for {@link P17}
-     * @param name18 the name/key for {@link P18}
-     * @param codec18 the codec for {@link P18}
+     * @param name18   the name/key for {@link P18}
+     * @param codec18  the codec for {@link P18}
      * @param getter18 the getter for {@link P18}
-     * @param name19 the name/key for {@link P19}
-     * @param codec19 the codec for {@link P19}
+     * @param name19   the name/key for {@link P19}
+     * @param codec19  the codec for {@link P19}
      * @param getter19 the getter for {@link P19}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
+     * @param <P12>    the twelfth parameter type
+     * @param <P13>    the thirteenth parameter type
+     * @param <P14>    the fourteenth parameter type
+     * @param <P15>    the fifteenth parameter type
+     * @param <P16>    the sixteenth parameter type
+     * @param <P17>    the seventeenth parameter type
+     * @param <P18>    the eighteenth parameter type
+     * @param <P19>    the nineteenth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
-     * @param <P12> the twelfth parameter type
-     * @param <P13> the thirteenth parameter type
-     * @param <P14> the fourteenth parameter type
-     * @param <P15> the fifteenth parameter type
-     * @param <P16> the sixteenth parameter type
-     * @param <P17> the seventeenth parameter type
-     * @param <P18> the eighteenth parameter type
-     * @param <P19> the nineteenth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
@@ -2465,89 +2492,90 @@ public interface StructCodec<R> extends Codec<R> {
 
     /**
      * Creates a struct template. See {@link StructCodec}
-     * @param name1 the name/key for {@link P1}
-     * @param codec1 the codec for {@link P1}
-     * @param getter1 the getter for {@link P1}
-     * @param name2 the name/key for {@link P2}
-     * @param codec2 the codec for {@link P2}
-     * @param getter2 the getter for {@link P2}
-     * @param name3 the name/key for {@link P3}
-     * @param codec3 the codec for {@link P3}
-     * @param getter3 the getter for {@link P3}
-     * @param name4 the name/key for {@link P4}
-     * @param codec4 the codec for {@link P4}
-     * @param getter4 the getter for {@link P4}
-     * @param name5 the name/key for {@link P5}
-     * @param codec5 the codec for {@link P5}
-     * @param getter5 the getter for {@link P5}
-     * @param name6 the name/key for {@link P6}
-     * @param codec6 the codec for {@link P6}
-     * @param getter6 the getter for {@link P6}
-     * @param name7 the name/key for {@link P7}
-     * @param codec7 the codec for {@link P7}
-     * @param getter7 the getter for {@link P7}
-     * @param name8 the name/key for {@link P8}
-     * @param codec8 the codec for {@link P8}
-     * @param getter8 the getter for {@link P8}
-     * @param name9 the name/key for {@link P9}
-     * @param codec9 the codec for {@link P9}
-     * @param getter9 the getter for {@link P9}
-     * @param name10 the name/key for {@link P10}
-     * @param codec10 the codec for {@link P10}
+     *
+     * @param name1    the name/key for {@link P1}
+     * @param codec1   the codec for {@link P1}
+     * @param getter1  the getter for {@link P1}
+     * @param name2    the name/key for {@link P2}
+     * @param codec2   the codec for {@link P2}
+     * @param getter2  the getter for {@link P2}
+     * @param name3    the name/key for {@link P3}
+     * @param codec3   the codec for {@link P3}
+     * @param getter3  the getter for {@link P3}
+     * @param name4    the name/key for {@link P4}
+     * @param codec4   the codec for {@link P4}
+     * @param getter4  the getter for {@link P4}
+     * @param name5    the name/key for {@link P5}
+     * @param codec5   the codec for {@link P5}
+     * @param getter5  the getter for {@link P5}
+     * @param name6    the name/key for {@link P6}
+     * @param codec6   the codec for {@link P6}
+     * @param getter6  the getter for {@link P6}
+     * @param name7    the name/key for {@link P7}
+     * @param codec7   the codec for {@link P7}
+     * @param getter7  the getter for {@link P7}
+     * @param name8    the name/key for {@link P8}
+     * @param codec8   the codec for {@link P8}
+     * @param getter8  the getter for {@link P8}
+     * @param name9    the name/key for {@link P9}
+     * @param codec9   the codec for {@link P9}
+     * @param getter9  the getter for {@link P9}
+     * @param name10   the name/key for {@link P10}
+     * @param codec10  the codec for {@link P10}
      * @param getter10 the getter for {@link P10}
-     * @param name11 the name/key for {@link P11}
-     * @param codec11 the codec for {@link P11}
+     * @param name11   the name/key for {@link P11}
+     * @param codec11  the codec for {@link P11}
      * @param getter11 the getter for {@link P11}
-     * @param name12 the name/key for {@link P12}
-     * @param codec12 the codec for {@link P12}
+     * @param name12   the name/key for {@link P12}
+     * @param codec12  the codec for {@link P12}
      * @param getter12 the getter for {@link P12}
-     * @param name13 the name/key for {@link P13}
-     * @param codec13 the codec for {@link P13}
+     * @param name13   the name/key for {@link P13}
+     * @param codec13  the codec for {@link P13}
      * @param getter13 the getter for {@link P13}
-     * @param name14 the name/key for {@link P14}
-     * @param codec14 the codec for {@link P14}
+     * @param name14   the name/key for {@link P14}
+     * @param codec14  the codec for {@link P14}
      * @param getter14 the getter for {@link P14}
-     * @param name15 the name/key for {@link P15}
-     * @param codec15 the codec for {@link P15}
+     * @param name15   the name/key for {@link P15}
+     * @param codec15  the codec for {@link P15}
      * @param getter15 the getter for {@link P15}
-     * @param name16 the name/key for {@link P16}
-     * @param codec16 the codec for {@link P16}
+     * @param name16   the name/key for {@link P16}
+     * @param codec16  the codec for {@link P16}
      * @param getter16 the getter for {@link P16}
-     * @param name17 the name/key for {@link P17}
-     * @param codec17 the codec for {@link P17}
+     * @param name17   the name/key for {@link P17}
+     * @param codec17  the codec for {@link P17}
      * @param getter17 the getter for {@link P17}
-     * @param name18 the name/key for {@link P18}
-     * @param codec18 the codec for {@link P18}
+     * @param name18   the name/key for {@link P18}
+     * @param codec18  the codec for {@link P18}
      * @param getter18 the getter for {@link P18}
-     * @param name19 the name/key for {@link P19}
-     * @param codec19 the codec for {@link P19}
+     * @param name19   the name/key for {@link P19}
+     * @param codec19  the codec for {@link P19}
      * @param getter19 the getter for {@link P19}
-     * @param name20 the name/key for {@link P20}
-     * @param codec20 the codec for {@link P20}
+     * @param name20   the name/key for {@link P20}
+     * @param codec20  the codec for {@link P20}
      * @param getter20 the getter for {@link P20}
-     * @param ctor the constructor for {@link R}
+     * @param ctor     the constructor for {@link R}
+     * @param <R>      the return type
+     * @param <P1>     the first parameter type
+     * @param <P2>     the second parameter type
+     * @param <P3>     the third parameter type
+     * @param <P4>     the fourth parameter type
+     * @param <P5>     the fifth parameter type
+     * @param <P6>     the sixth parameter type
+     * @param <P7>     the seventh parameter type
+     * @param <P8>     the eighth parameter type
+     * @param <P9>     the ninth parameter type
+     * @param <P10>    the tenth parameter type
+     * @param <P11>    the eleventh parameter type
+     * @param <P12>    the twelfth parameter type
+     * @param <P13>    the thirteenth parameter type
+     * @param <P14>    the fourteenth parameter type
+     * @param <P15>    the fifteenth parameter type
+     * @param <P16>    the sixteenth parameter type
+     * @param <P17>    the seventeenth parameter type
+     * @param <P18>    the eighteenth parameter type
+     * @param <P19>    the nineteenth parameter type
+     * @param <P20>    the twentieth parameter type
      * @return the new {@link StructCodec} template.
-     * @param <R> the return type
-     * @param <P1> the first parameter type
-     * @param <P2> the second parameter type
-     * @param <P3> the third parameter type
-     * @param <P4> the fourth parameter type
-     * @param <P5> the fifth parameter type
-     * @param <P6> the sixth parameter type
-     * @param <P7> the seventh parameter type
-     * @param <P8> the eighth parameter type
-     * @param <P9> the ninth parameter type
-     * @param <P10> the tenth parameter type
-     * @param <P11> the eleventh parameter type
-     * @param <P12> the twelfth parameter type
-     * @param <P13> the thirteenth parameter type
-     * @param <P14> the fourteenth parameter type
-     * @param <P15> the fifteenth parameter type
-     * @param <P16> the sixteenth parameter type
-     * @param <P17> the seventeenth parameter type
-     * @param <P18> the eighteenth parameter type
-     * @param <P19> the nineteenth parameter type
-     * @param <P20> the twentieth parameter type
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, P20 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
