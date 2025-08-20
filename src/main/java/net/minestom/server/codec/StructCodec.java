@@ -6,6 +6,7 @@ import net.minestom.server.network.NetworkBufferTemplate.*;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -79,6 +80,7 @@ public interface StructCodec<R> extends Codec<R> {
      */
     @Override
     default <D> Result<R> decode(Transcoder<D> coder, D value) {
+        Objects.requireNonNull(value, "Value cannot be null");
         return coder.getMap(value).map(map -> decodeFromMap(coder, map));
     }
 

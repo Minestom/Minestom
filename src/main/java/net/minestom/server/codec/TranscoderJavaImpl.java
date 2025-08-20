@@ -1,7 +1,10 @@
 package net.minestom.server.codec;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.*;
 
+@ApiStatus.Internal
 final class TranscoderJavaImpl implements Transcoder<Object> {
     public static final Transcoder<Object> INSTANCE = new TranscoderJavaImpl();
 
