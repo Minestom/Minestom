@@ -48,7 +48,6 @@ import java.util.function.Supplier;
  *
  * @param <T> The type to be represented by this codec, nullable T will provide nullable results.
  */
-@ApiStatus.Experimental
 public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>, Decoder<T> {
 
     /**
