@@ -324,16 +324,19 @@ final class CodecImpl {
             this.delegateFunc = delegateFunc;
         }
 
+        private Codec<T> delegate() {
+            if (delegate == null) delegate = delegateFunc.get();
+            return Objects.requireNonNull(delegate, "Delegate cannot be null after supplier call.");
+        }
+
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
-            if (delegate == null) delegate = delegateFunc.get();
-            return delegate.decode(coder, value);
+            return delegate().decode(coder, value);
         }
 
         @Override
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable T value) {
-            if (delegate == null) delegate = delegateFunc.get();
-            return delegate.encode(coder, value);
+            return delegate().encode(coder, value);
         }
     }
 
