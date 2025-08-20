@@ -18,6 +18,7 @@ import org.jetbrains.annotations.*;
 import javax.crypto.Cipher;
 import java.io.*;
 import java.lang.foreign.Arena;
+import java.lang.foreign.MemorySegment;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.security.PublicKey;
@@ -329,8 +330,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(null);
     }
 
+
+    @ApiStatus.Experimental
+    static NetworkBuffer wrap(MemorySegment segment, int readIndex, int writeIndex, @Nullable Registries registries) {
+        return NetworkBufferImpl.wrap(segment, readIndex, writeIndex, registries);
+    }
+
     static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
-        return NetworkBufferImpl.wrap(bytes, readIndex, writeIndex, registries);
+        return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
     }
 
     static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex) {

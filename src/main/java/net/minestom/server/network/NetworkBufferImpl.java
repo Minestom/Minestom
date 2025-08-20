@@ -441,9 +441,9 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         return segment.getString(index);
     }
 
-    static NetworkBuffer wrap(byte [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
         return new NetworkBufferImpl(
-                null, MemorySegment.ofArray(bytes),
+                null, segment,
                 readIndex, writeIndex, null, registries
         );
     }
