@@ -258,7 +258,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     }
 
     /**
-     * Transforms an object from {@link S} to {@link T} or from {@link T} to {@link S}
+     * Transforms an object from {@link S} to another {@link T} and from {@link T} back to {@link S}
      *
      * @param to   the function to {@link S} from {@link T}
      * @param from the function from {@link S} to {@link T}
