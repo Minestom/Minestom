@@ -1,13 +1,16 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.nbt.*;
+import org.jetbrains.annotations.ApiStatus;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
+@ApiStatus.Internal
 final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     static final TranscoderNbtImpl INSTANCE = new TranscoderNbtImpl();
-
-    private static final Set<String> WRAPPED_ELEMENT_KEYS = Set.of("");
 
     @Override
     public BinaryTag createNull() {

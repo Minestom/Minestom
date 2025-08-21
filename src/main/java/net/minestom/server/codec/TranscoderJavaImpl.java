@@ -1,7 +1,10 @@
 package net.minestom.server.codec;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.*;
 
+@ApiStatus.Internal
 final class TranscoderJavaImpl implements Transcoder<Object> {
     public static final Transcoder<Object> INSTANCE = new TranscoderJavaImpl();
 
@@ -132,6 +135,11 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
     }
 
     @Override
+    public Object emptyList() {
+        return List.of();
+    }
+
+    @Override
     public Result<MapLike<Object>> getMap(Object value) {
         if (!(value instanceof Map<?, ?> map))
             return new Result.Error<>("Not a map: " + value);
@@ -181,6 +189,11 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
                 return Map.copyOf(map);
             }
         };
+    }
+
+    @Override
+    public Object emptyMap() {
+        return Map.of();
     }
 
     @Override
