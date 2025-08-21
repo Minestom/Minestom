@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -30,10 +31,12 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
 import static net.minestom.server.network.NetworkBuffer.SHORT;
@@ -337,7 +340,26 @@ public class DynamicChunk extends Chunk {
                 tagHandler().readableCopy());
     }
 
+    /**
+     *
+     * @return a copy of the block entities currently in this chunk
+     */
+    @Override
+    public @Unmodifiable Map<Point, Block> getBlockEntities() {
+        synchronized (this) {
+            return this.entries.int2ObjectEntrySet().stream()
+                    .collect(Collectors.toUnmodifiableMap(e -> {
+                        final int index = e.getIntKey();
+                        final int x = CoordConversion.chunkBlockIndexGetX(index);
+                        final int y = CoordConversion.chunkBlockIndexGetY(index);
+                        final int z = CoordConversion.chunkBlockIndexGetZ(index);
+                        return new BlockVec(x, y, z);
+                    }, Map.Entry::getValue));
+        }
+    }
+
     private void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
     }
+
 }
