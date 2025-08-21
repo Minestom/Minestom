@@ -152,6 +152,7 @@ public interface Transcoder<D> {
     Result<@Unmodifiable List<D>> getList(D value);
 
     /**
+     * A empty list intermediary
      * @return the empty list intermediary
      */
     default D emptyList() {
@@ -163,6 +164,7 @@ public interface Transcoder<D> {
      * @param expectedSize the initial size
      * @return a list builder
      */
+    @Contract(pure = true)
     ListBuilder<D> createList(int expectedSize);
 
     /**
@@ -175,6 +177,7 @@ public interface Transcoder<D> {
     Result<MapLike<D>> getMap(D value);
 
     /**
+     * A emtpy map intermediary
      * @return the empty map intermediary
      */
     default D emptyMap() {
@@ -182,8 +185,10 @@ public interface Transcoder<D> {
     }
 
     /**
+     * Creates a {@link MapBuilder}
      * @return a new {@link MapBuilder}
      */
+    @Contract(pure = true)
     MapBuilder<D> createMap();
 
     /**
@@ -325,7 +330,6 @@ public interface Transcoder<D> {
          * @param key the key to use
          * @return the result, {@link Result.Error} if missing
          */
-        @Contract(pure = true)
         Result<D> getValue(String key);
 
         /**

@@ -19,7 +19,7 @@ import java.util.function.Function;
 public sealed interface Result<T extends @UnknownNullability Object> {
 
     /**
-     * {@inheritDoc}
+     * Represents the {@link Result} was successful.
      *
      * @param value the value of {@link T}
      * @param <T>   the value type
@@ -28,7 +28,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
     }
 
     /**
-     * {@inheritDoc}
+     * Represents the {@link Result} was a failure.
      *
      * @param message the message
      * @param <T>     the type

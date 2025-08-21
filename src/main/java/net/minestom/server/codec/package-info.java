@@ -1,7 +1,7 @@
 /**
- * Provides the codec system for Minestom, enabling encoding and decoding of data between Java objects
- * and generic data formats. The core abstraction is the {@link net.minestom.server.codec.Transcoder} interface,
- * which supports multiple formats such as NBT, JSON, Java objects, and CRC32 hashes.
+ * Codecs are ways of expressing objects in intermediary formats.
+ * The core abstraction is the {@link net.minestom.server.codec.Transcoder} interface,
+ * which supports multiple formats such as NBT, JSON and Java objects.
  * <p>
  * Codecs define conversion logic for individual types, while transcoders handle the representation and
  * construction of data structures like lists and maps. This design allows super extensible, and type-safe
