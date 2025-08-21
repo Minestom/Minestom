@@ -281,8 +281,8 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * block entities if block entities are added/removed from the chunk after calling this method.
      */
     @Unmodifiable
-    public Collection<Block> getBlockEntities() {
-        return Collections.emptyList();
+    public Map<Point, Block> getBlockEntities() {
+        return Collections.emptyMap();
     }
 
     @Override
