@@ -52,10 +52,6 @@ public record ClientSettings(Locale locale, byte viewDistance,
         Objects.requireNonNull(mainHand);
     }
 
-    public int effectiveViewDistance() {
-        return Math.min(viewDistance(), ServerFlag.CHUNK_VIEW_DISTANCE);
-    }
-
     /**
      * Represents where is located the main hand of the player (can be changed in Minecraft option).
      */
