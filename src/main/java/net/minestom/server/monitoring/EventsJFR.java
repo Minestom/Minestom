@@ -33,6 +33,7 @@ public final class EventsJFR {
     public static final String SERVER_PING = "minestom.ServerPing";
     public static final String SERVER_TICK = "minestom.ServerTickTime";
     public static final String SERVER_IMMUTABLE = "minestom.ServerImmutable";
+    public static final String SERVER_INITALIZATION = "minestom.ServerInitalization";
 
     public static final String CHUNK_GENERATION = "minestom.ChunkGeneration";
     public static final String CHUNK_LOADING = "minestom.ChunkLoading";
@@ -89,6 +90,10 @@ public final class EventsJFR {
         return JFR_AVAILABLE ? new PlayerChat(player.toString(), message) : NO_OP;
     }
 
+    public static EventMarker newServerInitalization() {
+        return JFR_AVAILABLE ? new ServerInitalization() : NO_OP;
+    }
+
     @Name(SERVER_PING)
     @Label("Server Ping")
     @Category({"Minestom", "Server"})
@@ -114,6 +119,13 @@ public final class EventsJFR {
     @Category({"Minestom", "Server"})
     @Description("Called when the server process is frozen")
     private static final class ServerImmutable extends JFREventWrapper {
+    }
+
+    @Name(SERVER_INITALIZATION)
+    @Label("Server Initialization")
+    @Category({"Minestom", "Server"})
+    @Description("Called when the server process is getting updated")
+    private static final class ServerInitalization extends JFREventWrapper {
     }
 
     @Name(CHUNK_GENERATION)

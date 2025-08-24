@@ -94,8 +94,11 @@ public final class MinecraftServer implements MinecraftConstants {
         Check.stateCondition(unsealed && IMMUTABLE_SERVER_PROCESS, "The server process is immutable, cannot update it.");
         unsealed = true;
         serverProcess = null;
+        var event = EventsJFR.newServerInitalization();
+        event.begin();
         ServerProcess process = new ServerProcessImpl(auth);
         serverProcess = process;
+        event.commit();
         Check.stateCondition(DetourRegistry.detourRegistry().hasDetours(), "There are still detours registered, this is not allowed after the server has been initialized.");
         return process;
     }
