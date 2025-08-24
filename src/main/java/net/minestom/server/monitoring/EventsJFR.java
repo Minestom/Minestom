@@ -53,6 +53,10 @@ public final class EventsJFR {
         return JFR_AVAILABLE ? new ServerTick() : NO_OP;
     }
 
+    public static EventMarker newServerImmutable() {
+        return JFR_AVAILABLE ? new ServerImmutable() : NO_OP;
+    }
+
     public static EventMarker newChunkGeneration(UUID instance, int chunkX, int chunkZ) {
         return JFR_AVAILABLE ? new ChunkGeneration(instance.toString(), chunkX, chunkZ) : NO_OP;
     }
@@ -109,7 +113,7 @@ public final class EventsJFR {
     @Label("Server Immutable")
     @Category({"Minestom", "Server"})
     @Description("Called when the server process is frozen")
-    public static final class ServerImmutable extends Event {
+    private static final class ServerImmutable extends JFREventWrapper {
     }
 
     @Name(CHUNK_GENERATION)

@@ -46,7 +46,7 @@ public sealed interface VillagerProfession extends StaticProtocolObject<Villager
         return VillagerProfessionImpl.REGISTRY.get(id);
     }
 
-    static @NotNull Registry<VillagerProfession> staticRegistry() {
+    static Registry<VillagerProfession> staticRegistry() {
         return VillagerProfessionImpl.REGISTRY;
     }
 }

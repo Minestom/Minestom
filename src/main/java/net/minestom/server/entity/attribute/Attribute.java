@@ -61,7 +61,7 @@ public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attri
         return AttributeImpl.REGISTRY.get(id);
     }
 
-    static @NotNull Registry<Attribute> staticRegistry() {
+    static Registry<Attribute> staticRegistry() {
         return AttributeImpl.REGISTRY;
     }
 

@@ -375,7 +375,7 @@ public final class MinecraftServer implements MinecraftConstants {
      *
      * @return the detour registry
      */
-    public static @NotNull DetourRegistry detourRegistry() {
+    public static DetourRegistry detourRegistry() {
         return DetourRegistry.detourRegistry();
     }
 
@@ -414,7 +414,7 @@ public final class MinecraftServer implements MinecraftConstants {
             Check.stateCondition(!ServerFlag.IMMUTABLE_SERVER_PROCESS, "The server process is mutable, this should not be called.");
             Check.stateCondition(!isUnsealed(), "The server is not unsealed, cannot create an ImmutableServerHolder.");
 
-            new EventsJFR.ServerImmutable().commit();
+            EventsJFR.newServerImmutable().commit();
         }
     }
 }

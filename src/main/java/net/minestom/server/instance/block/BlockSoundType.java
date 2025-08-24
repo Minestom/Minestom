@@ -73,7 +73,7 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
         return BlockSoundImpl.REGISTRY.get(key);
     }
 
-    static @NotNull Registry<BlockSoundType> staticRegistry() {
+    static Registry<BlockSoundType> staticRegistry() {
         return BlockSoundImpl.REGISTRY;
     }
 }

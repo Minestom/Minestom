@@ -115,10 +115,10 @@ public sealed interface Registry<T> extends Keyed permits StaticRegistry, Dynami
      *
      * @return The key associated.
      */
-    @NotNull RegistryKey<? extends Registry<T>> registryKey();
+    RegistryKey<? extends Registry<T>> registryKey();
 
     @Override
-    default @NotNull Key key() {
+    default Key key() {
         return registryKey().key();
     };
 }

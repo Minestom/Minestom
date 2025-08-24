@@ -26,7 +26,7 @@ public sealed interface StatisticType extends StaticProtocolObject<StatisticType
         return StatisticTypeImpl.REGISTRY.get(id);
     }
 
-    static @NotNull Registry<StatisticType> staticRegistry() {
+    static Registry<StatisticType> staticRegistry() {
         return StatisticTypeImpl.REGISTRY;
     }
 }

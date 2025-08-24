@@ -46,57 +46,57 @@ import java.util.function.Supplier;
 public final class RegistryData {
 
     @ApiStatus.Internal
-    public static BlockEntry block(@NotNull Keyed namespace, Properties main) {
+    public static BlockEntry block(Keyed namespace, Properties main) {
         return new BlockEntry(namespace.key(), main, new HashMap<>(), null, null);
     }
 
     @ApiStatus.Internal
-    public static BlockEntry block(@NotNull Keyed namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
+    public static BlockEntry block(Keyed namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
         return new BlockEntry(namespace.key(), main, internCache, parent, parentProperties);
     }
 
     @ApiStatus.Internal
-    public static MaterialEntry material(@NotNull Keyed namespace, Properties main) {
+    public static MaterialEntry material(Keyed namespace, Properties main) {
         return new MaterialEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static EntityEntry entity(@NotNull Keyed namespace, Properties main) {
+    public static EntityEntry entity(Keyed namespace, Properties main) {
         return new EntityEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static VillagerProfessionEntry villagerProfession(@NotNull Keyed namespace, Properties main) {
+    public static VillagerProfessionEntry villagerProfession(Keyed namespace, Properties main) {
         return new VillagerProfessionEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static FeatureFlagEntry featureFlag(@NotNull Keyed namespace, Properties main) {
+    public static FeatureFlagEntry featureFlag(Keyed namespace, Properties main) {
         return new FeatureFlagEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static FluidEntry fluid(@NotNull Keyed namespace, Properties main) {
+    public static FluidEntry fluid(Keyed namespace, Properties main) {
         return new FluidEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static PotionEffectEntry potionEffect(@NotNull Keyed namespace, Properties main) {
+    public static PotionEffectEntry potionEffect(Keyed namespace, Properties main) {
         return new PotionEffectEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static AttributeEntry attribute(@NotNull Keyed namespace, Properties main) {
+    public static AttributeEntry attribute(Keyed namespace, Properties main) {
         return new AttributeEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static GameEventEntry gameEventEntry(@NotNull Keyed namespace, Properties properties) {
+    public static GameEventEntry gameEventEntry(Keyed namespace, Properties properties) {
         return new GameEventEntry(namespace.key(), properties);
     }
 
     @ApiStatus.Internal
-    public static BlockSoundTypeEntry blockSoundTypeEntry(@NotNull Keyed namespace, Properties properties) {
+    public static BlockSoundTypeEntry blockSoundTypeEntry(Keyed namespace, Properties properties) {
         return new BlockSoundTypeEntry(namespace.key(), properties);
     }
 
@@ -170,7 +170,7 @@ public final class RegistryData {
     }
 
     @ApiStatus.Internal
-    static <T> @Unmodifiable Map<TagKey<T>, RegistryTag<T>> loadTags(DetourRegistry detourRegistry, @NotNull Key registryKey) {
+    static <T> @Unmodifiable Map<TagKey<T>, RegistryTag<T>> loadTags(DetourRegistry detourRegistry, Key registryKey) {
         final var tagJson = RegistryData.load(String.format("tags/%s.json", registryKey.value()), false);
         final Map<TagKey<T>, RegistryTag<T>> tags = new HashMap<>(tagJson.size());
         for (String tagName : tagJson.asMap().keySet()) {

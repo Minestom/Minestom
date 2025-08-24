@@ -126,7 +126,7 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
         return new CustomSoundEvent(key, range);
     }
 
-    static @NotNull Registry<? extends SoundEvent> staticRegistry() {
+    static Registry<? extends SoundEvent> staticRegistry() {
         return BuiltinSoundEvent.REGISTRY;
     }
 

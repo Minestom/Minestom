@@ -168,7 +168,7 @@ public interface Registries {
                 fluid(),
                 gameEvent(),
                 potionType(),
-                (Registry<? extends @NotNull StaticProtocolObject<?>>) soundEvent(), // BuiltinSoundEvent is a StaticProtocolObject
+                (Registry<? extends StaticProtocolObject<?>>) soundEvent(), // BuiltinSoundEvent is a StaticProtocolObject
                 attribute(),
                 featureFlag(),
                 villagerProfession(),

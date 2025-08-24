@@ -23,7 +23,7 @@ public sealed interface GameEvent extends StaticProtocolObject<GameEvent>, GameE
      * @return the game event registry
      */
     @Contract(pure = true)
-    @NotNull RegistryData.GameEventEntry registry();
+    RegistryData.GameEventEntry registry();
 
     int notificationRadius();
 

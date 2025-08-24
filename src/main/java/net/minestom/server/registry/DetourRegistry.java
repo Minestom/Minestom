@@ -27,7 +27,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * <p>
      * @return the singleton instance of the DetourRegistry
      */
-    static @NotNull DetourRegistry detourRegistry() {
+    static DetourRegistry detourRegistry() {
         return DetourRegistryImpl.INSTANCE;
     }
 
@@ -38,7 +38,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * @param detour the detour to register
      * @param <T>    the type of the registry entry
      */
-    <T> void register(@NotNull RegistryKey<T> key, @NotNull Detour<T> detour);
+    <T> void register(RegistryKey<T> key, Detour<T> detour);
 
     /**
      * Registers a detour for the given tag key.
@@ -46,14 +46,14 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * @param detour the detour to register
      * @param <T> the type of the registry entry
      */
-    <T> void register(@NotNull TagKey<T> key, @NotNull Detour<RegistryTag.Builder<T>> detour);
+    <T> void register(TagKey<T> key, Detour<RegistryTag.Builder<T>> detour);
 
     /**
      * Checks if a detour is registered for the given registry key.
      * @param key the registry key to check
      * @return true if a detour is registered for the key, false otherwise
      */
-    boolean hasDetour(@NotNull Keyed key);
+    boolean hasDetour(Keyed key);
 
     /**
      * Checks if there are any detours in the registry.
@@ -72,7 +72,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * @param <T> the type of the registry entry
      */
     @ApiStatus.Internal
-    <T> @NotNull T consume(@NotNull RegistryKey<T> key, @NotNull T value);
+    <T> T consume(RegistryKey<T> key, T value);
 
     /**
      * Consumes the detour for the given registry key and applies it to the provided value.
@@ -81,7 +81,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      */
     @ApiStatus.Internal
     @Contract(mutates = "param2")
-    <T> void consume(@NotNull TagKey<T> key, @NotNull RegistryTag.Builder<T> builder);
+    <T> void consume(TagKey<T> key, RegistryTag.Builder<T> builder);
 
     /**
      * A functional interface representing a detour that can be applied to a value.
@@ -97,7 +97,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
          * @param value the value to apply the detour to
          * @return the modified value
          */
-        @NotNull T apply(@NotNull T value);
+        T apply(T value);
 
         /**
          * Combines this detour with another detour, creating a new detour that applies both in sequence.
@@ -105,7 +105,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
          * @return a new detour that applies this detour followed by the after detour
          */
         @NotNull
-        default Detour<T> andThen(@NotNull Detour<T> after) {
+        default Detour<T> andThen(Detour<T> after) {
             Check.notNull(after, "After detour cannot be null");
             return value -> {
                 T intermediate = this.apply(value);

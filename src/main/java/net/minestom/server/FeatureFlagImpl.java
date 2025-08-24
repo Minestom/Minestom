@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 record FeatureFlagImpl(RegistryData.FeatureFlagEntry registry) implements FeatureFlag {

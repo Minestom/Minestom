@@ -20,17 +20,17 @@ final class DetourRegistryImpl implements DetourRegistry {
     }
 
     @Override
-    public <T> void register(@NotNull RegistryKey<T> registryKey, @NotNull Detour<T> detour) {
+    public <T> void register(RegistryKey<T> registryKey, Detour<T> detour) {
         this.registerKeyed(registryKey, detour);
     }
 
     @Override
-    public <T> void register(@NotNull TagKey<T> tagKey, @NotNull Detour<RegistryTag.Builder<T>> detour) {
+    public <T> void register(TagKey<T> tagKey, Detour<RegistryTag.Builder<T>> detour) {
         this.registerKeyed(tagKey, detour);
     }
 
     @Override
-    public boolean hasDetour(@NotNull Keyed key) {
+    public boolean hasDetour(Keyed key) {
         Check.notNull(key, "Registry key cannot be null");
         return detours.containsKey(key.key());
     }
@@ -41,17 +41,17 @@ final class DetourRegistryImpl implements DetourRegistry {
     }
 
     @Override
-    public <T> @NotNull T consume(@NotNull RegistryKey<T> registryKey, @NotNull T value) {
+    public <T> T consume(RegistryKey<T> registryKey, T value) {
         return this.consumeKeyed(registryKey, value);
     }
 
     @Override
-    public <T> void consume(@NotNull TagKey<T> key, RegistryTag.@NotNull Builder<T> builder) {
+    public <T> void consume(TagKey<T> key, RegistryTag.Builder<T> builder) {
         this.consumeKeyed(key, builder);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> void registerKeyed(@NotNull Keyed keyedKey, @NotNull Detour<T> detour) {
+    public <T> void registerKeyed(Keyed keyedKey, Detour<T> detour) {
         Check.notNull(keyedKey, "Registry key cannot be null");
         Check.notNull(detour, "Detour cannot be null");
         final Key key = keyedKey.key();
@@ -64,7 +64,7 @@ final class DetourRegistryImpl implements DetourRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T consumeKeyed(@NotNull Keyed keyedKey, @NotNull T value) {
+    private <T> T consumeKeyed(Keyed keyedKey, T value) {
         Check.notNull(keyedKey, "Keyed key cannot be null");
         Check.notNull(value, "Value cannot be null");
         final Key key = keyedKey.key();

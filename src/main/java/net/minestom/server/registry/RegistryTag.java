@@ -44,7 +44,7 @@ public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKe
         return new RegistryTagImpl.Direct<>(List.copyOf(values));
     }
 
-    static <T> @NotNull RegistryTag<T> builder(@Nullable TagKey<T> key, @NotNull Consumer<Builder<T>> consumer) {
+    static <T> RegistryTag<T> builder(@Nullable TagKey<T> key, Consumer<Builder<T>> consumer) {
         RegistryTagImpl.BuilderImpl<T> builder = new RegistryTagImpl.BuilderImpl<>(key);
         consumer.accept(builder);
         return builder.build();
@@ -64,7 +64,7 @@ public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKe
          * @param key the key to add
          * @return true if the key was added, false if it was already present
          */
-        boolean add(@NotNull RegistryKey<T> key);
+        boolean add(RegistryKey<T> key);
 
         /**
          * Removes a key from the tag.
@@ -72,6 +72,6 @@ public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKe
          * @param key the key to remove
          * @return true if the key was removed, false if it was not present
          */
-        boolean remove(@NotNull RegistryKey<T> key);
+        boolean remove(RegistryKey<T> key);
     }
 }

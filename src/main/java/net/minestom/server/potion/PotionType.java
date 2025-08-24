@@ -31,7 +31,7 @@ public sealed interface PotionType extends StaticProtocolObject<PotionType>, Pot
         return PotionTypeImpl.REGISTRY.get(id);
     }
 
-    static @NotNull Registry<PotionType> staticRegistry() {
+    static Registry<PotionType> staticRegistry() {
         return PotionTypeImpl.REGISTRY;
     }
 }

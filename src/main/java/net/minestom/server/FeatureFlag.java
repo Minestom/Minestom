@@ -26,7 +26,7 @@ public sealed interface FeatureFlag extends StaticProtocolObject<FeatureFlag>, F
         return FeatureFlagImpl.REGISTRY.get(id);
     }
 
-    static @NotNull Registry<FeatureFlag> staticRegistry() {
+    static Registry<FeatureFlag> staticRegistry() {
         return FeatureFlagImpl.REGISTRY;
     }
 }
