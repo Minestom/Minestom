@@ -3,14 +3,15 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -172,7 +173,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return the block registry
      */
     @Contract(pure = true)
-    RegistryData.BlockEntry registry();
+    Entry registry();
 
     @Override
     default Key key() {
@@ -247,6 +248,59 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         Comparator ID = (b1, b2) -> b1.id() == b2.id();
 
         Comparator STATE = (b1, b2) -> b1.stateId() == b2.stateId();
+    }
+
+    sealed interface Entry permits BlockImpl.EntryImpl {
+        Key key();
+        int id();
+        int stateId();
+        String translationKey();
+        float hardness();
+        float explosionResistance();
+        float friction();
+        float speedFactor();
+        float jumpFactor();
+        boolean isAir();
+        boolean isSolid();
+        boolean isLiquid();
+        boolean occludes();
+        boolean requiresTool();
+        byte lightEmission();
+        boolean isReplaceable();
+        boolean isBlockEntity();
+        @Nullable Key blockEntity();
+        int blockEntityId();
+        @Nullable Material material();
+        @Nullable BlockSoundType blockSoundType();
+        boolean isRedstoneConductor();
+        boolean isSignalSource();
+        Shape collisionShape();
+        Shape occlusionShape();
+
+        Entry withKey(Key key);
+        Entry withId(int id);
+        Entry withStateId(int stateId);
+        Entry withTranslationKey(String translationKey);
+        Entry withHardness(float hardness);
+        Entry withExplosionResistance(float explosionResistance);
+        Entry withFriction(float friction);
+        Entry withSpeedFactor(float speedFactor);
+        Entry withJumpFactor(float jumpFactor);
+        Entry withAir(boolean air);
+        Entry withSolid(boolean solid);
+        Entry withLiquid(boolean liquid);
+        Entry withOccludes(boolean occludes);
+        Entry withRequiresTool(boolean requiresTool);
+        Entry withLightEmission(byte lightEmission);
+        Entry withReplaceable(boolean replaceable);
+        Entry withBlockEntity(@Nullable Key blockEntity);
+        Entry withBlockEntityId(int blockEntityId);
+        Entry withMaterial(@Nullable Material material);
+        Entry withBlockSoundType(@Nullable BlockSoundType blockSoundType);
+        Entry withRedstoneConductor(boolean redstoneConductor);
+        Entry withSignalSource(boolean signalSource);
+        Entry withCollisionShape(Shape collisionShape);
+        Entry withOcclusionShape(Shape occlusionShape);
     }
 
     /**

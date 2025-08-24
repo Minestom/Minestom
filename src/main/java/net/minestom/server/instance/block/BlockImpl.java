@@ -3,7 +3,11 @@ package net.minestom.server.instance.block;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.Shape;
+import net.minestom.server.item.Material;
 import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
@@ -15,13 +19,9 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-record BlockImpl(RegistryData.BlockEntry registry,
+record BlockImpl(Entry registry,
                  long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
                  @Nullable BlockHandler handler) implements Block {
@@ -74,12 +74,13 @@ record BlockImpl(RegistryData.BlockEntry registry,
                                 propertyTypes[i++] = new PropertyType(k, v);
                             }
                         } else {
-                            propertyTypes = new PropertyType[0];
+                            propertyTypes = PropertyType.NO_TYPES;
                         }
                     }
                     propertiesType.set(blockId, propertyTypes);
 
-                    final RegistryData.BlockEntry baseBlockEntry = RegistryData.block(namespace, properties, internCache, null, null);
+                    final EntryImpl baseBlockEntry = EntryImpl.parse(namespace, properties, internCache);
+                    Block defaultBlock = null;
 
                     // Retrieve block states
                     {
@@ -89,7 +90,6 @@ record BlockImpl(RegistryData.BlockEntry registry,
                         int propertiesOffset = 0;
                         for (var stateEntry : stateObject) {
                             final String query = stateEntry.getKey();
-                            final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                             final var propertyMap = BlockUtils.parseProperties(query);
                             assert propertyTypes.length == propertyMap.size();
                             long propertiesValue = 0;
@@ -99,18 +99,19 @@ record BlockImpl(RegistryData.BlockEntry registry,
                                 propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
                             }
 
-                            final RegistryData.BlockEntry entryOverride = RegistryData.block(namespace, RegistryData.Properties.fromMap(stateOverride), internCache, baseBlockEntry, properties);
+                            final var stateOverride = RegistryData.Properties.fromMap((Map<String, Object>) stateEntry.getValue());
+                            final Entry entryOverride = baseBlockEntry.withProperties(internCache, stateOverride);
                             final BlockImpl block = new BlockImpl(entryOverride,
                                     propertiesValue, null, null);
                             blockStateMap.set(block.stateId(), block);
+                            if (block.stateId() == baseBlockEntry.stateId()) defaultBlock = block;
                             propertiesKeys[propertiesOffset] = propertiesValue;
                             blocksValues[propertiesOffset++] = block;
                         }
                         possibleStates.set(blockId, new Long2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
                     }
                     // Register default state
-                    final int defaultState = properties.getInt("defaultStateId");
-                    return blockStateMap.get(defaultState);
+                    return Objects.requireNonNull(defaultBlock);
                 });
         BLOCK_STATE_MAP = blockStateMap.toList();
         PROPERTIES_TYPE = propertiesType.toList();
@@ -319,6 +320,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     }
 
     private record PropertyType(String key, List<String> values) {
+        static final PropertyType[] NO_TYPES = new PropertyType[0];
     }
 
     static long updateIndex(long value, int index, byte newValue) {
@@ -333,5 +335,309 @@ record BlockImpl(RegistryData.BlockEntry registry,
         final int position = index * BITS_PER_INDEX;
         final int mask = (1 << BITS_PER_INDEX) - 1;
         return ((value >> position) & mask);
+    }
+
+    public record EntryImpl(
+            Key key,
+            int id,
+            int stateId,
+            String translationKey,
+            float hardness,
+            float explosionResistance,
+            float friction,
+            float speedFactor,
+            float jumpFactor,
+            byte packedFlags,
+            byte lightEmission,
+            @Nullable Key blockEntity,
+            int blockEntityId,
+            @Nullable Material material,
+            @Nullable BlockSoundType blockSoundType,
+            Shape collisionShape,
+            Shape occlusionShape
+    ) implements Entry {
+        private static final byte AIR_OFFSET = 1 << 0;
+        private static final byte LIQUID_OFFSET = 1 << 1;
+        private static final byte SOLID_OFFSET = 1 << 2;
+        private static final byte OCCLUDES_OFFSET = 1 << 3;
+        private static final byte REQUIRES_TOOL_OFFSET = 1 << 4;
+        private static final byte REPLACEABLE_OFFSET = 1 << 5;
+        private static final byte REDSTONE_CONDUCTOR_OFFSET = 1 << 6;
+        private static final byte SIGNAL_SOURCE_OFFSET = -1 << 7; // 2's complement
+
+        @Override
+        public boolean isAir() {
+            return (packedFlags & AIR_OFFSET) != 0;
+        }
+
+        @Override
+        public boolean isLiquid() {
+            return (packedFlags & LIQUID_OFFSET) != 0;
+        }
+
+        @Override
+        public boolean isSolid() {
+            return (packedFlags & SOLID_OFFSET) != 0;
+        }
+        @Override
+        public boolean occludes() {
+            return (packedFlags & OCCLUDES_OFFSET) != 0;
+        }
+        @Override
+        public boolean requiresTool() {
+            return (packedFlags & REQUIRES_TOOL_OFFSET) != 0;
+        }
+        @Override
+        public boolean isReplaceable() {
+            return (packedFlags & REPLACEABLE_OFFSET) != 0;
+        }
+
+        @Override
+        public boolean isBlockEntity() {
+            return blockEntity != null;
+        }
+        
+        @Override
+        public boolean isRedstoneConductor() {
+            return (packedFlags & REDSTONE_CONDUCTOR_OFFSET) != 0;
+        }
+        @Override
+        public boolean isSignalSource() {
+            return (packedFlags & SIGNAL_SOURCE_OFFSET) != 0;
+        }
+
+        @Override
+        public Entry withKey(Key key) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withId(int id) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withStateId(int stateId) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withTranslationKey(String translationKey) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withHardness(float hardness) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withExplosionResistance(float explosionResistance) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withFriction(float friction) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withSpeedFactor(float speedFactor) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withJumpFactor(float jumpFactor) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withAir(boolean air) {
+            return withFlag(AIR_OFFSET, air);
+        }
+
+        @Override
+        public Entry withLiquid(boolean liquid) {
+            return withFlag(LIQUID_OFFSET, liquid);
+        }
+
+        @Override
+        public Entry withSolid(boolean solid) {
+            return withFlag(SOLID_OFFSET, solid);
+        }
+
+        @Override
+        public Entry withOccludes(boolean occludes) {
+            return withFlag(OCCLUDES_OFFSET, occludes);
+        }
+
+        @Override
+        public Entry withRequiresTool(boolean requiresTool) {
+            return withFlag(REQUIRES_TOOL_OFFSET, requiresTool);
+        }
+
+        @Override
+        public Entry withLightEmission(byte lightEmission) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withReplaceable(boolean replaceable) {
+            return withFlag(REPLACEABLE_OFFSET, replaceable);
+        }
+
+        @Override
+        public Entry withBlockEntity(@Nullable Key blockEntity) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withBlockEntityId(int blockEntityId) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withMaterial(@Nullable Material material) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withBlockSoundType(@Nullable BlockSoundType blockSoundType) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity,  blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withRedstoneConductor(boolean redstoneConductor) {
+            return withFlag(REDSTONE_CONDUCTOR_OFFSET, redstoneConductor);
+        }
+
+        @Override
+        public Entry withSignalSource(boolean signalSource) {
+            return withFlag(SIGNAL_SOURCE_OFFSET, signalSource);
+        }
+
+        @Override
+        public Entry withCollisionShape(Shape collisionShape) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        @Override
+        public Entry withOcclusionShape(Shape occlusionShape) {
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+        }
+
+        private Entry withFlag(byte flag, boolean enabled) {
+            byte newFlags = enabled ? (byte) (packedFlags | flag) : (byte) (packedFlags & ~flag);
+            return new EntryImpl(
+                    key, id, stateId, translationKey, hardness, explosionResistance, friction,
+                    speedFactor, jumpFactor, newFlags, lightEmission, blockEntity, blockEntityId,
+                    material, blockSoundType, collisionShape, occlusionShape
+            );
+        }
+
+        @SuppressWarnings({"unchecked", "PatternValidation"})
+        private Entry withProperties(Map<Object, Object> internCache, RegistryData.Properties properties) {
+            Entry entry = this;
+            for (var mapEntry: properties) {
+                var key = mapEntry.getKey();
+                var value = mapEntry.getValue();
+                entry = switch (key) {
+                    case "key" -> entry.withKey(Key.key(value.toString())); // Ideally this should never happen
+                    case "id" -> entry.withId(((Number) value).intValue());
+                    case "stateId" -> entry.withStateId(((Number) value).intValue());
+                    case "translationKey" -> entry.withTranslationKey(((String) value));
+                    case "hardness" -> entry.withHardness(((Number) value).floatValue());
+                    case "explosionResistance" -> entry.withExplosionResistance(((Number) value).floatValue());
+                    case "friction" -> entry.withFriction(((Number) value).floatValue());
+                    case "speedFactor" -> entry.withSpeedFactor(((Number) value).floatValue());
+                    case "jumpFactor" -> entry.withJumpFactor(((Number) value).floatValue());
+                    case "air" -> entry.withAir((boolean) value);
+                    case "solid" -> entry.withSolid((boolean) value);
+                    case "liquid" -> entry.withLiquid((boolean) value);
+                    case "occludes" -> entry.withOccludes((boolean) value);
+                    case "requiresTool" -> entry.withRequiresTool((boolean) value);
+                    case "lightEmission" -> entry.withLightEmission(((Number) value).byteValue());
+                    case "replaceable" -> entry.withReplaceable((boolean) value);
+                    case "soundType" -> entry.withBlockSoundType(BlockSoundType.fromKey((String) value));
+                    case "blockEntity" -> {
+                        final var section = (Map<String, Object>) value;
+                        if (section != null) {
+                            final RegistryData.Properties blockSection = RegistryData.Properties.fromMap(section);
+                            yield entry.withBlockEntity(Key.key(blockSection.getString("namespace")))
+                                    .withBlockEntityId(blockSection.getInt("blockEntityId"));
+                        } else {
+                            // Kind of wasteful to parse this to begin with.
+                            yield entry.withBlockEntity(null).withBlockEntityId(0);
+                        }
+                    }
+                    case "collisionShape" -> entry.withCollisionShape(CollisionUtils.parseCollisionShape(internCache, (String) value));
+                    case "occlusionShape" -> {
+                        final boolean modifyingLight = properties.containsKey("lightEmission");
+                        final boolean modifyingOcclusion = properties.containsKey("occludes");
+                        final byte lightEmission = modifyingLight ? properties.getByte("lightEmission") : entry.lightEmission();
+                        final boolean occludes = modifyingOcclusion ? properties.getBoolean("occludes") : entry.occludes();
+                        yield entry.withOcclusionShape(CollisionUtils.parseOcclusionShape(internCache, (String) value, occludes, lightEmission));
+                    }
+                    case "correspondingItem" -> entry.withMaterial(Material.fromKey((String) value));
+                    case "redstoneConductor" -> entry.withRedstoneConductor((boolean) value);
+                    case "signalSource" -> entry.withSignalSource((boolean) value);
+                    case "shape", "visualShape", "blocksMotion", "solidBlocking", "canRespawnIn", "interactionShape", "mapColorId", "flammable" -> entry; //TODO we probably should parse these for line of sight.
+                    default -> throw new IllegalArgumentException("Unknown key: " + key);
+                };
+            }
+            return entry;
+        }
+
+        @SuppressWarnings("PatternValidation")
+        private static EntryImpl parse(RegistryKey<Block> key, RegistryData.Properties main, Map<Object, Object> internCache) {
+            var id = main.getInt("id");
+            var stateId = main.getInt("defaultStateId");
+            var translationKey = main.getString("translationKey");
+            var hardness = main.getFloat("hardness");
+            var explosionResistance = main.getFloat("explosionResistance");
+            var friction = main.getFloat("friction");
+            var speedFactor = main.getFloat("speedFactor", 1);
+            var jumpFactor = main.getFloat("jumpFactor", 1);
+            var air = main.getBoolean("air", false);
+            var solid = main.getBoolean("solid");
+            var liquid = main.getBoolean("liquid", false);
+            var occludes = main.getBoolean("occludes", true);
+            var requiresTool = main.getBoolean("requiresTool", true);
+            var lightEmission = main.getByte("lightEmission", (byte) 0);
+            var replaceable = main.getBoolean("replaceable", false);
+            var blockSoundType = BlockSoundType.fromKey(main.getString("soundType"));
+            var blockEntity = main.section("blockEntity");
+            final Key blockEntityKey;
+            final int blockEntityId;
+            if (blockEntity != null) {
+                blockEntityKey = Key.key(blockEntity.getString("namespace"));
+                blockEntityId = blockEntity.getInt("id");
+            } else {
+                blockEntityKey = null;
+                blockEntityId = 0;
+            }
+            final String materialNamespace = main.getString("correspondingItem", null);
+            var material = materialNamespace != null ? Material.fromKey(materialNamespace) : null;
+            final String collision = main.getString("collisionShape");
+            final String occlusion = main.getString("occlusionShape");
+            var collisionShape = CollisionUtils.parseCollisionShape(internCache, collision);
+            var occlusionShape = CollisionUtils.parseOcclusionShape(internCache, occlusion, occludes, lightEmission);
+            var redstoneConductor = main.getBoolean("redstoneConductor");
+            var signalSource = main.getBoolean("signalSource", false);
+            byte packedFlags = (byte) ((air ? AIR_OFFSET : 0) |
+                            (liquid ? LIQUID_OFFSET : 0) |
+                            (solid ? SOLID_OFFSET : 0) |
+                            (occludes ? OCCLUDES_OFFSET : 0) |
+                            (requiresTool ? REQUIRES_TOOL_OFFSET : 0) |
+                            (replaceable ? REPLACEABLE_OFFSET : 0) |
+                            (redstoneConductor ? REDSTONE_CONDUCTOR_OFFSET : 0) |
+                            (signalSource ? SIGNAL_SOURCE_OFFSET : 0)
+            );
+            return new EntryImpl(
+                    key.key(), id, stateId, translationKey, hardness, explosionResistance, friction,
+                    speedFactor, jumpFactor, packedFlags, lightEmission, blockEntityKey, blockEntityId,
+                    material, blockSoundType, collisionShape, occlusionShape
+            );
+        }
     }
 }
