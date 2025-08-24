@@ -561,14 +561,9 @@ record BlockImpl(Entry registry,
                     case "soundType" -> entry.withBlockSoundType(BlockSoundType.fromKey((String) value));
                     case "blockEntity" -> {
                         final var section = (Map<String, Object>) value;
-                        if (section != null) {
-                            final RegistryData.Properties blockSection = RegistryData.Properties.fromMap(section);
-                            yield entry.withBlockEntity(Key.key(blockSection.getString("namespace")))
-                                    .withBlockEntityId(blockSection.getInt("blockEntityId"));
-                        } else {
-                            // Kind of wasteful to parse this to begin with.
-                            yield entry.withBlockEntity(null).withBlockEntityId(0);
-                        }
+                        final RegistryData.Properties blockSection = RegistryData.Properties.fromMap(section);
+                        yield entry.withBlockEntity(Key.key(blockSection.getString("namespace")))
+                                .withBlockEntityId(blockSection.getInt("blockEntityId"));
                     }
                     case "collisionShape" -> entry.withCollisionShape(CollisionUtils.parseCollisionShape(internCache, (String) value));
                     case "occlusionShape" -> {
