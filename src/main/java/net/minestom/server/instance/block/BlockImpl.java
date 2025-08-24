@@ -379,14 +379,17 @@ record BlockImpl(Entry registry,
         public boolean isSolid() {
             return (packedFlags & SOLID_OFFSET) != 0;
         }
+
         @Override
         public boolean occludes() {
             return (packedFlags & OCCLUDES_OFFSET) != 0;
         }
+
         @Override
         public boolean requiresTool() {
             return (packedFlags & REQUIRES_TOOL_OFFSET) != 0;
         }
+
         @Override
         public boolean isReplaceable() {
             return (packedFlags & REPLACEABLE_OFFSET) != 0;
@@ -396,11 +399,12 @@ record BlockImpl(Entry registry,
         public boolean isBlockEntity() {
             return blockEntity != null;
         }
-        
+
         @Override
         public boolean isRedstoneConductor() {
             return (packedFlags & REDSTONE_CONDUCTOR_OFFSET) != 0;
         }
+
         @Override
         public boolean isSignalSource() {
             return (packedFlags & SIGNAL_SOURCE_OFFSET) != 0;
@@ -503,7 +507,7 @@ record BlockImpl(Entry registry,
 
         @Override
         public Entry withBlockSoundType(@Nullable BlockSoundType blockSoundType) {
-            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity,  blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
+            return new EntryImpl(key, id, stateId, translationKey, hardness, explosionResistance, friction, speedFactor, jumpFactor, packedFlags, lightEmission, blockEntity, blockEntityId, material, blockSoundType, collisionShape, occlusionShape);
         }
 
         @Override
@@ -538,7 +542,7 @@ record BlockImpl(Entry registry,
         @SuppressWarnings({"unchecked", "PatternValidation"})
         private Entry withProperties(Map<Object, Object> internCache, RegistryData.Properties properties) {
             Entry entry = this;
-            for (var mapEntry: properties) {
+            for (var mapEntry : properties) {
                 var key = mapEntry.getKey();
                 var value = mapEntry.getValue();
                 entry = switch (key) {
@@ -564,7 +568,8 @@ record BlockImpl(Entry registry,
                         yield entry.withBlockEntity(Key.key(blockSection.getString("namespace")))
                                 .withBlockEntityId(blockSection.getInt("blockEntityId"));
                     }
-                    case "collisionShape" -> entry.withCollisionShape(CollisionUtils.parseCollisionShape(internCache, (String) value));
+                    case "collisionShape" ->
+                            entry.withCollisionShape(CollisionUtils.parseCollisionShape(internCache, (String) value));
                     case "occlusionShape" -> {
                         final boolean modifyingLight = properties.containsKey("lightEmission");
                         final boolean modifyingOcclusion = properties.containsKey("occludes");
@@ -575,7 +580,8 @@ record BlockImpl(Entry registry,
                     case "correspondingItem" -> entry.withMaterial(Material.fromKey((String) value));
                     case "redstoneConductor" -> entry.withRedstoneConductor((boolean) value);
                     case "signalSource" -> entry.withSignalSource((boolean) value);
-                    case "shape", "visualShape", "blocksMotion", "solidBlocking", "canRespawnIn", "interactionShape", "mapColorId", "flammable" -> entry; //TODO we probably should parse these for line of sight.
+                    case "shape", "visualShape", "blocksMotion", "solidBlocking", "canRespawnIn", "interactionShape",
+                         "mapColorId", "flammable" -> entry; //TODO we probably should parse these for line of sight.
                     default -> throw new IllegalArgumentException("Unknown key: " + key);
                 };
             }

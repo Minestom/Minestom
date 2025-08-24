@@ -5,7 +5,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-@ApiStatus.Internal
+@ApiStatus.NonExtendable
 public non-sealed interface StaticProtocolObject<T> extends RegistryKey<T> {
 
     @Contract(pure = true)
