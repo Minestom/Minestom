@@ -73,7 +73,7 @@ public final class MinecraftServer implements MinecraftConstants {
     private static final boolean IMMUTABLE_SERVER_PROCESS = ServerFlag.IMMUTABLE_SERVER_PROCESS && !ServerFlag.INSIDE_TEST;
 
     // In-Game Manager
-    private static volatile ServerProcess serverProcess;
+    private static volatile @UnknownNullability ServerProcess serverProcess;
     private static volatile boolean unsealed = false; // This could be moved into ServerProcess as a sentinel. Requires casting.
 
     private static int compressionThreshold = 256;
@@ -153,7 +153,7 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public static @UnknownNullability ServerProcess process() {
-        if (IMMUTABLE_SERVER_PROCESS) return ImmutableServerHolder.INSTANCE.process();
+        if (IMMUTABLE_SERVER_PROCESS) return ImmutableProcessHolder.INSTANCE;
         return serverProcess;
     }
 
@@ -405,16 +405,15 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess != null && serverProcess.isAlive();
     }
 
-    // We use a record here as it provides better inlining.
-    private record ImmutableServerHolder(ServerProcess process) {
-        static final ImmutableServerHolder INSTANCE = new ImmutableServerHolder(serverProcess);
+    private static final class ImmutableProcessHolder {
+        private static final ServerProcess INSTANCE = freezeServerProcess(serverProcess);
 
-        private ImmutableServerHolder {
+        private static ServerProcess freezeServerProcess(ServerProcess process) {
             Check.notNull(process, "The server process is not initialized, did you forget to call MinecraftServer#init?.");
             Check.stateCondition(!ServerFlag.IMMUTABLE_SERVER_PROCESS, "The server process is mutable, this should not be called.");
             Check.stateCondition(!isUnsealed(), "The server is not unsealed, cannot create an ImmutableServerHolder.");
-
             EventsJFR.newServerImmutable().commit();
+            return process;
         }
     }
 }
