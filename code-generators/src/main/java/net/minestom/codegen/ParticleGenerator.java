@@ -46,16 +46,15 @@ public record ParticleGenerator(Entry.Static entry,
             final String key = particleIdObjectEntry.getKey();
             final JsonObject value = particleIdObjectEntry.getValue().getAsJsonObject();
 
-            ClassName fieldCN = particleCN;
+            final ClassName fieldCN;
+            final CodeBlock cast;
             if (value.get("hasData").getAsBoolean()) {
                 // This particle has data, use the particle implementation class
                 fieldCN = particleCN.nestedClass(toPascalCase(namespaceShort(key)));
-            }
-
-            String cast = "";
-            if (!fieldCN.equals(particleCN)) {
-                // This is one of the unique particle classes with particle data, cast this
-                cast = "(Particle." + fieldCN.simpleName() + ") ";
+                cast = CodeBlock.of("($T) ", fieldCN);
+            } else {
+                fieldCN = particleCN;
+                cast = CodeBlock.builder().build(); // Empty cast for particles without data
             }
 
             String fieldName = toConstant(key);
