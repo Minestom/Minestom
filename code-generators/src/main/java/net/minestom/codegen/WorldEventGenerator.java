@@ -25,6 +25,10 @@ public record WorldEventGenerator(String packageName, String worldEventClassName
         Objects.requireNonNull(outputFolder, "outputFolder cannot be null");
     }
 
+    public WorldEventGenerator(Entry entry, Path outputFolder) {
+        this(entry.packageName(), entry.generatedName(), entry.resource(), outputFolder);
+    }
+
     @Override
     public void generate() {
         ensureDirectory(outputFolder);
