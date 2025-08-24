@@ -4,7 +4,6 @@ import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
@@ -20,9 +19,8 @@ public class ArgumentStringArray extends Argument<String[]> {
         super(id, true, true);
     }
 
-    @NotNull
     @Override
-    public String[] parse(@NotNull CommandSender sender, @NotNull String input) {
+    public String[] parse(CommandSender sender, String input) {
         return input.split(Pattern.quote(StringUtils.SPACE));
     }
 

@@ -7,7 +7,6 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.testing.Env;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,12 +24,12 @@ public class EnchantmentListTest extends AbstractItemComponentTest<EnchantmentLi
     );
 
     @Override
-    protected @NotNull DataComponent<EnchantmentList> component() {
+    protected DataComponent<EnchantmentList> component() {
         return SHARED_COMPONENTS.getFirst();
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, EnchantmentList>> directReadWriteEntries() {
+    protected List<Map.Entry<String, EnchantmentList>> directReadWriteEntries() {
         return List.of(
                 Map.entry("empty", EnchantmentList.EMPTY),
                 Map.entry("single entry", new EnchantmentList(Map.of(Enchantment.SHARPNESS, 1))),

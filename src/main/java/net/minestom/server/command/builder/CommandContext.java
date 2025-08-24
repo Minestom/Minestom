@@ -27,41 +27,41 @@ public class CommandContext {
     protected Map<String, String> rawArgs = new HashMap<>();
     private CommandData returnData;
 
-    public CommandContext(@NotNull String input) {
+    public CommandContext(String input) {
         this.input = input;
         this.commandName = input.split(StringUtils.SPACE)[0];
     }
 
-    public @NotNull String getInput() {
+    public String getInput() {
         return input;
     }
 
-    public @NotNull String getCommandName() {
+    public String getCommandName() {
         return commandName;
     }
 
-    public <T> T get(@NotNull Argument<T> argument) {
+    public <T> T get(Argument<T> argument) {
         return get(argument.getId());
     }
 
-    public <T> T get(@NotNull String identifier) {
+    public <T> T get(String identifier) {
         return (T) args.get(identifier);
     }
 
-    public <T> T getOrDefault(@NotNull Argument<T> argument, T defaultValue) {
+    public <T> T getOrDefault(Argument<T> argument, T defaultValue) {
         return getOrDefault(argument.getId(), defaultValue);
     }
 
-    public <T> T getOrDefault(@NotNull String identifier, T defaultValue) {
+    public <T> T getOrDefault(String identifier, T defaultValue) {
         T value;
         return (value = get(identifier)) != null ? value : defaultValue;
     }
 
-    public boolean has(@NotNull Argument<?> argument) {
+    public boolean has(Argument<?> argument) {
         return args.containsKey(argument.getId());
     }
 
-    public boolean has(@NotNull String identifier) {
+    public boolean has(String identifier) {
         return args.containsKey(identifier);
     }
 
@@ -73,24 +73,24 @@ public class CommandContext {
         this.returnData = returnData;
     }
 
-    public @NotNull Map<String, Object> getMap() {
+    public Map<String, Object> getMap() {
         return args;
     }
 
-    public void copy(@NotNull CommandContext context) {
+    public void copy(CommandContext context) {
         this.args = context.args;
         this.rawArgs = context.rawArgs;
     }
 
-    public String getRaw(@NotNull Argument<?> argument) {
+    public String getRaw(Argument<?> argument) {
         return rawArgs.get(argument.getId());
     }
 
-    public String getRaw(@NotNull String identifier) {
+    public String getRaw(String identifier) {
         return rawArgs.get(identifier);
     }
 
-    public void setArg(@NotNull String id, Object value, String rawInput) {
+    public void setArg(String id, Object value, String rawInput) {
         this.args.put(id, value);
         this.rawArgs.put(id, rawInput);
     }

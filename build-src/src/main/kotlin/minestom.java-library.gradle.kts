@@ -30,6 +30,7 @@ dependencies {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+    modularity.inferModulePath = true
 
     withSourcesJar()
     withJavadocJar()
@@ -58,6 +59,7 @@ tasks.withType<Test> {
     // Viewable packets make tracking harder. Could be re-enabled later.
     jvmArgs("-Dminestom.viewable-packet=false")
     jvmArgs("-Dminestom.inside-test=true")
+    jvmArgs("-Dminestom.acquirable-strict=true")
     minHeapSize = "512m"
     maxHeapSize = "1024m"
 }

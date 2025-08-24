@@ -4,7 +4,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WitherMeta extends MonsterMeta {
@@ -12,7 +11,7 @@ public class WitherMeta extends MonsterMeta {
     private Entity leftHead;
     private Entity rightHead;
 
-    public WitherMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public WitherMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

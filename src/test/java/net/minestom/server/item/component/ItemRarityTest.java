@@ -3,7 +3,6 @@ package net.minestom.server.item.component;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ItemRarityTest extends AbstractItemComponentTest<ItemRarity> {
     @Override
-    protected @NotNull DataComponent<ItemRarity> component() {
+    protected DataComponent<ItemRarity> component() {
         return DataComponents.RARITY;
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, ItemRarity>> directReadWriteEntries() {
+    protected List<Map.Entry<String, ItemRarity>> directReadWriteEntries() {
         return List.of(
                 Map.entry("common", ItemRarity.COMMON)
         );

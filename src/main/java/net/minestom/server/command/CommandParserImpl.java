@@ -1,14 +1,16 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.Graph.Node;
-import net.minestom.server.command.builder.*;
+import net.minestom.server.command.builder.ArgumentCallback;
+import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.CommandData;
+import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.Suggestion;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +96,7 @@ final class CommandParserImpl implements CommandParser {
     }
 
     @Override
-    public @NotNull CommandParser.Result parse(@NotNull CommandSender sender, @NotNull Graph graph, @NotNull String input) {
+    public CommandParser.Result parse(CommandSender sender, Graph graph, String input) {
         final CommandStringReader reader = new CommandStringReader(input);
         Chain chain = new Chain();
         Node parent = graph.root();
@@ -126,7 +128,7 @@ final class CommandParserImpl implements CommandParser {
         return obj == null ? null : getter.apply(obj);
     }
 
-    private static NodeResult parseNode(@NotNull CommandSender sender, Node node, Chain chain, CommandStringReader reader) {
+    private static NodeResult parseNode(CommandSender sender, Node node, Chain chain, CommandStringReader reader) {
         chain = chain.fork();
         Argument<?> argument = node.argument();
         int start = reader.cursor();
@@ -231,7 +233,7 @@ final class CommandParserImpl implements CommandParser {
         private static final Result INSTANCE = new UnknownCommandResult();
 
         @Override
-        public @NotNull ExecutableCommand executable() {
+        public ExecutableCommand executable() {
             return UnknownExecutableCmd.INSTANCE;
         }
 
@@ -251,7 +253,7 @@ final class CommandParserImpl implements CommandParser {
 
         @Nullable CommandCondition condition();
 
-        @NotNull Map<String, ArgumentResult<Object>> arguments();
+        Map<String, ArgumentResult<Object>> arguments();
 
         CommandExecutor globalListener();
 
@@ -271,7 +273,7 @@ final class CommandParserImpl implements CommandParser {
 
     record InvalidCommand(String input, CommandCondition condition, ArgumentCallback callback,
                           ArgumentResult.SyntaxError<?> error,
-                          @NotNull Map<String, ArgumentResult<Object>> arguments, CommandExecutor globalListener,
+                          Map<String, ArgumentResult<Object>> arguments, CommandExecutor globalListener,
                           @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
             implements InternalKnownCommand, Result.KnownCommand.Invalid {
 
@@ -283,13 +285,13 @@ final class CommandParserImpl implements CommandParser {
         }
 
         @Override
-        public @NotNull ExecutableCommand executable() {
+        public ExecutableCommand executable() {
             return new InvalidExecutableCmd(condition, globalListener, callback, error, input, arguments);
         }
     }
 
     record ValidCommand(String input, CommandCondition condition, CommandExecutor executor,
-                        @NotNull Map<String, ArgumentResult<Object>> arguments,
+                        Map<String, ArgumentResult<Object>> arguments,
                         CommandExecutor globalListener, @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
             implements InternalKnownCommand, Result.KnownCommand.Valid {
 
@@ -304,7 +306,7 @@ final class CommandParserImpl implements CommandParser {
         }
 
         @Override
-        public @NotNull ExecutableCommand executable() {
+        public ExecutableCommand executable() {
             return new ValidExecutableCmd(condition, globalListener, executor, input, arguments);
         }
     }
@@ -313,7 +315,7 @@ final class CommandParserImpl implements CommandParser {
         static final ExecutableCommand INSTANCE = new UnknownExecutableCmd();
 
         @Override
-        public @NotNull Result execute(@NotNull CommandSender sender) {
+        public Result execute(CommandSender sender) {
             return ExecutionResultImpl.UNKNOWN;
         }
     }
@@ -322,7 +324,7 @@ final class CommandParserImpl implements CommandParser {
                               String input,
                               Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
         @Override
-        public @NotNull Result execute(@NotNull CommandSender sender) {
+        public Result execute(CommandSender sender) {
             final CommandContext context = createCommandContext(input, arguments);
 
             globalListener().apply(sender, context);
@@ -344,7 +346,7 @@ final class CommandParserImpl implements CommandParser {
                                 ArgumentResult.SyntaxError<?> error, String input,
                                 Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
         @Override
-        public @NotNull Result execute(@NotNull CommandSender sender) {
+        public Result execute(CommandSender sender) {
             globalListener().apply(sender, createCommandContext(input, arguments));
 
             if (condition != null && !condition.canUse(sender, input())) {
@@ -429,7 +431,7 @@ final class CommandParserImpl implements CommandParser {
 
     // ARGUMENT
 
-    private static <T> ArgumentResult<T> parseArgument(@NotNull CommandSender sender, Argument<T> argument, CommandStringReader reader) {
+    private static <T> ArgumentResult<T> parseArgument(CommandSender sender, Argument<T> argument, CommandStringReader reader) {
         // Handle specific type without loop
         try {
             // Single word argument

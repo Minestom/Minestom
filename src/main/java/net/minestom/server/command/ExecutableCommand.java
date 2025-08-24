@@ -4,16 +4,15 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandSyntax;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Internal
 public interface ExecutableCommand {
-    @NotNull Result execute(@NotNull CommandSender sender);
+    Result execute(CommandSender sender);
 
     interface Result {
-        @NotNull Type type();
+        Type type();
 
-        @NotNull CommandData commandData();
+        CommandData commandData();
 
         enum Type {
             /**

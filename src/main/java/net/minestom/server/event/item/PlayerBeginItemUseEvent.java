@@ -8,7 +8,6 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player begins using an item with the item, animation, and duration.
@@ -24,8 +23,8 @@ public class PlayerBeginItemUseEvent implements PlayerInstanceEvent, ItemEvent, 
 
     private boolean cancelled = false;
 
-    public PlayerBeginItemUseEvent(@NotNull Player player, @NotNull PlayerHand hand,
-                                   @NotNull ItemStack itemStack, @NotNull ItemAnimation animation,
+    public PlayerBeginItemUseEvent(Player player, PlayerHand hand,
+                                   ItemStack itemStack, ItemAnimation animation,
                                    long itemUseDuration) {
         this.player = player;
         this.hand = hand;
@@ -35,20 +34,20 @@ public class PlayerBeginItemUseEvent implements PlayerInstanceEvent, ItemEvent, 
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    public @NotNull PlayerHand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
     @Override
-    public @NotNull ItemStack getItemStack() {
+    public ItemStack getItemStack() {
         return itemStack;
     }
 
-    public @NotNull ItemAnimation getAnimation() {
+    public ItemAnimation getAnimation() {
         return animation;
     }
 

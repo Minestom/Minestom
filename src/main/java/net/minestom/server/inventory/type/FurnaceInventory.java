@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
-import org.jetbrains.annotations.NotNull;
 
 public class FurnaceInventory extends Inventory {
 
@@ -13,11 +12,11 @@ public class FurnaceInventory extends Inventory {
     private short progressArrow;
     private short maximumProgress;
 
-    public FurnaceInventory(@NotNull Component title) {
+    public FurnaceInventory(Component title) {
         super(InventoryType.FURNACE, title);
     }
 
-    public FurnaceInventory(@NotNull String title) {
+    public FurnaceInventory(String title) {
         super(InventoryType.FURNACE, title);
     }
 

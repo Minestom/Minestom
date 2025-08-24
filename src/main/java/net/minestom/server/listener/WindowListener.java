@@ -6,12 +6,10 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.click.Click;
-import net.minestom.server.inventory.click.ClickPreprocessor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
-import net.minestom.server.network.packet.server.common.PingPacket;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,9 +71,6 @@ public class WindowListener {
         ItemStack cursorItem = player.getInventory().getCursorItem();
         if (!ItemStack.Hash.of(cursorItem).equals(packet.clickedItem()))
             player.sendPacket(new SetCursorItemPacket(cursorItem));
-
-        // (Why is the ping packet necessary?)
-        player.sendPacket(new PingPacket((1 << 30) | (windowId << 16)));
     }
 
     public static void pong(ClientPongPacket packet, Player player) {
@@ -83,8 +78,7 @@ public class WindowListener {
     }
 
     public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
-        // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
-        player.closeInventory(true);
+        player.closeInventory(true, (byte) packet.windowId());
     }
 
 }

@@ -6,7 +6,6 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player change his held slot (by pressing 1-9 keys).
@@ -19,7 +18,7 @@ public class PlayerChangeHeldSlotEvent implements PlayerInstanceEvent, Cancellab
 
     private boolean cancelled;
 
-    public PlayerChangeHeldSlotEvent(@NotNull Player player, byte oldSlot, byte newSlot) {
+    public PlayerChangeHeldSlotEvent(Player player, byte oldSlot, byte newSlot) {
         this.player = player;
         this.oldSlot = oldSlot;
         this.newSlot = newSlot;
@@ -103,7 +102,7 @@ public class PlayerChangeHeldSlotEvent implements PlayerInstanceEvent, Cancellab
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

@@ -7,7 +7,6 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.block.BlockUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ArgumentBlockState extends Argument<Block> {
 
@@ -16,17 +15,17 @@ public class ArgumentBlockState extends Argument<Block> {
     public static final int INVALID_PROPERTY = 3;
     public static final int INVALID_PROPERTY_VALUE = 4;
 
-    public ArgumentBlockState(@NotNull String id) {
+    public ArgumentBlockState(String id) {
         super(id, true, false);
     }
 
     @Override
-    public @NotNull Block parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public Block parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         return staticParse(input);
     }
 
     @Override
-    public @NotNull ArgumentParserType parser() {
+    public ArgumentParserType parser() {
         return ArgumentParserType.BLOCK_STATE;
     }
 
@@ -34,7 +33,7 @@ public class ArgumentBlockState extends Argument<Block> {
      * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @Deprecated
-    public static Block staticParse(@NotNull String input) throws ArgumentSyntaxException {
+    public static Block staticParse(String input) throws ArgumentSyntaxException {
         final int nbtIndex = input.indexOf("[");
         if (nbtIndex == 0)
             throw new ArgumentSyntaxException("No block type", input, NO_BLOCK);

@@ -8,7 +8,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +52,7 @@ public final class BenchmarkManager {
     private volatile boolean stop = false;
     private long time;
 
-    public void enable(@NotNull Duration duration) {
+    public void enable(Duration duration) {
         Check.stateCondition(enabled, "A benchmark is already running, please disable it first.");
         try {
             THREAD_MX_BEAN.setThreadContentionMonitoringEnabled(true);
@@ -88,7 +87,7 @@ public final class BenchmarkManager {
         this.enabled = false;
     }
 
-    public void addThreadMonitor(@NotNull String threadName) {
+    public void addThreadMonitor(String threadName) {
         THREADS.add(threadName);
     }
 
@@ -101,11 +100,11 @@ public final class BenchmarkManager {
         return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
 
-    public @NotNull Map<String, ThreadResult> getResultMap() {
+    public Map<String, ThreadResult> getResultMap() {
         return Collections.unmodifiableMap(resultMap);
     }
 
-    public @NotNull Component getCpuMonitoringMessage() {
+    public Component getCpuMonitoringMessage() {
         if (!enabled) return Component.text("CPU monitoring is disabled");
         TextComponent.Builder benchmarkMessage = Component.text();
         for (var resultEntry : resultMap.entrySet()) {

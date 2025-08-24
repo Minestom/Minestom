@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
 public interface ExplosionSupplier {
@@ -15,6 +16,6 @@ public interface ExplosionSupplier {
      * @param additionalData data passed via {@link Instance#explode(float, float, float, float, CompoundBinaryTag)} )}. Can be null
      * @return Explosion object representing the algorithm to use
      */
-    Explosion createExplosion(float centerX, float centerY, float centerZ, float strength, CompoundBinaryTag additionalData);
+    Explosion createExplosion(float centerX, float centerY, float centerZ, float strength, @Nullable CompoundBinaryTag additionalData);
 
 }

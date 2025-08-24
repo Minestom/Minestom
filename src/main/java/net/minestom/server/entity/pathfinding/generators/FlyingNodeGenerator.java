@@ -5,7 +5,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +15,7 @@ public class FlyingNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
 
     @Override
-    public @NotNull Collection<? extends PNode> getWalkable(Block.@NotNull Getter getter, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
+    public Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited, PNode current, Point goal, BoundingBox boundingBox) {
         Collection<PNode> nearby = new ArrayList<>();
         tempNode = new PNode(0, 0, 0, 0, 0, current);
 
@@ -95,7 +94,7 @@ public class FlyingNodeGenerator implements NodeGenerator {
     }
 
     @Override
-    public @NotNull OptionalDouble gravitySnap(Block.@NotNull Getter getter, double pointX, double pointY, double pointZ, @NotNull BoundingBox boundingBox, double maxFall) {
+    public OptionalDouble gravitySnap(Block.Getter getter, double pointX, double pointY, double pointZ, BoundingBox boundingBox, double maxFall) {
         return OptionalDouble.of(pointY);
     }
 }

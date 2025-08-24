@@ -6,7 +6,6 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.location.RelativeVec;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -26,7 +25,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
     private final int numberCount;
 
-    public ArgumentRelativeVec(@NotNull String id, int numberCount) {
+    public ArgumentRelativeVec(String id, int numberCount) {
         super(id, true);
         this.numberCount = numberCount;
     }
@@ -35,9 +34,8 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
     abstract Function<String, ? extends Number> getAbsoluteNumberParser();
 
-    @NotNull
     @Override
-    public RelativeVec parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public RelativeVec parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         final String[] split = input.split(StringUtils.SPACE);
         if (split.length != getNumberCount()) {
             throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);

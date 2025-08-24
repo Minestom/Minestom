@@ -5,7 +5,6 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.instance.Instance;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.function.Predicate;
@@ -26,8 +25,8 @@ public class ClosestEntityTarget extends TargetSelector {
      */
     @SafeVarargs
     @Deprecated
-    public ClosestEntityTarget(@NotNull EntityCreature entityCreature, float range,
-                               @NotNull Class<? extends LivingEntity>... entitiesTarget) {
+    public ClosestEntityTarget(EntityCreature entityCreature, float range,
+                               Class<? extends LivingEntity>... entitiesTarget) {
         this(entityCreature, range, ent -> {
             Class<? extends Entity> clazz = ent.getClass();
             for (Class<? extends LivingEntity> targetClass : entitiesTarget) {
@@ -44,8 +43,8 @@ public class ClosestEntityTarget extends TargetSelector {
      * @param range           the maximum range the entity can target others within
      * @param targetPredicate the predicate used to check if the other entity can be targeted
      */
-    public ClosestEntityTarget(@NotNull EntityCreature entityCreature, double range,
-                               @NotNull Predicate<Entity> targetPredicate) {
+    public ClosestEntityTarget(EntityCreature entityCreature, double range,
+                               Predicate<Entity> targetPredicate) {
         super(entityCreature);
         this.range = range;
         this.targetPredicate = targetPredicate;

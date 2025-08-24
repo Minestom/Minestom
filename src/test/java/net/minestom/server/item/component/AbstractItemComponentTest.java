@@ -7,7 +7,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -25,17 +24,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractItemComponentTest<T> {
 
-    protected abstract @NotNull DataComponent<T> component();
+    protected abstract DataComponent<T> component();
 
-    protected abstract @NotNull List<Map.Entry<String, T>> directReadWriteEntries();
+    protected abstract List<Map.Entry<String, T>> directReadWriteEntries();
 
-    private @NotNull Stream<Arguments> directReadWriteMethodSource() {
+    private Stream<Arguments> directReadWriteMethodSource() {
         return directReadWriteEntries().stream().map(entry -> Arguments.of(entry.getKey(), entry.getValue()));
     }
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("directReadWriteMethodSource")
-    public void directReadWriteTest(String testName, @NotNull T entry, Env env) {
+    public void directReadWriteTest(String testName, T entry, Env env) {
         var coder = new RegistryTranscoder<>(Transcoder.NBT, env.process());
         if (component().isSerialized()) {
             var written1 = assertOk(component().encode(coder, entry));

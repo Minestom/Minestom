@@ -13,38 +13,35 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
-import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 final class TestConnectionImpl implements TestConnection {
-    private final Env env;
     private final ServerProcess process;
+    private final GameProfile gameProfile;
     private final PlayerConnectionImpl playerConnection = new PlayerConnectionImpl();
 
     private final AtomicBoolean connected = new AtomicBoolean(false);
 
     private final List<IncomingCollector<ServerPacket>> incomingTrackers = new CopyOnWriteArrayList<>();
 
-    TestConnectionImpl(Env env) {
-        this.env = env;
+    TestConnectionImpl(Env env, GameProfile gameProfile) {
         this.process = env.process();
+        this.gameProfile = gameProfile;
     }
 
     @Override
-    public @NotNull Player connect(@NotNull Instance instance, @NotNull Pos pos) {
+    public Player connect(Instance instance, Pos pos) {
         if (!connected.compareAndSet(false, true)) {
             throw new IllegalStateException("Already connected");
         }
 
-        final GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "RandName");
         var player = process.connection().createPlayer(playerConnection, gameProfile);
         player.eventNode().addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(instance);
@@ -68,7 +65,7 @@ final class TestConnectionImpl implements TestConnection {
     }
 
     @Override
-    public @NotNull <T extends ServerPacket> Collector<T> trackIncoming(@NotNull Class<T> type) {
+    public <T extends ServerPacket> Collector<T> trackIncoming(Class<T> type) {
         var tracker = new IncomingCollector<>(type);
         this.incomingTrackers.add(IncomingCollector.class.cast(tracker));
         return tracker;
@@ -78,7 +75,7 @@ final class TestConnectionImpl implements TestConnection {
         private boolean online = true;
 
         @Override
-        public void sendPacket(@NotNull SendablePacket packet) {
+        public void sendPacket(SendablePacket packet) {
             final var serverPacket = this.extractPacket(packet);
             for (var tracker : incomingTrackers) {
                 if (tracker.type.isAssignableFrom(serverPacket.getClass())) tracker.packets.add(serverPacket);
@@ -101,7 +98,7 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         @Override
-        public @NotNull SocketAddress getRemoteAddress() {
+        public SocketAddress getRemoteAddress() {
             return new InetSocketAddress("localhost", 25565);
         }
 
@@ -125,19 +122,19 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         @Override
-        public @NotNull List<T> collect() {
+        public List<T> collect() {
             incomingTrackers.remove(this);
             return List.copyOf(packets);
         }
     }
 
     static final class TestPlayerImpl extends Player {
-        public TestPlayerImpl(@NotNull PlayerConnection playerConnection, @NotNull GameProfile gameProfile) {
+        public TestPlayerImpl(PlayerConnection playerConnection, GameProfile gameProfile) {
             super(playerConnection, gameProfile);
         }
 
         @Override
-        public void sendChunk(@NotNull Chunk chunk) {
+        public void sendChunk(Chunk chunk) {
             // Send immediately
             sendPacket(chunk.getFullDataPacket());
         }
