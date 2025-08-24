@@ -17,7 +17,10 @@ import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.utils.json.JsonUtil;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,7 +50,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private final RegistryKey<DynamicRegistry<T>> registryKey;
     private final Codec<T> codec;
 
-    DynamicRegistryImpl(@NotNull RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec) {
+    DynamicRegistryImpl(RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec) {
         this.registryKey = registryKey;
         this.codec = codec;
         // Expect stale data possibilities with unsafe ops.
@@ -62,10 +65,10 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     // Used to create compressed registries
-    DynamicRegistryImpl(@NotNull RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec, @NotNull List<T> idToValue,
-                        @NotNull Map<RegistryKey<T>, Integer> keyToId, @NotNull List<RegistryKey<T>> idToKey,
-                        @NotNull Map<Key, T> keyToValue, @NotNull Map<T, RegistryKey<T>> valueToKey,
-                        @NotNull List<DataPack> packById, @NotNull Map<TagKey<T>, RegistryTag<T>> tags) {
+    DynamicRegistryImpl(RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec, List<T> idToValue,
+                        Map<RegistryKey<T>, Integer> keyToId, List<RegistryKey<T>> idToKey,
+                        Map<Key, T> keyToValue, Map<T, RegistryKey<T>> valueToKey,
+                        List<DataPack> packById, Map<TagKey<T>, RegistryTag<T>> tags) {
         this.registryKey = registryKey;
         this.codec = codec;
         this.idToValue = idToValue;
@@ -78,7 +81,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @NotNull RegistryKey<DynamicRegistry<T>> registryKey() {
+    public RegistryKey<DynamicRegistry<T>> registryKey() {
         return this.registryKey;
     }
 
@@ -94,7 +97,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @Nullable T get(@NotNull Key key) {
+    public @Nullable T get(Key key) {
         return keyToValue.get(key);
     }
 
@@ -106,24 +109,24 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @Nullable RegistryKey<T> getKey(@NotNull T value) {
+    public @Nullable RegistryKey<T> getKey(T value) {
         return valueToKey.get(value);
     }
 
     @Override
-    public @Nullable RegistryKey<T> getKey(@NotNull Key key) {
+    public @Nullable RegistryKey<T> getKey(Key key) {
         if (!keyToValue.containsKey(key))
             return null;
         return new RegistryKeyImpl<>(key);
     }
 
     @Override
-    public int getId(@NotNull RegistryKey<T> key) {
+    public int getId(RegistryKey<T> key) {
         return keyToId.getOrDefault(key, -1);
     }
 
     @Override
-    public @NotNull RegistryKey<T> register(@NotNull Key key, @NotNull T object, @Nullable DataPack pack) {
+    public RegistryKey<T> register(Key key, T object, @Nullable DataPack pack) {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
@@ -135,7 +138,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                 idToValue.add(object);
                 idToKey.add(registryKey);
                 keyToId.put(registryKey, idToValue.size() - 1);
-                if (pack != null) packById.add(pack); // Dont add for null, handled.
+                packById.add(pack);
             } else {
                 idToValue.set(id, object);
                 idToKey.set(id, registryKey);
@@ -149,7 +152,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public boolean remove(@NotNull Key key) throws UnsupportedOperationException {
+    public boolean remove(Key key) throws UnsupportedOperationException {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
@@ -190,24 +193,24 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @NotNull Collection<RegistryKey<T>> keys() {
+    public Collection<RegistryKey<T>> keys() {
         return Collections.unmodifiableCollection(idToKey);
     }
 
     @Override
-    public @NotNull Collection<T> values() {
+    public Collection<T> values() {
         return Collections.unmodifiableCollection(idToValue);
     }
 
     // Tags
 
     @Override
-    public @Nullable RegistryTag<T> getTag(@NotNull TagKey<T> key) {
+    public @Nullable RegistryTag<T> getTag(TagKey<T> key) {
         return this.tags.get(key);
     }
 
     @Override
-    public @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key) {
+    public RegistryTag<T> getOrCreateTag(TagKey<T> key) {
         if (!ServerFlag.REGISTRY_FREEZING_TAGS || MinecraftServer.isInitializing())
             return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
         final RegistryTag<T> tag = this.tags.get(key);
@@ -216,17 +219,17 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public boolean removeTag(@NotNull TagKey<T> key) {
+    public boolean removeTag(TagKey<T> key) {
         return this.tags.remove(key) != null;
     }
 
     @Override
-    public @NotNull Collection<RegistryTag<T>> tags() {
+    public Collection<RegistryTag<T>> tags() {
         return Collections.unmodifiableCollection(this.tags.values());
     }
 
     @Override // This method is called by a virtual thread in the configuration phase
-    public @NotNull SendablePacket registryDataPacket(@NotNull Registries registries, boolean excludeVanilla) {
+    public SendablePacket registryDataPacket(Registries registries, boolean excludeVanilla) {
         // We cache the vanilla packet because that is by far the most common case. If some client claims not to have
         // the vanilla datapack we can compute the entire thing.
         if (excludeVanilla) {
@@ -245,7 +248,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public TagsPacket.@NotNull Registry tagRegistry() {
+    public TagsPacket.Registry tagRegistry() {
         final List<TagsPacket.Tag> tagList = new ArrayList<>(tags.size());
         for (final RegistryTag<T> tag : tags.values()) {
             final int[] entries = new int[tag.size()];
@@ -257,7 +260,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return new TagsPacket.Registry(key().asString(), tagList);
     }
 
-    private @NotNull RegistryDataPacket createRegistryDataPacket(@NotNull Registries registries, boolean excludeVanilla) {
+    private RegistryDataPacket createRegistryDataPacket(Registries registries, boolean excludeVanilla) {
         Check.notNull(codec, "Cannot create registry data packet for server-only registry");
         Transcoder<BinaryTag> transcoder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         // Copy to avoid concurrent modification issues while iterating, as we are not synchronized on the registry
@@ -273,7 +276,6 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             packById = this.packById;
         }
         List<RegistryDataPacket.Entry> entries = new ArrayList<>(idToValue.size());
-        final int packByIdSize = packById.size();
         for (int i = 0; i < idToValue.size(); i++) {
             CompoundBinaryTag data = null;
             // sorta todo, sorta just a note:
@@ -285,7 +287,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             // like material, block, etc generate entries which are behind feature flags, whereas the ones which inspect
             // static assets (the traditionally dynamic registries), do not generate those assets.
             T entry = idToValue.get(i);
-            DataPack pack = i < packByIdSize ? packById.get(i) : null;
+            DataPack pack = packById.get(i);
             if (!excludeVanilla || pack != DataPack.MINECRAFT_CORE) {
                 final Result<BinaryTag> entryResult = codec.encode(transcoder, entry);
                 if (entryResult instanceof Result.Ok(BinaryTag tag)) {
@@ -306,7 +308,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
      * @return A safe copy of this registry
      */
     @Contract(pure = true)
-    @NotNull DynamicRegistryImpl<T> compact() {
+    DynamicRegistryImpl<T> compact() {
         if (canFreeze()) {
             return new DynamicRegistryImpl<>(registryKey, codec,
                     List.copyOf(idToValue),
@@ -338,7 +340,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @Nullable Comparator<RegistryKey<T>> idComparator, @NotNull Codec<T> codec) {
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, DynamicRegistryImpl<T> registry, @Nullable Comparator<RegistryKey<T>> idComparator, Codec<T> codec) {
         try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", registry.key().value()))) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", registry.key().value());
             final JsonElement json = JsonUtil.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8));

@@ -3,15 +3,11 @@ package net.minestom.server.registry;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 final class RegistryTagImpl {
@@ -25,12 +21,12 @@ final class RegistryTagImpl {
         }
 
         @Override
-        public boolean contains(@NotNull RegistryKey<Object> value) {
+        public boolean contains(RegistryKey<Object> value) {
             return false;
         }
 
         @Override
-        public @NotNull Iterator<RegistryKey<Object>> iterator() {
+        public Iterator<RegistryKey<Object>> iterator() {
             return Collections.emptyIterator();
         }
 
@@ -47,22 +43,22 @@ final class RegistryTagImpl {
         private final TagKey<T> key;
         private final Set<RegistryKey<T>> entries;
 
-        Backed(@NotNull TagKey<T> key) {
+        Backed(TagKey<T> key) {
             this(key, Set.of());
         }
 
-        Backed(@NotNull TagKey<T> key, @NotNull Collection<RegistryKey<T>> entries) {
+        Backed(TagKey<T> key, Collection<RegistryKey<T>> entries) {
             this.key = key;
             this.entries = ServerFlag.REGISTRY_FREEZING_TAGS ? Set.copyOf(entries) : new CopyOnWriteArraySet<>(entries);
         }
 
         @Override
-        public @NotNull TagKey<T> key() {
+        public TagKey<T> key() {
             return key;
         }
 
         @Override
-        public boolean contains(@NotNull RegistryKey<T> value) {
+        public boolean contains(RegistryKey<T> value) {
             return entries.contains(value instanceof RegistryKeyImpl<T> key ? key : new RegistryKeyImpl<>(value.key()));
         }
 
@@ -72,19 +68,19 @@ final class RegistryTagImpl {
         }
 
         @Override
-        public @NotNull Iterator<RegistryKey<T>> iterator() {
+        public Iterator<RegistryKey<T>> iterator() {
             return entries.iterator();
         }
 
         @Override
-        public boolean add(@NotNull RegistryKey<T> key) {
+        public boolean add(RegistryKey<T> key) {
             var added = entries.add(key);
             if (added) invalidate();
             return added;
         }
 
         @Override
-        public boolean remove(@NotNull RegistryKey<T> key) {
+        public boolean remove(RegistryKey<T> key) {
             boolean removed = entries.remove(key);
             if (removed) invalidate();
             return removed;
@@ -95,7 +91,7 @@ final class RegistryTagImpl {
         }
     }
 
-    record Direct<T>(@NotNull List<RegistryKey<T>> keys) implements RegistryTag<T> {
+    record Direct<T>(List<RegistryKey<T>> keys) implements RegistryTag<T> {
         public Direct {
             keys = List.copyOf(keys);
         }
@@ -106,12 +102,12 @@ final class RegistryTagImpl {
         }
 
         @Override
-        public boolean contains(@NotNull RegistryKey<T> value) {
+        public boolean contains(RegistryKey<T> value) {
             return keys.contains(value instanceof RegistryKeyImpl<T> key ? key : new RegistryKeyImpl<>(value.key()));
         }
 
         @Override
-        public @NotNull Iterator<RegistryKey<T>> iterator() {
+        public Iterator<RegistryKey<T>> iterator() {
             return keys.iterator();
         }
 
@@ -122,7 +118,7 @@ final class RegistryTagImpl {
     }
 
     static final class BuilderImpl<T> implements RegistryTag.Builder<T> {
-        private final TagKey<T> key;
+        private final @Nullable TagKey<T> key;
         private final List<RegistryKey<T>> entries;
 
         BuilderImpl(@Nullable TagKey<T> key) {
@@ -130,12 +126,12 @@ final class RegistryTagImpl {
             this.entries = new ArrayList<>();
         }
 
-        public boolean add(@NotNull RegistryKey<T> key) {
+        public boolean add(RegistryKey<T> key) {
             Check.notNull(key, "Registry key cannot be null");
             return entries.add(key);
         }
 
-        public boolean remove(@NotNull RegistryKey<T> key) {
+        public boolean remove(RegistryKey<T> key) {
             Check.notNull(key, "Registry key cannot be null");
             return entries.remove(key);
         }

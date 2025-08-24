@@ -6,7 +6,6 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.TradeListPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,11 +19,11 @@ public class VillagerInventory extends Inventory {
     private boolean regularVillager;
     private boolean canRestock;
 
-    public VillagerInventory(@NotNull Component title) {
+    public VillagerInventory(Component title) {
         super(InventoryType.MERCHANT, title);
     }
 
-    public VillagerInventory(@NotNull String title) {
+    public VillagerInventory(String title) {
         super(InventoryType.MERCHANT, title);
     }
 
@@ -86,7 +85,7 @@ public class VillagerInventory extends Inventory {
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
+    public boolean addViewer(Player player) {
         final boolean result = super.addViewer(player);
         if (result) player.sendPacket(tradeCache);
         return result;

@@ -18,7 +18,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.registry.RegistryTranscoder;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -40,9 +39,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
         super(id, true);
     }
 
-    @NotNull
     @Override
-    public ItemStack parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public ItemStack parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         return staticParse(input);
     }
 
@@ -55,7 +53,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
      * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @SuppressWarnings("unchecked") @Deprecated
-    public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
+    public static ItemStack staticParse(String input) throws ArgumentSyntaxException {
         var reader = new StringReader(input);
 
         final Material material = Material.fromKey(reader.readKey());
@@ -116,7 +114,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
         private String input;
         private int index = 0;
 
-        public StringReader(@NotNull String input) {
+        public StringReader(String input) {
             this.input = input;
         }
 
@@ -140,7 +138,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             index++;
         }
 
-        public @NotNull Key readKey() {
+        public Key readKey() {
             char c;
             int start = index;
             while (hasMore() && (c = peek()) != '{' && c != '[' && c != '=') {
@@ -149,7 +147,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             return Key.key(input.substring(start, index));
         }
 
-        public @NotNull BinaryTag readTag() {
+        public BinaryTag readTag() {
             try {
                 StringBuilder remainder = new StringBuilder();
                 final BinaryTag result = MinestomAdventure.tagStringIO().asTag(input.substring(index), remainder);

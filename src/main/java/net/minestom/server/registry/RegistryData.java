@@ -25,7 +25,6 @@ import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -34,12 +33,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -52,54 +46,56 @@ import java.util.function.Supplier;
 public final class RegistryData {
 
     @ApiStatus.Internal
-    public static BlockEntry block(@NotNull Keyed namespace, @NotNull Properties main) {
+    public static BlockEntry block(@NotNull Keyed namespace, Properties main) {
         return new BlockEntry(namespace.key(), main, new HashMap<>(), null, null);
     }
 
     @ApiStatus.Internal
-    public static BlockEntry block(@NotNull Keyed namespace, @NotNull Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
+    public static BlockEntry block(@NotNull Keyed namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
         return new BlockEntry(namespace.key(), main, internCache, parent, parentProperties);
     }
 
     @ApiStatus.Internal
-    public static MaterialEntry material(@NotNull Keyed namespace, @NotNull Properties main) {
+    public static MaterialEntry material(@NotNull Keyed namespace, Properties main) {
         return new MaterialEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static EntityEntry entity(@NotNull Keyed namespace, @NotNull Properties main) {
+    public static EntityEntry entity(@NotNull Keyed namespace, Properties main) {
         return new EntityEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static VillagerProfessionEntry villagerProfession(@NotNull Keyed namespace, @NotNull Properties main) {
+    public static VillagerProfessionEntry villagerProfession(@NotNull Keyed namespace, Properties main) {
         return new VillagerProfessionEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static FeatureFlagEntry featureFlag(@NotNull Keyed namespace, @NotNull Properties main) {
+    public static FeatureFlagEntry featureFlag(@NotNull Keyed namespace, Properties main) {
         return new FeatureFlagEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static FluidEntry fluid(@NotNull Keyed namespace, @NotNull Properties main) {
+    public static FluidEntry fluid(@NotNull Keyed namespace, Properties main) {
         return new FluidEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static PotionEffectEntry potionEffect(@NotNull Keyed namespace, @NotNull Properties main) {
+    public static PotionEffectEntry potionEffect(@NotNull Keyed namespace, Properties main) {
         return new PotionEffectEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static AttributeEntry attribute(@NotNull Keyed namespace, @NotNull Properties main) {
+    public static AttributeEntry attribute(@NotNull Keyed namespace, Properties main) {
         return new AttributeEntry(namespace.key(), main);
     }
 
+    @ApiStatus.Internal
     public static GameEventEntry gameEventEntry(@NotNull Keyed namespace, Properties properties) {
         return new GameEventEntry(namespace.key(), properties);
     }
 
+    @ApiStatus.Internal
     public static BlockSoundTypeEntry blockSoundTypeEntry(@NotNull Keyed namespace, Properties properties) {
         return new BlockSoundTypeEntry(namespace.key(), properties);
     }
@@ -107,7 +103,7 @@ public final class RegistryData {
     /**
      * @param path The path without a leading slash, e.g. "blocks.json"
      */
-    public static @Nullable InputStream loadRegistryFile(@NotNull String path) throws IOException {
+    public static @Nullable InputStream loadRegistryFile(String path) throws IOException {
         // 1. Try to load from jar resources
         InputStream resourceStream = RegistryData.class.getClassLoader().getResourceAsStream(path);
 
@@ -151,7 +147,7 @@ public final class RegistryData {
      * @throws IllegalStateException when MinecraftServer isn't initializing.
      */
     @ApiStatus.Internal
-    public static <T extends StaticProtocolObject<T>> @NotNull Registry<T> createStaticRegistry(@NotNull RegistryKey<Registry<T>> registryKey, @NotNull Loader<T> loader) {
+    public static <T extends StaticProtocolObject<T>> Registry<T> createStaticRegistry(RegistryKey<Registry<T>> registryKey, Loader<T> loader) {
         Check.stateCondition(!MinecraftServer.isInitializing(),
                 "Static registry `{0}` cannot be created before its unsealed. Did you forget to do MinecraftServer#init before using?", registryKey.name());
         // Create the registry (data)
@@ -174,7 +170,7 @@ public final class RegistryData {
     }
 
     @ApiStatus.Internal
-    static <T> @Unmodifiable Map<TagKey<T>, RegistryTag<T>> loadTags(@NotNull DetourRegistry detourRegistry, @NotNull Key registryKey) {
+    static <T> @Unmodifiable Map<TagKey<T>, RegistryTag<T>> loadTags(DetourRegistry detourRegistry, @NotNull Key registryKey) {
         final var tagJson = RegistryData.load(String.format("tags/%s.json", registryKey.value()), false);
         final Map<TagKey<T>, RegistryTag<T>> tags = new HashMap<>(tagJson.size());
         for (String tagName : tagJson.asMap().keySet()) {
@@ -184,7 +180,7 @@ public final class RegistryData {
         return Map.copyOf(tags);
     }
 
-    private static <T> @NotNull RegistryTag<T> loadTag(@NotNull DetourRegistry detourRegistry, Map<TagKey<T>, RegistryTag<T>> currentTags, TagKey<T> tagKey, Properties main) {
+    private static <T> RegistryTag<T> loadTag(DetourRegistry detourRegistry, Map<TagKey<T>, RegistryTag<T>> currentTags, TagKey<T> tagKey, Properties main) {
         final RegistryTag<T> registryTag = currentTags.get(tagKey);
         if (registryTag != null) return registryTag;
         // If the tag doesnt exist, we create it
@@ -207,7 +203,7 @@ public final class RegistryData {
 
     @FunctionalInterface
     public interface Loader<T extends StaticProtocolObject<T>> {
-        @NotNull T get(RegistryKey<T> key, Properties properties);
+        T get(RegistryKey<T> key, Properties properties);
     }
 
     public record GameEventEntry(Key key, int id, int notificationRadius) implements Entry {
@@ -244,7 +240,7 @@ public final class RegistryData {
         private final Shape collisionShape;
         private final Shape occlusionShape;
 
-        private BlockEntry(Key namespace, Properties main, @NotNull Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
+        private BlockEntry(Key namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
             assert parent == null || !main.asMap().isEmpty() : "BlockEntry cannot be empty if it has a parent";
             this.key = parent != null ? parent.key : namespace;
             this.id = fromParent(parent, BlockEntry::id, main, "id", Properties::getInt, null);
@@ -309,8 +305,8 @@ public final class RegistryData {
             );
         }
 
-        private static <R>  R fromParent(@Nullable BlockEntry parent, @NotNull Function<BlockEntry, R> parentProperty,
-                                @Nullable Properties main, @NotNull String name, @NotNull BiFunction<Properties, String, R> function,
+        private static <R>  R fromParent(@Nullable BlockEntry parent, Function<BlockEntry, R> parentProperty,
+                                @Nullable Properties main, String name, BiFunction<Properties, String, R> function,
                                 @Nullable R defaultValue) {
             R value = null;
             if (main != null && main.containsKey(name)) {  // Required to have a nullable properties method
@@ -328,7 +324,7 @@ public final class RegistryData {
             return value;
         }
 
-        public @NotNull Key key() {
+        public Key key() {
             return key;
         }
 
@@ -457,7 +453,7 @@ public final class RegistryData {
             }
         }
 
-        public @NotNull Key key() {
+        public Key key() {
             return key;
         }
 
@@ -465,7 +461,7 @@ public final class RegistryData {
             return id;
         }
 
-        public @NotNull String translationKey() {
+        public String translationKey() {
             return translationKey;
         }
 
@@ -473,7 +469,7 @@ public final class RegistryData {
             return blockSupplier.get();
         }
 
-        public @NotNull DataComponentMap prototype() {
+        public DataComponentMap prototype() {
             if (prototype instanceof Either.Left(var components)) {
                 final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, MinecraftServer.process());
                 DataComponentMap.Builder builder = DataComponentMap.builder();
@@ -562,7 +558,7 @@ public final class RegistryData {
             this.entityOffsets = Map.copyOf(entityOffsets);
         }
 
-        public @NotNull Key key() {
+        public Key key() {
             return key;
         }
 
@@ -620,11 +616,11 @@ public final class RegistryData {
          * @param attachmentName The attachment to retrieve
          * @return A list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
          */
-        public @Nullable List<Double> entityAttachment(@NotNull String attachmentName) {
+        public @Nullable List<Double> entityAttachment(String attachmentName) {
             return entityOffsets.get(attachmentName);
         }
 
-        public @NotNull BoundingBox boundingBox() {
+        public BoundingBox boundingBox() {
             return boundingBox;
         }
     }
@@ -644,7 +640,7 @@ public final class RegistryData {
             }
         }
 
-        public @NotNull Key key() {
+        public Key key() {
             return key;
         }
 
@@ -697,7 +693,7 @@ public final class RegistryData {
         }
     }
 
-    public record BlockSoundTypeEntry(@NotNull Key key, float volume, float pitch,
+    public record BlockSoundTypeEntry(Key key, float volume, float pitch,
                                       SoundEvent breakSound, SoundEvent hitSound, SoundEvent fallSound,
                                       SoundEvent placeSound, SoundEvent stepSound) {
         public BlockSoundTypeEntry(Key namespace, Properties main) {
@@ -857,7 +853,7 @@ public final class RegistryData {
 
         <T> List<T> getList(String name, List<T> defaultValue);
 
-        default <T> @NotNull List<T> getList(String name) {
+        default <T> List<T> getList(String name) {
             return getList(name, List.of());
         }
 
@@ -873,7 +869,7 @@ public final class RegistryData {
         Map<String, Object> asMap();
 
         @Override
-        default @NotNull Iterator<Map.Entry<String, Object>> iterator() {
+        default Iterator<Map.Entry<String, Object>> iterator() {
             return asMap().entrySet().iterator();
         }
 

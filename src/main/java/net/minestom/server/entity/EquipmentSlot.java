@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,19 +26,19 @@ public enum EquipmentSlot {
     private static final Map<Integer, EquipmentSlot> BY_PROTOCOL_ID = Arrays.stream(values())
             .collect(Collectors.toMap(EquipmentSlot::protocolId, slot -> slot));
     private static final Map<Integer, EquipmentSlot> BY_LEGACY_PROTOCOL_ID = Arrays.stream(values())
-            .collect(Collectors.toMap(EquipmentSlot::protocolId, slot -> slot));
+            .collect(Collectors.toMap(EquipmentSlot::legacyProtocolId, slot -> slot));
 
     public static final NetworkBuffer.Type<EquipmentSlot> NETWORK_TYPE = NetworkBuffer.VAR_INT
             .transform(BY_PROTOCOL_ID::get, EquipmentSlot::protocolId);
     public static final Codec<EquipmentSlot> CODEC = Codec.STRING
             .transform(BY_NBT_NAME::get, EquipmentSlot::nbtName);
 
-    public static @NotNull List<@NotNull EquipmentSlot> armors() {
+    public static List<EquipmentSlot> armors() {
         return ARMORS;
     }
 
     @Deprecated
-    public static @NotNull EquipmentSlot fromLegacyProtocolId(int legacyProtocolId) {
+    public static EquipmentSlot fromLegacyProtocolId(int legacyProtocolId) {
         final EquipmentSlot slot = BY_LEGACY_PROTOCOL_ID.get(legacyProtocolId);
         if (slot != null) return slot;
 
@@ -52,7 +51,7 @@ public enum EquipmentSlot {
     private final boolean armor;
     private final int armorSlot;
 
-    EquipmentSlot(int protocolId, int legacyProtocolId, @NotNull String nbtName, boolean armor, int armorSlot) {
+    EquipmentSlot(int protocolId, int legacyProtocolId, String nbtName, boolean armor, int armorSlot) {
         this.protocolId = protocolId;
         this.legacyProtocolId = legacyProtocolId;
         this.nbtName = nbtName;
@@ -77,7 +76,7 @@ public enum EquipmentSlot {
         return legacyProtocolId;
     }
 
-    public @NotNull String nbtName() {
+    public String nbtName() {
         return nbtName;
     }
 

@@ -4,25 +4,24 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
-import net.minestom.server.registry.BuiltinRegistries;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.registry.BuiltinRegistries;
 
 public sealed interface ChatType extends Holder.Direct<ChatType>, ChatTypes permits ChatTypeImpl {
 
-    @NotNull Codec<ChatType> REGISTRY_CODEC = StructCodec.struct(
+    Codec<ChatType> REGISTRY_CODEC = StructCodec.struct(
             "chat", ChatTypeDecoration.CODEC, ChatType::chat,
             "narration", ChatTypeDecoration.CODEC, ChatType::narration,
             ChatType::create);
 
-    static @NotNull ChatType create(
-            @NotNull ChatTypeDecoration chat,
-            @NotNull ChatTypeDecoration narration
+    static ChatType create(
+            ChatTypeDecoration chat,
+            ChatTypeDecoration narration
     ) {
         return new ChatTypeImpl(chat, narration);
     }
 
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -33,13 +32,13 @@ public sealed interface ChatType extends Holder.Direct<ChatType>, ChatTypes perm
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
+    static DynamicRegistry<ChatType> createDefaultRegistry() {
         return DynamicRegistry.load(BuiltinRegistries.CHAT_TYPE, REGISTRY_CODEC);
     }
 
-    @NotNull ChatTypeDecoration chat();
+    ChatTypeDecoration chat();
 
-    @NotNull ChatTypeDecoration narration();
+    ChatTypeDecoration narration();
 
     final class Builder {
         private ChatTypeDecoration chat;
@@ -48,17 +47,17 @@ public sealed interface ChatType extends Holder.Direct<ChatType>, ChatTypes perm
         private Builder() {
         }
 
-        public Builder chat(@NotNull ChatTypeDecoration chat) {
+        public Builder chat(ChatTypeDecoration chat) {
             this.chat = chat;
             return this;
         }
 
-        public Builder narration(@NotNull ChatTypeDecoration narration) {
+        public Builder narration(ChatTypeDecoration narration) {
             this.narration = narration;
             return this;
         }
 
-        public @NotNull ChatType build() {
+        public ChatType build() {
             return new ChatTypeImpl(chat, narration);
         }
     }

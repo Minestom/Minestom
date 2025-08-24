@@ -5,7 +5,6 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,12 +21,12 @@ public class ComponentTest extends AbstractItemComponentTest<Component> {
     );
 
     @Override
-    protected @NotNull DataComponent<Component> component() {
+    protected DataComponent<Component> component() {
         return SHARED_COMPONENTS.getFirst();
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, Component>> directReadWriteEntries() {
+    protected List<Map.Entry<String, Component>> directReadWriteEntries() {
         // Component serialization is well tested elsewhere, this is just a sanity check really.
         return List.of(
                 Map.entry("empty component", Component.empty()),

@@ -1,12 +1,7 @@
 package net.minestom.server.sound;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.registry.Registry;
-import net.minestom.server.registry.RegistryData;
-import net.minestom.server.registry.BuiltinRegistries;
-import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.registry.StaticProtocolObject;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.registry.*;
 import org.jetbrains.annotations.UnknownNullability;
 
 record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject<BuiltinSoundEvent>, SoundEvent {
@@ -17,11 +12,11 @@ record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject<Builti
                     (namespace, properties) -> new BuiltinSoundEvent(namespace.key(), properties.getInt("id"))
             );
 
-    static @UnknownNullability SoundEvent get(@NotNull String key) {
+    static @UnknownNullability SoundEvent get(String key) {
         return REGISTRY.get(Key.key(key));
     }
 
-    static @UnknownNullability SoundEvent get(@NotNull RegistryKey<? extends SoundEvent> key) {
+    static @UnknownNullability SoundEvent get(RegistryKey<? extends SoundEvent> key) {
         return REGISTRY.get((RegistryKey<BuiltinSoundEvent>) key);
     }
 
@@ -31,7 +26,7 @@ record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject<Builti
     }
 
     @Override
-    public @NotNull String name() {
+    public String name() {
         return StaticProtocolObject.super.name();
     }
 }

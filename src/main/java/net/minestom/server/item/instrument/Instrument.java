@@ -6,41 +6,40 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 public sealed interface Instrument extends Holder.Direct<Instrument>, Instruments permits InstrumentImpl {
-    @NotNull NetworkBuffer.Type<Instrument> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
+    NetworkBuffer.Type<Instrument> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
             SoundEvent.NETWORK_TYPE, Instrument::soundEvent,
             NetworkBuffer.FLOAT, Instrument::useDuration,
             NetworkBuffer.FLOAT, Instrument::range,
             NetworkBuffer.COMPONENT, Instrument::description,
             InstrumentImpl::new);
-    @NotNull Codec<Instrument> REGISTRY_CODEC = StructCodec.struct(
+    Codec<Instrument> REGISTRY_CODEC = StructCodec.struct(
             "sound_event", SoundEvent.CODEC, Instrument::soundEvent,
             "use_duration", Codec.FLOAT, Instrument::useDuration,
             "range", Codec.FLOAT, Instrument::range,
             "description", Codec.COMPONENT, Instrument::description,
             InstrumentImpl::new);
 
-    @NotNull NetworkBuffer.Type<Holder<Instrument>> NETWORK_TYPE = Holder.networkType(Registries::instrument, REGISTRY_NETWORK_TYPE);
-    @NotNull Codec<Holder<Instrument>> CODEC = Holder.codec(Registries::instrument, REGISTRY_CODEC);
+    NetworkBuffer.Type<Holder<Instrument>> NETWORK_TYPE = Holder.networkType(Registries::instrument, REGISTRY_NETWORK_TYPE);
+    Codec<Holder<Instrument>> CODEC = Holder.codec(Registries::instrument, REGISTRY_CODEC);
 
-    static @NotNull Instrument create(
-            @NotNull SoundEvent soundEvent,
+    static Instrument create(
+            SoundEvent soundEvent,
             float useDuration,
             float range,
-            @NotNull Component description
+            Component description
     ) {
         return new InstrumentImpl(soundEvent, useDuration, range, description);
     }
 
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -50,11 +49,11 @@ public sealed interface Instrument extends Holder.Direct<Instrument>, Instrument
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<Instrument> createDefaultRegistry() {
+    static DynamicRegistry<Instrument> createDefaultRegistry() {
         return DynamicRegistry.load(BuiltinRegistries.INSTRUMENT, REGISTRY_CODEC);
     }
 
-    @NotNull SoundEvent soundEvent();
+    SoundEvent soundEvent();
 
     float useDuration();
 
@@ -64,7 +63,7 @@ public sealed interface Instrument extends Holder.Direct<Instrument>, Instrument
 
     float range();
 
-    @NotNull Component description();
+    Component description();
 
     final class Builder {
         private SoundEvent soundEvent;
@@ -75,27 +74,27 @@ public sealed interface Instrument extends Holder.Direct<Instrument>, Instrument
         private Builder() {
         }
 
-        public @NotNull Builder soundEvent(@NotNull SoundEvent soundEvent) {
+        public Builder soundEvent(SoundEvent soundEvent) {
             this.soundEvent = soundEvent;
             return this;
         }
 
-        public @NotNull Builder useDuration(float useDuration) {
+        public Builder useDuration(float useDuration) {
             this.useDuration = useDuration;
             return this;
         }
 
-        public @NotNull Builder range(float range) {
+        public Builder range(float range) {
             this.range = range;
             return this;
         }
 
-        public @NotNull Builder description(@NotNull Component description) {
+        public Builder description(Component description) {
             this.description = description;
             return this;
         }
 
-        public @NotNull Instrument build() {
+        public Instrument build() {
             return new InstrumentImpl(soundEvent, useDuration, range, description);
         }
     }

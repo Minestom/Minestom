@@ -7,19 +7,18 @@ import net.minestom.server.color.Color;
 import net.minestom.server.sound.Music;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public record BiomeEffects(
-        @NotNull RGBLike fogColor,
-        @NotNull RGBLike skyColor,
-        @NotNull RGBLike waterColor,
-        @NotNull RGBLike waterFogColor,
+        RGBLike fogColor,
+        RGBLike skyColor,
+        RGBLike waterColor,
+        RGBLike waterFogColor,
         @Nullable RGBLike foliageColor,
         @Nullable RGBLike grassColor,
-        @NotNull GrassColorModifier grassColorModifier,
+        GrassColorModifier grassColorModifier,
         @Nullable BiomeEffects.Particle biomeParticle,
         @Nullable SoundEvent ambientSound,
         @Nullable BiomeEffects.MoodSound moodSound,
@@ -64,7 +63,7 @@ public record BiomeEffects(
     }
 
     public record MoodSound(
-            @NotNull SoundEvent sound,
+            SoundEvent sound,
             int tickDelay,
             int blockSearchExtent,
             double offset
@@ -78,7 +77,7 @@ public record BiomeEffects(
     }
 
     public record AdditionsSound(
-            @NotNull SoundEvent sound,
+            SoundEvent sound,
             double tickChance
     ) {
         public static final Codec<AdditionsSound> CODEC = StructCodec.struct(
@@ -87,7 +86,7 @@ public record BiomeEffects(
                 AdditionsSound::new);
     }
 
-    public record WeightedMusic(@NotNull Music music, int wieght) {
+    public record WeightedMusic(Music music, int wieght) {
         public static final Codec<WeightedMusic> CODEC = StructCodec.struct(
                 "data", Music.CODEC, WeightedMusic::music,
                 "weight", Codec.INT, WeightedMusic::wieght,
@@ -116,22 +115,22 @@ public record BiomeEffects(
         Builder() {
         }
 
-        public Builder fogColor(@NotNull RGBLike fogColor) {
+        public Builder fogColor(RGBLike fogColor) {
             this.fogColor = fogColor;
             return this;
         }
 
-        public Builder skyColor(@NotNull RGBLike skyColor) {
+        public Builder skyColor(RGBLike skyColor) {
             this.skyColor = skyColor;
             return this;
         }
 
-        public Builder waterColor(@NotNull RGBLike waterColor) {
+        public Builder waterColor(RGBLike waterColor) {
             this.waterColor = waterColor;
             return this;
         }
 
-        public Builder waterFogColor(@NotNull RGBLike waterFogColor) {
+        public Builder waterFogColor(RGBLike waterFogColor) {
             this.waterFogColor = waterFogColor;
             return this;
         }
@@ -146,7 +145,7 @@ public record BiomeEffects(
             return this;
         }
 
-        public Builder grassColorModifier(@NotNull GrassColorModifier grassColorModifier) {
+        public Builder grassColorModifier(GrassColorModifier grassColorModifier) {
             this.grassColorModifier = grassColorModifier;
             return this;
         }

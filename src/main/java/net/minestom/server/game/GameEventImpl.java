@@ -6,7 +6,6 @@ import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 /**
@@ -28,12 +27,12 @@ record GameEventImpl(RegistryData.GameEventEntry registry) implements GameEvent 
         return new GameEventImpl(RegistryData.gameEventEntry(namespace, properties));
     }
 
-    static @UnknownNullability GameEvent get(@NotNull RegistryKey<GameEvent> key) {
+    static @UnknownNullability GameEvent get(RegistryKey<GameEvent> key) {
         return REGISTRY.get(key);
     }
 
     @Override
-    public @NotNull Key key() {
+    public Key key() {
         return registry.key();
     }
 

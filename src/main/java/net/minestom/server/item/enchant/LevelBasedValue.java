@@ -10,26 +10,25 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public interface LevelBasedValue {
-    @NotNull RegistryKey<DynamicRegistry<StructCodec<? extends LevelBasedValue>>> REGISTRY_KEY = RegistryKey.unsafeOf("minestom:enchantment_level_based_value");
+    RegistryKey<DynamicRegistry<StructCodec<? extends LevelBasedValue>>> REGISTRY_KEY = RegistryKey.unsafeOf("minestom:enchantment_level_based_value");
 
-    @NotNull StructCodec<LevelBasedValue> TAGGED_CODEC = Codec.RegistryTaggedUnion(
+    StructCodec<LevelBasedValue> TAGGED_CODEC = Codec.RegistryTaggedUnion(
             Registries::enchantmentLevelBasedValues, LevelBasedValue::codec, "type");
-    @NotNull Codec<LevelBasedValue> CODEC = new Codec<>() {
+    Codec<LevelBasedValue> CODEC = new Codec<>() {
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable LevelBasedValue value) {
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable LevelBasedValue value) {
             if (value instanceof Constant(float constantValue))
                 return new Result.Ok<>(coder.createFloat(constantValue));
             return TAGGED_CODEC.encode(coder, value);
         }
 
         @Override
-        public @NotNull <D> Result<LevelBasedValue> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public <D> Result<LevelBasedValue> decode(Transcoder<D> coder, D value) {
             final Result<Float> numberResult = coder.getFloat(value);
             if (numberResult instanceof Result.Ok(Float number))
                 return new Result.Ok<>(new Constant(number));
@@ -38,7 +37,7 @@ public interface LevelBasedValue {
     };
 
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> createDefaultRegistry() {
+    static DynamicRegistry<StructCodec<? extends LevelBasedValue>> createDefaultRegistry() {
         return DynamicRegistry.create(REGISTRY_KEY, null, registry -> {
             // Note that constant is omitted from the registry, it has serialization handled out of band above.
             registry.register("linear", Linear.CODEC, DataPack.MINECRAFT_CORE);
@@ -51,7 +50,7 @@ public interface LevelBasedValue {
 
     float calc(int level);
 
-    @NotNull StructCodec<? extends LevelBasedValue> codec();
+    StructCodec<? extends LevelBasedValue> codec();
 
     record Constant(float value) implements LevelBasedValue {
 
@@ -61,7 +60,7 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull StructCodec<Constant> codec() {
+        public StructCodec<Constant> codec() {
             throw new UnsupportedOperationException("Constant values are serialized as a special case, see LevelBasedValue.CODEC");
         }
     }
@@ -79,12 +78,12 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull StructCodec<Linear> codec() {
+        public StructCodec<Linear> codec() {
             return CODEC;
         }
     }
 
-    record Clamped(@NotNull LevelBasedValue value, float min, float max) implements LevelBasedValue {
+    record Clamped(LevelBasedValue value, float min, float max) implements LevelBasedValue {
         public static final StructCodec<Clamped> CODEC = StructCodec.struct(
                 "value", LevelBasedValue.CODEC, Clamped::value,
                 "min", Codec.FLOAT, Clamped::min,
@@ -98,13 +97,13 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull StructCodec<Clamped> codec() {
+        public StructCodec<Clamped> codec() {
             return CODEC;
         }
     }
 
-    record Fraction(@NotNull LevelBasedValue numerator,
-                    @NotNull LevelBasedValue denominator) implements LevelBasedValue {
+    record Fraction(LevelBasedValue numerator,
+                    LevelBasedValue denominator) implements LevelBasedValue {
         public static final StructCodec<Fraction> CODEC = StructCodec.struct(
                 "numerator", LevelBasedValue.CODEC, Fraction::numerator,
                 "denominator", LevelBasedValue.CODEC, Fraction::denominator,
@@ -118,7 +117,7 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull StructCodec<Fraction> codec() {
+        public StructCodec<Fraction> codec() {
             return CODEC;
         }
     }
@@ -135,12 +134,12 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull StructCodec<LevelsSquared> codec() {
+        public StructCodec<LevelsSquared> codec() {
             return CODEC;
         }
     }
 
-    record Lookup(@NotNull List<Float> values, @NotNull LevelBasedValue fallback) implements LevelBasedValue {
+    record Lookup(List<Float> values, LevelBasedValue fallback) implements LevelBasedValue {
         public static final StructCodec<Lookup> CODEC = StructCodec.struct(
                 "values", Codec.FLOAT.list(), Lookup::values,
                 "fallback", LevelBasedValue.CODEC, Lookup::fallback,
@@ -154,7 +153,7 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull StructCodec<Lookup> codec() {
+        public StructCodec<Lookup> codec() {
             return CODEC;
         }
     }

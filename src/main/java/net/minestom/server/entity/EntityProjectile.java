@@ -15,7 +15,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.thread.Acquirable;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -33,7 +32,7 @@ public class EntityProjectile extends Entity {
     private final Entity shooter;
     private boolean wasStuck;
 
-    public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
+    public EntityProjectile(@Nullable Entity shooter, EntityType entityType) {
         super(entityType);
         this.shooter = shooter;
         setup();
@@ -62,7 +61,7 @@ public class EntityProjectile extends Entity {
         shoot(from, to, shootEvent.getPower(), shootEvent.getSpread());
     }
 
-    private void shoot(@NotNull Point from, @NotNull Point to, double power, double spread) {
+    private void shoot(Point from, Point to, double power, double spread) {
         double dx = to.x() - from.x();
         double dy = to.y() - from.y();
         double dz = to.z() - from.z();
@@ -141,7 +140,7 @@ public class EntityProjectile extends Entity {
         final double part = bb.width() / 2;
         final Vec dir = posNow.sub(pos).asVec();
         final int parts = (int) Math.ceil(dir.length() / part);
-        final Pos direction = dir.normalize().mul(part).asPosition();
+        final Pos direction = dir.normalize().mul(part).asPos();
         final long aliveTicks = getAliveTicks();
         Block block = null;
         Point blockPos = null;
@@ -195,7 +194,7 @@ public class EntityProjectile extends Entity {
     @ApiStatus.Experimental
     @SuppressWarnings("unchecked")
     @Override
-    public @NotNull Acquirable<? extends EntityProjectile> acquirable() {
+    public Acquirable<? extends EntityProjectile> acquirable() {
         return (Acquirable<? extends EntityProjectile>) super.acquirable();
     }
 }

@@ -1,10 +1,5 @@
 package net.minestom.server.thread;
 
-import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * Represents an object that has been safely acquired and can be freed again.
  * <p>
@@ -13,31 +8,8 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @param <T> the type of the acquired object
  */
-public final class Acquired<T> {
-    private final T value;
-    private final Thread owner;
-    private final ReentrantLock lock;
-    private boolean unlocked;
+public sealed interface Acquired<T> permits AcquiredImpl {
+    T get();
 
-    Acquired(T value, TickThread tickThread) {
-        this.value = value;
-        this.owner = Thread.currentThread();
-        this.lock = AcquirableImpl.enter(owner, tickThread);
-    }
-
-    public @NotNull T get() {
-        safeCheck();
-        return value;
-    }
-
-    public void unlock() {
-        safeCheck();
-        this.unlocked = true;
-        AcquirableImpl.leave(lock);
-    }
-
-    private void safeCheck() {
-        Check.stateCondition(Thread.currentThread() != owner, "Acquired object is owned by the thread {0}", owner);
-        Check.stateCondition(unlocked, "The acquired element has already been unlocked!");
-    }
+    void unlock();
 }

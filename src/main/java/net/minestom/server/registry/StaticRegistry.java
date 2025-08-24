@@ -7,15 +7,9 @@ import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -31,10 +25,10 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     private final Map<TagKey<T>, RegistryTag<T>> tags;
 
     StaticRegistry(
-            @NotNull RegistryKey<Registry<T>> registryKey,
-            @NotNull Map<Key, T> namespaces,
-            @NotNull ObjectArray<T> ids,
-            @NotNull Map<TagKey<T>, RegistryTag<T>> tags
+            RegistryKey<Registry<T>> registryKey,
+            Map<Key, T> namespaces,
+            ObjectArray<T> ids,
+            Map<TagKey<T>, RegistryTag<T>> tags
     ) {
         this.registryKey = registryKey;
         this.keyToValue = Map.copyOf(namespaces);
@@ -47,7 +41,7 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     }
 
     @Override
-    public @NotNull RegistryKey<Registry<T>> registryKey() {
+    public RegistryKey<Registry<T>> registryKey() {
         return registryKey;
     }
 
@@ -57,7 +51,7 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     }
 
     @Override
-    public @Nullable T get(@NotNull Key key) {
+    public @Nullable T get(Key key) {
         return this.keyToValue.get(key);
     }
 
@@ -68,17 +62,17 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     }
 
     @Override
-    public @Nullable RegistryKey<T> getKey(@NotNull T value) {
+    public @Nullable RegistryKey<T> getKey(T value) {
         return this.valueToKey.get(value);
     }
 
     @Override
-    public @Nullable RegistryKey<T> getKey(@NotNull Key key) {
+    public @Nullable RegistryKey<T> getKey(Key key) {
         return this.keyToValue.containsKey(key) ? new RegistryKeyImpl<>(key) : null;
     }
 
     @Override
-    public int getId(@NotNull RegistryKey<T> key) {
+    public int getId(RegistryKey<T> key) {
         final T value = this.keyToValue.get(key.key());
         if (value == null) return -1; // Not found
         return this.valueToKey.get(value) != null ? value.id() : -1;
@@ -96,22 +90,22 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     }
 
     @Override
-    public @NotNull Collection<RegistryKey<T>> keys() {
+    public Collection<RegistryKey<T>> keys() {
         return this.valueToKey.values();
     }
 
     @Override
-    public @NotNull Collection<T> values() {
+    public Collection<T> values() {
         return this.valueToKey.keySet();
     }
 
     @Override
-    public @Nullable RegistryTag<T> getTag(@NotNull TagKey<T> key) {
+    public @Nullable RegistryTag<T> getTag(TagKey<T> key) {
         return this.tags.get(key);
     }
 
     @Override
-    public @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key) {
+    public RegistryTag<T> getOrCreateTag(TagKey<T> key) {
         if (!ServerFlag.REGISTRY_FREEZING_TAGS)
             return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
         final RegistryTag<T> tag = this.tags.get(key);
@@ -120,17 +114,17 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     }
 
     @Override
-    public boolean removeTag(@NotNull TagKey<T> key) {
+    public boolean removeTag(TagKey<T> key) {
         return this.tags.remove(key) != null;
     }
 
     @Override
-    public @NotNull Collection<RegistryTag<T>> tags() {
+    public Collection<RegistryTag<T>> tags() {
         return Collections.unmodifiableCollection(this.tags.values());
     }
 
     @Override
-    public TagsPacket.@NotNull Registry tagRegistry() {
+    public TagsPacket.Registry tagRegistry() {
         final List<TagsPacket.Tag> tagList = new ArrayList<>(tags.size());
         for (final RegistryTag<T> entry : tags.values()) {
             if (!(entry instanceof RegistryTagImpl.Backed<T> tag)) continue;

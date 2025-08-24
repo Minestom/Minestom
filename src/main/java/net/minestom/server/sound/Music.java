@@ -2,10 +2,9 @@ package net.minestom.server.sound;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import org.jetbrains.annotations.NotNull;
 
 public record Music(
-        @NotNull SoundEvent sound,
+        SoundEvent sound,
         int minDelay,
         int maxDelay,
         boolean replaceCurrentMusic

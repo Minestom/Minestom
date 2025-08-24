@@ -9,11 +9,10 @@ import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfSoundVariantImpl {
-    @NotNull NetworkBuffer.Type<RegistryKey<WolfSoundVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::wolfSoundVariant);
-    @NotNull Codec<RegistryKey<WolfSoundVariant>> CODEC = RegistryKey.codec(Registries::wolfSoundVariant);
+    NetworkBuffer.Type<RegistryKey<WolfSoundVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::wolfSoundVariant);
+    Codec<RegistryKey<WolfSoundVariant>> CODEC = RegistryKey.codec(Registries::wolfSoundVariant);
 
     Codec<WolfSoundVariant> REGISTRY_CODEC = StructCodec.struct(
             "ambient_sound", SoundEvent.CODEC, WolfSoundVariant::ambientSound,
@@ -34,13 +33,13 @@ public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfS
         return DynamicRegistry.load(BuiltinRegistries.WOLF_SOUND_VARIANT, REGISTRY_CODEC);
     }
 
-    static @NotNull WolfSoundVariant create(
-            @NotNull SoundEvent ambientSound,
-            @NotNull SoundEvent deathSound,
-            @NotNull SoundEvent growlSound,
-            @NotNull SoundEvent hurtSound,
-            @NotNull SoundEvent pantSound,
-            @NotNull SoundEvent whineSound
+    static WolfSoundVariant create(
+            SoundEvent ambientSound,
+            SoundEvent deathSound,
+            SoundEvent growlSound,
+            SoundEvent hurtSound,
+            SoundEvent pantSound,
+            SoundEvent whineSound
     ) {
         return new WolfSoundVariantImpl(
                 ambientSound,
@@ -52,21 +51,21 @@ public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfS
         );
     }
 
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
-    @NotNull SoundEvent ambientSound();
+    SoundEvent ambientSound();
 
-    @NotNull SoundEvent deathSound();
+    SoundEvent deathSound();
 
-    @NotNull SoundEvent growlSound();
+    SoundEvent growlSound();
 
-    @NotNull SoundEvent hurtSound();
+    SoundEvent hurtSound();
 
-    @NotNull SoundEvent pantSound();
+    SoundEvent pantSound();
 
-    @NotNull SoundEvent whineSound();
+    SoundEvent whineSound();
 
     final class Builder {
         private SoundEvent ambientSound;
@@ -76,37 +75,37 @@ public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfS
         private SoundEvent pantSound;
         private SoundEvent whineSound;
 
-        public @NotNull Builder ambientSound(@NotNull SoundEvent ambientSound) {
+        public Builder ambientSound(SoundEvent ambientSound) {
             this.ambientSound = ambientSound;
             return this;
         }
 
-        public @NotNull Builder deathSound(@NotNull SoundEvent deathSound) {
+        public Builder deathSound(SoundEvent deathSound) {
             this.deathSound = deathSound;
             return this;
         }
 
-        public @NotNull Builder growlSound(@NotNull SoundEvent growlSound) {
+        public Builder growlSound(SoundEvent growlSound) {
             this.growlSound = growlSound;
             return this;
         }
 
-        public @NotNull Builder hurtSound(@NotNull SoundEvent hurtSound) {
+        public Builder hurtSound(SoundEvent hurtSound) {
             this.hurtSound = hurtSound;
             return this;
         }
 
-        public @NotNull Builder pantSound(@NotNull SoundEvent pantSound) {
+        public Builder pantSound(SoundEvent pantSound) {
             this.pantSound = pantSound;
             return this;
         }
 
-        public @NotNull Builder whineSound(@NotNull SoundEvent whineSound) {
+        public Builder whineSound(SoundEvent whineSound) {
             this.whineSound = whineSound;
             return this;
         }
 
-        public @NotNull WolfSoundVariant build() {
+        public WolfSoundVariant build() {
             return new WolfSoundVariantImpl(
                     ambientSound,
                     deathSound,

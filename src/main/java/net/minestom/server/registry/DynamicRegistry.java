@@ -2,13 +2,11 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.SendablePacket;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -33,7 +31,7 @@ import java.util.function.Function;
 public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRegistryImpl {
 
     @SafeVarargs
-    static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Map.Entry<Key, T>... entries) {
+    static <T> DynamicRegistry<T> fromMap(RegistryKey<DynamicRegistry<T>> key, Map.Entry<Key, T>... entries) {
         return create(key, null, registry -> {
             for (var entry : entries) registry.register(entry.getKey(), entry.getValue(), null);
         });
@@ -45,7 +43,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key) {
+    static <T> DynamicRegistry<T> create(RegistryKey<DynamicRegistry<T>> key) {
         return create(key, null);
     }
 
@@ -55,7 +53,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key, @Nullable Codec<T> codec) {
+    static <T> DynamicRegistry<T> create(RegistryKey<DynamicRegistry<T>> key, @Nullable Codec<T> codec) {
         return create(key, codec, null);
     }
 
@@ -65,7 +63,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key, @Nullable Codec<T> codec, @Nullable Consumer<DynamicRegistry<T>> consumer) {
+    static <T> DynamicRegistry<T> create(RegistryKey<DynamicRegistry<T>> key, @Nullable Codec<T> codec, @Nullable Consumer<DynamicRegistry<T>> consumer) {
         var registry = new DynamicRegistryImpl<>(key, codec);
         if (consumer != null) consumer.accept(registry);
         final DetourRegistry detourRegistry = DetourRegistry.detourRegistry();
@@ -78,7 +76,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      *      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec) {
+    static <T> DynamicRegistry<T> load(RegistryKey<DynamicRegistry<T>> key, Codec<T> codec) {
         return load(key, codec, (Registries) null);
     }
 
@@ -88,7 +86,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Registries registries) {
+    static <T> DynamicRegistry<T> load(RegistryKey<DynamicRegistry<T>> key, Codec<T> codec, @Nullable Registries registries) {
         return load(key, codec, registries != null ? (ignored) -> registries : null);
     }
 
@@ -98,7 +96,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Function<DynamicRegistry<T>, Registries> registryFunction) {
+    static <T> DynamicRegistry<T> load(RegistryKey<DynamicRegistry<T>> key, Codec<T> codec, @Nullable Function<DynamicRegistry<T>, Registries> registryFunction) {
         return load(key, codec, registryFunction, null, null);
     }
 
@@ -108,7 +106,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Function<DynamicRegistry<T>, Registries> registryFunction, @Nullable Comparator<RegistryKey<T>> idComparator, @Nullable Codec<T> readCodec) {
+    static <T> DynamicRegistry<T> load(RegistryKey<DynamicRegistry<T>> key, Codec<T> codec, @Nullable Function<DynamicRegistry<T>, Registries> registryFunction, @Nullable Comparator<RegistryKey<T>> idComparator, @Nullable Codec<T> readCodec) {
         return create(key, codec, registry -> DynamicRegistryImpl.loadStaticJsonRegistry(
                 registryFunction != null ? registryFunction.apply(registry) : null, // Gross but self-referential loading nightmare requirement.
                 (DynamicRegistryImpl<T>) registry,
@@ -130,26 +128,26 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @param object The entry to register
      * @return The new ID of the registered object
      */
-    default @NotNull RegistryKey<T> register(@NotNull String id, @NotNull T object) {
+    default RegistryKey<T> register(String id, T object) {
         return register(Key.key(id), object, null);
     }
 
-    default @NotNull RegistryKey<T> register(@NotNull Keyed id, @NotNull T object) {
+    default RegistryKey<T> register(Keyed id, T object) {
         return register(id.key(), object, null);
     }
 
     @ApiStatus.Internal
-    default @NotNull RegistryKey<T> register(@NotNull String id, @NotNull T object, @Nullable DataPack pack) {
+    default RegistryKey<T> register(String id, T object, @Nullable DataPack pack) {
         return register(Key.key(id), object, pack);
     }
 
     @ApiStatus.Internal
-    default @NotNull RegistryKey<T> register(@NotNull Keyed id, @NotNull T object, @Nullable DataPack pack) {
+    default RegistryKey<T> register(Keyed id, T object, @Nullable DataPack pack) {
         return register(id.key(), object, pack);
     }
 
     @ApiStatus.Internal
-    @NotNull RegistryKey<T> register(@NotNull Key id, @NotNull T object, @Nullable DataPack pack);
+    RegistryKey<T> register(Key id, T object, @Nullable DataPack pack);
 
     /**
      * <p>Removes an object from this registry.</p>
@@ -167,7 +165,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @return True if the object was removed, false if it was not present
      * @throws UnsupportedOperationException If the system property <code>minestom.registry.unsafe-remove</code> is not set to <code>true</code>
      */
-    boolean remove(@NotNull Key key) throws UnsupportedOperationException;
+    boolean remove(Key key) throws UnsupportedOperationException;
 
     /**
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
@@ -178,8 +176,12 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @return A {@link SendablePacket} containing the registry data
      */
     @ApiStatus.Internal
-    @NotNull SendablePacket registryDataPacket(@NotNull Registries registries, boolean excludeVanilla);
+    SendablePacket registryDataPacket(Registries registries, boolean excludeVanilla);
 
+    /**
+     * Registry key typed to {@link DynamicRegistry}
+     * @return the registryKey associated with this registry.
+     */
     @Override
-    @NotNull RegistryKey<DynamicRegistry<T>> registryKey();
+    RegistryKey<DynamicRegistry<T>> registryKey();
 }

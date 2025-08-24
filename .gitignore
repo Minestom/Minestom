@@ -1,3 +1,6 @@
+.DS_Store
+**.hprof
+
 # Registry files
 /minecraft_data/
 /.minestom_tmp/
@@ -46,6 +49,10 @@ gradle-app.setting
 # IDEA files
 .idea/
 **/out/
+
+# VSCode files
+.vscode/
+**/bin/
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties

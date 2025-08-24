@@ -16,30 +16,25 @@ import net.minestom.server.item.component.Tool;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryTag;
-import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class BlockBreakCalculation {
 
     public static final int UNBREAKABLE = -1;
-    private static final RegistryTag<Fluid> WATER_TAG = Fluid.staticRegistry().getTag(FluidTags.WATER);
+    private static final RegistryTag<Fluid> WATER_TAG = Objects.requireNonNull(Fluid.staticRegistry().getTag(FluidTags.WATER), "Water tag null");
     // The vanilla client checks for bamboo breaking speed with item instanceof SwordItem.
     // We could either check all sword ID's, or the sword tag.
     // Since tags are immutable, checking the tag seems easier to understand
-    private static final RegistryTag<Material> SWORD_TAG = Material.staticRegistry().getTag(MaterialTags.SWORDS);
-
-    static {
-        Check.notNull(WATER_TAG, "Water tag cannot be null");
-        Check.notNull(SWORD_TAG, "Sword tag cannot be null");
-    }
+    private static final RegistryTag<Material> SWORD_TAG = Objects.requireNonNull(Material.staticRegistry().getTag(MaterialTags.SWORDS), "Sword tag null");
 
     /**
      * Calculates the block break time in ticks
      *
      * @return the block break time in ticks, -1 if the block is unbreakable
      */
-    public static int breakTicks(@NotNull Block block, @NotNull Player player) {
+    public static int breakTicks(Block block, Player player) {
         if (player.getGameMode() == GameMode.CREATIVE) {
             // Creative can always break blocks instantly
             return 0;
@@ -96,8 +91,17 @@ public class BlockBreakCalculation {
             speedMultiplier /= 5;
         }
 
-        double damage = speedMultiplier / blockHardness;
+        // if speed multiplier is 0, the block is unbreakable
+        if (speedMultiplier == 0) {
+            return UNBREAKABLE;
+        }
 
+        // prevent division by zero
+        if (blockHardness == 0) {
+            return 0;
+        }
+
+        double damage = speedMultiplier / blockHardness;
         if (isBestTool) {
             damage /= 30;
         } else {
@@ -112,7 +116,7 @@ public class BlockBreakCalculation {
         return (int) Math.ceil(1 / damage);
     }
 
-    private static boolean isInWater(@NotNull Player player) {
+    private static boolean isInWater(Player player) {
         Pos pos = player.getPosition();
         Instance instance = player.getInstance();
         double eyeY = pos.y() + player.getEyeHeight();
@@ -157,7 +161,7 @@ public class BlockBreakCalculation {
         return (8 - level) / 9F;
     }
 
-    private static float getMiningFatigueMultiplier(@NotNull Player player) {
+    private static float getMiningFatigueMultiplier(Player player) {
         int level = player.getEffectLevel(PotionEffect.MINING_FATIGUE) + 1;
         // Use switch to avoid expensive Math.pow
         return switch (level) { // 0.3 ^ min(level, 4)
@@ -169,24 +173,24 @@ public class BlockBreakCalculation {
         };
     }
 
-    private static float getHasteMultiplier(@NotNull Player player) {
+    private static float getHasteMultiplier(Player player) {
         // Add 1 to potion level for correct calculation
         float level = Math.max(player.getEffectLevel(PotionEffect.HASTE), player.getEffectLevel(PotionEffect.CONDUIT_POWER)) + 1;
         return (1F + 0.2F * level);
     }
 
-    private static float getMiningSpeed(@Nullable Tool tool, @NotNull Block block) {
+    private static float getMiningSpeed(@Nullable Tool tool, Block block) {
         if (tool == null) {
             return 1;
         }
         return tool.getSpeed(block);
     }
 
-    private static boolean canBreakBlock(@Nullable Tool tool, @NotNull Block block) {
+    private static boolean canBreakBlock(@Nullable Tool tool, Block block) {
         return !block.registry().requiresTool() || isEffective(tool, block);
     }
 
-    private static boolean isEffective(@Nullable Tool tool, @NotNull Block block) {
+    private static boolean isEffective(@Nullable Tool tool, Block block) {
         return tool != null && tool.isCorrectForDrops(block);
     }
 }

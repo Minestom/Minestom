@@ -4,7 +4,6 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when the gamemode of a player is being modified.
@@ -16,7 +15,7 @@ public class PlayerGameModeChangeEvent implements PlayerInstanceEvent, Cancellab
 
     private boolean cancelled;
 
-    public PlayerGameModeChangeEvent(@NotNull Player player, @NotNull GameMode newGameMode) {
+    public PlayerGameModeChangeEvent(Player player, GameMode newGameMode) {
         this.player = player;
         this.newGameMode = newGameMode;
     }
@@ -26,7 +25,7 @@ public class PlayerGameModeChangeEvent implements PlayerInstanceEvent, Cancellab
      *
      * @return the target gamemode
      */
-    public @NotNull GameMode getNewGameMode() {
+    public GameMode getNewGameMode() {
         return newGameMode;
     }
 
@@ -35,7 +34,7 @@ public class PlayerGameModeChangeEvent implements PlayerInstanceEvent, Cancellab
      *
      * @param newGameMode the new target gamemode
      */
-    public void setNewGameMode(@NotNull GameMode newGameMode) {
+    public void setNewGameMode(GameMode newGameMode) {
         this.newGameMode = newGameMode;
     }
 
@@ -50,7 +49,7 @@ public class PlayerGameModeChangeEvent implements PlayerInstanceEvent, Cancellab
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

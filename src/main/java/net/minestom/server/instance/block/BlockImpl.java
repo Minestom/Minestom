@@ -11,7 +11,6 @@ import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.ObjectArray;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
@@ -22,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-record BlockImpl(@NotNull RegistryData.BlockEntry registry,
+record BlockImpl(RegistryData.BlockEntry registry,
                  long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
                  @Nullable BlockHandler handler) implements Block {
@@ -118,15 +117,19 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         POSSIBLE_STATES = possibleStates.toList();
     }
 
-    static @UnknownNullability Block get(@NotNull RegistryKey<Block> key) {
+    static @UnknownNullability Block get(RegistryKey<Block> key) {
         return REGISTRY.get(key);
+    }
+
+    static int statesCount() {
+        return BLOCK_STATE_MAP.size();
     }
 
     static Block getState(int stateId) {
         return BLOCK_STATE_MAP.get(stateId);
     }
 
-    static @Nullable Block parseState(@NotNull String input) {
+    static @Nullable Block parseState(String input) {
         if (input.isEmpty()) return null;
         final int nbtIndex = input.indexOf("[");
         if (nbtIndex == 0) return null;
@@ -147,7 +150,7 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     }
 
     @Override
-    public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
+    public Block withProperty(String property, String value) {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         assert propertyTypes != null;
         final byte keyIndex = findKeyIndexThrow(propertyTypes, property, this);
@@ -157,7 +160,7 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     }
 
     @Override
-    public @NotNull Block withProperties(@NotNull Map<@NotNull String, @NotNull String> properties) {
+    public Block withProperties(Map<String, String> properties) {
         if (properties.isEmpty()) return this;
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         assert propertyTypes != null;
@@ -171,7 +174,7 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     }
 
     @Override
-    public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
+    public <T> Block withTag(Tag<T> tag, @Nullable T value) {
         var builder = CompoundBinaryTag.builder();
         if (nbt != null) builder.put(nbt);
         tag.write(builder, value);
@@ -181,17 +184,17 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     }
 
     @Override
-    public @NotNull Block withNbt(@Nullable CompoundBinaryTag compound) {
+    public Block withNbt(@Nullable CompoundBinaryTag compound) {
         return new BlockImpl(registry, propertiesArray, compound, handler);
     }
 
     @Override
-    public @NotNull Block withHandler(@Nullable BlockHandler handler) {
+    public Block withHandler(@Nullable BlockHandler handler) {
         return new BlockImpl(registry, propertiesArray, nbt, handler);
     }
 
     @Override
-    public @Unmodifiable @NotNull Map<String, String> properties() {
+    public @Unmodifiable Map<String, String> properties() {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         assert propertyTypes != null;
         final int length = propertyTypes.length;
@@ -208,7 +211,7 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     }
 
     @Override
-    public @NotNull String state() {
+    public String state() {
         final Map<String, String> properties = properties();
         if (properties.isEmpty()) return name();
         StringBuilder builder = new StringBuilder(name()).append('[');
@@ -223,12 +226,12 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     }
 
     @Override
-    public @NotNull Block defaultState() {
+    public Block defaultState() {
         return Block.fromBlockId(id());
     }
 
     @Override
-    public String getProperty(@NotNull String property) {
+    public @Nullable String getProperty(String property) {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         final int length = propertyTypes.length;
         if (length == 0) return null;
@@ -239,12 +242,12 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     }
 
     @Override
-    public @NotNull Collection<@NotNull Block> possibleStates() {
+    public Collection<Block> possibleStates() {
         return Collection.class.cast(possibleProperties().values());
     }
 
     @Override
-    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+    public <T> @UnknownNullability T getTag(Tag<T> tag) {
         return tag.read(Objects.requireNonNullElse(nbt, CompoundBinaryTag.empty()));
     }
 
