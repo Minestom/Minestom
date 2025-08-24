@@ -560,8 +560,7 @@ record BlockImpl(Entry registry,
                     case "replaceable" -> entry.withReplaceable((boolean) value);
                     case "soundType" -> entry.withBlockSoundType(BlockSoundType.fromKey((String) value));
                     case "blockEntity" -> {
-                        final var section = (Map<String, Object>) value;
-                        final RegistryData.Properties blockSection = RegistryData.Properties.fromMap(section);
+                        final RegistryData.Properties blockSection = RegistryData.Properties.fromMap((Map<String, Object>) value);
                         yield entry.withBlockEntity(Key.key(blockSection.getString("namespace")))
                                 .withBlockEntityId(blockSection.getInt("blockEntityId"));
                     }
@@ -611,8 +610,7 @@ record BlockImpl(Entry registry,
                 blockEntityKey = null;
                 blockEntityId = 0;
             }
-            final String materialNamespace = main.getString("correspondingItem", null);
-            var material = materialNamespace != null ? Material.fromKey(materialNamespace) : null;
+            var material = main.containsKey("correspondingItem") ? Material.fromKey(main.getString("correspondingItem")) : null;
             final String collision = main.getString("collisionShape");
             final String occlusion = main.getString("occlusionShape");
             var collisionShape = CollisionUtils.parseCollisionShape(internCache, collision);
