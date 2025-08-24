@@ -35,7 +35,7 @@ final class BlockLight implements Light {
         blockPalette.getAllPresent((x, y, z, stateId) -> {
             final Block block = Block.fromStateId(stateId);
             assert block != null;
-            final byte lightEmission = (byte) block.registry().lightEmission();
+            final byte lightEmission = block.registry().lightEmission();
 
             final int index = x | (z << 4) | (y << 8);
             if (lightEmission > 0) {
