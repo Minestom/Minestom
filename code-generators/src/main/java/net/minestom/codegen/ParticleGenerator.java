@@ -37,6 +37,7 @@ public record ParticleGenerator(InputStream particleFile,
 
         // Start code gen
         ClassName particlesCN = ClassName.get("net.minestom.server.particle", "Particles");
+        ClassName particlesKeysCN = ClassName.get("net.minestom.server.particle", "ParticleKeys");
         TypeSpec.Builder particlesInterface = TypeSpec.interfaceBuilder(particlesCN)
                 .addModifiers(Modifier.SEALED)
                 .addPermittedSubclass(particleCN)
@@ -45,25 +46,25 @@ public record ParticleGenerator(InputStream particleFile,
         for (Map.Entry<String, JsonElement> particleIdObjectEntry : orderedParticleIdObjectEntries) {
             final String key = particleIdObjectEntry.getKey();
             final JsonObject value = particleIdObjectEntry.getValue().getAsJsonObject();
-            final String namespacedName = namespaceShort(key);
 
-            final ClassName fieldCN;
-            final CodeBlock cast;
+            ClassName fieldCN = particleCN;
             if (value.get("hasData").getAsBoolean()) {
                 // This particle has data, use the particle implementation class
                 fieldCN = ClassName.get("net.minestom.server.particle", "Particle",
-                        toPascalCase(namespacedName));
-                cast = CodeBlock.of("($T) ", fieldCN);
-            } else {
-                fieldCN = particleCN;
-                cast = CodeBlock.builder().build(); // Empty cast for particles without data
+                        toPascalCase(key.replace("minecraft:", "")));
             }
 
-            String fieldName = toConstant(key);
+            String cast = "";
+            if (!fieldCN.equals(particleCN)) {
+                // This is one of the unique particle classes with particle data, cast this
+                cast = "(Particle." + fieldCN.simpleName() + ") ";
+            }
+
+            String fieldName = key.replace("minecraft:", "").toUpperCase();
 
             particlesInterface.addField(FieldSpec.builder(fieldCN, fieldName)
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("$L$T.get($S)", cast, particleImplCN, key).build());
+                    .initializer("$L$T.get($T.$L)", cast, particleImplCN, particlesKeysCN, fieldName).build());
         }
 
         writeFiles(JavaFile.builder("net.minestom.server.particle", particlesInterface.build())
