@@ -26,7 +26,7 @@ public final class Generators {
         var customStaticRegistries = customStaticRegistries();
         var customStaticRegistriesMap = customStaticRegistries.stream().collect(Collectors.toMap(Entry::namespace, Function.identity()));
         final Entry.Static particleKeys = customStaticRegistriesMap.get("particle");
-        new ParticleGenerator(particleKeys.resource(), outputFolder).generate();
+        new ParticleGenerator(particleKeys, outputFolder).generate();
 
         // Enum generators.
         new DyeColorGenerator(customStaticRegistriesMap.get("dye_colors").resource(), outputFolder).generate();
@@ -75,7 +75,7 @@ public final class Generators {
     private static List<Entry.Static> customStaticRegistries() {
         return List.of(
                 new Entry.Static("dye_colors", "net.minestom.server.color", "DyeColor", null, null),
-                new Entry.Static("particle", "net.minestom.server.particle", "Particle", null, null),
+                new Entry.Static("particle", "net.minestom.server.particle", "Particle"),
                 new Entry.Static("recipe_types", "net.minestom.server.recipe", "RecipeType", null, null),
                 new Entry.Static("recipe_display_types", "net.minestom.server.recipe.display", "RecipeDisplayType", null, null),
                 new Entry.Static("slot_display_types", "net.minestom.server.recipe.display", "SlotDisplayType", null, null),
