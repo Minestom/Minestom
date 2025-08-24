@@ -15,21 +15,21 @@ public interface BannerPatternTags {
 
     TagKey<BannerPattern> PATTERN_ITEM_CREEPER = TagKey.unsafeOf(key("pattern_item/creeper"));
 
+    TagKey<BannerPattern> PATTERN_ITEM_FLOWER = TagKey.unsafeOf(key("pattern_item/flower"));
+
+    TagKey<BannerPattern> PATTERN_ITEM_FIELD_MASONED = TagKey.unsafeOf(key("pattern_item/field_masoned"));
+
+    TagKey<BannerPattern> PATTERN_ITEM_FLOW = TagKey.unsafeOf(key("pattern_item/flow"));
+
     TagKey<BannerPattern> PATTERN_ITEM_SKULL = TagKey.unsafeOf(key("pattern_item/skull"));
+
+    TagKey<BannerPattern> PATTERN_ITEM_GLOBE = TagKey.unsafeOf(key("pattern_item/globe"));
+
+    TagKey<BannerPattern> PATTERN_ITEM_MOJANG = TagKey.unsafeOf(key("pattern_item/mojang"));
 
     TagKey<BannerPattern> PATTERN_ITEM_PIGLIN = TagKey.unsafeOf(key("pattern_item/piglin"));
 
     TagKey<BannerPattern> PATTERN_ITEM_BORDURE_INDENTED = TagKey.unsafeOf(key("pattern_item/bordure_indented"));
 
-    TagKey<BannerPattern> PATTERN_ITEM_GLOBE = TagKey.unsafeOf(key("pattern_item/globe"));
-
     TagKey<BannerPattern> PATTERN_ITEM_GUSTER = TagKey.unsafeOf(key("pattern_item/guster"));
-
-    TagKey<BannerPattern> PATTERN_ITEM_MOJANG = TagKey.unsafeOf(key("pattern_item/mojang"));
-
-    TagKey<BannerPattern> PATTERN_ITEM_FLOW = TagKey.unsafeOf(key("pattern_item/flow"));
-
-    TagKey<BannerPattern> PATTERN_ITEM_FLOWER = TagKey.unsafeOf(key("pattern_item/flower"));
-
-    TagKey<BannerPattern> PATTERN_ITEM_FIELD_MASONED = TagKey.unsafeOf(key("pattern_item/field_masoned"));
 }

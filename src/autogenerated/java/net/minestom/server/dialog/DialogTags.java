@@ -11,7 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface DialogTags {
-    TagKey<Dialog> PAUSE_SCREEN_ADDITIONS = TagKey.unsafeOf(key("pause_screen_additions"));
-
     TagKey<Dialog> QUICK_ACTIONS = TagKey.unsafeOf(key("quick_actions"));
+
+    TagKey<Dialog> PAUSE_SCREEN_ADDITIONS = TagKey.unsafeOf(key("pause_screen_additions"));
 }

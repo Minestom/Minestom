@@ -11,9 +11,9 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface InstrumentTags {
+    TagKey<Instrument> REGULAR_GOAT_HORNS = TagKey.unsafeOf(key("regular_goat_horns"));
+
     TagKey<Instrument> GOAT_HORNS = TagKey.unsafeOf(key("goat_horns"));
 
     TagKey<Instrument> SCREAMING_GOAT_HORNS = TagKey.unsafeOf(key("screaming_goat_horns"));
-
-    TagKey<Instrument> REGULAR_GOAT_HORNS = TagKey.unsafeOf(key("regular_goat_horns"));
 }

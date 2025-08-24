@@ -11,7 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface FluidTags {
-    TagKey<Fluid> LAVA = TagKey.unsafeOf(key("lava"));
-
     TagKey<Fluid> WATER = TagKey.unsafeOf(key("water"));
+
+    TagKey<Fluid> LAVA = TagKey.unsafeOf(key("lava"));
 }

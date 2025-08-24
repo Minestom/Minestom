@@ -13,11 +13,11 @@ import org.jetbrains.annotations.ApiStatus;
 public interface GameEventTags {
     TagKey<GameEvent> IGNORE_VIBRATIONS_SNEAKING = TagKey.unsafeOf(key("ignore_vibrations_sneaking"));
 
-    TagKey<GameEvent> ALLAY_CAN_LISTEN = TagKey.unsafeOf(key("allay_can_listen"));
+    TagKey<GameEvent> SHRIEKER_CAN_LISTEN = TagKey.unsafeOf(key("shrieker_can_listen"));
 
     TagKey<GameEvent> VIBRATIONS = TagKey.unsafeOf(key("vibrations"));
 
     TagKey<GameEvent> WARDEN_CAN_LISTEN = TagKey.unsafeOf(key("warden_can_listen"));
 
-    TagKey<GameEvent> SHRIEKER_CAN_LISTEN = TagKey.unsafeOf(key("shrieker_can_listen"));
+    TagKey<GameEvent> ALLAY_CAN_LISTEN = TagKey.unsafeOf(key("allay_can_listen"));
 }
