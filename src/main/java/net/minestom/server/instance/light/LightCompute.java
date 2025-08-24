@@ -85,13 +85,13 @@ public final class LightCompute {
                     };
 
                     if (blockTo == null && blockFrom != null) {
-                        if (blockFrom.registry().collisionShape().isOccluded(Block.AIR.registry().collisionShape(), face.getOppositeFace()))
+                        if (blockFrom.registry().occlusionShape().isOccluded(Block.AIR.registry().occlusionShape(), face.getOppositeFace()))
                             continue;
                     } else if (blockTo != null && blockFrom == null) {
-                        if (Block.AIR.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face))
+                        if (Block.AIR.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face))
                             continue;
                     } else if (blockTo != null && blockFrom != null) {
-                        if (blockFrom.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face.getOppositeFace()))
+                        if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
                             continue;
                     }
 
