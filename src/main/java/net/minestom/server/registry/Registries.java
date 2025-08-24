@@ -34,7 +34,6 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;

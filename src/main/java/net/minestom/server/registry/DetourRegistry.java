@@ -1,11 +1,9 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -104,7 +102,6 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
          * @param after the detour to apply after this one
          * @return a new detour that applies this detour followed by the after detour
          */
-        @NotNull
         default Detour<T> andThen(Detour<T> after) {
             Check.notNull(after, "After detour cannot be null");
             return value -> {
