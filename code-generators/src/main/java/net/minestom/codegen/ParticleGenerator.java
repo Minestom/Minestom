@@ -40,6 +40,7 @@ public record ParticleGenerator(Entry.Static entry,
         TypeSpec.Builder particlesInterface = TypeSpec.interfaceBuilder(particlesCN)
                 .addModifiers(Modifier.SEALED)
                 .addPermittedSubclass(particleCN)
+                .addAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "$S", "unused").build())
                 .addJavadoc(generateJavadoc(particleCN));
 
         for (Map.Entry<String, JsonElement> particleIdObjectEntry : orderedParticleIdObjectEntries) {
