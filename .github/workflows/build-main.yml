@@ -20,6 +20,6 @@ jobs:
         with:
           # Allow caching for all branches in our repo;
           # this is so we don't get evicted, see Cache Optimization in action docs for more info
-          cache-read-only: ${{ github.ref != 'Minestom' }}
+          cache-read-only: false
       - name: Build
         run: ./gradlew test javadoc
