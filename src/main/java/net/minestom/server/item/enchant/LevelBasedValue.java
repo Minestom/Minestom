@@ -1,6 +1,5 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
@@ -8,6 +7,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface LevelBasedValue {
+    RegistryKey<DynamicRegistry<StructCodec<? extends LevelBasedValue>>> REGISTRY_KEY = RegistryKey.unsafeOf("minestom:enchantment_level_based_value");
 
     StructCodec<LevelBasedValue> TAGGED_CODEC = Codec.RegistryTaggedUnion(
             Registries::enchantmentLevelBasedValues, LevelBasedValue::codec, "type");
@@ -37,14 +38,14 @@ public interface LevelBasedValue {
 
     @ApiStatus.Internal
     static DynamicRegistry<StructCodec<? extends LevelBasedValue>> createDefaultRegistry() {
-        final DynamicRegistry<StructCodec<? extends LevelBasedValue>> registry = DynamicRegistry.create(Key.key("minestom:enchantment_value_effect"));
-        // Note that constant is omitted from the registry, it has serialization handled out of band above.
-        registry.register("linear", Linear.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("clamped", Clamped.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("fraction", Fraction.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("levels_squared", LevelsSquared.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("lookup", Lookup.CODEC, DataPack.MINECRAFT_CORE);
-        return registry;
+        return DynamicRegistry.create(REGISTRY_KEY, null, registry -> {
+            // Note that constant is omitted from the registry, it has serialization handled out of band above.
+            registry.register("linear", Linear.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("clamped", Clamped.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("fraction", Fraction.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("levels_squared", LevelsSquared.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("lookup", Lookup.CODEC, DataPack.MINECRAFT_CORE);
+        });
     }
 
     float calc(int level);

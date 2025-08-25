@@ -8,6 +8,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -123,6 +124,10 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
      */
     static SoundEvent of(Key key, @Nullable Float range) {
         return new CustomSoundEvent(key, range);
+    }
+
+    static Registry<? extends SoundEvent> staticRegistry() {
+        return BuiltinSoundEvent.REGISTRY;
     }
 
     @Contract(pure = true)

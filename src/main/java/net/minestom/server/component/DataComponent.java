@@ -58,11 +58,11 @@ public sealed interface DataComponent<T> extends StaticProtocolObject<DataCompon
     void write(NetworkBuffer writer, T value);
 
     static @Nullable DataComponent<?> fromKey(String key) {
-        return DataComponentImpl.NAMESPACES.get(key);
+        return fromKey(Key.key(key));
     }
 
     static @Nullable DataComponent<?> fromKey(Key key) {
-        return fromKey(key.asString());
+        return DataComponentImpl.NAMESPACES.get(key);
     }
 
     static @Nullable DataComponent<?> fromId(int id) {

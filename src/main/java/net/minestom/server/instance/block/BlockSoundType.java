@@ -2,6 +2,7 @@ package net.minestom.server.instance.block;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.sound.SoundEvent;
@@ -72,4 +73,7 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
         return BlockSoundImpl.REGISTRY.get(key);
     }
 
+    static Registry<BlockSoundType> staticRegistry() {
+        return BlockSoundImpl.REGISTRY;
+    }
 }

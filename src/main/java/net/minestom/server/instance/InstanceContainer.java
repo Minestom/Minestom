@@ -202,7 +202,7 @@ public class InstanceContainer extends Instance {
             // Refresh player chunk block
             {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-                RegistryData.BlockEntry registry = block.registry();
+                Block.Entry registry = block.registry();
                 if (registry.isBlockEntity()) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));

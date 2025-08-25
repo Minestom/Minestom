@@ -1,8 +1,11 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.FeatureFlag;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.VillagerProfession;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -14,6 +17,7 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.game.GameEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.instance.fluid.Fluid;
@@ -23,9 +27,17 @@ import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.PotionType;
+import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.statistic.StatisticType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * <p>Provides access to all the dynamic registries. {@link net.minestom.server.ServerProcess} is the most relevant
@@ -60,6 +72,38 @@ public interface Registries {
 
     default Registry<GameEvent> gameEvent() {
         return GameEvent.staticRegistry();
+    }
+
+    default Registry<PotionType> potionType() {
+        return PotionType.staticRegistry();
+    }
+
+    default Registry<? extends SoundEvent> soundEvent() {
+        return SoundEvent.staticRegistry();
+    }
+
+    default Registry<Attribute> attribute() {
+        return Attribute.staticRegistry();
+    }
+
+    default Registry<FeatureFlag> featureFlag() {
+        return FeatureFlag.staticRegistry();
+    }
+
+    default Registry<VillagerProfession> villagerProfession() {
+        return VillagerProfession.staticRegistry();
+    }
+
+    default Registry<BlockSoundType> blockSoundType() {
+        return BlockSoundType.staticRegistry();
+    }
+
+    default Registry<Particle> particle() {
+        return Particle.staticRegistry();
+    }
+
+    default Registry<StatisticType> statisticType() {
+        return StatisticType.staticRegistry();
     }
 
     // Dynamic registries
@@ -112,6 +156,27 @@ public interface Registries {
 
     DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects();
 
+    // The following are used as collections of registries.
+    @SuppressWarnings("unchecked")
+    default @Unmodifiable Collection<Registry<? extends StaticProtocolObject<?>>> staticRegistries() {
+        return List.of(
+                blocks(),
+                material(),
+                potionEffect(),
+                entityType(),
+                fluid(),
+                gameEvent(),
+                potionType(),
+                (Registry<? extends StaticProtocolObject<?>>) soundEvent(), // BuiltinSoundEvent is a StaticProtocolObject
+                attribute(),
+                featureFlag(),
+                villagerProfession(),
+                blockSoundType(),
+                particle(),
+                statisticType()
+        );
+    }
+
     @FunctionalInterface
     interface Selector<T> {
         Registry<T> select(Registries registries);
@@ -152,6 +217,46 @@ public interface Registries {
         @Override
         public Registry<GameEvent> gameEvent() {
             return delegate.gameEvent();
+        }
+
+        @Override
+        public Registry<PotionType> potionType() {
+            return delegate.potionType();
+        }
+
+        @Override
+        public Registry<? extends SoundEvent> soundEvent() {
+            return delegate.soundEvent();
+        }
+
+        @Override
+        public Registry<Attribute> attribute() {
+            return delegate.attribute();
+        }
+
+        @Override
+        public Registry<FeatureFlag> featureFlag() {
+            return delegate.featureFlag();
+        }
+
+        @Override
+        public Registry<VillagerProfession> villagerProfession() {
+            return delegate.villagerProfession();
+        }
+
+        @Override
+        public Registry<BlockSoundType> blockSoundType() {
+            return delegate.blockSoundType();
+        }
+
+        @Override
+        public Registry<Particle> particle() {
+            return delegate.particle();
+        }
+
+        @Override
+        public Registry<StatisticType> statisticType() {
+            return delegate.statisticType();
         }
 
         @Override

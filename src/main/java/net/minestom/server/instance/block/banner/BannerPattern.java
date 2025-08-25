@@ -5,10 +5,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Holder;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.*;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
@@ -43,7 +40,7 @@ public sealed interface BannerPattern extends Holder.Direct<BannerPattern>, Bann
      */
     @ApiStatus.Internal
     static DynamicRegistry<BannerPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("banner_pattern"), REGISTRY_CODEC, RegistryData.Resource.BANNER_PATTERNS);
+        return DynamicRegistry.load(BuiltinRegistries.BANNER_PATTERN, REGISTRY_CODEC);
     }
 
     Key assetId();

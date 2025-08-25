@@ -1,13 +1,12 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -31,7 +30,7 @@ public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfS
      */
     @ApiStatus.Internal
     static DynamicRegistry<WolfSoundVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("wolf_sound_variant"), REGISTRY_CODEC, RegistryData.Resource.WOLF_SOUND_VARIANTS);
+        return DynamicRegistry.load(BuiltinRegistries.WOLF_SOUND_VARIANT, REGISTRY_CODEC);
     }
 
     static WolfSoundVariant create(

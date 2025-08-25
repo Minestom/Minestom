@@ -22,6 +22,10 @@ public class GenericEnumGenerator implements MinestomCodeGenerator {
 
     private boolean isPackagePrivate = false;
 
+    public GenericEnumGenerator(Entry entry, Path outputFolder) {
+        this(entry.packageName(), entry.generatedName(), entry.resource(), outputFolder);
+    }
+
     public GenericEnumGenerator(
             String packageName, String className,
             InputStream entriesFile, Path outputFolder

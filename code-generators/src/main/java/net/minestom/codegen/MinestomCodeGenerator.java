@@ -20,6 +20,7 @@ public interface MinestomCodeGenerator {
         String constant = namespaceShort(namespace)
                 .replaceFirst("brigadier:", "") // Not implicit, do not put into namespaceShort
                 .replace(".", "_")
+                .replace("/", "_")
                 .toUpperCase(Locale.ROOT);
         if (!SourceVersion.isName(constant)) {
             constant = "_" + constant;

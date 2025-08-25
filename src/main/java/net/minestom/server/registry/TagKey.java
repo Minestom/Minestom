@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
+import org.jetbrains.annotations.ApiStatus;
 
 public sealed interface TagKey<T> extends Keyed permits TagKeyImpl {
     static <T> Codec<TagKey<T>> codec(Registries.Selector<T> selector) {
@@ -22,6 +23,19 @@ public sealed interface TagKey<T> extends Keyed permits TagKeyImpl {
         if (!hashedKey.startsWith("#"))
             throw new IllegalArgumentException("Hashed key must start with '#': " + hashedKey);
         return new TagKeyImpl<>(Key.key(hashedKey.substring(1)));
+    }
+
+    /**
+     * Creates a new {@link TagKey} from the given raw string. Should not be used externally.
+     * Use {@link TagKey#ofHash(String)} instead.
+     *
+     * @param key the key to create the TagKey from
+     * @return a new TagKey instance
+     * @param <T> the type of the registry entry
+     */
+    @ApiStatus.Internal
+    static <T> TagKey<T> unsafeOf(Key key) {
+        return new TagKeyImpl<>(key);
     }
 
     default String hashedKey() {

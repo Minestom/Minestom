@@ -20,11 +20,12 @@ public sealed interface GameEvent extends StaticProtocolObject<GameEvent>, GameE
     /**
      * Returns the game event registry.
      *
-     * @return the game event registry or null if not found
+     * @return the game event registry
      */
     @Contract(pure = true)
-    @Nullable
     RegistryData.GameEventEntry registry();
+
+    int notificationRadius();
 
     static Collection<GameEvent> values() {
         return GameEventImpl.REGISTRY.values();

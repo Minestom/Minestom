@@ -45,13 +45,13 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private final Map<T, RegistryKey<T>> valueToKey;
     private final List<DataPack> packById;
 
-    private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags;
+    private final Map<TagKey<T>, RegistryTag<T>> tags;
 
-    private final Key key;
+    private final RegistryKey<DynamicRegistry<T>> registryKey;
     private final Codec<T> codec;
 
-    DynamicRegistryImpl(Key key, @Nullable Codec<T> codec) {
-        this.key = key;
+    DynamicRegistryImpl(RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec) {
+        this.registryKey = registryKey;
         this.codec = codec;
         // Expect stale data possibilities with unsafe ops.
         this.idToValue = new ArrayList<>();
@@ -65,11 +65,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     // Used to create compressed registries
-    DynamicRegistryImpl(Key key, @Nullable Codec<T> codec, List<T> idToValue,
+    DynamicRegistryImpl(RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec, List<T> idToValue,
                         Map<RegistryKey<T>, Integer> keyToId, List<RegistryKey<T>> idToKey,
                         Map<Key, T> keyToValue, Map<T, RegistryKey<T>> valueToKey,
-                        List<DataPack> packById, Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
-        this.key = key;
+                        List<DataPack> packById, Map<TagKey<T>, RegistryTag<T>> tags) {
+        this.registryKey = registryKey;
         this.codec = codec;
         this.idToValue = idToValue;
         this.idToKey = idToKey;
@@ -81,8 +81,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public Key key() {
-        return this.key;
+    public RegistryKey<DynamicRegistry<T>> registryKey() {
+        return this.registryKey;
     }
 
     public @UnknownNullability Codec<T> codec() {
@@ -138,7 +138,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                 idToValue.add(object);
                 idToKey.add(registryKey);
                 keyToId.put(registryKey, idToValue.size() - 1);
-                packById.add(pack);
+                if (pack != null) packById.add(pack);
             } else {
                 idToValue.set(id, object);
                 idToKey.set(id, registryKey);
@@ -171,7 +171,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
             // Remove all references from tags
             for (final var tag : tags.values()) {
-                tag.remove(registryKey);
+                if (tag instanceof RegistryTagImpl.Backed<T> backedTag)
+                    backedTag.remove(registryKey);
             }
 
             vanillaRegistryDataPacket.invalidate();
@@ -210,7 +211,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public RegistryTag<T> getOrCreateTag(TagKey<T> key) {
-        return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+        if (!ServerFlag.REGISTRY_FREEZING_TAGS || MinecraftServer.isInitializing())
+            return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+        final RegistryTag<T> tag = this.tags.get(key);
+        Check.notNull(tag, "Tag key `{0}` is not registered, while the tags are frozen!", key.hashedKey());
+        return tag;
     }
 
     @Override
@@ -245,7 +250,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Override
     public TagsPacket.Registry tagRegistry() {
         final List<TagsPacket.Tag> tagList = new ArrayList<>(tags.size());
-        for (final RegistryTagImpl.Backed<T> tag : tags.values()) {
+        for (final RegistryTag<T> tag : tags.values()) {
             final int[] entries = new int[tag.size()];
             int i = 0;
             for (var registryKey : tag)
@@ -271,6 +276,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             packById = this.packById;
         }
         List<RegistryDataPacket.Entry> entries = new ArrayList<>(idToValue.size());
+        final int packIdSize = packById.size();
         for (int i = 0; i < idToValue.size(); i++) {
             CompoundBinaryTag data = null;
             // sorta todo, sorta just a note:
@@ -282,19 +288,19 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             // like material, block, etc generate entries which are behind feature flags, whereas the ones which inspect
             // static assets (the traditionally dynamic registries), do not generate those assets.
             T entry = idToValue.get(i);
-            DataPack pack = packById.get(i);
+            DataPack pack = i < packIdSize ? packById.get(i) : null;
             if (!excludeVanilla || pack != DataPack.MINECRAFT_CORE) {
                 final Result<BinaryTag> entryResult = codec.encode(transcoder, entry);
                 if (entryResult instanceof Result.Ok(BinaryTag tag)) {
                     data = (CompoundBinaryTag) tag;
                 } else {
-                    throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + key);
+                    throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + registryKey.name());
                 }
             }
             //noinspection DataFlowIssue
             entries.add(new RegistryDataPacket.Entry(getKey(i).key().asString(), data));
         }
-        return new RegistryDataPacket(key.asString(), entries);
+        return new RegistryDataPacket(registryKey.key().asString(), entries);
     }
 
     /**
@@ -304,8 +310,19 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
      */
     @Contract(pure = true)
     DynamicRegistryImpl<T> compact() {
+        if (canFreeze()) {
+            return new DynamicRegistryImpl<>(registryKey, codec,
+                    List.copyOf(idToValue),
+                    Map.copyOf(keyToId),
+                    List.copyOf(idToKey),
+                    Map.copyOf(keyToValue),
+                    Map.copyOf(valueToKey),
+                    List.copyOf(packById), //TODO null packById existing entry. (determine use case)
+                    ServerFlag.REGISTRY_FREEZING_TAGS ? Map.copyOf(tags) : new ConcurrentHashMap<>(tags)
+            );
+        }
         // Create new instances so they are trimmed to size without downcasting.
-        return new DynamicRegistryImpl<>(key, codec,
+        return new DynamicRegistryImpl<>(registryKey, codec,
                 new ArrayList<>(idToValue),
                 new HashMap<>(keyToId),
                 new ArrayList<>(idToKey),
@@ -317,37 +334,43 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     static boolean isFrozen() {
-        return canFreeze() && MinecraftServer.process() != null && MinecraftServer.isStarted();
+        return canFreeze() && !MinecraftServer.isInitializing();
     }
 
     static boolean canFreeze() {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, DynamicRegistryImpl<T> registry, RegistryData.Resource resource, @Nullable Comparator<String> idComparator, Codec<T> codec) {
-        Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, DynamicRegistryImpl<T> registry, @Nullable Comparator<RegistryKey<T>> idComparator, Codec<T> codec) {
         try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", registry.key().value()))) {
-            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+            Check.notNull(resourceStream, "Resource {0} does not exist!", registry.key().value());
             final JsonElement json = JsonUtil.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8));
             if (!(json instanceof JsonObject root))
                 throw new IllegalStateException("Failed to load registry " + registry.key() + ": expected a JSON object, got " + json);
 
-            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false, true) : Transcoder.JSON;
+            final DetourRegistry detourRegistry = DetourRegistry.detourRegistry();
+            // Load tags if present, Required here because the transcoder will try and read them while parsing the registry.
+            Map<TagKey<T>, RegistryTag<T>> tags = RegistryData.loadTags(detourRegistry, registry.key());
+            registry.tags.putAll(tags);
+
+            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false) : Transcoder.JSON;
             List<Map.Entry<String, JsonElement>> entries = new ArrayList<>(root.entrySet());
-            if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
+            // Kind of a ugly solution, but we need to sort the entries by key to ensure that the order is deterministic.
+            if (idComparator != null) entries.sort(Map.Entry.comparingByKey((a, b) -> {
+                final RegistryKey<T> keyA = RegistryKey.unsafeOf(a);
+                final RegistryKey<T> keyB = RegistryKey.unsafeOf(b);
+                return idComparator.compare(keyA, keyB);
+            }));
             for (Map.Entry<String, JsonElement> entry : entries) {
-                final String namespace = entry.getKey();
+                final RegistryKey<T> key = RegistryKey.unsafeOf(entry.getKey());
                 final Result<T> valueResult = codec.decode(transcoder, entry.getValue());
                 if (valueResult instanceof Result.Ok(T value)) {
-                    registry.register(namespace, value, DataPack.MINECRAFT_CORE);
+                    value = detourRegistry.consume(key, value);
+                    registry.register(key, value, DataPack.MINECRAFT_CORE);
                 } else {
-                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.key() + ": " + valueResult);
+                    throw new IllegalStateException("Failed to decode registry entry " + key.name() + " for registry " + registry.key() + ": " + valueResult);
                 }
             }
-
-            // Load tags if present
-            Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = RegistryData.loadTags(registry.key());
-            registry.tags.putAll(tags);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

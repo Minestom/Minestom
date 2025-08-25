@@ -1,29 +1,30 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
 public non-sealed interface ValueEffect extends Enchantment.Effect {
+    RegistryKey<DynamicRegistry<StructCodec<? extends ValueEffect>>> REGISTRY_KEY = RegistryKey.unsafeOf("minestom:enchantment_value_effect");
 
     StructCodec<ValueEffect> CODEC = Codec.RegistryTaggedUnion(
             Registries::enchantmentValueEffects, ValueEffect::codec, "type");
 
     @ApiStatus.Internal
     static DynamicRegistry<StructCodec<? extends ValueEffect>> createDefaultRegistry() {
-        final DynamicRegistry<StructCodec<? extends ValueEffect>> registry = DynamicRegistry.create(Key.key("minestom:enchantment_value_effect"));
-        registry.register("add", Add.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("multiply", Multiply.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("remove_binomial", RemoveBinomial.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("set", Set.CODEC, DataPack.MINECRAFT_CORE);
-        return registry;
+        return DynamicRegistry.create(REGISTRY_KEY, null, registry -> {
+            registry.register("add", Add.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("multiply", Multiply.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("remove_binomial", RemoveBinomial.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("set", Set.CODEC, DataPack.MINECRAFT_CORE);
+        });
     }
 
     float apply(float base, int level);

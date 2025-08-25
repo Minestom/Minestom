@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
@@ -58,6 +59,10 @@ public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attri
 
     static @Nullable Attribute fromId(int id) {
         return AttributeImpl.REGISTRY.get(id);
+    }
+
+    static Registry<Attribute> staticRegistry() {
+        return AttributeImpl.REGISTRY;
     }
 
 }

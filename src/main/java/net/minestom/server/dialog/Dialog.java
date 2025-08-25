@@ -15,7 +15,7 @@ import java.util.Map;
 
 public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
     Registry<StructCodec<? extends Dialog>> REGISTRY = DynamicRegistry.fromMap(
-            Key.key("dialog_type"),
+            RegistryKey.unsafeOf("dialog_type"),
             Map.entry(Key.key("notice"), Notice.CODEC),
             Map.entry(Key.key("server_links"), ServerLinks.CODEC),
             Map.entry(Key.key("dialog_list"), DialogList.CODEC),
@@ -64,9 +64,12 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
      */
     @ApiStatus.Internal
     static DynamicRegistry<Dialog> createDefaultRegistry(Registries registries) {
-        return DynamicRegistry.createForDialogWithSelfReferentialLoadingNightmare(
-                Key.key("dialog"), REGISTRY_CODEC, RegistryData.Resource.DIALOGS, registries
-        );
+        return DynamicRegistry.load(BuiltinRegistries.DIALOG, REGISTRY_CODEC, registry -> new Registries.Delegating(registries) {
+            @Override
+            public DynamicRegistry<Dialog> dialog() {
+                return registry;
+            }
+        });
     }
 
     record Notice(DialogMetadata metadata, DialogActionButton action) implements Dialog {

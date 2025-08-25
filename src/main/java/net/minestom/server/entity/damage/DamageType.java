@@ -1,13 +1,10 @@
 package net.minestom.server.entity.damage;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
-import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.*;
 import org.jetbrains.annotations.ApiStatus;
+import net.minestom.server.registry.BuiltinRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
@@ -42,7 +39,7 @@ public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<DamageType> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("damage_type"), REGISTRY_CODEC, RegistryData.Resource.DAMAGE_TYPES);
+        return DynamicRegistry.load(BuiltinRegistries.DAMAGE_TYPE, REGISTRY_CODEC);
     }
 
     String messageId();

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EffectComponent {
-    static final Map<String, DataComponent<?>> NAMESPACES = new HashMap<>(32);
+    static final Map<Key, DataComponent<?>> NAMESPACES = new HashMap<>(32);
     static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> DAMAGE_PROTECTION = register("damage_protection", ConditionalEffect.codec(ValueEffect.CODEC).list());
@@ -53,11 +53,11 @@ public class EffectComponent {
     public static final Codec<DataComponentMap> CODEC = DataComponentMap.codec(EffectComponent::fromId, EffectComponent::fromNamespaceId);
 
     public static @Nullable DataComponent<?> fromNamespaceId(String namespaceId) {
-        return NAMESPACES.get(namespaceId);
+        return fromKey(Key.key(namespaceId));
     }
 
     public static @Nullable DataComponent<?> fromKey(Key namespaceId) {
-        return fromNamespaceId(namespaceId.asString());
+        return NAMESPACES.get(namespaceId);
     }
 
     public static @Nullable DataComponent<?> fromId(int id) {
@@ -70,7 +70,7 @@ public class EffectComponent {
 
     static <T> DataComponent<T> register(String name, @Nullable Codec<T> nbt) {
         DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), null, nbt);
-        NAMESPACES.put(impl.name(), impl);
+        NAMESPACES.put(impl.key(), impl);
         IDS.set(impl.id(), impl);
         return impl;
     }
