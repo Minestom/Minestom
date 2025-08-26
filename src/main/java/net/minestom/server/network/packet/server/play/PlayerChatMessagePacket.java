@@ -58,11 +58,7 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, b
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof PlayerChatMessagePacket(
-                int globalIndex1, UUID sender1, int index1, byte[] signature1, SignedMessageBody.Packed body,
-                Component content, FilterMask mask, int typeId, Component typeName, Component typeTarget
-        ))) return false;
-
+        if (!(object instanceof PlayerChatMessagePacket(int globalIndex1, UUID sender1, int index1, byte[] signature1, SignedMessageBody.Packed body, Component content, FilterMask mask, int typeId, Component typeName, Component typeTarget))) return false;
         return index() == index1 && msgTypeId() == typeId && globalIndex() == globalIndex1 && Objects.equals(sender(), sender1) && Objects.equals(filterMask(), mask) && Objects.equals(msgTypeName(), typeName) && Objects.equals(msgTypeTarget(), typeTarget) && Objects.equals(unsignedContent(), content) && Arrays.equals(signature(), signature1) && messageBody().equals(body);
     }
 
