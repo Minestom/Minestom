@@ -12,9 +12,9 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientSettings(@NotNull Locale locale, byte viewDistance,
-                             @NotNull ChatMessageType chatMessageType, boolean chatColors,
-                             byte displayedSkinParts, @NotNull MainHand mainHand,
+public record ClientSettings(Locale locale, byte viewDistance,
+                             ChatMessageType chatMessageType, boolean chatColors,
+                             byte displayedSkinParts, MainHand mainHand,
                              boolean enableTextFiltering, boolean allowServerListings,
                              ClientSettings.ParticleSetting particleSetting) {
     public static final ClientSettings DEFAULT = new ClientSettings(

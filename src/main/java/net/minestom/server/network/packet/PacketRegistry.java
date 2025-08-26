@@ -41,7 +41,7 @@ public interface PacketRegistry<T> {
 
     ConnectionSide side();
 
-    @NotNull @Unmodifiable Collection<PacketInfo<? extends T>> packets();
+    @Unmodifiable Collection<PacketInfo<? extends T>> packets();
 
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
@@ -483,7 +483,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull @Unmodifiable Collection<PacketInfo<? extends T>> packets() {
+        public @Unmodifiable Collection<PacketInfo<? extends T>> packets() {
             return List.of(suppliers);
         }
 
