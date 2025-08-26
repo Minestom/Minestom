@@ -1,6 +1,7 @@
 package net.minestom.server.network.player;
 
 import net.minestom.server.ServerFlag;
+import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -50,6 +51,15 @@ public record ClientSettings(Locale locale, byte viewDistance,
         viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
         Objects.requireNonNull(chatMessageType);
         Objects.requireNonNull(mainHand);
+    }
+
+    /**
+     * Deprecated in favor of {@link Player#effectiveViewDistance()}
+     * @return The effective view distance, which is the smaller of either the client's view distance settings and the server's max view distance
+     */
+    @Deprecated
+    public int effectiveViewDistance() {
+        return Math.min(viewDistance(), ServerFlag.CHUNK_VIEW_DISTANCE);
     }
 
     /**

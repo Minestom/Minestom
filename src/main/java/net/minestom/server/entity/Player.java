@@ -2377,11 +2377,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @return The effective chunk view distance range of the client
      */
     public int effectiveViewDistance() {
-        if (this.instance == null) {
-            return Math.min(settings.viewDistance(), ServerFlag.CHUNK_VIEW_DISTANCE) + 1;
-        } else {
-            return Math.min(settings.viewDistance(), this.instance.viewDistance()) + 1;
-        }
+        Instance instance = this.instance;
+        int maxViewDistance = instance != null ? instance.viewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
+        return Math.min(settings.viewDistance(), maxViewDistance) + 1;
     }
 
     @SuppressWarnings("unchecked")
