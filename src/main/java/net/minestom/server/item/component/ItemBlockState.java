@@ -19,6 +19,10 @@ public record ItemBlockState(Map<String, String> properties) {
         properties = Map.copyOf(properties);
     }
 
+    public ItemBlockState(String key, String value) {
+        this(Map.of(key, value));
+    }
+
     public ItemBlockState with(String key, String value) {
         Map<String, String> newProperties = new HashMap<>(properties);
         newProperties.put(key, value);
