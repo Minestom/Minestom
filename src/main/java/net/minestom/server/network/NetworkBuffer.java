@@ -47,9 +47,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Key> KEY = STRING.transform(Key::key, Key::asString);
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
     Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.IOUTF8StringType();
-    Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    Type<CompoundBinaryTag> NBT_COMPOUND = (Type) new NetworkBufferTypeImpl.NbtType();
+    Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType<>();
+    Type<CompoundBinaryTag> NBT_COMPOUND = new NetworkBufferTypeImpl.NbtType<>();
     Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
     Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
@@ -109,8 +108,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.EitherType<>(left, right);
     }
 
-    <T>
-    void write(Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    <T> void write(Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
 
     <T> @UnknownNullability T read(Type<T> type) throws IndexOutOfBoundsException;
 
@@ -172,7 +170,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     @Nullable Registries registries();
 
-    interface Type<T> {
+    interface Type<T extends @UnknownNullability Object> {
         void write(NetworkBuffer buffer, T value);
 
         T read(NetworkBuffer buffer);
@@ -213,7 +211,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
             return set(Integer.MAX_VALUE);
         }
 
-        default Type<T> optional() {
+        default Type<@Nullable T> optional() {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
         }
 
@@ -230,7 +228,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferImpl.Builder(size);
     }
 
-    static NetworkBuffer staticBuffer(long size, Registries registries) {
+    static NetworkBuffer staticBuffer(long size, @Nullable Registries registries) {
         return builder(size).registry(registries).build();
     }
 
@@ -238,7 +236,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return staticBuffer(size, null);
     }
 
-    static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
+    static NetworkBuffer resizableBuffer(long initialSize, @Nullable Registries registries) {
         return builder(initialSize)
                 .autoResize(AutoResize.DOUBLE)
                 .registry(registries)
@@ -249,7 +247,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(initialSize, null);
     }
 
-    static NetworkBuffer resizableBuffer(Registries registries) {
+    static NetworkBuffer resizableBuffer(@Nullable Registries registries) {
         return resizableBuffer(256, registries);
     }
 
