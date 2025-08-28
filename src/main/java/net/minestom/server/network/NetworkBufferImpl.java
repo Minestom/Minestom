@@ -102,7 +102,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public void copyTo(long srcOffset, byte [] dest, long destOffset, long length) {
+    public void copyTo(long srcOffset, byte[] dest, long destOffset, long length) {
         assertDummy();
         assertOverflow(srcOffset + length);
         assertOverflow(destOffset + length);
@@ -113,7 +113,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         UNSAFE.copyMemory(null, address + srcOffset, dest, BYTE_ARRAY_OFFSET + destOffset, length);
     }
 
-    public byte [] extractBytes(Consumer<NetworkBuffer> extractor) {
+    public byte[] extractBytes(Consumer<NetworkBuffer> extractor) {
         assertDummy();
         final long startingPosition = readIndex();
         extractor.accept(this);
@@ -470,7 +470,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return Double.longBitsToDouble(longValue);
     }
 
-    static NetworkBuffer wrap(byte [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(byte[] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
         var buffer = new Builder(bytes.length).registry(registries).build();
         buffer.writeAt(0, NetworkBuffer.RAW_BYTES, bytes);
         buffer.index(readIndex, writeIndex);

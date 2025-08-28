@@ -10,8 +10,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EncryptionRequestPacket(
         String serverId,
-        byte [] publicKey,
-        byte [] verifyToken,
+        byte[] publicKey,
+        byte[] verifyToken,
         boolean shouldAuthenticate
 ) implements ServerPacket.Login {
     public static final NetworkBuffer.Type<EncryptionRequestPacket> SERIALIZER = NetworkBufferTemplate.template(

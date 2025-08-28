@@ -67,7 +67,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
     }
 
     public record ColorContent(byte columns, byte rows, byte x, byte z,
-                               byte [] data) {
+                               byte[] data) {
         public static final NetworkBuffer.Type<ColorContent> SERIALIZER = NetworkBufferTemplate.template(
                 BYTE, ColorContent::columns,
                 BYTE, ColorContent::rows,

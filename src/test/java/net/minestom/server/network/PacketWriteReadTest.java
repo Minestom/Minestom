@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import com.google.gson.JsonObject;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.resource.ResourcePackStatus;
 import net.kyori.adventure.text.Component;
@@ -9,12 +10,12 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.EquipmentSlot;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.crypto.*;
+import net.minestom.server.entity.*;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatMessageType;
@@ -23,19 +24,21 @@ import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
+import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
+import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
-import net.minestom.server.network.packet.client.play.ClientConfigurationAckPacket;
-import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
+import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
+import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
@@ -46,11 +49,15 @@ import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
+import net.minestom.server.utils.crypto.KeyUtils;
+import net.minestom.server.world.Difficulty;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.security.PublicKey;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -60,8 +67,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * Ensures that packet can be written and read correctly.
  */
 public class PacketWriteReadTest {
-    private static final Map<Class<? extends ServerPacket>, List<ServerPacket>> SERVER_PACKETS = new HashMap<>();
-    private static final Map<Class<? extends ClientPacket>, List<ClientPacket>> CLIENT_PACKETS = new HashMap<>();
+    private static final Map<Class<? extends ServerPacket>, Set<ServerPacket>> SERVER_PACKETS = new HashMap<>();
+    private static final Map<Class<? extends ClientPacket>, Set<ClientPacket>> CLIENT_PACKETS = new HashMap<>();
 
     private static final String OG = "TheMode911";
     private static final Component COMPONENT = Component.text("Hey");
@@ -70,13 +77,17 @@ public class PacketWriteReadTest {
     @SafeVarargs
     private static <T extends ServerPacket> void addServerPackets(T... packets) {
         assertNotEquals(0, packets.length);
-        SERVER_PACKETS.computeIfAbsent(packets[0].getClass(), c -> new ArrayList<>()).addAll(List.of(packets));
+        var packetClass = packets[0].getClass();
+        var set = SERVER_PACKETS.computeIfAbsent(packetClass, c -> new HashSet<>(packets.length));
+        for (var packet: packets) assertTrue(set.add(packet), "Found duplicate server packet in %s with `%s`".formatted(packet.getClass().getSimpleName(), packet));
     }
 
     @SafeVarargs
     private static <T extends ClientPacket> void addClientPackets(T... packets) {
         assertNotEquals(0, packets.length);
-        CLIENT_PACKETS.computeIfAbsent(packets[0].getClass(), c -> new ArrayList<>()).addAll(List.of(packets));
+        var packetClass = packets[0].getClass();
+        var set = CLIENT_PACKETS.computeIfAbsent(packetClass, c -> new HashSet<>(packets.length));
+        for (var packet: packets) assertTrue(set.add(packet), "Found duplicate client packet in %s with `%s`".formatted(packet.getClass().getSimpleName(), packet));
     }
 
     @BeforeAll
@@ -234,6 +245,8 @@ public class PacketWriteReadTest {
 
     @BeforeAll
     public static void setupClient() {
+        MinecraftServer.init(); // Need to validate packets with auth mode.
+
         // Handshake
         addClientPackets(
                 new ClientHandshakePacket(755, "localhost", 25565, ClientHandshakePacket.Intent.LOGIN),
@@ -251,6 +264,10 @@ public class PacketWriteReadTest {
                 new ClientPingRequestPacket(Long.MIN_VALUE),
                 new ClientPingRequestPacket(Long.MAX_VALUE),
                 new ClientPingRequestPacket(0)
+        );
+
+        addClientPackets(
+                new ClientPongPacket(Integer.MAX_VALUE), new ClientPongPacket(Integer.MIN_VALUE), new ClientPongPacket(6500125), new ClientPongPacket(0)
         );
 
         // Login
@@ -329,16 +346,87 @@ public class PacketWriteReadTest {
         for (ResourcePackStatus status : ResourcePackStatus.values()) { // Full enum test
             addClientPackets(new ClientResourcePackStatusPacket(UUID.randomUUID(), status));
         }
+        addClientPackets(new ClientSelectKnownPacksPacket(List.of(
+                new SelectKnownPacksPacket.Entry("namespaced:entry", "custom_id", "1.0.0"),
+                new SelectKnownPacksPacket.Entry("defaultnamespace", "other_id", "12598125")
+        )));
+        addClientPackets(
+                new ClientCustomClickActionPacket(Key.key("wowzers"), CompoundBinaryTag.builder().putInt("key", 0).build()),
+                new ClientCustomClickActionPacket(Key.key("asgdf"), CompoundBinaryTag.builder().putString("key", "value").build())
+        );
 
+        // Play
+        addClientPackets(new ClientTeleportConfirmPacket(325626), new ClientTeleportConfirmPacket(Integer.MAX_VALUE), new ClientTeleportConfirmPacket(Integer.MIN_VALUE));
+        addClientPackets(new ClientQueryBlockNbtPacket(1325, BlockVec.ZERO), new ClientQueryBlockNbtPacket(-15, BlockVec.ONE));
+        addClientPackets(new ClientSelectBundleItemPacket(32, 65), new ClientSelectBundleItemPacket(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        addClientPackets(new ClientChangeDifficultyPacket(Difficulty.EASY, false),  new ClientChangeDifficultyPacket(Difficulty.HARD, true), new ClientChangeDifficultyPacket(Difficulty.PEACEFUL, true));
+        addClientPackets(new ClientChangeGameModePacket(GameMode.ADVENTURE),  new ClientChangeGameModePacket(GameMode.SURVIVAL), new ClientChangeGameModePacket(GameMode.CREATIVE), new ClientChangeGameModePacket(GameMode.SPECTATOR));
+        addClientPackets(new ClientChatAckPacket(12549581), new ClientChatAckPacket(Integer.MIN_VALUE), new ClientChatAckPacket(Integer.MAX_VALUE));
+        addClientPackets(new ClientCommandChatPacket("l".repeat(256)), new ClientCommandChatPacket("helloworld"));
+        //TODO (signed) support signed chat/commands with proper data.
+        addClientPackets(new ClientSignedCommandChatPacket("helloworld", Long.MAX_VALUE, 0L, new ArgumentSignatures(List.of(new ArgumentSignatures.Entry("hey", new MessageSignature(new byte[256])))), new LastSeenMessages.Update(100, new BitSet()), (byte) 0));
+        addClientPackets(new ClientChatMessagePacket("My name is bob", Long.MAX_VALUE, 0L, new byte[10], 100, new BitSet(), (byte) 100));
+        //TODO (signed) use a key for tests
+        addClientPackets(new ClientChatSessionUpdatePacket(new ChatSession(UUID.randomUUID(), new PlayerPublicKey(Instant.MAX, new PublicKey() {
+            @Override
+            public String getAlgorithm() {
+                return "";
+            }
+
+            @Override
+            public String getFormat() {
+                return "";
+            }
+
+            @Override
+            public byte[] getEncoded() {
+                return new byte[0];
+            }
+        }, new byte[4096]))));
+        addClientPackets(new ClientChunkBatchReceivedPacket(0.5f));
+        addClientPackets(new ClientStatusPacket(ClientStatusPacket.Action.PERFORM_RESPAWN), new  ClientStatusPacket(ClientStatusPacket.Action.REQUEST_STATS));
+        addClientPackets(new ClientTickEndPacket());
+        addClientPackets(new ClientTabCompletePacket(15, "/hellloworld"), new ClientTabCompletePacket(Integer.MIN_VALUE, "/hello arg1 arg2 arg3"), new ClientTabCompletePacket(-1000, "//undo"));
+        addClientPackets(new ClientFinishConfigurationPacket());
+        addClientPackets(new ClientClickWindowButtonPacket(15, 14), new ClientClickWindowButtonPacket(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        addClientPackets(new ClientClickWindowPacket(125, 20, (short) -999, (byte) 1, ClientClickWindowPacket.ClickType.SWAP, Map.of(), ItemStack.Hash.AIR), new ClientClickWindowPacket(Integer.MAX_VALUE, Integer.MIN_VALUE, (short) 51, (byte) 1, ClientClickWindowPacket.ClickType.SWAP, Map.of((short) 5, ItemStack.Hash.AIR), ItemStack.Hash.AIR));
+        addClientPackets(new ClientCloseWindowPacket(15), new ClientCloseWindowPacket(Integer.MIN_VALUE));
+        addClientPackets(new ClientWindowSlotStatePacket(25, 25, true), new ClientWindowSlotStatePacket(Integer.MAX_VALUE, Integer.MAX_VALUE, true), new  ClientWindowSlotStatePacket(Integer.MIN_VALUE, Integer.MAX_VALUE, false));
+        //Cookie
+        //Plugin message
+        addClientPackets(new ClientDebugSampleSubscriptionPacket(DebugSamplePacket.Type.TICK_TIME));
+        addClientPackets(new ClientEditBookPacket(14, List.of("page1", "page2"), "Wrath of nothing"), new ClientEditBookPacket(15, List.of(), null), new ClientEditBookPacket(12, List.of("hi".repeat(100).split("h")), "What is this book?"));
+        addClientPackets(new ClientQueryEntityNbtPacket(1325, 25), new ClientQueryEntityNbtPacket(-15, Integer.MAX_VALUE));
+        addClientPackets(
+                new ClientInteractEntityPacket(10, new ClientInteractEntityPacket.Attack(), true),
+                new ClientInteractEntityPacket(32, new ClientInteractEntityPacket.Interact(PlayerHand.MAIN), false),
+                new ClientInteractEntityPacket(15, new ClientInteractEntityPacket.InteractAt(1f, 2f, 1f, PlayerHand.MAIN), true),
+                new ClientInteractEntityPacket(Integer.MAX_VALUE, new ClientInteractEntityPacket.Interact(PlayerHand.OFF), false),
+                new ClientInteractEntityPacket(2365, new ClientInteractEntityPacket.Attack(), false)
+        );
+        addClientPackets(new ClientGenerateStructurePacket(Vec.ZERO, Integer.MAX_VALUE, true));
+        addClientPackets(new ClientLockDifficultyPacket(true), new ClientLockDifficultyPacket(false));
+        addClientPackets(new ClientPlayerPositionPacket(Vec.ONE, (byte) ClientPlayerPositionPacket.FLAG_HORIZONTAL_COLLISION), new ClientPlayerPositionPacket(Vec.ZERO, (byte) ClientPlayerPositionPacket.FLAG_ON_GROUND));
+        addClientPackets(new ClientPlayerPositionAndRotationPacket(Pos.ZERO, true, true), new ClientPlayerPositionAndRotationPacket(new Pos(10, 10, 10, 0f, 0f), false, true));
+        addClientPackets(new ClientPlayerPositionStatusPacket(true, false),  new ClientPlayerPositionStatusPacket(false, false), new  ClientPlayerPositionStatusPacket(false, true), new  ClientPlayerPositionStatusPacket(true, true));
         addClientPackets(new ClientVehicleMovePacket(new Pos(5, 5, 5, 45f, 45f), true));
         addClientPackets(new ClientVehicleMovePacket(new Pos(6, 5, 6, 82f, 12.5f), false));
+        addClientPackets(new ClientSteerBoatPacket(true, false), new ClientSteerBoatPacket(false, false), new  ClientSteerBoatPacket(true, true), new ClientSteerBoatPacket(false, true));
+        addClientPackets(new ClientPickItemFromBlockPacket(BlockVec.ONE, true), new ClientPickItemFromBlockPacket(BlockVec.ZERO, false));
+        addClientPackets(new ClientPickItemFromEntityPacket(124, true), new ClientPickItemFromEntityPacket(124, false), new   ClientPickItemFromEntityPacket(Integer.MAX_VALUE, true), new ClientPickItemFromEntityPacket(Integer.MIN_VALUE, false));
+        addClientPackets(new ClientPlaceRecipePacket((byte) 10, 10, true), new ClientPlaceRecipePacket((byte) 51, 14, false));
+        addClientPackets(new ClientPlayerAbilitiesPacket((byte) 0x02));
+        addClientPackets(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.STARTED_DIGGING, BlockVec.ZERO, BlockFace.BOTTOM, Integer.MAX_VALUE), new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK, BlockVec.ONE, BlockFace.TOP, Integer.MIN_VALUE));
+        addClientPackets(new ClientEntityActionPacket(10, ClientEntityActionPacket.Action.LEAVE_BED, 0), new  ClientEntityActionPacket(15, ClientEntityActionPacket.Action.START_SPRINTING, 0), new  ClientEntityActionPacket(321, ClientEntityActionPacket.Action.START_FLYING_ELYTRA, 0));
+        addClientPackets(new ClientInputPacket(true, false, true, false, false, false, true), new ClientInputPacket(false, true, true, false, false, false, true));
+        addClientPackets(new ClientPlayerLoadedPacket());
+        //addClientPackets(new ClientSetRecipeBookStatePacket());
     }
 
     private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet) {
         byte[] bytes = NetworkBuffer.makeArray(networkType, packet);
-        NetworkBuffer reader = NetworkBuffer.resizableBuffer();
-        reader.write(NetworkBuffer.RAW_BYTES, bytes);
-        var createdPacket = networkType.read(reader);
+        var buffer = NetworkBuffer.wrap(bytes, 0, bytes.length);
+        var createdPacket = buffer.read(networkType);
         assertEquals(packet, createdPacket);
     }
 
@@ -347,7 +435,8 @@ public class PacketWriteReadTest {
                 parser.handshake(),
                 parser.status(),
                 parser.login(),
-                parser.configuration()//, parser.play()
+                parser.configuration()//,
+                //parser.play()
         ).flatMap(registry -> registry.packets().stream());
     }
 

@@ -116,9 +116,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
-    void copyTo(long srcOffset, byte [] dest, long destOffset, long length);
+    void copyTo(long srcOffset, byte[] dest, long destOffset, long length);
 
-    byte [] extractBytes(Consumer<NetworkBuffer> extractor);
+    byte[] extractBytes(Consumer<NetworkBuffer> extractor);
 
     NetworkBuffer clear();
 
@@ -255,11 +255,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(null);
     }
 
-    static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
         return NetworkBufferImpl.wrap(bytes, readIndex, writeIndex, registries);
     }
 
-    static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex) {
+    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
         return wrap(bytes, readIndex, writeIndex, null);
     }
 
