@@ -63,7 +63,7 @@ public record PlayerInfoUpdatePacket(
                 newEntries.add(new Entry(entry.uuid, entry.username,
                         entry.properties, entry.listed, entry.latency,
                         entry.gameMode, operator.apply(displayName),
-                        entry.chatSession, entry.listOrder));
+                        entry.chatSession, entry.listOrder, entry.displayHat));
             } else {
                 newEntries.add(entry);
             }
@@ -74,7 +74,7 @@ public record PlayerInfoUpdatePacket(
     public record Entry(UUID uuid, String username, List<Property> properties,
                         boolean listed, int latency, GameMode gameMode,
                         @Nullable Component displayName, @Nullable ChatSession chatSession,
-                        int listOrder) {
+                        int listOrder, boolean displayHat) {
         public Entry {
             properties = List.copyOf(properties);
         }
@@ -98,21 +98,23 @@ public record PlayerInfoUpdatePacket(
                     Component displayName = null;
                     ChatSession chatSession = null;
                     int listOrder = 0;
+                    boolean displayHat = true;
                     for (Action action : actions) {
                         switch (action) {
                             case ADD_PLAYER -> {
                                 username = buffer.read(STRING);
                                 properties = buffer.read(Property.SERIALIZER.list(GameProfile.MAX_PROPERTIES));
                             }
-                            case INITIALIZE_CHAT -> chatSession = ChatSession.SERIALIZER.read(buffer);
+                            case INITIALIZE_CHAT -> chatSession = ChatSession.SERIALIZER.optional().read(buffer);
                             case UPDATE_GAME_MODE -> gameMode = buffer.read(NetworkBuffer.Enum(GameMode.class));
                             case UPDATE_LISTED -> listed = buffer.read(BOOLEAN);
                             case UPDATE_LATENCY -> latency = buffer.read(VAR_INT);
                             case UPDATE_DISPLAY_NAME -> displayName = buffer.read(COMPONENT.optional());
                             case UPDATE_LIST_ORDER -> listOrder = buffer.read(VAR_INT);
+                            case UPDATE_HAT -> displayHat = buffer.read(BOOLEAN);
                         }
                     }
-                    return new Entry(uuid, username, properties, listed, latency, gameMode, displayName, chatSession, listOrder);
+                    return new Entry(uuid, username, properties, listed, latency, gameMode, displayName, chatSession, listOrder, displayHat);
                 }
             };
         }
@@ -140,7 +142,8 @@ public record PlayerInfoUpdatePacket(
         UPDATE_LISTED((writer, entry) -> writer.write(BOOLEAN, entry.listed)),
         UPDATE_LATENCY((writer, entry) -> writer.write(VAR_INT, entry.latency)),
         UPDATE_DISPLAY_NAME((writer, entry) -> writer.write(COMPONENT.optional(), entry.displayName)),
-        UPDATE_LIST_ORDER((writer, entry) -> writer.write(VAR_INT, entry.listOrder));
+        UPDATE_LIST_ORDER((writer, entry) -> writer.write(VAR_INT, entry.listOrder)),
+        UPDATE_HAT((writer, entry) -> writer.write(BOOLEAN, entry.displayHat));
 
         final Writer writer;
 
