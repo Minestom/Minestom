@@ -2244,8 +2244,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         List<PlayerInfoUpdatePacket.Property> prop = skin != null ?
                 List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
+        byte hatIndex = ((MetadataDef.Entry.BitMask) MetadataDef.Player.IS_HAT_ENABLED).bitMask();
         return new PlayerInfoUpdatePacket.Entry(getUuid(), getUsername(), prop,
-                true, getLatency(), getGameMode(), displayName, null, 0);
+                true, getLatency(), getGameMode(), displayName, null, 0, (settings.displayedSkinParts() & hatIndex) == hatIndex);
     }
 
     /**
