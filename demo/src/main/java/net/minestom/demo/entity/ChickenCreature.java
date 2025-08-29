@@ -12,17 +12,17 @@ public class ChickenCreature extends EntityCreature {
     public ChickenCreature() {
         super(EntityType.CHICKEN);
 
-        addAIGroup(
-                List.of(
+//        addAIGroup(
+//                List.of(
 //                        new DoNothingGoal(this, 500, 0.1f),
 //                        new MeleeAttackGoal(this, 500, 2, TimeUnit.MILLISECOND),
-                        new RandomStrollGoal(this, 2)
-                ),
-                List.of(
+//                        new RandomStrollGoal(this, 2)
+//                ),
+//                List.of(
 //                        new LastEntityDamagerTarget(this, 15),
 //                        new ClosestEntityTarget(this, 15, LivingEntity.class)
-                )
-        );
+//                )
+//        );
 
         // Another way to register previously added EntityAIGroup, using specialized builder:
 //        addAIGroup(

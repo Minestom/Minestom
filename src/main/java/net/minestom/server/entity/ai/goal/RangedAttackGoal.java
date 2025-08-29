@@ -5,7 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.Goal;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
 
-public class RangedAttackGoal extends GoalSelector {
+public class RangedAttackGoal extends Goal {
     private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     private long lastShot;
@@ -89,8 +89,8 @@ public class RangedAttackGoal extends GoalSelector {
     }
 
     @Override
-    public boolean shouldStart() {
-        this.cachedTarget = findTarget();
+    public boolean canStart() {
+        this.cachedTarget = entityCreature.findTarget();
         return this.cachedTarget != null;
     }
 
@@ -106,7 +106,7 @@ public class RangedAttackGoal extends GoalSelector {
             target = this.cachedTarget;
             this.cachedTarget = null;
         } else {
-            target = findTarget();
+            target = entityCreature.findTarget();
         }
         if (target == null) {
             this.stop = true;

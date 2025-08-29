@@ -2,7 +2,8 @@ package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.ai.EntityAI;
-import net.minestom.server.entity.ai.EntityAIGroup;
+import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.entity.pathfinding.NavigatorImpl;
@@ -15,17 +16,17 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
 
     private int removalAnimationDelay = 1000;
 
-    private final Set<EntityAIGroup> aiGroups = new CopyOnWriteArraySet<>();
+    private final GoalSelector goalSelector = new GoalSelector();
+    private final List<TargetSelector> targetSelectors = new ArrayList<>();
 
     private final Navigator navigator;
 
@@ -51,7 +52,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     @Override
     public void update(long time) {
         // AI
-        aiTick(time);
+        getGoalSelector().tick(time);
 
         // Path finding
         this.navigator.tick();
@@ -100,25 +101,21 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     }
 
     @Override
-    public Collection<EntityAIGroup> getAIGroups() {
-        return aiGroups;
+    public GoalSelector getGoalSelector() {
+        return goalSelector;
     }
 
-    /**
-     * Gets the entity target.
-     *
-     * @return the entity target, can be null if not any
-     */
-    @Nullable
-    public Entity getTarget() {
+    @Override
+    public List<TargetSelector> getTargetSelectors() {
+        return targetSelectors;
+    }
+
+    @Override
+    public @Nullable Entity getTarget() {
         return target;
     }
 
-    /**
-     * Changes the entity target.
-     *
-     * @param target the new entity target, null to remove
-     */
+    @Override
     public void setTarget(@Nullable Entity target) {
         this.target = target;
     }

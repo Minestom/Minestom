@@ -1,51 +1,64 @@
 package net.minestom.server.entity.ai;
 
-import java.util.Collection;
+import net.minestom.server.entity.Entity;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
  * Represents an entity which can contain
- * {@link GoalSelector goal selectors} and {@link TargetSelector target selectors}.
+ * {@link Goal goal selectors} and {@link TargetSelector target selectors}.
  * <p>
- * Both types of selectors are being stored in {@link EntityAIGroup AI groups}.
- * For every group there could be only a single {@link GoalSelector goal selector} running at a time,
+ * Both types of selectors are being stored in {@link GoalSelector AI groups}.
+ * For every group there could be only a single {@link Goal goal selector} running at a time,
  * but multiple groups are independent of each other, so each of them can have own goal selector running.
  */
 public interface EntityAI {
 
     /**
-     * Gets the AI groups of this entity.
+     * Gets the goal selector of this entity. This can be used to add AI goals.
      *
-     * @return a modifiable collection of AI groups of this entity.
+     * @return the goal selector
      */
-    Collection<EntityAIGroup> getAIGroups();
+    GoalSelector getGoalSelector();
 
     /**
-     * Adds new AI group to this entity.
+     * Returns a modifiable list of target selectors for this entity.
+     * <p>
+     * The order of this list determines priority (with the first selector being higher priority than the next, and so on).
      *
-     * @param group a group to be added.
+     * @return a modifiable list of target selectors
      */
-    default void addAIGroup(EntityAIGroup group) {
-        getAIGroups().add(group);
-    }
+    List<TargetSelector> getTargetSelectors();
 
     /**
-     * Adds new AI group to this entity, consisting of the given
-     * {@link GoalSelector goal selectors} and {@link TargetSelector target selectors}.
-     * Their order is also a priority: the lower element index is, the higher priority is.
+     * Gets the entity target.
      *
-     * @param goalSelectors   goal selectors of the group.
-     * @param targetSelectors target selectors of the group.
+     * @return the entity target, can be null if not any
      */
-    default void addAIGroup(List<GoalSelector> goalSelectors, List<TargetSelector> targetSelectors) {
-        EntityAIGroup group = new EntityAIGroup();
-        group.getGoalSelectors().addAll(goalSelectors);
-        group.getTargetSelectors().addAll(targetSelectors);
-        addAIGroup(group);
-    }
+    @Nullable Entity getTarget();
 
-    default void aiTick(long time) {
-        getAIGroups().forEach(group -> group.tick(time));
-    }
+    /**
+     * Changes the entity target.
+     *
+     * @param target the new entity target, null to remove
+     */
+    void setTarget(@Nullable Entity target);
 
+    /**
+     * Tries to find a target using the target selectors from {@link EntityAI#getTargetSelectors()}.
+     * The target returned by {@link EntityAI#getTarget()} will be updated.
+     *
+     * @return the new target, null if none was found
+     */
+    default @Nullable Entity findTarget() {
+        for (TargetSelector targetSelector : getTargetSelectors()) {
+            final Entity entity = targetSelector.findTarget();
+            if (entity != null) {
+                setTarget(entity);
+                return entity;
+            }
+        }
+        return null;
+    }
 }

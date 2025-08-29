@@ -24,8 +24,7 @@ public abstract class TargetSelector {
      *
      * @return the target, null if not any
      */
-    @Nullable
-    public abstract Entity findTarget();
+    public @Nullable abstract Entity findTarget();
 
     /**
      * Gets the entity linked to this target selector.

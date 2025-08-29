@@ -1,100 +1,214 @@
 package net.minestom.server.entity.ai;
 
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.ref.WeakReference;
+import java.util.*;
+import java.util.function.UnaryOperator;
 
-public abstract class GoalSelector {
+/**
+ * Responsible for regulating entity AI goals.
+ * <p>
+ * The goals are organized by slots. A {@link Slot} can be user created.
+ * Each slot can hold one active goal, but a goal can occupy multiple slots if needed.
+ * <p>
+ * Use {@link GoalSelector#getGoals()} to modify the goals.
+ */
+public class GoalSelector {
+    private final Map<Slot, GoalInstance> currentGoals = new HashMap<>();
+    private final List<GoalInstance> goals = new GoalSelectorsArrayList();
 
-    private WeakReference<EntityAIGroup> aiGroupWeakReference;
-    protected EntityCreature entityCreature;
-
-    public GoalSelector(EntityCreature entityCreature) {
-        this.entityCreature = entityCreature;
+    /**
+     * Returns a modifiable list of {@link GoalInstance} objects.
+     * <p>
+     * The order of this list determines goal priority (with the first goal being higher priority than the next, and so on).
+     *
+     * @return a modifiable list of goals
+     */
+    public List<GoalInstance> getGoals() {
+        return goals;
     }
 
     /**
-     * Whether or not this {@link GoalSelector} should start.
+     * Gets the current active goal for the given slot.
      *
-     * @return true to start
+     * @param slot the slot to get the active goal from
+     * @return the current goal selector of this group, null if not any
      */
-    public abstract boolean shouldStart();
+    public @Nullable GoalInstance getCurrentGoal(Slot slot) {
+        return currentGoals.get(slot);
+    }
 
     /**
-     * Starts this {@link GoalSelector}.
-     */
-    public abstract void start();
-
-    /**
-     * Called every tick when this {@link GoalSelector} is running.
+     * Changes the current active goal for the given slot.
+     * <p>
+     * Mostly unsafe since the current goal should normally
+     * be chosen during the tick method.
+     * <p>
+     * NOTE: This method will only update the given slot, not all slots defined by the {@link GoalInstance}.
      *
-     * @param time the time of the update in milliseconds
+     * @param goalInstance the new goal for this slot, null to disable it
      */
-    public abstract void tick(long time);
-
-    /**
-     * Whether or not this {@link GoalSelector} should end.
-     *
-     * @return true to end
-     */
-    public abstract boolean shouldEnd();
-
-    /**
-     * Ends this {@link GoalSelector}.
-     */
-    public abstract void end();
-
-    /**
-     * Finds a target based on the entity {@link TargetSelector}.
-     *
-     * @return the target entity, null if not found
-     */
-    @Nullable
-    public Entity findTarget() {
-        EntityAIGroup aiGroup = getAIGroup();
-        if (aiGroup == null) {
-            return null;
+    public void setCurrentGoal(Slot slot, @Nullable GoalInstance goalInstance) {
+        Check.argCondition(
+                goalInstance != null && goalInstance.goal.getAIGroup() != this,
+                "Tried to set goal selector attached to another AI group!"
+        );
+        if (goalInstance != null) {
+            currentGoals.put(slot, goalInstance);
+        } else {
+            currentGoals.remove(slot);
         }
-        for (TargetSelector targetSelector : aiGroup.getTargetSelectors()) {
-            final Entity entity = targetSelector.findTarget();
-            if (entity != null) {
-                return entity;
+    }
+
+    public void tick(long time) {
+        // End and remove goals when needed
+        for (GoalInstance goalInstance : goals) {
+            if (goalInstance.active && (goalInstance.disabled || goalInstance.goal.shouldEnd())) {
+                goalInstance.goal.end();
+                goalInstance.active = false;
+
+                for (Slot slot : goalInstance.slots) {
+                    currentGoals.remove(slot);
+                }
             }
         }
-        return null;
+
+        // Start new goals if needed
+        for (GoalInstance goalInstance : goals) {
+            if (goalInstance.disabled || goalInstance.active)
+                continue;
+
+            if (canReplaceAllSlots(goalInstance) && goalInstance.goal.canStart()) {
+                for (Slot slot : goalInstance.slots) {
+                    GoalInstance prevGoal = currentGoals.put(slot, goalInstance);
+                    if (prevGoal != null && prevGoal.active) {
+                        prevGoal.goal.end();
+                        prevGoal.active = false;
+                    }
+                }
+
+                goalInstance.goal.start();
+                goalInstance.active = true;
+            }
+        }
+
+        // Tick current goals
+        Set<GoalInstance> tickedGoals = new HashSet<>();
+        for (GoalInstance goalInstance : currentGoals.values()) {
+            if (tickedGoals.contains(goalInstance)) continue; // Do not tick twice
+            goalInstance.goal.tick(time);
+            tickedGoals.add(goalInstance);
+        }
     }
 
     /**
-     * Gets the entity behind the goal selector.
+     * Returns whether all the needed slots for the given goal can be replaced.
+     * It takes into account the priority (list order) in which the goals were defined.
      *
-     * @return the entity
+     * @param goal the goal for which to determine the result
+     * @return whether this goal can replace all current goals in the needed slots
      */
-    public EntityCreature getEntityCreature() {
-        return entityCreature;
+    private boolean canReplaceAllSlots(GoalInstance goal) {
+        int priority = goals.indexOf(goal);
+
+        for (Slot slot : goal.slots) {
+            GoalInstance current = currentGoals.get(slot);
+            if (current == null) continue;
+            int runningPriority = goals.indexOf(current);
+            if (!current.goal.canInterrupt() || priority > runningPriority)
+                return false;
+        }
+        return true;
     }
 
     /**
-     * Changes the entity affected by the goal selector.
-     * <p>
-     * WARNING: this does not add the goal selector to {@code entityCreature},
-     * this only change the internal entity AI group's field. Be sure to remove the goal from
-     * the previous entity AI group and add it to the new one using {@link EntityAIGroup#getGoalSelectors()}.
-     *
-     * @param entityCreature the new affected entity
+     * Represents a goal selector slot, which can have an active goal.
      */
-    public void setEntityCreature(EntityCreature entityCreature) {
-        this.entityCreature = entityCreature;
+    public static class Slot {}
+
+    public static class GoalInstance {
+        private final Goal goal;
+        private final Set<Slot> slots;
+        private boolean active;
+        private boolean disabled;
+
+        public GoalInstance(Goal goal, Set<Slot> slots) {
+            this.goal = goal;
+            this.slots = slots;
+        }
+
+        public Goal goal() {
+            return goal;
+        }
+
+        public Set<Slot> slots() {
+            return slots;
+        }
+
+        public boolean isActive() {
+            return active;
+        }
+
+        public boolean isDisabled() {
+            return disabled;
+        }
+
+        public void setDisabled(boolean disabled) {
+            this.disabled = disabled;
+        }
     }
 
-    void setAIGroup(EntityAIGroup group) {
-        this.aiGroupWeakReference = new WeakReference<>(group);
-    }
+    /**
+     * The purpose of this list is to guarantee that every {@link Goal} added to that group
+     * has a reference to it for some internal interactions. We don't provide developers with
+     * methods like `addGoalSelector` or `removeGoalSelector`: instead we provide them with direct
+     * access to list of goal selectors, so that they could use operations such as `clear`, `set`, `removeIf`, etc.
+     */
+    private class GoalSelectorsArrayList extends ArrayList<GoalInstance> {
 
-    @Nullable
-    protected EntityAIGroup getAIGroup() {
-        return this.aiGroupWeakReference.get();
+        private GoalSelectorsArrayList() {
+        }
+
+        @Override
+        public GoalInstance set(int index, GoalInstance element) {
+            element.goal().setAIGroup(GoalSelector.this);
+            return super.set(index, element);
+        }
+
+        @Override
+        public boolean add(GoalInstance element) {
+            element.goal().setAIGroup(GoalSelector.this);
+            return super.add(element);
+        }
+
+        @Override
+        public void add(int index, GoalInstance element) {
+            element.goal().setAIGroup(GoalSelector.this);
+            super.add(index, element);
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends GoalInstance> c) {
+            c.forEach(element -> element.goal().setAIGroup(GoalSelector.this));
+            return super.addAll(c);
+        }
+
+        @Override
+        public boolean addAll(int index, Collection<? extends GoalInstance> c) {
+            c.forEach(element -> element.goal().setAIGroup(GoalSelector.this));
+            return super.addAll(index, c);
+        }
+
+        @Override
+        public void replaceAll(UnaryOperator<GoalInstance> operator) {
+            super.replaceAll(element -> {
+                element = operator.apply(element);
+                element.goal().setAIGroup(GoalSelector.this);
+                return element;
+            });
+        }
+
     }
 
 }

@@ -9,10 +9,10 @@ public class ZombieCreature extends EntityCreature {
 
     public ZombieCreature() {
         super(EntityType.ZOMBIE);
-        addAIGroup(
-                new EntityAIGroupBuilder()
-                        .addGoalSelector(new RandomLookAroundGoal(this, 20))
-                        .build()
-        );
+//        addAIGroup(
+//                new EntityAIGroupBuilder()
+//                        .addGoalSelector(new RandomLookAroundGoal(this, 20))
+//                        .build()
+//        );
     }
 }

@@ -4,12 +4,12 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.Goal;
 import net.minestom.server.entity.pathfinding.Navigator;
 
 import java.time.Duration;
 
-public class FollowTargetGoal extends GoalSelector {
+public class FollowTargetGoal extends Goal {
     private final Duration pathDuration;
     private long lastUpdateTime = 0;
     private boolean forceEnd = false;
@@ -29,9 +29,9 @@ public class FollowTargetGoal extends GoalSelector {
     }
 
     @Override
-    public boolean shouldStart() {
+    public boolean canStart() {
         Entity target = entityCreature.getTarget();
-        if (target == null) target = findTarget();
+        if (target == null) target = entityCreature.findTarget();
         if (target == null) return false;
         final boolean result = target.getPosition().distanceSquared(entityCreature.getPosition()) >= 2 * 2;
         if (result) {
