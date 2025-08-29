@@ -5,6 +5,7 @@ import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.EntityAIGroup;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.entity.pathfinding.NavigatorImpl;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Instance;
@@ -26,7 +27,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
 
     private final Set<EntityAIGroup> aiGroups = new CopyOnWriteArraySet<>();
 
-    private final Navigator navigator = new Navigator(this);
+    private final Navigator navigator;
 
     private Entity target;
 
@@ -36,10 +37,15 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     public EntityCreature(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
         heal();
+        this.navigator = createNavigator();
     }
 
     public EntityCreature(EntityType entityType) {
         this(entityType, UUID.randomUUID());
+    }
+
+    protected Navigator createNavigator() {
+        return new NavigatorImpl(this);
     }
 
     @Override

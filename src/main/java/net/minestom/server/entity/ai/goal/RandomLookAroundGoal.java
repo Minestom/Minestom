@@ -55,7 +55,7 @@ public class RandomLookAroundGoal extends GoalSelector {
         if (RANDOM.nextInt(chancePerTick) != 0) {
             return false;
         }
-        return entityCreature.getNavigator().getPathPosition() == null;
+        return entityCreature.getNavigator().getTargetPosition() == null;
     }
 
     @Override

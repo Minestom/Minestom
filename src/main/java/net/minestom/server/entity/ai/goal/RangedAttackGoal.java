@@ -127,7 +127,7 @@ public class RangedAttackGoal extends GoalSelector {
             }
         }
         Navigator navigator = this.entityCreature.getNavigator();
-        final var pathPosition = navigator.getPathPosition();
+        final var pathPosition = navigator.getTargetPosition();
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
                 navigator.setPathTo(null);

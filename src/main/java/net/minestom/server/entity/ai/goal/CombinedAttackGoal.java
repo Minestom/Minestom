@@ -191,7 +191,7 @@ public class CombinedAttackGoal extends GoalSelector {
             }
         }
         Navigator navigator = this.entityCreature.getNavigator();
-        final var pathPosition = navigator.getPathPosition();
+        final var pathPosition = navigator.getTargetPosition();
         // If we don't want to come close and we're already within desirable range, no movement is needed.
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {

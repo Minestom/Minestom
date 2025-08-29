@@ -90,7 +90,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
             // Move toward the target entity
             Navigator navigator = entityCreature.getNavigator();
-            final var pathPosition = navigator.getPathPosition();
+            final var pathPosition = navigator.getTargetPosition();
             final var targetPosition = target.getPosition();
             if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
                 if (this.cooldown.isReady(time)) {

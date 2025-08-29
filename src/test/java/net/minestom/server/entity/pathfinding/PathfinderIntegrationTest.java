@@ -55,7 +55,7 @@ public class PathfinderIntegrationTest {
 
         i.setBlock(1, 46, 7, Block.STONE);
 
-        Navigator nav = new Navigator(zombie);
+        NavigatorImpl nav = new NavigatorImpl(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
         while (nav.getState() == PPath.State.CALCULATING) {
         }
@@ -75,7 +75,7 @@ public class PathfinderIntegrationTest {
         var zombie = new LivingEntity(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(0, 40, 0));
 
-        Navigator nav = new Navigator(zombie);
+        NavigatorImpl nav = new NavigatorImpl(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
         while (nav.getState() == PPath.State.CALCULATING) {
         }
@@ -95,7 +95,7 @@ public class PathfinderIntegrationTest {
         var zombie = new LivingEntity(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(0, 40, 0));
 
-        Navigator nav = new Navigator(zombie);
+        NavigatorImpl nav = new NavigatorImpl(zombie);
         nav.setPathTo(new Pos(2, 40, 2));
 
         while (nav.getState() == PPath.State.CALCULATING) {
@@ -119,7 +119,7 @@ public class PathfinderIntegrationTest {
         zombie.tick(0);
         zombie.tick(0);
 
-        Navigator nav = new Navigator(zombie);
+        NavigatorImpl nav = new NavigatorImpl(zombie);
         nav.setPathTo(new Pos(43.5, 40, -41.5));
 
         while (nav.getState() == PPath.State.CALCULATING) {
@@ -185,7 +185,7 @@ public class PathfinderIntegrationTest {
         zombie.setInstance(i, new Pos(0, 40, 0));
         zombie.setBoundingBox(zombie.getBoundingBox().expand(4f, 4f, 4f));
 
-        Navigator nav = new Navigator(zombie);
+        NavigatorImpl nav = new NavigatorImpl(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
         while (nav.getState() == PPath.State.CALCULATING) {
         }
