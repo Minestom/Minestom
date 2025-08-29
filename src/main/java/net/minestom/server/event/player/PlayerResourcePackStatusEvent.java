@@ -34,7 +34,7 @@ public class PlayerResourcePackStatusEvent implements PlayerEvent {
      * Gets the associated pack UUID that has resolved on the client with the particular status
      * @return the UUID of the resource pack
      */
-    public UUID getPackUUID() {
+    public UUID getPackUuid() {
         return packUUID;
     }
 
