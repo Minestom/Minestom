@@ -1,10 +1,8 @@
 package net.minestom.server.entity.ai;
 
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.UnaryOperator;
 
 /**
  * Responsible for regulating entity AI goals.
@@ -16,7 +14,7 @@ import java.util.function.UnaryOperator;
  */
 public class GoalSelector {
     private final Map<Slot, GoalInstance> currentGoals = new HashMap<>();
-    private final List<GoalInstance> goals = new GoalArrayList();
+    private final List<GoalInstance> goals = new ArrayList<>();
 
     /**
      * Returns a modifiable list of {@link GoalInstance} objects.
@@ -66,10 +64,6 @@ public class GoalSelector {
      * @param goalInstance the new goal for this slot, null to disable it
      */
     public void setCurrentGoal(Slot slot, @Nullable GoalInstance goalInstance) {
-        Check.argCondition(
-                goalInstance != null && goalInstance.goal.getAIGroup() != this,
-                "Tried to set goal selector attached to another AI group!"
-        );
         if (goalInstance != null) {
             currentGoals.put(slot, goalInstance);
         } else {
@@ -174,57 +168,4 @@ public class GoalSelector {
             this.disabled = disabled;
         }
     }
-
-    /**
-     * The purpose of this list is to guarantee that every {@link Goal} added to that group
-     * has a reference to it for some internal interactions. We don't provide developers with
-     * methods like `addGoal` or `removeGoal`: instead we provide them with direct
-     * access to list of goals, so that they could use operations such as `clear`, `set`, `removeIf`, etc.
-     */
-    private class GoalArrayList extends ArrayList<GoalInstance> {
-
-        private GoalArrayList() {
-        }
-
-        @Override
-        public GoalInstance set(int index, GoalInstance element) {
-            element.goal().setAIGroup(GoalSelector.this);
-            return super.set(index, element);
-        }
-
-        @Override
-        public boolean add(GoalInstance element) {
-            element.goal().setAIGroup(GoalSelector.this);
-            return super.add(element);
-        }
-
-        @Override
-        public void add(int index, GoalInstance element) {
-            element.goal().setAIGroup(GoalSelector.this);
-            super.add(index, element);
-        }
-
-        @Override
-        public boolean addAll(Collection<? extends GoalInstance> c) {
-            c.forEach(element -> element.goal().setAIGroup(GoalSelector.this));
-            return super.addAll(c);
-        }
-
-        @Override
-        public boolean addAll(int index, Collection<? extends GoalInstance> c) {
-            c.forEach(element -> element.goal().setAIGroup(GoalSelector.this));
-            return super.addAll(index, c);
-        }
-
-        @Override
-        public void replaceAll(UnaryOperator<GoalInstance> operator) {
-            super.replaceAll(element -> {
-                element = operator.apply(element);
-                element.goal().setAIGroup(GoalSelector.this);
-                return element;
-            });
-        }
-
-    }
-
 }

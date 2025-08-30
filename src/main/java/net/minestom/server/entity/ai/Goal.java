@@ -1,13 +1,9 @@
 package net.minestom.server.entity.ai;
 
 import net.minestom.server.entity.EntityCreature;
-import org.jetbrains.annotations.Nullable;
-
-import java.lang.ref.WeakReference;
 
 public abstract class Goal {
 
-    private WeakReference<GoalSelector> aiGroupWeakReference;
     protected EntityCreature entityCreature;
 
     public Goal(EntityCreature entityCreature) {
@@ -75,14 +71,4 @@ public abstract class Goal {
     public void setEntityCreature(EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
     }
-
-    void setAIGroup(GoalSelector group) {
-        this.aiGroupWeakReference = new WeakReference<>(group);
-    }
-
-    @Nullable
-    protected GoalSelector getAIGroup() {
-        return this.aiGroupWeakReference.get();
-    }
-
 }

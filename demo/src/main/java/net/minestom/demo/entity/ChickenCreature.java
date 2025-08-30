@@ -5,6 +5,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.goal.DoNothingGoal;
+import net.minestom.server.entity.ai.goal.RandomLookAroundGoal;
 import net.minestom.server.entity.ai.goal.RandomStrollGoal;
 import net.minestom.server.entity.ai.target.ClosestEntityTarget;
 import net.minestom.server.entity.ai.target.LastEntityDamagerTarget;
@@ -15,12 +16,14 @@ public class ChickenCreature extends EntityCreature {
     public ChickenCreature() {
         super(EntityType.CHICKEN);
 
-        GoalSelector.Slot slot = new GoalSelector.Slot();
+        GoalSelector.Slot move = new GoalSelector.Slot();
+        GoalSelector.Slot look = new GoalSelector.Slot();
 
         getAi()
-                .addGoal(new DoNothingGoal(this, 500, 0.5f), slot)
+                .addGoal(move, new DoNothingGoal(this, 500, 0.1f))
                 //.addGoal(new MeleeAttackGoal(this, 3, 2, TimeUnit.MILLISECOND), slot)
-                .addGoal(new RandomStrollGoal(this, 10), slot);
+                .addGoal(move, new RandomStrollGoal(this, 3))
+                .addGoal(look, new RandomLookAroundGoal(this, 10));
 
         getAi()
                 .addTargetSelector(new LastEntityDamagerTarget(this, 15))

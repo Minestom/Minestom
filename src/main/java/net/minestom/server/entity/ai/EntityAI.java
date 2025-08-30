@@ -48,12 +48,25 @@ public class EntityAI {
     /**
      * Adds a goal to the goal selector. The later the goal is added, the lower its priority.
      *
+     * @param slot the slot that the goal will occupy
      * @param goal  the goal to add
-     * @param slots the slots that the goal will occupy
      * @return this
      */
-    public EntityAI addGoal(Goal goal, GoalSelector.Slot slot, GoalSelector.Slot... slots) {
-        goalSelector.addGoal(goal, slot, slots);
+    public EntityAI addGoal(GoalSelector.Slot slot, Goal goal) {
+        goalSelector.addGoal(goal, slot);
+        return this;
+    }
+
+    /**
+     * Adds a goal to the goal selector. The later the goal is added, the lower its priority.
+     *
+     * @param slot1 one of the slots that the goal will occupy
+     * @param slot2 one of the slots that the goal will occupy
+     * @param goal  the goal to add
+     * @return this
+     */
+    public EntityAI addGoal(GoalSelector.Slot slot1, GoalSelector.Slot slot2, Goal goal) {
+        goalSelector.addGoal(goal, slot1, slot2);
         return this;
     }
 
