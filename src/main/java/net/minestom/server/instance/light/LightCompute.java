@@ -85,13 +85,13 @@ public final class LightCompute {
                     };
 
                     if (blockTo == null && blockFrom != null) {
-                        if (blockFrom.registry().collisionShape().isOccluded(Block.AIR.registry().collisionShape(), face.getOppositeFace()))
+                        if (blockFrom.registry().occlusionShape().isOccluded(Block.AIR.registry().occlusionShape(), face.getOppositeFace()))
                             continue;
                     } else if (blockTo != null && blockFrom == null) {
-                        if (Block.AIR.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face))
+                        if (Block.AIR.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face))
                             continue;
                     } else if (blockTo != null && blockFrom != null) {
-                        if (blockFrom.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face.getOppositeFace()))
+                        if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
                             continue;
                     }
 
@@ -158,8 +158,8 @@ public final class LightCompute {
                     final Block currentBlock = Objects.requireNonNullElse(getBlock(blockPalette, x, y, z), Block.AIR);
                     final Block propagatedBlock = Objects.requireNonNullElse(getBlock(blockPalette, xO, yO, zO), Block.AIR);
 
-                    final Shape currentShape = currentBlock.registry().collisionShape();
-                    final Shape propagatedShape = propagatedBlock.registry().collisionShape();
+                    final Shape currentShape = currentBlock.registry().occlusionShape();
+                    final Shape propagatedShape = propagatedBlock.registry().occlusionShape();
 
                     final boolean airAir = currentBlock.isAir() && propagatedBlock.isAir();
                     if (!airAir && currentShape.isOccluded(propagatedShape, BlockFace.fromDirection(direction)))
