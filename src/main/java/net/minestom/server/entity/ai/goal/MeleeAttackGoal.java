@@ -25,9 +25,6 @@ public class MeleeAttackGoal extends Goal {
     private final double range;
     private final Duration delay;
 
-    private boolean stop;
-    private Entity cachedTarget;
-
     /**
      * @param entityCreature the entity to add the goal to
      * @param range          the allowed range the entity can attack others.
@@ -55,61 +52,53 @@ public class MeleeAttackGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        this.cachedTarget = entityCreature.getAi().getTarget();
-        return this.cachedTarget != null;
+        final Entity target = entityCreature.getAi().getTarget();
+        return target != null && entityCreature.getDistanceSquared(target) <= range * range;
     }
 
     @Override
     public void start() {
-        final Point targetPosition = this.cachedTarget.getPosition();
-        entityCreature.getNavigator().setPathTo(targetPosition);
+        final Entity target = entityCreature.getAi().getTarget();
+        assert target != null;
+        //entityCreature.getNavigator().setPathTo(target.getPosition());
     }
 
     @Override
     public void tick(long time) {
-        Entity target;
-        if (this.cachedTarget != null) {
-            target = this.cachedTarget;
-            this.cachedTarget = null;
-        } else {
-            target = entityCreature.getAi().getTarget();
+        final Entity target = entityCreature.getAi().getTarget();
+        assert target != null;
+
+        // Attack the target entity
+        if (entityCreature.getDistanceSquared(target) <= range * range) {
+            entityCreature.lookAt(target);
+            if (!Cooldown.hasCooldown(time, lastHit, delay)) {
+                entityCreature.attack(target, true);
+                this.lastHit = time;
+            }
+            return;
         }
 
-        this.stop = target == null;
-
-        if (!stop) {
-
-            // Attack the target entity
-            if (entityCreature.getDistanceSquared(target) <= range * range) {
-                entityCreature.lookAt(target);
-                if (!Cooldown.hasCooldown(time, lastHit, delay)) {
-                    entityCreature.attack(target, true);
-                    this.lastHit = time;
-                }
-                return;
-            }
-
-            // Move toward the target entity
-            Navigator navigator = entityCreature.getNavigator();
-            final var pathPosition = navigator.getTargetPosition();
-            final var targetPosition = target.getPosition();
-            if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
-                if (this.cooldown.isReady(time)) {
-                    this.cooldown.refreshLastUpdate(time);
-                    navigator.setPathTo(targetPosition);
-                }
-            }
-        }
+        // Move toward the target entity
+//        Navigator navigator = entityCreature.getNavigator();
+//        final var pathPosition = navigator.getTargetPosition();
+//        final var targetPosition = target.getPosition();
+//        if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
+//            if (this.cooldown.isReady(time)) {
+//                this.cooldown.refreshLastUpdate(time);
+//                navigator.setPathTo(targetPosition);
+//            }
+//        }
     }
 
     @Override
     public boolean shouldEnd() {
-        return stop;
+        final Entity target = entityCreature.getAi().getTarget();
+        return target == null || entityCreature.getDistanceSquared(target) > range * range;
     }
 
     @Override
     public void end() {
         // Stop following the target
-        entityCreature.getNavigator().setPathTo(null);
+        //entityCreature.getNavigator().setPathTo(null);
     }
 }
