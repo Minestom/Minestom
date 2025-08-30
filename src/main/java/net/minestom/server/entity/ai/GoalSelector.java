@@ -30,6 +30,22 @@ public class GoalSelector {
     }
 
     /**
+     * Adds a goal to the goal list. The later the goal is added, the lower its priority.
+     *
+     * @param goal  the goal to add
+     * @param slots the slots that the goal will occupy
+     * @return this
+     */
+    public GoalSelector addGoal(Goal goal, Slot slot, Slot... slots) {
+        Set<Slot> slotSet = new HashSet<>();
+        slotSet.add(slot);
+        Collections.addAll(slotSet, slots);
+
+        goals.add(new GoalInstance(goal, slotSet));
+        return this;
+    }
+
+    /**
      * Gets the current active goal for the given slot.
      *
      * @param slot the slot to get the active goal from
@@ -135,7 +151,7 @@ public class GoalSelector {
 
         public GoalInstance(Goal goal, Set<Slot> slots) {
             this.goal = goal;
-            this.slots = slots;
+            this.slots = Set.copyOf(slots);
         }
 
         public Goal goal() {

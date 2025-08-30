@@ -3,6 +3,7 @@ package net.minestom.server.entity.ai.goal;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.Goal;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
@@ -13,7 +14,7 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 
 /**
- * Attacks the entity's target ({@link EntityCreature#getTarget()}) OR the closest entity
+ * Attacks the entity's target ({@link EntityAI#getTarget()}) OR the closest entity
  * which can be targeted with the entity {@link TargetSelector}.
  */
 public class MeleeAttackGoal extends Goal {

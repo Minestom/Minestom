@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Container for all entity AI from {@link EntityCreature}.
@@ -14,7 +13,7 @@ import java.util.Set;
  * It contains a {@link GoalSelector} which determines the active AI goals,
  * and it tracks the entity target with a list of {@link TargetSelector}.
  *
- * @see EntityAI#addGoal(Goal, GoalSelector.Slot...)
+ * @see EntityAI#addGoal(Goal, GoalSelector.Slot, GoalSelector.Slot...)
  * @see EntityAI#addTargetSelector(TargetSelector)
  */
 public class EntityAI {
@@ -53,8 +52,8 @@ public class EntityAI {
      * @param slots the slots that the goal will occupy
      * @return this
      */
-    public EntityAI addGoal(Goal goal, GoalSelector.Slot... slots) {
-        goalSelector.getGoals().add(new GoalSelector.GoalInstance(goal, Set.of(slots)));
+    public EntityAI addGoal(Goal goal, GoalSelector.Slot slot, GoalSelector.Slot... slots) {
+        goalSelector.addGoal(goal, slot, slots);
         return this;
     }
 
