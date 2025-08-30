@@ -38,7 +38,6 @@ public class ChunkViewerIntegrationTest {
     @Test
     public void renderDistance(Env env) {
         final int viewRadius = ServerFlag.CHUNK_VIEW_DISTANCE;
-        final int count = ChunkRange.chunksCount(viewRadius);
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         // Check initial load
@@ -47,7 +46,7 @@ public class ChunkViewerIntegrationTest {
             var player = connection.connect(instance, new Pos(0, 40, 0));
             assertEquals(instance, player.getInstance());
             assertEquals(new Pos(0, 40, 0), player.getPosition());
-            assertEquals(count, tracker.collect().size());
+            assertEquals(ChunkRange.chunksCount(player.effectiveViewDistance()), tracker.collect().size());
         }
         // Check chunk#sendChunk
         {
@@ -57,7 +56,7 @@ public class ChunkViewerIntegrationTest {
                     instance.getChunk(x, z).sendChunk();
                 }
             }
-            assertEquals(count, tracker.collect().size());
+            assertEquals(ChunkRange.chunksCount(viewRadius), tracker.collect().size());
         }
     }
 }
