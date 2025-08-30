@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Container for all entity AI from {@link EntityCreature}.
@@ -13,7 +14,7 @@ import java.util.List;
  * It contains a {@link GoalSelector} which determines the active AI goals,
  * and it tracks the entity target with a list of {@link TargetSelector}.
  *
- * @see EntityAI#addGoal(Goal, GoalSelector.Slot, GoalSelector.Slot...)
+ * @see EntityAI#addGoal(GoalSelector.Slot, Goal)
  * @see EntityAI#addTargetSelector(TargetSelector)
  */
 public class EntityAI {
@@ -21,16 +22,28 @@ public class EntityAI {
     private final List<TargetSelector> targetSelectors = new ArrayList<>();
 
     private @Nullable Entity target;
+    private @Nullable TargetSelector usedTargetSelector;
+
+    private final Random random = new Random();
 
     public void tick(long time) {
         goalSelector.tick(time);
 
-        // Re-evaluate target selection
+        evaluateTarget();
+    }
+
+    private void evaluateTarget() {
+        if (usedTargetSelector != null && usedTargetSelector.shouldLoseTarget()) {
+            target = null;
+            usedTargetSelector = null;
+        }
+
         for (TargetSelector targetSelector : getTargetSelectors()) {
             if (!targetSelector.canUse()) continue;
             final Entity entity = targetSelector.findTarget();
             if (entity != null) {
                 this.target = entity;
+                this.usedTargetSelector = targetSelector;
                 break;
             }
         }
@@ -109,5 +122,9 @@ public class EntityAI {
      */
     public void setTarget(@Nullable Entity target) {
         this.target = target;
+    }
+
+    public Random getRandom() {
+        return random;
     }
 }
