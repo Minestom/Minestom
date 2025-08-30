@@ -2265,7 +2265,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());
         }
-        connection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        connection.sendPacket(new EntityHeadLookPacket(getEntityId(), headRotation));
     }
 
     @Override
