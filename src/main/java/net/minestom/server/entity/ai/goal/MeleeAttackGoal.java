@@ -1,14 +1,11 @@
 package net.minestom.server.entity.ai.goal;
 
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.Goal;
 import net.minestom.server.entity.ai.TargetSelector;
-import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -18,9 +15,6 @@ import java.time.temporal.TemporalUnit;
  * which can be targeted with the entity {@link TargetSelector}.
  */
 public class MeleeAttackGoal extends Goal {
-
-    private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
-
     private long lastHit;
     private final double range;
     private final Duration delay;
@@ -46,10 +40,6 @@ public class MeleeAttackGoal extends Goal {
         this.delay = delay;
     }
 
-    public Cooldown getCooldown() {
-        return this.cooldown;
-    }
-
     @Override
     public boolean canStart() {
         final Entity target = entityCreature.getAi().getTarget();
@@ -58,9 +48,7 @@ public class MeleeAttackGoal extends Goal {
 
     @Override
     public void start() {
-        final Entity target = entityCreature.getAi().getTarget();
-        assert target != null;
-        //entityCreature.getNavigator().setPathTo(target.getPosition());
+
     }
 
     @Override
@@ -75,19 +63,7 @@ public class MeleeAttackGoal extends Goal {
                 entityCreature.attack(target, true);
                 this.lastHit = time;
             }
-            return;
         }
-
-        // Move toward the target entity
-//        Navigator navigator = entityCreature.getNavigator();
-//        final var pathPosition = navigator.getTargetPosition();
-//        final var targetPosition = target.getPosition();
-//        if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
-//            if (this.cooldown.isReady(time)) {
-//                this.cooldown.refreshLastUpdate(time);
-//                navigator.setPathTo(targetPosition);
-//            }
-//        }
     }
 
     @Override
@@ -98,7 +74,6 @@ public class MeleeAttackGoal extends Goal {
 
     @Override
     public void end() {
-        // Stop following the target
-        //entityCreature.getNavigator().setPathTo(null);
+
     }
 }

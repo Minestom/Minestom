@@ -22,15 +22,16 @@ public class ChickenCreature extends EntityCreature {
         GoalSelector.Slot damage = new GoalSelector.Slot();
 
         getAi()
-                .addGoal(move, new FollowTargetGoal(this, Duration.of(1, TimeUnit.SECOND), 2))
+                .addGoal(move, new FollowTargetGoal(this, Duration.of(1, TimeUnit.SECOND), 8))
                 .addGoal(move, new DoNothingGoal(this, 500, 0.1f))
-                .addGoal(damage, new MeleeAttackGoal(this, 3, 2, TimeUnit.MILLISECOND))
-                .addGoal(move, new RandomStrollGoal(this, 3))
+                //.addGoal(damage, new MeleeAttackGoal(this, 3, 2, TimeUnit.MILLISECOND))
+                .addGoal(damage, new RangedAttackGoal(this, 20, 5, 0, 1, TimeUnit.SECOND))
+                .addGoal(move, look, new RandomStrollGoal(this, 3))
                 .addGoal(look, new RandomLookAroundGoal(this, 10));
 
         getAi()
-                .addTargetSelector(new LastEntityDamagerTarget(this, 15, 200))
-                .addTargetSelector(new ClosestEntityTarget(this, 15, 50, entity -> entity instanceof LivingEntity));
+                .addTargetSelector(new LastEntityDamagerTarget(this, 30, 200))
+                .addTargetSelector(new ClosestEntityTarget(this, 30, 50, entity -> entity instanceof LivingEntity));
 
         getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
     }
