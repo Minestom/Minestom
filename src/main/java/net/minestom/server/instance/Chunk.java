@@ -20,10 +20,9 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 // TODO light data & API
 
@@ -101,7 +100,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public abstract Section getSection(int section);
 
     public abstract Heightmap motionBlockingHeightmap();
+
     public abstract Heightmap worldSurfaceHeightmap();
+
     public abstract void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
 
     public Section getSectionAt(int blockY) {
@@ -265,12 +266,23 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     /**
      * Called when the chunk has been successfully loaded.
      */
-    protected void onLoad() {}
+    protected void onLoad() {
+    }
 
     /**
      * Called when the chunk generator has finished generating the chunk.
      */
-    public void onGenerate() {}
+    public void onGenerate() {
+    }
+
+    /**
+     *
+     * @return the current block entities in this chunk, not guaranteed to stay consistent with the chunk's
+     * block entities if block entities are added/removed from the chunk after calling this method.
+     */
+    public @Unmodifiable Map<Point, Block> getBlockEntities() {
+        return Collections.emptyMap();
+    }
 
     @Override
     public String toString() {
