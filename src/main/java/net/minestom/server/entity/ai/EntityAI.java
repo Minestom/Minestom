@@ -124,6 +124,11 @@ public class EntityAI {
         this.target = target;
     }
 
+    /**
+     * Gets a random source which can be used in goals.
+     *
+     * @return the random source
+     */
     public Random getRandom() {
         return random;
     }

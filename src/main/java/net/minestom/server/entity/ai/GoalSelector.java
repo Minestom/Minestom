@@ -5,12 +5,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
- * Responsible for regulating entity AI goals.
+ * Responsible for managing entity AI goals.
  * <p>
  * The goals are organized by slots. A {@link Slot} can be user created.
  * Each slot can hold one active goal, but a goal can occupy multiple slots if needed.
  * <p>
  * Use {@link GoalSelector#getGoals()} to modify the goals.
+ *
+ * @see Goal
  */
 public class GoalSelector {
     private final Map<Slot, GoalInstance> currentGoals = new HashMap<>();
