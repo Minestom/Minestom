@@ -30,8 +30,7 @@ public class FollowTargetGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        Entity target = entityCreature.getTarget();
-        if (target == null) target = entityCreature.findTarget();
+        Entity target = entityCreature.getAi().getTarget();
         if (target == null) return false;
         final boolean result = target.getPosition().distanceSquared(entityCreature.getPosition()) >= 2 * 2;
         if (result) {
@@ -50,7 +49,7 @@ public class FollowTargetGoal extends Goal {
             this.forceEnd = true;
             return;
         }
-        this.entityCreature.setTarget(target);
+        this.entityCreature.getAi().setTarget(target);
         Navigator navigator = entityCreature.getNavigator();
         this.lastTargetPos = target.getPosition();
         if (lastTargetPos.distanceSquared(entityCreature.getPosition()) < 2 * 2) {
@@ -73,7 +72,7 @@ public class FollowTargetGoal extends Goal {
                 pathDuration.toMillis() + lastUpdateTime > time) {
             return;
         }
-        final Pos targetPos = entityCreature.getTarget() != null ? entityCreature.getTarget().getPosition() : null;
+        final Pos targetPos = entityCreature.getAi().getTarget() != null ? entityCreature.getAi().getTarget().getPosition() : null;
         if (targetPos != null && !targetPos.sameBlock(lastTargetPos)) {
             this.lastUpdateTime = time;
             this.lastTargetPos = targetPos;
@@ -83,7 +82,7 @@ public class FollowTargetGoal extends Goal {
 
     @Override
     public boolean shouldEnd() {
-        final Entity target = entityCreature.getTarget();
+        final Entity target = entityCreature.getAi().getTarget();
         return forceEnd ||
                 target == null ||
                 target.isRemoved() ||

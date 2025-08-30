@@ -17,6 +17,15 @@ public abstract class TargetSelector {
     }
 
     /**
+     * Whether this {@link TargetSelector} can currently be used.
+     *
+     * @return true to use
+     */
+    public boolean canUse() {
+        return true;
+    }
+
+    /**
      * Finds the target.
      * <p>
      * Returning null means that this target selector didn't find any entity,

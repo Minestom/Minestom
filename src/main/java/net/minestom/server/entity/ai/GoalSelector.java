@@ -16,7 +16,7 @@ import java.util.function.UnaryOperator;
  */
 public class GoalSelector {
     private final Map<Slot, GoalInstance> currentGoals = new HashMap<>();
-    private final List<GoalInstance> goals = new GoalSelectorsArrayList();
+    private final List<GoalInstance> goals = new GoalArrayList();
 
     /**
      * Returns a modifiable list of {@link GoalInstance} objects.
@@ -162,12 +162,12 @@ public class GoalSelector {
     /**
      * The purpose of this list is to guarantee that every {@link Goal} added to that group
      * has a reference to it for some internal interactions. We don't provide developers with
-     * methods like `addGoalSelector` or `removeGoalSelector`: instead we provide them with direct
-     * access to list of goal selectors, so that they could use operations such as `clear`, `set`, `removeIf`, etc.
+     * methods like `addGoal` or `removeGoal`: instead we provide them with direct
+     * access to list of goals, so that they could use operations such as `clear`, `set`, `removeIf`, etc.
      */
-    private class GoalSelectorsArrayList extends ArrayList<GoalInstance> {
+    private class GoalArrayList extends ArrayList<GoalInstance> {
 
-        private GoalSelectorsArrayList() {
+        private GoalArrayList() {
         }
 
         @Override

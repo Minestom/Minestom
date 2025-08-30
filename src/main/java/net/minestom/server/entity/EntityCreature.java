@@ -2,8 +2,6 @@ package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.ai.EntityAI;
-import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.entity.pathfinding.NavigatorImpl;
@@ -13,24 +11,17 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
+public class EntityCreature extends LivingEntity implements NavigableEntity {
 
     private int removalAnimationDelay = 1000;
 
-    private final GoalSelector goalSelector = new GoalSelector();
-    private final List<TargetSelector> targetSelectors = new ArrayList<>();
-
+    private final EntityAI ai = new EntityAI();
     private final Navigator navigator;
-
-    private Entity target;
 
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
@@ -52,7 +43,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     @Override
     public void update(long time) {
         // AI
-        getGoalSelector().tick(time);
+        ai.tick(time);
 
         // Path finding
         this.navigator.tick();
@@ -100,24 +91,8 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         this.removalAnimationDelay = removalAnimationDelay;
     }
 
-    @Override
-    public GoalSelector getGoalSelector() {
-        return goalSelector;
-    }
-
-    @Override
-    public List<TargetSelector> getTargetSelectors() {
-        return targetSelectors;
-    }
-
-    @Override
-    public @Nullable Entity getTarget() {
-        return target;
-    }
-
-    @Override
-    public void setTarget(@Nullable Entity target) {
-        this.target = target;
+    public EntityAI getAi() {
+        return ai;
     }
 
     @Override

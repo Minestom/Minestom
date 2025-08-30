@@ -54,7 +54,7 @@ public class MeleeAttackGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        this.cachedTarget = entityCreature.findTarget();
+        this.cachedTarget = entityCreature.getAi().getTarget();
         return this.cachedTarget != null;
     }
 
@@ -71,7 +71,7 @@ public class MeleeAttackGoal extends Goal {
             target = this.cachedTarget;
             this.cachedTarget = null;
         } else {
-            target = entityCreature.findTarget();
+            target = entityCreature.getAi().getTarget();
         }
 
         this.stop = target == null;

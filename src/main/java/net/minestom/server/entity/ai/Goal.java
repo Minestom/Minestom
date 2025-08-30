@@ -1,6 +1,5 @@
 package net.minestom.server.entity.ai;
 
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,21 +15,21 @@ public abstract class Goal {
     }
 
     /**
-     * Whether or not this {@link Goal} can start.
+     * Whether this {@link Goal} can start.
      *
      * @return true to start
      */
     public abstract boolean canStart();
 
     /**
-     * Whether or not this {@link Goal} should end.
+     * Whether this {@link Goal} should end.
      *
      * @return true to end
      */
     public abstract boolean shouldEnd();
 
     /**
-     * Whether or not this {@link Goal} can be interrupted and replaced by another goal.
+     * Whether this {@link Goal} can be interrupted and replaced by another goal.
      *
      * @return whether the goal can be interrupted
      */

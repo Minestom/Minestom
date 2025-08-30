@@ -139,7 +139,7 @@ public class CombinedAttackGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        this.cachedTarget = entityCreature.findTarget();
+        this.cachedTarget = entityCreature.getAi().getTarget();
         return this.cachedTarget != null;
     }
 
@@ -155,7 +155,7 @@ public class CombinedAttackGoal extends Goal {
             target = this.cachedTarget;
             this.cachedTarget = null;
         } else {
-            target = entityCreature.findTarget();
+            target = entityCreature.getAi().getTarget();
         }
         if (target == null) {
             this.stop = true;
