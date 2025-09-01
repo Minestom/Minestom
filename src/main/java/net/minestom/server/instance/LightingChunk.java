@@ -156,7 +156,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public @NotNull Block setBlock(BlockChange mutation) {
+    public Block setBlock(BlockChange mutation) {
         final Block block = super.setBlock(mutation);
         this.occlusionMap = null;
 
