@@ -6,7 +6,6 @@ import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -23,9 +22,8 @@ public class ArgumentNbtCompoundTag extends Argument<CompoundBinaryTag> {
         super(id, true);
     }
 
-    @NotNull
     @Override
-    public CompoundBinaryTag parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public CompoundBinaryTag parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
             return MinestomAdventure.tagStringIO().asCompound(input);
         } catch (IOException e) {

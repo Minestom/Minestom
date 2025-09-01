@@ -1,9 +1,10 @@
 package net.minestom.server.coordinate;
 
-import org.jetbrains.annotations.NotNull;
-
 public final class CoordConversion {
-    public static final int SECTION_BLOCK_COUNT = 16 * 16 * 16;
+    public static final int REGION_SIZE = 512;
+    public static final int SECTION_SIZE = 16;
+    public static final int SECTION_BOUND = 15;
+    public static final int SECTION_BLOCK_COUNT = SECTION_SIZE * SECTION_SIZE * SECTION_SIZE;
 
     // COORDINATE CONVERSIONS
 
@@ -11,18 +12,30 @@ public final class CoordConversion {
         return (int) Math.floor(xyz);
     }
 
+    public static int globalToRegion(int xz) {
+        return xz >> 9;
+    }
+
+    public static int globalToRegion(double xz) {
+        final int block = globalToBlock(xz);
+        return globalToRegion(block);
+    }
+
+    public static int globalToChunk(int xz) {
+        return globalToSection(xz);
+    }
+
     public static int globalToChunk(double xz) {
         final int block = globalToBlock(xz);
         return globalToChunk(block);
     }
 
-    public static int globalToChunk(int xz) {
-        // Assume chunk/section size being 16 (4 bits)
-        return xz >> 4;
+    public static int globalToSection(int xyz) {
+        return xyz >> 4;
     }
 
     public static int globalToSectionRelative(int xyz) {
-        return xyz & 0xF;
+        return xyz & SECTION_BOUND;
     }
 
     public static boolean sectionAligned(int xyz) {
@@ -33,19 +46,19 @@ public final class CoordConversion {
         return sectionAligned(x) && sectionAligned(y) && sectionAligned(z);
     }
 
-    public static boolean sectionAligned(@NotNull Point point) {
+    public static boolean sectionAligned(Point point) {
         return sectionAligned(point.blockX(), point.blockY(), point.blockZ());
     }
 
-    public static boolean sectionAligned(@NotNull Point p1, @NotNull Point p2) {
+    public static boolean sectionAligned(Point p1, Point p2) {
         final int minX = Math.min(p1.blockX(), p2.blockX());
         final int minY = Math.min(p1.blockY(), p2.blockY());
         final int minZ = Math.min(p1.blockZ(), p2.blockZ());
         final int maxX = Math.max(p1.blockX(), p2.blockX());
         final int maxY = Math.max(p1.blockY(), p2.blockY());
         final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
-        return sectionAligned(minX, minY, minZ) &&
-                globalToSectionRelative(maxX) == 15 && globalToSectionRelative(maxY) == 15 && globalToSectionRelative(maxZ) == 15;
+        return ((minX | minY | minZ) & SECTION_BOUND) == 0 &&
+                ((maxX | maxY | maxZ) & SECTION_BOUND) == SECTION_BOUND;
     }
 
     public static int chunkToRegion(int chunkCoordinate) {
@@ -57,11 +70,29 @@ public final class CoordConversion {
     }
 
     public static int floorSection(int coordinate) {
-        return coordinate - (coordinate & 0xF);
+        return coordinate & ~SECTION_BOUND;
     }
 
     public static int ceilSection(int coordinate) {
-        return ((coordinate - 1) | 15) + 1;
+        return (coordinate + SECTION_BOUND) & ~SECTION_BOUND;
+    }
+
+    // REGION INDEX
+
+    public static long regionIndex(int regionX, int regionZ) {
+        return (((long) regionX) << 32) | (regionZ & 0xffffffffL);
+    }
+
+    public static long regionIndex(Point point) {
+        return regionIndex(point.regionX(), point.regionZ());
+    }
+
+    public static int regionIndexGetX(long index) {
+        return (int) (index >> 32);
+    }
+
+    public static int regionIndexGetZ(long index) {
+        return (int) index;
     }
 
     // CHUNK INDEX
@@ -70,7 +101,7 @@ public final class CoordConversion {
         return (((long) chunkX) << 32) | (chunkZ & 0xffffffffL);
     }
 
-    public static long chunkIndex(@NotNull Point point) {
+    public static long chunkIndex(Point point) {
         return chunkIndex(point.chunkX(), point.chunkZ());
     }
 
@@ -114,10 +145,16 @@ public final class CoordConversion {
         return (index >>> 28) & 0xF; // bits 28-31
     }
 
-    public static @NotNull Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {
-        final int x = chunkBlockIndexGetX(index) + 16 * chunkX;
+    public static Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {
+        final int x = chunkBlockIndexGetX(index) + SECTION_SIZE * chunkX;
         final int y = chunkBlockIndexGetY(index);
-        final int z = chunkBlockIndexGetZ(index) + 16 * chunkZ;
+        final int z = chunkBlockIndexGetZ(index) + SECTION_SIZE * chunkZ;
+        return new Vec(x, y, z);
+    }
+
+    public static Point chunkBlockRelativeGetGlobal(int sectionRelativeX, int y, int sectionRelativeZ, int chunkX, int chunkZ) {
+        final int x = sectionRelativeX + 16 * chunkX;
+        final int z = sectionRelativeZ + 16 * chunkZ;
         return new Vec(x, y, z);
     }
 
@@ -164,15 +201,15 @@ public final class CoordConversion {
     }
 
     public static int sectionBlockIndexGetX(int index) {
-        return (index >> 8) & 0xF;
+        return (index >> 8) & SECTION_BOUND;
     }
 
     public static int sectionBlockIndexGetY(int index) {
-        return index & 0xF;
+        return index & SECTION_BOUND;
     }
 
     public static int sectionBlockIndexGetZ(int index) {
-        return (index >> 4) & 0xF;
+        return (index >> 4) & SECTION_BOUND;
     }
 
     public static long encodeSectionBlockChange(int sectionBlockIndex, long value) {
@@ -183,5 +220,87 @@ public final class CoordConversion {
 
     public static long encodeSectionBlockChange(int localX, int localY, int localZ, long value) {
         return encodeSectionBlockChange(sectionBlockIndex(localX, localY, localZ), value);
+    }
+
+    // HASHING
+
+    private static final long PRIME_X = 0x9E37_79B9_7F4A_7C15L;  // Large prime for X axis
+    private static final long PRIME_Y = 0xF9F9_F9F9_ECEC_ECECL;  // Large prime for Y axis
+    private static final long PRIME_Z = 0xA5A5_A5A5_A5A5_A5A5L;  // Large prime for Z axis
+
+    // Rotation amounts optimized for 3D coordinate separation
+    private static final int ROT_X = 31;  // Prime rotation for X
+    private static final int ROT_Y = 37;  // Prime rotation for Y
+    private static final int ROT_Z = 41;  // Prime rotation for Z
+
+    private static final long AVALANCHE_1 = 0xFF51_AFD7_ED55_8CCDL;
+    private static final long AVALANCHE_2 = 0xC4CE_B9FE_1A85_EC53L;
+
+    private static final long INT_SEED = 0xCAFE_BABE_DEAD_BEEFL;
+    private static final long DOUBLE_SEED = 0xDEAD_BEEF_CAFE_BABEL;
+
+    public static long hashBlockCoord(int x, int y, int z) {
+        long h = INT_SEED;
+        h ^= Long.rotateLeft(Integer.toUnsignedLong(x) * PRIME_X, ROT_X);
+        h ^= Long.rotateLeft(Integer.toUnsignedLong(y) * PRIME_Y, ROT_Y);
+        h ^= Long.rotateLeft(Integer.toUnsignedLong(z) * PRIME_Z, ROT_Z);
+        h = Long.rotateLeft(h, 23) ^ (h >>> 17);
+        h ^= h >>> 33;
+        h *= AVALANCHE_1;
+        h ^= h >>> 33;
+        h *= AVALANCHE_2;
+        h ^= h >>> 33;
+        return h;
+    }
+
+    public static long hashBlockCoord(Point point) {
+        return hashBlockCoord(point.blockX(), point.blockY(), point.blockZ());
+    }
+
+    public static long hashGlobalCoord(double x, double y, double z) {
+        long h = DOUBLE_SEED;
+        long ix = Double.doubleToLongBits(x);
+        long iy = Double.doubleToLongBits(y);
+        long iz = Double.doubleToLongBits(z);
+        long ex = (ix >>> 52) & 0x7FFL;
+        long ey = (iy >>> 52) & 0x7FFL;
+        long ez = (iz >>> 52) & 0x7FFL;
+        long mx = ix & 0x000F_FFFF_FFFF_FFFFL;
+        long my = iy & 0x000F_FFFF_FFFF_FFFFL;
+        long mz = iz & 0x000F_FFFF_FFFF_FFFFL;
+        h ^= Long.rotateLeft(ix * PRIME_X, ROT_X);
+        h ^= Long.rotateLeft(iy * PRIME_Y, ROT_Y);
+        h ^= Long.rotateLeft(iz * PRIME_Z, ROT_Z);
+        h ^= Long.rotateLeft((ex << 32) | (ey << 16) | ez, 19);
+        h ^= Long.rotateLeft(mx ^ my ^ mz, 43);
+        h = Long.rotateLeft(h, 29) ^ (h >>> 13);
+        h ^= h >>> 33;
+        h *= AVALANCHE_1;
+        h ^= h >>> 33;
+        h *= AVALANCHE_2;
+        h ^= h >>> 33;
+        return h;
+    }
+
+    public static long hashGlobalCoord(Point point) {
+        return hashGlobalCoord(point.x(), point.y(), point.z());
+    }
+
+    // STRING FORMATTING
+
+    public static String formatGlobalCoord(double x, double y, double z) {
+        return "(%.3f, %.3f, %.3f)".formatted(x, y, z);
+    }
+
+    public static String formatGlobalCoord(Point point) {
+        return formatGlobalCoord(point.x(), point.y(), point.z());
+    }
+
+    public static String formatBlockCoord(int x, int y, int z) {
+        return "(%d, %d, %d)".formatted(x, y, z);
+    }
+
+    public static String formatBlockCoord(Point point) {
+        return formatBlockCoord(point.blockX(), point.blockY(), point.blockZ());
     }
 }

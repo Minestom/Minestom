@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.client.play;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientEditBookPacket(int slot, @NotNull List<String> pages,
+public record ClientEditBookPacket(int slot, List<String> pages,
                                    @Nullable String title) implements ClientPacket {
     public static final int MAX_PAGES = 100;
     public static final int MAX_TITLE_LENGTH = 32;

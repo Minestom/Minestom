@@ -50,9 +50,47 @@ dependencies {
     testImplementation(project(":testing"))
 }
 
-tasks.jar {
-    manifest {
-        attributes("Automatic-Module-Name" to "net.minestom.server")
+// GraalVM Native Image configuration
+tasks.register<Test>("testWithAgent") {
+    group = "verification"
+    description = "Runs all tests with GraalVM native-image agent to generate metadata."
+
+    val metadataOutputDir = layout.buildDirectory.dir("native-image-metadata").get().asFile
+    val resourcesTargetDir = layout.projectDirectory.dir("src/main/resources/META-INF/native-image/net.minestom/minestom").asFile
+    val filterFile = layout.buildDirectory.file("agent-filter.json").get().asFile
+
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+
+    // Configure the native-image agent
+    jvmArgs(
+            "-agentlib:native-image-agent=config-output-dir=${metadataOutputDir.absolutePath},caller-filter-file=${filterFile.absolutePath}"
+    )
+
+    doFirst {
+        delete(metadataOutputDir)
+        metadataOutputDir.mkdirs()
+
+        filterFile.parentFile.mkdirs()
+        filterFile.writeText("""
+{
+  "rules": [
+    {"excludeClasses": "org.junit.**"},
+    {"excludeClasses": "org.opentest4j.**"},
+    {"excludeClasses": "org.gradle.**"},
+    {"excludeClasses": "net.minestom.testing.**"}
+  ]
+}""")
+        println("Created filter file: ${filterFile.absolutePath}")
+    }
+
+    doLast {
+        resourcesTargetDir.mkdirs()
+        copy {
+            from(metadataOutputDir)
+            into(resourcesTargetDir)
+        }
+        println("✅ GraalVM metadata generated and copied to: $resourcesTargetDir")
     }
 }
 

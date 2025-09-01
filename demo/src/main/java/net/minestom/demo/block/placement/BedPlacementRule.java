@@ -5,7 +5,9 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * https://gist.github.com/mworzala/0676c28343310458834d70ed29b11a37
@@ -16,12 +18,12 @@ public class BedPlacementRule extends BlockPlacementRule {
     private static final String PROP_PART = "part";
     private static final String PROP_FACING = "facing";
 
-    public BedPlacementRule(@NotNull Block block) {
+    public BedPlacementRule(Block block) {
         super(block);
     }
 
     @Override
-    public @NotNull Block blockPlace(@NotNull BlockChange blockChange) {
+    public Block blockPlace(BlockChange blockChange) {
         if (!(blockChange instanceof BlockChange.Player mut)) {
             return blockChange.block(); // not a player placement
         }

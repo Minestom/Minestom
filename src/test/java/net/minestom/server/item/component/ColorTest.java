@@ -7,7 +7,6 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.color.Color;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,12 +24,12 @@ public class ColorTest extends AbstractItemComponentTest<RGBLike> {
     );
 
     @Override
-    protected @NotNull DataComponent<RGBLike> component() {
+    protected DataComponent<RGBLike> component() {
         return SHARED_COMPONENTS.getFirst();
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, RGBLike>> directReadWriteEntries() {
+    protected List<Map.Entry<String, RGBLike>> directReadWriteEntries() {
         return List.of(
                 entry("simple", new Color(0x123456))
         );

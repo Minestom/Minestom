@@ -9,7 +9,6 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
 import net.minestom.server.sound.SoundEvent;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -17,8 +16,8 @@ import java.util.List;
 public record BlocksAttacks(
         float blockDelaySeconds,
         float disableCooldownScale,
-        @NotNull List<DamageReduction> damageReductions,
-        @NotNull ItemDamageFunction itemDamage,
+        List<DamageReduction> damageReductions,
+        ItemDamageFunction itemDamage,
         @Nullable TagKey<DamageType> bypassedBy,
         @Nullable SoundEvent blockSound,
         @Nullable SoundEvent disableSound
@@ -29,8 +28,8 @@ public record BlocksAttacks(
             DamageReduction.NETWORK_TYPE.list(Short.MAX_VALUE), BlocksAttacks::damageReductions,
             ItemDamageFunction.NETWORK_TYPE, BlocksAttacks::itemDamage,
             TagKey.networkType(Registries::damageType).optional(), BlocksAttacks::bypassedBy,
-            SoundEvent.NETWORK_TYPE, BlocksAttacks::blockSound,
-            SoundEvent.NETWORK_TYPE, BlocksAttacks::disableSound,
+            SoundEvent.NETWORK_TYPE.optional(), BlocksAttacks::blockSound,
+            SoundEvent.NETWORK_TYPE.optional(), BlocksAttacks::disableSound,
             BlocksAttacks::new);
     public static final Codec<BlocksAttacks> NBT_TYPE = StructCodec.struct(
             "block_delay_seconds", Codec.FLOAT.optional(0f), BlocksAttacks::blockDelaySeconds,

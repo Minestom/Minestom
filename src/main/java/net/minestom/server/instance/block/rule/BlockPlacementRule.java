@@ -27,7 +27,7 @@ public abstract class BlockPlacementRule {
 
     protected final Block block;
 
-    protected BlockPlacementRule(@NotNull Block block) {
+    protected BlockPlacementRule(Block block) {
         this.block = block;
     }
 
@@ -35,7 +35,7 @@ public abstract class BlockPlacementRule {
      * Called when the block state id can be updated (for instance if a neighbour block changed).
      * This is first called on a newly placed block, and then this is called for all neighbors of the block
      */
-    public @NotNull Block blockUpdate(@NotNull BlockChange blockChange) {
+    public Block blockUpdate(BlockChange blockChange) {
         return blockChange.block();
     }
 
@@ -45,7 +45,7 @@ public abstract class BlockPlacementRule {
      *
      * @return the block to place, {@code null} to cancel
      */
-    public abstract @NotNull Block blockPlace(@NotNull BlockChange blockChange);
+    public abstract Block blockPlace(BlockChange blockChange);
 
     /**
      * Called to determine if the block should be updated based on the offset and the block that is being placed.
@@ -55,7 +55,7 @@ public abstract class BlockPlacementRule {
      * @param block  The block that is being placed
      * @return {@code true} if the block will consider the update, {@code false} otherwise
      */
-    public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
+    public boolean considerUpdate(Vec offset, Block block) {
         for (Vec off : updateShape()) {
             if (off.samePoint(offset)) {
                 return true;
@@ -69,15 +69,15 @@ public abstract class BlockPlacementRule {
      *
      * @return the shape of the block
      */
-    public @NotNull @Unmodifiable List<Vec> updateShape() {
+    public @Unmodifiable List<Vec> updateShape() {
         return DEFAULT_BLOCK_UPDATE_SHAPE;
     }
 
-    public boolean isSelfReplaceable(@NotNull BlockChange.Replacement blockChange) {
+    public boolean isSelfReplaceable(BlockChange.Replacement blockChange) {
         return false;
     }
 
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
         return block;
     }
 

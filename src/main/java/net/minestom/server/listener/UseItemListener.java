@@ -17,7 +17,6 @@ import net.minestom.server.item.component.InstrumentComponent;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
-import org.jetbrains.annotations.NotNull;
 
 public class UseItemListener {
 
@@ -40,7 +39,7 @@ public class UseItemListener {
             // client they can hold it forever
             useItemTime = 7200;
             useAnimation = ItemAnimation.CROSSBOW;
-        } else if (material == Material.SHIELD) {
+        } else if (itemStack.has(DataComponents.BLOCKS_ATTACKS)) {
             useItemTime = 72000;
             useAnimation = ItemAnimation.BLOCK;
         } else if (material == Material.TRIDENT) {
@@ -98,7 +97,7 @@ public class UseItemListener {
         }
     }
 
-    private static int getInstrumentTime(@NotNull ItemStack itemStack) {
+    private static int getInstrumentTime(ItemStack itemStack) {
         final InstrumentComponent holder = itemStack.get(DataComponents.INSTRUMENT);
         if (holder == null) return 0;
 

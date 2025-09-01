@@ -2,7 +2,6 @@ package net.minestom.server.item.component;
 
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -17,12 +16,12 @@ public class BoolTest extends AbstractItemComponentTest<Boolean> {
     );
 
     @Override
-    protected @NotNull DataComponent<Boolean> component() {
+    protected DataComponent<Boolean> component() {
         return SHARED_COMPONENTS.getFirst();
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, Boolean>> directReadWriteEntries() {
+    protected List<Map.Entry<String, Boolean>> directReadWriteEntries() {
         return List.of(
                 entry("true", true),
                 entry("false", false)

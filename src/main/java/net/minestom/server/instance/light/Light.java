@@ -1,9 +1,8 @@
 package net.minestom.server.instance.light;
 
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.ApiStatus;
@@ -49,12 +48,10 @@ public interface Light {
 
     @ApiStatus.Internal
     static Point[] getNeighbors(Chunk chunk, int sectionY) {
-        final int chunkX = chunk.getChunkX();
-        final int chunkZ = chunk.getChunkZ();
+        final int chunkX = chunk.getChunkX(), chunkZ = chunk.getChunkZ();
 
-        Point[] links = new Vec[BlockFace.values().length];
-        for (BlockFace face : BlockFace.values()) {
-            final Direction direction = face.toDirection();
+        Point[] links = new BlockVec[LightCompute.DIRECTIONS.length];
+        for (Direction direction : LightCompute.DIRECTIONS) {
             final int x = chunkX + direction.normalX();
             final int z = chunkZ + direction.normalZ();
             final int y = sectionY + direction.normalY();
@@ -64,7 +61,7 @@ public interface Light {
             if (y - foundChunk.getMinSection() > foundChunk.getMaxSection() || y - foundChunk.getMinSection() < 0)
                 continue;
 
-            links[face.ordinal()] = new Vec(foundChunk.getChunkX(), y, foundChunk.getChunkZ());
+            links[direction.ordinal()] = new BlockVec(foundChunk.getChunkX(), y, foundChunk.getChunkZ());
         }
         return links;
     }

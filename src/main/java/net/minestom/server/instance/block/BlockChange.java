@@ -2,49 +2,45 @@ package net.minestom.server.instance.block;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Player, BlockChange.Replacement {
-
-    @NotNull
+    
     Block.Getter instance();
 
-    @NotNull
     Point blockPosition();
 
-    @NotNull
     Block block();
 
-    @NotNull
-    BlockChange withBlock(@NotNull Block block);
+    BlockChange withBlock(Block block);
 
     record Instance(
-            @NotNull Block.Getter instance, @NotNull Point blockPosition,
-            @NotNull Block block, @Nullable Vec offset
+            Block.Getter instance, Point blockPosition,
+            Block block, @Nullable Vec offset
     ) implements BlockChange {
 
-        public Instance(@NotNull Block.Getter instance, @NotNull Point blockPosition, @NotNull Block block) {
+        public Instance(Block.Getter instance, Point blockPosition, Block block) {
             this(instance, blockPosition, block, null);
         }
 
         @Override
-        public @NotNull BlockChange.Instance withBlock(@NotNull Block block) {
+        public BlockChange.Instance withBlock(Block block) {
             return new Instance(instance, blockPosition, block, offset);
         }
     }
 
     record Player(
-            @NotNull Block.Getter instance, @NotNull Point blockPosition,
-            @NotNull Block block, @NotNull BlockFace blockFace,
-            @NotNull Player player, @NotNull PlayerHand hand,
-            @NotNull Point cursorPosition
+        Block.Getter instance, Point blockPosition,
+        Block block, BlockFace blockFace,
+        net.minestom.server.entity.Player player, PlayerHand hand,
+        Point cursorPosition
     ) implements BlockChange {
 
         @Override
-        public @NotNull BlockChange.Player withBlock(@NotNull Block block) {
+        public BlockChange.Player withBlock(Block block) {
             return new Player(instance, blockPosition,
                     block, blockFace,
                     player, hand, cursorPosition);
@@ -52,18 +48,18 @@ public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Pl
     }
 
     record Replacement(
-            @NotNull Block.Getter instance, @NotNull Point blockPosition,
-            @NotNull Block block, @NotNull BlockFace blockFace,
-            @NotNull Point cursorPosition, boolean isOffset,
-            @NotNull Material material
+            Block.Getter instance, Point blockPosition,
+            Block block, BlockFace blockFace,
+            Point cursorPosition, boolean isOffset,
+            Material material
     ) implements BlockChange {
 
         @Override
-        public @NotNull BlockChange.Replacement withBlock(@NotNull Block block) {
+        public BlockChange.Replacement withBlock(Block block) {
             return new Replacement(instance, blockPosition, block, blockFace, cursorPosition, isOffset, material);
         }
 
-        public @NotNull BlockChange.Replacement withOffset(boolean offset) {
+        public BlockChange.Replacement withOffset(boolean offset) {
             return new Replacement(instance, blockPosition, block, blockFace, cursorPosition, offset, material);
         }
     }

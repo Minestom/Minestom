@@ -2,7 +2,6 @@ package net.minestom.server.utils;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
@@ -27,7 +26,7 @@ public final class TickUtils {
      * @return the number of ticks
      * @throws IllegalArgumentException if duration is negative
      */
-    public static int fromDuration(@NotNull Duration duration) {
+    public static int fromDuration(Duration duration) {
         return TickUtils.fromDuration(duration, MinecraftServer.TICK_MS);
     }
 
@@ -39,7 +38,7 @@ public final class TickUtils {
      * @return the number of ticks
      * @throws IllegalArgumentException if duration is negative
      */
-    public static int fromDuration(@NotNull Duration duration, int msPerTick) {
+    public static int fromDuration(Duration duration, int msPerTick) {
         Check.argCondition(duration.isNegative(), "Duration cannot be negative");
         return (int) (duration.toMillis() / msPerTick);
     }
