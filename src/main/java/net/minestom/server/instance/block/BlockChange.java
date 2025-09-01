@@ -1,7 +1,9 @@
 package net.minestom.server.instance.block;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.PlayerHand;
+import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,11 +19,11 @@ public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Pl
     Block block();
 
     @NotNull
-    BlockChange withBlock(@NotNull Block newBlock);
+    BlockChange withBlock(@NotNull Block block);
 
     record Instance(
             @NotNull Block.Getter instance, @NotNull Point blockPosition,
-            @NotNull Block block, @Nullable net.minestom.server.coordinate.Vec offset
+            @NotNull Block block, @Nullable Vec offset
     ) implements BlockChange {
 
         public Instance(@NotNull Block.Getter instance, @NotNull Point blockPosition, @NotNull Block block) {
@@ -29,22 +31,22 @@ public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Pl
         }
 
         @Override
-        public @NotNull BlockChange.Instance withBlock(@NotNull Block newBlock) {
-            return new Instance(instance, blockPosition, newBlock, offset);
+        public @NotNull BlockChange.Instance withBlock(@NotNull Block block) {
+            return new Instance(instance, blockPosition, block, offset);
         }
     }
 
     record Player(
             @NotNull Block.Getter instance, @NotNull Point blockPosition,
             @NotNull Block block, @NotNull BlockFace blockFace,
-            @NotNull net.minestom.server.entity.Player player, @NotNull PlayerHand hand,
+            @NotNull Player player, @NotNull PlayerHand hand,
             @NotNull Point cursorPosition
     ) implements BlockChange {
 
         @Override
-        public @NotNull BlockChange.Player withBlock(@NotNull Block newBlock) {
+        public @NotNull BlockChange.Player withBlock(@NotNull Block block) {
             return new Player(instance, blockPosition,
-                    newBlock, blockFace,
+                    block, blockFace,
                     player, hand, cursorPosition);
         }
     }
@@ -53,16 +55,16 @@ public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Pl
             @NotNull Block.Getter instance, @NotNull Point blockPosition,
             @NotNull Block block, @NotNull BlockFace blockFace,
             @NotNull Point cursorPosition, boolean isOffset,
-            @NotNull net.minestom.server.item.Material material
+            @NotNull Material material
     ) implements BlockChange {
 
         @Override
-        public @NotNull BlockChange.Replacement withBlock(@NotNull Block newBlock) {
-            return new Replacement(instance, blockPosition, newBlock, blockFace, cursorPosition, isOffset, material);
+        public @NotNull BlockChange.Replacement withBlock(@NotNull Block block) {
+            return new Replacement(instance, blockPosition, block, blockFace, cursorPosition, isOffset, material);
         }
 
-        public @NotNull BlockChange.Replacement withOffset(boolean newOffset) {
-            return new Replacement(instance, blockPosition, block, blockFace, cursorPosition, newOffset, material);
+        public @NotNull BlockChange.Replacement withOffset(boolean offset) {
+            return new Replacement(instance, blockPosition, block, blockFace, cursorPosition, offset, material);
         }
     }
 }
