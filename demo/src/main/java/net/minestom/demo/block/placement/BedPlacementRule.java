@@ -14,7 +14,6 @@ import java.util.Objects;
  */
 public class BedPlacementRule extends BlockPlacementRule {
 
-
     private static final String PROP_PART = "part";
     private static final String PROP_FACING = "facing";
 

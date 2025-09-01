@@ -79,12 +79,12 @@ public class BlockPlacementRuleIntegrationTest {
 
         env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.STONE) {
             @Override
-            public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
+            public Block blockPlace(BlockChange mutation) {
                 return mutation.block();
             }
 
             @Override
-            public @NotNull Block blockUpdate(@NotNull BlockChange mutation) {
+            public Block blockUpdate(BlockChange mutation) {
                 return super.blockUpdate(mutation);
             }
 
@@ -120,12 +120,12 @@ public class BlockPlacementRuleIntegrationTest {
 
         env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.STONE) {
             @Override
-            public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
+            public Block blockPlace(BlockChange mutation) {
                 return mutation.block();
             }
 
             @Override
-            public @NotNull Block blockUpdate(@NotNull BlockChange mutation) {
+            public Block blockUpdate(BlockChange mutation) {
                 return super.blockUpdate(mutation);
             }
         });
@@ -151,12 +151,12 @@ public class BlockPlacementRuleIntegrationTest {
         env.process().block().registerHandler(SuspiciousGravelBlockHandler.INSTANCE.getKey(), () -> SuspiciousGravelBlockHandler.INSTANCE);
         env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.SUSPICIOUS_GRAVEL) {
             @Override
-            public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
+            public Block blockPlace(BlockChange mutation) {
                 return mutation.block();
             }
 
             @Override
-            public @NotNull Block blockUpdate(@NotNull BlockChange mutation) {
+            public Block blockUpdate(BlockChange mutation) {
                 currentBlock.set(mutation.block());
                 return super.blockUpdate(mutation);
             }
@@ -179,7 +179,7 @@ class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockPlace(@NotNull BlockChange blockChange) {
+    public Block blockPlace(BlockChange blockChange) {
         var instance = blockChange.instance();
         var position = blockChange.blockPosition();
 
@@ -187,7 +187,7 @@ class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockUpdate(@NotNull BlockChange updateState) {
+    public Block blockUpdate(BlockChange updateState) {
         var instance = updateState.instance();
         var position = updateState.blockPosition();
 
@@ -211,7 +211,7 @@ class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull @Unmodifiable List<Vec> updateShape() {
+    public @Unmodifiable List<Vec> updateShape() {
         return List.of(
                 Direction.NORTH.vec(),
                 Direction.SOUTH.vec(),
@@ -221,7 +221,7 @@ class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
+    public boolean considerUpdate(Vec offset, Block block) {
         // Fences should only consider updates from solid blocks that are next to them
         return super.considerUpdate(offset, block) && block.isSolid() || block.isAir(); // ensure the block is solid
     }

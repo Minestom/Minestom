@@ -16,7 +16,7 @@ public abstract class BlockPlacementRule {
      * This is used when a block is placed and needs to determine which neighbors to update.
      * This is the same as the default block update shape &amp; order in Minecraft.
      */
-    public static final @Unmodifiable @NotNull List<Vec> DEFAULT_BLOCK_UPDATE_SHAPE = List.of(
+    public static final @Unmodifiable List<Vec> DEFAULT_BLOCK_UPDATE_SHAPE = List.of(
             Direction.WEST.vec(),
             Direction.EAST.vec(),
             Direction.NORTH.vec(),

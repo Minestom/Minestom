@@ -21,7 +21,7 @@ public class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockPlace(@NotNull BlockChange blockChange) {
+    public Block blockPlace(BlockChange blockChange) {
         var instance = blockChange.instance();
         var position = blockChange.blockPosition();
 
@@ -29,14 +29,13 @@ public class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockUpdate(@NotNull BlockChange updateState) {
+    public Block blockUpdate(BlockChange updateState) {
         var instance = updateState.instance();
         var position = updateState.blockPosition();
 
         return calculateConnections(instance, position);
     }
 
-    @NotNull
     private Block calculateConnections(Block.Getter instance, Point position) {
         Map<String, String> connections = new HashMap<>();
 
@@ -58,7 +57,7 @@ public class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull @Unmodifiable List<Vec> updateShape() {
+    public @Unmodifiable List<Vec> updateShape() {
         return List.of(
                 Direction.NORTH.vec(),
                 Direction.SOUTH.vec(),
@@ -68,7 +67,7 @@ public class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
+    public boolean considerUpdate(Vec offset, Block block) {
         // Fences should only consider updates from solid blocks that are next to them
         return super.considerUpdate(offset, block) && block.isSolid() || block.isAir(); // ensure the block is solid
     }
