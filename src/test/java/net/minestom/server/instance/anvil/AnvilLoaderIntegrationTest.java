@@ -10,6 +10,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
@@ -300,10 +301,11 @@ public class AnvilLoaderIntegrationTest {
             }
 
             @Override
-            public void onPlace(Placement placement) {
-                assertEquals(point.x(), placement.getBlockPosition().x());
-                assertEquals(point.y(), placement.getBlockPosition().y());
-                assertEquals(point.z(), placement.getBlockPosition().z());
+            public Block onPlace(BlockChange blockChange) {
+                assertEquals(point.x(), blockChange.blockPosition().x());
+                assertEquals(point.y(), blockChange.blockPosition().y());
+                assertEquals(point.z(), blockChange.blockPosition().z());
+                return blockChange.block();
             }
         };
         env.process().block().registerHandler(Block.DIAMOND_BLOCK.key(), () -> handler);
