@@ -3,8 +3,8 @@ metadata.format.version = "1.1"
 [versions]
 
 # Important dependencies
-data = "1.21.5-rv2"
-adventure = "4.23.0"
+data = "1.21.8-rv1"
+adventure = "4.24.0"
 jetbrainsAnnotations = "26.0.1"
 slf4j = "2.0.16"
 
@@ -21,7 +21,7 @@ jmh = "1.37"
 jcstress = "0.16"
 
 # Code Generation
-javaPoet = "1.13.0"
+javaPoet = "0.7.0"
 
 # Log impl (for demo & codegen)
 logback = "1.5.16"
@@ -41,6 +41,7 @@ adventure-nbt = { group = "net.kyori", name = "adventure-nbt", version.ref = "ad
 adventure-serializer-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
+adventure-serializer-ansi = { group = "net.kyori", name = "adventure-text-serializer-ansi", version.ref = "adventure" }
 adventure-text-logger-slf4j = { group = "net.kyori", name = "adventure-text-logger-slf4j", version.ref = "adventure" }
 
 # Miscellaneous
@@ -66,7 +67,7 @@ jmh-annotationprocessor = { group = "org.openjdk.jmh", name = "jmh-generator-ann
 jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", version.ref = "jcstress" }
 
 # Code Generation
-javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
+javaPoet = { group = "com.palantir.javapoet", name = "javapoet", version.ref = "javaPoet" }
 
 # Log impl (for demo & codegen)
 logback-core = { group = "ch.qos.logback", name = "logback-core", version.ref = "logback" }
@@ -75,7 +76,7 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 [bundles]
 
 flare = ["flare", "flare-fastutil"]
-adventure = ["adventure-api", "adventure-nbt", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"]
+adventure = ["adventure-api", "adventure-nbt", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-serializer-ansi", "adventure-text-logger-slf4j"]
 junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-suite-engine"]
 logback = ["logback-core", "logback-classic"]
 

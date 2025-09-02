@@ -1,10 +1,10 @@
 package net.minestom.server.event.server;
 
+import net.minestom.server.event.trait.AsyncEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.ping.ResponseData;
 import net.minestom.server.ping.ServerListPingType;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.ping.Status;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -13,19 +13,19 @@ import java.util.Objects;
  * Called when a {@link PlayerConnection} sends a status packet,
  * usually to display information on the server list.
  */
-public class ServerListPingEvent implements CancellableEvent {
+public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
     private final PlayerConnection connection;
     private final ServerListPingType type;
 
-    private boolean cancelled = false;
-    private ResponseData responseData;
+    private boolean cancelled;
+    private Status status;
 
     /**
      * Creates a new server list ping event with no player connection.
      *
      * @param type the ping type to respond with
      */
-    public ServerListPingEvent(@NotNull ServerListPingType type) {
+    public ServerListPingEvent(ServerListPingType type) {
         this(null, type);
     }
 
@@ -35,8 +35,8 @@ public class ServerListPingEvent implements CancellableEvent {
      * @param connection the player connection, if the ping type is modern
      * @param type       the ping type to respond with
      */
-    public ServerListPingEvent(@Nullable PlayerConnection connection, @NotNull ServerListPingType type) {
-        this.responseData = new ResponseData();
+    public ServerListPingEvent(@Nullable PlayerConnection connection, ServerListPingType type) {
+        this.status = Status.builder().build();
         this.connection = connection;
         this.type = type;
     }
@@ -47,17 +47,17 @@ public class ServerListPingEvent implements CancellableEvent {
      *
      * @return the response data being returned
      */
-    public @NotNull ResponseData getResponseData() {
-        return responseData;
+    public Status getStatus() {
+        return status;
     }
 
     /**
      * Sets the response data, overwriting the exiting data.
      *
-     * @param responseData the new data
+     * @param status the new data
      */
-    public void setResponseData(@NotNull ResponseData responseData) {
-        this.responseData = Objects.requireNonNull(responseData);
+    public void setStatus(Status status) {
+        this.status = Objects.requireNonNull(status);
     }
 
     /**
@@ -75,7 +75,7 @@ public class ServerListPingEvent implements CancellableEvent {
      *
      * @return the ping type
      */
-    public @NotNull ServerListPingType getPingType() {
+    public ServerListPingType getPingType() {
         return type;
     }
 

@@ -9,6 +9,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.Range;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import net.minestom.server.utils.Unit;
 
 import java.util.*;
 import java.util.function.Function;
@@ -46,12 +47,12 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
         );
 
         @Override
-        public void write(@NotNull NetworkBuffer buffer, DataComponentPredicates value) {
+        public void write(NetworkBuffer buffer, DataComponentPredicates value) {
             delegate.write(buffer, Objects.requireNonNullElseGet(value, () -> new DataComponentPredicates(null, null)));
         }
 
         @Override
-        public @NotNull DataComponentPredicates read(@NotNull NetworkBuffer buffer) {
+        public DataComponentPredicates read(NetworkBuffer buffer) {
             DataComponentPredicates value = delegate.read(buffer);
             DataComponentMap exact = value.exact();
             // Read empty lists and compounds as null
@@ -67,7 +68,7 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
     };
 
     @Override
-    public boolean test(@NotNull DataComponent.Holder holder) {
+    public boolean test(DataComponent.Holder holder) {
         if (exact != null && !exact.entrySet().stream().allMatch(entry -> Objects.equals(holder.get(entry.component()), entry.value()))) {
             return false;
         }

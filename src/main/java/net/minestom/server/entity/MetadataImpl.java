@@ -4,7 +4,7 @@ import net.kyori.adventure.nbt.EndBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
-import net.minestom.server.entity.metadata.animal.FrogMeta;
+import net.minestom.server.entity.metadata.animal.FrogVariant;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -16,7 +16,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.collection.ObjectArray;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
@@ -52,7 +51,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_POSE, Pose(EntityPose.STANDING));
         EMPTY_VALUES.set(TYPE_CAT_VARIANT, CatVariant(CatVariant.TABBY));
         EMPTY_VALUES.set(TYPE_WOLF_VARIANT, WolfVariant(WolfVariant.PALE));
-        EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogMeta.Variant.TEMPERATE));
+        EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogVariant.TEMPERATE));
         // OptGlobalPos
         EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(PaintingVariant.KEBAB));
         EMPTY_VALUES.set(TYPE_SNIFFER_STATE, SnifferState(SnifferMeta.State.IDLING));
@@ -64,16 +63,16 @@ final class MetadataImpl {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     record EntryImpl<T>(int type, @UnknownNullability T value,
-                        @NotNull NetworkBuffer.Type<T> serializer) implements Metadata.Entry<T> {
+                        NetworkBuffer.Type<T> serializer) implements Metadata.Entry<T> {
         static final NetworkBuffer.Type<EntryImpl<?>> SERIALIZER = new NetworkBuffer.Type<>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, EntryImpl value) {
+            public void write(NetworkBuffer buffer, EntryImpl value) {
                 buffer.write(VAR_INT, value.type);
                 buffer.write(value.serializer, value.value);
             }
 
             @Override
-            public EntryImpl read(@NotNull NetworkBuffer buffer) {
+            public EntryImpl read(NetworkBuffer buffer) {
                 final int type = buffer.read(VAR_INT);
                 final EntryImpl<?> value = (EntryImpl<?>) EMPTY_VALUES.get(type);
                 if (value == null) throw new UnsupportedOperationException("Unknown value type: " + type);

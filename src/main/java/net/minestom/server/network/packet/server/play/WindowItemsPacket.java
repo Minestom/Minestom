@@ -6,7 +6,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,8 +14,8 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record WindowItemsPacket(int windowId, int stateId, @NotNull List<ItemStack> items,
-                                @NotNull ItemStack carriedItem) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public record WindowItemsPacket(int windowId, int stateId, List<ItemStack> items,
+                                ItemStack carriedItem) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ENTRIES = 128;
 
     public static final NetworkBuffer.Type<WindowItemsPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -31,7 +30,7 @@ public record WindowItemsPacket(int windowId, int stateId, @NotNull List<ItemSta
     }
 
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         final var list = new ArrayList<>(this.items);
         list.add(this.carriedItem);
 
@@ -55,7 +54,7 @@ public record WindowItemsPacket(int windowId, int stateId, @NotNull List<ItemSta
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         UnaryOperator<List<Component>> loreOperator = lines -> {
             final var translatedComponents = new ArrayList<Component>();
             lines.forEach(component -> translatedComponents.add(operator.apply(component)));

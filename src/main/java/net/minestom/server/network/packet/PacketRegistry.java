@@ -19,25 +19,23 @@ import net.minestom.server.network.packet.server.configuration.*;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 public interface PacketRegistry<T> {
     @UnknownNullability
-    T create(int packetId, @NotNull NetworkBuffer reader);
+    T create(int packetId, NetworkBuffer reader);
 
-    PacketInfo<T> packetInfo(@NotNull Class<?> packetClass);
+    PacketInfo<T> packetInfo(Class<?> packetClass);
 
-    default PacketInfo<T> packetInfo(@NotNull T packet) {
+    default PacketInfo<T> packetInfo(T packet) {
         return packetInfo(packet.getClass());
     }
 
     PacketInfo<T> packetInfo(int packetId);
 
-    @NotNull
     ConnectionState state();
 
-    @NotNull ConnectionSide side();
+    ConnectionSide side();
 
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
@@ -48,7 +46,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull ConnectionSide side() {
+        public ConnectionSide side() {
             return ConnectionSide.CLIENT;
         }
     }
@@ -61,7 +59,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.HANDSHAKE;
         }
     }
@@ -75,7 +73,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.STATUS;
         }
     }
@@ -92,7 +90,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.LOGIN;
         }
     }
@@ -107,12 +105,13 @@ public interface PacketRegistry<T> {
                     entry(ClientKeepAlivePacket.class, ClientKeepAlivePacket.SERIALIZER),
                     entry(ClientPongPacket.class, ClientPongPacket.SERIALIZER),
                     entry(ClientResourcePackStatusPacket.class, ClientResourcePackStatusPacket.SERIALIZER),
-                    entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER)
+                    entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER),
+                    entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER)
             );
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.CONFIGURATION;
         }
     }
@@ -124,6 +123,7 @@ public interface PacketRegistry<T> {
                     entry(ClientQueryBlockNbtPacket.class, ClientQueryBlockNbtPacket.SERIALIZER),
                     entry(ClientSelectBundleItemPacket.class, ClientSelectBundleItemPacket.SERIALIZER),
                     entry(ClientChangeDifficultyPacket.class, ClientChangeDifficultyPacket.SERIALIZER),
+                    entry(ClientChangeGameModePacket.class, ClientChangeGameModePacket.SERIALIZER),
                     entry(ClientChatAckPacket.class, ClientChatAckPacket.SERIALIZER),
                     entry(ClientCommandChatPacket.class, ClientCommandChatPacket.SERIALIZER),
                     entry(ClientSignedCommandChatPacket.class, ClientSignedCommandChatPacket.SERIALIZER),
@@ -183,12 +183,13 @@ public interface PacketRegistry<T> {
                     entry(ClientSpectatePacket.class, ClientSpectatePacket.SERIALIZER),
                     entry(ClientTestInstanceBlockActionPacket.class, ClientTestInstanceBlockActionPacket.SERIALIZER),
                     entry(ClientPlayerBlockPlacementPacket.class, ClientPlayerBlockPlacementPacket.SERIALIZER),
-                    entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER)
+                    entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER),
+                    entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER)
             );
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.PLAY;
         }
     }
@@ -199,7 +200,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull ConnectionSide side() {
+        public ConnectionSide side() {
             return ConnectionSide.SERVER;
         }
     }
@@ -212,7 +213,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.HANDSHAKE;
         }
     }
@@ -226,7 +227,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.STATUS;
         }
     }
@@ -244,7 +245,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.LOGIN;
         }
     }
@@ -268,12 +269,14 @@ public interface PacketRegistry<T> {
                     entry(TagsPacket.class, TagsPacket.SERIALIZER),
                     entry(SelectKnownPacksPacket.class, SelectKnownPacksPacket.SERIALIZER),
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
-                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
+                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
+                    entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
+                    entry(ShowDialogPacket.class, ShowDialogPacket.INLINE_SERIALIZER)
             );
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.CONFIGURATION;
         }
     }
@@ -411,12 +414,15 @@ public interface PacketRegistry<T> {
                     entry(TagsPacket.class, TagsPacket.SERIALIZER),
                     entry(ProjectilePowerPacket.class, ProjectilePowerPacket.SERIALIZER),
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
-                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
+                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
+                    entry(TrackedWaypointPacket.class, TrackedWaypointPacket.SERIALIZER),
+                    entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
+                    entry(ShowDialogPacket.class, ShowDialogPacket.SERIALIZER)
             );
         }
 
         @Override
-        public @NotNull ConnectionState state() {
+        public ConnectionState state() {
             return ConnectionState.PLAY;
         }
     }
@@ -426,7 +432,7 @@ public interface PacketRegistry<T> {
         private final PacketInfo<? extends T>[] suppliers;
         private final ClassValue<PacketInfo<T>> packetIds = new ClassValue<>() {
             @Override
-            protected PacketInfo<T> computeValue(@NotNull Class<?> type) {
+            protected PacketInfo<T> computeValue(Class<?> type) {
                 for (PacketInfo<? extends T> info : suppliers) {
                     if (info != null && info.packetClass == type) {
                         return (PacketInfo<T>) info;
@@ -446,7 +452,7 @@ public interface PacketRegistry<T> {
             this.suppliers = packetInfos;
         }
 
-        public @UnknownNullability T create(int packetId, @NotNull NetworkBuffer reader) {
+        public @UnknownNullability T create(int packetId, NetworkBuffer reader) {
             final PacketInfo<T> info = packetInfo(packetId);
             final NetworkBuffer.Type<T> supplier = info.serializer;
             final T packet = supplier.read(reader);
@@ -457,7 +463,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public PacketInfo<T> packetInfo(@NotNull Class<?> packetClass) {
+        public PacketInfo<T> packetInfo(Class<?> packetClass) {
             return packetIds.get(packetClass);
         }
 
@@ -469,7 +475,6 @@ public interface PacketRegistry<T> {
             }
             return info;
         }
-
 
 
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {

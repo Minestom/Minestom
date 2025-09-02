@@ -3,7 +3,6 @@ package net.minestom.server.timer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import net.minestom.server.MinecraftServer;
 import org.jctools.queues.MpscUnboundedArrayQueue;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -72,8 +71,8 @@ final class SchedulerImpl implements Scheduler {
     }
 
     @Override
-    public @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task,
-                                    @NotNull ExecutionType executionType) {
+    public Task submitTask(Supplier<TaskSchedule> task,
+                                    ExecutionType executionType) {
         final TaskImpl taskRef = new TaskImpl(TASK_COUNTER.getAndIncrement(), task,
                 executionType, this);
         handleTask(taskRef);
@@ -103,29 +102,30 @@ final class SchedulerImpl implements Scheduler {
             schedule = TaskSchedule.stop();
         }
 
-        if (schedule instanceof TaskScheduleImpl.DurationSchedule durationSchedule) {
-            final Duration duration = durationSchedule.duration();
-            SCHEDULER.schedule(() -> safeExecute(task), duration.toMillis(), TimeUnit.MILLISECONDS);
-        } else if (schedule instanceof TaskScheduleImpl.TickSchedule tickSchedule) {
-            synchronized (this) {
-                final int target = tickState + tickSchedule.tick();
-                var targetTaskQueue = switch (task.executionType()) {
-                    case TICK_START -> tickStartTaskQueue;
-                    case TICK_END -> tickEndTaskQueue;
-                };
-                targetTaskQueue.computeIfAbsent(target, i -> new ArrayList<>()).add(task);
+        switch (schedule) {
+            case TaskScheduleImpl.DurationSchedule durationSchedule -> {
+                final Duration duration = durationSchedule.duration();
+                SCHEDULER.schedule(() -> safeExecute(task), duration.toMillis(), TimeUnit.MILLISECONDS);
             }
-        } else if (schedule instanceof TaskScheduleImpl.FutureSchedule futureSchedule) {
-            futureSchedule.future().thenRun(() -> safeExecute(task));
-        } else if (schedule instanceof TaskScheduleImpl.Park) {
-            task.parked = true;
-        } else if (schedule instanceof TaskScheduleImpl.Stop) {
-            task.cancel();
-        } else if (schedule instanceof TaskScheduleImpl.Immediate) {
-            if (task.executionType() == ExecutionType.TICK_END) {
-                tickEndTasksToExecute.relaxedOffer(task);
+            case TaskScheduleImpl.TickSchedule tickSchedule -> {
+                synchronized (this) {
+                    final int target = tickState + tickSchedule.tick();
+                    var targetTaskQueue = switch (task.executionType()) {
+                        case TICK_START -> tickStartTaskQueue;
+                        case TICK_END -> tickEndTaskQueue;
+                    };
+                    targetTaskQueue.computeIfAbsent(target, i -> new ArrayList<>()).add(task);
+                }
             }
-            else tasksToExecute.relaxedOffer(task);
+            case TaskScheduleImpl.FutureSchedule futureSchedule ->
+                    futureSchedule.future().thenRun(() -> safeExecute(task));
+            case TaskScheduleImpl.Park ignored -> task.parked = true;
+            case TaskScheduleImpl.Stop ignored -> task.cancel();
+            case TaskScheduleImpl.Immediate ignored -> {
+                if (task.executionType() == ExecutionType.TICK_END) {
+                    tickEndTasksToExecute.relaxedOffer(task);
+                } else tasksToExecute.relaxedOffer(task);
+            }
         }
     }
 }

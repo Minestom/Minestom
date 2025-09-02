@@ -5,14 +5,31 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.serializer.ComponentSerializer;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Transcoder;
+import net.minestom.server.registry.RegistryTranscoder;
 
 public interface NbtComponentSerializer extends ComponentSerializer<Component, Component, BinaryTag> {
-    static @NotNull NbtComponentSerializer nbt() {
+    static NbtComponentSerializer nbt() {
         return NbtComponentSerializerImpl.INSTANCE;
     }
 
-    @NotNull Style deserializeStyle(@NotNull BinaryTag tag);
+    /**
+     * @deprecated use {@link Codec#COMPONENT_STYLE} instead.
+     */
+    @Deprecated(forRemoval = true)
+    default Style deserializeStyle(BinaryTag tag) {
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        return Codec.COMPONENT_STYLE.decode(coder, tag).orElseThrow();
+    }
 
-    @NotNull CompoundBinaryTag serializeStyle(@NotNull Style style);
+    /**
+     * @deprecated use {@link Codec#COMPONENT_STYLE} instead.
+     */
+    @Deprecated(forRemoval = true)
+    default CompoundBinaryTag serializeStyle(Style style) {
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        return (CompoundBinaryTag) Codec.COMPONENT_STYLE.encode(coder, style).orElseThrow();
+    }
 }

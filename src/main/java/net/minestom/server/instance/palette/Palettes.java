@@ -11,7 +11,6 @@ public final class Palettes {
     public static long[] pack(int[] ints, int bitsPerEntry) {
         final int intsPerLong = (int) Math.floor(64d / bitsPerEntry);
         long[] longs = new long[(int) Math.ceil(ints.length / (double) intsPerLong)];
-
         final long mask = (1L << bitsPerEntry) - 1L;
         for (int i = 0; i < longs.length; i++) {
             for (int intIndex = 0; intIndex < intsPerLong; intIndex++) {
@@ -22,7 +21,6 @@ public final class Palettes {
                 }
             }
         }
-
         return longs;
     }
 
@@ -32,11 +30,10 @@ public final class Palettes {
         final double intsPerLong = Math.floor(64d / bitsPerEntry);
         final int intsPerLongCeil = (int) Math.ceil(intsPerLong);
 
-        long mask = (1L << bitsPerEntry) - 1L;
+        final long mask = (1L << bitsPerEntry) - 1L;
         for (int i = 0; i < out.length; i++) {
             final int longIndex = i / intsPerLongCeil;
             final int subIndex = i % intsPerLongCeil;
-
             out[i] = (int) ((in[longIndex] >>> (bitsPerEntry * subIndex)) & mask);
         }
     }

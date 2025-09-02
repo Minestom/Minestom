@@ -1,10 +1,10 @@
 package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -24,11 +24,11 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
         this(x, y, z, 0, 0);
     }
 
-    public Pos(@NotNull Point point, float yaw, float pitch) {
+    public Pos(Point point, float yaw, float pitch) {
         this(point.x(), point.y(), point.z(), yaw, pitch);
     }
 
-    public Pos(@NotNull Point point) {
+    public Pos(Point point) {
         this(point, 0, 0);
     }
 
@@ -38,8 +38,10 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      *
      * @param point the point to convert
      * @return the converted position
+     * @deprecated use {@link Point#asPos()} instead
      */
-    public static @NotNull Pos fromPoint(@NotNull Point point) {
+    @Deprecated
+    public static Pos fromPoint(Point point) {
         if (point instanceof Pos pos) return pos;
         return new Pos(point.x(), point.y(), point.z());
     }
@@ -53,22 +55,22 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @return a new position
      */
     @Contract(pure = true)
-    public @NotNull Pos withCoord(double x, double y, double z) {
+    public Pos withCoord(double x, double y, double z) {
         return new Pos(x, y, z, yaw, pitch);
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withCoord(@NotNull Point point) {
+    public Pos withCoord(Point point) {
         return withCoord(point.x(), point.y(), point.z());
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withView(float yaw, float pitch) {
+    public Pos withView(float yaw, float pitch) {
         return new Pos(x, y, z, yaw, pitch);
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withView(@NotNull Pos pos) {
+    public Pos withView(Pos pos) {
         return withView(pos.yaw(), pos.pitch());
     }
 
@@ -77,7 +79,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * in the direction of the point.
      */
     @Contract(pure = true)
-    public @NotNull Pos withDirection(@NotNull Point point) {
+    public Pos withDirection(Point point) {
         /*
          * Sin = Opp / Hyp
          * Cos = Adj / Hyp
@@ -99,30 +101,30 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withYaw(float yaw) {
+    public Pos withYaw(float yaw) {
         return new Pos(x, y, z, yaw, pitch);
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withYaw(@NotNull DoubleUnaryOperator operator) {
+    public Pos withYaw(DoubleUnaryOperator operator) {
         return withYaw((float) operator.applyAsDouble(yaw));
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withPitch(float pitch) {
+    public Pos withPitch(float pitch) {
         return new Pos(x, y, z, yaw, pitch);
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withLookAt(@NotNull Point point) {
+    public Pos withLookAt(Point point) {
         if (samePoint(point)) return this;
-        final Vec delta = Vec.fromPoint(point.sub(this)).normalize();
+        final Vec delta = point.sub(this).asVec().normalize();
         return withView(PositionUtils.getLookYaw(delta.x(), delta.z()),
                 PositionUtils.getLookPitch(delta.x(), delta.y(), delta.z()));
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withPitch(@NotNull DoubleUnaryOperator operator) {
+    public Pos withPitch(DoubleUnaryOperator operator) {
         return withPitch((float) operator.applyAsDouble(pitch));
     }
 
@@ -132,7 +134,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @param position the position to compare
      * @return true if the two positions have the same view
      */
-    public boolean sameView(@NotNull Pos position) {
+    public boolean sameView(Pos position) {
         return sameView(position.yaw(), position.pitch());
     }
 
@@ -148,7 +150,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @return a vector pointing the direction of this location's {@link
      * #pitch() pitch} and {@link #yaw() yaw}
      */
-    public @NotNull Vec direction() {
+    public Vec direction() {
         final float rotX = yaw;
         final float rotY = pitch;
         final double xz = Math.cos(Math.toRadians(rotY));
@@ -158,125 +160,133 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     }
 
     /**
+     * @return The closest direction {@link #yaw() yaw} and {@link #pitch() pitch} are facing to.
+     */
+    public Direction facing() {
+        if (pitch < -45) return Direction.UP;
+        if (pitch > 45) return Direction.DOWN;
+        if (yaw > 135 || yaw <= -135) return Direction.NORTH;
+        if (-135 < yaw && yaw <= -45) return Direction.EAST;
+        if (-45 < yaw && yaw <= 45) return Direction.SOUTH;
+        if (45 < yaw) return Direction.WEST;
+        throw new IllegalStateException("Illegal yaw (%s) or pitch (%s) value.".formatted(this.yaw, pitch));
+    }
+
+    /**
      * Returns a new position based on this position fields.
      *
      * @param operator the operator deconstructing this object and providing a new position
      * @return the new position
      */
     @Contract(pure = true)
-    public @NotNull Pos apply(@NotNull Operator operator) {
+    public Pos apply(Operator operator) {
         return operator.apply(x, y, z, yaw, pitch);
     }
 
     @Override
     @Contract(pure = true)
-    public @NotNull Pos withX(@NotNull DoubleUnaryOperator operator) {
+    public Pos withX(DoubleUnaryOperator operator) {
         return new Pos(operator.applyAsDouble(x), y, z, yaw, pitch);
     }
 
     @Override
     @Contract(pure = true)
-    public @NotNull Pos withX(double x) {
+    public Pos withX(double x) {
         return new Pos(x, y, z, yaw, pitch);
     }
 
     @Override
     @Contract(pure = true)
-    public @NotNull Pos withY(@NotNull DoubleUnaryOperator operator) {
+    public Pos withY(DoubleUnaryOperator operator) {
         return new Pos(x, operator.applyAsDouble(y), z, yaw, pitch);
     }
 
     @Override
     @Contract(pure = true)
-    public @NotNull Pos withY(double y) {
+    public Pos withY(double y) {
         return new Pos(x, y, z, yaw, pitch);
     }
 
     @Override
     @Contract(pure = true)
-    public @NotNull Pos withZ(@NotNull DoubleUnaryOperator operator) {
+    public Pos withZ(DoubleUnaryOperator operator) {
         return new Pos(x, y, operator.applyAsDouble(z), yaw, pitch);
     }
 
     @Override
     @Contract(pure = true)
-    public @NotNull Pos withZ(double z) {
+    public Pos withZ(double z) {
         return new Pos(x, y, z, yaw, pitch);
     }
 
     @Override
-    public @NotNull Pos add(double x, double y, double z) {
+    public Pos add(double x, double y, double z) {
         return new Pos(this.x + x, this.y + y, this.z + z, yaw, pitch);
     }
 
     @Override
-    public @NotNull Pos add(@NotNull Point point) {
+    public Pos add(Point point) {
         return add(point.x(), point.y(), point.z());
     }
 
     @Override
-    public @NotNull Pos add(double value) {
+    public Pos add(double value) {
         return add(value, value, value);
     }
 
     @Override
-    public @NotNull Pos sub(double x, double y, double z) {
+    public Pos sub(double x, double y, double z) {
         return new Pos(this.x - x, this.y - y, this.z - z, yaw, pitch);
     }
 
     @Override
-    public @NotNull Pos sub(@NotNull Point point) {
+    public Pos sub(Point point) {
         return sub(point.x(), point.y(), point.z());
     }
 
     @Override
-    public @NotNull Pos sub(double value) {
+    public Pos sub(double value) {
         return sub(value, value, value);
     }
 
     @Override
-    public @NotNull Pos mul(double x, double y, double z) {
+    public Pos mul(double x, double y, double z) {
         return new Pos(this.x * x, this.y * y, this.z * z, yaw, pitch);
     }
 
     @Override
-    public @NotNull Pos mul(@NotNull Point point) {
+    public Pos mul(Point point) {
         return mul(point.x(), point.y(), point.z());
     }
 
     @Override
-    public @NotNull Pos mul(double value) {
+    public Pos mul(double value) {
         return mul(value, value, value);
     }
 
     @Override
-    public @NotNull Pos div(double x, double y, double z) {
+    public Pos div(double x, double y, double z) {
         return new Pos(this.x / x, this.y / y, this.z / z, yaw, pitch);
     }
 
     @Override
-    public @NotNull Pos div(@NotNull Point point) {
+    public Pos div(Point point) {
         return div(point.x(), point.y(), point.z());
     }
 
     @Override
-    public @NotNull Pos div(double value) {
+    public Pos div(double value) {
         return div(value, value, value);
     }
 
     @Override
-    public @NotNull Pos relative(@NotNull BlockFace face) {
+    public Pos relative(BlockFace face) {
         return (Pos) Point.super.relative(face);
-    }
-
-    @Contract(pure = true)
-    public @NotNull Vec asVec() {
-        return new Vec(x, y, z);
     }
 
     @FunctionalInterface
     public interface Operator {
-        @NotNull Pos apply(double x, double y, double z, float yaw, float pitch);
+        Pos apply(double x, double y, double z, float yaw, float pitch);
     }
 
     /**

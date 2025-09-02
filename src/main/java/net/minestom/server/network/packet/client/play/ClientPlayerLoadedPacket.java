@@ -6,5 +6,5 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 public record ClientPlayerLoadedPacket() implements ClientPacket {
     public static final NetworkBuffer.Type<ClientPlayerLoadedPacket> SERIALIZER = NetworkBufferTemplate
-            .template(ClientPlayerLoadedPacket::new);
+            .template(new ClientPlayerLoadedPacket());
 }

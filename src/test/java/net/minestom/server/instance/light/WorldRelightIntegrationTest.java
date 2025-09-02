@@ -7,7 +7,6 @@ import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -17,7 +16,7 @@ import static net.minestom.server.instance.BlockLightMergeIntegrationTest.assert
 
 @EnvTest
 public class WorldRelightIntegrationTest {
-    private @NotNull Instance createLightingInstance(@NotNull ServerProcess process) {
+    private Instance createLightingInstance(ServerProcess process) {
         var instance = process.instance().createInstanceContainer();
         instance.setGenerator(unit -> {
             unit.modifier().fillHeight(39, 40, Block.STONE);

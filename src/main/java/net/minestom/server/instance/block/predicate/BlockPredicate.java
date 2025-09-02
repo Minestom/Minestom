@@ -17,7 +17,6 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.block.BlockUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -43,7 +42,7 @@ public record BlockPredicate(
         @Nullable RegistryTag<Block> blocks,
         @Nullable PropertiesPredicate state,
         @Nullable NbtPredicate nbt,
-        @NotNull DataComponentPredicates components
+        DataComponentPredicates components
 ) implements Predicate<Block> {
     /**
      * Matches all blocks.
@@ -72,35 +71,35 @@ public record BlockPredicate(
             BlockPredicate::new
     );
 
-    public BlockPredicate(@NotNull RegistryTag<Block> blocks) {
+    public BlockPredicate(RegistryTag<Block> blocks) {
         this(blocks, null, null, null);
     }
 
-    public BlockPredicate(@NotNull Block... blocks) {
+    public BlockPredicate(Block... blocks) {
         this(RegistryTag.direct(blocks));
     }
 
-    public BlockPredicate(@NotNull PropertiesPredicate state) {
+    public BlockPredicate(PropertiesPredicate state) {
         this(null, state, null, null);
     }
 
-    public BlockPredicate(@NotNull CompoundBinaryTag nbt) {
+    public BlockPredicate(CompoundBinaryTag nbt) {
         this(new NbtPredicate(nbt));
     }
 
-    public BlockPredicate(@NotNull NbtPredicate nbt) {
+    public BlockPredicate(NbtPredicate nbt) {
         this(null, null, nbt, null);
     }
 
-    public BlockPredicate(@NotNull DataComponentMap components) {
+    public BlockPredicate(DataComponentMap components) {
         this(null, null, null, new DataComponentPredicates(components, null));
     }
 
-    public BlockPredicate(@NotNull ComponentPredicateSet predicates) {
+    public BlockPredicate(ComponentPredicateSet predicates) {
         this(null, null, null, new DataComponentPredicates(null, predicates));
     }
 
-    public BlockPredicate(@NotNull DataComponentPredicates predicates) {
+    public BlockPredicate(DataComponentPredicates predicates) {
         this(null, null, null, predicates);
     }
 
@@ -116,7 +115,7 @@ public record BlockPredicate(
     }
 
     @Override
-    public boolean test(@NotNull Block block) {
+    public boolean test(Block block) {
         if (blocks != null && !blocks.contains(block))
             return false;
         if (state != null && !state.test(block))

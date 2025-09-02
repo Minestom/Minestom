@@ -1,31 +1,21 @@
 package net.minestom.codegen;
 
-import net.minestom.codegen.color.DyeColorGenerator;
-import net.minestom.codegen.particle.ParticleGenerator;
-import net.minestom.codegen.recipe.RecipeTypeGenerator;
-import net.minestom.codegen.util.GenericEnumGenerator;
-import net.minestom.codegen.worldevent.WorldEventGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.lang.model.SourceVersion;
-import java.io.File;
 import java.io.InputStream;
-import java.util.Locale;
+import java.nio.file.Path;
+import java.util.Objects;
 
 public final class Generators {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Generators.class);
 
     public static void main(String[] args) {
         if (args.length != 1) {
-            LOGGER.error("Usage: <target folder>");
+            System.err.println("Usage: <target folder>");
             return;
         }
-        File outputFolder = new File(args[0]);
+        Path outputFolder = Path.of(args[0]);
 
         // Special generators
         new DyeColorGenerator(resource("dye_colors.json"), outputFolder).generate();
-        new ParticleGenerator(resource("particles.json"), outputFolder).generate();
+        new ParticleGenerator(resource("particle.json"), outputFolder).generate();
         new ConstantsGenerator(resource("constants.json"), outputFolder).generate();
         new RecipeTypeGenerator(resource("recipe_types.json"), outputFolder).generate();
         new GenericEnumGenerator("net.minestom.server.recipe.display", "RecipeDisplayType",
@@ -43,7 +33,7 @@ public final class Generators {
         new WorldEventGenerator("net.minestom.server.worldevent", "WorldEvent",
                 resource("world_events.json"), outputFolder).generate();
 
-        var generator = new CodeGenerator(outputFolder);
+        var generator = new RegistryGenerator(outputFolder);
 
         // Static registries
         generator.generate(resource("block.json"), "net.minestom.server.instance.block", "Block", "BlockImpl", "Blocks");
@@ -63,7 +53,6 @@ public final class Generators {
         // Dynamic registries
         generator.generateKeys(resource("chat_type.json"), "net.minestom.server.message", "ChatType");
         generator.generateKeys(resource("dimension_type.json"), "net.minestom.server.world", "DimensionType");
-        generator.generateKeys(resource("worldgen/biome.json"), "net.minestom.server.world.biome", "Biome");
         generator.generateKeys(resource("damage_type.json"), "net.minestom.server.entity.damage", "DamageType");
         generator.generateKeys(resource("trim_material.json"), "net.minestom.server.item.armor", "TrimMaterial");
         generator.generateKeys(resource("trim_pattern.json"), "net.minestom.server.item.armor", "TrimPattern");
@@ -79,26 +68,12 @@ public final class Generators {
         generator.generateKeys(resource("cow_variant.json"), "net.minestom.server.entity.metadata.animal", "CowVariant");
         generator.generateKeys(resource("frog_variant.json"), "net.minestom.server.entity.metadata.animal", "FrogVariant");
         generator.generateKeys(resource("pig_variant.json"), "net.minestom.server.entity.metadata.animal", "PigVariant");
+        generator.generateKeys(resource("worldgen/biome.json"), "net.minestom.server.world.biome", "Biome");
 
-        LOGGER.info("Finished generating code");
-    }
-
-    public static String namespaceToConstant(String namespace) {
-        String constant = namespace
-                .replace("minecraft:", "")
-                .replace(".", "_")
-                .toUpperCase(Locale.ROOT);
-        if (!SourceVersion.isName(constant)) {
-            constant = "_" + constant;
-        }
-        return constant;
-    }
-
-    public static String namespaceShort(String namespace) {
-        return namespace.replaceFirst("minecraft:", "");
+        System.out.println("Finished generating code");
     }
 
     private static InputStream resource(String name) {
-        return Generators.class.getResourceAsStream("/" + name);
+        return Objects.requireNonNull(Generators.class.getResourceAsStream("/" + name), "Cannot find resource: %s".formatted(name));
     }
 }

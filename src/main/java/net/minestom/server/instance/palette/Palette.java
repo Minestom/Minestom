@@ -3,7 +3,6 @@ package net.minestom.server.instance.palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntUnaryOperator;
@@ -53,23 +52,27 @@ public sealed interface Palette permits PaletteImpl {
 
     int get(int x, int y, int z);
 
-    void getAll(@NotNull EntryConsumer consumer);
+    void getAll(EntryConsumer consumer);
 
-    void getAllPresent(@NotNull EntryConsumer consumer);
+    void getAllPresent(EntryConsumer consumer);
+
+    int height(int x, int z, EntryPredicate predicate);
 
     void set(int x, int y, int z, int value);
 
     void fill(int value);
 
+    void load(int[] palette, long[] values);
+
     void offset(int offset);
 
     void replace(int oldValue, int newValue);
 
-    void setAll(@NotNull EntrySupplier supplier);
+    void setAll(EntrySupplier supplier);
 
-    void replace(int x, int y, int z, @NotNull IntUnaryOperator operator);
+    void replace(int x, int y, int z, IntUnaryOperator operator);
 
-    void replaceAll(@NotNull EntryFunction function);
+    void replaceAll(EntryFunction function);
 
     /**
      * Efficiently copies values from another palette with the given offset.
@@ -81,7 +84,7 @@ public sealed interface Palette permits PaletteImpl {
      * @param offsetY the Y offset to apply when copying
      * @param offsetZ the Z offset to apply when copying
      */
-    void copyFrom(@NotNull Palette source, int offsetX, int offsetY, int offsetZ);
+    void copyFrom(Palette source, int offsetX, int offsetY, int offsetZ);
 
     /**
      * Efficiently copies values from another palette starting at position (0, 0, 0).
@@ -92,12 +95,32 @@ public sealed interface Palette permits PaletteImpl {
      *
      * @param source the source palette to copy from
      */
-    void copyFrom(@NotNull Palette source);
+    void copyFrom(Palette source);
 
     /**
      * Returns the number of entries in this palette.
      */
     int count();
+
+    /**
+     * Returns the number of entries in this palette that match the given value.
+     *
+     * @param value the value to count
+     * @return the number of entries matching the value
+     */
+    int count(int value);
+
+    default boolean isEmpty() {
+        return count() == 0;
+    }
+
+    /**
+     * Checks if the palette contains the given value.
+     *
+     * @param value the value to check
+     * @return true if the palette contains the value, false otherwise
+     */
+    boolean any(int value);
 
     /**
      * Returns the number of bits used per entry.
@@ -127,9 +150,9 @@ public sealed interface Palette permits PaletteImpl {
      * @param palette the palette to compare with
      * @return true if the palettes are equivalent, false otherwise
      */
-    boolean compare(@NotNull Palette palette);
+    boolean compare(Palette palette);
 
-    @NotNull Palette clone();
+    Palette clone();
 
     @ApiStatus.Internal
     int paletteIndexToValue(int value);
@@ -164,6 +187,11 @@ public sealed interface Palette permits PaletteImpl {
         int apply(int x, int y, int z, int value);
     }
 
+    @FunctionalInterface
+    interface EntryPredicate {
+        boolean get(int x, int y, int z, int value);
+    }
+
     NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS);
 
     static NetworkBuffer.Type<Palette> biomeSerializer(int biomeCount) {
@@ -175,7 +203,7 @@ public sealed interface Palette permits PaletteImpl {
         //noinspection unchecked
         return (NetworkBuffer.Type) new NetworkBuffer.Type<PaletteImpl>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, PaletteImpl value) {
+            public void write(NetworkBuffer buffer, PaletteImpl value) {
                 // Temporary fix for biome direct bits depending on the number of registered biomes
                 if (directBits != value.directBits && !value.hasPalette()) {
                     PaletteImpl tmp = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
@@ -195,7 +223,7 @@ public sealed interface Palette permits PaletteImpl {
             }
 
             @Override
-            public PaletteImpl read(@NotNull NetworkBuffer buffer) {
+            public PaletteImpl read(NetworkBuffer buffer) {
                 final byte bitsPerEntry = buffer.read(BYTE);
                 if (bitsPerEntry == 0) {
                     // Single value palette
@@ -206,8 +234,7 @@ public sealed interface Palette permits PaletteImpl {
                 } else if (bitsPerEntry >= minIndirect && bitsPerEntry <= maxIndirect) {
                     // Indirect palette
                     final int[] palette = buffer.read(VAR_INT_ARRAY);
-                    int entriesPerLong = 64 / bitsPerEntry;
-                    final long[] data = new long[(dimension * dimension * dimension) / entriesPerLong + 1];
+                    final long[] data = new long[Palettes.arrayLength(dimension, bitsPerEntry)];
                     for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
                     return new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),

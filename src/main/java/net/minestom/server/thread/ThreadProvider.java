@@ -1,19 +1,18 @@
 package net.minestom.server.thread;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 @FunctionalInterface
 @ApiStatus.Experimental
 public interface ThreadProvider<T> {
-    static <T> @NotNull ThreadProvider<T> counter() {
+    static <T> ThreadProvider<T> counter() {
         return new ThreadProvider<>() {
             private final AtomicInteger counter = new AtomicInteger();
 
             @Override
-            public int findThread(@NotNull T partition) {
+            public int findThread(T partition) {
                 return counter.getAndIncrement();
             }
         };
@@ -24,14 +23,14 @@ public interface ThreadProvider<T> {
      *
      * @param partition the partition
      */
-    int findThread(@NotNull T partition);
+    int findThread(T partition);
 
     /**
      * Defines how often chunks thread should be updated.
      *
      * @return the refresh type
      */
-    default @NotNull RefreshType refreshType() {
+    default RefreshType refreshType() {
         return RefreshType.NEVER;
     }
 

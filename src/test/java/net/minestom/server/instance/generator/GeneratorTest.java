@@ -367,7 +367,179 @@ public class GeneratorTest {
         assertEquals(expectedStones, stones);
     }
 
-    static GenerationUnit dummyUnit(Point start, Point end) {
+    @Test
+    public void sectionsSingleSection() {
+        // Test a unit that covers exactly one section
+        var unit = dummyUnit(new Vec(0, 0, 0), new Vec(16, 16, 16));
+        var sections = unit.sections();
+
+        assertEquals(1, sections.size());
+        assertTrue(sections.contains(new Vec(0, 0, 0)));
+    }
+
+    @Test
+    public void sectionsMultipleSections() {
+        // Test a unit that covers multiple sections (2x2x2 = 8 sections)
+        var unit = dummyUnit(new Vec(0, 0, 0), new Vec(32, 32, 32));
+        var sections = unit.sections();
+
+        assertEquals(8, sections.size());
+        // Check all expected sections are present
+        Set<Point> expectedSections = Set.of(
+                new Vec(0, 0, 0), new Vec(0, 0, 1),
+                new Vec(0, 1, 0), new Vec(0, 1, 1),
+                new Vec(1, 0, 0), new Vec(1, 0, 1),
+                new Vec(1, 1, 0), new Vec(1, 1, 1)
+        );
+        assertEquals(expectedSections, sections);
+    }
+
+    @Test
+    public void sectionsNegativeCoordinates() {
+        // Test a unit with negative coordinates
+        var unit = dummyUnit(new Vec(-32, -16, -48), new Vec(-16, 0, -32));
+        var sections = unit.sections();
+
+        assertEquals(1, sections.size());
+        assertTrue(sections.contains(new Vec(-2, -1, -3)));
+    }
+
+    @Test
+    public void sectionsAsymmetricUnit() {
+        // Test a unit that is not square (different dimensions)
+        var unit = dummyUnit(new Vec(16, 0, 0), new Vec(64, 16, 32));
+        var sections = unit.sections();
+
+        // 3 sections wide (x), 1 section high (y), 2 sections deep (z) = 6 sections
+        assertEquals(6, sections.size());
+        Set<Point> expectedSections = Set.of(
+                new Vec(1, 0, 0), new Vec(1, 0, 1),
+                new Vec(2, 0, 0), new Vec(2, 0, 1),
+                new Vec(3, 0, 0), new Vec(3, 0, 1)
+        );
+        assertEquals(expectedSections, sections);
+    }
+
+    @Test
+    public void sectionsLargeUnit() {
+        // Test a larger unit to verify the algorithm scales
+        var unit = dummyUnit(new Vec(0, 0, 0), new Vec(48, 64, 32));
+        var sections = unit.sections();
+
+        // 3 sections wide (x), 4 sections high (y), 2 sections deep (z) = 24 sections
+        assertEquals(24, sections.size());
+
+        // Verify all sections are within expected bounds
+        for (Point section : sections) {
+            assertTrue(section.x() >= 0 && section.x() < 3, "Section X out of bounds: " + section.x());
+            assertTrue(section.y() >= 0 && section.y() < 4, "Section Y out of bounds: " + section.y());
+            assertTrue(section.z() >= 0 && section.z() < 2, "Section Z out of bounds: " + section.z());
+        }
+    }
+
+    @Test
+    public void sectionsOffsetCoordinates() {
+        // Test a unit that doesn't start at section boundaries but is aligned to sections
+        var unit = dummyUnit(new Vec(32, 48, 16), new Vec(64, 80, 48));
+        var sections = unit.sections();
+
+        // 2 sections wide (x), 2 sections high (y), 2 sections deep (z) = 8 sections
+        assertEquals(8, sections.size());
+        Set<Point> expectedSections = Set.of(
+                new Vec(2, 3, 1), new Vec(2, 3, 2),
+                new Vec(2, 4, 1), new Vec(2, 4, 2),
+                new Vec(3, 3, 1), new Vec(3, 3, 2),
+                new Vec(3, 4, 1), new Vec(3, 4, 2)
+        );
+        assertEquals(expectedSections, sections);
+    }
+
+    @Test
+    public void sectionsChunkUnit() {
+        // Test sections() on an actual chunk unit
+        final int minSection = -1;
+        final int maxSection = 5;
+        final int chunkX = 3;
+        final int chunkZ = -2;
+        final int sectionCount = maxSection - minSection;
+        GenSection[] sections = new GenSection[sectionCount];
+        Arrays.setAll(sections, i -> new GenSection());
+        var chunkUnit = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
+
+        var unitSections = chunkUnit.sections();
+        assertEquals(sectionCount, unitSections.size());
+
+        // Verify all sections have the correct chunk coordinates and are within the height range
+        for (Point section : unitSections) {
+            assertEquals(chunkX, section.x(), "Section X should match chunk X");
+            assertEquals(chunkZ, section.z(), "Section Z should match chunk Z");
+            assertTrue(section.y() >= minSection && section.y() < maxSection,
+                    "Section Y should be within height range: " + section.y());
+        }
+    }
+
+    @Test
+    public void sectionsSingleSectionUnit() {
+        // Test sections() on a single section unit
+        final int sectionX = 3;
+        final int sectionY = -5;
+        final int sectionZ = -2;
+        var sectionUnit = GeneratorImpl.section(null, new GenSection(), sectionX, sectionY, sectionZ);
+
+        var sections = sectionUnit.sections();
+        assertEquals(1, sections.size());
+        assertTrue(sections.contains(new Vec(sectionX, sectionY, sectionZ)));
+    }
+
+    @Test
+    public void sectionsReturnType() {
+        // Test that sections() returns an immutable set
+        var unit = dummyUnit(new Vec(0, 0, 0), new Vec(32, 16, 16));
+        var sections = unit.sections();
+
+        // Verify it's a Set and contains the expected number of elements
+        assertInstanceOf(Set.class, sections);
+        assertEquals(2, sections.size()); // 2x1x1 = 2 sections
+
+        // Verify immutability by attempting to modify (should throw exception)
+        assertThrows(UnsupportedOperationException.class, () -> {
+            sections.add(new Vec(99, 99, 99));
+        });
+    }
+
+    @Test
+    public void sectionsCoordinateConsistency() {
+        // Test that section coordinates are consistent with the unit's absolute coordinates
+        var unit = dummyUnit(new Vec(48, 64, 32), new Vec(80, 96, 64));
+        var sections = unit.sections();
+
+        Point start = unit.absoluteStart();
+        Point end = unit.absoluteEnd();
+
+        // Calculate expected section bounds
+        int expectedMinX = start.sectionX();
+        int expectedMinY = start.sectionY();
+        int expectedMinZ = start.sectionZ();
+        int expectedMaxX = end.sectionX();
+        int expectedMaxY = end.sectionY();
+        int expectedMaxZ = end.sectionZ();
+
+        // Verify all sections are within the expected bounds
+        for (Point section : sections) {
+            assertTrue(section.x() >= expectedMinX && section.x() < expectedMaxX,
+                    "Section X coordinate out of bounds: " + section.x());
+            assertTrue(section.y() >= expectedMinY && section.y() < expectedMaxY,
+                    "Section Y coordinate out of bounds: " + section.y());
+            assertTrue(section.z() >= expectedMinZ && section.z() < expectedMaxZ,
+                    "Section Z coordinate out of bounds: " + section.z());
+        }
+
+        // Verify we have the expected total count
+        int expectedCount = (expectedMaxX - expectedMinX) * (expectedMaxY - expectedMinY) * (expectedMaxZ - expectedMinZ);
+        assertEquals(expectedCount, sections.size());
+    }
+
+    static GenerationUnit dummyUnit(Vec start, Vec end) {
         return unit(null, null, start, end, null);
     }
 }

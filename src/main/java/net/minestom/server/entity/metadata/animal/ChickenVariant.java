@@ -9,19 +9,17 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 public sealed interface ChickenVariant extends ChickenVariants permits ChickenVariantImpl {
-
     Codec<ChickenVariant> REGISTRY_CODEC = StructCodec.struct(
             "model", Model.CODEC.optional(Model.NORMAL), ChickenVariant::model,
             "asset_id", Codec.KEY, ChickenVariant::assetId,
             ChickenVariantImpl::new);
 
-    @NotNull NetworkBuffer.Type<RegistryKey<ChickenVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::chickenVariant);
-    @NotNull Codec<RegistryKey<ChickenVariant>> CODEC = RegistryKey.codec(Registries::chickenVariant);
+    NetworkBuffer.Type<RegistryKey<ChickenVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::chickenVariant);
+    Codec<RegistryKey<ChickenVariant>> CODEC = RegistryKey.codec(Registries::chickenVariant);
 
-    static @NotNull ChickenVariant create(@NotNull Model model, @NotNull Key assetId) {
+    static ChickenVariant create(Model model, Key assetId) {
         return new ChickenVariantImpl(model, assetId);
     }
 
@@ -32,12 +30,12 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
      */
     @ApiStatus.Internal
     static DynamicRegistry<ChickenVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:chicken_variant"), REGISTRY_CODEC, RegistryData.Resource.CHICKEN_VARIANTS);
+        return DynamicRegistry.create(Key.key("chicken_variant"), REGISTRY_CODEC, RegistryData.Resource.CHICKEN_VARIANTS);
     }
 
-    @NotNull Model model();
+    Model model();
 
-    @NotNull Key assetId();
+    Key assetId();
 
     enum Model {
         NORMAL,

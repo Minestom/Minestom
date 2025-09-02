@@ -3,7 +3,6 @@ package net.minestom.server.command.builder.exception;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Exception triggered when an {@link Argument} is wrongly parsed.
@@ -18,7 +17,7 @@ public class ArgumentSyntaxException extends RuntimeException {
     private final String input;
     private final int errorCode;
 
-    public ArgumentSyntaxException(@NotNull String message, @NotNull String input, int errorCode) {
+    public ArgumentSyntaxException(String message, String input, int errorCode) {
         super(message);
         this.input = input;
         this.errorCode = errorCode;
@@ -35,7 +34,6 @@ public class ArgumentSyntaxException extends RuntimeException {
      *
      * @return the command input which triggered the exception
      */
-    @NotNull
     public String getInput() {
         return input;
     }

@@ -4,7 +4,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.Range;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -19,17 +19,16 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
 
     public static final int FORMAT_ERROR = -1;
     private final Function<String, N> parser;
-    private final BiFunction<N, N, T> rangeConstructor;
+    private final BiFunction<@Nullable N, @Nullable N, T> rangeConstructor;
 
-    public ArgumentRange(@NotNull String id, Function<String, N> parser, BiFunction<N, N, T> rangeConstructor) {
+    public ArgumentRange(String id, Function<String, N> parser, BiFunction<N, N, T> rangeConstructor) {
         super(id);
         this.parser = parser;
         this.rangeConstructor = rangeConstructor;
     }
 
-    @NotNull
     @Override
-    public T parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public T parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
             final String[] split = input.split(Pattern.quote(".."), -1);
 

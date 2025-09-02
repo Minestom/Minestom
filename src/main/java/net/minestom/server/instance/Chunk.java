@@ -12,7 +12,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -20,7 +19,6 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -61,7 +59,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     // Data
     private final TagHandler tagHandler = TagHandler.newHandler();
 
-    public Chunk(@NotNull Instance instance, int chunkX, int chunkZ, boolean shouldGenerate) {
+    public Chunk(Instance instance, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.identifier = UUID.randomUUID();
         this.instance = instance;
         this.chunkX = chunkX;
@@ -90,23 +88,23 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param block the block to place
      */
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
+    public void setBlock(int x, int y, int z, Block block) {
         setBlock(x, y, z, block, null, null);
     }
 
-    protected abstract void setBlock(int x, int y, int z, @NotNull Block block,
+    protected abstract void setBlock(int x, int y, int z, Block block,
                                      @Nullable BlockHandler.Placement placement,
                                      @Nullable BlockHandler.Destroy destroy);
 
-    public abstract @NotNull List<Section> getSections();
+    public abstract List<Section> getSections();
 
-    public abstract @NotNull Section getSection(int section);
+    public abstract Section getSection(int section);
 
-    public abstract @NotNull Heightmap motionBlockingHeightmap();
-    public abstract @NotNull Heightmap worldSurfaceHeightmap();
+    public abstract Heightmap motionBlockingHeightmap();
+    public abstract Heightmap worldSurfaceHeightmap();
     public abstract void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
 
-    public @NotNull Section getSectionAt(int blockY) {
+    public Section getSectionAt(int blockY) {
         return getSection(CoordConversion.globalToChunk(blockY));
     }
 
@@ -123,22 +121,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public abstract void tick(long time);
 
     /**
-     * Gets the last time that this chunk changed.
-     * <p>
-     * "Change" means here data used in {@link ChunkDataPacket}.
-     * It is necessary to see if the cached version of this chunk can be used
-     * instead of re-writing and compressing everything.
-     *
-     * @return the last change time in milliseconds
-     */
-    public abstract long getLastChangeTime();
-
-    /**
      * Sends the chunk data to {@code player}.
      *
      * @param player the player
      */
-    public void sendChunk(@NotNull Player player) {
+    public void sendChunk(Player player) {
         player.sendChunk(this);
     }
 
@@ -147,7 +134,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     }
 
     @ApiStatus.Internal
-    public abstract @NotNull SendablePacket getFullDataPacket();
+    public abstract SendablePacket getFullDataPacket();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
@@ -159,7 +146,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param chunkZ   the chunk Z of the copy
      * @return a copy of this chunk with a potentially new instance and position
      */
-    public abstract @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
+    public abstract Chunk copy(Instance instance, int chunkX, int chunkZ);
 
     /**
      * Resets the chunk, this means clearing all the data making it empty.
@@ -173,7 +160,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the chunk identifier
      */
-    public @NotNull UUID getIdentifier() {
+    public UUID getIdentifier() {
         return identifier;
     }
 
@@ -182,7 +169,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the linked instance
      */
-    public @NotNull Instance getInstance() {
+    public Instance getInstance() {
         return instance;
     }
 
@@ -227,7 +214,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the position of this chunk
      */
-    public @NotNull Point toPosition() {
+    public Point toPosition() {
         return new Vec(CHUNK_SIZE_X * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
 
@@ -291,22 +278,22 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
+    public boolean addViewer(Player player) {
         return viewable.addViewer(player);
     }
 
     @Override
-    public boolean removeViewer(@NotNull Player player) {
+    public boolean removeViewer(Player player) {
         return viewable.removeViewer(player);
     }
 
     @Override
-    public @NotNull Set<Player> getViewers() {
+    public Set<Player> getViewers() {
         return viewable.getViewers();
     }
 
     @Override
-    public @NotNull TagHandler tagHandler() {
+    public TagHandler tagHandler() {
         return tagHandler;
     }
 

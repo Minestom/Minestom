@@ -31,7 +31,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,14 +83,14 @@ public final class ConnectionManager {
     /**
      * Returns an unmodifiable set containing the players currently in the play state.
      */
-    public @NotNull Collection<@NotNull Player> getOnlinePlayers() {
+    public Collection<Player> getOnlinePlayers() {
         return unmodifiablePlayPlayers;
     }
 
     /**
      * Returns an unmodifiable set containing the players currently in the configuration state.
      */
-    public @NotNull Collection<@NotNull Player> getConfigPlayers() {
+    public Collection<Player> getConfigPlayers() {
         return unmodifiableConfigurationPlayers;
     }
 
@@ -104,7 +103,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @return the player linked to the connection
      */
-    public Player getPlayer(@NotNull PlayerConnection connection) {
+    public Player getPlayer(PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
     }
 
@@ -116,7 +115,7 @@ public final class ConnectionManager {
      * @param username the player username (case-insensitive)
      * @return the first player who validate the username condition, null if none was found
      */
-    public @Nullable Player getOnlinePlayerByUsername(@NotNull String username) {
+    public @Nullable Player getOnlinePlayerByUsername(String username) {
         for (Player player : getOnlinePlayers()) {
             if (player.getUsername().equalsIgnoreCase(username))
                 return player;
@@ -132,7 +131,7 @@ public final class ConnectionManager {
      * @param uuid the player UUID
      * @return the first player who validate the UUID condition, null if none was found
      */
-    public @Nullable Player getOnlinePlayerByUuid(@NotNull UUID uuid) {
+    public @Nullable Player getOnlinePlayerByUuid(UUID uuid) {
         for (Player player : getOnlinePlayers()) {
             if (player.getUuid().equals(uuid))
                 return player;
@@ -146,7 +145,7 @@ public final class ConnectionManager {
      * @param username the player username (can be partial)
      * @return the closest match, null if no players are online
      */
-    public @Nullable Player findOnlinePlayer(@NotNull String username) {
+    public @Nullable Player findOnlinePlayer(String username) {
         Player exact = getOnlinePlayerByUsername(username);
         if (exact != null) return exact;
         final String username1 = username.toLowerCase(Locale.ROOT);
@@ -171,14 +170,14 @@ public final class ConnectionManager {
     }
 
     @ApiStatus.Internal
-    public @NotNull Player createPlayer(@NotNull PlayerConnection connection, @NotNull GameProfile gameProfile) {
+    public Player createPlayer(PlayerConnection connection, GameProfile gameProfile) {
         assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
         final Player player = playerProvider.createPlayer(connection, gameProfile);
         this.connectionPlayerMap.put(connection, player);
         return player;
     }
 
-    public void sendRegistryTags(@NotNull Player player) {
+    public void sendRegistryTags(Player player) {
         player.sendPacket(cachedTagsPacket);
     }
 
@@ -189,7 +188,7 @@ public final class ConnectionManager {
         this.cachedTagsPacket.invalidate();
     }
 
-    public GameProfile transitionLoginToConfig(@NotNull PlayerConnection connection, @NotNull GameProfile gameProfile) {
+    public GameProfile transitionLoginToConfig(PlayerConnection connection, GameProfile gameProfile) {
         assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
         // Compression
         if (connection instanceof PlayerSocketConnection socketConnection) {
@@ -216,7 +215,7 @@ public final class ConnectionManager {
     }
 
     @ApiStatus.Internal
-    public void transitionPlayToConfig(@NotNull Player player) {
+    public void transitionPlayToConfig(Player player) {
         player.sendPacket(new StartConfigurationPacket());
         configurationPlayers.add(player);
     }
@@ -225,7 +224,7 @@ public final class ConnectionManager {
      * Return value exposed for testing
      */
     @ApiStatus.Internal
-    public void doConfiguration(@NotNull Player player, boolean isFirstConfig) {
+    public void doConfiguration(Player player, boolean isFirstConfig) {
         assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
         if (isFirstConfig) {
             configurationPlayers.add(player);
@@ -265,6 +264,7 @@ public final class ConnectionManager {
             player.sendPacket(registries.chatType().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.dimensionType().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.biome().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.dialog().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.damageType().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.trimMaterial().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.trimPattern().registryDataPacket(registries, excludeVanilla));
@@ -294,7 +294,7 @@ public final class ConnectionManager {
     }
 
     @ApiStatus.Internal
-    public void transitionConfigToPlay(@NotNull Player player) {
+    public void transitionConfigToPlay(Player player) {
         this.waitingPlayers.relaxedOffer(player);
     }
 
@@ -307,7 +307,7 @@ public final class ConnectionManager {
      * @see PlayerConnection#disconnect() to properly disconnect a player
      */
     @ApiStatus.Internal
-    public synchronized void removePlayer(@NotNull PlayerConnection connection) {
+    public synchronized void removePlayer(PlayerConnection connection) {
         final Player player = this.connectionPlayerMap.remove(connection);
         if (player == null) return;
         this.configurationPlayers.remove(player);
@@ -368,22 +368,22 @@ public final class ConnectionManager {
     /**
      * Updates keep alive by checking the last keep alive packet and send a new one if needed.
      *
-     * @param tickStart the time of the update in milliseconds, forwarded to the packet
+     * @param tickStart the time of the update in nanoseconds, forwarded to the packet
      */
-    private void handleKeepAlive(@NotNull Collection<Player> playerGroup, long tickStart) {
+    private void handleKeepAlive(Collection<Player> playerGroup, long tickStart) {
         final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
         for (Player player : playerGroup) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();
-            if (lastKeepAlive > ServerFlag.KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
+            if (lastKeepAlive > TimeUnit.MILLISECONDS.toNanos(ServerFlag.KEEP_ALIVE_DELAY) && player.didAnswerKeepAlive()) {
                 player.refreshKeepAlive(tickStart);
                 player.sendPacket(keepAlivePacket);
-            } else if (lastKeepAlive >= ServerFlag.KEEP_ALIVE_KICK) {
+            } else if (lastKeepAlive >= TimeUnit.MILLISECONDS.toNanos(ServerFlag.KEEP_ALIVE_KICK)) {
                 player.kick(TIMEOUT_TEXT);
             }
         }
     }
 
-    private @NotNull TagsPacket createTagsPacket() {
+    private TagsPacket createTagsPacket() {
         final List<TagsPacket.Registry> entries = new ArrayList<>();
 
         // The following are the registries which contain tags used by the vanilla client.
@@ -394,6 +394,7 @@ public final class ConnectionManager {
         entries.add(registries.blocks().tagRegistry());
         entries.add(registries.catVariant().tagRegistry());
         entries.add(registries.damageType().tagRegistry());
+        entries.add(registries.dialog().tagRegistry());
         entries.add(registries.enchantment().tagRegistry());
         entries.add(registries.entityType().tagRegistry());
         entries.add(registries.fluid().tagRegistry());

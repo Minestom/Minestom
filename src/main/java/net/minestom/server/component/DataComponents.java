@@ -16,19 +16,16 @@ import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.entity.metadata.water.AxolotlMeta;
 import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
 import net.minestom.server.entity.metadata.water.fish.TropicalFishMeta;
+import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.*;
 import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Holder;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.*;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Unit;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -91,8 +88,8 @@ public class DataComponents {
     public static final DataComponent<InstrumentComponent> INSTRUMENT = register("instrument", InstrumentComponent.NETWORK_TYPE, InstrumentComponent.CODEC);
     public static final DataComponent<ProvidesTrimMaterial> PROVIDES_TRIM_MATERIAL = register("provides_trim_material", ProvidesTrimMaterial.NETWORK_TYPE, ProvidesTrimMaterial.CODEC);
     public static final DataComponent<Integer> OMINOUS_BOTTLE_AMPLIFIER = register("ominous_bottle_amplifier", NetworkBuffer.VAR_INT, Codec.INT);
-    public static final DataComponent<RegistryKey<JukeboxSong>> JUKEBOX_PLAYABLE = register("jukebox_playable", JukeboxSong.NETWORK_TYPE, JukeboxSong.CODEC);
-    public static final DataComponent<String> PROVIDES_BANNER_PATTERNS = register("provides_banner_patterns", NetworkBuffer.STRING, Codec.STRING);
+    public static final DataComponent<RegistryKey<JukeboxSong>> JUKEBOX_PLAYABLE = register("jukebox_playable", JukeboxSong.JUKEBOX_PLAYABLE_NETWORK_TYPE, JukeboxSong.CODEC);
+    public static final DataComponent<TagKey<BannerPattern>> PROVIDES_BANNER_PATTERNS = register("provides_banner_patterns", TagKey.networkType(Registries::bannerPattern), TagKey.hashCodec(Registries::bannerPattern));
     public static final DataComponent<List<String>> RECIPES = register("recipes", NetworkBuffer.STRING.list(Short.MAX_VALUE), Codec.STRING.list(Short.MAX_VALUE));
     public static final DataComponent<LodestoneTracker> LODESTONE_TRACKER = register("lodestone_tracker", LodestoneTracker.NETWORK_TYPE, LodestoneTracker.CODEC);
     public static final DataComponent<FireworkExplosion> FIREWORK_EXPLOSION = register("firework_explosion", FireworkExplosion.NETWORK_TYPE, FireworkExplosion.CODEC);
@@ -134,7 +131,7 @@ public class DataComponents {
     public static final DataComponent<DyeColor> SHULKER_COLOR = register("shulker/color", DyeColor.NETWORK_TYPE, DyeColor.CODEC);
 
     // There are some components that are serialized to codec as an object containing a single field, for now we just inline them here.
-    private static <T> @NotNull Codec<T> wrapObject(@NotNull String fieldName, @NotNull Codec<T> serializer) {
+    private static <T> Codec<T> wrapObject(String fieldName, Codec<T> serializer) {
         return StructCodec.struct(fieldName, serializer, t -> t, t -> t);
     }
 }

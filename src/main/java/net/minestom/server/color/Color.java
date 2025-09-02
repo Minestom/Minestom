@@ -5,7 +5,6 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -21,6 +20,24 @@ public class Color implements RGBLike {
             Color::new,
             color -> Color.fromRGBLike(color).asRGB()
     );
+
+    public static final NetworkBuffer.Type<RGBLike> RGB_BYTE_NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(NetworkBuffer buffer, RGBLike value) {
+            buffer.write(NetworkBuffer.BYTE, (byte) value.red());
+            buffer.write(NetworkBuffer.BYTE, (byte) value.green());
+            buffer.write(NetworkBuffer.BYTE, (byte) value.blue());
+        }
+
+        @Override
+        public RGBLike read(NetworkBuffer buffer) {
+            final int red = buffer.read(NetworkBuffer.BYTE);
+            final int green = buffer.read(NetworkBuffer.BYTE);
+            final int blue = buffer.read(NetworkBuffer.BYTE);
+            return new Color(red, green, blue);
+        }
+    };
+
     public static final Codec<RGBLike> CODEC = Codec.INT
             .transform(Color::new, color -> Color.fromRGBLike(color).asRGB());
 
@@ -55,28 +72,28 @@ public class Color implements RGBLike {
      *
      * @param rgbLike the color
      */
-    public Color(@NotNull RGBLike rgbLike) {
+    public Color(RGBLike rgbLike) {
         this(rgbLike.red(), rgbLike.green(), rgbLike.blue());
     }
 
-    public static @NotNull Color fromRGBLike(@NotNull RGBLike rgbLike) {
+    public static Color fromRGBLike(RGBLike rgbLike) {
         if (rgbLike instanceof Color color) return color;
         return new Color(rgbLike.red(), rgbLike.green(), rgbLike.blue());
     }
 
-    public @NotNull Color withRed(int red) {
+    public Color withRed(int red) {
         return new Color(red, green, blue);
     }
 
-    public @NotNull Color withGreen(int green) {
+    public Color withGreen(int green) {
         return new Color(red, green, blue);
     }
 
-    public @NotNull Color withBlue(int blue) {
+    public Color withBlue(int blue) {
         return new Color(red, green, blue);
     }
 
-    public @NotNull AlphaColor withAlpha(int alpha) {
+    public AlphaColor withAlpha(int alpha) {
         return new AlphaColor(alpha, red, green, blue);
     }
 
@@ -100,7 +117,7 @@ public class Color implements RGBLike {
      *
      * @param colors the colors
      */
-    public @NotNull Color mixWith(@NotNull RGBLike... colors) {
+    public Color mixWith(RGBLike... colors) {
         int r = red, g = green, b = blue;
 
         // store the current highest component
