@@ -7,6 +7,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,9 +16,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static net.minestom.server.instance.light.LightCompute.*;
 
 final class BlockLight implements Light {
-    private byte[] content;
-    private byte[] contentPropagation;
-    private byte[] contentPropagationSwap;
+    private byte @Nullable [] content;
+    private byte @Nullable [] contentPropagation;
+    private byte @Nullable [] contentPropagationSwap;
 
     private volatile boolean isValidBorders = true;
     private final AtomicBoolean needsSend = new AtomicBoolean(false);
@@ -82,8 +83,10 @@ final class BlockLight implements Light {
 
     @Override
     public int getLevel(int x, int y, int z) {
+        var content = this.content;
         if (content == null) return 0;
         int index = x | (z << 4) | (y << 8);
+        var contentPropagation = this.contentPropagation;
         if (contentPropagation == null) return LightCompute.getLight(content, index);
         return Math.max(LightCompute.getLight(contentPropagation, index), LightCompute.getLight(content, index));
     }
@@ -121,7 +124,8 @@ final class BlockLight implements Light {
         if (!isValidBorders) return Set.of();
         ShortArrayFIFOQueue queue = buildExternalQueue(blockPalette, neighbors, content, lightLookup, paletteLookup);
         final byte[] contentPropagationTemp = LightCompute.compute(blockPalette, queue);
-        this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
+        var contentPropagationSwap = this.contentPropagationSwap;
+        this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap == null ? EMPTY_CONTENT : contentPropagationSwap, contentPropagationTemp);
         // Propagate changes to neighbors and self
         Set<Point> toUpdate = new HashSet<>();
         for (int i = 0; i < neighbors.length; i++) {

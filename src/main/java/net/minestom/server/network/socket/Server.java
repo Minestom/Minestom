@@ -132,7 +132,7 @@ public final class Server {
                 connection.disconnect();
                 break;
             } catch (Throwable e) {
-                boolean isExpected = e instanceof IOException && e.getMessage().equals("Broken pipe");
+                boolean isExpected = e instanceof IOException && "Broken pipe".equals(e.getMessage()) || "An established connection was aborted by the software in your host machine".equals(e.getMessage());
                 if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
 
                 connection.disconnect();
