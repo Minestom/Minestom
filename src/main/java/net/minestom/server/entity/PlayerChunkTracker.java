@@ -4,23 +4,16 @@ import it.unimi.dsi.fastutil.longs.*;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.chunksystem.ChunkAndClaim;
 import net.minestom.server.instance.chunksystem.ChunkClaim;
 import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.instance.chunksystem.ClaimCallbacks;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.sound.midi.Track;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -104,7 +97,7 @@ public class PlayerChunkTracker {
      * Special method to update the instance of the tracked object, but don't send any chunk updates.
      * Used for shared instances
      */
-    public void updateInstanceSameChunks(@NotNull Tracked tracked) {
+    public void updateInstanceSameChunks(Tracked tracked) {
         lock.lock();
         try {
             if (this.tracked == null) {
@@ -192,7 +185,7 @@ public class PlayerChunkTracker {
      * <p>
      * Always called from player tick thread
      */
-    public void startTracking(@NotNull Tracked tracked) {
+    public void startTracking(Tracked tracked) {
         lock.lock();
         try {
             if (this.tracked != null) {
@@ -250,7 +243,7 @@ public class PlayerChunkTracker {
     private ClaimCallbacks callbacks(Long2ObjectMap<Chunk> trackedVisibleChunks) {
         return new ClaimCallbacks() {
             @Override
-            public void chunkLoaded(@NotNull ChunkClaim claim, @NotNull Chunk chunk) {
+            public void chunkLoaded(ChunkClaim claim, Chunk chunk) {
                 var index = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
                 lock.lock();
                 try {
@@ -293,17 +286,14 @@ public class PlayerChunkTracker {
     public Tracked addClaim(Instance instance, int chunkX, int chunkZ) {
         var chunkManager = instance.getChunkManager();
         var trackedVisibleChunks = new Long2ObjectOpenHashMap<Chunk>();
-        var chunkAndClaim = chunkManager.addClaim(chunkX, chunkZ, this.player
-                .getSettings()
-                .effectiveViewDistance(), this.priority, CLAIM_SHAPE, callbacks(trackedVisibleChunks));
+        var chunkAndClaim = chunkManager.addClaim(chunkX, chunkZ, this.player.effectiveViewDistance(), this.priority, CLAIM_SHAPE, callbacks(trackedVisibleChunks));
         return new Tracked(chunkManager, chunkAndClaim, trackedVisibleChunks);
     }
 
     /**
      * @param visibleChunks the chunks that should be visible to the player. These chunks may still be in the chunk (send) queue.
      */
-    public record Tracked(@NotNull ChunkManager chunkManager, @NotNull ChunkAndClaim chunkAndClaim,
-                          @NotNull Long2ObjectMap<Chunk> visibleChunks) {
+    public record Tracked(ChunkManager chunkManager, ChunkAndClaim chunkAndClaim, Long2ObjectMap<Chunk> visibleChunks) {
         private void untrack() {
             chunkManager.removeClaim(chunkAndClaim.claim());
         }

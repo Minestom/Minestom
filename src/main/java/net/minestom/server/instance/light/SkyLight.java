@@ -153,7 +153,7 @@ final class SkyLight implements Light {
             final Point neighbor = neighbors[i];
             if (neighbor == null) continue;
             final BlockFace face = FACES[i];
-            if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {
+            if (LightCompute.hasGottenBrighter(content, contentPropagation, contentPropagationTemp, face)) {
                 toUpdate.add(neighbor);
             }
         }

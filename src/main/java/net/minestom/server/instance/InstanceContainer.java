@@ -239,7 +239,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @NotNull ChunkManager getChunkManager() {
+    public ChunkManager getChunkManager() {
         return this.chunkManager;
     }
 
@@ -283,19 +283,19 @@ public class InstanceContainer extends Instance {
 
     @Override
     @Deprecated
-    public CompletableFuture<Void> saveInstance() {
+    public CompletableFuture<@Nullable Void> saveInstance() {
         return chunkManager.saveInstanceData();
     }
 
     @Override
     @Deprecated
-    public CompletableFuture<Void> saveChunkToStorage(Chunk chunk) {
+    public CompletableFuture<@Nullable Void> saveChunkToStorage(Chunk chunk) {
         return chunkManager.saveChunk(chunk);
     }
 
     @Override
     @Deprecated
-    public CompletableFuture<Void> saveChunksToStorage() {
+    public CompletableFuture<@Nullable Void> saveChunksToStorage() {
         return chunkManager.saveChunks();
     }
 

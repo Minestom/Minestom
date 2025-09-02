@@ -186,7 +186,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the chunk's scheduler
      */
-    public @NotNull Scheduler getScheduler() {
+    public Scheduler getScheduler() {
         return scheduler;
     }
 

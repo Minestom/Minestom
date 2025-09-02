@@ -40,6 +40,12 @@ public interface Light {
     @ApiStatus.Internal
     byte @NotNull [] array();
 
+    /**
+     * Called after {@link #calculateInternal(Palette, int, int, int, int[], int, LightLookup)}
+     * or {@link #calculateExternal(Palette, Point[], LightLookup, PaletteLookup)} is called to
+     * swap the temporary(/builder-) propagation buffer to the stable propagation buffer
+     */
+    @ApiStatus.Internal
     void flip();
 
     /**
@@ -69,19 +75,36 @@ public interface Light {
      *
      * @param copyArray the data to set
      */
+    @ApiStatus.Internal
     void set(byte[] copyArray);
 
     @ApiStatus.Internal
-    Set<Point> calculateInternal(Palette blockPalette,
-                                 int chunkX, int chunkY, int chunkZ,
-                                 int[] heightmap, int maxY,
-                                 LightLookup lightLookup);
+    @NotNull LightCalculation createInternalCalculation(@NotNull Palette blockPalette, int chunkX, int chunkY, int chunkZ, int[] heightmap, int maxY, @NotNull LightLookup lightLookup);
 
     @ApiStatus.Internal
-    Set<Point> calculateExternal(Palette blockPalette,
-                                 Point[] neighbors,
-                                 LightLookup lightLookup,
-                                 PaletteLookup paletteLookup);
+    @NotNull LightCalculation createExternalCalculation(@NotNull Palette blockPalette, @NotNull Point @NotNull [] neighbors, @NotNull LightLookup lightLookup, @NotNull PaletteLookup paletteLookup);
+
+    /**
+     * @return true when successful
+     */
+    boolean applyInternalCalculation(@NotNull LightCalculation lightCalculation);
+
+    /**
+     * @return true when successful
+     */
+    boolean applyExternalCalculation(@NotNull LightCalculation lightCalculation);
+
+//    @ApiStatus.Internal
+//    Set<Point> calculateInternal(Palette blockPalette,
+//                                 int chunkX, int chunkY, int chunkZ,
+//                                 int[] heightmap, int maxY,
+//                                 LightLookup lightLookup);
+//
+//    @ApiStatus.Internal
+//    Set<Point> calculateExternal(Palette blockPalette,
+//                                 Point[] neighbors,
+//                                 LightLookup lightLookup,
+//                                 PaletteLookup paletteLookup);
 
     @ApiStatus.Internal
     static Point[] getNeighbors(Chunk chunk, int sectionY) {

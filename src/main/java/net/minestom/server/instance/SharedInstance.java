@@ -42,7 +42,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public @NotNull ChunkManager getChunkManager() {
+    public ChunkManager getChunkManager() {
         return instanceContainer.getChunkManager();
     }
 
@@ -67,17 +67,17 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public CompletableFuture<Void> saveInstance() {
+    public CompletableFuture<@Nullable Void> saveInstance() {
         return instanceContainer.saveInstance();
     }
 
     @Override
-    public CompletableFuture<Void> saveChunkToStorage(Chunk chunk) {
+    public CompletableFuture<@Nullable Void> saveChunkToStorage(Chunk chunk) {
         return instanceContainer.saveChunkToStorage(chunk);
     }
 
     @Override
-    public CompletableFuture<Void> saveChunksToStorage() {
+    public CompletableFuture<@Nullable Void> saveChunksToStorage() {
         return instanceContainer.saveChunksToStorage();
     }
 
@@ -137,7 +137,7 @@ public class SharedInstance extends Instance {
      * @param instance2 the second instance
      * @return true if the two instances share the same chunks
      */
-    public static boolean areLinked(Instance instance1, Instance instance2) {
+    public static boolean areLinked(@Nullable Instance instance1, @Nullable Instance instance2) {
         // SharedInstance check
         if (instance1 instanceof InstanceContainer && instance2 instanceof SharedInstance) {
             return ((SharedInstance) instance2).getInstanceContainer().equals(instance1);

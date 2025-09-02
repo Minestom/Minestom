@@ -115,17 +115,17 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             EntityType.BLOCK_DISPLAY);
     private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
 
-    protected Instance instance;
-    protected Chunk currentChunk;
+    protected @Nullable Instance instance;
+    protected @Nullable Chunk currentChunk;
     protected Pos position; // Should be updated by setPositionInternal only.
     protected Pos previousPosition;
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
     protected BoundingBox boundingBox;
-    private PhysicsResult previousPhysicsResult = null;
+    private @Nullable PhysicsResult previousPhysicsResult = null;
 
-    protected Entity vehicle;
+    protected @Nullable Entity vehicle;
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second

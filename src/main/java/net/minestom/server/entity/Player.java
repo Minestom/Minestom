@@ -1,7 +1,5 @@
 package net.minestom.server.entity;
 
-import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
-import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.dialog.DialogLike;
@@ -31,14 +29,15 @@ import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.coordinate.*;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerInputs;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.entity.EntityTeleportEvent;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -91,10 +90,8 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -112,7 +109,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
@@ -605,7 +601,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public CompletableFuture<Void> setInstance(Instance instance, Pos spawnPosition) {
         var start = System.nanoTime();
-        final Instance currentInstance = this.instance;
+        final @Nullable Instance currentInstance = this.instance;
         Check.argCondition(currentInstance == instance, "Instance should be different than the current one");
 
         // Must update the player chunks
@@ -627,10 +623,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         chunkQueue.resetState();
 
         // Wait for 3x3 chunks around spawn position to be loaded. We need to do this to prevent falling through the floor.
-        var future3x3 = new CompletableFuture<Void>();
+        var future3x3 = new CompletableFuture<@Nullable Void>();
         var temporaryClaim = instance.getChunkManager().addClaim(spawnPosition, 1, chunkTracker.getPriority(), ChunkClaim.Shape.SQUARE, new ClaimCallbacks() {
             @Override
-            public void allChunksLoaded(@NotNull ChunkClaim claim) {
+            public void allChunksLoaded(ChunkClaim claim) {
                 future3x3.complete(null);
             }
         });
@@ -2316,6 +2312,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public enum FacePoint {
         FEET,
         EYE
+    }
+
+    /**
+     * Gets the client's 'effective' view distance, which is the minimum of the client's view distance settings, and the local instance settings, plus one
+     * @return The effective chunk view distance range of the client
+     */
+    public int effectiveViewDistance() {
+        @Nullable Instance instance = this.instance;
+        int maxViewDistance = instance != null ? instance.viewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
+        return Math.min(settings.viewDistance(), maxViewDistance) + 1;
     }
 
     @SuppressWarnings("unchecked")

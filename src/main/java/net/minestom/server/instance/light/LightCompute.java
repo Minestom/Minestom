@@ -7,18 +7,15 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
 
 public final class LightCompute {
     static final Direction[] DIRECTIONS = Direction.values();
     static final BlockFace[] FACES = BlockFace.values();
-    static final int LIGHT_LENGTH = SECTION_BLOCK_COUNT / 2;
-    static final int SECTION_SIZE = 16;
     /**
      * One chunk section is 16x16x16.
      * One byte stores to light values, each 4 bit
@@ -128,7 +125,7 @@ public final class LightCompute {
         while (!lightPre.isEmpty()) {
             final int index = lightPre.dequeueShort();
 
-            final int newLightLevel = (index >> 12) & 15;
+            final int newLightLevel = (index >> 12) & 0xF;
             final int newIndex = index & 0xFFF;
 
             final int oldLightLevel = getLight(lightArray, newIndex);
@@ -158,7 +155,7 @@ public final class LightCompute {
                 }
 
                 // Section
-                final int newIndex = xO | (zO << 4) | (yO << 8);
+                final int newIndex = computeIndex(xO, yO, zO);
 
                 if (getLight(lightArray, newIndex) < newLightLevel) {
                     final Block currentBlock = Objects.requireNonNullElse(getBlock(blockPalette, x, y, z), Block.AIR);
@@ -186,13 +183,17 @@ public final class LightCompute {
     }
 
     static int getLight(byte[] light, int x, int y, int z) {
-        return getLight(light, x | (z << 4) | (y << 8));
+        return getLight(light, computeIndex(x, y, z));
     }
 
     static int getLight(byte[] light, int index) {
         if (index >>> 1 >= light.length) return 0;
         final int value = light[index >>> 1];
         return ((value >>> ((index & 1) << 2)) & 0xF);
+    }
+
+    static int computeIndex(int x, int y, int z) {
+        return x | (z << 4) | (y << 8);
     }
 
     public static Block getBlock(Palette palette, int x, int y, int z) {
@@ -237,19 +238,20 @@ public final class LightCompute {
         return lightMax;
     }
 
-    public static boolean compareBorders(byte[] content, byte[] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {
-        if (content == null && contentPropagation == null && contentPropagationTemp == null) return true;
+    public static boolean hasGottenBrighter(byte[] content, byte[] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {
+        if (content == null && contentPropagation == null && contentPropagationTemp == null) return false;
 
+        // k is the edge of the section, 0 for north, west and bottom(down), 15 for south, east and top(up)
         final int k = switch (face) {
             case WEST, BOTTOM, NORTH -> 0;
             case EAST, TOP, SOUTH -> 15;
         };
-        for (int bx = 0; bx < SECTION_SIZE; bx++) {
-            for (int by = 0; by < SECTION_SIZE; by++) {
+        for (int sectionX = 0; sectionX < SECTION_SIZE; sectionX++) {
+            for (int sectionZ = 0; sectionZ < SECTION_SIZE; sectionZ++) {
                 final int posFrom = switch (face) {
-                    case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
-                    case WEST, EAST -> k | (by << 4) | (bx << 8);
-                    default -> bx | (by << 4) | (k << 8);
+                    case NORTH, SOUTH -> computeIndex(sectionX, sectionZ, k);
+                    case WEST, EAST -> computeIndex(k, sectionX, sectionZ);
+                    case BOTTOM, TOP -> computeIndex(sectionX, k, sectionZ);
                 };
 
                 int valueFrom;
@@ -259,9 +261,9 @@ public final class LightCompute {
                 else valueFrom = Math.max(getLight(content, posFrom), getLight(contentPropagation, posFrom));
 
                 final int valueTo = getLight(contentPropagationTemp, posFrom);
-                if (valueFrom < valueTo) return false;
+                if (valueFrom < valueTo) return true;
             }
         }
-        return true;
+        return false;
     }
 }

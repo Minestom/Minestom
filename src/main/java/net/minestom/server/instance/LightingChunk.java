@@ -11,9 +11,12 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.instance.light.AbstractLight;
 import net.minestom.server.instance.light.Light;
+import net.minestom.server.instance.light.LightCalculation;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import org.jetbrains.annotations.Nullable;
 
@@ -337,6 +340,10 @@ public class LightingChunk extends DynamicChunk {
         } finally {
             packetGenerationLock.unlock();
         }
+    }
+
+    private UpdateLightPacket createLightPacket() {
+        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
     }
 
     @Override

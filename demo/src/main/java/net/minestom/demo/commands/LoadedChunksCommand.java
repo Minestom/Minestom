@@ -8,7 +8,7 @@ public class LoadedChunksCommand extends Command {
         super("loadedchunks");
         setDefaultExecutor((sender, context) -> {
             for (var instance : MinecraftServer.getInstanceManager().getInstances()) {
-                sender.sendMessage(instance.getDimensionName() + ": " + instance.getChunks().size());
+                sender.sendMessage(instance.getUuid() + ": " + instance.getChunks().size());
             }
         });
     }
