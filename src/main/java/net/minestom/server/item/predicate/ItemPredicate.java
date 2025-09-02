@@ -7,7 +7,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Range;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -28,20 +27,20 @@ public record ItemPredicate(
 
     public static final NetworkBuffer.Type<ItemPredicate> NETWORK_TYPE = NetworkBuffer.TypedNBT(CODEC);
 
-    public ItemPredicate(@NotNull List<Material> items) {
+    public ItemPredicate(List<Material> items) {
         this(items, null, null);
     }
 
-    public ItemPredicate(@NotNull Range.Int count, @Nullable List<Material> items) {
+    public ItemPredicate(Range.Int count, @Nullable List<Material> items) {
         this(items, count, null);
     }
 
-    public ItemPredicate(@NotNull DataComponentPredicates predicates) {
+    public ItemPredicate(DataComponentPredicates predicates) {
         this(null, null, predicates);
     }
 
     @Override
-    public boolean test(@NotNull ItemStack itemStack) {
+    public boolean test(ItemStack itemStack) {
         if (items != null && !items.contains(itemStack.material()))
             return false;
         if (count != null && !count.inRange(itemStack.amount()))

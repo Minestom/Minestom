@@ -23,7 +23,6 @@ import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.*;
 import net.minestom.server.utils.Range;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -32,7 +31,7 @@ import java.util.function.Predicate;
 public sealed interface DataComponentPredicate extends Predicate<DataComponent.Holder> {
 
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<Codec<? extends DataComponentPredicate>> createDefaultRegistry() {
+    static DynamicRegistry<Codec<? extends DataComponentPredicate>> createDefaultRegistry() {
         final DynamicRegistry<Codec<? extends DataComponentPredicate>> registry = DynamicRegistry.create(Key.key("minecraft:data_component_predicate_type"));
         registry.register("damage", Damage.CODEC);
         registry.register("enchantments", Enchantments.CODEC);
@@ -51,7 +50,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         return registry;
     }
 
-    @NotNull Codec<? extends DataComponentPredicate> codec();
+    Codec<? extends DataComponentPredicate> codec();
 
     /**
      * Tests damage or remaining durability.
@@ -67,7 +66,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             Integer damageValue = holder.get(DataComponents.DAMAGE);
             if (damageValue == null) {
                 return false;
@@ -79,7 +78,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -106,7 +105,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull EnchantmentList enchantmentList) {
+        public boolean test(EnchantmentList enchantmentList) {
             if (enchantments != null) {
                 for (RegistryKey<Enchantment> key : enchantments) {
                     if (enchantmentList.has(key) && (levels == null || levels.inRange(enchantmentList.level(key)))) {
@@ -130,7 +129,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param children The enchantment predicates to apply to the object. All items must pass for this predicate to pass.
      * @see EnchantmentListPredicate Information about enchantment matching
      */
-    record Enchantments(@NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
+    record Enchantments(List<EnchantmentListPredicate> children) implements DataComponentPredicate {
         public static final Codec<Enchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(Enchantments::new, Enchantments::children);
 
         public Enchantments {
@@ -143,13 +142,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             EnchantmentList enchantments = holder.get(DataComponents.ENCHANTMENTS);
             return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -161,7 +160,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see EnchantmentListPredicate Information about enchantment matching
      */
     record StoredEnchantments(
-            @NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
+            List<EnchantmentListPredicate> children) implements DataComponentPredicate {
         public static final Codec<StoredEnchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
 
         public StoredEnchantments {
@@ -174,13 +173,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             EnchantmentList enchantments = holder.get(DataComponents.STORED_ENCHANTMENTS);
             return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -194,7 +193,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public static final Codec<Potions> CODEC = RegistryTag.codec(Registries::potionType).transform(Potions::new, Potions::potionTypes).optional();
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             if (potionTypes == null) return false;
             var potion = holder.get(DataComponents.POTION_CONTENTS);
             if (potion == null || potion.potion() == null) return false;
@@ -202,7 +201,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -213,7 +212,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param nbt An NBT predicate to match against the object's custom data
      * @see NbtPredicate#compareNBT(BinaryTag, BinaryTag) Description of NBT comparison logic
      */
-    record CustomData(@NotNull NbtPredicate nbt) implements DataComponentPredicate {
+    record CustomData(NbtPredicate nbt) implements DataComponentPredicate {
         public static final Codec<CustomData> CODEC = NbtPredicate.CODEC.transform(CustomData::new, CustomData::nbt);
 
         public CustomData(@Nullable CompoundBinaryTag nbt) {
@@ -221,13 +220,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             net.minestom.server.item.component.CustomData other = holder.get(DataComponents.CUSTOM_DATA);
             return other != null && nbt.test(other.nbt());
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -245,13 +244,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             List<ItemStack> itemStacks = holder.get(DataComponents.CONTAINER);
             return items == null || items.test(itemStacks != null ? itemStacks.stream().filter(item -> !item.isAir()).toList() : List.of());
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -270,13 +269,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             List<ItemStack> itemStacks = holder.get(DataComponents.BUNDLE_CONTENTS);
             return items == null || items.test(itemStacks != null ? itemStacks : List.of());
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -320,7 +319,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             FireworkList fireworks = holder.get(DataComponents.FIREWORKS);
             if (fireworks == null) return false;
             if (flightDuration != null && !flightDuration.inRange(fireworks.flightDuration()))
@@ -329,7 +328,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -339,7 +338,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param delegate A predicate to match against the object's firework explosion
      */
-    record FireworkExplosion(@NotNull Fireworks.FireworkExplosionPredicate delegate) implements DataComponentPredicate {
+    record FireworkExplosion(Fireworks.FireworkExplosionPredicate delegate) implements DataComponentPredicate {
         public static final Codec<FireworkExplosion> CODEC = FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
 
         public FireworkExplosion(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
@@ -349,13 +348,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             net.minestom.server.item.component.FireworkExplosion explosion = holder.get(DataComponents.FIREWORK_EXPLOSION);
             return delegate.test(explosion);
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -374,25 +373,25 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             if (pages == null) return true;
             WritableBookContent content = holder.get(DataComponents.WRITABLE_BOOK_CONTENT);
             if (content == null) return false;
             return pages.test(content.pages());
         }
 
-        public record PagePredicate(@NotNull String contents) implements Predicate<FilteredText<String>> {
+        public record PagePredicate(String contents) implements Predicate<FilteredText<String>> {
 
             public static final Codec<PagePredicate> CODEC = Codec.STRING.transform(PagePredicate::new, PagePredicate::contents);
 
             @Override
-            public boolean test(@NotNull FilteredText<String> text) {
+            public boolean test(FilteredText<String> text) {
                 return text.text().equals(contents);
             }
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -422,7 +421,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             WrittenBookContent content = holder.get(DataComponents.WRITTEN_BOOK_CONTENT);
             if (content == null) return false;
 
@@ -438,17 +437,17 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             return pages == null || pages.test(content.pages());
         }
 
-        public record PagePredicate(@NotNull Component contents) implements Predicate<FilteredText<Component>> {
+        public record PagePredicate(Component contents) implements Predicate<FilteredText<Component>> {
             public static final Codec<PagePredicate> CODEC = Codec.COMPONENT.transform(PagePredicate::new, PagePredicate::contents);
 
             @Override
-            public boolean test(@NotNull FilteredText<Component> text) {
+            public boolean test(FilteredText<Component> text) {
                 return text.text().equals(contents);
             }
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -477,7 +476,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull AttributeList.Modifier other) {
+        public boolean test(AttributeList.Modifier other) {
             if (attribute != null && !attribute.key().equals(other.attribute().key()))
                 return false;
             if (id != null && !id.equals(other.modifier().id()))
@@ -505,7 +504,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             if (modifiers == null) return true;
             AttributeList attributes = holder.get(DataComponents.ATTRIBUTE_MODIFIERS);
             if (attributes == null) return false;
@@ -513,7 +512,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -534,7 +533,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             var trim = holder.get(DataComponents.TRIM);
             if (trim == null) return false;
             if (material != null && !trim.material().isDirect() && !material.contains(trim.material().asKey()))
@@ -543,7 +542,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }
@@ -561,14 +560,14 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(@NotNull DataComponent.Holder holder) {
+        public boolean test(DataComponent.Holder holder) {
             var song = holder.get(DataComponents.JUKEBOX_PLAYABLE);
             if (song == null) return false;
             return songs == null || songs.contains(song);
         }
 
         @Override
-        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+        public Codec<? extends DataComponentPredicate> codec() {
             return CODEC;
         }
     }

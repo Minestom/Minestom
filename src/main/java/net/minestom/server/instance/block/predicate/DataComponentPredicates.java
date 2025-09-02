@@ -7,9 +7,7 @@ import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.Range;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import net.minestom.server.utils.Unit;
 
 import java.util.*;
 import java.util.function.Function;

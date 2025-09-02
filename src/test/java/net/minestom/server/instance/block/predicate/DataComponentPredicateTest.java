@@ -25,7 +25,6 @@ import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.utils.Range;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +45,7 @@ public class DataComponentPredicateTest {
 
     private static final DataComponent.Holder EMPTY_HOLDER = new DataComponent.Holder() {
         @Override
-        public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        public <T> @Nullable T get(DataComponent<T> component) {
             return null;
         }
     };
