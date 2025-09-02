@@ -3,6 +3,7 @@ package net.minestom.server;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.component.DataComponents;
@@ -27,6 +28,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
@@ -76,6 +78,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
     private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
     private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
+    private final DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes;
 
     private final DynamicRegistry<ChatType> chatType;
     private final DynamicRegistry<Dialog> dialog;
@@ -130,6 +133,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
         this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
         this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
+        this.componentPredicateTypes = DataComponentPredicate.createDefaultRegistry();
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dialog = Dialog.createDefaultRegistry(this);
@@ -279,6 +283,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return enchantmentLocationEffects;
+    }
+
+    @Override
+    public DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+        return componentPredicateTypes;
     }
 
     @Override

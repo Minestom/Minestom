@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.kyori.adventure.text.format.Style;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
@@ -131,6 +132,11 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
             throw new IllegalArgumentException("Not a compound: " + value);
         return compound;
     }, compound -> compound);
+
+    Codec<CompoundBinaryTag> NBT_COMPOUND_COERCED = Codec.NBT_COMPOUND.orElse(Codec.STRING.transform(
+            string -> MinestomAdventure.tagStringIO().asCompound(string),
+            tag -> MinestomAdventure.tagStringIO().asString(tag)
+    ));
 
     /**
      * Creates an enum codec from a given class
@@ -345,7 +351,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      */
     @Contract(pure = true)
     default <V> Codec<Map<T, V>> mapValue(Codec<V> valueCodec, int maxSize) {
-        return new CodecImpl.MapImpl<>(Codec.this, valueCodec, maxSize);
+        return mapValue((ignored) -> valueCodec, maxSize);
     }
 
     /**
@@ -357,7 +363,15 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      */
     @Contract(pure = true)
     default <V> Codec<Map<T, V>> mapValue(Codec<V> valueCodec) {
-        return mapValue(valueCodec, Integer.MAX_VALUE);
+        return mapValue((ignored) -> valueCodec, Integer.MAX_VALUE);
+    }
+
+    default <V> Codec<Map<T, V>> mapValue(Function<T, Codec<V>> valueCodecGetter, int maxSize) {
+        return new CodecImpl.MapImpl<>(Codec.this, valueCodecGetter, maxSize);
+    }
+
+    default <V> Codec<Map<T, V>> mapValue(Function<T, Codec<V>> valueCodecGetter) {
+        return mapValue(valueCodecGetter, Integer.MAX_VALUE);
     }
 
     /**

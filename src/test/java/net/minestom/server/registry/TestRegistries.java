@@ -1,5 +1,6 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
@@ -13,6 +14,7 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
@@ -48,6 +50,7 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
     public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
     public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects = null;
+    public DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes = null;
 
     public TestRegistries() {
 
@@ -170,5 +173,10 @@ public class TestRegistries implements Registries {
     @Override
     public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return Objects.requireNonNull(enchantmentLocationEffects);
+    }
+
+    @Override
+    public DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+        return Objects.requireNonNull(componentPredicateTypes);
     }
 }
