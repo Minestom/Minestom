@@ -8,14 +8,13 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -157,19 +156,19 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, Block block,
-                         @Nullable BlockHandler.Placement placement,
-                         @Nullable BlockHandler.Destroy destroy) {
-        super.setBlock(x, y, z, block, placement, destroy);
+    public Block setBlock(BlockChange mutation) {
+        final Block block = super.setBlock(mutation);
         this.occlusionMap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change
-        int coordinate = CoordConversion.globalToChunk(y);
+        int coordinate = CoordConversion.globalToChunk(mutation.blockPosition().y());
         if (doneInit && !freezeInvalidation) {
             invalidateNeighborsSection(coordinate);
             invalidateResendDelay();
             this.partialLightCache.invalidate();
         }
+
+        return block;
     }
 
     public void sendLighting() {

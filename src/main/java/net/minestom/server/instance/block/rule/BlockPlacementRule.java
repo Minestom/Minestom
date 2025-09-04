@@ -1,15 +1,29 @@
 package net.minestom.server.instance.block.rule;
 
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
-import org.jetbrains.annotations.Nullable;
+import net.minestom.server.instance.block.BlockChange;
+import net.minestom.server.utils.Direction;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.List;
 
 public abstract class BlockPlacementRule {
-    public static final int DEFAULT_UPDATE_RANGE = 10;
+
+    /**
+     * The default update shape for blocks, which includes all 6 cardinal directions.
+     * This is used when a block is placed and needs to determine which neighbors to update.
+     * This is the same as the default block update shape &amp; order in Minecraft.
+     */
+    public static final @Unmodifiable List<Vec> DEFAULT_BLOCK_UPDATE_SHAPE = List.of(
+            Direction.WEST.vec(),
+            Direction.EAST.vec(),
+            Direction.NORTH.vec(),
+            Direction.SOUTH.vec(),
+            Direction.UP.vec(),
+            Direction.DOWN.vec()
+    );
 
     protected final Block block;
 
@@ -20,24 +34,46 @@ public abstract class BlockPlacementRule {
     /**
      * Called when the block state id can be updated (for instance if a neighbour block changed).
      * This is first called on a newly placed block, and then this is called for all neighbors of the block
-     *
-     * @param updateState The current parameters to the block update
-     * @return the updated block
      */
-    public Block blockUpdate(UpdateState updateState) {
-        return updateState.currentBlock();
+    public Block blockUpdate(BlockChange blockChange) {
+        return blockChange.block();
     }
 
     /**
      * Called when the block is placed.
      * It is recommended that you only set up basic properties on the block for this placement, such as determining facing, etc
      *
-     * @param placementState The current parameters to the block placement
      * @return the block to place, {@code null} to cancel
      */
-    public abstract @Nullable Block blockPlace(PlacementState placementState);
+    public abstract Block blockPlace(BlockChange blockChange);
 
-    public boolean isSelfReplaceable(Replacement replacement) {
+    /**
+     * Called to determine if the block should be updated based on the offset and the block that is being placed.
+     * This is used to determine if the block should be updated when a new block signals this block to update.
+     *
+     * @param offset The offset from the current block position
+     * @param block  The block that is being placed
+     * @return {@code true} if the block will consider the update, {@code false} otherwise
+     */
+    public boolean considerUpdate(Vec offset, Block block) {
+        for (Vec off : updateShape()) {
+            if (off.samePoint(offset)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The update shape of the block, used to determine which blocks should attempt to be updated by this block.
+     *
+     * @return the shape of the block
+     */
+    public @Unmodifiable List<Vec> updateShape() {
+        return DEFAULT_BLOCK_UPDATE_SHAPE;
+    }
+
+    public boolean isSelfReplaceable(BlockChange.Replacement blockChange) {
         return false;
     }
 
@@ -45,42 +81,7 @@ public abstract class BlockPlacementRule {
         return block;
     }
 
-    /**
-     * The max distance where a block update can be triggered. It is not based on block, so if the value is 3 and a completely
-     * different block updates 3 blocks away it could still trigger an update.
-     */
-    public int maxUpdateDistance() {
-        return DEFAULT_UPDATE_RANGE;
-    }
-
-    public record PlacementState(
-            Block.Getter instance,
-            Block block,
-            @Nullable BlockFace blockFace,
-            Point placePosition,
-            @Nullable Point cursorPosition,
-            @Nullable Pos playerPosition,
-            @Nullable ItemStack usedItemStack,
-            boolean isPlayerShifting
-    ) {
-    }
-
-    public record UpdateState(Block.Getter instance,
-                              Point blockPosition,
-                              Block currentBlock,
-                              BlockFace fromFace) {
-    }
-
-    public record Replacement(
-            Block block,
-            BlockFace blockFace,
-            Point cursorPosition,
-            /**
-			 * Whether or not the placement position is offset from the clicked block
-			 * position.
-			 */
-            boolean isOffset,
-            Material material
-    ) {
+    public boolean isClientPredicted() {
+        return false;
     }
 }
