@@ -2,33 +2,26 @@ package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.ai.EntityAI;
-import net.minestom.server.entity.ai.EntityAIGroup;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.entity.pathfinding.NavigatorImpl;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArraySet;
 
-public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
+public class EntityCreature extends LivingEntity implements NavigableEntity {
 
     private int removalAnimationDelay = 1000;
 
-    private final Set<EntityAIGroup> aiGroups = new CopyOnWriteArraySet<>();
-
-    private final Navigator navigator = new Navigator(this);
-
-    private Entity target;
+    private final EntityAI ai = new EntityAI();
+    private final Navigator navigator;
 
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
@@ -36,16 +29,21 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     public EntityCreature(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
         heal();
+        this.navigator = createNavigator();
     }
 
     public EntityCreature(EntityType entityType) {
         this(entityType, UUID.randomUUID());
     }
 
+    protected Navigator createNavigator() {
+        return new NavigatorImpl(this);
+    }
+
     @Override
     public void update(long time) {
         // AI
-        aiTick(time);
+        ai.tick(time);
 
         // Path finding
         this.navigator.tick();
@@ -93,28 +91,8 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         this.removalAnimationDelay = removalAnimationDelay;
     }
 
-    @Override
-    public Collection<EntityAIGroup> getAIGroups() {
-        return aiGroups;
-    }
-
-    /**
-     * Gets the entity target.
-     *
-     * @return the entity target, can be null if not any
-     */
-    @Nullable
-    public Entity getTarget() {
-        return target;
-    }
-
-    /**
-     * Changes the entity target.
-     *
-     * @param target the new entity target, null to remove
-     */
-    public void setTarget(@Nullable Entity target) {
-        this.target = target;
+    public EntityAI getAi() {
+        return ai;
     }
 
     @Override
