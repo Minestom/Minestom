@@ -68,7 +68,7 @@ public sealed interface DialogAction {
 
     record ShowDialog(Holder<Dialog> dialog) implements DialogAction {
         public static final StructCodec<ShowDialog> CODEC = StructCodec.struct(
-                "dialog", Holder.codec(Registries::dialog, Dialog.REGISTRY_CODEC), ShowDialog::dialog,
+                "dialog", Holder.codec(Registries::dialog, Codec.ForwardRef(() -> Dialog.REGISTRY_CODEC)), ShowDialog::dialog,
                 ShowDialog::new);
 
         @Override
