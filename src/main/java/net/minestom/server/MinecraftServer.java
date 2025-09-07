@@ -70,7 +70,7 @@ public final class MinecraftServer implements MinecraftConstants {
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
 
     // In-Game Manager
-    private static volatile @UnknownNullability ServerProcess serverProcess;
+    private static volatile ServerProcess serverProcess;
 
     private static int compressionThreshold = 256;
     private static String brandName = "Minestom";
