@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.testing.Env;
@@ -84,6 +85,13 @@ public class ItemTest {
         assertTrue(item1.isSimilar(item2));
         assertTrue(item1.withAmount(5).isSimilar(item2.withAmount(2)));
         assertFalse(item1.isSimilar(item2.with(DataComponents.CUSTOM_NAME, Component.text("Hey!"))));
+    }
+
+    @Test
+    public void testEqualityComponents(Env env) {
+        var item1 = ItemStack.of(Material.MUSIC_DISC_STAL);
+        var item2 = ItemStack.of(Material.MUSIC_DISC_STAL).with(DataComponents.JUKEBOX_PLAYABLE, JukeboxSong.STAL);
+        assertTrue(item1.isSimilar(item2));
     }
 
     @Test
