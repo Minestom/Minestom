@@ -1,8 +1,10 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.TagStringIO;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
@@ -13,6 +15,7 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +95,16 @@ public class ItemTest {
         var item1 = ItemStack.of(Material.MUSIC_DISC_STAL);
         var item2 = ItemStack.of(Material.MUSIC_DISC_STAL).with(DataComponents.JUKEBOX_PLAYABLE, JukeboxSong.STAL);
         assertTrue(item1.isSimilar(item2));
+    }
+
+    @Test
+    public void testFromNbtLoreSpace(Env env) throws IOException {
+        var itemStack = ItemStack.of(Material.LAPIS_BLOCK)
+                .withLore(Component.text("Hey!", NamedTextColor.RED), Component.empty(), Component.text("hello"))
+                .with(DataComponents.ITEM_MODEL, "unknown");
+        var tagOut = MinestomAdventure.tagStringIO().asString(itemStack.toItemNBT());
+        var tagIn = MinestomAdventure.tagStringIO().asCompound(tagOut);
+        assertEquals(itemStack, ItemStack.fromItemNBT(tagIn));
     }
 
     @Test
