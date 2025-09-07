@@ -494,8 +494,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         sendPacket(new RespawnPacket(dimensionTypeId, instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL,
-                DEFAULT_SEA_LEVEL));
+                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
@@ -1204,7 +1203,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final RespawnPacket respawnPacket = new RespawnPacket(dimensionTypeId,
                 instance.getDimensionName(), 0, gameMode, gameMode,
                 false, levelFlat, deathLocation, portalCooldown,
-                (byte) RespawnPacket.COPY_ALL, DEFAULT_SEA_LEVEL);
+                DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -1667,8 +1666,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
         sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL,
-                DEFAULT_SEA_LEVEL));
+                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
     }
 
