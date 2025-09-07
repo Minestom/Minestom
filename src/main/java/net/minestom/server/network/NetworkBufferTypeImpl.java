@@ -772,8 +772,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public void write(NetworkBuffer buffer, Map<K, V> map) {
             buffer.write(VAR_INT, map.size());
             for (Map.Entry<K, V> entry : map.entrySet()) {
-                buffer.write(parent, entry.getKey());
-                buffer.write(valueTypeGetter.apply(entry.getKey()), entry.getValue());
+                final K key = entry.getKey();
+                buffer.write(parent, key);
+                buffer.write(valueTypeGetter.apply(key), entry.getValue());
             }
         }
 
@@ -785,8 +786,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             K[] keys = (K[]) new Object[size];
             V[] values = (V[]) new Object[size];
             for (int i = 0; i < size; i++) {
-                keys[i] = buffer.read(parent);
-                values[i] = buffer.read(valueTypeGetter.apply(keys[i]));
+                final K key = buffer.read(parent);
+                keys[i] = key;
+                values[i] = buffer.read(valueTypeGetter.apply(key));
             }
             return Map.copyOf(new Object2ObjectArrayMap<>(keys, values, size));
         }

@@ -46,7 +46,7 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
 
         @Override
         public void write(NetworkBuffer buffer, DataComponentPredicates value) {
-            delegate.write(buffer, Objects.requireNonNullElseGet(value, () -> new DataComponentPredicates(null, null)));
+            delegate.write(buffer, Objects.requireNonNullElse(value, DataComponentPredicates.EMPTY));
         }
 
         @Override
@@ -67,8 +67,12 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
 
     @Override
     public boolean test(DataComponent.Holder holder) {
-        if (exact != null && !exact.entrySet().stream().allMatch(entry -> Objects.equals(holder.get(entry.component()), entry.value()))) {
-            return false;
+        if (exact != null) {
+            for (DataComponent.Value entry : exact.entrySet()) {
+                if (!Objects.equals(holder.get(entry.component()), entry.value())) {
+                    return false;
+                }
+            }
         }
         return predicates == null || predicates.test(holder);
     }

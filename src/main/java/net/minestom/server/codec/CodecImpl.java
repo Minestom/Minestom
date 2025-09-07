@@ -199,7 +199,7 @@ final class CodecImpl {
                 if (!(keyResult instanceof Result.Ok(K decodedKey)))
                     return keyResult.cast();
                 // The throwing decode here is fine since we are already iterating over known keys.
-                Codec<V> valueCodec;
+                final Codec<V> valueCodec;
                 try {
                     valueCodec = valueCodecGetter.apply(decodedKey);
                 } catch (Exception e) {
@@ -225,7 +225,7 @@ final class CodecImpl {
                 final Result<D> keyResult = keyCodec.encode(coder, entry.getKey());
                 if (!(keyResult instanceof Result.Ok(D encodedKey)))
                     return keyResult.cast();
-                Codec<V> valueCodec;
+                final Codec<V> valueCodec;
                 try {
                     valueCodec = valueCodecGetter.apply(entry.getKey());
                 } catch (Exception e) {

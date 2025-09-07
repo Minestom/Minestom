@@ -8,7 +8,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +43,7 @@ public record ComponentPredicateSet(Map<Integer, DataComponentPredicate> predica
             })
             .transform(ComponentPredicateSet::fromMap, ComponentPredicateSet::toMap);
 
+    @Contract(pure = true)
     private Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> toMap() {
         Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> map = new HashMap<>(this.predicates.size());
         for (Map.Entry<Integer, DataComponentPredicate> entry : predicates.entrySet()) {
@@ -53,13 +54,16 @@ public record ComponentPredicateSet(Map<Integer, DataComponentPredicate> predica
     }
 
     private static ComponentPredicateSet fromMap(Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> input) {
-        ComponentPredicateSet map = new ComponentPredicateSet(new Int2ObjectArrayMap<>(input.size()));
+        Int2ObjectArrayMap<DataComponentPredicate> map = new Int2ObjectArrayMap<>(input.size());
         for (DataComponentPredicate predicate : input.values()) {
-            map = map.add(predicate);
+            var key = MinecraftServer.componentPredicateTypes().getKey(predicate.codec());
+            Check.notNull(key, "Unknown DataComponentPredicate type");
+            map.put(MinecraftServer.componentPredicateTypes().getId(key), predicate);
         }
-        return map;
+        return new ComponentPredicateSet(map);
     }
 
+    @Contract(pure = true)
     public ComponentPredicateSet add(DataComponentPredicate predicate) {
         var newMap = new Int2ObjectArrayMap<>(predicates);
         var key = MinecraftServer.componentPredicateTypes().getKey(predicate.codec());
@@ -68,6 +72,7 @@ public record ComponentPredicateSet(Map<Integer, DataComponentPredicate> predica
         return new ComponentPredicateSet(newMap);
     }
 
+    @Contract(pure = true)
     public ComponentPredicateSet remove(DataComponentPredicate predicate) {
         var newMap = new Int2ObjectArrayMap<>(predicates);
         var key = MinecraftServer.componentPredicateTypes().getKey(predicate.codec());

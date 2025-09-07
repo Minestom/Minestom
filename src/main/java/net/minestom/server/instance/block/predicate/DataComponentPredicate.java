@@ -25,7 +25,10 @@ import net.minestom.server.utils.Range;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public sealed interface DataComponentPredicate extends Predicate<DataComponent.Holder> {
@@ -115,7 +118,12 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 return false;
             } else if (levels != null) {
                 // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
-                return enchantmentList.enchantments().entrySet().stream().anyMatch(entry -> levels.inRange(entry.getValue()));
+                for (int enchantmentLevel : enchantmentList.enchantments().values()) {
+                    if (levels.inRange(enchantmentLevel)) {
+                        return true;
+                    }
+                }
+                return false;
             } else {
                 // If neither are specified, the predicate returns true when the item has any enchantments
                 return !enchantmentList.enchantments().isEmpty();
@@ -144,7 +152,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         @Override
         public boolean test(DataComponent.Holder holder) {
             EnchantmentList enchantments = holder.get(DataComponents.ENCHANTMENTS);
-            return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
+            if (enchantments == null) return false;
+            for (EnchantmentListPredicate child : children) {
+                if (!child.test(enchantments)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         @Override
@@ -175,7 +189,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         @Override
         public boolean test(DataComponent.Holder holder) {
             EnchantmentList enchantments = holder.get(DataComponents.STORED_ENCHANTMENTS);
-            return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
+            if (enchantments == null) return false;
+            for (EnchantmentListPredicate child : children) {
+                if (!child.test(enchantments)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         @Override
@@ -245,8 +265,9 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
         @Override
         public boolean test(DataComponent.Holder holder) {
-            List<ItemStack> itemStacks = holder.get(DataComponents.CONTAINER);
-            return items == null || items.test(itemStacks != null ? itemStacks.stream().filter(item -> !item.isAir()).toList() : List.of());
+            List<ItemStack> itemStacks = new ArrayList<>(Objects.requireNonNullElseGet(holder.get(DataComponents.CONTAINER), List::of));
+            itemStacks.removeIf(ItemStack::isAir);
+            return items == null || items.test(itemStacks);
         }
 
         @Override

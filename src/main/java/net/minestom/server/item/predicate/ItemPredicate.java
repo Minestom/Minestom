@@ -39,6 +39,12 @@ public record ItemPredicate(
         this(null, null, predicates);
     }
 
+    public ItemPredicate {
+        if (items != null) {
+            items = List.copyOf(items);
+        }
+    }
+
     @Override
     public boolean test(ItemStack itemStack) {
         if (items != null && !items.contains(itemStack.material()))

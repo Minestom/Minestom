@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.predicate;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.utils.Range;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -95,7 +96,13 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
 
             @Override
             public boolean test(Collection<T> collection) {
-                return this.count.inRange((int) collection.stream().filter(this.predicate).count());
+                int count = 0;
+                for (T item : collection) {
+                    if (this.predicate.test(item)) {
+                        count++;
+                    }
+                }
+                return this.count.inRange(count);
             }
         }
 
@@ -114,11 +121,12 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
         }
     }
 
+    @Contract(pure = true)
     public static <T, P extends Predicate<T>> CollectionPredicate.Builder<T, P> builder() {
         return new CollectionPredicate.Builder<>();
     }
 
-    public static class Builder<T, P extends Predicate<T>> {
+    public static final class Builder<T, P extends Predicate<T>> {
 
         private final List<P> containsList = new ArrayList<>();
         private final List<Count.Entry<T, P>> countList = new ArrayList<>();
