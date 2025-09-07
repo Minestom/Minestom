@@ -35,7 +35,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      */
     record Error<T>(String message) implements Result<T> {
         public Error {
-            message = Objects.requireNonNull(message, "Message cannot be null");
+            Objects.requireNonNull(message, "Message cannot be null");
         }
     }
 
@@ -100,7 +100,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @throws IllegalStateException if this instance of {@link Error}
      */
     @Contract(pure = true)
-    default @UnknownNullability T orElseThrow() {
+    default T orElseThrow() {
         return switch (this) {
             case Ok<T>(T value) -> value;
             case Error<?>(String errorMessage) -> throw new IllegalArgumentException(errorMessage);
@@ -115,7 +115,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @throws IllegalStateException if this instance of {@link Error}
      */
     @Contract(pure = true)
-    default @UnknownNullability T orElseThrow(String message) {
+    default T orElseThrow(String message) {
         return switch (this) {
             case Ok<T>(T value) -> value;
             case Error<?>(String errorMessage) -> throw new IllegalArgumentException(

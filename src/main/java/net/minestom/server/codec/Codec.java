@@ -144,6 +144,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      */
     @Contract(pure = true)
     static <E extends Enum<E>> Codec<E> Enum(Class<E> enumClass) {
+        Objects.requireNonNull(enumClass, "Enum class cannot be null");
         return STRING.transform(
                 value -> Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT)),
                 value -> value.name().toLowerCase(Locale.ROOT));
@@ -193,6 +194,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
             Function<T, StructCodec<? extends T>> serializerGetter,
             String key
     ) {
+        Objects.requireNonNull(registry, "registry");
         return Codec.RegistryTaggedUnion((ignored) -> registry, serializerGetter, key);
     }
 
