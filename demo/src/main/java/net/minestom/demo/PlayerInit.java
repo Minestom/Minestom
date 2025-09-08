@@ -126,7 +126,7 @@ public class PlayerInit {
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
                         .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(List.of(
-                                new BlockPredicate(RegistryTag.direct(Block.OAK_SIGN), PropertiesPredicate.exact("rotation", "1"), null, null),
+                                new BlockPredicate(RegistryTag.direct(Block.OAK_SIGN), PropertiesPredicate.exact("rotation", "1"), null, DataComponentPredicates.EMPTY),
                                 new BlockPredicate(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build()),
                                 new BlockPredicate(
                                         DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(CustomData.EMPTY, 10, 5))).build()

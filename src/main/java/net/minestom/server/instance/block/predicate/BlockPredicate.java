@@ -16,10 +16,10 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.block.BlockUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -46,13 +46,13 @@ public record BlockPredicate(
     /**
      * Matches all blocks.
      */
-    public static final BlockPredicate ALL = new BlockPredicate(null, null, null, null);
+    public static final BlockPredicate ALL = new BlockPredicate(null, null, null, DataComponentPredicates.EMPTY);
     /**
      * <p>Matches no blocks.</p>
      *
      * <p>Works based on the property that an exact property will never match a property which doesn't exist on any block.</p>
      */
-    public static final BlockPredicate NONE = new BlockPredicate(null, new PropertiesPredicate(Map.of("no_such_property", new PropertiesPredicate.ValuePredicate.Exact("never"))), null, null);
+    public static final BlockPredicate NONE = new BlockPredicate(null, new PropertiesPredicate(Map.of("no_such_property", new PropertiesPredicate.ValuePredicate.Exact("never"))), null, DataComponentPredicates.EMPTY);
 
     public static final NetworkBuffer.Type<BlockPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
             RegistryTag.networkType(Registries::blocks).optional(), BlockPredicate::blocks,
@@ -71,7 +71,7 @@ public record BlockPredicate(
     );
 
     public BlockPredicate(RegistryTag<Block> blocks) {
-        this(blocks, null, null, null);
+        this(blocks, null, null, DataComponentPredicates.EMPTY);
     }
 
     public BlockPredicate(Block... blocks) {
@@ -79,7 +79,7 @@ public record BlockPredicate(
     }
 
     public BlockPredicate(PropertiesPredicate state) {
-        this(null, state, null, null);
+        this(null, state, null, DataComponentPredicates.EMPTY);
     }
 
     public BlockPredicate(CompoundBinaryTag nbt) {
@@ -87,15 +87,15 @@ public record BlockPredicate(
     }
 
     public BlockPredicate(NbtPredicate nbt) {
-        this(null, null, nbt, null);
+        this(null, null, nbt, DataComponentPredicates.EMPTY);
     }
 
     public BlockPredicate(DataComponentMap components) {
-        this(null, null, null, new DataComponentPredicates(components, null));
+        this(null, null, null, new DataComponentPredicates(components, ComponentPredicateSet.EMPTY));
     }
 
     public BlockPredicate(ComponentPredicateSet predicates) {
-        this(null, null, null, new DataComponentPredicates(null, predicates));
+        this(null, null, null, new DataComponentPredicates(DataComponentMap.EMPTY, predicates));
     }
 
     public BlockPredicate(DataComponentPredicates predicates) {
@@ -103,14 +103,11 @@ public record BlockPredicate(
     }
 
     public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable NbtPredicate nbt) {
-        this(blocks, state, nbt, null);
+        this(blocks, state, nbt, DataComponentPredicates.EMPTY);
     }
 
-    public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable NbtPredicate nbt, @Nullable DataComponentPredicates components) {
-        this.blocks = blocks;
-        this.state = state;
-        this.nbt = nbt;
-        this.components = Objects.requireNonNullElse(components, DataComponentPredicates.EMPTY);
+    public BlockPredicate {
+        Check.notNull(components, "Component predicates cannot be null");
     }
 
     @Override
@@ -121,7 +118,7 @@ public record BlockPredicate(
             return false;
         if (nbt != null && (block.nbt() == null || !nbt.test(BlockUtils.extractClientNbt(block))))
             return false;
-        if ((components.exact() == null || components.exact().isEmpty()) && (components.predicates() == null || components.predicates().isEmpty()))
+        if (components.exact().isEmpty() && components.predicates().isEmpty())
             return true;
         if (block.nbt() == null)
             return false; // If a block has no NBT (it's not a block entity), any component predicates must return false

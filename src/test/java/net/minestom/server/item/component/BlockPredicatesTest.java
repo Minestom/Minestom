@@ -13,6 +13,7 @@ import net.minestom.server.instance.block.predicate.ComponentPredicateSet;
 import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.registry.RegistryTag;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicates> {
 
     @Override
-    protected DataComponent<BlockPredicates> component() {
+    protected DataComponent<@NotNull BlockPredicates> component() {
         return DataComponents.CAN_PLACE_ON; // CAN_BREAK is the same thing
     }
 

@@ -48,6 +48,7 @@ public record ComponentPredicateSet(Map<Integer, DataComponentPredicate> predica
         Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> map = new HashMap<>(this.predicates.size());
         for (Map.Entry<Integer, DataComponentPredicate> entry : predicates.entrySet()) {
             var key = MinecraftServer.componentPredicateTypes().getKey(entry.getKey());
+            assert key != null;
             map.put(key, entry.getValue());
         }
         return map;
