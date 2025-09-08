@@ -366,10 +366,32 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
         return mapValue((ignored) -> valueCodec, Integer.MAX_VALUE);
     }
 
+    /**
+     * Creates a map of key {@link T} and value of {@link V}.
+     * <p>
+     * Note: this method accepts a function that returns a {@link Codec} for each key.
+     * If you are using the same codec for every key, consider using {@link #mapValue(Codec)}.
+     *
+     * @param valueCodecGetter a function that maps a key to the codec to use for the value, {@link V}
+     * @param <V>              the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
+    @Contract(pure = true)
     default <V> Codec<Map<T, V>> mapValue(Function<T, Codec<V>> valueCodecGetter, int maxSize) {
         return new CodecImpl.MapImpl<>(Codec.this, valueCodecGetter, maxSize);
     }
 
+    /**
+     * Creates a map of key {@link T} and value of {@link V}. See {@link #mapValue(Function, int)}
+     * <p>
+     * Note: this method accepts a function that returns a {@link Codec} for each key.
+     * If you are using the same codec for every key, consider using {@link #mapValue(Codec)}.
+     *
+     * @param valueCodecGetter a function that maps a key to the codec to use for the value, {@link V}
+     * @param <V>              the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
+    @Contract(pure = true)
     default <V> Codec<Map<T, V>> mapValue(Function<T, Codec<V>> valueCodecGetter) {
         return mapValue(valueCodecGetter, Integer.MAX_VALUE);
     }
