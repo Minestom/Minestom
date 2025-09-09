@@ -1,5 +1,7 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
@@ -11,6 +13,7 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -30,6 +33,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.predicate.*;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -37,11 +41,15 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.Bee;
+import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Consumable;
+import net.minestom.server.item.component.CustomData;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
@@ -115,12 +123,19 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
-//                ItemStack itemStack = ItemStack.builder(Material.STONE)
-//                        .amount(64)
-//                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
-//                        .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
-//                        .build();
-//                player.getInventory().addItemStack(itemStack);
+                ItemStack itemStack = ItemStack.builder(Material.STONE)
+                        .amount(64)
+                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(List.of(
+                                new BlockPredicate(RegistryTag.direct(Block.OAK_SIGN), PropertiesPredicate.exact("rotation", "1"), null, DataComponentPredicates.EMPTY),
+                                new BlockPredicate(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build()),
+                                new BlockPredicate(
+                                        DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(CustomData.EMPTY, 10, 5))).build()
+                                ),
+                                new BlockPredicate(new ComponentPredicateSet().add(new DataComponentPredicate.CustomData(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build())))
+                        )))
+                        .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(Block.DIAMOND_ORE)))
+                        .build();
+                player.getInventory().addItemStack(itemStack);
 
                 player.sendPacket(new CustomReportDetailsPacket(Map.of(
                         "hello", "world"

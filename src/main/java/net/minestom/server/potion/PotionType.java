@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,5 +29,9 @@ public sealed interface PotionType extends StaticProtocolObject<PotionType>, Pot
 
     static @Nullable PotionType fromId(int id) {
         return PotionTypeImpl.REGISTRY.get(id);
+    }
+
+    static Registry<PotionType> staticRegistry() {
+        return PotionTypeImpl.REGISTRY;
     }
 }

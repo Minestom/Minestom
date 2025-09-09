@@ -1,5 +1,6 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.EntityType;
@@ -16,6 +17,7 @@ import net.minestom.server.game.GameEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.instance.fluid.Fluid;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.armor.TrimMaterial;
@@ -24,6 +26,7 @@ import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 
@@ -48,6 +51,10 @@ public interface Registries {
 
     default Registry<PotionEffect> potionEffect() {
         return PotionEffect.staticRegistry();
+    }
+
+    default Registry<PotionType> potionType() {
+        return PotionType.staticRegistry();
     }
 
     default Registry<EntityType> entityType() {
@@ -112,6 +119,8 @@ public interface Registries {
 
     DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects();
 
+    DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes();
+
     @FunctionalInterface
     interface Selector<T> {
         Registry<T> select(Registries registries);
@@ -137,6 +146,11 @@ public interface Registries {
         @Override
         public Registry<PotionEffect> potionEffect() {
             return delegate.potionEffect();
+        }
+
+        @Override
+        public Registry<PotionType> potionType() {
+            return delegate.potionType();
         }
 
         @Override
@@ -267,6 +281,11 @@ public interface Registries {
         @Override
         public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
             return delegate.enchantmentLocationEffects();
+        }
+
+        @Override
+        public DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+            return delegate.componentPredicateTypes();
         }
     }
 }
