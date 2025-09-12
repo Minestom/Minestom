@@ -450,20 +450,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         }
 
         /**
-         * Creates a new {@link InputStream} for this {@link NetworkBuffer}.
-         * @return the view of the buffer as an input stream
-         */
-        @Contract(pure = true)
-        InputStream inputStream();
-
-        /**
-         * Creates a new {@link OutputStream} for this {@link NetworkBuffer}.
-         * @return the view of the buffer as an output stream
-         */
-        @Contract(pure = true)
-        OutputStream outputStream();
-
-        /**
          * @throws UnsupportedOperationException not implemented.
          */
         @Override

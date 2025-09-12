@@ -2,10 +2,6 @@ package net.minestom.server.network;
 
 import net.minestom.server.utils.validate.Check;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -20,68 +16,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
  */
 record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IOView {
     NetworkBufferIOViewImpl {
-        Check.notNull(buffer, "Buffer cannot be null");
-    }
-
-    @Override
-    public OutputStream outputStream() {
-        return new OutputStream() {
-            @Override
-            public void write(int b) {
-                buffer.write(BYTE, (byte) b);
-            }
-
-            @Override
-            public void write(byte[] b, int off, int len) {
-                buffer.write(RAW_BYTES, Arrays.copyOfRange(b, off, len));
-            }
-        };
-    }
-
-    @Override
-    public InputStream inputStream() {
-        return new InputStream() {
-            @Override
-            public int read() {
-                return buffer.read(BYTE) & 0xFF;
-            }
-
-            @Override
-            public int read(byte[] b, int off, int len) {
-                // We will let the caller get an exception if the length is invalid.
-                // TODO Not a compliant impl of InputStream.
-                var newBytes = buffer.read(NetworkBuffer.FixedRawBytes(len - off));
-                System.arraycopy(newBytes, 0, b, off, len);
-                return newBytes.length;
-            }
-
-            @Override
-            public long skip(long n) {
-                var currentReadIndex = buffer.readIndex();
-                var readableBytes = buffer.readableBytes();
-                if (currentReadIndex + n > readableBytes) {
-                    n = readableBytes - currentReadIndex;
-                }
-                if (n > 0) buffer.advanceRead(n);
-                return n;
-            }
-
-            @Override
-            public void skipNBytes(long n) throws IOException {
-                var shouldSkipTo = buffer.readIndex() + n;
-                var skippedTo = Math.min(shouldSkipTo, buffer.readableBytes());
-                if (skippedTo != shouldSkipTo) {
-                    throw new EOFException("Not enough bytes to skip");
-                }
-                // Otherwise advance the read.
-                buffer.advanceRead(n);
-            }
-
-            @Override
-            public int available() {
-                return (int) buffer.readableBytes();
-            }
-        };
+        Objects.requireNonNull(buffer, "Buffer cannot be null");
     }
 
     @Override
@@ -164,7 +99,6 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
     }
 
     @Override
-
     public String readUTF() {
         return buffer.read(STRING_IO_UTF8);
     }
