@@ -514,7 +514,7 @@ public class NetworkBufferTest {
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
             assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
-            buffer = confinedBuffer.copy(arena, confinedBuffer.readIndex(), confinedBuffer.readableBytes());
+            buffer = confinedBuffer.copy(arena, confinedBuffer.readIndex(), confinedBuffer.readableBytes(),0, confinedBuffer.readableBytes());
         }
         assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
     }
@@ -528,10 +528,24 @@ public class NetworkBufferTest {
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, stringBytes);
             assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
-            buffer = confinedBuffer.copy(confinedBuffer.readIndex(), confinedBuffer.readableBytes());
+            buffer = confinedBuffer.copy(confinedBuffer.readIndex(), confinedBuffer.readableBytes(), 0, confinedBuffer.readableBytes());
         }
         var bytes = buffer.read(RAW_BYTES);
         assertArrayEquals(stringBytes, bytes);
+    }
+
+    @Test
+    public void testTrim() {
+        var buffer = NetworkBuffer.builder(256).build();
+        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
+        buffer.write(VAR_INT, Integer.MAX_VALUE);
+        buffer.write(RAW_BYTES, stringBytes);
+        buffer = buffer.trim(Arena.ofAuto());
+        assertEquals(10, buffer.capacity());
+        assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
+        assertArrayEquals(stringBytes, buffer.read(RAW_BYTES));
+        buffer = buffer.trim(Arena.ofAuto());
+        assertEquals(0, buffer.capacity());
     }
 
     @Test

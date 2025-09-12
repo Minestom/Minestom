@@ -159,9 +159,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
-    void copyTo(long srcOffset, byte [] dest, long destOffset, long length);
+    @Deprecated(forRemoval = true) // No longer long's
+    default void copyTo(long srcOffset, byte[] dest, long destOffset, long length) {
+        this.copyTo(srcOffset, dest, Math.toIntExact(destOffset), Math.toIntExact(length));
+    }
 
-    byte [] extractBytes(Consumer<NetworkBuffer> extractor);
+    void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
+
+    byte[] extractBytes(Consumer<NetworkBuffer> extractor);
 
     NetworkBuffer clear();
 
@@ -194,16 +199,17 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void ensureWritable(long length);
 
     /**
-     * Compact all the data from the readIndex to the writing index to be zero aligned.
+     * Compact (copies) all the data from the readIndex to the writing index to be zero aligned.
      * This does not change the buffer capacity.
      */
     void compact();
 
-    /**
-     * Trims the network buffer from its read index to its write index.
-     * This shrinks the buffer to the minimum size required to hold the data in [readIndex, writeIndex] and will be #{@link #readableBytes()} size.
-     */
-    void trim();
+    @Contract(pure = true)
+    NetworkBuffer trim();
+
+    @ApiStatus.Experimental
+    @Contract(pure = true)
+    NetworkBuffer trim(Arena arena);
 
     @Contract(pure = true)
     default NetworkBuffer copy(long index, long length) {
@@ -222,7 +228,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     @ApiStatus.Experimental
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _, _, _, _ -> new")
     NetworkBuffer copy(Arena arena, long index, long length, long readIndex, long writeIndex);
 
     @Contract(pure = true)
@@ -336,11 +342,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return NetworkBufferImpl.wrap(segment, readIndex, writeIndex, registries);
     }
 
-    static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
         return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
     }
 
-    static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex) {
+    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
         return wrap(bytes, readIndex, writeIndex, null);
     }
 
@@ -360,6 +366,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         @Contract(pure = true)
         Builder registry(@Nullable Registries registries);
 
+        @Contract("-> new")
         NetworkBuffer build();
     }
 
