@@ -229,7 +229,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         assertReadOnly();
         final long readableBytes = readableBytes();
         if (readableBytes == capacity()) return this;
-        if (arena == null) arena = Arena.ofAuto(); // hmmm....
+        if (arena == null) arena = defaultArena();
         return copy(arena, readIndex, readableBytes, 0, readableBytes);
     }
 
@@ -500,7 +500,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         @Override
         public NetworkBuffer build() {
-            if (this.arena == null) this.arena = Arena.ofAuto();
+            if (this.arena == null) this.arena = defaultArena();
             return new NetworkBufferImpl(
                     arena, arena.allocate(initialSize),
                     0, 0,
@@ -509,6 +509,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     }
 
+    @Contract(pure = true)
     static NetworkBufferImpl dummy(@Nullable Registries registries) {
         // Dummy buffer with no memory allocated
         // Useful for size calculations
@@ -521,5 +522,10 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     @Contract(pure = true)
     static NetworkBufferImpl impl(NetworkBuffer buffer) {
         return (NetworkBufferImpl) buffer;
+    }
+
+    @Contract
+    static Arena defaultArena() {
+        return Arena.ofAuto();
     }
 }

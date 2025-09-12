@@ -224,7 +224,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     @Contract(pure = true)
     default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex){
-        return copy(Arena.ofAuto(), index, length, readIndex, writeIndex);
+        return copy(NetworkBufferImpl.defaultArena(), index, length, readIndex, writeIndex);
     }
 
     @ApiStatus.Experimental
