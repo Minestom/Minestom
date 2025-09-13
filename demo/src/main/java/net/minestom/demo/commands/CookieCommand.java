@@ -1,5 +1,6 @@
 package net.minestom.demo.commands;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -16,7 +17,7 @@ public class CookieCommand extends Command {
     }
 
     public static class Store extends Command {
-        private final Argument<String> keyArg = ArgumentType.ResourceLocation("key");
+        private final Argument<Key> keyArg = ArgumentType.ResourceLocation("key");
         private final Argument<String[]> valueArg = ArgumentType.StringArray("value");
 
         public Store() {
@@ -28,7 +29,7 @@ public class CookieCommand extends Command {
         private void store(CommandSender sender, CommandContext context) {
             if (!(sender instanceof Player player)) return;
 
-            String key = context.get(keyArg);
+            String key = context.get(keyArg).asString();
             byte[] value = String.join(" ", context.get(valueArg)).getBytes();
 
             player.getPlayerConnection().storeCookie(key, value);
@@ -37,7 +38,7 @@ public class CookieCommand extends Command {
     }
 
     public static class Fetch extends Command {
-        private final Argument<String> keyArg = ArgumentType.ResourceLocation("key");
+        private final Argument<Key> keyArg = ArgumentType.ResourceLocation("key");
 
         public Fetch() {
             super("fetch");
@@ -48,7 +49,7 @@ public class CookieCommand extends Command {
         private void fetch(CommandSender sender, CommandContext context) {
             if (!(sender instanceof Player player)) return;
 
-            String key = context.get(keyArg);
+            String key = context.get(keyArg).asString();
 
             player.getPlayerConnection().fetchCookie(key).thenAccept(value -> {
                 if (value == null) {
