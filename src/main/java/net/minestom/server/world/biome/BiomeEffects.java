@@ -23,8 +23,7 @@ public record BiomeEffects(
         @Nullable SoundEvent ambientSound,
         @Nullable BiomeEffects.MoodSound moodSound,
         @Nullable BiomeEffects.AdditionsSound additionsSound,
-        @Nullable List<WeightedMusic> music,
-        @Nullable Float musicVolume
+        @Nullable Music music
 ) {
     public static final BiomeEffects PLAINS_EFFECTS = BiomeEffects.builder()
             .fogColor(new Color(0xC0D8FF))
@@ -45,8 +44,7 @@ public record BiomeEffects(
             "ambient_sound", SoundEvent.CODEC.optional(), BiomeEffects::ambientSound,
             "mood_sound", MoodSound.CODEC.optional(), BiomeEffects::moodSound,
             "additions_sound", AdditionsSound.CODEC.optional(), BiomeEffects::additionsSound,
-            "music", WeightedMusic.CODEC.list().optional(), BiomeEffects::music,
-            "music_volume", Codec.FLOAT.optional(), BiomeEffects::musicVolume,
+            "music", Music.CODEC.optional(), BiomeEffects::music,
             BiomeEffects::new);
 
     public enum GrassColorModifier {
@@ -86,13 +84,6 @@ public record BiomeEffects(
                 AdditionsSound::new);
     }
 
-    public record WeightedMusic(Music music, int wieght) {
-        public static final Codec<WeightedMusic> CODEC = StructCodec.struct(
-                "data", Music.CODEC, WeightedMusic::music,
-                "weight", Codec.INT, WeightedMusic::wieght,
-                WeightedMusic::new);
-    }
-
     public static Builder builder() {
         return new Builder();
     }
@@ -109,8 +100,7 @@ public record BiomeEffects(
         private SoundEvent ambientSound;
         private BiomeEffects.MoodSound moodSound;
         private BiomeEffects.AdditionsSound additionsSound;
-        private List<WeightedMusic> music;
-        private Float musicVolume;
+        private Music music;
 
         Builder() {
         }
@@ -170,13 +160,8 @@ public record BiomeEffects(
             return this;
         }
 
-        public Builder music(@Nullable List<WeightedMusic> music) {
+        public Builder music(@Nullable Music music) {
             this.music = music;
-            return this;
-        }
-
-        public Builder musicVolume(@Nullable Float musicVolume) {
-            this.musicVolume = musicVolume;
             return this;
         }
 
@@ -190,7 +175,7 @@ public record BiomeEffects(
                     fogColor, skyColor, waterColor, waterFogColor,
                     foliageColor, grassColor, grassColorModifier,
                     biomeParticle, ambientSound, moodSound,
-                    additionsSound, music, musicVolume
+                    additionsSound, music
             );
         }
     }
