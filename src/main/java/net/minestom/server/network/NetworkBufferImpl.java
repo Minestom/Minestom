@@ -353,7 +353,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     // Internal writing methods
-    void _putBytes (long index, byte[] value) {
+    void _putBytes(long index, byte[] value) {
         if (isDummy()) return;
         MemorySegment.copy(value, 0, this.segment, JAVA_BYTE, index, value.length);
     }
@@ -524,7 +524,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         return (NetworkBufferImpl) buffer;
     }
 
-    @Contract
+    @Contract(pure = true)
     static Arena defaultArena() {
         return Arena.ofAuto();
     }
