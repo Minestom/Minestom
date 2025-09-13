@@ -115,6 +115,8 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
+
+                player.sendMessage(Component.text("click me for less health").clickEvent(ClickEvent.runCommand("health set 2")));
 //                ItemStack itemStack = ItemStack.builder(Material.STONE)
 //                        .amount(64)
 //                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
