@@ -139,7 +139,7 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new struct codec for value
      */
     static <R> StructCodec<R> struct(R value) {
-        final Result<R> ok = new Result.Ok<>(value);
+        final Result<R> ok = new Result.Ok<>(Objects.requireNonNull(value, "value"));
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -161,6 +161,7 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new struct codec for value
      */
     static <R> StructCodec<R> struct(Supplier<R> ctor) {
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -189,6 +190,10 @@ public interface StructCodec<R> extends Codec<R> {
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             F1<P1, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -227,6 +232,13 @@ public interface StructCodec<R> extends Codec<R> {
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
             F2<P1, P2, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -275,6 +287,16 @@ public interface StructCodec<R> extends Codec<R> {
             String name3, Codec<P3> codec3, Function<R, P3> getter3,
             F3<P1, P2, P3, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -333,6 +355,19 @@ public interface StructCodec<R> extends Codec<R> {
             String name4, Codec<P4> codec4, Function<R, P4> getter4,
             F4<P1, P2, P3, P4, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -401,6 +436,22 @@ public interface StructCodec<R> extends Codec<R> {
             String name5, Codec<P5> codec5, Function<R, P5> getter5,
             F5<P1, P2, P3, P4, P5, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -479,6 +530,25 @@ public interface StructCodec<R> extends Codec<R> {
             String name6, Codec<P6> codec6, Function<R, P6> getter6,
             F6<P1, P2, P3, P4, P5, P6, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -567,6 +637,28 @@ public interface StructCodec<R> extends Codec<R> {
             String name7, Codec<P7> codec7, Function<R, P7> getter7,
             F7<P1, P2, P3, P4, P5, P6, P7, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -666,6 +758,31 @@ public interface StructCodec<R> extends Codec<R> {
             String name8, Codec<P8> codec8, Function<R, P8> getter8,
             F8<P1, P2, P3, P4, P5, P6, P7, P8, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -774,6 +891,34 @@ public interface StructCodec<R> extends Codec<R> {
             String name9, Codec<P9> codec9, Function<R, P9> getter9,
             F9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -892,6 +1037,37 @@ public interface StructCodec<R> extends Codec<R> {
             String name10, Codec<P10> codec10, Function<R, P10> getter10,
             F10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -1020,6 +1196,40 @@ public interface StructCodec<R> extends Codec<R> {
             String name11, Codec<P11> codec11, Function<R, P11> getter11,
             F11<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -1159,6 +1369,43 @@ public interface StructCodec<R> extends Codec<R> {
             String name12, Codec<P12> codec12, Function<R, P12> getter12,
             F12<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(name12, "name12");
+        Objects.requireNonNull(codec12, "codec12");
+        Objects.requireNonNull(getter12, "getter12");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -1307,6 +1554,46 @@ public interface StructCodec<R> extends Codec<R> {
             String name13, Codec<P13> codec13, Function<R, P13> getter13,
             F13<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(name12, "name12");
+        Objects.requireNonNull(codec12, "codec12");
+        Objects.requireNonNull(getter12, "getter12");
+        Objects.requireNonNull(name13, "name13");
+        Objects.requireNonNull(codec13, "codec13");
+        Objects.requireNonNull(getter13, "getter13");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -1465,6 +1752,49 @@ public interface StructCodec<R> extends Codec<R> {
             String name14, Codec<P14> codec14, Function<R, P14> getter14,
             F14<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(name12, "name12");
+        Objects.requireNonNull(codec12, "codec12");
+        Objects.requireNonNull(getter12, "getter12");
+        Objects.requireNonNull(name13, "name13");
+        Objects.requireNonNull(codec13, "codec13");
+        Objects.requireNonNull(getter13, "getter13");
+        Objects.requireNonNull(name14, "name14");
+        Objects.requireNonNull(codec14, "codec14");
+        Objects.requireNonNull(getter14, "getter14");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -1633,6 +1963,52 @@ public interface StructCodec<R> extends Codec<R> {
             String name15, Codec<P15> codec15, Function<R, P15> getter15,
             F15<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(name12, "name12");
+        Objects.requireNonNull(codec12, "codec12");
+        Objects.requireNonNull(getter12, "getter12");
+        Objects.requireNonNull(name13, "name13");
+        Objects.requireNonNull(codec13, "codec13");
+        Objects.requireNonNull(getter13, "getter13");
+        Objects.requireNonNull(name14, "name14");
+        Objects.requireNonNull(codec14, "codec14");
+        Objects.requireNonNull(getter14, "getter14");
+        Objects.requireNonNull(name15, "name15");
+        Objects.requireNonNull(codec15, "codec15");
+        Objects.requireNonNull(getter15, "getter15");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -1811,6 +2187,55 @@ public interface StructCodec<R> extends Codec<R> {
             String name16, Codec<P16> codec16, Function<R, P16> getter16,
             F16<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(name12, "name12");
+        Objects.requireNonNull(codec12, "codec12");
+        Objects.requireNonNull(getter12, "getter12");
+        Objects.requireNonNull(name13, "name13");
+        Objects.requireNonNull(codec13, "codec13");
+        Objects.requireNonNull(getter13, "getter13");
+        Objects.requireNonNull(name14, "name14");
+        Objects.requireNonNull(codec14, "codec14");
+        Objects.requireNonNull(getter14, "getter14");
+        Objects.requireNonNull(name15, "name15");
+        Objects.requireNonNull(codec15, "codec15");
+        Objects.requireNonNull(getter15, "getter15");
+        Objects.requireNonNull(name16, "name16");
+        Objects.requireNonNull(codec16, "codec16");
+        Objects.requireNonNull(getter16, "getter16");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -1999,6 +2424,58 @@ public interface StructCodec<R> extends Codec<R> {
             String name17, Codec<P17> codec17, Function<R, P17> getter17,
             F17<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(name12, "name12");
+        Objects.requireNonNull(codec12, "codec12");
+        Objects.requireNonNull(getter12, "getter12");
+        Objects.requireNonNull(name13, "name13");
+        Objects.requireNonNull(codec13, "codec13");
+        Objects.requireNonNull(getter13, "getter13");
+        Objects.requireNonNull(name14, "name14");
+        Objects.requireNonNull(codec14, "codec14");
+        Objects.requireNonNull(getter14, "getter14");
+        Objects.requireNonNull(name15, "name15");
+        Objects.requireNonNull(codec15, "codec15");
+        Objects.requireNonNull(getter15, "getter15");
+        Objects.requireNonNull(name16, "name16");
+        Objects.requireNonNull(codec16, "codec16");
+        Objects.requireNonNull(getter16, "getter16");
+        Objects.requireNonNull(name17, "name17");
+        Objects.requireNonNull(codec17, "codec17");
+        Objects.requireNonNull(getter17, "getter17");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -2197,6 +2674,61 @@ public interface StructCodec<R> extends Codec<R> {
             String name18, Codec<P18> codec18, Function<R, P18> getter18,
             F18<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(name12, "name12");
+        Objects.requireNonNull(codec12, "codec12");
+        Objects.requireNonNull(getter12, "getter12");
+        Objects.requireNonNull(name13, "name13");
+        Objects.requireNonNull(codec13, "codec13");
+        Objects.requireNonNull(getter13, "getter13");
+        Objects.requireNonNull(name14, "name14");
+        Objects.requireNonNull(codec14, "codec14");
+        Objects.requireNonNull(getter14, "getter14");
+        Objects.requireNonNull(name15, "name15");
+        Objects.requireNonNull(codec15, "codec15");
+        Objects.requireNonNull(getter15, "getter15");
+        Objects.requireNonNull(name16, "name16");
+        Objects.requireNonNull(codec16, "codec16");
+        Objects.requireNonNull(getter16, "getter16");
+        Objects.requireNonNull(name17, "name17");
+        Objects.requireNonNull(codec17, "codec17");
+        Objects.requireNonNull(getter17, "getter17");
+        Objects.requireNonNull(name18, "name18");
+        Objects.requireNonNull(codec18, "codec18");
+        Objects.requireNonNull(getter18, "getter18");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -2405,6 +2937,64 @@ public interface StructCodec<R> extends Codec<R> {
             String name19, Codec<P19> codec19, Function<R, P19> getter19,
             F19<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(name12, "name12");
+        Objects.requireNonNull(codec12, "codec12");
+        Objects.requireNonNull(getter12, "getter12");
+        Objects.requireNonNull(name13, "name13");
+        Objects.requireNonNull(codec13, "codec13");
+        Objects.requireNonNull(getter13, "getter13");
+        Objects.requireNonNull(name14, "name14");
+        Objects.requireNonNull(codec14, "codec14");
+        Objects.requireNonNull(getter14, "getter14");
+        Objects.requireNonNull(name15, "name15");
+        Objects.requireNonNull(codec15, "codec15");
+        Objects.requireNonNull(getter15, "getter15");
+        Objects.requireNonNull(name16, "name16");
+        Objects.requireNonNull(codec16, "codec16");
+        Objects.requireNonNull(getter16, "getter16");
+        Objects.requireNonNull(name17, "name17");
+        Objects.requireNonNull(codec17, "codec17");
+        Objects.requireNonNull(getter17, "getter17");
+        Objects.requireNonNull(name18, "name18");
+        Objects.requireNonNull(codec18, "codec18");
+        Objects.requireNonNull(getter18, "getter18");
+        Objects.requireNonNull(name19, "name19");
+        Objects.requireNonNull(codec19, "codec19");
+        Objects.requireNonNull(getter19, "getter19");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -2623,6 +3213,67 @@ public interface StructCodec<R> extends Codec<R> {
             String name20, Codec<P20> codec20, Function<R, P20> getter20,
             F20<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, R> ctor
     ) {
+        Objects.requireNonNull(name1, "name1");
+        Objects.requireNonNull(codec1, "codec1");
+        Objects.requireNonNull(getter1, "getter1");
+        Objects.requireNonNull(name2, "name2");
+        Objects.requireNonNull(codec2, "codec2");
+        Objects.requireNonNull(getter2, "getter2");
+        Objects.requireNonNull(name3, "name3");
+        Objects.requireNonNull(codec3, "codec3");
+        Objects.requireNonNull(getter3, "getter3");
+        Objects.requireNonNull(name4, "name4");
+        Objects.requireNonNull(codec4, "codec4");
+        Objects.requireNonNull(getter4, "getter4");
+        Objects.requireNonNull(name5, "name5");
+        Objects.requireNonNull(codec5, "codec5");
+        Objects.requireNonNull(getter5, "getter5");
+        Objects.requireNonNull(name6, "name6");
+        Objects.requireNonNull(codec6, "codec6");
+        Objects.requireNonNull(getter6, "getter6");
+        Objects.requireNonNull(name7, "name7");
+        Objects.requireNonNull(codec7, "codec7");
+        Objects.requireNonNull(getter7, "getter7");
+        Objects.requireNonNull(name8, "name8");
+        Objects.requireNonNull(codec8, "codec8");
+        Objects.requireNonNull(getter8, "getter8");
+        Objects.requireNonNull(name9, "name9");
+        Objects.requireNonNull(codec9, "codec9");
+        Objects.requireNonNull(getter9, "getter9");
+        Objects.requireNonNull(name10, "name10");
+        Objects.requireNonNull(codec10, "codec10");
+        Objects.requireNonNull(getter10, "getter10");
+        Objects.requireNonNull(name11, "name11");
+        Objects.requireNonNull(codec11, "codec11");
+        Objects.requireNonNull(getter11, "getter11");
+        Objects.requireNonNull(name12, "name12");
+        Objects.requireNonNull(codec12, "codec12");
+        Objects.requireNonNull(getter12, "getter12");
+        Objects.requireNonNull(name13, "name13");
+        Objects.requireNonNull(codec13, "codec13");
+        Objects.requireNonNull(getter13, "getter13");
+        Objects.requireNonNull(name14, "name14");
+        Objects.requireNonNull(codec14, "codec14");
+        Objects.requireNonNull(getter14, "getter14");
+        Objects.requireNonNull(name15, "name15");
+        Objects.requireNonNull(codec15, "codec15");
+        Objects.requireNonNull(getter15, "getter15");
+        Objects.requireNonNull(name16, "name16");
+        Objects.requireNonNull(codec16, "codec16");
+        Objects.requireNonNull(getter16, "getter16");
+        Objects.requireNonNull(name17, "name17");
+        Objects.requireNonNull(codec17, "codec17");
+        Objects.requireNonNull(getter17, "getter17");
+        Objects.requireNonNull(name18, "name18");
+        Objects.requireNonNull(codec18, "codec18");
+        Objects.requireNonNull(getter18, "getter18");
+        Objects.requireNonNull(name19, "name19");
+        Objects.requireNonNull(codec19, "codec19");
+        Objects.requireNonNull(getter19, "getter19");
+        Objects.requireNonNull(name20, "name20");
+        Objects.requireNonNull(codec20, "codec20");
+        Objects.requireNonNull(getter20, "getter20");
+        Objects.requireNonNull(ctor, "ctor");
         return new StructCodec<>() {
             @Override
             public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
