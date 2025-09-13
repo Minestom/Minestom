@@ -6,19 +6,18 @@ import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.attribute.AttributeOperation;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
 public class ItemAttributeTest extends AbstractItemComponentTest<AttributeList> {
     @Override
-    protected @NotNull DataComponent<AttributeList> component() {
+    protected DataComponent<AttributeList> component() {
         return DataComponents.ATTRIBUTE_MODIFIERS;
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, AttributeList>> directReadWriteEntries() {
+    protected List<Map.Entry<String, AttributeList>> directReadWriteEntries() {
         return List.of(
                 Map.entry("empty", AttributeList.EMPTY),
                 Map.entry("single", new AttributeList(new AttributeList.Modifier(Attribute.MOVEMENT_SPEED, new AttributeModifier("minestom:movement_test", 0.1, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))),

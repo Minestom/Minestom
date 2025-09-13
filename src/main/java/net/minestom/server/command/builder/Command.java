@@ -11,6 +11,7 @@ import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +50,8 @@ public class Command {
     private final String[] aliases;
     private final String[] names;
 
-    private CommandExecutor defaultExecutor;
-    private CommandCondition condition;
+    private @Nullable CommandExecutor defaultExecutor;
+    private @Nullable CommandCondition condition;
 
     private final List<Command> subcommands;
     private final List<CommandSyntax> syntaxes;
@@ -62,7 +63,7 @@ public class Command {
      * @param aliases the command aliases
      * @see #Command(String)
      */
-    public Command(String name, @Nullable String... aliases) {
+    public Command(String name, String... aliases) {
         this.name = name;
         this.aliases = aliases;
         this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
@@ -237,7 +238,7 @@ public class Command {
      *
      * @return the command aliases, can be null or empty
      */
-    public @Nullable String[] getAliases() {
+    public String[] getAliases() {
         return aliases;
     }
 
@@ -296,7 +297,7 @@ public class Command {
      * @param context the UNCHECKED context of the command, some can be null even when unexpected
      * @param command the raw UNCHECKED received command
      */
-    public void globalListener(CommandSender sender, CommandContext context, String command) {
+    public void globalListener(CommandSender sender, @UnknownNullability CommandContext context, String command) {
     }
 
     @ApiStatus.Experimental

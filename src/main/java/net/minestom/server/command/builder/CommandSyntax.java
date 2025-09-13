@@ -17,10 +17,10 @@ import java.util.function.Function;
  */
 public class CommandSyntax {
 
-    private CommandCondition commandCondition;
+    private @Nullable CommandCondition commandCondition;
     private CommandExecutor executor;
 
-    private final Map<String, Function<CommandSender, Object>> defaultValuesMap;
+    private final @Nullable Map<String, Function<CommandSender, Object>> defaultValuesMap;
     private final Argument<?>[] args;
 
     private final boolean suggestion;

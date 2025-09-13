@@ -1,12 +1,14 @@
 package net.minestom.server.codec;
 
 import com.google.gson.*;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.AbstractList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+@ApiStatus.Internal
 final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     public static final TranscoderJsonImpl INSTANCE = new TranscoderJsonImpl();
 

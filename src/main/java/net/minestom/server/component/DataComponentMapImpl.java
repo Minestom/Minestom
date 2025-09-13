@@ -8,6 +8,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.function.IntFunction;
  *
  * @param components The component patch.
  */
-record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataComponentMap {
+record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap {
     private static final char REMOVAL_PREFIX = '!';
 
     @Override
@@ -70,7 +71,7 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
 
     @Override
     public DataComponentMap remove(DataComponent<?> component) {
-        Int2ObjectMap<Object> newComponents = new Int2ObjectArrayMap<>(components);
+        Int2ObjectMap<@Nullable Object> newComponents = new Int2ObjectArrayMap<>(components);
         newComponents.put(component.id(), null);
         return new DataComponentMapImpl(newComponents);
     }
@@ -94,7 +95,7 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
         return new PatchBuilderImpl(new Int2ObjectArrayMap<>(components));
     }
 
-    record BuilderImpl(Int2ObjectMap<Object> components) implements DataComponentMap.Builder {
+    record BuilderImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap.Builder {
 
         @Override
         public boolean has(DataComponent<?> component) {
@@ -119,7 +120,7 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
         }
     }
 
-    record PatchBuilderImpl(Int2ObjectMap<Object> components) implements DataComponentMap.PatchBuilder {
+    record PatchBuilderImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap.PatchBuilder {
 
         @Override
         public boolean has(DataComponent<?> component) {
@@ -151,7 +152,7 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
     }
 
     record NetworkTypeImpl(
-            IntFunction<DataComponent<?>> idToType,
+            IntFunction<@Nullable DataComponent<?>> idToType,
             boolean isPatch, boolean isTrusted
     ) implements NetworkBuffer.Type<DataComponentMap> {
         @Override
@@ -166,13 +167,13 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
             if (isPatch) {
                 buffer.write(NetworkBuffer.VAR_INT, patch.components.size() - added);
             }
-            for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
+            for (var entry : patch.components.int2ObjectEntrySet()) {
                 if (entry.getValue() == null) continue;
 
                 buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
                 //noinspection unchecked
-                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
-                assert type != null;
+                DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(entry.getIntKey());
+                Check.notNull(type, "Unknown component id: {0}", entry.getIntKey());
                 if (isTrusted) {
                     type.write(buffer, entry.getValue());
                 } else {
@@ -182,7 +183,7 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
                 }
             }
             if (isPatch) {
-                for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
+                for (var entry : patch.components.int2ObjectEntrySet()) {
                     if (entry.getValue() != null) continue;
 
                     buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
@@ -195,11 +196,11 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
             int added = buffer.read(NetworkBuffer.VAR_INT);
             int removed = isPatch ? buffer.read(NetworkBuffer.VAR_INT) : 0;
             Check.stateCondition(added + removed > 256, "Data component map too large: {0}", added + removed);
-            Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(added + removed);
+            Int2ObjectMap<@Nullable Object> patch = new Int2ObjectArrayMap<>(added + removed);
             for (int i = 0; i < added; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
                 //noinspection unchecked
-                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(id);
+                DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(id);
                 Check.notNull(type, "Unknown component: {0}", id);
                 if (isTrusted) {
                     patch.put(type.id(), type.read(buffer));
@@ -218,8 +219,8 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
     }
 
     record CodecImpl(
-            IntFunction<DataComponent<?>> idToType,
-            Function<String, DataComponent<?>> nameToType,
+            IntFunction<@Nullable DataComponent<?>> idToType,
+            Function<String, @Nullable DataComponent<?>> nameToType,
             boolean isPatch
     ) implements Codec<DataComponentMap> {
         @Override
@@ -229,7 +230,7 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
                 return mapResult.cast();
             if (map.isEmpty()) return new Result.Ok<>(EMPTY);
 
-            final Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(map.size());
+            final Int2ObjectMap<@Nullable Object> patch = new Int2ObjectArrayMap<>(map.size());
             for (String key : map.keys()) {
                 boolean remove = false;
                 if (!key.isEmpty() && key.charAt(0) == REMOVAL_PREFIX) {
@@ -260,9 +261,9 @@ record DataComponentMapImpl(Int2ObjectMap<Object> components) implements DataCom
             final DataComponentMapImpl patch = (DataComponentMapImpl) value;
 
             final Transcoder.MapBuilder<D> map = coder.createMap();
-            for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
+            for (var entry : patch.components.int2ObjectEntrySet()) {
                 //noinspection unchecked
-                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
+                DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(entry.getIntKey());
                 if (type == null) return new Result.Error<>("unknown data component id: " + entry.getIntKey());
                 if (entry.getValue() == null) {
                     if (isPatch) map.put(REMOVAL_PREFIX + type.name(), coder.createMap().build());

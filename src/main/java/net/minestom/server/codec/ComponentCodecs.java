@@ -16,8 +16,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Used internally to hold component codecs
+ */
 @ApiStatus.Internal
 public final class ComponentCodecs {
+    private ComponentCodecs() {}
     // Very gross :|
     private static final Codec<Component> COMPONENT_FORWARD = Codec.ForwardRef(() -> Codec.COMPONENT);
 

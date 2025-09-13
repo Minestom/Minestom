@@ -103,7 +103,7 @@ public final class AttributeInstance {
      * @param modifier the modifier to add
      * @return the old modifier, or null if none
      */
-    public AttributeModifier addModifier(AttributeModifier modifier) {
+    public @Nullable AttributeModifier addModifier(AttributeModifier modifier) {
         final AttributeModifier previousModifier = modifiers.put(modifier.id(), modifier);
         if (!modifier.equals(previousModifier)) refreshCachedValue(getBaseValue());
         return previousModifier;
@@ -115,7 +115,7 @@ public final class AttributeInstance {
      * @param modifier the modifier to remove
      * @return the modifier that was removed, or null if none
      */
-    public AttributeModifier removeModifier(AttributeModifier modifier) {
+    public @Nullable AttributeModifier removeModifier(AttributeModifier modifier) {
         return removeModifier(modifier.id());
     }
 
@@ -134,7 +134,7 @@ public final class AttributeInstance {
      * @param id The namespace id of the modifier to remove
      * @return the modifier that was removed, or null if none
      */
-    public AttributeModifier removeModifier(Key id) {
+    public @Nullable AttributeModifier removeModifier(Key id) {
         final AttributeModifier removed = modifiers.remove(id);
         if (removed != null) {
             refreshCachedValue(getBaseValue());

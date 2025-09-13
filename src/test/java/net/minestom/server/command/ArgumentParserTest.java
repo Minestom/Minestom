@@ -3,7 +3,6 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.parser.ArgumentParser;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -51,7 +50,7 @@ public class ArgumentParserTest {
         assertParserEquals("Word<arg1> UUID<arg2> NBT<arg3>", ArgumentType.Word("arg1"), ArgumentType.UUID("arg2"), ArgumentType.NBT("arg3"));
     }
 
-    private static void assertParserEquals(@NotNull String input, @NotNull Argument<?> @NotNull ... args) {
+    private static void assertParserEquals(String input, Argument<?> ... args) {
         assertArrayEquals(ArgumentParser.generate(input), args);
     }
 }

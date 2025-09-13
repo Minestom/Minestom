@@ -334,18 +334,18 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     public CompletableFuture<Void> teleport(Pos position, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+                                            @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
         return teleport(position, chunks, flags, true);
     }
 
     public CompletableFuture<Void> teleport(Pos position, Vec velocity, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+                                            @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
         return teleport(position, velocity, chunks, flags, true);
     }
 
     public CompletableFuture<Void> teleport(Pos position, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
-                                                     boolean shouldConfirm) {
+                                            @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
+                                            boolean shouldConfirm) {
         // Use delta coord if not providing a delta velocity (to avoid resetting velocity)
         return teleport(position, Vec.ZERO, chunks, flags | RelativeFlags.DELTA_COORD, shouldConfirm);
     }
@@ -364,8 +364,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
     public CompletableFuture<Void> teleport(Pos position, Vec velocity, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
-                                                     boolean shouldConfirm) {
+                                            @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
+                                            boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
         EntityTeleportEvent event = new EntityTeleportEvent(this, position, flags);
@@ -838,7 +838,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         if (previousInstance != null) removeFromInstance(previousInstance);
         if (this instanceof Player player) instance.bossBars().forEach(player::showBossBar);
-        new EventsJFR.InstanceJoin(getUuid().toString(), instance.toString()).commit();
+        EventsJFR.newInstanceJoin(getUuid(), instance.getUuid()).commit();
 
         this.isActive = true;
         setPositionInternal(spawnPosition);
@@ -886,7 +886,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (this instanceof Player player) instance.bossBars().forEach(player::hideBossBar);
         instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
         this.viewEngine.forManuals(this::removeViewer);
-        new EventsJFR.InstanceLeave(getUuid().toString(), instance.getUuid().toString()).commit();
+        EventsJFR.newInstanceLeave(getUuid(), instance.getUuid()).commit();
     }
 
     /**
@@ -1755,10 +1755,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos start = position.withY(position.y() + getEyeHeight());
         final Pos end = entity.position.withY(entity.position.y() + entity.getEyeHeight());
         final Vec direction = exactView ? position.direction() : end.sub(start).asVec().normalize();
-        if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction, entity.getPosition())) {
+        if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction, entity.position)) {
             return false;
         }
-        return CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox);
+        return CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox, entity.position);
     }
 
     /**
@@ -1786,10 +1786,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos start = position.withY(position.y() + getEyeHeight());
         final Vec startAsVec = start.asVec();
         final Predicate<Entity> finalPredicate = e -> e != this
-                && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.getPosition())
+                && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.position)
                 && predicate.test(e)
                 && CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start,
-                e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox);
+                e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox, e.position);
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
                 .filter(finalPredicate)

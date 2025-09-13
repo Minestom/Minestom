@@ -13,12 +13,14 @@ import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@ApiStatus.Internal
 final class CodecImpl {
 
     record RawValueImpl<D>(Transcoder<D> coder, D value) implements Codec.RawValue {
@@ -51,11 +53,11 @@ final class CodecImpl {
         }
     }
 
+    @FunctionalInterface
     interface PrimitiveEncoder<T> {
         <D> D encode(Transcoder<D> coder, T value);
     }
 
-    @SuppressWarnings("unchecked")
     record PrimitiveImpl<T>(PrimitiveEncoder<T> encoder, Decoder<T> decoder) implements Codec<T> {
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
@@ -84,13 +86,13 @@ final class CodecImpl {
     }
 
     record TransformImpl<T, S>(Codec<T> inner, ThrowingFunction<T, S> to,
-                               ThrowingFunction<S, T> from) implements Codec<S> {
+                               ThrowingFunction<@Nullable S, T> from) implements Codec<S> {
         @Override
         public <D> Result<S> decode(Transcoder<D> coder, D value) {
             try {
                 final Result<T> innerResult = inner.decode(coder, value);
                 return switch (innerResult) {
-                    case Result.Ok(T inner) -> new Result.Ok<>(to.apply(inner));
+                    case Result.Ok(T innerValue) -> new Result.Ok<>(to.apply(innerValue));
                     case Result.Error(String error) -> new Result.Error<>(error);
                 };
             } catch (Exception e) {
@@ -227,9 +229,9 @@ final class CodecImpl {
         }
     }
 
-    record UnionImpl<T, R, T1 extends T, TR extends R>(String keyField, Codec<T> keyCodec,
-                                                       Function<T, StructCodec<TR>> serializers,
-                                                       Function<R, T1> keyFunc) implements StructCodec<R> {
+    record UnionImpl<T, R>(String keyField, Codec<T> keyCodec,
+                           Function<T, @Nullable StructCodec<? extends R>> serializers,
+                           Function<R, ? extends T> keyFunc) implements StructCodec<R> {
 
         @SuppressWarnings("unchecked")
         @Override
@@ -237,14 +239,16 @@ final class CodecImpl {
             final Result<T> keyResult = map.getValue(keyField).map(key -> keyCodec.decode(coder, key));
             if (!(keyResult instanceof Result.Ok(T key)))
                 return keyResult.cast();
-            return (Result<R>) serializers.apply(key).decodeFromMap(coder, map);
+            final StructCodec<? extends R> serializer = serializers.apply(key);
+            if (serializer == null) return new Result.Error<>("no union value: " + key);
+            return (Result<R>) serializer.decodeFromMap(coder, map);
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public <D> Result<D> encodeToMap(Transcoder<D> coder, R value, MapBuilder<D> map) {
             final T key = keyFunc.apply(value);
-            var serializer = serializers.apply(key);
+            final StructCodec<R> serializer = (StructCodec<R>) serializers.apply(key);
             if (serializer == null) return new Result.Error<>("no union value: " + key);
 
             final Result<D> keyResult = keyCodec.encode(coder, key);
@@ -253,7 +257,7 @@ final class CodecImpl {
             if (keyValue == null) return new Result.Error<>("null");
 
             map.put(keyField, keyValue);
-            return serializer.encodeToMap(coder, (TR) value, map);
+            return serializer.encodeToMap(coder, value, map);
         }
     }
 
@@ -279,7 +283,7 @@ final class CodecImpl {
         }
 
         @Override
-        public <D> Result<D> encodeToMap(Transcoder<D> coder, T value, MapBuilder<D> map) {
+        public <D> Result<@Nullable D> encodeToMap(Transcoder<D> coder, T value, MapBuilder<D> map) {
             if (!(coder instanceof RegistryTranscoder<D> context))
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = registrySelector.select(context.registries());
@@ -316,22 +320,25 @@ final class CodecImpl {
 
     static final class ForwardRefImpl<T> implements Codec<T> {
         private final Supplier<Codec<T>> delegateFunc;
-        private Codec<T> delegate;
+        private @Nullable Codec<T> delegate;
 
         ForwardRefImpl(Supplier<Codec<T>> delegateFunc) {
             this.delegateFunc = delegateFunc;
         }
 
+        private Codec<T> delegate() {
+            if (delegate == null) delegate = delegateFunc.get();
+            return Objects.requireNonNull(delegate, "Delegate cannot be null after supplier call.");
+        }
+
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
-            if (delegate == null) delegate = delegateFunc.get();
-            return delegate.decode(coder, value);
+            return delegate().decode(coder, value);
         }
 
         @Override
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable T value) {
-            if (delegate == null) delegate = delegateFunc.get();
-            return delegate.encode(coder, value);
+            return delegate().encode(coder, value);
         }
     }
 
@@ -439,27 +446,6 @@ final class CodecImpl {
             list.add(coder.createDouble(value.y()));
             list.add(coder.createDouble(value.z()));
             return new Result.Ok<>(list.build());
-        }
-    }
-
-    /**
-     * @deprecated Remove once adventure is updated to have change_page be an int.
-     */
-    @Deprecated
-    record IntAsStringImpl() implements Codec<String> {
-        @Override
-        public <D> Result<String> decode(Transcoder<D> coder, D value) {
-            return coder.getInt(value).mapResult(String::valueOf);
-        }
-
-        @Override
-        public <D> Result<D> encode(Transcoder<D> coder, @Nullable String value) {
-            if (value == null) return new Result.Error<>("null");
-            try {
-                return new Result.Ok<>(coder.createInt(Integer.parseInt(value)));
-            } catch (NumberFormatException ignored) {
-                return new Result.Error<>("not an integer: " + value);
-            }
         }
     }
 

@@ -2,12 +2,18 @@ module net.minestom.server {
     requires static org.jetbrains.annotations;  // TODO remove this when jspecify matures.
     requires com.google.gson;
     requires it.unimi.dsi.fastutil;
+    requires space.vectrix.flare.fastutil;
     requires jdk.unsupported; // Unsafe
     requires net.kyori.adventure;
     requires net.kyori.adventure.nbt;
     requires net.kyori.adventure.key;
     requires net.kyori.examination.api;
     requires net.kyori.adventure.text.logger.slf4j;
+    requires net.kyori.adventure.text.serializer.legacy;
+    requires net.kyori.adventure.text.serializer.gson;
+    requires net.kyori.adventure.text.serializer.plain;
+    requires net.kyori.adventure.text.serializer.json;
+    requires net.kyori.adventure.text.serializer.ansi;
     requires org.slf4j;
     requires org.jctools.core;
     requires jdk.jfr;

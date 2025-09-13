@@ -4,7 +4,6 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.registry.TestRegistries;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -76,7 +75,7 @@ class SerializationContextTest {
         }
 
         @Override
-        public @NotNull StructCodec<MyLevelBasedValue> codec() {
+        public StructCodec<MyLevelBasedValue> codec() {
             return CODEC;
         }
     }
@@ -90,7 +89,7 @@ class SerializationContextTest {
         }
 
         @Override
-        public @NotNull StructCodec<MyEffect> codec() {
+        public StructCodec<MyEffect> codec() {
             return CODEC;
         }
     }

@@ -148,7 +148,7 @@ public abstract class PlayerConnection {
                 player.scheduleNextTick(Entity::remove);
             else {
                 EventDispatcher.call(new PlayerDisconnectEvent(player));
-                new EventsJFR.PlayerLeave(player.getUuid().toString()).commit();
+                EventsJFR.newPlayerLeave(player.getUuid()).commit();
             }
         }
     }
@@ -207,7 +207,7 @@ public abstract class PlayerConnection {
         this.playerPublicKey = playerPublicKey;
     }
 
-    public void storeCookie(String key, byte [] data) {
+    public void storeCookie(String key, byte[] data) {
         sendPacket(new CookieStorePacket(key, data));
     }
 

@@ -1,0 +1,169 @@
+{
+  "resources":{
+  "includes":[{
+    "pattern":"\\QMETA-INF/services/java.lang.System$LoggerFinder\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.net.spi.InetAddressResolverProvider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.nio.channels.spi.SelectorProvider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.time.zone.ZoneRulesProvider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/net.kyori.adventure.internal.properties.AdventureProperties$DefaultOverrideProvider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer$Provider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.gson.GsonComponentSerializer$Provider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org.junit.platform.engine.TestEngine\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org.junit.platform.launcher.LauncherDiscoveryListener\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org.junit.platform.launcher.LauncherSessionListener\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org.junit.platform.launcher.PostDiscoveryFilter\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org.junit.platform.launcher.TestExecutionListener\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/org.slf4j.spi.SLF4JServiceProvider\\E"
+  }, {
+    "pattern":"\\Qattribute.json\\E"
+  }, {
+    "pattern":"\\Qbanner_pattern.json\\E"
+  }, {
+    "pattern":"\\Qblock.json\\E"
+  }, {
+    "pattern":"\\Qblock_sound_type.json\\E"
+  }, {
+    "pattern":"\\Qcat_variant.json\\E"
+  }, {
+    "pattern":"\\Qchat_type.json\\E"
+  }, {
+    "pattern":"\\Qchicken_variant.json\\E"
+  }, {
+    "pattern":"\\Qcow_variant.json\\E"
+  }, {
+    "pattern":"\\Qdamage_type.json\\E"
+  }, {
+    "pattern":"\\Qdialog.json\\E"
+  }, {
+    "pattern":"\\Qdimension_type.json\\E"
+  }, {
+    "pattern":"\\Qenchantment.json\\E"
+  }, {
+    "pattern":"\\Qentity_type.json\\E"
+  }, {
+    "pattern":"\\Qfeature_flag.json\\E"
+  }, {
+    "pattern":"\\Qfluid.json\\E"
+  }, {
+    "pattern":"\\Qfrog_variant.json\\E"
+  }, {
+    "pattern":"\\Qgame_event.json\\E"
+  }, {
+    "pattern":"\\Qinstrument.json\\E"
+  }, {
+    "pattern":"\\Qitem.json\\E"
+  }, {
+    "pattern":"\\Qjukebox_song.json\\E"
+  }, {
+    "pattern":"\\Qjunit-platform.properties\\E"
+  }, {
+    "pattern":"\\Qnet/minestom/server/instance/lighting/region/r.0.0.mca\\E"
+  }, {
+    "pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"
+  }, {
+    "pattern":"\\Qpainting_variant.json\\E"
+  }, {
+    "pattern":"\\Qparticle.json\\E"
+  }, {
+    "pattern":"\\Qpig_variant.json\\E"
+  }, {
+    "pattern":"\\Qpotion_effect.json\\E"
+  }, {
+    "pattern":"\\Qpotion_type.json\\E"
+  }, {
+    "pattern":"\\Qsound_event.json\\E"
+  }, {
+    "pattern":"\\Qtags/attribute.json\\E"
+  }, {
+    "pattern":"\\Qtags/banner_pattern.json\\E"
+  }, {
+    "pattern":"\\Qtags/block.json\\E"
+  }, {
+    "pattern":"\\Qtags/block_sound_type.json\\E"
+  }, {
+    "pattern":"\\Qtags/cat_variant.json\\E"
+  }, {
+    "pattern":"\\Qtags/chat_type.json\\E"
+  }, {
+    "pattern":"\\Qtags/chicken_variant.json\\E"
+  }, {
+    "pattern":"\\Qtags/cow_variant.json\\E"
+  }, {
+    "pattern":"\\Qtags/damage_type.json\\E"
+  }, {
+    "pattern":"\\Qtags/dialog.json\\E"
+  }, {
+    "pattern":"\\Qtags/dimension_type.json\\E"
+  }, {
+    "pattern":"\\Qtags/enchantment.json\\E"
+  }, {
+    "pattern":"\\Qtags/entity_type.json\\E"
+  }, {
+    "pattern":"\\Qtags/feature_flag.json\\E"
+  }, {
+    "pattern":"\\Qtags/fluid.json\\E"
+  }, {
+    "pattern":"\\Qtags/frog_variant.json\\E"
+  }, {
+    "pattern":"\\Qtags/game_event.json\\E"
+  }, {
+    "pattern":"\\Qtags/instrument.json\\E"
+  }, {
+    "pattern":"\\Qtags/item.json\\E"
+  }, {
+    "pattern":"\\Qtags/jukebox_song.json\\E"
+  }, {
+    "pattern":"\\Qtags/painting_variant.json\\E"
+  }, {
+    "pattern":"\\Qtags/particle.json\\E"
+  }, {
+    "pattern":"\\Qtags/pig_variant.json\\E"
+  }, {
+    "pattern":"\\Qtags/potion_effect.json\\E"
+  }, {
+    "pattern":"\\Qtags/potion_type.json\\E"
+  }, {
+    "pattern":"\\Qtags/sound_event.json\\E"
+  }, {
+    "pattern":"\\Qtags/trim_material.json\\E"
+  }, {
+    "pattern":"\\Qtags/trim_pattern.json\\E"
+  }, {
+    "pattern":"\\Qtags/villager_profession.json\\E"
+  }, {
+    "pattern":"\\Qtags/wolf_sound_variant.json\\E"
+  }, {
+    "pattern":"\\Qtags/wolf_variant.json\\E"
+  }, {
+    "pattern":"\\Qtags/worldgen/biome.json\\E"
+  }, {
+    "pattern":"\\Qtrim_material.json\\E"
+  }, {
+    "pattern":"\\Qtrim_pattern.json\\E"
+  }, {
+    "pattern":"\\Qvillager_profession.json\\E"
+  }, {
+    "pattern":"\\Qwolf_sound_variant.json\\E"
+  }, {
+    "pattern":"\\Qwolf_variant.json\\E"
+  }, {
+    "pattern":"\\Qworldgen/biome.json\\E"
+  }, {
+    "pattern":"jdk.jfr:\\Qjdk/jfr/internal/types/metadata.bin\\E"
+  }]},
+  "bundles":[]
+}

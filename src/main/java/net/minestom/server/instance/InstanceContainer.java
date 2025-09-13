@@ -245,7 +245,7 @@ public class InstanceContainer extends Instance {
             // Break or change the broken block based on event result
             final Block resultBlock = blockBreakEvent.getResultBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
-                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
+                    new BlockHandler.PlayerDestroy(block, resultBlock, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
             PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
                     new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), blockPosition, block.stateId(), false),
@@ -283,7 +283,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public Chunk getChunk(int chunkX, int chunkZ) {
+    public @Nullable Chunk getChunk(int chunkX, int chunkZ) {
         return chunks.get(CoordConversion.chunkIndex(chunkX, chunkZ));
     }
 
@@ -331,7 +331,7 @@ public class InstanceContainer extends Instance {
         final Consumer<Chunk> generate = chunk -> {
             if (chunk == null) {
                 // Loader couldn't load the chunk, generate it
-                EventsJFR.ChunkGeneration chunkGeneration = new EventsJFR.ChunkGeneration(getUuid().toString(), chunkX, chunkZ);
+                var chunkGeneration = EventsJFR.newChunkGeneration(getUuid(), chunkX, chunkZ);
                 chunkGeneration.begin();
                 chunk = createChunk(chunkX, chunkZ);
                 chunk.onGenerate();
@@ -348,7 +348,7 @@ public class InstanceContainer extends Instance {
             completableFuture.complete(chunk);
         };
         Supplier<Chunk> loaderSupplier = () -> {
-            EventsJFR.ChunkLoading chunkLoading = new EventsJFR.ChunkLoading(getUuid().toString(), loader.getClass(), chunkX, chunkZ);
+            var chunkLoading = EventsJFR.newChunkLoading(getUuid(), loader.getClass(), chunkX, chunkZ);
             chunkLoading.begin();
             final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
             chunkLoading.end();
