@@ -7,44 +7,104 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
 public interface Light {
+    /**
+     * @return a new skylight instance
+     */
     static Light sky() {
         return new SkyLight();
     }
 
+    /**
+     * @return a new block-light instance
+     */
     static Light block() {
         return new BlockLight();
     }
 
+    /**
+     * Check if this light (section) needs to be resent to clients because something changed.
+     * Calling this method clears the {@code requiresSend} status
+     *
+     * @return whether this light (section) needs to be resent
+     */
     boolean requiresSend();
 
+    /**
+     * @return the underlying array which is used in the packet. This usually bakes the array, which is computationally expensive.
+     */
     @ApiStatus.Internal
-    byte[] array();
+    byte @NotNull [] array();
 
+    /**
+     * Called after {@link #calculateInternal(Palette, int, int, int, int[], int, LightLookup)}
+     * or {@link #calculateExternal(Palette, Point[], LightLookup, PaletteLookup)} is called to
+     * swap the temporary(/builder-) propagation buffer to the stable propagation buffer
+     */
+    @ApiStatus.Internal
     void flip();
 
+    /**
+     * Get the light level at some position
+     *
+     * @param x x position, 0-15
+     * @param y y position, 0-15
+     * @param z z position, 0-15
+     * @return the light level at the given position
+     */
     int getLevel(int x, int y, int z);
 
+    /**
+     * Invalidates this light.
+     * The next time this light is used, it will recalculate.
+     */
     void invalidate();
 
+    /**
+     * @return whether this light (section) needs to be recalculated
+     */
     boolean requiresUpdate();
 
+    /**
+     * Sets the light to some data. This is usually used by initializers to set initial values.
+     * This light will likely change when the light is invalidated and recalculated
+     *
+     * @param copyArray the data to set
+     */
+    @ApiStatus.Internal
     void set(byte[] copyArray);
 
     @ApiStatus.Internal
-    Set<Point> calculateInternal(Palette blockPalette,
-                                 int chunkX, int chunkY, int chunkZ,
-                                 int[] heightmap, int maxY,
-                                 LightLookup lightLookup);
+    @NotNull LightCalculation createInternalCalculation(@NotNull Palette blockPalette, int chunkX, int chunkY, int chunkZ, int[] heightmap, int maxY, @NotNull LightLookup lightLookup);
 
     @ApiStatus.Internal
-    Set<Point> calculateExternal(Palette blockPalette,
-                                 Point[] neighbors,
-                                 LightLookup lightLookup,
-                                 PaletteLookup paletteLookup);
+    @NotNull LightCalculation createExternalCalculation(@NotNull Palette blockPalette, @NotNull Point @NotNull [] neighbors, @NotNull LightLookup lightLookup, @NotNull PaletteLookup paletteLookup);
+
+    /**
+     * @return true when successful
+     */
+    boolean applyInternalCalculation(@NotNull LightCalculation lightCalculation);
+
+    /**
+     * @return true when successful
+     */
+    boolean applyExternalCalculation(@NotNull LightCalculation lightCalculation);
+
+//    @ApiStatus.Internal
+//    Set<Point> calculateInternal(Palette blockPalette,
+//                                 int chunkX, int chunkY, int chunkZ,
+//                                 int[] heightmap, int maxY,
+//                                 LightLookup lightLookup);
+//
+//    @ApiStatus.Internal
+//    Set<Point> calculateExternal(Palette blockPalette,
+//                                 Point[] neighbors,
+//                                 LightLookup lightLookup,
+//                                 PaletteLookup paletteLookup);
 
     @ApiStatus.Internal
     static Point[] getNeighbors(Chunk chunk, int sectionY) {

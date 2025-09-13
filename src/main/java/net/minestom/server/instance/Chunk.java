@@ -15,6 +15,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
+import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
@@ -55,6 +56,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     protected volatile boolean loaded = true;
     private final Viewable viewable;
+    private final Scheduler scheduler = Scheduler.newScheduler();
 
     // Data
     private final TagHandler tagHandler = TagHandler.newHandler();
@@ -118,7 +120,13 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param time the time of the update in milliseconds
      */
     @Override
-    public abstract void tick(long time);
+    public final void tick(long time) {
+        scheduler.processTick();
+        tick0(time);
+        scheduler.processTickEnd();
+    }
+
+    protected abstract void tick0(long time);
 
     /**
      * Sends the chunk data to {@code player}.
@@ -171,6 +179,15 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     public Instance getInstance() {
         return instance;
+    }
+
+    /**
+     * Gets a scheduler to run tasks on the Chunk thread
+     *
+     * @return the chunk's scheduler
+     */
+    public Scheduler getScheduler() {
+        return scheduler;
     }
 
     /**
