@@ -493,7 +493,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         }
 
         @Override
-        public NetworkBuffer.Builder registry(@Nullable Registries registries) {
+        public NetworkBuffer.Builder registry(Registries registries) {
             this.registries = registries;
             return this;
         }

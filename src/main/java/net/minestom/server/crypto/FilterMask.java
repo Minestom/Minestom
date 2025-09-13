@@ -24,6 +24,10 @@ public record FilterMask(Type type, BitSet mask) {
         }
     };
 
+    public FilterMask {
+        mask = (BitSet) mask.clone();
+    }
+
     public enum Type {
         PASS_THROUGH,
         FULLY_FILTERED,

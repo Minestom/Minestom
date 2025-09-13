@@ -133,7 +133,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, R> Type<R> template(Type<P1> p1, Function<R, P1> g1, F1<P1, R> reader) {
+    public static <P1 extends @UnknownNullability Object, R> Type<R> template(Type<P1> p1, Function<R, P1> g1, F1<P1, R> reader) {
         return new NetworkBufferTypeImpl<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -147,7 +147,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             F2<P1, P2, R> reader
     ) {
@@ -165,7 +165,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, F3<P1, P2, P3, R> reader
     ) {
@@ -184,7 +184,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             F4<P1, P2, P3, P4, R> reader
@@ -208,7 +208,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, F5<P1, P2, P3, P4, P5, R> reader
@@ -234,7 +234,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -262,7 +262,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -292,7 +292,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -324,7 +324,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -358,7 +358,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -394,7 +394,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -432,7 +432,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -471,7 +471,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -514,7 +514,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -558,7 +558,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -605,7 +605,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -653,7 +653,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -704,7 +704,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -756,7 +756,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
@@ -810,7 +810,7 @@ public final class NetworkBufferTemplate {
         };
     }
 
-    public static <P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, R> Type<R> template(
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, P20 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,

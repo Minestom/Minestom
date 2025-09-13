@@ -4,7 +4,9 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT_ARRAY;
@@ -37,5 +39,22 @@ public record TagsPacket(List<Registry> registries) implements ServerPacket.Conf
                 VAR_INT_ARRAY, Tag::entries,
                 Tag::new
         );
+
+        public Tag {
+            entries = entries.clone();
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (!(object instanceof Tag(String identifier1, int[] entries1))) return false;
+            return Arrays.equals(entries(), entries1) && Objects.equals(identifier(), identifier1);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = Objects.hashCode(identifier());
+            result = 31 * result + Arrays.hashCode(entries());
+            return result;
+        }
     }
 }

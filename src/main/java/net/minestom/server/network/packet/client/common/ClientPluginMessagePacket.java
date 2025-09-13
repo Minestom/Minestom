@@ -5,7 +5,6 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
 import static net.minestom.server.network.NetworkBuffer.STRING;
@@ -23,14 +22,14 @@ public record ClientPluginMessagePacket(String channel, byte[] data) implements 
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ClientPluginMessagePacket that = (ClientPluginMessagePacket) o;
-        return Objects.deepEquals(data, that.data) && Objects.equals(channel, that.channel);
+        if (!(o instanceof ClientPluginMessagePacket(String channel1, byte[] data1))) return false;
+        return Arrays.equals(data(), data1) && channel().equals(channel1);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(channel, Arrays.hashCode(data));
+        int result = channel().hashCode();
+        result = 31 * result + Arrays.hashCode(data());
+        return result;
     }
 }

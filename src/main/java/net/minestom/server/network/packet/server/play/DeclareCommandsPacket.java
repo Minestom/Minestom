@@ -5,7 +5,9 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -15,7 +17,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
     public static final int MAX_NODES = Short.MAX_VALUE;
 
     public DeclareCommandsPacket {
-        nodes = List.copyOf(nodes);
+        nodes = List.copyOf(nodes); // TODO deep copy?
     }
 
     public static final NetworkBuffer.Type<DeclareCommandsPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -121,6 +123,24 @@ public record DeclareCommandsPacket(List<Node> nodes,
 
         private boolean isArgument() {
             return (flags & 0b10) != 0;
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (!(object instanceof Node node)) return false;
+            return flags == node.flags && redirectedNode == node.redirectedNode && Arrays.equals(children, node.children) && Objects.equals(name, node.name) && parser == node.parser && Arrays.equals(properties, node.properties) && Objects.equals(suggestionsType, node.suggestionsType);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = flags;
+            result = 31 * result + Arrays.hashCode(children);
+            result = 31 * result + redirectedNode;
+            result = 31 * result + Objects.hashCode(name);
+            result = 31 * result + Objects.hashCode(parser);
+            result = 31 * result + Arrays.hashCode(properties);
+            result = 31 * result + Objects.hashCode(suggestionsType);
+            return result;
         }
     }
 

@@ -5,6 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -13,7 +14,7 @@ public record RespawnPacket(
         int dimensionType, String worldName,
         long hashedSeed, GameMode gameMode, GameMode previousGameMode,
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
-        int portalCooldown, int seaLevel, byte copyData
+        int portalCooldown, int seaLevel, @MagicConstant(flagsFromClass = RespawnPacket.class) byte copyData
 ) implements ServerPacket.Play {
     public static final int COPY_NONE = 0x0;
     public static final int COPY_ATTRIBUTES = 0x1;
