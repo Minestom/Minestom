@@ -21,7 +21,9 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.PacketParser;
+import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.PacketVanilla;
+import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
@@ -462,17 +464,21 @@ public class PacketWriteReadTest {
                         parser.login(),
                         parser.configuration()//,
                         //parser.play()
-                ).flatMap(registry -> registry.packets().stream())
-                .flatMap(info -> {
-                    var tests = map.get(info.packetClass());
-                    var name = info.packetClass().getSimpleName();
-                    assertNotNull(tests, "No packet tests for " + name);
-                    assertNotEquals(0, tests.size(), "Empty packet tests for " + name);
+                ).flatMap(it -> packets(it, map));
+    }
 
-                    return tests.stream().map(packet ->
-                            Arguments.of(info.serializer(), packet)
-                    );
-                });
+    static <T> Stream<Arguments> packets(PacketRegistry<T> registry, Map<Class<? extends T>, ? extends Collection<T>> map) {
+        return registry.packets().stream().flatMap(info ->  {
+            var tests = map.get(info.packetClass());
+            var name = info.packetClass().getSimpleName();
+            assertNotNull(tests, "No packet tests for %s".formatted(name));
+            assertNotEquals(0, tests.size(), "Empty packet tests for %s".formatted(name));
+
+            var serializer = info.serializer();
+            return tests.stream().map(packet ->
+                    Arguments.of(serializer, packet)
+            );
+        });
     }
 
     static Stream<Arguments> serverPacketArguments() {
