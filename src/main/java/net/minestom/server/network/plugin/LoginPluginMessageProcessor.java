@@ -21,7 +21,7 @@ public class LoginPluginMessageProcessor {
         this.connection = connection;
     }
 
-    public CompletableFuture<LoginPlugin.Response> request(String channel, byte [] requestPayload) {
+    public CompletableFuture<LoginPlugin.Response> request(String channel, byte[] requestPayload) {
         LoginPlugin.Request request = new LoginPlugin.Request(channel, requestPayload);
 
         final int messageId = nextMessageId();

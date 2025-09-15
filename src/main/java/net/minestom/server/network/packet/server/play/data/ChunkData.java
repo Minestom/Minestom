@@ -8,16 +8,18 @@ import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.block.BlockUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte [] data,
+public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
                         Map<Integer, Block> blockEntities) {
     public ChunkData {
-        heightmaps = Map.copyOf(heightmaps);
+        heightmaps = Map.copyOf(heightmaps); // TODO deep copy?
+        data = data.clone();
         blockEntities = blockEntities.entrySet()
                 .stream()
                 .filter((entry) -> entry.getValue().registry().isBlockEntity())
@@ -70,5 +72,19 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte [] data,
             // TODO create block object
         }
         return blockEntities;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof ChunkData(Map<Heightmap.Type, long[]> heightmaps1, byte[] data1, Map<Integer, Block> entities))) return false;
+        return Arrays.equals(data(), data1) && blockEntities().equals(entities) && heightmaps().equals(heightmaps1);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = heightmaps().hashCode();
+        result = 31 * result + Arrays.hashCode(data());
+        result = 31 * result + blockEntities().hashCode();
+        return result;
     }
 }

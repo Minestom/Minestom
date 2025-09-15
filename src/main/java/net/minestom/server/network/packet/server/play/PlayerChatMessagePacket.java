@@ -8,10 +8,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -39,6 +36,10 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, b
             PlayerChatMessagePacket::new
     );
 
+    public PlayerChatMessagePacket {
+        signature = signature != null ? signature.clone() : null;
+    }
+
     @Override
     public Collection<Component> components() {
         final ArrayList<Component> list = new ArrayList<>();
@@ -53,5 +54,26 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, b
         return new PlayerChatMessagePacket(globalIndex, sender, index, signature,
                 messageBody, operator.apply(unsignedContent), filterMask,
                 msgTypeId, operator.apply(msgTypeName), operator.apply(msgTypeTarget));
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof PlayerChatMessagePacket(int globalIndex1, UUID sender1, int index1, byte[] signature1, SignedMessageBody.Packed body, Component content, FilterMask mask, int typeId, Component typeName, Component typeTarget))) return false;
+        return index() == index1 && msgTypeId() == typeId && globalIndex() == globalIndex1 && Objects.equals(sender(), sender1) && Objects.equals(filterMask(), mask) && Objects.equals(msgTypeName(), typeName) && Objects.equals(msgTypeTarget(), typeTarget) && Objects.equals(unsignedContent(), content) && Arrays.equals(signature(), signature1) && messageBody().equals(body);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = globalIndex();
+        result = 31 * result + Objects.hashCode(sender());
+        result = 31 * result + index();
+        result = 31 * result + Arrays.hashCode(signature());
+        result = 31 * result + messageBody().hashCode();
+        result = 31 * result + Objects.hashCode(unsignedContent());
+        result = 31 * result + Objects.hashCode(filterMask());
+        result = 31 * result + msgTypeId();
+        result = 31 * result + Objects.hashCode(msgTypeName());
+        result = 31 * result + Objects.hashCode(msgTypeTarget());
+        return result;
     }
 }
