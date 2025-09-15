@@ -14,13 +14,13 @@ import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.crypto.*;
+import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.PacketParser;
-import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
@@ -35,10 +35,7 @@ import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
-import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
-import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
-import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
-import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
+import net.minestom.server.network.packet.server.configuration.*;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
@@ -49,8 +46,9 @@ import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
-import net.minestom.server.utils.crypto.KeyUtils;
 import net.minestom.server.world.Difficulty;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -66,6 +64,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Ensures that packet can be written and read correctly.
  */
+@EnvTest // Some packets require registries.
 public class PacketWriteReadTest {
     private static final Map<Class<? extends ServerPacket>, Set<ServerPacket>> SERVER_PACKETS = new HashMap<>();
     private static final Map<Class<? extends ClientPacket>, Set<ClientPacket>> CLIENT_PACKETS = new HashMap<>();
@@ -79,7 +78,8 @@ public class PacketWriteReadTest {
         assertNotEquals(0, packets.length);
         var packetClass = packets[0].getClass();
         var set = SERVER_PACKETS.computeIfAbsent(packetClass, c -> new HashSet<>(packets.length));
-        for (var packet: packets) assertTrue(set.add(packet), "Found duplicate server packet in %s with `%s`".formatted(packet.getClass().getSimpleName(), packet));
+        for (var packet : packets)
+            assertTrue(set.add(packet), "Found duplicate server packet in %s with `%s`".formatted(packet.getClass().getSimpleName(), packet));
     }
 
     @SafeVarargs
@@ -87,7 +87,8 @@ public class PacketWriteReadTest {
         assertNotEquals(0, packets.length);
         var packetClass = packets[0].getClass();
         var set = CLIENT_PACKETS.computeIfAbsent(packetClass, c -> new HashSet<>(packets.length));
-        for (var packet: packets) assertTrue(set.add(packet), "Found duplicate client packet in %s with `%s`".formatted(packet.getClass().getSimpleName(), packet));
+        for (var packet : packets)
+            assertTrue(set.add(packet), "Found duplicate client packet in %s with `%s`".formatted(packet.getClass().getSimpleName(), packet));
     }
 
     @BeforeAll
@@ -160,6 +161,30 @@ public class PacketWriteReadTest {
                 new RegistryDataPacket.Entry("some_value4", CompoundBinaryTag.builder().putBoolean("", true).build()),
                 new RegistryDataPacket.Entry("some_value5", CompoundBinaryTag.builder().putBoolean("", false).build())
         )));
+        addServerPackets(new ResourcePackPushPacket(new UUID(Long.MAX_VALUE, 0), "test", "test", false, Component.text("hello").append(COMPONENT)));
+        addServerPackets(new ResourcePackPopPacket(new UUID(Long.MAX_VALUE, 0)), new ResourcePackPopPacket(new UUID(0, Long.MAX_VALUE)));
+        addServerPackets(new CookieStorePacket("somepacket", new byte[]{1, 2, 23, 123}), new CookieStorePacket("somepacket", new byte[5120]));
+        addServerPackets(new TransferPacket("test", 20000), new TransferPacket("0", 25565));
+        addServerPackets(new UpdateEnabledFeaturesPacket(List.of("unvalidated", "very")));
+        addServerPackets(new TagsPacket(List.of(new TagsPacket.Registry("test", List.of(new TagsPacket.Tag("#cool", new int[]{1, 2, 23, 123}))))), new TagsPacket(List.of()));
+        addServerPackets(new SelectKnownPacksPacket(List.of(new SelectKnownPacksPacket.Entry("test", "id", "randomversion"))));
+        addServerPackets(new CustomReportDetailsPacket(Map.of("key", "value", "key1", "value1")));
+        addServerPackets(new ServerLinksPacket(new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.BUG_REPORT, "https://minestom.net"), new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.ANNOUNCEMENTS, "https://minestom.net")));
+        addServerPackets(new ClearDialogPacket());
+        addServerPackets(new ShowDialogPacket(
+                new Dialog.MultiAction(
+                        new DialogMetadata(COMPONENT, COMPONENT, true, false, DialogAfterAction.WAIT_FOR_RESPONSE, List.of(), List.of(new DialogInput.Text("heyt", 12, COMPONENT, true, "", 10, null))),
+                        List.of(),
+                        null,
+                        10
+                )));
+        addServerPackets(new ShowDialogPacket(
+                new Dialog.Confirmation(
+                        new DialogMetadata(COMPONENT, COMPONENT.append(Component.text(OG)), true, false, DialogAfterAction.WAIT_FOR_RESPONSE, List.of(), List.of(new DialogInput.Text("heyt", 12, COMPONENT, true, "", 10, null))),
+                        new DialogActionButton(COMPONENT.appendNewline(), COMPONENT, DialogActionButton.DEFAULT_WIDTH, new DialogAction.OpenUrl("https://minestom.net")),
+                        new DialogActionButton(COMPONENT.appendNewline(), COMPONENT, 10, new DialogAction.CopyToClipboard("https://minestom.net"))
+                )));
+
         // Play
         addServerPackets(new AcknowledgeBlockChangePacket(0));
         addServerPackets(new ActionBarPacket(COMPONENT));
@@ -225,19 +250,19 @@ public class PacketWriteReadTest {
 
         addServerPackets(
                 new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.ADD_PLAYER,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), OG, prop, false, 0, null, null, null, 0)),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), OG, prop, false, 0, GameMode.CREATIVE, null, null, 0, true)),
                 new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), null, List.of(), false, 0, null, Component.text("Not").append(Component.text(OG)), null, 0)),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, Component.text("Not").append(Component.text(OG)), null, 0, false)),
                 new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), null, List.of(), false, 0, GameMode.CREATIVE, null, null, 0)),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SPECTATOR, null, null, 0, true)),
                 new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), null, List.of(), false, 20, null, null, null, 0)),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 20, GameMode.CREATIVE, null, null, 0, false)),
                 new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LISTED,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), null, List.of(), true, 0, null, null, null, 0)),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null, 0, true)),
                 new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), null, List.of(), false, 0, null, null, null, 42)),
-        new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_HAT,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, null, null, 0, false))
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, null, null, 42, false)),
+                new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_HAT,
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, null, null, 0, false))
         );
 
         addServerPackets(new PlayerInfoRemovePacket(UUID.randomUUID()));
@@ -299,7 +324,7 @@ public class PacketWriteReadTest {
         addClientPackets(
                 new ClientSettingsPacket(ClientSettings.DEFAULT),
                 new ClientSettingsPacket(new ClientSettings(
-                        Locale.UK, (byte) 2, ChatMessageType.FULL,false,
+                        Locale.UK, (byte) 2, ChatMessageType.FULL, false,
                         (byte) 0x01, ClientSettings.MainHand.LEFT,
                         false, false,
                         ClientSettings.ParticleSetting.MINIMAL
@@ -359,8 +384,8 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientTeleportConfirmPacket(325626), new ClientTeleportConfirmPacket(Integer.MAX_VALUE), new ClientTeleportConfirmPacket(Integer.MIN_VALUE));
         addClientPackets(new ClientQueryBlockNbtPacket(1325, BlockVec.ZERO), new ClientQueryBlockNbtPacket(-15, BlockVec.ONE));
         addClientPackets(new ClientSelectBundleItemPacket(32, 65), new ClientSelectBundleItemPacket(Integer.MAX_VALUE, Integer.MAX_VALUE));
-        addClientPackets(new ClientChangeDifficultyPacket(Difficulty.EASY, false),  new ClientChangeDifficultyPacket(Difficulty.HARD, true), new ClientChangeDifficultyPacket(Difficulty.PEACEFUL, true));
-        addClientPackets(new ClientChangeGameModePacket(GameMode.ADVENTURE),  new ClientChangeGameModePacket(GameMode.SURVIVAL), new ClientChangeGameModePacket(GameMode.CREATIVE), new ClientChangeGameModePacket(GameMode.SPECTATOR));
+        addClientPackets(new ClientChangeDifficultyPacket(Difficulty.EASY, false), new ClientChangeDifficultyPacket(Difficulty.HARD, true), new ClientChangeDifficultyPacket(Difficulty.PEACEFUL, true));
+        addClientPackets(new ClientChangeGameModePacket(GameMode.ADVENTURE), new ClientChangeGameModePacket(GameMode.SURVIVAL), new ClientChangeGameModePacket(GameMode.CREATIVE), new ClientChangeGameModePacket(GameMode.SPECTATOR));
         addClientPackets(new ClientChatAckPacket(12549581), new ClientChatAckPacket(Integer.MIN_VALUE), new ClientChatAckPacket(Integer.MAX_VALUE));
         addClientPackets(new ClientCommandChatPacket("l".repeat(256)), new ClientCommandChatPacket("helloworld"));
         //TODO (signed) support signed chat/commands with proper data.
@@ -384,14 +409,14 @@ public class PacketWriteReadTest {
             }
         }, new byte[4096]))));
         addClientPackets(new ClientChunkBatchReceivedPacket(0.5f));
-        addClientPackets(new ClientStatusPacket(ClientStatusPacket.Action.PERFORM_RESPAWN), new  ClientStatusPacket(ClientStatusPacket.Action.REQUEST_STATS));
+        addClientPackets(new ClientStatusPacket(ClientStatusPacket.Action.PERFORM_RESPAWN), new ClientStatusPacket(ClientStatusPacket.Action.REQUEST_STATS));
         addClientPackets(new ClientTickEndPacket());
         addClientPackets(new ClientTabCompletePacket(15, "/hellloworld"), new ClientTabCompletePacket(Integer.MIN_VALUE, "/hello arg1 arg2 arg3"), new ClientTabCompletePacket(-1000, "//undo"));
         addClientPackets(new ClientFinishConfigurationPacket());
         addClientPackets(new ClientClickWindowButtonPacket(15, 14), new ClientClickWindowButtonPacket(Integer.MIN_VALUE, Integer.MAX_VALUE));
         addClientPackets(new ClientClickWindowPacket(125, 20, (short) -999, (byte) 1, ClientClickWindowPacket.ClickType.SWAP, Map.of(), ItemStack.Hash.AIR), new ClientClickWindowPacket(Integer.MAX_VALUE, Integer.MIN_VALUE, (short) 51, (byte) 1, ClientClickWindowPacket.ClickType.SWAP, Map.of((short) 5, ItemStack.Hash.AIR), ItemStack.Hash.AIR));
         addClientPackets(new ClientCloseWindowPacket(15), new ClientCloseWindowPacket(Integer.MIN_VALUE));
-        addClientPackets(new ClientWindowSlotStatePacket(25, 25, true), new ClientWindowSlotStatePacket(Integer.MAX_VALUE, Integer.MAX_VALUE, true), new  ClientWindowSlotStatePacket(Integer.MIN_VALUE, Integer.MAX_VALUE, false));
+        addClientPackets(new ClientWindowSlotStatePacket(25, 25, true), new ClientWindowSlotStatePacket(Integer.MAX_VALUE, Integer.MAX_VALUE, true), new ClientWindowSlotStatePacket(Integer.MIN_VALUE, Integer.MAX_VALUE, false));
         //Cookie
         //Plugin message
         addClientPackets(new ClientDebugSampleSubscriptionPacket(DebugSamplePacket.Type.TICK_TIME));
@@ -408,75 +433,65 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientLockDifficultyPacket(true), new ClientLockDifficultyPacket(false));
         addClientPackets(new ClientPlayerPositionPacket(Vec.ONE, (byte) ClientPlayerPositionPacket.FLAG_HORIZONTAL_COLLISION), new ClientPlayerPositionPacket(Vec.ZERO, (byte) ClientPlayerPositionPacket.FLAG_ON_GROUND));
         addClientPackets(new ClientPlayerPositionAndRotationPacket(Pos.ZERO, true, true), new ClientPlayerPositionAndRotationPacket(new Pos(10, 10, 10, 0f, 0f), false, true));
-        addClientPackets(new ClientPlayerPositionStatusPacket(true, false),  new ClientPlayerPositionStatusPacket(false, false), new  ClientPlayerPositionStatusPacket(false, true), new  ClientPlayerPositionStatusPacket(true, true));
+        addClientPackets(new ClientPlayerPositionStatusPacket(true, false), new ClientPlayerPositionStatusPacket(false, false), new ClientPlayerPositionStatusPacket(false, true), new ClientPlayerPositionStatusPacket(true, true));
         addClientPackets(new ClientVehicleMovePacket(new Pos(5, 5, 5, 45f, 45f), true));
         addClientPackets(new ClientVehicleMovePacket(new Pos(6, 5, 6, 82f, 12.5f), false));
-        addClientPackets(new ClientSteerBoatPacket(true, false), new ClientSteerBoatPacket(false, false), new  ClientSteerBoatPacket(true, true), new ClientSteerBoatPacket(false, true));
+        addClientPackets(new ClientSteerBoatPacket(true, false), new ClientSteerBoatPacket(false, false), new ClientSteerBoatPacket(true, true), new ClientSteerBoatPacket(false, true));
         addClientPackets(new ClientPickItemFromBlockPacket(BlockVec.ONE, true), new ClientPickItemFromBlockPacket(BlockVec.ZERO, false));
-        addClientPackets(new ClientPickItemFromEntityPacket(124, true), new ClientPickItemFromEntityPacket(124, false), new   ClientPickItemFromEntityPacket(Integer.MAX_VALUE, true), new ClientPickItemFromEntityPacket(Integer.MIN_VALUE, false));
+        addClientPackets(new ClientPickItemFromEntityPacket(124, true), new ClientPickItemFromEntityPacket(124, false), new ClientPickItemFromEntityPacket(Integer.MAX_VALUE, true), new ClientPickItemFromEntityPacket(Integer.MIN_VALUE, false));
         addClientPackets(new ClientPlaceRecipePacket((byte) 10, 10, true), new ClientPlaceRecipePacket((byte) 51, 14, false));
         addClientPackets(new ClientPlayerAbilitiesPacket((byte) 0x02));
         addClientPackets(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.STARTED_DIGGING, BlockVec.ZERO, BlockFace.BOTTOM, Integer.MAX_VALUE), new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK, BlockVec.ONE, BlockFace.TOP, Integer.MIN_VALUE));
-        addClientPackets(new ClientEntityActionPacket(10, ClientEntityActionPacket.Action.LEAVE_BED, 0), new  ClientEntityActionPacket(15, ClientEntityActionPacket.Action.START_SPRINTING, 0), new  ClientEntityActionPacket(321, ClientEntityActionPacket.Action.START_FLYING_ELYTRA, 0));
+        addClientPackets(new ClientEntityActionPacket(10, ClientEntityActionPacket.Action.LEAVE_BED, 0), new ClientEntityActionPacket(15, ClientEntityActionPacket.Action.START_SPRINTING, 0), new ClientEntityActionPacket(321, ClientEntityActionPacket.Action.START_FLYING_ELYTRA, 0));
         addClientPackets(new ClientInputPacket(true, false, true, false, false, false, true), new ClientInputPacket(false, true, true, false, false, false, true));
         addClientPackets(new ClientPlayerLoadedPacket());
         //addClientPackets(new ClientSetRecipeBookStatePacket());
     }
 
-    private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet) {
-        byte[] bytes = NetworkBuffer.makeArray(networkType, packet);
-        var buffer = NetworkBuffer.wrap(bytes, 0, bytes.length);
+    private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet, Env env) {
+        byte[] bytes = NetworkBuffer.makeArray(networkType, packet, env.process());
+        var buffer = NetworkBuffer.wrap(bytes, 0, bytes.length, env.process()); // Requires for serialization of some packets
         var createdPacket = buffer.read(networkType);
         assertEquals(packet, createdPacket);
     }
 
-    static <T> Stream<PacketRegistry.PacketInfo<? extends T>> packets(PacketParser<T> parser) {
+    static <T> Stream<Arguments> packets(PacketParser<T> parser, Map<Class<? extends T>, ? extends Collection<T>> map) {
         return Stream.of(
-                parser.handshake(),
-                parser.status(),
-                parser.login(),
-                parser.configuration()//,
-                //parser.play()
-        ).flatMap(registry -> registry.packets().stream());
+                        parser.handshake(),
+                        parser.status(),
+                        parser.login(),
+                        parser.configuration()//,
+                        //parser.play()
+                ).flatMap(registry -> registry.packets().stream())
+                .flatMap(info -> {
+                    var tests = map.get(info.packetClass());
+                    var name = info.packetClass().getSimpleName();
+                    assertNotNull(tests, "No packet tests for " + name);
+                    assertNotEquals(0, tests.size(), "Empty packet tests for " + name);
+
+                    return tests.stream().map(packet ->
+                            Arguments.of(info.serializer(), packet)
+                    );
+                });
     }
 
     static Stream<Arguments> serverPacketArguments() {
-        return packets(PacketVanilla.SERVER_PACKET_PARSER)
-                .flatMap(info -> {
-                    var tests = SERVER_PACKETS.get(info.packetClass());
-                    var name = info.packetClass().getSimpleName();
-                    assertNotNull(tests, "No server packet tests for " + name);
-                    assertNotEquals(0, tests.size(), "Empty server packet tests for " + name);
-
-                    return tests.stream().map(packet ->
-                            Arguments.of(info.serializer(), packet, name)
-                    );
-                });
+        return packets(PacketVanilla.SERVER_PACKET_PARSER, SERVER_PACKETS);
     }
 
     static Stream<Arguments> clientPacketArguments() {
-        return packets(PacketVanilla.CLIENT_PACKET_PARSER)
-                .flatMap(info -> {
-                    var tests = CLIENT_PACKETS.get(info.packetClass());
-                    var name = info.packetClass().getSimpleName();
-                    assertNotNull(tests, "No client packet tests for " + name);
-                    assertNotEquals(0, tests.size(), "Empty client packet tests for " + name);
-
-                    return tests.stream().map(packet ->
-                            Arguments.of(info.serializer(), packet, name)
-                    );
-                });
+        return packets(PacketVanilla.CLIENT_PACKET_PARSER, CLIENT_PACKETS);
     }
 
-    @ParameterizedTest(name = "Server Packet Test: {2}")
+    @ParameterizedTest(name = "Server Packet Test: {1}")
     @MethodSource("serverPacketArguments")
-    void serverTest(NetworkBuffer.Type<ServerPacket> serializer, ServerPacket packet, String ignoredFormatName) {
-        testPacket(serializer, packet);
+    void serverTest(NetworkBuffer.Type<ServerPacket> serializer, ServerPacket packet, Env env) {
+        testPacket(serializer, packet, env);
     }
 
-    @ParameterizedTest(name = "Client Packet Test: {2}")
+    @ParameterizedTest(name = "Client Packet Test: {1}")
     @MethodSource("clientPacketArguments")
-    void clientTest(NetworkBuffer.Type<ClientPacket> serializer, ClientPacket packet, String ignoredFormatName) {
-        testPacket(serializer, packet);
+    void clientTest(NetworkBuffer.Type<ClientPacket> serializer, ClientPacket packet, Env env) {
+        testPacket(serializer, packet, env);
     }
 }
