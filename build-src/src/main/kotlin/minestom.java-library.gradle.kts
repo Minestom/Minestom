@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.nmcp)
 }
 
-val javaVersion = System.getenv("JAVA_VERSION") ?: "21"
+val javaVersion = System.getenv("JAVA_VERSION") ?: "25"
 
 group = "net.minestom"
 version = System.getenv("MINESTOM_VERSION") ?: "dev"
@@ -48,7 +48,7 @@ tasks.withType<Javadoc> {
         addBooleanOption("html5", true)
         addStringOption("-release", javaVersion)
         // Links to external javadocs
-        links("https://docs.oracle.com/en/java/javase/${javaVersion}/docs/api/")
+        links("https://docs.oracle.com/en/java/javase/$javaVersion/docs/api/")
         links("https://javadoc.io/doc/net.kyori/adventure-api/${libs.versions.adventure.get()}/")
         links("https://javadoc.io/doc/net.kyori/adventure-nbt/${libs.versions.adventure.get()}/")
         links("https://javadoc.io/doc/net.kyori/adventure-key/${libs.versions.adventure.get()}/")
