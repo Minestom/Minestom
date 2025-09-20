@@ -6,20 +6,21 @@ import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ViewableInventory;
 
 /**
  * Called when a player open an {@link AbstractInventory}.
  * <p>
- * Executed by {@link Player#openInventory(Inventory)}.
+ * Executed by {@link Player#openInventory(ViewableInventory)}.
  */
 public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, CancellableEvent {
 
-    private AbstractInventory inventory;
+    private ViewableInventory inventory;
     private final Player player;
 
     private boolean cancelled;
 
-    public InventoryOpenEvent(AbstractInventory inventory, Player player) {
+    public InventoryOpenEvent(ViewableInventory inventory, Player player) {
         this.inventory = inventory;
         this.player = player;
     }
@@ -34,12 +35,12 @@ public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, 
     }
 
     /**
-     * Gets the inventory to open, this could have been change by the {@link #setInventory(AbstractInventory)}.
+     * Gets the inventory to open, this could have been change by the {@link #setInventory(ViewableInventory)}.
      *
      * @return the inventory to open, null to just close the current inventory if any
      */
     @Override
-    public AbstractInventory getInventory() {
+    public ViewableInventory getInventory() {
         return inventory;
     }
 
@@ -50,7 +51,7 @@ public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, 
      *
      * @param inventory the inventory to open
      */
-    public void setInventory(AbstractInventory inventory) {
+    public void setInventory(ViewableInventory inventory) {
         this.inventory = inventory;
     }
 
