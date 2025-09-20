@@ -3,6 +3,8 @@ package net.minestom.server.inventory;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
@@ -83,6 +85,15 @@ public class InventoryTest {
             final byte windowId = new Inventory(InventoryType.CHEST_1_ROW, "title").getWindowId();
             assertTrue(windowId > 0);
         }
+    }
+
+    @Test
+    public void testHorseInventoryColumns() {
+        Entity horse = new Entity(EntityType.HORSE);
+        HorseInventory inventory = new HorseInventory(horse, 5);
+        assertEquals(17, inventory.getSize());
+
+        assertThrows(IllegalArgumentException.class, () -> new HorseInventory(horse, -1));
     }
 
     @Test

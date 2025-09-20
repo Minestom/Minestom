@@ -2,6 +2,8 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.item.ItemStack;
@@ -158,6 +160,26 @@ public class InventoryIntegrationTest {
         assertSame(inventory, player.getOpenInventory());
         player.closeInventory();
         assertNull(player.getOpenInventory());
+    }
+
+    @Test
+    public void openHorseInventoryTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        Entity horse = new Entity(EntityType.HORSE);
+        HorseInventory inventory = new HorseInventory(horse, 5);
+
+        var openTracker = connection.trackIncoming(OpenHorseWindowPacket.class);
+        player.openInventory(inventory);
+
+        assertSame(inventory, player.getOpenInventory());
+        openTracker.assertSingle(packet -> {
+            assertEquals(inventory.getWindowId(), packet.windowId());
+            assertEquals(5, packet.slotCount());
+            assertEquals(horse.getEntityId(), packet.entityId());
+        });
     }
 
     @Test
