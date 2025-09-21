@@ -168,6 +168,7 @@ final class CommandParserImpl implements CommandParser {
         if (!reader.hasRemaining()) start--; // This is needed otherwise the reader throws an AssertionError
 
         NodeResult error = null;
+        int errorCount = 0;
         for (Node child : node.next()) {
             NodeResult childResult = parseNode(sender, child, chain, reader);
             if (childResult.argumentResult instanceof ArgumentResult.Success<Object>) {
@@ -177,21 +178,24 @@ final class CommandParserImpl implements CommandParser {
                 // Traverse through the node results to find the last
                 // node with a valid argument literal
                 NodeResult lastResult = null;
+                int nodeCount = 0;
                 for (var result : childResult.chain.nodeResults) {
                     final Argument<?> arg = result.node.argument();
                     if (arg instanceof ArgumentLiteral) {
                         lastResult = result;
+                        nodeCount++;
                     }
                 }
 
                 final boolean valid = lastResult != null && lastResult.argumentResult instanceof ArgumentResult.Success;
 
-                if (valid && (error == null || childResult.chain.size() > error.chain.size())) {
+                if (valid && (error == null || nodeCount > errorCount)) {
                     // If this is the base argument (e.g. "teleport" in /teleport) then
                     // do not report an argument to be incompatible, since the more
                     // correct thing would be to say that the command is unknown.
                     if (!(childResult.chain.size() == 2 && childResult.argumentResult instanceof ArgumentResult.IncompatibleType<?>)) {
                         error = childResult;
+                        errorCount = nodeCount;
                     }
                 }
                 reader.cursor(start);
