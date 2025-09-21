@@ -7,6 +7,7 @@ import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.Suggestion;
@@ -181,7 +182,7 @@ final class CommandParserImpl implements CommandParser {
                 int nodeCount = 0;
                 for (var result : childResult.chain.nodeResults) {
                     final Argument<?> arg = result.node.argument();
-                    if (arg instanceof ArgumentLiteral) {
+                    if (arg instanceof ArgumentLiteral || arg instanceof ArgumentWord) {
                         lastResult = result;
                         nodeCount++;
                     }
