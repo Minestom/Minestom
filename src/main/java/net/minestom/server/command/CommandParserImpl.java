@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.Suggestion;
@@ -173,7 +174,19 @@ final class CommandParserImpl implements CommandParser {
                 // Assume that there is only one successful node for a given chain of arguments
                 return childResult;
             } else {
-                if (error == null || childResult.chain.size() > error.chain.size()) {
+                // Traverse through the node results to find the last
+                // node with a valid argument literal
+                NodeResult lastResult = null;
+                for (var result : childResult.chain.nodeResults) {
+                    final Argument<?> arg = result.node.argument();
+                    if (arg instanceof ArgumentLiteral) {
+                        lastResult = result;
+                    }
+                }
+
+                final boolean valid = lastResult != null && lastResult.argumentResult instanceof ArgumentResult.Success;
+
+                if (valid && (error == null || childResult.chain.size() > error.chain.size())) {
                     // If this is the base argument (e.g. "teleport" in /teleport) then
                     // do not report an argument to be incompatible, since the more
                     // correct thing would be to say that the command is unknown.
