@@ -177,7 +177,7 @@ final class CommandParserImpl implements CommandParser {
                 return childResult;
             } else {
                 // Traverse through the node results to find the last
-                // node with a valid argument literal
+                // node with a valid argument
                 NodeResult lastResult = null;
                 int nodeCount = 0;
                 for (var result : childResult.chain.nodeResults) {
