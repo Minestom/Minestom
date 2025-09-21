@@ -15,10 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -27,8 +24,8 @@ final class CommandParserImpl implements CommandParser {
     static final CommandParserImpl PARSER = new CommandParserImpl();
 
     static final class Chain {
-        CommandExecutor defaultExecutor = null;
-        SuggestionCallback suggestionCallback = null;
+        @Nullable CommandExecutor defaultExecutor = null;
+        @Nullable SuggestionCallback suggestionCallback = null;
         final ArrayDeque<NodeResult> nodeResults = new ArrayDeque<>();
         final List<CommandCondition> conditions = new ArrayList<>();
         final List<CommandExecutor> globalListeners = new ArrayList<>();
@@ -78,8 +75,8 @@ final class CommandParserImpl implements CommandParser {
 
         Chain() {}
 
-        Chain(CommandExecutor defaultExecutor,
-              SuggestionCallback suggestionCallback,
+        Chain(@Nullable CommandExecutor defaultExecutor,
+              @Nullable SuggestionCallback suggestionCallback,
               ArrayDeque<NodeResult> nodeResults,
               List<CommandCondition> conditions,
               List<CommandExecutor> globalListeners) {
@@ -176,7 +173,7 @@ final class CommandParserImpl implements CommandParser {
                 // Assume that there is only one successful node for a given chain of arguments
                 return childResult;
             } else {
-                if (error == null || error.chain.size() < childResult.chain.size()) {
+                if (error == null || childResult.chain.size() > error.chain.size()) {
                     // If this is the base argument (e.g. "teleport" in /teleport) then
                     // do not report an argument to be incompatible, since the more
                     // correct thing would be to say that the command is unknown.
@@ -188,7 +185,6 @@ final class CommandParserImpl implements CommandParser {
             }
         }
         // None were successful. Either incompatible types, or syntax error. It doesn't matter to us, though
-
         // Try to execute this node
         CommandExecutor executor = nullSafeGetter(node.execution(), Graph.Execution::executor);
         if (executor == null) {
@@ -213,7 +209,7 @@ final class CommandParserImpl implements CommandParser {
             }
             NodeResult nodeResult = new NodeResult(
                     returnNode,
-                    chain,
+                    error == null ? chain : error.chain,
                     new ArgumentResult.SyntaxError<>("Command has trailing data", "", -1),
                     suggestionCallback
             );
@@ -296,7 +292,17 @@ final class CommandParserImpl implements CommandParser {
             implements InternalKnownCommand, Result.KnownCommand.Valid {
 
         static ValidCommand defaultExecutor(String input, Chain chain) {
-            return new ValidCommand(input, chain.mergedConditions(), chain.defaultExecutor, chain.collectArguments(),
+            CommandExecutor defaultExecutor = null;
+            for (Iterator<NodeResult> it = chain.nodeResults.descendingIterator(); it.hasNext();) {
+                defaultExecutor = it.next().chain().defaultExecutor;
+                if (defaultExecutor != null) break;
+            }
+
+            if (defaultExecutor == null) {
+                throw new IllegalStateException("There was no default executor in the chain to call?");
+            }
+
+            return new ValidCommand(input, chain.mergedConditions(), defaultExecutor, chain.collectArguments(),
                     chain.mergedGlobalExecutors(), chain.suggestionCallback, chain.getArgs());
         }
 
