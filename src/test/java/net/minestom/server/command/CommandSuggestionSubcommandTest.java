@@ -56,4 +56,41 @@ public class CommandSuggestionSubcommandTest {
         manager.executeServerCommand("foo baz test");
     }
 
+    /**
+     * Make sure than when we have a {@code /foo} command, and we enter incorrect
+     * arguments it defaults to the correct default executor
+     */
+    @Test
+    public void useCorrectDefaultExecutor() {
+        var manager = new CommandManager();
+        var command = new Command("foo");
+        var barCommand = new Command("bar");
+        var bazCommand = new Command("baz");
+
+        var wordArg1 = Word("wordArg1");
+        var wordArg2 = Word("wordArg2");
+
+        bazCommand.setDefaultExecutor((sender, context) -> {
+            // Since the base command has a default executor, we shouldn't be calling this
+            fail("Baz subcommand command executor should not have been called");
+        });
+
+        barCommand.setDefaultExecutor((sender, context) -> {
+            // This should never be called, original behaviour had this happen due to malformed command chain
+            fail("Bar subcommand executor should not have been called");
+        });
+
+        // This is the default executor we're expecting to call
+        command.setDefaultExecutor((sender, context) -> {});
+        bazCommand.addSyntax((sender, context) -> {}, wordArg1, wordArg2);
+
+        command.addSubcommand(barCommand);
+        command.addSubcommand(bazCommand);
+        manager.register(command);
+
+        // Failing this means that the base command is defaulting to the incorrect executor
+        // in the chain, it should be using the own default executor but its using one of the
+        // subcommands's default executors
+        manager.executeServerCommand("foo abc");
+    }
 }
