@@ -300,9 +300,9 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @return the list codec of type {@link T}
      */
     @Contract(pure = true, value = "_ -> new")
-    default Codec<@Unmodifiable List<@Nullable T>> listOrSingle(int maxSize) {
+    default Codec<@Unmodifiable @Nullable List<T>> listOrSingle(int maxSize) {
         return Codec.this.list(maxSize).orElse(Codec.this.transform(
-                List::of, list -> list.isEmpty() ? null : list.getFirst()));
+                (it) -> it == null ? null : List.of(it), list -> list.isEmpty() ? null : list.getFirst()));
     }
 
     /**
@@ -312,7 +312,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @return the list codec of type {@link T}
      */
     @Contract(pure = true, value = "-> new")
-    default Codec<@Unmodifiable List<@Nullable T>> listOrSingle() {
+    default Codec<@Unmodifiable @Nullable List<T>> listOrSingle() {
         return this.listOrSingle(Integer.MAX_VALUE);
     }
 
