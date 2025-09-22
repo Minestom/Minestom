@@ -65,7 +65,7 @@ public class CommandSuggestionSubcommandTest {
         var manager = new CommandManager();
         var command = new Command("foo");
         var barCommand = new Command("bar");
-        var bazCommand = new Command("baz", "bom");
+        var bazCommand = new Command("baz", "qux");
 
         var wordArg1 = Word("wordArg1");
         var wordArg2 = Word("wordArg2");
