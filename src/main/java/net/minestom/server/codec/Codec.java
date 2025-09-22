@@ -16,6 +16,7 @@ import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -64,7 +65,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
          * @param <D>   The Object type
          * @return the new raw value instance
          */
-        @Contract(pure = true)
+        @Contract(pure = true, value = "_, _ -> new")
         static <D> RawValue of(Transcoder<D> coder, D value) {
             return new CodecImpl.RawValueImpl<>(coder, value);
         }
@@ -76,7 +77,6 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
          * @param <D>   the resultant type; transcoder type.
          * @return the {@link Result} of converting to {@code coder}.
          */
-        @Contract(pure = true)
         <D> Result<D> convertTo(Transcoder<D> coder);
     }
 
@@ -142,7 +142,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <E>       Enum type, E must be an enum
      * @return the codec enum
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     static <E extends Enum<E>> Codec<E> Enum(Class<E> enumClass) {
         Objects.requireNonNull(enumClass, "Enum class cannot be null");
         return STRING.transform(
@@ -159,7 +159,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>  The codec Type
      * @return the recursive codec
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     static <T> Codec<T> Recursive(Function<Codec<T>, Codec<T>> func) {
         return new CodecImpl.RecursiveImpl<>(func).delegate;
     }
@@ -174,7 +174,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>      the codec type
      * @return the supplier
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     static <T> Codec<T> ForwardRef(Supplier<Codec<T>> supplier) {
         return new CodecImpl.ForwardRefImpl<>(supplier);
     }
@@ -188,7 +188,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>              the struct codec type.
      * @return a {@link StructCodec}
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _, _ -> new")
     static <T> StructCodec<T> RegistryTaggedUnion(
             Registry<StructCodec<? extends T>> registry,
             Function<T, StructCodec<? extends T>> serializerGetter,
@@ -204,13 +204,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * Registry selectors will be used to lookup values of codecs of {@link T}.
      * Then will be used to map to object {@link T} from {@code key}
      *
-     * @param registrySelector the registery selector used during lookup.
+     * @param registrySelector the registry selector used during lookup.
      * @param serializerGetter the serializer for each value of {@link T}
      * @param key              the map key for {@link T}
      * @param <T>              the codec type
      * @return a {@link StructCodec} bidirectionally mapping values of {@link T}
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _, _ -> new")
     static <T> StructCodec<T> RegistryTaggedUnion(
             Registries.Selector<StructCodec<? extends T>> registrySelector,
             Function<T, StructCodec<? extends T>> serializerGetter,
@@ -228,7 +228,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <R>        the right type
      * @return a {@link Codec} with {@link Either} of {@link L} and {@link R}
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _ -> new")
     static <L, R> Codec<Either<L, R>> Either(Codec<L> leftCodec, Codec<R> rightCodec) {
         return new CodecImpl.EitherImpl<>(leftCodec, rightCodec);
     }
@@ -238,7 +238,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      *
      * @return the optional codec of type {@link T}
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "-> new")
     default Codec<@Nullable T> optional() {
         return new CodecImpl.OptionalImpl<>(this, null);
     }
@@ -253,7 +253,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @return the optional codec of type {@link T}
      * @throws NullPointerException if defaultValue is null, use {@link #optional()} instead.
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     default Codec<@UnknownNullability T> optional(T defaultValue) {
         // We really have no idea what nullability this will have as optional still accepts null values, but the default value could never be null
         return new CodecImpl.OptionalImpl<>(this, Objects.requireNonNull(defaultValue, "Default value cannot be null"));
@@ -267,98 +267,98 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <S>  the type
      * @return the transforming codec of {@link S}
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _ -> new")
     default <S extends @UnknownNullability Object> Codec<S> transform(ThrowingFunction<T, S> to, ThrowingFunction<S, T> from) {
         return new CodecImpl.TransformImpl<>(this, to, from);
     }
 
     /**
-     * Creates a list codec of {@link T} where its size is no larger than {@code maxSize}.
+     * Creates an unmodifiable list codec of {@link T} where its size is no larger than {@code maxSize}.
      *
      * @param maxSize the max size of the list before returning an error result.
      * @return the list codec of type {@link T}
      */
-    @Contract(pure = true)
-    default Codec<List<T>> list(int maxSize) {
+    @Contract(pure = true, value = "_ -> new")
+    default Codec<@Unmodifiable List<T>> list(int maxSize) {
         return new CodecImpl.ListImpl<>(this, maxSize);
     }
 
     /**
-     * Creates an unbounded list codec. See {@link #list(int)}
+     * Creates an unmodifiable unbounded list codec. See {@link #list(int)}
      *
      * @return the unbounded list codec of type {@link T}
      */
-    @Contract(pure = true)
-    default Codec<List<T>> list() {
+    @Contract(pure = true, value = "-> new")
+    default Codec<@Unmodifiable List<T>> list() {
         return list(Integer.MAX_VALUE);
     }
 
     /**
-     * Returns a list or the first element or null if no such element exists.
+     * Returns an unmodifiable list or the first element or null if no such element exists.
      *
      * @param maxSize the max size of the list before returning an error result
      * @return the list codec of type {@link T}
      */
-    @Contract(pure = true)
-    default Codec<List<@Nullable T>> listOrSingle(int maxSize) {
+    @Contract(pure = true, value = "_ -> new")
+    default Codec<@Unmodifiable List<@Nullable T>> listOrSingle(int maxSize) {
         return Codec.this.list(maxSize).orElse(Codec.this.transform(
                 List::of, list -> list.isEmpty() ? null : list.getFirst()));
     }
 
     /**
-     * Returns an unbounded list or the first element or null if no such element exists.
+     * Returns an unmodifiable unbounded list or the first element or null if no such element exists.
      * See {@link #listOrSingle(int)}
      *
      * @return the list codec of type {@link T}
      */
-    @Contract(pure = true)
-    default Codec<List<@Nullable T>> listOrSingle() {
+    @Contract(pure = true, value = "-> new")
+    default Codec<@Unmodifiable List<@Nullable T>> listOrSingle() {
         return this.listOrSingle(Integer.MAX_VALUE);
     }
 
     /**
-     * Creates a set where its max is no larger than {@code maxSize}
+     * Creates an unmodifiable set where its max is no larger than {@code maxSize}
      *
      * @param maxSize the max size before returning an error result
      * @return the set codec of type {@link T}
      */
-    @Contract(pure = true)
-    default Codec<Set<T>> set(int maxSize) {
+    @Contract(pure = true, value = "_ -> new")
+    default Codec<@Unmodifiable Set<T>> set(int maxSize) {
         return new CodecImpl.SetImpl<>(Codec.this, maxSize);
     }
 
     /**
-     * Creates an unbounded set. See {@link #set(int)}
+     * Creates an unmodifiable unbounded set. See {@link #set(int)}
      *
      * @return the set codec of type {@link T}
      */
-    @Contract(pure = true)
-    default Codec<Set<T>> set() {
+    @Contract(pure = true, value = "-> new")
+    default Codec<@Unmodifiable Set<T>> set() {
         return set(Integer.MAX_VALUE);
     }
 
     /**
-     * Creates a map of key {@link T} and value of {@link V}
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}
      *
      * @param valueCodec the codec to use for {@link V}
      * @param maxSize    the max size before returning an error result.
      * @param <V>        the value type
      * @return the map codec of type {@link T} and {@link V}
      */
-    @Contract(pure = true)
-    default <V> Codec<Map<T, V>> mapValue(Codec<V> valueCodec, int maxSize) {
+    @Contract(pure = true, value = "_, _ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValue(Codec<V> valueCodec, int maxSize) {
         return new CodecImpl.MapImpl<>(Codec.this, valueCodec, maxSize);
     }
 
     /**
-     * Creates a map of key {@link T} and value of {@link V}. See {@link #mapValue(Codec, int)}
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}. See {@link #mapValue(Codec, int)}
      *
      * @param valueCodec the codec to use for {@link V}
      * @param <V>        the value type
      * @return the map codec of type {@link T} and {@link V}
      */
-    @Contract(pure = true)
-    default <V> Codec<Map<T, V>> mapValue(Codec<V> valueCodec) {
+    @Contract(pure = true, value = "_ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValue(Codec<V> valueCodec) {
         return mapValue(valueCodec, Integer.MAX_VALUE);
     }
 
@@ -372,7 +372,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <R>         the return type; {@link T} or a subclass
      * @return the struct codec union of {@link R}
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _ -> new")
     default <R> StructCodec<R> unionType(Function<T, StructCodec<? extends R>> serializers, Function<R, ? extends T> keyFunc) {
         return unionType("type", serializers, keyFunc);
     }
@@ -388,7 +388,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <R>         the return type; {@link T} or a subclass
      * @return the struct codec union of {@link R}
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _, _ -> new")
     default <R> StructCodec<R> unionType(
             String keyField,
             Function<T, StructCodec<? extends R>> serializers,
@@ -406,7 +406,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param other the other codec
      * @return the or else codec of {@link T}
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     default Codec<T> orElse(Codec<T> other) {
         return new CodecImpl.OrElseImpl<>(this, other);
     }

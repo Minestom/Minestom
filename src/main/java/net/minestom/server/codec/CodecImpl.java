@@ -15,6 +15,7 @@ import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -124,13 +125,13 @@ final class CodecImpl {
         }
     }
 
-    record ListImpl<T>(Codec<T> inner, int maxSize) implements Codec<List<T>> {
+    record ListImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable List<T>> {
         ListImpl {
             Objects.requireNonNull(inner, "inner");
         }
 
         @Override
-        public <D> Result<List<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<@Unmodifiable List<T>> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
             if (!(listResult instanceof Result.Ok(List<D> list)))
                 return listResult.cast();
@@ -164,13 +165,13 @@ final class CodecImpl {
         }
     }
 
-    record SetImpl<T>(Codec<T> inner, int maxSize) implements Codec<Set<T>> {
+    record SetImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable Set<T>> {
         SetImpl {
             Objects.requireNonNull(inner, "inner");
         }
 
         @Override
-        public <D> Result<Set<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<@Unmodifiable Set<T>> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
             if (!(listResult instanceof Result.Ok(List<D> list)))
                 return listResult.cast();
@@ -204,14 +205,14 @@ final class CodecImpl {
     }
 
     record MapImpl<K, V>(Codec<K> keyCodec, Codec<V> valueCodec,
-                         int maxSize) implements Codec<Map<K, V>> {
+                         int maxSize) implements Codec<@Unmodifiable Map<K, V>> {
         MapImpl {
             Objects.requireNonNull(keyCodec, "keyCodec");
             Objects.requireNonNull(valueCodec, "valueCodec");
         }
 
         @Override
-        public <D> Result<Map<K, V>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<@Unmodifiable Map<K, V>> decode(Transcoder<D> coder, D value) {
             final Result<MapLike<D>> mapResult = coder.getMap(value);
             if (!(mapResult instanceof Result.Ok(MapLike<D> map)))
                 return mapResult.cast();
