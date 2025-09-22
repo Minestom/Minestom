@@ -5,7 +5,7 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 
 record StatisticTypeImpl(Key key, int id) implements StatisticType {
-    static final Registry<StatisticType> REGISTRY = RegistryData.createStaticRegistry(Key.key("statistic_type"),
+    static final Registry<StatisticType> REGISTRY = RegistryData.createStaticRegistry(Key.key("custom_statistics"),
             (namespace, properties) -> new StatisticTypeImpl(Key.key(namespace), properties.getInt("id")));
 
     static StatisticType get(String key) {
