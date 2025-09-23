@@ -163,7 +163,7 @@ public sealed class MetadataDef {
     }
 
     public static final class MinecartCommandBlock extends AbstractMinecart {
-        public static final Entry<String> COMMAND = index(0, Metadata::String, "false");
+        public static final Entry<String> COMMAND = index(0, Metadata::String, "");
         public static final Entry<Component> LAST_OUTPUT = index(1, Metadata::Chat, Component.empty());
     }
 
