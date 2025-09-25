@@ -2,7 +2,7 @@ package net.minestom.server.codec;
 
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
-import net.minestom.server.network.NetworkBufferTemplate.*;
+import net.minestom.server.utils.Functions.*;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
