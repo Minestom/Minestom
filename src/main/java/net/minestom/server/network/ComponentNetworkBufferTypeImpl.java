@@ -11,6 +11,7 @@ import net.minestom.server.adventure.serializer.nbt.NbtDataComponentValue;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.dialog.Dialog;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
@@ -34,8 +35,9 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
     @Override
     public Component read(NetworkBuffer buffer) {
-        final Transcoder<BinaryTag> coder = buffer.registries() != null
-                ? new RegistryTranscoder<>(Transcoder.NBT, buffer.registries())
+        final Registries registries = buffer.registries();
+        final Transcoder<BinaryTag> coder = registries != null
+                ? new RegistryTranscoder<>(Transcoder.NBT, registries)
                 : Transcoder.NBT;
         return Codec.COMPONENT.decode(coder, buffer.read(NBT)).orElseThrow();
     }
@@ -262,8 +264,9 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 final ClickEvent.Payload.Dialog payload = checkPayload(clickEvent, ClickEvent.Payload.Dialog.class);
 
                 try {
-                    final Transcoder<BinaryTag> coder = buffer.registries() != null
-                            ? new RegistryTranscoder<>(Transcoder.NBT, buffer.registries())
+                    final Registries registries = buffer.registries();
+                    final Transcoder<BinaryTag> coder = registries != null
+                            ? new RegistryTranscoder<>(Transcoder.NBT, registries)
                             : Transcoder.NBT;
                     final BinaryTag dialog = Dialog.CODEC.encode(coder, Dialog.unwrap(payload.dialog())).orElseThrow();
 
