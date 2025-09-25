@@ -1,7 +1,5 @@
 package net.minestom.server.network;
 
-import net.minestom.server.utils.validate.Check;
-
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -16,7 +14,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
  */
 record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IOView {
     NetworkBufferIOViewImpl {
-        Objects.requireNonNull(buffer, "Buffer cannot be null");
+        Objects.requireNonNull(buffer, "buffer");
     }
 
     @Override
@@ -160,7 +158,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public void writeBytes(String string) {
-        Check.notNull(string, "String cannot be null!");
+        Objects.requireNonNull(string, "String cannot be null!");
         for (int i = 0; i < string.length(); i++) {
             buffer.write(BYTE, (byte) string.charAt(i)); // Low byte only
         }
@@ -168,7 +166,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public void writeChars(String string) {
-        Check.notNull(string, "String cannot be null!");
+        Objects.requireNonNull(string, "String cannot be null!");
         for (int i = 0; i < string.length(); i++) {
             buffer.write(SHORT, (short) string.charAt(i));
         }
@@ -176,7 +174,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public void writeUTF(String string) {
-        Check.notNull(string, "String cannot be null!");
+        Objects.requireNonNull(string, "String cannot be null!");
         buffer.write(STRING_IO_UTF8, string);
     }
 }
