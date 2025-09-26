@@ -2,7 +2,6 @@ package net.minestom.server.network;
 
 import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
@@ -13,13 +12,13 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.json.JsonUtil;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -793,7 +792,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
                 keys[i] = buffer.read(parent);
                 values[i] = buffer.read(valueType);
             }
-            return Map.copyOf(new Object2ObjectArrayMap<>(keys, values, size));
+            return ArrayUtils.toMap(keys, values, size);
         }
     }
 
