@@ -8,6 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -24,9 +25,9 @@ public final class Server {
 
     private final PacketParser<ClientPacket> packetParser;
 
-    private ServerSocketChannel serverSocket;
-    private SocketAddress socketAddress;
-    private String address;
+    private @UnknownNullability ServerSocketChannel serverSocket;
+    private @UnknownNullability SocketAddress socketAddress;
+    private @UnknownNullability String address;
     private int port;
 
     public Server(PacketParser<ClientPacket> packetParser) {
@@ -119,12 +120,15 @@ public final class Server {
                 break;
             }
         }
+        // Ensure the write thread gets unlocked once the read thread stops.
+        connection.unlockWriteThread();
     }
 
     private void playerWriteLoop(PlayerSocketConnection connection) {
         Check.notNull(connection, "connection cannot be null");
         while (!stop) {
             try {
+                connection.awaitSendablePackets();
                 connection.flushSync();
             } catch (ClosedChannelException ignored) {
                 break; // We closed the socket during write, just exit.

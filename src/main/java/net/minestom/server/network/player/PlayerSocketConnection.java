@@ -32,6 +32,7 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.Cipher;
@@ -74,13 +75,13 @@ public class PlayerSocketConnection extends PlayerConnection {
     private SocketAddress remoteAddress;
 
     //Could be null. Only used for Mojang Auth
-    private volatile EncryptionContext encryptionContext;
+    private volatile @Nullable EncryptionContext encryptionContext;
     private byte[] nonce = new byte[4];
 
     // Data from client packets
-    private String loginUsername;
-    private GameProfile gameProfile;
-    private String serverAddress;
+    private @Nullable String loginUsername;
+    private @Nullable GameProfile gameProfile;
+    private @Nullable String serverAddress;
     private int serverPort;
     private int protocolVersion;
 
@@ -89,6 +90,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private final Thread readThread, writeThread;
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
+    private @Nullable NetworkBuffer writeLeftover = null;
     // Index where compression starts, linked to `sentPacketCounter`
     // Used instead of a simple boolean so we can get proper timing for serialization
     private volatile long compressionStart = Long.MAX_VALUE;
@@ -221,7 +223,8 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     // Requires ServerFlag.FASTER_SOCKET_WRITES
-    private void unlockWriteThread() {
+    @ApiStatus.Internal
+    public void unlockWriteThread() {
         if (!ServerFlag.FASTER_SOCKET_WRITES) return;
         if (!this.writeSignaled.compareAndExchange(false, true)) {
             LockSupport.unpark(writeThread);
@@ -413,9 +416,29 @@ public class PlayerSocketConnection extends PlayerConnection {
         return true;
     }
 
-    private NetworkBuffer writeLeftover = null;
+    @Blocking
+    public void awaitSendablePackets() throws InterruptedException {
+        // Consume queued packets
+        final var packetQueue = this.packetQueue;
+        if (!packetQueue.isEmpty()) return;
+        if (ServerFlag.FASTER_SOCKET_WRITES) {
+            assert this.writeThread == Thread.currentThread() : "writeThread should be the current thread";
+            this.writeSignaled.set(false);
+            // We cant sleep forever if our writeLeftover still exists, we fall back to a fixed parkNanos, which is also spirituous
+            final var writeLeftover = this.writeLeftover;
+            if (writeLeftover != null) {
+                LockSupport.parkNanos(writeLeftover, 1_000_000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
+            } else {
+                LockSupport.park(this);
+            }
+            assert this.packetQueue.peek() != null : "packet queue should not be empty";
+        } else {
+            Thread.sleep(1000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
+        }
+    }
 
     public void flushSync() throws IOException {
+        if (!channel.isConnected()) throw new EOFException("Channel is closed");
         // Write leftover if any
         NetworkBuffer leftover = this.writeLeftover;
         if (leftover != null) {
@@ -428,25 +451,8 @@ public class PlayerSocketConnection extends PlayerConnection {
                 return;
             }
         }
-        // Consume queued packets
-        var packetQueue = this.packetQueue;
-        if (packetQueue.isEmpty()) {
-            if (!ServerFlag.FASTER_SOCKET_WRITES) {
-                try {
-                    // Can probably be improved by waking up at the end of the tick
-                    // But this work well enough and without additional state.
-                    Thread.sleep(1000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                assert this.writeThread == Thread.currentThread(): "writeThread should be the current thread";
-                this.writeSignaled.set(false);
-                LockSupport.park(this);
-                assert this.packetQueue.peek() != null : "packet queue should not be empty";
-            }
-        }
-        if (!channel.isConnected()) throw new EOFException("Channel is closed");
+        final var packetQueue = this.packetQueue;
+        if (packetQueue.isEmpty()) return; // Nothing to write, no need to access the pool
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         // Write to buffer
         PacketWriting.writeQueue(buffer, packetQueue, 1, (b, packet) -> {
