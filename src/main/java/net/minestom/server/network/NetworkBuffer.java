@@ -249,6 +249,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     @Nullable Registries registries();
 
+    /**
+     * Creates a new {@link IOView} of this buffer.
+     * <br>
+     * Useful to interface with API's that support {@link DataInput} or {@link DataOutput}.
+     * @return the io view.
+     */
+    @ApiStatus.Experimental
+    @Contract(pure = true, value = "->new")
+    IOView ioView();
+
     interface Type<T extends @UnknownNullability Object> {
         void write(NetworkBuffer buffer, T value);
 
@@ -435,25 +445,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Self-contained interface
      * that extends {@link DataInput} and {@link DataOutput} for mostly reading/writing binary tags.
-     * <p>
+     * <br>
+     * You can access the io view of a network buffer with {@link NetworkBuffer#ioView()}
+     * <br>
      * This interface is separate from {@link NetworkBuffer}
      * because we don't want DataInput and DataOutput to be part of the public API.
      * You should use {@link NetworkBuffer} instead where possible.
+     * <br>
+     * You should never rely on the identity properties of {@link IOView} as it is a value class candidate.
      */
     sealed interface IOView extends DataInput, DataOutput permits NetworkBufferIOViewImpl {
-        /**
-         * Creates a new {@link IOView} for the given {@link NetworkBuffer}.
-         * @param buffer the buffer to read from and write to
-         * @return the view of the buffer
-         * <br>
-         * Note: The backing buffer is used for index tracking.
-         */
-        @ApiStatus.Experimental
-        @Contract(pure = true)
-        static IOView of(NetworkBuffer buffer) {
-            return new NetworkBufferIOViewImpl(buffer);
-        }
-
         /**
          * @throws UnsupportedOperationException not implemented.
          */

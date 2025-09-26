@@ -352,7 +352,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
     record NbtType<T extends BinaryTag>() implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
-            final BinaryTagWriter nbtWriter = new BinaryTagWriter(IOView.of(buffer));
+            final BinaryTagWriter nbtWriter = new BinaryTagWriter(buffer.ioView());
             try {
                 nbtWriter.writeNameless(value);
             } catch (IOException e) {
@@ -363,7 +363,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         @SuppressWarnings("unchecked") // TODO push this down into the reader
         @Override
         public T read(NetworkBuffer buffer) {
-            final BinaryTagReader nbtReader = new BinaryTagReader(IOView.of(buffer));
+            final BinaryTagReader nbtReader = new BinaryTagReader(buffer.ioView());
             try {
                 return (T) nbtReader.readNameless();
             } catch (IOException e) {

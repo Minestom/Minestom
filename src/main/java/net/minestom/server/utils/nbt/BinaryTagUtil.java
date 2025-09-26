@@ -1,56 +1,45 @@
 package net.minestom.server.utils.nbt;
 
 import net.kyori.adventure.nbt.*;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
+
+import static net.kyori.adventure.nbt.BinaryTagTypes.*;
 
 @ApiStatus.Internal
 public final class BinaryTagUtil {
-    private static final BinaryTagType<?>[] TYPES = new BinaryTagType[]{
-            BinaryTagTypes.END,
-            BinaryTagTypes.BYTE,
-            BinaryTagTypes.SHORT,
-            BinaryTagTypes.INT,
-            BinaryTagTypes.LONG,
-            BinaryTagTypes.FLOAT,
-            BinaryTagTypes.DOUBLE,
-            BinaryTagTypes.BYTE_ARRAY,
-            BinaryTagTypes.STRING,
-            BinaryTagTypes.LIST,
-            BinaryTagTypes.COMPOUND,
-            BinaryTagTypes.INT_ARRAY,
-            BinaryTagTypes.LONG_ARRAY,
-    };
-
-    public static BinaryTagType<?> nbtTypeFromId(byte id) {
-        Check.argCondition(id < 0 || id >= TYPES.length, "Invalid NBT type id: " + id);
-        return TYPES[id];
+    public static BinaryTagType<? extends BinaryTag> nbtTypeFromId(byte id) {
+        return switch (id) {
+            case 0 -> END;
+            case 1 -> BYTE;
+            case 2 -> SHORT;
+            case 3 -> INT;
+            case 4 -> LONG;
+            case 5 -> FLOAT;
+            case 6 -> DOUBLE;
+            case 7 -> BYTE_ARRAY;
+            case 8 -> STRING;
+            case 9 -> LIST;
+            case 10 -> COMPOUND;
+            case 11 -> INT_ARRAY;
+            case 12 -> LONG_ARRAY;
+            default -> throw new IllegalStateException("Unexpected NBT id value: " + id);
+        };
     }
 
     public static Object nbtValueFromTag(BinaryTag tag) {
-        if (tag instanceof ByteBinaryTag byteTag) {
-            return byteTag.value();
-        } else if (tag instanceof ShortBinaryTag shortTag) {
-            return shortTag.value();
-        } else if (tag instanceof IntBinaryTag intTag) {
-            return intTag.value();
-        } else if (tag instanceof LongBinaryTag longTag) {
-            return longTag.value();
-        } else if (tag instanceof FloatBinaryTag floatTag) {
-            return floatTag.value();
-        } else if (tag instanceof DoubleBinaryTag doubleTag) {
-            return doubleTag.value();
-        } else if (tag instanceof ByteArrayBinaryTag byteArrayTag) {
-            return byteArrayTag.value();
-        } else if (tag instanceof StringBinaryTag stringTag) {
-            return stringTag.value();
-        } else if (tag instanceof IntArrayBinaryTag intArrayTag) {
-            return intArrayTag.value();
-        } else if (tag instanceof LongArrayBinaryTag longArrayTag) {
-            return longArrayTag.value();
-        } else {
-            throw new UnsupportedOperationException("Unsupported NBT type: " + tag.getClass());
-        }
+        return switch (tag) {
+            case ByteBinaryTag byteTag -> byteTag.value();
+            case ShortBinaryTag shortTag -> shortTag.value();
+            case IntBinaryTag intTag -> intTag.value();
+            case LongBinaryTag longTag -> longTag.value();
+            case FloatBinaryTag floatTag -> floatTag.value();
+            case DoubleBinaryTag doubleTag -> doubleTag.value();
+            case ByteArrayBinaryTag byteArrayTag -> byteArrayTag.value();
+            case StringBinaryTag stringTag -> stringTag.value();
+            case IntArrayBinaryTag intArrayTag -> intArrayTag.value();
+            case LongArrayBinaryTag longArrayTag -> longArrayTag.value();
+            default -> throw new UnsupportedOperationException("Unsupported NBT type: " + tag.getClass());
+        };
     }
 
     private BinaryTagUtil() {

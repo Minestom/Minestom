@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.io.EOFException;
+import java.lang.foreign.ValueLayout;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.function.Consumer;
@@ -21,7 +23,16 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
+final class NetworkBufferImpl implements NetworkBuffer {
+    // Writing order
+    public static final ByteOrder BYTE_ORDER = ByteOrder.BIG_ENDIAN;
+    public static final ValueLayout.OfByte JAVA_BYTE = ValueLayout.JAVA_BYTE.withOrder(BYTE_ORDER);
+    public static final ValueLayout.OfShort JAVA_SHORT = ValueLayout.JAVA_SHORT_UNALIGNED.withOrder(BYTE_ORDER);
+    public static final ValueLayout.OfInt JAVA_INT = ValueLayout.JAVA_INT_UNALIGNED.withOrder(BYTE_ORDER);
+    public static final ValueLayout.OfLong JAVA_LONG = ValueLayout.JAVA_LONG_UNALIGNED.withOrder(BYTE_ORDER);
+    public static final ValueLayout.OfFloat JAVA_FLOAT = ValueLayout.JAVA_FLOAT_UNALIGNED.withOrder(BYTE_ORDER);
+    public static final ValueLayout.OfDouble JAVA_DOUBLE = ValueLayout.JAVA_DOUBLE_UNALIGNED.withOrder(BYTE_ORDER);
+
     // Dummy constants
     private static final long DUMMY_CAPACITY = Long.MAX_VALUE;
 
@@ -343,6 +354,11 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     @Override
+    public IOView ioView() {
+        return new NetworkBufferIOViewImpl(this);
+    }
+
+    @Override
     public String toString() {
         return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, autoResize=%s, readOnly=%s}",
                 readIndex, writeIndex, capacity(), registries != null, autoResize != null, isReadOnly());
@@ -480,8 +496,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         }
 
         @Override
-        public NetworkBuffer.Builder arena(Arena arena) {
-            Check.notNull(arena, "Arena cannot be null, use NetworkBuffer#sizeOf instead.");
+        public NetworkBuffer.Builder arena(@Nullable Arena arena) {
             this.arena = arena;
             return this;
         }
@@ -493,7 +508,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         }
 
         @Override
-        public NetworkBuffer.Builder registry(Registries registries) {
+        public NetworkBuffer.Builder registry(@Nullable Registries registries) {
             this.registries = registries;
             return this;
         }
