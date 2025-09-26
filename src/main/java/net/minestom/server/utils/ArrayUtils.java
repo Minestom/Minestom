@@ -3,6 +3,7 @@ package net.minestom.server.utils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -34,7 +35,7 @@ public final class ArrayUtils {
         return result;
     }
 
-    public static <K, V> Map<K, V> toMap(K[] keys, V[] values, int length) {
+    public static <K, V> @Unmodifiable Map<K, V> toMap(K[] keys, V[] values, int length) {
         assert keys.length >= length && keys.length == values.length;
         return switch (length) {
             case 0 -> Map.of();
