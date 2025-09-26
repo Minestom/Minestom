@@ -2,7 +2,6 @@ package net.minestom.server.network;
 
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -18,7 +17,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -36,21 +37,25 @@ final class NetworkBufferImpl implements NetworkBuffer {
     // Dummy constants
     private static final long DUMMY_CAPACITY = Long.MAX_VALUE;
 
-    private final @Nullable Arena arena; // Nullable for dummy buffers or wrapped buffers.
+    // Required to keep a strong reference to the used arena. Regardless if we allocate on it or not
+    // Nullable for dummy buffers or wrapped buffers.
+    private @Nullable Arena arena;
     private MemorySegment segment; // final when autoResize is null
 
     private final @Nullable AutoResize autoResize;
     private final @Nullable Registries registries;
+    private final @Nullable Supplier<Arena> arenaSupplier; // This is awful, but auto arenas won't deallocate on resize without this.
 
     private long readIndex, writeIndex;
 
-    NetworkBufferImpl(@Nullable Arena arena, MemorySegment segment, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
+    NetworkBufferImpl(@Nullable Arena arena, MemorySegment segment, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries, @Nullable Supplier<Arena> arenaSupplier) {
         this.arena = arena;
         this.segment = segment;
         this.readIndex = readIndex;
         this.writeIndex = writeIndex;
         this.autoResize = autoResize;
         this.registries = registries;
+        this.arenaSupplier = arenaSupplier;
     }
 
     @Override
@@ -208,14 +213,16 @@ final class NetworkBufferImpl implements NetworkBuffer {
     public void resize(long newSize) {
         assertDummy();
         assertReadOnly();
-        final Arena arena = this.arena;
-        if (arena == null) throw new IllegalStateException("Buffer cannot be resized without an arena");
+        final Supplier<Arena> arenaSupplier = this.arenaSupplier;
+        if (arenaSupplier == null) throw new IllegalStateException("Buffer cannot be resized without an arena");
         final long capacity = capacity();
         if (newSize < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (newSize == capacity) throw new IllegalArgumentException("New size is the same as the current size");
+        final Arena arena = arenaSupplier.get(); // We need to use a new arena to allow the old one to deallocate.
         final MemorySegment newSegment = arena.allocate(newSize);
         MemorySegment.copy(this.segment, 0, newSegment, 0, capacity);
         this.segment = newSegment;
+        this.arena = arena;
     }
 
     @Override
@@ -230,26 +237,39 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public NetworkBuffer trim() {
-        return trim(null); // Deferred arena creation.
-    }
-
-    @Override
-    public NetworkBuffer trim(@Nullable Arena arena) {
+    public NetworkBuffer trim(NetworkBuffer.Settings settings) {
         assertDummy();
         assertReadOnly();
         final long readableBytes = readableBytes();
         if (readableBytes == capacity()) return this;
-        if (arena == null) arena = defaultArena();
+        return copy(settings, readIndex, readableBytes, 0, readableBytes);
+    }
+
+    @Override
+    public NetworkBuffer trim(Arena arena) {
+        assertDummy();
+        assertReadOnly();
+        final long readableBytes = readableBytes();
+        if (readableBytes == capacity()) return this;
         return copy(arena, readIndex, readableBytes, 0, readableBytes);
+    }
+
+    @Override
+    public NetworkBuffer copy(NetworkBuffer.Settings settings, long index, long length, long readIndex, long writeIndex) {
+        assertDummy();
+        final Settings settingsImpl = (Settings) settings;
+        final Arena arena = settingsImpl.arena(); // Get a new arena to copy into.
+        final MemorySegment copySegment = arena.allocate(length); // implicit null check of arena.
+        MemorySegment.copy(this.segment, index, copySegment, 0, length);
+        return new NetworkBufferImpl(arena, copySegment, readIndex, writeIndex, settingsImpl.autoResize(), settingsImpl.registries(), settingsImpl.arenaSupplier());
     }
 
     @Override
     public NetworkBuffer copy(Arena arena, long index, long length, long readIndex, long writeIndex) {
         assertDummy();
-        final MemorySegment copySegment = arena.allocate(length);
+        final MemorySegment copySegment = arena.allocate(length); // implicit null check of arena.
         MemorySegment.copy(this.segment, index, copySegment, 0, length);
-        return new NetworkBufferImpl(arena, copySegment, readIndex, writeIndex, autoResize, registries);
+        return new NetworkBufferImpl(arena, copySegment, readIndex, writeIndex, autoResize, registries, arenaSupplier);
     }
 
     @Override
@@ -257,7 +277,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         assertDummy();
         final MemorySegment sliceSegment = this.segment.asSlice(index, length);
         // This region will live as long as the backing segment is alive, no reason to create another arena.
-        return new NetworkBufferImpl(arena, sliceSegment, readIndex, writeIndex, autoResize, registries);
+        return new NetworkBufferImpl(this.arena, sliceSegment, readIndex, writeIndex, null, registries, null);
     }
 
     @Override
@@ -350,7 +370,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public @Nullable Registries registries() {
-        return registries;
+        return this.registries;
     }
 
     @Override
@@ -361,7 +381,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public String toString() {
         return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, autoResize=%s, readOnly=%s}",
-                readIndex, writeIndex, capacity(), registries != null, autoResize != null, isReadOnly());
+                readIndex, writeIndex, capacity(), registries() != null, this.autoResize != null, isReadOnly());
     }
 
     private boolean isDummy() {
@@ -452,9 +472,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
+        Objects.requireNonNull(segment, "segment"); // Doesn't make sense with a null segment.
         return new NetworkBufferImpl(
                 null, segment,
-                readIndex, writeIndex, null, registries
+                readIndex, writeIndex,
+                null, registries, null
         );
     }
 
@@ -466,6 +488,13 @@ final class NetworkBufferImpl implements NetworkBuffer {
         dst.assertDummy();
         dst.assertReadOnly();
         MemorySegment.copy(src.segment, srcOffset, dst.segment, dstOffset, length);
+    }
+
+    public static void fill(NetworkBuffer srcBuffer, long srcOffset, byte value, long length) {
+        var src = impl(srcBuffer);
+        src.assertDummy();
+        src.assertReadOnly();
+        src.segment.asSlice(srcOffset, length).fill(value);
     }
 
     public static boolean contentEquals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
@@ -486,40 +515,51 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (isDummy()) throw new UnsupportedOperationException("Buffer is a dummy buffer");
     }
 
-    static final class Builder implements NetworkBuffer.Builder {
-        private final long initialSize;
-        private @Nullable Arena arena;
-        private @Nullable AutoResize autoResize;
-        private @Nullable Registries registries;
-        public Builder(long initialSize) {
-            this.initialSize = initialSize;
+    record Settings(Supplier<Arena> arenaSupplier, @Nullable AutoResize autoResize, @Nullable Registries registries) implements NetworkBuffer.Settings {
+        static final Settings STATIC = new Settings(Arena::ofAuto, null, null);
+        static final Settings RESIZEABLE = STATIC.autoResize(AutoResize.DOUBLE);
+
+        public Settings {
+            Objects.requireNonNull(arenaSupplier, "arenaSupplier");
         }
 
         @Override
-        public NetworkBuffer.Builder arena(@Nullable Arena arena) {
-            this.arena = arena;
-            return this;
+        public Settings arena(Arena arena) {
+            Objects.requireNonNull(arena, "arena");
+            return new Settings(() -> arena, autoResize, registries);
         }
 
         @Override
-        public NetworkBuffer.Builder autoResize(@Nullable AutoResize autoResize) {
-            this.autoResize = autoResize;
-            return this;
+        public Settings arena(Supplier<Arena> arenaSupplier) {
+            Objects.requireNonNull(arenaSupplier, "arenaSupplier");
+            return new Settings(arenaSupplier, autoResize, registries);
         }
 
         @Override
-        public NetworkBuffer.Builder registry(@Nullable Registries registries) {
-            this.registries = registries;
-            return this;
+        public Settings autoResize(AutoResize autoResize) {
+            Objects.requireNonNull(autoResize, "autoResize");
+            return new Settings(arenaSupplier, autoResize, registries);
         }
 
         @Override
-        public NetworkBuffer build() {
-            if (this.arena == null) this.arena = defaultArena();
+        public Settings registry(Registries registries) {
+            Objects.requireNonNull(registries, "registries");
+            return new Settings(arenaSupplier, autoResize, registries);
+        }
+
+        @Contract("->new")
+        public Arena arena() {
+            return Objects.requireNonNull(arenaSupplier.get(), "arena");
+        }
+
+        @Override
+        public NetworkBuffer build(long initialSize) {
+            final Arena arena = arena();
             return new NetworkBufferImpl(
                     arena, arena.allocate(initialSize),
                     0, 0,
-                    autoResize, registries);
+                    autoResize, registries, arenaSupplier
+            );
         }
 
     }
@@ -531,16 +571,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return new NetworkBufferImpl(
                 null, MemorySegment.NULL,
                 0, 0,
-                null, registries);
+                null, registries, null);
     }
 
     @Contract(pure = true)
     static NetworkBufferImpl impl(NetworkBuffer buffer) {
         return (NetworkBufferImpl) buffer;
-    }
-
-    @Contract(pure = true)
-    static Arena defaultArena() {
-        return Arena.ofAuto();
     }
 }

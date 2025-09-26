@@ -66,7 +66,7 @@ import java.util.zip.DataFormatException;
  *     System.out.println("Bytes: " + Arrays.toString(bytes));
  *     NetworkBuffer buffer = NetworkBuffer.wrap(bytes, 0, bytes.length);
  *     MyData value = buffer.read(MyData.SERIALIZER);
- *     System.out.println("Value: " + value); // Output: Value: MyData
+ *     System.out.println("Value: " + value); // Value: MyData(id=1, name="Test")
  * </code></pre>
  */
 public sealed interface NetworkBuffer permits NetworkBufferImpl {
@@ -203,7 +203,12 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void compact();
 
     @Contract(pure = true)
-    NetworkBuffer trim();
+    default NetworkBuffer trim() {
+        return trim(builder());
+    }
+
+    @Contract(pure = true)
+    NetworkBuffer trim(Settings builder);
 
     @ApiStatus.Experimental
     @Contract(pure = true)
@@ -214,16 +219,18 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return copy(index, length, readIndex(), writeIndex());
     }
 
-    @ApiStatus.Experimental
     @Contract(pure = true)
-    default NetworkBuffer copy(Arena arena, long index, long length) {
-        return copy(arena, index, length, readIndex(), writeIndex());
+    default NetworkBuffer copy(Settings builder, long index, long length) {
+        return copy(builder, index, length, readIndex(), writeIndex());
     }
 
     @Contract(pure = true)
-    default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex){
-        return copy(NetworkBufferImpl.defaultArena(), index, length, readIndex, writeIndex);
+    default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
+        return copy(builder(), index, length, readIndex, writeIndex);
     }
+
+    @Contract(pure = true, value = "_, _, _, _, _ -> new")
+    NetworkBuffer copy(Settings builder, long index, long length, long readIndex, long writeIndex);
 
     @ApiStatus.Experimental
     @Contract(pure = true, value = "_, _, _, _, _ -> new")
@@ -264,12 +271,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
         T read(NetworkBuffer buffer);
 
-        default long sizeOf(T value, @Nullable Registries registries) {
+        default long sizeOf(T value, Registries registries) {
+            Objects.requireNonNull(registries, "registries");
             return NetworkBufferTypeImpl.sizeOf(this, value, registries);
         }
 
         default long sizeOf(T value) {
-            return sizeOf(value, null);
+            return NetworkBufferTypeImpl.sizeOf(this, value, null);
         }
 
         default <S> Type<S> transform(Function<T, S> to, Function<S, T> from) {
@@ -313,69 +321,168 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         }
     }
 
-    static Builder builder(long size) {
-        return new NetworkBufferImpl.Builder(size);
+    @Contract(pure = true)
+    static Settings builder() {
+        // TODO we probably should allow changing the default builder to allow custom arena implementations that could track the amount of bytes used, lifetime etc...
+        return staticBuilder();
     }
 
-    static NetworkBuffer staticBuffer(long size, @Nullable Registries registries) {
-        return builder(size).registry(registries).build();
+    @Contract(pure = true)
+    static Settings staticBuilder() {
+        return NetworkBufferImpl.Settings.STATIC;
+    }
+
+    @Contract(pure = true)
+    static Settings resizeableBuilder() {
+        return NetworkBufferImpl.Settings.RESIZEABLE;
+    }
+
+    static NetworkBuffer staticBuffer(long size, Registries registries) {
+        Objects.requireNonNull(registries, "registries");
+        return staticBuilder().registry(registries).build(size);
     }
 
     static NetworkBuffer staticBuffer(long size) {
-        return staticBuffer(size, null);
+        return staticBuilder().build(size);
     }
 
-    static NetworkBuffer resizableBuffer(long initialSize, @Nullable Registries registries) {
-        return builder(initialSize)
-                .autoResize(AutoResize.DOUBLE)
+    static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
+        Objects.requireNonNull(registries, "registries");
+        return resizeableBuilder()
                 .registry(registries)
-                .build();
+                .build(initialSize);
     }
 
     static NetworkBuffer resizableBuffer(int initialSize) {
-        return resizableBuffer(initialSize, null);
+        return resizeableBuilder().build(initialSize);
     }
 
-    static NetworkBuffer resizableBuffer(@Nullable Registries registries) {
+    static NetworkBuffer resizableBuffer(Registries registries) {
+        Objects.requireNonNull(registries, "registries");
         return resizableBuffer(256, registries);
     }
 
     static NetworkBuffer resizableBuffer() {
-        return resizableBuffer(null);
+        return resizableBuffer(256);
     }
-
-
+    /**
+     * Wrap the byte array into a {@link NetworkBuffer} with the registries.
+     * Useful when you already have a memory segment.
+     * @param segment the segment
+     * @param readIndex the {@link #readIndex()}
+     * @param writeIndex the {@link #writeIndex()}
+     * @param registries the {@link #registries()}
+     * @return the new {@link NetworkBuffer}
+     */
+    @Contract("_, _, _, _ -> new")
     @ApiStatus.Experimental
-    static NetworkBuffer wrap(MemorySegment segment, int readIndex, int writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(MemorySegment segment, int readIndex, int writeIndex, Registries registries) {
+        Objects.requireNonNull(segment, "segment");
+        Objects.requireNonNull(registries, "registries");
         return NetworkBufferImpl.wrap(segment, readIndex, writeIndex, registries);
     }
-
-    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
-        return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
-    }
-
-    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
-        return wrap(bytes, readIndex, writeIndex, null);
+    /**
+     * Wrap the byte array into a {@link NetworkBuffer} with the registries.
+     * Useful when you already have a memory segment.
+     * @param segment the segment
+     * @param readIndex the {@link #readIndex()}
+     * @param writeIndex the {@link #writeIndex()}
+     * @return the new {@link NetworkBuffer}
+     */
+    @Contract("_, _, _ -> new")
+    @ApiStatus.Experimental
+    static NetworkBuffer wrap(MemorySegment segment, int readIndex, int writeIndex) {
+        Objects.requireNonNull(segment, "segment");
+        return NetworkBufferImpl.wrap(segment, readIndex, writeIndex, null);
     }
 
     /**
-     * Builder for creating a {@link NetworkBuffer} through {@link NetworkBuffer#builder(long)}.
-     * <br>
-     *  Useful for creating buffers with specific configurations, arenas, and registries.
+     * Wrap the byte array into a {@link NetworkBuffer} with the registries.
+     * Useful when you already have a {@code byte[]}.
+     * @param bytes the bytes
+     * @param readIndex the {@link #readIndex()}
+     * @param writeIndex the {@link #writeIndex()}
+     * @param registries the {@link #registries()}
+     * @return the new {@link NetworkBuffer}
      */
-    sealed interface Builder permits NetworkBufferImpl.Builder {
+    @Contract("_, _, _, _ -> new")
+    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, Registries registries) {
+        Objects.requireNonNull(bytes, "bytes");
+        Objects.requireNonNull(registries, "registries");
+        return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
+    }
+
+    /**
+     * Wrap the byte array into a {@link NetworkBuffer}.
+     * Useful when you already have a {@code byte[]}.
+     * @param bytes the bytes
+     * @param readIndex the {@link #readIndex()}
+     * @param writeIndex the {@link #writeIndex()}
+     * @return the new {@link NetworkBuffer}
+     */
+    @Contract("_, _, _ -> new")
+    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
+        Objects.requireNonNull(bytes, "bytes");
+        return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex);
+    }
+
+    /**
+     * Builder for creating a {@link NetworkBuffer} through {@link NetworkBuffer#builder()}.
+     * <br>
+     * Useful for creating buffers with specific configuration like arenas, auto resizing, and registries.
+     * <br>
+     * Builders are immutable and can be used across threads. You also shouldn't rely on the identity of builders due to being a value class candidate.
+     */
+    sealed interface Settings permits NetworkBufferImpl.Settings {
+        /**
+         * Sets the arena used for allocations.
+         * <br>
+         * Otherwise if left unset the default arena will be used.
+         * @param arena the arena
+         * @return the new settings
+         */
         @ApiStatus.Experimental
-        @Contract(pure = true)
-        Builder arena(Arena arena);
+        @Contract(pure = true, value = "_ -> new")
+        Settings arena(Arena arena);
 
-        @Contract(pure = true)
-        Builder autoResize(@Nullable AutoResize autoResize);
+        /**
+         * Sets the new arena strategy. Called when we want to reallocate memory to a fresh arena, for example during copy or initialization.
+         * <br>
+         * Note you should use {@link #arena(Arena)} if you use a singleton instance.
+         * <br>
+         * Otherwise if left unset the default arena will be used.
+         * @param arenaSupplier the supplier
+         * @return the new settings
+         */
+        @ApiStatus.Experimental
+        @Contract(pure = true,  value = "_ -> new")
+        Settings arena(Supplier<Arena> arenaSupplier);
 
-        @Contract(pure = true)
-        Builder registry(@Nullable Registries registries);
+        /**
+         * Sets the auto resizing strategy.
+         * <br>
+         * Otherwise if left unset the buffer will never be resized and is considered a static buffer.
+         * @param autoResize the {@link AutoResize} strategy
+         * @return the new settings
+         */
+        @Contract(pure = true, value = "_ -> new")
+        Settings autoResize(AutoResize autoResize);
 
-        @Contract("-> new")
-        NetworkBuffer build();
+        /**
+         * Sets a registry for buffers to use.
+         * @param registries the registry
+         * @return the new settings
+         */
+        @Contract(pure = true, value = "_ -> new")
+        Settings registry(Registries registries);
+
+        /**
+         * Builds a new network buffer from these settings with {@code initialSize} allocated.
+         * @param initialSize the initial size of the buffer, or size if {@link AutoResize} is unset.
+         * @return the new network buffer
+         */
+        @Contract("_ -> new")
+        NetworkBuffer build(long initialSize);
     }
 
     /**
@@ -394,27 +501,93 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         long resize(long capacity, long targetSize);
     }
 
-    static byte[] makeArray(Consumer<NetworkBuffer> writing, @Nullable Registries registries) {
+    /**
+     * Creates a byte array from the consumer and with registries.
+     * @param writing consumer of the {@link NetworkBuffer}
+     * @param registries the registries to use in serialization
+     * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
+     */
+    static byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries) {
         NetworkBuffer buffer = resizableBuffer(256, registries);
         writing.accept(buffer);
         return buffer.read(RAW_BYTES);
     }
 
+    /**
+     * Creates a byte array from the consumer and without registries.
+     * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
+     * @param writing consumer of the {@link NetworkBuffer}
+     * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
+     */
     static byte[] makeArray(Consumer<NetworkBuffer> writing) {
-        return makeArray(writing, null);
+        NetworkBuffer buffer = resizableBuffer(256);
+        writing.accept(buffer);
+        return buffer.read(RAW_BYTES);
     }
 
-    static <T> byte[] makeArray(Type<T> type, T value, @Nullable Registries registries) {
-        return makeArray(buffer -> buffer.write(type, value), registries);
+    /**
+     * Creates a byte array from the type and value registries.
+     * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
+     * @param type the {@link Type} for {@link T}
+     * @param value the value
+     * @param registries the registries to use in serialization
+     * @return the smallest byte array to represent {@link T}
+     * @param <T> the type
+     */
+    static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, Registries registries) {
+        Objects.requireNonNull(type, "type");
+        // value is nullable when T is optional.
+        Objects.requireNonNull(registries, "registries");
+        return makeArray(buffer -> buffer.write(type, value), registries); // TODO can optimize fixed values here.
     }
 
-    static <T> byte[] makeArray(Type<T> type, T value) {
-        return makeArray(type, value, null);
+    /**
+     * Creates a byte array from the type and value without registries.
+     * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
+     * @param type the {@link Type} for {@link T}
+     * @param value the value
+     * @return the smallest byte array to represent {@link T}
+     * @param <T> the type
+     */
+    static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
+        Objects.requireNonNull(type, "type");
+        // value is nullable when T is optional.
+        return makeArray(buffer -> buffer.write(type, value)); // TODO can optimize fixed values here.
     }
 
+    /**
+     * Copies the src {@link NetworkBuffer} into the destination {@link NetworkBuffer}
+     * <br>
+     * @param srcBuffer the source
+     * @param srcOffset the source offset
+     * @param dstBuffer the destination
+     * @param dstOffset the destination offset
+     * @param length the length to copy
+     * @throws UnsupportedOperationException if {@code srcBuffer} is a dummy
+     * @throws UnsupportedOperationException if {@code dstBuffer} is a dummy
+     * @throws UnsupportedOperationException if {@code dstBuffer} is read only
+     */
     static void copy(NetworkBuffer srcBuffer, long srcOffset,
                      NetworkBuffer dstBuffer, long dstOffset, long length) {
+        Objects.requireNonNull(srcBuffer, "srcBuffer");
+        Objects.requireNonNull(dstBuffer, "dstBuffer");
         NetworkBufferImpl.copy(srcBuffer, srcOffset, dstBuffer, dstOffset, length);
+    }
+
+    /**
+     * Fill the buffer with the byte value specified.
+     * <br>
+     * Useful if you want to zero a buffer after use if required.
+     * @param buffer the buffer
+     * @param offset the offset
+     * @param value the value to fill
+     * @param length the length
+     * @throws UnsupportedOperationException if {@code buffer} is a dummy
+     * @throws UnsupportedOperationException if {@code buffer} is a read only
+     */
+    static void fill(NetworkBuffer buffer, long offset, byte value, long length) {
+        Objects.requireNonNull(buffer, "buffer");
+        NetworkBufferImpl.fill(buffer, offset, value, length);
     }
 
     /**
@@ -439,6 +612,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return true if the content is equal
      */
     static boolean contentEquals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
+        Objects.requireNonNull(buffer1, "buffer1");
+        Objects.requireNonNull(buffer2, "buffer2");
         return NetworkBufferImpl.contentEquals(buffer1, buffer2);
     }
 
