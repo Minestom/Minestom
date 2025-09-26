@@ -19,12 +19,14 @@ import net.minestom.server.network.packet.server.configuration.*;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface PacketRegistry<T> {
     @UnknownNullability
@@ -435,28 +437,21 @@ public interface PacketRegistry<T> {
     }
 
     abstract sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
-        private final List<PacketInfo<T>> suppliers;
-        private final ClassValue<PacketInfo<T>> packetIds = new ClassValue<>() {
-            @Override
-            protected PacketInfo<T> computeValue(Class<?> type) {
-                for (PacketInfo<T> info : suppliers) {
-                    if (info.packetClass == type) {
-                        return info;
-                    }
-                }
-                throw new IllegalStateException("Packet type " + type + " cannot be sent in state " + side().name() + "_" + state().name() + "!");
-            }
-        };
+        private final List<PacketInfo<T>> packetsById;
+        private final Map<Class<T>, PacketInfo<T>> packetsByClass;
 
         @SuppressWarnings("unchecked")
         @SafeVarargs PacketRegistryTemplate(Entry<? extends T>... suppliers) {
+            Class<T>[] packetInfoClasses = new Class[suppliers.length];
             PacketInfo<T>[] packetInfos = new PacketInfo[suppliers.length];
             for (int i = 0; i < suppliers.length; i++) {
                 final Entry<T> entry = (Entry<T>) suppliers[i]; // ? extends T -> ? implements T so T is safe here
                 Check.notNull(entry, "Missing entry for 0x{0} in state {1} for {2}", Integer.toHexString(i), state().name(), side().name());
+                packetInfoClasses[i] = entry.type;
                 packetInfos[i] = new PacketInfo<>(entry.type, i, entry.reader);
             }
-            this.suppliers = List.of(packetInfos);
+            this.packetsById = List.of(packetInfos);
+            this.packetsByClass = ArrayUtils.toMap(packetInfoClasses, packetInfos, suppliers.length);
         }
 
         public @UnknownNullability T create(int packetId, NetworkBuffer reader) {
@@ -466,20 +461,24 @@ public interface PacketRegistry<T> {
 
         @Override
         public PacketInfo<T> packetInfo(Class<?> packetClass) {
-            return packetIds.get(packetClass);
+            final PacketInfo<T> info = packetsByClass.get(packetClass);
+            if (info == null) {
+                throw new IllegalStateException("Packet type " + packetClass + " cannot be sent in state " + side().name() + "_" + state().name() + "!");
+            }
+            return info;
         }
 
         @Override
         public PacketInfo<T> packetInfo(int packetId) {
-            if (packetId < 0 || packetId >= suppliers.size()) {
+            if (packetId < 0 || packetId >= packetsById.size()) {
                 throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
             }
-            return suppliers.get(packetId);
+            return packetsById.get(packetId);
         }
 
         @Override
         public @Unmodifiable Collection<PacketInfo<T>> packets() {
-            return suppliers;
+            return packetsById;
         }
 
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
