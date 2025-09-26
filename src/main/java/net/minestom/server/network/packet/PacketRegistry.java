@@ -19,6 +19,7 @@ import net.minestom.server.network.packet.server.configuration.*;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -41,7 +42,7 @@ public interface PacketRegistry<T> {
 
     ConnectionSide side();
 
-    @Unmodifiable Collection<PacketInfo<? extends T>> packets();
+    @Unmodifiable Collection<PacketInfo<T>> packets();
 
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
@@ -433,39 +434,34 @@ public interface PacketRegistry<T> {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     abstract sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
-        private final PacketInfo<? extends T>[] suppliers;
+        private final List<PacketInfo<T>> suppliers;
         private final ClassValue<PacketInfo<T>> packetIds = new ClassValue<>() {
             @Override
             protected PacketInfo<T> computeValue(Class<?> type) {
-                for (PacketInfo<? extends T> info : suppliers) {
-                    if (info != null && info.packetClass == type) {
-                        return (PacketInfo<T>) info;
+                for (PacketInfo<T> info : suppliers) {
+                    if (info.packetClass == type) {
+                        return info;
                     }
                 }
                 throw new IllegalStateException("Packet type " + type + " cannot be sent in state " + side().name() + "_" + state().name() + "!");
             }
         };
 
+        @SuppressWarnings("unchecked")
         @SafeVarargs PacketRegistryTemplate(Entry<? extends T>... suppliers) {
-            PacketInfo<? extends T>[] packetInfos = new PacketInfo[suppliers.length];
+            PacketInfo<T>[] packetInfos = new PacketInfo[suppliers.length];
             for (int i = 0; i < suppliers.length; i++) {
-                final Entry<? extends T> entry = suppliers[i];
-                if (entry == null) continue;
-                packetInfos[i] = new PacketInfo(entry.type, i, entry.reader);
+                final Entry<T> entry = (Entry<T>) suppliers[i]; // ? extends T -> ? implements T so T is safe here
+                Check.notNull(entry, "Missing entry for 0x{0} in state {1} for {2}", Integer.toHexString(i), state().name(), side().name());
+                packetInfos[i] = new PacketInfo<>(entry.type, i, entry.reader);
             }
-            this.suppliers = packetInfos;
+            this.suppliers = List.of(packetInfos);
         }
 
         public @UnknownNullability T create(int packetId, NetworkBuffer reader) {
             final PacketInfo<T> info = packetInfo(packetId);
-            final NetworkBuffer.Type<T> supplier = info.serializer;
-            final T packet = supplier.read(reader);
-            if (packet == null) {
-                throw new IllegalStateException("Packet " + info.packetClass + " failed to read!");
-            }
-            return packet;
+            return info.serializer().read(reader);
         }
 
         @Override
@@ -475,24 +471,26 @@ public interface PacketRegistry<T> {
 
         @Override
         public PacketInfo<T> packetInfo(int packetId) {
-            final PacketInfo<T> info;
-            if (packetId < 0 || packetId >= suppliers.length || (info = (PacketInfo<T>) suppliers[packetId]) == null) {
+            if (packetId < 0 || packetId >= suppliers.size()) {
                 throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
             }
-            return info;
+            return suppliers.get(packetId);
         }
 
         @Override
-        public @Unmodifiable Collection<PacketInfo<? extends T>> packets() {
-            return List.of(suppliers);
+        public @Unmodifiable Collection<PacketInfo<T>> packets() {
+            return suppliers;
         }
 
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
+            public Entry {
+                Check.notNull(type, "Type cannot be null");
+                Check.notNull(reader, "Packet reader cannot be null");
+            }
         }
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        static <T> Entry<T> entry(Class<T> type, NetworkBuffer.Type<T> reader) {
-            return new Entry<>((Class) type, reader);
+        static <T extends Record> Entry<T> entry(Class<T> type, NetworkBuffer.Type<T> reader) {
+            return new Entry<>(type, reader);
         }
     }
 
