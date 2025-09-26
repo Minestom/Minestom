@@ -4,6 +4,8 @@ import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,8 +38,8 @@ public record DeclareCommandsPacket(List<Node> nodes,
         public int[] children = new int[0];
         public int redirectedNode; // Only if flags & 0x08
         public String name = ""; // Only for literal and argument
-        public ArgumentParserType parser; // Only for argument
-        public byte[] properties; // Only for argument
+        public @Nullable ArgumentParserType parser; // Only for argument
+        public byte @Nullable [] properties; // Only for argument
         public String suggestionsType = ""; // Only if flags 0x10
 
         public static final NetworkBuffer.Type<Node> SERIALIZER = new Type<>() {

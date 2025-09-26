@@ -39,9 +39,8 @@ public final class PacketVanilla {
                 case STATUS -> ConnectionState.STATUS;
                 case LOGIN, TRANSFER -> ConnectionState.LOGIN;
             };
-            case ClientLoginAcknowledgedPacket ignored -> ConnectionState.CONFIGURATION;
-            case ClientConfigurationAckPacket ignored -> ConnectionState.CONFIGURATION;
-            case ClientFinishConfigurationPacket ignored -> ConnectionState.PLAY;
+            case ClientLoginAcknowledgedPacket _, ClientConfigurationAckPacket _ -> ConnectionState.CONFIGURATION;
+            case ClientFinishConfigurationPacket _ -> ConnectionState.PLAY;
             default -> currentState;
         };
     }
@@ -51,9 +50,8 @@ public final class PacketVanilla {
         if (currentState == ConnectionState.HANDSHAKE)
             throw new IllegalStateException("No server Handshake packet exists");
         return switch (packet) {
-            case LoginSuccessPacket ignored -> ConnectionState.CONFIGURATION;
-            case StartConfigurationPacket ignored -> ConnectionState.CONFIGURATION;
-            case FinishConfigurationPacket ignored -> ConnectionState.PLAY;
+            case LoginSuccessPacket _, StartConfigurationPacket _ -> ConnectionState.CONFIGURATION;
+            case FinishConfigurationPacket _ -> ConnectionState.PLAY;
             default -> currentState;
         };
     }

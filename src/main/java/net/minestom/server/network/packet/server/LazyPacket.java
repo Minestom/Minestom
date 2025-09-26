@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -12,7 +13,7 @@ import java.util.function.Supplier;
 @ApiStatus.Internal
 public final class LazyPacket implements SendablePacket {
     private final Supplier<ServerPacket> packetSupplier;
-    private volatile ServerPacket packet;
+    private volatile @Nullable ServerPacket packet;
 
     public LazyPacket(Supplier<ServerPacket> packetSupplier) {
         this.packetSupplier = packetSupplier;

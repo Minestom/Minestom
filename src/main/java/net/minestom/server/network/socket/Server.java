@@ -76,14 +76,14 @@ public final class Server {
                 try {
                     final SocketChannel client = serverSocket.accept();
                     configureSocket(client);
-                    AtomicReference<PlayerSocketConnection> reference = new AtomicReference<>(null);
+                    AtomicReference<@UnknownNullability PlayerSocketConnection> reference = new AtomicReference<>(null);
                     Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
                     Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
                     PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
                     reference.set(connection);
                     readThread.start();
                     writeThread.start();
-                } catch (AsynchronousCloseException ignored) {
+                } catch (AsynchronousCloseException _) {
                     // We are exiting, bye bye!
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -108,7 +108,7 @@ public final class Server {
             try {
                 // Read & process packets
                 connection.read(packetParser);
-            } catch (ClosedChannelException ignored) {
+            } catch (ClosedChannelException _) {
                 break; // We closed the socket during read, just exit.
             } catch (EOFException e) {
                 connection.disconnect();
@@ -130,7 +130,7 @@ public final class Server {
             try {
                 connection.awaitSendablePackets();
                 connection.flushSync();
-            } catch (ClosedChannelException ignored) {
+            } catch (ClosedChannelException _) {
                 break; // We closed the socket during write, just exit.
             } catch (EOFException e) {
                 connection.disconnect();

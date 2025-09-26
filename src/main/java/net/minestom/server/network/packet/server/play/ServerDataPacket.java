@@ -16,35 +16,13 @@ public record ServerDataPacket(Component motd, byte @Nullable [] iconBase64) imp
             BYTE_ARRAY.optional(), ServerDataPacket::iconBase64,
             ServerDataPacket::new);
 
-
-    /**
-     * No longer exists
-     * @deprecated Use {@link ServerDataPacket(Component, byte[])}
-     * @param motd motd
-     * @param iconBase64 icon
-     * @param forRemoval enforcesSecureChat
-     */
-    @Deprecated(forRemoval = true)
-    public ServerDataPacket(Component motd, @Nullable byte[] iconBase64, boolean forRemoval) {
-        this(motd, iconBase64);
-    }
-    /**
-     * No longer exists
-     * @deprecated Use {@link ServerDataPacket(Component, byte[])}
-     */
-    @Deprecated(forRemoval = true)
-    boolean enforcesSecureChat() {
-        return false;
-    }
-
     public ServerDataPacket {
         iconBase64 = iconBase64 != null ? iconBase64.clone() : null;
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof ServerDataPacket(Component motd1, byte[] base64))) return false;
-
+    public boolean equals(Object o) {
+        if (!(o instanceof ServerDataPacket(Component motd1, byte[] base64))) return false;
         return motd().equals(motd1) && Arrays.equals(iconBase64(), base64);
     }
 
@@ -52,7 +30,6 @@ public record ServerDataPacket(Component motd, byte @Nullable [] iconBase64) imp
     public int hashCode() {
         int result = motd().hashCode();
         result = 31 * result + Arrays.hashCode(iconBase64());
-        result = 31 * result + Boolean.hashCode(enforcesSecureChat());
         return result;
     }
 }

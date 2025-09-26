@@ -460,6 +460,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          */
         @Override
         @Deprecated
-        String readLine() throws IOException;
+        String readLine();
     }
 }

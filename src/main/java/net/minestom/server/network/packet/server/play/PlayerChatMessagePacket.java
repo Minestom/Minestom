@@ -32,7 +32,7 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, b
             FilterMask.SERIALIZER, PlayerChatMessagePacket::filterMask,
             VAR_INT, PlayerChatMessagePacket::msgTypeId,
             COMPONENT, PlayerChatMessagePacket::msgTypeName,
-            COMPONENT, PlayerChatMessagePacket::msgTypeTarget,
+            COMPONENT.optional(), PlayerChatMessagePacket::msgTypeTarget,
             PlayerChatMessagePacket::new
     );
 
@@ -52,8 +52,8 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, b
     @Override
     public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         return new PlayerChatMessagePacket(globalIndex, sender, index, signature,
-                messageBody, operator.apply(unsignedContent), filterMask,
-                msgTypeId, operator.apply(msgTypeName), operator.apply(msgTypeTarget));
+                messageBody, unsignedContent != null ? operator.apply(unsignedContent) : null, filterMask,
+                msgTypeId, operator.apply(msgTypeName), msgTypeTarget != null ? operator.apply(msgTypeTarget) : null);
     }
 
     @Override

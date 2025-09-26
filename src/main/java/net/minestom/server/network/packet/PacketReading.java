@@ -105,7 +105,7 @@ public final class PacketReading {
                     packets.add(parsedPacket);
                     state = parsedPacket.nextState();
                 }
-                case Result.Empty<T> ignored -> {
+                case Result.Empty<T> _ -> {
                     break readLoop;
                 }
                 case Result.Failure<T> failure -> {

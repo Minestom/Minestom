@@ -173,7 +173,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                 // Compact in case of incomplete read
                 readBuffer.compact();
             }
-            case PacketReading.Result.Empty<ClientPacket> ignored -> {
+            case PacketReading.Result.Empty<ClientPacket> _ -> {
                 // Empty
             }
             case PacketReading.Result.Failure<ClientPacket> failure -> {
