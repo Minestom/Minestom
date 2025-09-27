@@ -154,7 +154,7 @@ public sealed class MetadataDef {
     }
 
     public static sealed class AbstractMinecart extends AbstractVehicle {
-        public static final Entry<@Nullable Integer> CUSTOM_BLOCK_STATE = index(0, Metadata::OptBlockState, null);
+        public static final Entry<@Nullable Block> CUSTOM_BLOCK_STATE = index(0, Metadata::OptBlockState, null);
         public static final Entry<Integer> CUSTOM_BLOCK_Y_POSITION = index(1, Metadata::VarInt, 6);
     }
 
