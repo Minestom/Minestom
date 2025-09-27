@@ -18,6 +18,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.Damage;
+import net.minestom.server.entity.metadata.avatar.MannequinMeta;
 import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
@@ -47,6 +48,7 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
+import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
@@ -185,6 +187,23 @@ public class PlayerInit {
                             Either.left(playerEntity.getUuid()),
                             TrackedWaypointPacket.Icon.DEFAULT,
                             new TrackedWaypointPacket.Target.Vec3i(playerEntity.getPosition())
+                    )));
+
+                    var mannequinEntity = new LivingEntity(EntityType.MANNEQUIN);
+                    mannequinEntity.setNoGravity(true);
+                    var mannequinMeta = (MannequinMeta) mannequinEntity.getEntityMeta();
+                    mannequinEntity.set(DataComponents.CUSTOM_NAME, Component.text("Minestom"));
+                    mannequinMeta.setCustomNameVisible(true);
+                    mannequinMeta.setProfile(new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of())));
+                    mannequinMeta.setImmovable(true);
+                    mannequinMeta.setDescription(Component.text("npc"));
+                    mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
+                    mannequinEntity.setItemInMainHand(ItemStack.of(Material.PLAYER_HEAD).with(DataComponents.PROFILE,
+                          new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of()))));
+                    player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
+                            Either.left(mannequinEntity.getUuid()),
+                            TrackedWaypointPacket.Icon.DEFAULT,
+                            new TrackedWaypointPacket.Target.Vec3i(mannequinEntity.getPosition())
                     )));
                 }
             })

@@ -171,6 +171,8 @@ sealed interface EntityTypes permits EntityType {
 
     EntityType MANGROVE_CHEST_BOAT = EntityTypeImpl.get("mangrove_chest_boat");
 
+    EntityType MANNEQUIN = EntityTypeImpl.get("mannequin");
+
     EntityType MARKER = EntityTypeImpl.get("marker");
 
     EntityType MINECART = EntityTypeImpl.get("minecart");

@@ -781,6 +781,8 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ENTITY_COPPER_GOLEM_SPAWN = BuiltinSoundEvent.get("entity.copper_golem.spawn");
 
+    SoundEvent ENTITY_COPPER_GOLEM_SHEAR = BuiltinSoundEvent.get("entity.copper_golem.shear");
+
     SoundEvent BLOCK_COPPER_GRATE_BREAK = BuiltinSoundEvent.get("block.copper_grate.break");
 
     SoundEvent BLOCK_COPPER_GRATE_STEP = BuiltinSoundEvent.get("block.copper_grate.step");
@@ -2683,6 +2685,8 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent BLOCK_SHELF_STEP = BuiltinSoundEvent.get("block.shelf.step");
 
+    SoundEvent BLOCK_SHELF_TAKE_ITEM = BuiltinSoundEvent.get("block.shelf.take_item");
+
     SoundEvent ITEM_SHIELD_BLOCK = BuiltinSoundEvent.get("item.shield.block");
 
     SoundEvent ITEM_SHIELD_BREAK = BuiltinSoundEvent.get("item.shield.break");
@@ -3282,6 +3286,8 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent BLOCK_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get("block.sign.waxed_interact_fail");
 
     SoundEvent BLOCK_WATER_AMBIENT = BuiltinSoundEvent.get("block.water.ambient");
+
+    SoundEvent WEATHER_END_FLASH = BuiltinSoundEvent.get("weather.end_flash");
 
     SoundEvent WEATHER_RAIN = BuiltinSoundEvent.get("weather.rain");
 

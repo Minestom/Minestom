@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.metadata.animal.*;
@@ -13,6 +12,7 @@ import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.RegistryKey;
@@ -45,11 +45,11 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_STRING, value, NetworkBuffer.STRING);
     }
 
-    public static Entry<Component> Chat(Component value) {
+    public static Entry<Component> Component(Component value) {
         return new MetadataImpl.EntryImpl<>(TYPE_CHAT, value, NetworkBuffer.COMPONENT);
     }
 
-    public static Entry<Component> OptChat(@Nullable Component value) {
+    public static Entry<Component> OptComponent(@Nullable Component value) {
         return new MetadataImpl.EntryImpl<>(TYPE_OPT_CHAT, value, NetworkBuffer.OPT_CHAT);
     }
 
@@ -78,30 +78,26 @@ public final class Metadata {
     }
 
     public static Entry<UUID> OptUUID(@Nullable UUID value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPT_UUID, value, NetworkBuffer.OPT_UUID);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPT_UUID, value, NetworkBuffer.UUID.optional());
     }
 
     public static Entry<Block> BlockState(Block value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, Block.NETWORK_TYPE);
+        return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, Block.STATE_NETWORK_TYPE);
     }
 
-    public static Entry<Integer> OptBlockState(@Nullable Integer value) {
+    public static Entry<Block> OptBlockState(@Nullable Block value) {
         return new MetadataImpl.EntryImpl<>(TYPE_OPT_BLOCKSTATE, value, new NetworkBuffer.Type<>() {
             @Override
-            public void write(NetworkBuffer buffer, Integer value) {
-                buffer.write(NetworkBuffer.VAR_INT, value == null ? 0 : value);
+            public void write(NetworkBuffer buffer, @Nullable Block value) {
+                buffer.write(NetworkBuffer.VAR_INT, value == null ? 0 : value.id());
             }
 
             @Override
-            public Integer read(NetworkBuffer buffer) {
+            public @Nullable Block read(NetworkBuffer buffer) {
                 int value = buffer.read(NetworkBuffer.VAR_INT);
-                return value == 0 ? null : value;
+                return value == 0 ? null : Block.fromStateId(value);
             }
         });
-    }
-
-    public static Entry<BinaryTag> NBT(BinaryTag nbt) {
-        return new MetadataImpl.EntryImpl<>(TYPE_NBT, nbt, NetworkBuffer.NBT);
     }
 
     public static Entry<Particle> Particle(Particle particle) {
@@ -171,16 +167,16 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, SnifferMeta.State.NETWORK_TYPE);
     }
 
-    public static Entry<CopperGolemMeta.WeatherState> WeatherState(CopperGolemMeta.WeatherState value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_WEATHER_STATE, value, CopperGolemMeta.WeatherState.NETWORK_TYPE);
+    public static Entry<ArmadilloMeta.State> ArmadilloState(ArmadilloMeta.State value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_ARMADILLO_STATE, value, ArmadilloMeta.State.NETWORK_TYPE);
     }
 
     public static Entry<CopperGolemMeta.State> CopperGolemState(CopperGolemMeta.State value) {
         return new MetadataImpl.EntryImpl<>(TYPE_COPPER_GOLEM_STATE, value, CopperGolemMeta.State.NETWORK_TYPE);
     }
 
-    public static Entry<ArmadilloMeta.State> ArmadilloState(ArmadilloMeta.State value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_ARMADILLO_STATE, value, ArmadilloMeta.State.NETWORK_TYPE);
+    public static Entry<CopperGolemMeta.WeatherState> WeatherState(CopperGolemMeta.WeatherState value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_WEATHER_STATE, value, CopperGolemMeta.WeatherState.NETWORK_TYPE);
     }
 
     public static Entry<Point> Vector3(Point value) {
@@ -189,6 +185,10 @@ public final class Metadata {
 
     public static Entry<float[]> Quaternion(float [] value) {
         return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
+    }
+
+    public static Entry<ResolvableProfile> ResolvableProfile(ResolvableProfile value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_RESOLVABLE_PROFILE, value, ResolvableProfile.NETWORK_TYPE);
     }
 
     private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
@@ -209,7 +209,6 @@ public final class Metadata {
     public static final byte TYPE_OPT_UUID = nextId();
     public static final byte TYPE_BLOCKSTATE = nextId();
     public static final byte TYPE_OPT_BLOCKSTATE = nextId();
-    public static final byte TYPE_NBT = nextId();
     public static final byte TYPE_PARTICLE = nextId();
     public static final byte TYPE_PARTICLE_LIST = nextId();
     public static final byte TYPE_VILLAGERDATA = nextId();
@@ -225,11 +224,12 @@ public final class Metadata {
     public static final byte TYPE_OPT_GLOBAL_POSITION = nextId(); // Unused by protocol it seems
     public static final byte TYPE_PAINTING_VARIANT = nextId();
     public static final byte TYPE_SNIFFER_STATE = nextId();
-    public static final byte TYPE_WEATHER_STATE = nextId();
-    public static final byte TYPE_COPPER_GOLEM_STATE = nextId();
     public static final byte TYPE_ARMADILLO_STATE = nextId();
+    public static final byte TYPE_COPPER_GOLEM_STATE = nextId();
+    public static final byte TYPE_WEATHER_STATE = nextId();
     public static final byte TYPE_VECTOR3 = nextId();
     public static final byte TYPE_QUATERNION = nextId();
+    public static final byte TYPE_RESOLVABLE_PROFILE = nextId();
 
     // Impl Note: Adding an entry here requires that a default value entry is added in MetadataImpl.EMPTY_VALUES
 

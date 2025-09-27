@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import net.kyori.adventure.nbt.EndBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
@@ -14,6 +13,7 @@ import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -33,8 +33,8 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_LONG, VarLong(0L));
         EMPTY_VALUES.set(TYPE_FLOAT, Float(0f));
         EMPTY_VALUES.set(TYPE_STRING, String(""));
-        EMPTY_VALUES.set(TYPE_CHAT, Chat(Component.empty()));
-        EMPTY_VALUES.set(TYPE_OPT_CHAT, OptChat(null));
+        EMPTY_VALUES.set(TYPE_CHAT, Component(Component.empty()));
+        EMPTY_VALUES.set(TYPE_OPT_CHAT, OptComponent(null));
         EMPTY_VALUES.set(TYPE_ITEM_STACK, ItemStack(ItemStack.AIR));
         EMPTY_VALUES.set(TYPE_BOOLEAN, Boolean(false));
         EMPTY_VALUES.set(TYPE_ROTATION, Rotation(Vec.ZERO));
@@ -44,7 +44,6 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_OPT_UUID, OptUUID(null));
         EMPTY_VALUES.set(TYPE_BLOCKSTATE, BlockState(Block.AIR));
         EMPTY_VALUES.set(TYPE_OPT_BLOCKSTATE, OptBlockState(null));
-        EMPTY_VALUES.set(TYPE_NBT, NBT(EndBinaryTag.endBinaryTag()));
         EMPTY_VALUES.set(TYPE_PARTICLE, Particle(Particle.DUST));
         EMPTY_VALUES.set(TYPE_PARTICLE_LIST, ParticleList(List.of()));
         EMPTY_VALUES.set(TYPE_VILLAGERDATA, VillagerData(VillagerMeta.VillagerData.DEFAULT));
@@ -56,11 +55,12 @@ final class MetadataImpl {
         // OptGlobalPos
         EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(PaintingVariant.KEBAB));
         EMPTY_VALUES.set(TYPE_SNIFFER_STATE, SnifferState(SnifferMeta.State.IDLING));
-        EMPTY_VALUES.set(TYPE_WEATHER_STATE, WeatherState(CopperGolemMeta.WeatherState.UNAFFECTED));
-        EMPTY_VALUES.set(TYPE_COPPER_GOLEM_STATE, CopperGolemState(CopperGolemMeta.State.IDLE));
         EMPTY_VALUES.set(TYPE_ARMADILLO_STATE, ArmadilloState(ArmadilloMeta.State.IDLE));
+        EMPTY_VALUES.set(TYPE_COPPER_GOLEM_STATE, CopperGolemState(CopperGolemMeta.State.IDLE));
+        EMPTY_VALUES.set(TYPE_WEATHER_STATE, WeatherState(CopperGolemMeta.WeatherState.UNAFFECTED));
         EMPTY_VALUES.set(TYPE_VECTOR3, Vector3(Vec.ZERO));
         EMPTY_VALUES.set(TYPE_QUATERNION, Quaternion(new float[]{0, 0, 0, 0}));
+        EMPTY_VALUES.set(TYPE_RESOLVABLE_PROFILE, ResolvableProfile(ResolvableProfile.EMPTY));
         EMPTY_VALUES.trim();
     }
 

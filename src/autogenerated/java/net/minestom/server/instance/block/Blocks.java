@@ -589,6 +589,10 @@ sealed interface Blocks permits Block {
 
     Block SOUL_WALL_TORCH = BlockImpl.get("soul_wall_torch");
 
+    Block COPPER_TORCH = BlockImpl.get("copper_torch");
+
+    Block COPPER_WALL_TORCH = BlockImpl.get("copper_wall_torch");
+
     Block GLOWSTONE = BlockImpl.get("glowstone");
 
     Block NETHER_PORTAL = BlockImpl.get("nether_portal");
@@ -685,7 +689,39 @@ sealed interface Blocks permits Block {
 
     Block IRON_BARS = BlockImpl.get("iron_bars");
 
-    Block CHAIN = BlockImpl.get("chain");
+    Block COPPER_BARS = BlockImpl.get("copper_bars");
+
+    Block EXPOSED_COPPER_BARS = BlockImpl.get("exposed_copper_bars");
+
+    Block WEATHERED_COPPER_BARS = BlockImpl.get("weathered_copper_bars");
+
+    Block OXIDIZED_COPPER_BARS = BlockImpl.get("oxidized_copper_bars");
+
+    Block WAXED_COPPER_BARS = BlockImpl.get("waxed_copper_bars");
+
+    Block WAXED_EXPOSED_COPPER_BARS = BlockImpl.get("waxed_exposed_copper_bars");
+
+    Block WAXED_WEATHERED_COPPER_BARS = BlockImpl.get("waxed_weathered_copper_bars");
+
+    Block WAXED_OXIDIZED_COPPER_BARS = BlockImpl.get("waxed_oxidized_copper_bars");
+
+    Block IRON_CHAIN = BlockImpl.get("iron_chain");
+
+    Block COPPER_CHAIN = BlockImpl.get("copper_chain");
+
+    Block EXPOSED_COPPER_CHAIN = BlockImpl.get("exposed_copper_chain");
+
+    Block WEATHERED_COPPER_CHAIN = BlockImpl.get("weathered_copper_chain");
+
+    Block OXIDIZED_COPPER_CHAIN = BlockImpl.get("oxidized_copper_chain");
+
+    Block WAXED_COPPER_CHAIN = BlockImpl.get("waxed_copper_chain");
+
+    Block WAXED_EXPOSED_COPPER_CHAIN = BlockImpl.get("waxed_exposed_copper_chain");
+
+    Block WAXED_WEATHERED_COPPER_CHAIN = BlockImpl.get("waxed_weathered_copper_chain");
+
+    Block WAXED_OXIDIZED_COPPER_CHAIN = BlockImpl.get("waxed_oxidized_copper_chain");
 
     Block GLASS_PANE = BlockImpl.get("glass_pane");
 
@@ -1668,6 +1704,22 @@ sealed interface Blocks permits Block {
     Block LANTERN = BlockImpl.get("lantern");
 
     Block SOUL_LANTERN = BlockImpl.get("soul_lantern");
+
+    Block COPPER_LANTERN = BlockImpl.get("copper_lantern");
+
+    Block EXPOSED_COPPER_LANTERN = BlockImpl.get("exposed_copper_lantern");
+
+    Block WEATHERED_COPPER_LANTERN = BlockImpl.get("weathered_copper_lantern");
+
+    Block OXIDIZED_COPPER_LANTERN = BlockImpl.get("oxidized_copper_lantern");
+
+    Block WAXED_COPPER_LANTERN = BlockImpl.get("waxed_copper_lantern");
+
+    Block WAXED_EXPOSED_COPPER_LANTERN = BlockImpl.get("waxed_exposed_copper_lantern");
+
+    Block WAXED_WEATHERED_COPPER_LANTERN = BlockImpl.get("waxed_weathered_copper_lantern");
+
+    Block WAXED_OXIDIZED_COPPER_LANTERN = BlockImpl.get("waxed_oxidized_copper_lantern");
 
     Block CAMPFIRE = BlockImpl.get("campfire");
 
