@@ -37,7 +37,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
             "min_y", Codec.INT, DimensionType::minY,
             "height", Codec.INT, DimensionType::height,
             "infiniburn", Codec.STRING, DimensionType::infiniburn,
-            "effects", Codec.KEY.optional(OVERWORLD_EFFECTS), DimensionType::effects,
+            "effects", Codec.KEY, DimensionType::effects,
             "monster_spawn_block_light_limit", Codec.INT, DimensionType::monsterSpawnBlockLightLimit,
             "monster_spawn_light_level", Codec.INT.orElse(Codec.UNIT.transform(ignored -> 0, ignored -> Unit.INSTANCE)), DimensionType::monsterSpawnLightLevel,
             DimensionType::create);
