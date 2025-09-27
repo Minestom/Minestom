@@ -232,6 +232,20 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     }
 
     /**
+     * Creates an Either Codec, depending on the value of Either decides which codec to use.
+     *
+     * @param leftCodec  the left codec
+     * @param rightCodec the right codec
+     * @param <L>        the left type
+     * @param <R>        the right type
+     * @return a {@link StructCodec} with {@link Either} of {@link L} and {@link R}
+     */
+    @Contract(pure = true)
+    static <L, R> StructCodec<Either<L, R>> EitherStruct(StructCodec<L> leftCodec, StructCodec<R> rightCodec) {
+        return new CodecImpl.EitherStructImpl<>(leftCodec, rightCodec);
+    }
+
+    /**
      * Creates an optional codec, where null is encodable into {@link Transcoder#createNull()}.
      *
      * @return the optional codec of type {@link T}

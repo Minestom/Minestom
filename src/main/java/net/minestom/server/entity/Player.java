@@ -35,7 +35,7 @@ import net.minestom.server.coordinate.*;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
-import net.minestom.server.entity.metadata.PlayerMeta;
+import net.minestom.server.entity.metadata.avatar.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerInputs;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
@@ -301,7 +301,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Difficulty
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), true));
 
-        sendPacket(new SpawnPositionPacket(respawnPoint, 0));
+        sendPacket(new SpawnPositionPacket(
+                new WorldPos(spawnInstance.getDimensionName(), respawnPoint),
+                respawnPoint.yaw(), respawnPoint.pitch()
+        ));
 
         // Reenable metadata notifications as we leave the configuration state
         metadata.setNotifyAboutChanges(true);
@@ -727,7 +730,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         synchronizePositionAfterTeleport(spawnPosition, Vec.ZERO, RelativeFlags.NONE, true); // So the player doesn't get stuck
 
         if (dimensionChange) {
-            sendPacket(new SpawnPositionPacket(spawnPosition, 0));
+            sendPacket(new SpawnPositionPacket(
+                    new WorldPos(instance.getDimensionName(), spawnPosition),
+                    spawnPosition.yaw(), spawnPosition.pitch()
+            ));
             sendPacket(instance.createInitializeWorldBorderPacket());
             sendPacket(instance.createTimePacket());
         }

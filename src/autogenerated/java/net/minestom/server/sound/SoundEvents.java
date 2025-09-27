@@ -155,6 +155,8 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ITEM_ARMOR_EQUIP_LEATHER = BuiltinSoundEvent.get("item.armor.equip_leather");
 
+    SoundEvent ITEM_ARMOR_EQUIP_COPPER = BuiltinSoundEvent.get("item.armor.equip_copper");
+
     SoundEvent ITEM_ARMOR_EQUIP_NETHERITE = BuiltinSoundEvent.get("item.armor.equip_netherite");
 
     SoundEvent ITEM_ARMOR_EQUIP_TURTLE = BuiltinSoundEvent.get("item.armor.equip_turtle");
@@ -717,9 +719,69 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent BLOCK_COPPER_FALL = BuiltinSoundEvent.get("block.copper.fall");
 
+    SoundEvent BLOCK_COPPER_CHEST_CLOSE = BuiltinSoundEvent.get("block.copper_chest.close");
+
+    SoundEvent BLOCK_COPPER_CHEST_OPEN = BuiltinSoundEvent.get("block.copper_chest.open");
+
+    SoundEvent BLOCK_COPPER_CHEST_WEATHERED_CLOSE = BuiltinSoundEvent.get("block.copper_chest_weathered.close");
+
+    SoundEvent BLOCK_COPPER_CHEST_WEATHERED_OPEN = BuiltinSoundEvent.get("block.copper_chest_weathered.open");
+
+    SoundEvent BLOCK_COPPER_CHEST_OXIDIZED_CLOSE = BuiltinSoundEvent.get("block.copper_chest_oxidized.close");
+
+    SoundEvent BLOCK_COPPER_CHEST_OXIDIZED_OPEN = BuiltinSoundEvent.get("block.copper_chest_oxidized.open");
+
     SoundEvent BLOCK_COPPER_DOOR_CLOSE = BuiltinSoundEvent.get("block.copper_door.close");
 
     SoundEvent BLOCK_COPPER_DOOR_OPEN = BuiltinSoundEvent.get("block.copper_door.open");
+
+    SoundEvent ENTITY_COPPER_GOLEM_STEP = BuiltinSoundEvent.get("entity.copper_golem.step");
+
+    SoundEvent ENTITY_COPPER_GOLEM_HURT = BuiltinSoundEvent.get("entity.copper_golem.hurt");
+
+    SoundEvent ENTITY_COPPER_GOLEM_DEATH = BuiltinSoundEvent.get("entity.copper_golem.death");
+
+    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_STEP = BuiltinSoundEvent.get("entity.copper_golem_weathered.step");
+
+    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_HURT = BuiltinSoundEvent.get("entity.copper_golem_weathered.hurt");
+
+    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_DEATH = BuiltinSoundEvent.get("entity.copper_golem_weathered.death");
+
+    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_STEP = BuiltinSoundEvent.get("entity.copper_golem_oxidized.step");
+
+    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_HURT = BuiltinSoundEvent.get("entity.copper_golem_oxidized.hurt");
+
+    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_DEATH = BuiltinSoundEvent.get("entity.copper_golem_oxidized.death");
+
+    SoundEvent ENTITY_COPPER_GOLEM_SPIN = BuiltinSoundEvent.get("entity.copper_golem.spin");
+
+    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_SPIN = BuiltinSoundEvent.get("entity.copper_golem_weathered.spin");
+
+    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_SPIN = BuiltinSoundEvent.get("entity.copper_golem_oxidized.spin");
+
+    SoundEvent ENTITY_COPPER_GOLEM_NO_ITEM_GET = BuiltinSoundEvent.get("entity.copper_golem.no_item_get");
+
+    SoundEvent ENTITY_COPPER_GOLEM_NO_ITEM_NO_GET = BuiltinSoundEvent.get("entity.copper_golem.no_item_no_get");
+
+    SoundEvent ENTITY_COPPER_GOLEM_ITEM_DROP = BuiltinSoundEvent.get("entity.copper_golem.item_drop");
+
+    SoundEvent ENTITY_COPPER_GOLEM_ITEM_NO_DROP = BuiltinSoundEvent.get("entity.copper_golem.item_no_drop");
+
+    SoundEvent ENTITY_COPPER_GOLEM_BECOME_STATUE = BuiltinSoundEvent.get("entity.copper_golem_become_statue");
+
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_BREAK = BuiltinSoundEvent.get("block.copper_golem_statue.break");
+
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_PLACE = BuiltinSoundEvent.get("block.copper_golem_statue.place");
+
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_HIT = BuiltinSoundEvent.get("block.copper_golem_statue.hit");
+
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_STEP = BuiltinSoundEvent.get("block.copper_golem_statue.step");
+
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_FALL = BuiltinSoundEvent.get("block.copper_golem_statue.fall");
+
+    SoundEvent ENTITY_COPPER_GOLEM_SPAWN = BuiltinSoundEvent.get("entity.copper_golem.spawn");
+
+    SoundEvent ENTITY_COPPER_GOLEM_SHEAR = BuiltinSoundEvent.get("entity.copper_golem.shear");
 
     SoundEvent BLOCK_COPPER_GRATE_BREAK = BuiltinSoundEvent.get("block.copper_grate.break");
 
@@ -2603,6 +2665,28 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ITEM_SHEARS_SNIP = BuiltinSoundEvent.get("item.shears.snip");
 
+    SoundEvent BLOCK_SHELF_ACTIVATE = BuiltinSoundEvent.get("block.shelf.activate");
+
+    SoundEvent BLOCK_SHELF_BREAK = BuiltinSoundEvent.get("block.shelf.break");
+
+    SoundEvent BLOCK_SHELF_DEACTIVATE = BuiltinSoundEvent.get("block.shelf.deactivate");
+
+    SoundEvent BLOCK_SHELF_FALL = BuiltinSoundEvent.get("block.shelf.fall");
+
+    SoundEvent BLOCK_SHELF_HIT = BuiltinSoundEvent.get("block.shelf.hit");
+
+    SoundEvent BLOCK_SHELF_MULTI_SWAP = BuiltinSoundEvent.get("block.shelf.multi_swap");
+
+    SoundEvent BLOCK_SHELF_PLACE = BuiltinSoundEvent.get("block.shelf.place");
+
+    SoundEvent BLOCK_SHELF_PLACE_ITEM = BuiltinSoundEvent.get("block.shelf.place_item");
+
+    SoundEvent BLOCK_SHELF_SINGLE_SWAP = BuiltinSoundEvent.get("block.shelf.single_swap");
+
+    SoundEvent BLOCK_SHELF_STEP = BuiltinSoundEvent.get("block.shelf.step");
+
+    SoundEvent BLOCK_SHELF_TAKE_ITEM = BuiltinSoundEvent.get("block.shelf.take_item");
+
     SoundEvent ITEM_SHIELD_BLOCK = BuiltinSoundEvent.get("item.shield.block");
 
     SoundEvent ITEM_SHIELD_BREAK = BuiltinSoundEvent.get("item.shield.break");
@@ -3202,6 +3286,8 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent BLOCK_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get("block.sign.waxed_interact_fail");
 
     SoundEvent BLOCK_WATER_AMBIENT = BuiltinSoundEvent.get("block.water.ambient");
+
+    SoundEvent WEATHER_END_FLASH = BuiltinSoundEvent.get("weather.end_flash");
 
     SoundEvent WEATHER_RAIN = BuiltinSoundEvent.get("weather.rain");
 

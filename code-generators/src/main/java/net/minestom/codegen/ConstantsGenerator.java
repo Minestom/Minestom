@@ -45,22 +45,26 @@ public record ConstantsGenerator(InputStream constantsFile,
                 .initializer("$L", constants.get("world").getAsInt())
                 .build()
         );
-        constantsInterface.addField(FieldSpec.builder(TypeName.INT, "RESOURCE_PACK_VERSION")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer("$L", constants.get("resourcepack").getAsInt())
-                .build()
-        );
-        constantsInterface.addField(FieldSpec.builder(TypeName.INT, "DATA_PACK_VERSION")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer("$L", constants.get("datapack").getAsInt())
-                .build()
-        );
+        addMajorMinorField(constantsInterface, "RESOURCE_PACK_VERSION", constants.get("resourcepack").getAsString());
+        addMajorMinorField(constantsInterface, "DATA_PACK_VERSION", constants.get("datapack").getAsString());
 
         // Write files to outputFolder
         writeFiles(JavaFile.builder("net.minestom.server", constantsInterface.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()
+        );
+    }
+
+    private static void addMajorMinorField(TypeSpec.Builder typeSpec, String name, String value) {
+        String[] parts = value.split("\\.");
+        if (parts.length != 2) throw new IllegalArgumentException("Invalid version format for " + name + ": " + value);
+
+        var majorMinorClass = ClassName.get("net.minestom.server.utils", "MajorMinorVersion");
+        typeSpec.addField(FieldSpec.builder(majorMinorClass, name)
+                                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                            .initializer("new $T($L, $L)", majorMinorClass, parts[0], parts[1])
+                                            .build()
         );
     }
 

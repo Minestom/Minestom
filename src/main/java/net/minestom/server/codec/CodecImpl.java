@@ -418,6 +418,27 @@ final class CodecImpl {
         }
     }
 
+    record EitherStructImpl<L, R>(StructCodec<L> leftCodec, StructCodec<R> rightCodec) implements StructCodec<Either<L, R>> {
+        @Override
+        public <D> Result<Either<L, R>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
+            final Result<L> leftResult = leftCodec.decodeFromMap(coder, map);
+            if (leftResult instanceof Result.Ok(L leftValue))
+                return new Result.Ok<>(Either.left(leftValue));
+            final Result<R> rightResult = rightCodec.decodeFromMap(coder, map);
+            if (rightResult instanceof Result.Ok(R rightValue))
+                return new Result.Ok<>(Either.right(rightValue));
+            return new Result.Error<>("Failed to decode Either: " + leftResult + ", " + rightResult);
+        }
+
+        @Override
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, Either<L, R> value, MapBuilder<D> map) {
+            return switch (value) {
+                case Either.Left(L leftValue) -> leftCodec.encodeToMap(coder, leftValue, map);
+                case Either.Right(R rightValue) -> rightCodec.encodeToMap(coder, rightValue, map);
+            };
+        }
+    }
+
     record Vector3DImpl() implements Codec<Point> {
         @Override
         public <D> Result<Point> decode(Transcoder<D> coder, D value) {

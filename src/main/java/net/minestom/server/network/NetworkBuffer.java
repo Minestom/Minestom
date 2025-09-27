@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
@@ -32,9 +33,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
     Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
+    Type<Short> UNSIGNED_BYTE = new NetworkBufferTypeImpl.UnsignedByteType();
     Type<Short> SHORT = new NetworkBufferTypeImpl.ShortType();
     Type<Integer> UNSIGNED_SHORT = new NetworkBufferTypeImpl.UnsignedShortType();
     Type<Integer> INT = new NetworkBufferTypeImpl.IntType();
+    Type<Long> UNSIGNED_INT = new NetworkBufferTypeImpl.UnsignedIntType();
     Type<Long> LONG = new NetworkBufferTypeImpl.LongType();
     Type<Float> FLOAT = new NetworkBufferTypeImpl.FloatType();
     Type<Double> DOUBLE = new NetworkBufferTypeImpl.DoubleType();
@@ -53,7 +56,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
     Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
-    Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
+    Type<java.util.UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
     Type<Pos> POS = new NetworkBufferTypeImpl.PosType();
 
     Type<byte[]> BYTE_ARRAY = new NetworkBufferTypeImpl.ByteArrayType();
@@ -69,11 +72,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
     Type<Point> VECTOR3I = new NetworkBufferTypeImpl.Vector3IType();
     Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
+    Type<Vec> LP_VECTOR3 = new NetworkBufferTypeImpl.LpVector3Type();
     Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
 
     Type<@Nullable Component> OPT_CHAT = COMPONENT.optional();
     Type<@Nullable Point> OPT_BLOCK_POSITION = BLOCK_POSITION.optional();
-    Type<@Nullable UUID> OPT_UUID = UUID.optional();
 
     Type<Direction> DIRECTION = Enum(Direction.class);
     Type<EntityPose> POSE = Enum(EntityPose.class);
