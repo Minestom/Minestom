@@ -159,7 +159,7 @@ public final class PacketWriting {
         final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
         try {
             writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
-            return tmpBuffer.copy(0, tmpBuffer.writeIndex());
+            return tmpBuffer.trim();
         } catch (IndexOutOfBoundsException e) {
             final long sizeOf = serializer.sizeOf(packet, tmpBuffer.registries());
             if (sizeOf > ServerFlag.MAX_PACKET_SIZE) {
@@ -170,7 +170,7 @@ public final class PacketWriting {
             tmpBuffer.resize(sizeOf + 15);
             tmpBuffer.writeIndex(0);
             writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
-            return tmpBuffer.copy(0, tmpBuffer.writeIndex());
+            return tmpBuffer.trim();
         }
     }
 

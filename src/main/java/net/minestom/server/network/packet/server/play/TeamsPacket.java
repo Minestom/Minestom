@@ -11,6 +11,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -94,7 +95,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             public CreateTeamAction read(NetworkBuffer buffer) {
                 return new CreateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
                         buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
-                        NamedTextColor.namedColor(buffer.read(VAR_INT)), buffer.read(COMPONENT), buffer.read(COMPONENT),
+                        Objects.requireNonNull(NamedTextColor.namedColor(buffer.read(VAR_INT))), buffer.read(COMPONENT), buffer.read(COMPONENT),
                         buffer.read(STRING.list(MAX_MEMBERS)));
             }
         };
@@ -155,7 +156,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             public UpdateTeamAction read(NetworkBuffer buffer) {
                 return new UpdateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
                         buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
-                        NamedTextColor.namedColor(buffer.read(VAR_INT)),
+                        Objects.requireNonNull(NamedTextColor.namedColor(buffer.read(VAR_INT))),
                         buffer.read(COMPONENT), buffer.read(COMPONENT));
             }
         };

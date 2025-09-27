@@ -48,14 +48,23 @@ public record ScoreboardObjectivePacket(String objectiveName, byte mode,
 
     @Override
     public Collection<Component> components() {
-        return mode == 0 || mode == 2 ? List.of(objectiveValue) :
-                List.of();
+        if (mode == 0 || mode == 2) {
+            assert objectiveValue != null;
+            return List.of(objectiveValue);
+        } else {
+            return List.of();
+        }
     }
 
     @Override
     public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
-        return mode == 0 || mode == 2 ? new ScoreboardObjectivePacket(objectiveName, mode,
-                operator.apply(objectiveValue), type, numberFormat) : this;
+        if (mode == 0 || mode == 2) {
+            assert objectiveValue != null;
+            return new ScoreboardObjectivePacket(objectiveName, mode,
+                    operator.apply(objectiveValue), type, numberFormat);
+        } else {
+            return this;
+        }
     }
 
     /**

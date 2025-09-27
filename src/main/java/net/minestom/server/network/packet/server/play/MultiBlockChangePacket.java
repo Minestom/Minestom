@@ -13,6 +13,10 @@ public record MultiBlockChangePacket(long chunkSectionPosition, long[] blocks) i
             VAR_LONG_ARRAY, MultiBlockChangePacket::blocks,
             MultiBlockChangePacket::new);
 
+    public MultiBlockChangePacket {
+        blocks = blocks.clone();
+    }
+
     public MultiBlockChangePacket(int chunkX, int section, int chunkZ, long[] blocks) {
         this(((long) (chunkX & 0x3FFFFF) << 42) | (section & 0xFFFFF) | ((long) (chunkZ & 0x3FFFFF) << 20), blocks);
     }
