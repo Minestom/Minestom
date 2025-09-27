@@ -42,7 +42,7 @@ dependencies {
     implementation(libs.minestomData)
 
     // Performance/data structures
-    api(libs.fastutil)
+    implementation(libs.fastutil)
     implementation(libs.bundles.flare)
     api(libs.gson)
     implementation(libs.jcTools)
