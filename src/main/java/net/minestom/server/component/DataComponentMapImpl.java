@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -223,6 +224,11 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
             Function<String, @Nullable DataComponent<?>> nameToType,
             boolean isPatch
     ) implements Codec<DataComponentMap> {
+        CodecImpl {
+            Objects.requireNonNull(idToType, "idToType");
+            Objects.requireNonNull(nameToType, "nameToType");
+        }
+
         @Override
         public <D> Result<DataComponentMap> decode(Transcoder<D> coder, D value) {
             final Result<MapLike<D>> mapResult = coder.getMap(value);
@@ -258,6 +264,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
 
         @Override
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable DataComponentMap value) {
+            if (value == null) return new Result.Error<>("null");
             final DataComponentMapImpl patch = (DataComponentMapImpl) value;
 
             final Transcoder.MapBuilder<D> map = coder.createMap();

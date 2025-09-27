@@ -5,7 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public final class CodecTest {
@@ -44,5 +44,56 @@ public final class CodecTest {
         var result = optionalCodec.decode(transcoder, encodeResult.orElseThrow());
         CodecAssertions.assertOk(result);
         Assertions.assertEquals(expected, result.orElseThrow());
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @ParameterizedTest
+    @MethodSource("nonDestructiveTranscoders")
+    <D> void testListUnmodifiable(Transcoder<D> transcoder) {
+        List<String> testList = Arrays.asList("Hey", "How", "Are", "You");
+        var codec = Codec.STRING.list();
+        var encoded = codec.encode(transcoder, testList);
+        CodecAssertions.assertOk(encoded);
+        var decoded = codec.decode(transcoder, encoded.orElseThrow());
+        CodecAssertions.assertOk(decoded);
+        var decodedObject = decoded.orElseThrow();
+        Assertions.assertEquals(testList, decodedObject);
+        Assertions.assertDoesNotThrow(() -> testList.set(0, "Test"));
+        Assertions.assertNotEquals(testList, decodedObject);
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> decodedObject.set(0, "Test"));
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @ParameterizedTest
+    @MethodSource("nonDestructiveTranscoders")
+    <D> void testSetUnmodifiable(Transcoder<D> transcoder) {
+        var testSet = new HashSet<>(Set.of("Hey", "How", "Are", "You"));
+        var codec = Codec.STRING.set();
+        var encoded = codec.encode(transcoder, testSet);
+        CodecAssertions.assertOk(encoded);
+        var decoded = codec.decode(transcoder, encoded.orElseThrow());
+        CodecAssertions.assertOk(decoded);
+        var decodedObject = decoded.orElseThrow();
+        Assertions.assertEquals(testSet, decodedObject);
+        Assertions.assertDoesNotThrow(() -> testSet.remove("Hey"));
+        Assertions.assertNotEquals(testSet, decodedObject);
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> decodedObject.remove("Hey"));
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @ParameterizedTest
+    @MethodSource("nonDestructiveTranscoders")
+    <D> void testMapUnmodifiable(Transcoder<D> transcoder) {
+        var testSet = new HashMap<>(Map.of("Hey", "How", "Are", "You"));
+        var codec = Codec.STRING.mapValue(Codec.STRING);
+        var encoded = codec.encode(transcoder, testSet);
+        CodecAssertions.assertOk(encoded);
+        var decoded = codec.decode(transcoder, encoded.orElseThrow());
+        CodecAssertions.assertOk(decoded);
+        var decodedObject = decoded.orElseThrow();
+        Assertions.assertEquals(testSet, decodedObject);
+        Assertions.assertDoesNotThrow(() -> testSet.remove("Hey"));
+        Assertions.assertNotEquals(testSet, decodedObject);
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> decodedObject.remove("Hey"));
     }
 }

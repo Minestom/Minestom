@@ -108,7 +108,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
     ) implements Dialog {
         public static final StructCodec<DialogList> CODEC = StructCodec.struct(
                 StructCodec.INLINE, DialogMetadata.CODEC, DialogList::metadata,
-                "dialogs", HolderSet.codec(Registries::dialog, Dialog.REGISTRY_CODEC), DialogList::dialogs,
+                "dialogs", HolderSet.codec(Registries::dialog, Codec.ForwardRef(() -> Dialog.REGISTRY_CODEC)), DialogList::dialogs,
                 "exit_action", DialogActionButton.CODEC.optional(), DialogList::exitAction,
                 "columns", Codec.INT.optional(2), DialogList::columns,
                 "button_width", Codec.INT.optional(150), DialogList::buttonWidth,
