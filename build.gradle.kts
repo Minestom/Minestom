@@ -50,6 +50,10 @@ dependencies {
     testImplementation(project(":testing"))
 }
 
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:-requires-transitive-automatic") // Adventure dependencies are automatic until 5.0.0, see https://github.com/KyoriPowered/adventure/issues/1287
+}
+
 // GraalVM Native Image configuration
 tasks.register<Test>("testWithAgent") {
     group = "verification"
