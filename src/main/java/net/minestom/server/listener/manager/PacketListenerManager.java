@@ -119,7 +119,7 @@ public final class PacketListenerManager {
      */
     public <T extends ClientPacket> void processClientPacket(T packet, PlayerConnection connection) {
         // Update connection state 'as we receive' the packet, aka before we send any responses
-        // from processing. This is important for disconnection during start of handshake.
+        // from processing. This is important for sending packets in response which are state-dependent.
         final ConnectionState currState = connection.getClientState();
         final ConnectionState nextState = PacketVanilla.nextClientState(packet, currState);
         if (nextState != currState) connection.setClientState(nextState);
