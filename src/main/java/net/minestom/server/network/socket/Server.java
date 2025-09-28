@@ -136,7 +136,7 @@ public final class Server {
                 connection.disconnect();
                 break;
             } catch (Throwable e) {
-                boolean isExpected = e instanceof IOException && e.getMessage().equals("Broken pipe");
+                boolean isExpected = e instanceof IOException && (e.getMessage().equals("Broken pipe") || e.getMessage().equals("Connection reset by peer"));
                 if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
 
                 connection.disconnect();
