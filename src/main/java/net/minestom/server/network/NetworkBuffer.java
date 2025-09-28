@@ -204,7 +204,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     @Contract(pure = true)
     default NetworkBuffer trim() {
-        return trim(builder());
+        return trim(staticBuilder());
     }
 
     @Contract(pure = true)
@@ -226,7 +226,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     @Contract(pure = true)
     default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
-        return copy(builder(), index, length, readIndex, writeIndex);
+        return copy(staticBuilder(), index, length, readIndex, writeIndex);
     }
 
     @Contract(pure = true, value = "_, _, _, _, _ -> new")
@@ -319,12 +319,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         default Type<T> lengthPrefixed(int maxLength) {
             return new NetworkBufferTypeImpl.LengthPrefixedType<>(this, maxLength);
         }
-    }
-
-    @Contract(pure = true)
-    static Settings builder() {
-        // TODO we probably should allow changing the default builder to allow custom arena implementations that could track the amount of bytes used, lifetime etc...
-        return staticBuilder();
     }
 
     @Contract(pure = true)
@@ -427,7 +421,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Builder for creating a {@link NetworkBuffer} through {@link NetworkBuffer#builder()}.
+     * Builder for creating a {@link NetworkBuffer} through {@link NetworkBuffer#staticBuilder()}.
      * <br>
      * Useful for creating buffers with specific configuration like arenas, auto resizing, and registries.
      * <br>
