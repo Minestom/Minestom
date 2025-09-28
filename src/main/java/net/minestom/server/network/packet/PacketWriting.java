@@ -5,6 +5,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Queue;
@@ -161,7 +162,13 @@ public final class PacketWriting {
             writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
             return tmpBuffer.trim();
         } catch (IndexOutOfBoundsException e) {
-            final long sizeOf = serializer.sizeOf(packet, tmpBuffer.registries());
+            final Registries registries = tmpBuffer.registries();
+            final long sizeOf;
+            if (registries != null) {
+                sizeOf = serializer.sizeOf(packet, registries);
+            } else {
+                sizeOf = serializer.sizeOf(packet);
+            }
             if (sizeOf > ServerFlag.MAX_PACKET_SIZE) {
                 throw new IllegalStateException("Packet too large: " + sizeOf);
             }
