@@ -5,7 +5,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventFilter;
-import net.minestom.server.instance.IChunkLoader;
+import net.minestom.server.instance.ChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.player.GameProfile;
@@ -53,7 +53,7 @@ public interface Env {
         return createFlatInstance(null);
     }
 
-    default Instance createFlatInstance(@Nullable IChunkLoader chunkLoader) {
+    default Instance createFlatInstance(@Nullable ChunkLoader chunkLoader) {
         var instance = process().instance().createInstanceContainer(chunkLoader);
         instance.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
         return instance;
@@ -63,7 +63,7 @@ public interface Env {
         return process().instance().createInstanceContainer();
     }
 
-    default Instance createEmptyInstance(IChunkLoader chunkLoader) {
+    default Instance createEmptyInstance(ChunkLoader chunkLoader) {
         return process().instance().createInstanceContainer(chunkLoader);
     }
 
