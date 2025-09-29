@@ -97,24 +97,29 @@ public record DeclareCommandsPacket(List<Node> nodes,
         };
 
         private byte[] getProperties(NetworkBuffer reader, ArgumentParserType parser) {
-            final Function<Function<NetworkBuffer, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes((extractor) -> {
-                byte flags = extractor.read(BYTE);
-                if ((flags & 0x01) == 0x01) {
-                    via.apply(extractor); // min
-                }
-                if ((flags & 0x02) == 0x02) {
-                    via.apply(extractor); // max
-                }
-            });
             return switch (parser) {
-                case DOUBLE -> minMaxExtractor.apply(b -> b.read(DOUBLE));
-                case INTEGER -> minMaxExtractor.apply(b -> b.read(INT));
-                case FLOAT -> minMaxExtractor.apply(b -> b.read(FLOAT));
-                case LONG -> minMaxExtractor.apply(b -> b.read(LONG));
-                case STRING -> reader.extractBytes(b -> b.read(VAR_INT));
-                case ENTITY, SCORE_HOLDER -> reader.extractBytes(b -> b.read(BYTE));
-                case TIME -> reader.extractBytes(b -> b.read(INT));
-                case RESOURCE_OR_TAG, RESOURCE_OR_TAG_KEY, RESOURCE, RESOURCE_KEY -> reader.extractBytes(b -> b.read(STRING));
+                case DOUBLE, FLOAT, INTEGER, LONG -> reader.extractReadBytes(extractor -> {
+                    byte flags1 = extractor.read(NetworkBuffer.BYTE);
+                    if ((flags1 & 0x01) != 0x01 || (flags1 & 0x02) != 0x02) return;
+                    final Type<?> type = switch (parser) {
+                        case DOUBLE -> NetworkBuffer.DOUBLE;
+                        case FLOAT -> NetworkBuffer.FLOAT;
+                        case INTEGER -> NetworkBuffer.INT;
+                        case LONG -> NetworkBuffer.LONG;
+                        default -> throw new IllegalArgumentException("Unknown parser " + parser);
+                    };
+
+                    if ((flags1 & 0x01) == 0x01) {
+                        extractor.read(type); // min
+                    }
+                    if ((flags1 & 0x02) == 0x02) {
+                        extractor.read(type); // max
+                    }
+                });
+                case STRING -> reader.extractReadBytes(VAR_INT);
+                case ENTITY, SCORE_HOLDER -> reader.extractReadBytes(BYTE);
+                case TIME -> reader.extractReadBytes(INT);
+                case RESOURCE_OR_TAG, RESOURCE_OR_TAG_KEY, RESOURCE, RESOURCE_KEY -> reader.extractReadBytes(STRING);
                 default -> new byte[0]; // unknown
             };
         }
