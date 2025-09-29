@@ -39,7 +39,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     // Required to keep a strong reference to the used arena. Regardless if we allocate on it or not
     // Nullable for dummy buffers or wrapped buffers.
-    private @Nullable Arena arena;
+    private @Nullable Arena arena; // final when autoResize is null
     private MemorySegment segment; // final when autoResize is null
 
     private final @Nullable AutoResize autoResize;
@@ -101,17 +101,35 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public byte[] extractBytes(Consumer<NetworkBuffer> extractor) {
+    public byte[] extractReadBytes(Consumer<NetworkBuffer> extractor) {
         assertDummy();
         final long startingPosition = readIndex();
         extractor.accept(this);
         final long endingPosition = readIndex();
         final long length = endingPosition - startingPosition;
+        return extractBytes(startingPosition, length);
+    }
+
+    @Override
+    public byte[] extractWrittenBytes(Consumer<NetworkBuffer> extractor) {
+        assertDummy();
+        assertReadOnly();
+        final long startingPosition = writeIndex();
+        extractor.accept(this);
+        final long endingPosition = writeIndex();
+        final long length = endingPosition - startingPosition;
+        return extractBytes(startingPosition, length);
+    }
+
+    private byte[] extractBytes(long index, long length) {
         if (length > Integer.MAX_VALUE) {
             throw new IndexOutOfBoundsException("Buffer is too large to be extracted: " + length);
         }
+        if (length < 0) {
+            throw new IndexOutOfBoundsException("Buffer is too small to be extracted: " + length);
+        }
         byte[] output = new byte[(int) length];
-        copyTo(startingPosition, output, 0, output.length);
+        MemorySegment.copy(this.segment, JAVA_BYTE, index, output, 0, output.length);
         return output;
     }
 
@@ -206,20 +224,23 @@ final class NetworkBufferImpl implements NetworkBuffer {
         final long newCapacity = strategy.resize(capacity, targetSize);
         if (newCapacity <= capacity)
             throw new IndexOutOfBoundsException("Buffer is full has been resized to the same capacity: " + capacity + " -> " + targetSize);
+        if (targetSize > newCapacity) {
+            throw new IndexOutOfBoundsException("Buffer is full below the target size: " + newCapacity + " -> " + targetSize);
+        }
         return newCapacity;
     }
 
     @Override
-    public void resize(long newSize) {
+    public void resize(long length) {
         assertDummy();
         assertReadOnly();
         final Supplier<Arena> arenaSupplier = this.arenaSupplier;
         if (arenaSupplier == null) throw new IllegalStateException("Buffer cannot be resized without an arena");
         final long capacity = capacity();
-        if (newSize < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
-        if (newSize == capacity) throw new IllegalArgumentException("New size is the same as the current size");
+        if (length < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
+        if (length == capacity) throw new IllegalArgumentException("New size is the same as the current size");
         final Arena arena = arenaSupplier.get(); // We need to use a new arena to allow the old one to deallocate.
-        final MemorySegment newSegment = arena.allocate(newSize);
+        final MemorySegment newSegment = arena.allocate(length);
         MemorySegment.copy(this.segment, 0, newSegment, 0, capacity);
         this.segment = newSegment;
         this.arena = arena;
@@ -315,12 +336,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
     }
 
-    // Use the JVM lazy loading to ignore these until compression is required.
-    static final class CompressionHolder {
-        private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
-        private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
-    }
-
     @Override
     public long compress(long start, long length, NetworkBuffer output) {
         assertDummy();
@@ -332,7 +347,12 @@ final class NetworkBufferImpl implements NetworkBuffer {
         final ByteBuffer input = segment.asSlice(start, length).asByteBuffer().order(BYTE_ORDER);
         final ByteBuffer outputBuffer = outImpl.segment.asSlice(output.writeIndex(), output.writableBytes()).asByteBuffer().order(BYTE_ORDER);
 
-        Deflater deflater = CompressionHolder.DEFLATER_POOL.get();
+        // Use the JVM lazy loading to ignore these until compression is required.
+        final class DeflaterPoolHolder {
+            private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
+        }
+
+        Deflater deflater = DeflaterPoolHolder.DEFLATER_POOL.get();
         try {
             deflater.setInput(input);
             deflater.finish();
@@ -341,7 +361,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
             output.advanceWrite(bytes);
             return bytes;
         } finally {
-            CompressionHolder.DEFLATER_POOL.add(deflater);
+            DeflaterPoolHolder.DEFLATER_POOL.add(deflater);
         }
     }
 
@@ -356,7 +376,12 @@ final class NetworkBufferImpl implements NetworkBuffer {
         final ByteBuffer input = segment.asSlice(start, length).asByteBuffer().order(BYTE_ORDER);
         final ByteBuffer outputBuffer = outImpl.segment.asSlice(output.writeIndex(), output.writableBytes()).asByteBuffer().order(BYTE_ORDER);
 
-        Inflater inflater = CompressionHolder.INFLATER_POOL.get();
+        // Use the JVM lazy loading to ignore these until decompression is required.
+        final class InflaterPoolHolder {
+            private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
+        }
+
+        Inflater inflater = InflaterPoolHolder.INFLATER_POOL.get();
         try {
             inflater.setInput(input);
             final int bytes = inflater.inflate(outputBuffer);
@@ -364,7 +389,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
             output.advanceWrite(bytes);
             return bytes;
         } finally {
-            CompressionHolder.INFLATER_POOL.add(inflater);
+            InflaterPoolHolder.INFLATER_POOL.add(inflater);
         }
     }
 
@@ -553,10 +578,10 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
 
         @Override
-        public NetworkBuffer build(long initialSize) {
+        public NetworkBuffer allocate(long length) {
             final Arena arena = arena();
             return new NetworkBufferImpl(
-                    arena, arena.allocate(initialSize),
+                    arena, arena.allocate(length),
                     0, 0,
                     autoResize, registries, arenaSupplier
             );

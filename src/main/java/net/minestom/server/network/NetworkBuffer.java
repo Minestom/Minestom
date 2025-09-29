@@ -120,140 +120,501 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     // Combinators
 
+    /**
+     * Creates an enum type from the enum class
+     * @param enumClass the enum class
+     * @return the new enum type
+     * @param <E> the enum type
+     */
+    @Contract(pure = true, value = "_ -> new")
     static <E extends Enum<E>> Type<E> Enum(Class<E> enumClass) {
         final E[] values = enumClass.getEnumConstants();
         return VAR_INT.transform(integer -> values[integer], Enum::ordinal);
     }
 
+    /**
+     * Creates an enum set type from the enum class
+     * @param enumClass the enum class
+     * @return the new enum set type
+     * @param <E> the enum type
+     */
+    @Contract(pure = true, value = "_ -> new")
     static <E extends Enum<E>> Type<EnumSet<E>> EnumSet(Class<E> enumClass) {
         return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, enumClass.getEnumConstants());
     }
 
+    /**
+     * Creates a fixed bit set type with the specified length.
+     * @param length the length
+     * @return the type
+     */
+    @Contract(pure = true, value = "_ -> new")
     static Type<BitSet> FixedBitSet(int length) {
         return new NetworkBufferTypeImpl.FixedBitSetType(length);
     }
 
+    /**
+     * Creates a type that reads/writes in {@code length} bytes.
+     * @param length the length
+     * @return the new type
+     */
+    @Contract(pure = true, value = "_ -> new")
     static Type<byte[]> FixedRawBytes(int length) {
         return new NetworkBufferTypeImpl.RawBytesType(length);
     }
 
+    /**
+     * Lazily compute the Type required for serialization.
+     * <br>
+     * Note your implementation should be thread safe, and should normally be called once. This may be updated to become a stable value.
+     * @param supplier the supplier
+     * @return the new type
+     * @param <T> the type
+     */
+    @Contract(pure = true, value = "_ -> new")
     static <T> Type<T> Lazy(Supplier<Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
 
+    /**
+     * Creates a typed NBT serializer using a {@link Codec}
+     * @param serializer the serializer
+     * @return the new type
+     * @param <T> the codec type
+     */
+    @Contract(pure = true, value = "_ -> new")
     static <T> Type<T> TypedNBT(Codec<T> serializer) {
         return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 
+    /**
+     * Either type for {@link L} and {@link R}
+     * @param left the left type
+     * @param right the right type
+     * @return the new type for Either
+     * @param <L> left type
+     * @param <R> left type
+     */
+    @Contract(pure = true, value = "_, _ -> new")
     static <L, R> Type<Either<L, R>> Either(NetworkBuffer.Type<L> left, NetworkBuffer.Type<R> right) {
         return new NetworkBufferTypeImpl.EitherType<>(left, right);
     }
 
-    <T> void write(Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    /**
+     * Writes the value of {@link T} at {@link #writeIndex()}
+     * <br>
+     * Writing may require resizing so any side effects of {@link #resize(long)} could happen.
+     * @param type the type
+     * @param value the value to write
+     * @param <T> the type
+     * @throws IndexOutOfBoundsException if the write index is out of bounds.
+     */
+    @Contract(mutates = "this")
+    <T extends @UnknownNullability Object> void write(Type<T> type, T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T read(Type<T> type) throws IndexOutOfBoundsException;
+    /**
+     * Reads the value of {@link T} at {@link #readIndex()}
+     * @param type type
+     * @return the value
+     * @param <T> the type
+     * @throws IndexOutOfBoundsException if the read index is out of bounds.
+     */
+    @Contract(mutates = "this")
+    <T extends @UnknownNullability Object> T read(Type<T> type) throws IndexOutOfBoundsException;
 
-    <T> void writeAt(long index, Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    /**
+     * Write the value of {@link T} using at {@code index}
+     * <br>
+     * Note: Temporarily sets the write index to {@code index} to be used then pops it at the end.
+     * @param index the index to write at
+     * @param type the type
+     * @param value the value of T
+     * @param <T> the type
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
+     */
+    @Contract(mutates = "this")
+    <T extends @UnknownNullability Object> void writeAt(long index, Type<T> type, T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
+    /**
+     * Read the value of {@link T} using at {@code index}
+     * <br>
+     * Note: Temporarily sets the read index to {@code index} to be used then pops it at the end.
+     * @param index the index to read at
+     * @param type the type
+     * @return the value {@link T}
+     * @param <T> the type
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
+     */
+    @Contract(mutates = "this")
+    <T extends @UnknownNullability Object> T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
+    /**
+     * @deprecated Use {@link #copyTo(long, byte[], int, int)} instead as the length and destination offsets are integers.
+     * @param srcOffset the source offset
+     * @param dest the dest buffer
+     * @param destOffset the destination offset
+     * @param length the length
+     */
     @Deprecated(forRemoval = true) // No longer long's
     default void copyTo(long srcOffset, byte[] dest, long destOffset, long length) {
         this.copyTo(srcOffset, dest, Math.toIntExact(destOffset), Math.toIntExact(length));
     }
 
+    /**
+     * Copies the buffer from {@code sourceOffset} to the {@code length}.
+     * @param srcOffset the source offset
+     * @param dest the dest buffer
+     * @param destOffset the destination offset
+     * @param length the length
+     */
     void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
 
-    byte[] extractBytes(Consumer<NetworkBuffer> extractor);
+    /**
+     * @deprecated Use {@link #extractReadBytes(Consumer)}
+     * Consume read bytes from the extractor. Using {@link #readIndex()}
+     * <br>
+     * If you require the write index bytes use {@link #makeArray(Consumer, Registries)}
+     * @param extractor the consumer of the network buffer
+     * @return the bytes extracted
+     */
+    @Contract("_ -> new")
+    @Deprecated
+    default byte[] extractBytes(Consumer<NetworkBuffer> extractor) {
+        return extractReadBytes(extractor);
+    }
 
+    /**
+     * Consume read bytes from the extractor. Using {@link #readIndex()}
+     * <br>
+     * If you require the write index bytes use {@link #extractWrittenBytes(Consumer)}
+     * @param type the type to extract
+     * @return the bytes extracted
+     */
+    @Contract("_ -> new")
+    default byte[] extractReadBytes(Type<?> type) {
+        Objects.requireNonNull(type, "type");
+        return extractReadBytes(buffer -> buffer.read(type));
+    }
+
+    /**
+     * Consume read bytes from the extractor. Using {@link #readIndex()}
+     * <br>
+     * If you require the write index bytes use {@link #extractWrittenBytes(Consumer)}
+     * @param extractor the consumer of the network buffer
+     * @return the bytes extracted
+     */
+    @Contract("_ -> new")
+    byte[] extractReadBytes(Consumer<NetworkBuffer> extractor);
+
+    /**
+     * Consume read bytes from the extractor. Using {@link #readIndex()}
+     * <br>
+     * If you require the write index bytes use {@link #extractWrittenBytes(Consumer)}
+     * @param type the type to extract
+     * @return the bytes extracted
+     */
+    @Contract("_, _ -> new")
+    default <T extends @UnknownNullability Object> byte[] extractWrittenBytes(Type<T> type, T value) {
+        Objects.requireNonNull(type, "type");
+        return extractWrittenBytes(buffer -> buffer.write(type, value));
+    }
+
+    /**
+     * Consume written bytes from the extractor. Using {@link #readIndex()}
+     * <br>
+     * If you require the read index bytes use {@link #extractReadBytes(Consumer)}
+     * @param extractor the consumer of the network buffer
+     * @return the bytes extracted
+     */
+    @Contract("_ -> new")
+    byte[] extractWrittenBytes(Consumer<NetworkBuffer> extractor);
+
+    /**
+     * Clears the data tracked by this buffer.
+     * <br>
+     * Note: the implementation does not require zeroing of the previously stored data, instead use {@link NetworkBuffer#fill(NetworkBuffer, long, byte, long)}.
+     * @return this
+     */
+    @Contract("-> this")
     NetworkBuffer clear();
 
+    /**
+     * Returns the write index tracked by this buffer
+     * @return the write index
+     */
     long writeIndex();
 
+    /**
+     * Returns the read index tracked by this buffer
+     * @return the read index
+     */
     long readIndex();
 
+    /**
+     * Sets the write index
+     * @param writeIndex the new write index
+     * @return this
+     */
+    @Contract("_ -> this")
     NetworkBuffer writeIndex(long writeIndex);
 
+    /**
+     * Sets the read index
+     * @param readIndex the new read index
+     * @return this
+     */
+    @Contract("_ -> this")
     NetworkBuffer readIndex(long readIndex);
 
+    /**
+     * Sets both indexes to the specified ones
+     * @param readIndex the new read index
+     * @param writeIndex the new write index
+     * @return this
+     */
+    @Contract("_, _ -> this")
     NetworkBuffer index(long readIndex, long writeIndex);
 
+    /**
+     * Advances the write index and returns the previous index, while storing the new index into {@link #writeIndex()}
+     * @param length the length to advance
+     * @return the previous write index
+     */
     long advanceWrite(long length);
 
+    /**
+     * Advances the read index and returns the previous index, while storing the new index into {@link #readIndex()}
+     * @param length the length to advance
+     * @return the previous read index
+     */
     long advanceRead(long length);
 
+    /**
+     * Readable bytes are the amount of bytes that have been written to the {@link #writeIndex()}
+     * The readable bytes can be calculated by {@link #writeIndex()} - {@link #readIndex()}.
+     * @return the readable bytes
+     */
     long readableBytes();
 
+    /**
+     * Writeable bytes are the amount of bytes that are left in the buffer from the {@link #writeIndex()}
+     * The writeable bytes can be calculated by {@link #capacity()} - {@link #writeIndex()}.
+     * @return the writeable bytes
+     */
     long writableBytes();
 
+    /**
+     * Gets the capacity for the buffer or its length.
+     * @return the capacity/length
+     */
     long capacity();
 
+    /**
+     * Sets the buffer to be read only, this cannot be undone, instead you must copy the buffer.
+     */
     void readOnly();
 
+    /**
+     * Returns true if the buffer has previously been {@link #readOnly()}
+     * @return true if the buffer is read only
+     */
+    @Contract(pure = true)
     boolean isReadOnly();
 
-    void resize(long newSize);
+    /**
+     * Resize the buffer to the new {@link #capacity()} using the current settings.
+     * @param length the new size
+     * @throws IllegalStateException if the buffer cannot be resized
+     * @throws IllegalArgumentException if the new size is less than or equal to the current {@link #capacity()}.
+     * @throws UnsupportedOperationException if the buffer is a dummy
+     * @throws UnsupportedOperationException if the buffer is read only
+     */
+    void resize(long length);
 
+    /**
+     * Ensures that the buffer {@link #writableBytes()} is greater or equal to {@code length}.
+     * Otherwise, the buffer will be resized using {@link #resize(long)} with {@link}
+     * @param length the length to ensure
+     * @throws IndexOutOfBoundsException if the resize does not permit the length to be written
+     * @throws RuntimeException for any error in {@link #resize(long)}
+     */
     void ensureWritable(long length);
 
     /**
-     * Compact (copies) all the data from the readIndex to the writing index to be zero aligned.
-     * This does not change the buffer capacity.
+     * Compact (copies) all the data from the {@link #readIndex()} to the {@link #writeIndex()} to be zero aligned.
+     * This does not change the buffer capacity, instead it's a simple copy.
      */
     void compact();
 
-    @Contract(pure = true)
+    /**
+     * Creates a copy of the buffer trimmed using the settings to {@link #settingsStatic()}.
+     * <br>
+     * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
+     * @return the trimmed buffer
+     */
+    @Contract("-> new")
     default NetworkBuffer trim() {
-        return trim(staticBuilder());
+        return trim(settingsStatic());
     }
 
-    @Contract(pure = true)
-    NetworkBuffer trim(Settings builder);
+    /**
+     * Creates a copy of the buffer trimmed using the settings to {@link Settings#allocate(long)}.
+     * <br>
+     * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data
+     * @param settings the settings to allocate from
+     * @return the trimmed buffer
+     */
+    @Contract("_, -> new")
+    NetworkBuffer trim(Settings settings);
 
+    /**
+     * Creates a copy of the buffer trimmed using the new arena.
+     * <br>
+     * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data
+     * @param arena the arena to use
+     * @return the trimmed buffer
+     */
     @ApiStatus.Experimental
-    @Contract(pure = true)
+    @Contract("_ -> new")
     NetworkBuffer trim(Arena arena);
 
-    @Contract(pure = true)
+    /**
+     * Copies the current buffer using the settings specified {@link #settingsStatic()}
+     * with the index to the length using {@link #readIndex()} and {@link #writeIndex()}.
+     * @param index the starting index
+     * @param length the length
+     * @return the copy of the current buffer into a new buffer
+     */
+    @Contract("_, _ -> new")
     default NetworkBuffer copy(long index, long length) {
         return copy(index, length, readIndex(), writeIndex());
     }
 
-    @Contract(pure = true)
-    default NetworkBuffer copy(Settings builder, long index, long length) {
-        return copy(builder, index, length, readIndex(), writeIndex());
+    /**
+     * Copies the current buffer using the {@link Settings} with the index to the length with
+     * the using {@link #readIndex()} and {@link #writeIndex()}.
+     * @param settings the {@link Settings} which {@link Settings#allocate(long)} be used for the new buffer.
+     * @param index the index
+     * @param length the length
+     * @return the copy of the current buffer into a new buffer
+     */
+    @Contract("_, _, _ -> new")
+    default NetworkBuffer copy(Settings settings, long index, long length) {
+        return copy(settings, index, length, readIndex(), writeIndex());
     }
 
-    @Contract(pure = true)
+    /**
+     * Copies the current buffer using the settings specified {@link #settingsStatic()}
+     * with the index to the length with the new specified read and write indexes.
+     * @param index the starting index
+     * @param length the length
+     * @param readIndex the read index
+     * @param writeIndex the write index
+     * @return the copy of the current buffer into a new buffer
+     */
+    @Contract("_, _, _, _ -> new")
     default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
-        return copy(staticBuilder(), index, length, readIndex, writeIndex);
+        return copy(settingsStatic(), index, length, readIndex, writeIndex);
     }
 
-    @Contract(pure = true, value = "_, _, _, _, _ -> new")
-    NetworkBuffer copy(Settings builder, long index, long length, long readIndex, long writeIndex);
+    /**
+     * Copies the current buffer using the {@link Settings} with the index to the length with the new specified read and write indexes.
+     * @param settings the {@link Settings} which {@link Settings#allocate(long)} be used for the new buffer.
+     * @param index the starting index
+     * @param length the length
+     * @param readIndex the new read index
+     * @param writeIndex the new write index
+     * @return the copy of the current buffer into a new buffer
+     */
+    @Contract("_, _, _, _, _ -> new")
+    NetworkBuffer copy(Settings settings, long index, long length, long readIndex, long writeIndex);
 
+    /**
+     * Copies the current buffer into the arena using the index to the length with the new specified read and write indexes
+     * @param arena the arena to use
+     * @param index the starting index
+     * @param length the length
+     * @param readIndex the new read index
+     * @param writeIndex the new write index
+     * @return the copy of the current buffer into a new buffer
+     */
     @ApiStatus.Experimental
-    @Contract(pure = true, value = "_, _, _, _, _ -> new")
+    @Contract("_, _, _, _, _ -> new")
     NetworkBuffer copy(Arena arena, long index, long length, long readIndex, long writeIndex);
 
-    @Contract(pure = true)
+    /**
+     * Creates a slice from the starting index to the length passing the read index and write index supplied
+     * @param index the starting index
+     * @param length the length
+     * @param readIndex the new read index
+     * @param writeIndex the new write index
+     * @return the network buffer slice which can error when of backing reference arena falls out of scope. (resizing)
+     */
+    @Contract(pure = true, value = "_, _, _, _ -> new")
     NetworkBuffer slice(long index, long length, long readIndex, long writeIndex);
 
-    @Contract(pure = true)
+    /**
+     * Creates a slice from the starting index to the length
+     * @param index the starting index
+     * @param length the length
+     * @return a slice defined in {@link #slice(long, long, long, long)}
+     */
+    @Contract(pure = true, value = "_, _ -> new")
     default NetworkBuffer slice(long index, long length) {
         return slice(index, length, readIndex(), writeIndex());
     }
 
+    /**
+     * Reads the current buffer with the {@link ReadableByteChannel}
+     * <br>
+     * Uses the {@link #writableBytes()} starting from {@link #writeIndex()}
+     * @param channel the channel to write to
+     * @return the amount of bytes read
+     * @throws IOException if -1 bytes were written.
+     */
     int readChannel(ReadableByteChannel channel) throws IOException;
 
+    /**
+     * Write the current buffer into the {@link WritableByteChannel}
+     * <br>
+     * Uses the {@link #readableBytes()} starting from {@link #readIndex()}
+     * @param channel the channel to write to
+     * @return true if fully written
+     * @throws IOException if -1 bytes were written.
+     */
     boolean writeChannel(WritableByteChannel channel) throws IOException;
 
+    /**
+     * Encrypt/Decrypt this network buffer using a {@link Cipher}
+     * @param cipher the cipher to use
+     * @param start the start index
+     * @param length the length
+     */
     void cipher(Cipher cipher, long start, long length);
 
+    /**
+     * Compress this buffer into the output using {@link java.util.zip.Deflater}
+     * @param start the start index
+     * @param length the length
+     * @param output the output buffer
+     * @return the amount of bytes that were compressed
+     */
     long compress(long start, long length, NetworkBuffer output);
 
+    /**
+     * Decompress this buffer into the output using {@link java.util.zip.Inflater}
+     * @param start the start index
+     * @param length the length
+     * @param output the output buffer
+     * @return the amount of bytes that were decompressed
+     * @throws DataFormatException if the data is invalid
+     */
     long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
+    /**
+     * The registries used when creating with {@link Settings#registry(Registries)}
+     * @return the registries
+     */
     @Nullable Registries registries();
 
     /**
@@ -266,99 +627,247 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Contract(pure = true, value = "->new")
     IOView ioView();
 
+    /**
+     * A type is a writer/reader for {@link T} it attempts to provide a bidirectional guarantee.
+     * Through {@link #write(NetworkBuffer, Object)} and {@link #read(NetworkBuffer)}.
+     * <br>
+     * Unlike {@link net.minestom.server.codec.StructCodec} types are always written linearly into a {@link NetworkBuffer}
+     * <br>
+     * You should use templates wherever possible to ensure bidirectional serialization.
+     * @param <T> the type, nullable.
+     */
     interface Type<T extends @UnknownNullability Object> {
+        /**
+         * Write {@link T} to a {@link NetworkBuffer}.
+         * @param buffer the buffer to use
+         * @param value the value
+         */
         void write(NetworkBuffer buffer, T value);
 
+        /**
+         * Read the value from the {@link NetworkBuffer}
+         * @param buffer the buffer
+         * @return {@link T}
+         */
         T read(NetworkBuffer buffer);
 
+        /**
+         * Determines the sizeOf {@link T} using the registries provided.
+         * @param value the value to get the size of
+         * @param registries the registries
+         * @return the size
+         */
         default long sizeOf(T value, Registries registries) {
             Objects.requireNonNull(registries, "registries");
             return NetworkBufferTypeImpl.sizeOf(this, value, registries);
         }
 
+        /**
+         * Determines the sizeOf {@link T}.
+         * @param value the value to get the size of
+         * @return the size
+         */
         default long sizeOf(T value) {
             return NetworkBufferTypeImpl.sizeOf(this, value, null);
         }
 
-        default <S> Type<S> transform(Function<T, S> to, Function<S, T> from) {
+        /**
+         * Transform the current type {@link T} to {@link S} and {@link S} to {@link T}.
+         * @param to the function to call when reading your value
+         * @param from the function to call when writing your value
+         * @return the new type that transforms {@link T}
+         * @param <S> type to
+         */
+        default <S extends @UnknownNullability Object> Type<S> transform(Function<T, S> to, Function<S, T> from) {
             return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
         }
 
-        default <V> Type<Map<T, V>> mapValue(Type<V> valueType, int maxSize) {
+        /**
+         * Creates a map type to map the value of {@link T} with {@link V} into an unmodifiable map.
+         *
+         * @param valueType the value type
+         * @param maxSize the max size before throwing
+         * @return the type
+         * @param <V> the value type
+         */
+        default <V> Type<@Unmodifiable Map<T, V>> mapValue(Type<V> valueType, int maxSize) {
             return new NetworkBufferTypeImpl.MapType<>(this, valueType, maxSize);
         }
 
-        default <V> Type<Map<T, V>> mapValue(Type<V> valueType) {
+        /**
+         * Creates a map type to map the value of {@link T} with {@link V} into an unmodifiable map.
+         * <br>
+         * Note the max length allowed is {@link Integer#MAX_VALUE}, if you have a strict upperbound use {@link #mapValue(Type, int)}
+         * @param valueType the value type
+         * @return the type
+         * @param <V> the value type
+         */
+        default <V> Type<@Unmodifiable Map<T, V>> mapValue(Type<V> valueType) {
             return mapValue(valueType, Integer.MAX_VALUE);
         }
 
-        default Type<List<T>> list(int maxSize) {
+        /**
+         * Creates an unmodifiable list type for {@link T} with its max sized defined
+         * <br>
+         * Note the encoding for null lists is a 0 byte.
+         * @param maxSize the max size before throwing.
+         * @return the list type for {@link T}
+         */
+        default Type<@Unmodifiable @UnknownNullability List<T>> list(int maxSize) {
             return new NetworkBufferTypeImpl.ListType<>(this, maxSize);
         }
 
-        default Type<List<T>> list() {
+        /**
+         * Creates an unmodifiable list type for {@link T} with no max size defined.
+         * <br>
+         * Note the max length allowed is {@link Integer#MAX_VALUE}, if you have a strict upperbound use {@link #list(int)}
+         * <br>
+         * Note the encoding for null lists is a 0 byte.
+         * @return the list type for {@link T}
+         */
+        default Type<@Unmodifiable @UnknownNullability List<T>> list() {
             return list(Integer.MAX_VALUE);
         }
 
-        default Type<Set<T>> set(int maxSize) {
+        /**
+         * Creates an unmodifiable set type for {@link T} with no max size defined.
+         * <br>
+         * Note the max length allowed is {@link Integer#MAX_VALUE}, if you have a strict upperbound use {@link #list(int)}
+         * <br>
+         * Note the encoding for null lists is a 0 byte.
+         * @return the list type for {@link T}
+         */
+        default Type<@Unmodifiable @UnknownNullability Set<T>> set(int maxSize) {
             return new NetworkBufferTypeImpl.SetType<>(this, maxSize);
         }
 
-        default Type<Set<T>> set() {
+        /**
+         * Creates an unmodifiable set type for {@link T} with no max size defined.
+         * <br>
+         * Note the max length allowed is {@link Integer#MAX_VALUE}, if you have a strict upperbound use {@link #list(int)}
+         * <br>
+         * Note the encoding for null lists is a 0 byte.
+         * @return the list type for {@link T}
+         */
+        default Type<@Unmodifiable @UnknownNullability Set<T>> set() {
             return set(Integer.MAX_VALUE);
         }
 
+        /**
+         * Creates an optional type for {@link T}, which allows it to have null values.
+         * <br>
+         * Note the encoding prefixes all {@link T} with a true/false if the value is null or not.
+         * @return the new optional type
+         */
         default Type<@Nullable T> optional() {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
         }
 
-        default <R, TR extends R> Type<R> unionType(Function<T, NetworkBuffer.Type<TR>> serializers, Function<R, ? extends T> keyFunc) {
+        /**
+         * Creates a union type for {@link T}, this allows you to map subtypes of {@link T} useful for sealed interfaces.
+         * @param serializers the map of {@link T} to the serializer
+         * @param keyFunc the key to use from {@link R} into {@link T} into {@code serializers}
+         * @return the new union type for {@link T} using {@link R}
+         * @param <R> the union type
+         */
+        default <R> Type<R> unionType(Function<T, NetworkBuffer.Type<? extends R>> serializers, Function<R, ? extends T> keyFunc) {
             return new NetworkBufferTypeImpl.UnionType<>(this, keyFunc, serializers);
         }
 
+        /**
+         * Creates a type where it prefixes the length
+         * @param maxLength the max length before throwing
+         * @return the new length prefixed type
+         */
         default Type<T> lengthPrefixed(int maxLength) {
             return new NetworkBufferTypeImpl.LengthPrefixedType<>(this, maxLength);
         }
     }
 
+    /**
+     * Gets the static settings
+     * @return the static settings.
+     */
     @Contract(pure = true)
-    static Settings staticBuilder() {
+    static Settings settingsStatic() {
         return NetworkBufferImpl.Settings.STATIC;
     }
 
+    /**
+     * Gets the resizeable settings
+     * @return the resizeable settings.
+     */
     @Contract(pure = true)
-    static Settings resizeableBuilder() {
+    static Settings settingsResizeable() {
         return NetworkBufferImpl.Settings.RESIZEABLE;
     }
 
+    /**
+     * Creates a new static buffer using {@link NetworkBuffer#settingsStatic()}.
+     * @param size the size to use for {@link Settings#allocate(long)}
+     * @param registries the registries to use
+     * @return the new network buffer
+     */
+    @Contract("_, _ -> new")
     static NetworkBuffer staticBuffer(long size, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return staticBuilder().registry(registries).build(size);
+        return settingsStatic().registry(registries).allocate(size);
     }
 
+    /**
+     * Creates a new static buffer using {@link NetworkBuffer#settingsStatic()}.
+     * @param size the size to use for {@link Settings#allocate(long)}
+     * @return the new network buffer
+     */
+    @Contract("_ -> new")
     static NetworkBuffer staticBuffer(long size) {
-        return staticBuilder().build(size);
+        return settingsStatic().allocate(size);
     }
 
+    /**
+     * Creates a resizeable buffer using {@link NetworkBuffer#settingsResizeable()}
+     * @param initialSize the initial size to use for {@link Settings#allocate(long)}
+     * @param registries the registries to use
+     * @return the new buffer
+     */
+    @Contract("_, _ -> new")
     static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return resizeableBuilder()
+        return settingsResizeable()
                 .registry(registries)
-                .build(initialSize);
+                .allocate(initialSize);
     }
 
+    /**
+     * Creates a resizeable buffer using {@link NetworkBuffer#settingsResizeable()}
+     * @param initialSize the initial size to use for {@link Settings#allocate(long)}
+     * @return the new buffer
+     */
+    @Contract("_ -> new")
     static NetworkBuffer resizableBuffer(int initialSize) {
-        return resizeableBuilder().build(initialSize);
+        return settingsResizeable().allocate(initialSize);
     }
 
+    /**
+     * Creates a resizeable buffer using {@link NetworkBuffer#resizableBuffer(long, Registries)} with an initial size of 256.
+     * @param registries the registries to use if required during encoding/decoding.
+     * @return the new buffer
+     */
+    @Contract("_ -> new")
     static NetworkBuffer resizableBuffer(Registries registries) {
         Objects.requireNonNull(registries, "registries");
         return resizableBuffer(256, registries);
     }
 
+    /**
+     * Creates a resizeable buffer with an initial size of 256
+     * @return the new buffer
+     */
+    @Contract("-> new")
     static NetworkBuffer resizableBuffer() {
         return resizableBuffer(256);
     }
+
     /**
      * Wrap the byte array into a {@link NetworkBuffer} with the registries.
      * Useful when you already have a memory segment.
@@ -375,6 +884,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         Objects.requireNonNull(registries, "registries");
         return NetworkBufferImpl.wrap(segment, readIndex, writeIndex, registries);
     }
+
     /**
      * Wrap the byte array into a {@link NetworkBuffer} with the registries.
      * Useful when you already have a memory segment.
@@ -421,7 +931,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Builder for creating a {@link NetworkBuffer} through {@link NetworkBuffer#staticBuilder()}.
+     * Builder for creating a {@link NetworkBuffer} through {@link NetworkBuffer#settingsStatic()}.
      * <br>
      * Useful for creating buffers with specific configuration like arenas, auto resizing, and registries.
      * <br>
@@ -436,7 +946,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @return the new settings
          */
         @ApiStatus.Experimental
-        @Contract(pure = true, value = "_ -> new")
+        @Contract(pure = true)
         Settings arena(Arena arena);
 
         /**
@@ -449,7 +959,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @return the new settings
          */
         @ApiStatus.Experimental
-        @Contract(pure = true,  value = "_ -> new")
+        @Contract(pure = true)
         Settings arena(Supplier<Arena> arenaSupplier);
 
         /**
@@ -459,7 +969,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @param autoResize the {@link AutoResize} strategy
          * @return the new settings
          */
-        @Contract(pure = true, value = "_ -> new")
+        @Contract(pure = true)
         Settings autoResize(AutoResize autoResize);
 
         /**
@@ -467,16 +977,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @param registries the registry
          * @return the new settings
          */
-        @Contract(pure = true, value = "_ -> new")
+        @Contract(pure = true)
         Settings registry(Registries registries);
 
         /**
-         * Builds a new network buffer from these settings with {@code initialSize} allocated.
-         * @param initialSize the initial size of the buffer, or size if {@link AutoResize} is unset.
+         * Builds a new network buffer from these settings with {@code length} allocated.
+         * @param length the size of the buffer, or initial size if {@link AutoResize} is set.
          * @return the new network buffer
          */
         @Contract("_ -> new")
-        NetworkBuffer build(long initialSize);
+        NetworkBuffer allocate(long length);
     }
 
     /**
@@ -502,9 +1012,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
      */
     static byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries) {
-        NetworkBuffer buffer = resizableBuffer(256, registries);
-        writing.accept(buffer);
-        return buffer.read(RAW_BYTES);
+        Objects.requireNonNull(registries, "registries");
+        return resizableBuffer(256, registries)
+                .extractWrittenBytes(writing);
     }
 
     /**
@@ -514,9 +1024,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
      */
     static byte[] makeArray(Consumer<NetworkBuffer> writing) {
-        NetworkBuffer buffer = resizableBuffer(256);
-        writing.accept(buffer);
-        return buffer.read(RAW_BYTES);
+        return resizableBuffer(256)
+                .extractWrittenBytes(writing);
     }
 
     /**
@@ -530,9 +1039,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, Registries registries) {
         Objects.requireNonNull(type, "type");
-        // value is nullable when T is optional.
         Objects.requireNonNull(registries, "registries");
-        return makeArray(buffer -> buffer.write(type, value), registries); // TODO can optimize fixed values here.
+        return resizableBuffer(256, registries)
+                .extractWrittenBytes(type, value);
     }
 
     /**
@@ -545,8 +1054,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
         Objects.requireNonNull(type, "type");
-        // value is nullable when T is optional.
-        return makeArray(buffer -> buffer.write(type, value)); // TODO can optimize fixed values here.
+        return resizableBuffer(256)
+                .extractWrittenBytes(type, value);
     }
 
     /**

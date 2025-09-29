@@ -182,7 +182,7 @@ public class NetworkBufferTest {
         assertEquals(1, buffer.writeIndex());
         assertEquals(0, buffer.readIndex());
 
-        var array = buffer.extractBytes(extractor -> extractor.read(BYTE));
+        var array = buffer.extractReadBytes(BYTE);
         assertArrayEquals(new byte[]{25}, array, "Unequal array: " + Arrays.toString(array));
         assertEquals(1, buffer.writeIndex());
         assertEquals(1, buffer.readIndex());
@@ -192,7 +192,7 @@ public class NetworkBufferTest {
         assertEquals(10, buffer.writeIndex());
         assertEquals(1, buffer.readIndex());
 
-        array = buffer.extractBytes(extractor -> {
+        array = buffer.extractReadBytes(extractor -> {
             extractor.read(BYTE);
             extractor.read(LONG);
         });
@@ -497,7 +497,7 @@ public class NetworkBufferTest {
     public void testConfinedArena() {
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            buffer = NetworkBuffer.staticBuilder().arena(arena).build(256);
+            buffer = NetworkBuffer.settingsStatic().arena(arena).allocate(256);
             buffer.write(VAR_INT, Integer.MAX_VALUE);
             buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
             assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
@@ -509,7 +509,7 @@ public class NetworkBufferTest {
     public void testConfinedArenaCopy() {
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            var confinedBuffer = NetworkBuffer.staticBuilder().arena(arena).build(256);
+            var confinedBuffer = NetworkBuffer.settingsStatic().arena(arena).allocate(256);
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
             assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
@@ -523,7 +523,7 @@ public class NetworkBufferTest {
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            var confinedBuffer = NetworkBuffer.staticBuilder().arena(arena).build(256);
+            var confinedBuffer = NetworkBuffer.settingsStatic().arena(arena).allocate(256);
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, stringBytes);
             assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
@@ -535,7 +535,7 @@ public class NetworkBufferTest {
 
     @Test
     public void testTrim() {
-        var buffer = NetworkBuffer.staticBuilder().build(256);
+        var buffer = NetworkBuffer.settingsStatic().allocate(256);
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         buffer.write(VAR_INT, Integer.MAX_VALUE);
         buffer.write(RAW_BYTES, stringBytes);
