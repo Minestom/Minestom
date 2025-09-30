@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
+import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
@@ -19,6 +20,7 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.Equippable;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
@@ -448,8 +450,6 @@ public final class RegistryData {
         private final Supplier<Block> blockSupplier;
         private @Nullable Either<Properties, DataComponentMap> prototype;
 
-        private final EntityType entityType;
-
         private MaterialEntry(String namespace, Properties main) {
             this.prototype = Either.left(main.section("components"));
             this.key = Key.key(namespace);
@@ -458,14 +458,6 @@ public final class RegistryData {
             {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromKey(blockNamespace) : () -> null;
-            }
-            {
-                final Properties spawnEggProperties = main.section("spawnEggProperties");
-                if (spawnEggProperties != null) {
-                    this.entityType = EntityType.fromKey(spawnEggProperties.getString("entityType"));
-                } else {
-                    this.entityType = null;
-                }
             }
         }
 
@@ -523,9 +515,16 @@ public final class RegistryData {
          * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
          *
          * @return The entity type it can spawn, or null if it is not a spawn egg
+         * @deprecated Read {@link DataComponents#ENTITY_DATA} for the spawned entity data.
          */
+        @Deprecated(forRemoval = true)
         public @Nullable EntityType spawnEntityType() {
-            return entityType;
+            CustomData entityData = prototype().get(DataComponents.ENTITY_DATA, CustomData.EMPTY);
+            try {
+                return EntityType.fromKey(entityData.nbt().getString("id"));
+            } catch (InvalidKeyException ignored) {
+                return null;
+            }
         }
     }
 
