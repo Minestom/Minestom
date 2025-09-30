@@ -69,7 +69,7 @@ public record EntityMetaDataPacket(int entityId,
 
             if (v instanceof Component c) {
                 var translated = operator.apply(c);
-                entries.put(key, t == Metadata.TYPE_OPT_CHAT ? Metadata.OptChat(translated) : Metadata.Chat(translated));
+                entries.put(key, t == Metadata.TYPE_OPT_CHAT ? Metadata.OptComponent(translated) : Metadata.Component(translated));
             } else {
                 entries.put(key, value);
             }

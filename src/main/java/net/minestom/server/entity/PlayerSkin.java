@@ -3,6 +3,11 @@ package net.minestom.server.entity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.mojang.MojangUtils;
 import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.Nullable;
@@ -60,19 +65,26 @@ public record PlayerSkin(String textures, String signature) {
         }
     }
 
-    /**
-     * @deprecated use {@link #textures()}
-     */
-    @Deprecated
-    public String getTextures() {
-        return textures;
+    public record Patch(
+            @Nullable Key body,
+            @Nullable Key cape,
+            @Nullable Key elytra,
+            @Nullable Boolean slim
+    ) {
+        public static final Patch EMPTY = new Patch(null, null, null, null);
+
+        public static final NetworkBuffer.Type<Patch> NETWORK_TYPE = NetworkBufferTemplate.template(
+                NetworkBuffer.KEY.optional(), Patch::body,
+                NetworkBuffer.KEY.optional(), Patch::cape,
+                NetworkBuffer.KEY.optional(), Patch::elytra,
+                NetworkBuffer.BOOLEAN.optional(), Patch::slim,
+                Patch::new);
+        public static final StructCodec<Patch> CODEC = StructCodec.struct(
+                "body", Codec.KEY.optional(), Patch::body,
+                "cape", Codec.KEY.optional(), Patch::cape,
+                "elytra", Codec.KEY.optional(), Patch::elytra,
+                "slim", Codec.BOOLEAN.optional(), Patch::slim,
+                Patch::new);
     }
 
-    /**
-     * @deprecated use {@link #signature()}
-     */
-    @Deprecated
-    public String getSignature() {
-        return signature;
-    }
 }
