@@ -509,11 +509,12 @@ public class NetworkBufferTest {
     public void testConfinedArenaCopy() {
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            var confinedBuffer = NetworkBuffer.settingsStatic().arena(arena).allocate(256);
+            var settings = NetworkBuffer.settingsStatic().arena(arena);
+            var confinedBuffer = settings.allocate(256);
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
             assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
-            buffer = confinedBuffer.copy(arena, confinedBuffer.readIndex(), confinedBuffer.readableBytes(),0, confinedBuffer.readableBytes());
+            buffer = confinedBuffer.copy(settings, confinedBuffer.readIndex(), confinedBuffer.readableBytes(),0, confinedBuffer.readableBytes());
         }
         assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
     }
@@ -539,11 +540,11 @@ public class NetworkBufferTest {
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         buffer.write(VAR_INT, Integer.MAX_VALUE);
         buffer.write(RAW_BYTES, stringBytes);
-        buffer = buffer.trim(Arena.ofAuto());
+        buffer = buffer.trim();
         assertEquals(10, buffer.capacity());
         assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
         assertArrayEquals(stringBytes, buffer.read(RAW_BYTES));
-        buffer = buffer.trim(Arena.ofAuto());
+        buffer = buffer.trim();
         assertEquals(0, buffer.capacity());
     }
 
@@ -584,7 +585,7 @@ public class NetworkBufferTest {
         assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
     }
 
-    static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte[] expected, Action<T> action) {
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte @Nullable [] expected, Action<T> action) {
         var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());
