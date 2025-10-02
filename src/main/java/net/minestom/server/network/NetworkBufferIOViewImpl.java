@@ -31,10 +31,9 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public int skipBytes(int n) {
-        var currentReadIndex = buffer.readIndex();
-        var readableBytes = buffer.readableBytes();
-        if (currentReadIndex + n > readableBytes) {
-            n = Math.toIntExact(readableBytes - currentReadIndex);
+        var readableBytes = Math.toIntExact(buffer.readableBytes());
+        if (n > readableBytes) {
+            n = readableBytes;
         }
         if (n > 0) buffer.advanceRead(n);
         return n;
@@ -113,7 +112,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public void write(byte[] b, int off, int len) {
-        buffer.write(RAW_BYTES, Arrays.copyOfRange(b, off, len));
+        buffer.write(RAW_BYTES, Arrays.copyOfRange(b, off, off + len));
     }
 
     @Override
@@ -133,7 +132,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public void writeChar(int value) {
-        buffer.write(BYTE, (byte) value);
+        buffer.write(SHORT, (short) value);
     }
 
     @Override

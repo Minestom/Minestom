@@ -68,6 +68,8 @@ import java.util.zip.DataFormatException;
  *     MyData value = buffer.read(MyData.SERIALIZER);
  *     System.out.println("Value: " + value); // Value: MyData(id=1, name="Test")
  * </code></pre>
+ * <br>
+ * You can also use a {@link IOView} to interface with code that only works with {@link DataInput} and {@link DataOutput}.
  */
 public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
@@ -468,17 +470,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     NetworkBuffer trim(Settings settings);
 
     /**
-     * Creates a copy of the buffer trimmed using the new arena.
-     * <br>
-     * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data
-     * @param arena the arena to use
-     * @return the trimmed buffer
-     */
-    @ApiStatus.Experimental
-    @Contract("_ -> new")
-    NetworkBuffer trim(Arena arena);
-
-    /**
      * Copies the current buffer using the settings specified {@link #settingsStatic()}
      * with the index to the length using {@link #readIndex()} and {@link #writeIndex()}.
      * @param index the starting index
@@ -528,19 +519,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract("_, _, _, _, _ -> new")
     NetworkBuffer copy(Settings settings, long index, long length, long readIndex, long writeIndex);
-
-    /**
-     * Copies the current buffer into the arena using the index to the length with the new specified read and write indexes
-     * @param arena the arena to use
-     * @param index the starting index
-     * @param length the length
-     * @param readIndex the new read index
-     * @param writeIndex the new write index
-     * @return the copy of the current buffer into a new buffer
-     */
-    @ApiStatus.Experimental
-    @Contract("_, _, _, _, _ -> new")
-    NetworkBuffer copy(Arena arena, long index, long length, long readIndex, long writeIndex);
 
     /**
      * Creates a slice from the starting index to the length passing the read index and write index supplied
@@ -1130,14 +1108,104 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * because we don't want DataInput and DataOutput to be part of the public API.
      * You should use {@link NetworkBuffer} instead where possible.
      * <br>
-     * You should never rely on the identity properties of {@link IOView} as it is a value class candidate.
+     * Note: this implementation removes checked exceptions as the backing {@link NetworkBuffer} would not throw {@link IOException}'s.
+     * Also {@link #readLine()} is not implemented as it's already deprecated in {@link DataInputStream}.
+     * <br>
+     * You should never rely on the identity of {@link IOView} as it is a value class candidate.
      */
     sealed interface IOView extends DataInput, DataOutput permits NetworkBufferIOViewImpl {
+
         /**
          * @throws UnsupportedOperationException not implemented.
          */
         @Override
         @Deprecated
         String readLine();
+
+        // Override DataInput methods to remove checked exceptions
+        @Override
+        void readFully(byte[] b);
+
+        @Override
+        void readFully(byte[] b, int off, int len);
+
+        @Override
+        int skipBytes(int n);
+
+        @Override
+        boolean readBoolean();
+
+        @Override
+        byte readByte();
+
+        @Override
+        int readUnsignedByte();
+
+        @Override
+        short readShort();
+
+        @Override
+        int readUnsignedShort();
+
+        @Override
+        char readChar();
+
+        @Override
+        int readInt();
+
+        @Override
+        long readLong();
+
+        @Override
+        float readFloat();
+
+        @Override
+        double readDouble();
+
+        @Override
+        String readUTF();
+
+        // Override DataOutput methods to remove checked exceptions
+        @Override
+        void write(int b);
+
+        @Override
+        void write(byte[] b);
+
+        @Override
+        void write(byte[] b, int off, int len);
+
+        @Override
+        void writeBoolean(boolean v);
+
+        @Override
+        void writeByte(int v);
+
+        @Override
+        void writeShort(int v);
+
+        @Override
+        void writeChar(int v);
+
+        @Override
+        void writeInt(int v);
+
+        @Override
+        void writeLong(long v);
+
+        @Override
+        void writeFloat(float v);
+
+        @Override
+        void writeDouble(double v);
+
+        @Override
+        void writeBytes(String s);
+
+        @Override
+        void writeChars(String s);
+
+        @Override
+        void writeUTF(String s);
     }
 }

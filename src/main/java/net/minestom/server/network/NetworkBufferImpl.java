@@ -121,6 +121,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return extractBytes(startingPosition, length);
     }
 
+    @Contract("_, _ -> new")
     private byte[] extractBytes(long index, long length) {
         if (length > Integer.MAX_VALUE) {
             throw new IndexOutOfBoundsException("Buffer is too large to be extracted: " + length);
@@ -267,15 +268,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public NetworkBuffer trim(Arena arena) {
-        assertDummy();
-        assertReadOnly();
-        final long readableBytes = readableBytes();
-        if (readableBytes == capacity()) return this;
-        return copy(arena, readIndex, readableBytes, 0, readableBytes);
-    }
-
-    @Override
     public NetworkBuffer copy(NetworkBuffer.Settings settings, long index, long length, long readIndex, long writeIndex) {
         assertDummy();
         final Settings settingsImpl = (Settings) settings;
@@ -283,14 +275,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
         final MemorySegment copySegment = arena.allocate(length); // implicit null check of arena.
         MemorySegment.copy(this.segment, index, copySegment, 0, length);
         return new NetworkBufferImpl(arena, copySegment, readIndex, writeIndex, settingsImpl.autoResize(), settingsImpl.registries(), settingsImpl.arenaSupplier());
-    }
-
-    @Override
-    public NetworkBuffer copy(Arena arena, long index, long length, long readIndex, long writeIndex) {
-        assertDummy();
-        final MemorySegment copySegment = arena.allocate(length); // implicit null check of arena.
-        MemorySegment.copy(this.segment, index, copySegment, 0, length);
-        return new NetworkBufferImpl(arena, copySegment, readIndex, writeIndex, autoResize, registries, arenaSupplier);
     }
 
     @Override
@@ -551,7 +535,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         @Override
         public Settings arena(Arena arena) {
             Objects.requireNonNull(arena, "arena");
-            return new Settings(() -> arena, autoResize, registries);
+            final Supplier<Arena> arenaSupplier = () -> arena; // stable value/lazy constant
+            return new Settings(arenaSupplier, autoResize, registries);
         }
 
         @Override
