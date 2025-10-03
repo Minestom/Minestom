@@ -11,6 +11,7 @@ import net.minestom.demo.block.placement.BedPlacementRule;
 import net.minestom.demo.block.placement.DripstonePlacementRule;
 import net.minestom.demo.commands.*;
 import net.minestom.demo.recipe.ShapelessRecipe;
+import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.component.DataComponents;
@@ -28,11 +29,9 @@ import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
 import net.minestom.server.utils.time.TimeUnit;
 
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,7 +41,7 @@ public class Main {
         System.setProperty("minestom.new-socket-write-lock", "true");
         MinecraftServer.setCompressionThreshold(0);
 
-        MinecraftServer minecraftServer = MinecraftServer.init();
+        MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Offline());
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
@@ -91,6 +90,7 @@ public class Main {
         commandManager.register(new AttributeCommand());
         commandManager.register(new PrimedTNTCommand());
         commandManager.register(new SleepCommand());
+        commandManager.register(new MinecartCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

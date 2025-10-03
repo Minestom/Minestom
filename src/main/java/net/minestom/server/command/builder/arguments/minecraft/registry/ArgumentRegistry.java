@@ -3,7 +3,6 @@ package net.minestom.server.command.builder.arguments.minecraft.registry;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class ArgumentRegistry<T> extends Argument<T> {
 
@@ -13,11 +12,10 @@ public abstract class ArgumentRegistry<T> extends Argument<T> {
         super(id);
     }
 
-    public abstract T getRegistry(@NotNull String value);
+    public abstract T getRegistry(String value);
 
-    @NotNull
     @Override
-    public T parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public T parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         final T registryValue = getRegistry(input);
         if (registryValue == null)
             throw new ArgumentSyntaxException("Registry value is invalid", input, INVALID_NAME);

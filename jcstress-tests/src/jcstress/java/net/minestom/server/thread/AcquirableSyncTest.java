@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.Tickable;
-import org.jetbrains.annotations.NotNull;
 import org.openjdk.jcstress.annotations.*;
 import org.openjdk.jcstress.infra.results.L_Result;
 
@@ -12,7 +11,7 @@ import static org.openjdk.jcstress.annotations.Expect.ACCEPTABLE;
 @State
 public class AcquirableSyncTest {
 
-    private final ThreadDispatcher<World> dispatcher = ThreadDispatcher.singleThread();
+    private final ThreadDispatcher<World, Element> dispatcher = ThreadDispatcher.singleThread();
     private final World world = new World();
     private final Element element = new Element();
 
@@ -33,7 +32,7 @@ public class AcquirableSyncTest {
         }
 
         @Override
-        public @NotNull Acquirable<? extends Element> acquirable() {
+        public Acquirable<? extends Element> acquirable() {
             return acquirable;
         }
     }

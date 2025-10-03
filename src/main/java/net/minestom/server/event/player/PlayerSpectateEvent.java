@@ -3,7 +3,6 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called by the SpectateListener when a player starts spectating an entity.
@@ -23,7 +22,7 @@ public class PlayerSpectateEvent implements PlayerEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

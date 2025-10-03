@@ -1,6 +1,5 @@
 package net.minestom.server.utils.collection;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -61,13 +60,13 @@ final class ObjectArrayImpl {
         }
 
         @Override
-        public @UnknownNullability T @NotNull [] arrayCopy(@NotNull Class<T> type) {
+        public @UnknownNullability T [] arrayCopy(Class<T> type) {
             //noinspection unchecked,rawtypes
             return (T[]) Arrays.<T, T>copyOf(array, max + 1, (Class) type.arrayType());
         }
 
         @Override
-        public @NotNull List<@NotNull T> toList() {
+        public List<T> toList() {
             // Trim the array to the maximum size, it internally will be copied regardless.
             final T[] array = Arrays.copyOf(this.array, max + 1);
             return List.of(array);
@@ -127,13 +126,13 @@ final class ObjectArrayImpl {
         }
 
         @Override
-        public @UnknownNullability T @NotNull [] arrayCopy(@NotNull Class<T> type) {
+        public @UnknownNullability T [] arrayCopy(Class<T> type) {
             //noinspection unchecked,rawtypes
             return (T[]) Arrays.<T, T>copyOf(array, max + 1, (Class) type.arrayType());
         }
 
         @Override
-        public @NotNull List<@NotNull T> toList() {
+        public List<T> toList() {
             // Trim the array to the maximum size, it internally will be copied regardless.
             final T[] array = Arrays.copyOf(this.array, this.max + 1);
             return List.of(array);

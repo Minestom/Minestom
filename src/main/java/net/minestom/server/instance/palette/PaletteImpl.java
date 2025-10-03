@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.utils.MathUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -62,7 +61,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public void getAll(@NotNull EntryConsumer consumer) {
+    public void getAll(EntryConsumer consumer) {
         if (bitsPerEntry == 0) {
             Palettes.getAllFill(dimension, count, consumer);
         } else {
@@ -71,7 +70,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public void getAllPresent(@NotNull EntryConsumer consumer) {
+    public void getAllPresent(EntryConsumer consumer) {
         if (bitsPerEntry == 0) {
             if (count != 0) Palettes.getAllFill(dimension, count, consumer);
         } else {
@@ -80,7 +79,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public int height(int x, int z, @NotNull EntryPredicate predicate) {
+    public int height(int x, int z, EntryPredicate predicate) {
         validateCoord(dimension, x, 0, z);
         final int dimension = this.dimension;
         final int startY = dimension - 1;
@@ -213,7 +212,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public void setAll(@NotNull EntrySupplier supplier) {
+    public void setAll(EntrySupplier supplier) {
         int[] cache = WRITE_CACHE.get();
         final int dimension = dimension();
         // Fill cache with values
@@ -250,7 +249,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public void replace(int x, int y, int z, @NotNull IntUnaryOperator operator) {
+    public void replace(int x, int y, int z, IntUnaryOperator operator) {
         validateCoord(dimension, x, y, z);
         final int oldValue = get(x, y, z);
         final int newValue = operator.applyAsInt(oldValue);
@@ -258,7 +257,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public void replaceAll(@NotNull EntryFunction function) {
+    public void replaceAll(EntryFunction function) {
         int[] cache = WRITE_CACHE.get();
         AtomicInteger arrayIndex = new AtomicInteger();
         AtomicInteger count = new AtomicInteger();
@@ -277,7 +276,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public void copyFrom(@NotNull Palette source, int offsetX, int offsetY, int offsetZ) {
+    public void copyFrom(Palette source, int offsetX, int offsetY, int offsetZ) {
         if (offsetX == 0 && offsetY == 0 && offsetZ == 0) {
             copyFrom(source);
             return;
@@ -390,7 +389,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public void copyFrom(@NotNull Palette source) {
+    public void copyFrom(Palette source) {
         final PaletteImpl sourcePalette = (PaletteImpl) source;
         final int sourceDimension = sourcePalette.dimension();
         final int targetDimension = this.dimension();
@@ -537,7 +536,7 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public boolean compare(@NotNull Palette p) {
+    public boolean compare(Palette p) {
         final PaletteImpl palette = (PaletteImpl) p;
         final int dimension = this.dimension();
         if (palette.dimension() != dimension) return false;
@@ -558,7 +557,7 @@ final class PaletteImpl implements Palette {
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
-    public @NotNull Palette clone() {
+    public Palette clone() {
         PaletteImpl clone = new PaletteImpl(dimension, minBitsPerEntry, maxBitsPerEntry, directBits);
         clone.bitsPerEntry = this.bitsPerEntry;
         clone.count = this.count;
@@ -569,7 +568,7 @@ final class PaletteImpl implements Palette {
         return clone;
     }
 
-    private void retrieveAll(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
+    private void retrieveAll(EntryConsumer consumer, boolean consumeEmpty) {
         if (!consumeEmpty && count == 0) return;
         final long[] values = this.values;
         final int dimension = this.dimension();

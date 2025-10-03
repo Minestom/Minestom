@@ -14,7 +14,6 @@ import net.minestom.server.dialog.Dialog;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +26,7 @@ import static net.minestom.server.network.NetworkBufferImpl.impl;
 record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
 
     @Override
-    public void write(@NotNull NetworkBuffer buffer, @NotNull Component value) {
+    public void write(NetworkBuffer buffer, Component value) {
         Check.notNull(value, "Component cannot be null");
 
         buffer.write(BYTE, TAG_COMPOUND);
@@ -35,7 +34,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     }
 
     @Override
-    public Component read(@NotNull NetworkBuffer buffer) {
+    public Component read(NetworkBuffer buffer) {
         final Transcoder<BinaryTag> coder = buffer.registries() != null
                 ? new RegistryTranscoder<>(Transcoder.NBT, buffer.registries())
                 : Transcoder.NBT;
@@ -51,7 +50,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     private static final byte TAG_LIST = 9;
     private static final byte TAG_COMPOUND = 10;
 
-    private void writeInnerComponent(@NotNull NetworkBuffer buffer, @NotNull Component component) {
+    private void writeInnerComponent(NetworkBuffer buffer, Component component) {
         buffer.write(BYTE, TAG_STRING); // Start first tag (always the type)
         buffer.write(STRING_IO_UTF8, "type");
         switch (component) {
@@ -148,7 +147,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         buffer.write(BYTE, TAG_END);
     }
 
-    private void writeComponentStyle(@NotNull NetworkBuffer buffer, @NotNull Style style) {
+    private void writeComponentStyle(NetworkBuffer buffer, Style style) {
         final TextColor color = style.color();
         if (color != null) {
             buffer.write(BYTE, TAG_STRING);
@@ -221,7 +220,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         if (hoverEvent != null) writeHoverEvent(buffer, hoverEvent);
     }
 
-    private void writeClickEvent(@NotNull NetworkBuffer buffer, @NotNull ClickEvent clickEvent) {
+    private void writeClickEvent(NetworkBuffer buffer, ClickEvent clickEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
         buffer.write(STRING_IO_UTF8, "click_event");
 
@@ -294,7 +293,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         buffer.write(BYTE, TAG_END);
     }
 
-    private <T extends ClickEvent.Payload> @NotNull T checkPayload(@NotNull ClickEvent clickEvent, @NotNull Class<T> expected) {
+    private <T extends ClickEvent.Payload> T checkPayload(ClickEvent clickEvent, Class<T> expected) {
         final ClickEvent.Payload payload = clickEvent.payload();
         if (!expected.isInstance(payload))
             throw new IllegalArgumentException("Expected " + expected.getSimpleName() + " for " + clickEvent.action() + ", got: " + payload.getClass());
@@ -302,7 +301,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     }
 
     @SuppressWarnings("unchecked")
-    private void writeHoverEvent(@NotNull NetworkBuffer buffer, @NotNull HoverEvent<?> hoverEvent) {
+    private void writeHoverEvent(NetworkBuffer buffer, HoverEvent<?> hoverEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
         buffer.write(STRING_IO_UTF8, "hover_event");
 

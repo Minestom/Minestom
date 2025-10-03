@@ -154,9 +154,8 @@ public sealed class MetadataDef {
     }
 
     public static sealed class AbstractMinecart extends AbstractVehicle {
-        public static final Entry<Integer> CUSTOM_BLOCK_ID_AND_DAMAGE = index(0, Metadata::VarInt, 0);
+        public static final Entry<@Nullable Integer> CUSTOM_BLOCK_STATE = index(0, Metadata::OptBlockState, null);
         public static final Entry<Integer> CUSTOM_BLOCK_Y_POSITION = index(1, Metadata::VarInt, 6);
-        public static final Entry<Boolean> SHOW_CUSTOM_BLOCK = index(2, Metadata::Boolean, false);
     }
 
     public static final class MinecartFurnace extends AbstractMinecart {
@@ -164,7 +163,7 @@ public sealed class MetadataDef {
     }
 
     public static final class MinecartCommandBlock extends AbstractMinecart {
-        public static final Entry<String> COMMAND = index(0, Metadata::String, "false");
+        public static final Entry<String> COMMAND = index(0, Metadata::String, "");
         public static final Entry<Component> LAST_OUTPUT = index(1, Metadata::Chat, Component.empty());
     }
 

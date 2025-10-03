@@ -5,12 +5,11 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public record SelectKnownPacksPacket(
-        @NotNull List<Entry> entries
+        List<Entry> entries
 ) implements ServerPacket.Configuration {
     private static final int MAX_ENTRIES = 64;
     public static final Entry MINECRAFT_CORE = new Entry("minecraft", "core", MinecraftServer.VERSION_NAME);
@@ -25,9 +24,9 @@ public record SelectKnownPacksPacket(
     }
 
     public record Entry(
-            @NotNull String namespace,
-            @NotNull String id,
-            @NotNull String version
+            String namespace,
+            String id,
+            String version
     ) {
         public static final NetworkBuffer.Type<Entry> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING, Entry::namespace,

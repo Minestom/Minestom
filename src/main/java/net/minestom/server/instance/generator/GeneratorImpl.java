@@ -11,7 +11,6 @@ import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -102,7 +101,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void setBlock(int x, int y, int z, @NotNull Block block) {
+        public void setBlock(int x, int y, int z, Block block) {
             resize(x, y, z);
             GenerationUnit section = findAbsolute(sections, minSection, width, height, depth, x, y, z);
             assert section.absoluteStart().sectionX() == globalToChunk(x) &&
@@ -173,7 +172,7 @@ public final class GeneratorImpl {
                            List<GenerationUnit> divided,
                            List<UnitImpl> forks) implements GenerationUnit {
         @Override
-        public @NotNull GenerationUnit fork(@NotNull Point start, @NotNull Point end) {
+        public GenerationUnit fork(Point start, Point end) {
             final int minSectionX = floorSection(start.blockX()) / 16;
             final int minSectionY = floorSection(start.blockY()) / 16;
             final int minSectionZ = floorSection(start.blockZ()) / 16;
@@ -203,7 +202,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void fork(@NotNull Consumer<Block.@NotNull Setter> consumer) {
+        public void fork(Consumer<Block.Setter> consumer) {
             DynamicFork dynamicFork = new DynamicFork(biomeRegistry);
             consumer.accept(dynamicFork);
             final Vec startSection = dynamicFork.minSection;
@@ -217,7 +216,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public @NotNull List<GenerationUnit> subdivide() {
+        public List<GenerationUnit> subdivide() {
             return Objects.requireNonNullElseGet(divided, GenerationUnit.super::subdivide);
         }
 
@@ -236,7 +235,7 @@ public final class GeneratorImpl {
                                       GenSection genSection, boolean fork) implements GenericModifier {
 
         @Override
-        public void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome) {
+        public void setBiome(int x, int y, int z, RegistryKey<Biome> biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
             final int id = biomeRegistry.getId(biome);
             Check.argCondition(id == -1, "Biome has not been registered: {0}", biome);
@@ -247,7 +246,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void setBlock(int x, int y, int z, @NotNull Block block) {
+        public void setBlock(int x, int y, int z, Block block) {
             final int localX = globalToSectionRelative(x);
             final int localY = globalToSectionRelative(y);
             final int localZ = globalToSectionRelative(z);
@@ -256,13 +255,13 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void setRelative(int x, int y, int z, @NotNull Block block) {
+        public void setRelative(int x, int y, int z, Block block) {
             handleCache(x, y, z, block);
             this.genSection.blocks.set(x, y, z, retrieveBlockId(block));
         }
 
         @Override
-        public void setAllRelative(@NotNull Supplier supplier) {
+        public void setAllRelative(Supplier supplier) {
             this.genSection.blocks.setAll((x, y, z) -> {
                 final Block block = supplier.get(x, y, z);
                 handleCache(x, y, z, block);
@@ -271,7 +270,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void fill(@NotNull Block block) {
+        public void fill(Block block) {
             if (requireCache(block)) {
                 for (int x = 0; x < 16; x++) {
                     for (int y = 0; y < 16; y++) {
@@ -285,7 +284,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void fillBiome(@NotNull RegistryKey<Biome> biome) {
+        public void fillBiome(RegistryKey<Biome> biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
             final int id = biomeRegistry.getId(biome);
             Check.argCondition(id == -1, "Biome has not been registered: {0}", biome);
@@ -319,7 +318,7 @@ public final class GeneratorImpl {
                                    int width, int height, int depth,
                                    List<GenerationUnit> sections) implements GenericModifier {
         @Override
-        public void setBlock(int x, int y, int z, @NotNull Block block) {
+        public void setBlock(int x, int y, int z, Block block) {
             checkBorder(x, y, z);
             final GenerationUnit section = findAbsoluteSection(x, y, z);
             y -= start.y();
@@ -327,7 +326,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome) {
+        public void setBiome(int x, int y, int z, RegistryKey<Biome> biome) {
             checkBorder(x, y, z);
             final GenerationUnit section = findAbsoluteSection(x, y, z);
             y -= start.y();
@@ -335,7 +334,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void setRelative(int x, int y, int z, @NotNull Block block) {
+        public void setRelative(int x, int y, int z, Block block) {
             if (x < 0 || x >= size.x() || y < 0 || y >= size.y() || z < 0 || z >= size.z()) {
                 throw new IllegalArgumentException("x, y and z must be in the chunk: " + x + ", " + y + ", " + z);
             }
@@ -347,7 +346,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void setAll(@NotNull Supplier supplier) {
+        public void setAll(Supplier supplier) {
             for (GenerationUnit section : sections) {
                 final Point start = section.absoluteStart();
                 final int startX = start.blockX();
@@ -359,7 +358,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void setAllRelative(@NotNull Supplier supplier) {
+        public void setAllRelative(Supplier supplier) {
             final Point start = this.start;
             for (GenerationUnit section : sections) {
                 final Point sectionStart = section.absoluteStart();
@@ -372,21 +371,21 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void fill(@NotNull Block block) {
+        public void fill(Block block) {
             for (GenerationUnit section : sections) {
                 section.modifier().fill(block);
             }
         }
 
         @Override
-        public void fillBiome(@NotNull RegistryKey<Biome> biome) {
+        public void fillBiome(RegistryKey<Biome> biome) {
             for (GenerationUnit section : sections) {
                 section.modifier().fillBiome(biome);
             }
         }
 
         @Override
-        public void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
+        public void fillHeight(int minHeight, int maxHeight, Block block) {
             final Vec start = this.start;
             final int width = this.width, depth = this.depth;
             final int startX = start.blockX(), startZ = start.blockZ();
@@ -454,7 +453,7 @@ public final class GeneratorImpl {
         Vec end();
 
         @Override
-        default void setAll(@NotNull Supplier supplier) {
+        default void setAll(Supplier supplier) {
             final Vec start = start(), end = end();
             final int endX = end.blockX();
             final int endY = end.blockY();
@@ -469,7 +468,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        default void setAllRelative(@NotNull Supplier supplier) {
+        default void setAllRelative(Supplier supplier) {
             final Vec size = size();
             final int endX = size.blockX();
             final int endY = size.blockY();
@@ -484,12 +483,12 @@ public final class GeneratorImpl {
         }
 
         @Override
-        default void fill(@NotNull Block block) {
+        default void fill(Block block) {
             fill(start(), end(), block);
         }
 
         @Override
-        default void fill(@NotNull Point start, @NotNull Point end, @NotNull Block block) {
+        default void fill(Point start, Point end, Block block) {
             final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
             final int endX = end.blockX(), endY = end.blockY(), endZ = end.blockZ();
             for (int x = startX; x < endX; x++) {
@@ -502,7 +501,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        default void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
+        default void fillHeight(int minHeight, int maxHeight, Block block) {
             final Vec start = start();
             final Vec end = end();
             final int startY = start.blockY();

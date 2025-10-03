@@ -5,16 +5,15 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record RespawnPacket(
-        int dimensionType, @NotNull String worldName,
-        long hashedSeed, @NotNull GameMode gameMode, @NotNull GameMode previousGameMode,
+        int dimensionType, String worldName,
+        long hashedSeed, GameMode gameMode, GameMode previousGameMode,
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
-        int portalCooldown, byte copyData, int seaLevel
+        int portalCooldown, int seaLevel, byte copyData
 ) implements ServerPacket.Play {
     public static final int COPY_NONE = 0x0;
     public static final int COPY_ATTRIBUTES = 0x1;
@@ -31,7 +30,29 @@ public record RespawnPacket(
             BOOLEAN, RespawnPacket::isFlat,
             WorldPos.NETWORK_TYPE.optional(), RespawnPacket::deathLocation,
             VAR_INT, RespawnPacket::portalCooldown,
-            BYTE, RespawnPacket::copyData,
             VAR_INT, RespawnPacket::seaLevel,
+            BYTE, RespawnPacket::copyData,
             RespawnPacket::new);
+
+    /**
+     * @deprecated Use {@link RespawnPacket#RespawnPacket(int, String, long, GameMode, GameMode, boolean, boolean, WorldPos, int, int, byte)}
+     * @param dimensionType dimensionType
+     * @param worldName worldName
+     * @param hashedSeed hashedSeed
+     * @param gameMode gameMode
+     * @param previousGameMode previousGameMode
+     * @param isDebug isDebug
+     * @param isFlat isFlat
+     * @param deathLocation deathLocation
+     * @param portalCooldown portalCooldown
+     * @param copyData copyData
+     * @param seaLevel seaLevel
+     */
+    @Deprecated(forRemoval = true)
+    public RespawnPacket(int dimensionType, String worldName,
+                         long hashedSeed, GameMode gameMode, GameMode previousGameMode,
+                         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
+                         int portalCooldown, byte copyData, int seaLevel) {
+        this(dimensionType, worldName, hashedSeed, gameMode, previousGameMode, isDebug, isFlat, deathLocation, portalCooldown, seaLevel, copyData);
+    }
 }

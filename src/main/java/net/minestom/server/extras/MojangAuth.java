@@ -1,5 +1,6 @@
 package net.minestom.server.extras;
 
+import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.extras.velocity.VelocityProxy;
@@ -8,6 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.security.KeyPair;
 
+/**
+ * @deprecated Use {@link net.minestom.server.MinecraftServer#init(Auth)}
+ */
+@SuppressWarnings("removal")
+@Deprecated(forRemoval = true)
 public final class MojangAuth {
     private static volatile boolean enabled = false;
     private static volatile KeyPair keyPair;

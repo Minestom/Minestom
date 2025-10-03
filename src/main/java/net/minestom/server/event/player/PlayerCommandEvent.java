@@ -3,7 +3,6 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called every time a player send a message starting by '/'.
@@ -15,7 +14,7 @@ public class PlayerCommandEvent implements PlayerInstanceEvent, CancellableEvent
 
     private boolean cancelled;
 
-    public PlayerCommandEvent(@NotNull Player player, @NotNull String command) {
+    public PlayerCommandEvent(Player player, String command) {
         this.player = player;
         this.command = command;
     }
@@ -25,7 +24,6 @@ public class PlayerCommandEvent implements PlayerInstanceEvent, CancellableEvent
      *
      * @return the command that the player wants to execute
      */
-    @NotNull
     public String getCommand() {
         return command;
     }
@@ -35,7 +33,7 @@ public class PlayerCommandEvent implements PlayerInstanceEvent, CancellableEvent
      *
      * @param command the new command
      */
-    public void setCommand(@NotNull String command) {
+    public void setCommand(String command) {
         this.command = command;
     }
 
@@ -50,7 +48,7 @@ public class PlayerCommandEvent implements PlayerInstanceEvent, CancellableEvent
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

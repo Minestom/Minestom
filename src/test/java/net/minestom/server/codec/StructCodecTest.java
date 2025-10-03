@@ -2,7 +2,6 @@ package net.minestom.server.codec;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.adventure.MinestomAdventure;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.codec.CodecAssertions.assertError;
@@ -124,7 +123,7 @@ public class StructCodecTest {
         assertEquals(snbt("{name: \"test\", value: \"innerValue\"}"), assertOk(encodeResult));
     }
 
-    private @NotNull BinaryTag snbt(@NotNull String snbt) {
+    private BinaryTag snbt(String snbt) {
         return assertDoesNotThrow(() -> MinestomAdventure.tagStringIO().asTag(snbt));
     }
 

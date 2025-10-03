@@ -6,13 +6,12 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientSignedCommandChatPacket(@NotNull String message, long timestamp,
-                                            long salt, @NotNull ArgumentSignatures signatures,
-                                            LastSeenMessages.@NotNull Update lastSeenMessages,
+public record ClientSignedCommandChatPacket(String message, long timestamp,
+                                            long salt, ArgumentSignatures signatures,
+                                            LastSeenMessages.Update lastSeenMessages,
                                             byte checksum) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientSignedCommandChatPacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientSignedCommandChatPacket::message,

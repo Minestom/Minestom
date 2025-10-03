@@ -10,7 +10,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
 
 public class PlayerPositionListener {
     private static final double MAX_COORDINATE = 30_000_000;
@@ -19,6 +19,14 @@ public class PlayerPositionListener {
     public static void playerPacketListener(ClientPlayerPositionStatusPacket packet, Player player) {
         // TODO: Should we expose horizontal collision here and the methods below?
         player.refreshOnGround(packet.onGround());
+    }
+
+    /**
+     * Exists to update yaw/pitch from UseItemListener
+     */
+    @ApiStatus.Internal
+    public static void playerRotation(Player player, float yaw, float pitch) {
+        processMovement(player, player.getPosition().withView(yaw, pitch), player.isOnGround());
     }
 
     public static void playerLookListener(ClientPlayerRotationPacket packet, Player player) {
@@ -37,7 +45,7 @@ public class PlayerPositionListener {
         player.refreshReceivedTeleportId(packet.teleportId());
     }
 
-    private static void processMovement(@NotNull Player player, @NotNull Pos packetPosition, boolean onGround) {
+    private static void processMovement(Player player, Pos packetPosition, boolean onGround) {
         // Prevent the player from moving too far
         // Doubles close to max size can cause overflow, or simply have precision issues
         if (Math.abs(packetPosition.x()) > MAX_COORDINATE ||
