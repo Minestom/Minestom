@@ -529,8 +529,7 @@ final class PaletteImpl implements Palette {
             makeDirect();
         } else if (focus == Optimization.SIZE) {
             // Size optimization - calculate minimum bits needed for unique values
-            final var paletteList = new IntArrayList(uniqueCount);
-            uniqueValues.forEach(paletteList::add);
+            final var paletteList = new IntArrayList(uniqueValues);
             downsizeWithPalette(paletteList);
         }
     }
@@ -624,7 +623,7 @@ final class PaletteImpl implements Palette {
         if (newBpe >= bpe || newBpe > maxBitsPerEntry) return;
 
         // Fill new palette <-> value objects
-        final Int2IntOpenHashMap newValueToPaletteMap = new Int2IntOpenHashMap();
+        final Int2IntOpenHashMap newValueToPaletteMap = new Int2IntOpenHashMap(palette.size());
         newValueToPaletteMap.defaultReturnValue(-1);
         final AtomicInteger index = new AtomicInteger();
         palette.forEach(v -> {
