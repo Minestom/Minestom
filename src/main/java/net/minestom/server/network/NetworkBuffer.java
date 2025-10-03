@@ -463,14 +463,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void trim();
 
     /**
-     * Creates a copy of the buffer trimmed using the settings to {@link #settingsStatic()}.
+     * Creates a copy of the buffer trimmed using the settings to {@link Settings#staticSettings()}.
      * <br>
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
      * @return the trimmed buffer
      */
     @Contract("-> new")
     default NetworkBuffer trimmed() {
-        return trimmed(settingsStatic());
+        return trimmed(Settings.staticSettings());
     }
 
     /**
@@ -484,7 +484,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     NetworkBuffer trimmed(Settings settings);
 
     /**
-     * Copies the current buffer using the settings specified {@link #settingsStatic()}
+     * Copies the current buffer using the settings specified {@link Settings#staticSettings()}
      * with the index to the length using {@link #readIndex()} and {@link #writeIndex()}.
      * @param index the starting index
      * @param length the length
@@ -509,7 +509,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Copies the current buffer using the settings specified {@link #settingsStatic()}
+     * Copies the current buffer using the settings specified {@link Settings#staticSettings()}
      * with the index to the length with the new specified read and write indexes.
      * @param index the starting index
      * @param length the length
@@ -519,7 +519,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract("_, _, _, _ -> new")
     default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
-        return copy(settingsStatic(), index, length, readIndex, writeIndex);
+        return copy(Settings.staticSettings(), index, length, readIndex, writeIndex);
     }
 
     /**
@@ -777,25 +777,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Gets the static settings
-     * @return the static settings.
-     */
-    @Contract(pure = true)
-    static Settings settingsStatic() {
-        return NetworkBufferImpl.Settings.STATIC;
-    }
-
-    /**
-     * Gets the resizeable settings
-     * @return the resizeable settings.
-     */
-    @Contract(pure = true)
-    static Settings settingsResizeable() {
-        return NetworkBufferImpl.Settings.RESIZEABLE;
-    }
-
-    /**
-     * Creates a new static buffer using {@link NetworkBuffer#settingsStatic()}.
+     * Creates a new static buffer using {@link Settings#staticSettings()}.
      * @param size the size to use for {@link Settings#allocate(long)}
      * @param registries the registries to use
      * @return the new network buffer
@@ -803,21 +785,21 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Contract("_, _ -> new")
     static NetworkBuffer staticBuffer(long size, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return settingsStatic().registry(registries).allocate(size);
+        return Settings.staticSettings().registry(registries).allocate(size);
     }
 
     /**
-     * Creates a new static buffer using {@link NetworkBuffer#settingsStatic()}.
+     * Creates a new static buffer using {@link Settings#staticSettings()}.
      * @param size the size to use for {@link Settings#allocate(long)}
      * @return the new network buffer
      */
     @Contract("_ -> new")
     static NetworkBuffer staticBuffer(long size) {
-        return settingsStatic().allocate(size);
+        return Settings.staticSettings().allocate(size);
     }
 
     /**
-     * Creates a resizeable buffer using {@link NetworkBuffer#settingsResizeable()}
+     * Creates a resizeable buffer using {@link Settings#resizeableSettings()} ()}
      * @param initialSize the initial size to use for {@link Settings#allocate(long)}
      * @param registries the registries to use
      * @return the new buffer
@@ -825,19 +807,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Contract("_, _ -> new")
     static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return settingsResizeable()
+        return Settings.resizeableSettings()
                 .registry(registries)
                 .allocate(initialSize);
     }
 
     /**
-     * Creates a resizeable buffer using {@link NetworkBuffer#settingsResizeable()}
+     * Creates a resizeable buffer using {@link Settings#resizeableSettings()}
      * @param initialSize the initial size to use for {@link Settings#allocate(long)}
      * @return the new buffer
      */
     @Contract("_ -> new")
     static NetworkBuffer resizableBuffer(int initialSize) {
-        return settingsResizeable().allocate(initialSize);
+        return Settings.resizeableSettings().allocate(initialSize);
     }
 
     /**
@@ -923,13 +905,31 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Builder for creating a {@link NetworkBuffer} through {@link NetworkBuffer#settingsStatic()}.
+     * Builder for creating a {@link NetworkBuffer} through {@link Settings#staticSettings()}.
      * <br>
      * Useful for creating buffers with specific configuration like arenas, auto resizing, and registries.
      * <br>
      * Builders are immutable and can be used across threads. You also shouldn't rely on the identity of builders due to being a value class candidate.
      */
     sealed interface Settings permits NetworkBufferImpl.Settings {
+        /**
+         * Gets the static settings where {@link #arena(Supplier)} is set.
+         * @return the static settings.
+         */
+        @Contract(pure = true)
+        static Settings staticSettings() {
+            return NetworkBufferImpl.Settings.STATIC;
+        }
+
+        /**
+         * Gets the resizeable settings where {@link #autoResize(AutoResize)} is set and built off {@link #staticSettings()}.
+         * @return the resizeable settings.
+         */
+        @Contract(pure = true)
+        static Settings resizeableSettings() {
+            return NetworkBufferImpl.Settings.RESIZEABLE;
+        }
+        
         /**
          * Sets the arena used for allocations.
          * <br>

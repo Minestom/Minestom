@@ -497,7 +497,7 @@ public class NetworkBufferTest {
     public void testConfinedArena() {
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            buffer = NetworkBuffer.settingsStatic().arena(arena).allocate(256);
+            buffer = NetworkBuffer.Settings.staticSettings().arena(arena).allocate(256);
             buffer.write(VAR_INT, Integer.MAX_VALUE);
             buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
             assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
@@ -509,7 +509,7 @@ public class NetworkBufferTest {
     public void testConfinedArenaCopy() {
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            var settings = NetworkBuffer.settingsStatic().arena(arena);
+            var settings = NetworkBuffer.Settings.staticSettings().arena(arena);
             var confinedBuffer = settings.allocate(256);
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
@@ -524,7 +524,7 @@ public class NetworkBufferTest {
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            var confinedBuffer = NetworkBuffer.settingsStatic().arena(arena).allocate(256);
+            var confinedBuffer = NetworkBuffer.Settings.staticSettings().arena(arena).allocate(256);
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, stringBytes);
             assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
@@ -537,7 +537,7 @@ public class NetworkBufferTest {
 
     @Test
     public void testTrim() {
-        var buffer = NetworkBuffer.settingsStatic().allocate(256);
+        var buffer = NetworkBuffer.staticBuffer(256);
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         buffer.write(VAR_INT, Integer.MAX_VALUE);
         buffer.write(RAW_BYTES, stringBytes);
@@ -551,7 +551,7 @@ public class NetworkBufferTest {
 
     @Test
     public void testTrimmed() {
-        var buffer = NetworkBuffer.settingsStatic().allocate(256);
+        var buffer = NetworkBuffer.staticBuffer(256);
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         buffer.write(VAR_INT, Integer.MAX_VALUE);
         buffer.write(RAW_BYTES, stringBytes);
