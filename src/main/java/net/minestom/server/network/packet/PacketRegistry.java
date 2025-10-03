@@ -12,7 +12,7 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
-import net.minestom.server.network.packet.client.status.StatusRequestPacket;
+import net.minestom.server.network.packet.client.status.ClientStatusRequestPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.configuration.*;
@@ -76,7 +76,7 @@ public interface PacketRegistry<T> {
     final class ClientStatus extends Client {
         public ClientStatus() {
             super(
-                    entry(StatusRequestPacket.class, StatusRequestPacket.SERIALIZER),
+                    entry(ClientStatusRequestPacket.class, ClientStatusRequestPacket.SERIALIZER),
                     entry(ClientPingRequestPacket.class, ClientPingRequestPacket.SERIALIZER)
             );
         }

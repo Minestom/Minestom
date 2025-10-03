@@ -23,7 +23,6 @@ import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.PacketVanilla;
-import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
@@ -34,7 +33,7 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
-import net.minestom.server.network.packet.client.status.StatusRequestPacket;
+import net.minestom.server.network.packet.client.status.ClientStatusRequestPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.configuration.*;
@@ -285,7 +284,7 @@ public class PacketWriteReadTest {
 
         // Status
         addClientPackets(
-                new StatusRequestPacket()
+                new ClientStatusRequestPacket()
         );
         addClientPackets(
                 new ClientPingRequestPacket(Long.MIN_VALUE),

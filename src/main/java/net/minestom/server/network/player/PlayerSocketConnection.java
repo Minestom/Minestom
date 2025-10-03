@@ -26,7 +26,7 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.ClientConfigurationAckPacket;
-import net.minestom.server.network.packet.client.status.StatusRequestPacket;
+import net.minestom.server.network.packet.client.status.ClientStatusRequestPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.validate.Check;
@@ -59,7 +59,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private static final Set<Class<? extends ClientPacket>> IMMEDIATE_PROCESS_PACKETS = Set.of(
             ClientHandshakePacket.class, // First received packet
             ClientCookieResponsePacket.class,
-            StatusRequestPacket.class,
+            ClientStatusRequestPacket.class,
             ClientPingRequestPacket.class,
             ClientKeepAlivePacket.class, // Used to calculate latency
             ClientLoginStartPacket.class,
