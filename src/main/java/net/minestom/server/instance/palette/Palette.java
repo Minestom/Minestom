@@ -14,14 +14,14 @@ import static net.minestom.server.network.NetworkBuffer.*;
 /**
  * Palette is a data storage with three storage models used to store blocks and biomes
  * <br>
- * Single Value Mode (bitsPerEntry == 0): All blocks have the same value.
+ * Single Value Mode {@code (bitsPerEntry == 0)}: All blocks have the same value.
  * No arrays allocated, value stored in count field.
  * <br>
- * Indirect Mode (bitsPerEntry <= maxBitsPerEntry): Uses palette compression.
+ * Indirect Mode {@code (bitsPerEntry <= maxBitsPerEntry)}: Uses palette compression.
  * Values array stores palette indices, paletteToValueList and valueToPaletteMap
  * provide bidirectional mapping between indices and block values.
  * <br>
- * Direct Mode (bitsPerEntry > maxBitsPerEntry): Stores block values directly.
+ * Direct Mode {@code (bitsPerEntry > maxBitsPerEntry)}: Stores block values directly.
  * No palette structures, values array contains actual block values using directBits.
  * <br>
  * You can optimize for space/speed using {@link #optimize(Optimization)}
