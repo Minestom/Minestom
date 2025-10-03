@@ -413,8 +413,12 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     /**
      * Sets the buffer to be read only, this cannot be undone, instead you must copy the buffer.
+     * <br>
+     * While the current implementation does set this buffer to read only; it may in the future not provide this.
+     * This is why it's missing its (this) contract.
+     * @return this, may change in the future to return new.
      */
-    void readOnly();
+    NetworkBuffer readOnly();
 
     /**
      * Returns true if the buffer has previously been {@link #readOnly()}

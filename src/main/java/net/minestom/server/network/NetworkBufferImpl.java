@@ -199,10 +199,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public void readOnly() {
+    public NetworkBuffer readOnly() {
         assertDummy();
-        if (isReadOnly()) return; // Should we warn? (also here cause asReadOnly does not check for this)
+        if (isReadOnly()) return this; // Should we warn? (also here cause asReadOnly does not check for this)
         this.segment = this.segment.asReadOnly();
+        return this;
     }
 
     @Override
