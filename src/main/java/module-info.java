@@ -57,6 +57,7 @@ module net.minestom.server {
     exports net.minestom.server.entity.metadata.ambient;
     exports net.minestom.server.entity.metadata.animal;
     exports net.minestom.server.entity.metadata.animal.tameable;
+    exports net.minestom.server.entity.metadata.avatar;
     exports net.minestom.server.entity.metadata.display;
     exports net.minestom.server.entity.metadata.flying;
     exports net.minestom.server.entity.metadata.golem;
