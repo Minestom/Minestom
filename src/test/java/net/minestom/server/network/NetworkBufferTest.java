@@ -534,17 +534,32 @@ public class NetworkBufferTest {
         assertArrayEquals(stringBytes, bytes);
     }
 
+
     @Test
     public void testTrim() {
         var buffer = NetworkBuffer.settingsStatic().allocate(256);
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         buffer.write(VAR_INT, Integer.MAX_VALUE);
         buffer.write(RAW_BYTES, stringBytes);
-        buffer = buffer.trim();
+        buffer.trim();
         assertEquals(10, buffer.capacity());
         assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
         assertArrayEquals(stringBytes, buffer.read(RAW_BYTES));
-        buffer = buffer.trim();
+        buffer.trim();
+        assertEquals(0, buffer.capacity());
+    }
+
+    @Test
+    public void testTrimmed() {
+        var buffer = NetworkBuffer.settingsStatic().allocate(256);
+        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
+        buffer.write(VAR_INT, Integer.MAX_VALUE);
+        buffer.write(RAW_BYTES, stringBytes);
+        buffer = buffer.trimmed();
+        assertEquals(10, buffer.capacity());
+        assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
+        assertArrayEquals(stringBytes, buffer.read(RAW_BYTES));
+        buffer = buffer.trimmed();
         assertEquals(0, buffer.capacity());
     }
 

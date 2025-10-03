@@ -260,7 +260,25 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public NetworkBuffer trim(NetworkBuffer.Settings settings) {
+    public void trim() {
+        assertDummy();
+        assertReadOnly();
+        final long readableBytes = readableBytes();
+        if (readableBytes == capacity()) return;
+        final var arenaSupplier = this.arenaSupplier;
+        if (arenaSupplier == null) throw new IllegalStateException("Buffer cannot trim without an arena supplier");
+        final Arena arena = this.arenaSupplier.get();
+        final MemorySegment oldSegment = this.segment;
+        final MemorySegment segment = arena.allocate(readableBytes);
+        MemorySegment.copy(oldSegment, readIndex, segment, 0, readableBytes);
+        this.segment = segment;
+        this.arena = arena;
+        this.writeIndex = readableBytes;
+        this.readIndex = 0;
+    }
+
+    @Override
+    public NetworkBuffer trimmed(NetworkBuffer.Settings settings) {
         assertDummy();
         assertReadOnly();
         final long readableBytes = readableBytes();

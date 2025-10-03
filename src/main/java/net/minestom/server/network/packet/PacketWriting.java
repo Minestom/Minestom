@@ -160,7 +160,7 @@ public final class PacketWriting {
         final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
         try {
             writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
-            return tmpBuffer.trim();
+            return tmpBuffer.trimmed();
         } catch (IndexOutOfBoundsException e) {
             final Registries registries = tmpBuffer.registries();
             final long sizeOf;
@@ -177,7 +177,7 @@ public final class PacketWriting {
             tmpBuffer.resize(sizeOf + 15);
             tmpBuffer.writeIndex(0);
             writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
-            return tmpBuffer.trim();
+            return tmpBuffer.trimmed();
         }
     }
 

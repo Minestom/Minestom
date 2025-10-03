@@ -450,7 +450,17 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Compact (copies) all the data from the {@link #readIndex()} to the {@link #writeIndex()} to be zero aligned.
      * This does not change the buffer capacity, instead it's a simple copy.
      */
+    @Contract(mutates = "this")
     void compact();
+
+
+    /**
+     * Creates a copy of the buffer trimmed and assigns it to this {@link NetworkBuffer}.
+     * <br>
+     * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
+     */
+    @Contract(mutates = "this")
+    void trim();
 
     /**
      * Creates a copy of the buffer trimmed using the settings to {@link #settingsStatic()}.
@@ -459,8 +469,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the trimmed buffer
      */
     @Contract("-> new")
-    default NetworkBuffer trim() {
-        return trim(settingsStatic());
+    default NetworkBuffer trimmed() {
+        return trimmed(settingsStatic());
     }
 
     /**
@@ -471,7 +481,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the trimmed buffer
      */
     @Contract("_, -> new")
-    NetworkBuffer trim(Settings settings);
+    NetworkBuffer trimmed(Settings settings);
 
     /**
      * Copies the current buffer using the settings specified {@link #settingsStatic()}
