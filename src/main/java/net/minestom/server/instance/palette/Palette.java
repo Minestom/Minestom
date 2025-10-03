@@ -227,10 +227,10 @@ public sealed interface Palette permits PaletteImpl {
     }
 
     static NetworkBuffer.Type<Palette> serializer(int dimension, int minIndirect, int maxIndirect, int directBits) {
-        //noinspection unchecked
-        return (NetworkBuffer.Type) new NetworkBuffer.Type<PaletteImpl>() {
+        return new NetworkBuffer.Type<>() {
             @Override
-            public void write(NetworkBuffer buffer, PaletteImpl value) {
+            public void write(NetworkBuffer buffer, Palette palette) {
+                PaletteImpl value = (PaletteImpl) palette;
                 // Temporary fix for biome direct bits depending on the number of registered biomes
                 if (directBits != value.directBits && !value.hasPalette()) {
                     PaletteImpl tmp = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
@@ -250,7 +250,7 @@ public sealed interface Palette permits PaletteImpl {
             }
 
             @Override
-            public PaletteImpl read(NetworkBuffer buffer) {
+            public Palette read(NetworkBuffer buffer) {
                 final byte bitsPerEntry = buffer.read(BYTE);
                 PaletteImpl result = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
                 result.bitsPerEntry = bitsPerEntry;
