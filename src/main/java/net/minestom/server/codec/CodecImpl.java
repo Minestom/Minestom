@@ -296,14 +296,14 @@ final class CodecImpl {
 
     @SuppressWarnings("unchecked")
     record RegistryTaggedUnionImpl<T>(
+            String key,
             Registries.Selector<StructCodec<? extends T>> registrySelector,
-            Function<T, StructCodec<? extends T>> valueToCodec,
-            String key
+            Function<T, StructCodec<? extends T>> valueToCodec
     ) implements StructCodec<T> {
         RegistryTaggedUnionImpl {
+            Objects.requireNonNull(key, "key");
             Objects.requireNonNull(registrySelector, "registrySelector");
             Objects.requireNonNull(valueToCodec, "valueToCodec");
-            Objects.requireNonNull(key, "key");
         }
 
         @Override

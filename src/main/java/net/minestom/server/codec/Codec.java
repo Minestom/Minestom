@@ -180,6 +180,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     }
 
     /**
+     * @deprecated Use {@link #RegistryTaggedUnion(String, Registry, Function)} instead.
      * Shortcut for {@link Codec#RegistryTaggedUnion(Registries.Selector, Function, String)}
      *
      * @param registry         the codec registry
@@ -188,17 +189,18 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>              the struct codec type.
      * @return a {@link StructCodec}
      */
+    @Deprecated
     @Contract(pure = true, value = "_, _, _ -> new")
     static <T> StructCodec<T> RegistryTaggedUnion(
             Registry<StructCodec<? extends T>> registry,
             Function<T, StructCodec<? extends T>> serializerGetter,
             String key
     ) {
-        Objects.requireNonNull(registry, "registry");
-        return Codec.RegistryTaggedUnion((ignored) -> registry, serializerGetter, key);
+        return Codec.RegistryTaggedUnion(key, registry, serializerGetter);
     }
 
     /**
+     * @deprecated Use {@link #RegistryTaggedUnion(String, Registries.Selector, Function)} instead.
      * Creates a {@link StructCodec} to bidirectionally map values of {@link T} to their encoded values
      * <br>
      * Registry selectors will be used to lookup values of codecs of {@link T}.
@@ -210,13 +212,89 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>              the codec type
      * @return a {@link StructCodec} bidirectionally mapping values of {@link T}
      */
+    @Deprecated
     @Contract(pure = true, value = "_, _, _ -> new")
     static <T> StructCodec<T> RegistryTaggedUnion(
             Registries.Selector<StructCodec<? extends T>> registrySelector,
             Function<T, StructCodec<? extends T>> serializerGetter,
             String key
     ) {
-        return new CodecImpl.RegistryTaggedUnionImpl<>(registrySelector, serializerGetter, key);
+        return Codec.RegistryTaggedUnion(key, registrySelector, serializerGetter);
+    }
+
+    /**
+     * Shortcut for {@link Codec#RegistryTaggedUnion(String, Registry, Function)}
+     * where {@code key} will be {@code "type"}
+     *
+     * @param registry         the codec registry
+     * @param serializerGetter the codec getter
+     * @param <T>              the struct codec type.
+     * @return a {@link StructCodec}
+     */
+    @Contract(pure = true, value = "_, _ -> new")
+    static <T> StructCodec<T> RegistryTaggedUnion(
+            Registry<StructCodec<? extends T>> registry,
+            Function<T, StructCodec<? extends T>> serializerGetter
+    ) {
+        return Codec.RegistryTaggedUnion("type", registry, serializerGetter);
+    }
+
+    /**
+     * Shortcut for {@link Codec#RegistryTaggedUnion(String, Registries.Selector, Function)}
+     * where {@code selector} will be {@code registry}
+     *
+     * @param key              the map key
+     * @param registry         the codec registry
+     * @param serializerGetter the codec getter
+     * @param <T>              the struct codec type.
+     * @return a {@link StructCodec}
+     */
+    @Contract(pure = true, value = "_, _, _ -> new")
+    static <T> StructCodec<T> RegistryTaggedUnion(
+            String key,
+            Registry<StructCodec<? extends T>> registry,
+            Function<T, StructCodec<? extends T>> serializerGetter
+    ) {
+        Objects.requireNonNull(registry, "registry");
+        return Codec.RegistryTaggedUnion(key, (ignored) -> registry, serializerGetter); // Stable Value/Lazy Constant
+    }
+
+    /**
+     * Shortcut for {@link Codec#RegistryTaggedUnion(String, Registries.Selector, Function)}
+     * where {@code key} will be {@code "type"}
+     *
+     * @param registrySelector the registry selector used during lookup.
+     * @param serializerGetter the serializer for each value of {@link T}
+     * @param <T>              the codec type
+     * @return a {@link StructCodec} bidirectionally mapping values of {@link T}
+     */
+    @Contract(pure = true, value = "_, _ -> new")
+    static <T> StructCodec<T> RegistryTaggedUnion(
+            Registries.Selector<StructCodec<? extends T>> registrySelector,
+            Function<T, StructCodec<? extends T>> serializerGetter
+    ) {
+        return new CodecImpl.RegistryTaggedUnionImpl<>("type", registrySelector, serializerGetter);
+    }
+
+    /**
+     * Creates a {@link StructCodec} to bidirectionally map values of {@link T} to their encoded values
+     * <br>
+     * Registry selectors will be used to lookup values of codecs of {@link T}.
+     * Then will be used to map to object {@link T} from {@code key}
+     *
+     * @param key              the map key for {@link T}
+     * @param registrySelector the registry selector used during lookup.
+     * @param serializerGetter the serializer for each value of {@link T}
+     * @param <T>              the codec type
+     * @return a {@link StructCodec} bidirectionally mapping values of {@link T}
+     */
+    @Contract(pure = true, value = "_, _, _ -> new")
+    static <T> StructCodec<T> RegistryTaggedUnion(
+            String key,
+            Registries.Selector<StructCodec<? extends T>> registrySelector,
+            Function<T, StructCodec<? extends T>> serializerGetter
+    ) {
+        return new CodecImpl.RegistryTaggedUnionImpl<>(key, registrySelector, serializerGetter);
     }
 
     /**
