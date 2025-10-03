@@ -12,9 +12,19 @@ import java.util.function.IntUnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 /**
- * Represents a palette used to store blocks and biomes.
- * <p>
- * 0 is the default value.
+ * Palette is a data storage with three storage models used to store blocks and biomes
+ * <br>
+ * Single Value Mode (bitsPerEntry == 0): All blocks have the same value.
+ * No arrays allocated, value stored in count field.
+ * <br>
+ * Indirect Mode (bitsPerEntry <= maxBitsPerEntry): Uses palette compression.
+ * Values array stores palette indices, paletteToValueList and valueToPaletteMap
+ * provide bidirectional mapping between indices and block values.
+ * <br>
+ * Direct Mode (bitsPerEntry > maxBitsPerEntry): Stores block values directly.
+ * No palette structures, values array contains actual block values using directBits.
+ * <br>
+ * You can optimize for space/speed using {@link #optimize(Optimization)}
  */
 public sealed interface Palette permits PaletteImpl {
     int BLOCK_DIMENSION = 16;
@@ -139,10 +149,25 @@ public sealed interface Palette permits PaletteImpl {
         return dimension * dimension * dimension;
     }
 
+    /**
+     * Attempts to optimize the current {@link Palette}
+     * <br>
+     * If plausible the only optimization will be performed is converting to a single value regardless of {@link Optimization}
+     * @param focus the optimization focus
+     */
     void optimize(Optimization focus);
 
+    /**
+     * An optimization mode to use with {@link #optimize(Optimization)}
+     */
     enum Optimization {
+        /**
+         * Will attempt to make indirect to save space.
+         */
         SIZE,
+        /**
+         * Will attempt to make direct to reduce lookup.
+         */
         SPEED,
     }
 
