@@ -38,7 +38,7 @@ public class MinecartCommand extends Command {
             case COMMAND_BLOCK -> EntityType.COMMAND_BLOCK_MINECART;
         });
         var meta = (AbstractMinecartMeta) minecart.getEntityMeta();
-        meta.setCustomBlockState(context.get(block).stateId());
+        meta.setCustomBlockState(context.get(block));
         meta.setCustomBlockYPosition(context.get(offset));
 
         minecart.setInstance(player.getInstance(), player.getPosition().withView(0f, 0f));

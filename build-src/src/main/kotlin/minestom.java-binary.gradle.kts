@@ -9,6 +9,9 @@ val javaVersion = System.getenv("JAVA_VERSION") ?: "22"
 group = "net.minestom"
 
 repositories {
+    val dataVersion = libs.minestomData.get().version ?: ""
+    if (dataVersion.endsWith("-dev"))
+        mavenLocal()
     mavenCentral()
 }
 
