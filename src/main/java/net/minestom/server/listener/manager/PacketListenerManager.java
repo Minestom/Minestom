@@ -19,7 +19,7 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
-import net.minestom.server.network.packet.client.status.StatusRequestPacket;
+import net.minestom.server.network.packet.client.status.ClientStatusRequestPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public final class PacketListenerManager {
 
         setListener(ConnectionState.HANDSHAKE, ClientHandshakePacket.class, HandshakeListener::listener);
 
-        setListener(ConnectionState.STATUS, StatusRequestPacket.class, StatusListener::requestListener);
+        setListener(ConnectionState.STATUS, ClientStatusRequestPacket.class, StatusListener::requestListener);
         setListener(ConnectionState.STATUS, ClientPingRequestPacket.class, StatusListener::pingRequestListener);
 
         setListener(ConnectionState.LOGIN, ClientLoginStartPacket.class, LoginListener::loginStartListener);
