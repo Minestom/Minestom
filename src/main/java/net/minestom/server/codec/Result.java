@@ -13,6 +13,8 @@ import java.util.function.Function;
  * or use some of the helper methods provided like {@link #orElseThrow()} or {@link #mapResult(Function)}.
  * <br>
  * To construct simply just do {@code new Result.Ok<>(value) } and {@code new Result.Error<>("Error message!") }
+ * <br>
+ * You should not rely on the identity of results as they are value candidates.
  *
  * @param <T> the type, can be nullable.
  */
