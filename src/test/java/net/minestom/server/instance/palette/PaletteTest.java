@@ -953,6 +953,36 @@ public class PaletteTest {
         assertEquals(-1, multiValuePalette.height(5, 5, (x, y, z, value) -> value == 999));
     }
 
+    @Test
+    public void count() {
+        Palette testPalette = Palette.blocks();
+        testPalette.fill(5000);
+        assertEquals(4096, testPalette.count());
+
+        // Should correctly count
+        testPalette.set(0, 0, 0, 0);
+        testPalette.set(0, 0, 1, 1);
+        testPalette.set(0, 0, 2, 2);
+        testPalette.set(0, 0, 3, 3);
+        assertEquals(4095, testPalette.count());
+
+        testPalette.set(0, 0, 0, 5000);
+        assertEquals(4096, testPalette.count());
+
+        testPalette.replace(5000, 0);
+        assertEquals(3, testPalette.count());
+    }
+
+    @Test
+    public void loadCount() {
+        Palette testPalette = Palette.empty(4, 4, 8, 12);
+        int[] palette = new int[] { 10, 2, 4, 0 };
+        // 12 palette values that lead to 0 and 6 zeroed palette values
+        long[] values = new long[] { 0x01230123, 0x00130013, 0x33333333, 0x22222222 };
+        testPalette.load(palette, values);
+        assertEquals(testPalette.maxSize() - 12, testPalette.count());
+    }
+
     private static List<Palette> testPalettes() {
         return List.of(
                 Palette.sized(2, 1, 5, 15, 3),
