@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.nmcp)
 }
 
-val javaVersion = System.getenv("JAVA_VERSION") ?: "22"
+val javaVersion = System.getenv("JAVA_VERSION") ?: "21"
 
 group = "net.minestom"
 version = System.getenv("MINESTOM_VERSION") ?: "dev"
