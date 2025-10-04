@@ -30,7 +30,7 @@ import java.util.function.UnaryOperator;
  * Represents an inventory where items can be modified/retrieved.
  */
 public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable, Viewable, EventHandler<InventoryEvent>
-        permits Inventory, PlayerInventory {
+        permits ViewableInventory, PlayerInventory {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
 

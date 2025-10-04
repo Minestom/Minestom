@@ -52,6 +52,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.ViewableInventory;
 import net.minestom.server.inventory.click.ClickPreprocessor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -1743,7 +1744,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param inventory the inventory to open
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
      */
-    public boolean openInventory(Inventory inventory) {
+    public boolean openInventory(ViewableInventory inventory) {
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
