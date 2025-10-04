@@ -36,7 +36,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class PlayerConnection {
     private Player player;
-    private volatile ConnectionState connectionState;
+
+    // Server & client states can differ during configuration.
+    // "server" state means the state the server thinks its in.
+    // "client" state means the state the client thinks its in.
+    // For example, after sending start configuration but before receiving the ack,
+    // the server will be in CONFIGURATION while the client is still in PLAY.
+    private volatile ConnectionState serverState, clientState;
+
     private PlayerPublicKey playerPublicKey;
     volatile boolean online;
 
@@ -48,7 +55,8 @@ public abstract class PlayerConnection {
 
     public PlayerConnection() {
         this.online = true;
-        this.connectionState = ConnectionState.HANDSHAKE;
+        this.serverState = ConnectionState.HANDSHAKE;
+        this.clientState = ConnectionState.HANDSHAKE;
     }
 
     /**
@@ -127,7 +135,7 @@ public abstract class PlayerConnection {
     public void kick(Component component) {
         // Packet type depends on the current player connection state
         final ServerPacket disconnectPacket;
-        if (connectionState == ConnectionState.LOGIN) {
+        if (serverState == ConnectionState.LOGIN) {
             disconnectPacket = new LoginDisconnectPacket(component);
         } else {
             disconnectPacket = new DisconnectPacket(component);
@@ -144,7 +152,7 @@ public abstract class PlayerConnection {
         final Player player = MinecraftServer.getConnectionManager().getPlayer(this);
         if (player != null) {
             MinecraftServer.getConnectionManager().removePlayer(this);
-            if (connectionState == ConnectionState.PLAY && !player.isRemoved())
+            if (serverState == ConnectionState.PLAY && !player.isRemoved())
                 player.scheduleNextTick(Entity::remove);
             else {
                 EventDispatcher.call(new PlayerDisconnectEvent(player));
@@ -182,21 +190,34 @@ public abstract class PlayerConnection {
         return online;
     }
 
-    public void setConnectionState(ConnectionState connectionState) {
-        this.connectionState = connectionState;
-        if (connectionState == ConnectionState.CONFIGURATION) {
+    /**
+     * @deprecated Use {@link #getClientState()} or {@link #getServerState()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public ConnectionState getConnectionState() {
+        return getClientState();
+    }
+
+    public ConnectionState getServerState() {
+        return serverState;
+    }
+
+    public ConnectionState getClientState() {
+        return clientState;
+    }
+
+    public void setClientState(ConnectionState clientState) {
+        if (this.clientState == ConnectionState.HANDSHAKE)
+            this.serverState = clientState;
+        this.clientState = clientState;
+    }
+
+    public void setServerState(ConnectionState serverState) {
+        this.serverState = serverState;
+        if (serverState != ConnectionState.LOGIN) {
             // Clear the plugin request map (it is not used beyond login)
             this.loginPluginMessageProcessor = null;
         }
-    }
-
-    /**
-     * Gets the client connection state.
-     *
-     * @return the client connection state
-     */
-    public ConnectionState getConnectionState() {
-        return connectionState;
     }
 
     public PlayerPublicKey playerPublicKey() {
@@ -212,7 +233,7 @@ public abstract class PlayerConnection {
     }
 
     public CompletableFuture<byte @Nullable []> fetchCookie(String key) {
-        if (getConnectionState() == ConnectionState.CONFIGURATION && getPlayer() == null) {
+        if (serverState == ConnectionState.CONFIGURATION && getPlayer() == null) {
             // This is a bit of an unfortunate limitation. The player provider blocks the player read virtual
             // thread waiting for the player provider so a cookie response would never be received and the
             // process would deadlock.
@@ -263,7 +284,8 @@ public abstract class PlayerConnection {
     @Override
     public String toString() {
         return "PlayerConnection{" +
-                "connectionState=" + connectionState +
+                "serverState=" + serverState +
+                ", clientState=" + clientState +
                 ", identifier=" + getIdentifier() +
                 '}';
     }

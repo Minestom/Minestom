@@ -4,17 +4,19 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.AbstractVehicleMeta;
+import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractMinecartMeta extends AbstractVehicleMeta {
     protected AbstractMinecartMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public int getCustomBlockState() {
+    public @Nullable Block getCustomBlockState() {
         return metadata.get(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_STATE);
     }
 
-    public void setCustomBlockState(int value) {
+    public void setCustomBlockState(@Nullable Block value) {
         metadata.set(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_STATE, value);
     }
 

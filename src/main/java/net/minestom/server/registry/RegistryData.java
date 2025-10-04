@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
+import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
@@ -19,6 +20,7 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.Equippable;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
@@ -253,7 +255,8 @@ public final class RegistryData {
         private final int blockEntityId;
         private final @Nullable Material material;
         private final @Nullable BlockSoundType blockSoundType;
-        private final Shape shape;
+        private final Shape collisionShape;
+        private final Shape occlusionShape;
 
         private BlockEntry(String namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
             assert parent == null || !main.asMap().isEmpty() : "BlockEntry cannot be empty if it has a parent";
@@ -290,18 +293,20 @@ public final class RegistryData {
                 }, null);
             }
             { // Unique special case where the shape strings can mutate but arent saved after the parse.
-                this.shape = fromParent(parent, BlockEntry::collisionShape, main, "collisionShape", (properties, string) -> {
-                    String collision = properties.getString(string);
-                    String occlusion = properties.getString("occlusionShape");
-                    if (parent == null || parentProperties == null)  // No parent, so we can just parse the shape
-                        return CollisionUtils.parseBlockShape(internCache, collision, occlusion, occludes, this.lightEmission);
+                this.collisionShape = fromParent(parent, BlockEntry::collisionShape, main, "collisionShape", (properties, string) -> {
+                    String shape = properties.getString(string);
+                    return CollisionUtils.parseCollisionShape(internCache, shape);
+                }, null);
+                this.occlusionShape = fromParent(parent, BlockEntry::occlusionShape, main, "occlusionShape", (properties, string) -> {
+                    String shape = properties.getString(string);
+                    if (parent == null || parentProperties == null) // No parent, so we can just parse the shape
+                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
                     // TODO make this condition just change the condition; like adding lightData if emission just changes.
-                    if (collision != null || occlusion != null || occludes != parent.occludes() || this.lightEmission != parent.lightEmission) {
-                        if (collision == null) collision = parentProperties.getString(string);
-                        if (occlusion == null) occlusion = parentProperties.getString("occlusionShape");
-                        return CollisionUtils.parseBlockShape(internCache, collision, occlusion, occludes, this.lightEmission);
+                    if (shape != null || occludes != parent.occludes() || this.lightEmission != parent.lightEmission) {
+                        if (shape == null) shape = parentProperties.getString(string);
+                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
                     }
-                    return parent.collisionShape();
+                    return parent.occlusionShape();
                 }, null);
             }
             var redstoneConductor = fromParent(parent, BlockEntry::isRedstoneConductor, main, "redstoneConductor", Properties::getBoolean, null);
@@ -426,7 +431,11 @@ public final class RegistryData {
         }
 
         public Shape collisionShape() {
-            return shape;
+            return collisionShape;
+        }
+
+        public Shape occlusionShape() {
+            return occlusionShape;
         }
 
         public @Nullable BlockSoundType getBlockSoundType() {
@@ -441,8 +450,6 @@ public final class RegistryData {
         private final Supplier<Block> blockSupplier;
         private @Nullable Either<Properties, DataComponentMap> prototype;
 
-        private final EntityType entityType;
-
         private MaterialEntry(String namespace, Properties main) {
             this.prototype = Either.left(main.section("components"));
             this.key = Key.key(namespace);
@@ -451,14 +458,6 @@ public final class RegistryData {
             {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromKey(blockNamespace) : () -> null;
-            }
-            {
-                final Properties spawnEggProperties = main.section("spawnEggProperties");
-                if (spawnEggProperties != null) {
-                    this.entityType = EntityType.fromKey(spawnEggProperties.getString("entityType"));
-                } else {
-                    this.entityType = null;
-                }
             }
         }
 
@@ -516,9 +515,16 @@ public final class RegistryData {
          * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
          *
          * @return The entity type it can spawn, or null if it is not a spawn egg
+         * @deprecated Read {@link DataComponents#ENTITY_DATA} for the spawned entity data.
          */
+        @Deprecated(forRemoval = true)
         public @Nullable EntityType spawnEntityType() {
-            return entityType;
+            CustomData entityData = prototype().get(DataComponents.ENTITY_DATA, CustomData.EMPTY);
+            try {
+                return EntityType.fromKey(entityData.nbt().getString("id"));
+            } catch (InvalidKeyException ignored) {
+                return null;
+            }
         }
     }
 
