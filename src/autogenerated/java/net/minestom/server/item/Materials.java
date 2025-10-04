@@ -617,6 +617,30 @@ sealed interface Materials permits Material {
 
     Material BRICKS = MaterialImpl.get("bricks");
 
+    Material ACACIA_SHELF = MaterialImpl.get("acacia_shelf");
+
+    Material BAMBOO_SHELF = MaterialImpl.get("bamboo_shelf");
+
+    Material BIRCH_SHELF = MaterialImpl.get("birch_shelf");
+
+    Material CHERRY_SHELF = MaterialImpl.get("cherry_shelf");
+
+    Material CRIMSON_SHELF = MaterialImpl.get("crimson_shelf");
+
+    Material DARK_OAK_SHELF = MaterialImpl.get("dark_oak_shelf");
+
+    Material JUNGLE_SHELF = MaterialImpl.get("jungle_shelf");
+
+    Material MANGROVE_SHELF = MaterialImpl.get("mangrove_shelf");
+
+    Material OAK_SHELF = MaterialImpl.get("oak_shelf");
+
+    Material PALE_OAK_SHELF = MaterialImpl.get("pale_oak_shelf");
+
+    Material SPRUCE_SHELF = MaterialImpl.get("spruce_shelf");
+
+    Material WARPED_SHELF = MaterialImpl.get("warped_shelf");
+
     Material BOOKSHELF = MaterialImpl.get("bookshelf");
 
     Material CHISELED_BOOKSHELF = MaterialImpl.get("chiseled_bookshelf");
@@ -715,6 +739,8 @@ sealed interface Materials permits Material {
 
     Material SOUL_TORCH = MaterialImpl.get("soul_torch");
 
+    Material COPPER_TORCH = MaterialImpl.get("copper_torch");
+
     Material GLOWSTONE = MaterialImpl.get("glowstone");
 
     Material INFESTED_STONE = MaterialImpl.get("infested_stone");
@@ -763,7 +789,39 @@ sealed interface Materials permits Material {
 
     Material IRON_BARS = MaterialImpl.get("iron_bars");
 
-    Material CHAIN = MaterialImpl.get("chain");
+    Material COPPER_BARS = MaterialImpl.get("copper_bars");
+
+    Material EXPOSED_COPPER_BARS = MaterialImpl.get("exposed_copper_bars");
+
+    Material WEATHERED_COPPER_BARS = MaterialImpl.get("weathered_copper_bars");
+
+    Material OXIDIZED_COPPER_BARS = MaterialImpl.get("oxidized_copper_bars");
+
+    Material WAXED_COPPER_BARS = MaterialImpl.get("waxed_copper_bars");
+
+    Material WAXED_EXPOSED_COPPER_BARS = MaterialImpl.get("waxed_exposed_copper_bars");
+
+    Material WAXED_WEATHERED_COPPER_BARS = MaterialImpl.get("waxed_weathered_copper_bars");
+
+    Material WAXED_OXIDIZED_COPPER_BARS = MaterialImpl.get("waxed_oxidized_copper_bars");
+
+    Material IRON_CHAIN = MaterialImpl.get("iron_chain");
+
+    Material COPPER_CHAIN = MaterialImpl.get("copper_chain");
+
+    Material EXPOSED_COPPER_CHAIN = MaterialImpl.get("exposed_copper_chain");
+
+    Material WEATHERED_COPPER_CHAIN = MaterialImpl.get("weathered_copper_chain");
+
+    Material OXIDIZED_COPPER_CHAIN = MaterialImpl.get("oxidized_copper_chain");
+
+    Material WAXED_COPPER_CHAIN = MaterialImpl.get("waxed_copper_chain");
+
+    Material WAXED_EXPOSED_COPPER_CHAIN = MaterialImpl.get("waxed_exposed_copper_chain");
+
+    Material WAXED_WEATHERED_COPPER_CHAIN = MaterialImpl.get("waxed_weathered_copper_chain");
+
+    Material WAXED_OXIDIZED_COPPER_CHAIN = MaterialImpl.get("waxed_oxidized_copper_chain");
 
     Material GLASS_PANE = MaterialImpl.get("glass_pane");
 
@@ -1417,6 +1475,20 @@ sealed interface Materials permits Material {
 
     Material LIGHTNING_ROD = MaterialImpl.get("lightning_rod");
 
+    Material EXPOSED_LIGHTNING_ROD = MaterialImpl.get("exposed_lightning_rod");
+
+    Material WEATHERED_LIGHTNING_ROD = MaterialImpl.get("weathered_lightning_rod");
+
+    Material OXIDIZED_LIGHTNING_ROD = MaterialImpl.get("oxidized_lightning_rod");
+
+    Material WAXED_LIGHTNING_ROD = MaterialImpl.get("waxed_lightning_rod");
+
+    Material WAXED_EXPOSED_LIGHTNING_ROD = MaterialImpl.get("waxed_exposed_lightning_rod");
+
+    Material WAXED_WEATHERED_LIGHTNING_ROD = MaterialImpl.get("waxed_weathered_lightning_rod");
+
+    Material WAXED_OXIDIZED_LIGHTNING_ROD = MaterialImpl.get("waxed_oxidized_lightning_rod");
+
     Material DAYLIGHT_DETECTOR = MaterialImpl.get("daylight_detector");
 
     Material SCULK_SENSOR = MaterialImpl.get("sculk_sensor");
@@ -1767,6 +1839,16 @@ sealed interface Materials permits Material {
 
     Material WOODEN_HOE = MaterialImpl.get("wooden_hoe");
 
+    Material COPPER_SWORD = MaterialImpl.get("copper_sword");
+
+    Material COPPER_SHOVEL = MaterialImpl.get("copper_shovel");
+
+    Material COPPER_PICKAXE = MaterialImpl.get("copper_pickaxe");
+
+    Material COPPER_AXE = MaterialImpl.get("copper_axe");
+
+    Material COPPER_HOE = MaterialImpl.get("copper_hoe");
+
     Material STONE_SWORD = MaterialImpl.get("stone_sword");
 
     Material STONE_SHOVEL = MaterialImpl.get("stone_shovel");
@@ -1840,6 +1922,14 @@ sealed interface Materials permits Material {
     Material LEATHER_LEGGINGS = MaterialImpl.get("leather_leggings");
 
     Material LEATHER_BOOTS = MaterialImpl.get("leather_boots");
+
+    Material COPPER_HELMET = MaterialImpl.get("copper_helmet");
+
+    Material COPPER_CHESTPLATE = MaterialImpl.get("copper_chestplate");
+
+    Material COPPER_LEGGINGS = MaterialImpl.get("copper_leggings");
+
+    Material COPPER_BOOTS = MaterialImpl.get("copper_boots");
 
     Material CHAINMAIL_HELMET = MaterialImpl.get("chainmail_helmet");
 
@@ -2203,6 +2293,8 @@ sealed interface Materials permits Material {
 
     Material COD_SPAWN_EGG = MaterialImpl.get("cod_spawn_egg");
 
+    Material COPPER_GOLEM_SPAWN_EGG = MaterialImpl.get("copper_golem_spawn_egg");
+
     Material COW_SPAWN_EGG = MaterialImpl.get("cow_spawn_egg");
 
     Material CREEPER_SPAWN_EGG = MaterialImpl.get("creeper_spawn_egg");
@@ -2417,6 +2509,8 @@ sealed interface Materials permits Material {
 
     Material ARMOR_STAND = MaterialImpl.get("armor_stand");
 
+    Material COPPER_HORSE_ARMOR = MaterialImpl.get("copper_horse_armor");
+
     Material IRON_HORSE_ARMOR = MaterialImpl.get("iron_horse_armor");
 
     Material GOLDEN_HORSE_ARMOR = MaterialImpl.get("golden_horse_armor");
@@ -2500,6 +2594,8 @@ sealed interface Materials permits Material {
     Material SHULKER_SHELL = MaterialImpl.get("shulker_shell");
 
     Material IRON_NUGGET = MaterialImpl.get("iron_nugget");
+
+    Material COPPER_NUGGET = MaterialImpl.get("copper_nugget");
 
     Material KNOWLEDGE_BOOK = MaterialImpl.get("knowledge_book");
 
@@ -2606,6 +2702,22 @@ sealed interface Materials permits Material {
     Material LANTERN = MaterialImpl.get("lantern");
 
     Material SOUL_LANTERN = MaterialImpl.get("soul_lantern");
+
+    Material COPPER_LANTERN = MaterialImpl.get("copper_lantern");
+
+    Material EXPOSED_COPPER_LANTERN = MaterialImpl.get("exposed_copper_lantern");
+
+    Material WEATHERED_COPPER_LANTERN = MaterialImpl.get("weathered_copper_lantern");
+
+    Material OXIDIZED_COPPER_LANTERN = MaterialImpl.get("oxidized_copper_lantern");
+
+    Material WAXED_COPPER_LANTERN = MaterialImpl.get("waxed_copper_lantern");
+
+    Material WAXED_EXPOSED_COPPER_LANTERN = MaterialImpl.get("waxed_exposed_copper_lantern");
+
+    Material WAXED_WEATHERED_COPPER_LANTERN = MaterialImpl.get("waxed_weathered_copper_lantern");
+
+    Material WAXED_OXIDIZED_COPPER_LANTERN = MaterialImpl.get("waxed_oxidized_copper_lantern");
 
     Material SWEET_BERRIES = MaterialImpl.get("sweet_berries");
 
@@ -2828,6 +2940,38 @@ sealed interface Materials permits Material {
     Material WAXED_WEATHERED_COPPER_BULB = MaterialImpl.get("waxed_weathered_copper_bulb");
 
     Material WAXED_OXIDIZED_COPPER_BULB = MaterialImpl.get("waxed_oxidized_copper_bulb");
+
+    Material COPPER_CHEST = MaterialImpl.get("copper_chest");
+
+    Material EXPOSED_COPPER_CHEST = MaterialImpl.get("exposed_copper_chest");
+
+    Material WEATHERED_COPPER_CHEST = MaterialImpl.get("weathered_copper_chest");
+
+    Material OXIDIZED_COPPER_CHEST = MaterialImpl.get("oxidized_copper_chest");
+
+    Material WAXED_COPPER_CHEST = MaterialImpl.get("waxed_copper_chest");
+
+    Material WAXED_EXPOSED_COPPER_CHEST = MaterialImpl.get("waxed_exposed_copper_chest");
+
+    Material WAXED_WEATHERED_COPPER_CHEST = MaterialImpl.get("waxed_weathered_copper_chest");
+
+    Material WAXED_OXIDIZED_COPPER_CHEST = MaterialImpl.get("waxed_oxidized_copper_chest");
+
+    Material COPPER_GOLEM_STATUE = MaterialImpl.get("copper_golem_statue");
+
+    Material EXPOSED_COPPER_GOLEM_STATUE = MaterialImpl.get("exposed_copper_golem_statue");
+
+    Material WEATHERED_COPPER_GOLEM_STATUE = MaterialImpl.get("weathered_copper_golem_statue");
+
+    Material OXIDIZED_COPPER_GOLEM_STATUE = MaterialImpl.get("oxidized_copper_golem_statue");
+
+    Material WAXED_COPPER_GOLEM_STATUE = MaterialImpl.get("waxed_copper_golem_statue");
+
+    Material WAXED_EXPOSED_COPPER_GOLEM_STATUE = MaterialImpl.get("waxed_exposed_copper_golem_statue");
+
+    Material WAXED_WEATHERED_COPPER_GOLEM_STATUE = MaterialImpl.get("waxed_weathered_copper_golem_statue");
+
+    Material WAXED_OXIDIZED_COPPER_GOLEM_STATUE = MaterialImpl.get("waxed_oxidized_copper_golem_statue");
 
     Material TRIAL_SPAWNER = MaterialImpl.get("trial_spawner");
 

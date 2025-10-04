@@ -34,7 +34,9 @@ public class PlayerEntity extends Entity {
         super.updateNewViewer(player);
 
         // Enable skin layers
-        player.sendPackets(new EntityMetaDataPacket(getEntityId(), Map.of(17, Metadata.Byte((byte) 127))));
+        player.sendPackets(new EntityMetaDataPacket(getEntityId(), Map.of(
+                MetadataDef.Avatar.DISPLAYED_MODEL_PARTS_FLAGS.index(), Metadata.Byte((byte) 127)
+        )));
     }
 
     @Override

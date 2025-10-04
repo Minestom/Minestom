@@ -42,12 +42,16 @@ dependencies {
     implementation(libs.minestomData)
 
     // Performance/data structures
-    api(libs.fastutil)
+    implementation(libs.fastutil)
     implementation(libs.bundles.flare)
     api(libs.gson)
     implementation(libs.jcTools)
 
     testImplementation(project(":testing"))
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:-requires-transitive-automatic") // Adventure dependencies are automatic until 5.0.0, see https://github.com/KyoriPowered/adventure/issues/1287
 }
 
 // GraalVM Native Image configuration

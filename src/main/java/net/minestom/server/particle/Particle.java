@@ -22,10 +22,7 @@ import java.util.Objects;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
-public sealed interface Particle extends StaticProtocolObject<Particle>, Particles permits Particle.Block, Particle.BlockMarker,
-        Particle.Dust, Particle.DustColorTransition, Particle.DustPillar, Particle.EntityEffect, Particle.FallingDust,
-        Particle.Item, Particle.SculkCharge, Particle.Shriek, Particle.Simple, Particle.Vibration, Particle.Trail,
-        Particle.BlockCrumble, Particle.TintedLeaves {
+public sealed interface Particle extends StaticProtocolObject<Particle>, Particles permits Particle.Block, Particle.BlockCrumble, Particle.BlockMarker, Particle.DragonBreath, Particle.Dust, Particle.DustColorTransition, Particle.DustPillar, Particle.Effect, Particle.EntityEffect, Particle.FallingDust, Particle.Flash, Particle.InstantEffect, Particle.Item, Particle.SculkCharge, Particle.Shriek, Particle.Simple, Particle.TintedLeaves, Particle.Trail, Particle.Vibration {
 
     NetworkBuffer.Type<Particle> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
@@ -596,6 +593,152 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
                     .put("type", coder.createString(key.asString()))
                     .put("color", colorData)
                     .build());
+        }
+    }
+
+    record DragonBreath(Key key, int id, float power) implements Particle {
+
+        @Contract(pure = true)
+        public DragonBreath withPower(float power) {
+            return new DragonBreath(key(), id(), power);
+        }
+
+        @Override
+        public DragonBreath readData(NetworkBuffer reader) {
+            return withPower(reader.read(NetworkBuffer.FLOAT));
+        }
+
+        @Override
+        public void writeData(NetworkBuffer writer) {
+            writer.write(NetworkBuffer.FLOAT, power);
+        }
+
+        @Override
+        public <D> Result<D> encode(Transcoder<D> coder) {
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("power", coder.createFloat(power))
+                    .build());
+        }
+    }
+
+    record Effect(Key key, int id, RGBLike color, float power) implements Particle {
+
+        @Contract(pure = true)
+        public Effect withColor(RGBLike color) {
+            return new Effect(key(), id(), color, power);
+        }
+
+        @Contract(pure = true)
+        public Effect withPower(float power) {
+            return new Effect(key(), id(), color, power);
+        }
+
+        @Contract(pure = true)
+        public Effect withProperties(RGBLike color, float power) {
+            return new Effect(key(), id(), color, power);
+        }
+
+        @Override
+        public Effect readData(NetworkBuffer reader) {
+            return withProperties(reader.read(Color.NETWORK_TYPE), reader.read(NetworkBuffer.FLOAT));
+        }
+
+        @Override
+        public void writeData(NetworkBuffer writer) {
+            writer.write(Color.NETWORK_TYPE, color);
+            writer.write(NetworkBuffer.FLOAT, power);
+        }
+
+        @Override
+        public <D> Result<D> encode(Transcoder<D> coder) {
+            final Result<D> colorResult = Color.CODEC.encode(coder, color);
+            if (!(colorResult instanceof Result.Ok(D colorData)))
+                return colorResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("color", colorData)
+                    .put("power", coder.createFloat(power))
+                    .build());
+        }
+    }
+
+    record Flash(Key key, int id, AlphaColor color) implements Particle {
+        @Contract(pure = true)
+        public Flash withColor(AlphaColor color) {
+            return new Flash(key(), id(), color);
+        }
+
+        @Contract(pure = true)
+        public Flash withColor(RGBLike color) {
+            return new Flash(key(), id(), new AlphaColor(1, color));
+        }
+
+        @Contract(pure = true)
+        public Flash withColor(int alpha, RGBLike color) {
+            return new Flash(key(), id(), new AlphaColor(alpha, color));
+        }
+
+        @Override
+        public Flash readData(NetworkBuffer reader) {
+            return withColor(reader.read(AlphaColor.NETWORK_TYPE));
+        }
+
+        @Override
+        public void writeData(NetworkBuffer writer) {
+            writer.write(AlphaColor.NETWORK_TYPE, color);
+        }
+
+        @Override
+        public <D> Result<D> encode(Transcoder<D> coder) {
+            final Result<D> colorResult = AlphaColor.CODEC.encode(coder, color);
+            if (!(colorResult instanceof Result.Ok(D colorData)))
+                return colorResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                       .put("type", coder.createString(key.asString()))
+                       .put("color", colorData)
+                       .build());
+        }
+    }
+
+    record InstantEffect(Key key, int id, RGBLike color, float power) implements Particle {
+
+        @Contract(pure = true)
+        public InstantEffect withColor(RGBLike color) {
+            return new InstantEffect(key(), id(), color, power);
+        }
+
+        @Contract(pure = true)
+        public InstantEffect withPower(float power) {
+            return new InstantEffect(key(), id(), color, power);
+        }
+
+        @Contract(pure = true)
+        public InstantEffect withProperties(RGBLike color, float power) {
+            return new InstantEffect(key(), id(), color, power);
+        }
+
+        @Override
+        public InstantEffect readData(NetworkBuffer reader) {
+            return withProperties(reader.read(Color.NETWORK_TYPE), reader.read(NetworkBuffer.FLOAT));
+        }
+
+        @Override
+        public void writeData(NetworkBuffer writer) {
+            writer.write(Color.NETWORK_TYPE, color);
+            writer.write(NetworkBuffer.FLOAT, power);
+        }
+
+        @Override
+        public <D> Result<D> encode(Transcoder<D> coder) {
+            final Result<D> colorResult = Color.CODEC.encode(coder, color);
+            if (!(colorResult instanceof Result.Ok(D colorData)))
+                return colorResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                       .put("type", coder.createString(key.asString()))
+                       .put("color", colorData)
+                       .put("power", coder.createFloat(power))
+                       .build());
         }
     }
 

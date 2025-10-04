@@ -3,6 +3,7 @@ package net.minestom.server.game;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -16,6 +17,8 @@ import java.util.Collection;
  * Used for a wide variety of events, from weather to bed use to game mode to demo messages.
  */
 public sealed interface GameEvent extends StaticProtocolObject<GameEvent>, GameEvents permits GameEventImpl {
+
+    NetworkBuffer.Type<GameEvent> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(GameEvent::fromId, GameEvent::id);
 
     /**
      * Returns the game event registry.

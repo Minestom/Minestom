@@ -88,6 +88,15 @@ public class Sidebar implements Scoreboard {
     }
 
     /**
+     * Gets the {@link Sidebar} title
+     *
+     * @return The sidebar title
+     */
+    public Component getTitle() {
+        return title;
+    }
+
+    /**
      * Changes the {@link Sidebar} title
      *
      * @param title The new sidebar title
