@@ -1426,7 +1426,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
-        sendPacketToViewersAndSelf(getPropertiesPacket());
+
+        // send attributes to everyone if our entity type is valid for it
+        // otherwise, just send to the player
+        if (shouldSendAttributes()) sendPacketToViewersAndSelf(getPropertiesPacket());
+        else sendPacket(getPropertiesPacket());
+
         sendPacketToViewersAndSelf(getEquipmentsPacket());
 
         getInventory().update();
@@ -1547,11 +1552,13 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final ClientSettings previous = this.settings;
         this.settings = settings;
         boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
-        PlayerMeta playerMeta = getPlayerMeta();
-        if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
-        playerMeta.setDisplayedSkinParts(settings.displayedSkinParts());
-        playerMeta.setRightMainHand(settings.mainHand() == ClientSettings.MainHand.RIGHT);
-        if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
+
+        if (getEntityMeta() instanceof PlayerMeta playerMeta) {
+            if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
+            playerMeta.setDisplayedSkinParts(settings.displayedSkinParts());
+            playerMeta.setRightMainHand(settings.mainHand() == ClientSettings.MainHand.RIGHT);
+            if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
+        }
 
         final byte previousViewDistance = previous.viewDistance();
         final byte newViewDistance = settings.viewDistance();
