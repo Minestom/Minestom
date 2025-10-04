@@ -223,7 +223,6 @@ public class Command {
         return addConditionalSyntax(null, executor, args);
     }
 
-
     /**
      * Creates a syntax from a formatted string.
      * <p>
