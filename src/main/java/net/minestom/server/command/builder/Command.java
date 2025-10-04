@@ -220,7 +220,7 @@ public class Command {
      * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
      */
     public Collection<CommandSyntax> addSyntax(CommandExecutor executor, Argument<?>... args) {
-        return addConditionalSyntax((CommandCondition) null, executor, args);
+        return addConditionalSyntax(null, executor, args);
     }
 
 
