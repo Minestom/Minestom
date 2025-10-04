@@ -122,6 +122,56 @@ public class CommandConditionTest {
         }
     }
 
+    @Test
+    public void conditionBypassedByZeroArgSyntax() {
+        var dispatcher = new CommandDispatcher();
+        var adminSender = new Sender();
+        var normalSender = new Sender();
+
+        AtomicBoolean called = new AtomicBoolean(false);
+
+        var command = new Command("admin");
+        command.setCondition((sender, commandString) -> sender == adminSender);
+        command.addSyntax((sender, context) -> called.set(true));
+
+        dispatcher.register(command);
+
+        dispatcher.execute(adminSender, "admin");
+        assertTrue(called.get(), "Admin should be able to execute");
+
+        called.set(false);
+        dispatcher.execute(normalSender, "admin");
+        assertFalse(called.get(), "Normal user should be blocked by command condition, but bug allows execution!");
+    }
+
+    @Test
+    public void bothCommandAndSyntaxConditionsChecked() {
+        var dispatcher = new CommandDispatcher();
+        var sender1 = new Sender();
+        var sender2 = new Sender();
+        var sender3 = new Sender();
+
+        AtomicBoolean called = new AtomicBoolean(false);
+
+        var command = new Command("test");
+        command.setCondition((sender, commandString) -> sender == sender1 || sender == sender2);
+        command.addConditionalSyntax((sender, commandString) -> sender == sender1 || sender == sender3,
+                (sender, context) -> called.set(true));
+
+        dispatcher.register(command);
+
+        dispatcher.execute(sender1, "test");
+        assertTrue(called.get(), "sender1 should satisfy both conditions");
+
+        called.set(false);
+        dispatcher.execute(sender2, "test");
+        assertFalse(called.get(), "sender2 should be blocked by syntax condition");
+
+        called.set(false);
+        dispatcher.execute(sender3, "test");
+        assertFalse(called.get(), "sender3 should be blocked by command condition");
+    }
+
     private static final class Sender implements CommandSender {
         @Override
         public TagHandler tagHandler() {

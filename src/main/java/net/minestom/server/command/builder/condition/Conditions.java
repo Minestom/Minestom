@@ -51,4 +51,11 @@ public class Conditions {
     public static boolean consoleOnly(CommandSender sender, String commandString) {
         return sender instanceof ConsoleSender;
     }
+
+    /**
+     * Inverts the result of the given condition.
+     */
+    public static CommandCondition not(CommandCondition condition) {
+        return (sender, commandString) -> !condition.canUse(sender, commandString);
+    }
 }

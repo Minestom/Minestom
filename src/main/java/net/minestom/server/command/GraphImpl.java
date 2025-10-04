@@ -121,7 +121,13 @@ record GraphImpl(NodeImpl root) implements Graph {
             for (var syntax : command.getSyntaxes()) {
                 if (syntax.getArguments().length == 0) {
                     executor = syntax.getExecutor();
-                    condition = syntax.getCommandCondition();
+                    CommandCondition syntaxCondition = syntax.getCommandCondition();
+                    if (syntaxCondition != null && defaultCondition != null) {
+                        condition = (sender, commandString) ->
+                            defaultCondition.canUse(sender, commandString) && syntaxCondition.canUse(sender, commandString);
+                    } else if (syntaxCondition != null) {
+                        condition = syntaxCondition;
+                    }
                     break;
                 }
             }

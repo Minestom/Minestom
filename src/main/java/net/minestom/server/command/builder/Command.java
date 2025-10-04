@@ -8,6 +8,7 @@ import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +21,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -100,11 +102,40 @@ public class Command {
     /**
      * Sets the {@link CommandCondition}.
      *
-     * @param commandCondition the new command condition, null to do not call anything
+     * @param conditions the conditions that must all pass
      * @see #getCondition()
      */
-    public void setCondition(@Nullable CommandCondition commandCondition) {
-        this.condition = commandCondition;
+    public void setCondition(CommandCondition... conditions) {
+        if (conditions.length == 0) {
+            this.condition = null;
+        } else if (conditions.length == 1) {
+            this.condition = conditions[0];
+        } else {
+            this.condition = Conditions.all(conditions);
+        }
+    }
+
+    /**
+     * Sets the {@link CommandCondition} using predicates.
+     *
+     * @param predicates the predicates that must all pass
+     * @see #setCondition(CommandCondition...)
+     */
+    @SafeVarargs
+    public final void setCondition(Predicate<CommandSender>... predicates) {
+        if (predicates.length == 0) {
+            this.condition = null;
+        } else if (predicates.length == 1) {
+            final Predicate<CommandSender> predicate = predicates[0];
+            this.condition = (sender, commandString) -> predicate.test(sender);
+        } else {
+            CommandCondition[] conditions = new CommandCondition[predicates.length];
+            for (int i = 0; i < predicates.length; i++) {
+                final Predicate<CommandSender> predicate = predicates[i];
+                conditions[i] = (sender, commandString) -> predicate.test(sender);
+            }
+            this.condition = Conditions.all(conditions);
+        }
     }
 
     /**
@@ -213,7 +244,21 @@ public class Command {
      * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
      */
     public Collection<CommandSyntax> addSyntax(CommandExecutor executor, Argument<?>... args) {
-        return addConditionalSyntax(null, executor, args);
+        return addConditionalSyntax((CommandCondition) null, executor, args);
+    }
+
+    /**
+     * Adds a new syntax with a sender predicate condition.
+     *
+     * @param senderPredicate the predicate to test the sender
+     * @param executor the executor to call when the syntax is successfully received
+     * @param args all the arguments of the syntax
+     * @return the created {@link CommandSyntax syntaxes}
+     * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
+     */
+    public Collection<CommandSyntax> addConditionalSyntax(@Nullable Predicate<CommandSender> senderPredicate, CommandExecutor executor, Argument<?>... args) {
+        CommandCondition condition = senderPredicate == null ? null : (sender, commandString) -> senderPredicate.test(sender);
+        return addConditionalSyntax(condition, executor, args);
     }
 
     /**
