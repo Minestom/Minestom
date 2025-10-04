@@ -39,6 +39,7 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.worldevent.WorldEvent;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +72,7 @@ public class InstanceContainer extends Instance {
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
     // the chunk generator used, can be null
-    private volatile Generator generator;
+    private volatile @Nullable Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
@@ -388,6 +389,12 @@ public class InstanceContainer extends Instance {
             processFork(chunk);
             return chunk;
         }
+        generateChunk(chunk, generator);
+        return chunk;
+    }
+
+    protected void generateChunk(Chunk chunk, Generator generator) {
+        final int chunkX = chunk.getChunkX(), chunkZ = chunk.getChunkZ();
         GeneratorImpl.GenSection[] genSections = new GeneratorImpl.GenSection[chunk.getSections().size()];
         Arrays.setAll(genSections, i -> {
             Section section = chunk.getSections().get(i);
@@ -439,7 +446,6 @@ public class InstanceContainer extends Instance {
             // End generation
             refreshLastBlockChangeTime();
         }
-        return chunk;
     }
 
     private void processFork(Chunk chunk) {
@@ -613,6 +619,15 @@ public class InstanceContainer extends Instance {
     @Override
     public void setGenerator(@Nullable Generator generator) {
         this.generator = generator;
+    }
+
+    @ApiStatus.Experimental
+    @Override
+    public CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator) {
+        return loadChunk(chunkX, chunkZ).thenAccept(chunk -> {
+            if (!isLoaded(chunk)) return;
+            generateChunk(chunk, generator);
+        });
     }
 
     /**
