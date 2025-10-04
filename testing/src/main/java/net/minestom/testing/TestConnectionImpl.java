@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.GameProfile;
@@ -58,7 +59,8 @@ final class TestConnectionImpl implements TestConnection {
             future.complete(player);
         });
         future.join();
-//        playerConnection.setConnectionState(ConnectionState.PLAY);
+        playerConnection.setClientState(ConnectionState.PLAY);
+        playerConnection.setServerState(ConnectionState.PLAY);
         process.connection().updateWaitingPlayers();
         return player;
     }

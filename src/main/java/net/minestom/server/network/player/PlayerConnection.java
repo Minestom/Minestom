@@ -191,17 +191,6 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * (you probably shouldn't be using this anyway)
-     *
-     * @deprecated Use {@link #setClientState(ConnectionState)} or {@link #setServerState(ConnectionState)} instead.
-     */
-    @Deprecated(forRemoval = true)
-    public void setConnectionState(ConnectionState connectionState) {
-        setClientState(connectionState);
-        setServerState(connectionState);
-    }
-
-    /**
      * @deprecated Use {@link #getClientState()} or {@link #getServerState()} instead.
      */
     @Deprecated(forRemoval = true)
