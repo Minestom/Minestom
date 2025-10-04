@@ -106,7 +106,7 @@ public class Command {
      * @see #getCondition()
      */
     public void setCondition(CommandCondition... conditions) {
-        if (conditions.length == 0) {
+        if (conditions == null || conditions.length == 0) {
             this.condition = null;
         } else if (conditions.length == 1) {
             this.condition = conditions[0];
@@ -123,7 +123,7 @@ public class Command {
      */
     @SafeVarargs
     public final void setCondition(Predicate<CommandSender>... predicates) {
-        if (predicates.length == 0) {
+        if (predicates == null || predicates.length == 0) {
             this.condition = null;
         } else if (predicates.length == 1) {
             final Predicate<CommandSender> predicate = predicates[0];
