@@ -10,7 +10,9 @@ import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.utils.StringUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
@@ -99,18 +101,22 @@ public class Command {
     }
 
     /**
-     * Sets the {@link CommandCondition}.
+     * Sets the {@link CommandCondition}s required to execute the command.
      *
-     * @param conditions the conditions that must all pass
+     * @param condition the condition that must pass
+     * @param conditions the rest of the conditions that must pass
      * @see #getCondition()
      */
-    public void setCondition(CommandCondition @Nullable... conditions) {
-        if (conditions == null || conditions.length == 0) {
+    public void setCondition(@Nullable CommandCondition condition, CommandCondition... conditions) {
+        Check.argCondition(condition == null && conditions.length > 0, "the first argument must not be null if you are passing in multiple conditions");
+
+        if (condition == null) {
             this.condition = null;
-        } else if (conditions.length == 1) {
-            this.condition = conditions[0];
         } else {
-            this.condition = Conditions.all(conditions);
+            var finalConditions = new CommandCondition[conditions.length + 1];
+            finalConditions[0] = condition;
+            System.arraycopy(conditions, 0, finalConditions, 1, conditions.length);
+            this.condition = Conditions.all(finalConditions);
         }
     }
 
