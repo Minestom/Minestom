@@ -21,7 +21,6 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -105,35 +104,12 @@ public class Command {
      * @param conditions the conditions that must all pass
      * @see #getCondition()
      */
-    public void setCondition(CommandCondition... conditions) {
+    public void setCondition(@Nullable CommandCondition... conditions) {
         if (conditions == null || conditions.length == 0) {
             this.condition = null;
         } else if (conditions.length == 1) {
             this.condition = conditions[0];
         } else {
-            this.condition = Conditions.all(conditions);
-        }
-    }
-
-    /**
-     * Sets the {@link CommandCondition} using predicates.
-     *
-     * @param predicates the predicates that must all pass
-     * @see #setCondition(CommandCondition...)
-     */
-    @SafeVarargs
-    public final void setCondition(Predicate<CommandSender>... predicates) {
-        if (predicates == null || predicates.length == 0) {
-            this.condition = null;
-        } else if (predicates.length == 1) {
-            final Predicate<CommandSender> predicate = predicates[0];
-            this.condition = (sender, commandString) -> predicate.test(sender);
-        } else {
-            CommandCondition[] conditions = new CommandCondition[predicates.length];
-            for (int i = 0; i < predicates.length; i++) {
-                final Predicate<CommandSender> predicate = predicates[i];
-                conditions[i] = (sender, commandString) -> predicate.test(sender);
-            }
             this.condition = Conditions.all(conditions);
         }
     }
@@ -247,19 +223,6 @@ public class Command {
         return addConditionalSyntax((CommandCondition) null, executor, args);
     }
 
-    /**
-     * Adds a new syntax with a sender predicate condition.
-     *
-     * @param senderPredicate the predicate to test the sender
-     * @param executor the executor to call when the syntax is successfully received
-     * @param args all the arguments of the syntax
-     * @return the created {@link CommandSyntax syntaxes}
-     * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
-     */
-    public Collection<CommandSyntax> addConditionalSyntax(@Nullable Predicate<CommandSender> senderPredicate, CommandExecutor executor, Argument<?>... args) {
-        CommandCondition condition = senderPredicate == null ? null : (sender, commandString) -> senderPredicate.test(sender);
-        return addConditionalSyntax(condition, executor, args);
-    }
 
     /**
      * Creates a syntax from a formatted string.
