@@ -4,7 +4,7 @@ plugins {
     id("com.gradleup.shadow")
 }
 
-val javaVersion = System.getenv("JAVA_VERSION") ?: "21"
+val javaVersion = System.getenv("JAVA_VERSION") ?: "25"
 
 group = "net.minestom"
 
