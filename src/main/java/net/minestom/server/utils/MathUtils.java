@@ -102,4 +102,14 @@ public final class MathUtils {
         Check.argCondition(n < 1, "n must be greater than 0");
         return Integer.SIZE - Integer.numberOfLeadingZeros(n);
     }
+
+    public static long ceilLong(double value) {
+        long i = (long) value;
+        return value > i ? i + 1L : i;
+    }
+
+    public static double absMax(double d0, double d1) {
+        return Math.max(Math.abs(d0), Math.abs(d1));
+    }
+
 }

@@ -1575,24 +1575,21 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected Vec getVelocityForPacket() {
-        return this.velocity.mul(8000f / ServerFlag.SERVER_TICKS_PER_SECOND);
+        return this.velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND);
     }
 
     protected SpawnEntityPacket getSpawnPacket() {
         int data = 0;
-        short velocityX = 0, velocityZ = 0, velocityY = 0;
+        Vec velocity = Vec.ZERO;
         if (getEntityMeta() instanceof ObjectDataProvider objectDataProvider) {
             data = objectDataProvider.getObjectData();
             if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
-                final var velocity = getVelocityForPacket();
-                velocityX = (short) velocity.x();
-                velocityY = (short) velocity.y();
-                velocityZ = (short) velocity.z();
+                velocity = getVelocityForPacket();
             }
         }
         final Pos position = getPosition();
-        return new SpawnEntityPacket(getEntityId(), getUuid(), getEntityType().id(),
-                position, position.yaw(), data, velocityX, velocityY, velocityZ);
+        return new SpawnEntityPacket(getEntityId(), getUuid(), getEntityType(),
+                position, position.yaw(), data, velocity);
     }
 
     protected EntityVelocityPacket getVelocityPacket() {
