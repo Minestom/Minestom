@@ -16,11 +16,12 @@ configurations.all {
     exclude("org.checkerframework", "checker-qual")
 }
 
+val adventureVersion = libs.adventure.api.get().version ?: ""
+
 repositories {
     val dataVersion = libs.minestomData.get().version ?: ""
     if (dataVersion.endsWith("-dev"))
         mavenLocal()
-    val adventureVersion = libs.adventure.api.get().version ?: ""
     if (adventureVersion.endsWith("-SNAPSHOT"))
         maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
 
@@ -56,13 +57,15 @@ tasks.withType<Javadoc> {
         addStringOption("-release", javaVersion)
         // Links to external javadocs
         links("https://docs.oracle.com/en/java/javase/${javaVersion}/docs/api/")
-        links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
-        links("https://jd.advntr.dev/nbt/${libs.versions.adventure.get()}/")
-        links("https://jd.advntr.dev/key/${libs.versions.adventure.get()}/")
-        links("https://jd.advntr.dev/text-serializer-ansi/${libs.versions.adventure.get()}/")
-        links("https://jd.advntr.dev/text-serializer-gson/${libs.versions.adventure.get()}/")
-        links("https://jd.advntr.dev/text-serializer-legacy/${libs.versions.adventure.get()}/")
-        links("https://jd.advntr.dev/text-serializer-plain/${libs.versions.adventure.get()}/")
+        if (!adventureVersion.endsWith("-SNAPSHOT")) {
+            links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/nbt/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/key/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-ansi/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-gson/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-legacy/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-plain/${libs.versions.adventure.get()}/")
+        }
         links("https://javadoc.io/doc/com.google.code.gson/gson/${libs.versions.gson.get()}/")
         links("https://javadoc.io/doc/org.jetbrains/annotations/${libs.versions.jetbrainsAnnotations.get()}/")
     }
