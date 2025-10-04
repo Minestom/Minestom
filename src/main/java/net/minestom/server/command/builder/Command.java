@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  * you can set it using {@link #setDefaultExecutor(CommandExecutor)}.
  * <p>
  * Before any syntax to be successfully executed the {@link CommandSender} needs to validated
- * the {@link CommandCondition} sets with {@link #setCondition(CommandCondition)} (ignored if null).
+ * the {@link CommandCondition} sets with {@link #setCondition(CommandCondition...)} (ignored if null).
  * <p>
  * Some {@link Argument} could also require additional condition (eg: a number which need to be between 2 values),
  * in this case, if the whole syntax is correct but not the argument condition,
