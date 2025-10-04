@@ -3,7 +3,7 @@ package net.minestom.demo.block.placement;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,14 +19,18 @@ public class DripstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @Nullable Block blockPlace(PlacementState placementState) {
-        var blockFace = Objects.requireNonNullElse(placementState.blockFace(), BlockFace.TOP);
+    public Block blockPlace(BlockChange blockChange) {
+        if (!(blockChange instanceof BlockChange.Player mut)) {
+            return blockChange.block(); // not a player placement
+        }
+        var blockFace = mut.blockFace();
         var direction = switch (blockFace) {
             case TOP -> "up";
             case BOTTOM -> "down";
-            default -> Objects.requireNonNullElse(placementState.cursorPosition(), Vec.ZERO).y() < 0.5 ? "up" : "down";
+            default ->
+                    Objects.requireNonNullElse(mut.player().getPosition().direction(), Vec.ZERO).y() < 0.5 ? "up" : "down";
         };
-        var thickness = getThickness(placementState.instance(), placementState.placePosition(), direction.equals("up"));
+        var thickness = getThickness(mut.instance(), mut.blockPosition(), direction.equals("up"));
         return block.withProperties(Map.of(
                 PROP_VERTICAL_DIRECTION, direction,
                 PROP_THICKNESS, thickness
@@ -34,10 +38,10 @@ public class DripstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public Block blockUpdate(UpdateState updateState) {
-        var direction = updateState.currentBlock().getProperty(PROP_VERTICAL_DIRECTION).equals("up");
-        var newThickness = getThickness(updateState.instance(), updateState.blockPosition(), direction);
-        return updateState.currentBlock().withProperty(PROP_THICKNESS, newThickness);
+    public Block blockUpdate(BlockChange mutation) {
+        var direction = mutation.block().getProperty(PROP_VERTICAL_DIRECTION).equals("up");
+        var newThickness = getThickness(mutation.instance(), mutation.blockPosition(), direction);
+        return mutation.block().withProperty(PROP_THICKNESS, newThickness);
     }
 
     private String getThickness(Block.Getter instance, Point blockPosition, boolean direction) {
@@ -66,10 +70,5 @@ public class DripstonePlacementRule extends BlockPlacementRule {
 
         // Otherwise it is a middle
         return "middle";
-    }
-
-    @Override
-    public int maxUpdateDistance() {
-        return 2;
     }
 }

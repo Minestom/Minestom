@@ -3,8 +3,10 @@ package net.minestom.server.instance.block.handler;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.MetadataDef.Interaction;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
@@ -26,8 +28,9 @@ class BlockHandlerIntegrationTest {
 
         var handler = new BlockHandler() {
             @Override
-            public void onPlace(Placement placement) {
-                assertEquals(blockPosition, placement.getBlockPosition());
+            public Block onPlace(BlockChange blockChange) {
+                assertEquals(blockPosition, blockChange.blockPosition());
+                return blockChange.block();
             }
 
             @Override
@@ -46,8 +49,9 @@ class BlockHandlerIntegrationTest {
 
         var handler = new BlockHandler() {
             @Override
-            public void onDestroy(Destroy destroy) {
-                assertEquals(blockPosition, destroy.getBlockPosition());
+            public Block onDestroy(BlockChange blockChange) {
+                assertEquals(blockPosition, blockChange.blockPosition());
+                return blockChange.block();
             }
 
             @Override
@@ -68,9 +72,9 @@ class BlockHandlerIntegrationTest {
         AtomicBoolean interacted = new AtomicBoolean(false);
         var handler = new BlockHandler() {
             @Override
-            public boolean onInteract(Interaction interaction) {
+            public boolean onInteract(BlockChange.Player interaction) {
                 interacted.set(true);
-                assertEquals(blockPosition, interaction.getBlockPosition());
+                assertEquals(blockPosition, interaction.blockPosition());
                 return false;
             }
 
@@ -98,7 +102,7 @@ class BlockHandlerIntegrationTest {
             @Override
             public void tick(Tick tick) {
                 ticked.set(true);
-                assertEquals(tick.getBlockPosition(), blockPosition.asVec());
+                assertEquals(tick.blockPosition(), blockPosition.asVec());
             }
 
             @Override
@@ -131,7 +135,7 @@ class BlockHandlerIntegrationTest {
             @Override
             public void tick(Tick tick) {
                 ticked.set(true);
-                assertEquals(tick.getBlockPosition(), blockPosition.asVec());
+                assertEquals(tick.blockPosition(), blockPosition.asVec());
             }
 
             @Override

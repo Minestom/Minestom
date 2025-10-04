@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
@@ -74,14 +75,19 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, Block block,
-                         @Nullable BlockHandler.Placement placement,
-                         @Nullable BlockHandler.Destroy destroy) {
+    public Block setBlock(BlockChange mutation) {
         final DimensionType instanceDim = instance.getCachedDimensionType();
+
+        final int x = mutation.blockPosition().blockX();
+        final int y = mutation.blockPosition().blockY();
+        final int z = mutation.blockPosition().blockZ();
+
+        Block block = mutation.block();
+
         if (y >= instanceDim.maxY() || y < instanceDim.minY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}",
                     instanceDim.minY(), instanceDim.maxY(), y);
-            return;
+            return block;
         }
         assertLock();
 
@@ -92,6 +98,30 @@ public class DynamicChunk extends Chunk {
         int sectionRelativeX = globalToSectionRelative(x);
         int sectionRelativeZ = globalToSectionRelative(z);
 
+        final int index = CoordConversion.chunkBlockIndex(x, y, z);
+
+        // Handler
+        final BlockHandler handler = block.handler();
+        final Block lastCachedBlock = this.entries.remove(index);
+
+        if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
+            block = lastCachedBlock.handler().onDestroy(mutation);
+        }
+        if (handler != null) {
+            block = handler.onPlace(mutation);
+        }
+
+        if (handler != null && handler.isTickable()) {
+            this.tickableMap.put(index, block);
+        } else {
+            this.tickableMap.remove(index);
+        }
+
+        // Cache the new block if needed
+        if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
+            this.entries.put(index, block);
+        }
+
         section.blockPalette().set(
                 sectionRelativeX,
                 globalToSectionRelative(y),
@@ -99,40 +129,12 @@ public class DynamicChunk extends Chunk {
                 block.stateId()
         );
 
-        final int index = CoordConversion.chunkBlockIndex(x, y, z);
-        // Handler
-        final BlockHandler handler = block.handler();
-        final Block lastCachedBlock;
-        if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
-            lastCachedBlock = this.entries.put(index, block);
-        } else {
-            lastCachedBlock = this.entries.remove(index);
-        }
-        // Block tick
-        if (handler != null && handler.isTickable()) {
-            this.tickableMap.put(index, block);
-        } else {
-            this.tickableMap.remove(index);
-        }
-
-        // Update block handlers
-        if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
-            // Previous destroy
-            lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, block, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
-        }
-        if (handler != null) {
-            // New placement
-            final Block finalBlock = block;
-            final Point placePoint = CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ);
-            handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, Objects.requireNonNullElseGet(lastCachedBlock, () -> this.getBlock(placePoint, Condition.TYPE)), instance, placePoint)));
-        }
-
         // UpdateHeightMaps
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
         motionBlocking.refresh(sectionRelativeX, y, sectionRelativeZ, block);
         worldSurface.refresh(sectionRelativeX, y, sectionRelativeZ, block);
+
+        return block;
     }
 
     @Override

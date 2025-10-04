@@ -172,7 +172,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
 
                 buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
                 //noinspection unchecked
-                DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(entry.getIntKey());
+                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
                 Check.notNull(type, "Unknown component id: {0}", entry.getIntKey());
                 if (isTrusted) {
                     type.write(buffer, entry.getValue());
@@ -200,7 +200,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
             for (int i = 0; i < added; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
                 //noinspection unchecked
-                DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(id);
+                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(id);
                 Check.notNull(type, "Unknown component: {0}", id);
                 if (isTrusted) {
                     patch.put(type.id(), type.read(buffer));
@@ -263,7 +263,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
             final Transcoder.MapBuilder<D> map = coder.createMap();
             for (var entry : patch.components.int2ObjectEntrySet()) {
                 //noinspection unchecked
-                DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(entry.getIntKey());
+                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
                 if (type == null) return new Result.Error<>("unknown data component id: " + entry.getIntKey());
                 if (entry.getValue() == null) {
                     if (isPatch) map.put(REMOVAL_PREFIX + type.name(), coder.createMap().build());

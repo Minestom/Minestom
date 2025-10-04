@@ -1,8 +1,8 @@
 package net.minestom.demo.block.placement;
 
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +14,6 @@ import java.util.Objects;
  */
 public class BedPlacementRule extends BlockPlacementRule {
 
-
     private static final String PROP_PART = "part";
     private static final String PROP_FACING = "facing";
 
@@ -23,21 +22,24 @@ public class BedPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @Nullable Block blockPlace(PlacementState placementState) {
-        var playerPosition = Objects.requireNonNullElse(placementState.playerPosition(), Pos.ZERO);
+    public Block blockPlace(BlockChange blockChange) {
+        if (!(blockChange instanceof BlockChange.Player mut)) {
+            return blockChange.block(); // not a player placement
+        }
+        var playerPosition = mut.player().getPosition();
         var facing = BlockFace.fromYaw(playerPosition.yaw());
 
         //todo bad code using instance directly
-        if (!(placementState.instance() instanceof Instance instance)) return null;
+        if (!(mut.instance() instanceof Instance instance)) return blockChange.block();
 
-        var headPosition = placementState.placePosition().relative(facing);
+        var headPosition = blockChange.blockPosition().relative(facing);
         if (!instance.getBlock(headPosition, Block.Getter.Condition.TYPE).isAir())
-            return null;
+            return blockChange.block();
 
         var headBlock = this.block.withProperty(PROP_PART, "head")
                 .withProperty(PROP_FACING, facing.name().toLowerCase());
         instance.setBlock(headPosition, headBlock);
 
-        return headBlock.withProperty(PROP_PART, "foot");
+        return mut.block().withProperty(PROP_PART, "foot").withProperty(PROP_FACING, facing.name().toLowerCase());
     }
 }
