@@ -104,7 +104,7 @@ public class Command {
      * @param conditions the conditions that must all pass
      * @see #getCondition()
      */
-    public void setCondition(@Nullable CommandCondition... conditions) {
+    public void setCondition(CommandCondition @Nullable... conditions) {
         if (conditions == null || conditions.length == 0) {
             this.condition = null;
         } else if (conditions.length == 1) {
