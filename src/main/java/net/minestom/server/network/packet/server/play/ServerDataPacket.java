@@ -8,7 +8,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
 public record ServerDataPacket(Component motd, byte @Nullable [] iconBase64) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ServerDataPacket> SERIALIZER = NetworkBufferTemplate.template(

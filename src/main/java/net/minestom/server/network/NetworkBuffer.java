@@ -17,7 +17,10 @@ import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.*;
 
 import javax.crypto.Cipher;
-import java.io.*;
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.nio.channels.ReadableByteChannel;
