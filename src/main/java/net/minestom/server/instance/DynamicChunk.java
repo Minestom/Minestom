@@ -159,9 +159,9 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void tick(long time) {
-        int i = 0;
-        for (Section section : sections) {
-            final int sectionY = i++ + minSection;
+        for (int i = 0; i < sections.size(); i++) {
+            Section section = sections.get(i);
+            final int sectionY = i + minSection;
             SectionImpl impl = (SectionImpl) section;
             var tickableMap = impl.tickableMap();
             if (tickableMap.isEmpty()) continue;

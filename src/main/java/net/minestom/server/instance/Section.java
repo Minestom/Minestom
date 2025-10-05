@@ -6,6 +6,7 @@ import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 public sealed interface Section extends Cloneable permits SectionImpl {
@@ -36,7 +37,7 @@ public sealed interface Section extends Cloneable permits SectionImpl {
 
     Light blockLight();
 
-    Int2ObjectOpenHashMap<@Nullable Block> entries();
+    Map<Integer, @Nullable Block> entries();
 
     @Nullable Block cacheBlock(int x, int y, int z, Block block);
 

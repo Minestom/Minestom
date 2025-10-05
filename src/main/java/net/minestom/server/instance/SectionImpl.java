@@ -19,6 +19,7 @@ record SectionImpl(
         Int2ObjectOpenHashMap<Block> tickableMap,
         AtomicLong version
 ) implements Section {
+    @Override
     public void clear() {
         this.blockPalette.fill(0);
         this.biomePalette.fill(0);
