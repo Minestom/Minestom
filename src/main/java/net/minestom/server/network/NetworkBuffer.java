@@ -44,19 +44,19 @@ import java.util.zip.DataFormatException;
  * <p>
  * We provide basic {@link NetworkBuffer.Type} here, which can be used to read and write data in a bidirectional way.
  * For example, you can write an integer to the buffer and then read it back:
- * <pre><code>
+ * <pre>{@code
  * NetworkBuffer buffer = NetworkBuffer.staticBuffer(1024);
  * buffer.write(NetworkBuffer.INT, 42);
  * int value = buffer.read(NetworkBuffer.INT);
  * System.out.println("Value: " + value); // Output: Value: 42
- * </code></pre>
+ * }</pre>
  * Or make an array of bytes with {@link NetworkBuffer#makeArray(Type, Object)} by a {@link NetworkBuffer.Type}:
- * <pre><code>
+ * <pre>{@code
  *     byte[] bytes = NetworkBuffer.makeArray(NetworkBuffer.STRING, "Hello, World!");
  *     System.out.println("Bytes: " + Arrays.toString(bytes));
- * </code></pre>
+ * }</pre>
  * Or use a {@link NetworkBufferTemplate} to function as a bidirectional serializer/deserializer for your objects:
- * <pre><code>
+ * <pre>{@code
  *     record MyData(int id, String name) {
  *         static final NetworkBuffer.Type<MyData> SERIALIZER = NetworkBufferTemplate.template(
  *          NetworkBuffer.INT, MyData::id,
@@ -71,7 +71,7 @@ import java.util.zip.DataFormatException;
  *     NetworkBuffer buffer = NetworkBuffer.wrap(bytes, 0, bytes.length);
  *     MyData value = buffer.read(MyData.SERIALIZER);
  *     System.out.println("Value: " + value); // Value: MyData(id=1, name="Test")
- * </code></pre>
+ * }</pre>
  * <br>
  * You can also use a {@link IOView} to interface with code that only works with {@link DataInput} and {@link DataOutput}.
  */
