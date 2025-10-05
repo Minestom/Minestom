@@ -43,8 +43,6 @@ record SectionImpl(
         } else {
             tickableMap().remove(index);
         }
-        // Palette
-        blockPalette().set(x, y, z, block.stateId());
         return lastCachedBlock;
     }
 

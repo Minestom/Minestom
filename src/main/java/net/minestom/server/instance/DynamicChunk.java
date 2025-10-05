@@ -87,6 +87,7 @@ public class DynamicChunk extends Chunk {
         Section section = getSectionAt(y);
         final int localX = globalToSectionRelative(x), localY = globalToSectionRelative(y), localZ = globalToSectionRelative(z);
 
+        section.blockPalette().set(localX, localY, localZ, block.stateId());
         Block lastCachedBlock = section.cacheBlock(localX, localY, localZ, block);
         BlockHandler handler = block.handler();
 
