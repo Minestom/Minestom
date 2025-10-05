@@ -20,11 +20,13 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.network.debug.DebugSubscription;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
+import net.minestom.server.network.packet.client.configuration.ClientAcceptCodeOfConductPacket;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
@@ -185,7 +187,7 @@ public class PacketWriteReadTest {
                         new DialogActionButton(COMPONENT.appendNewline(), COMPONENT, DialogActionButton.DEFAULT_WIDTH, new DialogAction.OpenUrl("https://minestom.net")),
                         new DialogActionButton(COMPONENT.appendNewline(), COMPONENT, 10, new DialogAction.CopyToClipboard("https://minestom.net"))
                 )));
-
+        addServerPackets(new CodeOfConductPacket("You need to be a nice person, i think?"));
         // Play
         addServerPackets(new AcknowledgeBlockChangePacket(0));
         addServerPackets(new ActionBarPacket(COMPONENT));
@@ -380,6 +382,7 @@ public class PacketWriteReadTest {
                 new ClientCustomClickActionPacket(Key.key("wowzers"), CompoundBinaryTag.builder().putInt("key", 0).build()),
                 new ClientCustomClickActionPacket(Key.key("asgdf"), CompoundBinaryTag.builder().putString("key", "value").build())
         );
+        addClientPackets(new ClientAcceptCodeOfConductPacket());
 
         // Play
         addClientPackets(new ClientTeleportConfirmPacket(325626), new ClientTeleportConfirmPacket(Integer.MAX_VALUE), new ClientTeleportConfirmPacket(Integer.MIN_VALUE));
@@ -420,7 +423,7 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientWindowSlotStatePacket(25, 25, true), new ClientWindowSlotStatePacket(Integer.MAX_VALUE, Integer.MAX_VALUE, true), new ClientWindowSlotStatePacket(Integer.MIN_VALUE, Integer.MAX_VALUE, false));
         //Cookie
         //Plugin message
-        addClientPackets(new ClientDebugSampleSubscriptionPacket(DebugSamplePacket.Type.TICK_TIME));
+        addClientPackets(new ClientDebugSubscriptionRequestPacket(Set.of(DebugSubscription.DEDICATED_SERVER_TICK_TIME, DebugSubscription.ENTITY_PATHS)));
         addClientPackets(new ClientEditBookPacket(14, List.of("page1", "page2"), "Wrath of nothing"), new ClientEditBookPacket(15, List.of(), null), new ClientEditBookPacket(12, List.of("hi".repeat(100).split("h")), "What is this book?"));
         addClientPackets(new ClientQueryEntityNbtPacket(1325, 25), new ClientQueryEntityNbtPacket(-15, Integer.MAX_VALUE));
         addClientPackets(
