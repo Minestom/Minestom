@@ -22,7 +22,7 @@ public sealed interface DialogInput {
             Map.entry(Key.key("number_range"), NumberRange.CODEC),
             Map.entry(Key.key("single_option"), SingleOption.CODEC),
             Map.entry(Key.key("text"), Text.CODEC));
-    StructCodec<DialogInput> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogInput::codec, "type");
+    StructCodec<DialogInput> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogInput::codec);
 
     static void validateKey(String key) {
         for (var c : key.toCharArray())
