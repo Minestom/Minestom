@@ -624,10 +624,15 @@ public class InstanceContainer extends Instance {
     @ApiStatus.Experimental
     @Override
     public CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator) {
-        return loadChunk(chunkX, chunkZ).thenAccept(chunk -> {
-            if (!isLoaded(chunk)) return;
-            generateChunk(chunk, generator);
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        Thread.startVirtualThread(() -> {
+            Chunk chunk = loadChunk(chunkX, chunkZ).join();
+            synchronized (chunk) {
+                generateChunk(chunk, generator);
+            }
+            future.complete(null);
         });
+        return future;
     }
 
     /**
