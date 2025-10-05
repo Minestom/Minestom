@@ -54,6 +54,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static net.minestom.server.coordinate.CoordConversion.*;
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
@@ -473,16 +474,20 @@ public class InstanceContainer extends Instance {
         var cache = section.genSection().specials();
         if (cache.isEmpty()) return;
         final int height = section.start().blockY();
-        synchronized (chunk) {
-            Int2ObjectMaps.fastForEach(cache, blockEntry -> {
-                final int index = blockEntry.getIntKey();
-                final Block block = blockEntry.getValue();
-                final int x = CoordConversion.chunkBlockIndexGetX(index);
-                final int y = CoordConversion.chunkBlockIndexGetY(index) + height;
-                final int z = CoordConversion.chunkBlockIndexGetZ(index);
-                chunk.setBlock(x, y, z, block);
-            });
-        }
+        final int sectionY = globalToChunk(height);
+        SectionImpl sec = (SectionImpl) chunk.getSection(sectionY);
+        Int2ObjectMaps.fastForEach(cache, blockEntry -> {
+            final int index = blockEntry.getIntKey();
+            final Block block = blockEntry.getValue();
+            final int localX = sectionBlockIndexGetX(index), localY = sectionBlockIndexGetY(index), localZ = sectionBlockIndexGetZ(index);
+            sec.blockPalette().set(localX, localY, localZ, block.stateId());
+            if (block.hasNbt() || block.handler() != null || block.registry().isBlockEntity()) {
+                sec.entries().put(index, block);
+                if (block.handler() != null && block.handler().isTickable()) {
+                    sec.tickableMap().put(index, block);
+                }
+            }
+        });
     }
 
     @Override
