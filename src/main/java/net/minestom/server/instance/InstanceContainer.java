@@ -474,19 +474,13 @@ public class InstanceContainer extends Instance {
         var cache = section.genSection().specials();
         if (cache.isEmpty()) return;
         final int height = section.start().blockY();
-        final int sectionY = globalToChunk(height);
-        SectionImpl sec = (SectionImpl) chunk.getSection(sectionY);
+        Section sec = chunk.getSectionAt(height);
         Int2ObjectMaps.fastForEach(cache, blockEntry -> {
             final int index = blockEntry.getIntKey();
             final Block block = blockEntry.getValue();
             final int localX = sectionBlockIndexGetX(index), localY = sectionBlockIndexGetY(index), localZ = sectionBlockIndexGetZ(index);
             sec.blockPalette().set(localX, localY, localZ, block.stateId());
-            if (block.hasNbt() || block.handler() != null || block.registry().isBlockEntity()) {
-                sec.entries().put(index, block);
-                if (block.handler() != null && block.handler().isTickable()) {
-                    sec.tickableMap().put(index, block);
-                }
-            }
+            sec.cacheBlock(localX, localY, localZ, block);
         });
     }
 
