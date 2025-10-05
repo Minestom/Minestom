@@ -629,7 +629,9 @@ public class InstanceContainer extends Instance {
             Chunk chunk = loadChunk(chunkX, chunkZ).join();
             synchronized (chunk) {
                 generateChunk(chunk, generator);
+                chunk.invalidate();
             }
+            chunk.sendChunk();
             future.complete(null);
         });
         return future;
