@@ -134,8 +134,7 @@ public class LightingChunk extends DynamicChunk {
                 for (int k = -1; k <= 1; k++) {
                     if (k + coordinate < neighborChunk.getMinSection() || k + coordinate >= neighborChunk.getMaxSection())
                         continue;
-                    neighborChunk.getSection(k + coordinate).blockLight().invalidate();
-                    neighborChunk.getSection(k + coordinate).skyLight().invalidate();
+                    neighborChunk.getSection(k + coordinate).invalidate();
                 }
             }
         }
@@ -187,8 +186,7 @@ public class LightingChunk extends DynamicChunk {
         super.onGenerate();
 
         for (int section = minSection; section < maxSection; section++) {
-            getSection(section).blockLight().invalidate();
-            getSection(section).skyLight().invalidate();
+            getSection(section).invalidate();
         }
 
         invalidate();
@@ -204,8 +202,7 @@ public class LightingChunk extends DynamicChunk {
                         light.invalidate();
 
                         for (int section = minSection; section < maxSection; section++) {
-                            light.getSection(section).blockLight().invalidate();
-                            light.getSection(section).skyLight().invalidate();
+                            light.getSection(section).invalidate();
                         }
                     }
                 }
@@ -443,8 +440,7 @@ public class LightingChunk extends DynamicChunk {
                 if (!(chunk instanceof LightingChunk lighting)) continue;
                 for (int sectionIndex = chunk.minSection; sectionIndex < chunk.maxSection; sectionIndex++) {
                     Section section = chunk.getSection(sectionIndex);
-                    section.blockLight().invalidate();
-                    section.skyLight().invalidate();
+                    section.invalidate();
                     sections.add(new Vec(chunk.getChunkX(), sectionIndex, chunk.getChunkZ()));
                 }
                 lighting.invalidate();
@@ -565,9 +561,7 @@ public class LightingChunk extends DynamicChunk {
     @Override
     public Chunk copy(Instance instance, int chunkX, int chunkZ) {
         var sections = this.sections.stream().map(Section::clone).toList();
-        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
-        lightingChunk.entries.putAll(entries);
-        return lightingChunk;
+        return new LightingChunk(instance, chunkX, chunkZ, sections);
     }
 
     @Override

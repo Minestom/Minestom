@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
+import static net.minestom.server.coordinate.CoordConversion.*;
 import static net.minestom.server.network.NetworkBuffer.SHORT;
 
 /**
@@ -53,10 +54,6 @@ public class DynamicChunk extends Chunk {
     protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
     protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
 
-    // Key = ChunkUtils#getBlockIndex
-    protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
-    protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
-
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
@@ -64,7 +61,7 @@ public class DynamicChunk extends Chunk {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> new Section());
+        Arrays.setAll(sectionsTemp, value -> Section.section());
         this.sections = List.of(sectionsTemp);
     }
 
@@ -88,51 +85,29 @@ public class DynamicChunk extends Chunk {
         this.chunkCache.invalidate();
 
         Section section = getSectionAt(y);
+        final int localX = globalToSectionRelative(x), localY = globalToSectionRelative(y), localZ = globalToSectionRelative(z);
 
-        int sectionRelativeX = globalToSectionRelative(x);
-        int sectionRelativeZ = globalToSectionRelative(z);
-
-        section.blockPalette().set(
-                sectionRelativeX,
-                globalToSectionRelative(y),
-                sectionRelativeZ,
-                block.stateId()
-        );
-
-        final int index = CoordConversion.chunkBlockIndex(x, y, z);
-        // Handler
-        final BlockHandler handler = block.handler();
-        final Block lastCachedBlock;
-        if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
-            lastCachedBlock = this.entries.put(index, block);
-        } else {
-            lastCachedBlock = this.entries.remove(index);
-        }
-        // Block tick
-        if (handler != null && handler.isTickable()) {
-            this.tickableMap.put(index, block);
-        } else {
-            this.tickableMap.remove(index);
-        }
+        Block lastCachedBlock = section.cacheBlock(localX, localY, localZ, block);
+        BlockHandler handler = block.handler();
 
         // Update block handlers
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, block, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
+                    () -> new BlockHandler.Destroy(lastCachedBlock, block, instance, CoordConversion.chunkBlockRelativeGetGlobal(localX, y, localZ, chunkX, chunkZ))));
         }
         if (handler != null) {
             // New placement
             final Block finalBlock = block;
-            final Point placePoint = CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ);
+            final Point placePoint = CoordConversion.chunkBlockRelativeGetGlobal(localX, y, localZ, chunkX, chunkZ);
             handler.onPlace(Objects.requireNonNullElseGet(placement,
                     () -> new BlockHandler.Placement(finalBlock, Objects.requireNonNullElseGet(lastCachedBlock, () -> this.getBlock(placePoint, Condition.TYPE)), instance, placePoint)));
         }
 
         // UpdateHeightMaps
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
-        motionBlocking.refresh(sectionRelativeX, y, sectionRelativeZ, block);
-        worldSurface.refresh(sectionRelativeX, y, sectionRelativeZ, block);
+        motionBlocking.refresh(localX, y, localZ, block);
+        worldSurface.refresh(localX, y, localZ, block);
     }
 
     @Override
@@ -183,15 +158,24 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void tick(long time) {
-        if (tickableMap.isEmpty()) return;
-        tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
-            final int index = entry.getIntKey();
-            final Block block = entry.getValue();
-            final BlockHandler handler = block.handler();
-            if (handler == null) return;
-            final Point blockPosition = CoordConversion.chunkBlockIndexGetGlobal(index, chunkX, chunkZ);
-            handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
-        });
+        int i = 0;
+        for (Section section : sections) {
+            final int sectionY = i++ + minSection;
+            SectionImpl impl = (SectionImpl) section;
+            var tickableMap = impl.tickableMap();
+            if (tickableMap.isEmpty()) continue;
+            tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
+                final int index = entry.getIntKey();
+                final Block block = entry.getValue();
+                final BlockHandler handler = block.handler();
+                if (handler == null) return;
+                final int localX = sectionBlockIndexGetX(index), localY = sectionBlockIndexGetY(index), localZ = sectionBlockIndexGetZ(index);
+                final Point blockPosition = new BlockVec(localX + chunkX * SECTION_SIZE,
+                        localY + sectionY * SECTION_SIZE,
+                        localZ + chunkZ * SECTION_SIZE);
+                handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
+            });
+        }
     }
 
     @Override
@@ -200,18 +184,18 @@ public class DynamicChunk extends Chunk {
         if (y < minSection * CHUNK_SECTION_SIZE || y >= maxSection * CHUNK_SECTION_SIZE)
             return Block.AIR; // Out of bounds
 
+        final Section section = getSectionAt(y);
+        final int localX = globalToSectionRelative(x), localY = globalToSectionRelative(y), localZ = globalToSectionRelative(z);
         // Verify if the block object is present
         if (condition != Condition.TYPE) {
-            final Block entry = !entries.isEmpty() ?
-                    entries.get(CoordConversion.chunkBlockIndex(x, y, z)) : null;
+            var entries = section.entries();
+            final Block entry = !entries.isEmpty() ? entries.get(sectionBlockIndex(localX, localY, localZ)) : null;
             if (entry != null || condition == Condition.CACHED) {
                 return entry;
             }
         }
         // Retrieve the block from state id
-        final Section section = getSectionAt(y);
-        final int blockStateId = section.blockPalette()
-                .get(globalToSectionRelative(x), globalToSectionRelative(y), globalToSectionRelative(z));
+        final int blockStateId = section.blockPalette().get(localX, localY, localZ);
         return Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR);
     }
 
@@ -235,19 +219,17 @@ public class DynamicChunk extends Chunk {
     @Override
     public Chunk copy(Instance instance, int chunkX, int chunkZ) {
         var sections = this.sections.stream().map(Section::clone).toList();
-        DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ, sections);
-        dynamicChunk.entries.putAll(entries);
-        return dynamicChunk;
+        return new DynamicChunk(instance, chunkX, chunkZ, sections);
     }
 
     @Override
     public void reset() {
         for (Section section : sections) section.clear();
-        this.entries.clear();
     }
 
     @Override
     public void invalidate() {
+        for (Section section : sections) section.invalidate();
         this.needsCompleteHeightmapRefresh = true;
         this.chunkCache.invalidate();
     }
@@ -269,9 +251,25 @@ public class DynamicChunk extends Chunk {
         }
 
         return new ChunkDataPacket(chunkX, chunkZ,
-                new ChunkData(heightmaps, data, entries),
+                new ChunkData(heightmaps, data, chunkEntries()),
                 createLightData(true)
         );
+    }
+
+    private Int2ObjectOpenHashMap<Block> chunkEntries() {
+        Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
+        int i = 0;
+        for (Section section : sections) {
+            final int sectionY = i++ + minSection;
+            section.entries().forEach((index, block) -> {
+                final int localX = sectionBlockIndexGetX(index);
+                final int localY = sectionBlockIndexGetY(index);
+                final int localZ = sectionBlockIndexGetZ(index);
+                final int globalIndex = chunkBlockIndex(localX, localY + sectionY * SECTION_SIZE, localZ);
+                entries.put(globalIndex, block);
+            });
+        }
+        return entries;
     }
 
     UpdateLightPacket createLightPacket() {
@@ -334,7 +332,7 @@ public class DynamicChunk extends Chunk {
         var entities = instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
         final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
-                clonedSections, entries.clone(), entityIds, updater.reference(instance),
+                clonedSections, entityIds, updater.reference(instance),
                 tagHandler().readableCopy());
     }
 
