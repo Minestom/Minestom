@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
-public record ClientPlayerPositionPacket(Point position, byte flags) implements ClientPacket {
+public record ClientPlayerPositionPacket(Point position, byte flags) implements ClientPacket.Play {
     public static final int FLAG_ON_GROUND = 1;
     public static final int FLAG_HORIZONTAL_COLLISION = 1 << 1;
 

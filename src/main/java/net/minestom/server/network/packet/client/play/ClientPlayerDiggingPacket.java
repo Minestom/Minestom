@@ -9,7 +9,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientPlayerDiggingPacket(Status status, Point blockPosition,
-                                        BlockFace blockFace, int sequence) implements ClientPacket {
+                                        BlockFace blockFace, int sequence) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPlayerDiggingPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.Enum(Status.class), ClientPlayerDiggingPacket::status,
             BLOCK_POSITION, ClientPlayerDiggingPacket::blockPosition,

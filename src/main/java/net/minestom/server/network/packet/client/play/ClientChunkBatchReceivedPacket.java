@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record ClientChunkBatchReceivedPacket(float targetChunksPerTick) implements ClientPacket {
+public record ClientChunkBatchReceivedPacket(float targetChunksPerTick) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientChunkBatchReceivedPacket> SERIALIZER = NetworkBufferTemplate.template(
             FLOAT, ClientChunkBatchReceivedPacket::targetChunksPerTick,
             ClientChunkBatchReceivedPacket::new);

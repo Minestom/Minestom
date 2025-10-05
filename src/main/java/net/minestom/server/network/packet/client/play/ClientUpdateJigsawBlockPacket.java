@@ -16,7 +16,7 @@ public record ClientUpdateJigsawBlockPacket(
         String jointType,
         int selectionPriority,
         int placementPriority
-) implements ClientPacket {
+) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientUpdateJigsawBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, ClientUpdateJigsawBlockPacket::location,
             STRING, ClientUpdateJigsawBlockPacket::name,

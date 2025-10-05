@@ -9,7 +9,7 @@ import java.util.Arrays;
 import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record ClientPluginMessagePacket(String channel, byte[] data) implements ClientPacket {
+public record ClientPluginMessagePacket(String channel, byte[] data) implements ClientPacket.Configuration, ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPluginMessagePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientPluginMessagePacket::channel,
             RAW_BYTES, ClientPluginMessagePacket::data,

@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record ClientNameItemPacket(String itemName) implements ClientPacket {
+public record ClientNameItemPacket(String itemName) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientNameItemPacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientNameItemPacket::itemName,
             ClientNameItemPacket::new);
