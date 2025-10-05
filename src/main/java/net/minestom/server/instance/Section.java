@@ -36,7 +36,7 @@ public sealed interface Section extends Cloneable permits SectionImpl {
 
     Light blockLight();
 
-    Int2ObjectOpenHashMap<Block> entries();
+    Int2ObjectOpenHashMap<@Nullable Block> entries();
 
     @Nullable Block cacheBlock(int x, int y, int z, Block block);
 
