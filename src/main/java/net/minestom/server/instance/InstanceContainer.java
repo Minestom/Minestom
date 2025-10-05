@@ -475,13 +475,15 @@ public class InstanceContainer extends Instance {
         if (cache.isEmpty()) return;
         final int height = section.start().blockY();
         Section sec = chunk.getSectionAt(height);
-        Int2ObjectMaps.fastForEach(cache, blockEntry -> {
-            final int index = blockEntry.getIntKey();
-            final Block block = blockEntry.getValue();
-            final int localX = sectionBlockIndexGetX(index), localY = sectionBlockIndexGetY(index), localZ = sectionBlockIndexGetZ(index);
-            sec.blockPalette().set(localX, localY, localZ, block.stateId());
-            sec.cacheBlock(localX, localY, localZ, block);
-        });
+        synchronized (chunk) {
+            Int2ObjectMaps.fastForEach(cache, blockEntry -> {
+                final int index = blockEntry.getIntKey();
+                final Block block = blockEntry.getValue();
+                final int localX = sectionBlockIndexGetX(index), localY = sectionBlockIndexGetY(index), localZ = sectionBlockIndexGetZ(index);
+                sec.blockPalette().set(localX, localY, localZ, block.stateId());
+                sec.cacheBlock(localX, localY, localZ, block);
+            });
+        }
     }
 
     @Override
