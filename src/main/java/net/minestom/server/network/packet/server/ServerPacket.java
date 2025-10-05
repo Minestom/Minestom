@@ -8,7 +8,7 @@ import net.minestom.server.network.player.PlayerConnection;
  * <p>
  * Packets are value-based, and should therefore not be reliant on identity.
  */
-public sealed interface ServerPacket extends SendablePacket permits ServerPacket.Configuration, ServerPacket.Login, ServerPacket.Play, ServerPacket.Status {
+public sealed interface ServerPacket extends SendablePacket {
 
     non-sealed interface Configuration extends ServerPacket {
     }
