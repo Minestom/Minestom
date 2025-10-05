@@ -50,8 +50,8 @@ public interface PacketRegistry<T> {
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
 
-    abstract sealed class Client extends PacketRegistryTemplate<ClientPacket> {
-        @SafeVarargs Client(Entry<? extends ClientPacket>... suppliers) {
+    abstract sealed class Client<T extends ClientPacket> extends PacketRegistryTemplate<ClientPacket> {
+        @SafeVarargs Client(Entry<? extends T>... suppliers) {
             super(suppliers);
         }
 
@@ -61,7 +61,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientHandshake extends Client {
+    final class ClientHandshake extends Client<ClientPacket.Handshake> {
         public ClientHandshake() {
             super(
                     entry(ClientHandshakePacket.class, ClientHandshakePacket.SERIALIZER)
@@ -74,7 +74,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientStatus extends Client {
+    final class ClientStatus extends Client<ClientPacket.Status> {
         public ClientStatus() {
             super(
                     entry(ClientStatusRequestPacket.class, ClientStatusRequestPacket.SERIALIZER),
@@ -88,7 +88,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientLogin extends Client {
+    final class ClientLogin extends Client<ClientPacket.Login> {
         public ClientLogin() {
             super(
                     entry(ClientLoginStartPacket.class, ClientLoginStartPacket.SERIALIZER),
@@ -105,7 +105,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientConfiguration extends Client {
+    final class ClientConfiguration extends Client<ClientPacket.Configuration> {
         public ClientConfiguration() {
             super(
                     entry(ClientSettingsPacket.class, ClientSettingsPacket.SERIALIZER),
@@ -127,7 +127,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientPlay extends Client {
+    final class ClientPlay extends Client<ClientPacket.Play> {
         public ClientPlay() {
             super(
                     entry(ClientTeleportConfirmPacket.class, ClientTeleportConfirmPacket.SERIALIZER),
@@ -205,8 +205,8 @@ public interface PacketRegistry<T> {
         }
     }
 
-    abstract sealed class Server extends PacketRegistryTemplate<ServerPacket> {
-        @SafeVarargs Server(Entry<? extends ServerPacket>... suppliers) {
+    abstract sealed class Server<T extends ServerPacket> extends PacketRegistryTemplate<ServerPacket> {
+        @SafeVarargs Server(Entry<? extends T>... suppliers) {
             super(suppliers);
         }
 
@@ -216,7 +216,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerHandshake extends Server {
+    final class ServerHandshake extends Server<ServerPacket> { // No type
         public ServerHandshake() {
             super(
                     // Empty
@@ -229,7 +229,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerStatus extends Server {
+    final class ServerStatus extends Server<ServerPacket.Status> {
         public ServerStatus() {
             super(
                     entry(ResponsePacket.class, ResponsePacket.SERIALIZER),
@@ -243,7 +243,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerLogin extends Server {
+    final class ServerLogin extends Server<ServerPacket.Login> {
         public ServerLogin() {
             super(
                     entry(LoginDisconnectPacket.class, LoginDisconnectPacket.SERIALIZER),
@@ -261,7 +261,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerConfiguration extends Server {
+    final class ServerConfiguration extends Server<ServerPacket.Configuration> {
         public ServerConfiguration() {
             super(
                     entry(CookieRequestPacket.class, CookieRequestPacket.SERIALIZER),
@@ -293,7 +293,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerPlay extends Server {
+    final class ServerPlay extends Server<ServerPacket.Play> {
         public ServerPlay() {
             super(
                     entry(BundlePacket.class, BundlePacket.SERIALIZER),
