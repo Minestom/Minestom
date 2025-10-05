@@ -29,6 +29,7 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -338,7 +339,8 @@ public class DynamicChunk extends Chunk {
                 tagHandler().readableCopy());
     }
 
-    private void assertLock() {
+    @ApiStatus.Internal
+    void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
     }
 }
