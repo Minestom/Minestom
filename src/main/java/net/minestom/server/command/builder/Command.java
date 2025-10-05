@@ -8,11 +8,8 @@ import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
@@ -39,7 +36,7 @@ import java.util.stream.Stream;
  * you can set it using {@link #setDefaultExecutor(CommandExecutor)}.
  * <p>
  * Before any syntax to be successfully executed the {@link CommandSender} needs to validated
- * the {@link CommandCondition} sets with {@link #setCondition(CommandCondition...)} (ignored if null).
+ * the {@link CommandCondition} sets with {@link #setCondition(CommandCondition)} (ignored if null).
  * <p>
  * Some {@link Argument} could also require additional condition (eg: a number which need to be between 2 values),
  * in this case, if the whole syntax is correct but not the argument condition,
@@ -101,23 +98,13 @@ public class Command {
     }
 
     /**
-     * Sets the {@link CommandCondition}s required to execute the command.
+     * Sets the {@link CommandCondition}.
      *
-     * @param condition the condition that must pass
-     * @param conditions the rest of the conditions that must pass
+     * @param commandCondition the new command condition, null to do not call anything
      * @see #getCondition()
      */
-    public void setCondition(@Nullable CommandCondition condition, CommandCondition... conditions) {
-        Check.argCondition(condition == null && conditions.length > 0, "the first argument must not be null if you are passing in multiple conditions");
-
-        if (condition == null) {
-            this.condition = null;
-        } else {
-            var finalConditions = new CommandCondition[conditions.length + 1];
-            finalConditions[0] = condition;
-            System.arraycopy(conditions, 0, finalConditions, 1, conditions.length);
-            this.condition = Conditions.all(finalConditions);
-        }
+    public void setCondition(@Nullable CommandCondition commandCondition) {
+        this.condition = commandCondition;
     }
 
     /**
