@@ -85,6 +85,10 @@ public record PlayerSkin(String textures, String signature) {
                 "elytra", Codec.KEY.optional(), Patch::elytra,
                 "slim", Codec.BOOLEAN.optional(), Patch::slim,
                 Patch::new);
+
+        public Patch(Key body) {
+            this(body, null, null, null);
+        }
     }
 
 }

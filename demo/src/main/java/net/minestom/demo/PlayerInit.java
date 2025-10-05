@@ -5,6 +5,7 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.object.ObjectContents;
 import net.minestom.demo.entity.PlayerEntity;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
@@ -122,7 +123,10 @@ public class PlayerInit {
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
 
-                player.sendMessage(Component.text("click me for less health").clickEvent(ClickEvent.runCommand("health set 2")));
+                player.sendMessage(Component.text("click me for less health ")
+                                           .clickEvent(ClickEvent.runCommand("health set 2"))
+                                           .append(Component.object(ObjectContents.sprite(Key.key("block/stone"))))
+                                           .append(Component.object(ObjectContents.playerHead("Minestom"))));
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
                         .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(Block.STONE)))

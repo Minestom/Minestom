@@ -54,7 +54,9 @@ public final class ConnectionManager {
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
     // Players waiting to be spawned (post configuration state)
-    private final MessagePassingQueue<Player> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
+    private final MessagePassingQueue<Player> playWaitingPlayers = new MpscUnboundedArrayQueue<>(64);
+    // Players waiting to be (re) configured
+    private final MessagePassingQueue<Player> configWaitingPlayers = new MpscUnboundedArrayQueue<>(64);
     // Players in configuration state
     private final Set<Player> configurationPlayers = new CopyOnWriteArraySet<>();
     // Players in play state
@@ -217,8 +219,7 @@ public final class ConnectionManager {
 
     @ApiStatus.Internal
     public void transitionPlayToConfig(Player player) {
-        player.sendPacket(new StartConfigurationPacket());
-        configurationPlayers.add(player);
+        configWaitingPlayers.relaxedOffer(player);
     }
 
     /**
@@ -296,7 +297,7 @@ public final class ConnectionManager {
 
     @ApiStatus.Internal
     public void transitionConfigToPlay(Player player) {
-        this.waitingPlayers.relaxedOffer(player);
+        this.playWaitingPlayers.relaxedOffer(player);
     }
 
     /**
@@ -347,7 +348,15 @@ public final class ConnectionManager {
      */
     @ApiStatus.Internal
     public void updateWaitingPlayers() {
-        this.waitingPlayers.drain(player -> {
+        this.configWaitingPlayers.drain(player -> {
+            // In case the method was called multiple times, the player disconnected, etc. just ignore it.
+            if (!playPlayers.remove(player)) return;
+
+            configurationPlayers.add(player);
+            player.remove(false);
+            player.sendPacket(new StartConfigurationPacket());
+        });
+        this.playWaitingPlayers.drain(player -> {
             if (!player.isOnline()) return; // Player disconnected while in queued to join
             configurationPlayers.remove(player);
             playPlayers.add(player);

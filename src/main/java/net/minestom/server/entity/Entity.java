@@ -1575,7 +1575,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected Vec getVelocityForPacket() {
-        return this.velocity.mul(8000f / ServerFlag.SERVER_TICKS_PER_SECOND);
+        return this.velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND);
     }
 
     protected SpawnEntityPacket getSpawnPacket() {

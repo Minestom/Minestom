@@ -1,5 +1,6 @@
 package net.minestom.server.network.player;
 
+import net.kyori.adventure.text.object.PlayerHeadObjectContents;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
@@ -42,7 +43,7 @@ public record GameProfile(
             "properties", Property.LIST_CODEC.optional(List.of()), GameProfile::properties,
             GameProfile::new);
 
-    public record Property(String name, String value, @Nullable String signature) {
+    public record Property(String name, String value, @Nullable String signature) implements PlayerHeadObjectContents.ProfileProperty {
         public Property(String name, String value) {
             this(name, value, null);
         }

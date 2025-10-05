@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.nmcp)
 }
 
-val javaVersion = System.getenv("JAVA_VERSION") ?: "21"
+val javaVersion = System.getenv("JAVA_VERSION") ?: "25"
 
 group = "net.minestom"
 version = System.getenv("MINESTOM_VERSION") ?: "dev"
@@ -16,13 +16,15 @@ configurations.all {
     exclude("org.checkerframework", "checker-qual")
 }
 
+val adventureVersion = libs.adventure.api.get().version ?: ""
+
 repositories {
     val dataVersion = libs.minestomData.get().version ?: ""
     if (dataVersion.endsWith("-dev"))
         mavenLocal()
-    val adventureVersion = libs.versions.adventure.get()
     if (adventureVersion.endsWith("-SNAPSHOT"))
-        maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots/")
+        maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
+
     mavenCentral()
 }
 
@@ -54,14 +56,16 @@ tasks.withType<Javadoc> {
         addBooleanOption("html5", true)
         addStringOption("-release", javaVersion)
         // Links to external javadocs
-        links("https://docs.oracle.com/en/java/javase/${javaVersion}/docs/api/")
-        links("https://javadoc.io/doc/net.kyori/adventure-api/${libs.versions.adventure.get()}/")
-        links("https://javadoc.io/doc/net.kyori/adventure-nbt/${libs.versions.adventure.get()}/")
-        links("https://javadoc.io/doc/net.kyori/adventure-key/${libs.versions.adventure.get()}/")
-        links("https://javadoc.io/doc/net.kyori/adventure-text-serializer-ansi/${libs.versions.adventure.get()}/")
-        links("https://javadoc.io/doc/net.kyori/adventure-text-serializer-gson/${libs.versions.adventure.get()}/")
-        links("https://javadoc.io/doc/net.kyori/adventure-text-serializer-legacy/${libs.versions.adventure.get()}/")
-        links("https://javadoc.io/doc/net.kyori/adventure-text-serializer-plain/${libs.versions.adventure.get()}/")
+        links("https://docs.oracle.com/en/java/javase/$javaVersion/docs/api/")
+        if (!adventureVersion.endsWith("-SNAPSHOT")) {
+            links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/nbt/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/key/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-ansi/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-gson/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-legacy/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-plain/${libs.versions.adventure.get()}/")
+        }
         links("https://javadoc.io/doc/com.google.code.gson/gson/${libs.versions.gson.get()}/")
         links("https://javadoc.io/doc/org.jetbrains/annotations/${libs.versions.jetbrainsAnnotations.get()}/")
     }
