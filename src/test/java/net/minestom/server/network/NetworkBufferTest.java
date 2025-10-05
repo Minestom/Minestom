@@ -11,6 +11,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.foreign.Arena;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -75,7 +76,7 @@ public class NetworkBufferTest {
         assertEquals(10, copy.writeIndex());
         assertEquals(10, copy.capacity());
 
-        assertTrue(NetworkBuffer.equals(buffer, copy));
+        assertTrue(NetworkBuffer.contentEquals(buffer, copy));
     }
 
     @Test
@@ -181,7 +182,7 @@ public class NetworkBufferTest {
         assertEquals(1, buffer.writeIndex());
         assertEquals(0, buffer.readIndex());
 
-        var array = buffer.extractBytes(extractor -> extractor.read(BYTE));
+        var array = buffer.extractReadBytes(BYTE);
         assertArrayEquals(new byte[]{25}, array, "Unequal array: " + Arrays.toString(array));
         assertEquals(1, buffer.writeIndex());
         assertEquals(1, buffer.readIndex());
@@ -191,7 +192,7 @@ public class NetworkBufferTest {
         assertEquals(10, buffer.writeIndex());
         assertEquals(1, buffer.readIndex());
 
-        array = buffer.extractBytes(extractor -> {
+        array = buffer.extractReadBytes(extractor -> {
             extractor.read(BYTE);
             extractor.read(LONG);
         });
@@ -492,6 +493,75 @@ public class NetworkBufferTest {
         assertBufferType(STRING_IO_UTF8, "Hello", stream.toByteArray());
     }
 
+    @Test
+    public void testConfinedArena() {
+        final NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            buffer = NetworkBuffer.Settings.staticSettings().arena(arena).allocate(256);
+            buffer.write(VAR_INT, Integer.MAX_VALUE);
+            buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
+            assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
+        }
+        assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
+    }
+
+    @Test
+    public void testConfinedArenaCopy() {
+        final NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            var settings = NetworkBuffer.Settings.staticSettings().arena(arena);
+            var confinedBuffer = settings.allocate(256);
+            confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
+            confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
+            assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
+            buffer = confinedBuffer.copy(settings, confinedBuffer.readIndex(), confinedBuffer.readableBytes(),0, confinedBuffer.readableBytes());
+        }
+        assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
+    }
+
+    @Test
+    public void testConfinedArenaGlobalCopy() {
+        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
+        final NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            var confinedBuffer = NetworkBuffer.Settings.staticSettings().arena(arena).allocate(256);
+            confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
+            confinedBuffer.write(RAW_BYTES, stringBytes);
+            assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
+            buffer = confinedBuffer.copy(confinedBuffer.readIndex(), confinedBuffer.readableBytes(), 0, confinedBuffer.readableBytes());
+        }
+        var bytes = buffer.read(RAW_BYTES);
+        assertArrayEquals(stringBytes, bytes);
+    }
+
+
+    @Test
+    public void testTrim() {
+        var buffer = NetworkBuffer.staticBuffer(256);
+        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
+        buffer.write(VAR_INT, Integer.MAX_VALUE);
+        buffer.write(RAW_BYTES, stringBytes);
+        buffer.trim();
+        assertEquals(10, buffer.capacity());
+        assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
+        assertArrayEquals(stringBytes, buffer.read(RAW_BYTES));
+        buffer.trim();
+        assertEquals(0, buffer.capacity());
+    }
+
+    @Test
+    public void testTrimmed() {
+        var buffer = NetworkBuffer.staticBuffer(256);
+        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
+        buffer.write(VAR_INT, Integer.MAX_VALUE);
+        buffer.write(RAW_BYTES, stringBytes);
+        buffer = buffer.trimmed();
+        assertEquals(10, buffer.capacity());
+        assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
+        assertArrayEquals(stringBytes, buffer.read(RAW_BYTES));
+        buffer = buffer.trimmed();
+        assertEquals(0, buffer.capacity());
+    }
 
     @Test
     public void testStringUtf8ModifiedRead() throws IOException {
@@ -530,7 +600,7 @@ public class NetworkBufferTest {
         assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
     }
 
-    static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte[] expected, Action<T> action) {
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte @Nullable [] expected, Action<T> action) {
         var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());

@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 @ApiStatus.Internal
 public final class CachedPacket implements SendablePacket {
     private final Supplier<ServerPacket> packetSupplier;
-    private volatile SoftReference<FramedPacket> packet;
+    private volatile @Nullable SoftReference<FramedPacket> packet;
 
     public CachedPacket(Supplier<ServerPacket> packetSupplier) {
         this.packetSupplier = packetSupplier;

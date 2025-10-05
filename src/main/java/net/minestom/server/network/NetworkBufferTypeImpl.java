@@ -2,7 +2,6 @@ package net.minestom.server.network;
 
 import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
@@ -13,6 +12,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Unit;
@@ -21,6 +21,7 @@ import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -33,7 +34,7 @@ import java.util.function.Supplier;
 import static net.minestom.server.network.NetworkBuffer.*;
 import static net.minestom.server.network.NetworkBufferImpl.impl;
 
-interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
+interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
 
@@ -381,10 +382,10 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record NbtType() implements NetworkBufferTypeImpl<BinaryTag> {
+    record NbtType<T extends BinaryTag>() implements NetworkBufferTypeImpl<T> {
         @Override
-        public void write(NetworkBuffer buffer, BinaryTag value) {
-            BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
+        public void write(NetworkBuffer buffer, T value) {
+            final BinaryTagWriter nbtWriter = new BinaryTagWriter(buffer.ioView());
             try {
                 nbtWriter.writeNameless(value);
             } catch (IOException e) {
@@ -392,11 +393,12 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             }
         }
 
+        @SuppressWarnings("unchecked") // TODO push this down into the reader
         @Override
-        public BinaryTag read(NetworkBuffer buffer) {
-            BinaryTagReader nbtReader = impl(buffer).nbtReader();
+        public T read(NetworkBuffer buffer) {
+            final BinaryTagReader nbtReader = new BinaryTagReader(buffer.ioView());
             try {
-                return nbtReader.readNameless();
+                return (T) nbtReader.readNameless();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -428,8 +430,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record JsonComponentType() implements NetworkBufferTypeImpl<Component> {
         @Override
         public void write(NetworkBuffer buffer, Component value) {
-            final Transcoder<JsonElement> coder = buffer.registries() != null
-                    ? new RegistryTranscoder<>(Transcoder.JSON, buffer.registries())
+            final Registries registries = buffer.registries();
+            final Transcoder<JsonElement> coder = registries != null
+                    ? new RegistryTranscoder<>(Transcoder.JSON, registries)
                     : Transcoder.JSON;
             final String json = JsonUtil.toJson(Codec.COMPONENT.encode(coder, value).orElseThrow());
             buffer.write(STRING, json);
@@ -437,8 +440,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
         @Override
         public Component read(NetworkBuffer buffer) {
-            final Transcoder<JsonElement> coder = buffer.registries() != null
-                    ? new RegistryTranscoder<>(Transcoder.JSON, buffer.registries())
+            final Registries registries = buffer.registries();
+            final Transcoder<JsonElement> coder = registries != null
+                    ? new RegistryTranscoder<>(Transcoder.JSON, registries)
                     : Transcoder.JSON;
             final JsonElement json = JsonUtil.fromJson(buffer.read(STRING));
             return Codec.COMPONENT.decode(coder, json).orElseThrow();
@@ -703,6 +707,11 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record EnumSetType<E extends Enum<E>>(Class<E> enumType,
                                           E[] values) implements NetworkBufferTypeImpl<EnumSet<E>> {
+        public EnumSetType {
+            Objects.requireNonNull(enumType, "enumType");
+            Objects.requireNonNull(values, "values");
+        }
+
         @Override
         public void write(NetworkBuffer buffer, EnumSet<E> value) {
             BitSet bitSet = new BitSet(values.length);
@@ -728,6 +737,10 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     }
 
     record FixedBitSetType(int length) implements NetworkBufferTypeImpl<BitSet> {
+        public FixedBitSetType {
+            Check.argCondition(length < 0, "Length is negative found {0}", length);
+        }
+
         @Override
         public void write(NetworkBuffer buffer, BitSet value) {
             final int setLength = value.length();
@@ -746,24 +759,39 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record OptionalType<T>(Type<T> parent) implements NetworkBufferTypeImpl<@Nullable T> {
+    record OptionalType<T extends @Nullable Object>(Type<T> parent) implements NetworkBufferTypeImpl<T> {
+        public OptionalType {
+            Objects.requireNonNull(parent, "parent");
+        }
+
         @Override
-        public void write(NetworkBuffer buffer, T value) {
+        public void write(NetworkBuffer buffer, @Nullable T value) {
             buffer.write(BOOLEAN, value != null);
             if (value != null) buffer.write(parent, value);
         }
 
         @Override
-        public T read(NetworkBuffer buffer) {
+        public @Nullable T read(NetworkBuffer buffer) {
             return buffer.read(BOOLEAN) ? buffer.read(parent) : null;
         }
     }
 
     record LengthPrefixedType<T>(Type<T> parent, int maxLength) implements NetworkBufferTypeImpl<T> {
+        public LengthPrefixedType {
+            Objects.requireNonNull(parent, "parent");
+            Check.argCondition(maxLength < 0, "length is negative found {0}", maxLength);
+        }
+
         @Override
         public void write(NetworkBuffer buffer, T value) {
             // Write to another buffer and copy (kinda inefficient, but currently unused serverside so its ok for now)
-            final byte[] componentData = NetworkBuffer.makeArray(b -> parent.write(b, value), buffer.registries());
+            final Registries registries = buffer.registries();
+            final byte[] componentData;
+            if (registries != null) {
+                componentData = NetworkBuffer.makeArray(parent, value, registries);
+            } else {
+                componentData = NetworkBuffer.makeArray(parent, value);
+            }
             buffer.write(NetworkBuffer.BYTE_ARRAY, componentData);
         }
 
@@ -783,29 +811,39 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     final class LazyType<T> implements NetworkBufferTypeImpl<T> {
         private final Supplier<NetworkBuffer.Type<T>> supplier;
-        private Type<T> type;
+        private @Nullable Type<T> type;
 
         public LazyType(Supplier<NetworkBuffer.Type<T>> supplier) {
-            this.supplier = supplier;
+            this.supplier = Objects.requireNonNull(supplier, "supplier");
         }
 
         @Override
         public void write(NetworkBuffer buffer, T value) {
-            if (type == null) type = supplier.get();
-            type.write(buffer, value);
+            type().write(buffer, value);
         }
 
         @Override
         public T read(NetworkBuffer buffer) {
-            if (type == null) type = supplier.get();
-            return null;
+            return type().read(buffer);
+        }
+
+        private Type<T> type() {
+            final Type<T> type = this.type;
+            if (type == null) {
+                return this.type = Objects.requireNonNull(supplier.get(), "type");
+            }
+            return type;
         }
     }
 
     record TypedNbtType<T>(Codec<T> nbtType) implements NetworkBufferTypeImpl<T> {
+        public TypedNbtType {
+            Objects.requireNonNull(nbtType, "nbtType");
+        }
+
         @Override
         public void write(NetworkBuffer buffer, T value) {
-            final Registries registries = impl(buffer).registries;
+            final Registries registries = buffer.registries();
             Check.stateCondition(registries == null, "Buffer does not have registries");
             final Result<BinaryTag> result = nbtType.encode(new RegistryTranscoder<>(Transcoder.NBT, registries), value);
             switch (result) {
@@ -816,7 +854,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
         @Override
         public T read(NetworkBuffer buffer) {
-            final Registries registries = impl(buffer).registries;
+            final Registries registries = buffer.registries();
             Check.stateCondition(registries == null, "Buffer does not have registries");
             final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), buffer.read(NBT));
             return switch (result) {
@@ -830,6 +868,11 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             NetworkBuffer.Type<L> left,
             NetworkBuffer.Type<R> right
     ) implements NetworkBuffer.Type<Either<L, R>> {
+        public EitherType {
+            Objects.requireNonNull(left, "left");
+            Objects.requireNonNull(right, "right");
+        }
+
         @Override
         public void write(NetworkBuffer buffer, Either<L, R> value) {
             switch (value) {
@@ -854,6 +897,12 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record TransformType<T, S>(Type<T> parent, Function<T, S> to,
                                Function<S, T> from) implements NetworkBufferTypeImpl<S> {
+        public TransformType {
+            Objects.requireNonNull(parent, "parent");
+            Objects.requireNonNull(to, "to");
+            Objects.requireNonNull(from, "from");
+        }
+
         @Override
         public void write(NetworkBuffer buffer, S value) {
             parent.write(buffer, from.apply(value));
@@ -867,6 +916,12 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record MapType<K, V>(Type<K> parent, NetworkBuffer.Type<V> valueType,
                          int maxSize) implements NetworkBufferTypeImpl<Map<K, V>> {
+        public MapType {
+            Objects.requireNonNull(parent, "parent");
+            Objects.requireNonNull(valueType, "valueType");
+            Check.argCondition(maxSize < 0, "Max size is negative found {0}", maxSize);
+        }
+
         @Override
         public void write(NetworkBuffer buffer, Map<K, V> map) {
             buffer.write(VAR_INT, map.size());
@@ -887,13 +942,18 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                 keys[i] = buffer.read(parent);
                 values[i] = buffer.read(valueType);
             }
-            return Map.copyOf(new Object2ObjectArrayMap<>(keys, values, size));
+            return ArrayUtils.toMap(keys, values, size);
         }
     }
 
     record ListType<T>(Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
+        public ListType {
+            Objects.requireNonNull(parent, "parent");
+            Check.argCondition(maxSize < 0, "Max size is negative found {0}", maxSize);
+        }
+
         @Override
-        public void write(NetworkBuffer buffer, List<T> values) {
+        public void write(NetworkBuffer buffer, @Nullable List<T> values) {
             if (values == null) {
                 buffer.write(BYTE, (byte) 0);
                 return;
@@ -914,8 +974,13 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     }
 
     record SetType<T>(Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<Set<T>> {
+        public SetType {
+            Objects.requireNonNull(parent, "parent");
+            Check.argCondition(maxSize < 0, "Max size is negative found {0}", maxSize);
+        }
+
         @Override
-        public void write(NetworkBuffer buffer, Set<T> values) {
+        public void write(NetworkBuffer buffer, @Nullable Set<T> values) {
             if (values == null) {
                 buffer.write(BYTE, (byte) 0);
                 return;
@@ -935,10 +1000,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record UnionType<T, K, TR extends T>(
+    record UnionType<T, K>(
             Type<K> keyType, Function<T, ? extends K> keyFunc,
-            Function<K, NetworkBuffer.Type<TR>> serializers
+            Function<K, NetworkBuffer.@Nullable Type<? extends T>> serializers
     ) implements NetworkBufferTypeImpl<T> {
+        public UnionType {
+            Objects.requireNonNull(keyType, "keyType");
+            Objects.requireNonNull(keyFunc, "keyFunc");
+            Objects.requireNonNull(serializers, "serializers");
+        }
 
         @SuppressWarnings("unchecked") // Much nicer than using the correct wildcard type for returns, pretty much ensuring T has subtypes already.
         @Override
@@ -948,14 +1018,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             var serializer = serializers.apply(key);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
-            serializer.write(buffer, (TR) value);
+            ((Type<T>) serializer).write(buffer, value);
         }
 
         @Override
         public T read(NetworkBuffer buffer) {
             final K key = buffer.read(keyType);
             var serializer = serializers.apply(key);
-            if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + key);
+            if (serializer == null)
+                throw new UnsupportedOperationException("Unrecognized type: " + key);
             return serializer.read(buffer);
         }
     }
@@ -1077,7 +1148,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    static <T> long sizeOf(Type<T> type, T value, Registries registries) {
+    static <T> long sizeOf(Type<T> type, T value, @Nullable Registries registries) {
         NetworkBuffer buffer = NetworkBufferImpl.dummy(registries);
         type.write(buffer, value);
         return buffer.writeIndex();
