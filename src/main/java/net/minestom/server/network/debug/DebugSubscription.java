@@ -16,10 +16,6 @@ public sealed interface DebugSubscription<T> extends StaticProtocolObject<DebugS
 
     Key key();
 
-    T read(NetworkBuffer reader);
-    void write(NetworkBuffer writer, T value);
-
-
     static @Nullable DebugSubscription<?> fromKey(String key) {
         return DebugSubscriptionImpl.NAMESPACES.get(key);
     }
@@ -36,40 +32,40 @@ public sealed interface DebugSubscription<T> extends StaticProtocolObject<DebugS
         return DebugSubscriptionImpl.NAMESPACES.values();
     }
 
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
     record Event<T>(DebugSubscription<T> subscription, T value) {
+        @SuppressWarnings("unchecked")
         public static final NetworkBuffer.Type<DebugSubscription.Event<?>> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
-            public void write(NetworkBuffer buffer, Event value) {
+            public void write(NetworkBuffer buffer, Event<?> value) {
                 buffer.write(DebugSubscription.NETWORK_TYPE, value.subscription);
-                value.subscription.write(buffer, value.value);
+                ((DebugSubscriptionImpl<Object>) value.subscription).write(buffer, value.value);
             }
 
             @Override
             public Event<?> read(NetworkBuffer buffer) {
-                DebugSubscription<?> subscription = buffer.read(DebugSubscription.NETWORK_TYPE);
-                return new Event(subscription, subscription.read(buffer));
+                var subscription = (DebugSubscriptionImpl<Object>) buffer.read(DebugSubscription.NETWORK_TYPE);
+                Object value = subscription.read(buffer);
+                return new Event<>(subscription, value);
             }
         };
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     record Update<T>(DebugSubscription<T> subscription, @Nullable T value) {
+        @SuppressWarnings("unchecked")
         public static final NetworkBuffer.Type<DebugSubscription.Update<?>> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
-            public void write(NetworkBuffer buffer, Update value) {
+            public void write(NetworkBuffer buffer, Update<?> value) {
                 buffer.write(DebugSubscription.NETWORK_TYPE, value.subscription);
                 buffer.write(NetworkBuffer.BOOLEAN, value.value != null);
-                if (value.value != null) value.subscription.write(buffer, value.value);
+                if (value.value != null) ((DebugSubscriptionImpl<Object>) value.subscription).write(buffer, value.value);
             }
 
             @Override
             public Update<?> read(NetworkBuffer buffer) {
-                DebugSubscription<?> subscription = buffer.read(DebugSubscription.NETWORK_TYPE);
+                var subscription = (DebugSubscriptionImpl<Object>) buffer.read(DebugSubscription.NETWORK_TYPE);
                 boolean hasValue = buffer.read(NetworkBuffer.BOOLEAN);
                 Object value = hasValue ? subscription.read(buffer) : null;
-                return new Update(subscription, value);
+                return new Update<>(subscription, value);
             }
         };
     }

@@ -8,7 +8,8 @@ import net.minestom.server.utils.Unit;
 
 import java.util.List;
 
-interface DebugSubscriptions {
+@SuppressWarnings("unused")
+sealed interface DebugSubscriptions permits DebugSubscription {
     DebugSubscription<Unit> DEDICATED_SERVER_TICK_TIME = register("dedicated_server_tick_time");
     DebugSubscription<DebugBeeInfo> BEES = register("bees", DebugBeeInfo.SERIALIZER);
     DebugSubscription<DebugBrainDump> BRAINS = register("brains", DebugBrainDump.SERIALIZER);
