@@ -54,69 +54,18 @@ public record DebugPathInfo(Path path, float maxNodeDistance) {
         public static NetworkBuffer.Type<NodeType> SERIALIZER = NetworkBuffer.Enum(NodeType.class);
     }
 
-    public static final class Node {
-        public static final NetworkBuffer.Type<Node> SERIALIZER = NetworkBufferTemplate.template(
-                NetworkBuffer.INT, Node::x,
-                NetworkBuffer.INT, Node::y,
-                NetworkBuffer.INT, Node::z,
-                NetworkBuffer.FLOAT, Node::walkedDistance,
-                NetworkBuffer.FLOAT, Node::costMalus,
-                NetworkBuffer.BOOLEAN, Node::closed,
-                NodeType.SERIALIZER, Node::type,
-                NetworkBuffer.FLOAT, Node::f,
-                Node::new);
-
-        private final int x;
-        private final int y;
-        private final int z;
-        private final float walkedDistance;
-        private final float costMalus;
-        private final boolean closed;
-        private final NodeType type;
-        private final float f;
-
-        public Node(int x, int y, int z, float walkedDistance, float costMalus, boolean closed, NodeType type, float f) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.walkedDistance = walkedDistance;
-            this.costMalus = costMalus;
-            this.closed = closed;
-            this.type = type;
-            this.f = f;
-        }
-
-        public int x() {
-            return x;
-        }
-
-        public int y() {
-            return y;
-        }
-
-        public int z() {
-            return z;
-        }
-
-        public float walkedDistance() {
-            return walkedDistance;
-        }
-
-        public float costMalus() {
-            return costMalus;
-        }
-
-        public boolean closed() {
-            return closed;
-        }
-
-        public NodeType type() {
-            return type;
-        }
-
-        public float f() {
-            return f;
-        }
+    public record Node(int x, int y, int z, float walkedDistance, float costMalus, boolean closed, NodeType type,
+                       float f) {
+            public static final NetworkBuffer.Type<Node> SERIALIZER = NetworkBufferTemplate.template(
+                    NetworkBuffer.INT, Node::x,
+                    NetworkBuffer.INT, Node::y,
+                    NetworkBuffer.INT, Node::z,
+                    NetworkBuffer.FLOAT, Node::walkedDistance,
+                    NetworkBuffer.FLOAT, Node::costMalus,
+                    NetworkBuffer.BOOLEAN, Node::closed,
+                    NodeType.SERIALIZER, Node::type,
+                    NetworkBuffer.FLOAT, Node::f,
+                    Node::new);
 
     }
 
