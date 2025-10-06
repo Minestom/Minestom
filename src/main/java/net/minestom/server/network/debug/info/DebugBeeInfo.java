@@ -19,4 +19,8 @@ public record DebugBeeInfo(
             NetworkBuffer.VAR_INT, DebugBeeInfo::travelTicks,
             NetworkBuffer.BLOCK_POSITION.list(), DebugBeeInfo::blacklistedHives,
             DebugBeeInfo::new);
+
+    public DebugBeeInfo {
+        blacklistedHives = List.copyOf(blacklistedHives);
+    }
 }

@@ -39,4 +39,13 @@ public record DebugBrainDump(
             NetworkBuffer.BLOCK_POSITION.set(), DebugBrainDump::pois,
             NetworkBuffer.BLOCK_POSITION.set(), DebugBrainDump::potentialPois,
             DebugBrainDump::new);
+
+    public DebugBrainDump {
+        activities = List.copyOf(activities);
+        behaviors = List.copyOf(behaviors);
+        memories = List.copyOf(memories);
+        gossips = List.copyOf(gossips);
+        pois = Set.copyOf(pois);
+        potentialPois = Set.copyOf(potentialPois);
+    }
 }

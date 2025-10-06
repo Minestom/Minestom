@@ -21,6 +21,10 @@ public record DebugPathInfo(Path path, float maxNodeDistance) {
                 Node.SERIALIZER.list(), Path::nodes,
                 Data.SERIALIZER, Path::data,
                 Path::new);
+
+        public Path {
+            nodes = List.copyOf(nodes);
+        }
     }
 
     public enum NodeType {
@@ -75,5 +79,11 @@ public record DebugPathInfo(Path path, float maxNodeDistance) {
                 Node.SERIALIZER.list(), Data::openSet,
                 Node.SERIALIZER.list(), Data::closedSet,
                 Data::new);
+
+        public Data {
+            targetNodes = Set.copyOf(targetNodes);
+            openSet = List.copyOf(openSet);
+            closedSet = List.copyOf(closedSet);
+        }
     }
 }
