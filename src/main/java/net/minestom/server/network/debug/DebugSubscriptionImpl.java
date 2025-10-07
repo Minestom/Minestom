@@ -11,17 +11,21 @@ public record DebugSubscriptionImpl<T>(
         int id,
         Key key,
         NetworkBuffer.Type<T> networkType
-) implements DebugSubscription<T> {
+) implements DebugSubscription<T>, NetworkBuffer.Type<T> {
     static final Map<String, DebugSubscription<?>> NAMESPACES = new HashMap<>(32);
     static final ObjectArray<DebugSubscription<?>> IDS = ObjectArray.singleThread(32);
 
-    @Override
-    public T read(NetworkBuffer reader) {
-        return this.networkType.read(reader);
+    static {
+        var ignoredForInit = DebugSubscriptions.BEES;
     }
 
     @Override
-    public void write(NetworkBuffer writer, T value) {
-        this.networkType.write(writer, value);
+    public void write(NetworkBuffer buffer, T value) {
+        networkType.write(buffer, value);
+    }
+
+    @Override
+    public T read(NetworkBuffer buffer) {
+        return networkType.read(buffer);
     }
 }
