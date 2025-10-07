@@ -13,6 +13,8 @@ import java.util.function.Function;
  * or use some of the helper methods provided like {@link #orElseThrow()} or {@link #mapResult(Function)}.
  * <br>
  * To construct simply just do {@code new Result.Ok<>(value) } and {@code new Result.Error<>("Error message!") }
+ * <br>
+ * You should not rely on the identity of results as they are value candidates.
  *
  * @param <T> the type, can be nullable.
  */
@@ -35,7 +37,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      */
     record Error<T>(String message) implements Result<T> {
         public Error {
-            message = Objects.requireNonNull(message, "Message cannot be null");
+            Objects.requireNonNull(message, "Message cannot be null");
         }
     }
 
@@ -100,7 +102,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @throws IllegalStateException if this instance of {@link Error}
      */
     @Contract(pure = true)
-    default @UnknownNullability T orElseThrow() {
+    default T orElseThrow() {
         return switch (this) {
             case Ok<T>(T value) -> value;
             case Error<?>(String errorMessage) -> throw new IllegalArgumentException(errorMessage);
@@ -115,7 +117,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @throws IllegalStateException if this instance of {@link Error}
      */
     @Contract(pure = true)
-    default @UnknownNullability T orElseThrow(String message) {
+    default T orElseThrow(String message) {
         return switch (this) {
             case Ok<T>(T value) -> value;
             case Error<?>(String errorMessage) -> throw new IllegalArgumentException(

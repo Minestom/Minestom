@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class GeneratorIntegrationTest {
@@ -96,5 +96,39 @@ public class GeneratorIntegrationTest {
         for (int y = 0; y < 40; y++) {
             assertEquals(y == 39 ? Block.STONE : Block.GRASS_BLOCK, instance.getBlock(0, y, 0), "y=" + y);
         }
+    }
+
+    @Test
+    public void explicitChunkGenerate(Env env) {
+        var instance = env.createEmptyInstance();
+        Generator generator = unit -> {
+            assert Thread.currentThread().isVirtual();
+            unit.modifier().fill(Block.GRASS_BLOCK);
+        };
+        instance.generateChunk(0, 0, generator).join();
+        assertNotNull(instance.getChunk(0, 0));
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, 0, 0));
+    }
+
+    @Test
+    public void explicitChunkGenerateOverride(Env env) {
+        var instance = env.createEmptyInstance();
+        instance.setGenerator(unit -> unit.modifier().fill(Block.STONE));
+        Generator generator = unit -> unit.modifier().fill(Block.GRASS_BLOCK);
+        instance.generateChunk(0, 0, generator).join();
+        assertNotNull(instance.getChunk(0, 0));
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, 0, 0));
+    }
+
+    @Test
+    public void explicitChunkGenerateLock(Env env) {
+        var instance = env.createEmptyInstance();
+        DynamicChunk chunk = (DynamicChunk) instance.loadChunk(0, 0).join();
+        Generator generator = unit -> {
+            chunk.assertLock();
+            unit.modifier().fill(Block.GRASS_BLOCK);
+        };
+        instance.generateChunk(0, 0, generator).join();
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, 0, 0));
     }
 }

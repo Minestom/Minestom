@@ -13,6 +13,10 @@ public record DebugStructureInfo(BlockBoundingBox boundingBox, List<Piece> piece
             Piece.SERIALIZER.list(), DebugStructureInfo::pieces,
             DebugStructureInfo::new);
 
+    public DebugStructureInfo {
+        pieces = List.copyOf(pieces);
+    }
+
     public record Piece(BlockBoundingBox boundingBox, boolean isStart) {
         public static final NetworkBuffer.Type<Piece> SERIALIZER = NetworkBufferTemplate.template(
                 BlockBoundingBox.NETWORK_TYPE, Piece::boundingBox,
