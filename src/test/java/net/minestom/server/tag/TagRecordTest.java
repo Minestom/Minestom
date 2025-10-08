@@ -2,6 +2,7 @@ package net.minestom.server.tag;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.item.ItemStack;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TagRecordTest {
-    record Vec(double x, double y, double z) {} // Use a local Vec to ignore during native-image
 
     @Test
     public void basic() {
