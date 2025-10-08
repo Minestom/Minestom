@@ -1,0 +1,1621 @@
+{
+  "reflection": [
+    {
+      "type": "byte[]",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.Boolean",
+      "jniAccessible": true,
+      "methods": [
+        {
+          "name": "getBoolean",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Class"
+    },
+    {
+      "type": "java.lang.ClassLoader",
+      "fields": [
+        {
+          "name": "classLoaderValueMap"
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Enum",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.Exception",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.Object[]",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.RuntimeException",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.StackTraceElement",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.StackTraceElement[]",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.String",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.String[]"
+    },
+    {
+      "type": "java.lang.Throwable",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.reflect.RecordComponent"
+    },
+    {
+      "type": "java.nio.Buffer",
+      "fields": [
+        {
+          "name": "address"
+        },
+        {
+          "name": "capacity"
+        }
+      ]
+    },
+    {
+      "type": "java.sql.Date"
+    },
+    {
+      "type": "java.util.ArrayList",
+      "serializable": true
+    },
+    {
+      "type": "java.util.Collections$EmptyList",
+      "serializable": true
+    },
+    {
+      "type": "java.util.HashSet",
+      "serializable": true
+    },
+    {
+      "type": "java.util.LinkedHashSet",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.ArrayBlockingQueue",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.AbstractOwnableSynchronizer",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.AbstractQueuedSynchronizer",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.ReentrantLock",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.ReentrantLock$NonfairSync",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.ReentrantLock$Sync",
+      "serializable": true
+    },
+    {
+      "type": "jdk.internal.misc.Unsafe"
+    },
+    {
+      "type": "net.minestom.server.adventure.provider.MinestomComponentLoggerProvider"
+    },
+    {
+      "type": "net.minestom.server.adventure.provider.MinestomGsonComponentSerializerProvider"
+    },
+    {
+      "type": "net.minestom.server.coordinate.Vec",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "double",
+            "double",
+            "double"
+          ]
+        },
+        {
+          "name": "x",
+          "parameterTypes": []
+        },
+        {
+          "name": "y",
+          "parameterTypes": []
+        },
+        {
+          "name": "z",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.entity.EntityTypes",
+      "fields": [
+        {
+          "name": "ACACIA_BOAT"
+        },
+        {
+          "name": "ACACIA_CHEST_BOAT"
+        },
+        {
+          "name": "ALLAY"
+        },
+        {
+          "name": "AREA_EFFECT_CLOUD"
+        },
+        {
+          "name": "ARMADILLO"
+        },
+        {
+          "name": "ARMOR_STAND"
+        },
+        {
+          "name": "ARROW"
+        },
+        {
+          "name": "AXOLOTL"
+        },
+        {
+          "name": "BAMBOO_CHEST_RAFT"
+        },
+        {
+          "name": "BAMBOO_RAFT"
+        },
+        {
+          "name": "BAT"
+        },
+        {
+          "name": "BEE"
+        },
+        {
+          "name": "BIRCH_BOAT"
+        },
+        {
+          "name": "BIRCH_CHEST_BOAT"
+        },
+        {
+          "name": "BLAZE"
+        },
+        {
+          "name": "BLOCK_DISPLAY"
+        },
+        {
+          "name": "BOGGED"
+        },
+        {
+          "name": "BREEZE"
+        },
+        {
+          "name": "BREEZE_WIND_CHARGE"
+        },
+        {
+          "name": "CAMEL"
+        },
+        {
+          "name": "CAT"
+        },
+        {
+          "name": "CAVE_SPIDER"
+        },
+        {
+          "name": "CHERRY_BOAT"
+        },
+        {
+          "name": "CHERRY_CHEST_BOAT"
+        },
+        {
+          "name": "CHEST_MINECART"
+        },
+        {
+          "name": "CHICKEN"
+        },
+        {
+          "name": "COD"
+        },
+        {
+          "name": "COMMAND_BLOCK_MINECART"
+        },
+        {
+          "name": "COPPER_GOLEM"
+        },
+        {
+          "name": "COW"
+        },
+        {
+          "name": "CREAKING"
+        },
+        {
+          "name": "CREEPER"
+        },
+        {
+          "name": "DARK_OAK_BOAT"
+        },
+        {
+          "name": "DARK_OAK_CHEST_BOAT"
+        },
+        {
+          "name": "DOLPHIN"
+        },
+        {
+          "name": "DONKEY"
+        },
+        {
+          "name": "DRAGON_FIREBALL"
+        },
+        {
+          "name": "DROWNED"
+        },
+        {
+          "name": "EGG"
+        },
+        {
+          "name": "ELDER_GUARDIAN"
+        },
+        {
+          "name": "ENDERMAN"
+        },
+        {
+          "name": "ENDERMITE"
+        },
+        {
+          "name": "ENDER_DRAGON"
+        },
+        {
+          "name": "ENDER_PEARL"
+        },
+        {
+          "name": "END_CRYSTAL"
+        },
+        {
+          "name": "EVOKER"
+        },
+        {
+          "name": "EVOKER_FANGS"
+        },
+        {
+          "name": "EXPERIENCE_BOTTLE"
+        },
+        {
+          "name": "EXPERIENCE_ORB"
+        },
+        {
+          "name": "EYE_OF_ENDER"
+        },
+        {
+          "name": "FALLING_BLOCK"
+        },
+        {
+          "name": "FIREBALL"
+        },
+        {
+          "name": "FIREWORK_ROCKET"
+        },
+        {
+          "name": "FISHING_BOBBER"
+        },
+        {
+          "name": "FOX"
+        },
+        {
+          "name": "FROG"
+        },
+        {
+          "name": "FURNACE_MINECART"
+        },
+        {
+          "name": "GHAST"
+        },
+        {
+          "name": "GIANT"
+        },
+        {
+          "name": "GLOW_ITEM_FRAME"
+        },
+        {
+          "name": "GLOW_SQUID"
+        },
+        {
+          "name": "GOAT"
+        },
+        {
+          "name": "GUARDIAN"
+        },
+        {
+          "name": "HAPPY_GHAST"
+        },
+        {
+          "name": "HOGLIN"
+        },
+        {
+          "name": "HOPPER_MINECART"
+        },
+        {
+          "name": "HORSE"
+        },
+        {
+          "name": "HUSK"
+        },
+        {
+          "name": "ILLUSIONER"
+        },
+        {
+          "name": "INTERACTION"
+        },
+        {
+          "name": "IRON_GOLEM"
+        },
+        {
+          "name": "ITEM"
+        },
+        {
+          "name": "ITEM_DISPLAY"
+        },
+        {
+          "name": "ITEM_FRAME"
+        },
+        {
+          "name": "JUNGLE_BOAT"
+        },
+        {
+          "name": "JUNGLE_CHEST_BOAT"
+        },
+        {
+          "name": "LEASH_KNOT"
+        },
+        {
+          "name": "LIGHTNING_BOLT"
+        },
+        {
+          "name": "LINGERING_POTION"
+        },
+        {
+          "name": "LLAMA"
+        },
+        {
+          "name": "LLAMA_SPIT"
+        },
+        {
+          "name": "MAGMA_CUBE"
+        },
+        {
+          "name": "MANGROVE_BOAT"
+        },
+        {
+          "name": "MANGROVE_CHEST_BOAT"
+        },
+        {
+          "name": "MANNEQUIN"
+        },
+        {
+          "name": "MARKER"
+        },
+        {
+          "name": "MINECART"
+        },
+        {
+          "name": "MOOSHROOM"
+        },
+        {
+          "name": "MULE"
+        },
+        {
+          "name": "OAK_BOAT"
+        },
+        {
+          "name": "OAK_CHEST_BOAT"
+        },
+        {
+          "name": "OCELOT"
+        },
+        {
+          "name": "OMINOUS_ITEM_SPAWNER"
+        },
+        {
+          "name": "PAINTING"
+        },
+        {
+          "name": "PALE_OAK_BOAT"
+        },
+        {
+          "name": "PALE_OAK_CHEST_BOAT"
+        },
+        {
+          "name": "PANDA"
+        },
+        {
+          "name": "PARROT"
+        },
+        {
+          "name": "PHANTOM"
+        },
+        {
+          "name": "PIG"
+        },
+        {
+          "name": "PIGLIN"
+        },
+        {
+          "name": "PIGLIN_BRUTE"
+        },
+        {
+          "name": "PILLAGER"
+        },
+        {
+          "name": "PLAYER"
+        },
+        {
+          "name": "POLAR_BEAR"
+        },
+        {
+          "name": "PUFFERFISH"
+        },
+        {
+          "name": "RABBIT"
+        },
+        {
+          "name": "RAVAGER"
+        },
+        {
+          "name": "SALMON"
+        },
+        {
+          "name": "SHEEP"
+        },
+        {
+          "name": "SHULKER"
+        },
+        {
+          "name": "SHULKER_BULLET"
+        },
+        {
+          "name": "SILVERFISH"
+        },
+        {
+          "name": "SKELETON"
+        },
+        {
+          "name": "SKELETON_HORSE"
+        },
+        {
+          "name": "SLIME"
+        },
+        {
+          "name": "SMALL_FIREBALL"
+        },
+        {
+          "name": "SNIFFER"
+        },
+        {
+          "name": "SNOWBALL"
+        },
+        {
+          "name": "SNOW_GOLEM"
+        },
+        {
+          "name": "SPAWNER_MINECART"
+        },
+        {
+          "name": "SPECTRAL_ARROW"
+        },
+        {
+          "name": "SPIDER"
+        },
+        {
+          "name": "SPLASH_POTION"
+        },
+        {
+          "name": "SPRUCE_BOAT"
+        },
+        {
+          "name": "SPRUCE_CHEST_BOAT"
+        },
+        {
+          "name": "SQUID"
+        },
+        {
+          "name": "STRAY"
+        },
+        {
+          "name": "STRIDER"
+        },
+        {
+          "name": "TADPOLE"
+        },
+        {
+          "name": "TEXT_DISPLAY"
+        },
+        {
+          "name": "TNT"
+        },
+        {
+          "name": "TNT_MINECART"
+        },
+        {
+          "name": "TRADER_LLAMA"
+        },
+        {
+          "name": "TRIDENT"
+        },
+        {
+          "name": "TROPICAL_FISH"
+        },
+        {
+          "name": "TURTLE"
+        },
+        {
+          "name": "VEX"
+        },
+        {
+          "name": "VILLAGER"
+        },
+        {
+          "name": "VINDICATOR"
+        },
+        {
+          "name": "WANDERING_TRADER"
+        },
+        {
+          "name": "WARDEN"
+        },
+        {
+          "name": "WIND_CHARGE"
+        },
+        {
+          "name": "WITCH"
+        },
+        {
+          "name": "WITHER"
+        },
+        {
+          "name": "WITHER_SKELETON"
+        },
+        {
+          "name": "WITHER_SKULL"
+        },
+        {
+          "name": "WOLF"
+        },
+        {
+          "name": "ZOGLIN"
+        },
+        {
+          "name": "ZOMBIE"
+        },
+        {
+          "name": "ZOMBIE_HORSE"
+        },
+        {
+          "name": "ZOMBIE_VILLAGER"
+        },
+        {
+          "name": "ZOMBIFIED_PIGLIN"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.entity.EntityView$Option"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$AgeableMob"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$AreaEffectCloud"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Avatar"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Frog"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$ItemEntity"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$LivingEntity"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Mob"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Player"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Slime"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataHolder",
+      "fields": [
+        {
+          "name": "notifyAboutChanges"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.event.EventNodeLazyImpl",
+      "fields": [
+        {
+          "name": "mapped"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.client.handshake.ClientHandshakePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.client.play.ClientVehicleMovePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.common.DisconnectPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.common.PingResponsePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.login.LoginDisconnectPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.login.LoginSuccessPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.login.SetCompressionPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.ActionBarPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.AttachEntityPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.BlockActionPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.BlockChangePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.BlockEntityDataPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.BossBarPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.CameraPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.ChangeGameStatePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.ClearTitlesPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.CloseWindowPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.CollectItemPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.DeathCombatEventPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.DeclareRecipesPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.DestroyEntitiesPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.DisplayScoreboardPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EndCombatEventPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EnterCombatEventPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EntityAnimationPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EntityAttributesPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EntityEquipmentPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EntityHeadLookPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EntityMetaDataPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EntityPositionAndRotationPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EntityPositionPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.EntityRotationPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.PlaceGhostRecipePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.PlayerInfoRemovePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.RecipeBookAddPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.RecipeBookRemovePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.SystemChatPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.WorldEventPacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.status.ResponsePacket",
+      "fields": [
+        {
+          "name": "SERIALIZER"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.tag.TagRecordTest$1CompoundRecord",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "net.kyori.adventure.nbt.CompoundBinaryTag"
+          ]
+        },
+        {
+          "name": "compound",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.tag.TagRecordTest$1Test"
+    },
+    {
+      "type": "net.minestom.server.tag.TagRecordTest$2Test"
+    },
+    {
+      "type": "net.minestom.server.tag.TagUpdateTest$1Structure",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "net.minestom.server.tag.TagUpdateTest$3Test"
+          ]
+        },
+        {
+          "name": "test",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.tag.TagUpdateTest$1Test",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int"
+          ]
+        },
+        {
+          "name": "coin",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.tag.TagUpdateTest$2Test",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int"
+          ]
+        },
+        {
+          "name": "coin",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.tag.TagUpdateTest$3Test",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int"
+          ]
+        },
+        {
+          "name": "coin",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.tag.TagUpdateTest$4Test",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int"
+          ]
+        },
+        {
+          "name": "coin",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.timer.TaskImpl",
+      "fields": [
+        {
+          "name": "parked"
+        }
+      ]
+    },
+    {
+      "type": "org.graalvm.nativeimage.VMRuntime"
+    },
+    {
+      "type": "org.gradle.api.internal.tasks.testing.filter.TestFilterSpec",
+      "serializable": true
+    },
+    {
+      "type": "org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformSpec",
+      "serializable": true
+    },
+    {
+      "type": "org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessorFactory",
+      "serializable": true
+    },
+    {
+      "type": "org.gradle.api.internal.tasks.testing.worker.TestWorker",
+      "serializable": true
+    },
+    {
+      "type": "org.gradle.api.internal.tasks.testing.worker.TestWorker$State",
+      "serializable": true
+    },
+    {
+      "type": "org.gradle.internal.logging.slf4j.StaticLoggerProvider"
+    },
+    {
+      "type": "org.gradle.internal.serialize.ExceptionPlaceholder",
+      "serializable": true
+    },
+    {
+      "type": "org.gradle.internal.serialize.StackTraceElementPlaceholder",
+      "serializable": true
+    },
+    {
+      "type": "org.gradle.internal.serialize.TopLevelExceptionPlaceholder",
+      "serializable": true
+    },
+    {
+      "type": "org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.io.DataInputStream"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
+      "fields": [
+        {
+          "name": "producerLimit"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.BaseMpscLinkedArrayQueueConsumerFields",
+      "fields": [
+        {
+          "name": "consumerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.BaseMpscLinkedArrayQueueProducerFields",
+      "fields": [
+        {
+          "name": "producerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpUnboundedXaddArrayQueueConsumerFields",
+      "fields": [
+        {
+          "name": "consumerChunk"
+        },
+        {
+          "name": "consumerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpUnboundedXaddArrayQueueProducerChunk",
+      "fields": [
+        {
+          "name": "producerChunk"
+        },
+        {
+          "name": "producerChunkIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpUnboundedXaddArrayQueueProducerFields",
+      "fields": [
+        {
+          "name": "producerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpUnboundedXaddChunk",
+      "fields": [
+        {
+          "name": "index"
+        },
+        {
+          "name": "next"
+        },
+        {
+          "name": "prev"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpscArrayQueueConsumerIndexField",
+      "fields": [
+        {
+          "name": "consumerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpscArrayQueueProducerIndexField",
+      "fields": [
+        {
+          "name": "producerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpscArrayQueueProducerLimitField",
+      "fields": [
+        {
+          "name": "producerLimit"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.SpscArrayQueueConsumerIndexField",
+      "fields": [
+        {
+          "name": "consumerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.SpscArrayQueueProducerIndexFields",
+      "fields": [
+        {
+          "name": "producerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.junit.jupiter.engine.JupiterTestEngine"
+    },
+    {
+      "type": "org.junit.platform.launcher.listeners.UniqueIdTrackingListener"
+    },
+    {
+      "type": "org.junit.platform.suite.engine.SuiteTestEngine"
+    },
+    {
+      "type": "org.opentest4j.IncompleteExecutionException",
+      "serializable": true
+    },
+    {
+      "type": "org.opentest4j.TestAbortedException",
+      "serializable": true
+    },
+    {
+      "type": "space.vectrix.flare.fastutil.Int2ObjectSyncMapImpl$ExpungingEntryImpl"
+    },
+    {
+      "type": "space.vectrix.flare.fastutil.Long2ObjectSyncMapImpl$ExpungingEntryImpl"
+    },
+    {
+      "type": "sun.management.VMManagementImpl",
+      "jniAccessible": true,
+      "fields": [
+        {
+          "name": "compTimeMonitoringSupport"
+        },
+        {
+          "name": "currentThreadCpuTimeSupport"
+        },
+        {
+          "name": "objectMonitorUsageSupport"
+        },
+        {
+          "name": "otherThreadCpuTimeSupport"
+        },
+        {
+          "name": "remoteDiagnosticCommandsSupport"
+        },
+        {
+          "name": "synchronizerUsageSupport"
+        },
+        {
+          "name": "threadAllocatedMemorySupport"
+        },
+        {
+          "name": "threadContentionMonitoringSupport"
+        }
+      ]
+    },
+    {
+      "type": "sun.misc.Unsafe",
+      "fields": [
+        {
+          "name": "theUnsafe"
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.NativePRNG",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.security.SecureRandomParameters"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.NativePRNG$NonBlocking",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.security.SecureRandomParameters"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.SHA",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.text.resources.cldr.FormatData"
+    },
+    {
+      "type": "sun.text.resources.cldr.FormatData_en"
+    },
+    {
+      "type": "sun.text.resources.cldr.FormatData_en_US"
+    },
+    {
+      "type": "sun.util.resources.cldr.CalendarData"
+    }
+  ],
+  "resources": [
+    {
+      "glob": "META-INF/services/java.net.spi.InetAddressResolverProvider"
+    },
+    {
+      "glob": "META-INF/services/java.nio.channels.spi.SelectorProvider"
+    },
+    {
+      "glob": "META-INF/services/net.kyori.adventure.internal.properties.AdventureProperties$DefaultOverrideProvider"
+    },
+    {
+      "glob": "META-INF/services/net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider"
+    },
+    {
+      "glob": "META-INF/services/net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer$Provider"
+    },
+    {
+      "glob": "META-INF/services/net.kyori.adventure.text.serializer.gson.GsonComponentSerializer$Provider"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.commons.support.scanning.ClasspathScanner"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.engine.TestEngine"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.LauncherDiscoveryListener"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.LauncherSessionListener"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.PostDiscoveryFilter"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.TestExecutionListener"
+    },
+    {
+      "glob": "META-INF/services/org.slf4j.spi.SLF4JServiceProvider"
+    },
+    {
+      "glob": "attribute.json"
+    },
+    {
+      "glob": "banner_pattern.json"
+    },
+    {
+      "glob": "block.json"
+    },
+    {
+      "glob": "block_sound_type.json"
+    },
+    {
+      "glob": "cat_variant.json"
+    },
+    {
+      "glob": "chat_type.json"
+    },
+    {
+      "glob": "chicken_variant.json"
+    },
+    {
+      "glob": "cow_variant.json"
+    },
+    {
+      "glob": "damage_type.json"
+    },
+    {
+      "glob": "dialog.json"
+    },
+    {
+      "glob": "dimension_type.json"
+    },
+    {
+      "glob": "enchantment.json"
+    },
+    {
+      "glob": "entity_type.json"
+    },
+    {
+      "glob": "feature_flag.json"
+    },
+    {
+      "glob": "fluid.json"
+    },
+    {
+      "glob": "frog_variant.json"
+    },
+    {
+      "glob": "game_event.json"
+    },
+    {
+      "glob": "instrument.json"
+    },
+    {
+      "glob": "item.json"
+    },
+    {
+      "glob": "jukebox_song.json"
+    },
+    {
+      "glob": "junit-platform.properties"
+    },
+    {
+      "glob": "net/minestom/server/instance/lighting/region/r.0.0.mca"
+    },
+    {
+      "glob": "org/slf4j/impl/StaticLoggerBinder.class"
+    },
+    {
+      "glob": "painting_variant.json"
+    },
+    {
+      "glob": "particle.json"
+    },
+    {
+      "glob": "pig_variant.json"
+    },
+    {
+      "glob": "potion_effect.json"
+    },
+    {
+      "glob": "potion_type.json"
+    },
+    {
+      "glob": "sound_event.json"
+    },
+    {
+      "glob": "tags/attribute.json"
+    },
+    {
+      "glob": "tags/banner_pattern.json"
+    },
+    {
+      "glob": "tags/block.json"
+    },
+    {
+      "glob": "tags/block_sound_type.json"
+    },
+    {
+      "glob": "tags/cat_variant.json"
+    },
+    {
+      "glob": "tags/chat_type.json"
+    },
+    {
+      "glob": "tags/chicken_variant.json"
+    },
+    {
+      "glob": "tags/cow_variant.json"
+    },
+    {
+      "glob": "tags/damage_type.json"
+    },
+    {
+      "glob": "tags/dialog.json"
+    },
+    {
+      "glob": "tags/dimension_type.json"
+    },
+    {
+      "glob": "tags/enchantment.json"
+    },
+    {
+      "glob": "tags/entity_type.json"
+    },
+    {
+      "glob": "tags/feature_flag.json"
+    },
+    {
+      "glob": "tags/fluid.json"
+    },
+    {
+      "glob": "tags/frog_variant.json"
+    },
+    {
+      "glob": "tags/game_event.json"
+    },
+    {
+      "glob": "tags/instrument.json"
+    },
+    {
+      "glob": "tags/item.json"
+    },
+    {
+      "glob": "tags/jukebox_song.json"
+    },
+    {
+      "glob": "tags/painting_variant.json"
+    },
+    {
+      "glob": "tags/particle.json"
+    },
+    {
+      "glob": "tags/pig_variant.json"
+    },
+    {
+      "glob": "tags/potion_effect.json"
+    },
+    {
+      "glob": "tags/potion_type.json"
+    },
+    {
+      "glob": "tags/sound_event.json"
+    },
+    {
+      "glob": "tags/trim_material.json"
+    },
+    {
+      "glob": "tags/trim_pattern.json"
+    },
+    {
+      "glob": "tags/villager_profession.json"
+    },
+    {
+      "glob": "tags/wolf_sound_variant.json"
+    },
+    {
+      "glob": "tags/wolf_variant.json"
+    },
+    {
+      "glob": "tags/worldgen/biome.json"
+    },
+    {
+      "glob": "trim_material.json"
+    },
+    {
+      "glob": "trim_pattern.json"
+    },
+    {
+      "glob": "villager_profession.json"
+    },
+    {
+      "glob": "wolf_sound_variant.json"
+    },
+    {
+      "glob": "wolf_variant.json"
+    },
+    {
+      "glob": "worldgen/biome.json"
+    },
+    {
+      "module": "jdk.jfr",
+      "glob": "jdk/jfr/internal/types/metadata.bin"
+    }
+  ]
+}
