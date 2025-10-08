@@ -133,31 +133,6 @@
       "type": "net.minestom.server.adventure.provider.MinestomGsonComponentSerializerProvider"
     },
     {
-      "type": "net.minestom.server.coordinate.Vec",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "double",
-            "double",
-            "double"
-          ]
-        },
-        {
-          "name": "x",
-          "parameterTypes": []
-        },
-        {
-          "name": "y",
-          "parameterTypes": []
-        },
-        {
-          "name": "z",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
       "type": "net.minestom.server.entity.EntityView$Option"
     },
     {

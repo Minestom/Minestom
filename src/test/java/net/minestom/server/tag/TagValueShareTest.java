@@ -1,6 +1,5 @@
 package net.minestom.server.tag;
 
-import net.minestom.server.coordinate.Vec;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
@@ -12,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Test tags that can share cached values.
  */
 public class TagValueShareTest {
+    record Vec(double x, double y, double z) {} // Use a local Vec to ignore during native-image
 
     record Entry(int value) {
     }
