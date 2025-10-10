@@ -1,9 +1,5 @@
 plugins {
     `java-library`
-
-    `maven-publish`
-    signing
-    alias(libs.plugins.nmcp)
 }
 
 val javaVersion = System.getenv("JAVA_VERSION") ?: "25"

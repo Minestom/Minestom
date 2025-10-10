@@ -1,0 +1,659 @@
+{
+  "reflection": [
+    {
+      "type": "byte[]",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.Boolean",
+      "jniAccessible": true,
+      "methods": [
+        {
+          "name": "getBoolean",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Class"
+    },
+    {
+      "type": "java.lang.ClassLoader",
+      "fields": [
+        {
+          "name": "classLoaderValueMap"
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Enum",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.Exception",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.Object[]",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.RuntimeException",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.StackTraceElement",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.StackTraceElement[]",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.String",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.String[]"
+    },
+    {
+      "type": "java.lang.Throwable",
+      "serializable": true
+    },
+    {
+      "type": "java.lang.reflect.RecordComponent"
+    },
+    {
+      "type": "java.nio.Buffer",
+      "fields": [
+        {
+          "name": "address"
+        },
+        {
+          "name": "capacity"
+        }
+      ]
+    },
+    {
+      "type": "java.sql.Date"
+    },
+    {
+      "type": "java.util.ArrayList",
+      "serializable": true
+    },
+    {
+      "type": "java.util.Collections$EmptyList",
+      "serializable": true
+    },
+    {
+      "type": "java.util.HashSet",
+      "serializable": true
+    },
+    {
+      "type": "java.util.LinkedHashSet",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.ArrayBlockingQueue",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.AbstractOwnableSynchronizer",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.AbstractQueuedSynchronizer",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.ReentrantLock",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.ReentrantLock$NonfairSync",
+      "serializable": true
+    },
+    {
+      "type": "java.util.concurrent.locks.ReentrantLock$Sync",
+      "serializable": true
+    },
+    {
+      "type": "jdk.internal.misc.Unsafe"
+    },
+    {
+      "type": "net.minestom.server.adventure.provider.MinestomComponentLoggerProvider"
+    },
+    {
+      "type": "net.minestom.server.adventure.provider.MinestomGsonComponentSerializerProvider"
+    },
+    {
+      "type": "net.minestom.server.coordinate.Vec",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "double",
+            "double",
+            "double"
+          ]
+        },
+        {
+          "name": "x",
+          "parameterTypes": []
+        },
+        {
+          "name": "y",
+          "parameterTypes": []
+        },
+        {
+          "name": "z",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.entity.EntityView$Option"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$AgeableMob"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$AreaEffectCloud"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Avatar"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Frog"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$ItemEntity"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$LivingEntity"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Mob"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Player"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Slime"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataHolder",
+      "fields": [
+        {
+          "name": "notifyAboutChanges"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.event.EventNodeLazyImpl",
+      "fields": [
+        {
+          "name": "mapped"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.timer.TaskImpl",
+      "fields": [
+        {
+          "name": "parked"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
+      "fields": [
+        {
+          "name": "producerLimit"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.BaseMpscLinkedArrayQueueConsumerFields",
+      "fields": [
+        {
+          "name": "consumerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.BaseMpscLinkedArrayQueueProducerFields",
+      "fields": [
+        {
+          "name": "producerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpUnboundedXaddArrayQueueConsumerFields",
+      "fields": [
+        {
+          "name": "consumerChunk"
+        },
+        {
+          "name": "consumerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpUnboundedXaddArrayQueueProducerChunk",
+      "fields": [
+        {
+          "name": "producerChunk"
+        },
+        {
+          "name": "producerChunkIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpUnboundedXaddArrayQueueProducerFields",
+      "fields": [
+        {
+          "name": "producerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpUnboundedXaddChunk",
+      "fields": [
+        {
+          "name": "index"
+        },
+        {
+          "name": "next"
+        },
+        {
+          "name": "prev"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpscArrayQueueConsumerIndexField",
+      "fields": [
+        {
+          "name": "consumerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpscArrayQueueProducerIndexField",
+      "fields": [
+        {
+          "name": "producerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.MpscArrayQueueProducerLimitField",
+      "fields": [
+        {
+          "name": "producerLimit"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.SpscArrayQueueConsumerIndexField",
+      "fields": [
+        {
+          "name": "consumerIndex"
+        }
+      ]
+    },
+    {
+      "type": "org.jctools.queues.SpscArrayQueueProducerIndexFields",
+      "fields": [
+        {
+          "name": "producerIndex"
+        }
+      ]
+    },
+    {
+      "type": "space.vectrix.flare.fastutil.Int2ObjectSyncMapImpl$ExpungingEntryImpl"
+    },
+    {
+      "type": "space.vectrix.flare.fastutil.Long2ObjectSyncMapImpl$ExpungingEntryImpl"
+    },
+    {
+      "type": "sun.management.VMManagementImpl",
+      "jniAccessible": true,
+      "fields": [
+        {
+          "name": "compTimeMonitoringSupport"
+        },
+        {
+          "name": "currentThreadCpuTimeSupport"
+        },
+        {
+          "name": "objectMonitorUsageSupport"
+        },
+        {
+          "name": "otherThreadCpuTimeSupport"
+        },
+        {
+          "name": "remoteDiagnosticCommandsSupport"
+        },
+        {
+          "name": "synchronizerUsageSupport"
+        },
+        {
+          "name": "threadAllocatedMemorySupport"
+        },
+        {
+          "name": "threadContentionMonitoringSupport"
+        }
+      ]
+    },
+    {
+      "type": "sun.misc.Unsafe",
+      "fields": [
+        {
+          "name": "theUnsafe"
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.NativePRNG",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.security.SecureRandomParameters"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.NativePRNG$NonBlocking",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.security.SecureRandomParameters"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.SHA",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.text.resources.cldr.FormatData"
+    },
+    {
+      "type": "sun.text.resources.cldr.FormatData_en"
+    },
+    {
+      "type": "sun.text.resources.cldr.FormatData_en_US"
+    },
+    {
+      "type": "sun.util.resources.cldr.CalendarData"
+    }
+  ],
+  "resources": [
+    {
+      "glob": "META-INF/services/java.net.spi.InetAddressResolverProvider"
+    },
+    {
+      "glob": "META-INF/services/java.nio.channels.spi.SelectorProvider"
+    },
+    {
+      "glob": "META-INF/services/net.kyori.adventure.internal.properties.AdventureProperties$DefaultOverrideProvider"
+    },
+    {
+      "glob": "META-INF/services/net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider"
+    },
+    {
+      "glob": "META-INF/services/net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer$Provider"
+    },
+    {
+      "glob": "META-INF/services/net.kyori.adventure.text.serializer.gson.GsonComponentSerializer$Provider"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.commons.support.scanning.ClasspathScanner"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.engine.TestEngine"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.LauncherDiscoveryListener"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.LauncherSessionListener"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.PostDiscoveryFilter"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.TestExecutionListener"
+    },
+    {
+      "glob": "META-INF/services/org.slf4j.spi.SLF4JServiceProvider"
+    },
+    {
+      "glob": "attribute.json"
+    },
+    {
+      "glob": "banner_pattern.json"
+    },
+    {
+      "glob": "block.json"
+    },
+    {
+      "glob": "block_sound_type.json"
+    },
+    {
+      "glob": "cat_variant.json"
+    },
+    {
+      "glob": "chat_type.json"
+    },
+    {
+      "glob": "chicken_variant.json"
+    },
+    {
+      "glob": "cow_variant.json"
+    },
+    {
+      "glob": "damage_type.json"
+    },
+    {
+      "glob": "dialog.json"
+    },
+    {
+      "glob": "dimension_type.json"
+    },
+    {
+      "glob": "enchantment.json"
+    },
+    {
+      "glob": "entity_type.json"
+    },
+    {
+      "glob": "feature_flag.json"
+    },
+    {
+      "glob": "fluid.json"
+    },
+    {
+      "glob": "frog_variant.json"
+    },
+    {
+      "glob": "game_event.json"
+    },
+    {
+      "glob": "instrument.json"
+    },
+    {
+      "glob": "item.json"
+    },
+    {
+      "glob": "jukebox_song.json"
+    },
+    {
+      "glob": "junit-platform.properties"
+    },
+    {
+      "glob": "net/minestom/server/instance/lighting/region/r.0.0.mca"
+    },
+    {
+      "glob": "org/slf4j/impl/StaticLoggerBinder.class"
+    },
+    {
+      "glob": "painting_variant.json"
+    },
+    {
+      "glob": "particle.json"
+    },
+    {
+      "glob": "pig_variant.json"
+    },
+    {
+      "glob": "potion_effect.json"
+    },
+    {
+      "glob": "potion_type.json"
+    },
+    {
+      "glob": "sound_event.json"
+    },
+    {
+      "glob": "tags/attribute.json"
+    },
+    {
+      "glob": "tags/banner_pattern.json"
+    },
+    {
+      "glob": "tags/block.json"
+    },
+    {
+      "glob": "tags/block_sound_type.json"
+    },
+    {
+      "glob": "tags/cat_variant.json"
+    },
+    {
+      "glob": "tags/chat_type.json"
+    },
+    {
+      "glob": "tags/chicken_variant.json"
+    },
+    {
+      "glob": "tags/cow_variant.json"
+    },
+    {
+      "glob": "tags/damage_type.json"
+    },
+    {
+      "glob": "tags/dialog.json"
+    },
+    {
+      "glob": "tags/dimension_type.json"
+    },
+    {
+      "glob": "tags/enchantment.json"
+    },
+    {
+      "glob": "tags/entity_type.json"
+    },
+    {
+      "glob": "tags/feature_flag.json"
+    },
+    {
+      "glob": "tags/fluid.json"
+    },
+    {
+      "glob": "tags/frog_variant.json"
+    },
+    {
+      "glob": "tags/game_event.json"
+    },
+    {
+      "glob": "tags/instrument.json"
+    },
+    {
+      "glob": "tags/item.json"
+    },
+    {
+      "glob": "tags/jukebox_song.json"
+    },
+    {
+      "glob": "tags/painting_variant.json"
+    },
+    {
+      "glob": "tags/particle.json"
+    },
+    {
+      "glob": "tags/pig_variant.json"
+    },
+    {
+      "glob": "tags/potion_effect.json"
+    },
+    {
+      "glob": "tags/potion_type.json"
+    },
+    {
+      "glob": "tags/sound_event.json"
+    },
+    {
+      "glob": "tags/trim_material.json"
+    },
+    {
+      "glob": "tags/trim_pattern.json"
+    },
+    {
+      "glob": "tags/villager_profession.json"
+    },
+    {
+      "glob": "tags/wolf_sound_variant.json"
+    },
+    {
+      "glob": "tags/wolf_variant.json"
+    },
+    {
+      "glob": "tags/worldgen/biome.json"
+    },
+    {
+      "glob": "trim_material.json"
+    },
+    {
+      "glob": "trim_pattern.json"
+    },
+    {
+      "glob": "villager_profession.json"
+    },
+    {
+      "glob": "wolf_sound_variant.json"
+    },
+    {
+      "glob": "wolf_variant.json"
+    },
+    {
+      "glob": "worldgen/biome.json"
+    },
+    {
+      "module": "jdk.jfr",
+      "glob": "jdk/jfr/internal/types/metadata.bin"
+    }
+  ]
+}

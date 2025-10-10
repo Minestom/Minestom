@@ -68,7 +68,7 @@ tasks.register<Test>("testWithAgent") {
 
     // Configure the native-image agent
     jvmArgs(
-            "-agentlib:native-image-agent=config-output-dir=${metadataOutputDir.absolutePath},caller-filter-file=${filterFile.absolutePath}"
+            "-agentlib:native-image-agent=config-output-dir=${metadataOutputDir.absolutePath},access-filter-file=${filterFile.absolutePath},caller-filter-file=${filterFile.absolutePath}"
     )
 
     doFirst {
@@ -82,7 +82,11 @@ tasks.register<Test>("testWithAgent") {
     {"excludeClasses": "org.junit.**"},
     {"excludeClasses": "org.opentest4j.**"},
     {"excludeClasses": "org.gradle.**"},
+    {"excludeClasses": "org.graalvm.**"},
     {"excludeClasses": "net.minestom.testing.**"}
+  ],
+  "regexRules": [
+     {"excludeClasses": "net\\.minestom\\.server\\..*Test(\\$.*)?"}
   ]
 }""")
         println("Created filter file: ${filterFile.absolutePath}")
