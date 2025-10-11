@@ -35,6 +35,7 @@ net.minestom.server.entity.metadata
 net.minestom.server.entity.metadata.ambient
 net.minestom.server.entity.metadata.animal
 net.minestom.server.entity.metadata.animal.tameable
+net.minestom.server.entity.metadata.avatar
 net.minestom.server.entity.metadata.display
 net.minestom.server.entity.metadata.flying
 net.minestom.server.entity.metadata.golem
@@ -106,6 +107,8 @@ net.minestom.server.map.framebuffers
 net.minestom.server.message
 net.minestom.server.monitoring
 net.minestom.server.network
+net.minestom.server.network.debug
+net.minestom.server.network.debug.info
 net.minestom.server.network.packet
 net.minestom.server.network.packet.client
 net.minestom.server.network.packet.client.common
