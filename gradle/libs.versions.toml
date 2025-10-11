@@ -3,7 +3,7 @@ metadata.format.version = "1.1"
 [versions]
 
 # Important dependencies
-data = "1.21.9-rv1"
+data = "1.21.10-rv1"
 adventure = "4.25.0"
 jetbrainsAnnotations = "26.0.2-1"
 slf4j = "2.0.17"
