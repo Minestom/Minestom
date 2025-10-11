@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte [] data,
+public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
                         Map<Integer, Block> blockEntities) {
     public ChunkData {
         heightmaps = Map.copyOf(heightmaps);
@@ -54,20 +54,25 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte [] data,
 
         @Override
         public ChunkData read(NetworkBuffer buffer) {
-            return new ChunkData(buffer.read(HEIGHTMAPS), buffer.read(BYTE_ARRAY),
-                    readBlockEntities(buffer));
+            return new ChunkData(buffer.read(HEIGHTMAPS), buffer.read(BYTE_ARRAY), readBlockEntities(buffer));
         }
     };
 
     private static Map<Integer, Block> readBlockEntities(NetworkBuffer reader) {
-        final Map<Integer, Block> blockEntities = new HashMap<>();
         final int size = reader.read(VAR_INT);
+        final Map<Integer, Block> blockEntities = HashMap.newHashMap(size);
         for (int i = 0; i < size; i++) {
             final byte xz = reader.read(BYTE);
             final short y = reader.read(SHORT);
             final int blockEntityId = reader.read(VAR_INT);
             final CompoundBinaryTag nbt = reader.read(NBT_COMPOUND);
-            // TODO create block object
+            final int index = CoordConversion.chunkBlockIndex(xz >> 4, y, xz & 15);
+            // Find the block entity
+            for (Block block : blockEntities.values()) {
+                if (block.registry().blockEntityId() != blockEntityId) continue;
+                blockEntities.put(index, block.withNbt(nbt));
+                break;
+            }
         }
         return blockEntities;
     }
