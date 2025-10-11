@@ -25,4 +25,11 @@ public record CustomModelData(
             "strings", Codec.STRING.list().optional(List.of()), CustomModelData::strings,
             "colors", Color.CODEC.list().optional(List.of()), CustomModelData::colors,
             CustomModelData::new);
+
+    public CustomModelData {
+        floats = List.copyOf(floats);
+        flags = List.copyOf(flags);
+        strings = List.copyOf(strings);
+        colors = List.copyOf(colors);
+    }
 }
