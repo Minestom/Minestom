@@ -42,12 +42,16 @@ dependencies {
     implementation(libs.minestomData)
 
     // Performance/data structures
-    api(libs.fastutil)
+    implementation(libs.fastutil)
     implementation(libs.bundles.flare)
     api(libs.gson)
     implementation(libs.jcTools)
 
     testImplementation(project(":testing"))
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:-requires-transitive-automatic") // Adventure dependencies are automatic until 5.0.0, see https://github.com/KyoriPowered/adventure/issues/1287
 }
 
 // GraalVM Native Image configuration
@@ -64,7 +68,7 @@ tasks.register<Test>("testWithAgent") {
 
     // Configure the native-image agent
     jvmArgs(
-            "-agentlib:native-image-agent=config-output-dir=${metadataOutputDir.absolutePath},caller-filter-file=${filterFile.absolutePath}"
+            "-agentlib:native-image-agent=config-output-dir=${metadataOutputDir.absolutePath},access-filter-file=${filterFile.absolutePath},caller-filter-file=${filterFile.absolutePath}"
     )
 
     doFirst {
@@ -78,7 +82,11 @@ tasks.register<Test>("testWithAgent") {
     {"excludeClasses": "org.junit.**"},
     {"excludeClasses": "org.opentest4j.**"},
     {"excludeClasses": "org.gradle.**"},
+    {"excludeClasses": "org.graalvm.**"},
     {"excludeClasses": "net.minestom.testing.**"}
+  ],
+  "regexRules": [
+     {"excludeClasses": "net\\.minestom\\.server\\..*Test(\\$.*)?"}
   ]
 }""")
         println("Created filter file: ${filterFile.absolutePath}")

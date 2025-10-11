@@ -6,6 +6,8 @@ import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.*;
+import net.kyori.adventure.text.object.PlayerHeadObjectContents;
+import net.kyori.adventure.text.object.SpriteObjectContents;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.serializer.nbt.NbtDataComponentValue;
 import net.minestom.server.codec.Codec;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 import static net.minestom.server.network.NetworkBufferImpl.impl;
@@ -49,6 +52,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     private static final byte TAG_STRING = 8;
     private static final byte TAG_LIST = 9;
     private static final byte TAG_COMPOUND = 10;
+    private static final byte TAG_INT_ARRAY = 11;
 
     private void writeInnerComponent(NetworkBuffer buffer, Component component) {
         buffer.write(BYTE, TAG_STRING); // Start first tag (always the type)
@@ -126,6 +130,90 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             case NBTComponent<?, ?> nbt -> {
                 //todo
                 throw new UnsupportedOperationException("NBTComponent is not implemented yet");
+            }
+            case ObjectComponent object -> {
+                buffer.write(STRING_IO_UTF8, "object");
+
+                switch (object.contents()) {
+                    case SpriteObjectContents sprite -> {
+                        if (!sprite.atlas().equals(SpriteObjectContents.DEFAULT_ATLAS)) {
+                            buffer.write(BYTE, TAG_STRING);
+                            buffer.write(STRING_IO_UTF8, "atlas");
+                            buffer.write(STRING_IO_UTF8, sprite.atlas().asMinimalString());
+                        }
+
+                        buffer.write(BYTE, TAG_STRING);
+                        buffer.write(STRING_IO_UTF8, "sprite");
+                        buffer.write(STRING_IO_UTF8, sprite.sprite().asMinimalString());
+                    }
+                    case PlayerHeadObjectContents player -> {
+                        buffer.write(BYTE, TAG_COMPOUND); // Start "player" tag
+                        buffer.write(STRING_IO_UTF8, "player");
+                        {
+                            final String name = player.name();
+                            if (name != null) {
+                                buffer.write(BYTE, TAG_STRING);
+                                buffer.write(STRING_IO_UTF8, "name");
+                                buffer.write(STRING_IO_UTF8, name);
+                            }
+
+                            final UUID id = player.id();
+                            if (id != null) {
+                                buffer.write(BYTE, TAG_INT_ARRAY);
+                                buffer.write(INT, 4);
+
+                                final long uuidMost = id.getMostSignificantBits();
+                                final long uuidLeast = id.getLeastSignificantBits();
+                                buffer.write(INT, (int) (uuidMost >> 32));
+                                buffer.write(INT, (int) uuidMost);
+                                buffer.write(INT, (int) (uuidLeast >> 32));
+                                buffer.write(INT, (int) uuidLeast);
+                            }
+
+                            int propertyCount = player.profileProperties().size();
+                            if (propertyCount > 0) {
+                                buffer.write(BYTE, TAG_LIST);
+                                buffer.write(STRING_IO_UTF8, "properties");
+                                buffer.write(BYTE, TAG_COMPOUND); // List type
+                                buffer.write(INT, propertyCount);
+
+                                for (PlayerHeadObjectContents.ProfileProperty property : player.profileProperties()) {
+                                    buffer.write(BYTE, TAG_STRING);
+                                    buffer.write(STRING_IO_UTF8, "name");
+                                    buffer.write(STRING_IO_UTF8, property.name());
+
+                                    buffer.write(BYTE, TAG_STRING);
+                                    buffer.write(STRING_IO_UTF8, "value");
+                                    buffer.write(STRING_IO_UTF8, property.value());
+
+                                    final String signature = property.signature();
+                                    if (signature != null) {
+                                        buffer.write(BYTE, TAG_STRING);
+                                        buffer.write(STRING_IO_UTF8, "signature");
+                                        buffer.write(STRING_IO_UTF8, signature);
+                                    }
+
+                                    buffer.write(BYTE, TAG_END); // End property object
+                                }
+                            }
+
+                            final Key texture = player.texture();
+                            if (texture != null) {
+                                buffer.write(BYTE, TAG_STRING);
+                                buffer.write(STRING_IO_UTF8, "body");
+                                buffer.write(STRING_IO_UTF8, texture.asMinimalString());
+                            }
+                        }
+                        buffer.write(BYTE, TAG_END); // End "player" tag
+
+                        if (!player.hat()) {
+                            buffer.write(BYTE, TAG_BYTE);
+                            buffer.write(STRING_IO_UTF8, "hat");
+                            buffer.write(BYTE, (byte) 0);
+                        }
+                    }
+                    default -> throw new UnsupportedOperationException("Unknown object contents: " + object.contents());
+                }
             }
             default -> throw new UnsupportedOperationException("Unsupported component type: " + component.getClass());
         }
@@ -296,7 +384,8 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     private <T extends ClickEvent.Payload> T checkPayload(ClickEvent clickEvent, Class<T> expected) {
         final ClickEvent.Payload payload = clickEvent.payload();
         if (!expected.isInstance(payload))
-            throw new IllegalArgumentException("Expected " + expected.getSimpleName() + " for " + clickEvent.action() + ", got: " + payload.getClass());
+            throw new IllegalArgumentException(
+                    "Expected " + expected.getSimpleName() + " for " + clickEvent.action() + ", got: " + payload.getClass());
         return expected.cast(payload);
     }
 

@@ -36,6 +36,10 @@ final class ParticleImpl {
             case "minecraft:trail" -> new Particle.Trail(key, id, Vec.ZERO, Color.WHITE, 0);
             case "minecraft:block_crumble" -> new Particle.BlockCrumble(key, id, Block.STONE);
             case "minecraft:tinted_leaves" -> new Particle.TintedLeaves(key, id, AlphaColor.WHITE);
+            case "minecraft:dragon_breath" -> new Particle.DragonBreath(key, id, 1);
+            case "minecraft:effect" -> new Particle.Effect(key, id, Color.WHITE, 1);
+            case "minecraft:flash" -> new Particle.Flash(key, id, AlphaColor.WHITE);
+            case "minecraft:instant_effect" -> new Particle.InstantEffect(key, id, Color.WHITE, 1);
             default -> new Particle.Simple(key, id);
         };
     }
