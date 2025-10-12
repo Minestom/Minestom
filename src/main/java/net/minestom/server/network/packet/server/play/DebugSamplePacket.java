@@ -16,20 +16,6 @@ public record DebugSamplePacket(long[] sample, Type type) implements ServerPacke
             Enum(Type.class), DebugSamplePacket::type,
             DebugSamplePacket::new);
 
-    public enum Type {
-        TICK_TIME(DebugSubscription.DEDICATED_SERVER_TICK_TIME);
-
-        private final DebugSubscription<?> debugSubscription;
-
-        Type(DebugSubscription<?> debugSubscription) {
-            this.debugSubscription = debugSubscription;
-        }
-
-        public DebugSubscription<?> getDebugSubscription() {
-            return debugSubscription;
-        }
-    }
-
     public DebugSamplePacket {
         sample = sample.clone();
     }
@@ -45,5 +31,19 @@ public record DebugSamplePacket(long[] sample, Type type) implements ServerPacke
         int result = Arrays.hashCode(sample());
         result = 31 * result + type().hashCode();
         return result;
+    }
+
+    public enum Type {
+        TICK_TIME(DebugSubscription.DEDICATED_SERVER_TICK_TIME);
+
+        private final DebugSubscription<?> debugSubscription;
+
+        Type(DebugSubscription<?> debugSubscription) {
+            this.debugSubscription = debugSubscription;
+        }
+
+        public DebugSubscription<?> getDebugSubscription() {
+            return debugSubscription;
+        }
     }
 }
