@@ -9,6 +9,7 @@ import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -21,6 +22,9 @@ public record GameProfile(
     public static final int MAX_PROPERTIES = 1024;
 
     public GameProfile {
+        Objects.requireNonNull(uuid, "uuid");
+        Objects.requireNonNull(name, "name");
+        Objects.requireNonNull(properties, "properties");
         if (name.isBlank())
             throw new IllegalArgumentException("Name cannot be blank");
         if (name.length() > 16)
@@ -44,6 +48,11 @@ public record GameProfile(
             GameProfile::new);
 
     public record Property(String name, String value, @Nullable String signature) implements PlayerHeadObjectContents.ProfileProperty {
+        public Property {
+            Objects.requireNonNull(name, "name");
+            Objects.requireNonNull(value, "value");
+        }
+
         public Property(String name, String value) {
             this(name, value, null);
         }
@@ -65,6 +74,6 @@ public record GameProfile(
                         map -> map.entrySet().stream().map(
                                 entry -> new Property(entry.getKey(), entry.getValue(), null)
                         ).toList(), Function.identity()),
-                           list -> Either.right(list));
+                        Either::right);
     }
 }

@@ -28,6 +28,10 @@ public record ExplosionPacket(
             BlockParticleInfo.SERIALIZER.list(), ExplosionPacket::blockParticles,
             ExplosionPacket::new);
 
+    public ExplosionPacket {
+        blockParticles = List.copyOf(blockParticles);
+    }
+
     public record BlockParticleInfo(Particle particle, float scaling, float speed, int weight) {
         public static final NetworkBuffer.Type<BlockParticleInfo> SERIALIZER = NetworkBufferTemplate.template(
                 Particle.NETWORK_TYPE, BlockParticleInfo::particle,

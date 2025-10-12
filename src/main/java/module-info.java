@@ -8,12 +8,12 @@ module net.minestom.server {
     requires transitive net.kyori.adventure.nbt;
     requires transitive net.kyori.adventure.key;
     requires transitive net.kyori.examination.api;
-    requires transitive net.kyori.adventure.text.logger.slf4j;
-    requires transitive net.kyori.adventure.text.serializer.legacy;
-    requires transitive net.kyori.adventure.text.serializer.gson;
-    requires transitive net.kyori.adventure.text.serializer.plain;
-    requires transitive net.kyori.adventure.text.serializer.json;
-    requires transitive net.kyori.adventure.text.serializer.ansi;
+    requires net.kyori.adventure.text.logger.slf4j;
+    requires net.kyori.adventure.text.serializer.legacy;
+    requires net.kyori.adventure.text.serializer.gson;
+    requires net.kyori.adventure.text.serializer.plain;
+    requires net.kyori.adventure.text.serializer.json;
+    requires net.kyori.adventure.text.serializer.ansi;
     requires org.slf4j;
     requires org.jctools.core;
     requires jdk.jfr;
@@ -129,6 +129,8 @@ module net.minestom.server {
     exports net.minestom.server.message;
     exports net.minestom.server.monitoring;
     exports net.minestom.server.network;
+    exports net.minestom.server.network.debug;
+    exports net.minestom.server.network.debug.info;
     exports net.minestom.server.network.packet;
     exports net.minestom.server.network.packet.client;
     exports net.minestom.server.network.packet.client.common;

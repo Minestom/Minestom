@@ -1,7 +1,7 @@
 plugins {
     java
     application
-    id("com.gradleup.shadow")
+    alias(libs.plugins.shadow)
 }
 
 val javaVersion = System.getenv("JAVA_VERSION") ?: "25"

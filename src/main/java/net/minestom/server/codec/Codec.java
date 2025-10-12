@@ -320,7 +320,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <R>        the right type
      * @return a {@link StructCodec} with {@link Either} of {@link L} and {@link R}
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _ -> new")
     static <L, R> StructCodec<Either<L, R>> EitherStruct(StructCodec<L> leftCodec, StructCodec<R> rightCodec) {
         return new CodecImpl.EitherStructImpl<>(leftCodec, rightCodec);
     }

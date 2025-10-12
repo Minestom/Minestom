@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.network.debug.DebugSubscription;
 import net.minestom.server.network.packet.server.ServerPacket;
 
 import java.util.Arrays;
@@ -16,7 +17,17 @@ public record DebugSamplePacket(long[] sample, Type type) implements ServerPacke
             DebugSamplePacket::new);
 
     public enum Type {
-        TICK_TIME
+        TICK_TIME(DebugSubscription.DEDICATED_SERVER_TICK_TIME);
+
+        private final DebugSubscription<?> debugSubscription;
+
+        Type(DebugSubscription<?> debugSubscription) {
+            this.debugSubscription = debugSubscription;
+        }
+
+        public DebugSubscription<?> getDebugSubscription() {
+            return debugSubscription;
+        }
     }
 
     public DebugSamplePacket {

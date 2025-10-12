@@ -13,4 +13,8 @@ public record ClientDebugSubscriptionRequestPacket(
     public static final NetworkBuffer.Type<ClientDebugSubscriptionRequestPacket> SERIALIZER = NetworkBufferTemplate.template(
             DebugSubscription.NETWORK_TYPE.set(), ClientDebugSubscriptionRequestPacket::subscriptions,
             ClientDebugSubscriptionRequestPacket::new);
+
+    public ClientDebugSubscriptionRequestPacket {
+        subscriptions = Set.copyOf(subscriptions);
+    }
 }

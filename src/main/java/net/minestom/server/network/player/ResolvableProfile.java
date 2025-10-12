@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public record ResolvableProfile(
@@ -28,6 +29,11 @@ public record ResolvableProfile(
             StructCodec.INLINE, Codec.EitherStruct(GameProfile.CODEC, Partial.CODEC), ResolvableProfile::profile,
             StructCodec.INLINE, PlayerSkin.Patch.CODEC, ResolvableProfile::patch,
             ResolvableProfile::new);
+
+    public ResolvableProfile {
+        Objects.requireNonNull(profile, "profile");
+        Objects.requireNonNull(patch, "patch");
+    }
 
     public ResolvableProfile(GameProfile profile) {
         this(Either.left(profile), PlayerSkin.Patch.EMPTY);

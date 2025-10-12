@@ -1,8 +1,10 @@
 package net.minestom.server.instance;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -130,5 +132,16 @@ public class GeneratorIntegrationTest {
         };
         instance.generateChunk(0, 0, generator).join();
         assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, 0, 0));
+    }
+
+    @Test
+    public void explicitChunkGeneratePacket(Env env) {
+        var instance = env.createEmptyInstance();
+        var connection = env.createConnection();
+        connection.connect(instance, Pos.ZERO);
+        Generator generator = unit -> unit.modifier().fill(Block.GRASS_BLOCK);
+        var tracker = connection.trackIncoming(ChunkDataPacket.class);
+        instance.generateChunk(0, 0, generator).join();
+        tracker.assertAny();
     }
 }

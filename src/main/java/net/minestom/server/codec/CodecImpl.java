@@ -469,6 +469,11 @@ final class CodecImpl {
     }
 
     record EitherStructImpl<L, R>(StructCodec<L> leftCodec, StructCodec<R> rightCodec) implements StructCodec<Either<L, R>> {
+        public EitherStructImpl {
+            Objects.requireNonNull(leftCodec, "leftCodec");
+            Objects.requireNonNull(rightCodec, "rightCodec");
+        }
+
         @Override
         public <D> Result<Either<L, R>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
             final Result<L> leftResult = leftCodec.decodeFromMap(coder, map);

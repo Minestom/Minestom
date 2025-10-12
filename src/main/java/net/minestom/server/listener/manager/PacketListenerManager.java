@@ -108,6 +108,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
         setPlayListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
         setPlayListener(ClientUpdateSignPacket.class, EditSignListener::listener);
+        setPlayListener(ClientDebugSubscriptionRequestPacket.class, DebugSubscriptionListener::requestListener);
     }
 
     /**
