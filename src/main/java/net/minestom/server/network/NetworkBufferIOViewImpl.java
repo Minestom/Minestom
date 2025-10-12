@@ -19,8 +19,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public void readFully(byte[] b) {
-        var newBytes = buffer.read(FixedRawBytes(b.length));
-        System.arraycopy(newBytes, 0, b, 0, b.length);
+        readFully(b, 0, b.length);
     }
 
     @Override
@@ -31,9 +30,9 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public int skipBytes(int n) {
-        var readableBytes = Math.toIntExact(buffer.readableBytes());
+        var readableBytes = buffer.readableBytes();
         if (n > readableBytes) {
-            n = readableBytes;
+            n = (int) readableBytes;
         }
         if (n > 0) buffer.advanceRead(n);
         return n;

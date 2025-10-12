@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 public final class NetworkBufferTemplate {
 
     public static <R> Type<R> template(R value) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
             }
@@ -23,7 +23,7 @@ public final class NetworkBufferTemplate {
     }
 
     public static <R> Type<R> template(Supplier<R> supplier) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
             }
@@ -36,7 +36,7 @@ public final class NetworkBufferTemplate {
     }
 
     public static <P1 extends @UnknownNullability Object, R> Type<R> template(Type<P1> p1, Function<R, P1> g1, F1<P1, R> reader) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -53,7 +53,7 @@ public final class NetworkBufferTemplate {
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             F2<P1, P2, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -71,7 +71,7 @@ public final class NetworkBufferTemplate {
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, F3<P1, P2, P3, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -91,7 +91,7 @@ public final class NetworkBufferTemplate {
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             F4<P1, P2, P3, P4, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -115,7 +115,7 @@ public final class NetworkBufferTemplate {
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, F5<P1, P2, P3, P4, P5, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -142,7 +142,7 @@ public final class NetworkBufferTemplate {
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
             F6<P1, P2, P3, P4, P5, P6, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -170,7 +170,7 @@ public final class NetworkBufferTemplate {
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
             Type<P7> p7, Function<R, P7> g7, F7<P1, P2, P3, P4, P5, P6, P7, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -201,7 +201,7 @@ public final class NetworkBufferTemplate {
             Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
             F8<P1, P2, P3, P4, P5, P6, P7, P8, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -233,7 +233,7 @@ public final class NetworkBufferTemplate {
             Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
             Type<P9> p9, Function<R, P9> g9, F9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -268,7 +268,7 @@ public final class NetworkBufferTemplate {
             Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
             F10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -304,7 +304,7 @@ public final class NetworkBufferTemplate {
             Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
             Type<P11> p11, Function<R, P11> g11, F11<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -342,7 +342,7 @@ public final class NetworkBufferTemplate {
             Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
             Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12, F12<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -383,7 +383,7 @@ public final class NetworkBufferTemplate {
             Type<P13> p13, Function<R, P13> g13,
             F13<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -426,7 +426,7 @@ public final class NetworkBufferTemplate {
             Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
             F14<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -471,7 +471,7 @@ public final class NetworkBufferTemplate {
             Type<P15> p15, Function<R, P15> g15,
             F15<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -518,7 +518,7 @@ public final class NetworkBufferTemplate {
             Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
             F16<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -567,7 +567,7 @@ public final class NetworkBufferTemplate {
             Type<P17> p17, Function<R, P17> g17,
             F17<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -618,7 +618,7 @@ public final class NetworkBufferTemplate {
             Type<P17> p17, Function<R, P17> g17, Type<P18> p18, Function<R, P18> g18,
             F18<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -670,7 +670,7 @@ public final class NetworkBufferTemplate {
             Type<P17> p17, Function<R, P17> g17, Type<P18> p18, Function<R, P18> g18,
             Type<P19> p19, Function<R, P19> g19, F19<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -725,7 +725,7 @@ public final class NetworkBufferTemplate {
             Type<P19> p19, Function<R, P19> g19, Type<P20> p20, Function<R, P20> g20,
             F20<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, R> reader
     ) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));

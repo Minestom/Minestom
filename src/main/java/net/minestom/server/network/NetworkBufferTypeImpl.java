@@ -34,11 +34,11 @@ import java.util.function.Supplier;
 import static net.minestom.server.network.NetworkBuffer.*;
 import static net.minestom.server.network.NetworkBufferImpl.impl;
 
-interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends NetworkBuffer.Type<T> {
-    int SEGMENT_BITS = 0x7F;
-    int CONTINUE_BIT = 0x80;
+final class NetworkBufferTypeImpl {
+    static final int SEGMENT_BITS = 0x7F;
+    static final int CONTINUE_BIT = 0x80;
 
-    record UnitType() implements NetworkBufferTypeImpl<Unit> {
+    record UnitType() implements NetworkBuffer.Type<Unit> {
         @Override
         public void write(NetworkBuffer buffer, Unit value) {
         }
@@ -49,7 +49,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record BooleanType() implements NetworkBufferTypeImpl<Boolean> {
+    record BooleanType() implements NetworkBuffer.Type<Boolean> {
         @Override
         public void write(NetworkBuffer buffer, Boolean value) {
             buffer.ensureWritable(1);
@@ -65,7 +65,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record ByteType() implements NetworkBufferTypeImpl<Byte> {
+    record ByteType() implements NetworkBuffer.Type<Byte> {
         @Override
         public void write(NetworkBuffer buffer, Byte value) {
             buffer.ensureWritable(1);
@@ -81,7 +81,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record UnsignedByteType() implements NetworkBufferTypeImpl<Short> {
+    record UnsignedByteType() implements NetworkBuffer.Type<Short> {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
             buffer.ensureWritable(1);
@@ -97,7 +97,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record ShortType() implements NetworkBufferTypeImpl<Short> {
+    record ShortType() implements NetworkBuffer.Type<Short> {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
             buffer.ensureWritable(2);
@@ -113,7 +113,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record UnsignedShortType() implements NetworkBufferTypeImpl<Integer> {
+    record UnsignedShortType() implements NetworkBuffer.Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
             buffer.ensureWritable(2);
@@ -129,7 +129,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record IntType() implements NetworkBufferTypeImpl<Integer> {
+    record IntType() implements NetworkBuffer.Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
             buffer.ensureWritable(4);
@@ -145,7 +145,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record UnsignedIntType() implements NetworkBufferTypeImpl<Long> {
+    record UnsignedIntType() implements NetworkBuffer.Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(4);
@@ -161,7 +161,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record LongType() implements NetworkBufferTypeImpl<Long> {
+    record LongType() implements NetworkBuffer.Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(8);
@@ -177,7 +177,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record FloatType() implements NetworkBufferTypeImpl<Float> {
+    record FloatType() implements NetworkBuffer.Type<Float> {
         @Override
         public void write(NetworkBuffer buffer, Float value) {
             buffer.ensureWritable(4);
@@ -193,7 +193,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record DoubleType() implements NetworkBufferTypeImpl<Double> {
+    record DoubleType() implements NetworkBuffer.Type<Double> {
         @Override
         public void write(NetworkBuffer buffer, Double value) {
             buffer.ensureWritable(8);
@@ -209,7 +209,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record VarIntType() implements NetworkBufferTypeImpl<Integer> {
+    record VarIntType() implements NetworkBuffer.Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer boxed) {
             buffer.ensureWritable(5);
@@ -244,7 +244,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record OptionalVarIntType() implements NetworkBufferTypeImpl<@Nullable Integer> {
+    record OptionalVarIntType() implements NetworkBuffer.Type<@Nullable Integer> {
         @Override
         public void write(NetworkBuffer buffer, @Nullable Integer value) {
             buffer.write(VAR_INT, value == null ? 0 : value + 1);
@@ -257,7 +257,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record VarInt3Type() implements NetworkBufferTypeImpl<Integer> {
+    record VarInt3Type() implements NetworkBuffer.Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer boxed) {
             final int value = boxed;
@@ -280,7 +280,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record VarLongType() implements NetworkBufferTypeImpl<Long> {
+    record VarLongType() implements NetworkBuffer.Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(10);
@@ -317,7 +317,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record RawBytesType(int length) implements NetworkBufferTypeImpl<byte[]> {
+    record RawBytesType(int length) implements NetworkBuffer.Type<byte[]> {
         @Override
         public void write(NetworkBuffer buffer, byte[] value) {
             if (length != -1 && value.length != length) {
@@ -347,7 +347,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record StringType() implements NetworkBufferTypeImpl<String> {
+    record StringType() implements NetworkBuffer.Type<String> {
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
@@ -361,7 +361,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record StringTerminatedType() implements NetworkBufferTypeImpl<String> {
+    record StringTerminatedType() implements NetworkBuffer.Type<String> {
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
@@ -382,7 +382,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record NbtType<T extends BinaryTag>() implements NetworkBufferTypeImpl<T> {
+    record NbtType<T extends BinaryTag>() implements NetworkBuffer.Type<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             final BinaryTagWriter nbtWriter = new BinaryTagWriter(buffer.ioView());
@@ -405,7 +405,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record BlockPositionType() implements NetworkBufferTypeImpl<Point> {
+    record BlockPositionType() implements NetworkBuffer.Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             final int blockX = value.blockX();
@@ -427,7 +427,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record JsonComponentType() implements NetworkBufferTypeImpl<Component> {
+    record JsonComponentType() implements NetworkBuffer.Type<Component> {
         @Override
         public void write(NetworkBuffer buffer, Component value) {
             final Registries registries = buffer.registries();
@@ -449,7 +449,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record UUIDType() implements NetworkBufferTypeImpl<UUID> {
+    record UUIDType() implements NetworkBuffer.Type<UUID> {
         @Override
         public void write(NetworkBuffer buffer, java.util.UUID value) {
             buffer.write(LONG, value.getMostSignificantBits());
@@ -464,7 +464,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record PosType() implements NetworkBufferTypeImpl<Pos> {
+    record PosType() implements NetworkBuffer.Type<Pos> {
         @Override
         public void write(NetworkBuffer buffer, Pos value) {
             buffer.write(DOUBLE, value.x());
@@ -485,7 +485,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record ByteArrayType() implements NetworkBufferTypeImpl<byte[]> {
+    record ByteArrayType() implements NetworkBuffer.Type<byte[]> {
         @Override
         public void write(NetworkBuffer buffer, byte[] value) {
             buffer.write(VAR_INT, value.length);
@@ -502,7 +502,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record LongArrayType() implements NetworkBufferTypeImpl<long[]> {
+    record LongArrayType() implements NetworkBuffer.Type<long[]> {
         @Override
         public void write(NetworkBuffer buffer, long[] value) {
             buffer.write(VAR_INT, value.length);
@@ -518,7 +518,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record VarIntArrayType() implements NetworkBufferTypeImpl<int[]> {
+    record VarIntArrayType() implements NetworkBuffer.Type<int[]> {
         @Override
         public void write(NetworkBuffer buffer, int[] value) {
             buffer.write(VAR_INT, value.length);
@@ -534,7 +534,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record VarLongArrayType() implements NetworkBufferTypeImpl<long[]> {
+    record VarLongArrayType() implements NetworkBuffer.Type<long[]> {
         @Override
         public void write(NetworkBuffer buffer, long[] value) {
             buffer.write(VAR_INT, value.length);
@@ -550,7 +550,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record Vector3Type() implements NetworkBufferTypeImpl<Point> {
+    record Vector3Type() implements NetworkBuffer.Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             buffer.write(FLOAT, (float) value.x());
@@ -567,7 +567,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record Vector3DType() implements NetworkBufferTypeImpl<Point> {
+    record Vector3DType() implements NetworkBuffer.Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             buffer.write(DOUBLE, value.x());
@@ -584,7 +584,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record Vector3IType() implements NetworkBufferTypeImpl<Point> {
+    record Vector3IType() implements NetworkBuffer.Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             buffer.write(VAR_INT, (int) value.x());
@@ -601,7 +601,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record Vector3BType() implements NetworkBufferTypeImpl<Point> {
+    record Vector3BType() implements NetworkBuffer.Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             buffer.write(BYTE, (byte) value.x());
@@ -618,7 +618,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record LpVector3Type() implements NetworkBufferTypeImpl<Vec> {
+    record LpVector3Type() implements NetworkBuffer.Type<Vec> {
         private static final int DATA_BITS_MASK = 0b111111111111111;
         private static final double MAX_QUANTIZED_VALUE = 32766.0;
         private static final int SCALE_BITS_MASK = 0b11;
@@ -684,7 +684,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record QuaternionType() implements NetworkBufferTypeImpl<float[]> {
+    record QuaternionType() implements NetworkBuffer.Type<float[]> {
         @Override
         public void write(NetworkBuffer buffer, float[] value) {
             buffer.write(FLOAT, value[0]);
@@ -706,7 +706,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
     // Combinators
 
     record EnumSetType<E extends Enum<E>>(Class<E> enumType,
-                                          E[] values) implements NetworkBufferTypeImpl<EnumSet<E>> {
+                                          E[] values) implements NetworkBuffer.Type<EnumSet<E>> {
         public EnumSetType {
             Objects.requireNonNull(enumType, "enumType");
             Objects.requireNonNull(values, "values");
@@ -736,7 +736,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record FixedBitSetType(int length) implements NetworkBufferTypeImpl<BitSet> {
+    record FixedBitSetType(int length) implements NetworkBuffer.Type<BitSet> {
         public FixedBitSetType {
             Check.argCondition(length < 0, "Length is negative found {0}", length);
         }
@@ -759,7 +759,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record OptionalType<T extends @Nullable Object>(Type<T> parent) implements NetworkBufferTypeImpl<T> {
+    record OptionalType<T extends @Nullable Object>(Type<T> parent) implements NetworkBuffer.Type<T> {
         public OptionalType {
             Objects.requireNonNull(parent, "parent");
         }
@@ -776,7 +776,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record LengthPrefixedType<T>(Type<T> parent, int maxLength) implements NetworkBufferTypeImpl<T> {
+    record LengthPrefixedType<T>(Type<T> parent, int maxLength) implements NetworkBuffer.Type<T> {
         public LengthPrefixedType {
             Objects.requireNonNull(parent, "parent");
             Check.argCondition(maxLength < 0, "length is negative found {0}", maxLength);
@@ -809,7 +809,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    final class LazyType<T> implements NetworkBufferTypeImpl<T> {
+    static final class LazyType<T> implements NetworkBuffer.Type<T> {
         private final Supplier<NetworkBuffer.Type<T>> supplier;
         private @Nullable Type<T> type;
 
@@ -836,7 +836,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record TypedNbtType<T>(Codec<T> nbtType) implements NetworkBufferTypeImpl<T> {
+    record TypedNbtType<T>(Codec<T> nbtType) implements NetworkBuffer.Type<T> {
         public TypedNbtType {
             Objects.requireNonNull(nbtType, "nbtType");
         }
@@ -896,7 +896,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
     }
 
     record TransformType<T, S>(Type<T> parent, Function<T, S> to,
-                               Function<S, T> from) implements NetworkBufferTypeImpl<S> {
+                               Function<S, T> from) implements NetworkBuffer.Type<S> {
         public TransformType {
             Objects.requireNonNull(parent, "parent");
             Objects.requireNonNull(to, "to");
@@ -915,7 +915,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
     }
 
     record MapType<K, V>(Type<K> parent, NetworkBuffer.Type<V> valueType,
-                         int maxSize) implements NetworkBufferTypeImpl<Map<K, V>> {
+                         int maxSize) implements NetworkBuffer.Type<Map<K, V>> {
         public MapType {
             Objects.requireNonNull(parent, "parent");
             Objects.requireNonNull(valueType, "valueType");
@@ -946,7 +946,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record ListType<T>(Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
+    record ListType<T>(Type<T> parent, int maxSize) implements NetworkBuffer.Type<List<T>> {
         public ListType {
             Objects.requireNonNull(parent, "parent");
             Check.argCondition(maxSize < 0, "Max size is negative found {0}", maxSize);
@@ -973,7 +973,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
         }
     }
 
-    record SetType<T>(Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<Set<T>> {
+    record SetType<T>(Type<T> parent, int maxSize) implements NetworkBuffer.Type<Set<T>> {
         public SetType {
             Objects.requireNonNull(parent, "parent");
             Check.argCondition(maxSize < 0, "Max size is negative found {0}", maxSize);
@@ -1003,7 +1003,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
     record UnionType<T, K>(
             Type<K> keyType, Function<T, ? extends K> keyFunc,
             Function<K, NetworkBuffer.@Nullable Type<? extends T>> serializers
-    ) implements NetworkBufferTypeImpl<T> {
+    ) implements NetworkBuffer.Type<T> {
         public UnionType {
             Objects.requireNonNull(keyType, "keyType");
             Objects.requireNonNull(keyFunc, "keyFunc");
@@ -1035,7 +1035,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
      * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)} & ${@link DataInputStream#readUTF()}. We need the data in the java
      * modified utf-8 format for Component, and I couldnt find a method without creating a new buffer for it.
      */
-    record IOUTF8StringType() implements NetworkBufferTypeImpl<String> {
+    record IOUTF8StringType() implements NetworkBuffer.Type<String> {
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final int strlen = value.length();

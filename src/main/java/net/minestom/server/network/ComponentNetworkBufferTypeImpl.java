@@ -26,7 +26,7 @@ import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
+record ComponentNetworkBufferTypeImpl() implements NetworkBuffer.Type<Component> {
 
     @Override
     public void write(NetworkBuffer buffer, Component value) {
