@@ -70,7 +70,7 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
         final var components = new ArrayList<Component>();
         for (Entry entry : entries)
             components.addAll(entry.display.components());
-        return components;
+        return List.copyOf(components);
     }
 
     @Override

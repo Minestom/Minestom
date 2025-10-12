@@ -8,6 +8,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,23 +23,11 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record TeamsPacket(String teamName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_MEMBERS = 16384;
 
-    public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, TeamsPacket value) {
-            buffer.write(STRING, value.teamName);
-            buffer.write(BYTE, (byte) value.action.id());
-            @SuppressWarnings("unchecked") final Type<Action> type = (Type<Action>) actionSerializer(value.action.id());
-            buffer.write(type, value.action);
-        }
-
-        @Override
-        public TeamsPacket read(NetworkBuffer buffer) {
-            final String teamName = buffer.read(STRING);
-            final byte actionId = buffer.read(BYTE);
-            final var type = actionSerializer(actionId);
-            return new TeamsPacket(teamName, type.read(buffer));
-        }
-    };
+    public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = NetworkBufferTemplate.template(
+            STRING, TeamsPacket::teamName,
+            BYTE.unionType(TeamsPacket::actionSerializer, Action::id), TeamsPacket::action,
+            TeamsPacket::new
+    );
 
     @Override
     public Collection<Component> components() {
@@ -66,8 +55,9 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
     }
 
-    public sealed interface Action permits CreateTeamAction, RemoveTeamAction, UpdateTeamAction, AddEntitiesToTeamAction, RemoveEntitiesToTeamAction {
-        int id();
+    public sealed interface Action {
+        @ApiStatus.Internal
+        byte id();
     }
 
     public record CreateTeamAction(Component displayName, byte friendlyFlags,
@@ -101,7 +91,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         };
 
         @Override
-        public int id() {
+        public byte id() {
             return 0;
         }
 
@@ -129,7 +119,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         public static final NetworkBuffer.Type<RemoveTeamAction> SERIALIZER = NetworkBufferTemplate.template(new RemoveTeamAction());
 
         @Override
-        public int id() {
+        public byte id() {
             return 1;
         }
     }
@@ -162,7 +152,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         };
 
         @Override
-        public int id() {
+        public byte id() {
             return 2;
         }
 
@@ -200,7 +190,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 3;
         }
     }
@@ -220,7 +210,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 4;
         }
     }
@@ -276,7 +266,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          *
          * @return the identifier
          */
-            public String getIdentifier() {
+        public String getIdentifier() {
             return identifier;
         }
     }
