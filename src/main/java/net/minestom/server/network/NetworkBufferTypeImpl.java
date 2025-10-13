@@ -21,9 +21,7 @@ import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
@@ -1032,7 +1030,7 @@ final class NetworkBufferTypeImpl {
     }
 
     /**
-     * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)} & ${@link DataInputStream#readUTF()}. We need the data in the java
+     * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)} & ${@link java.io.DataInputStream#readUTF()}. We need the data in the java
      * modified utf-8 format for Component, and I couldnt find a method without creating a new buffer for it.
      */
     record IOUTF8StringType() implements NetworkBuffer.Type<String> {
@@ -1050,33 +1048,24 @@ final class NetworkBufferTypeImpl {
             if (utflen > 65535 || /* overflow */ utflen < strlen)
                 throw new RuntimeException("UTF-8 string too long");
 
-            buffer.write(SHORT, (short) utflen);
-            buffer.ensureWritable(utflen);
+            buffer.write(UNSIGNED_SHORT, utflen);
+            buffer.ensureWritable(utflen); // throw early if possible
             var impl = (NetworkBufferImpl) buffer;
-            int i;
-            for (i = 0; i < strlen; i++) { // optimized for initial run of ASCII
+            long offset = buffer.writeIndex();
+            for (int i = 0; i < strlen; i++) { // Excerpt from ModifiedUtf#putChar
                 int c = value.charAt(i);
-                if (c >= 0x80 || c == 0) break;
-                impl._putByte(buffer.writeIndex(), (byte) c);
-                impl.advanceWrite(1);
-            }
-
-            for (; i < strlen; i++) {
-                int c = value.charAt(i);
-                if (c < 0x80 && c != 0) {
-                    impl._putByte(buffer.writeIndex(), (byte) c);
-                    impl.advanceWrite(1);
+                if (c != 0 && c < 0x80) {
+                    impl._putByte(offset++, (byte) c);
                 } else if (c >= 0x800) {
-                    impl._putByte(buffer.writeIndex(), (byte) (0xE0 | ((c >> 12) & 0x0F)));
-                    impl._putByte(buffer.writeIndex() + 1, (byte) (0x80 | ((c >> 6) & 0x3F)));
-                    impl._putByte(buffer.writeIndex() + 2, (byte) (0x80 | ((c >> 0) & 0x3F)));
-                    impl.advanceWrite(3);
+                    impl._putByte(offset++, (byte) (0xE0 | c >> 12 & 0x0F));
+                    impl._putByte(offset++, (byte) (0x80 | c >> 6  & 0x3F));
+                    impl._putByte(offset++, (byte) (0x80 | c       & 0x3F));
                 } else {
-                    impl._putByte(buffer.writeIndex(), (byte) (0xC0 | ((c >> 6) & 0x1F)));
-                    impl._putByte(buffer.writeIndex() + 1, (byte) (0x80 | ((c >> 0) & 0x3F)));
-                    impl.advanceWrite(2);
+                    impl._putByte(offset++, (byte) (0xC0 | c >> 6 & 0x1F));
+                    impl._putByte(offset++, (byte) (0x80 | c      & 0x3F));
                 }
             }
+            buffer.writeIndex(offset);
         }
 
         @Override
@@ -1132,7 +1121,7 @@ final class NetworkBufferTypeImpl {
                                         "malformed input around byte " + (count - 1));
                             chararr[chararr_count++] = (char) (((c & 0x0F) << 12) |
                                     ((char2 & 0x3F) << 6) |
-                                    ((char3 & 0x3F) << 0));
+                                    (char3 & 0x3F));
                         }
                         default ->
                             /* 10xx xxxx,  1111 xxxx */
