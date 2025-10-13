@@ -23,6 +23,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 
 // TODO light data & API
 
@@ -281,6 +283,18 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * block entities if block entities are added/removed from the chunk after calling this method.
      */
     public abstract @Unmodifiable Map<Point, Block> getBlockEntities();
+
+    /**
+     *
+     * Iterates over all block entities in the chunk
+     */
+    public abstract void forEachBlockEntity(BiConsumer<Point, Block> consumer);
+
+    /**
+     * Finds all block entities that match {@code filter}
+     * @return map of blocks that pass the filter
+     */
+    public abstract Map<Point, Block> filterBlockEntities(BiPredicate<Point, Block> filter);
 
     @Override
     public String toString() {
