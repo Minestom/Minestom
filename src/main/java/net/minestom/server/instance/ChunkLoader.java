@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.anvil.AnvilLoader;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -12,9 +13,14 @@ import java.util.concurrent.Phaser;
  * <p>
  * See {@link AnvilLoader} for the default implementation used in {@link InstanceContainer}.
  */
-public interface IChunkLoader {
+public interface ChunkLoader {
 
-    static IChunkLoader noop() {
+    /**
+     * Returns the no op chunk loader
+     * @return the no op loader.
+     */
+    @Contract(pure = true)
+    static ChunkLoader noop() {
         return NoopChunkLoaderImpl.INSTANCE;
     }
 

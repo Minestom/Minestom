@@ -13,19 +13,21 @@ import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@ApiStatus.Internal
 final class CodecImpl {
 
     record RawValueImpl<D>(Transcoder<D> coder, D value) implements Codec.RawValue {
-
         RawValueImpl {
-            Objects.requireNonNull(coder);
-            Objects.requireNonNull(value);
+            Objects.requireNonNull(coder, "coder");
+            Objects.requireNonNull(value, "value");
         }
 
         @Override
@@ -51,12 +53,17 @@ final class CodecImpl {
         }
     }
 
+    @FunctionalInterface
     interface PrimitiveEncoder<T> {
         <D> D encode(Transcoder<D> coder, T value);
     }
 
-    @SuppressWarnings("unchecked")
     record PrimitiveImpl<T>(PrimitiveEncoder<T> encoder, Decoder<T> decoder) implements Codec<T> {
+        PrimitiveImpl {
+            Objects.requireNonNull(encoder, "encoder");
+            Objects.requireNonNull(decoder, "decoder");
+        }
+
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
             return decoder.decode(coder, value);
@@ -70,6 +77,10 @@ final class CodecImpl {
     }
 
     record OptionalImpl<T>(Codec<T> inner, @Nullable T defaultValue) implements Codec<T> {
+        OptionalImpl {
+            Objects.requireNonNull(inner, "inner");
+        }
+
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
             return new Result.Ok<>(inner.decode(coder, value).orElse(defaultValue));
@@ -84,13 +95,19 @@ final class CodecImpl {
     }
 
     record TransformImpl<T, S>(Codec<T> inner, ThrowingFunction<T, S> to,
-                               ThrowingFunction<S, T> from) implements Codec<S> {
+                               ThrowingFunction<@Nullable S, T> from) implements Codec<S> {
+        TransformImpl {
+            Objects.requireNonNull(inner, "inner");
+            Objects.requireNonNull(to, "to");
+            Objects.requireNonNull(from, "from");
+        }
+
         @Override
         public <D> Result<S> decode(Transcoder<D> coder, D value) {
             try {
                 final Result<T> innerResult = inner.decode(coder, value);
                 return switch (innerResult) {
-                    case Result.Ok(T inner) -> new Result.Ok<>(to.apply(inner));
+                    case Result.Ok(T innerValue) -> new Result.Ok<>(to.apply(innerValue));
                     case Result.Error(String error) -> new Result.Error<>(error);
                 };
             } catch (Exception e) {
@@ -108,9 +125,13 @@ final class CodecImpl {
         }
     }
 
-    record ListImpl<T>(Codec<T> inner, int maxSize) implements Codec<List<T>> {
+    record ListImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable List<T>> {
+        ListImpl {
+            Objects.requireNonNull(inner, "inner");
+        }
+
         @Override
-        public <D> Result<List<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<@Unmodifiable List<T>> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
             if (!(listResult instanceof Result.Ok(List<D> list)))
                 return listResult.cast();
@@ -144,9 +165,13 @@ final class CodecImpl {
         }
     }
 
-    record SetImpl<T>(Codec<T> inner, int maxSize) implements Codec<Set<T>> {
+    record SetImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable Set<T>> {
+        SetImpl {
+            Objects.requireNonNull(inner, "inner");
+        }
+
         @Override
-        public <D> Result<Set<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<@Unmodifiable Set<T>> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
             if (!(listResult instanceof Result.Ok(List<D> list)))
                 return listResult.cast();
@@ -180,9 +205,14 @@ final class CodecImpl {
     }
 
     record MapImpl<K, V>(Codec<K> keyCodec, Codec<V> valueCodec,
-                         int maxSize) implements Codec<Map<K, V>> {
+                         int maxSize) implements Codec<@Unmodifiable Map<K, V>> {
+        MapImpl {
+            Objects.requireNonNull(keyCodec, "keyCodec");
+            Objects.requireNonNull(valueCodec, "valueCodec");
+        }
+
         @Override
-        public <D> Result<Map<K, V>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<@Unmodifiable Map<K, V>> decode(Transcoder<D> coder, D value) {
             final Result<MapLike<D>> mapResult = coder.getMap(value);
             if (!(mapResult instanceof Result.Ok(MapLike<D> map)))
                 return mapResult.cast();
@@ -227,9 +257,14 @@ final class CodecImpl {
         }
     }
 
-    record UnionImpl<T, R, T1 extends T, TR extends R>(String keyField, Codec<T> keyCodec,
-                                                       Function<T, StructCodec<TR>> serializers,
-                                                       Function<R, T1> keyFunc) implements StructCodec<R> {
+    record UnionImpl<T, R>(String keyField, Codec<T> keyCodec,
+                           Function<T, @Nullable StructCodec<? extends R>> serializers,
+                           Function<R, ? extends T> keyFunc) implements StructCodec<R> {
+        UnionImpl {
+            Objects.requireNonNull(serializers, "serializers");
+            Objects.requireNonNull(keyField, "keyField");
+            Objects.requireNonNull(keyFunc, "keyFunc");
+        }
 
         @SuppressWarnings("unchecked")
         @Override
@@ -237,14 +272,16 @@ final class CodecImpl {
             final Result<T> keyResult = map.getValue(keyField).map(key -> keyCodec.decode(coder, key));
             if (!(keyResult instanceof Result.Ok(T key)))
                 return keyResult.cast();
-            return (Result<R>) serializers.apply(key).decodeFromMap(coder, map);
+            final StructCodec<? extends R> serializer = serializers.apply(key);
+            if (serializer == null) return new Result.Error<>("no union value: " + key);
+            return (Result<R>) serializer.decodeFromMap(coder, map);
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public <D> Result<D> encodeToMap(Transcoder<D> coder, R value, MapBuilder<D> map) {
             final T key = keyFunc.apply(value);
-            var serializer = serializers.apply(key);
+            final StructCodec<R> serializer = (StructCodec<R>) serializers.apply(key);
             if (serializer == null) return new Result.Error<>("no union value: " + key);
 
             final Result<D> keyResult = keyCodec.encode(coder, key);
@@ -253,16 +290,22 @@ final class CodecImpl {
             if (keyValue == null) return new Result.Error<>("null");
 
             map.put(keyField, keyValue);
-            return serializer.encodeToMap(coder, (TR) value, map);
+            return serializer.encodeToMap(coder, value, map);
         }
     }
 
     @SuppressWarnings("unchecked")
     record RegistryTaggedUnionImpl<T>(
+            String key,
             Registries.Selector<StructCodec<? extends T>> registrySelector,
-            Function<T, StructCodec<? extends T>> valueToCodec,
-            String key
+            Function<T, StructCodec<? extends T>> valueToCodec
     ) implements StructCodec<T> {
+        RegistryTaggedUnionImpl {
+            Objects.requireNonNull(key, "key");
+            Objects.requireNonNull(registrySelector, "registrySelector");
+            Objects.requireNonNull(valueToCodec, "valueToCodec");
+        }
+
         @Override
         public <D> Result<T> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
             if (!(coder instanceof RegistryTranscoder<D> context))
@@ -279,7 +322,7 @@ final class CodecImpl {
         }
 
         @Override
-        public <D> Result<D> encodeToMap(Transcoder<D> coder, T value, MapBuilder<D> map) {
+        public <D> Result<@Nullable D> encodeToMap(Transcoder<D> coder, T value, MapBuilder<D> map) {
             if (!(coder instanceof RegistryTranscoder<D> context))
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = registrySelector.select(context.registries());
@@ -300,7 +343,8 @@ final class CodecImpl {
         final Codec<T> delegate;
 
         public RecursiveImpl(Function<Codec<T>, Codec<T>> self) {
-            this.delegate = self.apply(this);
+            Objects.requireNonNull(self, "self");
+            this.delegate = Objects.requireNonNull(self.apply(this), "delegate");
         }
 
         @Override
@@ -316,26 +360,34 @@ final class CodecImpl {
 
     static final class ForwardRefImpl<T> implements Codec<T> {
         private final Supplier<Codec<T>> delegateFunc;
-        private Codec<T> delegate;
+        private @Nullable Codec<T> delegate;
 
         ForwardRefImpl(Supplier<Codec<T>> delegateFunc) {
-            this.delegateFunc = delegateFunc;
+            this.delegateFunc = Objects.requireNonNull(delegateFunc, "delegateFunc");
+        }
+
+        private Codec<T> delegate() {
+            if (delegate == null) delegate = delegateFunc.get();
+            return Objects.requireNonNull(delegate, "Delegate cannot be null after supplier call.");
         }
 
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
-            if (delegate == null) delegate = delegateFunc.get();
-            return delegate.decode(coder, value);
+            return delegate().decode(coder, value);
         }
 
         @Override
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable T value) {
-            if (delegate == null) delegate = delegateFunc.get();
-            return delegate.encode(coder, value);
+            return delegate().encode(coder, value);
         }
     }
 
     record OrElseImpl<T>(Codec<T> primary, Codec<T> secondary) implements Codec<T> {
+        OrElseImpl {
+            Objects.requireNonNull(primary, "primary");
+            Objects.requireNonNull(secondary, "secondary");
+        }
+
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
             final Result<T> primaryResult = primary.decode(coder, value);
@@ -390,6 +442,11 @@ final class CodecImpl {
     }
 
     record EitherImpl<L, R>(Codec<L> leftCodec, Codec<R> rightCodec) implements Codec<Either<L, R>> {
+        EitherImpl {
+            Objects.requireNonNull(leftCodec, "leftCodec");
+            Objects.requireNonNull(rightCodec, "rightCodec");
+        }
+        
         @Override
         public <D> Result<Either<L, R>> decode(Transcoder<D> coder, D value) {
             final Result<L> leftResult = leftCodec.decode(coder, value);
@@ -407,6 +464,32 @@ final class CodecImpl {
             return switch (value) {
                 case Either.Left(L leftValue) -> leftCodec.encode(coder, leftValue);
                 case Either.Right(R rightValue) -> rightCodec.encode(coder, rightValue);
+            };
+        }
+    }
+
+    record EitherStructImpl<L, R>(StructCodec<L> leftCodec, StructCodec<R> rightCodec) implements StructCodec<Either<L, R>> {
+        public EitherStructImpl {
+            Objects.requireNonNull(leftCodec, "leftCodec");
+            Objects.requireNonNull(rightCodec, "rightCodec");
+        }
+
+        @Override
+        public <D> Result<Either<L, R>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
+            final Result<L> leftResult = leftCodec.decodeFromMap(coder, map);
+            if (leftResult instanceof Result.Ok(L leftValue))
+                return new Result.Ok<>(Either.left(leftValue));
+            final Result<R> rightResult = rightCodec.decodeFromMap(coder, map);
+            if (rightResult instanceof Result.Ok(R rightValue))
+                return new Result.Ok<>(Either.right(rightValue));
+            return new Result.Error<>("Failed to decode Either: " + leftResult + ", " + rightResult);
+        }
+
+        @Override
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, Either<L, R> value, MapBuilder<D> map) {
+            return switch (value) {
+                case Either.Left(L leftValue) -> leftCodec.encodeToMap(coder, leftValue, map);
+                case Either.Right(R rightValue) -> rightCodec.encodeToMap(coder, rightValue, map);
             };
         }
     }
@@ -439,27 +522,6 @@ final class CodecImpl {
             list.add(coder.createDouble(value.y()));
             list.add(coder.createDouble(value.z()));
             return new Result.Ok<>(list.build());
-        }
-    }
-
-    /**
-     * @deprecated Remove once adventure is updated to have change_page be an int.
-     */
-    @Deprecated
-    record IntAsStringImpl() implements Codec<String> {
-        @Override
-        public <D> Result<String> decode(Transcoder<D> coder, D value) {
-            return coder.getInt(value).mapResult(String::valueOf);
-        }
-
-        @Override
-        public <D> Result<D> encode(Transcoder<D> coder, @Nullable String value) {
-            if (value == null) return new Result.Error<>("null");
-            try {
-                return new Result.Ok<>(coder.createInt(Integer.parseInt(value)));
-            } catch (NumberFormatException ignored) {
-                return new Result.Error<>("not an integer: " + value);
-            }
         }
     }
 

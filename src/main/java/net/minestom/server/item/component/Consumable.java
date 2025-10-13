@@ -34,6 +34,10 @@ public record Consumable(
             "on_consume_effects", ConsumeEffect.CODEC.list().optional(List.of()), Consumable::effects,
             Consumable::new);
 
+    public Consumable {
+        effects = List.copyOf(effects);
+    }
+
     public int consumeTicks() {
         return (int) (consumeSeconds * ServerFlag.SERVER_TICKS_PER_SECOND);
     }

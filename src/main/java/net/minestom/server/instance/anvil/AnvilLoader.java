@@ -9,7 +9,7 @@ import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.IChunkLoader;
+import net.minestom.server.instance.ChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
@@ -17,6 +17,7 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +39,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
-public class AnvilLoader implements IChunkLoader {
+public class AnvilLoader implements ChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
     private final static int PLAINS_ID = BIOME_REGISTRY.getId(Biome.PLAINS);
@@ -406,7 +407,10 @@ public class AnvilLoader implements IChunkLoader {
                 final int globalSectionY = sectionY * 16;
                 // Retrieve block data
                 if (section.blockPalette().singleValue() != -1) {
-                    blockPaletteIndices.add(section.blockPalette().singleValue());
+                    final Block block = Block.fromStateId(section.blockPalette().singleValue());
+                    assert block != null;
+                    final CompoundBinaryTag blockState = blockStateNbt(block);
+                    blockPaletteEntries.add(blockState);
                 } else {
                     section.blockPalette().getAll((x, y, z, value) -> {
                         Block block = chunk.getBlock(x, globalSectionY + y, z, Block.Getter.Condition.CACHED);
@@ -439,10 +443,14 @@ public class AnvilLoader implements IChunkLoader {
                 }
                 // Retrieve biome data
                 if (section.biomePalette().singleValue() != -1) {
-                    blockPaletteIndices.add(section.biomePalette().singleValue());
+                    final RegistryKey<Biome> biomeKey = MinecraftServer.getBiomeRegistry()
+                            .getKey(section.biomePalette().singleValue());
+                    assert biomeKey != null;
+                    final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
+                    biomePalette.add(biomeName);
                 } else {
                     section.biomePalette().getAll((x, y, z, value) -> {
-                        int biomeIndex = (x / 4) + (y / 4) * 4 * 4 + (z / 4) * 4;
+                        int biomeIndex = x + y * 4 * 4 + z * 4;
                         final RegistryKey<Biome> biomeKey = MinecraftServer.getBiomeRegistry().getKey(value);
                         assert biomeKey != null;
                         final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
@@ -460,7 +468,7 @@ public class AnvilLoader implements IChunkLoader {
                 blockStates.put("palette", ListBinaryTag.listBinaryTag(BinaryTagTypes.COMPOUND, blockPaletteEntries));
                 if (blockPaletteEntries.size() > 1) {
                     // If there is only one entry we do not need to write the packed indices
-                    final int bitsPerEntry = (int) Math.max(4, Math.ceil(Math.log(blockPaletteEntries.size()) / Math.log(2)));
+                    final int bitsPerEntry = Math.max(4, MathUtils.bitsToRepresent(blockPaletteEntries.size() - 1));
                     blockStates.putLongArray("data", Palettes.pack(blockIndices, bitsPerEntry));
                 }
                 sectionData.put("block_states", blockStates.build());
@@ -469,7 +477,7 @@ public class AnvilLoader implements IChunkLoader {
                 biomes.put("palette", ListBinaryTag.listBinaryTag(BinaryTagTypes.STRING, biomePalette));
                 if (biomePalette.size() > 1) {
                     // If there is only one entry we do not need to write the packed indices
-                    final int bitsPerEntry = (int) Math.max(1, Math.ceil(Math.log(biomePalette.size()) / Math.log(2)));
+                    final int bitsPerEntry = MathUtils.bitsToRepresent(biomePalette.size() - 1);
                     biomes.putLongArray("data", Palettes.pack(biomeIndices, bitsPerEntry));
                 }
                 sectionData.put("biomes", biomes.build());

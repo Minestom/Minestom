@@ -22,6 +22,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.registry.*;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Unit;
@@ -93,7 +94,7 @@ public class DataComponents {
     public static final DataComponent<LodestoneTracker> LODESTONE_TRACKER = register("lodestone_tracker", LodestoneTracker.NETWORK_TYPE, LodestoneTracker.CODEC);
     public static final DataComponent<FireworkExplosion> FIREWORK_EXPLOSION = register("firework_explosion", FireworkExplosion.NETWORK_TYPE, FireworkExplosion.CODEC);
     public static final DataComponent<FireworkList> FIREWORKS = register("fireworks", FireworkList.NETWORK_TYPE, FireworkList.NBT_TYPE);
-    public static final DataComponent<HeadProfile> PROFILE = register("profile", HeadProfile.NETWORK_TYPE, HeadProfile.CODEC);
+    public static final DataComponent<ResolvableProfile> PROFILE = register("profile", ResolvableProfile.NETWORK_TYPE, ResolvableProfile.CODEC);
     public static final DataComponent<String> NOTE_BLOCK_SOUND = register("note_block_sound", NetworkBuffer.STRING, Codec.STRING);
     public static final DataComponent<BannerPatterns> BANNER_PATTERNS = register("banner_patterns", BannerPatterns.NETWORK_TYPE, BannerPatterns.CODEC);
     public static final DataComponent<DyeColor> BASE_COLOR = register("base_color", DyeColor.NETWORK_TYPE, DyeColor.CODEC);

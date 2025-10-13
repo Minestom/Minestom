@@ -32,6 +32,7 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
@@ -126,13 +127,14 @@ public class DynamicChunk extends Chunk {
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
+                    () -> new BlockHandler.Destroy(lastCachedBlock, block, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
         }
         if (handler != null) {
             // New placement
             final Block finalBlock = block;
+            final Point placePoint = CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ);
             handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
+                    () -> new BlockHandler.Placement(finalBlock, Objects.requireNonNullElseGet(lastCachedBlock, () -> this.getBlock(placePoint, Condition.TYPE)), instance, placePoint)));
         }
 
         // UpdateHeightMaps
@@ -394,7 +396,8 @@ public class DynamicChunk extends Chunk {
         }
     }
 
-    private void assertLock() {
+    @ApiStatus.Internal
+    void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
     }
 

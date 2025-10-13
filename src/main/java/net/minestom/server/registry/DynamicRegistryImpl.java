@@ -126,8 +126,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public RegistryKey<T> register(Key key, T object, @Nullable DataPack pack) {
+    public RegistryKey<T> register(Key key, T object, DataPack pack) {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
+        Check.notNull(key, "Key cannot be null");
+        Check.notNull(object, "Object cannot be null");
+        Check.notNull(pack, "Pack cannot be null");
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
@@ -154,6 +157,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Override
     public boolean remove(Key key) throws UnsupportedOperationException {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
+        Check.notNull(key, "Key cannot be null");
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
