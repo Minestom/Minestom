@@ -107,7 +107,13 @@ public final class Palettes {
 
     public static long[] remap(int dimension, int oldBitsPerEntry, int newBitsPerEntry,
                                long[] values, Int2IntFunction function) {
-        final long[] result = new long[arrayLength(dimension, newBitsPerEntry)];
+        return remap(dimension, oldBitsPerEntry, newBitsPerEntry, values, false, function);
+    }
+
+    public static long[] remap(int dimension, int oldBitsPerEntry, int newBitsPerEntry,
+                               long[] values, boolean forceRealloc, Int2IntFunction function) {
+        final long[] result = forceRealloc || oldBitsPerEntry != newBitsPerEntry ?
+                new long[arrayLength(dimension, newBitsPerEntry)] : values;
         final int magicMask = (1 << oldBitsPerEntry) - 1;
         final int oldValuesPerLong = 64 / oldBitsPerEntry;
         final int newValuesPerLong = 64 / newBitsPerEntry;

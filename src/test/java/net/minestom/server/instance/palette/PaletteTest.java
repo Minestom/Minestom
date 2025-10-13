@@ -691,7 +691,7 @@ public class PaletteTest {
         assertEquals(15, palette.bitsPerEntry());
 
         // Should not have a palette anymore (direct mode)
-        assertNull(((PaletteImpl) palette).paletteToValueList);
+        assertNull(((PaletteImpl) palette).paletteIndexMap);
     }
 
     @Test
@@ -717,15 +717,15 @@ public class PaletteTest {
         assertEquals(3, palette.bitsPerEntry());
 
         // Should have palette
-        assertNotNull(((PaletteImpl) palette).paletteToValueList);
+        assertNotNull(((PaletteImpl) palette).paletteIndexMap);
 
         // Verify palette contents
-        assertEquals(5, ((PaletteImpl) palette).paletteToValueList.size());
-        assertEquals(0, ((PaletteImpl) palette).paletteToValueList.getInt(0));
-        assertEquals(10, ((PaletteImpl) palette).paletteToValueList.getInt(1));
-        assertEquals(20, ((PaletteImpl) palette).paletteToValueList.getInt(2));
-        assertEquals(30, ((PaletteImpl) palette).paletteToValueList.getInt(3));
-        assertEquals(40, ((PaletteImpl) palette).paletteToValueList.getInt(4));
+        assertEquals(5,  ((PaletteImpl) palette).paletteIndexMap.size());
+        assertEquals(0,  ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(0));
+        assertEquals(10, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(1));
+        assertEquals(20, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(2));
+        assertEquals(30, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(3));
+        assertEquals(40, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(4));
     }
 
     @Test
@@ -742,8 +742,8 @@ public class PaletteTest {
         assertEquals(3, palette.bitsPerEntry());
 
         // Should have palette
-        assertNotNull(((PaletteImpl) palette).paletteToValueList);
-        assertEquals(8, ((PaletteImpl) palette).paletteToValueList.size());
+        assertNotNull(((PaletteImpl) palette).paletteIndexMap);
+        assertEquals(8, ((PaletteImpl) palette).paletteIndexMap.size());
     }
 
     @Test
@@ -763,8 +763,8 @@ public class PaletteTest {
         assertEquals(4, palette.bitsPerEntry());
 
         // Should still have palette (not direct)
-        assertNotNull(((PaletteImpl) palette).paletteToValueList);
-        assertEquals(16, ((PaletteImpl) palette).paletteToValueList.size());
+        assertNotNull(((PaletteImpl) palette).paletteIndexMap);
+        assertEquals(16, ((PaletteImpl) palette).paletteIndexMap.size());
     }
 
     @Test
@@ -781,9 +781,9 @@ public class PaletteTest {
         assertEquals(1, palette.bitsPerEntry());
 
         // Should have palette with single entry
-        assertNotNull(((PaletteImpl) palette).paletteToValueList);
-        assertEquals(1, ((PaletteImpl) palette).paletteToValueList.size());
-        assertEquals(0, ((PaletteImpl) palette).paletteToValueList.getInt(0));
+        assertNotNull(((PaletteImpl) palette).paletteIndexMap);
+        assertEquals(1, ((PaletteImpl) palette).paletteIndexMap.size());
+        assertEquals(0, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(0));
     }
 
     @Test
@@ -846,8 +846,8 @@ public class PaletteTest {
 
         // Should not have indirect palette structures (direct mode)
         PaletteImpl impl = (PaletteImpl) palette;
-        assertNull(impl.paletteToValueList,
-                "Direct palette should not have paletteToValueList");
+        assertNull(impl.paletteIndexMap,
+                "Direct palette should not have paletteIndexMap");
 
         // Verify we can still read some values correctly
         // In direct mode, palette indices become the actual values
