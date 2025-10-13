@@ -117,44 +117,22 @@ final class PaletteImpl implements Palette {
     public void load(int[] palette, long[] values) {
         int bpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
         bpe = Math.max(minBitsPerEntry, bpe);
-        boolean useDirectMode = bpe > maxBitsPerEntry;
-        if (useDirectMode) bpe = directBits;
-        this.bitsPerEntry = (byte) bpe;
 
-        if (useDirectMode) {
+        if (bpe > maxBitsPerEntry) {
             // Direct mode: convert from palette indices to direct values
+            this.bitsPerEntry = directBits;
             this.paletteIndexMap = null;
-            this.values = new long[arrayLength(dimension, directBits)];
 
-            final int originalBpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
-            final int actualOriginalBpe = Math.max(minBitsPerEntry, originalBpe);
-            final int originalMask = (1 << actualOriginalBpe) - 1;
-            final int originalValuesPerLong = 64 / actualOriginalBpe;
-
-            int nonZeroCount = 0;
-            final int dimension = this.dimension;
-            for (int y = 0; y < dimension; y++) {
-                for (int z = 0; z < dimension; z++) {
-                    for (int x = 0; x < dimension; x++) {
-                        final int index = sectionIndex(dimension, x, y, z);
-
-                        // Read palette index from original values
-                        final int longIndex = index / originalValuesPerLong;
-                        final int bitIndex = (index % originalValuesPerLong) * actualOriginalBpe;
-                        final int paletteIndex = (int) (values[longIndex] >> bitIndex) & originalMask;
-
-                        // Convert to direct value
-                        final int directValue = paletteIndex < palette.length ? palette[paletteIndex] : 0;
-                        if (directValue != 0) nonZeroCount++;
-
-                        // Write direct value to new values array using coordinates
-                        write(dimension, directBits, this.values, x, y, z, directValue);
-                    }
-                }
-            }
-            this.count = nonZeroCount;
+            final AtomicInteger count = new AtomicInteger();
+            this.values = Palettes.remap(dimension, bpe, directBits, values, true, v -> {
+                final int result = palette[v];
+                if (result != 0) count.setPlain(count.getPlain() + 1);
+                return result;
+            });
+            this.count = count.getPlain();
         } else {
             // Indirect mode: use palette
+            this.bitsPerEntry = (byte) bpe;
             this.paletteIndexMap = new PaletteIndexMap(palette);
             this.values = Arrays.copyOf(values, arrayLength(dimension, bitsPerEntry));
             recount();

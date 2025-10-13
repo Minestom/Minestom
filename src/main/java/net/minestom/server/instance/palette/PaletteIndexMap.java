@@ -113,6 +113,7 @@ final class PaletteIndexMap implements Cloneable {
         return indexToValue[index];
     }
 
+    /// Should not be modified
     int[] indexToValueArray() {
         return indexToValue;
     }
