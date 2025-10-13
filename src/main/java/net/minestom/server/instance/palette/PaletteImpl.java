@@ -114,6 +114,67 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public void fill(int x0, int y0, int z0, int x1, int y1, int z1, int value) {
+        final int dimensionMinus = dimension - 1;
+        final int minX = Math.max(0, Math.min(x0, x1));
+        final int minY = Math.max(0, Math.min(y0, y1));
+        final int minZ = Math.max(0, Math.min(z0, z1));
+        final int maxX = Math.min(dimensionMinus, Math.max(x0, x1));
+        final int maxY = Math.min(dimensionMinus, Math.max(y0, y1));
+        final int maxZ = Math.min(dimensionMinus, Math.max(z0, z1));
+        if (minX > maxX || minY > maxY || minZ > maxZ) return;
+        if (minX == 0 && minY == 0 && minZ == 0 &&
+                maxX == dimensionMinus && maxY == dimensionMinus && maxZ == dimensionMinus) {
+            fill(value);
+            return;
+        }
+
+        final int paletteIndex = valueToPaletteIndex(value);
+        final int airPaletteIndex = valueToPalettIndexOrDefault(0);
+        int countDelta = 0;
+        if (paletteIndex == airPaletteIndex) {
+            countDelta = (maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1);
+        }
+
+        final int dimensionBits = MathUtils.bitsToRepresent(dimension - 1);
+        final int finalXTravel = dimensionMinus - maxX;
+        final int initialZTravel = minZ << dimensionBits;
+        final int finalZTravel = (dimensionMinus - maxZ) << dimensionBits;
+
+        final long[] values = this.values;
+        final int valuesPerLong = 64 / bitsPerEntry;
+        final int maxBitIndex = bitsPerEntry * valuesPerLong;
+        final int mask = (1 << bitsPerEntry) - 1;
+
+        int index = minY << (dimensionBits << 1);
+        for (int y = minY; y <= maxY; y++) {
+            index += initialZTravel;
+            for (int z = minZ; z <= maxZ; z++) {
+                index += minX;
+                int blockIndex = index / valuesPerLong;
+                int bitIndex = (index % valuesPerLong) * bitsPerEntry;
+                long block = values[blockIndex];
+                for (int x = minZ; x <= maxZ; x++) {
+                    if (((block >>> bitIndex) & mask) == airPaletteIndex) countDelta--;
+                    block = (block & ~(((long) mask) << bitIndex)) | (((long) paletteIndex) << bitIndex);
+
+                    bitIndex += bitsPerEntry;
+                    if (bitIndex >= maxBitIndex) {
+                        values[blockIndex] = block;
+                        bitIndex = 0;
+                        blockIndex++;
+                        block = values[blockIndex];
+                    }
+                    index++;
+                }
+                index += finalXTravel;
+            }
+            index += finalZTravel;
+        }
+        this.count += countDelta;
+    }
+
+    @Override
     public void load(int[] palette, long[] values) {
         int bpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
         bpe = Math.max(minBitsPerEntry, bpe);

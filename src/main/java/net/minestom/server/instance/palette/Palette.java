@@ -1,7 +1,5 @@
 package net.minestom.server.instance.palette;
 
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -73,6 +71,8 @@ public sealed interface Palette permits PaletteImpl {
     void set(int x, int y, int z, int value);
 
     void fill(int value);
+
+    void fill(int x0, int y0, int z0, int x1, int y1, int z1, int value);
 
     void load(int[] palette, long[] values);
 
@@ -232,7 +232,7 @@ public sealed interface Palette permits PaletteImpl {
             public void write(NetworkBuffer buffer, Palette palette) {
                 PaletteImpl value = (PaletteImpl) palette;
                 // Temporary fix for biome direct bits depending on the number of registered biomes
-                if (directBits != value.directBits && !value.hasPalette()) {
+                if (directBits != value.directBits && value.isDirect()) {
                     PaletteImpl tmp = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
                     tmp.setAll(value::get);
                     value = tmp;
@@ -242,8 +242,12 @@ public sealed interface Palette permits PaletteImpl {
                 if (bitsPerEntry == 0) {
                     buffer.write(VAR_INT, value.count);
                 } else {
-                    if (value.hasPalette()) {
-                        buffer.write(VAR_INT.list(), value.paletteToValueList);
+                    if (!value.isDirect()) {
+                        final int paletteSize = value.paletteIndexMap.size();
+                        buffer.write(VAR_INT, paletteSize);
+                        for (int index = 0; index < paletteSize; index++) {
+                            buffer.write(VAR_INT, value.paletteIndexMap.indexToValue(index));
+                        }
                     }
                     for (long l : value.values) buffer.write(LONG, l);
                 }
@@ -259,14 +263,10 @@ public sealed interface Palette permits PaletteImpl {
                     result.count = buffer.read(VAR_INT);
                     return result;
                 }
-                if (result.hasPalette()) {
+                if (!result.isDirect()) {
                     // Indirect palette
                     final int[] palette = buffer.read(VAR_INT_ARRAY);
-                    result.paletteToValueList = new IntArrayList(palette);
-                    result.valueToPaletteMap = new Int2IntOpenHashMap(palette.length);
-                    for (int i = 0; i < palette.length; i++) {
-                        result.valueToPaletteMap.put(palette[i], i);
-                    }
+                    result.paletteIndexMap = new PaletteIndexMap(palette);
                 }
                 final long[] data = new long[Palettes.arrayLength(dimension, bitsPerEntry)];
                 for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
