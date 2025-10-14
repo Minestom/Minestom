@@ -252,37 +252,34 @@ final class PaletteImpl implements Palette {
     public void setAll(EntrySupplier supplier) {
         int[] cache = WRITE_CACHE.get();
         final int dimension = dimension();
+        final int maxPaletteSize = 1 << maxBitsPerEntry;
         // Fill cache with values
-        int fillValue = -1;
+        @Nullable
+        PaletteIndexMap newPaletteIndexMap = new PaletteIndexMap(minBitsPerEntry);
         int count = 0;
         int index = 0;
         for (int y = 0; y < dimension; y++) {
             for (int z = 0; z < dimension; z++) {
                 for (int x = 0; x < dimension; x++) {
                     int value = supplier.get(x, y, z);
-                    // Support for fill fast exit if the supplier returns a constant value
-                    if (fillValue != -2) {
-                        if (fillValue == -1) {
-                            fillValue = value;
-                        } else if (fillValue != value) {
-                            fillValue = -2;
-                        }
-                    }
-                    // Set value in cache
                     if (value != 0) count++;
-                    cache[index++] = value;
+                    if (newPaletteIndexMap == null) {
+                        cache[index++] = value;
+                        continue;
+                    }
+                    final int maybePaletteIndex = newPaletteIndexMap.valueToIndexCapped(value, maxPaletteSize);
+                    if (maybePaletteIndex < 0) {
+                        for (int i = 0; i < index; i++) cache[i] = newPaletteIndexMap.indexToValue(cache[i]);
+                        newPaletteIndexMap = null;
+                        cache[index++] = value;
+                        continue;
+                    }
+                    cache[index++] = maybePaletteIndex;
                 }
             }
         }
-        assert index == maxSize();
-        // Update palette content
-        if (fillValue < 0) {
-            makeDirect();
-            updateAll(cache);
-            this.count = count;
-        } else {
-            fill(fillValue);
-        }
+        this.count = count;
+        updateAll(cache, newPaletteIndexMap);
     }
 
     @Override
@@ -296,20 +293,35 @@ final class PaletteImpl implements Palette {
     @Override
     public void replaceAll(EntryFunction function) {
         int[] cache = WRITE_CACHE.get();
-        AtomicInteger arrayIndex = new AtomicInteger();
-        AtomicInteger count = new AtomicInteger();
-        getAll((x, y, z, value) -> {
-            final int newValue = function.apply(x, y, z, value);
-            final int index = arrayIndex.getPlain();
-            arrayIndex.setPlain(index + 1);
-            cache[index] = newValue;
-            if (newValue != 0) count.setPlain(count.getPlain() + 1);
-        });
-        assert arrayIndex.getPlain() == maxSize();
+        final int maxPaletteSize = 1 << maxBitsPerEntry;
+        final var consumer = new EntryConsumer() {
+            @Nullable
+            PaletteIndexMap newPaletteIndexMap = new PaletteIndexMap(minBitsPerEntry);
+            int index = 0;
+            int count = 0;
+
+            @Override
+            public void accept(int x, int y, int z, int oldValue) {
+                final int value = function.apply(x, y, z, oldValue);
+                if (value != 0) count++;
+                if (newPaletteIndexMap == null) {
+                    cache[index++] = value;
+                    return;
+                }
+                final int maybePaletteIndex = newPaletteIndexMap.valueToIndexCapped(value, maxPaletteSize);
+                if (maybePaletteIndex < 0) {
+                    for (int i = 0; i < index; i++) cache[i] = newPaletteIndexMap.indexToValue(cache[i]);
+                    newPaletteIndexMap = null;
+                    cache[index++] = value;
+                    return;
+                }
+                cache[index++] = maybePaletteIndex;
+            }
+        };
+        getAll(consumer);
         // Update palette content
-        makeDirect();
-        updateAll(cache);
-        this.count = count.getPlain();
+        this.count = consumer.count;
+        updateAll(cache, consumer.newPaletteIndexMap);
     }
 
     @Override
@@ -611,23 +623,33 @@ final class PaletteImpl implements Palette {
         }
     }
 
-    private void updateAll(int[] paletteValues) {
+    private void updateAll(int[] paletteValues, @Nullable PaletteIndexMap newPaletteIndexMap) {
         final int size = maxSize();
         assert paletteValues.length >= size;
-        final int bitsPerEntry = this.bitsPerEntry;
-        final int valuesPerLong = 64 / bitsPerEntry;
-        final long clear = (1L << bitsPerEntry) - 1L;
-        final long[] values = this.values;
-        for (int i = 0; i < values.length; i++) {
-            long block = values[i];
-            final int startIndex = i * valuesPerLong;
-            final int endIndex = Math.min(startIndex + valuesPerLong, size);
-            for (int index = startIndex; index < endIndex; index++) {
-                final int bitIndex = (index - startIndex) * bitsPerEntry;
-                block = block & ~(clear << bitIndex) | ((long) paletteValues[index] << bitIndex);
+        final byte bpe;
+        if (newPaletteIndexMap == null) {
+            bpe = directBits;
+        } else {
+            if (newPaletteIndexMap.size() == 1) {
+                fill(newPaletteIndexMap.indexToValue(0));
+                return;
+            }
+            bpe = (byte) MathUtils.bitsToRepresent(Math.max(minBitsPerEntry, newPaletteIndexMap.size() - 1));
+        }
+
+        final int valuesPerLong = 64 / bpe;
+        final long[] values = bpe == bitsPerEntry ? this.values : new long[arrayLength(dimension, bpe)];
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = 0;
+            int end = Math.min(valuesPerLong, size - idx) * bpe;
+            for (int j = 0; j < end; j += bpe, idx++) {
+                block |= (long) paletteValues[idx] << j;
             }
             values[i] = block;
         }
+        this.values = values;
+        this.bitsPerEntry = bpe;
+        this.paletteIndexMap = newPaletteIndexMap;
     }
 
     /// Assumes {@link PaletteImpl#bitsPerEntry} != 0

@@ -67,6 +67,13 @@ final class PaletteIndexMap implements Cloneable {
         return -1;
     }
 
+    int valueToIndexCapped(final int value, final int maxSize) {
+        final int pos = find(value);
+        if (pos >= 0) return index[pos];
+        if (size >= maxSize) return -1;
+        return UNSAFE_insert(~pos, value);
+    }
+
     int indexToValue(final int index) {
         return indexToValue[index];
     }
