@@ -63,6 +63,35 @@ final class PaletteIndexMap implements Cloneable {
         this(palette, palette.length);
     }
 
+    int valueToIndex(final int value) {
+        final int pos = find(value);
+        if (pos >= 0) return index[pos];
+        return UNSAFE_insert(~pos, value);
+    }
+
+    int valueToIndexOrDefault(final int value) {
+        final int pos = find(value);
+        if (pos >= 0) return index[pos];
+        return -1;
+    }
+
+    int indexToValue(final int index) {
+        return indexToValue[index];
+    }
+
+    /// Should not be modified
+    int[] indexToValueArray() {
+        return indexToValue;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
     int find(final int value) {
         if (value == 0) return containsNullKey ? n : ~n;
         int curr;
@@ -97,81 +126,13 @@ final class PaletteIndexMap implements Cloneable {
         return index[pos];
     }
 
-    int valueToIndex(final int value) {
-        final int pos = find(value);
-        if (pos >= 0) return index[pos];
-        return UNSAFE_insert(~pos, value);
-    }
-
-    int valueToIndexOrDefault(final int value) {
-        final int pos = find(value);
-        if (pos >= 0) return index[pos];
-        return -1;
-    }
-
-    int indexToValue(final int index) {
-        return indexToValue[index];
-    }
-
-    /// Should not be modified
-    int[] indexToValueArray() {
-        return indexToValue;
-    }
-
-    /**
-     * Tries to replace the index for oldValue with newValue,
-     * which succeeds if only oldValue is part of the palette.
-     * <br>
-     * The map is modified if and only if oldValue is in the palette and newValue isn't.
-     * In which case oldValue will stop pointing to its old index and newValue will point to it instead.
-     *
-     * @return -1 if this doesn't contain oldValue,
-     * otherwise returns the old index of oldValue in the lower 32 bits of the result
-     * and the index of newValue in the higher 32 bits.
-     */
-    long tryReplace(final int oldValue, final int newValue) {
-        final int oldPos = find(oldValue);
-        if (oldPos < 0) return -1;
+    void UNSAFE_replace(final int oldPos, final int newValue) {
         final int oldIndex = index[oldPos];
-        int newPos = find(newValue);
-        if (newPos >= 0) return (((long) index[newPos]) << 32) | oldIndex;
         shiftKeys(oldPos);
-        // May have changed since we called shiftKeys
-        newPos = find(newValue);
+        final int newPos = ~find(newValue);
         value[newPos] = newValue;
         index[newPos] = oldIndex;
         indexToValue[oldIndex] = newValue;
-        return (((long) oldIndex) << 32) | oldIndex;
-    }
-
-    public int size() {
-        return size;
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    private void rehash(final int newN) {
-        final int[] key = this.value;
-        final int[] value = this.index;
-        final int mask = newN - 1;
-        final int[] newKey = new int[newN + 1];
-        final int[] newValue = new int[newN + 1];
-        int i = n, pos;
-        for (int j = realSize(); j-- != 0;) {
-            while (key[--i] == 0);
-            if (!((newKey[pos = (HashCommon.mix((key[i]))) & mask]) == 0))
-                while (!((newKey[pos = (pos + 1) & mask]) == 0));
-            newKey[pos] = key[i];
-            newValue[pos] = value[i];
-        }
-        newValue[newN] = value[n];
-        n = newN;
-        this.mask = mask;
-        maxFill = n - (n >> 2);
-        this.value = newKey;
-        this.index = newValue;
     }
 
     private void shiftKeys(int pos) {
@@ -194,6 +155,28 @@ final class PaletteIndexMap implements Cloneable {
             value[last] = curr;
             index[last] = index[pos];
         }
+    }
+
+    private void rehash(final int newN) {
+        final int[] key = this.value;
+        final int[] value = this.index;
+        final int mask = newN - 1;
+        final int[] newKey = new int[newN + 1];
+        final int[] newValue = new int[newN + 1];
+        int i = n, pos;
+        for (int j = realSize(); j-- != 0;) {
+            while (key[--i] == 0);
+            if (!((newKey[pos = (HashCommon.mix((key[i]))) & mask]) == 0))
+                while (!((newKey[pos = (pos + 1) & mask]) == 0));
+            newKey[pos] = key[i];
+            newValue[pos] = value[i];
+        }
+        newValue[newN] = value[n];
+        n = newN;
+        this.mask = mask;
+        maxFill = n - (n >> 2);
+        this.value = newKey;
+        this.index = newValue;
     }
 
     private int realSize() {

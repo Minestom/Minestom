@@ -133,7 +133,7 @@ final class PaletteImpl implements Palette {
         final int airPaletteIndex = valueToPalettIndexOrDefault(0);
         int countDelta = 0;
         if (paletteIndex == airPaletteIndex) {
-            countDelta = (maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1);
+            countDelta -= (maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1);
         }
 
         final int dimensionBits = MathUtils.bitsToRepresent(dimension - 1);
@@ -155,7 +155,7 @@ final class PaletteImpl implements Palette {
                 int bitIndex = (index % valuesPerLong) * bitsPerEntry;
                 long block = values[blockIndex];
                 for (int x = minZ; x <= maxZ; x++) {
-                    if (((block >>> bitIndex) & mask) == airPaletteIndex) countDelta--;
+                    if (((block >>> bitIndex) & mask) == airPaletteIndex) countDelta++;
                     block = (block & ~(((long) mask) << bitIndex)) | (((long) paletteIndex) << bitIndex);
 
                     bitIndex += bitsPerEntry;
@@ -222,11 +222,20 @@ final class PaletteImpl implements Palette {
                 oldIndex = oldValue;
                 newIndex = newValue;
             } else {
-                final long replaceResult = paletteIndexMap.tryReplace(oldValue, newValue);
-                if (replaceResult < 0) return; // Old value not present in palette
-                oldIndex = (int) replaceResult;
-                newIndex = (int) (replaceResult >> 32);
-                if (oldIndex == newIndex) return;
+                final int oldPos = paletteIndexMap.find(oldValue);
+                if (oldPos < 0) return;
+                oldIndex = paletteIndexMap.UNSAFE_getIndex(oldPos);
+                int newPos = paletteIndexMap.find(newValue);
+                if (newPos < 0) {
+                    if (oldValue == 0 || newValue == 0) {
+                        final int count = countPaletteIndex(oldIndex);
+                        if (oldValue == 0) this.count += count;
+                        if (newValue == 0) this.count -= count;
+                    }
+                    paletteIndexMap.UNSAFE_replace(oldPos, newValue);
+                    return;
+                }
+                newIndex = paletteIndexMap.UNSAFE_getIndex(newPos);
             }
             final AtomicInteger count = new AtomicInteger();
             Palettes.remap(dimension, bitsPerEntry, bitsPerEntry, values, v -> {
@@ -331,48 +340,11 @@ final class PaletteImpl implements Palette {
         }
 
         // Fast path: if source is single-value palette
-        if (sourcePalette.bitsPerEntry == 0) {
-            // Fill the region with the single value - optimized loop order
-            final int value = sourcePalette.count;
-            final int paletteValue = valueToPaletteIndex(value);
-
-            // Direct write to avoid repeated palette lookups
-            for (int y = 0; y < maxY; y++) {
-                final int targetY = offsetY + y;
-                for (int z = 0; z < maxZ; z++) {
-                    final int targetZ = offsetZ + z;
-                    for (int x = 0; x < maxX; x++) {
-                        final int targetX = offsetX + x;
-                        final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, paletteValue);
-                        // Update count based on air transitions
-                        final boolean wasAir = paletteIndexToValue(oldValue) == 0;
-                        final boolean isAir = value == 0;
-                        if (wasAir != isAir) {
-                            this.count += wasAir ? 1 : -1;
-                        }
-                    }
-                }
-            }
-            return;
-        }
-
-        // Source is empty, fill target region with air
-        if (sourcePalette.count == 0) {
-            if (this.count == 0) return;
-            final int airPaletteIndex = valueToPaletteIndex(0);
-            int removedBlocks = 0;
-            for (int y = 0; y < maxY; y++) {
-                final int targetY = offsetY + y;
-                for (int z = 0; z < maxZ; z++) {
-                    final int targetZ = offsetZ + z;
-                    for (int x = 0; x < maxX; x++) {
-                        final int targetX = offsetX + x;
-                        final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, airPaletteIndex);
-                        if (paletteIndexToValue(oldValue) != 0) removedBlocks++;
-                    }
-                }
-            }
-            this.count -= removedBlocks;
+        if (sourcePalette.bitsPerEntry == 0 || sourcePalette.count == 0) {
+            final int dimensionMinus = targetDimension - 1;
+            fill(offsetX, offsetY, offsetZ,
+                    dimensionMinus + offsetX, dimensionMinus + offsetY, dimensionMinus + offsetZ,
+                    sourcePalette.count);
             return;
         }
 
@@ -654,7 +626,7 @@ final class PaletteImpl implements Palette {
             final int[] indexToValueArray = paletteIndexMap.indexToValueArray();
             final int paletteIndexMapSize = paletteIndexMap.size();
             for (int index = 0; index < paletteIndexMapSize; index++) {
-                transformList.add(indexToValueArray[index]);
+                transformList.add(newPaletteIndexMap.valueToIndexOrDefault(indexToValueArray[index]));
             }
             final int[] transformArray = transformList.elements();
             this.values = Palettes.remap(dimension, bpe, newBpe, values, value -> transformArray[value]);
@@ -738,10 +710,6 @@ final class PaletteImpl implements Palette {
     public long @Nullable [] indexedValues() {
         return values;
     }
-
-//    boolean hasPalette() {
-//        return bitsPerEntry <= maxBitsPerEntry;
-//    }
 
     boolean isDirect() {
         return bitsPerEntry > maxBitsPerEntry;

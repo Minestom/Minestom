@@ -721,11 +721,11 @@ public class PaletteTest {
 
         // Verify palette contents
         assertEquals(5,  ((PaletteImpl) palette).paletteIndexMap.size());
-        assertEquals(0,  ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(0));
-        assertEquals(10, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(1));
-        assertEquals(20, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(2));
-        assertEquals(30, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(3));
-        assertEquals(40, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(4));
+        assertEquals(0,  ((PaletteImpl) palette).paletteIndexMap.indexToValue(0));
+        assertEquals(10, ((PaletteImpl) palette).paletteIndexMap.indexToValue(1));
+        assertEquals(20, ((PaletteImpl) palette).paletteIndexMap.indexToValue(2));
+        assertEquals(30, ((PaletteImpl) palette).paletteIndexMap.indexToValue(3));
+        assertEquals(40, ((PaletteImpl) palette).paletteIndexMap.indexToValue(4));
     }
 
     @Test
