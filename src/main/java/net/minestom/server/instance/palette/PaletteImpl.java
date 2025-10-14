@@ -1,8 +1,6 @@
 package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -421,9 +419,9 @@ final class PaletteImpl implements Palette {
         }
 
         if (sourcePalette.paletteIndexMap != null) {
-            this.paletteIndexMap = new PaletteIndexMap(
-                    sourcePalette.paletteIndexMap.indexToValueArray(),
-                    sourcePalette.paletteIndexMap.size());
+            this.paletteIndexMap = sourcePalette.paletteIndexMap.clone();
+        } else {
+            this.paletteIndexMap = null;
         }
     }
 
@@ -509,14 +507,10 @@ final class PaletteImpl implements Palette {
             return;
         }
 
-        // Count unique values
-        IntSet uniqueValues = new IntOpenHashSet();
-        getAll((x, y, z, value) -> uniqueValues.add(value));
-        final int uniqueCount = uniqueValues.size();
-
-        // If only one unique value, use fill for maximum optimization
-        if (uniqueCount == 1) {
-            fill(uniqueValues.iterator().nextInt());
+        final PaletteIndexMap newPalette = collectOptimizedPalette();
+        if (newPalette == null) return;
+        if (newPalette.size() == 1) {
+            fill(newPalette.indexToValue(0));
             return;
         }
 
@@ -525,9 +519,34 @@ final class PaletteImpl implements Palette {
             makeDirect();
         } else if (focus == Optimization.SIZE) {
             // Size optimization - calculate minimum bits needed for unique values
-            final var paletteList = new IntArrayList(uniqueValues);
-            downsizeWithPalette(paletteList);
+            downsizeWithPalette(newPalette);
         }
+    }
+
+    /// Assumes bitsPerEntry != 0
+    private @Nullable PaletteIndexMap collectOptimizedPalette() {
+        final int size = maxSize();
+        final int bits = bitsPerEntry;
+        final int valuesPerLong = 64 / bits;
+        final int mask = (1 << bits) - 1;
+
+        PaletteIndexMap result = new PaletteIndexMap((byte) Math.min(maxBitsPerEntry, bitsPerEntry));
+        final int maxPaletteSize = 1 << maxBitsPerEntry;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                final int paletteIndex = (int) (block & mask);
+                final int value = paletteIndexToValue(paletteIndex);
+                final int pos = result.find(value);
+                if (pos < 0) {
+                    if (result.size() >= maxPaletteSize) return null;
+                    result.UNSAFE_insert(~pos, value);
+                }
+                block >>>= bits;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -612,28 +631,26 @@ final class PaletteImpl implements Palette {
     }
 
     /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
-    private void downsizeWithPalette(IntArrayList palette) {
+    private void downsizeWithPalette(PaletteIndexMap palette) {
         final byte bpe = this.bitsPerEntry;
         final byte newBpe = (byte) Math.max(MathUtils.bitsToRepresent(palette.size() - 1), minBitsPerEntry);
         if (newBpe >= bpe || newBpe > maxBitsPerEntry) return;
 
-        final PaletteIndexMap newPaletteIndexMap = new PaletteIndexMap(palette.elements(), palette.size());
-
         if (isDirect()) {
-            this.values = Palettes.remap(dimension, bpe, newBpe, values, newPaletteIndexMap::valueToIndexOrDefault);
+            this.values = Palettes.remap(dimension, bpe, newBpe, values, palette::valueToIndexOrDefault);
         } else {
             final IntArrayList transformList = new IntArrayList(paletteIndexMap.size());
             final int[] indexToValueArray = paletteIndexMap.indexToValueArray();
             final int paletteIndexMapSize = paletteIndexMap.size();
             for (int index = 0; index < paletteIndexMapSize; index++) {
-                transformList.add(newPaletteIndexMap.valueToIndexOrDefault(indexToValueArray[index]));
+                transformList.add(palette.valueToIndexOrDefault(indexToValueArray[index]));
             }
             final int[] transformArray = transformList.elements();
             this.values = Palettes.remap(dimension, bpe, newBpe, values, value -> transformArray[value]);
         }
 
         this.bitsPerEntry = newBpe;
-        this.paletteIndexMap = newPaletteIndexMap;
+        this.paletteIndexMap = palette;
     }
 
     void makeDirect() {

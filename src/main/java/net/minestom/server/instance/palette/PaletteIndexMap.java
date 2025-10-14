@@ -46,21 +46,13 @@ final class PaletteIndexMap implements Cloneable {
         indexToValue = new int[1 << bitsPerEntry];
     }
 
-    PaletteIndexMap(int[] palette, int paletteLength) {
-        if (paletteLength > palette.length)
-            throw new IllegalArgumentException("Palette length greater than palette array length");
-
-        this(paletteLength > 1 ? (byte) MathUtils.bitsToRepresent(paletteLength) : 1);
-        for (int i = 0; i < paletteLength; i++) {
-            final int value = palette[i];
+    PaletteIndexMap(int[] palette) {
+        this(palette.length > 1 ? (byte) MathUtils.bitsToRepresent(palette.length) : 1);
+        for (final int value : palette) {
             final int pos = find(value);
             if (pos >= 0) throw new IllegalArgumentException("Palette entries must be unique");
             UNSAFE_insert(~pos, value);
         }
-    }
-
-    PaletteIndexMap(int[] palette) {
-        this(palette, palette.length);
     }
 
     int valueToIndex(final int value) {
