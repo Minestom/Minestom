@@ -105,6 +105,23 @@ public final class Palettes {
                     consumer.accept(x, y, z, value);
     }
 
+    public static int count(int dimension, int bitsPerEntry, long[] values, int paletteIndex) {
+        if (paletteIndex < 0) return 0;
+        int result = 0;
+        final int size = dimension * dimension * dimension;
+        final int valuesPerLong = 64 / bitsPerEntry;
+        final int mask = (1 << bitsPerEntry) - 1;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                if (((int) (block & mask)) == paletteIndex) result++;
+                block >>>= bitsPerEntry;
+            }
+        }
+        return result;
+    }
+
     public static long[] remap(int dimension, int oldBitsPerEntry, int newBitsPerEntry,
                                long[] values, Int2IntFunction function) {
         return remap(dimension, oldBitsPerEntry, newBitsPerEntry, values, false, function);

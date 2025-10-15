@@ -66,25 +66,21 @@ public sealed interface Palette permits PaletteImpl {
 
     void getAllPresent(EntryConsumer consumer);
 
-    int height(int x, int z, EntryPredicate predicate);
-
     void set(int x, int y, int z, int value);
+
+    void setAll(EntrySupplier supplier);
+
+    void replace(int oldValue, int newValue);
+
+    void replace(int x, int y, int z, IntUnaryOperator operator);
+
+    void replaceAll(EntryFunction function);
 
     void fill(int value);
 
     void fill(int x0, int y0, int z0, int x1, int y1, int z1, int value);
 
-    void load(int[] palette, long[] values);
-
     void offset(int offset);
-
-    void replace(int oldValue, int newValue);
-
-    void setAll(EntrySupplier supplier);
-
-    void replace(int x, int y, int z, IntUnaryOperator operator);
-
-    void replaceAll(EntryFunction function);
 
     /**
      * Efficiently copies values from another palette with the given offset.
@@ -109,8 +105,10 @@ public sealed interface Palette permits PaletteImpl {
      */
     void copyFrom(Palette source);
 
+    void load(int[] palette, long[] values);
+
     /**
-     * Returns the number of entries in this palette.
+     * @return the number of entries that are not equal to 0 in this palette.
      */
     int count();
 
@@ -133,6 +131,8 @@ public sealed interface Palette permits PaletteImpl {
      * @return true if the palette contains the value, false otherwise
      */
     boolean any(int value);
+
+    int height(int x, int z, EntryPredicate predicate);
 
     /**
      * Returns the number of bits used per entry.

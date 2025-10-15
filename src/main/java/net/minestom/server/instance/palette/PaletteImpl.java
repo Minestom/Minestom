@@ -226,7 +226,7 @@ final class PaletteImpl implements Palette {
                 int newPos = paletteIndexMap.find(newValue);
                 if (newPos < 0) {
                     if (oldValue == 0 || newValue == 0) {
-                        final int count = countPaletteIndex(oldIndex);
+                        final int count = Palettes.count(dimension, bitsPerEntry, values, oldIndex);
                         if (oldValue == 0) this.count += count;
                         if (newValue == 0) this.count -= count;
                     }
@@ -333,28 +333,31 @@ final class PaletteImpl implements Palette {
 
         final PaletteImpl sourcePalette = (PaletteImpl) source;
         final int sourceDimension = sourcePalette.dimension();
-        final int targetDimension = this.dimension();
-        if (sourceDimension != targetDimension) {
+        final int dimension = this.dimension;
+        if (sourceDimension != dimension) {
             throw new IllegalArgumentException("Source palette dimension (" + sourceDimension +
-                    ") must equal target palette dimension (" + targetDimension + ")");
-        }
-
-        // Calculate the actual copy bounds - only copy what fits within target bounds
-        final int maxX = Math.min(sourceDimension, targetDimension - offsetX);
-        final int maxY = Math.min(sourceDimension, targetDimension - offsetY);
-        final int maxZ = Math.min(sourceDimension, targetDimension - offsetZ);
-
-        // Early exit if nothing to copy (offset pushes everything out of bounds)
-        if (maxX <= 0 || maxY <= 0 || maxZ <= 0) {
-            return;
+                    ") must equal target palette dimension (" + dimension + ")");
         }
 
         // Fast path: if source is single-value palette
         if (sourcePalette.bitsPerEntry == 0 || sourcePalette.count == 0) {
-            final int dimensionMinus = targetDimension - 1;
+            final int dimensionMinus = dimension - 1;
             fill(offsetX, offsetY, offsetZ,
                     dimensionMinus + offsetX, dimensionMinus + offsetY, dimensionMinus + offsetZ,
                     sourcePalette.count);
+            return;
+        }
+
+        // Calculate the actual copy bounds - only copy what fits within target bounds
+        final int minX = Math.max(0, -offsetX);
+        final int minY = Math.max(0, -offsetY);
+        final int minZ = Math.max(0, -offsetZ);
+        final int maxX = dimension - Math.max(0, offsetX);
+        final int maxY = dimension - Math.max(0, offsetY);
+        final int maxZ = dimension - Math.max(0, offsetZ);
+
+        // Early exit if nothing to copy (offset pushes everything out of bounds)
+        if (minX >= maxX || minY >= maxY || minZ >= maxZ) {
             return;
         }
 
@@ -364,17 +367,17 @@ final class PaletteImpl implements Palette {
         final int sourceBitsPerEntry = sourcePalette.bitsPerEntry;
         final int sourceMask = (1 << sourceBitsPerEntry) - 1;
         final int sourceValuesPerLong = 64 / sourceBitsPerEntry;
-        final int sourceDimensionBitCount = MathUtils.bitsToRepresent(sourceDimension - 1);
+        final int sourceDimensionBitCount = MathUtils.bitsToRepresent(dimension - 1);
         final int sourceShiftedDimensionBitCount = sourceDimensionBitCount << 1;
         final int[] sourcePaletteIds = sourcePalette.isDirect() ? null :
                 sourcePalette.paletteIndexMap.indexToValueArray();
 
         int countDelta = 0;
-        for (int y = 0; y < maxY; y++) {
+        for (int y = minY; y < maxY; y++) {
             final int targetY = offsetY + y;
-            for (int z = 0; z < maxZ; z++) {
+            for (int z = minZ; z < maxZ; z++) {
                 final int targetZ = offsetZ + z;
-                for (int x = 0; x < maxX; x++) {
+                for (int x = minX; x < maxX; x++) {
                     final int targetX = offsetX + x;
 
                     final int sourceIndex = y << sourceShiftedDimensionBitCount | z << sourceDimensionBitCount | x;
@@ -386,7 +389,7 @@ final class PaletteImpl implements Palette {
 
                     // Convert to target palette index and write
                     final int targetPaletteIndex = valueToPaletteIndex(sourceValue);
-                    final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, targetPaletteIndex);
+                    final int oldValue = Palettes.write(dimension, bitsPerEntry, values, targetX, targetY, targetZ, targetPaletteIndex);
 
                     // Update count
                     final boolean wasAir = paletteIndexToValue(oldValue) == 0;
@@ -451,32 +454,15 @@ final class PaletteImpl implements Palette {
         if (bitsPerEntry == 0) return count == value ? maxSize() : 0;
         if (value == 0) return maxSize() - count();
         final int queryValue = valueToPalettIndexOrDefault(value);
-        return countPaletteIndex(queryValue);
+
+        return Palettes.count(dimension, bitsPerEntry, values, queryValue);
     }
 
     void recount() {
         if (bitsPerEntry != 0) {
-            this.count = maxSize() - countPaletteIndex(valueToPalettIndexOrDefault(0));
+            final int zeroCount = Palettes.count(dimension, bitsPerEntry, values, valueToPalettIndexOrDefault(0));
+            this.count = maxSize() - zeroCount;
         }
-    }
-
-    /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
-    int countPaletteIndex(int paletteIndex) {
-        if (paletteIndex < 0) return 0;
-        int result = 0;
-        final int size = maxSize();
-        final int bits = bitsPerEntry;
-        final int valuesPerLong = 64 / bits;
-        final int mask = (1 << bits) - 1;
-        for (int i = 0, idx = 0; i < values.length; i++) {
-            long block = values[i];
-            int end = Math.min(valuesPerLong, size - idx);
-            for (int j = 0; j < end; j++, idx++) {
-                if (((int) (block & mask)) == paletteIndex) result++;
-                block >>>= bits;
-            }
-        }
-        return result;
     }
 
     @Override
@@ -550,11 +536,8 @@ final class PaletteImpl implements Palette {
             for (int j = 0; j < end; j++, idx++) {
                 final int paletteIndex = (int) (block & mask);
                 final int value = paletteIndexToValue(paletteIndex);
-                final int pos = result.find(value);
-                if (pos < 0) {
-                    if (result.size() >= maxPaletteSize) return null;
-                    result.UNSAFE_insert(~pos, value);
-                }
+                final int insertResult = result.valueToIndexCapped(value, maxPaletteSize);
+                if (insertResult < 0) return null;
                 block >>>= bits;
             }
         }
@@ -563,6 +546,7 @@ final class PaletteImpl implements Palette {
 
     @Override
     public boolean compare(Palette p) {
+        if (this == p) return true;
         final PaletteImpl palette = (PaletteImpl) p;
         final int dimension = this.dimension();
         if (palette.dimension() != dimension) return false;
