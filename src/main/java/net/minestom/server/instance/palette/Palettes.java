@@ -2,9 +2,11 @@ package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.minestom.server.utils.MathUtils;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
 
+@ApiStatus.Internal
 public final class Palettes {
     private Palettes() {
     }
@@ -94,6 +96,20 @@ public final class Palettes {
     public static int sectionIndex(int dimension, int x, int y, int z) {
         final int dimensionBitCount = MathUtils.bitsToRepresent(dimension - 1);
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
+    }
+
+    // Validation
+
+    public static void validateCoord(int dimension, int x, int y, int z) {
+        if (x < 0 || y < 0 || z < 0)
+            throw new IllegalArgumentException("Coordinates must be non-negative");
+        if (x >= dimension || y >= dimension || z >= dimension)
+            throw new IllegalArgumentException("Coordinates must be less than the dimension size, got " + x + ", " + y + ", " + z + " for dimension " + dimension);
+    }
+
+    public static void validateDimension(int dimension) {
+        if (dimension <= 1 || (dimension & dimension - 1) != 0)
+            throw new IllegalArgumentException("Dimension must be a positive power of 2, got " + dimension);
     }
 
     // Optimized operations

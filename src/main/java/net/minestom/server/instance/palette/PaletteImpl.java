@@ -1,6 +1,6 @@
 package net.minestom.server.instance.palette;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -72,28 +72,6 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public int height(int x, int z, EntryPredicate predicate) {
-        validateCoord(dimension, x, 0, z);
-        final int dimension = this.dimension;
-        final int startY = dimension - 1;
-        if (bitsPerEntry == 0) return predicate.get(x, startY, z, count) ? startY : -1;
-        final long[] values = this.values;
-        final int bitsPerEntry = this.bitsPerEntry;
-        final int valuesPerLong = 64 / bitsPerEntry;
-        final int mask = (1 << bitsPerEntry) - 1;
-        final int[] paletteIds = isDirect() ? null : paletteIndexMap.indexToValueArray();
-        for (int y = startY; y >= 0; y--) {
-            final int index = sectionIndex(dimension, x, y, z);
-            final int longIndex = index / valuesPerLong;
-            final int bitIndex = (index % valuesPerLong) * bitsPerEntry;
-            final int paletteIndex = (int) (values[longIndex] >> bitIndex) & mask;
-            final int value = paletteIds != null ? paletteIds[paletteIndex] : paletteIndex;
-            if (predicate.get(x, y, z, value)) return y;
-        }
-        return -1;
-    }
-
-    @Override
     public void set(int x, int y, int z, int value) {
         validateCoord(dimension, x, y, z);
         final int paletteIndex = valueToPaletteIndex(value);
@@ -101,6 +79,122 @@ final class PaletteImpl implements Palette {
         // Check if block count needs to be updated
         final boolean currentAir = paletteIndexToValue(oldValue) == 0;
         if (currentAir != (value == 0)) this.count += currentAir ? 1 : -1;
+    }
+
+    @Override
+    public void setAll(EntrySupplier supplier) {
+        int[] cache = WRITE_CACHE.get();
+        final int dimension = dimension();
+        final int maxPaletteSize = 1 << maxBitsPerEntry;
+        // Fill cache with values
+        @Nullable
+        PaletteIndexMap newPaletteIndexMap = new PaletteIndexMap(minBitsPerEntry);
+        int count = 0;
+        int index = 0;
+        for (int y = 0; y < dimension; y++) {
+            for (int z = 0; z < dimension; z++) {
+                for (int x = 0; x < dimension; x++) {
+                    int value = supplier.get(x, y, z);
+                    if (value != 0) count++;
+                    if (newPaletteIndexMap == null) {
+                        cache[index++] = value;
+                        continue;
+                    }
+                    final int maybePaletteIndex = newPaletteIndexMap.valueToIndexCapped(value, maxPaletteSize);
+                    if (maybePaletteIndex < 0) {
+                        for (int i = 0; i < index; i++) cache[i] = newPaletteIndexMap.indexToValue(cache[i]);
+                        newPaletteIndexMap = null;
+                        cache[index++] = value;
+                        continue;
+                    }
+                    cache[index++] = maybePaletteIndex;
+                }
+            }
+        }
+        this.count = count;
+        updateAll(cache, newPaletteIndexMap);
+    }
+
+    @Override
+    public void replace(int oldValue, int newValue) {
+        if (oldValue == newValue) return;
+        if (bitsPerEntry == 0) {
+            if (oldValue == count) fill(newValue);
+        } else {
+            int oldIndex;
+            int newIndex;
+            if (isDirect()) {
+                oldIndex = oldValue;
+                newIndex = newValue;
+            } else {
+                final int oldPos = paletteIndexMap.find(oldValue);
+                if (oldPos < 0) return;
+                oldIndex = paletteIndexMap.UNSAFE_getIndex(oldPos);
+                int newPos = paletteIndexMap.find(newValue);
+                if (newPos < 0) {
+                    if (oldValue == 0 || newValue == 0) {
+                        final int count = Palettes.count(dimension, bitsPerEntry, values, oldIndex);
+                        if (oldValue == 0) this.count += count;
+                        if (newValue == 0) this.count -= count;
+                    }
+                    paletteIndexMap.UNSAFE_replace(oldPos, newValue);
+                    return;
+                }
+                newIndex = paletteIndexMap.UNSAFE_getIndex(newPos);
+            }
+            final AtomicInteger count = new AtomicInteger();
+            Palettes.remap(dimension, bitsPerEntry, bitsPerEntry, values, v -> {
+               if (v == oldIndex) {
+                   count.setPlain(count.getPlain() + 1);
+                   return newIndex;
+               }
+               return v;
+            });
+            if (oldValue == 0) this.count += count.getPlain();
+            if (newValue == 0) this.count -= count.getPlain();
+        }
+    }
+
+    @Override
+    public void replace(int x, int y, int z, IntUnaryOperator operator) {
+        validateCoord(dimension, x, y, z);
+        final int oldValue = get(x, y, z);
+        final int newValue = operator.applyAsInt(oldValue);
+        if (oldValue != newValue) set(x, y, z, newValue);
+    }
+
+    @Override
+    public void replaceAll(EntryFunction function) {
+        int[] cache = WRITE_CACHE.get();
+        final int maxPaletteSize = 1 << maxBitsPerEntry;
+        final var consumer = new EntryConsumer() {
+            @Nullable
+            PaletteIndexMap newPaletteIndexMap = new PaletteIndexMap(minBitsPerEntry);
+            int index = 0;
+            int count = 0;
+
+            @Override
+            public void accept(int x, int y, int z, int oldValue) {
+                final int value = function.apply(x, y, z, oldValue);
+                if (value != 0) count++;
+                if (newPaletteIndexMap == null) {
+                    cache[index++] = value;
+                    return;
+                }
+                final int maybePaletteIndex = newPaletteIndexMap.valueToIndexCapped(value, maxPaletteSize);
+                if (maybePaletteIndex < 0) {
+                    for (int i = 0; i < index; i++) cache[i] = newPaletteIndexMap.indexToValue(cache[i]);
+                    newPaletteIndexMap = null;
+                    cache[index++] = value;
+                    return;
+                }
+                cache[index++] = maybePaletteIndex;
+            }
+        };
+        getAll(consumer);
+        // Update palette content
+        this.count = consumer.count;
+        updateAll(cache, consumer.newPaletteIndexMap);
     }
 
     @Override
@@ -173,155 +267,13 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
-    public void load(int[] palette, long[] values) {
-        int bpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
-        bpe = Math.max(minBitsPerEntry, bpe);
-
-        if (bpe > maxBitsPerEntry) {
-            // Direct mode: convert from palette indices to direct values
-            this.bitsPerEntry = directBits;
-            this.paletteIndexMap = null;
-
-            final AtomicInteger count = new AtomicInteger();
-            this.values = Palettes.remap(dimension, bpe, directBits, values, true, v -> {
-                final int result = palette[v];
-                if (result != 0) count.setPlain(count.getPlain() + 1);
-                return result;
-            });
-            this.count = count.getPlain();
-        } else {
-            // Indirect mode: use palette
-            this.bitsPerEntry = (byte) bpe;
-            this.paletteIndexMap = new PaletteIndexMap(palette);
-            this.values = Arrays.copyOf(values, arrayLength(dimension, bitsPerEntry));
-            recount();
-        }
-    }
-
-    @Override
     public void offset(int offset) {
         if (offset == 0) return;
         if (bitsPerEntry == 0) {
             this.count += offset;
         } else {
-            replaceAll((x, y, z, value) -> value + offset);
+            replaceAll((_, _, _, value) -> value + offset);
         }
-    }
-
-    @Override
-    public void replace(int oldValue, int newValue) {
-        if (oldValue == newValue) return;
-        if (bitsPerEntry == 0) {
-            if (oldValue == count) fill(newValue);
-        } else {
-            int oldIndex;
-            int newIndex;
-            if (isDirect()) {
-                oldIndex = oldValue;
-                newIndex = newValue;
-            } else {
-                final int oldPos = paletteIndexMap.find(oldValue);
-                if (oldPos < 0) return;
-                oldIndex = paletteIndexMap.UNSAFE_getIndex(oldPos);
-                int newPos = paletteIndexMap.find(newValue);
-                if (newPos < 0) {
-                    if (oldValue == 0 || newValue == 0) {
-                        final int count = Palettes.count(dimension, bitsPerEntry, values, oldIndex);
-                        if (oldValue == 0) this.count += count;
-                        if (newValue == 0) this.count -= count;
-                    }
-                    paletteIndexMap.UNSAFE_replace(oldPos, newValue);
-                    return;
-                }
-                newIndex = paletteIndexMap.UNSAFE_getIndex(newPos);
-            }
-            final AtomicInteger count = new AtomicInteger();
-            Palettes.remap(dimension, bitsPerEntry, bitsPerEntry, values, v -> {
-               if (v == oldIndex) {
-                   count.setPlain(count.getPlain() + 1);
-                   return newIndex;
-               }
-               return v;
-            });
-            if (oldValue == 0) this.count += count.getPlain();
-            if (newValue == 0) this.count -= count.getPlain();
-        }
-    }
-
-    @Override
-    public void setAll(EntrySupplier supplier) {
-        int[] cache = WRITE_CACHE.get();
-        final int dimension = dimension();
-        final int maxPaletteSize = 1 << maxBitsPerEntry;
-        // Fill cache with values
-        @Nullable
-        PaletteIndexMap newPaletteIndexMap = new PaletteIndexMap(minBitsPerEntry);
-        int count = 0;
-        int index = 0;
-        for (int y = 0; y < dimension; y++) {
-            for (int z = 0; z < dimension; z++) {
-                for (int x = 0; x < dimension; x++) {
-                    int value = supplier.get(x, y, z);
-                    if (value != 0) count++;
-                    if (newPaletteIndexMap == null) {
-                        cache[index++] = value;
-                        continue;
-                    }
-                    final int maybePaletteIndex = newPaletteIndexMap.valueToIndexCapped(value, maxPaletteSize);
-                    if (maybePaletteIndex < 0) {
-                        for (int i = 0; i < index; i++) cache[i] = newPaletteIndexMap.indexToValue(cache[i]);
-                        newPaletteIndexMap = null;
-                        cache[index++] = value;
-                        continue;
-                    }
-                    cache[index++] = maybePaletteIndex;
-                }
-            }
-        }
-        this.count = count;
-        updateAll(cache, newPaletteIndexMap);
-    }
-
-    @Override
-    public void replace(int x, int y, int z, IntUnaryOperator operator) {
-        validateCoord(dimension, x, y, z);
-        final int oldValue = get(x, y, z);
-        final int newValue = operator.applyAsInt(oldValue);
-        if (oldValue != newValue) set(x, y, z, newValue);
-    }
-
-    @Override
-    public void replaceAll(EntryFunction function) {
-        int[] cache = WRITE_CACHE.get();
-        final int maxPaletteSize = 1 << maxBitsPerEntry;
-        final var consumer = new EntryConsumer() {
-            @Nullable
-            PaletteIndexMap newPaletteIndexMap = new PaletteIndexMap(minBitsPerEntry);
-            int index = 0;
-            int count = 0;
-
-            @Override
-            public void accept(int x, int y, int z, int oldValue) {
-                final int value = function.apply(x, y, z, oldValue);
-                if (value != 0) count++;
-                if (newPaletteIndexMap == null) {
-                    cache[index++] = value;
-                    return;
-                }
-                final int maybePaletteIndex = newPaletteIndexMap.valueToIndexCapped(value, maxPaletteSize);
-                if (maybePaletteIndex < 0) {
-                    for (int i = 0; i < index; i++) cache[i] = newPaletteIndexMap.indexToValue(cache[i]);
-                    newPaletteIndexMap = null;
-                    cache[index++] = value;
-                    return;
-                }
-                cache[index++] = maybePaletteIndex;
-            }
-        };
-        getAll(consumer);
-        // Update palette content
-        this.count = consumer.count;
-        updateAll(cache, consumer.newPaletteIndexMap);
     }
 
     @Override
@@ -441,6 +393,32 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public void load(int[] palette, long[] values) {
+        int bpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
+        bpe = Math.max(minBitsPerEntry, bpe);
+
+        if (bpe > maxBitsPerEntry) {
+            // Direct mode: convert from palette indices to direct values
+            this.bitsPerEntry = directBits;
+            this.paletteIndexMap = null;
+
+            final AtomicInteger count = new AtomicInteger();
+            this.values = Palettes.remap(dimension, bpe, directBits, values, true, v -> {
+                final int result = palette[v];
+                if (result != 0) count.setPlain(count.getPlain() + 1);
+                return result;
+            });
+            this.count = count.getPlain();
+        } else {
+            // Indirect mode: use palette
+            this.bitsPerEntry = (byte) bpe;
+            this.paletteIndexMap = new PaletteIndexMap(palette);
+            this.values = Arrays.copyOf(values, arrayLength(dimension, bitsPerEntry));
+            recount();
+        }
+    }
+
+    @Override
     public int count() {
         if (bitsPerEntry == 0) {
             return count == 0 ? 0 : maxSize();
@@ -485,6 +463,28 @@ final class PaletteImpl implements Palette {
             }
         }
         return false;
+    }
+
+    @Override
+    public int height(int x, int z, EntryPredicate predicate) {
+        validateCoord(dimension, x, 0, z);
+        final int dimension = this.dimension;
+        final int startY = dimension - 1;
+        if (bitsPerEntry == 0) return predicate.get(x, startY, z, count) ? startY : -1;
+        final long[] values = this.values;
+        final int bitsPerEntry = this.bitsPerEntry;
+        final int valuesPerLong = 64 / bitsPerEntry;
+        final int mask = (1 << bitsPerEntry) - 1;
+        final int[] paletteIds = isDirect() ? null : paletteIndexMap.indexToValueArray();
+        for (int y = startY; y >= 0; y--) {
+            final int index = sectionIndex(dimension, x, y, z);
+            final int longIndex = index / valuesPerLong;
+            final int bitIndex = (index % valuesPerLong) * bitsPerEntry;
+            final int paletteIndex = (int) (values[longIndex] >> bitIndex) & mask;
+            final int value = paletteIds != null ? paletteIds[paletteIndex] : paletteIndex;
+            if (predicate.get(x, y, z, value)) return y;
+        }
+        return -1;
     }
 
     @Override
@@ -636,7 +636,6 @@ final class PaletteImpl implements Palette {
         this.paletteIndexMap = newPaletteIndexMap;
     }
 
-    /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
     private void downsizeWithPalette(PaletteIndexMap palette) {
         final byte bpe = this.bitsPerEntry;
         final byte newBpe = (byte) Math.max(MathUtils.bitsToRepresent(palette.size() - 1), minBitsPerEntry);
@@ -645,14 +644,13 @@ final class PaletteImpl implements Palette {
         if (isDirect()) {
             this.values = Palettes.remap(dimension, bpe, newBpe, values, palette::valueToIndexOrDefault);
         } else {
-            final IntArrayList transformList = new IntArrayList(paletteIndexMap.size());
             final int[] indexToValueArray = paletteIndexMap.indexToValueArray();
             final int paletteIndexMapSize = paletteIndexMap.size();
+            final int[] transform = new int[paletteIndexMapSize];
             for (int index = 0; index < paletteIndexMapSize; index++) {
-                transformList.add(palette.valueToIndexOrDefault(indexToValueArray[index]));
+                transform[index] = palette.valueToIndexOrDefault(indexToValueArray[index]);
             }
-            final int[] transformArray = transformList.elements();
-            this.values = Palettes.remap(dimension, bpe, newBpe, values, value -> transformArray[value]);
+            this.values = Palettes.remap(dimension, bpe, newBpe, values, value -> transform[value]);
         }
 
         this.bitsPerEntry = newBpe;
@@ -683,7 +681,7 @@ final class PaletteImpl implements Palette {
         if (newBpe > maxBitsPerEntry) {
             makeDirect();
         } else {
-            this.values = Palettes.remap(dimension, bpe, newBpe, values, (v) -> v);
+            this.values = Palettes.remap(dimension, bpe, newBpe, values, Int2IntFunction.identity());
             this.bitsPerEntry = newBpe;
         }
     }
@@ -711,7 +709,7 @@ final class PaletteImpl implements Palette {
 
         final int pos = paletteIndexMap.find(value);
         if (pos >= 0) return paletteIndexMap.UNSAFE_getIndex(pos);
-        if (paletteIndexMap.size() >= maxPaletteSize(bitsPerEntry)) {
+        if (paletteIndexMap.size() >= (1 << bitsPerEntry)) {
             // Palette is full, must resize
             upsize();
             if (isDirect()) return value;
@@ -736,17 +734,5 @@ final class PaletteImpl implements Palette {
 
     boolean isDirect() {
         return bitsPerEntry > maxBitsPerEntry;
-    }
-
-    private static void validateCoord(int dimension, int x, int y, int z) {
-        if (x < 0 || y < 0 || z < 0)
-            throw new IllegalArgumentException("Coordinates must be non-negative");
-        if (x >= dimension || y >= dimension || z >= dimension)
-            throw new IllegalArgumentException("Coordinates must be less than the dimension size, got " + x + ", " + y + ", " + z + " for dimension " + dimension);
-    }
-
-    private static void validateDimension(int dimension) {
-        if (dimension <= 1 || (dimension & dimension - 1) != 0)
-            throw new IllegalArgumentException("Dimension must be a positive power of 2, got " + dimension);
     }
 }
