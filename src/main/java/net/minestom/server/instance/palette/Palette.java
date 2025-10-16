@@ -1,7 +1,10 @@
 package net.minestom.server.instance.palette;
 
+import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,13 +31,13 @@ public sealed interface Palette permits PaletteImpl {
     int BLOCK_DIMENSION = 16;
     int BLOCK_PALETTE_MIN_BITS = 4;
     int BLOCK_PALETTE_MAX_BITS = 8;
-    int BLOCK_PALETTE_DIRECT_BITS = 15;
+    int BLOCK_PALETTE_DIRECT_BITS = MathUtils.bitsToRepresent(Block.statesCount() - 1);
 
     int BIOME_DIMENSION = 4;
     int BIOME_PALETTE_MIN_BITS = 1;
     int BIOME_PALETTE_MAX_BITS = 3;
     @ApiStatus.Internal
-    int BIOME_PALETTE_DIRECT_BITS = 6; // Vary based on biome count, this is just a sensible default
+    int BIOME_PALETTE_DIRECT_BITS = 7; // Vary based on biome count, this is just a sensible default
 
     static Palette blocks(int bitsPerEntry) {
         return sized(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS, bitsPerEntry);
@@ -231,11 +234,11 @@ public sealed interface Palette permits PaletteImpl {
             @Override
             public void write(NetworkBuffer buffer, Palette palette) {
                 PaletteImpl value = (PaletteImpl) palette;
-                // Temporary fix for biome direct bits depending on the number of registered biomes
+                Check.argCondition(dimension != value.dimension,
+                        "Palette must be of dimension {0}, got {1}", dimension, value.dimension);
                 if (directBits != value.directBits && value.isDirect()) {
-                    PaletteImpl tmp = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
-                    tmp.setAll(value::get);
-                    value = tmp;
+                    value.values = Palettes.remap(dimension, value.directBits, directBits, value.values, Int2IntFunction.identity());
+                    value.directBits = (byte) directBits;
                 }
                 final byte bitsPerEntry = value.bitsPerEntry;
                 buffer.write(BYTE, bitsPerEntry);

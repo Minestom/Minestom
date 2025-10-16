@@ -14,7 +14,8 @@ import static net.minestom.server.instance.palette.Palettes.*;
 
 final class PaletteImpl implements Palette {
     private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[SECTION_BLOCK_COUNT]);
-    final byte dimension, minBitsPerEntry, maxBitsPerEntry, directBits;
+    final byte dimension, minBitsPerEntry, maxBitsPerEntry;
+    byte directBits;
 
     byte bitsPerEntry = 0;
     int count = 0; // Serve as the single value if bitsPerEntry == 0
@@ -95,6 +96,7 @@ final class PaletteImpl implements Palette {
             for (int z = 0; z < dimension; z++) {
                 for (int x = 0; x < dimension; x++) {
                     int value = supplier.get(x, y, z);
+                    checkValue(value, false);
                     if (value != 0) count++;
                     if (newPaletteIndexMap == null) {
                         cache[index++] = value;
@@ -121,6 +123,7 @@ final class PaletteImpl implements Palette {
         if (bitsPerEntry == 0) {
             if (oldValue == count) fill(newValue);
         } else {
+            checkValue(newValue, true);
             int oldIndex;
             int newIndex;
             if (isDirect()) {
@@ -176,6 +179,7 @@ final class PaletteImpl implements Palette {
             @Override
             public void accept(int x, int y, int z, int oldValue) {
                 final int value = function.apply(x, y, z, oldValue);
+                checkValue(value, false);
                 if (value != 0) count++;
                 if (newPaletteIndexMap == null) {
                     cache[index++] = value;
@@ -199,6 +203,7 @@ final class PaletteImpl implements Palette {
 
     @Override
     public void fill(int value) {
+        checkValue(value, false);
         this.bitsPerEntry = 0;
         this.count = value;
         this.values = null;
@@ -271,6 +276,7 @@ final class PaletteImpl implements Palette {
         if (offset == 0) return;
         if (bitsPerEntry == 0) {
             this.count += offset;
+            checkValue(count, false);
         } else {
             replaceAll((_, _, _, value) -> value + offset);
         }
@@ -378,6 +384,7 @@ final class PaletteImpl implements Palette {
         // Copy
         this.bitsPerEntry = sourcePalette.bitsPerEntry;
         this.count = sourcePalette.count;
+        this.directBits = sourcePalette.directBits;
 
         if (sourcePalette.values != null) {
             this.values = sourcePalette.values.clone();
@@ -396,6 +403,7 @@ final class PaletteImpl implements Palette {
     public void load(int[] palette, long[] values) {
         int bpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
         bpe = Math.max(minBitsPerEntry, bpe);
+        for (final int value : palette) checkValue(value, false);
 
         if (bpe > maxBitsPerEntry) {
             // Direct mode: convert from palette indices to direct values
@@ -704,11 +712,15 @@ final class PaletteImpl implements Palette {
 
     @Override
     public int valueToPaletteIndex(int value) {
-        if (isDirect()) return value;
+        if (isDirect()) {
+            checkValue(value, true);
+            return value;
+        }
         if (values == null) initIndirect();
 
         final int pos = paletteIndexMap.find(value);
         if (pos >= 0) return paletteIndexMap.UNSAFE_getIndex(pos);
+        checkValue(value, true);
         if (paletteIndexMap.size() >= (1 << bitsPerEntry)) {
             // Palette is full, must resize
             upsize();
@@ -720,6 +732,15 @@ final class PaletteImpl implements Palette {
     /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
     int valueToPalettIndexOrDefault(int value) {
         return isDirect() ? value : paletteIndexMap.valueToIndexOrDefault(value);
+    }
+
+    void checkValue(int value, boolean allowResize) {
+        if (value < 1 << directBits) return;
+        final byte newDirectBits = (byte) MathUtils.bitsToRepresent(value);
+        if (allowResize && isDirect()) {
+            this.values = Palettes.remap(dimension, directBits, newDirectBits, values, Int2IntFunction.identity());
+        }
+        this.directBits = newDirectBits;
     }
 
     @Override
