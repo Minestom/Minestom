@@ -438,4 +438,145 @@ public class PaletteCopyTest {
             assertTrue(target.compare(backup));
         }
     }
+
+    @Nested
+    @DisplayName("Offset Copy Operations")
+    class OffsetCopyOperations {
+        @Test
+        @DisplayName("Copy with positive offset")
+        void CopyWithPositiveOffset() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            source.fill(10);
+
+            target.copyFrom(source, 2, 4, 8);
+            assertEquals((16 - 2) * (16 - 4) * (16 - 8), target.count());
+
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        if (x < 2 || y < 4 || z < 8) {
+                            assertEquals(0, target.get(x, y, z));
+                        } else {
+                            assertEquals(10, target.get(x, y, z));
+                        }
+                    }
+                }
+            }
+        }
+
+        @Test
+        @DisplayName("Copy Multi with positive offset")
+        void copyMultiWithPositiveOffset() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            source.fill(10);
+            source.set(0, 0, 0, 11);
+            source.set(5, 5, 5, 12);
+            source.set(2, 4, 8, 13);
+
+            target.copyFrom(source, 8, 4, 2);
+            assertEquals((16 - 8) * (16 - 4) * (16 - 2), target.count());
+
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        if (x < 8 || y < 4 || z < 2) {
+                            assertEquals(0, target.get(x, y, z));
+                        } else if (x == 8 && y == 4 && z == 2) {
+                            assertEquals(11, target.get(x, y, z));
+                        } else if (x == (8 + 5) && y == (4 + 5) && z == (2 + 5)) {
+                            assertEquals(12, target.get(x, y, z));
+                        } else if (x == (8 + 2) && y == (4 + 4) && z == (2 + 8)) {
+                            assertEquals(13, target.get(x, y, z));
+                        } else {
+                            assertEquals(10, target.get(x, y, z));
+                        }
+                    }
+                }
+            }
+        }
+
+        @Test
+        @DisplayName("Copy with negative offset")
+        void copyWithNegativeOffset() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            source.fill(10);
+
+            target.copyFrom(source, -2, -4, -8);
+            assertEquals((16 - 2) * (16 - 4) * (16 - 8), target.count());
+
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        if (x >= 16 - 2 || y >= 16 - 4 || z >= 16 - 8) {
+                            assertEquals(0, target.get(x, y, z));
+                        } else {
+                            assertEquals(10, target.get(x, y, z));
+                        }
+                    }
+                }
+            }
+        }
+
+        @Test
+        @DisplayName("Copy Multi with negative offset")
+        void copyMultiWithNegativeOffset() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            source.fill(10);
+            source.set(15, 15, 15, 11);
+            source.set(10, 10, 10, 12);
+            source.set(11, 12, 13, 13);
+
+            target.copyFrom(source, -8, -4, -2);
+            assertEquals((16 - 8) * (16 - 4) * (16 - 2), target.count());
+
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        if (x >= 16 - 8 || y >= 16 - 4 || z >= 16 - 2) {
+                            assertEquals(0, target.get(x, y, z));
+                        } else if (x == (15 - 8) && y == (15 - 4) && z == (15 - 2)) {
+                            assertEquals(11, target.get(x, y, z));
+                        } else if (x == (10 - 8) && y == (10 - 4) && z == (10 - 2)) {
+                            assertEquals(12, target.get(x, y, z));
+                        } else if (x == (11 - 8) && y == (12 - 4) && z == (13 - 2)) {
+                            assertEquals(13, target.get(x, y, z));
+                        } else {
+                            assertEquals(10, target.get(x, y, z));
+                        }
+                    }
+                }
+            }
+        }
+
+        @Test
+        @DisplayName("Copy out of bounds")
+        void copyOutOfBounds() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+            Palette backup = target.clone();
+
+            source.fill(16);
+            source.set(0, 0, 0, 8);
+            source.set(4, 4, 4, 9);
+            source.set(8, 8, 8, 10);
+            source.set(15, 15, 15, 11);
+
+            target.copyFrom(source, 20, 0, 0);
+            assertTrue(target.compare(backup));
+
+            target.copyFrom(source, 0, 16, 0);
+            assertTrue(target.compare(backup));
+
+            target.copyFrom(source, 0, 0, -16);
+            assertTrue(target.compare(backup));
+        }
+    }
 }

@@ -239,6 +239,7 @@ public sealed interface Palette permits PaletteImpl {
                 if (directBits != value.directBits && value.isDirect()) {
                     value.values = Palettes.remap(dimension, value.directBits, directBits, value.values, Int2IntFunction.identity());
                     value.directBits = (byte) directBits;
+                    value.bitsPerEntry = value.directBits;
                 }
                 final byte bitsPerEntry = value.bitsPerEntry;
                 buffer.write(BYTE, bitsPerEntry);

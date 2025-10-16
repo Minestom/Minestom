@@ -251,19 +251,21 @@ final class PaletteImpl implements Palette {
                 int blockIndex = index / valuesPerLong;
                 int bitIndex = (index % valuesPerLong) * bitsPerEntry;
                 long block = values[blockIndex];
-                for (int x = minZ; x <= maxZ; x++) {
-                    if (((block >>> bitIndex) & mask) == airPaletteIndex) countDelta++;
-                    block = (block & ~(((long) mask) << bitIndex)) | (((long) paletteIndex) << bitIndex);
-
-                    bitIndex += bitsPerEntry;
+                for (int x = minX; x <= maxX; x++) {
                     if (bitIndex >= maxBitIndex) {
                         values[blockIndex] = block;
                         bitIndex = 0;
                         blockIndex++;
                         block = values[blockIndex];
                     }
+
+                    if (((block >>> bitIndex) & mask) == airPaletteIndex) countDelta++;
+                    block = (block & ~(((long) mask) << bitIndex)) | (((long) paletteIndex) << bitIndex);
+
+                    bitIndex += bitsPerEntry;
                     index++;
                 }
+                values[blockIndex] = block;
                 index += finalXTravel;
             }
             index += finalZTravel;
