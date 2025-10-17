@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.component.DataComponents;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.attribute.AttributeOperation;
@@ -14,6 +15,7 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @EnvTest
 public class EntityAttributeTest {
@@ -26,11 +28,10 @@ public class EntityAttributeTest {
         LivingEntity entity = new LivingEntity(EntityTypes.CHICKEN);
         entity.setInstance(instance).join();
 
-        double baseHealth = 20;
         double addition = 10;
 
-        double baseAmount = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
-        assertEquals(0, Double.compare(baseAmount, baseHealth)); // Avoid floating-point rounding issues
+        double baseHealth = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
+        assertEquals(0, Double.compare(baseHealth, entity.getAttributeValue(Attribute.MAX_HEALTH))); // Avoid floating-point rounding issues
 
         ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(DataComponents.ATTRIBUTE_MODIFIERS,
                 new AttributeList(new AttributeList.Modifier(Attribute.MAX_HEALTH,
@@ -50,11 +51,10 @@ public class EntityAttributeTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 1));
 
-        double baseHealth = 20;
         double addition = 10;
 
-        double baseAmount = player.getAttribute(Attribute.MAX_HEALTH).getValue();
-        assertEquals(0, Double.compare(baseAmount, baseHealth)); // Avoid floating-point rounding issues
+        double baseHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
+        assertEquals(0, Double.compare(baseHealth, player.getAttributeValue(Attribute.MAX_HEALTH))); // Avoid floating-point rounding issues
 
         ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(DataComponents.ATTRIBUTE_MODIFIERS,
                 new AttributeList(new AttributeList.Modifier(Attribute.MAX_HEALTH,
@@ -88,5 +88,23 @@ public class EntityAttributeTest {
 
         player.setItemInMainHand(itemStack);
         assertEquals(0, Double.compare(player.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth + addition));
+    }
+
+    @Test
+    public void testEntityDefaultAttributes() {
+        var ironGolem = new EntityCreature(EntityType.IRON_GOLEM);
+        assertEquals(100.0, ironGolem.getAttributeValue(Attribute.MAX_HEALTH), 0.001);
+
+        var zombie = new EntityCreature(EntityType.ZOMBIE);
+        assertEquals(20.0, zombie.getAttributeValue(Attribute.MAX_HEALTH), 0.001);
+
+        assertNotNull(ironGolem.getAttribute(Attribute.MAX_HEALTH));
+        assertEquals(100.0, ironGolem.getAttribute(Attribute.MAX_HEALTH).getValue(), 0.001);
+    }
+
+    @Test
+    public void testEntitySpawnsWithCorrectHealth() {
+        var ironGolem = new EntityCreature(EntityType.IRON_GOLEM);
+        assertEquals(100.0f, ironGolem.getHealth(), 0.001f);
     }
 }

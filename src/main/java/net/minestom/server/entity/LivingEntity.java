@@ -10,6 +10,7 @@ import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.attribute.AttributeOperation;
+import net.minestom.server.entity.attribute.DefaultAttributes;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -98,6 +99,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
+        var defaults = DefaultAttributes.getDefaults(entityType);
+        for (var entry : defaults.entrySet()) {
+            getAttribute(entry.getKey()).setBaseValue(entry.getValue());
+        }
     }
 
     public LivingEntity(EntityType entityType) {
@@ -432,7 +437,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
      */
     public void heal() {
-        setHealth((float) getAttributeValue(Attribute.MAX_HEALTH));
+        setHealth((float) getAttribute(Attribute.MAX_HEALTH).getValue());
     }
 
     /**
