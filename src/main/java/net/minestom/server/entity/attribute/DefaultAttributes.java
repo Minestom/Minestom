@@ -76,7 +76,8 @@ public final class DefaultAttributes {
                     defaults.put(entityType, Map.copyOf(attributes));
                 }
             }
-            LOGGER.info("Loaded default attributes for {} entity types", defaults.size());
+
+            LOGGER.debug("Loaded default attributes for {} entity types", defaults.size());
         } catch (Exception exception) {
             LOGGER.error("Failed to load default entity attributes", exception);
         }
