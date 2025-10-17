@@ -40,7 +40,7 @@ public final class DefaultAttributes {
 
                 Properties attributeSection = properties.section(entityKey);
 
-                if (attributeSection == null || attributeSection.size() == 0) {
+                if (attributeSection.size() == 0) {
                     continue;
                 }
 
@@ -81,16 +81,13 @@ public final class DefaultAttributes {
         } catch (Exception exception) {
             LOGGER.error("Failed to load default entity attributes", exception);
         }
-        DEFAULTS = defaults.isEmpty() ? Map.of() : Map.copyOf(defaults);
+
+        DEFAULTS = Map.copyOf(defaults);
     }
 
     private DefaultAttributes() {}
 
     public static Map<Attribute, Double> getDefaults(EntityType entityType) {
         return DEFAULTS.getOrDefault(entityType, Map.of());
-    }
-
-    public static boolean hasDefaults(EntityType entityType) {
-        return DEFAULTS.containsKey(entityType);
     }
 }
