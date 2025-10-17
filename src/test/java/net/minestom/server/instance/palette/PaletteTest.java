@@ -1078,7 +1078,61 @@ public class PaletteTest {
                 }
             }
         }
+    }
 
+    @Test
+    public void bulkPlacementHighValue() {
+        int value = 1 << 16;
+        for (Palette palette : testPalettes()) {
+            final int dimension = palette.dimension();
+
+            for (int x = 0, idx = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++, idx++) {
+                        palette.set(x, y, z, value + idx);
+                    }
+                }
+            }
+
+            for (int x = 0, idx = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++, idx++) {
+                        assertEquals(value + idx, palette.get(x, y, z));
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void fillHighValue() {
+        final Palette palette = Palette.blocks();
+
+        palette.fill(1 << 20);
+        palette.set(0, 0, 0, 10);
+
+        assertEquals(10, palette.get(0, 0, 0));
+        assertEquals(1 << 20, palette.get(1, 1, 1));
+    }
+
+    @Test
+    public void setAllHighValue() {
+        final Palette palette = Palette.blocks();
+        final int value = 1 << 16;
+        final AtomicInteger index = new AtomicInteger();
+        palette.setAll((_, _, _) -> {
+            final int idx = index.getPlain();
+            index.setPlain(idx + 1);
+            return value + idx;
+        });
+
+        for (int y = 0, idx = 0; y < 16; y++) {
+            for (int z = 0; z < 16; z++) {
+                for (int x = 0; x < 16; x++, idx++) {
+                    assertEquals(value + idx, palette.get(x, y, z));
+                }
+            }
+        }
     }
 
     private static List<Palette> testPalettes() {
