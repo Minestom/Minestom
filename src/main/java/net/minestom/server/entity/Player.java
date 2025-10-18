@@ -1578,7 +1578,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
 
         final byte previousViewDistance = previous.viewDistance();
-        final byte newViewDistance = settings.viewDistance();
         // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
         if (instance != null) {
             final int previousEffectiveViewDistance = computeEffectiveViewDistance(previousViewDistance, instance);
