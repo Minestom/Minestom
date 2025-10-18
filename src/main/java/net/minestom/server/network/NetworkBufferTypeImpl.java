@@ -380,9 +380,16 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record NbtType<T extends BinaryTag>() implements Type<T> {
+    record NbtType() implements Type<BinaryTag> {
+        static final NbtType TYPE = new NbtType();
+
+        @SuppressWarnings("unchecked")
+        public static <T extends BinaryTag> Type<T> typed() {
+            return (Type<T>) TYPE;
+        }
+
         @Override
-        public void write(NetworkBuffer buffer, T value) {
+        public void write(NetworkBuffer buffer, BinaryTag value) {
             final BinaryTagWriter nbtWriter = new BinaryTagWriter(buffer.ioView());
             try {
                 nbtWriter.writeNameless(value);
@@ -391,15 +398,38 @@ final class NetworkBufferTypeImpl {
             }
         }
 
-        @SuppressWarnings("unchecked") // TODO push this down into the reader
         @Override
-        public T read(NetworkBuffer buffer) {
+        public BinaryTag read(NetworkBuffer buffer) {
             final BinaryTagReader nbtReader = new BinaryTagReader(buffer.ioView());
             try {
-                return (T) nbtReader.readNameless();
+                return nbtReader.readNameless();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    record OptionalNBTType() implements Type<@Nullable BinaryTag> {
+        static final OptionalNBTType INSTANCE = new OptionalNBTType();
+
+        @SuppressWarnings("unchecked")
+        static <T extends @Nullable BinaryTag> Type<T> typed() {
+            return (Type<T>) INSTANCE;
+        }
+
+        @Override
+        public void write(NetworkBuffer buffer, @Nullable BinaryTag value) {
+            if (value != null) {
+                NbtType.TYPE.write(buffer, value);
+            } else {
+                // TAG_END
+                buffer.write(BYTE, (byte) 0x00);
+            }
+        }
+
+        @Override
+        public BinaryTag read(NetworkBuffer buffer) {
+            return NbtType.TYPE.read(buffer);
         }
     }
 
