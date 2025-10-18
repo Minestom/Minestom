@@ -335,8 +335,7 @@ final class NetworkBufferTypeImpl {
                 length = Math.min(length, this.length);
             }
             if (length == 0) return new byte[0];
-            assert length > 0 : "Invalid remaining: " + length;
-
+            buffer.ensureReadable(length);
             final int arrayLength = Math.toIntExact(length);
             final byte[] bytes = new byte[arrayLength];
             impl(buffer)._getBytes(buffer.readIndex(), bytes);
