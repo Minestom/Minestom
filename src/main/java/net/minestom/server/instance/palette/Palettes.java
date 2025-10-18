@@ -82,17 +82,6 @@ public final class Palettes {
         Arrays.fill(values, block);
     }
 
-    public static int count(int bitsPerEntry, long[] values) {
-        final int valuesPerLong = 64 / bitsPerEntry;
-        int count = 0;
-        for (long block : values) {
-            for (int i = 0; i < valuesPerLong; i++) {
-                count += (int) ((block >>> i * bitsPerEntry) & ((1 << bitsPerEntry) - 1));
-            }
-        }
-        return count;
-    }
-
     public static int sectionIndex(int dimension, int x, int y, int z) {
         final int dimensionBitCount = MathUtils.bitsToRepresent(dimension - 1);
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;

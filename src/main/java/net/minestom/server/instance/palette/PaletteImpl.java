@@ -509,36 +509,30 @@ final class PaletteImpl implements Palette {
 
     @Override
     public void optimize(Optimization focus) {
-        final int bitsPerEntry = this.bitsPerEntry;
-        if (bitsPerEntry == 0) {
-            // Already optimized (single value)
-            return;
-        }
-
-        final PaletteIndexMap newPalette = collectOptimizedPalette();
-        if (newPalette == null) return;
-        if (newPalette.size() == 1) {
-            fill(newPalette.indexToValue(0));
-            return;
-        }
+        if (bitsPerEntry == 0) return;
 
         if (focus == Optimization.SPEED) {
-            // Speed optimization - use direct storage
-            makeDirect();
+            final PaletteIndexMap newPalette = collectOptimizedPalette((byte) 0);
+            if (newPalette == null) {
+                makeDirect();
+                return;
+            }
+            fill(newPalette.indexToValue(0));
         } else if (focus == Optimization.SIZE) {
-            // Size optimization - calculate minimum bits needed for unique values
+            final PaletteIndexMap newPalette = collectOptimizedPalette((byte) Math.min(bitsPerEntry, maxBitsPerEntry));
+            if (newPalette == null) return;
             downsizeWithPalette(newPalette);
         }
     }
 
     /// Assumes bitsPerEntry != 0
-    private @Nullable PaletteIndexMap collectOptimizedPalette() {
+    private @Nullable PaletteIndexMap collectOptimizedPalette(byte maxBitsPerEntry) {
         final int size = maxSize();
         final int bits = bitsPerEntry;
         final int valuesPerLong = 64 / bits;
         final int mask = (1 << bits) - 1;
 
-        PaletteIndexMap result = new PaletteIndexMap((byte) Math.min(maxBitsPerEntry, bitsPerEntry));
+        PaletteIndexMap result = new PaletteIndexMap((byte) Math.max(1, maxBitsPerEntry));
         final int maxPaletteSize = 1 << maxBitsPerEntry;
         for (int i = 0, idx = 0; i < values.length; i++) {
             long block = values[i];
@@ -647,6 +641,10 @@ final class PaletteImpl implements Palette {
     }
 
     private void downsizeWithPalette(PaletteIndexMap palette) {
+        if (palette.size() == 1) {
+            fill(palette.indexToValue(0));
+            return;
+        }
         final byte bpe = this.bitsPerEntry;
         final byte newBpe = (byte) Math.max(MathUtils.bitsToRepresent(palette.size() - 1), minBitsPerEntry);
         if (newBpe >= bpe || newBpe > maxBitsPerEntry) return;
