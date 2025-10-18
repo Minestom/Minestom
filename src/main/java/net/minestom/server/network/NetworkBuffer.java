@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -850,23 +851,25 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Creates a resizeable buffer using {@link NetworkBuffer#resizableBuffer(long, Registries)} with an initial size of 256.
+     * Creates a resizeable buffer using {@link NetworkBuffer#resizableBuffer(long, Registries)}
+     * with an initial size of 256, determined by {@link ServerFlag#DEFAULT_RESIZEABLE_SIZE}.
      * @param registries the registries to use if required during encoding/decoding.
      * @return the new buffer
      */
     @Contract("_ -> new")
     static NetworkBuffer resizableBuffer(Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return resizableBuffer(256, registries);
+        return resizableBuffer(ServerFlag.DEFAULT_RESIZEABLE_SIZE, registries);
     }
 
     /**
-     * Creates a resizeable buffer with an initial size of 256
+     * Creates a resizeable buffer
+     * with an initial size of 256, determined by {@link ServerFlag#DEFAULT_RESIZEABLE_SIZE}.
      * @return the new buffer
      */
     @Contract("-> new")
     static NetworkBuffer resizableBuffer() {
-        return resizableBuffer(256);
+        return resizableBuffer(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
     }
 
     /**
@@ -1026,29 +1029,43 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     /**
      * Creates a byte array from the consumer and with registries.
+     * <br>
+     * Note: only the current thread can write to the buffer.
      * @param writing consumer of the {@link NetworkBuffer}
      * @param registries the registries to use in serialization
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
      */
     static byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries) {
+        Objects.requireNonNull(writing, "writing");
         Objects.requireNonNull(registries, "registries");
-        return resizableBuffer(256, registries)
-                .extractWrittenBytes(writing);
+        try (var arena = Arena.ofConfined()) {
+            var settings = Settings.resizeableSettings().arena(arena).registry(registries);
+            var allocation = settings.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            return allocation.extractWrittenBytes(writing);
+        }
     }
 
     /**
      * Creates a byte array from the consumer and without registries.
+     * <br>
+     * Note: only the current thread can write to the buffer.
      * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
      * @param writing consumer of the {@link NetworkBuffer}
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
      */
     static byte[] makeArray(Consumer<NetworkBuffer> writing) {
-        return resizableBuffer(256)
-                .extractWrittenBytes(writing);
+        Objects.requireNonNull(writing, "writing");
+        try (var arena = Arena.ofConfined()) {
+            var settings = Settings.resizeableSettings().arena(arena);
+            var allocation = settings.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            return allocation.extractWrittenBytes(writing);
+        }
     }
 
     /**
      * Creates a byte array from the type and value registries.
+     * <br>
+     * Note: only the current thread can write to the buffer.
      * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
      * @param type the {@link Type} for {@link T}
      * @param value the value
@@ -1059,12 +1076,17 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, Registries registries) {
         Objects.requireNonNull(type, "type");
         Objects.requireNonNull(registries, "registries");
-        return resizableBuffer(256, registries)
-                .extractWrittenBytes(type, value);
+        try (var arena = Arena.ofConfined()) {
+            var settings = Settings.resizeableSettings().arena(arena).registry(registries);
+            var allocation = settings.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            return allocation.extractWrittenBytes(type, value);
+        }
     }
 
     /**
      * Creates a byte array from the type and value without registries.
+     * <br>
+     * Note: only the current thread can write to the buffer.
      * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
      * @param type the {@link Type} for {@link T}
      * @param value the value
@@ -1073,8 +1095,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
         Objects.requireNonNull(type, "type");
-        return resizableBuffer(256)
-                .extractWrittenBytes(type, value);
+        try (var arena = Arena.ofConfined()) {
+            var settings = Settings.resizeableSettings().arena(arena);
+            var allocation = settings.allocate(type.sizeOf(value));
+            return allocation.extractWrittenBytes(type, value);
+        }
     }
 
     /**
