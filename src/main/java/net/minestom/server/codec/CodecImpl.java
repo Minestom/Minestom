@@ -2,6 +2,8 @@ package net.minestom.server.codec;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.codec.Transcoder.ListBuilder;
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
@@ -94,8 +96,10 @@ final class CodecImpl {
         }
     }
 
-    record TransformImpl<T, S>(Codec<T> inner, ThrowingFunction<T, S> to,
-                               ThrowingFunction<@Nullable S, T> from) implements Codec<S> {
+    record TransformImpl<T, S>(
+            Codec<T> inner, ThrowingFunction<T, S> to,
+            ThrowingFunction<@Nullable S, T> from
+    ) implements Codec<S> {
         TransformImpl {
             Objects.requireNonNull(inner, "inner");
             Objects.requireNonNull(to, "to");
@@ -204,8 +208,10 @@ final class CodecImpl {
         }
     }
 
-    record MapImpl<K, V>(Codec<K> keyCodec, Codec<V> valueCodec,
-                         int maxSize) implements Codec<@Unmodifiable Map<K, V>> {
+    record MapImpl<K, V>(
+            Codec<K> keyCodec, Codec<V> valueCodec,
+            int maxSize
+    ) implements Codec<@Unmodifiable Map<K, V>> {
         MapImpl {
             Objects.requireNonNull(keyCodec, "keyCodec");
             Objects.requireNonNull(valueCodec, "valueCodec");
@@ -257,9 +263,11 @@ final class CodecImpl {
         }
     }
 
-    record UnionImpl<T, R>(String keyField, Codec<T> keyCodec,
-                           Function<T, @Nullable StructCodec<? extends R>> serializers,
-                           Function<R, ? extends T> keyFunc) implements StructCodec<R> {
+    record UnionImpl<T, R>(
+            String keyField, Codec<T> keyCodec,
+            Function<T, @Nullable StructCodec<? extends R>> serializers,
+            Function<R, ? extends T> keyFunc
+    ) implements StructCodec<R> {
         UnionImpl {
             Objects.requireNonNull(serializers, "serializers");
             Objects.requireNonNull(keyField, "keyField");
@@ -446,7 +454,7 @@ final class CodecImpl {
             Objects.requireNonNull(leftCodec, "leftCodec");
             Objects.requireNonNull(rightCodec, "rightCodec");
         }
-        
+
         @Override
         public <D> Result<Either<L, R>> decode(Transcoder<D> coder, D value) {
             final Result<L> leftResult = leftCodec.decode(coder, value);
@@ -468,7 +476,10 @@ final class CodecImpl {
         }
     }
 
-    record EitherStructImpl<L, R>(StructCodec<L> leftCodec, StructCodec<R> rightCodec) implements StructCodec<Either<L, R>> {
+    record EitherStructImpl<L, R>(
+            StructCodec<L> leftCodec,
+            StructCodec<R> rightCodec
+    ) implements StructCodec<Either<L, R>> {
         public EitherStructImpl {
             Objects.requireNonNull(leftCodec, "leftCodec");
             Objects.requireNonNull(rightCodec, "rightCodec");
@@ -522,6 +533,32 @@ final class CodecImpl {
             list.add(coder.createDouble(value.y()));
             list.add(coder.createDouble(value.z()));
             return new Result.Ok<>(list.build());
+        }
+    }
+
+    record CompoundBinaryTagImpl() implements StructCodec<CompoundBinaryTag> {
+        @Override
+        public <D> Result<CompoundBinaryTag> decodeFromMap(Transcoder<D> coder, Transcoder.MapLike<D> map) {
+            final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+            for (String key : map.keys()) {
+                final Result<BinaryTag> tagResult = map.getValue(key)
+                        .map(nbt -> RawValue.of(coder, nbt).convertTo(Transcoder.NBT));
+                if (!(tagResult instanceof Result.Ok(BinaryTag tag)))
+                    return tagResult.mapError(e -> key + ": " + e).cast();
+                builder.put(key, tag);
+            }
+            return new Result.Ok<>(builder.build());
+        }
+
+        @Override
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, CompoundBinaryTag value, Transcoder.MapBuilder<D> map) {
+            for (var entry : value) {
+                final Result<D> entryValue = RawValue.of(Transcoder.NBT, entry.getValue()).convertTo(coder);
+                if (!(entryValue instanceof Result.Ok(D okValue)))
+                    return entryValue.mapError(e -> entry.getKey() + ": " + e);
+                map.put(entry.getKey(), okValue);
+            }
+            return new Result.Ok<>(map.build());
         }
     }
 
