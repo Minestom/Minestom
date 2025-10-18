@@ -24,8 +24,9 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public void readFully(byte[] b, int off, int len) {
-        var newBytes = buffer.read(FixedRawBytes(len));
-        System.arraycopy(newBytes, 0, b, off, len);
+        buffer.ensureReadable(len);
+        buffer.copyTo(buffer.readIndex(), b, off, len);
+        buffer.advanceRead(len);
     }
 
     @Override
