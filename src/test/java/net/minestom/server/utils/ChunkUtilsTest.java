@@ -1,7 +1,13 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.ChunkRange;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -9,6 +15,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@EnvTest
 public class ChunkUtilsTest {
 
     @ParameterizedTest
@@ -48,4 +57,35 @@ public class ChunkUtilsTest {
     }
 
     private record ChunkCoordinate(int x, int z) {}
+
+    @Test
+    public void effectiveViewDistanceUsesServerFlagWhenNull() {
+        int result = ChunkUtils.computeEffectiveViewDistance((byte) 10, null);
+        assertEquals(Math.min(10, ServerFlag.CHUNK_VIEW_DISTANCE) + 1, result);
+    }
+
+    @Test
+    public void effectiveViewDistanceUsesInstanceViewDistance(Env env) {
+        Instance instance = env.createFlatInstance();
+        instance.viewDistance(8);
+        
+        assertEquals(9, ChunkUtils.computeEffectiveViewDistance((byte) 16, instance));
+    }
+
+    @Test
+    public void serverViewDistanceUsesServerFlagWhenNull() {
+        int result = ChunkUtils.computeServerViewDistance(null);
+        assertEquals(MathUtils.clamp(ServerFlag.CHUNK_VIEW_DISTANCE, 2, 32), result);
+    }
+
+    @Test
+    public void serverViewDistanceClampsValue(Env env) {
+        Instance instance = env.createFlatInstance();
+        
+        instance.viewDistance(1);
+        assertEquals(2, ChunkUtils.computeServerViewDistance(instance));
+        
+        instance.viewDistance(50);
+        assertEquals(32, ChunkUtils.computeServerViewDistance(instance));
+    }
 }
