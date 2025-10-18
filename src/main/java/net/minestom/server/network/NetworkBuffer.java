@@ -101,7 +101,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
     Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
-    Type<java.util.UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
+    Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
     Type<Pos> POS = new NetworkBufferTypeImpl.PosType();
 
     Type<byte[]> BYTE_ARRAY = new NetworkBufferTypeImpl.ByteArrayType();

@@ -36,7 +36,7 @@ final class NetworkBufferTypeImpl {
     static final int SEGMENT_BITS = 0x7F;
     static final int CONTINUE_BIT = 0x80;
 
-    record UnitType() implements NetworkBuffer.Type<Unit> {
+    record UnitType() implements Type<Unit> {
         @Override
         public void write(NetworkBuffer buffer, Unit value) {
         }
@@ -47,7 +47,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record BooleanType() implements NetworkBuffer.Type<Boolean> {
+    record BooleanType() implements Type<Boolean> {
         @Override
         public void write(NetworkBuffer buffer, Boolean value) {
             buffer.ensureWritable(1);
@@ -63,7 +63,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record ByteType() implements NetworkBuffer.Type<Byte> {
+    record ByteType() implements Type<Byte> {
         @Override
         public void write(NetworkBuffer buffer, Byte value) {
             buffer.ensureWritable(1);
@@ -79,7 +79,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record UnsignedByteType() implements NetworkBuffer.Type<Short> {
+    record UnsignedByteType() implements Type<Short> {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
             buffer.ensureWritable(1);
@@ -95,7 +95,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record ShortType() implements NetworkBuffer.Type<Short> {
+    record ShortType() implements Type<Short> {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
             buffer.ensureWritable(2);
@@ -111,7 +111,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record UnsignedShortType() implements NetworkBuffer.Type<Integer> {
+    record UnsignedShortType() implements Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
             buffer.ensureWritable(2);
@@ -127,7 +127,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record IntType() implements NetworkBuffer.Type<Integer> {
+    record IntType() implements Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
             buffer.ensureWritable(4);
@@ -143,7 +143,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record UnsignedIntType() implements NetworkBuffer.Type<Long> {
+    record UnsignedIntType() implements Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(4);
@@ -159,7 +159,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record LongType() implements NetworkBuffer.Type<Long> {
+    record LongType() implements Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(8);
@@ -175,7 +175,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record FloatType() implements NetworkBuffer.Type<Float> {
+    record FloatType() implements Type<Float> {
         @Override
         public void write(NetworkBuffer buffer, Float value) {
             buffer.ensureWritable(4);
@@ -191,7 +191,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record DoubleType() implements NetworkBuffer.Type<Double> {
+    record DoubleType() implements Type<Double> {
         @Override
         public void write(NetworkBuffer buffer, Double value) {
             buffer.ensureWritable(8);
@@ -207,7 +207,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record VarIntType() implements NetworkBuffer.Type<Integer> {
+    record VarIntType() implements Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer boxed) {
             buffer.ensureWritable(5);
@@ -242,7 +242,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record OptionalVarIntType() implements NetworkBuffer.Type<@Nullable Integer> {
+    record OptionalVarIntType() implements Type<@Nullable Integer> {
         @Override
         public void write(NetworkBuffer buffer, @Nullable Integer value) {
             buffer.write(VAR_INT, value == null ? 0 : value + 1);
@@ -255,7 +255,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record VarInt3Type() implements NetworkBuffer.Type<Integer> {
+    record VarInt3Type() implements Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer boxed) {
             final int value = boxed;
@@ -278,7 +278,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record VarLongType() implements NetworkBuffer.Type<Long> {
+    record VarLongType() implements Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(10);
@@ -315,7 +315,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record RawBytesType(int length) implements NetworkBuffer.Type<byte[]> {
+    record RawBytesType(int length) implements Type<byte[]> {
         @Override
         public void write(NetworkBuffer buffer, byte[] value) {
             if (length != -1 && value.length != length) {
@@ -345,7 +345,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record StringType() implements NetworkBuffer.Type<String> {
+    record StringType() implements Type<String> {
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
@@ -359,7 +359,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record StringTerminatedType() implements NetworkBuffer.Type<String> {
+    record StringTerminatedType() implements Type<String> {
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
@@ -380,7 +380,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record NbtType<T extends BinaryTag>() implements NetworkBuffer.Type<T> {
+    record NbtType<T extends BinaryTag>() implements Type<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             final BinaryTagWriter nbtWriter = new BinaryTagWriter(buffer.ioView());
@@ -403,7 +403,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record BlockPositionType() implements NetworkBuffer.Type<Point> {
+    record BlockPositionType() implements Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             final int blockX = value.blockX();
@@ -425,7 +425,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record JsonComponentType() implements NetworkBuffer.Type<Component> {
+    record JsonComponentType() implements Type<Component> {
         @Override
         public void write(NetworkBuffer buffer, Component value) {
             final Registries registries = buffer.registries();
@@ -447,7 +447,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record UUIDType() implements NetworkBuffer.Type<UUID> {
+    record UUIDType() implements Type<UUID> {
         @Override
         public void write(NetworkBuffer buffer, java.util.UUID value) {
             buffer.write(LONG, value.getMostSignificantBits());
@@ -462,7 +462,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record PosType() implements NetworkBuffer.Type<Pos> {
+    record PosType() implements Type<Pos> {
         @Override
         public void write(NetworkBuffer buffer, Pos value) {
             buffer.write(DOUBLE, value.x());
@@ -483,7 +483,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record ByteArrayType() implements NetworkBuffer.Type<byte[]> {
+    record ByteArrayType() implements Type<byte[]> {
         @Override
         public void write(NetworkBuffer buffer, byte[] value) {
             buffer.write(VAR_INT, value.length);
@@ -500,7 +500,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record LongArrayType() implements NetworkBuffer.Type<long[]> {
+    record LongArrayType() implements Type<long[]> {
         @Override
         public void write(NetworkBuffer buffer, long[] value) {
             buffer.write(VAR_INT, value.length);
@@ -516,7 +516,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record VarIntArrayType() implements NetworkBuffer.Type<int[]> {
+    record VarIntArrayType() implements Type<int[]> {
         @Override
         public void write(NetworkBuffer buffer, int[] value) {
             buffer.write(VAR_INT, value.length);
@@ -532,7 +532,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record VarLongArrayType() implements NetworkBuffer.Type<long[]> {
+    record VarLongArrayType() implements Type<long[]> {
         @Override
         public void write(NetworkBuffer buffer, long[] value) {
             buffer.write(VAR_INT, value.length);
@@ -548,7 +548,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record Vector3Type() implements NetworkBuffer.Type<Point> {
+    record Vector3Type() implements Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             buffer.write(FLOAT, (float) value.x());
@@ -565,7 +565,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record Vector3DType() implements NetworkBuffer.Type<Point> {
+    record Vector3DType() implements Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             buffer.write(DOUBLE, value.x());
@@ -582,7 +582,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record Vector3IType() implements NetworkBuffer.Type<Point> {
+    record Vector3IType() implements Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             buffer.write(VAR_INT, (int) value.x());
@@ -599,7 +599,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record Vector3BType() implements NetworkBuffer.Type<Point> {
+    record Vector3BType() implements Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             buffer.write(BYTE, (byte) value.x());
@@ -616,7 +616,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record LpVector3Type() implements NetworkBuffer.Type<Vec> {
+    record LpVector3Type() implements Type<Vec> {
         private static final int DATA_BITS_MASK = 0b111111111111111;
         private static final double MAX_QUANTIZED_VALUE = 32766.0;
         private static final int SCALE_BITS_MASK = 0b11;
@@ -682,7 +682,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record QuaternionType() implements NetworkBuffer.Type<float[]> {
+    record QuaternionType() implements Type<float[]> {
         @Override
         public void write(NetworkBuffer buffer, float[] value) {
             buffer.write(FLOAT, value[0]);
@@ -704,7 +704,7 @@ final class NetworkBufferTypeImpl {
     // Combinators
 
     record EnumSetType<E extends Enum<E>>(Class<E> enumType,
-                                          E[] values) implements NetworkBuffer.Type<EnumSet<E>> {
+                                          E[] values) implements Type<EnumSet<E>> {
         public EnumSetType {
             Objects.requireNonNull(enumType, "enumType");
             Objects.requireNonNull(values, "values");
@@ -734,7 +734,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record FixedBitSetType(int length) implements NetworkBuffer.Type<BitSet> {
+    record FixedBitSetType(int length) implements Type<BitSet> {
         public FixedBitSetType {
             Check.argCondition(length < 0, "Length is negative found {0}", length);
         }
@@ -757,7 +757,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record OptionalType<T extends @Nullable Object>(Type<T> parent) implements NetworkBuffer.Type<T> {
+    record OptionalType<T extends @Nullable Object>(Type<T> parent) implements Type<T> {
         public OptionalType {
             Objects.requireNonNull(parent, "parent");
         }
@@ -774,7 +774,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record LengthPrefixedType<T>(Type<T> parent, int maxLength) implements NetworkBuffer.Type<T> {
+    record LengthPrefixedType<T>(Type<T> parent, int maxLength) implements Type<T> {
         public LengthPrefixedType {
             Objects.requireNonNull(parent, "parent");
             Check.argCondition(maxLength < 0, "length is negative found {0}", maxLength);
@@ -807,11 +807,11 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    static final class LazyType<T> implements NetworkBuffer.Type<T> {
-        private final Supplier<NetworkBuffer.Type<T>> supplier;
+    static final class LazyType<T> implements Type<T> {
+        private final Supplier<Type<T>> supplier;
         private @Nullable Type<T> type;
 
-        public LazyType(Supplier<NetworkBuffer.Type<T>> supplier) {
+        public LazyType(Supplier<Type<T>> supplier) {
             this.supplier = Objects.requireNonNull(supplier, "supplier");
         }
 
@@ -834,7 +834,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record TypedNbtType<T>(Codec<T> nbtType) implements NetworkBuffer.Type<T> {
+    record TypedNbtType<T>(Codec<T> nbtType) implements Type<T> {
         public TypedNbtType {
             Objects.requireNonNull(nbtType, "nbtType");
         }
@@ -863,9 +863,9 @@ final class NetworkBufferTypeImpl {
     }
 
     record EitherType<L, R>(
-            NetworkBuffer.Type<L> left,
-            NetworkBuffer.Type<R> right
-    ) implements NetworkBuffer.Type<Either<L, R>> {
+            Type<L> left,
+            Type<R> right
+    ) implements Type<Either<L, R>> {
         public EitherType {
             Objects.requireNonNull(left, "left");
             Objects.requireNonNull(right, "right");
@@ -894,7 +894,7 @@ final class NetworkBufferTypeImpl {
     }
 
     record TransformType<T, S>(Type<T> parent, Function<T, S> to,
-                               Function<S, T> from) implements NetworkBuffer.Type<S> {
+                               Function<S, T> from) implements Type<S> {
         public TransformType {
             Objects.requireNonNull(parent, "parent");
             Objects.requireNonNull(to, "to");
@@ -912,8 +912,8 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record MapType<K, V>(Type<K> parent, NetworkBuffer.Type<V> valueType,
-                         int maxSize) implements NetworkBuffer.Type<Map<K, V>> {
+    record MapType<K, V>(Type<K> parent, Type<V> valueType,
+                         int maxSize) implements Type<Map<K, V>> {
         public MapType {
             Objects.requireNonNull(parent, "parent");
             Objects.requireNonNull(valueType, "valueType");
@@ -944,7 +944,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record ListType<T>(Type<T> parent, int maxSize) implements NetworkBuffer.Type<List<T>> {
+    record ListType<T>(Type<T> parent, int maxSize) implements Type<List<T>> {
         public ListType {
             Objects.requireNonNull(parent, "parent");
             Check.argCondition(maxSize < 0, "Max size is negative found {0}", maxSize);
@@ -971,7 +971,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record SetType<T>(Type<T> parent, int maxSize) implements NetworkBuffer.Type<Set<T>> {
+    record SetType<T>(Type<T> parent, int maxSize) implements Type<Set<T>> {
         public SetType {
             Objects.requireNonNull(parent, "parent");
             Check.argCondition(maxSize < 0, "Max size is negative found {0}", maxSize);
@@ -1001,7 +1001,7 @@ final class NetworkBufferTypeImpl {
     record UnionType<T, K>(
             Type<K> keyType, Function<T, ? extends K> keyFunc,
             Function<K, NetworkBuffer.@Nullable Type<? extends T>> serializers
-    ) implements NetworkBuffer.Type<T> {
+    ) implements Type<T> {
         public UnionType {
             Objects.requireNonNull(keyType, "keyType");
             Objects.requireNonNull(keyFunc, "keyFunc");
@@ -1033,7 +1033,7 @@ final class NetworkBufferTypeImpl {
      * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)} & ${@link java.io.DataInputStream#readUTF()}. We need the data in the java
      * modified utf-8 format for Component, and I couldnt find a method without creating a new buffer for it.
      */
-    record IOUTF8StringType() implements NetworkBuffer.Type<String> {
+    record IOUTF8StringType() implements Type<String> {
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final int strlen = value.length();
