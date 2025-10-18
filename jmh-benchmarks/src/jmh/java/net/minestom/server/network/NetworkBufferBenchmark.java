@@ -15,7 +15,7 @@ public class NetworkBufferBenchmark {
 
     private NetworkBuffer buffer;
 
-    @Setup()
+    @Setup
     public void setup() {
         buffer = NetworkBuffer.resizableBuffer(8096);
 
