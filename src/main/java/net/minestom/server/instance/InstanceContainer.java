@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
@@ -15,6 +16,7 @@ import net.minestom.server.event.instance.InstanceBlockUpdateEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
@@ -77,6 +79,7 @@ public class InstanceContainer extends Instance {
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
+    private final Long2ObjectOpenHashMap<List<UUID>> pendingChunkUnloads = new Long2ObjectOpenHashMap<>();
 
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<BlockVec, Block> currentlyChangingBlocks = new HashMap<>();
@@ -342,6 +345,7 @@ public class InstanceContainer extends Instance {
             // TODO run in the instance thread?
             cacheChunk(chunk);
             chunk.onLoad();
+            processPendingChunkUnloads(chunk);
 
             EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
             final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
@@ -739,9 +743,59 @@ public class InstanceContainer extends Instance {
         return supplier.get();
     }
 
+    @Override
+    public void handlePlayerChunkUnload(Player player, int chunkX, int chunkZ) {
+        Chunk chunk = getChunk(chunkX, chunkZ);
+        if (chunk != null) {
+            EventDispatcher.call(new PlayerChunkUnloadEvent(player, chunkX, chunkZ));
+            return;
+        }
+
+        queuePendingChunkUnload(player, chunkX, chunkZ);
+    }
+
     private void cacheChunk(Chunk chunk) {
         this.chunks.put(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.createPartition(chunk);
+    }
+
+    private void queuePendingChunkUnload(Player player, int chunkX, int chunkZ) {
+        long index = CoordConversion.chunkIndex(chunkX, chunkZ);
+        synchronized (pendingChunkUnloads) {
+            pendingChunkUnloads.computeIfAbsent(index, _ -> new ArrayList<>())
+                    .add(player.getUuid());
+        }
+    }
+
+    private void processPendingChunkUnloads(Chunk chunk) {
+        long index = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        List<UUID> entries;
+        synchronized (pendingChunkUnloads) {
+            entries = pendingChunkUnloads.remove(index);
+        }
+        if (entries == null || entries.isEmpty()) return;
+
+        var connectionManager = MinecraftServer.getConnectionManager();
+        for (UUID playerId : entries) {
+            Player player = connectionManager.getOnlinePlayerByUuid(playerId);
+            if (player == null || player.isRemoved()) continue;
+
+            Instance playerInstance = player.getInstance();
+            if (playerInstance != this)
+                if (!(playerInstance instanceof SharedInstance shared) || shared.getInstanceContainer() != this)
+                    continue;
+
+            if (chunk.getViewers().contains(player)) continue;
+
+            int viewDistance = player.effectiveViewDistance();
+            int centerX = player.getPosition().chunkX();
+            int centerZ = player.getPosition().chunkZ();
+            if (Math.abs(chunk.getChunkX() - centerX) <= viewDistance
+                    && Math.abs(chunk.getChunkZ() - centerZ) <= viewDistance)
+                continue;
+
+            EventDispatcher.call(new PlayerChunkUnloadEvent(player, chunk.getChunkX(), chunk.getChunkZ()));
+        }
     }
 }

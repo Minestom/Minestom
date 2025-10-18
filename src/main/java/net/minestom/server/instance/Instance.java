@@ -29,6 +29,7 @@ import net.minestom.server.event.EventHandler;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.instance.InstanceSectionInvalidateEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
+import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -319,6 +320,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public boolean isChunkLoaded(int chunkX, int chunkZ) {
         return getChunk(chunkX, chunkZ) != null;
+    }
+
+    public void handlePlayerChunkUnload(Player player, int chunkX, int chunkZ) {
+        Chunk chunk = getChunk(chunkX, chunkZ);
+        if (chunk == null) return;
+        EventDispatcher.call(new PlayerChunkUnloadEvent(player, chunkX, chunkZ));
     }
 
     /**

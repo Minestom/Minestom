@@ -171,7 +171,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     final ChunkRange.ChunkConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
         sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-        EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
+        if (this.instance != null) this.instance.handlePlayerChunkUnload(this, chunkX, chunkZ);
     };
 
     private final AtomicInteger teleportId = new AtomicInteger();
@@ -2388,6 +2388,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     /**
      * Gets the client's 'effective' view distance, which is the minimum of the client's view distance settings, and the local instance settings, plus one
+     *
      * @return The effective chunk view distance range of the client
      */
     public int effectiveViewDistance() {

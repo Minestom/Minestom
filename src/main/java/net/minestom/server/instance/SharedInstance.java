@@ -118,6 +118,11 @@ public class SharedInstance extends Instance {
     }
 
     @Override
+    public void handlePlayerChunkUnload(Player player, int chunkX, int chunkZ) {
+        instanceContainer.handlePlayerChunkUnload(player, chunkX, chunkZ);
+    }
+
+    @Override
     public boolean isInVoid(Point point) {
         return instanceContainer.isInVoid(point);
     }
