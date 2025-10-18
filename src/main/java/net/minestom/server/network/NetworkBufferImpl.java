@@ -213,9 +213,19 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public void ensureWritable(long length) {
+        if (length < 0)
+            throw new IllegalArgumentException("Length must be non-negative found: " + length);
         if (writableBytes() >= length) return;
         final long newCapacity = newCapacity(length, capacity());
         resize(newCapacity);
+    }
+
+    @Override
+    public void ensureReadable(long length) {
+        if (length < 0)
+            throw new IllegalArgumentException("Length must be non-negative found: " + length);
+        if (readableBytes() < length)
+            throw new IndexOutOfBoundsException(length + " is too large to be readable: " + readableBytes());
     }
 
     private long newCapacity(long length, long capacity) {

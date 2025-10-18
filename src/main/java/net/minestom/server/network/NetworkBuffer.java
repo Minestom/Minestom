@@ -447,10 +447,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Ensures that the buffer {@link #writableBytes()} is greater or equal to {@code length}.
      * Otherwise, the buffer will be resized using {@link #resize(long)} with {@link}
      * @param length the length to ensure
+     * @throws IllegalArgumentException if {@code length < 0}
      * @throws IndexOutOfBoundsException if the resize does not permit the length to be written
      * @throws RuntimeException for any error in {@link #resize(long)}
      */
     void ensureWritable(long length);
+
+    /**
+     * Ensures that the buffer {@link #readableBytes()} is greater or equal to {@code length}.
+     * @param length the length to ensure
+     * @throws IllegalArgumentException if {@code length < 0}
+     * @throws IndexOutOfBoundsException if buffer does not have enough data for this length.
+     */
+    void ensureReadable(long length);
 
     /**
      * Compact (copies) all the data from the {@link #readIndex()} to the {@link #writeIndex()} to be zero aligned.
