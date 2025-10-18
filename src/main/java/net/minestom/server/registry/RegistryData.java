@@ -17,6 +17,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Equippable;
@@ -250,8 +251,7 @@ public final class RegistryData {
         private final float jumpFactor;
         private final byte packedFlags;
         private final byte lightEmission;
-        private final @Nullable Key blockEntity;
-        private final int blockEntityId;
+        private final @Nullable BlockEntityType blockEntityType;
         private final @Nullable Material material;
         private final @Nullable BlockSoundType blockSoundType;
         private final Shape collisionShape;
@@ -281,9 +281,10 @@ public final class RegistryData {
             }, null);
             {
                 final Properties blockEntity = main.section("blockEntity");
-                final Key blockEntityKey = fromParent(parent, BlockEntry::blockEntity, blockEntity, "namespace", (properties, string) -> Key.key(properties.getString(string)), null);
-                this.blockEntity = blockEntityKey != null ? (Key) internCache.computeIfAbsent(blockEntityKey, key -> blockEntityKey) : null;
-                this.blockEntityId = fromParent(parent, BlockEntry::blockEntityId, blockEntity, "id", Properties::getInt, 0);
+                this.blockEntityType = fromParent(
+                        parent, BlockEntry::blockEntityType, blockEntity, "namespace",
+                        (properties, string) -> BlockEntityType.fromKey(properties.getString(string)),
+                        null);
             }
             {
                 this.material = fromParent(parent, BlockEntry::material, main, "correspondingItem", (properties, string) -> {
@@ -406,15 +407,27 @@ public final class RegistryData {
         }
 
         public boolean isBlockEntity() {
-            return blockEntity != null;
+            return blockEntityType != null;
         }
 
+        public @Nullable BlockEntityType blockEntityType() {
+            return blockEntityType;
+        }
+
+        /**
+         * @deprecated Use {@link #blockEntityType}
+         */
+        @Deprecated
         public @Nullable Key blockEntity() {
-            return blockEntity;
+            return blockEntityType != null ? blockEntityType.key() : null;
         }
 
+        /**
+         * @deprecated Use {@link #blockEntityType}
+         */
+        @Deprecated
         public int blockEntityId() {
-            return blockEntityId;
+            return blockEntityType != null ? blockEntityType.id() : -1;
         }
 
         public @Nullable Material material() {

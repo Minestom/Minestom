@@ -7,7 +7,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 public record BlockEntityTypeImpl(Key key, int id) implements BlockEntityType {
     static final Registry<BlockEntityType> REGISTRY = RegistryData.createStaticRegistry(
-            Key.key("block_entity_type"), BlockEntityTypeImpl::new);
+            Key.key("block_entity_types"), BlockEntityTypeImpl::new);
 
     private BlockEntityTypeImpl(String namespace, RegistryData.Properties properties) {
         this(Key.key(namespace), properties.getInt("id"));
