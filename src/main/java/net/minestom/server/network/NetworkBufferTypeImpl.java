@@ -362,10 +362,11 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
-            byte[] terminated = new byte[bytes.length + 1];
-            System.arraycopy(bytes, 0, terminated, 0, bytes.length);
-            terminated[terminated.length - 1] = 0;
-            buffer.write(RAW_BYTES, terminated);
+            final int length = bytes.length + 1;
+            buffer.ensureWritable(length);
+            impl(buffer)._putBytes(buffer.writeIndex(), bytes);
+            impl(buffer)._putByte(buffer.writeIndex() + bytes.length, (byte) 0); // null terminator
+            buffer.advanceWrite(length);
         }
 
         @Override
@@ -375,7 +376,7 @@ final class NetworkBufferTypeImpl {
             while ((b = buffer.read(BYTE)) != 0) {
                 bytes.add(b);
             }
-            return new String(bytes.elements(), StandardCharsets.UTF_8);
+            return new String(bytes.toByteArray(), StandardCharsets.UTF_8);
         }
     }
 

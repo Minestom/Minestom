@@ -2,10 +2,11 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
 import static net.minestom.server.network.NetworkBuffer.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@EnvTest // itemstack
 public class NetworkBufferTest {
 
     @Test
@@ -416,7 +419,32 @@ public class NetworkBufferTest {
 
     @Test
     public void string() {
+        assertBufferType(STRING, "", new byte[]{0x00});
+        assertBufferType(STRING, "h", new byte[]{0x01, 0x68});
+        assertBufferType(STRING, "H", new byte[]{0x01, 0x48});
         assertBufferType(STRING, "Hello World", new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
+        assertBufferType(STRING, "€", new byte[]{0x03, (byte) 0xE2, (byte) 0x82, (byte) 0xAC});
+        assertBufferType(STRING, "😀", new byte[]{0x04, (byte) 0xF0, (byte) 0x9F, (byte) 0x98, (byte) 0x80});
+    }
+
+    @Test
+    public void stringTerminated() {
+        assertBufferType(STRING_TERMINATED, "", new byte[]{0x00});
+        assertBufferType(STRING_TERMINATED, "h", new byte[]{0x68, 0x00});
+        assertBufferType(STRING_TERMINATED, "H", new byte[]{0x48, 0x00});
+        assertBufferType(STRING_TERMINATED, "Hello World", new byte[]{0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x00});
+        assertBufferType(STRING_TERMINATED, "€", new byte[]{(byte) 0xE2, (byte) 0x82, (byte) 0xAC, 0x00});
+        assertBufferType(STRING_TERMINATED, "😀", new byte[]{(byte) 0xF0, (byte) 0x9F, (byte) 0x98, (byte) 0x80, 0x00});
+    }
+
+    @Test
+    public void stringIOUtf() {
+        assertBufferType(STRING_IO_UTF8, "", new byte[]{0x00, 0x00});
+        assertBufferType(STRING_IO_UTF8, "h", new byte[]{0x00, 0x01, 0x68});
+        assertBufferType(STRING_IO_UTF8, "H", new byte[]{0x00, 0x01, 0x48});
+        assertBufferType(STRING_IO_UTF8, "Hello World", new byte[]{0x00, 0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
+        assertBufferType(STRING_IO_UTF8, "€", new byte[]{0x00, 0x03, (byte) 0xE2, (byte) 0x82, (byte) 0xAC});
+        assertBufferType(STRING_IO_UTF8, "😀", new byte[]{0x00, 0x06, (byte) 0xED, (byte) 0xA0, (byte) 0xBD, (byte) 0xED, (byte) 0xB8, (byte) 0x80});
     }
 
     @Test
@@ -437,10 +465,10 @@ public class NetworkBufferTest {
     }
 
     @Test
-    public void item() {
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.AIR);
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.of(Material.STONE, 1));
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.of(Material.DIAMOND_AXE, 1).with(DataComponents.DAMAGE, 1));
+    public void item(Env env) {
+        assertBufferType(env, ItemStack.NETWORK_TYPE, ItemStack.AIR);
+        assertBufferType(env, ItemStack.NETWORK_TYPE, ItemStack.of(Material.STONE, 1));
+        assertBufferType(env, ItemStack.NETWORK_TYPE, ItemStack.of(Material.DIAMOND_AXE, 1).with(DataComponents.DAMAGE, 1));
     }
 
     @Test
@@ -600,8 +628,8 @@ public class NetworkBufferTest {
         assertThrows(IllegalStateException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
     }
 
-    static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte @Nullable [] expected, Action<T> action) {
-        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
+    static <T> void assertBufferType(@Nullable Env env, NetworkBuffer.Type<T> type, @UnknownNullability T value, byte @Nullable [] expected, Action<T> action) {
+        var buffer = networkBuffer(env);
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
@@ -633,8 +661,12 @@ public class NetworkBufferTest {
         }
     }
 
-    static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value, byte @Nullable [] expected) {
-        assertBufferType(type, value, expected, new Action<>() {
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte @Nullable [] expected, Action<T> action) {
+        assertBufferType(null, type, value, expected, action);
+    }
+
+    static <T> void assertBufferType(@Nullable Env env, NetworkBuffer.Type<T> type, T value, byte @Nullable [] expected) {
+        assertBufferType(env, type, value, expected, new Action<>() {
             @Override
             public void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value) {
                 buffer.write(type, value);
@@ -647,12 +679,20 @@ public class NetworkBufferTest {
         });
     }
 
-    static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value) {
-        assertBufferType(type, value, null);
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value, byte @Nullable [] expected) {
+        assertBufferType(null, type, value, expected);
     }
 
-    static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value, byte @Nullable [] expected) {
-        assertBufferType(type, value, expected, new Action<T>() {
+    static <T> void assertBufferType(@Nullable Env env, NetworkBuffer.Type<T> type, T value) {
+        assertBufferType(env, type, value, null);
+    }
+
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value) {
+        assertBufferType(null, type, value, null);
+    }
+
+    static <T> void assertBufferTypeOptional(@Nullable Env env, NetworkBuffer.Type<T> type, @Nullable T value, byte @Nullable [] expected) {
+        assertBufferType(env, type, value, expected, new Action<T>() {
             @Override
             public void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value) {
                 buffer.write(type.optional(), value);
@@ -665,12 +705,16 @@ public class NetworkBufferTest {
         });
     }
 
+    static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value, byte @Nullable [] expected) {
+        assertBufferTypeOptional(null, type, value, expected);
+    }
+
     static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value) {
         assertBufferTypeOptional(type, value, null);
     }
 
-    static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> values, byte @Nullable [] expected) {
-        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
+    static <T> void assertBufferTypeCollection(@Nullable Env env, NetworkBuffer.Type<T> type, List<T> values, byte @Nullable [] expected) {
+        var buffer = networkBuffer(env);
         buffer.write(type.list(), values);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
@@ -688,13 +732,21 @@ public class NetworkBufferTest {
         }
     }
 
+    static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> values, byte @Nullable [] expected) {
+        assertBufferTypeCollection(null, type, values, expected);
+    }
+
     static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> value) {
-        assertBufferTypeCollection(type, value, null);
+        assertBufferTypeCollection(null, type, value, null);
     }
 
     interface Action<T> {
         void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value);
 
         T read(NetworkBuffer buffer, NetworkBuffer.Type<T> type);
+    }
+
+    static NetworkBuffer networkBuffer(@Nullable Env env) {
+        return env != null ? resizableBuffer(env.process()) : resizableBuffer();
     }
 }
