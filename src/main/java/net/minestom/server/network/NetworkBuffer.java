@@ -338,9 +338,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     byte[] extractWrittenBytes(Consumer<NetworkBuffer> extractor);
 
     /**
-     * Clears the data tracked by this buffer.
+     * Clears the data tracked by this buffer by setting the {@link #index(long, long)} to 0.
      * <br>
-     * Note: the implementation does not require zeroing of the previously stored data, instead use {@link NetworkBuffer#fill(NetworkBuffer, long, byte, long)}.
+     * Note: the implementation does not require zeroing of the previously stored data,
+     * instead use {@link NetworkBuffer#fill(NetworkBuffer, long, byte, long)} if you require this.
      * @return this
      */
     @Contract("-> this")
@@ -375,12 +376,12 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     NetworkBuffer readIndex(long readIndex);
 
     /**
-     * Sets both indexes to the specified ones
+     * Sets both {@link #writeIndex()} and {@link #writeIndex()} to the specified ones
      * @param readIndex the new read index
      * @param writeIndex the new write index
      * @return this
      */
-    @Contract("_, _ -> this")
+    @Contract(value = "_, _ -> this", mutates = "this")
     NetworkBuffer index(long readIndex, long writeIndex);
 
     /**
@@ -388,6 +389,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param length the length to advance
      * @return the previous write index
      */
+    @Contract(mutates = "this")
     long advanceWrite(long length);
 
     /**
@@ -395,6 +397,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param length the length to advance
      * @return the previous read index
      */
+    @Contract(mutates = "this")
     long advanceRead(long length);
 
     /**
@@ -402,6 +405,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * The readable bytes can be calculated by {@link #writeIndex()} - {@link #readIndex()}.
      * @return the readable bytes
      */
+    @Contract(pure = true)
     long readableBytes();
 
     /**
@@ -409,12 +413,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * The writeable bytes can be calculated by {@link #capacity()} - {@link #writeIndex()}.
      * @return the writeable bytes
      */
+    @Contract(pure = true)
     long writableBytes();
 
     /**
      * Gets the capacity for the buffer or its length.
      * @return the capacity/length
      */
+    @Contract(pure = true)
     long capacity();
 
     /**
@@ -436,12 +442,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Resize the buffer to the new {@link #capacity()} using the current settings.
      * @param length the new size
+     * @throws IllegalArgumentException if {@code length < 0}
      * @throws IllegalStateException if the buffer cannot be resized
      * @throws IllegalArgumentException if the new size is less than or equal to the current {@link #capacity()}.
      * @throws UnsupportedOperationException if the buffer is a dummy
      * @throws UnsupportedOperationException if the buffer is read only
      */
-    void resize(long length);
+    @Contract(mutates = "this")
+    void resize(@Range(from = 0, to = Long.MAX_VALUE) long length);
 
     /**
      * Ensures that the buffer {@link #writableBytes()} is greater or equal to {@code length}.
@@ -451,7 +459,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @throws IndexOutOfBoundsException if the resize does not permit the length to be written
      * @throws RuntimeException for any error in {@link #resize(long)}
      */
-    void ensureWritable(long length);
+    @Contract(mutates = "this")
+    void ensureWritable(@Range(from = 0, to = Long.MAX_VALUE) long length);
 
     /**
      * Ensures that the buffer {@link #readableBytes()} is greater or equal to {@code length}.
@@ -459,7 +468,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @throws IllegalArgumentException if {@code length < 0}
      * @throws IndexOutOfBoundsException if buffer does not have enough data for this length.
      */
-    void ensureReadable(long length);
+    @Contract(pure = true)
+    void ensureReadable(@Range(from = 0, to = Long.MAX_VALUE) long length);
 
     /**
      * Compact (copies) all the data from the {@link #readIndex()} to the {@link #writeIndex()} to be zero aligned.

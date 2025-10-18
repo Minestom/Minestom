@@ -244,6 +244,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public void resize(long length) {
+        if (length < 0) throw new IllegalArgumentException("Length must be non-negative found: " + length);
         assertDummy();
         assertReadOnly();
         final Supplier<Arena> arenaSupplier = this.arenaSupplier;
