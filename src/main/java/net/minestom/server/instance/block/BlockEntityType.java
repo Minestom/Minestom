@@ -2,6 +2,8 @@ package net.minestom.server.instance.block;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public sealed interface BlockEntityType extends StaticProtocolObject<BlockEntityType>, BlockEntityTypes permits BlockEntityTypeImpl {
+    NetworkBuffer.Type<BlockEntityType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(BlockEntityType::fromId, BlockEntityType::id);
+    Codec<BlockEntityType> CODEC = Codec.KEY.transform(BlockEntityType::fromKey, BlockEntityType::key);
 
     static Collection<BlockEntityType> values() {
         return BlockEntityTypeImpl.REGISTRY.values();

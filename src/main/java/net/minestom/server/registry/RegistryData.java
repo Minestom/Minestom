@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
-import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
@@ -20,8 +19,8 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.Equippable;
+import net.minestom.server.item.component.TypedCustomData;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -519,12 +518,8 @@ public final class RegistryData {
          */
         @Deprecated(forRemoval = true)
         public @Nullable EntityType spawnEntityType() {
-            CustomData entityData = prototype().get(DataComponents.ENTITY_DATA, CustomData.EMPTY);
-            try {
-                return EntityType.fromKey(entityData.nbt().getString("id"));
-            } catch (InvalidKeyException ignored) {
-                return null;
-            }
+            TypedCustomData<EntityType> entityData = prototype().get(DataComponents.ENTITY_DATA);
+            return entityData == null ? null : entityData.type();
         }
     }
 

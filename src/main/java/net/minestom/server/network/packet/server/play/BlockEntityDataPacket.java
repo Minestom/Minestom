@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
+// TODO(1.21.11): action should actually be a BlockEntityType.
 public record BlockEntityDataPacket(Point blockPosition, int action,
                                     @Nullable CompoundBinaryTag data) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<BlockEntityDataPacket> SERIALIZER = new Type<>() {
