@@ -35,11 +35,6 @@ public class NetworkBufferBenchmark {
     }
 
     @Benchmark
-    public void create(Blackhole blackhole) {
-        blackhole.consume(NetworkBuffer.resizableBuffer(8096));
-    }
-
-    @Benchmark
     public void read(Blackhole blackhole) {
         blackhole.consume(buffer.read(NetworkBuffer.LONG));
         blackhole.consume(buffer.read(NetworkBuffer.INT));
