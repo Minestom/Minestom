@@ -87,7 +87,7 @@ public final class PacketSendingUtils {
     }
 
     static SendablePacket groupedPacket(ServerPacket packet) {
-        return shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+        return ServerFlag.GROUPED_PACKET && shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
     }
 
     /**
@@ -97,8 +97,8 @@ public final class PacketSendingUtils {
      * @see CachedPacket#body(ConnectionState)
      */
     static boolean shouldUseCachePacket(final ServerPacket packet) {
-        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
-        if (!(packet instanceof ServerPacket.ComponentHolding holder)) return ServerFlag.GROUPED_PACKET;
+        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return true;
+        if (!(packet instanceof ServerPacket.ComponentHolding holder)) return true;
         return !containsTranslatableComponents(holder);
     }
 
