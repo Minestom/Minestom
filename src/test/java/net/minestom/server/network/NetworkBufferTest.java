@@ -579,7 +579,7 @@ public class NetworkBufferTest {
         // Write the raw bytes that are invalid
         buffer.write(RAW_BYTES, new byte[]{(byte) 0xC0, (byte) 0x80}); // Invalid UTF-8
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
         buffer.clear();
 
         var stream = new java.io.ByteArrayOutputStream();
@@ -591,13 +591,13 @@ public class NetworkBufferTest {
         byteArray[0] = (byte) 0x00;
         byteArray[1] = (byte) 0x00;
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
 
         buffer.clear();
         buffer.write(UNSIGNED_SHORT, 5);
         buffer.write(RAW_BYTES, new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF}); // Invalid utf8
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
+        assertThrows(IllegalStateException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
     }
 
     static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte @Nullable [] expected, Action<T> action) {

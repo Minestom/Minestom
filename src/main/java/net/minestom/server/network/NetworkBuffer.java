@@ -95,7 +95,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     Type<Key> KEY = STRING.transform(Key::key, Key::asString);
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
-    Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.IOUTF8StringType();
+    Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.StringIOUTFType();
     Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType<>();
     Type<CompoundBinaryTag> NBT_COMPOUND = new NetworkBufferTypeImpl.NbtType<>();
     Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();

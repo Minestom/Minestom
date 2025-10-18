@@ -22,8 +22,8 @@ import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
@@ -1029,19 +1029,25 @@ final class NetworkBufferTypeImpl {
     }
 
     /**
-     * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)} & ${@link java.io.DataInputStream#readUTF()}. We need the data in the java
-     * modified utf-8 format for Component, and I couldnt find a method without creating a new buffer for it.
+     * Used to write Java's UTF format, used primarily for {@link NetworkBuffer.IOView#writeUTF(String)}
+     * This is not a pretty gross implementation cause it closely follows {@link java.io.DataOutputStream}
+     * which optimizes for ascii for both read and write. This is quite expensive to write regardless as it requires
+     * a few iterations to write.
      */
-    record IOUTF8StringType() implements Type<String> {
+    record StringIOUTFType() implements Type<String> {
+        @SuppressWarnings("deprecation") // Follows java.io.DataOutputStream#writeUTF(DataOutput, String) for JDK 25, not public sadly.
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final int strlen = value.length();
             int utflen = strlen; // optimized for ASCII
+            int copyableBytes = 0;
 
             for (int i = 0; i < strlen; i++) {
                 int c = value.charAt(i);
                 if (c >= 0x80 || c == 0)
                     utflen += (c >= 0x800) ? 2 : 1;
+                if (strlen == utflen)
+                    copyableBytes++; // We have no access to JLA for this.
             }
 
             if (utflen > 65535 || /* overflow */ utflen < strlen)
@@ -1051,7 +1057,14 @@ final class NetworkBufferTypeImpl {
             buffer.ensureWritable(utflen); // throw early if possible
             var impl = (NetworkBufferImpl) buffer;
             long offset = buffer.writeIndex();
-            for (int i = 0; i < strlen; i++) { // Excerpt from ModifiedUtf#putChar
+            if (copyableBytes > 0) { // write if we have any copyableBytes
+                byte[] ascii = new byte[copyableBytes];
+                value.getBytes(0, copyableBytes, ascii, 0);
+                impl._putBytes(offset, ascii);
+                offset += copyableBytes;
+            }
+
+            for (int i = copyableBytes; i < strlen; i++) { // Excerpt from ModifiedUtf#putChar
                 int c = value.charAt(i);
                 if (c != 0 && c < 0x80) {
                     impl._putByte(offset++, (byte) c);
@@ -1069,70 +1082,12 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public String read(NetworkBuffer buffer) {
-            int utflen = buffer.read(UNSIGNED_SHORT);
-            if (buffer.readableBytes() < utflen) throw new IllegalArgumentException("Invalid String size.");
-            byte[] bytearr = buffer.read(FixedRawBytes(utflen));
-            final char[] chararr = new char[utflen];
-
-            int c, char2, char3;
-            int count = 0;
-            int chararr_count = 0;
-
-            while (count < utflen) {
-                c = (int) bytearr[count] & 0xff;
-                if (c > 127) break;
-                count++;
-                chararr[chararr_count++] = (char) c;
+            var ioView = buffer.ioView();
+            try { // DataInputStream only has readUTF sadly.
+                return DataInputStream.readUTF(ioView);
+            } catch (IOException e) {
+                throw new IllegalStateException("failed to read string", e);
             }
-
-            while (count < utflen) {
-                c = (int) bytearr[count] & 0xff;
-                try { // Surround in try catch to throw a runtime exception instead of a checked one
-                    switch (c >> 4) {
-                        case 0, 1, 2, 3, 4, 5, 6, 7 -> {
-                            /* 0xxxxxxx*/
-                            count++;
-                            chararr[chararr_count++] = (char) c;
-                        }
-                        case 12, 13 -> {
-                            /* 110x xxxx   10xx xxxx*/
-                            count += 2;
-                            if (count > utflen)
-                                throw new UTFDataFormatException(
-                                        "malformed input: partial character at end");
-                            char2 = bytearr[count - 1];
-                            if ((char2 & 0xC0) != 0x80)
-                                throw new UTFDataFormatException(
-                                        "malformed input around byte " + count);
-                            chararr[chararr_count++] = (char) (((c & 0x1F) << 6) |
-                                    (char2 & 0x3F));
-                        }
-                        case 14 -> {
-                            /* 1110 xxxx  10xx xxxx  10xx xxxx */
-                            count += 3;
-                            if (count > utflen)
-                                throw new UTFDataFormatException(
-                                        "malformed input: partial character at end");
-                            char2 = bytearr[count - 2];
-                            char3 = bytearr[count - 1];
-                            if (((char2 & 0xC0) != 0x80) || ((char3 & 0xC0) != 0x80))
-                                throw new UTFDataFormatException(
-                                        "malformed input around byte " + (count - 1));
-                            chararr[chararr_count++] = (char) (((c & 0x0F) << 12) |
-                                    ((char2 & 0x3F) << 6) |
-                                    (char3 & 0x3F));
-                        }
-                        default ->
-                            /* 10xx xxxx,  1111 xxxx */
-                                throw new UTFDataFormatException(
-                                        "malformed input around byte " + count);
-                    }
-                } catch (UTFDataFormatException e) {
-                    throw new IllegalArgumentException(e);
-                }
-            }
-            // The number of chars produced may be less than utflen
-            return new String(chararr, 0, chararr_count);
         }
     }
 
