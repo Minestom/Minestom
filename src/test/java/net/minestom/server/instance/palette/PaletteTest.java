@@ -1106,10 +1106,12 @@ public class PaletteTest {
 
     @Test
     public void fillHighValue() {
-        final Palette palette = Palette.blocks();
+        final PaletteImpl palette = (PaletteImpl) Palette.blocks();
 
         palette.fill(1 << 20);
         palette.set(0, 0, 0, 10);
+
+        palette.makeDirect();
 
         assertEquals(10, palette.get(0, 0, 0));
         assertEquals(1 << 20, palette.get(1, 1, 1));

@@ -19,8 +19,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
  * No arrays allocated, value stored in count field.
  * <br>
  * Indirect Mode {@code (bitsPerEntry <= maxBitsPerEntry)}: Uses palette compression.
- * Values array stores palette indices, paletteToValueList and valueToPaletteMap
- * provide bidirectional mapping between indices and block values.
+ * Values array stores palette indices, paletteIndexMap
+ * provides bidirectional mapping between indices and block values.
  * <br>
  * Direct Mode {@code (bitsPerEntry > maxBitsPerEntry)}: Stores block values directly.
  * No palette structures, values array contains actual block values using directBits.
@@ -81,8 +81,21 @@ public sealed interface Palette permits PaletteImpl {
 
     void fill(int value);
 
+    /**
+     * Efficiently fills a cuboid from {@code (x0, y0, z0)} to {@code (x1, y1, z1)} (inclusive).
+     * <p>
+     * If any part of the cuboid lies outside the bounds of palette,
+     * those out-of-bounds positions are ignored.
+     * <p>
+     * Coordinate order does not matter.
+     *
+     * @param value The value to fill with
+     */
     void fill(int x0, int y0, int z0, int x1, int y1, int z1, int value);
 
+    /**
+     * Efficiently offsets all values in the palette by the given offset.
+     */
     void offset(int offset);
 
     /**
@@ -135,6 +148,15 @@ public sealed interface Palette permits PaletteImpl {
      */
     boolean any(int value);
 
+    /**
+     * Gets the highest y position where predicate returns true, or -1 if none matched.
+     * <p>
+     * It is assumed that the predicate result is independent of passed coordinates.
+     *
+     * @param x the x coordinate to check at
+     * @param z the z coordinate to check at
+     * @return the highest y position where predicate returns true, or -1 if none matched.
+     */
     int height(int x, int z, EntryPredicate predicate);
 
     /**
