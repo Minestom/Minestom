@@ -126,11 +126,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
             value -> value.convertTo(Transcoder.NBT).orElseThrow(),
             value -> RawValue.of(Transcoder.NBT, value));
 
-    Codec<CompoundBinaryTag> NBT_COMPOUND = NBT.transform(value -> {
-        if (!(value instanceof CompoundBinaryTag compound))
-            throw new IllegalArgumentException("Not a compound: " + value);
-        return compound;
-    }, compound -> compound);
+    StructCodec<CompoundBinaryTag> NBT_COMPOUND = new CodecImpl.CompoundBinaryTagImpl();
 
     /**
      * Creates an enum codec from a given class

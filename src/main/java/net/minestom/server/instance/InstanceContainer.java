@@ -17,6 +17,7 @@ import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -29,7 +30,6 @@ import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -203,10 +203,10 @@ public class InstanceContainer extends Instance {
             // Refresh player chunk block
             {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-                RegistryData.BlockEntry registry = block.registry();
-                if (registry.isBlockEntity()) {
+                BlockEntityType blockEntityType = block.registry().blockEntityType();
+                if (blockEntityType != null) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
-                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
+                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
                 }
             }
             EventDispatcher.call(new InstanceBlockUpdateEvent(this, blockPosition, block));

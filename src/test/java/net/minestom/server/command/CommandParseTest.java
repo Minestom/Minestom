@@ -48,7 +48,7 @@ public class CommandParseTest {
         var foo = Graph.merge(Graph.builder(Literal("foo"))
                 .append(Literal("add"),
                         x -> x.append(Word("name"), createExecutor(add)))
-                .append(Word("action").from("inc", "dec"),
+                .append(Word("type").from("inc", "dec"),
                         x -> x.append(ArgumentType.Integer("num"), createExecutor(action)))
                 .build());
 
