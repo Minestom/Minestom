@@ -88,6 +88,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -285,7 +286,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.removed = false;
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType());
 
-        final int joinViewDistance = computeServerViewDistance(spawnInstance);
+        final int joinViewDistance = ChunkUtils.computeServerViewDistance(spawnInstance);
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
                 joinViewDistance, joinViewDistance,
@@ -634,7 +635,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        int preloadViewDistance = effectiveViewDistance(instance);
+        int preloadViewDistance = ChunkUtils.computeEffectiveViewDistance(settings.viewDistance(), instance);
         ChunkRange.chunksInRange(spawnPosition, preloadViewDistance, (chunkX, chunkZ) -> {
             final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
@@ -713,9 +714,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
 
-        final int previousServerViewDistance = computeServerViewDistance(this.instance);
+        final int previousServerViewDistance = ChunkUtils.computeServerViewDistance(this.instance);
         super.setInstance(instance, spawnPosition);
-        final int newServerViewDistance = computeServerViewDistance(instance);
+        final int newServerViewDistance = ChunkUtils.computeServerViewDistance(instance);
         if (previousServerViewDistance != newServerViewDistance) {
             sendPacket(new UpdateViewDistancePacket(newServerViewDistance));
             sendPacket(new UpdateSimulationDistancePacket(newServerViewDistance));
@@ -1580,7 +1581,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final byte previousViewDistance = previous.viewDistance();
         // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
         if (instance != null) {
-            final int previousEffectiveViewDistance = computeEffectiveViewDistance(previousViewDistance, instance);
+            final int previousEffectiveViewDistance = ChunkUtils.computeEffectiveViewDistance(previousViewDistance, instance);
             final int newEffectiveViewDistance = effectiveViewDistance();
             final int playerChunkX = position.chunkX();
             final int playerChunkZ = position.chunkZ();
@@ -2403,21 +2404,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @return The effective chunk view distance range of the client
      */
     public int effectiveViewDistance() {
-        return computeEffectiveViewDistance(settings.viewDistance(), this.instance);
-    }
-
-    public int effectiveViewDistance(@Nullable Instance targetInstance) {
-        return computeEffectiveViewDistance(settings.viewDistance(), targetInstance);
-    }
-
-    private int computeEffectiveViewDistance(byte clientViewDistance, @Nullable Instance targetInstance) {
-        int maxViewDistance = targetInstance != null ? targetInstance.viewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
-        return Math.min(clientViewDistance, maxViewDistance) + 1;
-    }
-
-    private int computeServerViewDistance(@Nullable Instance targetInstance) {
-        int viewDistance = targetInstance != null ? targetInstance.viewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
-        return MathUtils.clamp(viewDistance, 2, 32);
+        return ChunkUtils.computeEffectiveViewDistance(settings.viewDistance(), this.instance);
     }
 
     @SuppressWarnings("unchecked")
