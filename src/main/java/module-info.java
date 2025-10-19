@@ -3,7 +3,6 @@ module net.minestom.server {
     requires transitive com.google.gson;
     requires it.unimi.dsi.fastutil;
     requires space.vectrix.flare.fastutil;
-    requires jdk.unsupported; // Unsafe
     requires transitive net.kyori.adventure;
     requires transitive net.kyori.adventure.nbt;
     requires transitive net.kyori.adventure.key;
