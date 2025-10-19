@@ -170,6 +170,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public long advanceWrite(long length) {
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative");
         final long oldWriteIndex = writeIndex;
         writeIndex = oldWriteIndex + length;
         return oldWriteIndex;
@@ -177,6 +178,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public long advanceRead(long length) {
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative");
         final long oldReadIndex = readIndex;
         readIndex = oldReadIndex + length;
         return oldReadIndex;

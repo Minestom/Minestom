@@ -256,7 +256,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param <T> the type
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
-    @Contract(mutates = "this")
+    @Contract(mutates = "this", value = "_, _ -> new")
     <T extends @UnknownNullability Object> T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
     /**
@@ -289,7 +289,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the bytes extracted
      */
     @Contract("_ -> new")
-    @Deprecated
+    @Deprecated(forRemoval = true)
     default byte[] extractBytes(Consumer<NetworkBuffer> extractor) {
         return extractReadBytes(extractor);
     }
@@ -301,7 +301,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param type the type to extract
      * @return the bytes extracted
      */
-    @Contract("_ -> new")
+    @Contract(mutates = "this", value = "_ -> new")
     default byte[] extractReadBytes(Type<?> type) {
         Objects.requireNonNull(type, "type");
         return extractReadBytes(buffer -> buffer.read(type));
@@ -314,7 +314,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param extractor the consumer of the network buffer
      * @return the bytes extracted
      */
-    @Contract("_ -> new")
+    @Contract(mutates = "this", value = "_ -> new")
     byte[] extractReadBytes(Consumer<NetworkBuffer> extractor);
 
     /**
@@ -324,7 +324,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param type the type to extract
      * @return the bytes extracted
      */
-    @Contract("_, _ -> new")
+    @Contract(mutates = "this", value = "_, _ -> new")
     default <T extends @UnknownNullability Object> byte[] extractWrittenBytes(Type<T> type, T value) {
         Objects.requireNonNull(type, "type");
         return extractWrittenBytes(buffer -> buffer.write(type, value));
@@ -337,7 +337,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param extractor the consumer of the network buffer
      * @return the bytes extracted
      */
-    @Contract("_ -> new")
+    @Contract(mutates = "this", value = "_ -> new")
     byte[] extractWrittenBytes(Consumer<NetworkBuffer> extractor);
 
     /**
@@ -390,18 +390,20 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Advances the write index and returns the previous index, while storing the new index into {@link #writeIndex()}
      * @param length the length to advance
+     * @throws IllegalArgumentException if {@code length < 0}
      * @return the previous write index
      */
     @Contract(mutates = "this")
-    long advanceWrite(long length);
+    long advanceWrite(@Range(from = 0, to = Long.MAX_VALUE) long length);
 
     /**
      * Advances the read index and returns the previous index, while storing the new index into {@link #readIndex()}
      * @param length the length to advance
+     * @throws IllegalArgumentException if {@code length < 0}
      * @return the previous read index
      */
     @Contract(mutates = "this")
-    long advanceRead(long length);
+    long advanceRead(@Range(from = 0, to = Long.MAX_VALUE) long length);
 
     /**
      * Readable bytes are the amount of bytes that have been written to the {@link #writeIndex()}
@@ -424,15 +426,17 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the capacity/length
      */
     @Contract(pure = true)
+    @Range(from = 0, to = Long.MAX_VALUE)
     long capacity();
 
     /**
      * Sets the buffer to be read only, this cannot be undone, instead you must copy the buffer.
      * <br>
-     * While the current implementation does set this buffer to read only; it may in the future not provide this.
-     * This is why it's missing its (this) contract.
+     * While the current implementation does set this buffer to read only;
+     * it may in the future not provide this and instead only provide a read only copy.
      * @return this, may change in the future to return new.
      */
+    @Contract(mutates = "this", value = "-> this")
     NetworkBuffer readOnly();
 
     /**
@@ -480,7 +484,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract(mutates = "this")
     void compact();
-
 
     /**
      * Creates a copy of the buffer trimmed and assigns it to this {@link NetworkBuffer}.
@@ -564,6 +567,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     /**
      * Creates a slice from the starting index to the length passing the read index and write index supplied
+     * backed by the current {@link NetworkBuffer}
      * @param index the starting index
      * @param length the length
      * @param readIndex the new read index
@@ -575,6 +579,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     /**
      * Creates a slice from the starting index to the length
+     * backed by the current {@link NetworkBuffer}
      * @param index the starting index
      * @param length the length
      * @return a slice defined in {@link #slice(long, long, long, long)}
@@ -643,7 +648,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Useful to interface with API's that support {@link DataInput} or {@link DataOutput}.
      * @return the io view.
      */
-    @ApiStatus.Experimental
     @Contract(pure = true, value = "->new")
     IOView ioView();
 
@@ -662,6 +666,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @param buffer the buffer to use
          * @param value the value
          */
+        @Contract(mutates = "param1")
         void write(NetworkBuffer buffer, T value);
 
         /**
@@ -669,6 +674,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @param buffer the buffer
          * @return {@link T}
          */
+        @Contract(mutates = "param1")
         T read(NetworkBuffer buffer);
 
         /**
@@ -677,6 +683,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @param registries the registries
          * @return the size
          */
+        @Contract(pure = true)
+        @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value, Registries registries) {
             Objects.requireNonNull(registries, "registries");
             return NetworkBufferTypeImpl.sizeOf(this, value, registries);
@@ -687,6 +695,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @param value the value to get the size of
          * @return the size
          */
+        @Contract(pure = true)
+        @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value) {
             return NetworkBufferTypeImpl.sizeOf(this, value, null);
         }
@@ -698,6 +708,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @return the new type that transforms {@link T}
          * @param <S> type to
          */
+        @Contract(pure = true, value = "_, _ -> new")
         default <S extends @UnknownNullability Object> Type<S> transform(Function<T, S> to, Function<S, T> from) {
             return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
         }
@@ -710,6 +721,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @return the type
          * @param <V> the value type
          */
+        @Contract(pure = true, value = "_, _ -> new")
         default <V> Type<@Unmodifiable Map<T, V>> mapValue(Type<V> valueType, int maxSize) {
             return new NetworkBufferTypeImpl.MapType<>(this, valueType, maxSize);
         }
@@ -722,6 +734,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @return the type
          * @param <V> the value type
          */
+        @Contract(pure = true, value = "_ -> new")
         default <V> Type<@Unmodifiable Map<T, V>> mapValue(Type<V> valueType) {
             return mapValue(valueType, Integer.MAX_VALUE);
         }
@@ -733,6 +746,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @param maxSize the max size before throwing.
          * @return the list type for {@link T}
          */
+        @Contract(pure = true, value = "_ -> new")
         default Type<@Unmodifiable @UnknownNullability List<T>> list(int maxSize) {
             return new NetworkBufferTypeImpl.ListType<>(this, maxSize);
         }
@@ -745,6 +759,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * Note the encoding for null lists is a 0 byte.
          * @return the list type for {@link T}
          */
+        @Contract(pure = true, value = "-> new")
         default Type<@Unmodifiable @UnknownNullability List<T>> list() {
             return list(Integer.MAX_VALUE);
         }
@@ -757,6 +772,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * Note the encoding for null lists is a 0 byte.
          * @return the list type for {@link T}
          */
+        @Contract(pure = true, value = "_ -> new")
         default Type<@Unmodifiable @UnknownNullability Set<T>> set(int maxSize) {
             return new NetworkBufferTypeImpl.SetType<>(this, maxSize);
         }
@@ -769,6 +785,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * Note the encoding for null lists is a 0 byte.
          * @return the list type for {@link T}
          */
+        @Contract(pure = true, value = "-> new")
         default Type<@Unmodifiable @UnknownNullability Set<T>> set() {
             return set(Integer.MAX_VALUE);
         }
@@ -779,6 +796,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * Note the encoding prefixes all {@link T} with a true/false if the value is null or not.
          * @return the new optional type
          */
+        @Contract(pure = true, value = "-> new")
         default Type<@Nullable T> optional() {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
         }
@@ -790,6 +808,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @return the new union type for {@link T} using {@link R}
          * @param <R> the union type
          */
+        @Contract(pure = true, value = "_, _, _ -> new")
         default <R> Type<R> unionType(Function<T, NetworkBuffer.Type<? extends R>> serializers, Function<R, ? extends T> keyFunc) {
             return new NetworkBufferTypeImpl.UnionType<>(this, keyFunc, serializers);
         }
@@ -799,6 +818,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @param maxLength the max length before throwing
          * @return the new length prefixed type
          */
+        @Contract(pure = true, value = "_ -> new")
         default Type<T> lengthPrefixed(int maxLength) {
             return new NetworkBufferTypeImpl.LengthPrefixedType<>(this, maxLength);
         }
@@ -1035,6 +1055,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param registries the registries to use in serialization
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
      */
+    @Contract("_, _ -> new")
     static byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries) {
         Objects.requireNonNull(writing, "writing");
         Objects.requireNonNull(registries, "registries");
@@ -1053,6 +1074,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param writing consumer of the {@link NetworkBuffer}
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
      */
+    @Contract("_ -> new")
     static byte[] makeArray(Consumer<NetworkBuffer> writing) {
         Objects.requireNonNull(writing, "writing");
         try (var arena = Arena.ofConfined()) {
@@ -1073,6 +1095,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the smallest byte array to represent {@link T}
      * @param <T> the type
      */
+    @Contract("_ ,_, _ -> new")
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, Registries registries) {
         Objects.requireNonNull(type, "type");
         Objects.requireNonNull(registries, "registries");
@@ -1093,6 +1116,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the smallest byte array to represent {@link T}
      * @param <T> the type
      */
+    @Contract("_, _ -> new")
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
         Objects.requireNonNull(type, "type");
         try (var arena = Arena.ofConfined()) {
@@ -1158,6 +1182,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param buffer2 the right buffer
      * @return true if the content is equal
      */
+    @Contract(pure = true)
     static boolean contentEquals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
         Objects.requireNonNull(buffer1, "buffer1");
         Objects.requireNonNull(buffer2, "buffer2");
