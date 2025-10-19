@@ -8,10 +8,10 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Measurement(iterations = 10, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(3)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@State(Scope.Benchmark)
-public class IOUTF8StringBenchmark {
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@State(Scope.Thread)
+public class NetworkBufferIOUTFStringBenchmark {
 
     // Test strings of various types and lengths; Asked AI for some strings
     private static final String ASCII_SHORT = "Hello, World!";
