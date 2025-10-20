@@ -18,7 +18,7 @@ public final class Generators {
         }
         Path outputFolder = Path.of(args[0]);
 
-        CodegenRegistry registry = codegenRegistry();
+        CodegenRegistry registry = createCodegenRegistry();
 
         var generator = new RegistryGenerator(outputFolder);
         for (CodegenValue value: registry.registry().values()) {
@@ -39,7 +39,7 @@ public final class Generators {
 
     // Required if we want to eventually generate BlockValues for example, as it needs cross registry.
     // In the future the data generator might be able to do this task, but unlikely
-    private static CodegenRegistry codegenRegistry() {
+    private static CodegenRegistry createCodegenRegistry() {
         return CodegenRegistry.builder(Generators::resourceReader)
                 .putAll(
                         // --- SPECIAL GENERATORS (Custom logic) ---
@@ -311,7 +311,7 @@ public final class Generators {
             case "constants" -> new ConstantsGenerator(outputFolder);
             case "recipe_types" -> new RecipeTypeGenerator(outputFolder);
             case "recipe_display_types", "slot_display_types", "recipe_book_categories", "command_arguments",
-                 "villager_types" -> new GenericEnumGenerator(outputFolder);
+                 "villager_types" -> new GenericEnumGenerator(outputFolder); // This could be a static instance.
             case "consume_effects" -> new GenericPackagePrivateEnumGenerator(outputFolder);
             case "world_events" -> new WorldEventGenerator(outputFolder);
             default -> throw new RuntimeException("Unknown resource name: " + resourceName);
