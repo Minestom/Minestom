@@ -5,8 +5,6 @@ import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
 
 import javax.lang.model.element.Modifier;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
@@ -14,29 +12,25 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public record ParticleGenerator(InputStream particleFile,
-                                Path outputFolder) implements MinestomCodeGenerator {
+public record ParticleGenerator(Path outputFolder) implements MinestomCodeGenerator {
     public static final Pattern PASCAL_PATTERN = Pattern.compile("_([a-z])");
 
     public ParticleGenerator {
-        Objects.requireNonNull(particleFile, "Particle file cannot be null");
         Objects.requireNonNull(outputFolder, "Output folder cannot be null");
     }
 
     @Override
-    public void generate() {
-        ensureDirectory(outputFolder);
-
+    public void generate(CodegenRegistry registry, CodegenValue value) {
         // Important classes we use alot
-        ClassName particleCN = ClassName.get("net.minestom.server.particle", "Particle");
-        ClassName particleImplCN = ClassName.get("net.minestom.server.particle", "ParticleImpl");
+        ClassName particleCN = ClassName.get(value.packageName(), value.typeName());
+        ClassName particleImplCN = ClassName.get(value.packageName(), value.loaderName());
 
-        JsonObject particleObject = GSON.fromJson(new InputStreamReader(particleFile), JsonObject.class);
+        JsonObject particleObject = GSON.fromJson(registry.resource(value.resource()), JsonObject.class);
         List<Map.Entry<String, JsonElement>> orderedParticleIdObjectEntries = particleObject.entrySet().stream()
                 .sorted(Comparator.comparingInt(o -> o.getValue().getAsJsonObject().get("id").getAsInt())).toList();
 
         // Start code gen
-        ClassName particlesCN = ClassName.get("net.minestom.server.particle", "Particles");
+        ClassName particlesCN = ClassName.get(value.packageName(), value.generatedName());
         TypeSpec.Builder particlesInterface = TypeSpec.interfaceBuilder(particlesCN)
                 .addModifiers(Modifier.SEALED)
                 .addPermittedSubclass(particleCN)
@@ -44,15 +38,14 @@ public record ParticleGenerator(InputStream particleFile,
 
         for (Map.Entry<String, JsonElement> particleIdObjectEntry : orderedParticleIdObjectEntries) {
             final String key = particleIdObjectEntry.getKey();
-            final JsonObject value = particleIdObjectEntry.getValue().getAsJsonObject();
+            final JsonObject object = particleIdObjectEntry.getValue().getAsJsonObject();
             final String namespacedName = namespaceShort(key);
 
             final ClassName fieldCN;
             final CodeBlock cast;
-            if (value.get("hasData").getAsBoolean()) {
+            if (object.get("hasData").getAsBoolean()) {
                 // This particle has data, use the particle implementation class
-                fieldCN = ClassName.get("net.minestom.server.particle", "Particle",
-                        toPascalCase(namespacedName));
+                fieldCN = particleCN.nestedClass(toPascalCase(namespacedName));
                 cast = CodeBlock.of("($T) ", fieldCN);
             } else {
                 fieldCN = particleCN;
@@ -66,7 +59,7 @@ public record ParticleGenerator(InputStream particleFile,
                     .initializer("$L$T.get($S)", cast, particleImplCN, key).build());
         }
 
-        writeFiles(JavaFile.builder("net.minestom.server.particle", particlesInterface.build())
+        writeFiles(JavaFile.builder(value.packageName(), particlesInterface.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build());

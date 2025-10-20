@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
+public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialogs {
     Registry<StructCodec<? extends Dialog>> REGISTRY = DynamicRegistry.fromMap(
             Key.key("dialog_type"),
             Map.entry(Key.key("notice"), Notice.CODEC),

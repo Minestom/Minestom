@@ -20,6 +20,7 @@ public interface MinestomCodeGenerator {
         String constant = namespaceShort(namespace)
                 .replaceFirst("brigadier:", "") // Not implicit, do not put into namespaceShort
                 .replace(".", "_")
+                .replace("/", "_")
                 .toUpperCase(Locale.ROOT);
         if (!SourceVersion.isName(constant)) {
             constant = "_" + constant;
@@ -31,11 +32,11 @@ public interface MinestomCodeGenerator {
         return namespace.replaceFirst("minecraft:", "");
     }
 
-    default void ensureDirectory(Path directory) throws IllegalStateException {
+    default Path ensureDirectory(Path directory) throws IllegalStateException {
         Objects.requireNonNull(directory, "Directory is null");
-        if (Files.isDirectory(directory)) return;
+        if (Files.isDirectory(directory)) return directory;
         try {
-            Files.createDirectories(directory);
+            return Files.createDirectories(directory);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to create folder for %s".formatted(directory), e);
         }
@@ -64,7 +65,5 @@ public interface MinestomCodeGenerator {
 
     Path outputFolder();
 
-    default void generate() {
-        throw new UnsupportedOperationException("This generator `%s` does not implement the generate method".formatted(getClass().getSimpleName()));
-    }
+    void generate(CodegenRegistry registry, CodegenValue value);
 }

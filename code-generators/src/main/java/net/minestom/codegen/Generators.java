@@ -1,8 +1,13 @@
 package net.minestom.codegen;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.Objects;
+
+import static net.minestom.codegen.CodegenValue.builder;
 
 public final class Generators {
 
@@ -13,65 +18,304 @@ public final class Generators {
         }
         Path outputFolder = Path.of(args[0]);
 
-        // Special generators
-        new DyeColorGenerator(resource("dye_colors.json"), outputFolder).generate();
-        new ParticleGenerator(resource("particle.json"), outputFolder).generate();
-        new ConstantsGenerator(resource("constants.json"), outputFolder).generate();
-        new RecipeTypeGenerator(resource("recipe_types.json"), outputFolder).generate();
-        new GenericEnumGenerator("net.minestom.server.recipe.display", "RecipeDisplayType",
-                resource("recipe_display_types.json"), outputFolder).generate();
-        new GenericEnumGenerator("net.minestom.server.recipe.display", "SlotDisplayType",
-                resource("slot_display_types.json"), outputFolder).generate();
-        new GenericEnumGenerator("net.minestom.server.recipe", "RecipeBookCategory",
-                resource("recipe_book_categories.json"), outputFolder).generate();
-        new GenericEnumGenerator("net.minestom.server.item.component", "ConsumeEffectType",
-                resource("consume_effects.json"), outputFolder).packagePrivate().generate();
-        new GenericEnumGenerator("net.minestom.server.command", "ArgumentParserType",
-                resource("command_arguments.json"), outputFolder).generate();
-        new GenericEnumGenerator("net.minestom.server.entity", "VillagerType",
-                resource("villager_types.json"), outputFolder).generate();
-        new WorldEventGenerator("net.minestom.server.worldevent", "WorldEvent",
-                resource("world_events.json"), outputFolder).generate();
+        CodegenRegistry registry = codegenRegistry();
 
         var generator = new RegistryGenerator(outputFolder);
-
-        // Static registries
-        generator.generate(resource("block.json"), "net.minestom.server.instance.block", "Block", "BlockImpl", "Blocks");
-        generator.generate(resource("item.json"), "net.minestom.server.item", "Material", "MaterialImpl", "Materials");
-        generator.generate(resource("entity_type.json"), "net.minestom.server.entity", "EntityType", "EntityTypeImpl", "EntityTypes");
-        generator.generate(resource("potion_effect.json"), "net.minestom.server.potion", "PotionEffect", "PotionEffectImpl", "PotionEffects");
-        generator.generate(resource("potion_type.json"), "net.minestom.server.potion", "PotionType", "PotionTypeImpl", "PotionTypes");
-        generator.generate(resource("sound_event.json"), "net.minestom.server.sound", "SoundEvent", "BuiltinSoundEvent", "SoundEvents");
-        generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypes");
-        generator.generate(resource("attribute.json"), "net.minestom.server.entity.attribute", "Attribute", "AttributeImpl", "Attributes");
-        generator.generate(resource("feature_flag.json"), "net.minestom.server", "FeatureFlag", "FeatureFlagImpl", "FeatureFlags");
-        generator.generate(resource("fluid.json"), "net.minestom.server.instance.fluid", "Fluid", "FluidImpl", "Fluids");
-        generator.generate(resource("villager_profession.json"), "net.minestom.server.entity", "VillagerProfession", "VillagerProfessionImpl", "VillagerProfessions");
-        generator.generate(resource("game_event.json"), "net.minestom.server.game", "GameEvent", "GameEventImpl", "GameEvents");
-        generator.generate(resource("block_sound_type.json"), "net.minestom.server.instance.block", "BlockSoundType", "BlockSoundImpl", "BlockSoundTypes");
-        generator.generate(resource("block_entity_types.json"), "net.minestom.server.instance.block", "BlockEntityType", "BlockEntityTypeImpl", "BlockEntityTypes");
-
-        // Dynamic registries
-        generator.generateKeys(resource("chat_type.json"), "net.minestom.server.message", "ChatType");
-        generator.generateKeys(resource("dimension_type.json"), "net.minestom.server.world", "DimensionType");
-        generator.generateKeys(resource("damage_type.json"), "net.minestom.server.entity.damage", "DamageType");
-        generator.generateKeys(resource("trim_material.json"), "net.minestom.server.item.armor", "TrimMaterial");
-        generator.generateKeys(resource("trim_pattern.json"), "net.minestom.server.item.armor", "TrimPattern");
-        generator.generateKeys(resource("banner_pattern.json"), "net.minestom.server.instance.block.banner", "BannerPattern");
-        generator.generateKeys(resource("enchantment.json"), "net.minestom.server.item.enchant", "Enchantment");
-        generator.generateKeys(resource("painting_variant.json"), "net.minestom.server.entity.metadata.other", "PaintingVariant");
-        generator.generateKeys(resource("jukebox_song.json"), "net.minestom.server.instance.block.jukebox", "JukeboxSong");
-        generator.generateKeys(resource("instrument.json"), "net.minestom.server.item.instrument", "Instrument");
-        generator.generateKeys(resource("wolf_variant.json"), "net.minestom.server.entity.metadata.animal.tameable", "WolfVariant");
-        generator.generateKeys(resource("wolf_sound_variant.json"), "net.minestom.server.entity.metadata.animal.tameable", "WolfSoundVariant");
-        generator.generateKeys(resource("cat_variant.json"), "net.minestom.server.entity.metadata.animal.tameable", "CatVariant");
-        generator.generateKeys(resource("chicken_variant.json"), "net.minestom.server.entity.metadata.animal", "ChickenVariant");
-        generator.generateKeys(resource("cow_variant.json"), "net.minestom.server.entity.metadata.animal", "CowVariant");
-        generator.generateKeys(resource("frog_variant.json"), "net.minestom.server.entity.metadata.animal", "FrogVariant");
-        generator.generateKeys(resource("pig_variant.json"), "net.minestom.server.entity.metadata.animal", "PigVariant");
-        generator.generateKeys(resource("worldgen/biome.json"), "net.minestom.server.world.biome", "Biome");
+        for (CodegenValue value: registry.registry().values()) {
+            switch (value.type()) {
+                case STATIC, DYNAMIC -> generator.generate(registry, value);
+                case SPECIAL -> resolveSpecialGenerator(value.resource(), outputFolder).generate(registry, value);
+            }
+        }
 
         System.out.println("Finished generating code");
+    }
+
+    private static @Nullable InputStreamReader resourceReader(String filename) {
+        var out = Generators.class.getResourceAsStream("/%s.json".formatted(filename));
+        if (out == null) return null;
+        return new InputStreamReader(out);
+    }
+
+    // Required if we want to eventually generate BlockValues for example, as it needs cross registry.
+    // In the future the data generator might be able to do this task, but unlikely
+    private static CodegenRegistry codegenRegistry() {
+        return CodegenRegistry.builder(Generators::resourceReader)
+                .putAll(
+                        // --- SPECIAL GENERATORS (Custom logic) ---
+                        builder().specialType()
+                                .namespace("dye_colors")
+                                .packageName("net.minestom.server.color")
+                                .typeName("Color")
+                                .generatedName("DyeColor")
+                                .build(),
+                        builder().specialType() // Static special type
+                                .namespace("particle")
+                                .packageName("net.minestom.server.particle")
+                                .typeName("Particle")
+                                .loaderName("ParticleImpl")
+                                .generatedName("Particles")
+                                .build(),
+                        builder().specialType()
+                                .namespace("constants")
+                                .packageName("net.minestom.server")
+                                .typeName("MinecraftServer")
+                                .generatedName("MinecraftConstants")
+                                .build(),
+                        builder().specialType()
+                                .namespace("recipe_types")
+                                .packageName("net.minestom.server.recipe")
+                                .typeName("RecipeType")
+                                .build(),
+                        builder().specialType()
+                                .namespace("recipe_display_types")
+                                .packageName("net.minestom.server.recipe.display")
+                                .typeName("RecipeDisplayType")
+                                .build(),
+                        builder().specialType()
+                                .namespace("slot_display_types")
+                                .packageName("net.minestom.server.recipe.display")
+                                .typeName("SlotDisplayType")
+                                .build(),
+                        builder().specialType()
+                                .namespace("recipe_book_categories")
+                                .packageName("net.minestom.server.recipe")
+                                .typeName("RecipeBookCategory")
+                                .build(),
+                        builder().specialType()
+                                .namespace("consume_effects")
+                                .packageName("net.minestom.server.item.component")
+                                .typeName("ConsumeEffectType")
+                                .build(),
+                        builder().specialType()
+                                .namespace("command_arguments")
+                                .packageName("net.minestom.server.command")
+                                .typeName("ArgumentParserType")
+                                .build(),
+                        builder().specialType()
+                                .namespace("villager_types")
+                                .packageName("net.minestom.server.entity")
+                                .typeName("VillagerType")
+                                .build(),
+                        builder().specialType()
+                                .namespace("world_events")
+                                .packageName("net.minestom.server.worldevent")
+                                .typeName("WorldEvent")
+                                .build(),
+
+                        // --- STATIC REGISTRIES (Impl class + constant class) ---
+                        builder().staticType()
+                                .namespace("block")
+                                .packageName("net.minestom.server.instance.block")
+                                .typeName("Block")
+                                .generatedName("Blocks")
+                                .loaderName("BlockImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("item")
+                                .packageName("net.minestom.server.item")
+                                .typeName("Material")
+                                .generatedName("Materials")
+                                .loaderName("MaterialImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("entity_type")
+                                .packageName("net.minestom.server.entity")
+                                .typeName("EntityType")
+                                .generatedName("EntityTypes")
+                                .loaderName("EntityTypeImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("potion_effect")
+                                .packageName("net.minestom.server.potion")
+                                .typeName("PotionEffect")
+                                .generatedName("PotionEffects")
+                                .loaderName("PotionEffectImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("potion_type")
+                                .packageName("net.minestom.server.potion")
+                                .typeName("PotionType")
+                                .generatedName("PotionTypes")
+                                .loaderName("PotionTypeImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("sound_event")
+                                .packageName("net.minestom.server.sound")
+                                .typeName("SoundEvent")
+                                .generatedName("SoundEvents")
+                                .loaderName("BuiltinSoundEvent")
+                                .build(),
+                        builder().staticType()
+                                .namespace("custom_statistics")
+                                .packageName("net.minestom.server.statistic")
+                                .typeName("StatisticType")
+                                .generatedName("StatisticTypes")
+                                .loaderName("StatisticTypeImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("attribute")
+                                .packageName("net.minestom.server.entity.attribute")
+                                .typeName("Attribute")
+                                .generatedName("Attributes")
+                                .loaderName("AttributeImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("feature_flag")
+                                .packageName("net.minestom.server")
+                                .typeName("FeatureFlag")
+                                .generatedName("FeatureFlags")
+                                .loaderName("FeatureFlagImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("fluid")
+                                .packageName("net.minestom.server.instance.fluid")
+                                .typeName("Fluid")
+                                .generatedName("Fluids")
+                                .loaderName("FluidImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("villager_profession")
+                                .packageName("net.minestom.server.entity")
+                                .typeName("VillagerProfession")
+                                .generatedName("VillagerProfessions")
+                                .loaderName("VillagerProfessionImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("game_event")
+                                .packageName("net.minestom.server.game")
+                                .typeName("GameEvent")
+                                .generatedName("GameEvents")
+                                .loaderName("GameEventImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("block_sound_type")
+                                .packageName("net.minestom.server.instance.block")
+                                .typeName("BlockSoundType")
+                                .generatedName("BlockSoundTypes")
+                                .loaderName("BlockSoundImpl")
+                                .build(),
+                        builder().staticType()
+                                .namespace("block_entity_types")
+                                .packageName("net.minestom.server.instance.block")
+                                .typeName("BlockEntityType")
+                                .generatedName("BlockEntityTypes")
+                                .loaderName("BlockEntityTypeImpl")
+                                .build(),
+
+                        // --- DYNAMIC REGISTRIES (RegistryKeys + constant class) ---
+                        builder().dynamicType()
+                                .namespace("chat_type")
+                                .packageName("net.minestom.server.message")
+                                .typeName("ChatType")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("dimension_type")
+                                .packageName("net.minestom.server.world")
+                                .typeName("DimensionType")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("damage_type")
+                                .packageName("net.minestom.server.entity.damage")
+                                .typeName("DamageType")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("trim_material")
+                                .packageName("net.minestom.server.item.armor")
+                                .typeName("TrimMaterial")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("trim_pattern")
+                                .packageName("net.minestom.server.item.armor")
+                                .typeName("TrimPattern")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("banner_pattern")
+                                .packageName("net.minestom.server.instance.block.banner")
+                                .typeName("BannerPattern")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("enchantment")
+                                .packageName("net.minestom.server.item.enchant")
+                                .typeName("Enchantment")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("painting_variant")
+                                .packageName("net.minestom.server.entity.metadata.other")
+                                .typeName("PaintingVariant")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("jukebox_song")
+                                .packageName("net.minestom.server.instance.block.jukebox")
+                                .typeName("JukeboxSong")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("instrument")
+                                .packageName("net.minestom.server.item.instrument")
+                                .typeName("Instrument")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("wolf_variant")
+                                .packageName("net.minestom.server.entity.metadata.animal.tameable")
+                                .typeName("WolfVariant")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("wolf_sound_variant")
+                                .packageName("net.minestom.server.entity.metadata.animal.tameable")
+                                .typeName("WolfSoundVariant")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("cat_variant")
+                                .packageName("net.minestom.server.entity.metadata.animal.tameable")
+                                .typeName("CatVariant")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("chicken_variant")
+                                .packageName("net.minestom.server.entity.metadata.animal")
+                                .typeName("ChickenVariant")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("cow_variant")
+                                .packageName("net.minestom.server.entity.metadata.animal")
+                                .typeName("CowVariant")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("frog_variant")
+                                .packageName("net.minestom.server.entity.metadata.animal")
+                                .typeName("FrogVariant")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("pig_variant")
+                                .packageName("net.minestom.server.entity.metadata.animal")
+                                .typeName("PigVariant")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("worldgen/biome")
+                                .packageName("net.minestom.server.world.biome")
+                                .typeName("Biome")
+                                .build(),
+                        builder().dynamicType()
+                                .namespace("dialog")
+                                .packageName("net.minestom.server.dialog")
+                                .typeName("Dialog")
+                                .generatedName("Dialogs")
+                                .build()
+                )
+                .build();
+    }
+
+    private static MinestomCodeGenerator resolveSpecialGenerator(String resourceName, Path outputFolder) {
+        return switch (resourceName) {
+            case "dye_colors" -> new DyeColorGenerator(outputFolder);
+            case "particle" -> new ParticleGenerator(outputFolder);
+            case "constants" -> new ConstantsGenerator(outputFolder);
+            case "recipe_types" -> new RecipeTypeGenerator(outputFolder);
+            case "recipe_display_types", "slot_display_types", "recipe_book_categories", "command_arguments",
+                 "villager_types" -> new GenericEnumGenerator(outputFolder);
+            case "consume_effects" -> new GenericPackagePrivateEnumGenerator(outputFolder);
+            case "world_events" -> new WorldEventGenerator(outputFolder);
+            default -> throw new RuntimeException("Unknown resource name: " + resourceName);
+        };
     }
 
     private static InputStream resource(String name) {
