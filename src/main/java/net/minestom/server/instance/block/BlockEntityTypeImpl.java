@@ -3,6 +3,7 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 public record BlockEntityTypeImpl(Key key, int id) implements BlockEntityType {
@@ -13,7 +14,7 @@ public record BlockEntityTypeImpl(Key key, int id) implements BlockEntityType {
         this(Key.key(namespace), properties.getInt("id"));
     }
 
-    public static @UnknownNullability BlockEntityType get(String key) {
-        return REGISTRY.get(Key.key(key));
+    public static @UnknownNullability BlockEntityType get(RegistryKey<BlockEntityType> key) {
+        return REGISTRY.get(key);
     }
 }
