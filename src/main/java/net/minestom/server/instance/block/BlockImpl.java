@@ -7,6 +7,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -112,8 +113,8 @@ record BlockImpl(RegistryData.BlockEntry registry,
         POSSIBLE_STATES = possibleStates.toList();
     }
 
-    static @UnknownNullability Block get(String key) {
-        return REGISTRY.get(Key.key(key));
+    static @UnknownNullability Block get(RegistryKey<Block> key) {
+        return REGISTRY.get(key);
     }
 
     static int statesCount() {

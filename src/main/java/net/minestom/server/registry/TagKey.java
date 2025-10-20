@@ -24,6 +24,10 @@ public sealed interface TagKey<T> extends Keyed permits TagKeyImpl {
         return new TagKeyImpl<>(Key.key(hashedKey.substring(1)));
     }
 
+    static <T> TagKey<T> unsafeOf(Key key) {
+        return new TagKeyImpl<>(key);
+    }
+
     default String hashedKey() {
         return "#" + key().asString();
     }

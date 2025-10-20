@@ -54,6 +54,12 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     }
 
     @Override
+    public T get(RegistryKey<T> key) {
+        // We know these values should exist on the registry regardless of annotation.
+        return Objects.requireNonNull(this.keyToValue.get(key.key()));
+    }
+
+    @Override
     public @Nullable RegistryKey<T> getKey(int id) {
         final T value = this.idToValue.get(id);
         return value == null ? null : new RegistryKeyImpl<>(value.key());

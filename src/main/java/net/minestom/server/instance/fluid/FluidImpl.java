@@ -3,6 +3,7 @@ package net.minestom.server.instance.fluid;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 record FluidImpl(RegistryData.FluidEntry registry) implements Fluid {
@@ -10,8 +11,8 @@ record FluidImpl(RegistryData.FluidEntry registry) implements Fluid {
             (namespace, properties) -> new FluidImpl(RegistryData.fluid(namespace, properties)));
 
 
-    static @UnknownNullability Fluid get(String key) {
-        return REGISTRY.get(Key.key(key));
+    static @UnknownNullability Fluid get(RegistryKey<Fluid> key) {
+        return REGISTRY.get(key);
     }
 
     @Override
