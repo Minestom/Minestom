@@ -21,6 +21,7 @@ import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.BlockTags;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.ping.Status;
@@ -99,7 +100,7 @@ public class Main {
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night"));
 
-        RegistryTag<Block> tag = Block.staticRegistry().getTag(TagKey.ofHash("#minecraft:all_signs"));
+        RegistryTag<Block> tag = Block.staticRegistry().getTag(BlockTags.ALL_SIGNS);
         SignHandler signHandler = new SignHandler();
         for (RegistryKey<Block> key : Objects.requireNonNull(tag)) {
             blockManager.registerHandler(key.key(), () -> signHandler);
