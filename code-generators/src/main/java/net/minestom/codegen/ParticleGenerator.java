@@ -5,32 +5,39 @@ import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
 
 import javax.lang.model.element.Modifier;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
-public record ParticleGenerator(Path outputFolder) implements MinestomCodeGenerator {
+public final class ParticleGenerator extends RegistryGenerator {
     public static final Pattern PASCAL_PATTERN = Pattern.compile("_([a-z])");
 
-    public ParticleGenerator {
-        Objects.requireNonNull(outputFolder, "Output folder cannot be null");
+    public ParticleGenerator(Path outputFolder) {
+        super(outputFolder);
     }
 
     @Override
     public void generate(CodegenRegistry registry, CodegenValue value) {
-        // Important classes we use alot
-        ClassName particleCN = ClassName.get(value.packageName(), value.typeName());
-        ClassName particleImplCN = ClassName.get(value.packageName(), value.loaderName());
+        generateStatic(registry, value); // Generate this as static
+        generateTags(registry, value); // generate tags if present
+    }
 
-        JsonObject particleObject = GSON.fromJson(registry.resource(value.resource()), JsonObject.class);
+    @Override
+    public void generate(InputStreamReader resourceFile, String packageName, String typeName, String loaderName, String keyName, String generatedName) {
+        // Important classes we use alot
+        ClassName particleCN = ClassName.get(packageName, typeName);
+        ClassName particleImplCN = ClassName.get(packageName, loaderName);
+        ClassName particleKeysCN = ClassName.get(packageName, keyName);
+
+        JsonObject particleObject = GSON.fromJson(resourceFile, JsonObject.class);
         List<Map.Entry<String, JsonElement>> orderedParticleIdObjectEntries = particleObject.entrySet().stream()
                 .sorted(Comparator.comparingInt(o -> o.getValue().getAsJsonObject().get("id").getAsInt())).toList();
 
         // Start code gen
-        ClassName particlesCN = ClassName.get(value.packageName(), value.generatedName());
+        ClassName particlesCN = ClassName.get(packageName, generatedName);
         TypeSpec.Builder particlesInterface = TypeSpec.interfaceBuilder(particlesCN)
                 .addModifiers(Modifier.SEALED)
                 .addPermittedSubclass(particleCN)
@@ -56,10 +63,10 @@ public record ParticleGenerator(Path outputFolder) implements MinestomCodeGenera
 
             particlesInterface.addField(FieldSpec.builder(fieldCN, fieldName)
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("$L$T.get($S)", cast, particleImplCN, key).build());
+                    .initializer("$L$T.get($T.$L)", cast, particleImplCN, particleKeysCN, fieldName).build());
         }
 
-        writeFiles(JavaFile.builder(value.packageName(), particlesInterface.build())
+        writeFiles(JavaFile.builder(packageName, particlesInterface.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build());

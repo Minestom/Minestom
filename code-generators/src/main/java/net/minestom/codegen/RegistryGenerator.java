@@ -10,18 +10,34 @@ import javax.lang.model.element.Modifier;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 
-public record RegistryGenerator(Path outputFolder) implements MinestomCodeGenerator {
+public class RegistryGenerator implements MinestomCodeGenerator {
     private static final AnnotationSpec SUPPRESS_ANNOTATION = AnnotationSpec.builder(SuppressWarnings.class)
             .addMember("value", "$S", "all") // unused, SpellCheckingInspection, NullableProblems
             .build();
 
     private static final AnnotationSpec NONEXTENDABLE_ANNOTATION = AnnotationSpec.builder(ApiStatus.NonExtendable.class).build();
 
-    public RegistryGenerator {
-        ensureDirectory(outputFolder);
+    private final Path outputFolder;
+
+    public RegistryGenerator(Path outputFolder) {
+        this.outputFolder = ensureDirectory(outputFolder);
     }
 
-    public void generate(InputStreamReader resourceFile, String packageName, String typeName, String loaderName, String keyName, String generatedName) {
+    @Override
+    public Path outputFolder() {
+        return outputFolder;
+    }
+
+    @Override
+    public void generate(CodegenRegistry registry, CodegenValue value) {
+        switch (value.type()) {
+            case STATIC -> generateStatic(registry, value);
+            case DYNAMIC -> generateDynamic(registry, value);
+        }
+        generateTags(registry, value);
+    }
+
+    protected void generate(InputStreamReader resourceFile, String packageName, String typeName, String loaderName, String keyName, String generatedName) {
         ClassName typeClass = ClassName.get(packageName, typeName);
         ClassName loaderClass = ClassName.get(packageName, loaderName);
         ClassName keyClass = ClassName.get(packageName, keyName);
@@ -58,8 +74,8 @@ public record RegistryGenerator(Path outputFolder) implements MinestomCodeGenera
         );
     }
 
-    public void generateKeys(InputStreamReader resourceFile, String packageName, String typeName, String generatedName, boolean publicKeys) {
-        ClassName typeClass = ClassName.bestGuess(packageName + "." + typeName); // Use bestGuess to handle nested class
+    protected void generateKeys(InputStreamReader resourceFile, String packageName, String typeName, String generatedName, boolean publicKeys) {
+        ClassName typeClass = ClassName.get(packageName, typeName);
         ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "RegistryKey");
         ClassName generatedCN = ClassName.get(packageName, generatedName);
         ParameterizedTypeName typedRegistryKeyClass = ParameterizedTypeName.get(registryKeyClass, typeClass);
@@ -99,7 +115,7 @@ public record RegistryGenerator(Path outputFolder) implements MinestomCodeGenera
     }
 
 
-    public void generateTags(@Nullable InputStreamReader resourceFile, String packageName, String typeName, String generatedName) {
+    protected void generateTags(@Nullable InputStreamReader resourceFile, String packageName, String typeName, String generatedName) {
         if (resourceFile == null) {
             System.out.printf("Warning: Failed to locate tags for %s.%s%n", packageName, typeName);
             return;
@@ -143,14 +159,16 @@ public record RegistryGenerator(Path outputFolder) implements MinestomCodeGenera
         );
     }
 
-    @Override
-    public void generate(CodegenRegistry registry, CodegenValue value) {
-        if (value.type() == CodegenValue.Type.STATIC) {
-            generateKeys(registry.resource(value.resource()), value.packageName(), value.typeName(), value.keysName(), true);
-            generate(registry.resource(value.resource()), value.packageName(), value.typeName(), value.loaderName(), value.keysName(), value.generatedName());
-        } else if (value.type() == CodegenValue.Type.DYNAMIC) {
-            generateKeys(registry.resource(value.resource()), value.packageName(), value.typeName(), value.generatedName(), false);
-        }
+    protected void generateStatic(CodegenRegistry registry, CodegenValue value) {
+        generateKeys(registry.resource(value.resource()), value.packageName(), value.typeName(), value.keysName(), true);
+        generate(registry.resource(value.resource()), value.packageName(), value.typeName(), value.loaderName(), value.keysName(), value.generatedName());
+    }
+
+    protected void generateDynamic(CodegenRegistry registry, CodegenValue value) {
+        generateKeys(registry.resource(value.resource()), value.packageName(), value.typeName(), value.generatedName(), false);
+    }
+
+    protected void generateTags(CodegenRegistry registry, CodegenValue value) {
         generateTags(registry.optionalResource(value.tagResource()), value.packageName(), value.typeName(), value.tagsName());
     }
 }
