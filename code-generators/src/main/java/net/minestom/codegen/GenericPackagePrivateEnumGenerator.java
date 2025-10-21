@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 
-public class GenericPackagePrivateEnumGenerator extends GenericEnumGenerator {
+public final class GenericPackagePrivateEnumGenerator extends GenericEnumGenerator {
     public GenericPackagePrivateEnumGenerator(Path outputFolder) {
         super(outputFolder);
     }

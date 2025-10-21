@@ -10,7 +10,7 @@ import javax.lang.model.element.Modifier;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 
-public class RegistryGenerator implements MinestomCodeGenerator {
+public sealed class RegistryGenerator implements MinestomCodeGenerator permits ParticleGenerator {
     private static final AnnotationSpec SUPPRESS_ANNOTATION = AnnotationSpec.builder(SuppressWarnings.class)
             .addMember("value", "$S", "all") // unused, SpellCheckingInspection, NullableProblems
             .build();

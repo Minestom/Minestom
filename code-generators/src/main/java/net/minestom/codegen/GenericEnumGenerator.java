@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class GenericEnumGenerator implements MinestomCodeGenerator {
+public sealed class GenericEnumGenerator implements MinestomCodeGenerator permits DyeColorGenerator, GenericPackagePrivateEnumGenerator, RecipeTypeGenerator, WorldEventGenerator {
     private final Path outputFolder;
 
     public GenericEnumGenerator(Path outputFolder) {

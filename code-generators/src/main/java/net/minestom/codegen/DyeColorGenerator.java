@@ -11,9 +11,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public record DyeColorGenerator(Path outputFolder) implements MinestomCodeGenerator {
-    public DyeColorGenerator {
-        ensureDirectory(outputFolder);
+public final class DyeColorGenerator extends GenericEnumGenerator {
+
+    public DyeColorGenerator(Path outputFolder) {
+        super(outputFolder);
     }
 
     @Override

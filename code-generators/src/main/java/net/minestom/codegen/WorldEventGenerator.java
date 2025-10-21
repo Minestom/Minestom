@@ -12,9 +12,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public record WorldEventGenerator(Path outputFolder) implements MinestomCodeGenerator {
-    public WorldEventGenerator {
-        ensureDirectory(outputFolder);
+public final class WorldEventGenerator extends GenericEnumGenerator {
+
+    public WorldEventGenerator(Path outputFolder) {
+        super(outputFolder);
     }
 
     @Override
