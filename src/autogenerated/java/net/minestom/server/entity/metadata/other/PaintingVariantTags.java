@@ -1,7 +1,5 @@
 package net.minestom.server.entity.metadata.other;
 
-import static net.kyori.adventure.key.Key.key;
-
 import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -13,5 +11,5 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("all")
 @ApiStatus.NonExtendable
 public interface PaintingVariantTags {
-    TagKey<PaintingVariant> PLACEABLE = TagKey.unsafeOf(key("placeable"));
+    TagKey<PaintingVariant> PLACEABLE = TagKey.unsafeOf("placeable");
 }

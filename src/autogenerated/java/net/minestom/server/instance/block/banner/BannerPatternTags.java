@@ -1,7 +1,5 @@
 package net.minestom.server.instance.block.banner;
 
-import static net.kyori.adventure.key.Key.key;
-
 import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -13,25 +11,25 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("all")
 @ApiStatus.NonExtendable
 public interface BannerPatternTags {
-    TagKey<BannerPattern> NO_ITEM_REQUIRED = TagKey.unsafeOf(key("no_item_required"));
+    TagKey<BannerPattern> NO_ITEM_REQUIRED = TagKey.unsafeOf("no_item_required");
 
-    TagKey<BannerPattern> PATTERN_ITEM_GUSTER = TagKey.unsafeOf(key("pattern_item/guster"));
+    TagKey<BannerPattern> PATTERN_ITEM_GUSTER = TagKey.unsafeOf("pattern_item/guster");
 
-    TagKey<BannerPattern> PATTERN_ITEM_BORDURE_INDENTED = TagKey.unsafeOf(key("pattern_item/bordure_indented"));
+    TagKey<BannerPattern> PATTERN_ITEM_BORDURE_INDENTED = TagKey.unsafeOf("pattern_item/bordure_indented");
 
-    TagKey<BannerPattern> PATTERN_ITEM_MOJANG = TagKey.unsafeOf(key("pattern_item/mojang"));
+    TagKey<BannerPattern> PATTERN_ITEM_MOJANG = TagKey.unsafeOf("pattern_item/mojang");
 
-    TagKey<BannerPattern> PATTERN_ITEM_FIELD_MASONED = TagKey.unsafeOf(key("pattern_item/field_masoned"));
+    TagKey<BannerPattern> PATTERN_ITEM_FIELD_MASONED = TagKey.unsafeOf("pattern_item/field_masoned");
 
-    TagKey<BannerPattern> PATTERN_ITEM_CREEPER = TagKey.unsafeOf(key("pattern_item/creeper"));
+    TagKey<BannerPattern> PATTERN_ITEM_CREEPER = TagKey.unsafeOf("pattern_item/creeper");
 
-    TagKey<BannerPattern> PATTERN_ITEM_FLOWER = TagKey.unsafeOf(key("pattern_item/flower"));
+    TagKey<BannerPattern> PATTERN_ITEM_FLOWER = TagKey.unsafeOf("pattern_item/flower");
 
-    TagKey<BannerPattern> PATTERN_ITEM_FLOW = TagKey.unsafeOf(key("pattern_item/flow"));
+    TagKey<BannerPattern> PATTERN_ITEM_FLOW = TagKey.unsafeOf("pattern_item/flow");
 
-    TagKey<BannerPattern> PATTERN_ITEM_PIGLIN = TagKey.unsafeOf(key("pattern_item/piglin"));
+    TagKey<BannerPattern> PATTERN_ITEM_PIGLIN = TagKey.unsafeOf("pattern_item/piglin");
 
-    TagKey<BannerPattern> PATTERN_ITEM_GLOBE = TagKey.unsafeOf(key("pattern_item/globe"));
+    TagKey<BannerPattern> PATTERN_ITEM_GLOBE = TagKey.unsafeOf("pattern_item/globe");
 
-    TagKey<BannerPattern> PATTERN_ITEM_SKULL = TagKey.unsafeOf(key("pattern_item/skull"));
+    TagKey<BannerPattern> PATTERN_ITEM_SKULL = TagKey.unsafeOf("pattern_item/skull");
 }

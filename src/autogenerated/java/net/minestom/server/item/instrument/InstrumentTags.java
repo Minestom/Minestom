@@ -1,7 +1,5 @@
 package net.minestom.server.item.instrument;
 
-import static net.kyori.adventure.key.Key.key;
-
 import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -13,9 +11,9 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("all")
 @ApiStatus.NonExtendable
 public interface InstrumentTags {
-    TagKey<Instrument> GOAT_HORNS = TagKey.unsafeOf(key("goat_horns"));
+    TagKey<Instrument> GOAT_HORNS = TagKey.unsafeOf("goat_horns");
 
-    TagKey<Instrument> REGULAR_GOAT_HORNS = TagKey.unsafeOf(key("regular_goat_horns"));
+    TagKey<Instrument> REGULAR_GOAT_HORNS = TagKey.unsafeOf("regular_goat_horns");
 
-    TagKey<Instrument> SCREAMING_GOAT_HORNS = TagKey.unsafeOf(key("screaming_goat_horns"));
+    TagKey<Instrument> SCREAMING_GOAT_HORNS = TagKey.unsafeOf("screaming_goat_horns");
 }

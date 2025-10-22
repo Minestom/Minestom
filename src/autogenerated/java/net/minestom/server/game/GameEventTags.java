@@ -1,7 +1,5 @@
 package net.minestom.server.game;
 
-import static net.kyori.adventure.key.Key.key;
-
 import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -13,13 +11,13 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("all")
 @ApiStatus.NonExtendable
 public interface GameEventTags {
-    TagKey<GameEvent> WARDEN_CAN_LISTEN = TagKey.unsafeOf(key("warden_can_listen"));
+    TagKey<GameEvent> WARDEN_CAN_LISTEN = TagKey.unsafeOf("warden_can_listen");
 
-    TagKey<GameEvent> VIBRATIONS = TagKey.unsafeOf(key("vibrations"));
+    TagKey<GameEvent> VIBRATIONS = TagKey.unsafeOf("vibrations");
 
-    TagKey<GameEvent> SHRIEKER_CAN_LISTEN = TagKey.unsafeOf(key("shrieker_can_listen"));
+    TagKey<GameEvent> SHRIEKER_CAN_LISTEN = TagKey.unsafeOf("shrieker_can_listen");
 
-    TagKey<GameEvent> IGNORE_VIBRATIONS_SNEAKING = TagKey.unsafeOf(key("ignore_vibrations_sneaking"));
+    TagKey<GameEvent> IGNORE_VIBRATIONS_SNEAKING = TagKey.unsafeOf("ignore_vibrations_sneaking");
 
-    TagKey<GameEvent> ALLAY_CAN_LISTEN = TagKey.unsafeOf(key("allay_can_listen"));
+    TagKey<GameEvent> ALLAY_CAN_LISTEN = TagKey.unsafeOf("allay_can_listen");
 }

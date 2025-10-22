@@ -2,8 +2,6 @@ package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
-import net.kyori.adventure.key.Key;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
@@ -119,7 +117,6 @@ public sealed class RegistryGenerator implements MinestomCodeGenerator permits P
         final JsonObject json = GSON.fromJson(resourceFile, JsonObject.class);
 
         ClassName typeClass = ClassName.get(packageName, typeName);
-        ClassName keyClass = ClassName.get(Key.class);
         ClassName tagKeyClass = ClassName.get("net.minestom.server.registry", "TagKey");
         ParameterizedTypeName typedTagClass = ParameterizedTypeName.get(tagKeyClass, typeClass);
 
@@ -137,7 +134,7 @@ public sealed class RegistryGenerator implements MinestomCodeGenerator permits P
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
                                     // TypeClass.STONE = TagKey.of("stone")
-                                    "$T.unsafeOf(key($S))",
+                                    "$T.unsafeOf($S)",
                                     tagKeyClass,
                                     namespaceString
                             )
@@ -149,7 +146,6 @@ public sealed class RegistryGenerator implements MinestomCodeGenerator permits P
         writeFiles(JavaFile.builder(packageName, registryTagInterface.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
-                .addStaticImport(keyClass, "key")
                 .build()
         );
     }

@@ -3,7 +3,6 @@ module net.minestom.codegen {
     requires com.google.gson;
     requires com.palantir.javapoet;
     requires java.compiler;
-    requires net.kyori.adventure.key;
 
     exports net.minestom.codegen;
 }

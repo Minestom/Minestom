@@ -1,9 +1,11 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
+import org.jetbrains.annotations.ApiStatus;
 
 public sealed interface TagKey<T> extends Keyed permits TagKeyImpl {
     static <T> Codec<TagKey<T>> codec(Registries.Selector<T> selector) {
@@ -24,8 +26,14 @@ public sealed interface TagKey<T> extends Keyed permits TagKeyImpl {
         return new TagKeyImpl<>(Key.key(hashedKey.substring(1)));
     }
 
+    @ApiStatus.Internal
     static <T> TagKey<T> unsafeOf(Key key) {
         return new TagKeyImpl<>(key);
+    }
+
+    @ApiStatus.Internal
+    static <T> TagKey<T> unsafeOf(@KeyPattern String key) {
+        return unsafeOf(Key.key(key));
     }
 
     default String hashedKey() {

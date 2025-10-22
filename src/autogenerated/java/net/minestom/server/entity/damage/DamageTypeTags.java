@@ -1,7 +1,5 @@
 package net.minestom.server.entity.damage;
 
-import static net.kyori.adventure.key.Key.key;
-
 import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -13,69 +11,69 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("all")
 @ApiStatus.NonExtendable
 public interface DamageTypeTags {
-    TagKey<DamageType> BYPASSES_WOLF_ARMOR = TagKey.unsafeOf(key("bypasses_wolf_armor"));
+    TagKey<DamageType> BYPASSES_WOLF_ARMOR = TagKey.unsafeOf("bypasses_wolf_armor");
 
-    TagKey<DamageType> ALWAYS_MOST_SIGNIFICANT_FALL = TagKey.unsafeOf(key("always_most_significant_fall"));
+    TagKey<DamageType> ALWAYS_MOST_SIGNIFICANT_FALL = TagKey.unsafeOf("always_most_significant_fall");
 
-    TagKey<DamageType> MACE_SMASH = TagKey.unsafeOf(key("mace_smash"));
+    TagKey<DamageType> MACE_SMASH = TagKey.unsafeOf("mace_smash");
 
-    TagKey<DamageType> PANIC_CAUSES = TagKey.unsafeOf(key("panic_causes"));
+    TagKey<DamageType> PANIC_CAUSES = TagKey.unsafeOf("panic_causes");
 
-    TagKey<DamageType> IS_PROJECTILE = TagKey.unsafeOf(key("is_projectile"));
+    TagKey<DamageType> IS_PROJECTILE = TagKey.unsafeOf("is_projectile");
 
-    TagKey<DamageType> CAN_BREAK_ARMOR_STAND = TagKey.unsafeOf(key("can_break_armor_stand"));
+    TagKey<DamageType> CAN_BREAK_ARMOR_STAND = TagKey.unsafeOf("can_break_armor_stand");
 
-    TagKey<DamageType> IS_LIGHTNING = TagKey.unsafeOf(key("is_lightning"));
+    TagKey<DamageType> IS_LIGHTNING = TagKey.unsafeOf("is_lightning");
 
-    TagKey<DamageType> NO_IMPACT = TagKey.unsafeOf(key("no_impact"));
+    TagKey<DamageType> NO_IMPACT = TagKey.unsafeOf("no_impact");
 
-    TagKey<DamageType> IS_FALL = TagKey.unsafeOf(key("is_fall"));
+    TagKey<DamageType> IS_FALL = TagKey.unsafeOf("is_fall");
 
-    TagKey<DamageType> WITCH_RESISTANT_TO = TagKey.unsafeOf(key("witch_resistant_to"));
+    TagKey<DamageType> WITCH_RESISTANT_TO = TagKey.unsafeOf("witch_resistant_to");
 
-    TagKey<DamageType> BURNS_ARMOR_STANDS = TagKey.unsafeOf(key("burns_armor_stands"));
+    TagKey<DamageType> BURNS_ARMOR_STANDS = TagKey.unsafeOf("burns_armor_stands");
 
-    TagKey<DamageType> BYPASSES_ARMOR = TagKey.unsafeOf(key("bypasses_armor"));
+    TagKey<DamageType> BYPASSES_ARMOR = TagKey.unsafeOf("bypasses_armor");
 
-    TagKey<DamageType> WITHER_IMMUNE_TO = TagKey.unsafeOf(key("wither_immune_to"));
+    TagKey<DamageType> WITHER_IMMUNE_TO = TagKey.unsafeOf("wither_immune_to");
 
-    TagKey<DamageType> IS_DROWNING = TagKey.unsafeOf(key("is_drowning"));
+    TagKey<DamageType> IS_DROWNING = TagKey.unsafeOf("is_drowning");
 
-    TagKey<DamageType> IS_FREEZING = TagKey.unsafeOf(key("is_freezing"));
+    TagKey<DamageType> IS_FREEZING = TagKey.unsafeOf("is_freezing");
 
-    TagKey<DamageType> ALWAYS_HURTS_ENDER_DRAGONS = TagKey.unsafeOf(key("always_hurts_ender_dragons"));
+    TagKey<DamageType> ALWAYS_HURTS_ENDER_DRAGONS = TagKey.unsafeOf("always_hurts_ender_dragons");
 
-    TagKey<DamageType> DAMAGES_HELMET = TagKey.unsafeOf(key("damages_helmet"));
+    TagKey<DamageType> DAMAGES_HELMET = TagKey.unsafeOf("damages_helmet");
 
-    TagKey<DamageType> IS_FIRE = TagKey.unsafeOf(key("is_fire"));
+    TagKey<DamageType> IS_FIRE = TagKey.unsafeOf("is_fire");
 
-    TagKey<DamageType> BYPASSES_INVULNERABILITY = TagKey.unsafeOf(key("bypasses_invulnerability"));
+    TagKey<DamageType> BYPASSES_INVULNERABILITY = TagKey.unsafeOf("bypasses_invulnerability");
 
-    TagKey<DamageType> BURN_FROM_STEPPING = TagKey.unsafeOf(key("burn_from_stepping"));
+    TagKey<DamageType> BURN_FROM_STEPPING = TagKey.unsafeOf("burn_from_stepping");
 
-    TagKey<DamageType> IS_EXPLOSION = TagKey.unsafeOf(key("is_explosion"));
+    TagKey<DamageType> IS_EXPLOSION = TagKey.unsafeOf("is_explosion");
 
-    TagKey<DamageType> BYPASSES_SHIELD = TagKey.unsafeOf(key("bypasses_shield"));
+    TagKey<DamageType> BYPASSES_SHIELD = TagKey.unsafeOf("bypasses_shield");
 
-    TagKey<DamageType> ALWAYS_KILLS_ARMOR_STANDS = TagKey.unsafeOf(key("always_kills_armor_stands"));
+    TagKey<DamageType> ALWAYS_KILLS_ARMOR_STANDS = TagKey.unsafeOf("always_kills_armor_stands");
 
-    TagKey<DamageType> PANIC_ENVIRONMENTAL_CAUSES = TagKey.unsafeOf(key("panic_environmental_causes"));
+    TagKey<DamageType> PANIC_ENVIRONMENTAL_CAUSES = TagKey.unsafeOf("panic_environmental_causes");
 
-    TagKey<DamageType> AVOIDS_GUARDIAN_THORNS = TagKey.unsafeOf(key("avoids_guardian_thorns"));
+    TagKey<DamageType> AVOIDS_GUARDIAN_THORNS = TagKey.unsafeOf("avoids_guardian_thorns");
 
-    TagKey<DamageType> IS_PLAYER_ATTACK = TagKey.unsafeOf(key("is_player_attack"));
+    TagKey<DamageType> IS_PLAYER_ATTACK = TagKey.unsafeOf("is_player_attack");
 
-    TagKey<DamageType> NO_ANGER = TagKey.unsafeOf(key("no_anger"));
+    TagKey<DamageType> NO_ANGER = TagKey.unsafeOf("no_anger");
 
-    TagKey<DamageType> BYPASSES_EFFECTS = TagKey.unsafeOf(key("bypasses_effects"));
+    TagKey<DamageType> BYPASSES_EFFECTS = TagKey.unsafeOf("bypasses_effects");
 
-    TagKey<DamageType> IGNITES_ARMOR_STANDS = TagKey.unsafeOf(key("ignites_armor_stands"));
+    TagKey<DamageType> IGNITES_ARMOR_STANDS = TagKey.unsafeOf("ignites_armor_stands");
 
-    TagKey<DamageType> NO_KNOCKBACK = TagKey.unsafeOf(key("no_knockback"));
+    TagKey<DamageType> NO_KNOCKBACK = TagKey.unsafeOf("no_knockback");
 
-    TagKey<DamageType> ALWAYS_TRIGGERS_SILVERFISH = TagKey.unsafeOf(key("always_triggers_silverfish"));
+    TagKey<DamageType> ALWAYS_TRIGGERS_SILVERFISH = TagKey.unsafeOf("always_triggers_silverfish");
 
-    TagKey<DamageType> BYPASSES_ENCHANTMENTS = TagKey.unsafeOf(key("bypasses_enchantments"));
+    TagKey<DamageType> BYPASSES_ENCHANTMENTS = TagKey.unsafeOf("bypasses_enchantments");
 
-    TagKey<DamageType> BYPASSES_RESISTANCE = TagKey.unsafeOf(key("bypasses_resistance"));
+    TagKey<DamageType> BYPASSES_RESISTANCE = TagKey.unsafeOf("bypasses_resistance");
 }

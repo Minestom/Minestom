@@ -1,7 +1,5 @@
 package net.minestom.server.dialog;
 
-import static net.kyori.adventure.key.Key.key;
-
 import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -13,7 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("all")
 @ApiStatus.NonExtendable
 public interface DialogTags {
-    TagKey<Dialog> PAUSE_SCREEN_ADDITIONS = TagKey.unsafeOf(key("pause_screen_additions"));
+    TagKey<Dialog> PAUSE_SCREEN_ADDITIONS = TagKey.unsafeOf("pause_screen_additions");
 
-    TagKey<Dialog> QUICK_ACTIONS = TagKey.unsafeOf(key("quick_actions"));
+    TagKey<Dialog> QUICK_ACTIONS = TagKey.unsafeOf("quick_actions");
 }

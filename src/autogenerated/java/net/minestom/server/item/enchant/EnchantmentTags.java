@@ -1,7 +1,5 @@
 package net.minestom.server.item.enchant;
 
-import static net.kyori.adventure.key.Key.key;
-
 import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -13,47 +11,47 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("all")
 @ApiStatus.NonExtendable
 public interface EnchantmentTags {
-    TagKey<Enchantment> ON_TRADED_EQUIPMENT = TagKey.unsafeOf(key("on_traded_equipment"));
+    TagKey<Enchantment> ON_TRADED_EQUIPMENT = TagKey.unsafeOf("on_traded_equipment");
 
-    TagKey<Enchantment> IN_ENCHANTING_TABLE = TagKey.unsafeOf(key("in_enchanting_table"));
+    TagKey<Enchantment> IN_ENCHANTING_TABLE = TagKey.unsafeOf("in_enchanting_table");
 
-    TagKey<Enchantment> EXCLUSIVE_SET_RIPTIDE = TagKey.unsafeOf(key("exclusive_set/riptide"));
+    TagKey<Enchantment> EXCLUSIVE_SET_RIPTIDE = TagKey.unsafeOf("exclusive_set/riptide");
 
-    TagKey<Enchantment> EXCLUSIVE_SET_ARMOR = TagKey.unsafeOf(key("exclusive_set/armor"));
+    TagKey<Enchantment> EXCLUSIVE_SET_ARMOR = TagKey.unsafeOf("exclusive_set/armor");
 
-    TagKey<Enchantment> EXCLUSIVE_SET_DAMAGE = TagKey.unsafeOf(key("exclusive_set/damage"));
+    TagKey<Enchantment> EXCLUSIVE_SET_DAMAGE = TagKey.unsafeOf("exclusive_set/damage");
 
-    TagKey<Enchantment> EXCLUSIVE_SET_BOW = TagKey.unsafeOf(key("exclusive_set/bow"));
+    TagKey<Enchantment> EXCLUSIVE_SET_BOW = TagKey.unsafeOf("exclusive_set/bow");
 
-    TagKey<Enchantment> EXCLUSIVE_SET_MINING = TagKey.unsafeOf(key("exclusive_set/mining"));
+    TagKey<Enchantment> EXCLUSIVE_SET_MINING = TagKey.unsafeOf("exclusive_set/mining");
 
-    TagKey<Enchantment> EXCLUSIVE_SET_CROSSBOW = TagKey.unsafeOf(key("exclusive_set/crossbow"));
+    TagKey<Enchantment> EXCLUSIVE_SET_CROSSBOW = TagKey.unsafeOf("exclusive_set/crossbow");
 
-    TagKey<Enchantment> EXCLUSIVE_SET_BOOTS = TagKey.unsafeOf(key("exclusive_set/boots"));
+    TagKey<Enchantment> EXCLUSIVE_SET_BOOTS = TagKey.unsafeOf("exclusive_set/boots");
 
-    TagKey<Enchantment> PREVENTS_BEE_SPAWNS_WHEN_MINING = TagKey.unsafeOf(key("prevents_bee_spawns_when_mining"));
+    TagKey<Enchantment> PREVENTS_BEE_SPAWNS_WHEN_MINING = TagKey.unsafeOf("prevents_bee_spawns_when_mining");
 
-    TagKey<Enchantment> TRADEABLE = TagKey.unsafeOf(key("tradeable"));
+    TagKey<Enchantment> TRADEABLE = TagKey.unsafeOf("tradeable");
 
-    TagKey<Enchantment> PREVENTS_INFESTED_SPAWNS = TagKey.unsafeOf(key("prevents_infested_spawns"));
+    TagKey<Enchantment> PREVENTS_INFESTED_SPAWNS = TagKey.unsafeOf("prevents_infested_spawns");
 
-    TagKey<Enchantment> ON_MOB_SPAWN_EQUIPMENT = TagKey.unsafeOf(key("on_mob_spawn_equipment"));
+    TagKey<Enchantment> ON_MOB_SPAWN_EQUIPMENT = TagKey.unsafeOf("on_mob_spawn_equipment");
 
-    TagKey<Enchantment> PREVENTS_ICE_MELTING = TagKey.unsafeOf(key("prevents_ice_melting"));
+    TagKey<Enchantment> PREVENTS_ICE_MELTING = TagKey.unsafeOf("prevents_ice_melting");
 
-    TagKey<Enchantment> ON_RANDOM_LOOT = TagKey.unsafeOf(key("on_random_loot"));
+    TagKey<Enchantment> ON_RANDOM_LOOT = TagKey.unsafeOf("on_random_loot");
 
-    TagKey<Enchantment> TOOLTIP_ORDER = TagKey.unsafeOf(key("tooltip_order"));
+    TagKey<Enchantment> TOOLTIP_ORDER = TagKey.unsafeOf("tooltip_order");
 
-    TagKey<Enchantment> CURSE = TagKey.unsafeOf(key("curse"));
+    TagKey<Enchantment> CURSE = TagKey.unsafeOf("curse");
 
-    TagKey<Enchantment> PREVENTS_DECORATED_POT_SHATTERING = TagKey.unsafeOf(key("prevents_decorated_pot_shattering"));
+    TagKey<Enchantment> PREVENTS_DECORATED_POT_SHATTERING = TagKey.unsafeOf("prevents_decorated_pot_shattering");
 
-    TagKey<Enchantment> SMELTS_LOOT = TagKey.unsafeOf(key("smelts_loot"));
+    TagKey<Enchantment> SMELTS_LOOT = TagKey.unsafeOf("smelts_loot");
 
-    TagKey<Enchantment> TREASURE = TagKey.unsafeOf(key("treasure"));
+    TagKey<Enchantment> TREASURE = TagKey.unsafeOf("treasure");
 
-    TagKey<Enchantment> NON_TREASURE = TagKey.unsafeOf(key("non_treasure"));
+    TagKey<Enchantment> NON_TREASURE = TagKey.unsafeOf("non_treasure");
 
-    TagKey<Enchantment> DOUBLE_TRADE_PRICE = TagKey.unsafeOf(key("double_trade_price"));
+    TagKey<Enchantment> DOUBLE_TRADE_PRICE = TagKey.unsafeOf("double_trade_price");
 }
