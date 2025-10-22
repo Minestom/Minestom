@@ -96,15 +96,16 @@ final class PaletteImpl implements Palette {
             for (int z = 0; z < dimension; z++) {
                 for (int x = 0; x < dimension; x++) {
                     int value = supplier.get(x, y, z);
-                    checkValue(value, false);
                     if (value != 0) count++;
                     if (newPaletteIndexMap == null) {
+                        checkValue(value, false);
                         cache[index++] = value;
                         continue;
                     }
                     final int maybePaletteIndex = newPaletteIndexMap.valueToIndexCapped(value, maxPaletteSize);
                     if (maybePaletteIndex < 0) {
                         for (int i = 0; i < index; i++) cache[i] = newPaletteIndexMap.indexToValue(cache[i]);
+                        checkValue(newPaletteIndexMap.maxValue(), false);
                         newPaletteIndexMap = null;
                         cache[index++] = value;
                         continue;
@@ -123,10 +124,10 @@ final class PaletteImpl implements Palette {
         if (bitsPerEntry == 0) {
             if (oldValue == count) fill(newValue);
         } else {
-            checkValue(newValue, true);
             int oldIndex;
             int newIndex;
             if (isDirect()) {
+                checkValue(newValue, true);
                 oldIndex = oldValue;
                 newIndex = newValue;
             } else {
@@ -179,15 +180,16 @@ final class PaletteImpl implements Palette {
             @Override
             public void accept(int x, int y, int z, int oldValue) {
                 final int value = function.apply(x, y, z, oldValue);
-                checkValue(value, false);
                 if (value != 0) count++;
                 if (newPaletteIndexMap == null) {
+                    checkValue(value, false);
                     cache[index++] = value;
                     return;
                 }
                 final int maybePaletteIndex = newPaletteIndexMap.valueToIndexCapped(value, maxPaletteSize);
                 if (maybePaletteIndex < 0) {
                     for (int i = 0; i < index; i++) cache[i] = newPaletteIndexMap.indexToValue(cache[i]);
+                    checkValue(newPaletteIndexMap.maxValue(), false);
                     newPaletteIndexMap = null;
                     cache[index++] = value;
                     return;
@@ -203,7 +205,6 @@ final class PaletteImpl implements Palette {
 
     @Override
     public void fill(int value) {
-        checkValue(value, false);
         this.bitsPerEntry = 0;
         this.count = value;
         this.values = null;
@@ -278,7 +279,6 @@ final class PaletteImpl implements Palette {
         if (offset == 0) return;
         if (bitsPerEntry == 0) {
             this.count += offset;
-            checkValue(count, false);
         } else {
             replaceAll((_, _, _, value) -> value + offset);
         }
@@ -405,10 +405,11 @@ final class PaletteImpl implements Palette {
     public void load(int[] palette, long[] values) {
         int bpe = palette.length <= 1 ? 0 : MathUtils.bitsToRepresent(palette.length - 1);
         bpe = Math.max(minBitsPerEntry, bpe);
-        for (final int value : palette) checkValue(value, false);
 
         if (bpe > maxBitsPerEntry) {
             // Direct mode: convert from palette indices to direct values
+            for (final int value : palette) checkValue(value, false);
+
             this.bitsPerEntry = directBits;
             this.paletteIndexMap = null;
 
@@ -669,12 +670,14 @@ final class PaletteImpl implements Palette {
         if (isDirect()) return;
         if (bitsPerEntry == 0) {
             final int fillValue = this.count;
+            checkValue(fillValue, false);
             this.values = new long[arrayLength(dimension, directBits)];
             if (fillValue != 0) {
                 Palettes.fill(directBits, this.values, fillValue);
                 this.count = maxSize();
             }
         } else {
+            checkValue(paletteIndexMap.maxValue(), false);
             final int[] ids = paletteIndexMap.indexToValueArray();
             this.values = Palettes.remap(dimension, bitsPerEntry, directBits, values, v -> ids[v]);
         }
@@ -720,7 +723,6 @@ final class PaletteImpl implements Palette {
 
         final int pos = paletteIndexMap.find(value);
         if (pos >= 0) return paletteIndexMap.UNSAFE_getIndex(pos);
-        checkValue(value, true);
         if (paletteIndexMap.size() >= (1 << bitsPerEntry)) {
             // Palette is full, must resize
             upsize();
