@@ -147,7 +147,7 @@ final class PaletteImpl implements Palette {
                 newIndex = paletteIndexMap.UNSAFE_getIndex(newPos);
             }
             final AtomicInteger count = new AtomicInteger();
-            Palettes.remap(dimension, bitsPerEntry, bitsPerEntry, values, v -> {
+            this.values = Palettes.remap(dimension, bitsPerEntry, bitsPerEntry, values, v -> {
                if (v == oldIndex) {
                    count.setPlain(count.getPlain() + 1);
                    return newIndex;
@@ -741,6 +741,7 @@ final class PaletteImpl implements Palette {
         final byte newDirectBits = (byte) MathUtils.bitsToRepresent(value);
         if (allowResize && isDirect()) {
             this.values = Palettes.remap(dimension, directBits, newDirectBits, values, Int2IntFunction.identity());
+            this.bitsPerEntry = newDirectBits;
         }
         this.directBits = newDirectBits;
     }

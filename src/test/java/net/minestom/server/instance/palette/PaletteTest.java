@@ -1105,6 +1105,19 @@ public class PaletteTest {
     }
 
     @Test
+    public void directPlacementHighValue() {
+        final PaletteImpl palette = (PaletteImpl) Palette.blocks();
+
+        palette.makeDirect();
+        assertEquals(Palette.BLOCK_PALETTE_DIRECT_BITS, palette.bitsPerEntry());
+
+        palette.set(0, 0, 0, 1 << 20);
+        assertEquals(21, palette.bitsPerEntry()); // 1 << 20 needs 21 bits to represent
+
+        assertEquals(1 << 20, palette.get(0, 0, 0));
+    }
+
+    @Test
     public void fillHighValue() {
         final PaletteImpl palette = (PaletteImpl) Palette.blocks();
 
