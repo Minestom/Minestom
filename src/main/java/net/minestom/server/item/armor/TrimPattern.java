@@ -6,6 +6,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
@@ -47,7 +48,7 @@ public sealed interface TrimPattern extends Holder.Direct<TrimPattern>, TrimPatt
      */
     @ApiStatus.Internal
     static DynamicRegistry<TrimPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("trim_pattern"), REGISTRY_CODEC, RegistryData.Resource.TRIM_PATTERNS);
+        return DynamicRegistry.create(BuiltinRegistries.TRIM_PATTERN, REGISTRY_CODEC, RegistryData.Resource.TRIM_PATTERNS);
     }
 
     Key assetId();

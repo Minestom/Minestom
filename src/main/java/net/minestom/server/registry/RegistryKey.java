@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
@@ -35,7 +36,7 @@ public non-sealed interface RegistryKey<T> extends Holder<T>, Keyed {
      * Registry keys are returned from {@link DynamicRegistry#register(Key, Object)}.
      */
     @ApiStatus.Internal
-    static <T> RegistryKey<T> unsafeOf(String key) {
+    static <T> RegistryKey<T> unsafeOf(@KeyPattern String key) {
         return unsafeOf(Key.key(key));
     }
 

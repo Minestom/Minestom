@@ -2,6 +2,7 @@ package net.minestom.server.game;
 
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.UnknownNullability;
  */
 record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) implements GameEvent {
     static final Registry<GameEvent> REGISTRY = RegistryData.createStaticRegistry(
-            Key.key("game_event"), GameEventImpl::createImpl);
+            BuiltinRegistries.GAME_EVENT, GameEventImpl::createImpl);
 
     /**
      * Creates a new {@link GameEventImpl} with the given namespace and properties.

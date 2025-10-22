@@ -25,7 +25,13 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ApiStatus.Internal
@@ -47,11 +53,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags;
 
-    private final Key key;
+    private final RegistryKey<DynamicRegistry<T>> registryKey;
     private final Codec<T> codec;
 
-    DynamicRegistryImpl(Key key, @Nullable Codec<T> codec) {
-        this.key = key;
+    DynamicRegistryImpl(RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec) {
+        this.registryKey = registryKey;
         this.codec = codec;
         // Expect stale data possibilities with unsafe ops.
         this.idToValue = new ArrayList<>();
@@ -65,11 +71,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     // Used to create compressed registries
-    DynamicRegistryImpl(Key key, @Nullable Codec<T> codec, List<T> idToValue,
+    DynamicRegistryImpl(RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec, List<T> idToValue,
                         Map<RegistryKey<T>, Integer> keyToId, List<RegistryKey<T>> idToKey,
                         Map<Key, T> keyToValue, Map<T, RegistryKey<T>> valueToKey,
                         List<DataPack> packById, Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
-        this.key = key;
+        this.registryKey = registryKey;
         this.codec = codec;
         this.idToValue = idToValue;
         this.idToKey = idToKey;
@@ -82,7 +88,12 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public Key key() {
-        return this.key;
+        return this.registryKey.key();
+    }
+
+    @Override
+    public RegistryKey<DynamicRegistry<T>> registryKey() {
+        return this.registryKey;
     }
 
     public @UnknownNullability Codec<T> codec() {
@@ -292,13 +303,13 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                 if (entryResult instanceof Result.Ok(BinaryTag tag)) {
                     data = (CompoundBinaryTag) tag;
                 } else {
-                    throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + key);
+                    throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + registryKey);
                 }
             }
             //noinspection DataFlowIssue
             entries.add(new RegistryDataPacket.Entry(getKey(i).key().asString(), data));
         }
-        return new RegistryDataPacket(key.asString(), entries);
+        return new RegistryDataPacket(registryKey.name(), entries);
     }
 
     /**
@@ -309,7 +320,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Contract(pure = true)
     DynamicRegistryImpl<T> compact() {
         // Create new instances so they are trimmed to size without downcasting.
-        return new DynamicRegistryImpl<>(key, codec,
+        return new DynamicRegistryImpl<>(registryKey, codec,
                 new ArrayList<>(idToValue),
                 new HashMap<>(keyToId),
                 new ArrayList<>(idToKey),
