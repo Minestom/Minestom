@@ -55,6 +55,7 @@ public final class Generators {
                                 .typeName("Particle")
                                 .loaderName("ParticleImpl")
                                 .generatedName("Particles")
+                                .registryKeyOverride(CodegenValue.Type.STATIC)
                                 .build(),
                         builder().specialType()
                                 .namespace("constants")
