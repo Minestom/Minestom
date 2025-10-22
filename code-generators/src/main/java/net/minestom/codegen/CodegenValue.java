@@ -5,17 +5,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public record CodegenValue(Type type, String namespace, String packageName, String typeName, String loaderName,
-                           String generatedName, String keysName) {
+public record CodegenValue(Type codegenType, String namespace, String packageName, String typeName, String loaderName,
+                           String generatedName, String keysName, Type registryType) {
 
     public CodegenValue {
-        Objects.requireNonNull(type, "Type cannot be null");
+        Objects.requireNonNull(codegenType, "Type cannot be null");
         Objects.requireNonNull(namespace, "Namespace cannot be null");
         Objects.requireNonNull(packageName, "Package name cannot be null");
         Objects.requireNonNull(typeName, "Type name cannot be null");
         Objects.requireNonNull(loaderName, "Loader name cannot be null");
         Objects.requireNonNull(generatedName, "Generated name cannot be null");
         Objects.requireNonNull(keysName, "Keys name cannot be null");
+        Objects.requireNonNull(registryType, "Registry override cannot be null");
     }
 
     public static Builder builder() {
@@ -48,6 +49,7 @@ public record CodegenValue(Type type, String namespace, String packageName, Stri
         private @Nullable String loaderName;
         private @Nullable String generatedName;
         private @Nullable String keyName;
+        private @Nullable Type registryKeyOverride;
 
         private Builder() {}
 
@@ -81,6 +83,11 @@ public record CodegenValue(Type type, String namespace, String packageName, Stri
             return this;
         }
 
+        public Builder registryKeyOverride(Type registryKeyOverride) {
+            this.registryKeyOverride = Objects.requireNonNull(registryKeyOverride);
+            return this;
+        }
+
         public Builder staticType() {
             return type(Type.STATIC);
         }
@@ -108,8 +115,9 @@ public record CodegenValue(Type type, String namespace, String packageName, Stri
                 case STATIC, DYNAMIC -> typeName + "s";
                 case SPECIAL -> typeName;
             };
-            String keys = keyName != null ? keyName : typeName + "Keys";
-            return new CodegenValue(type, namespace, packageName, typeName, loader, generated, keys);
+            String keys = Objects.requireNonNullElse(keyName, typeName + "Keys");
+            Type registryKey = Objects.requireNonNullElse(registryKeyOverride, type);
+            return new CodegenValue(type, namespace, packageName, typeName, loader, generated, keys, registryKey);
         }
 
         private Builder type(Type type) {

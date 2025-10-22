@@ -11,11 +11,6 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 
 public sealed class RegistryGenerator implements MinestomCodeGenerator permits ParticleGenerator {
-    private static final AnnotationSpec SUPPRESS_ANNOTATION = AnnotationSpec.builder(SuppressWarnings.class)
-            .addMember("value", "$S", "all") // unused, SpellCheckingInspection, NullableProblems
-            .build();
-
-    private static final AnnotationSpec NONEXTENDABLE_ANNOTATION = AnnotationSpec.builder(ApiStatus.NonExtendable.class).build();
 
     private final Path outputFolder;
 
@@ -30,7 +25,7 @@ public sealed class RegistryGenerator implements MinestomCodeGenerator permits P
 
     @Override
     public void generate(CodegenRegistry registry, CodegenValue value) {
-        switch (value.type()) {
+        switch (value.codegenType()) {
             case STATIC -> generateStatic(registry, value);
             case DYNAMIC -> generateDynamic(registry, value);
         }

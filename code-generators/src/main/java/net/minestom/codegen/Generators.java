@@ -21,8 +21,8 @@ public final class Generators {
         CodegenRegistry registry = createCodegenRegistry();
 
         var generator = new RegistryGenerator(outputFolder);
-        for (CodegenValue value: registry.registry().values()) {
-            switch (value.type()) {
+        for (CodegenValue value: registry) {
+            switch (value.codegenType()) {
                 case STATIC, DYNAMIC -> generator.generate(registry, value);
                 case SPECIAL -> resolveSpecialGenerator(value.resource(), outputFolder).generate(registry, value);
             }
@@ -37,7 +37,7 @@ public final class Generators {
         return new InputStreamReader(out);
     }
 
-    // Required if we want to eventually generate BlockValues for example, as it needs cross registry.
+    // Required if we want to eventually generate BlockValues for example, as it needs cross values.
     // In the future the data generator might be able to do this task, but unlikely
     private static CodegenRegistry createCodegenRegistry() {
         return CodegenRegistry.builder(Generators::resourceReader)
@@ -49,7 +49,7 @@ public final class Generators {
                                 .typeName("Color")
                                 .generatedName("DyeColor")
                                 .build(),
-                        builder().specialType() // Static special type
+                        builder().specialType() // Static special codegenType
                                 .namespace("particle")
                                 .packageName("net.minestom.server.particle")
                                 .typeName("Particle")
@@ -101,6 +101,11 @@ public final class Generators {
                                 .namespace("world_events")
                                 .packageName("net.minestom.server.worldevent")
                                 .typeName("WorldEvent")
+                                .build(),
+                        builder().specialType()
+                                .namespace("built_in_registries")
+                                .packageName("net.minestom.server.registry")
+                                .typeName("BuiltinRegistries")
                                 .build(),
 
                         // --- STATIC REGISTRIES (Impl class + constant class) ---
@@ -314,6 +319,7 @@ public final class Generators {
                  "villager_types" -> new GenericEnumGenerator(outputFolder); // This could be a static instance.
             case "consume_effects" -> new GenericPackagePrivateEnumGenerator(outputFolder);
             case "world_events" -> new WorldEventGenerator(outputFolder);
+            case "built_in_registries" -> new BuiltInRegistryGenerator(outputFolder);
             default -> throw new RuntimeException("Unknown resource name: " + resourceName);
         };
     }

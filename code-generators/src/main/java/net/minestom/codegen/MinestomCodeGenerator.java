@@ -2,9 +2,11 @@ package net.minestom.codegen;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.palantir.javapoet.AnnotationSpec;
 import com.palantir.javapoet.ClassName;
 import com.palantir.javapoet.CodeBlock;
 import com.palantir.javapoet.JavaFile;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.lang.model.SourceVersion;
 import java.io.IOException;
@@ -15,6 +17,13 @@ import java.util.Objects;
 
 public interface MinestomCodeGenerator {
     Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+
+
+    AnnotationSpec SUPPRESS_ANNOTATION = AnnotationSpec.builder(SuppressWarnings.class)
+            .addMember("value", "$S", "all") // unused, SpellCheckingInspection, NullableProblems
+            .build();
+
+    AnnotationSpec NONEXTENDABLE_ANNOTATION = AnnotationSpec.builder(ApiStatus.NonExtendable.class).build();
 
     default String toConstant(String namespace) {
         String constant = namespaceShort(namespace)

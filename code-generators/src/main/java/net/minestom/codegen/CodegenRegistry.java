@@ -1,5 +1,6 @@
 package net.minestom.codegen;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
@@ -7,7 +8,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public record CodegenRegistry(Map<String, CodegenValue> registry, ResourceFunction resource) {
+public record CodegenRegistry(Map<String, CodegenValue> registry, ResourceFunction resource) implements Iterable<CodegenValue> {
     public CodegenRegistry {
         registry = Map.copyOf(registry);
         Objects.requireNonNull(resource, "Resource function cannot be null");
@@ -27,6 +28,11 @@ public record CodegenRegistry(Map<String, CodegenValue> registry, ResourceFuncti
 
     @Nullable InputStreamReader optionalResource(String name) {
         return resource.apply(name);
+    }
+
+    @Override
+    public Iterator<CodegenValue> iterator() {
+        return registry.values().iterator();
     }
 
     public static final class Builder {
