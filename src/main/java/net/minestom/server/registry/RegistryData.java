@@ -583,7 +583,7 @@ public final class RegistryData {
 
                 for (var entry : defaultAttributesSection) {
                     Attribute attribute = Attribute.fromKey(entry.getKey());
-                    if (attribute == null) continue;
+                    Check.notNull(attribute, "Failed to find attribute {0}", entry.getKey());
 
                     Object value = entry.getValue();
                     if (!(value instanceof Number number)) continue;
