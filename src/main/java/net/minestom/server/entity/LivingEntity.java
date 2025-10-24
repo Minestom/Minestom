@@ -98,13 +98,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
-        var defaultAttributes = entityType.registry().defaultAttributes();
-
-        if (!defaultAttributes.isEmpty()) {
-            for (var entry : defaultAttributes.entrySet()) {
-                getAttribute(entry.getKey()).setBaseValue(entry.getValue());
-            }
-        }
+        applyDefaultAttributeValues();
     }
 
     public LivingEntity(EntityType entityType) {
@@ -739,5 +733,18 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     public Acquirable<? extends LivingEntity> acquirable() {
         return (Acquirable<? extends LivingEntity>) super.acquirable();
+    }
+
+    /**
+     * Sets the attributes of this entity to their default vanilla values.
+     */
+    public void applyDefaultAttributeValues() {
+        var defaultAttributes = entityType.registry().defaultAttributes();
+
+        if (!defaultAttributes.isEmpty()) {
+            for (var entry : defaultAttributes.entrySet()) {
+                getAttribute(entry.getKey()).setBaseValue(entry.getValue());
+            }
+        }
     }
 }

@@ -584,11 +584,9 @@ public final class RegistryData {
                 for (var entry : defaultAttributesSection) {
                     Attribute attribute = Attribute.fromKey(entry.getKey());
                     Check.notNull(attribute, "Failed to find attribute {0}", entry.getKey());
-
                     Object value = entry.getValue();
-                    if (!(value instanceof Number number)) continue;
-
-                    attributes.put(attribute, number.doubleValue());
+                    Check.stateCondition(!(value instanceof Number), "Attribute value {0} is not a number", value);
+                    attributes.put(attribute, ((Number) value).doubleValue());
                 }
 
                 this.defaultAttributes = Map.copyOf(attributes);
