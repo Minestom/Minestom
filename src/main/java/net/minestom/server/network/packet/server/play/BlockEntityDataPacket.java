@@ -16,7 +16,7 @@ public record BlockEntityDataPacket(Point blockPosition,
 ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<BlockEntityDataPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, BlockEntityDataPacket::blockPosition,
-            BlockEntityType.NETWORK_TYPE, BlockEntityDataPacket::action,
+            BlockEntityType.NETWORK_TYPE, BlockEntityDataPacket::type,
             OPTIONAL_NBT_COMPOUND, BlockEntityDataPacket::data,
             BlockEntityDataPacket::new
     );
