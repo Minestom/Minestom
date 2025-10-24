@@ -22,7 +22,7 @@ import net.minestom.server.utils.MathUtils;
  * A performant implementation for transforming values into palette indices.
  * Derived from {@link it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap} and modified to suit our specific needs.
  */
-@SuppressWarnings({"StatementWithEmptyBody", "UnusedReturnValue"})
+@SuppressWarnings("UnusedReturnValue")
 final class PaletteIndexMap implements Cloneable {
     private int[] value;
     private int[] index;
@@ -169,9 +169,11 @@ final class PaletteIndexMap implements Cloneable {
         final int[] newValue = new int[newN + 1];
         int i = n, pos;
         for (int j = realSize(); j-- != 0;) {
+            //noinspection StatementWithEmptyBody
             while (key[--i] == 0);
-            if (!((newKey[pos = (HashCommon.mix((key[i]))) & mask]) == 0))
-                while (!((newKey[pos = (pos + 1) & mask]) == 0));
+            if ((newKey[pos = (HashCommon.mix(key[i])) & mask]) != 0)
+                //noinspection StatementWithEmptyBody
+                while ((newKey[pos = (pos + 1) & mask]) != 0);
             newKey[pos] = key[i];
             newValue[pos] = value[i];
         }
@@ -189,13 +191,17 @@ final class PaletteIndexMap implements Cloneable {
 
     @Override
     public PaletteIndexMap clone() {
-        PaletteIndexMap c;
+        final PaletteIndexMap c;
         try {
             c = (PaletteIndexMap) super.clone();
-        } catch (CloneNotSupportedException cantHappen) {
+        } catch (CloneNotSupportedException _) {
             throw new InternalError();
         }
+        c.mask = mask;
         c.containsNullKey = containsNullKey;
+        c.n = n;
+        c.maxFill = maxFill;
+        c.size = size;
         c.value = value.clone();
         c.index = index.clone();
         c.indexToValue = indexToValue.clone();

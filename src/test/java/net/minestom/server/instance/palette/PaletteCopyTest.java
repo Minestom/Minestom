@@ -526,8 +526,8 @@ public class PaletteCopyTest {
         @Test
         @DisplayName("Copy Multi with negative offset")
         void copyMultiWithNegativeOffset() {
-            Palette source = Palette.blocks();
-            Palette target = Palette.blocks();
+            final Palette source = Palette.blocks();
+            final Palette target = Palette.blocks();
 
             source.fill(10);
             source.set(15, 15, 15, 11);
@@ -557,26 +557,19 @@ public class PaletteCopyTest {
         }
 
         @Test
-        @DisplayName("Copy out of bounds")
-        void copyOutOfBounds() {
-            Palette source = Palette.blocks();
-            Palette target = Palette.blocks();
-            Palette backup = target.clone();
+        @DisplayName("Copy out of bounds throws")
+        void copyOutOfBoundsThrows() {
+            final Palette source = Palette.blocks();
+            final Palette target = Palette.blocks();
 
             source.fill(16);
             source.set(0, 0, 0, 8);
             source.set(4, 4, 4, 9);
             source.set(8, 8, 8, 10);
             source.set(15, 15, 15, 11);
-
-            target.copyFrom(source, 20, 0, 0);
-            assertTrue(target.compare(backup));
-
-            target.copyFrom(source, 0, 16, 0);
-            assertTrue(target.compare(backup));
-
-            target.copyFrom(source, 0, 0, -16);
-            assertTrue(target.compare(backup));
+            assertThrows(IllegalArgumentException.class, () -> target.copyFrom(source, 20, 0, 0));
+            assertThrows(IllegalArgumentException.class, () -> target.copyFrom(source, 0, 16, 0));
+            assertThrows(IllegalArgumentException.class, () -> target.copyFrom(source, 0, 0, -16));
         }
     }
 }

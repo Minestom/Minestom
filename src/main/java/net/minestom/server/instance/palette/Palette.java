@@ -1,6 +1,7 @@
 package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
@@ -82,16 +83,26 @@ public sealed interface Palette permits PaletteImpl {
     void fill(int value);
 
     /**
-     * Efficiently fills a cuboid from {@code (x0, y0, z0)} to {@code (x1, y1, z1)} (inclusive).
-     * <p>
-     * If any part of the cuboid lies outside the bounds of palette,
-     * those out-of-bounds positions are ignored.
-     * <p>
-     * Coordinate order does not matter.
+     * Efficiently fills a cuboid from {@code (minX, minY, minZ)} to {@code (maxX, maxY, maxZ)} (inclusive).
      *
      * @param value The value to fill with
+     * @throws IllegalArgumentException if {@code (minX, minY, minZ)} or {@code (maxX, maxY, maxZ)} are out of bounds,
+     * or if coordinates are out of order.
      */
-    void fill(int x0, int y0, int z0, int x1, int y1, int z1, int value);
+    void fill(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, int value);
+
+    /**
+     * Efficiently fills a cuboid from {@code min} to {@code max} (inclusive).
+     *
+     * @param min The minimum coordinates for the cuboid
+     * @param max The maximum coordinates for the cuboid (inclusive)
+     * @param value The value to fill with
+     * @throws IllegalArgumentException if {@code min} or {@code max} are out of bounds,
+     * or if coordinates are out of order.
+     */
+    default void fill(Point min, Point max, int value) {
+        fill(min.blockX(), min.blockY(), min.blockZ(), max.blockX(), max.blockY(), max.blockZ(), value);
+    }
 
     /**
      * Efficiently offsets all values in the palette by the given offset.
@@ -121,6 +132,20 @@ public sealed interface Palette permits PaletteImpl {
      */
     void copyFrom(Palette source);
 
+    /**
+     * Efficiently loads values from the anvil file format.
+     * <p>
+     * All indices are the same length.
+     * This length is set to the minimum amount of bits required to represent the largest index in the palette,
+     * and then set to a minimum of minBitsPerEntry.
+     * Indices are not packed across multiple longs,
+     * meaning that if there is no more space in a given long for the whole next index,
+     * it starts instead at the least significant bit of the next long.
+     * (for more info, see: <a href="https://minecraft.wiki/w/Chunk_format">the Minecraft wiki page</a>)
+     *
+     * @param palette The palette to use
+     * @param values The paletted values
+     */
     void load(int[] palette, long[] values);
 
     /**
@@ -255,7 +280,7 @@ public sealed interface Palette permits PaletteImpl {
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, Palette palette) {
-                PaletteImpl value = (PaletteImpl) palette;
+                final PaletteImpl value = (PaletteImpl) palette;
                 Check.argCondition(dimension != value.dimension,
                         "Palette must be of dimension {0}, got {1}", dimension, value.dimension);
                 if (directBits != value.directBits && value.isDirect()) {
@@ -275,14 +300,14 @@ public sealed interface Palette permits PaletteImpl {
                             buffer.write(VAR_INT, value.paletteIndexMap.indexToValue(index));
                         }
                     }
-                    for (long l : value.values) buffer.write(LONG, l);
+                    for (final long l : value.values) buffer.write(LONG, l);
                 }
             }
 
             @Override
             public Palette read(NetworkBuffer buffer) {
                 final byte bitsPerEntry = buffer.read(BYTE);
-                PaletteImpl result = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
+                final PaletteImpl result = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
                 result.bitsPerEntry = bitsPerEntry;
                 if (bitsPerEntry == 0) {
                     // Single value palette

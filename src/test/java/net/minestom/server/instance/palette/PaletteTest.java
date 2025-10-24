@@ -1022,61 +1022,28 @@ public class PaletteTest {
     }
 
     @Test
-    public void partialFillClipsOutOfBounds() {
-        for (Palette palette : testPalettes()) {
-            final int dimension = palette.dimension();
-            final int dimensionMinus = dimension - 1;
+    public void partialFillThrowsOutOfBounds() {
+        final Palette palette = Palette.blocks();
+        assertThrows(Exception.class, () -> palette.fill(-1, 0, 0, 0, 0, 0, 10));
+        assertThrows(Exception.class, () -> palette.fill(0, 0, 0, 16, 0, 0, 11));
+        assertThrows(Exception.class, () -> palette.fill(0, 0, 0, 100, 0, 0, 12));
+    }
 
-            palette.fill(1, 1, 1, 100, 100, 100, 10);
-            assertEquals(dimensionMinus * dimensionMinus * dimensionMinus, palette.count());
-
-            for (int x = 0; x < dimension; x++) {
-                for (int y = 0; y < dimension; y++) {
-                    for (int z = 0; z < dimension; z++) {
-                        if (x == 0 || y == 0 || z == 0) {
-                            assertEquals(0, palette.get(x, y, z));
-                        } else {
-                            assertEquals(10, palette.get(x, y, z));
-                        }
-                    }
-                }
-            }
-        }
+    @Test
+    public void partialFillThrowsUnordered() {
+        final Palette palette = Palette.blocks();
+        assertThrows(Exception.class, () -> palette.fill(10, 0, 0, 0, 10, 10, 1));
+        assertDoesNotThrow(() -> palette.fill(0, 2, 4, 0, 2, 4, 2));
     }
 
     @Test
     public void partialFillDoesTotalFill() {
-        for (Palette palette : testPalettes()) {
+        for (final Palette palette : testPalettes()) {
             final int dimension = palette.dimension();
             final int dimensionMinus = dimension - 1;
 
             palette.fill(0, 0, 0, dimensionMinus, dimensionMinus, dimensionMinus, 10);
             assertEquals(10, palette.singleValue());
-
-            palette.fill(-100, -100, -100, 100, 100, 100, 11);
-            assertEquals(11, palette.singleValue());
-        }
-    }
-
-    @Test
-    public void partialFillOrdersCoordinates() {
-        for (Palette palette : testPalettes()) {
-            final int dimension = palette.dimension();
-
-            palette.fill(1, 1, 1, 0, 0, 0, 10);
-            assertEquals(2 * 2 * 2, palette.count());
-
-            for (int x = 0; x < dimension; x++) {
-                for (int y = 0; y < dimension; y++) {
-                    for (int z = 0; z < dimension; z++) {
-                        if (x > 1 || y > 1 || z > 1) {
-                            assertEquals(0, palette.get(x, y, z));
-                        } else {
-                            assertEquals(10, palette.get(x, y, z));
-                        }
-                    }
-                }
-            }
         }
     }
 
