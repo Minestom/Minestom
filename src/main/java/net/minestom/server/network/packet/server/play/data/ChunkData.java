@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.block.BlockUtils;
@@ -47,7 +48,7 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
                 buffer.write(BYTE, (byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
                 buffer.write(SHORT, (short) point.blockY()); // y
 
-                buffer.write(VAR_INT, registry.blockEntityId());
+                buffer.write(BlockEntityType.NETWORK_TYPE, registry.blockEntityType());
                 final CompoundBinaryTag nbt = BlockUtils.extractClientNbt(block);
                 assert nbt != null;
                 buffer.write(NBT, nbt); // block nbt
@@ -67,7 +68,7 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
         for (int i = 0; i < size; i++) {
             final byte xz = reader.read(BYTE);
             final short y = reader.read(SHORT);
-            final int blockEntityId = reader.read(VAR_INT);
+            final BlockEntityType blockEntityType = reader.read(BlockEntityType.NETWORK_TYPE);
             final CompoundBinaryTag nbt = reader.read(NBT_COMPOUND);
             // TODO create block object
         }

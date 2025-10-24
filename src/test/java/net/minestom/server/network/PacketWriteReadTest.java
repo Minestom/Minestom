@@ -17,6 +17,7 @@ import net.minestom.server.crypto.*;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatMessageType;
@@ -195,7 +196,7 @@ public class PacketWriteReadTest {
         addServerPackets(new BlockActionPacket(VEC, (byte) 5, (byte) 5, 5));
         addServerPackets(new BlockBreakAnimationPacket(5, VEC, (byte) 5));
         addServerPackets(new BlockChangePacket(VEC, 0));
-        addServerPackets(new BlockEntityDataPacket(VEC, 5, CompoundBinaryTag.builder().putString("key", "value").build()));
+        addServerPackets(new BlockEntityDataPacket(VEC, BlockEntityType.SIGN, CompoundBinaryTag.builder().putString("key", "value").build()));
         addServerPackets(
                 new BossBarPacket(UUID.randomUUID(), new BossBarPacket.AddAction(COMPONENT, 5f, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS, (byte) 2)),
                 new BossBarPacket(UUID.randomUUID(), new BossBarPacket.RemoveAction()),
