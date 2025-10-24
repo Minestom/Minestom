@@ -591,7 +591,7 @@ public final class RegistryData {
                     attributes.put(attribute, number.doubleValue());
                 }
 
-                this.defaultAttributes = attributes.isEmpty() ? Map.of() : Map.copyOf(attributes);
+                this.defaultAttributes = Map.copyOf(attributes);
             }
         }
 
