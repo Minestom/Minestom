@@ -1,11 +1,13 @@
 package net.minestom.server.tag;
 
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-sealed interface StaticIntMap<T> permits StaticIntMap.Array {
+sealed interface StaticIntMap<T extends @UnknownNullability Object> permits StaticIntMap.Array {
 
     T get(@Range(from = 0, to = Integer.MAX_VALUE) int key);
 
@@ -21,7 +23,7 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
 
     void updateContent(StaticIntMap<T> content);
 
-    final class Array<T> implements StaticIntMap<T> {
+    final class Array<T extends @UnknownNullability Object> implements StaticIntMap<T> {
         private static final Object[] EMPTY_ARRAY = new Object[0];
 
         private T[] array;
@@ -36,7 +38,7 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
         }
 
         @Override
-        public T get(int key) {
+        public @Nullable T get(int key) {
             final T[] array = this.array;
             return key < array.length ? array[key] : null;
         }
