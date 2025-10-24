@@ -16,6 +16,7 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockSoundType;
@@ -541,6 +542,7 @@ public final class RegistryData {
         private final int clientTrackingRange;
         private final boolean fireImmune;
         private final Map<String, List<Double>> entityOffsets;
+        private final Map<Attribute, Double> defaultAttributes;
         private final BoundingBox boundingBox;
 
         public EntityEntry(String namespace, Properties main) {
@@ -571,6 +573,26 @@ public final class RegistryData {
                 }
             }
             this.entityOffsets = Map.copyOf(entityOffsets);
+
+            Properties defaultAttributesSection = main.section("defaultAttributes");
+
+            if (defaultAttributesSection == null) {
+                this.defaultAttributes = Map.of();
+            } else {
+                Map<Attribute, Double> attributes = new HashMap<>();
+
+                for (var entry : defaultAttributesSection) {
+                    Attribute attribute = Attribute.fromKey(entry.getKey());
+                    if (attribute == null) continue;
+
+                    Object value = entry.getValue();
+                    if (!(value instanceof Number number)) continue;
+
+                    attributes.put(attribute, number.doubleValue());
+                }
+
+                this.defaultAttributes = attributes.isEmpty() ? Map.of() : Map.copyOf(attributes);
+            }
         }
 
         public Key key() {
@@ -637,6 +659,10 @@ public final class RegistryData {
 
         public BoundingBox boundingBox() {
             return boundingBox;
+        }
+
+        public Map<Attribute, Double> defaultAttributes() {
+            return defaultAttributes;
         }
     }
 

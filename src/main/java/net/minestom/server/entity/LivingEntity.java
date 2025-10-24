@@ -10,7 +10,6 @@ import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.attribute.AttributeOperation;
-import net.minestom.server.entity.attribute.DefaultAttributes;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -99,9 +98,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
-        var defaults = DefaultAttributes.getDefaults(entityType);
-        for (var entry : defaults.entrySet()) {
-            getAttribute(entry.getKey()).setBaseValue(entry.getValue());
+        var defaultAttributes = entityType.registry().defaultAttributes();
+
+        if (!defaultAttributes.isEmpty()) {
+            for (var entry : defaultAttributes.entrySet()) {
+                getAttribute(entry.getKey()).setBaseValue(entry.getValue());
+            }
         }
     }
 

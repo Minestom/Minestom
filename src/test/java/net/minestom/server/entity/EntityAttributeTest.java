@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class EntityAttributeTest {
@@ -93,18 +95,41 @@ public class EntityAttributeTest {
     @Test
     public void testEntityDefaultAttributes() {
         var ironGolem = new EntityCreature(EntityType.IRON_GOLEM);
-        assertEquals(100.0, ironGolem.getAttributeValue(Attribute.MAX_HEALTH), 0.001);
-
         var zombie = new EntityCreature(EntityType.ZOMBIE);
-        assertEquals(20.0, zombie.getAttributeValue(Attribute.MAX_HEALTH), 0.001);
 
-        assertNotNull(ironGolem.getAttribute(Attribute.MAX_HEALTH));
-        assertEquals(100.0, ironGolem.getAttribute(Attribute.MAX_HEALTH).getValue(), 0.001);
+        var golemHealth = ironGolem.getAttribute(Attribute.MAX_HEALTH);
+        assertNotNull(golemHealth);
+        assertEquals(100.0, golemHealth.getBaseValue(), 0.001);
+        assertEquals(golemHealth.getBaseValue(), ironGolem.getAttributeValue(Attribute.MAX_HEALTH), 0.001);
+
+        var zombieHealth = zombie.getAttribute(Attribute.MAX_HEALTH);
+        assertNotNull(zombieHealth);
+        assertEquals(20.0, zombieHealth.getBaseValue(), 0.001);
+        assertEquals(zombieHealth.getBaseValue(), zombie.getAttributeValue(Attribute.MAX_HEALTH), 0.001);
     }
 
     @Test
     public void testEntitySpawnsWithCorrectHealth() {
         var ironGolem = new EntityCreature(EntityType.IRON_GOLEM);
         assertEquals(100.0f, ironGolem.getHealth(), 0.001f);
+    }
+
+    @Test
+    public void testDefaultAttributesFromRegistry() {
+        var golemDefaults = EntityType.IRON_GOLEM.defaultAttributes();
+        assertEquals(100.0, golemDefaults.getOrDefault(Attribute.MAX_HEALTH, Double.NaN), 0.001);
+        assertEquals(0.25, golemDefaults.getOrDefault(Attribute.MOVEMENT_SPEED, Double.NaN), 0.001);
+
+        var zombieDefaults = EntityType.ZOMBIE.defaultAttributes();
+        assertEquals(3.0, zombieDefaults.getOrDefault(Attribute.ATTACK_DAMAGE, Double.NaN), 0.001);
+        assertEquals(20.0, zombieDefaults.getOrDefault(Attribute.MAX_HEALTH, Double.NaN), 0.001);
+
+        assertTrue(EntityType.AREA_EFFECT_CLOUD.defaultAttributes().isEmpty());
+    }
+
+    @Test
+    public void testDefaultAttributesAreImmutable() {
+        var defaults = EntityType.IRON_GOLEM.defaultAttributes();
+        assertThrows(UnsupportedOperationException.class, () -> defaults.put(Attribute.MAX_HEALTH, 1.0));
     }
 }
