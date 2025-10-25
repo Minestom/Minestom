@@ -255,7 +255,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (length < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (length == capacity) throw new IllegalArgumentException("New size is the same as the current size");
         final Arena arena = arenaSupplier.get(); // We need to use a new arena to allow the old one to deallocate.
-        final MemorySegment newSegment = arena.allocate(length);
+        final MemorySegment newSegment = NetworkBufferAllocator.allocate(arena, length);
         MemorySegment.copy(this.segment, 0, newSegment, 0, capacity);
         this.segment = newSegment;
         this.arena = arena;
@@ -282,7 +282,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (arenaSupplier == null) throw new IllegalStateException("Buffer cannot trim without an arena supplier");
         final Arena arena = this.arenaSupplier.get();
         final MemorySegment oldSegment = this.segment;
-        final MemorySegment segment = arena.allocate(readableBytes);
+        final MemorySegment segment = NetworkBufferAllocator.allocate(arena, readableBytes);
         MemorySegment.copy(oldSegment, readIndex, segment, 0, readableBytes);
         this.segment = segment;
         this.arena = arena;
@@ -304,7 +304,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         assertDummy();
         final Settings settingsImpl = (Settings) settings;
         final Arena arena = settingsImpl.arena(); // Get a new arena to copy into.
-        final MemorySegment copySegment = arena.allocate(length); // implicit null check of arena.
+        final MemorySegment copySegment = NetworkBufferAllocator.allocate(arena, length); // implicit null check of arena.
         MemorySegment.copy(this.segment, index, copySegment, 0, length);
         return new NetworkBufferImpl(arena, copySegment, readIndex, writeIndex, settingsImpl.autoResize(), settingsImpl.registries(), settingsImpl.arenaSupplier());
     }
@@ -598,7 +598,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         public NetworkBuffer allocate(long length) {
             final Arena arena = arena();
             return new NetworkBufferImpl(
-                    arena, arena.allocate(length),
+                    arena, NetworkBufferAllocator.allocate(arena, length),
                     0, 0,
                     autoResize, registries, arenaSupplier
             );

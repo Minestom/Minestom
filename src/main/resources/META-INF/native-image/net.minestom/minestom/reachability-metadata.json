@@ -66,17 +66,6 @@
       "type": "java.lang.reflect.RecordComponent"
     },
     {
-      "type": "java.nio.Buffer",
-      "fields": [
-        {
-          "name": "address"
-        },
-        {
-          "name": "capacity"
-        }
-      ]
-    },
-    {
       "type": "java.sql.Date"
     },
     {
@@ -655,5 +644,21 @@
       "module": "jdk.jfr",
       "glob": "jdk/jfr/internal/types/metadata.bin"
     }
-  ]
+  ],
+  "foreign": {
+    "downcalls": [
+      {
+        "returnType": "void*",
+        "parameterTypes": [
+          "jlong"
+        ]
+      },
+      {
+        "returnType": "void",
+        "parameterTypes": [
+          "void*"
+        ]
+      }
+    ]
+  }
 }
