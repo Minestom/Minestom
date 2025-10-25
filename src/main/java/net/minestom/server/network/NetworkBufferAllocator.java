@@ -3,6 +3,8 @@ package net.minestom.server.network;
 import net.minestom.server.ServerFlag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
@@ -29,6 +31,7 @@ import java.util.Objects;
  */
 @ApiStatus.Internal
 final class NetworkBufferAllocator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkBufferAllocator.class);
     // true if we use system malloc and free.
     private static final boolean ENABLE_NATIVE = ServerFlag.FORCE_NATIVE_ALLOCATION
             || (ServerFlag.ATTEMPT_NATIVE_ALLOCATION && NetworkBufferAllocator.class.getModule().isNativeAccessEnabled());
@@ -50,6 +53,7 @@ final class NetworkBufferAllocator {
                     Linker.nativeLinker().defaultLookup().find("free").orElseThrow(),
                     FunctionDescriptor.ofVoid(ValueLayout.ADDRESS)
             );
+            LOGGER.info("Using native malloc/free implementation for NetworkBuffer allocations.");
         } else {
             mallocHandle = null;
             freeHandle = null;
