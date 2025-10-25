@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 10, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(3)
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.SECONDS)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Thread)
 public class NetworkBufferVarIntBenchmark {
 
@@ -27,11 +27,11 @@ public class NetworkBufferVarIntBenchmark {
     public void setup() {
         buffer = NetworkBuffer.staticBuffer(256);
 
-        one = ThreadLocalRandom.current().nextInt(0, 127 + 1);
-        two = ThreadLocalRandom.current().nextInt(0, 16_383 + 1);
-        three = ThreadLocalRandom.current().nextInt(0, 2_097_151 + 1);
-        four = ThreadLocalRandom.current().nextInt(0, 268_435_455 + 1);
-        five = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        one = ThreadLocalRandom.current().nextInt(1, 127 + 1);
+        two = ThreadLocalRandom.current().nextInt(127 + 1, 16_383 + 1);
+        three = ThreadLocalRandom.current().nextInt(16_383 + 1, 2_097_151 + 1);
+        four = ThreadLocalRandom.current().nextInt(2_097_151 + 1, 268_435_455 + 1);
+        five = ThreadLocalRandom.current().nextInt(268_435_455 + 1, Integer.MAX_VALUE);
     }
 
     @Benchmark
@@ -41,31 +41,31 @@ public class NetworkBufferVarIntBenchmark {
     }
 
     @Benchmark
-    public void variantOne() {
+    public void varintOne() {
         buffer.clear();
         buffer.write(NetworkBuffer.VAR_INT, one);
     }
 
     @Benchmark
-    public void variantTwo() {
+    public void varintTwo() {
         buffer.clear();
         buffer.write(NetworkBuffer.VAR_INT, two);
     }
 
     @Benchmark
-    public void variantThree() {
+    public void varintThree() {
         buffer.clear();
         buffer.write(NetworkBuffer.VAR_INT, three);
     }
 
     @Benchmark
-    public void variantFour() {
+    public void varintFour() {
         buffer.clear();
         buffer.write(NetworkBuffer.VAR_INT, four);
     }
 
     @Benchmark
-    public void variantFive() {
+    public void varintFive() {
         buffer.clear();
         buffer.write(NetworkBuffer.VAR_INT, five);
     }
