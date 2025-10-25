@@ -1,6 +1,8 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.EndBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
@@ -422,7 +424,7 @@ public class NetworkBufferTest {
         assertBufferType(STRING, "", new byte[]{0x00});
         assertBufferType(STRING, "h", new byte[]{0x01, 0x68});
         assertBufferType(STRING, "H", new byte[]{0x01, 0x48});
-        assertBufferType(STRING, "Hello World", new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
+        assertBufferType(STRING, "Hello World", new byte[]{0x0B, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64});
         assertBufferType(STRING, "€", new byte[]{0x03, (byte) 0xE2, (byte) 0x82, (byte) 0xAC});
         assertBufferType(STRING, "😀", new byte[]{0x04, (byte) 0xF0, (byte) 0x9F, (byte) 0x98, (byte) 0x80});
     }
@@ -432,7 +434,7 @@ public class NetworkBufferTest {
         assertBufferType(STRING_TERMINATED, "", new byte[]{0x00});
         assertBufferType(STRING_TERMINATED, "h", new byte[]{0x68, 0x00});
         assertBufferType(STRING_TERMINATED, "H", new byte[]{0x48, 0x00});
-        assertBufferType(STRING_TERMINATED, "Hello World", new byte[]{0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x00});
+        assertBufferType(STRING_TERMINATED, "Hello World", new byte[]{0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64, 0x00});
         assertBufferType(STRING_TERMINATED, "€", new byte[]{(byte) 0xE2, (byte) 0x82, (byte) 0xAC, 0x00});
         assertBufferType(STRING_TERMINATED, "😀", new byte[]{(byte) 0xF0, (byte) 0x9F, (byte) 0x98, (byte) 0x80, 0x00});
     }
@@ -442,7 +444,7 @@ public class NetworkBufferTest {
         assertBufferType(STRING_IO_UTF8, "", new byte[]{0x00, 0x00});
         assertBufferType(STRING_IO_UTF8, "h", new byte[]{0x00, 0x01, 0x68});
         assertBufferType(STRING_IO_UTF8, "H", new byte[]{0x00, 0x01, 0x48});
-        assertBufferType(STRING_IO_UTF8, "Hello World", new byte[]{0x00, 0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
+        assertBufferType(STRING_IO_UTF8, "Hello World", new byte[]{0x00, 0x0B, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64});
         assertBufferType(STRING_IO_UTF8, "€", new byte[]{0x00, 0x03, (byte) 0xE2, (byte) 0x82, (byte) 0xAC});
         assertBufferType(STRING_IO_UTF8, "😀", new byte[]{0x00, 0x06, (byte) 0xED, (byte) 0xA0, (byte) 0xBD, (byte) 0xED, (byte) 0xB8, (byte) 0x80});
     }
@@ -451,6 +453,16 @@ public class NetworkBufferTest {
     public void nbt() {
         assertBufferType(NetworkBuffer.NBT, intBinaryTag(5));
         assertBufferType(NetworkBuffer.NBT, CompoundBinaryTag.from(Map.of("key", intBinaryTag(5))));
+    }
+
+    @Test
+    public void optNBT() {
+        assertBufferType(OPTIONAL_NBT, intBinaryTag(5));
+        assertBufferType(OPTIONAL_NBT, CompoundBinaryTag.from(Map.of("key", intBinaryTag(5))));
+
+        // Ensure its End Tag
+        assertBufferType(OPTIONAL_NBT, null, new byte[] {0x00});
+        assertBufferType(OPTIONAL_NBT_COMPOUND, null, new byte[] {0x00});
     }
 
     @Test
@@ -741,7 +753,7 @@ public class NetworkBufferTest {
     }
 
     interface Action<T> {
-        void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value);
+        void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, T value);
 
         T read(NetworkBuffer buffer, NetworkBuffer.Type<T> type);
     }

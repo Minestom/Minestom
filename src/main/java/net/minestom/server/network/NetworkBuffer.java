@@ -99,7 +99,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.StringIOUTFType();
     Type<BinaryTag> NBT = NetworkBufferTypeImpl.NbtType.typed();
     Type<CompoundBinaryTag> NBT_COMPOUND = NetworkBufferTypeImpl.NbtType.typed();
+    // TAG_END special encoding for nullables.
     Type<@Nullable BinaryTag> OPTIONAL_NBT = NetworkBufferTypeImpl.OptionalNBTType.typed();
+    // TAG_END special encoding for nullables.
     Type<@Nullable CompoundBinaryTag> OPTIONAL_NBT_COMPOUND = NetworkBufferTypeImpl.OptionalNBTType.typed();
     Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();

@@ -3,6 +3,7 @@ package net.minestom.server.network;
 import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.EndBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
@@ -428,8 +429,11 @@ final class NetworkBufferTypeImpl {
         }
 
         @Override
-        public BinaryTag read(NetworkBuffer buffer) {
-            return NbtType.TYPE.read(buffer);
+        public @Nullable BinaryTag read(NetworkBuffer buffer) {
+            var type = NbtType.TYPE.read(buffer);
+            // TAG_END == null
+            if (type == EndBinaryTag.endBinaryTag()) return null;
+            return type;
         }
     }
 
