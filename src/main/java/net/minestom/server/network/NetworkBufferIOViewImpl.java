@@ -51,7 +51,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public int readUnsignedByte() {
-        return buffer.read(BYTE) & 0xFF;
+        return buffer.read(UNSIGNED_BYTE);
     }
 
     @Override
@@ -61,7 +61,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public int readUnsignedShort() {
-        return buffer.read(SHORT) & 0xFFFF;
+        return buffer.read(UNSIGNED_SHORT);
     }
 
     @Override
