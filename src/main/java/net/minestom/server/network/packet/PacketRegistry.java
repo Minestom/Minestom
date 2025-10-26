@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public interface PacketRegistry<T> {
     @UnknownNullability
@@ -48,6 +49,11 @@ public interface PacketRegistry<T> {
     @Unmodifiable Collection<PacketInfo<T>> packets();
 
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
+        public PacketInfo {
+            Objects.requireNonNull(packetClass, "packetClass");
+            Check.argCondition(id < 0, "id `{0}` must be non negative", id);
+            Objects.requireNonNull(serializer, "serializer");
+        }
     }
 
     abstract sealed class Client<T extends ClientPacket> extends PacketRegistryTemplate<ClientPacket> {
@@ -491,8 +497,8 @@ public interface PacketRegistry<T> {
 
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
             public Entry {
-                Check.notNull(type, "Type cannot be null");
-                Check.notNull(reader, "Packet reader cannot be null");
+                Objects.requireNonNull(type, "type");
+                Objects.requireNonNull(reader, "reader");
             }
         }
 
