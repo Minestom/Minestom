@@ -59,4 +59,17 @@ final class NetworkBufferStaticImpl extends NetworkBufferImpl {
     public void trim() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof NetworkBufferStaticImpl that)) return false;
+        return Objects.equals(arena, that.arena) && segment.equals(that.segment);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(arena);
+        result = 31 * result + segment.hashCode();
+        return result;
+    }
 }

@@ -90,7 +90,6 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
     }
 
     @Override
-    @Deprecated
     public String readLine() {
         throw new UnsupportedOperationException("Deprecated method readLine() called, not implemented");
     }

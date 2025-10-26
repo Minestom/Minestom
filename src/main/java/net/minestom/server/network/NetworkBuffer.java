@@ -1213,6 +1213,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          */
         @Override
         @Deprecated
+        @Contract("-> fail")
         String readLine();
 
         // Override DataInput methods to remove checked exceptions
