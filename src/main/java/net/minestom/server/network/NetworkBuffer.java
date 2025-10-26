@@ -434,11 +434,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Sets the buffer to be read only, this cannot be undone, instead you must copy the buffer.
      * <br>
-     * While the current implementation does set this buffer to read only;
-     * it may in the future not provide this and instead only provide a read only copy.
-     * @return this, may change in the future to return new.
+     * It preforms this operation by creating a new static {@link NetworkBuffer}.
+     * @return new static buffer
      */
-    @Contract(mutates = "this", value = "-> this")
+    @Contract(mutates = "this", value = "-> new")
     NetworkBuffer readOnly();
 
     /**
@@ -488,7 +487,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void compact();
 
     /**
-     * Creates a copy of the buffer trimmed and assigns it to this {@link NetworkBuffer}.
+     * Resizes this buffer to be trimmed and assigns it to this {@link NetworkBuffer}.
      * <br>
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
      */

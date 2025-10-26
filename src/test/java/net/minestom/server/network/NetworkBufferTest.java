@@ -577,7 +577,7 @@ public class NetworkBufferTest {
 
     @Test
     public void testTrim() {
-        var buffer = NetworkBuffer.staticBuffer(256);
+        var buffer = NetworkBuffer.resizableBuffer(256);
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         buffer.write(VAR_INT, Integer.MAX_VALUE);
         buffer.write(RAW_BYTES, stringBytes);
