@@ -49,8 +49,6 @@ public final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
     @Override
     public void resize(long length) {
         Check.argCondition(length < 0, "Length must be non-negative found {0}", length);
-        assertDummy();
-        assertReadOnly();
         final long capacity = capacity();
         if (length < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (length == capacity) throw new IllegalArgumentException("New size is the same as the current size");
@@ -63,8 +61,6 @@ public final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
 
     @Override
     public void trim() {
-        assertDummy();
-        assertReadOnly();
         final long readableBytes = readableBytes();
         if (readableBytes == capacity()) return;
         final Arena arena = this.arenaSupplier.get();
