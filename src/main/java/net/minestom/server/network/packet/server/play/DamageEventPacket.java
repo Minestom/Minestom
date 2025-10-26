@@ -14,7 +14,7 @@ import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
  *
  * @param targetEntityId ID of the entity being damaged
  * @param damageTypeId   ID of damage type
- * @param sourceEntityId 0 if there is no source entity, otherwise it is entityId + 1
+ * @param sourceEntityId 0 if there is no source entity, otherwise it is id + 1
  * @param sourceDirectId 0 if there is no direct source. For direct attacks (e.g. melee), this is the same as sourceEntityId. For indirect attacks (e.g. projectiles), this is the projectile entity id + 1
  * @param sourcePos      null if there is no source position, otherwise the position of the source
  */

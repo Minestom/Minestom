@@ -37,13 +37,13 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
 
         @Override
         public MapDataPacket read(NetworkBuffer buffer) {
-            var mapId = buffer.read(VAR_INT);
-            var scale = buffer.read(BYTE);
-            var locked = buffer.read(BOOLEAN);
-            var trackingPosition = buffer.read(BOOLEAN);
+            int mapId = buffer.read(VAR_INT);
+            byte scale = buffer.read(BYTE);
+            boolean locked = buffer.read(BOOLEAN);
+            boolean trackingPosition = buffer.read(BOOLEAN);
             List<Icon> icons = trackingPosition ? buffer.read(Icon.SERIALIZER.list(MAX_ICONS)) : List.of();
 
-            var columns = buffer.read(BYTE);
+            byte columns = buffer.read(BYTE);
             if (columns <= 0) return new MapDataPacket(mapId, scale, locked, trackingPosition, icons, null);
             byte rows = buffer.read(BYTE);
             byte x = buffer.read(BYTE);

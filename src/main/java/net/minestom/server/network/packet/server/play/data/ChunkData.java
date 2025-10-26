@@ -48,6 +48,7 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
                 buffer.write(BYTE, (byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
                 buffer.write(SHORT, (short) point.blockY()); // y
 
+                assert registry.blockEntityType() != null : "block %s was not a block entity inside blockEntities".formatted(registry.key());
                 buffer.write(BlockEntityType.NETWORK_TYPE, registry.blockEntityType());
                 final CompoundBinaryTag nbt = BlockUtils.extractClientNbt(block);
                 assert nbt != null;

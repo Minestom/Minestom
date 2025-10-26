@@ -809,7 +809,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * @return the new union type for {@link T} using {@link R}
          * @param <R> the union type
          */
-        @Contract(pure = true, value = "_, _, _ -> new")
+        @Contract(pure = true, value = "_, _ -> new")
         default <R> Type<R> unionType(Function<T, NetworkBuffer.Type<? extends R>> serializers, Function<R, ? extends T> keyFunc) {
             return new NetworkBufferTypeImpl.UnionType<>(this, keyFunc, serializers);
         }

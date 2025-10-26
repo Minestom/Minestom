@@ -151,10 +151,10 @@ public record AdvancementsPacket(
                 var description = buffer.read(NetworkBuffer.COMPONENT);
                 var icon = buffer.read(ItemStack.NETWORK_TYPE);
                 var frameType = FrameType.values()[buffer.read(NetworkBuffer.VAR_INT)];
-                var flags = buffer.read(NetworkBuffer.INT);
+                int flags = buffer.read(NetworkBuffer.INT);
                 var backgroundTexture = (flags & 0x1) != 0 ? buffer.read(NetworkBuffer.STRING) : null;
-                var x = buffer.read(NetworkBuffer.FLOAT);
-                var y = buffer.read(NetworkBuffer.FLOAT);
+                float x = buffer.read(NetworkBuffer.FLOAT);
+                float y = buffer.read(NetworkBuffer.FLOAT);
                 return new DisplayData(title, description,
                         icon, frameType,
                         flags, backgroundTexture,
