@@ -794,7 +794,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         /**
          * Creates an optional type for {@link T}, which allows it to have null values.
          * <br>
-         * Note the encoding prefixes all {@link T} with a true/false if the value is null or not.
+         * Note the encoding prefixes all {@link T} behind {@link #BOOLEAN} where its value if {@link T} is not null.
+         * For example a not null {@link T} would be true, and {@code null} would be false.
          * @return the new optional type
          */
         @Contract(pure = true, value = "-> new")
