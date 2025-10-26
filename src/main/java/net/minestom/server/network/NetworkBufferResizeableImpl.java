@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.foreign.Arena;
@@ -9,7 +10,14 @@ import java.lang.foreign.MemorySegment;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
+/**
+ * Represents {@link #resizableBuffer(long, Registries)}.
+ * <br>
+ * Which are the most commonly used when the bounds of the application are unknown for example {@link #makeArray(Type, Object)}.
+ * These will be converted into {@link NetworkBufferStaticImpl} if applicable, for example {@link #readOnly()}.
+ */
+@ApiStatus.Internal
+final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
     private final AutoResize autoResize;
     private final Supplier<Arena> arenaSupplier;
 
