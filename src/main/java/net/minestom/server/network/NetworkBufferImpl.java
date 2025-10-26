@@ -242,7 +242,7 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     @Override
     public final NetworkBuffer copy(NetworkBuffer.Settings settings, long index, long length, long readIndex, long writeIndex) {
         assertDummy();
-        NetworkBufferImpl newBuffer = (NetworkBufferImpl) settings.allocate(length);
+        final NetworkBufferImpl newBuffer = (NetworkBufferImpl) settings.allocate(length);
         MemorySegment.copy(this.segment(), index, newBuffer.segment(), 0, length);
         return newBuffer.index(readIndex, writeIndex);
     }
@@ -456,8 +456,8 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
 
     static void copy(NetworkBuffer srcBuffer, long srcOffset,
                      NetworkBuffer dstBuffer, long dstOffset, long length) {
-        var src = impl(srcBuffer);
-        var dst = impl(dstBuffer);
+        final var src = impl(srcBuffer);
+        final var dst = impl(dstBuffer);
         src.assertDummy();
         dst.assertDummy();
         dst.assertReadOnly();
