@@ -12,21 +12,21 @@ import java.util.Objects;
 
 /**
  * Allocator for {@link NetworkBuffer} segments that attempts to use native memory segments via
- * {@code malloc} and {@code free} instead of the default {@link java.lang.foreign.Arena} allocator.
+ * {@code malloc} and {@code free} instead of the default {@link Arena} allocator.
  *
  * <p>
- * The default {@link java.lang.foreign.Arena} implementation often uses a modified {@code calloc}
+ * The default {@link Arena} implementation often uses a modified {@code calloc}
  * approach which zeros all allocated memory for safety. This bypasses that zeroing
  * by using {@code malloc} (which does not zero memory),
  * as zeroing is unnecessary for {@link NetworkBuffer} use case, providing a performance benefit.
  * </p>
- *
+ * <p>
  * This custom native allocation is not forcefully enabled by default, unless:
  * <ul>
  * <li>When permitted by {@link Module#isNativeAccessEnabled()} behind
- * ({@link net.minestom.server.ServerFlag#ATTEMPT_NATIVE_ALLOCATION}).</li>
+ * ({@link ServerFlag#ATTEMPT_NATIVE_ALLOCATION}).</li>
  * <li>When explicitly requested by the user
- * ({@link net.minestom.server.ServerFlag#FORCE_NATIVE_ALLOCATION}).</li>
+ * ({@link ServerFlag#FORCE_NATIVE_ALLOCATION}).</li>
  * </ul>
  */
 @ApiStatus.Internal
