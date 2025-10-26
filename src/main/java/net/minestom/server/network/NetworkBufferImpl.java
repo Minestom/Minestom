@@ -49,7 +49,9 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     }
 
     protected abstract MemorySegment segment();
+
     protected abstract @Nullable Arena arena();
+
     protected abstract @Nullable AutoResize autoResize();
 
     @Override
@@ -204,14 +206,14 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     @Override
     public abstract boolean isReadOnly();
 
-    protected abstract void ensureCapacity(long length);
-
     @Override
     public final void ensureWritable(long length) {
         Check.argCondition(length < 0, "Length must be non-negative found {0}", length);
         if (writableBytes() >= length) return;
         ensureCapacity(writeIndex() + length);
     }
+
+    protected abstract void ensureCapacity(long length);
 
     @Override
     public final void ensureReadable(long length) {
@@ -499,7 +501,8 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
         if (isDummy()) throw new UnsupportedOperationException("Buffer is a dummy buffer");
     }
 
-    record Settings(Supplier<Arena> arenaSupplier, @Nullable AutoResize autoResize, @Nullable Registries registries) implements NetworkBuffer.Settings {
+    record Settings(Supplier<Arena> arenaSupplier, @Nullable AutoResize autoResize,
+                    @Nullable Registries registries) implements NetworkBuffer.Settings {
         static final Settings STATIC = new Settings(Arena::ofAuto, null, null);
         static final Settings RESIZEABLE = STATIC.autoResize(AutoResize.DOUBLE);
 
