@@ -38,13 +38,13 @@ public final class NetworkBufferStaticImpl extends NetworkBufferImpl {
     }
 
     @Override
-    public void ensureCapacity(long requestedSize) {
-        throw new IndexOutOfBoundsException();
+    protected boolean isDummy() {
+        return segment == MemorySegment.NULL;
     }
 
     @Override
-    protected boolean isDummy() {
-        return segment == MemorySegment.NULL;
+    public void ensureCapacity(long requestedSize) {
+        throw new IndexOutOfBoundsException();
     }
 
     @Override

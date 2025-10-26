@@ -47,6 +47,11 @@ public final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
     }
 
     @Override
+    protected boolean isDummy() {
+        return false;
+    }
+
+    @Override
     public void resize(long length) {
         Check.argCondition(length < 0, "Length must be non-negative found {0}", length);
         final long capacity = capacity();
@@ -84,11 +89,6 @@ public final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
             throw new IndexOutOfBoundsException("Buffer is full below the target size: " + newCapacity + " -> " + targetSize);
         }
         resize(newCapacity);
-    }
-
-    @Override
-    protected boolean isDummy() {
-        return false;
     }
 
 

@@ -203,8 +203,7 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
         return new NetworkBufferStaticImpl(arena(), segment().asReadOnly(), readIndex, writeIndex, registries);
     }
 
-    @Override
-    public abstract boolean isReadOnly();
+    protected abstract boolean isDummy();
 
     @Override
     public final void ensureWritable(long length) {
@@ -372,8 +371,6 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
         return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, autoResize=%s, readOnly=%s}",
                 readIndex, writeIndex, capacity(), registries() != null, this.autoResize() != null, isReadOnly());
     }
-
-    protected abstract boolean isDummy();
 
     // Internal writing methods
     final void _putBytes(long index, byte[] value) {
