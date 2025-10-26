@@ -45,11 +45,6 @@ final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
     }
 
     @Override
-    protected AutoResize autoResize() {
-        return autoResize;
-    }
-
-    @Override
     public boolean isReadOnly() {
         return false;
     }
@@ -89,8 +84,7 @@ final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
     @Override
     public void ensureCapacity(long targetSize) {
         final long capacity = capacity();
-        final AutoResize strategy = this.autoResize();
-        final long newCapacity = strategy.resize(capacity, targetSize);
+        final long newCapacity = this.autoResize.resize(capacity, targetSize);
         if (newCapacity <= capacity)
             throw new IndexOutOfBoundsException("Buffer is full has been resized to the same capacity: " + capacity + " -> " + targetSize);
         if (targetSize > newCapacity) {

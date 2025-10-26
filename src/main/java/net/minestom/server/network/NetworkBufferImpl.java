@@ -52,8 +52,6 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
 
     protected abstract @Nullable Arena arena();
 
-    protected abstract @Nullable AutoResize autoResize();
-
     @Override
     public final <T> void write(Type<T> type, @UnknownNullability T value) {
         assertReadOnly();
@@ -244,16 +242,9 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     @Override
     public final NetworkBuffer copy(NetworkBuffer.Settings settings, long index, long length, long readIndex, long writeIndex) {
         assertDummy();
-        final Settings settingsImpl = (Settings) settings;
-        final Arena arena = settingsImpl.arena(); // Get a new arena to copy into.
-        final MemorySegment copySegment = NetworkBufferAllocator.allocate(arena, length); // implicit null check of arena.
-        MemorySegment.copy(this.segment(), index, copySegment, 0, length);
-        final AutoResize autoResize = settingsImpl.autoResize();
-        if (autoResize != null) {
-            return new NetworkBufferResizeableImpl(arena, copySegment, readIndex, writeIndex, autoResize, settingsImpl.registries(), settingsImpl.arenaSupplier());
-        } else {
-            return new NetworkBufferStaticImpl(arena, copySegment, readIndex, writeIndex, settingsImpl.registries());
-        }
+        NetworkBufferImpl newBuffer = (NetworkBufferImpl) settings.allocate(length);
+        MemorySegment.copy(this.segment(), index, newBuffer.segment(), 0, length);
+        return newBuffer.index(readIndex, writeIndex);
     }
 
     @Override
@@ -369,7 +360,7 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     @Override
     public final String toString() {
         return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, autoResize=%s, readOnly=%s}",
-                readIndex, writeIndex, capacity(), registries() != null, this.autoResize() != null, isReadOnly());
+                readIndex, writeIndex, capacity(), registries() != null, this instanceof NetworkBufferResizeableImpl, isReadOnly());
     }
 
     // Internal writing methods

@@ -36,11 +36,6 @@ final class NetworkBufferStaticImpl extends NetworkBufferImpl {
     }
 
     @Override
-    protected @Nullable AutoResize autoResize() {
-        return null;
-    }
-
-    @Override
     public boolean isReadOnly() {
         return segment().isReadOnly();
     }
