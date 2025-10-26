@@ -75,6 +75,7 @@ public final class PacketViewableUtils {
 
     private static final class ViewableStorage {
         private static final ObjectPool<NetworkBuffer> POOL = ObjectPool.pool(
+                ServerFlag.VIEWABLE_POOL_SIZE,
                 () -> NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
                 NetworkBuffer::clear);
         // Player id -> list of offsets to ignore (32:32 bits)

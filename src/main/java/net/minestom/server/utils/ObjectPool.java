@@ -16,22 +16,22 @@ import java.util.function.UnaryOperator;
 @ApiStatus.Internal
 @ApiStatus.Experimental
 public final class ObjectPool<T> {
-    private static final int QUEUE_SIZE = 32_768;
     private static final Cleaner CLEANER = Cleaner.create();
 
-    private final MessagePassingQueue<SoftReference<T>> pool = new MpmcUnboundedXaddArrayQueue<>(QUEUE_SIZE);
+    private final MessagePassingQueue<SoftReference<T>> pool;
     private final Supplier<T> supplier;
     private final UnaryOperator<T> sanitizer;
 
-    public static <T> ObjectPool<T> pool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
-        return new ObjectPool<>(supplier, sanitizer);
+    public static <T> ObjectPool<T> pool(int size, Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+        return new ObjectPool<>(size, supplier, sanitizer);
     }
 
-    public static <T> ObjectPool<T> pool(Supplier<T> supplier) {
-        return new ObjectPool<>(supplier, UnaryOperator.identity());
+    public static <T> ObjectPool<T> pool(int size, Supplier<T> supplier) {
+        return new ObjectPool<>(size, supplier, UnaryOperator.identity());
     }
 
-    private ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+    private ObjectPool(int chunkSize, Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+        this.pool = new MpmcUnboundedXaddArrayQueue<>(chunkSize); // TODO support 0.
         this.supplier = supplier;
         this.sanitizer = sanitizer;
     }

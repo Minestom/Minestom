@@ -41,6 +41,12 @@ public final class ServerFlag {
     public static final boolean ATTEMPT_NATIVE_ALLOCATION = booleanProperty("minestom.attempt-native-allocation", true);
     public static final boolean FORCE_NATIVE_ALLOCATION = booleanProperty("minestom.force-native-allocation", false);
 
+    // Network object pooling
+    public static final int DECOMPRESS_POOL_SIZE = intProperty("minestom.decompress-pool-size", 32_767);
+    public static final int COMPRESS_POOL_SIZE = intProperty("minestom.compress-pool-size", 32_767);
+    public static final int PACKET_POOL_SIZE = intProperty("minestom.packet-buffer-pool-size", 32_767);
+    public static final int VIEWABLE_POOL_SIZE = intProperty("minestom.viewable-pool-size", 32_767);
+
     // Chunk update
     public static final float MIN_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.min-per-tick", 0.01f);
     public static final float MAX_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.max-per-tick", 64.0f);

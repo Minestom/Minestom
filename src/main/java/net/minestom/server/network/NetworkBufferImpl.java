@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.validate.Check;
@@ -303,7 +304,7 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
 
         // Use the JVM lazy loading to ignore these until compression is required.
         final class DeflaterPoolHolder {
-            private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
+            private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(ServerFlag.COMPRESS_POOL_SIZE, Deflater::new);
         }
 
         Deflater deflater = DeflaterPoolHolder.DEFLATER_POOL.get();
@@ -332,7 +333,7 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
 
         // Use the JVM lazy loading to ignore these until decompression is required.
         final class InflaterPoolHolder {
-            private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
+            private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(ServerFlag.DECOMPRESS_POOL_SIZE, Inflater::new);
         }
 
         Inflater inflater = InflaterPoolHolder.INFLATER_POOL.get();
