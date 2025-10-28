@@ -34,6 +34,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
             "respawn_anchor_works", Codec.BOOLEAN, DimensionType::respawnAnchorWorks,
             "has_raids", Codec.BOOLEAN, DimensionType::hasRaids,
             "logical_height", Codec.INT, DimensionType::logicalHeight,
+            "cloud_height", Codec.INT.optional(), DimensionType::cloudHeight,
             "min_y", Codec.INT, DimensionType::minY,
             "height", Codec.INT, DimensionType::height,
             "infiniburn", Codec.STRING, DimensionType::infiniburn,
@@ -45,11 +46,11 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
     static DimensionType create(
             boolean ultrawarm, boolean natural, double coordinateScale, boolean hasSkylight, boolean hasCeiling,
             float ambientLight, @Nullable Long fixedTime, boolean piglinSafe, boolean bedWorks, boolean respawnAnchorWorks,
-            boolean hasRaids, int logicalHeight, int minY, int height, String infiniburn, Key effects,
+            boolean hasRaids, int logicalHeight, @Nullable Integer cloudHeight, int minY, int height, String infiniburn, Key effects,
             int monsterSpawnBlockLightLimit, int monsterSpawnLightLevel
     ) {
         return new DimensionTypeImpl(ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
-                fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
+                fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, cloudHeight, minY, height,
                 infiniburn, effects, monsterSpawnBlockLightLimit, monsterSpawnLightLevel);
     }
 
@@ -91,6 +92,8 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
 
     int logicalHeight();
 
+    @Nullable Integer cloudHeight();
+
     int minY();
 
     default int maxY() {
@@ -119,12 +122,13 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         private boolean hasSkylight = true;
         private boolean hasCeiling = false;
         private float ambientLight = 0f;
-        private Long fixedTime = null;
+        private @Nullable Long fixedTime = null;
         private boolean piglinSafe = false;
         private boolean bedWorks = true;
         private boolean respawnAnchorWorks = false;
         private boolean hasRaids = true;
         private int logicalHeight = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
+        private @Nullable Integer cloudHeight = 192;
         private int minY = VANILLA_MIN_Y;
         private int height = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
         private String infiniburn = "#minecraft:infiniburn_overworld";
@@ -206,6 +210,12 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         }
 
         @Contract(value = "_ -> this", pure = true)
+        public Builder cloudHeight(@Nullable Integer cloudHeight) {
+            this.cloudHeight = cloudHeight;
+            return this;
+        }
+
+        @Contract(value = "_ -> this", pure = true)
         public Builder minY(int minY) {
             this.minY = minY;
             return this;
@@ -238,7 +248,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         public DimensionType build() {
             return new DimensionTypeImpl(
                     ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
-                    fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
+                    fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, cloudHeight, minY, height,
                     infiniburn, effects, 0, 0
             );
         }
