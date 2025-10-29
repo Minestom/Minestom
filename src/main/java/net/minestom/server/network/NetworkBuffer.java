@@ -456,8 +456,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Resize the buffer to the new {@link #capacity()} using the current settings.
      * @param length the new size
      * @throws IllegalArgumentException if {@code length < 0}
-     * @throws IllegalStateException if the buffer cannot be resized
      * @throws IllegalArgumentException if the new size is less than or equal to the current {@link #capacity()}.
+     * @throws UnsupportedOperationException if the buffer cannot be resized
      * @throws UnsupportedOperationException if the buffer is a dummy
      * @throws UnsupportedOperationException if the buffer is read only
      */
@@ -470,7 +470,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param length the length to ensure
      * @throws IllegalArgumentException if {@code length < 0}
      * @throws IndexOutOfBoundsException if the resize does not permit the length to be written
-     * @throws RuntimeException for any error in {@link #resize(long)}
+     * @throws IndexOutOfBoundsException if the buffer is static and needs to be resized.
      */
     @Contract(mutates = "this")
     void ensureWritable(@Range(from = 0, to = Long.MAX_VALUE) long length);
@@ -574,11 +574,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Creates a slice from the starting index to the length passing the read index and write index supplied
      * backed by the current {@link NetworkBuffer}
+     * <br>
+     * Note: if the buffer is resizable this cannot be guaranteed to be a view.
      * @param index the starting index
      * @param length the length
      * @param readIndex the new read index
      * @param writeIndex the new write index
-     * @return the network buffer slice which can error when of backing reference arena falls out of scope. (resizing)
+     * @return the network buffer slice
      */
     @Contract(pure = true, value = "_, _, _, _ -> new")
     NetworkBuffer slice(long index, long length, long readIndex, long writeIndex);
