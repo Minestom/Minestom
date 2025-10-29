@@ -15,6 +15,7 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.*;
 
 import javax.crypto.Cipher;
@@ -141,6 +142,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract(pure = true, value = "_ -> new")
     static <E extends Enum<E>> Type<E> Enum(Class<E> enumClass) {
+        Objects.requireNonNull(enumClass, "enumClass");
         final E[] values = enumClass.getEnumConstants();
         return VAR_INT.transform(integer -> values[integer], Enum::ordinal);
     }
@@ -159,6 +161,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Creates a fixed bit set type with the specified length.
      * @param length the length
+     * @throws IllegalArgumentException if {@code length} is less than zero
      * @return the type
      */
     @Contract(pure = true, value = "_ -> new")
@@ -169,11 +172,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Creates a type that reads/writes in {@code length} bytes.
      * @param length the length
+     * @throws IllegalArgumentException if {@code length} is less than zero
      * @return the new type
      */
     @Contract(pure = true, value = "_ -> new")
     static Type<byte[]> FixedRawBytes(int length) {
-        return new NetworkBufferTypeImpl.RawBytesType(length);
+        Check.argCondition(length < 0, "Length is negative found {0}", length);
+        return new NetworkBufferTypeImpl.RawBytesType(length); // Cant check in here since -1 is used for RAW_BYTES.
     }
 
     /**

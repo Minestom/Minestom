@@ -420,6 +420,49 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void fixedRawBytes() {
+        var array = new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64};
+        NetworkBuffer buffer = NetworkBuffer.wrap(array, 0, array.length);
+        var outBytes = buffer.read(FixedRawBytes(10));
+        assertEquals(10, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+        assertArrayEquals(Arrays.copyOf(array, 10), outBytes);
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(FixedRawBytes(10)));
+        assertArrayEquals(Arrays.copyOfRange(array, 10, 12), buffer.read(RAW_BYTES));
+    }
+
+    @Test
+    public void enumVarInt() {
+        enum Enums {
+            ONE,
+            TWO,
+            THREE,
+            FOUR,
+            FIVE,
+            SIX,
+            SEVEN,
+            EIGHT
+        }
+        var type = EnumSet(Enums.class);
+        assertBufferType(type, EnumSet.of(Enums.ONE, Enums.TWO), new byte[]{0x03});
+        assertBufferType(type, EnumSet.of(Enums.THREE), new byte[]{0x04});
+        assertBufferType(type, EnumSet.of(Enums.FOUR), new byte[]{0x08});
+        assertBufferType(type, EnumSet.of(Enums.FIVE), new byte[]{0x10});
+        assertBufferType(type, EnumSet.of(Enums.SIX), new byte[]{0x20});
+    }
+
+    @Test
+    public void fixedBitSet() {
+        var bitSet = new BitSet();
+        bitSet.set(0, true);
+        bitSet.set(1, false);
+        bitSet.set(2, true);
+        assertBufferType(FixedBitSet(3), bitSet, new byte[]{0x05});
+        bitSet.set(4, true);
+        assertBufferType(FixedBitSet(5), bitSet, new byte[]{0x15});
+    }
+
+    @Test
     public void string() {
         assertBufferType(STRING, "", new byte[]{0x00});
         assertBufferType(STRING, "h", new byte[]{0x01, 0x68});

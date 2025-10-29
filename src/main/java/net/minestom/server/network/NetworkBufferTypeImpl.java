@@ -324,7 +324,7 @@ final class NetworkBufferTypeImpl {
                 throw new IllegalArgumentException("Invalid length: " + value.length + " != " + length);
             }
             final int length = value.length;
-            if (length == 0) return;
+            if (length == 0) return; // TODO, should we allow zero length when length is fixed?
             buffer.ensureWritable(length);
             impl(buffer)._putBytes(buffer.writeIndex(), value);
             buffer.advanceWrite(length);
@@ -332,9 +332,9 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public byte[] read(NetworkBuffer buffer) {
-            long length = buffer.readableBytes();
-            if (this.length != -1) {
-                length = Math.min(length, this.length);
+            long length = this.length;
+            if (this.length == -1) {
+                length = buffer.readableBytes();
             }
             if (length == 0) return new byte[0];
             buffer.ensureReadable(length);
@@ -751,14 +751,12 @@ final class NetworkBufferTypeImpl {
             for (int i = 0; i < values.length; ++i) {
                 bitSet.set(i, value.contains(values[i]));
             }
-            final byte[] array = bitSet.toByteArray();
-            buffer.write(RAW_BYTES, array);
+            buffer.write(FixedBitSet(values.length), bitSet);
         }
 
         @Override
         public EnumSet<E> read(NetworkBuffer buffer) {
-            final byte[] array = buffer.read(FixedRawBytes((values.length + 7) / 8));
-            BitSet bitSet = BitSet.valueOf(array);
+            final BitSet bitSet = buffer.read(FixedBitSet(values.length));
             EnumSet<E> enumSet = EnumSet.noneOf(enumType);
             for (int i = 0; i < values.length; ++i) {
                 if (bitSet.get(i)) {
@@ -776,18 +774,16 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public void write(NetworkBuffer buffer, BitSet value) {
-            final int setLength = value.length();
-            if (setLength > length) {
-                throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
-            } else {
-                final byte[] array = value.toByteArray();
-                buffer.write(RAW_BYTES, array);
+            if (value.length() > length) {
+                throw new IllegalArgumentException("BitSet is larger than expected size (" + value.length() + ">" + length + ")");
             }
+            final byte[] array = value.toByteArray();
+            buffer.write(RAW_BYTES, Arrays.copyOf(array, (length + 7) / Long.BYTES));
         }
 
         @Override
         public BitSet read(NetworkBuffer buffer) {
-            final byte[] array = buffer.read(FixedRawBytes((length + 7) / 8));
+            final byte[] array = buffer.read(FixedRawBytes((length + 7) / Long.BYTES));
             return BitSet.valueOf(array);
         }
     }
