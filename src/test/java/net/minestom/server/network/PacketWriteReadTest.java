@@ -14,7 +14,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementAction;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.crypto.*;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
@@ -26,7 +25,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.debug.DebugSubscription;
-import net.minestom.server.network.debug.info.DebugBrainDump;
 import net.minestom.server.network.debug.info.DebugHiveInfo;
 import net.minestom.server.network.debug.info.DebugPathInfo;
 import net.minestom.server.network.debug.info.DebugPoiInfo;
@@ -65,6 +63,7 @@ import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticCategory;
 import net.minestom.server.utils.Rotation;
@@ -72,11 +71,12 @@ import net.minestom.server.world.Difficulty;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.security.PublicKey;
+import java.lang.foreign.Arena;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
@@ -647,13 +647,13 @@ public class PacketWriteReadTest {
 
     @ParameterizedTest(name = "Server Packet Test: {1}")
     @MethodSource("serverPacketArguments")
-    void serverTest(NetworkBuffer.Type<ServerPacket> serializer, ServerPacket packet, Env env) {
+    void serverPacket(NetworkBuffer.Type<ServerPacket> serializer, ServerPacket packet, Env env) {
         testPacket(serializer, packet, env);
     }
 
     @ParameterizedTest(name = "Client Packet Test: {1}")
     @MethodSource("clientPacketArguments")
-    void clientTest(NetworkBuffer.Type<ClientPacket> serializer, ClientPacket packet, Env env) {
+    void clientPacket(NetworkBuffer.Type<ClientPacket> serializer, ClientPacket packet, Env env) {
         testPacket(serializer, packet, env);
     }
 }
