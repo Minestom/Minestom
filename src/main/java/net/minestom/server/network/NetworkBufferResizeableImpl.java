@@ -87,7 +87,7 @@ final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
     }
 
     @Override
-    public void ensureCapacity(long targetSize) {
+    public void requireCapacity(long targetSize) {
         final long capacity = capacity();
         final long newCapacity = this.autoResize.resize(capacity, targetSize);
         if (newCapacity <= capacity)

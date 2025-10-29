@@ -208,10 +208,11 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     public final void ensureWritable(long length) {
         Check.argCondition(length < 0, "Length must be non-negative found {0}", length);
         if (writableBytes() >= length) return;
-        ensureCapacity(writeIndex() + length);
+        requireCapacity(writeIndex() + length);
     }
 
-    protected abstract void ensureCapacity(long length);
+    // Throws IndexOutOfBoundsException if capacity cannot be ensured
+    protected abstract void requireCapacity(long targetSize);
 
     @Override
     public final void ensureReadable(long length) {

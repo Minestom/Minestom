@@ -51,7 +51,7 @@ final class NetworkBufferStaticImpl extends NetworkBufferImpl {
     }
 
     @Override
-    public void ensureCapacity(long requestedSize) {
+    public void requireCapacity(long requestedSize) {
         throw new IndexOutOfBoundsException();
     }
 
