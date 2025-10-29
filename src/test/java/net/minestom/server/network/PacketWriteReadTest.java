@@ -5,11 +5,13 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.resource.ResourcePackStatus;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.advancements.AdvancementAction;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -17,12 +19,17 @@ import net.minestom.server.crypto.*;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.debug.DebugSubscription;
+import net.minestom.server.network.debug.info.DebugBrainDump;
+import net.minestom.server.network.debug.info.DebugHiveInfo;
+import net.minestom.server.network.debug.info.DebugPathInfo;
+import net.minestom.server.network.debug.info.DebugPoiInfo;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.PacketVanilla;
@@ -43,15 +50,23 @@ import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.configuration.*;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.data.ChunkData;
+import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
+import net.minestom.server.particle.Particle;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.statistic.StatisticCategory;
 import net.minestom.server.utils.Rotation;
 import net.minestom.server.world.Difficulty;
 import net.minestom.testing.Env;
@@ -253,26 +268,156 @@ public class PacketWriteReadTest {
         addServerPackets(new EntityRotationPacket(5, 45f, 45f, false));
 
         final PlayerSkin skin = new PlayerSkin("hh", "hh");
-        List<PlayerInfoUpdatePacket.Property> prop = List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature()));
-
-        addServerPackets(
-                new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.ADD_PLAYER,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), OG, prop, false, 0, GameMode.CREATIVE, null, null, 0, true)),
-                new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, Component.text("Not").append(Component.text(OG)), null, 0, false)),
-                new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SPECTATOR, null, null, 0, true)),
-                new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 20, GameMode.CREATIVE, null, null, 0, false)),
-                new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LISTED,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null, 0, true)),
-                new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, null, null, 42, false)),
-                new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_HAT,
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, null, null, 0, false))
+        addServerPackets( // TODO, these test are highly dependent on the default values, which arent great.
+                new PlayerInfoUpdatePacket(
+                        EnumSet.of(
+                                PlayerInfoUpdatePacket.Action.ADD_PLAYER,
+                                PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE
+                        ),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), OG, List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())), false, 0, GameMode.CREATIVE, null, null, 0, true)
+                ),
+                new PlayerInfoUpdatePacket(
+                        EnumSet.of(
+                                PlayerInfoUpdatePacket.Action.ADD_PLAYER,
+                                PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE,
+                                PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME,
+                                PlayerInfoUpdatePacket.Action.UPDATE_HAT
+                        ),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, Component.text("Not").append(Component.text(OG)), null, 0, false)
+                ),
+                new PlayerInfoUpdatePacket(
+                        EnumSet.of(
+                                PlayerInfoUpdatePacket.Action.ADD_PLAYER,
+                                PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE
+                        ),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SPECTATOR, null, null, 0, true)
+                ),
+                new PlayerInfoUpdatePacket(
+                        EnumSet.of(
+                                PlayerInfoUpdatePacket.Action.ADD_PLAYER,
+                                PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE,
+                                PlayerInfoUpdatePacket.Action.UPDATE_LATENCY,
+                                PlayerInfoUpdatePacket.Action.UPDATE_HAT
+                        ),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 20, GameMode.CREATIVE, null, null, 0, false)
+                ),
+                new PlayerInfoUpdatePacket(
+                        EnumSet.of(
+                                PlayerInfoUpdatePacket.Action.ADD_PLAYER,
+                                PlayerInfoUpdatePacket.Action.UPDATE_LISTED
+                        ),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null, 0, true)
+                ),
+                new PlayerInfoUpdatePacket(
+                        EnumSet.of(
+                                PlayerInfoUpdatePacket.Action.ADD_PLAYER,
+                                PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE,
+                                PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER,
+                                PlayerInfoUpdatePacket.Action.UPDATE_HAT
+                        ),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, null, null, 42, false)
+                ),
+                new PlayerInfoUpdatePacket(
+                        EnumSet.of(
+                                PlayerInfoUpdatePacket.Action.ADD_PLAYER,
+                                PlayerInfoUpdatePacket.Action.UPDATE_HAT
+                        ),
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, null, null, 0, false)
+                )
         );
 
         addServerPackets(new PlayerInfoRemovePacket(UUID.randomUUID()));
+        addServerPackets(new EntitySoundEffectPacket(SoundEvent.ENTITY_PLAYER_HURT, Sound.Source.PLAYER, 5, 1.0f, 1.0f, 0L));
+        addServerPackets(new EntityStatusPacket(5, (byte) 2));
+        addServerPackets(new EntityTeleportPacket(5, new Pos(0, 64, 0, 0, 0), Vec.ZERO, RelativeFlags.NONE, false));
+        addServerPackets(new EntityVelocityPacket(5, Vec.ONE));
+        addServerPackets(new ExplosionPacket(VEC, 4.0f, 3, null, Particle.FLAME, SoundEvent.ENTITY_GENERIC_EXPLODE, List.of()));
+        addServerPackets(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, VEC, null));
+        addServerPackets(new HeldItemChangePacket((byte) 0));
+        addServerPackets(new HitAnimationPacket(5, 90f));
+        addServerPackets(new InitializeWorldBorderPacket(0.0, 0.0, 10.0, 5.0, 0L, 29999984, 5, 15));
+        addServerPackets(new JoinGamePacket(5, false, List.of("minecraft:overworld"), 0, 10, 10, false, true, false, 0, "minecraft:overworld", 0L, GameMode.CREATIVE, GameMode.SURVIVAL, false, false, null, 0, 0, false));
+        addServerPackets(new MapDataPacket(5, (byte) 1, true, true, List.of(), null));
+        addServerPackets(new MultiBlockChangePacket(0, 0, 0, new long[0]));
+        addServerPackets(new NbtQueryResponsePacket(5, CompoundBinaryTag.builder().putString("key", "value").build()));
+        addServerPackets(new OpenBookPacket(PlayerHand.MAIN));
+        addServerPackets(new OpenHorseWindowPacket((byte) 5, 5, 5));
+        addServerPackets(new OpenSignEditorPacket(VEC, true));
+        addServerPackets(new OpenWindowPacket(5, 5, COMPONENT));
+        addServerPackets(new ParticlePacket(Particle.FLAME, VEC, Vec.ZERO, 0.1f, 10));
+        addServerPackets(new PlayerAbilitiesPacket((byte) 0x0F, 0.05f, 0.1f));
+        addServerPackets(new PlayerListHeaderAndFooterPacket(COMPONENT, COMPONENT));
+        addServerPackets(new PlayerPositionAndLookPacket(5, VEC, Vec.ZERO, 0f, 0f, 0));
+        addServerPackets(new PlayerRotationPacket(45f, false, 90f, false));
+        addServerPackets(new ProjectilePowerPacket(5, 1.0));
+        addServerPackets(new RespawnPacket(0,"overworld", 0L, GameMode.CREATIVE, GameMode.SURVIVAL, false, false, null, 5, 63, RespawnPacket.COPY_METADATA));
+        addServerPackets(new ScoreboardObjectivePacket("objective", (byte) 0, COMPONENT, ScoreboardObjectivePacket.Type.INTEGER, null));
+        addServerPackets(new SelectAdvancementTabPacket("minecraft:story/root"));
+        addServerPackets(new ServerDataPacket(COMPONENT, null));
+        addServerPackets(new ServerDifficultyPacket(Difficulty.NORMAL, true));
+        addServerPackets(new SetCooldownPacket("minecraft:ender_pearl", 5));
+        addServerPackets(new SetCursorItemPacket(ItemStack.of(Material.DIAMOND)));
+        addServerPackets(new SetExperiencePacket(0.5f, 10, 5));
+        addServerPackets(new SetPassengersPacket(5, List.of(6, 7)));
+        addServerPackets(new SetPlayerInventorySlotPacket(36, ItemStack.of(Material.DIAMOND_SWORD)));
+        addServerPackets(new SetSlotPacket((byte) 0, 0, (short) 36, ItemStack.of(Material.DIAMOND)));
+        addServerPackets(new SetTickStatePacket(20.0f, false));
+        addServerPackets(new SetTitleSubTitlePacket(COMPONENT));
+        addServerPackets(new SetTitleTextPacket(COMPONENT));
+        addServerPackets(new SetTitleTimePacket(10, 70, 20));
+        addServerPackets(new SoundEffectPacket(SoundEvent.ENTITY_PLAYER_HURT, net.kyori.adventure.sound.Sound.Source.PLAYER, (int) VEC.x() * 8, (int) VEC.y() * 8, (int) VEC.z() * 8, 1.0f, 1.0f, 0L));
+        addServerPackets(new SpawnEntityPacket(5, UUID.randomUUID(), EntityType.ZOMBIE, new Pos(0, 64, 0, 0, 0), 9.84375f, 0, Vec.ONE));
+        addServerPackets(new SpawnPositionPacket(new WorldPos("overworld", VEC), 0f, 1f));
+        addServerPackets(new StartConfigurationPacket());
+        addServerPackets(new StatisticsPacket(List.of(new StatisticsPacket.Statistic(StatisticCategory.BROKEN, 5, 100))));
+        addServerPackets(new StopSoundPacket((byte) 0, null, null));
+        addServerPackets(new TabCompletePacket(5, 0, 0, List.of()));
+        addServerPackets(new TeamsPacket("team", new TeamsPacket.CreateTeamAction(COMPONENT, (byte) 0, TeamsPacket.NameTagVisibility.ALWAYS, TeamsPacket.CollisionRule.ALWAYS, NamedTextColor.RED, COMPONENT, COMPONENT, List.of("player1"))));
+        addServerPackets(new TickStepPacket(20));
+        addServerPackets(new TimeUpdatePacket(1000L, 6000L, false));
+        addServerPackets(new TradeListPacket(5, List.of(), 5, 5, true, true));
+        addServerPackets(new UnloadChunkPacket(0, 0));
+        addServerPackets(new UpdateHealthPacket(20.0f, 20, 5.0f));
+        addServerPackets(new UpdateScorePacket("player", "objective", 100, COMPONENT, null));
+        addServerPackets(new UpdateSimulationDistancePacket(8));
+        addServerPackets(new UpdateViewDistancePacket(10));
+        addServerPackets(new UpdateViewPositionPacket(0, 0));
+        addServerPackets(new VehicleMovePacket(new Pos(0, 64, 0, 0, 0)));
+        addServerPackets(new WindowItemsPacket((byte) 0, 0, List.of(ItemStack.of(Material.DIAMOND)), ItemStack.of(Material.STONE)));
+        addServerPackets(new WindowPropertyPacket((byte) 0, (short) 0, (short) 5));
+        addServerPackets(new WorldBorderCenterPacket(0.0, 0.0));
+        addServerPackets(new WorldBorderLerpSizePacket(10.0, 20.0, 5000L));
+        addServerPackets(new WorldBorderSizePacket(10.0));
+        addServerPackets(new WorldBorderWarningDelayPacket(5));
+        addServerPackets(new WorldBorderWarningReachPacket(5));
+        addServerPackets(new AdvancementsPacket(false, List.of(), List.of(), List.of(), true));
+        // TODO, these chunk* skips important paths
+        addServerPackets(new ChunkBatchStartPacket());
+        addServerPackets(new ChunkBatchFinishedPacket(100));
+        addServerPackets(new ChunkDataPacket(0, 0, new ChunkData(Map.of(), new byte[0], Map.of()), new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
+        addServerPackets(new ChunkBiomesPacket(List.of()));
+        addServerPackets(new CustomChatCompletionPacket(CustomChatCompletionPacket.Action.ADD, List.of("entry1", "entry2")));
+        addServerPackets(new DamageEventPacket(5, 1, 2, 3, VEC));
+        addServerPackets(new DeclareCommandsPacket(List.of(), 0));
+        addServerPackets(new BundlePacket());
+        addServerPackets(new DebugBlockValuePacket(Vec.ONE, new DebugSubscription.Update<>(DebugSubscription.BEE_HIVES, new DebugHiveInfo(Block.BEEHIVE, 1, 0, true))));
+        addServerPackets(new DebugChunkValuePacket(1, 1, new DebugSubscription.Update<>(DebugSubscription.POIS, new DebugPoiInfo(VEC, DebugPoiInfo.Type.BUTCHER, 1))));
+        addServerPackets(new DebugEntityValuePacket(0, new DebugSubscription.Update<>(DebugSubscription.ENTITY_PATHS, new DebugPathInfo(new DebugPathInfo.Path(true, 0, VEC, List.of(), new DebugPathInfo.Data(Set.of(), List.of(), List.of())), 1))));
+        addServerPackets(new DebugEventPacket(new DebugSubscription.Event<>(DebugSubscription.NEIGHBOR_UPDATES, Vec.ZERO)));
+        addServerPackets(new DebugSamplePacket(new long[0], DebugSamplePacket.Type.TICK_TIME)); // Legacy debug wrapper, maybe it will change.
+        addServerPackets(new DeleteChatPacket(new MessageSignature(new byte[256])));
+        addServerPackets(new DisguisedChatPacket(Component.text("Hey"), 0, Component.text("Message"), null));
+        addServerPackets(new EntityPositionSyncPacket(1, VEC, VEC, 1f, 1f, false));
+        addServerPackets(new GameTestHighlightPosPacket(VEC, VEC));
+        addServerPackets(new UpdateLightPacket(0, 0, new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
+        addServerPackets(new MoveMinecartPacket(1, List.of(new MoveMinecartPacket.LerpStep(VEC, Vec.ZERO, 1f, 1f, 1f))));
+        addServerPackets(new PlayerChatMessagePacket(0, UUID.randomUUID(), 0, new MessageSignature(new byte[256]), new SignedMessageBody.Packed("hey", Instant.EPOCH, 0L, new LastSeenMessages.Packed(List.of())), null, new FilterMask(FilterMask.Type.FULLY_FILTERED, new BitSet()), 1, Component.text("hey"), null));
+        addServerPackets(new RecipeBookSettingsPacket(false, false, true, false, false, false, false, false));
+        addServerPackets(new RemoveEntityEffectPacket(0, PotionEffect.BAD_OMEN));
+        addServerPackets(new ResetScorePacket("dummy_score", null), new ResetScorePacket("duoka", "testObjective"));
+        addServerPackets(new TestInstanceBlockStatus(Component.text("Minestom is cool"), null), new TestInstanceBlockStatus(Component.text("Where is season 5 william?"), VEC));
+        addServerPackets(new EntityEffectPacket(0, new Potion(PotionEffect.ABSORPTION, 1, 150)));
+        addServerPackets(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.UNTRACK, new TrackedWaypointPacket.Waypoint("test", TrackedWaypointPacket.Icon.DEFAULT, new TrackedWaypointPacket.Target.Empty())));
     }
 
     @BeforeAll
@@ -445,7 +590,7 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.CRAFTING, true, false), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.FURNACE, false, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.BLAST_FURNACE, true, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.SMOKER, false, false));
         addClientPackets(new ClientNameItemPacket("Diamond Sword"), new ClientNameItemPacket(""), new ClientNameItemPacket("A".repeat(100)));
         addClientPackets(new ClientResourcePackStatusPacket(UUID.randomUUID(), ResourcePackStatus.ACCEPTED), new ClientResourcePackStatusPacket(UUID.randomUUID(), ResourcePackStatus.DECLINED));
-        addClientPackets(new ClientAdvancementTabPacket(net.minestom.server.advancements.AdvancementAction.OPENED_TAB, "minecraft:story/root"), new ClientAdvancementTabPacket(net.minestom.server.advancements.AdvancementAction.CLOSED_SCREEN, null));
+        addClientPackets(new ClientAdvancementTabPacket(AdvancementAction.OPENED_TAB, "minecraft:story/root"), new ClientAdvancementTabPacket(AdvancementAction.CLOSED_SCREEN, null));
         addClientPackets(new ClientSelectTradePacket(0), new ClientSelectTradePacket(5), new ClientSelectTradePacket(Integer.MAX_VALUE));
         addClientPackets(new ClientSetBeaconEffectPacket(PotionType.STRENGTH, PotionType.REGENERATION), new ClientSetBeaconEffectPacket(null, null), new ClientSetBeaconEffectPacket(PotionType.fromKey("strength"), null));
         addClientPackets(new ClientHeldItemChangePacket((short) 0), new ClientHeldItemChangePacket((short) 8), new ClientHeldItemChangePacket((short) 4));
