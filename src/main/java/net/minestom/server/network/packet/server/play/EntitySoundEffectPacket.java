@@ -1,7 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.sound.Sound;
-import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;

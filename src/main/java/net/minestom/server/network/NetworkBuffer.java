@@ -865,7 +865,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Creates a resizeable buffer using {@link Settings#resizeableSettings()} ()}
+     * Creates a resizeable buffer using {@link Settings#resizeableSettings()}
      * @param initialSize the initial size to use for {@link Settings#allocate(long)}
      * @param registries the registries to use
      * @return the new buffer

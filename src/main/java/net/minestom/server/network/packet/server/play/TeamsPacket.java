@@ -12,7 +12,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
