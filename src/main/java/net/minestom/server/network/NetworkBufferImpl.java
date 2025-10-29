@@ -530,14 +530,9 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
             return new Settings(arenaSupplier, autoResize, registries);
         }
 
-        @Contract("->new")
-        public Arena arena() {
-            return Objects.requireNonNull(arenaSupplier.get(), "arena");
-        }
-
         @Override
         public NetworkBuffer allocate(long length) {
-            final Arena arena = arena();
+            final Arena arena = Objects.requireNonNull(arenaSupplier.get(), "arena");
             final MemorySegment segment = NetworkBufferAllocator.allocate(arena, length);
             if (autoResize != null) {
                 return new NetworkBufferResizeableImpl(arena, segment, 0, 0, autoResize, registries, arenaSupplier);
