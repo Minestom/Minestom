@@ -105,13 +105,13 @@ public class CommandManagerTest {
 
     private static void assertNodeEquals(DeclareCommandsPacket.Node node, byte flags, int[] children, int redirectedNode,
                                          String name, String parser, byte[] properties, String suggestionsType) {
-        assertEquals(flags, node.flags);
-        assertArrayEquals(children, node.children);
-        assertEquals(redirectedNode, node.redirectedNode);
-        assertEquals(name, node.name);
-        assertEquals(parser, node.parser);
-        assertArrayEquals(properties, node.properties);
-        assertEquals(suggestionsType, node.suggestionsType);
+        assertEquals(flags, node.flags());
+        assertArrayEquals(children, node.children());
+        assertEquals(redirectedNode, node.redirectedNode());
+        assertEquals(name, node.name());
+        assertEquals(parser, node.parser());
+        assertArrayEquals(properties, node.properties());
+        assertEquals(suggestionsType, node.suggestionsType());
     }
 
 }

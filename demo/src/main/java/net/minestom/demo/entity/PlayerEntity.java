@@ -4,6 +4,7 @@ import net.minestom.server.entity.*;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.packet.server.play.PlayerInfoRemovePacket;
 import net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket;
+import net.minestom.server.network.player.GameProfile;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -22,8 +23,8 @@ public class PlayerEntity extends Entity {
 
     @Override
     public void updateNewViewer(Player player) {
-        var properties = new ArrayList<PlayerInfoUpdatePacket.Property>();
-        properties.add(new PlayerInfoUpdatePacket.Property("textures", skinTexture, skinSignature));
+        var properties = new ArrayList<GameProfile.Property>();
+        properties.add(new GameProfile.Property("textures", skinTexture, skinSignature));
         var entry = new PlayerInfoUpdatePacket.Entry(
                 getUuid(), username, properties, false,
                 0, GameMode.SURVIVAL, null,

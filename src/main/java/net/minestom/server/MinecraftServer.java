@@ -33,6 +33,7 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
@@ -201,6 +202,10 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static PacketParser.Client getPacketParser() {
         return serverProcess.packetParser();
+    }
+
+    public static PacketParser<ServerPacket> getPacketWriter() {
+        return serverProcess.packetWriter();
     }
 
     public static boolean isStarted() {

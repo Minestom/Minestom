@@ -12,11 +12,15 @@ public record ClientUpdateCommandBlockPacket(Point blockPosition, String command
     public static final NetworkBuffer.Type<ClientUpdateCommandBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, ClientUpdateCommandBlockPacket::blockPosition,
             STRING, ClientUpdateCommandBlockPacket::command,
-            Enum(Mode.class), ClientUpdateCommandBlockPacket::mode,
+            Mode.NETWORK_TYPE, ClientUpdateCommandBlockPacket::mode,
             BYTE, ClientUpdateCommandBlockPacket::flags,
             ClientUpdateCommandBlockPacket::new);
 
     public enum Mode {
-        SEQUENCE, AUTO, REDSTONE
+        SEQUENCE,
+        AUTO,
+        REDSTONE;
+
+        public static final NetworkBuffer.Type<Mode> NETWORK_TYPE = NetworkBuffer.Enum(Mode.class);
     }
 }

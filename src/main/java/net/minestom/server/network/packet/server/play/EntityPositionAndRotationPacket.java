@@ -2,32 +2,23 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityPositionAndRotationPacket(int entityId, short deltaX, short deltaY, short deltaZ,
                                               float yaw, float pitch, boolean onGround) implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<EntityPositionAndRotationPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, EntityPositionAndRotationPacket value) {
-            buffer.write(VAR_INT, value.entityId);
-            buffer.write(SHORT, value.deltaX);
-            buffer.write(SHORT, value.deltaY);
-            buffer.write(SHORT, value.deltaZ);
-            buffer.write(BYTE, (byte) (value.yaw * 256 / 360));
-            buffer.write(BYTE, (byte) (value.pitch * 256 / 360));
-            buffer.write(BOOLEAN, value.onGround);
-        }
-
-        @Override
-        public EntityPositionAndRotationPacket read(NetworkBuffer buffer) {
-            return new EntityPositionAndRotationPacket(buffer.read(VAR_INT),
-                    buffer.read(SHORT), buffer.read(SHORT), buffer.read(SHORT),
-                    buffer.read(BYTE) * 360f / 256f, buffer.read(BYTE) * 360f / 256f,
-                    buffer.read(BOOLEAN));
-        }
-    };
+    public static final NetworkBuffer.Type<EntityPositionAndRotationPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, EntityPositionAndRotationPacket::entityId,
+            SHORT, EntityPositionAndRotationPacket::deltaX,
+            SHORT, EntityPositionAndRotationPacket::deltaY,
+            SHORT, EntityPositionAndRotationPacket::deltaZ,
+            LP_ANGLE, EntityPositionAndRotationPacket::yaw,
+            LP_ANGLE, EntityPositionAndRotationPacket::pitch,
+            BOOLEAN, EntityPositionAndRotationPacket::onGround,
+            EntityPositionAndRotationPacket::new
+    );
 
     public static EntityPositionAndRotationPacket getPacket(int entityId,
                                                             Pos newPosition, Pos oldPosition,

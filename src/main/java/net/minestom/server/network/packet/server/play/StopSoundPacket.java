@@ -1,35 +1,97 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.kyori.adventure.sound.Sound;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
-                              @Nullable String sound) implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<StopSoundPacket> SERIALIZER = new Type<>() {
+public record StopSoundPacket(Action action) implements ServerPacket.Play {
+    public static final NetworkBuffer.Type<StopSoundPacket> SERIALIZER = NetworkBufferTemplate.template(
+            BYTE.unionType(Action::serializer, Action::flag), StopSoundPacket::action,
+            StopSoundPacket::new
+    );
+
+    public StopSoundPacket {
+        Objects.requireNonNull(action, "action");
+    }
+
+    public sealed interface Action {
+        private static Type<? extends Action> serializer(byte id) {
+            return switch (id) {
+                case 0b00 -> All.SERIALIZER;
+                case 0b01 -> Source.SERIALIZER;
+                case 0b10 -> Sound.SERIALIZER;
+                case 0b11 -> SourceAndSound.SERIALIZER;
+                default -> throw new IllegalStateException("Unexpected value: " + id);
+            };
+        }
+
+        @ApiStatus.OverrideOnly
+        byte flag();
+    }
+
+    public record All() implements Action {
+        public static final All INSTANCE = new All();
+        public static final Type<All> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
+
         @Override
-        public void write(NetworkBuffer buffer, StopSoundPacket value) {
-            buffer.write(BYTE, value.flags());
-            if (value.flags == 3 || value.flags == 1) {
-                assert value.source != null;
-                buffer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source));
-            }
-            if (value.flags == 2 || value.flags == 3) {
-                assert value.sound != null;
-                buffer.write(STRING, value.sound);
-            }
+        public byte flag() {
+            return 0b00;
+        }
+    }
+
+    public record Source(net.kyori.adventure.sound.Sound.Source source) implements Action {
+        public static final Type<Source> SERIALIZER = NetworkBufferTemplate.template(
+                AdventurePacketConvertor.SOUND_SOURCE_TYPE, Source::source,
+                Source::new
+        );
+
+        public Source {
+            Objects.requireNonNull(source, "source");
         }
 
         @Override
-        public StopSoundPacket read(NetworkBuffer buffer) {
-            byte flags = buffer.read(BYTE);
-            var source = flags == 3 || flags == 1 ? buffer.read(NetworkBuffer.Enum(Sound.Source.class)) : null;
-            var sound = flags == 2 || flags == 3 ? buffer.read(STRING) : null;
-            return new StopSoundPacket(flags, source, sound);
+        public byte flag() {
+            return 0b01;
         }
-    };
+    }
+
+    public record Sound(String sound) implements Action {
+        public static final Type<Sound> SERIALIZER = NetworkBufferTemplate.template(
+                STRING, Sound::sound,
+                Sound::new
+        );
+
+        public Sound {
+            Objects.requireNonNull(sound, "sound");
+        }
+
+        @Override
+        public byte flag() {
+            return 0b10;
+        }
+    }
+
+    public record SourceAndSound(net.kyori.adventure.sound.Sound.Source source, String sound) implements Action {
+        public static final Type<SourceAndSound> SERIALIZER = NetworkBufferTemplate.template(
+                AdventurePacketConvertor.SOUND_SOURCE_TYPE, SourceAndSound::source,
+                STRING, SourceAndSound::sound,
+                SourceAndSound::new
+        );
+
+        public SourceAndSound {
+            Objects.requireNonNull(source, "source");
+            Objects.requireNonNull(sound, "sound");
+        }
+
+        @Override
+        public byte flag() {
+            return 0b11;
+        }
+    }
 }

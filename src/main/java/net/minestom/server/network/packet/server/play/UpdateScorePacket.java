@@ -25,7 +25,7 @@ public record UpdateScorePacket(
             STRING, UpdateScorePacket::entityName,
             STRING, UpdateScorePacket::objectiveName,
             VAR_INT, UpdateScorePacket::score,
-            COMPONENT.optional(), UpdateScorePacket::displayName,
+            OPT_CHAT, UpdateScorePacket::displayName,
             Sidebar.NumberFormat.SERIALIZER.optional(), UpdateScorePacket::numberFormat,
             UpdateScorePacket::new
     );

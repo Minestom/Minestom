@@ -5,5 +5,6 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
 public record ClientConfigurationAckPacket() implements ClientPacket.Play {
-    public static final NetworkBuffer.Type<ClientConfigurationAckPacket> SERIALIZER = NetworkBufferTemplate.template(new ClientConfigurationAckPacket());
+    public static final ClientConfigurationAckPacket INSTANCE = new ClientConfigurationAckPacket();
+    public static final NetworkBuffer.Type<ClientConfigurationAckPacket> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 }

@@ -53,7 +53,15 @@
     },
     {
       "type": "java.lang.String",
-      "serializable": true
+      "serializable": true,
+      "methods": [
+        {
+          "name": "getBytesLength",
+          "parameterTypes": [
+            "java.nio.charset.Charset"
+          ]
+        }
+      ]
     },
     {
       "type": "java.lang.String[]"
@@ -63,18 +71,31 @@
       "serializable": true
     },
     {
-      "type": "java.lang.reflect.RecordComponent"
-    },
-    {
-      "type": "java.nio.Buffer",
-      "fields": [
+      "type": "java.lang.foreign.MemorySegment",
+      "methods": [
         {
-          "name": "address"
+          "name": "copy",
+          "parameterTypes": [
+            "java.lang.String",
+            "java.nio.charset.Charset",
+            "int",
+            "java.lang.foreign.MemorySegment",
+            "long",
+            "int"
+          ]
         },
         {
-          "name": "capacity"
+          "name": "getString",
+          "parameterTypes": [
+            "long",
+            "java.nio.charset.Charset",
+            "long"
+          ]
         }
       ]
+    },
+    {
+      "type": "java.lang.reflect.RecordComponent"
     },
     {
       "type": "java.sql.Date"
@@ -216,6 +237,22 @@
       ]
     },
     {
+      "type": "net.minestom.server.network.packet.server.CachedPacket",
+      "fields": [
+        {
+          "name": "packet"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.LazyPacket",
+      "fields": [
+        {
+          "name": "packet"
+        }
+      ]
+    },
+    {
       "type": "net.minestom.server.timer.TaskImpl",
       "fields": [
         {
@@ -284,14 +321,6 @@
       ]
     },
     {
-      "type": "sun.misc.Unsafe",
-      "fields": [
-        {
-          "name": "theUnsafe"
-        }
-      ]
-    },
-    {
       "type": "sun.security.provider.NativePRNG",
       "methods": [
         {
@@ -315,6 +344,24 @@
     },
     {
       "type": "sun.security.provider.SHA",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.security.rsa.RSAKeyFactory$Legacy",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.security.rsa.RSAKeyPairGenerator$Legacy",
       "methods": [
         {
           "name": "<init>",
@@ -634,5 +681,21 @@
       "module": "jdk.jfr",
       "glob": "jdk/jfr/internal/types/metadata.bin"
     }
-  ]
+  ],
+  "foreign": {
+    "downcalls": [
+      {
+        "returnType": "void*",
+        "parameterTypes": [
+          "jlong"
+        ]
+      },
+      {
+        "returnType": "void",
+        "parameterTypes": [
+          "void*"
+        ]
+      }
+    ]
+  }
 }

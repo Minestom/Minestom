@@ -31,6 +31,7 @@ import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,7 +105,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @return the player linked to the connection
      */
-    public Player getPlayer(PlayerConnection connection) {
+    public @UnknownNullability Player getPlayer(PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
     }
 
@@ -244,7 +245,7 @@ public final class ConnectionManager {
         final Instance spawningInstance = event.getSpawningInstance();
         Objects.requireNonNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
 
-        if (event.willClearChat()) player.sendPacket(new ResetChatPacket());
+        if (event.willClearChat()) player.sendPacket(ResetChatPacket.INSTANCE);
 
         // Registry data (if it should be sent)
         if (event.willSendRegistryData()) {
@@ -256,7 +257,9 @@ public final class ConnectionManager {
                 player.getPlayerConnection().disconnect();
                 return;
             } catch (ExecutionException e) {
-                throw new RuntimeException("Error receiving known packs", e);
+                player.getPlayerConnection().disconnect();
+                MinecraftServer.getExceptionManager().handleException(e);
+                return;
             }
             boolean excludeVanilla = knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
 
@@ -299,7 +302,7 @@ public final class ConnectionManager {
 
         keepAlivePlayers.remove(player);
         player.setPendingOptions(spawningInstance, event.isHardcore());
-        player.sendPacket(new FinishConfigurationPacket());
+        player.sendPacket(FinishConfigurationPacket.INSTANCE);
     }
 
     @ApiStatus.Internal
@@ -361,7 +364,7 @@ public final class ConnectionManager {
 
             configurationPlayers.add(player);
             player.remove(false);
-            player.sendPacket(new StartConfigurationPacket());
+            player.sendPacket(StartConfigurationPacket.INSTANCE);
         });
         this.playWaitingPlayers.drain(player -> {
             if (!player.isOnline()) return; // Player disconnected while in queued to join

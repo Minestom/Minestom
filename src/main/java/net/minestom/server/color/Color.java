@@ -4,6 +4,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 
@@ -22,22 +23,12 @@ public class Color implements RGBLike {
             color -> Color.fromRGBLike(color).asRGB()
     );
 
-    public static final NetworkBuffer.Type<RGBLike> RGB_BYTE_NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, RGBLike value) {
-            buffer.write(NetworkBuffer.BYTE, (byte) value.red());
-            buffer.write(NetworkBuffer.BYTE, (byte) value.green());
-            buffer.write(NetworkBuffer.BYTE, (byte) value.blue());
-        }
-
-        @Override
-        public RGBLike read(NetworkBuffer buffer) {
-            final int red = buffer.read(NetworkBuffer.BYTE);
-            final int green = buffer.read(NetworkBuffer.BYTE);
-            final int blue = buffer.read(NetworkBuffer.BYTE);
-            return new Color(red, green, blue);
-        }
-    };
+    public static final NetworkBuffer.Type<RGBLike> RGB_BYTE_NETWORK_TYPE = NetworkBufferTemplate.template(
+            NetworkBuffer.BYTE, rgb -> (byte) rgb.red(),
+            NetworkBuffer.BYTE, rgb -> (byte) rgb.green(),
+            NetworkBuffer.BYTE, rgb -> (byte) rgb.blue(),
+            Color::new
+    );
 
     public static final Codec<RGBLike> CODEC = Codec.INT.<RGBLike>transform(Color::new, color -> Color.fromRGBLike(color).asRGB())
             .orElse(Codec.VECTOR3D, vector -> new Color((float) vector.x(), (float) vector.y(), (float) vector.z()));

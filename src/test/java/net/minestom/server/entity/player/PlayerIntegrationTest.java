@@ -275,7 +275,10 @@ public class PlayerIntegrationTest {
         Entity entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(player.getInstance(), new Pos(9, 9, 9));
         player.lookAt(entity);
-        tracker.assertSingle(FacePlayerPacket.class, packet -> assertEquals(entity.getEntityId(), packet.entityId()));
+        tracker.assertSingle(FacePlayerPacket.class, packet -> {
+            assertNotNull(packet.entityData());
+            assertEquals(entity.getEntityId(), packet.entityData().id());
+        });
 
         assertEquals(startingPlayerPos, player.getPosition());
     }

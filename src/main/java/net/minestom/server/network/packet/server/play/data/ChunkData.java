@@ -2,74 +2,86 @@ package net.minestom.server.network.packet.server.play.data;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.CoordConversion;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.block.BlockUtils;
 
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte [] data,
-                        Map<Integer, Block> blockEntities) {
+public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
+                        List<BlockEntityInfo> blockEntities) {
+    public static final NetworkBuffer.Type<ChunkData> NETWORK_TYPE = NetworkBufferTemplate.template(
+            Heightmap.Type.NETWORK_TYPE.mapValue(LONG_ARRAY, Heightmap.Type.values().length), ChunkData::heightmaps,
+            BYTE_ARRAY, ChunkData::data,
+            BlockEntityInfo.NETWORK_TYPE.list(), ChunkData::blockEntities,
+            ChunkData::new
+    );
+
     public ChunkData {
-        heightmaps = Map.copyOf(heightmaps);
-        blockEntities = blockEntities.entrySet()
-                .stream()
-                .filter((entry) -> entry.getValue().registry().isBlockEntity())
-                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+        heightmaps = Map.copyOf(heightmaps); // TODO deep copy?
+        data = data.clone();
+        blockEntities = List.copyOf(blockEntities);
     }
 
-    public static final NetworkBuffer.Type<ChunkData> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        private static final NetworkBuffer.Type<Map<Heightmap.Type, long[]>> HEIGHTMAPS = Heightmap.Type.NETWORK_TYPE
-                .mapValue(LONG_ARRAY, Heightmap.Type.values().length);
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ChunkData(
+                Map<Heightmap.Type, long[]> heightmaps1, byte[] data1, List<BlockEntityInfo> entities
+        ))) return false;
+        return Arrays.equals(data, data1) && blockEntities.equals(entities) && heightmaps.equals(heightmaps1);
+    }
 
-        @Override
-        public void write(NetworkBuffer buffer, ChunkData value) {
-            // Heightmaps
-            buffer.write(HEIGHTMAPS, value.heightmaps);
-            // Data
-            buffer.write(BYTE_ARRAY, value.data);
-            // Block entities
-            buffer.write(VAR_INT, value.blockEntities.size());
-            for (var entry : value.blockEntities.entrySet()) {
-                final int index = entry.getKey();
-                final Block block = entry.getValue();
-                final var registry = block.registry();
+    @Override
+    public int hashCode() {
+        int result = heightmaps.hashCode();
+        result = 31 * result + Arrays.hashCode(data);
+        result = 31 * result + blockEntities.hashCode();
+        return result;
+    }
 
-                final Point point = CoordConversion.chunkBlockIndexGetGlobal(index, 0, 0);
-                buffer.write(BYTE, (byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
-                buffer.write(SHORT, (short) point.blockY()); // y
+    public record BlockEntityInfo(int index, BlockEntityType type, CompoundBinaryTag nbt) {
+        public static final NetworkBuffer.Type<BlockEntityInfo> NETWORK_TYPE = NetworkBufferTemplate.template(
+                BYTE, BlockEntityInfo::xz,
+                SHORT, BlockEntityInfo::y,
+                BlockEntityType.NETWORK_TYPE, BlockEntityInfo::type,
+                NBT_COMPOUND, BlockEntityInfo::nbt,
+                BlockEntityInfo::new
+        );
 
-                buffer.write(BlockEntityType.NETWORK_TYPE, registry.blockEntityType());
-                final CompoundBinaryTag nbt = BlockUtils.extractClientNbt(block);
-                assert nbt != null;
-                buffer.write(NBT, nbt); // block nbt
-            }
+        public BlockEntityInfo {
+            Objects.requireNonNull(type, "type");
+            Objects.requireNonNull(nbt, "nbt");
         }
 
-        @Override
-        public ChunkData read(NetworkBuffer buffer) {
-            return new ChunkData(buffer.read(HEIGHTMAPS), buffer.read(BYTE_ARRAY),
-                    readBlockEntities(buffer));
+        // If it's a block entity, this is safe.
+        @SuppressWarnings("DataFlowIssue")
+        public BlockEntityInfo(int index, Block block) {
+            assert block.registry().isBlockEntity() : "Block %s is not a block entity".formatted(block.registry().key());
+            this(index, block.registry().blockEntityType(), BlockUtils.extractClientNbt(block));
         }
-    };
 
-    private static Map<Integer, Block> readBlockEntities(NetworkBuffer reader) {
-        final Map<Integer, Block> blockEntities = new HashMap<>();
-        final int size = reader.read(VAR_INT);
-        for (int i = 0; i < size; i++) {
-            final byte xz = reader.read(BYTE);
-            final short y = reader.read(SHORT);
-            final BlockEntityType blockEntityType = reader.read(BlockEntityType.NETWORK_TYPE);
-            final CompoundBinaryTag nbt = reader.read(NBT_COMPOUND);
-            // TODO create block object
+        // Serialization below this point
+        private BlockEntityInfo(byte xz, short blockY, BlockEntityType type, CompoundBinaryTag tag) {
+            this(CoordConversion.chunkBlockIndex(xz >> 4, blockY, xz & 15), type, tag);
         }
-        return blockEntities;
+
+        private byte xz() {
+            final int blockX = CoordConversion.chunkBlockIndexGetX(index);
+            final int blockZ = CoordConversion.chunkBlockIndexGetZ(index);
+            return (byte) ((blockX & 15) << 4 | (blockZ & 15));
+        }
+
+        private short y() {
+            final int blockY = CoordConversion.chunkBlockIndexGetY(index);
+            return (short) blockY;
+        }
     }
 }

@@ -9,16 +9,10 @@ import java.io.IOException;
 
 // Based on net.kyori.adventure.nbt.BinaryTagWriterImpl licensed under the MIT license.
 // https://github.com/KyoriPowered/adventure/blob/main/4/nbt/src/main/java/net/kyori/adventure/nbt/BinaryTagWriterImpl.java
-public class BinaryTagWriter {
+public record BinaryTagWriter(DataOutput output) {
 
     static {
         BinaryTagTypes.COMPOUND.id(); // Force initialization
-    }
-
-    private final DataOutput output;
-
-    public BinaryTagWriter(DataOutput output) {
-        this.output = output;
     }
 
     public void writeNameless(BinaryTag tag) throws IOException {

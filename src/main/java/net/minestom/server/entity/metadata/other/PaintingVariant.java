@@ -16,8 +16,8 @@ public sealed interface PaintingVariant extends Holder.Direct<PaintingVariant>, 
             NetworkBuffer.INT, PaintingVariant::width,
             NetworkBuffer.INT, PaintingVariant::height,
             NetworkBuffer.KEY, PaintingVariant::assetId,
-            NetworkBuffer.COMPONENT.optional(), PaintingVariant::title,
-            NetworkBuffer.COMPONENT.optional(), PaintingVariant::author,
+            NetworkBuffer.OPT_CHAT, PaintingVariant::title,
+            NetworkBuffer.OPT_CHAT, PaintingVariant::author,
             PaintingVariantImpl::new);
     Codec<PaintingVariant> REGISTRY_CODEC = StructCodec.struct(
             "width", Codec.INT, PaintingVariant::width,

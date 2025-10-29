@@ -2,11 +2,12 @@ package net.minestom.server.codec;
 
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
-import net.minestom.server.network.NetworkBufferTemplate.*;
+import net.minestom.server.utils.Functions.*;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -14,7 +15,7 @@ import java.util.function.Supplier;
  * A struct codec is a map backed {@link Codec}, where the keys are strings.
  * See {@link Codec}, {@link Decoder} and {@link Encoder}
  * <br>
- * You can also use {@link #struct(String, Codec, Function, F1)} to create as templating
+ * You can also use {@link #struct(String, Codec, Function, Function)} to create as templating
  * similar to {@link net.minestom.server.network.NetworkBufferTemplate}
  * <p>
  * {@inheritDoc}
@@ -188,7 +189,7 @@ public interface StructCodec<R> extends Codec<R> {
      */
     static <R, P1 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
-            F1<? super P1, ? extends R> ctor
+            Function<? super P1, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -230,7 +231,7 @@ public interface StructCodec<R> extends Codec<R> {
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
             String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
-            F2<? super P1, ? super P2, ? extends R> ctor
+            BiFunction<? super P1, ? super P2, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");

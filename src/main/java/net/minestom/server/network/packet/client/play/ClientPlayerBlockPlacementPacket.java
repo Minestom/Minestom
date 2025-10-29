@@ -14,7 +14,7 @@ public record ClientPlayerBlockPlacementPacket(
         float cursorPositionX, float cursorPositionY, float cursorPositionZ,
         boolean insideBlock, boolean hitWorldBorder, int sequence) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPlayerBlockPlacementPacket> SERIALIZER = NetworkBufferTemplate.template(
-            Enum(PlayerHand.class), ClientPlayerBlockPlacementPacket::hand,
+            PlayerHand.NETWORK_TYPE, ClientPlayerBlockPlacementPacket::hand,
             BLOCK_POSITION, ClientPlayerBlockPlacementPacket::blockPosition,
             Enum(BlockFace.class), ClientPlayerBlockPlacementPacket::blockFace,
             FLOAT, ClientPlayerBlockPlacementPacket::cursorPositionX,

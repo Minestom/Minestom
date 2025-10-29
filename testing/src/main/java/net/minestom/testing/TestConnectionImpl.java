@@ -1,6 +1,8 @@
 package net.minestom.testing;
 
 import net.kyori.adventure.translation.GlobalTranslator;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.coordinate.Pos;
@@ -85,12 +87,12 @@ final class TestConnectionImpl implements TestConnection {
 
         private ServerPacket extractPacket(final SendablePacket packet) {
             if (!(packet instanceof ServerPacket serverPacket))
-                return SendablePacket.extractServerPacket(getServerState(), packet);
+                return SendablePacket.extractServerPacket(packet, getServerState(), MinecraftServer.getPacketWriter());
 
             final Player player = getPlayer();
             if (player == null) return serverPacket;
 
-            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ServerPacket.ComponentHolding) {
+            if (ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ServerPacket.ComponentHolding) {
                 serverPacket = ((ServerPacket.ComponentHolding) serverPacket).copyWithOperator(component ->
                         GlobalTranslator.render(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
