@@ -39,6 +39,14 @@ public record TrackedWaypointPacket(
                 Icon.NETWORK_TYPE, Waypoint::icon,
                 Target.NETWORK_TYPE, Waypoint::target,
                 Waypoint::new);
+
+        public Waypoint(UUID id, Icon icon, Target target) {
+            this(Either.left(id), icon, target);
+        }
+
+        public Waypoint(String id, Icon icon, Target target) {
+            this(Either.right(id), icon, target);
+        }
     }
 
     public record Icon(

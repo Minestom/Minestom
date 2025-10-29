@@ -16,10 +16,10 @@ public record RespawnPacket(
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
         int portalCooldown, int seaLevel, @MagicConstant(flagsFromClass = RespawnPacket.class) byte copyData
 ) implements ServerPacket.Play {
-    public static final int COPY_NONE = 0x0;
-    public static final int COPY_ATTRIBUTES = 0x1;
-    public static final int COPY_METADATA = 0x2;
-    public static final int COPY_ALL = COPY_ATTRIBUTES | COPY_METADATA;
+    public static final byte COPY_NONE = 0x0;
+    public static final byte COPY_ATTRIBUTES = 0x1;
+    public static final byte COPY_METADATA = 0x2;
+    public static final byte COPY_ALL = COPY_ATTRIBUTES | COPY_METADATA;
 
     public static final NetworkBuffer.Type<RespawnPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, RespawnPacket::dimensionType,
