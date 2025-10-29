@@ -437,12 +437,12 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     long capacity();
 
     /**
-     * Sets the buffer to be read only, this cannot be undone, instead you must copy the buffer.
+     * Creates a read only version of this buffer.
      * <br>
-     * It preforms this operation by creating a new static {@link NetworkBuffer}.
+     * Note: While this can be a view, during resizing of the original buffer this may no longer be valid.
      * @return new static buffer
      */
-    @Contract(mutates = "this", value = "-> new")
+    @Contract(pure = true, value = "-> new")
     NetworkBuffer readOnly();
 
     /**
