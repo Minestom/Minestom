@@ -212,7 +212,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param right the right type
      * @return the new type for Either
      * @param <L> left type
-     * @param <R> left type
+     * @param <R> right type
      */
     @Contract(pure = true, value = "_, _ -> new")
     static <L, R> Type<Either<L, R>> Either(NetworkBuffer.Type<L> left, NetworkBuffer.Type<R> right) {
@@ -244,7 +244,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Write the value of {@link T} using at {@code index}
      * <br>
-     * Note: Temporarily sets the write index to {@code index} to be used then pops it at the end.
+     * Note: Temporarily sets the write index to {@code index} to be used then restored at the end.
      * @param index the index to write at
      * @param type the type
      * @param value the value of T
@@ -257,7 +257,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Read the value of {@link T} using at {@code index}
      * <br>
-     * Note: Temporarily sets the read index to {@code index} to be used then pops it at the end.
+     * Note: Temporarily sets the read index to {@code index} to be used then restored at the end.
      * @param index the index to read at
      * @param type the type
      * @return the value {@link T}
@@ -311,8 +311,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param srcOffset the buffer
      * @param length the length
      * @param value the value to fill
-     * @throws UnsupportedOperationException if {@code buffer} is a dummy
-     * @throws UnsupportedOperationException if {@code buffer} is a read only
+     * @throws UnsupportedOperationException if this buffer is a dummy
+     * @throws UnsupportedOperationException if this buffer is a read only
      */
     void fill(long srcOffset, long length, byte value);
 
@@ -320,7 +320,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @deprecated Use {@link #extractReadBytes(Consumer)}
      * Consume read bytes from the extractor. Using {@link #readIndex()}
      * <br>
-     * If you require the write index bytes use {@link #makeArray(Consumer, Registries)}
+     * If you require the write index bytes use {@link #extractWrittenBytes(Consumer)}
      * @param extractor the consumer of the network buffer
      * @return the bytes extracted
      */
@@ -367,7 +367,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Consume written bytes from the extractor. Using {@link #readIndex()}
+     * Consume written bytes from the extractor. Using {@link #writeIndex()}
      * <br>
      * If you require the read index bytes use {@link #extractReadBytes(Consumer)}
      * @param extractor the consumer of the network buffer
@@ -495,16 +495,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param length the new size
      * @throws IllegalArgumentException if {@code length < 0}
      * @throws IllegalArgumentException if the new size is less than or equal to the current {@link #capacity()}.
-     * @throws UnsupportedOperationException if the buffer cannot be resized
-     * @throws UnsupportedOperationException if the buffer is a dummy
-     * @throws UnsupportedOperationException if the buffer is read only
+     * @throws UnsupportedOperationException if this buffer cannot be resized
+     * @throws UnsupportedOperationException if this buffer is a dummy
+     * @throws UnsupportedOperationException if this buffer is read only
      */
     @Contract(mutates = "this")
     void resize(@Range(from = 0, to = Long.MAX_VALUE) long length);
 
     /**
      * Ensures that the buffer {@link #writableBytes()} is greater or equal to {@code length}.
-     * Otherwise, the buffer will be resized using {@link #resize(long)} with {@link}
+     * Otherwise, the buffer will be resized using {@link #resize(long)} if {@link #isResizable()} is true.
      * @param length the length to ensure
      * @throws IllegalArgumentException if {@code length < 0}
      * @throws IndexOutOfBoundsException if the resize does not permit the length to be written
@@ -551,7 +551,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Creates a copy of the buffer trimmed using the settings to {@link Settings#allocate(long)}.
      * <br>
-     * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data
+     * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
      * @param settings the settings to allocate from
      * @return the trimmed buffer
      */
@@ -573,7 +573,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Copies the current buffer using the {@link Settings} with the index to the length with
      * the using {@link #readIndex()} and {@link #writeIndex()}.
-     * @param settings the {@link Settings} which {@link Settings#allocate(long)} be used for the new buffer.
+     * @param settings the {@link Settings} which {@link Settings#allocate(long)} will be used for the new buffer.
      * @param index the index
      * @param length the length
      * @return the copy of the current buffer into a new buffer
@@ -599,7 +599,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     /**
      * Copies the current buffer using the {@link Settings} with the index to the length with the new specified read and write indexes.
-     * @param settings the {@link Settings} which {@link Settings#allocate(long)} be used for the new buffer.
+     * @param settings the {@link Settings} which {@link Settings#allocate(long)} will be used for the new buffer.
      * @param index the starting index
      * @param length the length
      * @param readIndex the new read index
@@ -641,7 +641,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Uses the {@link #writableBytes()} starting from {@link #writeIndex()}
      * @param channel the channel to write to
      * @return the amount of bytes read
-     * @throws IOException if -1 bytes were written.
+     * @throws IOException if -1 bytes were read.
      */
     int readChannel(ReadableByteChannel channel) throws IOException;
 
@@ -650,7 +650,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * <br>
      * Uses the {@link #readableBytes()} starting from {@link #readIndex()}
      * @param channel the channel to write to
-     * @return true if fully written
+     * @return true if fully written, false otherwise
      * @throws IOException if -1 bytes were written.
      */
     boolean writeChannel(WritableByteChannel channel) throws IOException;
@@ -918,7 +918,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Creates a resizeable buffer using {@link NetworkBuffer#resizableBuffer(long, Registries)}
+     * Creates a resizeable buffer using {@link #resizableBuffer(long, Registries)}
      * with an initial size of 256, determined by {@link ServerFlag#DEFAULT_RESIZEABLE_SIZE}.
      * @param registries the registries to use if required during encoding/decoding.
      * @return the new buffer
@@ -940,7 +940,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Wrap the byte array into a {@link NetworkBuffer} with the registries.
+     * Wrap the {@link MemorySegment} into a {@link NetworkBuffer} with the registries.
+     * <br>
      * Useful when you already have a memory segment.
      * @param segment the segment
      * @param readIndex the {@link #readIndex()}
@@ -957,7 +958,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Wrap the byte array into a {@link NetworkBuffer} with the registries.
+     * Wrap the {@link MemorySegment} into a {@link NetworkBuffer} without registries.
      * Useful when you already have a memory segment.
      * @param segment the segment
      * @param readIndex the {@link #readIndex()}
