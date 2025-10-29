@@ -25,6 +25,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.security.PublicKey;
@@ -285,8 +286,23 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param destOffset the destination offset
      * @param length the length
      */
+    @Contract(mutates = "param2")
     void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
 
+
+    /**
+     * Copies the buffer from {@code sourceOffset} to the {@code length} using the layout provided.
+     * <br>
+     * Note: The layout must be mapped to a type that is compatible with the destination buffer.
+     * @param srcOffset the source offset
+     * @param dest the dest buffer
+     * @param layout the array layout of the destination
+     * @param destOffset the destination offset
+     * @param length the length
+     */
+    @ApiStatus.Experimental
+    @Contract(mutates = "param2")
+    void copyTo(long srcOffset, Object dest, ValueLayout layout, int destOffset, int length);
 
     /**
      * Fill the buffer with the byte value specified.
