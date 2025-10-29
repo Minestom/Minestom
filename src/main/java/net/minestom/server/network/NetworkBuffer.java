@@ -364,7 +364,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Clears the data tracked by this buffer by setting the {@link #index(long, long)} to 0.
      * <br>
      * Note: the implementation does not require zeroing of the previously stored data,
-     * instead use {@link NetworkBuffer#fill(NetworkBuffer, long, byte, long)} if you require this.
+     * instead use {@link NetworkBuffer#fill(long, long, byte)} if you require this.
      * @return this
      */
     @Contract("-> this")
