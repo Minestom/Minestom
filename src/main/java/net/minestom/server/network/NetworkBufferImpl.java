@@ -96,6 +96,13 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     }
 
     @Override
+    public final void fill(long srcOffset, long length, byte value) {
+        assertDummy();
+        assertReadOnly();
+        segment().asSlice(srcOffset, length).fill(value);
+    }
+
+    @Override
     public final byte[] extractReadBytes(Consumer<NetworkBuffer> extractor) {
         assertDummy();
         final long startingPosition = readIndex();
@@ -464,13 +471,6 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
         dst.assertDummy();
         dst.assertReadOnly();
         MemorySegment.copy(src.segment(), srcOffset, dst.segment(), dstOffset, length);
-    }
-
-    public static void fill(NetworkBuffer srcBuffer, long srcOffset, byte value, long length) {
-        var src = impl(srcBuffer);
-        src.assertDummy();
-        src.assertReadOnly();
-        src.segment().asSlice(srcOffset, length).fill(value);
     }
 
     public static boolean contentEquals(NetworkBuffer buffer1, NetworkBuffer buffer2) {

@@ -617,6 +617,18 @@ public class NetworkBufferTest {
         assertArrayEquals(stringBytes, bytes);
     }
 
+    @Test
+    public void testFill() {
+        var buffer = NetworkBuffer.staticBuffer(256);
+        buffer.write(VAR_INT, Integer.MAX_VALUE);
+        buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
+        buffer.fill(buffer.readIndex(), buffer.readableBytes(), (byte) 0x00);
+        assertEquals(0, buffer.readIndex());
+        assertEquals(buffer.readableBytes(), buffer.writeIndex());
+        for (int i = 0; i < buffer.writeIndex(); i++) {
+            assertEquals((byte) 0x00, buffer.read(BYTE));
+        }
+    }
 
     @Test
     public void testTrim() {

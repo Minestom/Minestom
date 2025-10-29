@@ -287,6 +287,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
 
+
+    /**
+     * Fill the buffer with the byte value specified.
+     * <br>
+     * Useful if you want to zero a buffer after use if required.
+     * @param srcOffset the buffer
+     * @param length the length
+     * @param value the value to fill
+     * @throws UnsupportedOperationException if {@code buffer} is a dummy
+     * @throws UnsupportedOperationException if {@code buffer} is a read only
+     */
+    void fill(long srcOffset, long length, byte value);
+
     /**
      * @deprecated Use {@link #extractReadBytes(Consumer)}
      * Consume read bytes from the extractor. Using {@link #readIndex()}
@@ -1161,22 +1174,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         Objects.requireNonNull(srcBuffer, "srcBuffer");
         Objects.requireNonNull(dstBuffer, "dstBuffer");
         NetworkBufferImpl.copy(srcBuffer, srcOffset, dstBuffer, dstOffset, length);
-    }
-
-    /**
-     * Fill the buffer with the byte value specified.
-     * <br>
-     * Useful if you want to zero a buffer after use if required.
-     * @param buffer the buffer
-     * @param offset the offset
-     * @param value the value to fill
-     * @param length the length
-     * @throws UnsupportedOperationException if {@code buffer} is a dummy
-     * @throws UnsupportedOperationException if {@code buffer} is a read only
-     */
-    static void fill(NetworkBuffer buffer, long offset, byte value, long length) {
-        Objects.requireNonNull(buffer, "buffer");
-        NetworkBufferImpl.fill(buffer, offset, value, length);
     }
 
     /**
