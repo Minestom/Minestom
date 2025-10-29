@@ -7,6 +7,7 @@ import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,30 +18,11 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record BossBarPacket(UUID uuid,
                             Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
-    public static final NetworkBuffer.Type<BossBarPacket> SERIALIZER = new Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, BossBarPacket value) {
-            buffer.write(NetworkBuffer.UUID, value.uuid);
-            buffer.write(VAR_INT, value.action.id());
-            @SuppressWarnings("unchecked") final Type<Action> serializer = (Type<Action>) actionSerializer(value.action.id());
-            buffer.write(serializer, value.action);
-        }
-
-        @Override
-        public BossBarPacket read(NetworkBuffer buffer) {
-            final UUID uuid = buffer.read(NetworkBuffer.UUID);
-            final int id = buffer.read(VAR_INT);
-            final Type<? extends Action> serializer = actionSerializer(id);
-            return new BossBarPacket(uuid, serializer.read(buffer));
-        }
-    };
-
-    @Override
-    public Collection<Component> components() {
-        return this.action instanceof ComponentHolder<?> holder
-                ? holder.components()
-                : List.of();
-    }
+    public static final NetworkBuffer.Type<BossBarPacket> SERIALIZER = NetworkBufferTemplate.template(
+            UUID, BossBarPacket::uuid,
+            VAR_INT.unionType(BossBarPacket::actionSerializer, Action::id), BossBarPacket::action,
+            BossBarPacket::new
+    );
 
     private static Type<? extends Action> actionSerializer(int id) {
         return switch (id) {
@@ -55,15 +37,21 @@ public record BossBarPacket(UUID uuid,
     }
 
     @Override
+    public Collection<Component> components() {
+        return this.action instanceof ComponentHolder<?> holder
+                ? holder.components()
+                : List.of();
+    }
+
+    @Override
     public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         return this.action instanceof ComponentHolder<?> holder
                 ? new BossBarPacket(this.uuid, (Action) holder.copyWithOperator(operator))
                 : this;
     }
 
-    public sealed interface Action permits
-            AddAction, RemoveAction, UpdateHealthAction,
-            UpdateTitleAction, UpdateStyleAction, UpdateFlagsAction {
+    public sealed interface Action {
+        @ApiStatus.Internal
         int id();
     }
 

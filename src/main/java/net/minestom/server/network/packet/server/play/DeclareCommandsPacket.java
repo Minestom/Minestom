@@ -4,9 +4,11 @@ import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -15,7 +17,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
     public static final int MAX_NODES = Short.MAX_VALUE;
 
     public DeclareCommandsPacket {
-        nodes = List.copyOf(nodes);
+        nodes = List.copyOf(nodes); // TODO deep copy?
     }
 
     public static final NetworkBuffer.Type<DeclareCommandsPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -34,8 +36,8 @@ public record DeclareCommandsPacket(List<Node> nodes,
         public int[] children = new int[0];
         public int redirectedNode; // Only if flags & 0x08
         public String name = ""; // Only for literal and argument
-        public ArgumentParserType parser; // Only for argument
-        public byte[] properties; // Only for argument
+        public @Nullable ArgumentParserType parser; // Only for argument
+        public byte @Nullable [] properties; // Only for argument
         public String suggestionsType = ""; // Only if flags 0x10
 
         public static final NetworkBuffer.Type<Node> SERIALIZER = new Type<>() {
@@ -93,24 +95,29 @@ public record DeclareCommandsPacket(List<Node> nodes,
         };
 
         private byte[] getProperties(NetworkBuffer reader, ArgumentParserType parser) {
-            final Function<Function<NetworkBuffer, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes((extractor) -> {
-                byte flags = extractor.read(BYTE);
-                if ((flags & 0x01) == 0x01) {
-                    via.apply(extractor); // min
-                }
-                if ((flags & 0x02) == 0x02) {
-                    via.apply(extractor); // max
-                }
-            });
             return switch (parser) {
-                case DOUBLE -> minMaxExtractor.apply(b -> b.read(DOUBLE));
-                case INTEGER -> minMaxExtractor.apply(b -> b.read(INT));
-                case FLOAT -> minMaxExtractor.apply(b -> b.read(FLOAT));
-                case LONG -> minMaxExtractor.apply(b -> b.read(LONG));
-                case STRING -> reader.extractBytes(b -> b.read(VAR_INT));
-                case ENTITY, SCORE_HOLDER -> reader.extractBytes(b -> b.read(BYTE));
-                case TIME -> reader.extractBytes(b -> b.read(INT));
-                case RESOURCE_OR_TAG, RESOURCE_OR_TAG_KEY, RESOURCE, RESOURCE_KEY -> reader.extractBytes(b -> b.read(STRING));
+                case DOUBLE, FLOAT, INTEGER, LONG -> reader.extractReadBytes(extractor -> {
+                    byte flags1 = extractor.read(NetworkBuffer.BYTE);
+                    if ((flags1 & 0x01) != 0x01 || (flags1 & 0x02) != 0x02) return;
+                    final Type<?> type = switch (parser) {
+                        case DOUBLE -> NetworkBuffer.DOUBLE;
+                        case FLOAT -> NetworkBuffer.FLOAT;
+                        case INTEGER -> NetworkBuffer.INT;
+                        case LONG -> NetworkBuffer.LONG;
+                        default -> throw new IllegalArgumentException("Unknown parser " + parser);
+                    };
+
+                    if ((flags1 & 0x01) == 0x01) {
+                        extractor.read(type); // min
+                    }
+                    if ((flags1 & 0x02) == 0x02) {
+                        extractor.read(type); // max
+                    }
+                });
+                case STRING -> reader.extractReadBytes(VAR_INT);
+                case ENTITY, SCORE_HOLDER -> reader.extractReadBytes(BYTE);
+                case TIME -> reader.extractReadBytes(INT);
+                case RESOURCE_OR_TAG, RESOURCE_OR_TAG_KEY, RESOURCE, RESOURCE_KEY -> reader.extractReadBytes(STRING);
                 default -> new byte[0]; // unknown
             };
         }
@@ -121,6 +128,24 @@ public record DeclareCommandsPacket(List<Node> nodes,
 
         private boolean isArgument() {
             return (flags & 0b10) != 0;
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (!(object instanceof Node node)) return false;
+            return flags == node.flags && redirectedNode == node.redirectedNode && Arrays.equals(children, node.children) && Objects.equals(name, node.name) && parser == node.parser && Arrays.equals(properties, node.properties) && Objects.equals(suggestionsType, node.suggestionsType);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = flags;
+            result = 31 * result + Arrays.hashCode(children);
+            result = 31 * result + redirectedNode;
+            result = 31 * result + Objects.hashCode(name);
+            result = 31 * result + Objects.hashCode(parser);
+            result = 31 * result + Arrays.hashCode(properties);
+            result = 31 * result + Objects.hashCode(suggestionsType);
+            return result;
         }
     }
 
@@ -133,6 +158,6 @@ public record DeclareCommandsPacket(List<Node> nodes,
     }
 
     public enum NodeType {
-        ROOT, LITERAL, ARGUMENT, NONE;
+        ROOT, LITERAL, ARGUMENT, NONE
     }
 }

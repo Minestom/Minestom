@@ -6,6 +6,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -36,13 +37,13 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
 
         @Override
         public MapDataPacket read(NetworkBuffer buffer) {
-            var mapId = buffer.read(VAR_INT);
-            var scale = buffer.read(BYTE);
-            var locked = buffer.read(BOOLEAN);
-            var trackingPosition = buffer.read(BOOLEAN);
+            int mapId = buffer.read(VAR_INT);
+            byte scale = buffer.read(BYTE);
+            boolean locked = buffer.read(BOOLEAN);
+            boolean trackingPosition = buffer.read(BOOLEAN);
             List<Icon> icons = trackingPosition ? buffer.read(Icon.SERIALIZER.list(MAX_ICONS)) : List.of();
 
-            var columns = buffer.read(BYTE);
+            byte columns = buffer.read(BYTE);
             if (columns <= 0) return new MapDataPacket(mapId, scale, locked, trackingPosition, icons, null);
             byte rows = buffer.read(BYTE);
             byte x = buffer.read(BYTE);
@@ -66,7 +67,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
     }
 
     public record ColorContent(byte columns, byte rows, byte x, byte z,
-                               byte [] data) {
+                               byte[] data) {
         public static final NetworkBuffer.Type<ColorContent> SERIALIZER = NetworkBufferTemplate.template(
                 BYTE, ColorContent::columns,
                 BYTE, ColorContent::rows,
@@ -74,5 +75,25 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
                 BYTE, ColorContent::z,
                 BYTE_ARRAY, ColorContent::data,
                 ColorContent::new);
+
+        public ColorContent {
+            data = data.clone();
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (!(object instanceof ColorContent(byte columns1, byte rows1, byte x1, byte z1, byte[] data1))) return false;
+            return x() == x1 && z() == z1 && rows() == rows1 && columns() == columns1 && Arrays.equals(data(), data1);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = columns();
+            result = 31 * result + rows();
+            result = 31 * result + x();
+            result = 31 * result + z();
+            result = 31 * result + Arrays.hashCode(data());
+            return result;
+        }
     }
 }

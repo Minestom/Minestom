@@ -1,7 +1,6 @@
 package net.minestom.server.adventure;
 
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -11,38 +10,56 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.TickUtils;
+import net.minestom.server.utils.collection.ObjectArray;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Utility methods to convert adventure enums to their packet values.
  */
 public class AdventurePacketConvertor {
-    private static final Object2IntMap<NamedTextColor> NAMED_TEXT_COLOR_ID_MAP = new Object2IntArrayMap<>(16);
+    private static final Map<NamedTextColor, Integer> NAMED_TEXT_COLOR_ID_MAP;
+    private static final List<NamedTextColor> ID_NAMED_TEXT_COLOR_MAP;
 
     static {
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.BLACK, 0);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.DARK_BLUE, 1);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.DARK_GREEN, 2);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.DARK_AQUA, 3);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.DARK_RED, 4);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.DARK_PURPLE, 5);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.GOLD, 6);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.GRAY, 7);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.DARK_GRAY, 8);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.BLUE, 9);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.GREEN, 10);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.AQUA, 11);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.RED, 12);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.LIGHT_PURPLE, 13);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.YELLOW, 14);
-        NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.WHITE, 15);
+        Object2IntArrayMap<NamedTextColor> COLOR_ID_MAP = new Object2IntArrayMap<>(16);
+        COLOR_ID_MAP.put(NamedTextColor.BLACK, 0);
+        COLOR_ID_MAP.put(NamedTextColor.DARK_BLUE, 1);
+        COLOR_ID_MAP.put(NamedTextColor.DARK_GREEN, 2);
+        COLOR_ID_MAP.put(NamedTextColor.DARK_AQUA, 3);
+        COLOR_ID_MAP.put(NamedTextColor.DARK_RED, 4);
+        COLOR_ID_MAP.put(NamedTextColor.DARK_PURPLE, 5);
+        COLOR_ID_MAP.put(NamedTextColor.GOLD, 6);
+        COLOR_ID_MAP.put(NamedTextColor.GRAY, 7);
+        COLOR_ID_MAP.put(NamedTextColor.DARK_GRAY, 8);
+        COLOR_ID_MAP.put(NamedTextColor.BLUE, 9);
+        COLOR_ID_MAP.put(NamedTextColor.GREEN, 10);
+        COLOR_ID_MAP.put(NamedTextColor.AQUA, 11);
+        COLOR_ID_MAP.put(NamedTextColor.RED, 12);
+        COLOR_ID_MAP.put(NamedTextColor.LIGHT_PURPLE, 13);
+        COLOR_ID_MAP.put(NamedTextColor.YELLOW, 14);
+        COLOR_ID_MAP.put(NamedTextColor.WHITE, 15);
+
+        ObjectArray<NamedTextColor> array = ObjectArray.singleThread(16);
+        COLOR_ID_MAP.forEach((key, value) -> array.set(value, key));
+
+        // We are only using these to ensure they are never modified at runtime, and use constructs encapsulated by the JVM.
+        NAMED_TEXT_COLOR_ID_MAP = Map.copyOf(COLOR_ID_MAP);
+        ID_NAMED_TEXT_COLOR_MAP = array.toList();
     }
+
+    @ApiStatus.Experimental
+    public static final NetworkBuffer.Type<NamedTextColor> NAMED_TEXT_COLOR = NetworkBuffer.VAR_INT
+            .transform(AdventurePacketConvertor::getNamedTextColor, AdventurePacketConvertor::getNamedTextColorValue);
 
     /**
      * Gets the int value of a boss bar overlay.
@@ -95,7 +112,17 @@ public class AdventurePacketConvertor {
      * @return the int value
      */
     public static int getNamedTextColorValue(NamedTextColor color) {
-        return NAMED_TEXT_COLOR_ID_MAP.getInt(color);
+        return NAMED_TEXT_COLOR_ID_MAP.get(color);
+    }
+
+    /**
+     * Gets the named text color from the int value, see {@link #getNamedTextColorValue(NamedTextColor)}.
+     *
+     * @param id the color value
+     * @return the int value
+     */
+    public static NamedTextColor getNamedTextColor(int id) {
+        return ID_NAMED_TEXT_COLOR_MAP.get(id);
     }
 
     /**

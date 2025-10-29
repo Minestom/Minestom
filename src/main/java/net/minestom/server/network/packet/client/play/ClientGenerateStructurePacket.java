@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientGenerateStructurePacket(Point blockPosition,
-                                            int level, boolean keepJigsaws) implements ClientPacket {
+                                            int level, boolean keepJigsaws) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientGenerateStructurePacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, ClientGenerateStructurePacket::blockPosition,
             VAR_INT, ClientGenerateStructurePacket::level,

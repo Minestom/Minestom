@@ -9,7 +9,7 @@ public record ClientSetTestBlockPacket(
         Point blockPosition,
         TestBlockMode mode,
         String message
-) implements ClientPacket {
+) implements ClientPacket.Play {
 
     public static final NetworkBuffer.Type<ClientSetTestBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.BLOCK_POSITION, ClientSetTestBlockPacket::blockPosition,

@@ -4,9 +4,12 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.Arrays;
+
+import static net.minestom.server.network.NetworkBuffer.FixedRawBytes;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record MessageSignature(byte [] signature) {
+public record MessageSignature(byte[] signature) {
     static final int SIGNATURE_BYTE_LENGTH = 256;
 
     public MessageSignature {
@@ -16,7 +19,7 @@ public record MessageSignature(byte [] signature) {
     }
 
     public static final NetworkBuffer.Type<MessageSignature> SERIALIZER = NetworkBufferTemplate.template(
-            NetworkBuffer.RAW_BYTES, MessageSignature::signature,
+            FixedRawBytes(SIGNATURE_BYTE_LENGTH), MessageSignature::signature,
             MessageSignature::new
     );
 
@@ -38,5 +41,16 @@ public record MessageSignature(byte [] signature) {
                 return new Packed(id, id == -1 ? buffer.read(MessageSignature.SERIALIZER) : null);
             }
         };
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof MessageSignature(byte[] signature1))) return false;
+        return Arrays.equals(signature(), signature1);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(signature());
     }
 }

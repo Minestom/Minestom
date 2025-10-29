@@ -20,6 +20,10 @@ public record RegistryDataPacket(
             Entry.SERIALIZER.list(Integer.MAX_VALUE), RegistryDataPacket::entries,
             RegistryDataPacket::new);
 
+    public RegistryDataPacket {
+        entries = List.copyOf(entries);
+    }
+
     public record Entry(
             String id,
             @Nullable BinaryTag data

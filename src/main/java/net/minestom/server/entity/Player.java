@@ -1387,13 +1387,22 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private void facePosition(FacePoint facePoint, Point targetPosition,
                               @Nullable Entity entity, @Nullable FacePoint targetPoint) {
-        final int entityId = entity != null ? entity.getEntityId() : 0;
-        sendPacket(new FacePlayerPacket(
-                facePoint == FacePoint.EYE ?
-                        FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET, targetPosition,
-                entityId,
-                targetPoint == FacePoint.EYE ?
-                        FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET));
+        if (entity != null && targetPoint != null) {
+            sendPacket(new FacePlayerPacket(
+                    FacePlayerPacket.FacePosition.fromFacePoint(facePoint),
+                    targetPosition,
+                    new FacePlayerPacket.EntityData(
+                            entity.getEntityId(),
+                            FacePlayerPacket.FacePosition.fromFacePoint(targetPoint)
+                    )
+            ));
+        } else {
+            sendPacket(new FacePlayerPacket(
+                    FacePlayerPacket.FacePosition.fromFacePoint(facePoint),
+                    targetPosition,
+                    null
+            ));
+        }
     }
 
     /**
@@ -1889,7 +1898,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public void lookAt(Point point) {
         // Let the player's client provide updated position values
-        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, point, 0, null));
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, point, null));
     }
 
     /**
@@ -1903,7 +1912,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public void lookAt(Entity entity) {
         // Let the player's client provide updated position values
-        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, entity.getPosition(), entity.getEntityId(), FacePlayerPacket.FacePosition.EYES));
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, entity.getPosition(), new FacePlayerPacket.EntityData(entity.getEntityId(), FacePlayerPacket.FacePosition.EYES)));
     }
 
     /**
