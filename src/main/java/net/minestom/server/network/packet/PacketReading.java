@@ -171,7 +171,7 @@ public final class PacketReading {
         }
         final long readerEnd = readerStart + packetLength;
         final PacketRegistry<T> registry = parser.stateRegistry(state);
-        // We create a slice here so RAW_BYTES capacity is correct, we also set it to read only cause we dont want readers writing into this buffer.
+        // We create a slice here so capacity is enforced, we also set it to read only cause we dont want readers writing into this buffer.
         final NetworkBuffer slice = buffer.slice(readerStart, packetLength, 0, packetLength).readOnly();
         final T packet = readFramedPacket(slice, registry, compressed);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
@@ -199,7 +199,7 @@ public final class PacketReading {
         try {
             if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
             buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
-            return readPayload(decompressed.readOnly(), registry); // Read only payload
+            return readPayload(decompressed.readOnly(), registry); // Payload should not write into the buffer
         } finally {
             PacketVanilla.PACKET_POOL.add(decompressed);
         }
