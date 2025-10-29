@@ -22,7 +22,7 @@ public final class BinaryTagUtil {
             case 10 -> COMPOUND;
             case 11 -> INT_ARRAY;
             case 12 -> LONG_ARRAY;
-            default -> throw new IllegalStateException("Unexpected NBT id value: " + id);
+            default -> throw new IllegalArgumentException("Invalid NBT type id: " + id);
         };
     }
 
