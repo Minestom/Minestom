@@ -58,7 +58,7 @@ public class AdventurePacketConvertor {
     }
 
     @ApiStatus.Experimental
-    public static NetworkBuffer.Type<NamedTextColor> NAMED_TEXT_COLOR = NetworkBuffer.VAR_INT
+    public static final NetworkBuffer.Type<NamedTextColor> NAMED_TEXT_COLOR = NetworkBuffer.VAR_INT
             .transform(AdventurePacketConvertor::getNamedTextColor, AdventurePacketConvertor::getNamedTextColorValue);
 
     /**
