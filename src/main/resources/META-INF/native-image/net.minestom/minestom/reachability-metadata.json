@@ -387,6 +387,24 @@
       ]
     },
     {
+      "type": "sun.security.rsa.RSAKeyFactory$Legacy",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.security.rsa.RSAKeyPairGenerator$Legacy",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "sun.text.resources.cldr.FormatData"
     },
     {
@@ -447,6 +465,9 @@
     },
     {
       "glob": "block.json"
+    },
+    {
+      "glob": "block_entity_types.json"
     },
     {
       "glob": "block_sound_type.json"
@@ -534,6 +555,9 @@
     },
     {
       "glob": "tags/block.json"
+    },
+    {
+      "glob": "tags/block_entity_types.json"
     },
     {
       "glob": "tags/block_sound_type.json"
