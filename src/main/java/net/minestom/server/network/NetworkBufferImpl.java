@@ -360,8 +360,8 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
 
     @Override
     public final String toString() {
-        return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, autoResize=%s, readOnly=%s}",
-                readIndex, writeIndex, capacity(), registries() != null, this instanceof NetworkBufferResizeableImpl, isReadOnly());
+        return String.format("NetworkBuffer{r%d|w%d->%d, registries=%b, autoResize=%b, readOnly=%b}",
+                readIndex, writeIndex, capacity(), registries() != null, isResizable(), isReadOnly());
     }
 
     // Internal writing methods

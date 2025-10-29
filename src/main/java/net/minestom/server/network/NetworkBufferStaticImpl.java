@@ -41,6 +41,11 @@ final class NetworkBufferStaticImpl extends NetworkBufferImpl {
     }
 
     @Override
+    public boolean isResizable() {
+        return false;
+    }
+
+    @Override
     protected boolean isDummy() {
         return segment == MemorySegment.NULL;
     }

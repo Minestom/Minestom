@@ -50,6 +50,11 @@ final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
     }
 
     @Override
+    public boolean isResizable() {
+        return true;
+    }
+
+    @Override
     protected boolean isDummy() {
         return false;
     }

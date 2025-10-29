@@ -453,6 +453,15 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     boolean isReadOnly();
 
     /**
+     * Returns true if the buffer is a resizable buffer.
+     * <br>
+     * If false, the buffer is static and cannot be resized and {@link #resize(long)} will always fail.
+     * @return true if the buffer is resizable
+     */
+    @Contract(pure = true)
+    boolean isResizable();
+
+    /**
      * Resize the buffer to the new {@link #capacity()} using the current settings.
      * @param length the new size
      * @throws IllegalArgumentException if {@code length < 0}
