@@ -52,17 +52,18 @@ final class NetworkBufferStaticImpl extends NetworkBufferImpl {
 
     @Override
     public void requireCapacity(long requestedSize) {
-        throw new IndexOutOfBoundsException();
+        // IndexOutOfBoundsException required due to ensureWritable
+        throw new IndexOutOfBoundsException("Static buffer cannot be resized to %d".formatted(requestedSize));
     }
 
     @Override
     public void resize(long length) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Static buffer cannot be resized to %d".formatted(length));
     }
 
     @Override
     public void trim() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Static buffer cannot resized for trim");
     }
 
     @Override
