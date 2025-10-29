@@ -4,12 +4,14 @@ import net.minestom.server.network.NetworkBuffer.Type;
 import net.minestom.server.utils.Functions.*;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class NetworkBufferTemplate {
 
     public static <R> Type<R> template(R value) {
+        Objects.requireNonNull(value, "value");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -23,6 +25,7 @@ public final class NetworkBufferTemplate {
     }
 
     public static <R> Type<R> template(Supplier<R> supplier) {
+        Objects.requireNonNull(supplier, "supplier");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -30,12 +33,15 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return supplier.get();
+                return Objects.requireNonNull(supplier.get(), "value");
             }
         };
     }
 
-    public static <P1 extends @UnknownNullability Object, R> Type<R> template(Type<P1> p1, Function<R, P1> g1, F1<P1, R> reader) {
+    public static <P1 extends @UnknownNullability Object, R> Type<R> template(Type<P1> p1, Function<R, P1> g1, F1<P1, R> ctor) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -44,15 +50,20 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(p1.read(buffer));
+                return ctor.apply(p1.read(buffer));
             }
         };
     }
 
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            F2<P1, P2, R> reader
+            F2<P1, P2, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -62,15 +73,22 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(p1.read(buffer), p2.read(buffer));
+                return ctor.apply(p1.read(buffer), p2.read(buffer));
             }
         };
     }
 
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, F3<P1, P2, P3, R> reader
+            Type<P3> p3, Function<R, P3> g3, F3<P1, P2, P3, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -81,7 +99,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(p1.read(buffer), p2.read(buffer), p3.read(buffer));
+                return ctor.apply(p1.read(buffer), p2.read(buffer), p3.read(buffer));
             }
         };
     }
@@ -89,8 +107,17 @@ public final class NetworkBufferTemplate {
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            F4<P1, P2, P3, P4, R> reader
+            F4<P1, P2, P3, P4, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -102,7 +129,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer)
                 );
@@ -113,8 +140,19 @@ public final class NetworkBufferTemplate {
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, F5<P1, P2, P3, P4, P5, R> reader
+            Type<P5> p5, Function<R, P5> g5, F5<P1, P2, P3, P4, P5, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -127,7 +165,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer)
@@ -140,8 +178,21 @@ public final class NetworkBufferTemplate {
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            F6<P1, P2, P3, P4, P5, P6, R> reader
+            F6<P1, P2, P3, P4, P5, P6, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -155,7 +206,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer)
@@ -168,8 +219,23 @@ public final class NetworkBufferTemplate {
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, F7<P1, P2, P3, P4, P5, P6, P7, R> reader
+            Type<P7> p7, Function<R, P7> g7, F7<P1, P2, P3, P4, P5, P6, P7, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -184,7 +250,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -199,8 +265,25 @@ public final class NetworkBufferTemplate {
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
             Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            F8<P1, P2, P3, P4, P5, P6, P7, P8, R> reader
+            F8<P1, P2, P3, P4, P5, P6, P7, P8, R> ctor
     ) {
+            Objects.requireNonNull(p1, "p1");
+            Objects.requireNonNull(g1, "g1");
+            Objects.requireNonNull(p2, "p2");
+            Objects.requireNonNull(g2, "g2");
+            Objects.requireNonNull(p3, "p3");
+            Objects.requireNonNull(g3, "g3");
+            Objects.requireNonNull(p4, "p4");
+            Objects.requireNonNull(g4, "g4");
+            Objects.requireNonNull(p5, "p5");
+            Objects.requireNonNull(g5, "g5");
+            Objects.requireNonNull(p6, "p6");
+            Objects.requireNonNull(g6, "g6");
+            Objects.requireNonNull(p7, "p7");
+            Objects.requireNonNull(g7, "g7");
+            Objects.requireNonNull(p8, "p8");
+            Objects.requireNonNull(g8, "g8");
+            Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -216,7 +299,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -231,8 +314,27 @@ public final class NetworkBufferTemplate {
             Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
             Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, F9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> reader
+            Type<P9> p9, Function<R, P9> g9, F9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -249,7 +351,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -266,8 +368,29 @@ public final class NetworkBufferTemplate {
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
             Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
             Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            F10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> reader
+            F10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -285,7 +408,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -302,8 +425,31 @@ public final class NetworkBufferTemplate {
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
             Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
             Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, F11<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, R> reader
+            Type<P11> p11, Function<R, P11> g11, F11<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -322,7 +468,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -340,8 +486,33 @@ public final class NetworkBufferTemplate {
             Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
             Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
             Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12, F12<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, R> reader
+            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12, F12<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -361,7 +532,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -381,8 +552,35 @@ public final class NetworkBufferTemplate {
             Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
             Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
             Type<P13> p13, Function<R, P13> g13,
-            F13<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, R> reader
+            F13<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -403,7 +601,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -424,8 +622,37 @@ public final class NetworkBufferTemplate {
             Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
             Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
             Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
-            F14<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, R> reader
+            F14<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(p14, "p14");
+        Objects.requireNonNull(g14, "g14");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -447,7 +674,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -469,8 +696,39 @@ public final class NetworkBufferTemplate {
             Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
             Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
             Type<P15> p15, Function<R, P15> g15,
-            F15<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, R> reader
+            F15<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(p14, "p14");
+        Objects.requireNonNull(g14, "g14");
+        Objects.requireNonNull(p15, "p15");
+        Objects.requireNonNull(g15, "g15");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -493,7 +751,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -516,8 +774,41 @@ public final class NetworkBufferTemplate {
             Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
             Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
             Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
-            F16<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, R> reader
+            F16<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(p14, "p14");
+        Objects.requireNonNull(g14, "g14");
+        Objects.requireNonNull(p15, "p15");
+        Objects.requireNonNull(g15, "g15");
+        Objects.requireNonNull(p16, "p16");
+        Objects.requireNonNull(g16, "g16");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -541,7 +832,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -565,8 +856,43 @@ public final class NetworkBufferTemplate {
             Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
             Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
             Type<P17> p17, Function<R, P17> g17,
-            F17<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, R> reader
+            F17<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, R> ctor
     ) {
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(p14, "p14");
+        Objects.requireNonNull(g14, "g14");
+        Objects.requireNonNull(p15, "p15");
+        Objects.requireNonNull(g15, "g15");
+        Objects.requireNonNull(p16, "p16");
+        Objects.requireNonNull(g16, "g16");
+        Objects.requireNonNull(p17, "p17");
+        Objects.requireNonNull(g17, "g17");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -591,7 +917,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -616,8 +942,46 @@ public final class NetworkBufferTemplate {
             Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
             Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
             Type<P17> p17, Function<R, P17> g17, Type<P18> p18, Function<R, P18> g18,
-            F18<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, R> reader
+            F18<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, R> ctor
     ) {
+
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(p14, "p14");
+        Objects.requireNonNull(g14, "g14");
+        Objects.requireNonNull(p15, "p15");
+        Objects.requireNonNull(g15, "g15");
+        Objects.requireNonNull(p16, "p16");
+        Objects.requireNonNull(g16, "g16");
+        Objects.requireNonNull(p17, "p17");
+        Objects.requireNonNull(g17, "g17");
+        Objects.requireNonNull(p18, "p18");
+        Objects.requireNonNull(g18, "g18");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -643,7 +1007,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -668,8 +1032,48 @@ public final class NetworkBufferTemplate {
             Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
             Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
             Type<P17> p17, Function<R, P17> g17, Type<P18> p18, Function<R, P18> g18,
-            Type<P19> p19, Function<R, P19> g19, F19<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, R> reader
+            Type<P19> p19, Function<R, P19> g19, F19<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, R> ctor
     ) {
+
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(p14, "p14");
+        Objects.requireNonNull(g14, "g14");
+        Objects.requireNonNull(p15, "p15");
+        Objects.requireNonNull(g15, "g15");
+        Objects.requireNonNull(p16, "p16");
+        Objects.requireNonNull(g16, "g16");
+        Objects.requireNonNull(p17, "p17");
+        Objects.requireNonNull(g17, "g17");
+        Objects.requireNonNull(p18, "p18");
+        Objects.requireNonNull(g18, "g18");
+        Objects.requireNonNull(p19, "p19");
+        Objects.requireNonNull(g19, "g19");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -696,7 +1100,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
@@ -723,8 +1127,50 @@ public final class NetworkBufferTemplate {
             Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
             Type<P17> p17, Function<R, P17> g17, Type<P18> p18, Function<R, P18> g18,
             Type<P19> p19, Function<R, P19> g19, Type<P20> p20, Function<R, P20> g20,
-            F20<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, R> reader
+            F20<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, R> ctor
     ) {
+
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(p14, "p14");
+        Objects.requireNonNull(g14, "g14");
+        Objects.requireNonNull(p15, "p15");
+        Objects.requireNonNull(g15, "g15");
+        Objects.requireNonNull(p16, "p16");
+        Objects.requireNonNull(g16, "g16");
+        Objects.requireNonNull(p17, "p17");
+        Objects.requireNonNull(g17, "g17");
+        Objects.requireNonNull(p18, "p18");
+        Objects.requireNonNull(g18, "g18");
+        Objects.requireNonNull(p19, "p19");
+        Objects.requireNonNull(g19, "g19");
+        Objects.requireNonNull(p20, "p20");
+        Objects.requireNonNull(g20, "g20");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -752,7 +1198,7 @@ public final class NetworkBufferTemplate {
 
             @Override
             public R read(NetworkBuffer buffer) {
-                return reader.apply(
+                return ctor.apply(
                         p1.read(buffer), p2.read(buffer),
                         p3.read(buffer), p4.read(buffer),
                         p5.read(buffer), p6.read(buffer),
