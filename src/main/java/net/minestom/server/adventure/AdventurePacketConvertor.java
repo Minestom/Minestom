@@ -80,7 +80,7 @@ public class AdventurePacketConvertor {
     public static byte getBossBarFlagValue(Collection<BossBar.Flag> flags) {
         byte val = 0x0;
         for (BossBar.Flag flag : flags) {
-            val |= flag.ordinal();
+            val |= (byte) (1 << flag.ordinal());
         }
         return val;
     }
