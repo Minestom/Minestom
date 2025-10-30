@@ -1217,7 +1217,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      *      var factory = NetworkBuffer.Factory.staticFactory().arena(arena);
      *      NetworkBuffer buffer = factory.allocate(1024);
      *      // Do things with the buffer
-     * }</pre>
+     * }}</pre>
      */
     sealed interface Factory permits NetworkBufferImpl.FactoryImpl {
         /**
