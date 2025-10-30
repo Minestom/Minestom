@@ -91,13 +91,8 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
 
     @Override
     public final void copyTo(long srcOffset, byte[] dest, int destOffset, int length) {
-        copyTo(srcOffset, dest, JAVA_BYTE, destOffset, length);
-    }
-
-    @Override
-    public final void copyTo(long srcOffset, Object dest, ValueLayout layout, int destOffset, int length) {
         assertDummy();
-        MemorySegment.copy(this.segment(), layout, srcOffset, dest, destOffset, length);
+        MemorySegment.copy(this.segment(), JAVA_BYTE, srcOffset, dest, destOffset, length);
     }
 
     @Override
