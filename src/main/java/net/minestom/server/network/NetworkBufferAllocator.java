@@ -70,7 +70,7 @@ final class NetworkBufferAllocator {
         Objects.requireNonNull(arena, "arena");
         try {
             MemorySegment segment = (MemorySegment) MALLOC_HANDLE.invokeExact(byteSize);
-            if (segment.address() == MemorySegment.NULL.address())
+            if (byteSize > 0 && segment.address() == MemorySegment.NULL.address())
                 throw new OutOfMemoryError("Native failed to allocate: %d".formatted(byteSize));
             return segment.reinterpret(byteSize, arena, NetworkBufferAllocator::cleaner);
         } catch (Throwable e) {
