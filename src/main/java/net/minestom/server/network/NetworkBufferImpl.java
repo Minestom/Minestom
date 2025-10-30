@@ -245,18 +245,18 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     }
 
     @Override
-    public final NetworkBuffer trimmed(NetworkBuffer.Settings settings) {
+    public final NetworkBuffer trimmed(NetworkBuffer.Factory factory) {
         assertDummy();
         assertReadOnly();
         final long readableBytes = readableBytes();
         if (readableBytes == capacity()) return this;
-        return copy(settings, readIndex, readableBytes, 0, readableBytes);
+        return copy(factory, readIndex, readableBytes, 0, readableBytes);
     }
 
     @Override
-    public final NetworkBuffer copy(NetworkBuffer.Settings settings, long index, long length, long readIndex, long writeIndex) {
+    public final NetworkBuffer copy(NetworkBuffer.Factory factory, long index, long length, long readIndex, long writeIndex) {
         assertDummy();
-        final NetworkBufferImpl newBuffer = (NetworkBufferImpl) settings.allocate(length);
+        final NetworkBufferImpl newBuffer = (NetworkBufferImpl) factory.allocate(length);
         MemorySegment.copy(this.segment(), index, newBuffer.segment(), 0, length);
         return newBuffer.index(readIndex, writeIndex);
     }
@@ -496,38 +496,38 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
         if (isDummy()) throw new UnsupportedOperationException("Buffer is a dummy buffer");
     }
 
-    record Settings(Supplier<Arena> arenaSupplier, @Nullable AutoResize autoResize,
-                    @Nullable Registries registries) implements NetworkBuffer.Settings {
-        static final Settings STATIC = new Settings(Arena::ofAuto, null, null);
-        static final Settings RESIZEABLE = STATIC.autoResize(AutoResize.DOUBLE);
+    record FactoryImpl(Supplier<Arena> arenaSupplier, @Nullable AutoResize autoResize,
+                       @Nullable Registries registries) implements NetworkBuffer.Factory {
+        static final FactoryImpl STATIC = new FactoryImpl(Arena::ofAuto, null, null);
+        static final FactoryImpl RESIZEABLE = STATIC.autoResize(AutoResize.DOUBLE);
 
-        public Settings {
+        public FactoryImpl {
             Objects.requireNonNull(arenaSupplier, "arenaSupplier");
         }
 
         @Override
-        public Settings arena(Arena arena) {
+        public FactoryImpl arena(Arena arena) {
             Objects.requireNonNull(arena, "arena");
             final Supplier<Arena> arenaSupplier = () -> arena; // stable value/lazy constant
-            return new Settings(arenaSupplier, autoResize, registries);
+            return new FactoryImpl(arenaSupplier, autoResize, registries);
         }
 
         @Override
-        public Settings arena(Supplier<Arena> arenaSupplier) {
+        public FactoryImpl arena(Supplier<Arena> arenaSupplier) {
             Objects.requireNonNull(arenaSupplier, "arenaSupplier");
-            return new Settings(arenaSupplier, autoResize, registries);
+            return new FactoryImpl(arenaSupplier, autoResize, registries);
         }
 
         @Override
-        public Settings autoResize(AutoResize autoResize) {
+        public FactoryImpl autoResize(AutoResize autoResize) {
             Objects.requireNonNull(autoResize, "autoResize");
-            return new Settings(arenaSupplier, autoResize, registries);
+            return new FactoryImpl(arenaSupplier, autoResize, registries);
         }
 
         @Override
-        public Settings registry(Registries registries) {
+        public FactoryImpl registry(Registries registries) {
             Objects.requireNonNull(registries, "registries");
-            return new Settings(arenaSupplier, autoResize, registries);
+            return new FactoryImpl(arenaSupplier, autoResize, registries);
         }
 
         @Override

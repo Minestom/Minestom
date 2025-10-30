@@ -312,7 +312,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param length the length
      * @param value the value to fill
      * @throws UnsupportedOperationException if this buffer is a dummy
-     * @throws UnsupportedOperationException if this buffer is a read only
+     * @throws UnsupportedOperationException if this buffer is a read-only
      */
     void fill(long srcOffset, long length, byte value);
 
@@ -466,7 +466,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     long capacity();
 
     /**
-     * Creates a read only version of this buffer.
+     * Creates a read-only version of this buffer.
      * <br>
      * Note: While this can be a view, during resizing of the original buffer this may no longer be valid.
      * @return new static buffer
@@ -476,7 +476,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     /**
      * Returns true if the buffer has previously been {@link #readOnly()}
-     * @return true if the buffer is read only
+     * @return true if the buffer is read-only
      */
     @Contract(pure = true)
     boolean isReadOnly();
@@ -491,13 +491,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     boolean isResizable();
 
     /**
-     * Resize the buffer to the new {@link #capacity()} using the current settings.
+     * Resize the buffer to {@code length} the new {@link #capacity()}.
+     * <br>
+     * Note: This throws away the existing arena so it can be freed.
+     * You can set a fixed arena by {@link Factory#arena(Arena)}
      * @param length the new size
      * @throws IllegalArgumentException if {@code length < 0}
      * @throws IllegalArgumentException if the new size is less than or equal to the current {@link #capacity()}.
      * @throws UnsupportedOperationException if this buffer cannot be resized
      * @throws UnsupportedOperationException if this buffer is a dummy
-     * @throws UnsupportedOperationException if this buffer is read only
+     * @throws UnsupportedOperationException if this buffer is read-only
      */
     @Contract(mutates = "this")
     void resize(@Range(from = 0, to = Long.MAX_VALUE) long length);
@@ -517,7 +520,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Ensures that the buffer {@link #readableBytes()} is greater or equal to {@code length}.
      * @param length the length to ensure
      * @throws IllegalArgumentException if {@code length < 0}
-     * @throws IndexOutOfBoundsException if buffer does not have enough data for this length.
+     * @throws IndexOutOfBoundsException if the buffer does not have enough data for this length.
      */
     @Contract(pure = true)
     void ensureReadable(@Range(from = 0, to = Long.MAX_VALUE) long length);
@@ -538,28 +541,28 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void trim();
 
     /**
-     * Creates a copy of the buffer trimmed using the settings to {@link Settings#staticSettings()}.
+     * Creates a copy of the buffer trimmed using the factory to {@link Factory#staticFactory()}.
      * <br>
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
      * @return the trimmed buffer
      */
     @Contract("-> new")
     default NetworkBuffer trimmed() {
-        return trimmed(Settings.staticSettings());
+        return trimmed(NetworkBuffer.Factory.staticFactory());
     }
 
     /**
-     * Creates a copy of the buffer trimmed using the settings to {@link Settings#allocate(long)}.
+     * Creates a copy of the buffer trimmed using the factory to {@link Factory#allocate(long)}.
      * <br>
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
-     * @param settings the settings to allocate from
+     * @param factory the factory to allocate from
      * @return the trimmed buffer
      */
     @Contract("_, -> new")
-    NetworkBuffer trimmed(Settings settings);
+    NetworkBuffer trimmed(Factory factory);
 
     /**
-     * Copies the current buffer using the settings specified {@link Settings#staticSettings()}
+     * Copies the current buffer using the factory specified {@link Factory#staticFactory()}
      * with the index to the length using {@link #readIndex()} and {@link #writeIndex()}.
      * @param index the starting index
      * @param length the length
@@ -571,20 +574,20 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Copies the current buffer using the {@link Settings} with the index to the length with
+     * Copies the current buffer using the {@link Factory} with the index to the length with
      * the using {@link #readIndex()} and {@link #writeIndex()}.
-     * @param settings the {@link Settings} which {@link Settings#allocate(long)} will be used for the new buffer.
+     * @param factory the {@link Factory} which {@link Factory#allocate(long)} will be used for the new buffer.
      * @param index the index
      * @param length the length
      * @return the copy of the current buffer into a new buffer
      */
     @Contract("_, _, _ -> new")
-    default NetworkBuffer copy(Settings settings, long index, long length) {
-        return copy(settings, index, length, readIndex(), writeIndex());
+    default NetworkBuffer copy(Factory factory, long index, long length) {
+        return copy(factory, index, length, readIndex(), writeIndex());
     }
 
     /**
-     * Copies the current buffer using the settings specified {@link Settings#staticSettings()}
+     * Copies the current buffer using the factory specified {@link Factory#staticFactory()}
      * with the index to the length with the new specified read and write indexes.
      * @param index the starting index
      * @param length the length
@@ -594,12 +597,12 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract("_, _, _, _ -> new")
     default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
-        return copy(Settings.staticSettings(), index, length, readIndex, writeIndex);
+        return copy(NetworkBuffer.Factory.staticFactory(), index, length, readIndex, writeIndex);
     }
 
     /**
-     * Copies the current buffer using the {@link Settings} with the index to the length with the new specified read and write indexes.
-     * @param settings the {@link Settings} which {@link Settings#allocate(long)} will be used for the new buffer.
+     * Copies the current buffer using the {@link Factory} with the index to the length with the new specified read and write indexes.
+     * @param factory the {@link Factory} which {@link Factory#allocate(long)} will be used for the new buffer.
      * @param index the starting index
      * @param length the length
      * @param readIndex the new read index
@@ -607,7 +610,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the copy of the current buffer into a new buffer
      */
     @Contract("_, _, _, _, _ -> new")
-    NetworkBuffer copy(Settings settings, long index, long length, long readIndex, long writeIndex);
+    NetworkBuffer copy(Factory factory, long index, long length, long readIndex, long writeIndex);
 
     /**
      * Creates a slice from the starting index to the length passing the read index and write index supplied
@@ -683,7 +686,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
     /**
-     * The registries used when creating with {@link Settings#registry(Registries)}
+     * The registries used when creating with {@link Factory#registry(Registries)}
      * @return the registries
      */
     @Nullable Registries registries();
@@ -872,49 +875,49 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Creates a new static buffer using {@link Settings#staticSettings()}.
-     * @param size the size to use for {@link Settings#allocate(long)}
+     * Creates a new static buffer using {@link Factory#staticFactory()}.
+     * @param size the size to use for {@link Factory#allocate(long)}
      * @param registries the registries to use
      * @return the new network buffer
      */
     @Contract("_, _ -> new")
     static NetworkBuffer staticBuffer(long size, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return Settings.staticSettings().registry(registries).allocate(size);
+        return NetworkBuffer.Factory.staticFactory().registry(registries).allocate(size);
     }
 
     /**
-     * Creates a new static buffer using {@link Settings#staticSettings()}.
-     * @param size the size to use for {@link Settings#allocate(long)}
+     * Creates a new static buffer using {@link Factory#staticFactory()}.
+     * @param size the size to use for {@link Factory#allocate(long)}
      * @return the new network buffer
      */
     @Contract("_ -> new")
     static NetworkBuffer staticBuffer(long size) {
-        return Settings.staticSettings().allocate(size);
+        return NetworkBuffer.Factory.staticFactory().allocate(size);
     }
 
     /**
-     * Creates a resizeable buffer using {@link Settings#resizeableSettings()}
-     * @param initialSize the initial size to use for {@link Settings#allocate(long)}
+     * Creates a resizeable buffer using {@link Factory#resizeableFactory()}
+     * @param initialSize the initial size to use for {@link Factory#allocate(long)}
      * @param registries the registries to use
      * @return the new buffer
      */
     @Contract("_, _ -> new")
     static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return Settings.resizeableSettings()
+        return NetworkBuffer.Factory.resizeableFactory()
                 .registry(registries)
                 .allocate(initialSize);
     }
 
     /**
-     * Creates a resizeable buffer using {@link Settings#resizeableSettings()}
-     * @param initialSize the initial size to use for {@link Settings#allocate(long)}
+     * Creates a resizeable buffer using {@link Factory#resizeableFactory()}
+     * @param initialSize the initial size to use for {@link Factory#allocate(long)}
      * @return the new buffer
      */
     @Contract("_ -> new")
     static NetworkBuffer resizableBuffer(int initialSize) {
-        return Settings.resizeableSettings().allocate(initialSize);
+        return NetworkBuffer.Factory.resizeableFactory().allocate(initialSize);
     }
 
     /**
@@ -1003,41 +1006,42 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Builder for creating a {@link NetworkBuffer} through {@link Settings#staticSettings()}.
+     * Factory for creating a {@link NetworkBuffer} through {@link Factory#staticFactory()}.
      * <br>
      * Useful for creating buffers with specific configuration like arenas, auto resizing, and registries.
      * <br>
-     * Builders are immutable and can be used across threads. You also shouldn't rely on the identity of builders due to being a value class candidate.
+     * Factories are immutable and can be used across threads if the {@link Arena} supports it.
+     * You also shouldn't rely on the identity of them due to being a value class candidate.
      */
-    sealed interface Settings permits NetworkBufferImpl.Settings {
+    sealed interface Factory permits NetworkBufferImpl.FactoryImpl {
         /**
-         * Gets the static settings where {@link #arena(Supplier)} is set.
-         * @return the static settings.
+         * Gets the static factory where {@link #arena(Supplier)} is set.
+         * @return the static factory.
          */
         @Contract(pure = true)
-        static Settings staticSettings() {
-            return NetworkBufferImpl.Settings.STATIC;
+        static Factory staticFactory() {
+            return NetworkBufferImpl.FactoryImpl.STATIC;
         }
 
         /**
-         * Gets the resizeable settings where {@link #autoResize(AutoResize)} is set and built off {@link #staticSettings()}.
-         * @return the resizeable settings.
+         * Gets the resizeable factory where {@link #autoResize(AutoResize)} is set and built off {@link #staticFactory()}.
+         * @return the resizeable factory.
          */
         @Contract(pure = true)
-        static Settings resizeableSettings() {
-            return NetworkBufferImpl.Settings.RESIZEABLE;
+        static Factory resizeableFactory() {
+            return NetworkBufferImpl.FactoryImpl.RESIZEABLE;
         }
         
         /**
          * Sets the arena used for allocations.
          * <br>
-         * Otherwise if left unset the default arena will be used.
+         * Otherwise, if left unset, the default arena will be used.
          * @param arena the arena
-         * @return the new settings
+         * @return the new factory
          */
         @ApiStatus.Experimental
-        @Contract(pure = true)
-        Settings arena(Arena arena);
+        @Contract(pure = true, value = "_ -> new")
+        Factory arena(Arena arena);
 
         /**
          * Sets the new arena strategy. Called when we want to reallocate memory to a fresh arena, for example during copy or initialization.
@@ -1046,32 +1050,32 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
          * <br>
          * Otherwise if left unset the default arena will be used.
          * @param arenaSupplier the supplier
-         * @return the new settings
+         * @return the new factory
          */
         @ApiStatus.Experimental
-        @Contract(pure = true)
-        Settings arena(Supplier<Arena> arenaSupplier);
+        @Contract(pure = true, value = "_ -> new")
+        Factory arena(Supplier<Arena> arenaSupplier);
 
         /**
          * Sets the auto resizing strategy.
          * <br>
          * Otherwise if left unset the buffer will never be resized and is considered a static buffer.
          * @param autoResize the {@link AutoResize} strategy
-         * @return the new settings
+         * @return the new factory
          */
-        @Contract(pure = true)
-        Settings autoResize(AutoResize autoResize);
+        @Contract(pure = true, value = "_ -> new")
+        Factory autoResize(AutoResize autoResize);
 
         /**
          * Sets a registry for buffers to use.
          * @param registries the registry
-         * @return the new settings
+         * @return the new factory
          */
-        @Contract(pure = true)
-        Settings registry(Registries registries);
+        @Contract(pure = true, value = "_ -> new")
+        Factory registry(Registries registries);
 
         /**
-         * Builds a new network buffer from these settings with {@code length} allocated.
+         * Builds a new network buffer from this factory with {@code length} allocated.
          * @param length the size of the buffer, or initial size if {@link AutoResize} is set.
          * @return the new network buffer
          */
@@ -1108,8 +1112,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         Objects.requireNonNull(writing, "writing");
         Objects.requireNonNull(registries, "registries");
         try (var arena = Arena.ofConfined()) {
-            var settings = Settings.resizeableSettings().arena(arena).registry(registries);
-            var allocation = settings.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            var factory = NetworkBuffer.Factory.resizeableFactory().arena(arena).registry(registries);
+            var allocation = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
             return allocation.extractWrittenBytes(writing);
         }
     }
@@ -1126,8 +1130,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static byte[] makeArray(Consumer<NetworkBuffer> writing) {
         Objects.requireNonNull(writing, "writing");
         try (var arena = Arena.ofConfined()) {
-            var settings = Settings.resizeableSettings().arena(arena);
-            var allocation = settings.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            var factory = NetworkBuffer.Factory.resizeableFactory().arena(arena);
+            var allocation = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
             return allocation.extractWrittenBytes(writing);
         }
     }
@@ -1148,8 +1152,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         Objects.requireNonNull(type, "type");
         Objects.requireNonNull(registries, "registries");
         try (var arena = Arena.ofConfined()) {
-            var settings = Settings.resizeableSettings().arena(arena).registry(registries);
-            var allocation = settings.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            var factory = NetworkBuffer.Factory.resizeableFactory().arena(arena).registry(registries);
+            var allocation = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
             return allocation.extractWrittenBytes(type, value);
         }
     }
@@ -1168,8 +1172,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
         Objects.requireNonNull(type, "type");
         try (var arena = Arena.ofConfined()) {
-            var settings = Settings.resizeableSettings().arena(arena);
-            var allocation = settings.allocate(type.sizeOf(value));
+            var factory = NetworkBuffer.Factory.resizeableFactory().arena(arena);
+            var allocation = factory.allocate(type.sizeOf(value));
             return allocation.extractWrittenBytes(type, value);
         }
     }
@@ -1184,7 +1188,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param length the length to copy
      * @throws UnsupportedOperationException if {@code srcBuffer} is a dummy
      * @throws UnsupportedOperationException if {@code dstBuffer} is a dummy
-     * @throws UnsupportedOperationException if {@code dstBuffer} is read only
+     * @throws UnsupportedOperationException if {@code dstBuffer} is read-only
      */
     static void copy(NetworkBuffer srcBuffer, long srcOffset,
                      NetworkBuffer dstBuffer, long dstOffset, long length) {

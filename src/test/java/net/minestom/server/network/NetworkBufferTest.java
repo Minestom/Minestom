@@ -1,8 +1,6 @@
 package net.minestom.server.network;
 
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.EndBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
@@ -19,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -580,7 +577,7 @@ public class NetworkBufferTest {
     public void testConfinedArena() {
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            buffer = NetworkBuffer.Settings.staticSettings().arena(arena).allocate(256);
+            buffer = Factory.staticFactory().arena(arena).allocate(256);
             buffer.write(VAR_INT, Integer.MAX_VALUE);
             buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
             assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
@@ -592,7 +589,7 @@ public class NetworkBufferTest {
     public void testConfinedArenaCopy() {
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            var settings = NetworkBuffer.Settings.staticSettings().arena(arena);
+            var settings = Factory.staticFactory().arena(arena);
             var confinedBuffer = settings.allocate(256);
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
@@ -607,7 +604,7 @@ public class NetworkBufferTest {
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            var confinedBuffer = NetworkBuffer.Settings.staticSettings().arena(arena).allocate(256);
+            var confinedBuffer = Factory.staticFactory().arena(arena).allocate(256);
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, stringBytes);
             assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
