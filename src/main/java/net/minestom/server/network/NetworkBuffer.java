@@ -161,6 +161,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     /**
      * Creates a fixed bit set type with the specified length.
+     * <br>
+     * Note: If there aren't enough bits set during writing, the value will be padded with 0's.
      * @param length the length
      * @throws IllegalArgumentException if {@code length} is less than zero
      * @return the type
@@ -1102,7 +1104,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     /**
      * Creates a byte array from the consumer and with registries.
      * <br>
-     * Note: only the current thread can write to the buffer.
+     * Note: only the current thread can use the buffer.
      * @param writing consumer of the {@link NetworkBuffer}
      * @param registries the registries to use in serialization
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
@@ -1111,17 +1113,17 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries) {
         Objects.requireNonNull(writing, "writing");
         Objects.requireNonNull(registries, "registries");
-        try (var arena = Arena.ofConfined()) {
-            var factory = NetworkBuffer.Factory.resizeableFactory().arena(arena).registry(registries);
-            var allocation = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
-            return allocation.extractWrittenBytes(writing);
+        try (Arena arena = Arena.ofConfined()) {
+            final Factory factory = NetworkBuffer.Factory.resizeableFactory().arena(arena).registry(registries);
+            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            return buffer.extractWrittenBytes(writing);
         }
     }
 
     /**
      * Creates a byte array from the consumer and without registries.
      * <br>
-     * Note: only the current thread can write to the buffer.
+     * Note: only the current thread can use the buffer.
      * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
      * @param writing consumer of the {@link NetworkBuffer}
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
@@ -1129,17 +1131,17 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Contract("_ -> new")
     static byte[] makeArray(Consumer<NetworkBuffer> writing) {
         Objects.requireNonNull(writing, "writing");
-        try (var arena = Arena.ofConfined()) {
-            var factory = NetworkBuffer.Factory.resizeableFactory().arena(arena);
-            var allocation = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
-            return allocation.extractWrittenBytes(writing);
+        try (Arena arena = Arena.ofConfined()) {
+            final Factory factory = NetworkBuffer.Factory.resizeableFactory().arena(arena);
+            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            return buffer.extractWrittenBytes(writing);
         }
     }
 
     /**
      * Creates a byte array from the type and value registries.
      * <br>
-     * Note: only the current thread can write to the buffer.
+     * Note: only the current thread can use the buffer.
      * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
      * @param type the {@link Type} for {@link T}
      * @param value the value
@@ -1151,17 +1153,17 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, Registries registries) {
         Objects.requireNonNull(type, "type");
         Objects.requireNonNull(registries, "registries");
-        try (var arena = Arena.ofConfined()) {
-            var factory = NetworkBuffer.Factory.resizeableFactory().arena(arena).registry(registries);
-            var allocation = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
-            return allocation.extractWrittenBytes(type, value);
+        try (Arena arena = Arena.ofConfined()) {
+            final Factory factory = NetworkBuffer.Factory.resizeableFactory().arena(arena).registry(registries);
+            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            return buffer.extractWrittenBytes(type, value);
         }
     }
 
     /**
      * Creates a byte array from the type and value without registries.
      * <br>
-     * Note: only the current thread can write to the buffer.
+     * Note: only the current thread can use the buffer.
      * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
      * @param type the {@link Type} for {@link T}
      * @param value the value
@@ -1171,10 +1173,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Contract("_, _ -> new")
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
         Objects.requireNonNull(type, "type");
-        try (var arena = Arena.ofConfined()) {
-            var factory = NetworkBuffer.Factory.resizeableFactory().arena(arena);
-            var allocation = factory.allocate(type.sizeOf(value));
-            return allocation.extractWrittenBytes(type, value);
+        try (Arena arena = Arena.ofConfined()) {
+            final Factory factory = NetworkBuffer.Factory.resizeableFactory().arena(arena);
+            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            return buffer.extractWrittenBytes(type, value);
         }
     }
 
@@ -1190,6 +1192,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @throws UnsupportedOperationException if {@code dstBuffer} is a dummy
      * @throws UnsupportedOperationException if {@code dstBuffer} is read-only
      */
+    @Contract(mutates = "param3")
     static void copy(NetworkBuffer srcBuffer, long srcOffset,
                      NetworkBuffer dstBuffer, long dstOffset, long length) {
         Objects.requireNonNull(srcBuffer, "srcBuffer");
