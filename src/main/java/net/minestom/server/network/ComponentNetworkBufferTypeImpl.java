@@ -161,6 +161,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBuffer.Type<Component>
                             final UUID id = player.id();
                             if (id != null) {
                                 buffer.write(BYTE, TAG_INT_ARRAY);
+                                buffer.write(STRING_IO_UTF8, "id");
                                 buffer.write(INT, 4);
 
                                 final long uuidMost = id.getMostSignificantBits();
