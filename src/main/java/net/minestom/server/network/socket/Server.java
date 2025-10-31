@@ -8,6 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -24,9 +25,9 @@ public final class Server {
 
     private final PacketParser<ClientPacket> packetParser;
 
-    private ServerSocketChannel serverSocket;
-    private SocketAddress socketAddress;
-    private String address;
+    private @UnknownNullability ServerSocketChannel serverSocket;
+    private @UnknownNullability SocketAddress socketAddress;
+    private @UnknownNullability String address;
     private int port;
 
     public Server(PacketParser<ClientPacket> packetParser) {
@@ -75,14 +76,14 @@ public final class Server {
                 try {
                     final SocketChannel client = serverSocket.accept();
                     configureSocket(client);
-                    AtomicReference<PlayerSocketConnection> reference = new AtomicReference<>(null);
+                    AtomicReference<@UnknownNullability PlayerSocketConnection> reference = new AtomicReference<>(null);
                     Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
                     Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
                     PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
                     reference.set(connection);
                     readThread.start();
                     writeThread.start();
-                } catch (AsynchronousCloseException ignored) {
+                } catch (AsynchronousCloseException _) {
                     // We are exiting, bye bye!
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -107,7 +108,7 @@ public final class Server {
             try {
                 // Read & process packets
                 connection.read(packetParser);
-            } catch (ClosedChannelException ignored) {
+            } catch (ClosedChannelException _) {
                 break; // We closed the socket during read, just exit.
             } catch (EOFException e) {
                 connection.disconnect();
@@ -119,20 +120,23 @@ public final class Server {
                 break;
             }
         }
+        // Ensure the write thread gets unlocked once the read thread stops.
+        connection.unlockWriteThread();
     }
 
     private void playerWriteLoop(PlayerSocketConnection connection) {
         Check.notNull(connection, "connection cannot be null");
         while (!stop) {
             try {
+                connection.awaitSendablePackets();
                 connection.flushSync();
-            } catch (ClosedChannelException ignored) {
+            } catch (ClosedChannelException _) {
                 break; // We closed the socket during write, just exit.
             } catch (EOFException e) {
                 connection.disconnect();
                 break;
             } catch (Throwable e) {
-                boolean isExpected = e instanceof IOException && e.getMessage().equals("Broken pipe");
+                boolean isExpected = e instanceof IOException && (e.getMessage().equals("Broken pipe") || e.getMessage().equals("Connection reset by peer"));
                 if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
 
                 connection.disconnect();

@@ -9,7 +9,7 @@ import java.util.Set;
 
 public record ClientDebugSubscriptionRequestPacket(
         Set<DebugSubscription<?>> subscriptions
-) implements ClientPacket {
+) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientDebugSubscriptionRequestPacket> SERIALIZER = NetworkBufferTemplate.template(
             DebugSubscription.NETWORK_TYPE.set(), ClientDebugSubscriptionRequestPacket::subscriptions,
             ClientDebugSubscriptionRequestPacket::new);

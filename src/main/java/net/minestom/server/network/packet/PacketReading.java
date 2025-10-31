@@ -105,7 +105,7 @@ public final class PacketReading {
                     packets.add(parsedPacket);
                     state = parsedPacket.nextState();
                 }
-                case Result.Empty<T> ignored -> {
+                case Result.Empty<T> _ -> {
                     break readLoop;
                 }
                 case Result.Failure<T> failure -> {
@@ -170,12 +170,12 @@ public final class PacketReading {
             else return EMPTY_CLIENT_PACKET;
         }
         final long readerEnd = readerStart + packetLength;
-        final long writerEnd = buffer.writeIndex();
-        buffer.writeIndex(readerEnd);
         final PacketRegistry<T> registry = parser.stateRegistry(state);
-        final T packet = readFramedPacket(buffer, registry, compressed);
+        // We create a slice here so capacity is enforced, we also set it to read only cause we dont want readers writing into this buffer.
+        final NetworkBuffer slice = buffer.slice(readerStart, packetLength, 0, packetLength).readOnly();
+        final T packet = readFramedPacket(slice, registry, compressed);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
-        buffer.index(readerEnd, writerEnd);
+        buffer.readIndex(readerEnd);
         return new Result.Success<>(new ParsedPacket<>(nextState, packet));
     }
 
@@ -199,7 +199,7 @@ public final class PacketReading {
         try {
             if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
             buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
-            return readPayload(decompressed, registry);
+            return readPayload(decompressed.readOnly(), registry); // Payload should not write into the buffer
         } finally {
             PacketVanilla.PACKET_POOL.add(decompressed);
         }

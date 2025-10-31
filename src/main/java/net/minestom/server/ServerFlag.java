@@ -37,6 +37,15 @@ public final class ServerFlag {
     public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
     public static final int SOCKET_TIMEOUT = intProperty("minestom.socket-timeout", 15_000);
     public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 16_383);
+    public static final int DEFAULT_RESIZEABLE_SIZE = intProperty("minestom.default-resizeable-size", 256);
+    public static final boolean ATTEMPT_NATIVE_ALLOCATION = booleanProperty("minestom.attempt-native-allocation", true);
+    public static final boolean FORCE_NATIVE_ALLOCATION = booleanProperty("minestom.force-native-allocation", false);
+
+    // Network object pooling
+    public static final int DECOMPRESS_POOL_SIZE = intProperty("minestom.decompress-pool-size", 32_767);
+    public static final int COMPRESS_POOL_SIZE = intProperty("minestom.compress-pool-size", 32_767);
+    public static final int PACKET_POOL_SIZE = intProperty("minestom.packet-buffer-pool-size", 32_767);
+    public static final int VIEWABLE_POOL_SIZE = intProperty("minestom.viewable-pool-size", 32_767);
 
     // Chunk update
     public static final float MIN_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.min-per-tick", 0.01f);

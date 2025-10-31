@@ -4,6 +4,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
@@ -35,5 +36,23 @@ public record ChunkBiomesPacket(List<ChunkBiomeData> chunks) implements ServerPa
                 return new ChunkBiomeData(chunkX, chunkZ, data);
             }
         };
+
+        public ChunkBiomeData {
+            data = data.clone();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof ChunkBiomeData(int x, int z, byte[] data1))) return false;
+            return chunkX() == x && chunkZ() == z && Arrays.equals(data(), data1);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = chunkX();
+            result = 31 * result + chunkZ();
+            result = 31 * result + Arrays.hashCode(data());
+            return result;
+        }
     }
 }

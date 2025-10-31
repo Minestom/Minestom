@@ -12,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record ClientPlayerBlockPlacementPacket(
         PlayerHand hand, Point blockPosition, BlockFace blockFace,
         float cursorPositionX, float cursorPositionY, float cursorPositionZ,
-        boolean insideBlock, boolean hitWorldBorder, int sequence) implements ClientPacket {
+        boolean insideBlock, boolean hitWorldBorder, int sequence) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPlayerBlockPlacementPacket> SERIALIZER = NetworkBufferTemplate.template(
             Enum(PlayerHand.class), ClientPlayerBlockPlacementPacket::hand,
             BLOCK_POSITION, ClientPlayerBlockPlacementPacket::blockPosition,

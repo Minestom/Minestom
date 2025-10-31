@@ -20,13 +20,21 @@ public record PlayerInfoUpdatePacket(
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ENTRIES = 1024;
 
+    public PlayerInfoUpdatePacket {
+        actions = EnumSet.copyOf(actions);
+        entries = List.copyOf(entries);
+    }
+
     public PlayerInfoUpdatePacket(Action action, Entry entry) {
         this(EnumSet.of(action), List.of(entry));
     }
 
-    public PlayerInfoUpdatePacket {
-        actions = EnumSet.copyOf(actions);
-        entries = List.copyOf(entries);
+    public PlayerInfoUpdatePacket(EnumSet<Action> action, Entry entry) {
+        this(action, List.of(entry));
+    }
+
+    public PlayerInfoUpdatePacket(Action action, List<Entry> entry) {
+        this(EnumSet.of(action), entry);
     }
 
     public static final NetworkBuffer.Type<PlayerInfoUpdatePacket> SERIALIZER = new Type<>() {
