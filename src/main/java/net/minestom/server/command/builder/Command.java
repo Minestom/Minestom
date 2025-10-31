@@ -123,6 +123,12 @@ public class Command {
         this.subcommands.add(command);
     }
 
+    public void addSubcommands(Command... commands) {
+        for (Command command : commands) {
+            addSubcommand(command);
+        }
+    }
+
     public List<Command> getSubcommands() {
         return Collections.unmodifiableList(subcommands);
     }

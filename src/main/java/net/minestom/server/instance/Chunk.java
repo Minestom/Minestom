@@ -233,7 +233,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Gets if this chunk is read-only.
      * <p>
      * Being read-only should prevent block placing/breaking and setting block from an {@link Instance}.
-     * It does not affect {@link IChunkLoader} and {@link Generator}.
+     * It does not affect {@link ChunkLoader} and {@link Generator}.
      *
      * @return true if the chunk is read-only
      */
@@ -245,7 +245,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Changes the read state of the chunk.
      * <p>
      * Being read-only should prevent block placing/breaking and setting block from an {@link Instance}.
-     * It does not affect {@link IChunkLoader} and {@link Generator}.
+     * It does not affect {@link ChunkLoader} and {@link Generator}.
      *
      * @param readOnly true to make the chunk read-only, false otherwise
      */

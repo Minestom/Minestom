@@ -33,7 +33,8 @@ import java.util.function.BiPredicate;
  */
 public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, Blocks permits BlockImpl {
 
-    NetworkBuffer.Type<Block> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromStateId, Block::stateId);
+    NetworkBuffer.Type<Block> ID_NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromBlockId, Block::id);
+    NetworkBuffer.Type<Block> STATE_NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromStateId, Block::stateId);
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.

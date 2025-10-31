@@ -176,13 +176,22 @@ public final class CollisionUtils {
         return newPosition;
     }
 
-    public static Shape parseBlockShape(Map<Object, Object> internCache, String collision, String occlusion, boolean occludes, byte lightEmission) {
-        record ShapeEntry(String collision, String occlusion, boolean occludes, byte lightEmission) {
-        } // Easy way to Hashcode
-        ShapeEntry entry = new ShapeEntry(collision, occlusion, occludes, lightEmission);
+    @ApiStatus.Internal
+    public static Shape parseCollisionShape(Map<Object, Object> internCache, String shape) {
+        final Shape cachedShape = (Shape) internCache.get(shape);
+        if (cachedShape != null) return cachedShape;
+        final Shape parsedShape = ShapeImpl.parseShapeFromRegistry(shape, (byte) 0);
+        internCache.put(shape, parsedShape);
+        return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
+    }
+
+    @ApiStatus.Internal
+    public static Shape parseOcclusionShape(Map<Object, Object> internCache, String shape, boolean occludes, byte lightEmission) {
+        record ShapeEntry(String shape, boolean occludes, byte lightEmission) {} // Easy way to Hashcode
+        ShapeEntry entry = new ShapeEntry(shape, occludes, lightEmission);
         final Shape cachedShape = (Shape) internCache.get(entry);
         if (cachedShape != null) return cachedShape;
-        final Shape parsedShape = ShapeImpl.parseBlockFromRegistry(collision, occlusion, occludes, lightEmission);
+        final Shape parsedShape = occludes ? ShapeImpl.parseShapeFromRegistry(shape, lightEmission) : ShapeImpl.emptyShape(lightEmission);
         internCache.put(entry, parsedShape);
         return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
     }
