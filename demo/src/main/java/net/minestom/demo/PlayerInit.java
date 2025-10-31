@@ -211,6 +211,12 @@ public class PlayerInit {
                     )));
                 }
             })
+            .addListener(PlayerGameModeRequestEvent.class, event -> {
+                final Player player = event.getPlayer();
+                if (player.getPermissionLevel() >= 2) {
+                    player.setGameMode(event.getRequestedGameMode());
+                }
+            })
             .addListener(PlayerChatEvent.class, event -> {
                 var dialog = new Dialog.MultiAction(
                         new DialogMetadata(
