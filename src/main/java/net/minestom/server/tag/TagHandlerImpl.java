@@ -281,7 +281,7 @@ final class TagHandlerImpl implements TagHandler {
                 this.entries.forValues(entry -> {
                     final Tag tag = entry.tag;
                     final BinaryTag nbt = entry.updatedNbt();
-                    if (nbt != null && (!tag.entry.isPath() || (!ServerFlag.SERIALIZE_EMPTY_COMPOUND) && ((CompoundBinaryTag) nbt).size() > 0)) {
+                    if (nbt != null && (!tag.entry.isPath() || ServerFlag.SERIALIZE_EMPTY_COMPOUND || !((CompoundBinaryTag) nbt).isEmpty())) {
                         tmp.put(tag.getKey(), nbt);
                     }
                 });
