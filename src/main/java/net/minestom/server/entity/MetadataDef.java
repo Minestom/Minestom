@@ -272,7 +272,7 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> CAN_DUPLICATE = index(1, Metadata::Boolean, true);
     }
 
-    public static final class Armadillo extends Mob {
+    public static final class Armadillo extends AgeableMob {
         public static final Entry<ArmadilloMeta.State> STATE = index(0, Metadata::ArmadilloState,
                                                                      ArmadilloMeta.State.IDLE);
     }
