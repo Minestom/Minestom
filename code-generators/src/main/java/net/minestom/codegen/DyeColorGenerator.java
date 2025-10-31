@@ -6,29 +6,24 @@ import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
 
 import javax.lang.model.element.Modifier;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.StreamSupport;
 
-public record DyeColorGenerator(InputStream dyeColorsFile,
-                                Path outputFolder) implements MinestomCodeGenerator {
-    public DyeColorGenerator {
-        Objects.requireNonNull(dyeColorsFile, "Dye colors file cannot be null");
-        Objects.requireNonNull(outputFolder, "Output folder cannot be null");
+public final class DyeColorGenerator extends GenericEnumGenerator {
+
+    public DyeColorGenerator(Path outputFolder) {
+        super(outputFolder);
     }
 
     @Override
-    public void generate() {
-        ensureDirectory(outputFolder);
+    public void generate(CodegenRegistry registry, CodegenValue value) {
         // Important classes we use alot
-        ClassName colorCN = ClassName.get("net.minestom.server.color", "Color");
+        ClassName colorCN = ClassName.get(value.packageName(), value.typeName());
 
-        JsonArray dyeColors = GSON.fromJson(new InputStreamReader(dyeColorsFile), JsonArray.class);
-        ClassName dyeColorCN = ClassName.get("net.minestom.server.color", "DyeColor");
+        JsonArray dyeColors = GSON.fromJson(registry.resource(value.resource()), JsonArray.class);
+        ClassName dyeColorCN = ClassName.get(value.packageName(), value.generatedName());
         // Dye Color Enum
         TypeSpec.Builder dyeColorEnum = TypeSpec.enumBuilder(dyeColorCN)
                 .addSuperinterface(ClassName.get("net.kyori.adventure.util", "RGBLike"))
@@ -129,7 +124,7 @@ public record DyeColorGenerator(InputStream dyeColorsFile,
         }
 
         // Write files to outputFolder
-        writeFiles(JavaFile.builder("net.minestom.server.color", dyeColorEnum.build())
+        writeFiles(JavaFile.builder(value.packageName(), dyeColorEnum.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()

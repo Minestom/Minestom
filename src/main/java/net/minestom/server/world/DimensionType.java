@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.utils.Unit;
@@ -64,7 +65,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
      */
     @ApiStatus.Internal
     static DynamicRegistry<DimensionType> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("dimension_type"), REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
+        return DynamicRegistry.create(BuiltinRegistries.DIMENSION_TYPE, REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
     }
 
     boolean ultrawarm();
