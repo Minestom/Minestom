@@ -1,275 +1,62 @@
 package net.minestom.server.tag;
 
-import net.kyori.adventure.nbt.*;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.collection.AutoIncrementMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
-/**
- * Represents a key to retrieve or change a value.
- * <p>
- * All tags are serializable.
- *
- * @param <T> the tag type
- */
-@ApiStatus.NonExtendable
-public class Tag<T> {
-    private static final AutoIncrementMap<String> INDEX_MAP = new AutoIncrementMap<>();
-
-    record PathEntry(String name, int index) {
+public sealed interface Tag<T extends @UnknownNullability Object> permits TagImpl {
+    static Tag<Byte> Byte(String key) {
+        return TagImpl.tag(key, Serializers.BYTE);
     }
 
-    final int index;
-    private final String key;
-    final Serializers.Entry<T, BinaryTag> entry;
-    private final @Nullable Supplier<@Nullable T> defaultValue;
-
-    final Function<?, ?> readComparator;
-    // Optional properties
-    final PathEntry @Nullable [] path;
-    final @Nullable UnaryOperator<T> copy;
-    final int listScope;
-
-    Tag(int index, String key,
-        Function<?, ?> readComparator,
-        Serializers.Entry<T, BinaryTag> entry,
-        @Nullable Supplier<@Nullable T> defaultValue,
-        PathEntry @Nullable [] path,
-        @Nullable UnaryOperator<T> copy, int listScope) {
-        assert index == INDEX_MAP.get(key);
-        this.index = index;
-        this.key = key;
-        this.readComparator = readComparator;
-        this.entry = entry;
-        this.defaultValue = defaultValue;
-        this.path = path;
-        this.copy = copy;
-        this.listScope = listScope;
+    static Tag<Boolean> Boolean(String key) {
+        return TagImpl.tag(key, Serializers.BOOLEAN);
     }
 
-    static <T, N extends BinaryTag> Tag<T> tag(String key, Serializers.Entry<T, N> entry) {
-        return new Tag<>(INDEX_MAP.get(key), key, entry.reader(), (Serializers.Entry<T, BinaryTag>) entry,
-                null, null, null, 0);
+    static Tag<Short> Short(String key) {
+        return TagImpl.tag(key, Serializers.SHORT);
     }
 
-    static <T> Tag<T> fromSerializer(String key, TagSerializer<T> serializer) {
-        if (serializer instanceof TagRecord.Serializer recordSerializer) {
-            // Allow fast retrieval
-            //noinspection unchecked
-            return tag(key, recordSerializer.serializerEntry);
-        }
-        return tag(key, Serializers.fromTagSerializer(serializer));
+    static Tag<Integer> Integer(String key) {
+        return TagImpl.tag(key, Serializers.INT);
     }
 
-    /**
-     * Returns the key used to navigate inside the holder nbt.
-     *
-     * @return the tag key
-     */
-    public String getKey() {
-        return key;
+    static Tag<Long> Long(String key) {
+        return TagImpl.tag(key, Serializers.LONG);
     }
 
-    @Contract(value = "_ -> new", pure = true)
-    public Tag<T> defaultValue(Supplier<T> defaultValue) {
-        return new Tag<>(index, key, readComparator, entry, defaultValue, path, copy, listScope);
+    static Tag<Float> Float(String key) {
+        return TagImpl.tag(key, Serializers.FLOAT);
     }
 
-    @Contract(value = "_ -> new", pure = true)
-    public Tag<T> defaultValue(T defaultValue) {
-        return defaultValue(() -> defaultValue);
+    static Tag<Double> Double(String key) {
+        return TagImpl.tag(key, Serializers.DOUBLE);
     }
 
-    @Contract(value = "_, _ -> new", pure = true)
-    public <R> Tag<R> map(Function<T, R> readMap,
-                          Function<R, T> writeMap) {
-        var entry = this.entry;
-        final Function<BinaryTag, R> readFunction = entry.reader().andThen(t -> {
-            if (t == null) return null;
-            return readMap.apply(t);
-        });
-        final Function<R, BinaryTag> writeFunction = writeMap.andThen(entry.writer());
-        return new Tag<>(index, key, readMap,
-                new Serializers.Entry<>(entry.nbtType(), readFunction, writeFunction),
-                // Default value
-                () -> {
-                    T defaultValue = createDefault();
-                    if (defaultValue == null) return null;
-                    return readMap.apply(defaultValue);
-                },
-                path, null, listScope);
+    static Tag<String> String(String key) {
+        return TagImpl.tag(key, Serializers.STRING);
     }
 
-    @Contract(value = "-> new", pure = true)
-    public Tag<List<T>> list() {
-        var entry = this.entry;
-        var readFunction = entry.reader();
-        var writeFunction = entry.writer();
-        var listEntry = new Serializers.Entry<List<T>, ListBinaryTag>(
-                BinaryTagTypes.LIST,
-                read -> {
-                    if (read.isEmpty()) return List.of();
-                    return read.stream().map(readFunction).toList();
-                },
-                write -> {
-                    if (write.isEmpty())
-                        return ListBinaryTag.empty();
-                    final List<BinaryTag> list = write.stream().map(writeFunction).toList();
-                    final BinaryTagType<?> type = list.getFirst().type();
-                    return ListBinaryTag.listBinaryTag(type, list);
-                });
-        UnaryOperator<List<T>> co = this.copy != null ? ts -> {
-            final int size = ts.size();
-            T[] array = (T[]) new Object[size];
-            boolean shallowCopy = true;
-            for (int i = 0; i < size; i++) {
-                final T t = ts.get(i);
-                final T copy = this.copy.apply(t);
-                if (shallowCopy && copy != t) shallowCopy = false;
-                array[i] = copy;
-            }
-            return shallowCopy ? List.copyOf(ts) : List.of(array);
-        } : List::copyOf;
-        return new Tag<>(index, key, readComparator, (Serializers.Entry) listEntry,
-                null, path, co, listScope + 1);
+    static Tag<UUID> UUID(String key) {
+        return TagImpl.tag(key, Serializers.UUID);
     }
 
-    @Contract(value = "_ -> new", pure = true)
-    public Tag<T> path(String @Nullable ... path) {
-        if (path == null || path.length == 0) {
-            return new Tag<>(index, key, readComparator, entry, defaultValue, null, copy, listScope);
-        }
-        PathEntry[] pathEntries = new PathEntry[path.length];
-        for (int i = 0; i < path.length; i++) {
-            final String name = path[i];
-            if (name == null || name.isEmpty()) throw new IllegalArgumentException("Path must not be empty: " + Arrays.toString(path));
-            pathEntries[i] = new PathEntry(name, INDEX_MAP.get(name));
-        }
-        return new Tag<>(index, key, readComparator, entry, defaultValue, pathEntries, copy, listScope);
+    static Tag<ItemStack> ItemStack(String key) {
+        return TagImpl.tag(key, Serializers.ITEM);
     }
 
-    public @Nullable T read(CompoundBinaryTag nbt) {
-        final BinaryTag readable = isView() ? nbt : nbt.get(key);
-        final T result;
-        try {
-            if (readable == null || (result = entry.read(readable)) == null)
-                return createDefault();
-            return result;
-        } catch (ClassCastException e) {
-            return createDefault();
-        }
-    }
-
-    public void write(CompoundBinaryTag.Builder nbtCompound, @Nullable T value) {
-        if (value != null) {
-            final BinaryTag nbt = entry.write(value);
-            if (isView()) nbtCompound.put((CompoundBinaryTag) nbt);
-            else nbtCompound.put(key, nbt);
-        } else {
-            if (isView()) {
-                // Adventure compound builder doesn't currently have a clear method.
-                nbtCompound.build().keySet().forEach(nbtCompound::remove);
-            } else nbtCompound.remove(key);
-        }
-    }
-
-    public void writeUnsafe(CompoundBinaryTag.Builder nbtCompound, @Nullable Object value) {
-        //noinspection unchecked
-        write(nbtCompound, (T) value);
-    }
-
-    final boolean isView() {
-        return key.isEmpty();
-    }
-
-    final boolean shareValue(Tag<?> other) {
-        if (this == other) return true;
-        // Tags are not strictly the same, compare readers
-        if (this.listScope != other.listScope) return false;
-        return this.readComparator == other.readComparator;
-    }
-
-    final @Nullable T createDefault() {
-        final Supplier<T> supplier = defaultValue;
-        return supplier != null ? supplier.get() : null;
-    }
-
-    final T copyValue(T value) {
-        final UnaryOperator<T> copier = copy;
-        return copier != null ? copier.apply(value) : value;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Tag<?> tag)) return false;
-        return index == tag.index &&
-                listScope == tag.listScope &&
-                readComparator.equals(tag.readComparator) &&
-                Objects.equals(defaultValue, tag.defaultValue) &&
-                Arrays.equals(path, tag.path) && Objects.equals(copy, tag.copy);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(index, readComparator, defaultValue, copy, listScope);
-        result = 31 * result + Arrays.hashCode(path);
-        return result;
-    }
-
-    public static Tag<Byte> Byte(String key) {
-        return tag(key, Serializers.BYTE);
-    }
-
-    public static Tag<Boolean> Boolean(String key) {
-        return tag(key, Serializers.BOOLEAN);
-    }
-
-    public static Tag<Short> Short(String key) {
-        return tag(key, Serializers.SHORT);
-    }
-
-    public static Tag<Integer> Integer(String key) {
-        return tag(key, Serializers.INT);
-    }
-
-    public static Tag<Long> Long(String key) {
-        return tag(key, Serializers.LONG);
-    }
-
-    public static Tag<Float> Float(String key) {
-        return tag(key, Serializers.FLOAT);
-    }
-
-    public static Tag<Double> Double(String key) {
-        return tag(key, Serializers.DOUBLE);
-    }
-
-    public static Tag<String> String(String key) {
-        return tag(key, Serializers.STRING);
-    }
-
-    public static Tag<UUID> UUID(String key) {
-        return tag(key, Serializers.UUID);
-    }
-
-    public static Tag<ItemStack> ItemStack(String key) {
-        return tag(key, Serializers.ITEM);
-    }
-
-    public static Tag<Component> Component(String key) {
-        return tag(key, Serializers.COMPONENT);
+    static Tag<Component> Component(String key) {
+        return TagImpl.tag(key, Serializers.COMPONENT);
     }
 
     /**
@@ -277,8 +64,8 @@ public class Tag<T> {
      * <p>
      * Specialized tags are recommended if the type is known as conversion will be required both way (read and write).
      */
-    public static Tag<BinaryTag> NBT(String key) {
-        return tag(key, Serializers.NBT_ENTRY);
+    static Tag<BinaryTag> NBT(String key) {
+        return TagImpl.tag(key, Serializers.NBT_ENTRY);
     }
 
     /**
@@ -291,8 +78,8 @@ public class Tag<T> {
      * @param <T>        the tag type
      * @return the created tag
      */
-    public static <T> Tag<T> Structure(String key, TagSerializer<T> serializer) {
-        return fromSerializer(key, serializer);
+    static <T> Tag<T> Structure(String key, TagSerializer<T> serializer) {
+        return TagImpl.fromSerializer(key, serializer);
     }
 
     /**
@@ -300,17 +87,17 @@ public class Tag<T> {
      * <p>
      * Must be used with care.
      */
-    public static <T> Tag<T> View(TagSerializer<T> serializer) {
+    static <T> Tag<T> View(TagSerializer<T> serializer) {
         return Structure("", serializer);
     }
 
     @ApiStatus.Experimental
-    public static <T extends Record> Tag<T> Structure(String key, Class<T> type) {
+    static <T extends Record> Tag<T> Structure(String key, Class<T> type) {
         return Structure(key, TagRecord.serializer(type));
     }
 
     @ApiStatus.Experimental
-    public static <T extends Record> Tag<T> View(Class<T> type) {
+    static <T extends Record> Tag<T> View(Class<T> type) {
         return View(TagRecord.serializer(type));
     }
 
@@ -324,8 +111,54 @@ public class Tag<T> {
      * @param key The key.
      * @return A transient tag with the key.
      */
-    public static <T> Tag<T> Transient(String key) {
+    static <T> Tag<T> Transient(String key) {
         //noinspection unchecked
-        return (Tag<T>) tag(key, Serializers.EMPTY);
+        return (Tag<T>) TagImpl.tag(key, Serializers.EMPTY);
     }
+
+    /**
+     * Use {@link #key()} instead
+     * @return the key
+     * @deprecated misleading non-record component, use {@link #key()} instead.
+     */
+    @Deprecated
+    String getKey();
+
+    /**
+     * Returns the key for the Tag
+     * <br>
+     * Same key specified during the creation.
+     * @return the key to use
+     */
+    String key();
+
+    @Contract(value = "_ -> new", pure = true)
+    Tag<T> defaultValue(Supplier<T> defaultValue);
+
+    @Contract(value = "_ -> new", pure = true)
+    Tag<T> defaultValue(T defaultValue);
+
+    @Contract(value = "_, _ -> new", pure = true)
+    <R> Tag<R> map(Function<T, R> readMap,
+                   Function<R, T> writeMap);
+
+    @Contract(value = "-> new", pure = true)
+    Tag<List<T>> list();
+
+    @Contract(value = "_ -> new", pure = true)
+    Tag<T> path(String @Nullable ... path);
+
+    T read(CompoundBinaryTag nbt);
+
+    void write(CompoundBinaryTag.Builder nbtCompound, T value);
+
+    void writeUnsafe(CompoundBinaryTag.Builder nbtCompound, @Nullable Object value);
+
+    boolean isView();
+
+    boolean shareValue(Tag<?> other);
+
+    T createDefault();
+
+    T copyValue(T value);
 }
