@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import org.jetbrains.annotations.UnknownNullability;
+
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -25,7 +27,7 @@ public sealed interface Either<L, R> {
         }
     }
 
-    default <T> T unify(Function<L, T> leftMapper, Function<R, T> rightMapper) {
+    default <T extends @UnknownNullability Object> T unify(Function<L, T> leftMapper, Function<R, T> rightMapper) {
         return switch (this) {
             case Left(L value) -> leftMapper.apply(value);
             case Right(R value) -> rightMapper.apply(value);
