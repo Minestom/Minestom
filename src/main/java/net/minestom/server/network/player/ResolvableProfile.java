@@ -71,8 +71,8 @@ public record ResolvableProfile(
                 Partial::new);
         public static final StructCodec<Partial> CODEC = StructCodec.struct(
                 "name", Codec.STRING.optional(), Partial::name,
-                "uuid", Codec.UUID.optional(), Partial::uuid,
-                "properties", GameProfile.Property.LIST_CODEC, Partial::properties,
+                "id", Codec.UUID.optional(), Partial::uuid,
+                "properties", GameProfile.Property.LIST_CODEC.optional(List.of()), Partial::properties,
                 Partial::new);
 
         public Partial {

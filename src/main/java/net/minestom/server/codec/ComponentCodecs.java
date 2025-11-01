@@ -14,11 +14,14 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.dialog.Dialog;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.ResolvableProfile;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Used internally to hold component codecs
@@ -238,7 +241,18 @@ public final class ComponentCodecs {
         private static final StructCodec<PlayerHeadObjectContents> PLAYER_HEAD_CONTENTS = StructCodec.struct(
                 "player", ResolvableProfile.CODEC, ResolvableProfile::fromPlayerHeadContents,
                 "hat", Codec.BOOLEAN.optional(true), PlayerHeadObjectContents::hat,
-                (player, hat) -> ObjectContents.playerHead().skin(player).hat(hat).build());
+                (player, hat) -> {
+                    final @Nullable String name = player.profile().unify(GameProfile::name, ResolvableProfile.Partial::name);
+                    final @Nullable UUID uuid = player.profile().unify(GameProfile::uuid, ResolvableProfile.Partial::uuid);
+                    final List<GameProfile.Property> properties = player.profile().unify(GameProfile::properties, ResolvableProfile.Partial::properties);
+                    return ObjectContents.playerHead()
+                            .name(name)
+                            .id(uuid)
+                            .profileProperties((Collection<PlayerHeadObjectContents.ProfileProperty>) (Collection<?>) properties) //TODO(adventure) upstream ? extends
+                            .skin(player)
+                            .hat(hat)
+                            .build();
+                });
 
         @Override
         public <D> Result<ObjectComponent> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
