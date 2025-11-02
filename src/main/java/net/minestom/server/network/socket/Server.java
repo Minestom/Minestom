@@ -110,12 +110,16 @@ public final class Server {
                 connection.read(packetParser);
             } catch (ClosedChannelException _) {
                 break; // We closed the socket during read, just exit.
-            } catch (EOFException e) {
+            } catch (EOFException _) {
+                connection.disconnect();
+                break;
+            } catch (SocketException e) {
+                boolean isExpected = e.getMessage().equals("Connection reset");
+                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
             } catch (Throwable e) {
-                boolean isExpected = e instanceof SocketException && e.getMessage().equals("Connection reset");
-                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
+                MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
             }
@@ -128,17 +132,20 @@ public final class Server {
         Check.notNull(connection, "connection cannot be null");
         while (!stop) {
             try {
-                connection.awaitSendablePackets();
+                connection.awaitFlush();
                 connection.flushSync();
             } catch (ClosedChannelException _) {
                 break; // We closed the socket during write, just exit.
-            } catch (EOFException e) {
+            } catch (EOFException _) {
+                connection.disconnect();
+                break;
+            } catch (IOException e) {
+                boolean isExpected = e.getMessage().equals("Broken pipe") || e.getMessage().equals("Connection reset by peer");
+                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
             } catch (Throwable e) {
-                boolean isExpected = e instanceof IOException && (e.getMessage().equals("Broken pipe") || e.getMessage().equals("Connection reset by peer"));
-                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
-
+                MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
             }

@@ -40,9 +40,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.LockSupport;
@@ -212,7 +210,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     // Requires ServerFlag.FASTER_SOCKET_WRITES
-    @ApiStatus.Internal
     public void unlockWriteThread() {
         if (!ServerFlag.FASTER_SOCKET_WRITES) return;
         if (!this.writeSignaled.compareAndExchange(false, true)) {
@@ -232,7 +229,6 @@ public class PlayerSocketConnection extends PlayerConnection {
      *
      * @param remoteAddress the new connection remote address
      */
-    @ApiStatus.Internal
     public void setRemoteAddress(SocketAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
@@ -409,15 +405,15 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @Blocking
-    public void awaitSendablePackets() throws InterruptedException {
+    public void awaitFlush() throws InterruptedException {
         // Consume queued packets
         final var packetQueue = this.packetQueue;
         if (!packetQueue.isEmpty()) return;
         if (ServerFlag.FASTER_SOCKET_WRITES) {
             assert this.writeThread == Thread.currentThread() : "writeThread should be the current thread";
             this.writeSignaled.set(false);
-            // We cant sleep forever if our writeLeftover still exists, we fall back to a fixed parkNanos, which is also spirituous
-            final var writeLeftover = this.writeLeftover;
+            // We cant sleep forever if writeLeftover still exists, we fall back to a fixed parkNanos, which is also spirituous
+            final NetworkBuffer writeLeftover = this.writeLeftover;
             if (writeLeftover != null) {
                 LockSupport.parkNanos(writeLeftover, 1_000_000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
             } else {
@@ -432,7 +428,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     public void flushSync() throws IOException {
         if (!channel.isConnected()) throw new EOFException("Channel is closed");
         // Write leftover if any
-        NetworkBuffer leftover = this.writeLeftover;
+        final NetworkBuffer leftover = this.writeLeftover;
         if (leftover != null) {
             final boolean success = leftover.writeChannel(channel);
             if (success) {
@@ -443,9 +439,9 @@ public class PlayerSocketConnection extends PlayerConnection {
                 return;
             }
         }
-        final var packetQueue = this.packetQueue;
+        final Queue<SendablePacket> packetQueue = this.packetQueue;
         if (packetQueue.isEmpty()) return; // Nothing to write, no need to access the pool
-        NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
+        final NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         // Write to buffer
         PacketWriting.writeQueue(buffer, packetQueue, 1, (b, packet) -> {
             final boolean compressed = sentPacketCounter.get() > compressionStart;

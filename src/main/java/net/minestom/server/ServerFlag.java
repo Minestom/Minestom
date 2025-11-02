@@ -29,19 +29,21 @@ public final class ServerFlag {
     public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 15_000);
     public static final int PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE = intProperty("minestom.player.chunk-update-limiter-history-size", 5, 0, Integer.MAX_VALUE);
 
-    // Network buffers
+    // Networking
     public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
     public static final int MAX_PACKET_SIZE_PRE_AUTH = intProperty("minestom.max-packet-size-pre-auth", 8_192);
     public static final int SOCKET_SEND_BUFFER_SIZE = intProperty("minestom.send-buffer-size", 262_143);
     public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
     public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
     public static final int SOCKET_TIMEOUT = intProperty("minestom.socket-timeout", 15_000);
-    public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 16_383);
+
+    // Network buffers
     public static final int DEFAULT_RESIZEABLE_SIZE = intProperty("minestom.default-resizeable-size", 256);
     public static final boolean ATTEMPT_NATIVE_ALLOCATION = booleanProperty("minestom.attempt-native-allocation", true);
     public static final boolean FORCE_NATIVE_ALLOCATION = booleanProperty("minestom.force-native-allocation", false);
 
     // Network object pooling
+    public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 16_383);
     public static final int DECOMPRESS_POOL_SIZE = intProperty("minestom.decompress-pool-size", 32_767);
     public static final int COMPRESS_POOL_SIZE = intProperty("minestom.compress-pool-size", 32_767);
     public static final int PACKET_POOL_SIZE = intProperty("minestom.packet-buffer-pool-size", 32_767);
