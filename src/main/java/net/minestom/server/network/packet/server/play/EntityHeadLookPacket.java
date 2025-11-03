@@ -11,7 +11,7 @@ public record EntityHeadLookPacket(int entityId, float yaw) implements ServerPac
         @Override
         public void write(NetworkBuffer buffer, EntityHeadLookPacket value) {
             buffer.write(VAR_INT, value.entityId);
-            buffer.write(BYTE, (byte) (value.yaw * 256 / 360));
+            buffer.write(BYTE, (byte) (value.yaw * 256f / 360f));
         }
 
         @Override
