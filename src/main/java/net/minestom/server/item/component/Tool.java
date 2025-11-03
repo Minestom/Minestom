@@ -29,6 +29,10 @@ public record Tool(List<Rule> rules, float defaultMiningSpeed, int damagePerBloc
             "can_destroy_blocks_in_creative", Codec.BOOLEAN.optional(true), Tool::canDestroyBlocksInCreative,
             Tool::new);
 
+    public Tool {
+        rules = List.copyOf(rules);
+    }
+
     public record Rule(RegistryTag<Block> blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
 
         public static final NetworkBuffer.Type<Rule> NETWORK_TYPE = NetworkBufferTemplate.template(

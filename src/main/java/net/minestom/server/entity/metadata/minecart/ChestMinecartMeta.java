@@ -8,9 +8,4 @@ public class ChestMinecartMeta extends AbstractMinecartContainerMeta {
         super(entity, metadata);
     }
 
-    @Override
-    public int getObjectData() {
-        return 1;
-    }
-
 }

@@ -9,6 +9,7 @@ import net.minestom.server.listener.preplay.HandshakeListener;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.listener.preplay.StatusListener;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
@@ -107,6 +108,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
         setPlayListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
         setPlayListener(ClientUpdateSignPacket.class, EditSignListener::listener);
+        setPlayListener(ClientDebugSubscriptionRequestPacket.class, DebugSubscriptionListener::requestListener);
     }
 
     /**
@@ -116,18 +118,24 @@ public final class PacketListenerManager {
      * @param connection the connection of the player who sent the packet
      * @param <T>        the packet type
      */
-    public <T extends ClientPacket> void processClientPacket(T packet, PlayerConnection connection, ConnectionState state) {
+    public <T extends ClientPacket> void processClientPacket(T packet, PlayerConnection connection) {
+        // Update connection state 'as we receive' the packet, aka before we send any responses
+        // from processing. This is important for sending packets in response which are state-dependent.
+        final ConnectionState currState = connection.getClientState();
+        final ConnectionState nextState = PacketVanilla.nextClientState(packet, currState);
+        if (nextState != currState) connection.setClientState(nextState);
+
         final Class clazz = packet.getClass();
-        PacketPrePlayListenerConsumer<T> packetListenerConsumer = listeners[state.ordinal()].get(clazz);
+        PacketPrePlayListenerConsumer<T> packetListenerConsumer = listeners[currState.ordinal()].get(clazz);
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
-            LOGGER.warn("Packet {}:{} does not have any default listener! (The issue likely comes from Minestom)", clazz, state);
+            LOGGER.warn("Packet {}:{} does not have any default listener! (The issue likely comes from Minestom)", clazz, currState);
             return;
         }
 
         // Event
-        if (state == ConnectionState.PLAY) {
+        if (currState == ConnectionState.PLAY) {
             PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(connection.getPlayer(), packet);
             EventDispatcher.call(playerPacketEvent);
             if (playerPacketEvent.isCancelled()) {

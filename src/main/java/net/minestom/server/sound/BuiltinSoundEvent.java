@@ -6,7 +6,7 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.UnknownNullability;
 
-record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject<BuiltinSoundEvent>, SoundEvent {
+public record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject<BuiltinSoundEvent>, SoundEvent {
     static final Registry<BuiltinSoundEvent> REGISTRY = RegistryData.createStaticRegistry(Key.key("sound_event"),
             (namespace, properties) -> new BuiltinSoundEvent(Key.key(namespace), properties.getInt("id")));
 

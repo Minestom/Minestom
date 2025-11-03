@@ -38,6 +38,11 @@ public interface Collector<T> {
         assertCount(0);
     }
 
+    default void assertAny() {
+        List<T> elements = collect();
+        assertFalse(elements.isEmpty(), "Expected at least 1 element, got none.");
+    }
+
     /**
      * Asserts that at least one element matches the given predicate.
      */

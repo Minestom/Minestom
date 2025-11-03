@@ -7,6 +7,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -93,6 +94,12 @@ public class SharedInstance extends Instance {
     @Override
     public void setGenerator(@Nullable Generator generator) {
         instanceContainer.setGenerator(generator);
+    }
+
+    @ApiStatus.Experimental
+    @Override
+    public CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator) {
+        return instanceContainer.generateChunk(chunkX, chunkZ, generator);
     }
 
     @Override

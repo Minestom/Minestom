@@ -21,6 +21,10 @@ public record TooltipDisplay(boolean hideTooltip, Set<DataComponent<?>> hiddenCo
             "hidden_components", DataComponent.CODEC.set(Short.MAX_VALUE).optional(Set.of()), TooltipDisplay::hiddenComponents,
             TooltipDisplay::new);
 
+    public TooltipDisplay {
+        hiddenComponents = Set.copyOf(hiddenComponents);
+    }
+
     public TooltipDisplay withHideTooltip(boolean hide) {
         return new TooltipDisplay(hide, hiddenComponents);
     }

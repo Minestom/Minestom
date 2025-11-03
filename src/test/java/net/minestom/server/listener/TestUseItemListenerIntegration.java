@@ -98,4 +98,15 @@ public class TestUseItemListenerIntegration {
         assertEquals(boots, player.getItemInMainHand());
         assertEquals(oldBoots, player.getEquipment(EquipmentSlot.BOOTS));
     }
+
+    @Test
+    void testRotation(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 41, 0));
+        player.refreshReceivedTeleportId(player.getLastSentTeleportId());
+
+        assertEquals(new Pos(0, 41, 0), player.getPosition());
+        UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 5f, 10f), player);
+        assertEquals(new Pos(0, 41, 0, 5f, 10f), player.getPosition());
+    }
 }

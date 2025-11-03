@@ -16,7 +16,7 @@ public sealed interface DialogBody {
             Key.key("dialog_body_type"),
             Map.entry(Key.key("item"), Item.CODEC),
             Map.entry(Key.key("plain_message"), PlainMessage.CODEC));
-    StructCodec<DialogBody> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogBody::codec, "type");
+    StructCodec<DialogBody> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogBody::codec);
 
     record Item(
             ItemStack itemStack,

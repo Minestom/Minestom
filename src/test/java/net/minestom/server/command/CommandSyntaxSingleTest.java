@@ -20,7 +20,7 @@ public class CommandSyntaxSingleTest {
     public void singleInteger() {
         List<Argument<?>> args = List.of(Integer("number"));
         assertSyntax(args, "5", ExpectedExecution.SYNTAX, Map.of("number", 5));
-        assertSyntax(args, "5 5", ExpectedExecution.DEFAULT);
+        assertSyntax(args, "5 5", ExpectedExecution.SYNTAX);
         assertSyntax(args, "", ExpectedExecution.DEFAULT);
     }
 
@@ -38,7 +38,7 @@ public class CommandSyntaxSingleTest {
         assertSyntax(args, """
                 "value"
                 """, ExpectedExecution.SYNTAX, Map.of("string", "value"));
-        assertSyntax(args, "5 5", ExpectedExecution.DEFAULT);
+        assertSyntax(args, "5 5", ExpectedExecution.SYNTAX);
         assertSyntax(args, "", ExpectedExecution.DEFAULT);
     }
 

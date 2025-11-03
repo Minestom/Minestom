@@ -296,7 +296,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @param yaw The possible "wrong" yaw
      * @return a fixed yaw
      */
-    private static float fixYaw(float yaw) {
+    public static float fixYaw(float yaw) {
         yaw = yaw % 360;
         if (yaw < -180.0F) {
             yaw += 360.0F;

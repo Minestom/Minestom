@@ -18,12 +18,16 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
      * @param transcoder The transcoder (possibly proxy) to extract
      * @return The delegate transcoder
      */
-    static Transcoder<?> extractDelegate(Transcoder<?> transcoder) {
-        if (transcoder instanceof TranscoderProxy<?> proxy)
+    static <D> Transcoder<D> extractDelegate(Transcoder<D> transcoder) {
+        if (transcoder instanceof TranscoderProxy<D> proxy)
             return extractDelegate(proxy.delegate());
         return transcoder;
     }
 
+    /**
+     * The delegate to use; This should be considered immutable during its lifetime.
+     * @return the {@link Transcoder} delegated for {@link TranscoderProxy}
+     */
     Transcoder<D> delegate();
 
     @Override

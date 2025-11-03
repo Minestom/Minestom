@@ -1,6 +1,7 @@
 package net.minestom.server.component;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.item.enchant.EffectComponent;
 import net.minestom.server.network.NetworkBuffer;
@@ -57,12 +58,12 @@ public sealed interface DataComponent<T> extends StaticProtocolObject<DataCompon
     T read(NetworkBuffer reader);
     void write(NetworkBuffer writer, T value);
 
-    static @Nullable DataComponent<?> fromKey(String key) {
-        return DataComponentImpl.NAMESPACES.get(key);
+    static @Nullable DataComponent<?> fromKey(@KeyPattern String key) {
+        return fromKey(Key.key(key));
     }
 
     static @Nullable DataComponent<?> fromKey(Key key) {
-        return fromKey(key.asString());
+        return DataComponentImpl.NAMESPACES.get(key);
     }
 
     static @Nullable DataComponent<?> fromId(int id) {

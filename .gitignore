@@ -1,5 +1,6 @@
 .DS_Store
 **.hprof
+/.profileconfig.json
 
 # Registry files
 /minecraft_data/

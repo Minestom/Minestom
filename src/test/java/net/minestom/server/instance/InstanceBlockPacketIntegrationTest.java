@@ -83,7 +83,7 @@ public class InstanceBlockPacketIntegrationTest {
         });
         blockEntityTracker.assertSingle(packet -> {
             assertPoint(blockPoint, packet.blockPosition());
-            assertEquals(block.registry().blockEntityId(), packet.action());
+            assertEquals(block.registry().blockEntityType(), packet.type());
             assertEquals(data, packet.data());
         });
 

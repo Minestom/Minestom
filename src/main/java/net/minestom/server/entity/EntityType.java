@@ -14,7 +14,7 @@ import java.util.Collection;
 
 public sealed interface EntityType extends StaticProtocolObject<EntityType>, EntityTypes permits EntityTypeImpl {
     NetworkBuffer.Type<EntityType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(EntityType::fromId, EntityType::id);
-    Codec<EntityType> CODEC = Codec.INT.transform(EntityType::fromId, EntityType::id);
+    Codec<EntityType> CODEC = Codec.KEY.transform(EntityType::fromKey, EntityType::key);
 
     /**
      * Returns the entity registry.

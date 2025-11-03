@@ -1,6 +1,7 @@
 package net.minestom.server.component;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
@@ -18,12 +19,12 @@ record DataComponentImpl<T>(
         @Nullable NetworkBuffer.Type<T> network,
         @Nullable Codec<T> codec
 ) implements DataComponent<T> {
-    static final Map<String, DataComponent<?>> NAMESPACES = new HashMap<>(32);
+    static final Map<Key, DataComponent<?>> NAMESPACES = new HashMap<>(32);
     static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 
-    static <T> DataComponent<T> register(String name, @Nullable NetworkBuffer.Type<T> network, @Nullable Codec<T> nbt) {
+    static <T> DataComponent<T> register(@KeyPattern String name, @Nullable NetworkBuffer.Type<T> network, @Nullable Codec<T> nbt) {
         DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), network, nbt);
-        NAMESPACES.put(impl.name(), impl);
+        NAMESPACES.put(impl.key(), impl);
         IDS.set(impl.id(), impl);
         return impl;
     }

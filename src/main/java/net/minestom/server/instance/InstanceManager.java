@@ -50,7 +50,7 @@ public final class InstanceManager {
      * @param loader        the chunk loader
      * @return the created {@link InstanceContainer}
      */
-    public InstanceContainer createInstanceContainer(RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
+    public InstanceContainer createInstanceContainer(RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader) {
         final InstanceContainer instanceContainer = new InstanceContainer(registries.dimensionType(), UUID.randomUUID(), dimensionType, loader, dimensionType.key());
         registerInstance(instanceContainer);
         return instanceContainer;
@@ -60,7 +60,7 @@ public final class InstanceManager {
         return createInstanceContainer(dimensionType, null);
     }
 
-    public InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
+    public InstanceContainer createInstanceContainer(@Nullable ChunkLoader loader) {
         return createInstanceContainer(DimensionType.OVERWORLD, loader);
     }
 

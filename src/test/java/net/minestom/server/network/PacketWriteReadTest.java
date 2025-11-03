@@ -11,6 +11,7 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -71,7 +72,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new BlockActionPacket(VEC, (byte) 5, (byte) 5, 5));
         SERVER_PACKETS.add(new BlockBreakAnimationPacket(5, VEC, (byte) 5));
         SERVER_PACKETS.add(new BlockChangePacket(VEC, 0));
-        SERVER_PACKETS.add(new BlockEntityDataPacket(VEC, 5, CompoundBinaryTag.builder().putString("key", "value").build()));
+        SERVER_PACKETS.add(new BlockEntityDataPacket(VEC, BlockEntityType.SIGN, CompoundBinaryTag.builder().putString("key", "value").build()));
         SERVER_PACKETS.add(new BossBarPacket(UUID.randomUUID(), new BossBarPacket.AddAction(COMPONENT, 5f, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS, (byte) 2)));
         SERVER_PACKETS.add(new BossBarPacket(UUID.randomUUID(), new BossBarPacket.RemoveAction()));
         SERVER_PACKETS.add(new BossBarPacket(UUID.randomUUID(), new BossBarPacket.UpdateHealthAction(5f)));

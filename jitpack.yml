@@ -1,2 +1,3 @@
-jdk:
-  - openjdk21
+before_install:
+  - sdk install java 25-graal
+  - sdk use java 25-graal

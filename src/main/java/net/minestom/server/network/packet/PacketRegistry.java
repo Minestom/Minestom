@@ -4,6 +4,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
+import net.minestom.server.network.packet.client.configuration.ClientAcceptCodeOfConductPacket;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
@@ -106,7 +107,8 @@ public interface PacketRegistry<T> {
                     entry(ClientPongPacket.class, ClientPongPacket.SERIALIZER),
                     entry(ClientResourcePackStatusPacket.class, ClientResourcePackStatusPacket.SERIALIZER),
                     entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER),
-                    entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER)
+                    entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER),
+                    entry(ClientAcceptCodeOfConductPacket.class, ClientAcceptCodeOfConductPacket.SERIALIZER)
             );
         }
 
@@ -141,7 +143,7 @@ public interface PacketRegistry<T> {
                     entry(ClientWindowSlotStatePacket.class, ClientWindowSlotStatePacket.SERIALIZER),
                     entry(ClientCookieResponsePacket.class, ClientCookieResponsePacket.SERIALIZER),
                     entry(ClientPluginMessagePacket.class, ClientPluginMessagePacket.SERIALIZER),
-                    entry(ClientDebugSampleSubscriptionPacket.class, ClientDebugSampleSubscriptionPacket.SERIALIZER),
+                    entry(ClientDebugSubscriptionRequestPacket.class, ClientDebugSubscriptionRequestPacket.SERIALIZER),
                     entry(ClientEditBookPacket.class, ClientEditBookPacket.SERIALIZER),
                     entry(ClientQueryEntityNbtPacket.class, ClientQueryEntityNbtPacket.SERIALIZER),
                     entry(ClientInteractEntityPacket.class, ClientInteractEntityPacket.SERIALIZER),
@@ -271,7 +273,8 @@ public interface PacketRegistry<T> {
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
                     entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
                     entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
-                    entry(ShowDialogPacket.class, ShowDialogPacket.INLINE_SERIALIZER)
+                    entry(ShowDialogPacket.class, ShowDialogPacket.INLINE_SERIALIZER),
+                    entry(CodeOfConductPacket.class, CodeOfConductPacket.SERIALIZER)
             );
         }
 
@@ -310,6 +313,10 @@ public interface PacketRegistry<T> {
                     entry(CustomChatCompletionPacket.class, CustomChatCompletionPacket.SERIALIZER),
                     entry(PluginMessagePacket.class, PluginMessagePacket.SERIALIZER),
                     entry(DamageEventPacket.class, DamageEventPacket.SERIALIZER),
+                    entry(DebugBlockValuePacket.class, DebugBlockValuePacket.SERIALIZER),
+                    entry(DebugChunkValuePacket.class, DebugChunkValuePacket.SERIALIZER),
+                    entry(DebugEntityValuePacket.class, DebugEntityValuePacket.SERIALIZER),
+                    entry(DebugEventPacket.class, DebugEventPacket.SERIALIZER),
                     entry(DebugSamplePacket.class, DebugSamplePacket.SERIALIZER),
                     entry(DeleteChatPacket.class, DeleteChatPacket.SERIALIZER),
                     entry(DisconnectPacket.class, DisconnectPacket.SERIALIZER),
@@ -319,6 +326,7 @@ public interface PacketRegistry<T> {
                     entry(ExplosionPacket.class, ExplosionPacket.SERIALIZER),
                     entry(UnloadChunkPacket.class, UnloadChunkPacket.SERIALIZER),
                     entry(ChangeGameStatePacket.class, ChangeGameStatePacket.SERIALIZER),
+                    entry(GameTestHighlightPosPacket.class, GameTestHighlightPosPacket.SERIALIZER),
                     entry(OpenHorseWindowPacket.class, OpenHorseWindowPacket.SERIALIZER),
                     entry(HitAnimationPacket.class, HitAnimationPacket.SERIALIZER),
                     entry(InitializeWorldBorderPacket.class, InitializeWorldBorderPacket.SERIALIZER),

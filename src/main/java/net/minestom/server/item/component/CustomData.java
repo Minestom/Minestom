@@ -11,17 +11,8 @@ import org.jetbrains.annotations.UnknownNullability;
 public record CustomData(CompoundBinaryTag nbt) implements TagReadable {
     public static final CustomData EMPTY = new CustomData(CompoundBinaryTag.empty());
 
-    public static final NetworkBuffer.Type<CustomData> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, CustomData value) {
-            buffer.write(NetworkBuffer.NBT, value.nbt);
-        }
-
-        @Override
-        public CustomData read(NetworkBuffer buffer) {
-            return new CustomData((CompoundBinaryTag) buffer.read(NetworkBuffer.NBT));
-        }
-    };
+    public static final NetworkBuffer.Type<CustomData> NETWORK_TYPE = NetworkBuffer.NBT_COMPOUND
+            .transform(CustomData::new, CustomData::nbt);
 
     public static final Codec<CustomData> CODEC = Codec.NBT_COMPOUND
             .transform(CustomData::new, CustomData::nbt);

@@ -31,7 +31,7 @@ public sealed interface DialogAction {
             Map.entry(Key.key("custom"), Custom.CODEC),
             Map.entry(Key.key("dynamic/run_command"), DynamicRunCommand.CODEC),
             Map.entry(Key.key("dynamic/custom"), DynamicCustom.CODEC));
-    StructCodec<DialogAction> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogAction::codec, "type");
+    StructCodec<DialogAction> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogAction::codec);
 
     record OpenUrl(String url) implements DialogAction {
         public static final StructCodec<OpenUrl> CODEC = StructCodec.struct(
@@ -68,7 +68,7 @@ public sealed interface DialogAction {
 
     record ShowDialog(Holder<Dialog> dialog) implements DialogAction {
         public static final StructCodec<ShowDialog> CODEC = StructCodec.struct(
-                "dialog", Holder.codec(Registries::dialog, Dialog.REGISTRY_CODEC), ShowDialog::dialog,
+                "dialog", Holder.codec(Registries::dialog, Codec.ForwardRef(() -> Dialog.REGISTRY_CODEC)), ShowDialog::dialog,
                 ShowDialog::new);
 
         @Override

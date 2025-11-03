@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.tag.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -113,5 +114,11 @@ public class BlockTest {
                 assertEquals(blockWithState, Block.fromStateId(blockWithState.stateId()));
             }
         }
+    }
+
+    @Test
+    void testBlockEntityRegistryLoading() {
+        // Sanity to ensure we correctly load block entity types
+        assertEquals(BlockEntityType.SIGN, Block.OAK_SIGN.registry().blockEntityType());
     }
 }

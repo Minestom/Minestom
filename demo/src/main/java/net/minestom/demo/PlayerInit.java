@@ -7,6 +7,8 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.object.ObjectContents;
+import net.minestom.demo.entity.PlayerEntity;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.FrameType;
@@ -20,6 +22,8 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.Damage;
+import net.minestom.server.entity.metadata.avatar.MannequinMeta;
+import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -35,6 +39,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.predicate.*;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
@@ -42,6 +47,7 @@ import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Bee;
+import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Consumable;
 import net.minestom.server.item.component.CustomData;
@@ -51,6 +57,7 @@ import net.minestom.server.network.packet.server.common.CustomReportDetailsPacke
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
+import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
@@ -158,8 +165,6 @@ public class PlayerInit {
 
                 PlayerInventory inventory = event.getPlayer().getInventory();
                 inventory.addItemStack(getFoodItem(20));
-                inventory.addItemStack(getFoodItem(10000));
-                inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
                 inventory.addItemStack(ItemStack.of(Material.PURPLE_BED));
 
                 if (event.isFirstSpawn()) {
@@ -176,11 +181,50 @@ public class PlayerInit {
                     happyGhast.setBodyEquipment(ItemStack.of(Material.GREEN_HARNESS));
                     happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
 
+                    var copperGolem = new LivingEntity(EntityType.COPPER_GOLEM);
+                    copperGolem.setNoGravity(true);
+                    copperGolem.setItemInMainHand(ItemStack.of(Material.STICK));
+                    ((CopperGolemMeta) copperGolem.getEntityMeta()).setState(CopperGolemMeta.State.GETTING_ITEM);
+                    copperGolem.setInstance(player.getInstance(), new Pos(-10, 40, 5, -133, 0));
+
+                    player.getInstance().setBlock(new Vec(-12, 40, 5), Block.WEATHERED_COPPER_GOLEM_STATUE.withProperty("copper_golem_pose", "star"));
+
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
                             Either.left(happyGhast.getUuid()),
                             TrackedWaypointPacket.Icon.DEFAULT,
                             new TrackedWaypointPacket.Target.Vec3i(happyGhast.getPosition())
                     )));
+
+                    var playerEntity = new PlayerEntity();
+                    playerEntity.setInstance(player.getInstance(), new Pos(-2.5, 40, 6.7, -163, 0));
+                    player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
+                            Either.left(playerEntity.getUuid()),
+                            TrackedWaypointPacket.Icon.DEFAULT,
+                            new TrackedWaypointPacket.Target.Vec3i(playerEntity.getPosition())
+                    )));
+
+                    var mannequinEntity = new LivingEntity(EntityType.MANNEQUIN);
+                    mannequinEntity.setNoGravity(true);
+                    var mannequinMeta = (MannequinMeta) mannequinEntity.getEntityMeta();
+                    mannequinEntity.set(DataComponents.CUSTOM_NAME, Component.text("Minestom"));
+                    mannequinMeta.setCustomNameVisible(true);
+                    mannequinMeta.setProfile(new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of())));
+                    mannequinMeta.setImmovable(true);
+                    mannequinMeta.setDescription(Component.text("npc"));
+                    mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
+                    mannequinEntity.setItemInMainHand(ItemStack.of(Material.PLAYER_HEAD).with(DataComponents.PROFILE,
+                          new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of()))));
+                    player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
+                            Either.left(mannequinEntity.getUuid()),
+                            TrackedWaypointPacket.Icon.DEFAULT,
+                            new TrackedWaypointPacket.Target.Vec3i(mannequinEntity.getPosition())
+                    )));
+                }
+            })
+            .addListener(PlayerGameModeRequestEvent.class, event -> {
+                final Player player = event.getPlayer();
+                if (player.getPermissionLevel() >= 2) {
+                    player.setGameMode(event.getRequestedGameMode());
                 }
             })
             .addListener(PlayerChatEvent.class, event -> {

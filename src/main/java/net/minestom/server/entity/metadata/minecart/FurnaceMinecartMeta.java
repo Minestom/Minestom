@@ -17,9 +17,4 @@ public class FurnaceMinecartMeta extends AbstractMinecartMeta {
         metadata.set(MetadataDef.MinecartFurnace.HAS_FUEL, value);
     }
 
-    @Override
-    public int getObjectData() {
-        return 2;
-    }
-
 }

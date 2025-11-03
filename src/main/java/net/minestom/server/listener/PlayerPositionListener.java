@@ -10,6 +10,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.ApiStatus;
 
 public class PlayerPositionListener {
     private static final double MAX_COORDINATE = 30_000_000;
@@ -18,6 +19,14 @@ public class PlayerPositionListener {
     public static void playerPacketListener(ClientPlayerPositionStatusPacket packet, Player player) {
         // TODO: Should we expose horizontal collision here and the methods below?
         player.refreshOnGround(packet.onGround());
+    }
+
+    /**
+     * Exists to update yaw/pitch from UseItemListener
+     */
+    @ApiStatus.Internal
+    public static void playerRotation(Player player, float yaw, float pitch) {
+        processMovement(player, player.getPosition().withView(yaw, pitch), player.isOnGround());
     }
 
     public static void playerLookListener(ClientPlayerRotationPacket packet, Player player) {

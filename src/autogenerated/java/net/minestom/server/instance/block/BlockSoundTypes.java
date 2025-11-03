@@ -135,6 +135,8 @@ sealed interface BlockSoundTypes permits BlockSoundType {
 
     BlockSoundType COPPER_GRATE = BlockSoundImpl.get("copper_grate");
 
+    BlockSoundType COPPER_GOLEM_STATUE = BlockSoundImpl.get("copper_golem_statue");
+
     BlockSoundType CAVE_VINES = BlockSoundImpl.get("cave_vines");
 
     BlockSoundType SPORE_BLOSSOM = BlockSoundImpl.get("spore_blossom");
@@ -216,6 +218,8 @@ sealed interface BlockSoundTypes permits BlockSoundType {
     BlockSoundType CHERRY_WOOD_HANGING_SIGN = BlockSoundImpl.get("cherry_wood_hanging_sign");
 
     BlockSoundType CHISELED_BOOKSHELF = BlockSoundImpl.get("chiseled_bookshelf");
+
+    BlockSoundType SHELF = BlockSoundImpl.get("shelf");
 
     BlockSoundType SUSPICIOUS_SAND = BlockSoundImpl.get("suspicious_sand");
 

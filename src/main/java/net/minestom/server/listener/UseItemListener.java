@@ -21,6 +21,8 @@ import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePack
 public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
+        PlayerPositionListener.playerRotation(player, packet.yaw(), packet.pitch());
+
         final PlayerHand hand = packet.hand();
         final ItemStack itemStack = player.getItemInHand(hand);
         final Material material = itemStack.material();

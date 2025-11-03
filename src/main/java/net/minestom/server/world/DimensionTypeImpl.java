@@ -16,6 +16,7 @@ record DimensionTypeImpl(
         boolean respawnAnchorWorks,
         boolean hasRaids,
         int logicalHeight,
+        @Nullable Integer cloudHeight,
         int minY,
         int height,
         String infiniburn,

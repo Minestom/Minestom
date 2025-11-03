@@ -126,7 +126,7 @@ public final class EventsJFR {
     @Name(CHUNK_LOADING)
     @Label("Chunk Loading")
     @Category({"Minestom", "World"})
-    @Description("Chunk loading from the instances' IChunkLoader")
+    @Description("Chunk loading from the instances' ChunkLoader")
     private static final class ChunkLoading extends JFREventWrapper {
         @Label("Instance UUID")
         String instance;

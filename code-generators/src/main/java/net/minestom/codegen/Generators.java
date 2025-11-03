@@ -49,6 +49,7 @@ public final class Generators {
         generator.generate(resource("villager_profession.json"), "net.minestom.server.entity", "VillagerProfession", "VillagerProfessionImpl", "VillagerProfessions");
         generator.generate(resource("game_event.json"), "net.minestom.server.game", "GameEvent", "GameEventImpl", "GameEvents");
         generator.generate(resource("block_sound_type.json"), "net.minestom.server.instance.block", "BlockSoundType", "BlockSoundImpl", "BlockSoundTypes");
+        generator.generate(resource("block_entity_types.json"), "net.minestom.server.instance.block", "BlockEntityType", "BlockEntityTypeImpl", "BlockEntityTypes");
 
         // Dynamic registries
         generator.generateKeys(resource("chat_type.json"), "net.minestom.server.message", "ChatType");

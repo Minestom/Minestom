@@ -25,9 +25,4 @@ public class CommandBlockMinecartMeta extends AbstractMinecartMeta {
     public void setLastOutput(Component value) {
         metadata.set(MetadataDef.MinecartCommandBlock.LAST_OUTPUT, value);
     }
-
-    @Override
-    public int getObjectData() {
-        return 6;
-    }
 }

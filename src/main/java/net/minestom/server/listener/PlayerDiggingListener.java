@@ -58,10 +58,10 @@ public final class PlayerDiggingListener {
             player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
             if (!diggingResult.success()) {
                 // Refresh block on player screen in case it had special data (like a sign)
-                var registry = diggingResult.block().registry();
-                if (registry.isBlockEntity()) {
+                var blockEntityType = diggingResult.block().registry().blockEntityType();
+                if (blockEntityType != null) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(diggingResult.block());
-                    player.sendPacketToViewersAndSelf(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
+                    player.sendPacketToViewersAndSelf(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
                 }
             }
         }

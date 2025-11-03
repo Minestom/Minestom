@@ -41,6 +41,10 @@ public record BlocksAttacks(
             "disabled_sound", SoundEvent.CODEC.optional(), BlocksAttacks::disableSound,
             BlocksAttacks::new);
 
+    public BlocksAttacks {
+        damageReductions = List.copyOf(damageReductions);
+    }
+
     public record ItemDamageFunction(float threshold, float base, float factor) {
         public static final ItemDamageFunction DEFAULT = new ItemDamageFunction(1f, 0f, 1f);
 

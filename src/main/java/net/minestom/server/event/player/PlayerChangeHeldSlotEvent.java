@@ -39,7 +39,7 @@ public class PlayerChangeHeldSlotEvent implements PlayerInstanceEvent, Cancellab
      *
      * @return The slot index that the player currently is holding
      */
-    public int getOldSlot() {
+    public byte getOldSlot() {
         return oldSlot;
     }
 

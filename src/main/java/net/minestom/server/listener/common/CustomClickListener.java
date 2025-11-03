@@ -11,7 +11,7 @@ import net.minestom.server.network.packet.client.common.ClientCustomClickActionP
 public final class CustomClickListener {
 
     public static void listener(ClientCustomClickActionPacket listener, Player player) {
-        var event = player.getPlayerConnection().getConnectionState() == ConnectionState.PLAY
+        var event = player.getPlayerConnection().getClientState() == ConnectionState.PLAY
                 ? new PlayerCustomClickEvent(player, listener.key(), listener.payload().type() == BinaryTagTypes.END ? null : listener.payload())
                 : new PlayerConfigCustomClickEvent(player, listener.key(), listener.payload().type() == BinaryTagTypes.END ? null : listener.payload());
         EventDispatcher.call(event);

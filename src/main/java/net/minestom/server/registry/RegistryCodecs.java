@@ -12,10 +12,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Objects;
 
 final class RegistryCodecs {
 
     record RegistryKeyImpl<T>(Registries.Selector<T> selector) implements Codec<RegistryKey<T>> {
+        RegistryKeyImpl {
+            Objects.requireNonNull(selector, "selector");
+        }
+
         @Override
         public <D> Result<RegistryKey<T>> decode(Transcoder<D> coder, D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
@@ -42,6 +47,11 @@ final class RegistryCodecs {
             Registries.Selector<T> selector,
             Codec<T> registryCodec
     ) implements Codec<Holder<T>> {
+        HolderCodec {
+            Objects.requireNonNull(selector, "selector");
+            Objects.requireNonNull(registryCodec, "registryCodec");
+        }
+
         @Override
         public <D> Result<Holder<T>> decode(Transcoder<D> coder, D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
@@ -72,6 +82,10 @@ final class RegistryCodecs {
     }
 
     record TagKeyImpl<T>(Registries.Selector<T> selector, boolean hash) implements Codec<TagKey<T>> {
+        TagKeyImpl {
+            Objects.requireNonNull(selector, "selector");
+        }
+
         @Override
         public <D> Result<TagKey<T>> decode(Transcoder<D> coder, D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
@@ -102,6 +116,9 @@ final class RegistryCodecs {
 
     record RegistryTagImpl<T>(Registries.Selector<T> selector) implements Codec<RegistryTag<T>> {
         // Per vanilla, this codec supports registryless context, in which case it can only decode direct tags.
+        RegistryTagImpl {
+            Objects.requireNonNull(selector, "selector");
+        }
 
         @Override
         public <D> Result<RegistryTag<T>> decode(Transcoder<D> coder, D value) {
@@ -160,6 +177,10 @@ final class RegistryCodecs {
             Codec<RegistryTag<T>> tagCodec,
             Codec<T> directCodec
     ) implements Codec<HolderSet<T>> {
+        HolderSetImpl {
+            Objects.requireNonNull(tagCodec, "tagCodec");
+            Objects.requireNonNull(directCodec, "directCodec");
+        }
         @Override
         public <D> Result<HolderSet<T>> decode(Transcoder<D> coder, D value) {
             // First try to decode as a tag
