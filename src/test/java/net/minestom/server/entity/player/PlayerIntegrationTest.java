@@ -2,6 +2,8 @@ package net.minestom.server.entity.player;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.ServerFlag;
+import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -290,4 +292,34 @@ public class PlayerIntegrationTest {
         player.remove(true);
     }
 
+
+    @Test
+    public void testJoinViewDistance(Env env) {
+        var pos = new Pos(0, 43, 0);
+        var connectingInstance = env.createEmptyInstance();
+        var player = env.createPlayer(connectingInstance, pos);
+        assertNotEquals(2, ServerFlag.CHUNK_VIEW_DISTANCE); // Ensure we arent using the same value
+
+        player.refreshSettings(new ClientSettings(Locale.US, (byte) 0x2,
+                ChatMessageType.FULL, true,
+                (byte) 0x7F, ClientSettings.MainHand.RIGHT,
+                true, true,
+                ClientSettings.ParticleSetting.ALL));
+
+        var instance1 = env.createEmptyInstance();
+        instance1.viewDistance(2);
+        var instance2 = env.createEmptyInstance();
+        instance2.viewDistance(32);
+
+        player.setInstance(instance1, pos).join();
+        player.setInstance(instance2, pos).join();
+
+        // Put them back
+        player.setInstance(connectingInstance, pos).join();
+
+        // View distance is an extra chunk from the settings to solve fog pop in.
+        assertEquals(ChunkRange.chunksCount(2 + 1), instance1.getChunks().size());
+        assertEquals(ChunkRange.chunksCount(32 + 1), instance2.getChunks().size());
+        assertEquals(ChunkRange.chunksCount(player.effectiveViewDistance()), connectingInstance.getChunks().size());
+    }
 }
