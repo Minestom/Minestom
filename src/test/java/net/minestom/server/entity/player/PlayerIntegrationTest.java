@@ -300,7 +300,7 @@ public class PlayerIntegrationTest {
         var player = env.createPlayer(connectingInstance, pos);
         assertNotEquals(2, ServerFlag.CHUNK_VIEW_DISTANCE); // Ensure we arent using the same value
 
-        player.refreshSettings(new ClientSettings(Locale.US, (byte) 0x2,
+        player.refreshSettings(new ClientSettings(Locale.US, (byte) 32,
                 ChatMessageType.FULL, true,
                 (byte) 0x7F, ClientSettings.MainHand.RIGHT,
                 true, true,
