@@ -1,14 +1,11 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.block.BlockIterator;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.BiPredicate;
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 /**
  * A modifiable queue for more advanced block raycasts.
