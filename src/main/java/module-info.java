@@ -4,10 +4,9 @@ module net.minestom.server {
     requires it.unimi.dsi.fastutil;
     requires space.vectrix.flare.fastutil;
     requires jdk.unsupported; // Unsafe
-    requires transitive net.kyori.adventure;
+    requires transitive net.kyori.adventure.api;
     requires transitive net.kyori.adventure.nbt;
     requires transitive net.kyori.adventure.key;
-    requires transitive net.kyori.examination.api;
     requires net.kyori.adventure.text.logger.slf4j;
     requires net.kyori.adventure.text.serializer.legacy;
     requires net.kyori.adventure.text.serializer.gson;
