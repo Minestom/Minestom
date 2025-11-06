@@ -15,7 +15,7 @@ public final class MinestomGsonComponentSerializerProvider implements GsonCompon
     }
 
     @Override
-        public GsonComponentSerializer gsonLegacy() {
+    public GsonComponentSerializer gsonLegacy() {
         return GsonComponentSerializer.builder()
                 .legacyHoverEventSerializer(NBTLegacyHoverEventSerializer.INSTANCE)
                 .editOptions(features -> features.value(JSONOptions.EMIT_RGB, false))
