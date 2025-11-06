@@ -78,7 +78,7 @@ public class StructCodecTest {
                 TheObject::new
         );
         var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{\"name\": 2}"));
-        assertError("name: Not a string: BinaryTagType[IntBinaryTag 3 (numeric)]{value=2}", result);
+        assertError("name: Not a string: IntBinaryTagImpl[value=2]", result);
     }
 
     @Test
