@@ -1,6 +1,7 @@
 package net.minestom.server.adventure.provider;
 
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.json.JSONOptions;
 
 import java.util.function.Consumer;
 
@@ -14,15 +15,15 @@ public final class MinestomGsonComponentSerializerProvider implements GsonCompon
     }
 
     @Override
-    public GsonComponentSerializer gsonLegacy() {
+        public GsonComponentSerializer gsonLegacy() {
         return GsonComponentSerializer.builder()
                 .legacyHoverEventSerializer(NBTLegacyHoverEventSerializer.INSTANCE)
-                .downsampleColors()
+                .editOptions(features -> features.value(JSONOptions.EMIT_RGB, false))
                 .build();
     }
 
     @Override
     public Consumer<GsonComponentSerializer.Builder> builder() {
-        return builder -> {}; // we don't need to touch the builder here
+        return _ -> {}; // we don't need to touch the builder here
     }
 }
