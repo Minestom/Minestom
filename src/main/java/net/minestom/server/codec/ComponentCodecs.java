@@ -52,7 +52,7 @@ public final class ComponentCodecs {
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable TextColor value) {
             if (value == null) return new Result.Error<>("null");
             if (value instanceof NamedTextColor namedColor)
-                return new Result.Ok<>(coder.createString(namedColor.toString()));
+                return new Result.Ok<>(coder.createString(namedColor.name()));
             return new Result.Ok<>(coder.createString(value.asHexString()));
         }
     };
@@ -67,31 +67,41 @@ public final class ComponentCodecs {
         };
     }
 
-    public static final StructCodec<ClickEvent> CLICK_EVENT = new StructCodec<>() {
-        private static final Codec<ClickEvent.Action> ACTION_CODEC = Codec.Enum(ClickEvent.Action.class);
+    private static List<Component> extractTranslatableComponents(final TranslatableComponent component) {
+        final List<TranslationArgument> arguments = component.arguments();
+        if (arguments.isEmpty()) return List.of();
+        Component[] components = new Component[arguments.size()];
+        for (int i = 0; i < components.length; i++) {
+            components[i] = arguments.get(i).asComponent();
+        }
+        return List.of(components);
+    }
+
+    public static final StructCodec<ClickEvent<?>> CLICK_EVENT = new StructCodec<>() {
+        private static final Codec<ClickEvent.Action<?>> ACTION_CODEC = Codec.STRING.transform(ClickEvent.Action.NAMES::value, ClickEvent.Action::toString);
 
         @Override
-        public <D> Result<ClickEvent> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
-            final Result<ClickEvent.Action> actionResult = map.getValue("action").map(value -> ACTION_CODEC.decode(coder, value));
+        public <D> Result<ClickEvent<?>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
+            final Result<ClickEvent.Action<?>> actionResult = map.getValue("action").map(value -> ACTION_CODEC.decode(coder, value));
             if (!(actionResult instanceof Result.Ok(var action)))
                 return actionResult.cast();
 
             return switch (action) {
-                case OPEN_URL -> map.getValue("url").map(value -> Codec.STRING.decode(coder, value))
+                case ClickEvent.Action.OpenUrl _ -> map.getValue("url").map(value -> Codec.STRING.decode(coder, value))
                         .mapResult(ClickEvent::openUrl);
-                case OPEN_FILE -> map.getValue("path").map(value -> Codec.STRING.decode(coder, value))
+                case ClickEvent.Action.OpenFile _ -> map.getValue("path").map(value -> Codec.STRING.decode(coder, value))
                         .mapResult(ClickEvent::openFile);
-                case RUN_COMMAND -> map.getValue("command").map(value -> Codec.STRING.decode(coder, value))
+                case ClickEvent.Action.RunCommand _ -> map.getValue("command").map(value -> Codec.STRING.decode(coder, value))
                         .mapResult(ClickEvent::runCommand);
-                case SUGGEST_COMMAND -> map.getValue("command").map(value -> Codec.STRING.decode(coder, value))
+                case ClickEvent.Action.SuggestCommand _ -> map.getValue("command").map(value -> Codec.STRING.decode(coder, value))
                         .mapResult(ClickEvent::suggestCommand);
-                case CHANGE_PAGE -> map.getValue("page").map(value -> Codec.INT.decode(coder, value))
+                case ClickEvent.Action.ChangePage _ -> map.getValue("page").map(value -> Codec.INT.decode(coder, value))
                         .mapResult(ClickEvent::changePage);
-                case COPY_TO_CLIPBOARD -> map.getValue("value").map(value -> Codec.STRING.decode(coder, value))
+                case ClickEvent.Action.CopyToClipboard _ -> map.getValue("value").map(value -> Codec.STRING.decode(coder, value))
                         .mapResult(ClickEvent::copyToClipboard);
-                case SHOW_DIALOG -> map.getValue("dialog").map(value -> Dialog.CODEC.decode(coder, value))
+                case ClickEvent.Action.ShowDialog _ -> map.getValue("dialog").map(value -> Dialog.CODEC.decode(coder, value))
                         .mapResult(dialog -> ClickEvent.showDialog(Dialog.wrap(dialog)));
-                case CUSTOM -> {
+                case ClickEvent.Action.Custom _ -> {
                     final Result<Key> idResult = map.getValue("id").map(value -> Codec.KEY.decode(coder, value));
                     if (!(idResult instanceof Result.Ok(Key id)))
                         yield idResult.cast();
@@ -112,20 +122,20 @@ public final class ComponentCodecs {
         }
 
         @Override
-        public <D> Result<D> encodeToMap(Transcoder<D> coder, ClickEvent value, MapBuilder<D> map) {
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, ClickEvent<?> value, MapBuilder<D> map) {
             final Result<D> actionResult = ACTION_CODEC.encode(coder, value.action());
             if (!(actionResult instanceof Result.Ok(D actionValue)))
                 return actionResult.cast();
             map.put("action", actionValue);
 
             return encodePayload(coder, switch (value.action()) {
-                case OPEN_URL -> "url";
-                case OPEN_FILE -> "path";
-                case RUN_COMMAND, SUGGEST_COMMAND -> "command";
-                case CHANGE_PAGE -> "page";
-                case COPY_TO_CLIPBOARD -> "value";
-                case SHOW_DIALOG -> "dialog";
-                case CUSTOM -> "__IGNORED__"; // Custom payload keys are written inside its writer
+                case ClickEvent.Action.OpenUrl _ -> "url";
+                case ClickEvent.Action.OpenFile _ -> "path";
+                case ClickEvent.Action.RunCommand _, ClickEvent.Action.SuggestCommand _ -> "command";
+                case ClickEvent.Action.ChangePage _  -> "page";
+                case ClickEvent.Action.CopyToClipboard _ -> "value";
+                case ClickEvent.Action.ShowDialog _ -> "dialog";
+                case ClickEvent.Action.Custom _ -> "__IGNORED__"; // Custom payload keys are written inside its writer
             }, value.payload(), map);
         }
 
@@ -155,8 +165,6 @@ public final class ComponentCodecs {
                     map.put("payload", customPayload);
                     yield new Result.Ok<>(map.build());
                 }
-                default ->
-                        throw new UnsupportedOperationException("Unknown click event payload type: " + payload.getClass());
             };
         }
     };
@@ -217,7 +225,7 @@ public final class ComponentCodecs {
     private static final StructCodec<TranslatableComponent> TRANSLATABLE_CONTENT = StructCodec.struct(
             "translate", Codec.STRING, TranslatableComponent::key,
             "fallback", Codec.STRING.optional(), TranslatableComponent::fallback,
-            "with", COMPONENT_FORWARD.list().optional(List.of()), TranslatableComponent::args,
+            "with", COMPONENT_FORWARD.list().optional(List.of()), ComponentCodecs::extractTranslatableComponents,
             Component::translatable);
     private static final StructCodec<ScoreComponent> SCORE_INNER_CONTENT = StructCodec.struct(
             "name", Codec.STRING, ScoreComponent::name,
@@ -267,18 +275,17 @@ public final class ComponentCodecs {
             return switch (value.contents()) {
                 case SpriteObjectContents sprite -> SPRITE_CONTENT.encodeToMap(coder, sprite, map);
                 case PlayerHeadObjectContents playerHead -> PLAYER_HEAD_CONTENTS.encodeToMap(coder, playerHead, map);
-                default -> new Result.Error<>("Unknown object contents type: " + value.contents().getClass());
             };
         }
     };
-    private static final StructCodec<NBTComponent<?, ?>> NBT_CONTENT = new StructCodec<>() {
+    private static final StructCodec<NBTComponent<?>> NBT_CONTENT = new StructCodec<>() {
         @Override
-        public <D> Result<NBTComponent<?, ?>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
+        public <D> Result<NBTComponent<?>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
             return new Result.Error<>("NBTComponent not yet supported");
         }
 
         @Override
-        public <D> Result<D> encodeToMap(Transcoder<D> coder, NBTComponent<?, ?> value, MapBuilder<D> map) {
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, NBTComponent<?> value, MapBuilder<D> map) {
             return new Result.Error<>("NBTComponent not yet supported");
         }
     };
@@ -364,9 +371,8 @@ public final class ComponentCodecs {
                     case SelectorComponent selectorComponent ->
                             SELECTOR_CONTENT.encodeToMap(coder, selectorComponent, map);
                     case KeybindComponent keybindComponent -> KEYBIND_CONTENT.encodeToMap(coder, keybindComponent, map);
-                    case NBTComponent<?, ?> nbtComponent -> NBT_CONTENT.encodeToMap(coder, nbtComponent, map);
+                    case NBTComponent<?> nbtComponent -> NBT_CONTENT.encodeToMap(coder, nbtComponent, map);
                     case ObjectComponent objectComponent -> OBJECT_CONTENT.encodeToMap(coder, objectComponent, map);
-                    default -> new Result.Error<>("Unknown component type: " + value.getClass());
                 };
 
                 return baseResult

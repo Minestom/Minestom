@@ -127,7 +127,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 buffer.write(STRING_IO_UTF8, "keybind");
                 buffer.write(STRING_IO_UTF8, keybind.keybind());
             }
-            case NBTComponent<?, ?> nbt -> {
+            case NBTComponent<?> nbt -> {
                 //todo
                 throw new UnsupportedOperationException("NBTComponent is not implemented yet");
             }
@@ -242,7 +242,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             buffer.write(BYTE, TAG_STRING);
             buffer.write(STRING_IO_UTF8, "color");
             if (color instanceof NamedTextColor namedColor)
-                buffer.write(STRING_IO_UTF8, namedColor.toString());
+                buffer.write(STRING_IO_UTF8, namedColor.name());
             else buffer.write(STRING_IO_UTF8, color.asHexString());
         }
 
@@ -302,53 +302,54 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             buffer.write(STRING_IO_UTF8, insertion);
         }
 
-        final ClickEvent clickEvent = style.clickEvent();
+        final ClickEvent<?> clickEvent = style.clickEvent();
         if (clickEvent != null) writeClickEvent(buffer, clickEvent);
 
         final HoverEvent<?> hoverEvent = style.hoverEvent();
         if (hoverEvent != null) writeHoverEvent(buffer, hoverEvent);
     }
 
-    private void writeClickEvent(NetworkBuffer buffer, ClickEvent clickEvent) {
+    private void writeClickEvent(NetworkBuffer buffer, ClickEvent<?> clickEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
         buffer.write(STRING_IO_UTF8, "click_event");
 
         buffer.write(BYTE, TAG_STRING);
         buffer.write(STRING_IO_UTF8, "action");
-        buffer.write(STRING_IO_UTF8, clickEvent.action().name().toLowerCase(Locale.ROOT));
+        assert clickEvent.action().toString().toLowerCase(Locale.ROOT).equals(clickEvent.action().toString()) : "action is not lowercase";
+        buffer.write(STRING_IO_UTF8, clickEvent.action().toString());
 
         switch (clickEvent.action()) {
-            case OPEN_URL -> {
+            case ClickEvent.Action.OpenUrl _ -> {
                 final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "url");
                 buffer.write(STRING_IO_UTF8, payload.value());
             }
-            case OPEN_FILE -> {
+            case ClickEvent.Action.OpenFile _ -> {
                 final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "path");
                 buffer.write(STRING_IO_UTF8, payload.value());
             }
-            case RUN_COMMAND, SUGGEST_COMMAND -> {
+            case ClickEvent.Action.RunCommand _, ClickEvent.Action.SuggestCommand _ -> {
                 final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "command");
                 buffer.write(STRING_IO_UTF8, payload.value());
             }
-            case CHANGE_PAGE -> {
+            case ClickEvent.Action.ChangePage _ -> {
                 final ClickEvent.Payload.Int payload = checkPayload(clickEvent, ClickEvent.Payload.Int.class);
                 buffer.write(BYTE, TAG_INT);
                 buffer.write(STRING_IO_UTF8, "page");
                 buffer.write(INT, payload.integer());
             }
-            case COPY_TO_CLIPBOARD -> {
+            case ClickEvent.Action.CopyToClipboard _ -> {
                 final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "value");
                 buffer.write(STRING_IO_UTF8, payload.value());
             }
-            case SHOW_DIALOG -> {
+            case ClickEvent.Action.ShowDialog _ -> {
                 final ClickEvent.Payload.Dialog payload = checkPayload(clickEvent, ClickEvent.Payload.Dialog.class);
 
                 try {
@@ -363,7 +364,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                     throw new RuntimeException("Failed to write dialog click event payload", e);
                 }
             }
-            case CUSTOM -> {
+            case ClickEvent.Action.Custom _ -> {
                 final ClickEvent.Payload.Custom payload = checkPayload(clickEvent, ClickEvent.Payload.Custom.class);
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "id");
@@ -382,7 +383,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         buffer.write(BYTE, TAG_END);
     }
 
-    private <T extends ClickEvent.Payload> T checkPayload(ClickEvent clickEvent, Class<T> expected) {
+    private <T extends ClickEvent.Payload> T checkPayload(ClickEvent<?> clickEvent, Class<T> expected) {
         final ClickEvent.Payload payload = clickEvent.payload();
         if (!expected.isInstance(payload))
             throw new IllegalArgumentException(
