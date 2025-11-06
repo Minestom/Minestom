@@ -1,6 +1,5 @@
 package net.minestom.demo.commands;
 
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
@@ -33,7 +32,7 @@ public class GamemodeCommand extends Command {
             sender.sendMessage(
                     Component.text("Invalid gamemode ", NamedTextColor.RED)
                             .append(Component.text(exception.getInput(), NamedTextColor.WHITE))
-                            .append(Component.text("!")), MessageType.SYSTEM);
+                            .append(Component.text("!")));
         });
 
         ArgumentEntity player = ArgumentType.Entity("targets").onlyPlayers(true);
@@ -42,7 +41,7 @@ public class GamemodeCommand extends Command {
         setDefaultExecutor((sender, context) -> {
             String commandName = context.getCommandName();
 
-            sender.sendMessage(Component.text("Usage: /" + commandName + " <gamemode> [targets]", NamedTextColor.RED), MessageType.SYSTEM);
+            sender.sendMessage(Component.text("Usage: /" + commandName + " <gamemode> [targets]", NamedTextColor.RED));
         });
 
         //Command Syntax for /gamemode <gamemode>
@@ -89,8 +88,8 @@ public class GamemodeCommand extends Command {
         if (entities.size() == 0) {
             //If there are no players that could be modified, display an error message
             if (sender instanceof Player)
-                sender.sendMessage(Component.translatable("argument.entity.notfound.player", NamedTextColor.RED), MessageType.SYSTEM);
-            else sender.sendMessage(Component.text("No player was found", NamedTextColor.RED), MessageType.SYSTEM);
+                sender.sendMessage(Component.translatable("argument.entity.notfound.player", NamedTextColor.RED));
+            else sender.sendMessage(Component.text("No player was found", NamedTextColor.RED));
         } else for (Entity entity : entities) {
             if (entity instanceof Player p) {
                 if (p == sender) {
@@ -105,8 +104,8 @@ public class GamemodeCommand extends Command {
                     Component playerName = p.getDisplayName() == null ? p.getName() : p.getDisplayName();
 
                     //Send a message to the changed player and the sender
-                    p.sendMessage(Component.translatable("gameMode.changed", gamemodeComponent), MessageType.SYSTEM);
-                    sender.sendMessage(Component.translatable("commands.gamemode.success.other", playerName, gamemodeComponent), MessageType.SYSTEM);
+                    p.sendMessage(Component.translatable("gameMode.changed", gamemodeComponent));
+                    sender.sendMessage(Component.translatable("commands.gamemode.success.other", playerName, gamemodeComponent));
                 }
             }
         }
@@ -125,6 +124,6 @@ public class GamemodeCommand extends Command {
         Component gamemodeComponent = Component.translatable(gamemodeString);
 
         //Send the translated message to the player.
-        sender.sendMessage(Component.translatable("commands.gamemode.success.self", gamemodeComponent), MessageType.SYSTEM);
+        sender.sendMessage(Component.translatable("commands.gamemode.success.self", gamemodeComponent));
     }
 }
