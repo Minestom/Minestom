@@ -1,6 +1,7 @@
 package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
@@ -32,20 +33,26 @@ public sealed interface Palette permits PaletteImpl {
     int BLOCK_DIMENSION = 16;
     int BLOCK_PALETTE_MIN_BITS = 4;
     int BLOCK_PALETTE_MAX_BITS = 8;
+    @ApiStatus.Internal
     int BLOCK_PALETTE_DIRECT_BITS = MathUtils.bitsToRepresent(Block.statesCount() - 1);
 
     int BIOME_DIMENSION = 4;
     int BIOME_PALETTE_MIN_BITS = 1;
     int BIOME_PALETTE_MAX_BITS = 3;
+
     @ApiStatus.Internal
-    int BIOME_PALETTE_DIRECT_BITS = 7; // Vary based on biome count, this is just a sensible default
+    static int biomePaletteDirectBits() {
+        final var process = MinecraftServer.process();
+        if (process == null) return 7; // Vanilla biome direct bits as of 1.21.10
+        return MathUtils.bitsToRepresent(process.biome().size() - 1);
+    }
 
     static Palette blocks(int bitsPerEntry) {
         return sized(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS, bitsPerEntry);
     }
 
     static Palette biomes(int bitsPerEntry) {
-        return sized(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, BIOME_PALETTE_DIRECT_BITS, bitsPerEntry);
+        return sized(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, biomePaletteDirectBits(), bitsPerEntry);
     }
 
     static Palette blocks() {
@@ -53,7 +60,7 @@ public sealed interface Palette permits PaletteImpl {
     }
 
     static Palette biomes() {
-        return empty(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, BIOME_PALETTE_DIRECT_BITS);
+        return empty(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, biomePaletteDirectBits());
     }
 
     static Palette empty(int dimension, int minBitsPerEntry, int maxBitsPerEntry, int directBits) {
@@ -272,7 +279,7 @@ public sealed interface Palette permits PaletteImpl {
     NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS);
 
     static NetworkBuffer.Type<Palette> biomeSerializer(int biomeCount) {
-        final int directBits = MathUtils.bitsToRepresent(biomeCount);
+        final int directBits = MathUtils.bitsToRepresent(biomeCount - 1);
         return serializer(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, directBits);
     }
 

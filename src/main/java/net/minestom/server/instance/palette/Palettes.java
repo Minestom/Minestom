@@ -13,7 +13,7 @@ public final class Palettes {
 
     public static long[] pack(int[] ints, int bitsPerEntry) {
         final int intsPerLong = (int) Math.floor(64d / bitsPerEntry);
-        long[] longs = new long[(int) Math.ceil(ints.length / (double) intsPerLong)];
+        final long[] longs = new long[(int) Math.ceil(ints.length / (double) intsPerLong)];
         final long mask = (1L << bitsPerEntry) - 1L;
         for (int i = 0; i < longs.length; i++) {
             for (int intIndex = 0; intIndex < intsPerLong; intIndex++) {
@@ -39,10 +39,6 @@ public final class Palettes {
             final int subIndex = i % intsPerLongCeil;
             out[i] = (int) ((in[longIndex] >>> (bitsPerEntry * subIndex)) & mask);
         }
-    }
-
-    public static int maxPaletteSize(int bitsPerEntry) {
-        return 1 << bitsPerEntry;
     }
 
     public static int arrayLength(int dimension, int bitsPerEntry) {
@@ -118,7 +114,7 @@ public final class Palettes {
         final int mask = (1 << bitsPerEntry) - 1;
         for (int i = 0, idx = 0; i < values.length; i++) {
             long block = values[i];
-            int end = Math.min(valuesPerLong, size - idx);
+            final int end = Math.min(valuesPerLong, size - idx);
             for (int j = 0; j < end; j++, idx++) {
                 if (((int) (block & mask)) == paletteIndex) result++;
                 block >>>= bitsPerEntry;
@@ -165,5 +161,55 @@ public final class Palettes {
             result[newValueIndex] = newValue;
         }
         return result;
+    }
+
+    public static int fill(
+            int minX, int minY, int minZ,
+            int maxX, int maxY, int maxZ,
+            int paletteIndex, int airPaletteIndex,
+            long[] values, int dimension, int bitsPerEntry) {
+        int countDelta = 0;
+        if (paletteIndex == airPaletteIndex) {
+            countDelta -= (maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1);
+        }
+
+        final int dimensionMinus = dimension - 1;
+        final int dimensionBits = MathUtils.bitsToRepresent(dimension - 1);
+        final int finalXTravel = dimensionMinus - maxX;
+        final int initialZTravel = minZ << dimensionBits;
+        final int finalZTravel = (dimensionMinus - maxZ) << dimensionBits;
+
+        final int valuesPerLong = 64 / bitsPerEntry;
+        final int maxBitIndex = bitsPerEntry * valuesPerLong;
+        final int mask = (1 << bitsPerEntry) - 1;
+
+        int index = minY << (dimensionBits << 1);
+        for (int y = minY; y <= maxY; y++) {
+            index += initialZTravel;
+            for (int z = minZ; z <= maxZ; z++) {
+                index += minX;
+                int blockIndex = index / valuesPerLong;
+                int bitIndex = (index % valuesPerLong) * bitsPerEntry;
+                long block = values[blockIndex];
+                for (int x = minX; x <= maxX; x++) {
+                    if (bitIndex >= maxBitIndex) {
+                        values[blockIndex] = block;
+                        bitIndex = 0;
+                        blockIndex++;
+                        block = values[blockIndex];
+                    }
+
+                    if (((block >>> bitIndex) & mask) == airPaletteIndex) countDelta++;
+                    block = (block & ~(((long) mask) << bitIndex)) | (((long) paletteIndex) << bitIndex);
+
+                    bitIndex += bitsPerEntry;
+                    index++;
+                }
+                values[blockIndex] = block;
+                index += finalXTravel;
+            }
+            index += finalZTravel;
+        }
+        return countDelta;
     }
 }

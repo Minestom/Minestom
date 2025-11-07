@@ -228,49 +228,12 @@ final class PaletteImpl implements Palette {
 
         final int paletteIndex = valueToPaletteIndex(value);
         final int airPaletteIndex = valueToPalettIndexOrDefault(0);
-        int countDelta = 0;
-        if (paletteIndex == airPaletteIndex) {
-            countDelta -= (maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1);
-        }
 
-        final int dimensionBits = MathUtils.bitsToRepresent(dimension - 1);
-        final int finalXTravel = dimensionMinus - maxX;
-        final int initialZTravel = minZ << dimensionBits;
-        final int finalZTravel = (dimensionMinus - maxZ) << dimensionBits;
-
-        final long[] values = this.values;
-        final int valuesPerLong = 64 / bitsPerEntry;
-        final int maxBitIndex = bitsPerEntry * valuesPerLong;
-        final int mask = (1 << bitsPerEntry) - 1;
-
-        int index = minY << (dimensionBits << 1);
-        for (int y = minY; y <= maxY; y++) {
-            index += initialZTravel;
-            for (int z = minZ; z <= maxZ; z++) {
-                index += minX;
-                int blockIndex = index / valuesPerLong;
-                int bitIndex = (index % valuesPerLong) * bitsPerEntry;
-                long block = values[blockIndex];
-                for (int x = minX; x <= maxX; x++) {
-                    if (bitIndex >= maxBitIndex) {
-                        values[blockIndex] = block;
-                        bitIndex = 0;
-                        blockIndex++;
-                        block = values[blockIndex];
-                    }
-
-                    if (((block >>> bitIndex) & mask) == airPaletteIndex) countDelta++;
-                    block = (block & ~(((long) mask) << bitIndex)) | (((long) paletteIndex) << bitIndex);
-
-                    bitIndex += bitsPerEntry;
-                    index++;
-                }
-                values[blockIndex] = block;
-                index += finalXTravel;
-            }
-            index += finalZTravel;
-        }
-        this.count += countDelta;
+        this.count += Palettes.fill(
+                minX, minY, minZ,
+                maxX, maxY, maxZ,
+                paletteIndex, airPaletteIndex,
+                values, dimension, bitsPerEntry);
     }
 
     @Override
@@ -539,8 +502,11 @@ final class PaletteImpl implements Palette {
             for (int j = 0; j < end; j++, idx++) {
                 final int paletteIndex = (int) (block & mask);
                 final int value = paletteIndexToValue(paletteIndex);
-                final int insertResult = result.valueToIndexCapped(value, maxPaletteSize);
-                if (insertResult < 0) return null;
+                final int pos = result.find(value);
+                if (pos < 0) {
+                    if (result.size() >= maxPaletteSize) return null;
+                    result.UNSAFE_insert(~pos, value);
+                }
                 block >>>= bits;
             }
         }
@@ -582,30 +548,27 @@ final class PaletteImpl implements Palette {
 
     private void retrieveAll(EntryConsumer consumer, boolean consumeEmpty) {
         if (!consumeEmpty && count == 0) return;
-        final long[] values = this.values;
-        final int dimension = this.dimension();
-        final int bitsPerEntry = this.bitsPerEntry;
-        final int magicMask = (1 << bitsPerEntry) - 1;
-        final int valuesPerLong = 64 / bitsPerEntry;
         final int size = maxSize();
+        final int bits = bitsPerEntry;
+        final int valuesPerLong = 64 / bits;
+        final int mask = (1 << bits) - 1;
         final int dimensionMinus = dimension - 1;
-        final int[] ids = isDirect() ? null : paletteIndexMap.indexToValueArray();
-        final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMinus);
-        final int shiftedDimensionBitCount = dimensionBitCount << 1;
-        for (int i = 0; i < values.length; i++) {
-            final long value = values[i];
-            final int startIndex = i * valuesPerLong;
-            final int endIndex = Math.min(startIndex + valuesPerLong, size);
-            for (int index = startIndex; index < endIndex; index++) {
-                final int bitIndex = (index - startIndex) * bitsPerEntry;
-                final int paletteIndex = (int) (value >> bitIndex & magicMask);
-                if (consumeEmpty || paletteIndex != 0) {
-                    final int y = index >> shiftedDimensionBitCount;
-                    final int z = index >> dimensionBitCount & dimensionMinus;
-                    final int x = index & dimensionMinus;
-                    final int result = ids != null && paletteIndex < ids.length ? ids[paletteIndex] : paletteIndex;
-                    consumer.accept(x, y, z, result);
+        final int dimensionBits = MathUtils.bitsToRepresent(dimensionMinus);
+        final int dimensionBitsShifted = dimensionBits << 1;
+
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            final int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                final int paletteIndex = (int) (block & mask);
+                final int value = paletteIndexToValue(paletteIndex);
+                if (consumeEmpty || value != 0) {
+                    final int x = idx & dimensionMinus;
+                    final int y = (idx >> dimensionBitsShifted) & dimensionMinus;
+                    final int z = (idx >> dimensionBits) & dimensionMinus;
+                    consumer.accept(x, y, z, value);
                 }
+                block >>>= bits;
             }
         }
     }

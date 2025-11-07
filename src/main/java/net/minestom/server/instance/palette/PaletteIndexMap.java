@@ -47,7 +47,7 @@ final class PaletteIndexMap implements Cloneable {
     }
 
     PaletteIndexMap(int[] palette) {
-        this(palette.length > 1 ? (byte) MathUtils.bitsToRepresent(palette.length) : 1);
+        this(palette.length > 1 ? (byte) MathUtils.bitsToRepresent(palette.length - 1) : 1);
         for (final int value : palette) {
             final int pos = find(value);
             if (pos >= 0) throw new IllegalArgumentException("Palette entries must be unique");
