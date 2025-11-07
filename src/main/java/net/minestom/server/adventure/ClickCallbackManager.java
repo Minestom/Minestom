@@ -1,9 +1,12 @@
 package net.minestom.server.adventure;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
@@ -18,31 +21,25 @@ import net.minestom.server.utils.UUIDUtils;
 /**
  * Manager for Adventure click callbacks.
  */
-public class ClickCallbackManager implements Tickable {
+public final class ClickCallbackManager implements Tickable {
     private static final Key KEY = Key.key("minestom", "click_callback");
 
-    private final Map<UUID, ClickCallback<Audience>> permanent = new ConcurrentHashMap<>();
-    private final Map<UUID, CallbackData> temporary = new ConcurrentHashMap<>();
+    private final Map<UUID, ClickCallback<Audience>> permanent = new ConcurrentHashMap<>(0);
+    private final Map<UUID, CallbackData> temporary = new ConcurrentHashMap<>(0);
 
-    private static class CallbackData {
-        private final ClickCallback<Audience> callback;
-        private final long expiry;
-
-        private long uses;
-
-        CallbackData(final ClickCallback<Audience> callback, final long expiry, final long uses) {
-            this.callback = callback;
-            this.expiry = expiry;
-            this.uses = uses;
+    private record CallbackData(ClickCallback<Audience> callback, long expiry, AtomicInteger uses) {
+        private CallbackData {
+            Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(uses, "uses");
         }
 
         boolean isExpired(final long time) {
-            return this.uses <= 0 || time >= this.expiry;
+            return this.uses.get() <= 0 || time >= this.expiry;
         }
 
         void consume(final Audience audience) {
-            if (!this.isExpired(System.nanoTime())) {
-                this.uses--;
+            final int remaining = this.uses.getAndUpdate(current -> current > 0 ? current - 1 : current);
+            if (remaining > 0 && this.expiry > System.nanoTime()) {
                 this.callback.accept(audience);
             }
         }
@@ -61,13 +58,15 @@ public class ClickCallbackManager implements Tickable {
      * @param packet the packet
      */
     public void consumeCustomClick(final Player player, final ClientCustomClickActionPacket packet) {
+        Objects.requireNonNull(player, "player");
+        Objects.requireNonNull(packet, "packet");
         if (!packet.key().equals(KEY)) return;
 
         if (packet.payload() instanceof final IntArrayBinaryTag tag) {
             final UUID uuid;
             try {
                 uuid = UUIDUtils.fromNbt(tag);
-            } catch (final IndexOutOfBoundsException ignored) {
+            } catch (final IndexOutOfBoundsException _) {
                 return;
             }
 
@@ -91,20 +90,22 @@ public class ClickCallbackManager implements Tickable {
      * @return the click event
      */
     public ClickEvent createClickEvent(final ClickCallback<Audience> callback, final ClickCallback.Options options) {
+        Objects.requireNonNull(callback, "callback");
+        Objects.requireNonNull(options, "options");
         final UUID uuid = UUID.randomUUID();
         final int uses = options.uses();
 
         long expiry;
         try {
             expiry = System.nanoTime() + options.lifetime().toNanos();
-        } catch (final ArithmeticException ignored) {
+        } catch (final ArithmeticException _) {
             expiry = Long.MAX_VALUE;
         }
 
         if (expiry == Long.MAX_VALUE && uses == ClickCallback.UNLIMITED_USES) {
             this.permanent.put(uuid, callback);
-        } else if (uses > 0) {
-            this.temporary.put(uuid, new CallbackData(callback, expiry, uses));
+        } else if (uses > 0 && expiry > System.nanoTime()) {
+            this.temporary.put(uuid, new CallbackData(callback, expiry, new AtomicInteger(uses)));
         }
 
         return ClickEvent.custom(KEY, new BinaryTagHolderImpl(UUIDUtils.toNbt(uuid)));
