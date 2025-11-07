@@ -16,7 +16,7 @@ import java.util.function.Function;
  * <p>
  * Keep in mind that while the entry points are always accurate, the exit points may not be in blocks like stairs.
  * <p>
- * For these cases, you can manually {@link net.minestom.server.collision.Ray.Intersection#canMerge(Ray.Intersection) check}
+ * For these cases, you can manually {@link net.minestom.server.collision.Ray.Intersection#overlaps(Ray.Intersection) check}
  * and {@link net.minestom.server.collision.Ray.Intersection#merge(Ray.Intersection) merge}, or use a {@link BlockQueue} instead.
  * @param ray the ray to traverse
  * @param blockIterator the block iterator

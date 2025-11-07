@@ -62,7 +62,7 @@ public class BlockQueue extends ArrayDeque<Ray.Intersection<Block>> {
     }
 
     /**
-     * If the first and second elements exist and {@link net.minestom.server.collision.Ray.Intersection#canMerge(Ray.Intersection) can merge},
+     * If the first and second elements exist and {@link net.minestom.server.collision.Ray.Intersection#overlaps(Ray.Intersection) can merge},
      * merge them, otherwise do nothing
      * @param predicate a predicate for merging
      * @return whether elements were merged
@@ -71,7 +71,7 @@ public class BlockQueue extends ArrayDeque<Ray.Intersection<Block>> {
         if (isEmpty()) return false;
         Ray.Intersection<Block> first = poll();
         Ray.Intersection<Block> next = peek();
-        if (next == null || !first.canMerge(next) || !predicate.test(first, next)) {
+        if (next == null || !first.overlaps(next) || !predicate.test(first, next)) {
             addFirst(first);
             return false;
         }
@@ -81,7 +81,7 @@ public class BlockQueue extends ArrayDeque<Ray.Intersection<Block>> {
     }
 
     /**
-     * If the first and second elements exist and {@link net.minestom.server.collision.Ray.Intersection#canMerge(Ray.Intersection) can merge},
+     * If the first and second elements exist and {@link net.minestom.server.collision.Ray.Intersection#overlaps(Ray.Intersection) can merge},
      * merge them, otherwise do nothing
      * @return whether elements were merged
      */

@@ -2,13 +2,17 @@ package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * A ray that can check for collisions along it.
@@ -26,7 +30,7 @@ public record Ray(
         Vec inverse
 ) {
     /**
-     * Constructs a vector.
+     * Constructs a ray.
      * @param origin the origin point
      * @param vector the ray's path, which can have any nonzero length
      */
@@ -56,6 +60,11 @@ public record Ray(
             Vec exitNormal,
             T object
     ) implements Comparable<Intersection<?>> {
+        /**
+         * Compares this intersection's t value with that of another one.
+         * @param o Any other intersection
+         * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
+         */
         @Override
         public int compareTo(Intersection<?> o) {
             return (int) Math.signum(t - o.t());
@@ -72,12 +81,12 @@ public record Ray(
          * @param other the other intersection
          * @return whether the intersections overlap
          */
-        public boolean canMerge(Intersection<?> other) {
+        public boolean overlaps(Intersection<?> other) {
             return !(other.exitT < t || exitT < other.t);
         }
 
         /**
-         * Merges two intersections.
+         * Merges two intersections by making one out of the lowest t and highest exitT from the intersections.
          * @param other the other intersection
          * @return a potentially larger intersection with the same {@link #object} as this
          */
@@ -140,18 +149,20 @@ public record Ray(
 
     /**
      * Check if this ray hits some shape.
+     * <p>
+     * If you're checking an {@link Entity}, use {@link Ray#cast(Shape, Vec)} with its position as a vector.
      * @param shape the shape to check against
      * @return an {@link Intersection} if one is found between this ray and the shape, and null otherwise
-     * @param <S> any Shape - for example, an {@link net.minestom.server.entity.Entity} or {@link BoundingBox}
+     * @param <S> any Shape - for example, a {@link BoundingBox}
      */
     public <S extends Shape> @Nullable Intersection<S> cast(S shape) {
         return cast(shape, Vec.ZERO);
     }
 
     /**
-     * Get an <b>unordered</b> list of collisions with shapes, starting with the closest to the origin.
+     * Get an <b>unordered</b> list of collisions with shapes.
      * <p>
-     * If you need to know which collisions happened first, use {@link #castSorted(Collection)}.
+     * If you need to know which collisions happened first, use {@link #castSorted(Collection)} or {@link Collections#min(Collection)}.
      * @param shapes the shapes to check against
      * @return a list of results, possibly empty
      * @param <S> any Shape - for example, an {@link net.minestom.server.entity.Entity} or {@link BoundingBox}
@@ -166,10 +177,10 @@ public record Ray(
     }
 
     /**
-     * Get an ordered list of collisions with shapes, starting with the closest to the origin.
+     * Get an ordered list of collisions with shapes, starting with the closest to the ray origin.
      * @param shapes the shapes to check against
      * @return a list of results, possibly empty
-     * @param <S> any Shape - for example, an {@link net.minestom.server.entity.Entity} or {@link BoundingBox}
+     * @param <S> any Shape - for example, a {@link BoundingBox}
      */
     public <S extends Shape> List<Intersection<S>> castSorted(Collection<S> shapes) {
         ArrayList<Intersection<S>> result = new ArrayList<>(shapes.size());
@@ -185,7 +196,7 @@ public record Ray(
      * Get the closest collision to the ray's origin.
      * @param shapes the shapes to check against
      * @return the closest result or null if there is none
-     * @param <S> any Shape - for example, an {@link net.minestom.server.entity.Entity} or {@link BoundingBox}
+     * @param <S> any Shape - for example, a{@link BoundingBox}
      */
     public <S extends Shape> @Nullable Intersection<S> findFirst(Collection<S> shapes) {
         ArrayList<Intersection<S>> result = new ArrayList<>(shapes.size());
@@ -195,6 +206,39 @@ public record Ray(
         }
         if (result.isEmpty()) return null;
         return Collections.min(result);
+    }
+
+    /**
+     * Get an <b>unordered</b> list of collisions with entities.
+     * <p>
+     * If you need to know which collisions happened first, use {@link #entitiesSorted(Collection)} or {@link Collections#min(Collection)}.
+     * @param entities the entities to check against
+     * @return a list of results, possibly empty
+     * @param <E> any Entity - if you're using {@link net.minestom.server.instance.EntityTracker}, you might use {@link net.minestom.server.entity.Player}
+     */
+    public <E extends Entity> List<Intersection<E>> entities(Collection<E> entities) {
+        ArrayList<Intersection<E>> result = new ArrayList<>(entities.size());
+        for (E e: entities) {
+            Intersection<E> r = cast(e, e.getPosition().asVec());
+            if (r != null) result.add(r);
+        }
+        return result;
+    }
+
+    /**
+     * Get an ordered list of collisions with entities, starting with the closest to the ray origin.
+     * @param entities the entities to check against
+     * @return a list of results, possibly empty
+     * @param <E> any Entity - if you're using {@link net.minestom.server.instance.EntityTracker}, you might use {@link net.minestom.server.entity.Player}
+     */
+    public <E extends Entity> List<Intersection<E>> entitiesSorted(Collection<E> entities) {
+        ArrayList<Intersection<E>> result = new ArrayList<>(entities.size());
+        for (E e: entities) {
+            Intersection<E> r = cast(e, e.getPosition().asVec());
+            if (r != null) result.add(r);
+        }
+        Collections.sort(result);
+        return result;
     }
 
     /**
