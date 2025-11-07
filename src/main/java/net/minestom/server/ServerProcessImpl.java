@@ -469,7 +469,7 @@ final class ServerProcessImpl implements ServerProcess {
             serverTick(nanoTime);
 
             // The click callback provider needs ticking to clean up the cache.
-            clickCallbackManager.tick(nanoTime);
+            clickCallbackManager().tick(nanoTime);
 
             scheduler().processTickEnd();
 
