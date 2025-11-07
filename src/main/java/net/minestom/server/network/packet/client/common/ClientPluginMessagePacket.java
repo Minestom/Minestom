@@ -18,6 +18,7 @@ public record ClientPluginMessagePacket(String channel, byte[] data) implements 
     public ClientPluginMessagePacket {
         if (channel.length() > 256)
             throw new IllegalArgumentException("Channel cannot be more than 256 characters long");
+        data = data.clone();
     }
 
     @Override
