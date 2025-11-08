@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.sound.Sound;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -18,7 +19,7 @@ public record EntitySoundEffectPacket(
 ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<EntitySoundEffectPacket> SERIALIZER = NetworkBufferTemplate.template(
             SoundEvent.NETWORK_TYPE, EntitySoundEffectPacket::soundEvent,
-            NetworkBuffer.Enum(Sound.Source.class), EntitySoundEffectPacket::source,
+            AdventurePacketConvertor.SOUND_SOURCE_TYPE, EntitySoundEffectPacket::source,
             VAR_INT, EntitySoundEffectPacket::entityId,
             FLOAT, EntitySoundEffectPacket::volume,
             FLOAT, EntitySoundEffectPacket::pitch,

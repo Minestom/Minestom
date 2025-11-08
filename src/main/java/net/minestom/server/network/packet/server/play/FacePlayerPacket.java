@@ -51,7 +51,8 @@ public record FacePlayerPacket(FacePosition facePosition,
     }
 
     public enum FacePosition {
-        FEET, EYES;
+        FEET,
+        EYES;
 
         private static final NetworkBuffer.Type<FacePosition> SERIALIZER = NetworkBuffer.Enum(FacePosition.class);
 

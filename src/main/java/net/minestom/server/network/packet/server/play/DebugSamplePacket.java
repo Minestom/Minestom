@@ -7,13 +7,12 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import java.util.Arrays;
 
-import static net.minestom.server.network.NetworkBuffer.Enum;
 import static net.minestom.server.network.NetworkBuffer.LONG_ARRAY;
 
 public record DebugSamplePacket(long[] sample, Type type) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<DebugSamplePacket> SERIALIZER = NetworkBufferTemplate.template(
             LONG_ARRAY, DebugSamplePacket::sample,
-            Enum(Type.class), DebugSamplePacket::type,
+            Type.NETWORK_TYPE, DebugSamplePacket::type,
             DebugSamplePacket::new);
 
     public DebugSamplePacket {
@@ -35,6 +34,8 @@ public record DebugSamplePacket(long[] sample, Type type) implements ServerPacke
 
     public enum Type {
         TICK_TIME(DebugSubscription.DEDICATED_SERVER_TICK_TIME);
+
+        public static final NetworkBuffer.Type<Type> NETWORK_TYPE = NetworkBuffer.Enum(Type.class);
 
         private final DebugSubscription<?> debugSubscription;
 

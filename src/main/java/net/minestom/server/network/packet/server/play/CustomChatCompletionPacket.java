@@ -13,7 +13,7 @@ public record CustomChatCompletionPacket(Action action,
     public static final int MAX_ENTRIES = Short.MAX_VALUE;
 
     public static final NetworkBuffer.Type<CustomChatCompletionPacket> SERIALIZER = NetworkBufferTemplate.template(
-            NetworkBuffer.Enum(Action.class), CustomChatCompletionPacket::action,
+            Action.NETWORK_TYPE, CustomChatCompletionPacket::action,
             STRING.list(MAX_ENTRIES), CustomChatCompletionPacket::entries,
             CustomChatCompletionPacket::new);
 
@@ -22,6 +22,10 @@ public record CustomChatCompletionPacket(Action action,
     }
 
     public enum Action {
-        ADD, REMOVE, SET
+        ADD,
+        REMOVE,
+        SET;
+
+        public static final NetworkBuffer.Type<Action> NETWORK_TYPE = NetworkBuffer.Enum(Action.class);
     }
 }

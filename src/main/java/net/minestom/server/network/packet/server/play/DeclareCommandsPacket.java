@@ -40,7 +40,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
         public byte @Nullable [] properties; // Only for argument
         public String suggestionsType = ""; // Only if flags 0x10
 
-        public static final NetworkBuffer.Type<Node> SERIALIZER = new Type<>() {
+        public static final NetworkBuffer.Type<Node> SERIALIZER = new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer writer, Node value) {
                 writer.write(BYTE, value.flags);

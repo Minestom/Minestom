@@ -131,6 +131,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
     Type<Vec> LP_VECTOR3 = new NetworkBufferTypeImpl.LpVector3Type();
     Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
+    Type<Float> LP_ROTATION = BYTE.transform(to -> to * 360f / 256f, from -> (byte) (from * 256 / 360));
 
     Type<@Nullable Component> OPT_CHAT = COMPONENT.optional();
     Type<@Nullable Point> OPT_BLOCK_POSITION = BLOCK_POSITION.optional();
@@ -142,6 +143,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     /**
      * Creates an enum type from the enum class
+     * <br>
+     * Encoded as a {@link #VAR_INT} from the ordinal
      *
      * @param enumClass the enum class
      * @param <E>       the enum type
@@ -152,6 +155,26 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         Objects.requireNonNull(enumClass, "enumClass");
         final E[] values = enumClass.getEnumConstants();
         return VAR_INT.transform(integer -> values[integer], Enum::ordinal);
+    }
+
+    /**
+     * Creates a byte enum type from the enum class.
+     * <br>
+     * Encoded as a {@link #BYTE} from the ordinal
+     * <br>
+     * Note: You should use {@link #Enum(Class)} instead if possible.
+     * As this type does not save space under normal use.
+     *
+     * @param enumClass the enum class
+     * @param <E>       the enum type
+     * @return the new enum type
+     */
+    @ApiStatus.Experimental
+    @Contract(pure = true, value = "_ -> new")
+    static <E extends Enum<E>> Type<E> ByteEnum(Class<E> enumClass) {
+        Objects.requireNonNull(enumClass, "enumClass");
+        final E[] values = enumClass.getEnumConstants();
+        return UNSIGNED_BYTE.transform(integer -> values[integer], enumObject -> (short) enumObject.ordinal());
     }
 
     /**

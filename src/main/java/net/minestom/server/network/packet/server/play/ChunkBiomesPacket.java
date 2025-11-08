@@ -20,22 +20,11 @@ public record ChunkBiomesPacket(List<ChunkBiomeData> chunks) implements ServerPa
     }
 
     public record ChunkBiomeData(int chunkX, int chunkZ, byte[] data) {
-        public static final NetworkBuffer.Type<ChunkBiomeData> SERIALIZER = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, ChunkBiomeData value) {
-                buffer.write(INT, value.chunkZ); // x and z are inverted, not a bug
-                buffer.write(INT, value.chunkX);
-                buffer.write(BYTE_ARRAY, value.data);
-            }
-
-            @Override
-            public ChunkBiomeData read(NetworkBuffer buffer) {
-                int chunkZ = buffer.read(INT);
-                int chunkX = buffer.read(INT);
-                byte[] data = buffer.read(BYTE_ARRAY);
-                return new ChunkBiomeData(chunkX, chunkZ, data);
-            }
-        };
+        public static final NetworkBuffer.Type<ChunkBiomeData> SERIALIZER = NetworkBufferTemplate.template(
+                INT, ChunkBiomeData::chunkZ, // x and z are inverted, not a bug
+                INT, ChunkBiomeData::chunkX,
+                BYTE_ARRAY, ChunkBiomeData::data,
+                (chunkZ, chunkX, data) -> new ChunkBiomeData(chunkX, chunkZ, data));
 
         public ChunkBiomeData {
             data = data.clone();

@@ -1,19 +1,23 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record MapDataPacket(int mapId, byte scale, boolean locked,
                             boolean trackingPosition, List<Icon> icons,
-                            @Nullable MapDataPacket.ColorContent colorContent) implements ServerPacket.Play {
+                            @Nullable MapDataPacket.ColorContent colorContent) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ICONS = 1024;
 
     public MapDataPacket {
@@ -31,7 +35,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
             if (value.colorContent != null) {
                 buffer.write(ColorContent.SERIALIZER, value.colorContent);
             } else {
-                buffer.write(BYTE, (byte) 0);
+                buffer.write(BYTE, (byte) 0x00);
             }
         }
 
@@ -55,8 +59,27 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
         }
     };
 
+    @Override
+    public @Unmodifiable Collection<Component> components() {
+        if (this.icons.isEmpty()) return List.of();
+        return this.icons.stream().map(Icon::components).flatMap(Collection::stream).toList();
+    }
+
+    @Override
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
+        if (this.icons.isEmpty()) return this;
+        return new MapDataPacket(
+                this.mapId,
+                this.scale,
+                this.locked,
+                this.trackingPosition,
+                this.icons.stream().map(it -> it.copyWithOperator(operator)).toList(),
+                this.colorContent
+        );
+    }
+
     public record Icon(int type, byte x, byte z, byte direction,
-                       @Nullable Component displayName) {
+                       @Nullable Component displayName) implements ComponentHolder<Icon> {
         public static final NetworkBuffer.Type<Icon> SERIALIZER = NetworkBufferTemplate.template(
                 VAR_INT, Icon::type,
                 BYTE, Icon::x,
@@ -64,6 +87,18 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
                 BYTE, Icon::direction,
                 COMPONENT.optional(), Icon::displayName,
                 Icon::new);
+
+        @Override
+        public Collection<Component> components() {
+            if (displayName != null) return List.of(displayName);
+            return List.of();
+        }
+
+        @Override
+        public Icon copyWithOperator(UnaryOperator<Component> operator) {
+            if (displayName != null) return new Icon(type, x, z, direction, operator.apply(displayName));
+            return this;
+        }
     }
 
     public record ColorContent(byte columns, byte rows, byte x, byte z,

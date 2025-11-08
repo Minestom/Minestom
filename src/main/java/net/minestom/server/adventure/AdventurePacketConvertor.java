@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Utility methods to convert adventure enums to their packet values.
  */
-public class AdventurePacketConvertor {
+public final class AdventurePacketConvertor {
     private static final Map<NamedTextColor, Integer> NAMED_TEXT_COLOR_ID_MAP;
     private static final List<NamedTextColor> ID_NAMED_TEXT_COLOR_MAP;
 
@@ -60,6 +60,9 @@ public class AdventurePacketConvertor {
     @ApiStatus.Experimental
     public static final NetworkBuffer.Type<NamedTextColor> NAMED_TEXT_COLOR = NetworkBuffer.VAR_INT
             .transform(AdventurePacketConvertor::getNamedTextColor, AdventurePacketConvertor::getNamedTextColorValue);
+
+    @ApiStatus.Experimental
+    public static final NetworkBuffer.Type<Sound.Source> SOUND_SOURCE_TYPE = NetworkBuffer.Enum(Sound.Source.class);
 
     /**
      * Gets the int value of a boss bar overlay.
@@ -184,19 +187,25 @@ public class AdventurePacketConvertor {
      * @return the sound stop packet
      */
     public static ServerPacket createSoundStopPacket(SoundStop stop) {
-        byte flags = 0x0;
         Sound.Source source = stop.source();
-        String sound = null;
-
-        if (source != null) flags |= 0x1;
+        final String sound;
 
         final Key soundKey = stop.sound();
         if (soundKey != null) {
-            flags |= 0x2;
             sound = soundKey.asString();
+        } else {
+            sound = null;
         }
 
-        return new StopSoundPacket(flags, source, sound);
+        if (source != null && sound != null) {
+            return new StopSoundPacket(new StopSoundPacket.SourceAndSound(source, sound));
+        } else if (source != null) {
+            return new StopSoundPacket(new StopSoundPacket.Source(source));
+        } else if (sound != null) {
+            return new StopSoundPacket(new StopSoundPacket.Sound(sound));
+        } else {
+            return new StopSoundPacket(new StopSoundPacket.All());
+        }
     }
 
     /**

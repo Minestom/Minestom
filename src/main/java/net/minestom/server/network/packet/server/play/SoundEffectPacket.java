@@ -1,13 +1,15 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.sound.Sound.Source;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.sound.SoundEvent;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+import static net.minestom.server.network.NetworkBuffer.LONG;
 
 public record SoundEffectPacket(
         SoundEvent soundEvent,
@@ -24,7 +26,7 @@ public record SoundEffectPacket(
 
     public static final NetworkBuffer.Type<SoundEffectPacket> SERIALIZER = NetworkBufferTemplate.template(
             SoundEvent.NETWORK_TYPE, SoundEffectPacket::soundEvent,
-            NetworkBuffer.Enum(Source.class), SoundEffectPacket::source,
+            AdventurePacketConvertor.SOUND_SOURCE_TYPE, SoundEffectPacket::source,
             INTEGER_TYPE, SoundEffectPacket::x,
             INTEGER_TYPE, SoundEffectPacket::y,
             INTEGER_TYPE, SoundEffectPacket::z,

@@ -12,15 +12,15 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementAction;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.crypto.*;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockEntityType;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatMessageType;
@@ -57,13 +57,13 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
-import net.minestom.server.potion.PotionType;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticCategory;
 import net.minestom.server.utils.Rotation;
@@ -71,12 +71,10 @@ import net.minestom.server.world.Difficulty;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.lang.foreign.Arena;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
@@ -274,7 +272,7 @@ public class PacketWriteReadTest {
                                 PlayerInfoUpdatePacket.Action.ADD_PLAYER,
                                 PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE
                         ),
-                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), OG, List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())), false, 0, GameMode.CREATIVE, null, null, 0, true)
+                        new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), OG, List.of(new GameProfile.Property("textures", skin.textures(), skin.signature())), false, 0, GameMode.CREATIVE, null, null, 0, true)
                 ),
                 new PlayerInfoUpdatePacket(
                         EnumSet.of(
@@ -351,7 +349,13 @@ public class PacketWriteReadTest {
         addServerPackets(new PlayerRotationPacket(45f, false, 90f, false));
         addServerPackets(new ProjectilePowerPacket(5, 1.0));
         addServerPackets(new RespawnPacket(0,"overworld", 0L, GameMode.CREATIVE, GameMode.SURVIVAL, false, false, null, 5, 63, RespawnPacket.COPY_METADATA));
-        addServerPackets(new ScoreboardObjectivePacket("objective", (byte) 0, COMPONENT, ScoreboardObjectivePacket.Type.INTEGER, null));
+        addServerPackets(
+                new ScoreboardObjectivePacket("objective", new ScoreboardObjectivePacket.Create(COMPONENT, ScoreboardObjectivePacket.Type.HEARTS, Sidebar.NumberFormat.blank())),
+                new ScoreboardObjectivePacket("objective", new ScoreboardObjectivePacket.Create(COMPONENT, ScoreboardObjectivePacket.Type.HEARTS, null)),
+                new ScoreboardObjectivePacket("objective", new ScoreboardObjectivePacket.Destroy()),
+                new ScoreboardObjectivePacket("objective", new ScoreboardObjectivePacket.Update(COMPONENT, ScoreboardObjectivePacket.Type.HEARTS, Sidebar.NumberFormat.styled(Component.empty()))),
+                new ScoreboardObjectivePacket("objective", new ScoreboardObjectivePacket.Update(COMPONENT, ScoreboardObjectivePacket.Type.HEARTS, null)))
+        ;
         addServerPackets(new SelectAdvancementTabPacket("minecraft:story/root"));
         addServerPackets(new ServerDataPacket(COMPONENT, null));
         addServerPackets(new ServerDifficultyPacket(Difficulty.NORMAL, true));
@@ -365,12 +369,17 @@ public class PacketWriteReadTest {
         addServerPackets(new SetTitleSubTitlePacket(COMPONENT));
         addServerPackets(new SetTitleTextPacket(COMPONENT));
         addServerPackets(new SetTitleTimePacket(10, 70, 20));
-        addServerPackets(new SoundEffectPacket(SoundEvent.ENTITY_PLAYER_HURT, net.kyori.adventure.sound.Sound.Source.PLAYER, (int) VEC.x() * 8, (int) VEC.y() * 8, (int) VEC.z() * 8, 1.0f, 1.0f, 0L));
+        addServerPackets(new SoundEffectPacket(SoundEvent.ENTITY_PLAYER_HURT, net.kyori.adventure.sound.Sound.Source.PLAYER, VEC.blockX(), VEC.blockY(), VEC.blockZ(), 1.0f, 1.0f, 0L));
         addServerPackets(new SpawnEntityPacket(5, UUID.randomUUID(), EntityType.ZOMBIE, new Pos(0, 64, 0, 0, 0), 9.84375f, 0, Vec.ONE));
         addServerPackets(new SpawnPositionPacket(new WorldPos("overworld", VEC), 0f, 1f));
         addServerPackets(new StartConfigurationPacket());
         addServerPackets(new StatisticsPacket(List.of(new StatisticsPacket.Statistic(StatisticCategory.BROKEN, 5, 100))));
-        addServerPackets(new StopSoundPacket((byte) 0, null, null));
+        addServerPackets(
+                new StopSoundPacket(new StopSoundPacket.All()),
+                new StopSoundPacket(new StopSoundPacket.Source(Sound.Source.BLOCK)),
+                new StopSoundPacket(new StopSoundPacket.Sound("minecraft:block.amethyst_block.break")),
+                new StopSoundPacket(new StopSoundPacket.SourceAndSound(Sound.Source.BLOCK, "block.amethyst_block.break"))
+        );
         addServerPackets(new TabCompletePacket(5, 0, 0, List.of()));
         addServerPackets(new TeamsPacket("team", new TeamsPacket.CreateTeamAction(COMPONENT, (byte) 0, TeamsPacket.NameTagVisibility.ALWAYS, TeamsPacket.CollisionRule.ALWAYS, NamedTextColor.RED, COMPONENT, COMPONENT, List.of("player1"))));
         addServerPackets(new TickStepPacket(20));
@@ -543,7 +552,7 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientCommandChatPacket("l".repeat(256)), new ClientCommandChatPacket("helloworld"));
         //TODO (signed) support signed chat/commands with proper data.
         addClientPackets(new ClientSignedCommandChatPacket("helloworld", Long.MAX_VALUE, 0L, new ArgumentSignatures(List.of(new ArgumentSignatures.Entry("hey", new MessageSignature(new byte[256])))), new LastSeenMessages.Update(100, new BitSet(20)), (byte) 0));
-        addClientPackets(new ClientChatMessagePacket("My name is bob", Long.MAX_VALUE, 0L, new byte[256], 100, new BitSet(), (byte) 100));
+        addClientPackets(new ClientChatMessagePacket("My name is bob", Long.MAX_VALUE, 0L, new MessageSignature(new byte[256]), 100, new BitSet(), (byte) 100));
         //TODO (signed) use a key for tests
         addClientPackets(new ClientChatSessionUpdatePacket(new ChatSession(UUID.randomUUID(), new PlayerPublicKey(Instant.EPOCH, Objects.requireNonNull(MojangCrypt.generateKeyPair()).getPublic(), new byte[4096]))));
         addClientPackets(new ClientChunkBatchReceivedPacket(0.5f));

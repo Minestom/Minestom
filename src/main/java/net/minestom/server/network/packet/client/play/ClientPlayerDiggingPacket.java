@@ -13,14 +13,9 @@ public record ClientPlayerDiggingPacket(Status status, Point blockPosition,
     public static final NetworkBuffer.Type<ClientPlayerDiggingPacket> SERIALIZER = NetworkBufferTemplate.template(
             Status.NETWORK_TYPE, ClientPlayerDiggingPacket::status,
             BLOCK_POSITION, ClientPlayerDiggingPacket::blockPosition,
-            ByteEnum(BlockFace.values()), ClientPlayerDiggingPacket::blockFace,
+            NetworkBuffer.ByteEnum(BlockFace.class), ClientPlayerDiggingPacket::blockFace,
             VAR_INT, ClientPlayerDiggingPacket::sequence,
             ClientPlayerDiggingPacket::new);
-
-    // byte enum encoding for BlockFace
-    private static <T extends Enum<T>> Type<T> ByteEnum(final T[] values) {
-        return BYTE.transform(aByte -> values[aByte], value -> (byte) value.ordinal());
-    }
 
     public enum Status {
         STARTED_DIGGING,

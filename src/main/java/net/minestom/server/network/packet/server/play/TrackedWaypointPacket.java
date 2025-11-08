@@ -95,7 +95,10 @@ public record TrackedWaypointPacket(
         }
 
         enum Type {
-            EMPTY, VEC3I, CHUNK, AZIMUTH;
+            EMPTY,
+            VEC3I,
+            CHUNK,
+            AZIMUTH;
 
             public static final NetworkBuffer.Type<Type> NETWORK_TYPE = NetworkBuffer.Enum(Type.class);
         }
