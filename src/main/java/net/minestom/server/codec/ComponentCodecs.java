@@ -78,7 +78,7 @@ public final class ComponentCodecs {
     }
 
     public static final StructCodec<ClickEvent<?>> CLICK_EVENT = new StructCodec<>() {
-        private static final Codec<ClickEvent.Action<?>> ACTION_CODEC = Codec.STRING.transform(ClickEvent.Action.NAMES::value, ClickEvent.Action::toString);
+        private static final Codec<ClickEvent.Action<?>> ACTION_CODEC = Codec.STRING.transform(ClickEvent.Action.NAMES::value, ClickEvent.Action::name);
 
         @Override
         public <D> Result<ClickEvent<?>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {

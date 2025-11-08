@@ -315,8 +315,8 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
         buffer.write(BYTE, TAG_STRING);
         buffer.write(STRING_IO_UTF8, "action");
-        assert clickEvent.action().toString().toLowerCase(Locale.ROOT).equals(clickEvent.action().toString()) : "action is not lowercase";
-        buffer.write(STRING_IO_UTF8, clickEvent.action().toString());
+        assert clickEvent.action().name().toLowerCase(Locale.ROOT).equals(clickEvent.action().name()) : "action is not lowercase";
+        buffer.write(STRING_IO_UTF8, clickEvent.action().name());
 
         switch (clickEvent.action()) {
             case ClickEvent.Action.OpenUrl _ -> {
