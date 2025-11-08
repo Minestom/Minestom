@@ -24,7 +24,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 @SuppressWarnings("ALL")
 @ApiStatus.Internal
 public final class PacketReading {
-    private final static Logger LOGGER = LoggerFactory.getLogger(PacketReading.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PacketReading.class);
 
     private static final int MAX_VAR_INT_SIZE = 5;
     private static final Result.Empty EMPTY_CLIENT_PACKET = new Result.Empty<>();
