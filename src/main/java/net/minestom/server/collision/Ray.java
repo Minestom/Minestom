@@ -61,13 +61,15 @@ public record Ray(
             T object
     ) implements Comparable<Intersection<?>> {
         /**
-         * Compares this intersection's t value with that of another one.
+         * Compares this intersection's t value with that of another one. If they are equal, compares their exitT values.
          * @param o Any other intersection
          * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
          */
         @Override
         public int compareTo(Intersection<?> o) {
-            return (int) Math.signum(t - o.t());
+            return t != o.t ?
+                    (int) Math.signum(t - o.t) :
+                    (int) Math.signum(exitT - o.exitT);
         }
 
         public <R> Intersection<R> withObject(R object) {
