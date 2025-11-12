@@ -102,14 +102,12 @@ public record ResolvableProfile(
             case Either.Left(GameProfile gameProfile) -> {
                 builder.name(gameProfile.name());
                 builder.id(gameProfile.uuid());
-                for (GameProfile.Property property : gameProfile.properties())
-                    builder.profileProperty(property);
+                builder.profileProperties(gameProfile.properties());
             }
             case Either.Right(Partial partial) -> {
                 builder.name(partial.name());
                 builder.id(partial.uuid());
-                for (GameProfile.Property property : partial.properties())
-                    builder.profileProperty(property);
+                builder.profileProperties(partial.properties());
             }
         }
     }
