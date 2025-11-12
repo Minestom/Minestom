@@ -3,7 +3,7 @@ package net.minestom.server.utils;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
+import net.kyori.adventure.translation.Translator;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
@@ -28,9 +28,18 @@ public class TranslationIntegrationTest {
 
     @BeforeAll
     static void translator() {
-        final var translator = TranslationRegistry.create(Key.key("test.reg"));
-        // Have to use US as default language because the default ClientSettings are in US :)
-        translator.register("test.key", Locale.US, new MessageFormat("This is a test message", MinestomAdventure.getDefaultLocale()));
+        final var translator = new Translator() {
+            @Override
+            public Key name() {
+                return Key.key("test.reg");
+            }
+
+            @Override
+            public MessageFormat translate(String key, Locale locale) {
+                if (!"test.key".equals(key)) return null;
+                return new MessageFormat("This is a test message", MinestomAdventure.getDefaultLocale());
+            }
+        };
 
         GlobalTranslator.translator().addSource(translator);
     }
