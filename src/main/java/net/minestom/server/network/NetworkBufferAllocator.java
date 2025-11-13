@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
-import java.lang.ref.Reference;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -101,9 +100,6 @@ final class NetworkBufferAllocator {
             // This might cause another exception to bubble up which you wouldn't see the initial error.
             NetworkBufferAllocator.free(segment);
             throw new IllegalStateException("Failed to reinterpret native memory: %d:%d".formatted(segment.address(), byteSize), e);
-        } finally {
-            // We need a reachability fence to ensure reinterpret can be called somewhat safely for global auto arenas.
-            Reference.reachabilityFence(arena);
         }
     }
 
