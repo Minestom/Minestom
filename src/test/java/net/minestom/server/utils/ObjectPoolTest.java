@@ -1,7 +1,5 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.PacketVanilla;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -14,27 +12,26 @@ public class ObjectPoolTest {
 
     @Test
     public void pool() {
-        var pool = PacketVanilla.PACKET_POOL;
-        Set<NetworkBuffer> pooledBuffers = Collections.newSetFromMap(new IdentityHashMap<>());
-        pool.clear();
+        var pool = ObjectPool.pool(Byte.MAX_VALUE, Object::new);
+        Set<Object> pooledObjects = Collections.newSetFromMap(new IdentityHashMap<>());
 
         assertEquals(0, pool.count());
-        var buffer = pool.get();
-        pooledBuffers.add(buffer);
+        var object = pool.get();
+        pooledObjects.add(object);
 
-        buffer = pool.get();
-        assertTrue(pooledBuffers.add(buffer));
+        object = pool.get();
+        assertTrue(pooledObjects.add(object));
 
-        pool.add(buffer);
+        pool.add(object);
         assertEquals(1, pool.count());
-        buffer = pool.get();
+        object = pool.get();
         assertEquals(0, pool.count());
-        assertFalse(pooledBuffers.add(buffer));
+        assertFalse(pooledObjects.add(object));
     }
 
     @Test
     public void autoClose() {
-        var pool = PacketVanilla.PACKET_POOL;
+        var pool = ObjectPool.pool(Byte.MAX_VALUE, Object::new);
         assertEquals(0, pool.count());
         try (var ignored = pool.hold()) {
             assertEquals(0, pool.count());
@@ -45,5 +42,25 @@ public class ObjectPoolTest {
             assertEquals(0, pool.count());
         }
         assertEquals(1, pool.count());
+    }
+
+    @Test
+    public void unpooled() {
+        var pool = ObjectPool.pool(0, Object::new);
+        Set<Object> pooledObjects = Collections.newSetFromMap(new IdentityHashMap<>());
+        assertEquals(0, pool.count());
+
+        var holder = pool.hold();
+        assertEquals(0, pool.count(), "hold increased count");
+        holder.close();
+        assertThrows(IllegalStateException.class, holder::get);
+        assertEquals(0, pool.count(), "exception increased count");
+
+        var object = pool.get();
+        pooledObjects.add(object);
+        object = pool.get();
+        assertTrue(pooledObjects.add(object), "should not return same object");
+
+        assertEquals(2, pooledObjects.size());
     }
 }

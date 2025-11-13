@@ -1,13 +1,8 @@
 package net.minestom.server.utils;
 
-import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.lang.ref.Cleaner;
-import java.lang.ref.SoftReference;
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -15,121 +10,39 @@ import java.util.function.UnaryOperator;
 
 @ApiStatus.Internal
 @ApiStatus.Experimental
-public final class ObjectPool<T> {
-    private static final Cleaner CLEANER = Cleaner.create();
-
-    private final MessagePassingQueue<SoftReference<T>> pool;
-    private final Supplier<T> supplier;
-    private final UnaryOperator<T> sanitizer;
-
-    public static <T> ObjectPool<T> pool(int size, Supplier<T> supplier, UnaryOperator<T> sanitizer) {
-        return new ObjectPool<>(size, supplier, sanitizer);
+public sealed interface ObjectPool<T> permits ObjectPoolImpl, ObjectPoolImpl.Unpooled {
+    static <T> ObjectPool<T> pool(int size, Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+        if (size <= 0) return new ObjectPoolImpl.Unpooled<>(supplier);
+        return new ObjectPoolImpl<>(size, supplier, sanitizer);
     }
 
-    public static <T> ObjectPool<T> pool(int size, Supplier<T> supplier) {
-        return new ObjectPool<>(size, supplier, UnaryOperator.identity());
+    static <T> ObjectPool<T> pool(int size, Supplier<T> supplier) {
+        if (size <= 0) return new ObjectPoolImpl.Unpooled<>(supplier);
+        return new ObjectPoolImpl<>(size, supplier, UnaryOperator.identity());
     }
 
-    private ObjectPool(int chunkSize, Supplier<T> supplier, UnaryOperator<T> sanitizer) {
-        this.pool = new MpmcUnboundedXaddArrayQueue<>(chunkSize); // TODO support 0.
-        this.supplier = supplier;
-        this.sanitizer = sanitizer;
-    }
+    T get();
 
-    public T get() {
-        T result;
-        SoftReference<T> ref;
-        while ((ref = pool.poll()) != null) {
-            if ((result = ref.get()) != null) return result;
-        }
-        return supplier.get();
-    }
+    T getAndRegister(Object ref);
 
-    public T getAndRegister(Object ref) {
-        T result = get();
-        register(ref, result);
-        return result;
-    }
+    void add(T object);
 
-    public void add(T object) {
-        object = sanitizer.apply(object);
-        this.pool.offer(new SoftReference<>(object));
-    }
+    void clear();
 
-    public void clear() {
-        this.pool.clear();
-    }
+    int count();
 
-    public int count() {
-        return pool.size();
-    }
+    void register(Object ref, AtomicReference<T> objectRef);
 
-    public void register(Object ref, AtomicReference<T> objectRef) {
-        CLEANER.register(ref, new BufferRefCleaner<>(this, objectRef));
-    }
+    void register(Object ref, T object);
 
-    public void register(Object ref, T object) {
-        CLEANER.register(ref, new BufferCleaner<>(this, object));
-    }
+    void register(Object ref, Collection<T> objects);
 
-    public void register(Object ref, Collection<T> objects) {
-        CLEANER.register(ref, new BuffersCleaner<>(this, objects));
-    }
+    Holder<T> hold();
 
-    public Holder hold() {
-        return new Holder(get());
-    }
+    <R> R use(Function<T, R> function);
 
-    public <R> R use(Function<T, R> function) {
-        T object = get();
-        try {
-            return function.apply(object);
-        } finally {
-            add(object);
-        }
-    }
-
-    private record BufferRefCleaner<T>(ObjectPool<T> pool, AtomicReference<T> objectRef) implements Runnable {
+    interface Holder<T> extends Supplier<T>, AutoCloseable {
         @Override
-        public void run() {
-            this.pool.add(objectRef.get());
-        }
-    }
-
-    private record BufferCleaner<T>(ObjectPool<T> pool, T object) implements Runnable {
-        @Override
-        public void run() {
-            this.pool.add(object);
-        }
-    }
-
-    private record BuffersCleaner<T>(ObjectPool<T> pool, Collection<T> objects) implements Runnable {
-        @Override
-        public void run() {
-            for (T buffer : objects) {
-                this.pool.add(buffer);
-            }
-        }
-    }
-
-    public final class Holder implements AutoCloseable {
-        private final T object;
-        private final AtomicBoolean closed = new AtomicBoolean(false);
-
-        Holder(T object) {
-            this.object = object;
-        }
-
-        public T get() {
-            if (closed.get()) throw new IllegalStateException("Holder is closed");
-            return object;
-        }
-
-        @Override
-        public void close() {
-            if (closed.compareAndSet(false, true)) {
-                add(object);
-            }
-        }
+        void close();
     }
 }
