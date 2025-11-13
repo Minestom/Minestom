@@ -21,7 +21,7 @@ public class LoginPluginMessageProcessor {
         this.connection = connection;
     }
 
-    public CompletableFuture<LoginPlugin.Response> request(String channel, byte [] requestPayload) {
+    public CompletableFuture<LoginPlugin.Response> request(String channel, byte[] requestPayload) {
         LoginPlugin.Request request = new LoginPlugin.Request(channel, requestPayload);
 
         final int messageId = nextMessageId();
@@ -49,7 +49,7 @@ public class LoginPluginMessageProcessor {
         if (requestByMsgId.isEmpty()) {
             return;
         }
-        CompletableFuture[] futures = requestByMsgId.values().stream()
+        CompletableFuture<?>[] futures = requestByMsgId.values().stream()
                 .map(LoginPlugin.Request::responseFuture)
                 .toArray(CompletableFuture[]::new);
         CompletableFuture.allOf(futures).get(timeout, timeUnit);

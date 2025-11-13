@@ -51,6 +51,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
         viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
         Objects.requireNonNull(chatMessageType);
         Objects.requireNonNull(mainHand);
+        Objects.requireNonNull(particleSetting);
     }
 
     /**

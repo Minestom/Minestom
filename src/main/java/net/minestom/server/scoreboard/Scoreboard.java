@@ -35,7 +35,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @return the creation objective packet
      */
     default ScoreboardObjectivePacket getCreationObjectivePacket(Component value, ScoreboardObjectivePacket.Type type) {
-        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 0, value, type, null);
+        return new ScoreboardObjectivePacket(getObjectiveName(), new ScoreboardObjectivePacket.Create(value, type));
     }
 
     /**
@@ -44,7 +44,18 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @return the destruction objective packet
      */
     default ScoreboardObjectivePacket getDestructionObjectivePacket() {
-        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 1, null, null, null);
+        return new ScoreboardObjectivePacket(getObjectiveName(), new ScoreboardObjectivePacket.Destroy());
+    }
+
+    /**
+     * Creates an update objective packet.
+     *
+     * @param value The value for the objective
+     * @param type  The type for the objective
+     * @return the creation objective packet
+     */
+    default ScoreboardObjectivePacket getUpdateObjectivePacket(Component value, ScoreboardObjectivePacket.Type type) {
+        return new ScoreboardObjectivePacket(getObjectiveName(), new ScoreboardObjectivePacket.Update(value, type));
     }
 
     /**

@@ -74,6 +74,7 @@ tasks.withType<Test> {
     jvmArgs("-Dminestom.viewable-packet=false")
     jvmArgs("-Dminestom.inside-test=true")
     jvmArgs("-Dminestom.acquirable-strict=true")
+    jvmArgs("-Dminestom.force-native-allocation=true")
     minHeapSize = "512m"
     maxHeapSize = "1024m"
 }

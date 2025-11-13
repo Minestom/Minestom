@@ -5,7 +5,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientPickItemFromEntityPacket(int entityId, boolean includeData) implements ClientPacket {
+public record ClientPickItemFromEntityPacket(int entityId, boolean includeData) implements ClientPacket.Play {
     public static final Type<ClientPickItemFromEntityPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientPickItemFromEntityPacket::entityId,
             BOOLEAN, ClientPickItemFromEntityPacket::includeData,

@@ -5,6 +5,11 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -14,11 +19,23 @@ public record DisguisedChatPacket(
         int type,
         Component senderName,
         @Nullable Component targetName
-) implements ServerPacket.Play {
+) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<DisguisedChatPacket> SERIALIZER = NetworkBufferTemplate.template(
             COMPONENT, DisguisedChatPacket::message,
             VAR_INT, DisguisedChatPacket::type,
             COMPONENT, DisguisedChatPacket::senderName,
             COMPONENT.optional(), DisguisedChatPacket::targetName,
             DisguisedChatPacket::new);
+
+    @Override
+    public @Unmodifiable Collection<Component> components() {
+        if (targetName != null) return List.of(message, senderName, targetName);
+        return List.of(message, senderName);
+    }
+
+    @Override
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
+        if (targetName != null) return new DisguisedChatPacket(operator.apply(message), type, operator.apply(senderName), operator.apply(targetName));
+        return new DisguisedChatPacket(operator.apply(message), type, operator.apply(senderName), null);
+    }
 }

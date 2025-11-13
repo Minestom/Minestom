@@ -1,24 +1,18 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
 public record ChangeGameStatePacket(Reason reason, float value) implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<ChangeGameStatePacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, ChangeGameStatePacket value) {
-            buffer.write(BYTE, (byte) value.reason.ordinal());
-            buffer.write(FLOAT, value.value);
-        }
-
-        @Override
-        public ChangeGameStatePacket read(NetworkBuffer buffer) {
-            return new ChangeGameStatePacket(Reason.values()[buffer.read(BYTE)], buffer.read(FLOAT));
-        }
-    };
+    public static final NetworkBuffer.Type<ChangeGameStatePacket> SERIALIZER = NetworkBufferTemplate.template(
+            Reason.NETWORK_TYPE, ChangeGameStatePacket::reason,
+            FLOAT, ChangeGameStatePacket::value,
+            ChangeGameStatePacket::new
+    );
 
     public enum Reason {
         NO_RESPAWN_BLOCK,
@@ -34,6 +28,8 @@ public record ChangeGameStatePacket(Reason reason, float value) implements Serve
         PLAYER_ELDER_GUARDIAN_MOB_APPEARANCE,
         ENABLE_RESPAWN_SCREEN,
         LIMITED_CRAFTING,
-        LEVEL_CHUNKS_LOAD_START
+        LEVEL_CHUNKS_LOAD_START;
+
+        public static final NetworkBuffer.Type<Reason> NETWORK_TYPE = NetworkBuffer.ByteEnum(Reason.class);
     }
 }

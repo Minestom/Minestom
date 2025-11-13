@@ -1,6 +1,7 @@
 package net.minestom.server.network.player;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.crypto.PlayerPublicKey;
@@ -35,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * It can be extended to create a new kind of player (NPC for instance).
  */
 public abstract class PlayerConnection {
-    private Player player;
+    private @Nullable Player player;
 
     // Server & client states can differ during configuration.
     // "server" state means the state the server thinks its in.
@@ -44,12 +45,12 @@ public abstract class PlayerConnection {
     // the server will be in CONFIGURATION while the client is still in PLAY.
     private volatile ConnectionState serverState, clientState;
 
-    private PlayerPublicKey playerPublicKey;
-    volatile boolean online;
+    private @Nullable PlayerPublicKey playerPublicKey;
+    private volatile boolean online;
 
-    private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
+    private @Nullable LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
-    private CompletableFuture<List<SelectKnownPacksPacket.Entry>> knownPacksFuture = null; // Present only when waiting for a response from the client.
+    private @Nullable CompletableFuture<List<SelectKnownPacksPacket.Entry>> knownPacksFuture = null; // Present only when waiting for a response from the client.
 
     private final Map<Key, CompletableFuture<byte @Nullable []>> pendingCookieRequests = new ConcurrentHashMap<>();
 
@@ -220,7 +221,7 @@ public abstract class PlayerConnection {
         }
     }
 
-    public PlayerPublicKey playerPublicKey() {
+    public @Nullable PlayerPublicKey playerPublicKey() {
         return playerPublicKey;
     }
 
@@ -228,11 +229,11 @@ public abstract class PlayerConnection {
         this.playerPublicKey = playerPublicKey;
     }
 
-    public void storeCookie(String key, byte[] data) {
+    public void storeCookie(@KeyPattern String key, byte[] data) {
         sendPacket(new CookieStorePacket(key, data));
     }
 
-    public CompletableFuture<byte @Nullable []> fetchCookie(String key) {
+    public CompletableFuture<byte @Nullable []> fetchCookie(@KeyPattern String key) {
         if (serverState == ConnectionState.CONFIGURATION && getPlayer() == null) {
             // This is a bit of an unfortunate limitation. The player provider blocks the player read virtual
             // thread waiting for the player provider so a cookie response would never be received and the
@@ -249,7 +250,7 @@ public abstract class PlayerConnection {
     }
 
     @ApiStatus.Internal
-    public void receiveCookieResponse(String key, byte @Nullable [] data) {
+    public void receiveCookieResponse(@KeyPattern String key, byte @Nullable [] data) {
         CompletableFuture<byte[]> future = pendingCookieRequests.remove(Key.key(key));
         if (future != null) {
             future.complete(data);
