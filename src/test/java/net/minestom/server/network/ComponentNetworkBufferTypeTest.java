@@ -1,10 +1,12 @@
 package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.object.ObjectContents;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 import static net.minestom.server.network.NetworkBuffer.NBT;
@@ -73,6 +75,18 @@ public class ComponentNetworkBufferTypeTest {
     @Test
     void hoverAction() {
         var comp = Component.text("hello").hoverEvent(Component.text("world"));
+        assertWriteReadEquality(comp);
+    }
+
+    @Test
+    void testObjectComponentHeadString() {
+        var comp = Component.object(ObjectContents.playerHead("Hello"));
+        assertWriteReadEquality(comp);
+    }
+
+    @Test
+    void testObjectComponentHeadUUID() {
+        var comp = Component.object(ObjectContents.playerHead(UUID.randomUUID()));
         assertWriteReadEquality(comp);
     }
 

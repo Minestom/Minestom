@@ -4,7 +4,10 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.BinaryTagTypes;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.IntBinaryTag;
+import net.minestom.server.ServerFlag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
+import org.junit.jupiter.api.condition.EnabledIf;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
  * Ensure that NBT tag can be read from other tags properly.
  */
 public class TagNbtTest {
+
+    static boolean isSerializeEmptyCompoundEnabled() {
+        return ServerFlag.SERIALIZE_EMPTY_COMPOUND;
+    }
 
     @Test
     public void list() {
@@ -206,5 +213,65 @@ public class TagNbtTest {
         var array = intArrayBinaryTag(1, 2, 3);
         handler.setTag(nbtTag, array);
         assertEquals(array, handler.getTag(nbtTag));
+    }
+
+    // from #2912
+    @Test
+    @EnabledIf("isSerializeEmptyCompoundEnabled")
+    public void emptyCompoundSerialization() {
+        var tag = Tag.NBT("test");
+        var handler = TagHandler.newHandler();
+
+        var value = CompoundBinaryTag.builder()
+                .putString("type", "something")
+                .put("value", CompoundBinaryTag.empty())
+                .build();
+        handler.setTag(tag, value);
+
+        var nbt = handler.asCompound();
+        var newHandler = TagHandler.fromCompound(nbt);
+
+        assertEquals(value, newHandler.getTag(tag),
+            "Empty compound should be preserved during serialization when SERIALIZE_EMPTY_COMPOUND flag is enabled");
+
+        assertEqualsSNBT("""
+                {
+                  "test": {
+                    "type": "something",
+                    "value": {}
+                  }
+                }
+                """, newHandler.asCompound());
+    }
+
+    @Test
+    @DisabledIf("isSerializeEmptyCompoundEnabled")
+    public void emptyCompoundSerializationDisabled() {
+        var tag = Tag.NBT("test");
+        var handler = TagHandler.newHandler();
+
+        var originalValue = CompoundBinaryTag.builder()
+                .putString("type", "something")
+                .put("value", CompoundBinaryTag.empty())
+                .build();
+        handler.setTag(tag, originalValue);
+
+        var nbt = handler.asCompound();
+        var newHandler = TagHandler.fromCompound(nbt);
+        var deserializedValue = newHandler.getTag(tag);
+
+        var expectedValue = CompoundBinaryTag.builder()
+                .putString("type", "something")
+                .build();
+        assertEquals(expectedValue, deserializedValue,
+            "Empty compound should be stripped during serialization when SERIALIZE_EMPTY_COMPOUND flag is disabled");
+
+        assertEqualsSNBT("""
+                {
+                  "test": {
+                    "type": "something"
+                  }
+                }
+                """, newHandler.asCompound());
     }
 }

@@ -93,6 +93,7 @@ public class Main {
         commandManager.register(new PrimedTNTCommand());
         commandManager.register(new SleepCommand());
         commandManager.register(new MinecartCommand());
+        commandManager.register(new BelowNameCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
