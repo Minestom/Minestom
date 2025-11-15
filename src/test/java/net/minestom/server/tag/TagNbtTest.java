@@ -6,6 +6,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.IntBinaryTag;
 import net.minestom.server.ServerFlag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 import org.junit.jupiter.api.condition.EnabledIf;
 
 import java.util.List;
@@ -25,10 +26,6 @@ public class TagNbtTest {
 
     static boolean isSerializeEmptyCompoundEnabled() {
         return ServerFlag.SERIALIZE_EMPTY_COMPOUND;
-    }
-
-    static boolean isSerializeEmptyCompoundDisabled() {
-        return !ServerFlag.SERIALIZE_EMPTY_COMPOUND;
     }
 
     @Test
@@ -220,7 +217,7 @@ public class TagNbtTest {
 
     // from #2912
     @Test
-    @EnabledIf("net.minestom.server.tag.TagNbtTest#isSerializeEmptyCompoundEnabled")
+    @EnabledIf("isSerializeEmptyCompoundEnabled")
     public void emptyCompoundSerialization() {
         var tag = Tag.NBT("test");
         var handler = TagHandler.newHandler();
@@ -248,7 +245,7 @@ public class TagNbtTest {
     }
 
     @Test
-    @EnabledIf("net.minestom.server.tag.TagNbtTest#isSerializeEmptyCompoundDisabled")
+    @DisabledIf("isSerializeEmptyCompoundEnabled")
     public void emptyCompoundSerializationDisabled() {
         var tag = Tag.NBT("test");
         var handler = TagHandler.newHandler();
