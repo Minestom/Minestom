@@ -38,6 +38,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.item.component.CustomData;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -303,13 +304,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @Override
     public <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.CUSTOM_DATA)
-            return (T) tagHandler.asCompound();
+            return (T) new CustomData(tagHandler.asCompound());
         return EntityMeta.getComponent(getEntityMeta(), component);
     }
 
     public <T> void set(DataComponent<T> component, T value) {
-        if (component == DataComponents.CUSTOM_DATA)
-            tagHandler.updateContent((CompoundBinaryTag) value);
+        if (component == DataComponents.CUSTOM_DATA) {
+            tagHandler.updateContent(((CustomData) value).nbt());
+        }
         else EntityMeta.setComponent(getEntityMeta(), component, value);
     }
 
