@@ -88,6 +88,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -285,9 +286,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.removed = false;
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType());
 
+        final int joinViewDistance = ChunkUtils.computeServerViewDistance(spawnInstance);
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
-                ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
+                joinViewDistance, joinViewDistance,
                 false, true, false,
                 dimensionTypeId, spawnInstance.getDimensionName(), 0,
                 gameMode, null, false, levelFlat,
@@ -633,7 +635,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkRange.chunksInRange(spawnPosition, this.effectiveViewDistance(), (chunkX, chunkZ) -> {
+        int preloadViewDistance = ChunkUtils.computeEffectiveViewDistance(settings.viewDistance(), instance);
+        ChunkRange.chunksInRange(spawnPosition, preloadViewDistance, (chunkX, chunkZ) -> {
             final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
@@ -711,7 +714,13 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
 
+        final int previousServerViewDistance = ChunkUtils.computeServerViewDistance(this.instance);
         super.setInstance(instance, spawnPosition);
+        final int newServerViewDistance = ChunkUtils.computeServerViewDistance(instance);
+        if (previousServerViewDistance != newServerViewDistance) {
+            sendPacket(new UpdateViewDistancePacket(newServerViewDistance));
+            sendPacket(new UpdateSimulationDistancePacket(newServerViewDistance));
+        }
 
         if (updateChunks) {
             final int chunkX = spawnPosition.chunkX();
@@ -1570,21 +1579,24 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
 
         final byte previousViewDistance = previous.viewDistance();
-        final byte newViewDistance = settings.viewDistance();
         // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
         if (instance != null) {
+            final int previousEffectiveViewDistance = ChunkUtils.computeEffectiveViewDistance(previousViewDistance, instance);
+            final int newEffectiveViewDistance = effectiveViewDistance();
+            final int playerChunkX = position.chunkX();
+            final int playerChunkZ = position.chunkZ();
             // Load/unload chunks if necessary due to view distance changes
-            if (previousViewDistance < newViewDistance) {
+            if (previousEffectiveViewDistance < newEffectiveViewDistance) {
                 // View distance expanded, send chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), newViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
+                ChunkRange.chunksInRange(playerChunkX, playerChunkZ, newEffectiveViewDistance, (chunkX, chunkZ) -> {
+                    if (Math.abs(chunkX - playerChunkX) > previousEffectiveViewDistance || Math.abs(chunkZ - playerChunkZ) > previousEffectiveViewDistance) {
                         chunkAdder.accept(chunkX, chunkZ);
                     }
                 });
-            } else if (previousViewDistance > newViewDistance) {
+            } else if (previousEffectiveViewDistance > newEffectiveViewDistance) {
                 // View distance shrunk, unload chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > newViewDistance || Math.abs(chunkZ - position.chunkZ()) > newViewDistance) {
+                ChunkRange.chunksInRange(playerChunkX, playerChunkZ, previousEffectiveViewDistance, (chunkX, chunkZ) -> {
+                    if (Math.abs(chunkX - playerChunkX) > newEffectiveViewDistance || Math.abs(chunkZ - playerChunkZ) > newEffectiveViewDistance) {
                         chunkRemover.accept(chunkX, chunkZ);
                     }
                 });
@@ -2388,12 +2400,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     /**
      * Gets the client's 'effective' view distance, which is the minimum of the client's view distance settings, and the local instance settings, plus one
+     *
      * @return The effective chunk view distance range of the client
      */
     public int effectiveViewDistance() {
-        Instance instance = this.instance;
-        int maxViewDistance = instance != null ? instance.viewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
-        return Math.min(settings.viewDistance(), maxViewDistance) + 1;
+        return ChunkUtils.computeEffectiveViewDistance(settings.viewDistance(), this.instance);
     }
 
     @SuppressWarnings("unchecked")
