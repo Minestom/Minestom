@@ -638,7 +638,7 @@ public class PaletteTest {
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
         Palette palette = Palette.biomes();
         Random random = new Random(12345);
-        palette.setAll((x, y, z) -> random.nextInt(2048));
+        palette.setAll((_, _, _) -> random.nextInt(2048));
 
         buffer.write(serializer, palette);
 
@@ -691,7 +691,7 @@ public class PaletteTest {
         assertEquals(15, palette.bitsPerEntry());
 
         // Should not have a palette anymore (direct mode)
-        assertNull(((PaletteImpl) palette).paletteToValueList);
+        assertNull(((PaletteImpl) palette).paletteIndexMap);
     }
 
     @Test
@@ -706,9 +706,7 @@ public class PaletteTest {
         for (int i = 0; i < 64; i++) {
             int longIndex = i / 21; // 21 values per long with 3 bits each (63 bits used)
             int bitIndex = (i % 21) * 3;
-            if (longIndex < values.length) {
-                values[longIndex] |= ((long) (i % 5)) << bitIndex;
-            }
+            values[longIndex] |= ((long) (i % 5)) << bitIndex;
         }
 
         palette.load(paletteData, values);
@@ -717,15 +715,15 @@ public class PaletteTest {
         assertEquals(3, palette.bitsPerEntry());
 
         // Should have palette
-        assertNotNull(((PaletteImpl) palette).paletteToValueList);
+        assertNotNull(((PaletteImpl) palette).paletteIndexMap);
 
         // Verify palette contents
-        assertEquals(5, ((PaletteImpl) palette).paletteToValueList.size());
-        assertEquals(0, ((PaletteImpl) palette).paletteToValueList.getInt(0));
-        assertEquals(10, ((PaletteImpl) palette).paletteToValueList.getInt(1));
-        assertEquals(20, ((PaletteImpl) palette).paletteToValueList.getInt(2));
-        assertEquals(30, ((PaletteImpl) palette).paletteToValueList.getInt(3));
-        assertEquals(40, ((PaletteImpl) palette).paletteToValueList.getInt(4));
+        assertEquals(5,  ((PaletteImpl) palette).paletteIndexMap.size());
+        assertEquals(0,  ((PaletteImpl) palette).paletteIndexMap.indexToValue(0));
+        assertEquals(10, ((PaletteImpl) palette).paletteIndexMap.indexToValue(1));
+        assertEquals(20, ((PaletteImpl) palette).paletteIndexMap.indexToValue(2));
+        assertEquals(30, ((PaletteImpl) palette).paletteIndexMap.indexToValue(3));
+        assertEquals(40, ((PaletteImpl) palette).paletteIndexMap.indexToValue(4));
     }
 
     @Test
@@ -742,8 +740,8 @@ public class PaletteTest {
         assertEquals(3, palette.bitsPerEntry());
 
         // Should have palette
-        assertNotNull(((PaletteImpl) palette).paletteToValueList);
-        assertEquals(8, ((PaletteImpl) palette).paletteToValueList.size());
+        assertNotNull(((PaletteImpl) palette).paletteIndexMap);
+        assertEquals(8, ((PaletteImpl) palette).paletteIndexMap.size());
     }
 
     @Test
@@ -763,8 +761,8 @@ public class PaletteTest {
         assertEquals(4, palette.bitsPerEntry());
 
         // Should still have palette (not direct)
-        assertNotNull(((PaletteImpl) palette).paletteToValueList);
-        assertEquals(16, ((PaletteImpl) palette).paletteToValueList.size());
+        assertNotNull(((PaletteImpl) palette).paletteIndexMap);
+        assertEquals(16, ((PaletteImpl) palette).paletteIndexMap.size());
     }
 
     @Test
@@ -781,9 +779,9 @@ public class PaletteTest {
         assertEquals(1, palette.bitsPerEntry());
 
         // Should have palette with single entry
-        assertNotNull(((PaletteImpl) palette).paletteToValueList);
-        assertEquals(1, ((PaletteImpl) palette).paletteToValueList.size());
-        assertEquals(0, ((PaletteImpl) palette).paletteToValueList.getInt(0));
+        assertNotNull(((PaletteImpl) palette).paletteIndexMap);
+        assertEquals(1, ((PaletteImpl) palette).paletteIndexMap.size());
+        assertEquals(0, ((PaletteImpl) palette).paletteIndexMap.valueToIndexOrDefault(0));
     }
 
     @Test
@@ -846,8 +844,8 @@ public class PaletteTest {
 
         // Should not have indirect palette structures (direct mode)
         PaletteImpl impl = (PaletteImpl) palette;
-        assertNull(impl.paletteToValueList,
-                "Direct palette should not have paletteToValueList");
+        assertNull(impl.paletteIndexMap,
+                "Direct palette should not have paletteIndexMap");
 
         // Verify we can still read some values correctly
         // In direct mode, palette indices become the actual values
@@ -981,6 +979,142 @@ public class PaletteTest {
         long[] values = new long[] { 0x01230123, 0x00130013, 0x33333333, 0x22222222 };
         testPalette.load(palette, values);
         assertEquals(testPalette.maxSize() - 12, testPalette.count());
+    }
+
+    @Test
+    public void partialFill() {
+        for (Palette palette : testPalettes()) {
+            final int dimension = palette.dimension();
+            final int dimensionMinus = dimension - 1;
+
+            palette.fill(0, 0, 0, dimensionMinus - 1, dimensionMinus - 1, dimensionMinus - 1, 10);
+            assertEquals(dimensionMinus * dimensionMinus * dimensionMinus, palette.count());
+
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++) {
+                        if (x == dimensionMinus || y == dimensionMinus || z == dimensionMinus) {
+                            assertEquals(0, palette.get(x, y, z));
+                        } else {
+                            assertEquals(10, palette.get(x, y, z));
+                        }
+                    }
+                }
+            }
+
+            palette.fill(0);
+
+            palette.fill(1, 1, 1, dimensionMinus, dimensionMinus, dimensionMinus, 10);
+            assertEquals(dimensionMinus * dimensionMinus * dimensionMinus, palette.count());
+
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++) {
+                        if (x == 0 || y == 0 || z == 0) {
+                            assertEquals(0, palette.get(x, y, z));
+                        } else {
+                            assertEquals(10, palette.get(x, y, z));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void partialFillThrowsOutOfBounds() {
+        final Palette palette = Palette.blocks();
+        assertThrows(Exception.class, () -> palette.fill(-1, 0, 0, 0, 0, 0, 10));
+        assertThrows(Exception.class, () -> palette.fill(0, 0, 0, 16, 0, 0, 11));
+        assertThrows(Exception.class, () -> palette.fill(0, 0, 0, 100, 0, 0, 12));
+    }
+
+    @Test
+    public void partialFillThrowsUnordered() {
+        final Palette palette = Palette.blocks();
+        assertThrows(Exception.class, () -> palette.fill(10, 0, 0, 0, 10, 10, 1));
+        assertDoesNotThrow(() -> palette.fill(0, 2, 4, 0, 2, 4, 2));
+    }
+
+    @Test
+    public void partialFillDoesTotalFill() {
+        for (final Palette palette : testPalettes()) {
+            final int dimension = palette.dimension();
+            final int dimensionMinus = dimension - 1;
+
+            palette.fill(0, 0, 0, dimensionMinus, dimensionMinus, dimensionMinus, 10);
+            assertEquals(10, palette.singleValue());
+        }
+    }
+
+    @Test
+    public void bulkPlacementHighValue() {
+        int value = 1 << 16;
+        for (Palette palette : testPalettes()) {
+            final int dimension = palette.dimension();
+
+            for (int x = 0, idx = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++, idx++) {
+                        palette.set(x, y, z, value + idx);
+                    }
+                }
+            }
+
+            for (int x = 0, idx = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    for (int z = 0; z < dimension; z++, idx++) {
+                        assertEquals(value + idx, palette.get(x, y, z));
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void directPlacementHighValue() {
+        final PaletteImpl palette = (PaletteImpl) Palette.blocks();
+
+        palette.makeDirect();
+        assertEquals(Palette.BLOCK_PALETTE_DIRECT_BITS, palette.bitsPerEntry());
+
+        palette.set(0, 0, 0, 1 << 20);
+        assertEquals(21, palette.bitsPerEntry()); // 1 << 20 needs 21 bits to represent
+
+        assertEquals(1 << 20, palette.get(0, 0, 0));
+    }
+
+    @Test
+    public void fillHighValue() {
+        final PaletteImpl palette = (PaletteImpl) Palette.blocks();
+
+        palette.fill(1 << 20);
+        palette.set(0, 0, 0, 10);
+
+        palette.makeDirect();
+
+        assertEquals(10, palette.get(0, 0, 0));
+        assertEquals(1 << 20, palette.get(1, 1, 1));
+    }
+
+    @Test
+    public void setAllHighValue() {
+        final Palette palette = Palette.blocks();
+        final int value = 1 << 16;
+        final AtomicInteger index = new AtomicInteger();
+        palette.setAll((_, _, _) -> {
+            final int idx = index.getPlain();
+            index.setPlain(idx + 1);
+            return value + idx;
+        });
+
+        for (int y = 0, idx = 0; y < 16; y++) {
+            for (int z = 0; z < 16; z++) {
+                for (int x = 0; x < 16; x++, idx++) {
+                    assertEquals(value + idx, palette.get(x, y, z));
+                }
+            }
+        }
     }
 
     private static List<Palette> testPalettes() {
