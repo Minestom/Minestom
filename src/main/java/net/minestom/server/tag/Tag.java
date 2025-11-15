@@ -14,6 +14,13 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Represents a key to retrieve or change a value.
+ * <p>
+ * All tags are serializable.
+ *
+ * @param <T> the tag type
+ */
 public sealed interface Tag<T extends @UnknownNullability Object> permits TagImpl {
     static Tag<Byte> Byte(String key) {
         return TagImpl.tag(key, Serializers.BYTE);

@@ -13,13 +13,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-/**
- * Represents a key to retrieve or change a value.
- * <p>
- * All tags are serializable.
- *
- * @param <T> the tag type
- */
 public record TagImpl<T>(int index, String key,
                          Function<?, ?> readComparator,
                          Serializers.Entry<T, BinaryTag> entry,
@@ -48,11 +41,6 @@ public record TagImpl<T>(int index, String key,
         return tag(key, Serializers.fromTagSerializer(serializer));
     }
 
-    /**
-     * Returns the key used to navigate inside the holder nbt.
-     *
-     * @return the tag key
-     */
     @Override
     public String getKey() {
         return key;
