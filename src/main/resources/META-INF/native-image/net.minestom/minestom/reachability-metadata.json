@@ -127,6 +127,9 @@
       "type": "jdk.internal.misc.Unsafe"
     },
     {
+      "type": "net.minestom.server.adventure.provider.MinestomAnsiComponentSerializerProvider"
+    },
+    {
       "type": "net.minestom.server.adventure.provider.MinestomComponentLoggerProvider"
     },
     {
