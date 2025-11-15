@@ -6,13 +6,10 @@ import com.palantir.javapoet.*;
 import javax.lang.model.element.Modifier;
 import java.nio.file.Path;
 
-public record ConstantsGenerator(Path outputFolder) implements MinestomCodeGenerator {
-    public ConstantsGenerator {
-        ensureDirectory(outputFolder);
-    }
+public final class ConstantsGenerator implements MinestomCodeGenerator {
 
     @Override
-    public void generate(CodegenRegistry registry, CodegenValue value) {
+    public void generate(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
         final ClassName implCN = ClassName.get(value.packageName(), value.typeName());
 
         // Important classes we use alot
@@ -42,7 +39,7 @@ public record ConstantsGenerator(Path outputFolder) implements MinestomCodeGener
         addMajorMinorField(constantsInterface, "DATA_PACK_VERSION", constants.get("datapack").getAsString());
 
         // Write files to outputFolder
-        writeFiles(JavaFile.builder(value.packageName(), constantsInterface.build())
+        writeFiles(outputFolder, JavaFile.builder(value.packageName(), constantsInterface.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()

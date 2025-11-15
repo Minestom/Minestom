@@ -14,12 +14,8 @@ import java.util.stream.StreamSupport;
 
 public final class WorldEventGenerator extends GenericEnumGenerator {
 
-    public WorldEventGenerator(Path outputFolder) {
-        super(outputFolder);
-    }
-
     @Override
-    public void generate(CodegenRegistry registry, CodegenValue value) {
+    public void generate(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
         // Important classes we use alot
         JsonArray entryList = GSON.fromJson(registry.resource(value.resource()), JsonArray.class);
         ClassName entryCN = ClassName.get(value.packageName(), value.typeName());
@@ -79,7 +75,7 @@ public final class WorldEventGenerator extends GenericEnumGenerator {
         }
 
         // Write files to outputFolder
-        writeFiles(JavaFile.builder(value.packageName(), entryEnum.build())
+        writeFiles(outputFolder, JavaFile.builder(value.packageName(), entryEnum.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()

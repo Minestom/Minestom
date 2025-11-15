@@ -13,19 +13,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public sealed class GenericEnumGenerator implements MinestomCodeGenerator permits DyeColorGenerator, GenericPackagePrivateEnumGenerator, RecipeTypeGenerator, WorldEventGenerator {
-    private final Path outputFolder;
-
-    public GenericEnumGenerator(Path outputFolder) {
-        this.outputFolder = ensureDirectory(outputFolder);
-    }
 
     @Override
-    public Path outputFolder() {
-        return outputFolder;
-    }
-
-    @Override
-    public void generate(CodegenRegistry codegenRegistry, CodegenValue value) {
+    public void generate(Path outputFolder, CodegenRegistry codegenRegistry, CodegenValue value) {
         // Important classes we use alot
         JsonArray entryList = GSON.fromJson(codegenRegistry.resource(value.resource()), JsonArray.class);
         ClassName entryCN = ClassName.get(value.packageName(), value.typeName());
@@ -94,7 +84,7 @@ public sealed class GenericEnumGenerator implements MinestomCodeGenerator permit
         }
 
         // Write files
-        writeFiles(JavaFile.builder(value.packageName(), entryEnum.build())
+        writeFiles(outputFolder, JavaFile.builder(value.packageName(), entryEnum.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()

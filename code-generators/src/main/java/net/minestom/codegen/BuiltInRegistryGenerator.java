@@ -6,13 +6,9 @@ import javax.lang.model.element.Modifier;
 import java.nio.file.Path;
 import java.util.Comparator;
 
-public record BuiltInRegistryGenerator(Path outputFolder) implements MinestomCodeGenerator {
-    public BuiltInRegistryGenerator {
-        ensureDirectory(outputFolder);
-    }
-
+public record BuiltInRegistryGenerator() implements MinestomCodeGenerator {
     @Override
-    public void generate(CodegenRegistry registry, CodegenValue value) {
+    public void generate(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
         final ClassName implCN = ClassName.get(value.packageName(), value.typeName());
 
         ClassName registryConstants = ClassName.get(value.packageName(), value.generatedName());
@@ -53,7 +49,7 @@ public record BuiltInRegistryGenerator(Path outputFolder) implements MinestomCod
                 });
 
         // Write files to outputFolder
-        writeFiles(JavaFile.builder(value.packageName(), constantsInterface.build())
+        writeFiles(outputFolder, JavaFile.builder(value.packageName(), constantsInterface.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()

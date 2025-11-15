@@ -3,9 +3,9 @@ package net.minestom.codegen;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public record CodegenRegistry(Map<String, CodegenValue> registry, ResourceFunction resource) implements Iterable<CodegenValue> {
@@ -70,5 +70,5 @@ public record CodegenRegistry(Map<String, CodegenValue> registry, ResourceFuncti
     public interface ResourceFunction extends Function<String, @Nullable InputStreamReader> {}
 
     @FunctionalInterface
-    public interface Generator extends Function<Path, MinestomCodeGenerator> {}
+    public interface Generator extends Supplier<MinestomCodeGenerator> {}
 }

@@ -15,18 +15,14 @@ import java.util.regex.Pattern;
 public final class ParticleGenerator extends RegistryGenerator {
     public static final Pattern PASCAL_PATTERN = Pattern.compile("_([a-z])");
 
-    public ParticleGenerator(Path outputFolder) {
-        super(outputFolder);
+    @Override
+    public void generate(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
+        generateStatic(outputFolder, registry, value); // Generate this as static
+        generateTags(outputFolder, registry, value); // generate tags if present
     }
 
     @Override
-    public void generate(CodegenRegistry registry, CodegenValue value) {
-        generateStatic(registry, value); // Generate this as static
-        generateTags(registry, value); // generate tags if present
-    }
-
-    @Override
-    public void generate(InputStreamReader resourceFile, String packageName, String typeName, String loaderName, String keyName, String generatedName) {
+    public void generate(Path outputFolder, InputStreamReader resourceFile, String packageName, String typeName, String loaderName, String keyName, String generatedName) {
         // Important classes we use alot
         ClassName particleCN = ClassName.get(packageName, typeName);
         ClassName particleImplCN = ClassName.get(packageName, loaderName);
@@ -66,7 +62,7 @@ public final class ParticleGenerator extends RegistryGenerator {
                     .initializer("$L$T.get($T.$L)", cast, particleImplCN, particleKeysCN, fieldName).build());
         }
 
-        writeFiles(JavaFile.builder(packageName, particlesInterface.build())
+        writeFiles(outputFolder, JavaFile.builder(packageName, particlesInterface.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build());

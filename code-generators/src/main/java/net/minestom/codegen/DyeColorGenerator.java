@@ -13,12 +13,8 @@ import java.util.stream.StreamSupport;
 
 public final class DyeColorGenerator extends GenericEnumGenerator {
 
-    public DyeColorGenerator(Path outputFolder) {
-        super(outputFolder);
-    }
-
     @Override
-    public void generate(CodegenRegistry registry, CodegenValue value) {
+    public void generate(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
         // Important classes we use alot
         ClassName colorCN = ClassName.get(value.packageName(), value.typeName());
 
@@ -124,7 +120,7 @@ public final class DyeColorGenerator extends GenericEnumGenerator {
         }
 
         // Write files to outputFolder
-        writeFiles(JavaFile.builder(value.packageName(), dyeColorEnum.build())
+        writeFiles(outputFolder, JavaFile.builder(value.packageName(), dyeColorEnum.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()

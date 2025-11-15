@@ -3,7 +3,6 @@ package net.minestom.codegen;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Path;
 import java.util.Objects;
 
 public record CodegenValue(Type codegenType, String namespace, String packageName, String typeName, String loaderName,
@@ -36,10 +35,6 @@ public record CodegenValue(Type codegenType, String namespace, String packageNam
 
     public String tagResource() {
         return "tags/%s".formatted(namespace());
-    }
-
-    public MinestomCodeGenerator generator(Path path) {
-        return generator.apply(path);
     }
 
     public enum Type {

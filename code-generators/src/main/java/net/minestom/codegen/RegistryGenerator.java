@@ -10,27 +10,16 @@ import java.nio.file.Path;
 
 public sealed class RegistryGenerator implements MinestomCodeGenerator permits ParticleGenerator {
 
-    private final Path outputFolder;
-
-    public RegistryGenerator(Path outputFolder) {
-        this.outputFolder = ensureDirectory(outputFolder);
-    }
-
     @Override
-    public Path outputFolder() {
-        return outputFolder;
-    }
-
-    @Override
-    public void generate(CodegenRegistry registry, CodegenValue value) {
+    public void generate(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
         switch (value.codegenType()) {
-            case STATIC -> generateStatic(registry, value);
-            case DYNAMIC -> generateDynamic(registry, value);
+            case STATIC -> generateStatic(outputFolder, registry, value);
+            case DYNAMIC -> generateDynamic(outputFolder, registry, value);
         }
-        generateTags(registry, value);
+        generateTags(outputFolder, registry, value);
     }
 
-    protected void generate(InputStreamReader resourceFile, String packageName, String typeName, String loaderName, String keyName, String generatedName) {
+    protected void generate(Path outputFolder, InputStreamReader resourceFile, String packageName, String typeName, String loaderName, String keyName, String generatedName) {
         ClassName typeClass = ClassName.get(packageName, typeName);
         ClassName loaderClass = ClassName.get(packageName, loaderName);
         ClassName keyClass = ClassName.get(packageName, keyName);
@@ -60,14 +49,14 @@ public sealed class RegistryGenerator implements MinestomCodeGenerator permits P
                             .build()
             );
         });
-        writeFiles(JavaFile.builder(packageName, blockConstantsClass.build())
+        writeFiles(outputFolder, JavaFile.builder(packageName, blockConstantsClass.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()
         );
     }
 
-    protected void generateKeys(InputStreamReader resourceFile, String packageName, String typeName, String generatedName, boolean publicKeys) {
+    protected void generateKeys(Path outputFolder, InputStreamReader resourceFile, String packageName, String typeName, String generatedName, boolean publicKeys) {
         ClassName typeClass = ClassName.get(packageName, typeName);
         ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "RegistryKey");
         ClassName generatedCN = ClassName.get(packageName, generatedName);
@@ -100,7 +89,7 @@ public sealed class RegistryGenerator implements MinestomCodeGenerator permits P
         });
 
         // Write files
-        writeFiles(JavaFile.builder(packageName, blockConstantsClass.build())
+        writeFiles(outputFolder, JavaFile.builder(packageName, blockConstantsClass.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()
@@ -108,7 +97,7 @@ public sealed class RegistryGenerator implements MinestomCodeGenerator permits P
     }
 
 
-    protected void generateTags(@Nullable InputStreamReader resourceFile, String packageName, String typeName, String generatedName) {
+    protected void generateTags(Path outputFolder, @Nullable InputStreamReader resourceFile, String packageName, String typeName, String generatedName) {
         if (resourceFile == null) {
             System.out.printf("Warning: Failed to locate tags for %s.%s%n", packageName, typeName);
             return;
@@ -143,23 +132,23 @@ public sealed class RegistryGenerator implements MinestomCodeGenerator permits P
             );
         });
 
-        writeFiles(JavaFile.builder(packageName, registryTagInterface.build())
+        writeFiles(outputFolder, JavaFile.builder(packageName, registryTagInterface.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()
         );
     }
 
-    protected void generateStatic(CodegenRegistry registry, CodegenValue value) {
-        generateKeys(registry.resource(value.resource()), value.packageName(), value.typeName(), value.keysName(), true);
-        generate(registry.resource(value.resource()), value.packageName(), value.typeName(), value.loaderName(), value.keysName(), value.generatedName());
+    protected void generateStatic(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
+        generateKeys(outputFolder, registry.resource(value.resource()), value.packageName(), value.typeName(), value.keysName(), true);
+        generate(outputFolder, registry.resource(value.resource()), value.packageName(), value.typeName(), value.loaderName(), value.keysName(), value.generatedName());
     }
 
-    protected void generateDynamic(CodegenRegistry registry, CodegenValue value) {
-        generateKeys(registry.resource(value.resource()), value.packageName(), value.typeName(), value.generatedName(), false);
+    protected void generateDynamic(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
+        generateKeys(outputFolder, registry.resource(value.resource()), value.packageName(), value.typeName(), value.generatedName(), false);
     }
 
-    protected void generateTags(CodegenRegistry registry, CodegenValue value) {
-        generateTags(registry.optionalResource(value.tagResource()), value.packageName(), value.typeName(), value.tagsName());
+    protected void generateTags(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
+        generateTags(outputFolder, registry.optionalResource(value.tagResource()), value.packageName(), value.typeName(), value.tagsName());
     }
 }

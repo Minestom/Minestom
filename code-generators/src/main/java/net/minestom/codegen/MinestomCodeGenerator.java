@@ -10,7 +10,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 import javax.lang.model.SourceVersion;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Objects;
@@ -41,19 +40,8 @@ public interface MinestomCodeGenerator {
         return namespace.replaceFirst("minecraft:", "");
     }
 
-    default Path ensureDirectory(Path directory) throws IllegalStateException {
-        Objects.requireNonNull(directory, "Directory is null");
-        if (Files.isDirectory(directory)) return directory;
-        try {
-            return Files.createDirectories(directory);
-        } catch (IOException e) {
-            throw new IllegalStateException("Failed to create folder for %s".formatted(directory), e);
-        }
-    }
-
-    default void writeFiles(JavaFile... files) {
+    default void writeFiles(Path to, JavaFile... files) {
         Objects.requireNonNull(files, "File list cannot be null");
-        final Path to = outputFolder();
         Objects.requireNonNull(to, "Output folder cannot be null");
         for (JavaFile javaFile : files) {
             try {
@@ -72,7 +60,5 @@ public interface MinestomCodeGenerator {
                 .build();
     }
 
-    Path outputFolder();
-
-    void generate(CodegenRegistry registry, CodegenValue value);
+    void generate(Path outputFolder, CodegenRegistry registry, CodegenValue value);
 }
