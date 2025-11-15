@@ -10,4 +10,6 @@ dependencies {
 
 jcstress {
     verbose = "true"
+    jcstressDependency = "org.openjdk.jcstress:jcstress-core:${libs.versions.jcstress.asProvider().get()}"
+    jvmArgs = "--enable-native-access=ALL-UNNAMED"
 }
