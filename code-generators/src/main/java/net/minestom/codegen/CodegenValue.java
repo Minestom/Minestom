@@ -3,10 +3,12 @@ package net.minestom.codegen;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.Objects;
 
 public record CodegenValue(Type codegenType, String namespace, String packageName, String typeName, String loaderName,
-                           String generatedName, String keysName, Type registryType) {
+                           String generatedName, String keysName, Type registryType,
+                           CodegenRegistry.Generator generator) {
 
     public CodegenValue {
         Objects.requireNonNull(codegenType, "Type cannot be null");
@@ -17,6 +19,7 @@ public record CodegenValue(Type codegenType, String namespace, String packageNam
         Objects.requireNonNull(generatedName, "Generated name cannot be null");
         Objects.requireNonNull(keysName, "Keys name cannot be null");
         Objects.requireNonNull(registryType, "Registry override cannot be null");
+        Objects.requireNonNull(generator, "Generator cannot be null");
     }
 
     public static Builder builder() {
@@ -35,6 +38,10 @@ public record CodegenValue(Type codegenType, String namespace, String packageNam
         return "tags/%s".formatted(namespace());
     }
 
+    public MinestomCodeGenerator generator(Path path) {
+        return generator.apply(path);
+    }
+
     public enum Type {
         STATIC,
         DYNAMIC,
@@ -50,6 +57,7 @@ public record CodegenValue(Type codegenType, String namespace, String packageNam
         private @Nullable String generatedName;
         private @Nullable String keyName;
         private @Nullable Type registryKeyOverride;
+        private @Nullable CodegenRegistry.Generator generator;
 
         private Builder() {}
 
@@ -100,11 +108,17 @@ public record CodegenValue(Type codegenType, String namespace, String packageNam
             return type(Type.SPECIAL);
         }
 
+        public Builder generator(CodegenRegistry.Generator generator) {
+            this.generator = Objects.requireNonNull(generator);
+            return this;
+        }
+
         public CodegenValue build() {
             Objects.requireNonNull(type, "Type must be set before building");
             Objects.requireNonNull(namespace, "Namespace must be set before building");
             Objects.requireNonNull(packageName, "Package name must be set before building");
             Objects.requireNonNull(typeName, "Type name must be set before building");
+            Objects.requireNonNull(generator, "Generator name must be set before building");
 
             // Fill in defaults
             String loader = loaderName != null ? loaderName : switch (type) {
@@ -117,7 +131,7 @@ public record CodegenValue(Type codegenType, String namespace, String packageNam
             };
             String keys = Objects.requireNonNullElse(keyName, typeName + "Keys");
             Type registryKey = Objects.requireNonNullElse(registryKeyOverride, type);
-            return new CodegenValue(type, namespace, packageName, typeName, loader, generated, keys, registryKey);
+            return new CodegenValue(type, namespace, packageName, typeName, loader, generated, keys, registryKey, generator);
         }
 
         private Builder type(Type type) {
