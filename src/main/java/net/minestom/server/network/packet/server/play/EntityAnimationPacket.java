@@ -21,6 +21,6 @@ public record EntityAnimationPacket(int entityId, Animation animation) implement
         CRITICAL_EFFECT,
         MAGICAL_CRITICAL_EFFECT;
 
-        public static final NetworkBuffer.Type<Animation> NETWORK_TYPE = NetworkBuffer.ByteEnum(Animation.class);
+        public static final NetworkBuffer.Type<Animation> NETWORK_TYPE = NetworkBuffer.Enum(Animation.class);
     }
 }

@@ -30,6 +30,6 @@ public record ChangeGameStatePacket(Reason reason, float value) implements Serve
         LIMITED_CRAFTING,
         LEVEL_CHUNKS_LOAD_START;
 
-        public static final NetworkBuffer.Type<Reason> NETWORK_TYPE = NetworkBuffer.ByteEnum(Reason.class);
+        public static final NetworkBuffer.Type<Reason> NETWORK_TYPE = NetworkBuffer.Enum(Reason.class);
     }
 }

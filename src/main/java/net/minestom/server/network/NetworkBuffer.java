@@ -158,26 +158,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Creates a byte enum type from the enum class.
-     * <br>
-     * Encoded as a {@link #BYTE} from the ordinal
-     * <br>
-     * Note: You should use {@link #Enum(Class)} instead if possible.
-     * As this type does not save space under normal use.
-     *
-     * @param enumClass the enum class
-     * @param <E>       the enum type
-     * @return the new enum type
-     */
-    @ApiStatus.Experimental
-    @Contract(pure = true, value = "_ -> new")
-    static <E extends Enum<E>> Type<E> ByteEnum(Class<E> enumClass) {
-        Objects.requireNonNull(enumClass, "enumClass");
-        final E[] values = enumClass.getEnumConstants();
-        return UNSIGNED_BYTE.transform(integer -> values[integer], enumObject -> (short) enumObject.ordinal());
-    }
-
-    /**
      * Creates an enum set type from the enum class
      *
      * @param enumClass the enum class

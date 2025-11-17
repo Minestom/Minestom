@@ -13,7 +13,7 @@ public record ClientPlayerDiggingPacket(Status status, Point blockPosition,
     public static final NetworkBuffer.Type<ClientPlayerDiggingPacket> SERIALIZER = NetworkBufferTemplate.template(
             Status.NETWORK_TYPE, ClientPlayerDiggingPacket::status,
             BLOCK_POSITION, ClientPlayerDiggingPacket::blockPosition,
-            NetworkBuffer.ByteEnum(BlockFace.class), ClientPlayerDiggingPacket::blockFace,
+            NetworkBuffer.Enum(BlockFace.class), ClientPlayerDiggingPacket::blockFace,
             VAR_INT, ClientPlayerDiggingPacket::sequence,
             ClientPlayerDiggingPacket::new);
 
