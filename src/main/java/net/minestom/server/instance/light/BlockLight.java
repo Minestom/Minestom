@@ -30,19 +30,44 @@ final class BlockLight implements Light {
     }
 
     static ShortArrayFIFOQueue buildInternalQueue(Palette blockPalette) {
-        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
-        // Apply section light
-        blockPalette.getAllPresent((x, y, z, stateId) -> {
-            final Block block = Block.fromStateId(stateId);
-            assert block != null;
-            final byte lightEmission = (byte) block.registry().lightEmission();
+        if (blockPalette.isEmpty()) return new ShortArrayFIFOQueue(0); // Avoid state id lookup for air
 
-            final int index = x | (z << 4) | (y << 8);
+        int singleValue = blockPalette.singleValue();
+        if (singleValue != -1) {
+            Block block = Block.fromStateId(singleValue);
+            assert block != null;
+            int lightEmission = block.registry().lightEmission();
             if (lightEmission > 0) {
-                lightSources.enqueue((short) (index | (lightEmission << 12)));
+                int dimension = blockPalette.dimension();
+                ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue(blockPalette.count());
+                for (byte z = 0; z < dimension; z++) {
+                    for (byte y = 0; y < dimension; y++) {
+                        for (byte x = 0; x < dimension; x++) {
+                            final int index = x | (z << 4) | (y << 8);
+                            lightSources.enqueue((short) (index | (lightEmission << 12)));
+                        }
+                    }
+                }
+                return lightSources;
+            } else {
+                // No light sources.
+                return new ShortArrayFIFOQueue(0);
             }
-        });
-        return lightSources;
+        } else {
+            ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
+            // Apply section light
+            blockPalette.getAllPresent((x, y, z, stateId) -> {
+                final Block block = Block.fromStateId(stateId);
+                assert block != null;
+                final byte lightEmission = (byte) block.registry().lightEmission();
+
+                final int index = x | (z << 4) | (y << 8);
+                if (lightEmission > 0) {
+                    lightSources.enqueue((short) (index | (lightEmission << 12)));
+                }
+            });
+            return lightSources;
+        }
     }
 
     @Override
