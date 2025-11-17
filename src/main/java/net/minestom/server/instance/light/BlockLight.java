@@ -39,7 +39,7 @@ final class BlockLight implements Light {
             int lightEmission = block.registry().lightEmission();
             if (lightEmission > 0) {
                 int dimension = blockPalette.dimension();
-                ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue(blockPalette.count());
+                ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
                 for (byte z = 0; z < dimension; z++) {
                     for (byte y = 0; y < dimension; y++) {
                         for (byte x = 0; x < dimension; x++) {
