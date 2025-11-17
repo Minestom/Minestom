@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.translation.Translatable;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
@@ -12,7 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface EntityType extends StaticProtocolObject<EntityType>, EntityTypes permits EntityTypeImpl {
+public sealed interface EntityType extends StaticProtocolObject<EntityType>, EntityTypes, Translatable
+        permits EntityTypeImpl {
     NetworkBuffer.Type<EntityType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(EntityType::fromId, EntityType::id);
     Codec<EntityType> CODEC = Codec.KEY.transform(EntityType::fromKey, EntityType::key);
 
@@ -40,6 +42,11 @@ public sealed interface EntityType extends StaticProtocolObject<EntityType>, Ent
 
     default double height() {
         return registry().height();
+    }
+
+    @Override
+    default String translationKey() {
+        return registry().translationKey();
     }
 
     static Collection<EntityType> values() {
