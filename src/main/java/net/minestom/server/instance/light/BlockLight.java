@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static net.minestom.server.instance.light.LightCompute.*;
 
 final class BlockLight implements Light {
@@ -37,34 +38,23 @@ final class BlockLight implements Light {
             Block block = Block.fromStateId(singleValue);
             assert block != null;
             int lightEmission = block.registry().lightEmission();
-            if (lightEmission > 0) {
-                int dimension = blockPalette.dimension();
-                ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
-                for (byte z = 0; z < dimension; z++) {
-                    for (byte y = 0; y < dimension; y++) {
-                        for (byte x = 0; x < dimension; x++) {
-                            final int index = x | (z << 4) | (y << 8);
-                            lightSources.enqueue((short) (index | (lightEmission << 12)));
-                        }
-                    }
-                }
-                return lightSources;
-            } else {
-                // No light sources.
-                return new ShortArrayFIFOQueue(0);
+            if (lightEmission <= 0) return new ShortArrayFIFOQueue(0);
+            ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue(SECTION_BLOCK_COUNT);
+            final int prefix = lightEmission << 12;
+            for (int index = 0; index < SECTION_BLOCK_COUNT; index++) {
+                lightSources.enqueue((short) (index | prefix));
             }
+            return lightSources;
         } else {
             ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
             // Apply section light
             blockPalette.getAllPresent((x, y, z, stateId) -> {
                 final Block block = Block.fromStateId(stateId);
                 assert block != null;
-                final byte lightEmission = (byte) block.registry().lightEmission();
-
+                final int lightEmission = block.registry().lightEmission();
+                if (lightEmission <= 0) return;
                 final int index = x | (z << 4) | (y << 8);
-                if (lightEmission > 0) {
-                    lightSources.enqueue((short) (index | (lightEmission << 12)));
-                }
+                lightSources.enqueue((short) (index | (lightEmission << 12)));
             });
             return lightSources;
         }
