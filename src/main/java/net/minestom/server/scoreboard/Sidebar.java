@@ -3,17 +3,20 @@ package net.minestom.server.scoreboard;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents a sidebar which can contain up to 16 {@link ScoreboardLine}.
@@ -503,7 +506,7 @@ public class Sidebar implements Scoreboard {
     }
 
 
-    public record NumberFormat(FormatType formatType, Component content) {
+    public record NumberFormat(FormatType formatType, @Nullable Component content) implements ComponentHolder<NumberFormat> {
         private NumberFormat() {
             this(FormatType.BLANK, null);
         }
@@ -554,6 +557,21 @@ public class Sidebar implements Scoreboard {
          */
         public static NumberFormat fixed(Component content) {
             return new NumberFormat(FormatType.FIXED, content);
+        }
+
+        @Override
+        public Collection<Component> components() {
+            return content != null ? List.of(content) : List.of();
+        }
+
+        @Override
+        public NumberFormat copyWithOperator(UnaryOperator<Component> operator) {
+            if (content == null) return this;
+
+            return new NumberFormat(
+                    formatType,
+                    operator.apply(content)
+            );
         }
 
         private enum FormatType {
