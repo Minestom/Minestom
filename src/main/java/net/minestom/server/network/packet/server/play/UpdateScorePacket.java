@@ -7,7 +7,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
@@ -32,9 +31,7 @@ public record UpdateScorePacket(
 
     @Override
     public Collection<Component> components() {
-        List<Component> list = new ArrayList<>();
-        if (displayName != null) list.add(displayName);
-        return List.copyOf(list);
+        return displayName != null ? List.of(displayName) : List.of();
     }
 
     @Override
