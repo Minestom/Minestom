@@ -96,7 +96,10 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public ItemStack withMaterial(Material material) {
-        return new ItemStackImpl(material, amount, components);
+        int newAmount = amount;
+        if (material != Material.AIR && newAmount == 0) newAmount = 1;
+        if (material == Material.AIR) newAmount = 0;
+        return new ItemStackImpl(material, newAmount, components);
     }
 
     @Override
