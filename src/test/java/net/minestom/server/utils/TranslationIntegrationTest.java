@@ -11,6 +11,8 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
+import net.minestom.server.network.packet.server.play.UpdateScorePacket;
+import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
@@ -90,5 +92,31 @@ public class TranslationIntegrationTest {
             assertNotEquals(message, received.itemStack().get(DataComponents.ITEM_NAME));
             assertNotEquals(message, received.itemStack().get(DataComponents.CUSTOM_NAME));
         });
+    }
+
+    @Test
+    public void testUpdateScorePacketTranslations(final Env env) {
+        final var instance = env.createFlatInstance();
+        final var connection = env.createConnection();
+        final var player = connection.connect(instance, new Pos(0, 40, 0));
+        final var collector = connection.trackIncoming(UpdateScorePacket.class);
+
+        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
+        final var message = Component.translatable("test.key");
+        final var numberFormat = Sidebar.NumberFormat.fixed(message);
+        final var packet = new UpdateScorePacket(
+                "",
+                "",
+                0,
+                message,
+                numberFormat
+        );
+        PacketSendingUtils.sendGroupedPacket(List.of(player), packet);
+
+        collector.assertSingle(received -> {
+            assertNotEquals(message, received.displayName());
+            assertNotEquals(message, received.numberFormat().content());
+        });
+
     }
 }
