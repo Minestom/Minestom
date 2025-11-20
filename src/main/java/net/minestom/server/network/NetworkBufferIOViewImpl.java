@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -18,14 +19,15 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
     }
 
     @Override
-    public void readFully(byte[] b) {
-        readFully(b, 0, b.length);
+    public void readFully(byte[] bytes) {
+        readFully(bytes, 0, bytes.length);
     }
 
     @Override
-    public void readFully(byte[] b, int off, int len) {
+    public void readFully(byte[] bytes, int off, int len) {
+        Objects.requireNonNull(bytes, "bytes");
         buffer.ensureReadable(len);
-        buffer.copyTo(buffer.readIndex(), b, off, len);
+        buffer.copyTo(buffer.readIndex(), bytes, off, len);
         buffer.advanceRead(len);
     }
 
@@ -66,7 +68,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public char readChar() {
-        return (char) (buffer.read(SHORT) & 0xFFFF);
+        return (char) readUnsignedShort();
     }
 
     @Override
@@ -100,18 +102,20 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
     }
 
     @Override
-    public void write(int b) {
-        buffer.write(BYTE, (byte) b);
+    public void write(int lower) {
+        buffer.write(BYTE, (byte) lower);
     }
 
     @Override
-    public void write(byte[] b) {
-        buffer.write(RAW_BYTES, b);
+    public void write(byte[] bytes) {
+        Objects.requireNonNull(bytes, "bytes");
+        buffer.write(RAW_BYTES, bytes);
     }
 
     @Override
-    public void write(byte[] b, int off, int len) {
-        buffer.write(RAW_BYTES, Arrays.copyOfRange(b, off, off + len));
+    public void write(byte[] bytes, int off, int len) {
+        Objects.requireNonNull(bytes, "bytes");
+        buffer.write(RAW_BYTES, Arrays.copyOfRange(bytes, off, off + len));
     }
 
     @Override
@@ -126,12 +130,12 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public void writeShort(int value) {
-        buffer.write(SHORT, (short) value);
+        buffer.write(UNSIGNED_SHORT, value);
     }
 
     @Override
     public void writeChar(int value) {
-        buffer.write(SHORT, (short) value);
+        buffer.write(UNSIGNED_SHORT, value);
     }
 
     @Override
@@ -155,24 +159,24 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
     }
 
     @Override
-    public void writeBytes(String string) {
-        Objects.requireNonNull(string, "String cannot be null!");
-        for (int i = 0; i < string.length(); i++) {
-            buffer.write(BYTE, (byte) string.charAt(i)); // Low byte only
+    public void writeBytes(String value) {
+        Objects.requireNonNull(value, "value");
+        for (int i = 0; i < value.length(); i++) {
+            buffer.write(BYTE, (byte) value.charAt(i)); // Low byte only
         }
     }
 
     @Override
-    public void writeChars(String string) {
-        Objects.requireNonNull(string, "String cannot be null!");
-        for (int i = 0; i < string.length(); i++) {
-            buffer.write(SHORT, (short) string.charAt(i));
+    public void writeChars(String value) {
+        Objects.requireNonNull(value, "value");
+        for (int i = 0; i < value.length(); i++) {
+            writeChar(value.charAt(i));
         }
     }
 
     @Override
-    public void writeUTF(String string) {
-        Objects.requireNonNull(string, "String cannot be null!");
-        buffer.write(STRING_IO_UTF8, string);
+    public void writeUTF(String value) {
+        Objects.requireNonNull(value, "String cannot be null!");
+        buffer.write(STRING_IO_UTF8, value);
     }
 }
