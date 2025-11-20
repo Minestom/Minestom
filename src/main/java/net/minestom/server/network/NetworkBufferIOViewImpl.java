@@ -176,7 +176,7 @@ record NetworkBufferIOViewImpl(NetworkBuffer buffer) implements NetworkBuffer.IO
 
     @Override
     public void writeUTF(String value) {
-        Objects.requireNonNull(value, "String cannot be null!");
+        Objects.requireNonNull(value, "value");
         buffer.write(STRING_IO_UTF8, value);
     }
 }
