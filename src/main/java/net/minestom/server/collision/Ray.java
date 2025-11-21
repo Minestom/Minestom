@@ -259,7 +259,7 @@ public record Ray(
      * @return a {@link BlockFinder}
      */
     public BlockFinder findBlocks(Block.Getter blockGetter) {
-        return new BlockFinder(this, blockIterator(), blockGetter, BlockFinder.BLOCK_HITBOXES);
+        return new BlockFinder(this, blockIterator(), blockGetter, BlockFinder.SOLID_BLOCK_HITBOXES);
     }
 
     /**
@@ -269,7 +269,7 @@ public record Ray(
      * @param blockGetter the provider for blocks, such as an {@link net.minestom.server.instance.Instance} or {@link net.minestom.server.instance.Chunk}
      * @param hitboxGetter a function that gets bounding boxes from a block
      *                     <p>
-     *                     {@link BlockFinder} provides some options, and {@link BlockFinder#BLOCK_HITBOXES} is the default.
+     *                     {@link BlockFinder} provides some options, and {@link BlockFinder#SOLID_BLOCK_HITBOXES} is the default.
      * @return a {@link BlockFinder}
      */
     public BlockFinder findBlocks(Block.Getter blockGetter, Function<Block, Collection<BoundingBox>> hitboxGetter) {
@@ -294,7 +294,7 @@ public record Ray(
      * @param blockGetter the provider for blocks, such as an {@link net.minestom.server.instance.Instance} or {@link net.minestom.server.instance.Chunk}
      * @param hitboxGetter a function that gets bounding boxes from a block
      *                     <p>
-     *                     {@link BlockFinder} provides some options, and {@link BlockFinder#BLOCK_HITBOXES} is the default.
+     *                     {@link BlockFinder} provides some options, and {@link BlockFinder#SOLID_BLOCK_HITBOXES} is the default.
      * @return a {@link BlockQueue}
      */
     public BlockQueue blockQueue(Block.Getter blockGetter, Function<Block, Collection<BoundingBox>> hitboxGetter) {

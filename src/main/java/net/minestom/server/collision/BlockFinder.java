@@ -33,8 +33,14 @@ public record BlockFinder(
     /**
      * A hitbox getter that finds a block's collision hitboxes.
      */
-    public static final Function<Block, Collection<BoundingBox>> BLOCK_HITBOXES =
+    public static final Function<Block, Collection<BoundingBox>> SOLID_BLOCK_HITBOXES =
             block -> ((ShapeImpl)block.registry().collisionShape()).boundingBoxes();
+
+    /**
+     * A hitbox getter that finds a block's client-side boxes (the outlines you see when looking at a block).
+     */
+    public static final Function<Block, Collection<BoundingBox>> BLOCK_HITBOXES =
+            block -> ((ShapeImpl)block.registry().shape()).boundingBoxes();
 
     /**
      * A 1x1x1 block hitbox.
