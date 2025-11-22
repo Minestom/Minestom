@@ -2,6 +2,8 @@ package net.minestom.server.codec;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.codec.Transcoder.ListBuilder;
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
@@ -15,6 +17,7 @@ import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -24,10 +27,9 @@ import java.util.function.Supplier;
 final class CodecImpl {
 
     record RawValueImpl<D>(Transcoder<D> coder, D value) implements Codec.RawValue {
-
         RawValueImpl {
-            Objects.requireNonNull(coder);
-            Objects.requireNonNull(value);
+            Objects.requireNonNull(coder, "coder");
+            Objects.requireNonNull(value, "value");
         }
 
         @Override
@@ -59,6 +61,11 @@ final class CodecImpl {
     }
 
     record PrimitiveImpl<T>(PrimitiveEncoder<T> encoder, Decoder<T> decoder) implements Codec<T> {
+        PrimitiveImpl {
+            Objects.requireNonNull(encoder, "encoder");
+            Objects.requireNonNull(decoder, "decoder");
+        }
+
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
             return decoder.decode(coder, value);
@@ -72,6 +79,10 @@ final class CodecImpl {
     }
 
     record OptionalImpl<T>(Codec<T> inner, @Nullable T defaultValue) implements Codec<T> {
+        OptionalImpl {
+            Objects.requireNonNull(inner, "inner");
+        }
+
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
             return new Result.Ok<>(inner.decode(coder, value).orElse(defaultValue));
@@ -85,8 +96,16 @@ final class CodecImpl {
         }
     }
 
-    record TransformImpl<T, S>(Codec<T> inner, ThrowingFunction<T, S> to,
-                               ThrowingFunction<@Nullable S, T> from) implements Codec<S> {
+    record TransformImpl<T, S>(
+            Codec<T> inner, ThrowingFunction<T, S> to,
+            ThrowingFunction<@Nullable S, T> from
+    ) implements Codec<S> {
+        TransformImpl {
+            Objects.requireNonNull(inner, "inner");
+            Objects.requireNonNull(to, "to");
+            Objects.requireNonNull(from, "from");
+        }
+
         @Override
         public <D> Result<S> decode(Transcoder<D> coder, D value) {
             try {
@@ -110,9 +129,13 @@ final class CodecImpl {
         }
     }
 
-    record ListImpl<T>(Codec<T> inner, int maxSize) implements Codec<List<T>> {
+    record ListImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable List<T>> {
+        ListImpl {
+            Objects.requireNonNull(inner, "inner");
+        }
+
         @Override
-        public <D> Result<List<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<@Unmodifiable List<T>> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
             if (!(listResult instanceof Result.Ok(List<D> list)))
                 return listResult.cast();
@@ -146,9 +169,13 @@ final class CodecImpl {
         }
     }
 
-    record SetImpl<T>(Codec<T> inner, int maxSize) implements Codec<Set<T>> {
+    record SetImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable Set<T>> {
+        SetImpl {
+            Objects.requireNonNull(inner, "inner");
+        }
+
         @Override
-        public <D> Result<Set<T>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<@Unmodifiable Set<T>> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
             if (!(listResult instanceof Result.Ok(List<D> list)))
                 return listResult.cast();
@@ -181,10 +208,17 @@ final class CodecImpl {
         }
     }
 
-    record MapImpl<K, V>(Codec<K> keyCodec, Codec<V> valueCodec,
-                         int maxSize) implements Codec<Map<K, V>> {
+    record MapImpl<K, V>(
+            Codec<K> keyCodec, Codec<V> valueCodec,
+            int maxSize
+    ) implements Codec<@Unmodifiable Map<K, V>> {
+        MapImpl {
+            Objects.requireNonNull(keyCodec, "keyCodec");
+            Objects.requireNonNull(valueCodec, "valueCodec");
+        }
+
         @Override
-        public <D> Result<Map<K, V>> decode(Transcoder<D> coder, D value) {
+        public <D> Result<@Unmodifiable Map<K, V>> decode(Transcoder<D> coder, D value) {
             final Result<MapLike<D>> mapResult = coder.getMap(value);
             if (!(mapResult instanceof Result.Ok(MapLike<D> map)))
                 return mapResult.cast();
@@ -229,9 +263,16 @@ final class CodecImpl {
         }
     }
 
-    record UnionImpl<T, R>(String keyField, Codec<T> keyCodec,
-                           Function<T, @Nullable StructCodec<? extends R>> serializers,
-                           Function<R, ? extends T> keyFunc) implements StructCodec<R> {
+    record UnionImpl<T, R>(
+            String keyField, Codec<T> keyCodec,
+            Function<T, @Nullable StructCodec<? extends R>> serializers,
+            Function<R, ? extends T> keyFunc
+    ) implements StructCodec<R> {
+        UnionImpl {
+            Objects.requireNonNull(serializers, "serializers");
+            Objects.requireNonNull(keyField, "keyField");
+            Objects.requireNonNull(keyFunc, "keyFunc");
+        }
 
         @SuppressWarnings("unchecked")
         @Override
@@ -263,10 +304,16 @@ final class CodecImpl {
 
     @SuppressWarnings("unchecked")
     record RegistryTaggedUnionImpl<T>(
+            String key,
             Registries.Selector<StructCodec<? extends T>> registrySelector,
-            Function<T, StructCodec<? extends T>> valueToCodec,
-            String key
+            Function<T, StructCodec<? extends T>> valueToCodec
     ) implements StructCodec<T> {
+        RegistryTaggedUnionImpl {
+            Objects.requireNonNull(key, "key");
+            Objects.requireNonNull(registrySelector, "registrySelector");
+            Objects.requireNonNull(valueToCodec, "valueToCodec");
+        }
+
         @Override
         public <D> Result<T> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
             if (!(coder instanceof RegistryTranscoder<D> context))
@@ -304,7 +351,8 @@ final class CodecImpl {
         final Codec<T> delegate;
 
         public RecursiveImpl(Function<Codec<T>, Codec<T>> self) {
-            this.delegate = self.apply(this);
+            Objects.requireNonNull(self, "self");
+            this.delegate = Objects.requireNonNull(self.apply(this), "delegate");
         }
 
         @Override
@@ -323,7 +371,7 @@ final class CodecImpl {
         private @Nullable Codec<T> delegate;
 
         ForwardRefImpl(Supplier<Codec<T>> delegateFunc) {
-            this.delegateFunc = delegateFunc;
+            this.delegateFunc = Objects.requireNonNull(delegateFunc, "delegateFunc");
         }
 
         private Codec<T> delegate() {
@@ -343,6 +391,11 @@ final class CodecImpl {
     }
 
     record OrElseImpl<T>(Codec<T> primary, Codec<T> secondary) implements Codec<T> {
+        OrElseImpl {
+            Objects.requireNonNull(primary, "primary");
+            Objects.requireNonNull(secondary, "secondary");
+        }
+
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
             final Result<T> primaryResult = primary.decode(coder, value);
@@ -397,6 +450,11 @@ final class CodecImpl {
     }
 
     record EitherImpl<L, R>(Codec<L> leftCodec, Codec<R> rightCodec) implements Codec<Either<L, R>> {
+        EitherImpl {
+            Objects.requireNonNull(leftCodec, "leftCodec");
+            Objects.requireNonNull(rightCodec, "rightCodec");
+        }
+
         @Override
         public <D> Result<Either<L, R>> decode(Transcoder<D> coder, D value) {
             final Result<L> leftResult = leftCodec.decode(coder, value);
@@ -414,6 +472,35 @@ final class CodecImpl {
             return switch (value) {
                 case Either.Left(L leftValue) -> leftCodec.encode(coder, leftValue);
                 case Either.Right(R rightValue) -> rightCodec.encode(coder, rightValue);
+            };
+        }
+    }
+
+    record EitherStructImpl<L, R>(
+            StructCodec<L> leftCodec,
+            StructCodec<R> rightCodec
+    ) implements StructCodec<Either<L, R>> {
+        public EitherStructImpl {
+            Objects.requireNonNull(leftCodec, "leftCodec");
+            Objects.requireNonNull(rightCodec, "rightCodec");
+        }
+
+        @Override
+        public <D> Result<Either<L, R>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
+            final Result<L> leftResult = leftCodec.decodeFromMap(coder, map);
+            if (leftResult instanceof Result.Ok(L leftValue))
+                return new Result.Ok<>(Either.left(leftValue));
+            final Result<R> rightResult = rightCodec.decodeFromMap(coder, map);
+            if (rightResult instanceof Result.Ok(R rightValue))
+                return new Result.Ok<>(Either.right(rightValue));
+            return new Result.Error<>("Failed to decode Either: " + leftResult + ", " + rightResult);
+        }
+
+        @Override
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, Either<L, R> value, MapBuilder<D> map) {
+            return switch (value) {
+                case Either.Left(L leftValue) -> leftCodec.encodeToMap(coder, leftValue, map);
+                case Either.Right(R rightValue) -> rightCodec.encodeToMap(coder, rightValue, map);
             };
         }
     }
@@ -446,6 +533,32 @@ final class CodecImpl {
             list.add(coder.createDouble(value.y()));
             list.add(coder.createDouble(value.z()));
             return new Result.Ok<>(list.build());
+        }
+    }
+
+    record CompoundBinaryTagImpl() implements StructCodec<CompoundBinaryTag> {
+        @Override
+        public <D> Result<CompoundBinaryTag> decodeFromMap(Transcoder<D> coder, Transcoder.MapLike<D> map) {
+            final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+            for (String key : map.keys()) {
+                final Result<BinaryTag> tagResult = map.getValue(key)
+                        .map(nbt -> RawValue.of(coder, nbt).convertTo(Transcoder.NBT));
+                if (!(tagResult instanceof Result.Ok(BinaryTag tag)))
+                    return tagResult.mapError(e -> key + ": " + e).cast();
+                builder.put(key, tag);
+            }
+            return new Result.Ok<>(builder.build());
+        }
+
+        @Override
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, CompoundBinaryTag value, Transcoder.MapBuilder<D> map) {
+            for (var entry : value) {
+                final Result<D> entryValue = RawValue.of(Transcoder.NBT, entry.getValue()).convertTo(coder);
+                if (!(entryValue instanceof Result.Ok(D okValue)))
+                    return entryValue.mapError(e -> entry.getKey() + ": " + e);
+                map.put(entry.getKey(), okValue);
+            }
+            return new Result.Ok<>(map.build());
         }
     }
 

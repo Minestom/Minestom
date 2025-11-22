@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.IntArrayBinaryTag;
 import net.kyori.adventure.nbt.IntBinaryTag;
@@ -210,9 +211,14 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentResourceLocation() {
         var arg = ArgumentType.ResourceLocation("resource_location");
-        assertArg(arg, "minecraft:resource_location_example", "minecraft:resource_location_example");
+
+        assertArg(arg, Key.key("foo:bar"), "foo:bar");
+        assertArg(arg, Key.key("minecraft:air"), "air");
+        assertArg(arg, Key.key("minecraft:foo/bar"), "foo/bar");
+
         assertInvalidArg(arg, "minecraft:invalid resource location");
-        //assertInvalidArg(arg, "minecraft:");
+        assertInvalidArg(arg, "!");
+        assertInvalidArg(arg, "a/b:empty");
     }
 
     @Test

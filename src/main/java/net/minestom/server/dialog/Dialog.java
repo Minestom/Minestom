@@ -21,7 +21,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
             Map.entry(Key.key("dialog_list"), DialogList.CODEC),
             Map.entry(Key.key("multi_action"), MultiAction.CODEC),
             Map.entry(Key.key("confirmation"), Confirmation.CODEC));
-    Codec<Dialog> REGISTRY_CODEC = Codec.RegistryTaggedUnion(REGISTRY, Dialog::codec, "type");
+    Codec<Dialog> REGISTRY_CODEC = Codec.RegistryTaggedUnion(REGISTRY, Dialog::codec);
     NetworkBuffer.Type<Dialog> REGISTRY_NETWORK_TYPE = NetworkBuffer.TypedNBT(REGISTRY_CODEC);
 
     NetworkBuffer.Type<Holder<Dialog>> NETWORK_TYPE = Holder.networkType(Registries::dialog, REGISTRY_NETWORK_TYPE);
@@ -108,7 +108,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
     ) implements Dialog {
         public static final StructCodec<DialogList> CODEC = StructCodec.struct(
                 StructCodec.INLINE, DialogMetadata.CODEC, DialogList::metadata,
-                "dialogs", HolderSet.codec(Registries::dialog, Dialog.REGISTRY_CODEC), DialogList::dialogs,
+                "dialogs", HolderSet.codec(Registries::dialog, Codec.ForwardRef(() -> Dialog.REGISTRY_CODEC)), DialogList::dialogs,
                 "exit_action", DialogActionButton.CODEC.optional(), DialogList::exitAction,
                 "columns", Codec.INT.optional(2), DialogList::columns,
                 "button_width", Codec.INT.optional(150), DialogList::buttonWidth,

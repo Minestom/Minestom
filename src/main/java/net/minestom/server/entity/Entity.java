@@ -38,6 +38,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.item.component.CustomData;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -119,6 +120,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Instance instance;
     protected Chunk currentChunk;
     protected Pos position; // Should be updated by setPositionInternal only.
+    protected float headRotation;
     protected Pos previousPosition;
     protected Pos lastSyncedPosition;
     protected boolean onGround;
@@ -199,6 +201,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.entityType = entityType;
         this.uuid = uuid;
         this.position = Pos.ZERO;
+        this.headRotation = 0;
         this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
@@ -226,7 +229,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this(entityType, UUID.randomUUID());
     }
 
-    protected void setPositionInternal(Pos newPosition) {
+    protected void setPositionInternal(Pos newPosition, float headRotation) {
         if (newPosition.x() >= MAX_COORDINATE || newPosition.x() <= -MAX_COORDINATE ||
                 newPosition.y() >= MAX_COORDINATE || newPosition.y() <= -MAX_COORDINATE ||
                 newPosition.z() >= MAX_COORDINATE || newPosition.z() <= -MAX_COORDINATE) {
@@ -237,6 +240,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             );
         }
         this.position = newPosition;
+        this.headRotation = headRotation;
     }
 
     /**
@@ -300,13 +304,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @Override
     public <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.CUSTOM_DATA)
-            return (T) tagHandler.asCompound();
+            return (T) new CustomData(tagHandler.asCompound());
         return EntityMeta.getComponent(getEntityMeta(), component);
     }
 
     public <T> void set(DataComponent<T> component, T value) {
-        if (component == DataComponents.CUSTOM_DATA)
-            tagHandler.updateContent((CompoundBinaryTag) value);
+        if (component == DataComponents.CUSTOM_DATA) {
+            tagHandler.updateContent(((CustomData) value).nbt());
+        }
         else EntityMeta.setComponent(getEntityMeta(), component, value);
     }
 
@@ -376,7 +381,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
-            setPositionInternal(globalPosition);
+            setPositionInternal(globalPosition, globalPosition.yaw());
             this.velocity = globalVelocity;
             refreshCoordinate(globalPosition);
             if (this instanceof Player player)
@@ -401,14 +406,31 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     /**
      * Changes the view of the entity.
+     * The head rotation will be updated to the yaw value.
      *
      * @param yaw   the new yaw
      * @param pitch the new pitch
      */
     public void setView(float yaw, float pitch) {
+        setView(yaw, pitch, yaw);
+    }
+
+    /**
+     * Changes the view and head rotation of the entity.
+     * This is only really useful for mobs whose heads are looking in a different direction than their body.
+     * <p>
+     * The client has a lot of prediction on this front, so using your own logic for this might not produce the desired result.
+     * For example: if the entity is not moving, the body will automatically rotate towards the head after a few ticks.
+     *
+     * @param yaw          the new yaw
+     * @param pitch        the new pitch
+     * @param headRotation the new head rotation
+     */
+    public void setView(float yaw, float pitch, float headRotation) {
+        headRotation = Pos.fixYaw(headRotation);
         final Pos currentPosition = this.position;
-        if (currentPosition.sameView(yaw, pitch)) return;
-        setPositionInternal(currentPosition.withView(yaw, pitch));
+        if (currentPosition.sameView(yaw, pitch) && this.headRotation == headRotation) return;
+        setPositionInternal(currentPosition.withView(yaw, pitch), headRotation);
         synchronizeView();
     }
 
@@ -527,7 +549,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             }
         }
         // Head position
-        player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        player.sendPacket(new EntityHeadLookPacket(getEntityId(), headRotation));
     }
 
     /**
@@ -829,7 +851,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EventsJFR.newInstanceJoin(getUuid(), instance.getUuid()).commit();
 
         this.isActive = true;
-        setPositionInternal(spawnPosition);
+        setPositionInternal(spawnPosition, spawnPosition.yaw());
         this.previousPosition = spawnPosition;
         this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
@@ -1287,7 +1309,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final var previousPosition = this.position;
         final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
         if (position.equals(lastSyncedPosition)) return;
-        setPositionInternal(position);
+        setPositionInternal(position, ignoreView ? headRotation : position.yaw());
         this.previousPosition = previousPosition;
         if (!position.samePoint(previousPosition)) refreshCoordinate(position);
         if (nextSynchronizationTick <= ticks + 1 || !sendPackets) {
@@ -1313,14 +1335,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             PacketViewableUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
                     lastSyncedPosition, isOnGround()), this);
             // Fix head rotation
-            PacketViewableUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
+            PacketViewableUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), headRotation), this);
         } else if (positionChange) {
             // This is a confusing fix for a confusing issue. If rotation is only sent when the entity actually changes, then spawning an entity
             // on the ground causes the entity not to update its rotation correctly. It works fine if the entity is spawned in the air. Very weird.
             PacketViewableUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
                     lastSyncedPosition, onGround), this);
         } else if (viewChange) {
-            PacketViewableUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
+            PacketViewableUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), headRotation), this);
             PacketViewableUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
                     lastSyncedPosition, isOnGround()), this);
         }
@@ -1348,7 +1370,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
                 newPosition.y() + EntityUtils.getPassengerHeightOffset(this, passenger),
                 newPosition.z());
-        passenger.setPositionInternal(newPassengerPos);
+        passenger.setPositionInternal(newPassengerPos, newPassengerPos.yaw());
         passenger.previousPosition = oldPassengerPos;
         passenger.refreshCoordinate(newPassengerPos);
     }
@@ -1396,6 +1418,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public Pos getPosition() {
         return position;
+    }
+
+    /**
+     * Gets the entity head rotation.
+     * In most cases, this will be the same as their yaw.
+     * It might be different for mobs which are looking in a different direction than their body.
+     * <p>
+     * The head rotation can be changed using {@link #setView(float, float, float)}.
+     *
+     * @return the head rotation
+     */
+    public float getHeadRotation() {
+        return headRotation;
     }
 
     /**
@@ -1526,7 +1561,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.removed = true;
         if (!permanent) {
             // Reset some state to be ready for re-use
-            setPositionInternal(Pos.ZERO);
+            setPositionInternal(Pos.ZERO, 0);
             this.previousPosition = Pos.ZERO;
             this.lastSyncedPosition = Pos.ZERO;
         }
@@ -1575,24 +1610,21 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected Vec getVelocityForPacket() {
-        return this.velocity.mul(8000f / ServerFlag.SERVER_TICKS_PER_SECOND);
+        return this.velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND);
     }
 
     protected SpawnEntityPacket getSpawnPacket() {
         int data = 0;
-        short velocityX = 0, velocityZ = 0, velocityY = 0;
+        Vec velocity = Vec.ZERO;
         if (getEntityMeta() instanceof ObjectDataProvider objectDataProvider) {
             data = objectDataProvider.getObjectData();
             if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
-                final var velocity = getVelocityForPacket();
-                velocityX = (short) velocity.x();
-                velocityY = (short) velocity.y();
-                velocityZ = (short) velocity.z();
+                velocity = getVelocityForPacket();
             }
         }
         final Pos position = getPosition();
-        return new SpawnEntityPacket(getEntityId(), getUuid(), getEntityType().id(),
-                position, position.yaw(), data, velocityX, velocityY, velocityZ);
+        return new SpawnEntityPacket(getEntityId(), getUuid(), getEntityType(),
+                position, position.yaw(), data, velocity);
     }
 
     protected EntityVelocityPacket getVelocityPacket() {
@@ -1622,7 +1654,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     private void synchronizeView() {
-        sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), headRotation));
         sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
     }
 
@@ -1743,10 +1775,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos start = position.withY(position.y() + getEyeHeight());
         final Pos end = entity.position.withY(entity.position.y() + entity.getEyeHeight());
         final Vec direction = exactView ? position.direction() : end.sub(start).asVec().normalize();
-        if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction, entity.getPosition())) {
+        if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction, entity.position)) {
             return false;
         }
-        return CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox);
+        return CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox, entity.position);
     }
 
     /**
@@ -1774,10 +1806,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos start = position.withY(position.y() + getEyeHeight());
         final Vec startAsVec = start.asVec();
         final Predicate<Entity> finalPredicate = e -> e != this
-                && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.getPosition())
+                && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.position)
                 && predicate.test(e)
                 && CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start,
-                e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox);
+                e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox, e.position);
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
                 .filter(finalPredicate)

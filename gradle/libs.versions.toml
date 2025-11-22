@@ -3,20 +3,20 @@ metadata.format.version = "1.1"
 [versions]
 
 # Important dependencies
-data = "1.21.8-rv1"
-adventure = "4.24.0"
-jetbrainsAnnotations = "26.0.1"
-slf4j = "2.0.16"
+data = "1.21.10-rv2"
+adventure = "4.25.0"
+jetbrainsAnnotations = "26.0.2-1"
+slf4j = "2.0.17"
 
 # Performance / Data Structures
-fastutil = "8.5.15"
+fastutil = "8.5.18"
 flare = "2.0.1"
-gson = "2.11.0"
+gson = "2.13.2"
 jcTools = "4.0.5"
 
 # Quality
-junit-jupiter = "5.11.4"
-junit-platform = "1.11.4"
+junit-jupiter = "6.0.0"
+junit-platform = "6.0.0"
 jmh = "1.37"
 jcstress = "0.16"
 
@@ -24,12 +24,13 @@ jcstress = "0.16"
 javaPoet = "0.7.0"
 
 # Log impl (for demo & codegen)
-logback = "1.5.16"
+logback = "1.5.19"
 
 # Gradle plugins
+shadow = "9.2.2"
 blossom = "2.1.0"
-nmcp = "1.0.0-rc.1"
-jmh-plugin = "0.7.2"
+nmcp = "1.2.0"
+jmh-plugin = "0.7.3"
 jcstress-plugin = "0.8.15"
 
 [libraries]
@@ -81,6 +82,7 @@ junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-
 logback = ["logback-core", "logback-classic"]
 
 [plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
 jmh-plugin = { id = "me.champeau.jmh", version.ref = "jmh-plugin" }
 jcstress-plugin = { id = "io.github.reyerizo.gradle.jcstress", version.ref = "jcstress-plugin" }

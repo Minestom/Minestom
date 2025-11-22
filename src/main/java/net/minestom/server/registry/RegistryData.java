@@ -17,9 +17,11 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Equippable;
+import net.minestom.server.item.component.TypedCustomData;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -249,8 +251,7 @@ public final class RegistryData {
         private final float jumpFactor;
         private final byte packedFlags;
         private final byte lightEmission;
-        private final @Nullable Key blockEntity;
-        private final int blockEntityId;
+        private final @Nullable BlockEntityType blockEntityType;
         private final @Nullable Material material;
         private final @Nullable BlockSoundType blockSoundType;
         private final Shape collisionShape;
@@ -280,9 +281,10 @@ public final class RegistryData {
             }, null);
             {
                 final Properties blockEntity = main.section("blockEntity");
-                final Key blockEntityKey = fromParent(parent, BlockEntry::blockEntity, blockEntity, "namespace", (properties, string) -> Key.key(properties.getString(string)), null);
-                this.blockEntity = blockEntityKey != null ? (Key) internCache.computeIfAbsent(blockEntityKey, key -> blockEntityKey) : null;
-                this.blockEntityId = fromParent(parent, BlockEntry::blockEntityId, blockEntity, "id", Properties::getInt, 0);
+                this.blockEntityType = fromParent(
+                        parent, BlockEntry::blockEntityType, blockEntity, "namespace",
+                        (properties, string) -> BlockEntityType.fromKey(properties.getString(string)),
+                        null);
             }
             {
                 this.material = fromParent(parent, BlockEntry::material, main, "correspondingItem", (properties, string) -> {
@@ -405,15 +407,27 @@ public final class RegistryData {
         }
 
         public boolean isBlockEntity() {
-            return blockEntity != null;
+            return blockEntityType != null;
         }
 
+        public @Nullable BlockEntityType blockEntityType() {
+            return blockEntityType;
+        }
+
+        /**
+         * @deprecated Use {@link #blockEntityType}
+         */
+        @Deprecated
         public @Nullable Key blockEntity() {
-            return blockEntity;
+            return blockEntityType != null ? blockEntityType.key() : null;
         }
 
+        /**
+         * @deprecated Use {@link #blockEntityType}
+         */
+        @Deprecated
         public int blockEntityId() {
-            return blockEntityId;
+            return blockEntityType != null ? blockEntityType.id() : -1;
         }
 
         public @Nullable Material material() {
@@ -448,8 +462,6 @@ public final class RegistryData {
         private final Supplier<Block> blockSupplier;
         private @Nullable Either<Properties, DataComponentMap> prototype;
 
-        private final EntityType entityType;
-
         private MaterialEntry(String namespace, Properties main) {
             this.prototype = Either.left(main.section("components"));
             this.key = Key.key(namespace);
@@ -458,14 +470,6 @@ public final class RegistryData {
             {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromKey(blockNamespace) : () -> null;
-            }
-            {
-                final Properties spawnEggProperties = main.section("spawnEggProperties");
-                if (spawnEggProperties != null) {
-                    this.entityType = EntityType.fromKey(spawnEggProperties.getString("entityType"));
-                } else {
-                    this.entityType = null;
-                }
             }
         }
 
@@ -523,9 +527,12 @@ public final class RegistryData {
          * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
          *
          * @return The entity type it can spawn, or null if it is not a spawn egg
+         * @deprecated Read {@link DataComponents#ENTITY_DATA} for the spawned entity data.
          */
+        @Deprecated(forRemoval = true)
         public @Nullable EntityType spawnEntityType() {
-            return entityType;
+            TypedCustomData<EntityType> entityData = prototype().get(DataComponents.ENTITY_DATA);
+            return entityData == null ? null : entityData.type();
         }
     }
 

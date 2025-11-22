@@ -7,14 +7,21 @@ import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.*;
+import net.kyori.adventure.text.object.ObjectContents;
+import net.kyori.adventure.text.object.PlayerHeadObjectContents;
+import net.kyori.adventure.text.object.SpriteObjectContents;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.dialog.Dialog;
+import net.minestom.server.network.player.GameProfile;
+import net.minestom.server.network.player.ResolvableProfile;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Used internally to hold component codecs
@@ -226,6 +233,44 @@ public final class ComponentCodecs {
     private static final StructCodec<KeybindComponent> KEYBIND_CONTENT = StructCodec.struct(
             "keybind", Codec.STRING, component -> component.keybind(),
             Component::keybind);
+    private static final StructCodec<ObjectComponent> OBJECT_CONTENT = new StructCodec<>() {
+        private static final StructCodec<SpriteObjectContents> SPRITE_CONTENT = StructCodec.struct(
+                "atlas", Codec.KEY.optional(SpriteObjectContents.DEFAULT_ATLAS), SpriteObjectContents::atlas,
+                "sprite", Codec.KEY, SpriteObjectContents::sprite,
+                ObjectContents::sprite);
+        private static final StructCodec<PlayerHeadObjectContents> PLAYER_HEAD_CONTENTS = StructCodec.struct(
+                "player", ResolvableProfile.CODEC, ResolvableProfile::fromPlayerHeadContents,
+                "hat", Codec.BOOLEAN.optional(true), PlayerHeadObjectContents::hat,
+                (player, hat) -> {
+                    final @Nullable String name = player.profile().unify(GameProfile::name, ResolvableProfile.Partial::name);
+                    final @Nullable UUID uuid = player.profile().unify(GameProfile::uuid, ResolvableProfile.Partial::uuid);
+                    final List<GameProfile.Property> properties = player.profile().unify(GameProfile::properties, ResolvableProfile.Partial::properties);
+                    return ObjectContents.playerHead()
+                            .name(name)
+                            .id(uuid)
+                            .profileProperties((Collection<PlayerHeadObjectContents.ProfileProperty>) (Collection<?>) properties) //TODO(adventure) upstream ? extends
+                            .skin(player)
+                            .hat(hat)
+                            .build();
+                });
+
+        @Override
+        public <D> Result<ObjectComponent> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
+            final Result<? extends ObjectContents> contents = map.hasValue("player")
+                    ? PLAYER_HEAD_CONTENTS.decodeFromMap(coder, map)
+                    : SPRITE_CONTENT.decodeFromMap(coder, map);
+            return contents.mapResult(Component::object);
+        }
+
+        @Override
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, ObjectComponent value, MapBuilder<D> map) {
+            return switch (value.contents()) {
+                case SpriteObjectContents sprite -> SPRITE_CONTENT.encodeToMap(coder, sprite, map);
+                case PlayerHeadObjectContents playerHead -> PLAYER_HEAD_CONTENTS.encodeToMap(coder, playerHead, map);
+                default -> new Result.Error<>("Unknown object contents type: " + value.contents().getClass());
+            };
+        }
+    };
     private static final StructCodec<NBTComponent<?, ?>> NBT_CONTENT = new StructCodec<>() {
         @Override
         public <D> Result<NBTComponent<?, ?>> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
@@ -268,6 +313,7 @@ public final class ComponentCodecs {
                     case "selector" -> SELECTOR_CONTENT.decodeFromMap(coder, map);
                     case "keybind" -> KEYBIND_CONTENT.decodeFromMap(coder, map);
                     case "nbt" -> NBT_CONTENT.decodeFromMap(coder, map);
+                    case "object" -> OBJECT_CONTENT.decodeFromMap(coder, map);
                     case null, default -> {
                         // Type was not included, try to guess based on the content.
                         final Result<? extends Component> textResult = TEXT_CONTENT.decodeFromMap(coder, map);
@@ -288,6 +334,9 @@ public final class ComponentCodecs {
                         final Result<? extends Component> nbtResult = NBT_CONTENT.decodeFromMap(coder, map);
                         if (nbtResult instanceof Result.Ok<? extends Component>)
                             yield nbtResult;
+                        final Result<? extends Component> objectResult = OBJECT_CONTENT.decodeFromMap(coder, map);
+                        if (objectResult instanceof Result.Ok<? extends Component>)
+                            yield objectResult;
                         yield new Result.Error<>("Unable to determine component type");
                     }
                 };
@@ -316,6 +365,7 @@ public final class ComponentCodecs {
                             SELECTOR_CONTENT.encodeToMap(coder, selectorComponent, map);
                     case KeybindComponent keybindComponent -> KEYBIND_CONTENT.encodeToMap(coder, keybindComponent, map);
                     case NBTComponent<?, ?> nbtComponent -> NBT_CONTENT.encodeToMap(coder, nbtComponent, map);
+                    case ObjectComponent objectComponent -> OBJECT_CONTENT.encodeToMap(coder, objectComponent, map);
                     default -> new Result.Error<>("Unknown component type: " + value.getClass());
                 };
 

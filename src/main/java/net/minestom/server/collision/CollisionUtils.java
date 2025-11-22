@@ -134,16 +134,17 @@ public final class CollisionUtils {
      * @param start    start of the line of sight.
      * @param end      end of the line of sight.
      * @param shape    shape to check.
+     * @param shapePos position of the shape to check.
      * @return true is shape is reachable by the given line of sight; false otherwise.
      */
     public static boolean isLineOfSightReachingShape(Instance instance, @Nullable Chunk chunk,
                                                      Point start, Point end,
-                                                     Shape shape) {
+                                                     Shape shape, Point shapePos) {
         final PhysicsResult result = handlePhysics(instance, chunk,
                 BoundingBox.ZERO, start.asPos(), end.sub(start).asVec(),
                 null, false);
 
-        return shape.intersectBox(end.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
+        return shape.intersectBox(shapePos.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
     }
 
     public static PhysicsResult handlePhysics(Entity entity, Vec entityVelocity) {

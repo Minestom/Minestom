@@ -56,11 +56,14 @@ final class GraphConverter {
             }
         }
         node.children = packetNodeChildren;
+
+        boolean isExecutable = graphNode.execution() != null && graphNode.execution().executor() != null;
+
         if (argument instanceof ArgumentLiteral literal) {
             if (literal.getId().isEmpty()) {
                 node.flags = 0; //root
             } else {
-                node.flags = literal(false, false);
+                node.flags = literal(isExecutable, false);
                 node.name = argument.getId();
                 if (redirect != null) {
                     node.flags |= 0x8;
@@ -71,7 +74,7 @@ final class GraphConverter {
             return new int[]{id.getAndIncrement()};
         } else {
             if (argument instanceof ArgumentCommand argCmd) {
-                node.flags = literal(false, true);
+                node.flags = literal(isExecutable, true);
                 node.name = argument.getId();
                 final String shortcut = argCmd.getShortcut();
                 if (shortcut.isEmpty()) {
@@ -100,7 +103,7 @@ final class GraphConverter {
                     String entry = entries.get(i);
                     final DeclareCommandsPacket.Node subNode = new DeclareCommandsPacket.Node();
                     subNode.children = node.children;
-                    subNode.flags = literal(false, false);
+                    subNode.flags = literal(isExecutable, false);
                     subNode.name = entry;
                     if (redirect != null) {
                         subNode.flags |= 0x8;
@@ -162,7 +165,7 @@ final class GraphConverter {
                 return res;
             } else {
                 final boolean hasSuggestion = argument.hasSuggestion();
-                node.flags = arg(false, hasSuggestion);
+                node.flags = arg(isExecutable, hasSuggestion);
                 node.name = argument.getId();
                 node.parser = argument.parser();
                 node.properties = argument.nodeProperties();
