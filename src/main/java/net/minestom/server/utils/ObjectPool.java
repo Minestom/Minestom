@@ -1,7 +1,9 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.ServerFlag;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
+import org.jctools.queues.atomic.MpmcAtomicArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.ref.Cleaner;
@@ -19,7 +21,7 @@ public final class ObjectPool<T> {
     private static final int QUEUE_SIZE = 32_768;
     private static final Cleaner CLEANER = Cleaner.create();
 
-    private final MessagePassingQueue<SoftReference<T>> pool = new MpmcUnboundedXaddArrayQueue<>(QUEUE_SIZE);
+    private final MessagePassingQueue<SoftReference<T>> pool;
     private final Supplier<T> supplier;
     private final UnaryOperator<T> sanitizer;
 
@@ -32,6 +34,8 @@ public final class ObjectPool<T> {
     }
 
     private ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+        // Atomic is bounded; no atomic variant exists that is MPMC.
+        this.pool = ServerFlag.UNSAFE_COLLECTIONS ? new MpmcUnboundedXaddArrayQueue<>(QUEUE_SIZE) : new MpmcAtomicArrayQueue<>(QUEUE_SIZE);
         this.supplier = supplier;
         this.sanitizer = sanitizer;
     }
