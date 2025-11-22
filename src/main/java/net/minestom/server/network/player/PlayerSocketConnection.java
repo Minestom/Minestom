@@ -132,9 +132,11 @@ public class PlayerSocketConnection extends PlayerConnection {
                     startingState, PacketVanilla::nextClientState,
                     compression()
             );
-        } catch (DataFormatException e) {
+        } catch (DataFormatException | RuntimeException e) {
+            // If anything is thrown, all packets in the queue will be lost here.
+            // So it's highly recommended to disconnect to avoid more invalid state.
             MinecraftServer.getExceptionManager().handleException(e);
-            disconnect();
+            if (ServerFlag.REJECT_MALFORMED_PACKET) disconnect();
             return;
         }
         switch (result) {

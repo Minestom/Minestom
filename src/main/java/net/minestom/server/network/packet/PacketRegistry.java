@@ -22,7 +22,6 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
@@ -31,7 +30,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public interface PacketRegistry<T> {
-    @UnknownNullability
     T create(int packetId, NetworkBuffer reader);
 
     PacketInfo<T> packetInfo(Class<?> packetClass);
@@ -62,7 +60,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public ConnectionSide side() {
+        public final ConnectionSide side() {
             return ConnectionSide.CLIENT;
         }
     }
@@ -217,7 +215,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public ConnectionSide side() {
+        public final ConnectionSide side() {
             return ConnectionSide.SERVER;
         }
     }
@@ -459,7 +457,7 @@ public interface PacketRegistry<T> {
             Class<T>[] packetInfoClasses = new Class[suppliers.length];
             PacketInfo<T>[] packetInfos = new PacketInfo[suppliers.length];
             for (int i = 0; i < suppliers.length; i++) {
-                final Entry<T> entry = (Entry<T>) suppliers[i]; // ? extends T -> ? implements T so T is safe here
+                final Entry<T> entry = (Entry<T>) suppliers[i]; // ? extends T -> ? implements T so T is safe here, but shouldn't be required...
                 Check.notNull(entry, "Missing entry for 0x{0} in state {1} for {2}", Integer.toHexString(i), state().name(), side().name());
                 packetInfoClasses[i] = entry.type;
                 packetInfos[i] = new PacketInfo<>(entry.type, i, entry.reader);
@@ -468,16 +466,22 @@ public interface PacketRegistry<T> {
             this.packetsByClass = ArrayUtils.toMap(packetInfoClasses, packetInfos, suppliers.length);
         }
 
-        public @UnknownNullability T create(int packetId, NetworkBuffer reader) {
+        public T create(int packetId, NetworkBuffer reader) {
             final PacketInfo<T> info = packetInfo(packetId);
-            return info.serializer().read(reader);
+            try {
+                final T packet = info.serializer().read(reader);
+                assert packet.getClass().isInstance(info.packetClass()) : "Packet class mismatch";
+                return packet;
+            } catch (RuntimeException e) {
+                throw new IllegalStateException("Packet id 0x%X (%s) failed to read in %s_%s!".formatted(packetId, info.packetClass().getSimpleName(), side().name(), state().name()), e);
+            }
         }
 
         @Override
         public PacketInfo<T> packetInfo(Class<?> packetClass) {
             final PacketInfo<T> info = packetsByClass.get(packetClass);
             if (info == null) {
-                throw new IllegalStateException("Packet type " + packetClass + " cannot be sent in state " + side().name() + "_" + state().name() + "!");
+                throw new IllegalStateException("Packet type %s cannot be sent in state %s_%s!".formatted(packetClass.getSimpleName(), side().name(), state().name()));
             }
             return info;
         }
@@ -485,7 +489,7 @@ public interface PacketRegistry<T> {
         @Override
         public PacketInfo<T> packetInfo(int packetId) {
             if (packetId < 0 || packetId >= packetsById.size()) {
-                throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
+                throw new IllegalStateException("Packet id 0x%X isn't registered or isn't registered in state %s_%s".formatted(packetId, side().name(), state().name()));
             }
             return packetsById.get(packetId);
         }

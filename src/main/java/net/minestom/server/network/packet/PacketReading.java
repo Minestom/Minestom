@@ -156,7 +156,7 @@ public final class PacketReading {
         }
         final int maxPacketSize = maxPacketSize(state);
         if (packetLength > maxPacketSize) {
-            throw new DataFormatException("Packet too large: " + packetLength);
+            throw new IllegalStateException("Packet too large: %d > %d:%s".formatted(packetLength, maxPacketSize, state.name()));
         }
         // READ PAYLOAD https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Packet_format
         if (buffer.readableBytes() < packetLength) {
@@ -187,6 +187,7 @@ public final class PacketReading {
             return readPayload(buffer, registry);
         }
 
+        // READ COMPRESSION HEADER
         final int dataLength = buffer.read(VAR_INT);
         if (dataLength == 0) {
             // Uncompressed packet
@@ -207,18 +208,12 @@ public final class PacketReading {
 
     private static <T> T readPayload(NetworkBuffer buffer, PacketRegistry<T> registry) {
         final int packetId = buffer.read(VAR_INT);
-        final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packetId);
-        final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
-        try {
-            final T packet = serializer.read(buffer);
-            if (buffer.readableBytes() != 0) {
-                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})",
-                        packetInfo.packetClass().getSimpleName(), Integer.toHexString(packetId), buffer);
-            }
-            return packet;
-        } catch (Exception e) {
-            throw new RuntimeException("failed to read packet " + packetInfo.packetClass(), e);
+        final T packet = registry.create(packetId, buffer);
+        if (buffer.readableBytes() != 0) {
+            LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})",
+                    packet.getClass().getSimpleName(), Integer.toHexString(packetId), buffer);
         }
+        return packet;
     }
 
     public static int maxPacketSize(ConnectionState state) {

@@ -36,6 +36,7 @@ public final class ServerFlag {
     public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
     public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
     public static final int SOCKET_TIMEOUT = intProperty("minestom.socket-timeout", 15_000);
+    public static final boolean REJECT_MALFORMED_PACKET = booleanProperty("minestom.reject-malformed-packet", true);
 
     // Network buffers
     public static final int DEFAULT_RESIZEABLE_SIZE = intProperty("minestom.default-resizeable-size", 256);
