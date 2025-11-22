@@ -2,7 +2,10 @@ package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
+import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
+import org.jctools.queues.atomic.MpscUnboundedAtomicArrayQueue;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -21,8 +24,8 @@ final class SchedulerImpl implements Scheduler {
         return thread;
     });
 
-    private final MpscUnboundedArrayQueue<TaskImpl> tasksToExecute = new MpscUnboundedArrayQueue<>(64);
-    private final MpscUnboundedArrayQueue<TaskImpl> tickEndTasksToExecute = new MpscUnboundedArrayQueue<>(64);
+    private final MessagePassingQueue<TaskImpl> tasksToExecute = ServerFlag.UNSAFE_COLLECTIONS ? new MpscUnboundedArrayQueue<>(64) : new MpscUnboundedAtomicArrayQueue<>(64);
+    private final MessagePassingQueue<TaskImpl> tickEndTasksToExecute = ServerFlag.UNSAFE_COLLECTIONS ? new MpscUnboundedArrayQueue<>(64) : new MpscUnboundedAtomicArrayQueue<>(64);
     // Tasks scheduled on a certain tick/tick end
     private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickStartTaskQueue = new Int2ObjectAVLTreeMap<>();
     private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickEndTaskQueue = new Int2ObjectAVLTreeMap<>();
@@ -48,7 +51,7 @@ final class SchedulerImpl implements Scheduler {
         processTickTasks(tickEndTaskQueue, tickEndTasksToExecute, 0);
     }
 
-    private void processTickTasks(Int2ObjectAVLTreeMap<List<TaskImpl>> targetTaskQueue, MpscUnboundedArrayQueue<TaskImpl> targetTasksToExecute, int tickDelta) {
+    private void processTickTasks(Int2ObjectAVLTreeMap<List<TaskImpl>> targetTaskQueue, MessagePassingQueue<TaskImpl> targetTasksToExecute, int tickDelta) {
         synchronized (this) {
             this.tickState += tickDelta;
             int tickToProcess;
@@ -60,7 +63,7 @@ final class SchedulerImpl implements Scheduler {
         runTasks(targetTasksToExecute);
     }
 
-    private void runTasks(MpscUnboundedArrayQueue<TaskImpl> targetQueue) {
+    private void runTasks(MessagePassingQueue<TaskImpl> targetQueue) {
         // Run all tasks lock-free, either in the current thread or pool
         if (!targetQueue.isEmpty()) {
             targetQueue.drain(task -> {

@@ -29,7 +29,9 @@ import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.validate.Check;
+import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
+import org.jctools.queues.atomic.MpscUnboundedAtomicArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,7 +85,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int protocolVersion;
 
     private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process());
-    private final MpscUnboundedXaddArrayQueue<SendablePacket> packetQueue = new MpscUnboundedXaddArrayQueue<>(1024);
+    private final MessagePassingQueue<SendablePacket> packetQueue = ServerFlag.UNSAFE_COLLECTIONS ? new MpscUnboundedXaddArrayQueue<>(1024) : new MpscUnboundedAtomicArrayQueue<>(1024);
     private final Thread readThread, writeThread;
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
