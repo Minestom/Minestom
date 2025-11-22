@@ -4,13 +4,14 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
+import org.intellij.lang.annotations.MagicConstant;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
-public record ClientPlayerPositionPacket(Point position, byte flags) implements ClientPacket {
-    public static final int FLAG_ON_GROUND = 1;
-    public static final int FLAG_HORIZONTAL_COLLISION = 1 << 1;
+public record ClientPlayerPositionPacket(Point position, @MagicConstant(flagsFromClass = ClientPlayerPositionPacket.class) byte flags) implements ClientPacket.Play {
+    public static final byte FLAG_ON_GROUND = 1;
+    public static final byte FLAG_HORIZONTAL_COLLISION = 1 << 1;
 
     public static final NetworkBuffer.Type<ClientPlayerPositionPacket> SERIALIZER = NetworkBufferTemplate.template(
             VECTOR3D, ClientPlayerPositionPacket::position,
@@ -19,7 +20,7 @@ public record ClientPlayerPositionPacket(Point position, byte flags) implements 
 
     public ClientPlayerPositionPacket(Point position, boolean onGround, boolean horizontalCollision) {
         this(position, (byte) ((onGround ? FLAG_ON_GROUND : 0) |
-                (byte) (horizontalCollision ? FLAG_HORIZONTAL_COLLISION : 0)));
+                (horizontalCollision ? FLAG_HORIZONTAL_COLLISION : 0)));
     }
 
     public boolean onGround() {

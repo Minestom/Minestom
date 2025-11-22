@@ -41,7 +41,7 @@ public class SendablePacketTest {
         var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet,
                 MinecraftServer.getCompressionThreshold());
         var cachedBuffer = cached.body(ConnectionState.PLAY);
-        assertTrue(NetworkBuffer.equals(buffer, cachedBuffer));
+        assertTrue(NetworkBuffer.contentEquals(buffer, cachedBuffer));
         // May fail in the very unlikely case where soft references are cleared
         // Rare enough to make this test worth it
         assertSame(cached.body(ConnectionState.PLAY), cachedBuffer);

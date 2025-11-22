@@ -5,7 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
-public record ClientChatSessionUpdatePacket(ChatSession chatSession) implements ClientPacket {
+public record ClientChatSessionUpdatePacket(ChatSession chatSession) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientChatSessionUpdatePacket> SERIALIZER = NetworkBufferTemplate.template(
             ChatSession.SERIALIZER, ClientChatSessionUpdatePacket::chatSession,
             ClientChatSessionUpdatePacket::new

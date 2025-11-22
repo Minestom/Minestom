@@ -216,7 +216,7 @@ public final class LoginListener {
         }
     }
 
-    public static void configAckListener(ClientConfigurationAckPacket packet, Player player) {
+    public static void configAckListener(ClientConfigurationAckPacket ignored, Player player) {
         executeConfig(player, false);
     }
 
@@ -224,7 +224,7 @@ public final class LoginListener {
         player.getPlayerConnection().receiveKnownPacksResponse(packet.entries());
     }
 
-    public static void finishConfigListener(ClientFinishConfigurationPacket packet, Player player) {
+    public static void finishConfigListener(ClientFinishConfigurationPacket ignored, Player player) {
         MinecraftServer.getConnectionManager().transitionConfigToPlay(player);
     }
 
