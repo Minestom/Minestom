@@ -292,7 +292,7 @@ public class PlayerIntegrationTest {
     }
 
     @Test
-    public void playerInfoUpdateEventTest(Env env) {
+    public void playerInfoUpdateEvent(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0));

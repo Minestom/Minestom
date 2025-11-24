@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -49,6 +50,7 @@ public class PlayerInfoUpdateEvent implements PlayerEvent, CancellableEvent {
      * Returns the effective recipients for this event. This method is for internal use only.
      * @return an unmodifiable collection of players
      */
+    @ApiStatus.Internal
     public Collection<Player> getEffectiveRecipients() {
         return Collections.unmodifiableCollection(recipients != null ? recipients : originalRecipients);
     }
