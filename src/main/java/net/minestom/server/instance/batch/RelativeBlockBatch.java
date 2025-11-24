@@ -123,8 +123,7 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    @Nullable
-    public AbsoluteBlockBatch apply(Instance instance, int x, int y, int z, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback) {
+    public @Nullable AbsoluteBlockBatch apply(Instance instance, int x, int y, int z, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback) {
         return apply(instance, x, y, z, callback, true);
     }
 
