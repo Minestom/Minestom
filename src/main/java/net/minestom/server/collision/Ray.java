@@ -35,7 +35,7 @@ public record Ray(
      * @param vector the ray's path, which can have any nonzero length
      */
     public Ray(Point origin, Vec vector) {
-        Check.stateCondition(vector.isZero(), "Ray may not have zero length");
+        Check.argCondition(vector.isZero(), "Ray may not have zero length");
         Vec normalized = vector.normalize();
         this(origin, normalized, vector.length(), Vec.ONE.div(normalized));
     }
@@ -72,6 +72,12 @@ public record Ray(
                     (int) Math.signum(exitT - o.exitT);
         }
 
+        /**
+         * Creates a copy of this intersection with the specified hit object
+         * @param object the new object
+         * @return a new intersection
+         * @param <R> the type of the hit object
+         */
         public <R> Intersection<R> withObject(R object) {
             return new Intersection<>(t, point, normal, exitT, exitPoint, exitNormal, object);
         }
