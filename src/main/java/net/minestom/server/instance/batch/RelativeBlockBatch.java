@@ -112,8 +112,6 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
         return apply(instance, position.blockX(), position.blockY(), position.blockZ(), callback);
     }
 
-
-
     /**
      * Applies this batch to the given instance at the given position.
      *
