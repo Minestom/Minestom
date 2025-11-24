@@ -87,9 +87,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    @Nullable
     @Override
-    public ChunkBatch apply(Instance instance, @Nullable ChunkCallback callback) {
+    public @Nullable ChunkBatch apply(Instance instance, @Nullable ChunkCallback callback) {
         return apply(instance, 0, 0, callback);
     }
 
