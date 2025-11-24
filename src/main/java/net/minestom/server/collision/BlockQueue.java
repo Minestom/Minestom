@@ -12,7 +12,14 @@ import java.util.function.BiPredicate;
  * <p>
  * Use {@link Ray#blockQueue} to create.
  */
-public class BlockQueue extends ArrayDeque<Ray.Intersection<Block>> {
+public final class BlockQueue extends ArrayDeque<Ray.Intersection<Block>> {
+
+    /**
+     * A predicate that passes if two block intersections have the same block type, ignoring state.
+     */
+    public final static BiPredicate<Ray.Intersection<Block>, Ray.Intersection<Block>> SAME_BLOCK_TYPE =
+            (i1, i2) -> i1.object().compare(i2.object());
+
     private final Iterator<Collection<Ray.Intersection<Block>>> refiller;
 
     /**
@@ -22,8 +29,8 @@ public class BlockQueue extends ArrayDeque<Ray.Intersection<Block>> {
      *                 {@link Ray#blockQueue(Block.Getter)} can handle this automatically
      */
     public BlockQueue(Iterator<Collection<Ray.Intersection<Block>>> refiller) {
-        super();
         this.refiller = refiller;
+        super();
     }
 
     /**
@@ -39,7 +46,7 @@ public class BlockQueue extends ArrayDeque<Ray.Intersection<Block>> {
 
     /**
      * Keep refilling until something is added or the refiller cannot add anything more.
-     * @return number of entries added, zero if refiller does not have a next element
+     * @return number of entries added, zero if the refiller does not have a next element
      */
     public int refillSome() {
         while (refiller.hasNext()) {

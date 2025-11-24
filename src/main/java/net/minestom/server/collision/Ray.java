@@ -114,7 +114,7 @@ public record Ray(
      * @return an {@link Intersection} if one is found between this ray and the shape, and null otherwise
      * @param <S> any Shape
      */
-    public <S extends Shape> @Nullable Intersection<S> cast(S shape, Vec offset) {
+    public <S extends Shape> @Nullable Intersection<S> cast(S shape, Point offset) {
         Vec bMin = shape.relativeStart().asVec().sub(origin).add(offset);
         Vec bMax = shape.relativeEnd().asVec().sub(origin).add(offset);
         Vec v1 = bMin.mul(inverse);
@@ -152,7 +152,7 @@ public record Ray(
     /**
      * Check if this ray hits some shape.
      * <p>
-     * If you're checking an {@link Entity}, use {@link Ray#cast(Shape, Vec)} with its position as a vector.
+     * If you're checking an {@link Entity}, use {@link Ray#cast(Shape, Point)} with its position.
      * @param shape the shape to check against
      * @return an {@link Intersection} if one is found between this ray and the shape, and null otherwise
      * @param <S> any Shape - for example, a {@link BoundingBox}
@@ -169,7 +169,7 @@ public record Ray(
      * @return a list of results, possibly empty
      * @param <S> any Shape - for example, an {@link net.minestom.server.entity.Entity} or {@link BoundingBox}
      */
-    public <S extends Shape> List<Intersection<S>> cast(Collection<S> shapes) {
+    public <S extends Shape> List<Intersection<S>> cast(Collection<? extends S> shapes) {
         ArrayList<Intersection<S>> result = new ArrayList<>(shapes.size());
         for (S e: shapes) {
             Intersection<S> r = cast(e);
@@ -184,7 +184,7 @@ public record Ray(
      * @return a list of results, possibly empty
      * @param <S> any Shape - for example, a {@link BoundingBox}
      */
-    public <S extends Shape> List<Intersection<S>> castSorted(Collection<S> shapes) {
+    public <S extends Shape> List<Intersection<S>> castSorted(Collection<? extends S> shapes) {
         ArrayList<Intersection<S>> result = new ArrayList<>(shapes.size());
         for (S e: shapes) {
             Intersection<S> r = cast(e);
@@ -200,7 +200,7 @@ public record Ray(
      * @return the closest result or null if there is none
      * @param <S> any Shape - for example, a{@link BoundingBox}
      */
-    public <S extends Shape> @Nullable Intersection<S> findFirst(Collection<S> shapes) {
+    public <S extends Shape> @Nullable Intersection<S> findFirst(Collection<? extends S> shapes) {
         ArrayList<Intersection<S>> result = new ArrayList<>(shapes.size());
         for (S e: shapes) {
             Intersection<S> r = cast(e);
@@ -218,7 +218,7 @@ public record Ray(
      * @return a list of results, possibly empty
      * @param <E> any Entity - if you're using {@link net.minestom.server.instance.EntityTracker}, you might use {@link net.minestom.server.entity.Player}
      */
-    public <E extends Entity> List<Intersection<E>> entities(Collection<E> entities) {
+    public <E extends Entity> List<Intersection<E>> entities(Collection<? extends E> entities) {
         ArrayList<Intersection<E>> result = new ArrayList<>(entities.size());
         for (E e: entities) {
             Intersection<E> r = cast(e, e.getPosition().asVec());
@@ -233,7 +233,7 @@ public record Ray(
      * @return a list of results, possibly empty
      * @param <E> any Entity - if you're using {@link net.minestom.server.instance.EntityTracker}, you might use {@link net.minestom.server.entity.Player}
      */
-    public <E extends Entity> List<Intersection<E>> entitiesSorted(Collection<E> entities) {
+    public <E extends Entity> List<Intersection<E>> entitiesSorted(Collection<? extends E> entities) {
         ArrayList<Intersection<E>> result = new ArrayList<>(entities.size());
         for (E e: entities) {
             Intersection<E> r = cast(e, e.getPosition().asVec());
