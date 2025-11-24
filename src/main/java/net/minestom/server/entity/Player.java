@@ -326,7 +326,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         var infoUpdateEvent = new PlayerInfoUpdateEvent(this, PlayerInfoUpdateEvent.InfoUpdateType.UPDATE, MinecraftServer.getConnectionManager().getOnlinePlayers());
         EventDispatcher.callCancellable(infoUpdateEvent, () -> {
-            for (var player : infoUpdateEvent.getRecipients()) {
+            for (var player : infoUpdateEvent.getEffectiveRecipients()) {
                 if (player != this) {
                     sendPacket(player.getAddPlayerToList());
                     if (player.displayName != null) {
@@ -2416,6 +2416,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private void sendPlayerInfo(ServerPacket.Play packet, PlayerInfoUpdateEvent.InfoUpdateType type) {
         var event = new PlayerInfoUpdateEvent(this, type, MinecraftServer.getConnectionManager().getOnlinePlayers());
 
-        EventDispatcher.callCancellable(event, () -> PacketSendingUtils.sendGroupedPacket(event.getRecipients(), packet));
+        EventDispatcher.callCancellable(event, () -> PacketSendingUtils.sendGroupedPacket(event.getEffectiveRecipients(), packet));
     }
 }
