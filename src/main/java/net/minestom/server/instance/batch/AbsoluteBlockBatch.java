@@ -96,34 +96,9 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    @Nullable
-    public AbsoluteBlockBatch apply(Instance instance, @Nullable Runnable callback) {
-        return apply(instance, callback != null ? (ignored) -> callback.run() : null, true);
-    }
-
-    /**
-     * Applies this batch to the given instance.
-     *
-     * @param instance The instance in which the batch should be applied
-     * @param callback The callback to be executed when the batch is applied
-     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
-     */
     @Override
     public @Nullable Batch<Consumer<AbsoluteBlockBatch>> apply(Instance instance, @Nullable Consumer<AbsoluteBlockBatch> callback) {
         return apply(instance, callback, true);
-    }
-
-    /**
-     * Applies this batch to the given instance, and execute the callback immediately when the
-     * blocks have been applied, in an unknown thread.
-     *
-     * @param instance The instance in which the batch should be applied
-     * @param callback The callback to be executed when the batch is applied
-     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
-     */
-    @Nullable
-    public AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Runnable callback) {
-        return apply(instance, callback != null ? (ignored) -> callback.run() : null, false);
     }
 
     /**
