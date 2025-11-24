@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * A {@link Batch} which can be used when changes are required across chunk borders,
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @see Batch
  * @see RelativeBlockBatch
  */
-public class AbsoluteBlockBatch implements Batch<Runnable> {
+public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
 
     // In the form of <Chunk Index, Batch>
     private final Long2ObjectMap<ChunkBatch> chunkBatchesMap = new Long2ObjectOpenHashMap<>();
@@ -95,8 +96,20 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    @Override
+    @Nullable
     public AbsoluteBlockBatch apply(Instance instance, @Nullable Runnable callback) {
+        return apply(instance, callback != null ? (ignored) -> callback.run() : null, true);
+    }
+
+    /**
+     * Applies this batch to the given instance.
+     *
+     * @param instance The instance in which the batch should be applied
+     * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     */
+    @Override
+    public @Nullable Batch<Consumer<AbsoluteBlockBatch>> apply(Instance instance, @Nullable Consumer<AbsoluteBlockBatch> callback) {
         return apply(instance, callback, true);
     }
 
@@ -108,7 +121,21 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
+    @Nullable
     public AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Runnable callback) {
+        return apply(instance, callback != null ? (ignored) -> callback.run() : null, false);
+    }
+
+    /**
+     * Applies this batch to the given instance, and execute the callback immediately when the
+     * blocks have been applied, in an unknown thread.
+     *
+     * @param instance The instance in which the batch should be applied
+     * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     */
+    @Nullable
+    public AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Consumer<AbsoluteBlockBatch> callback) {
         return apply(instance, callback, false);
     }
 
@@ -121,7 +148,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      *                     Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    protected AbsoluteBlockBatch apply(Instance instance, @Nullable Runnable callback, boolean safeCallback) {
+    @Nullable
+    protected AbsoluteBlockBatch apply(Instance instance, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback, boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
 
         final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch(inverseOption) : null;
@@ -145,9 +173,9 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
                         }
                         if (callback != null) {
                             if (safeCallback) {
-                                instance.scheduleNextTick(inst -> callback.run());
+                                instance.scheduleNextTick(inst -> callback.accept(inverse));
                             } else {
-                                callback.run();
+                                callback.accept(inverse);
                             }
                         }
 

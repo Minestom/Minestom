@@ -87,6 +87,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
+    @Nullable
     @Override
     public ChunkBatch apply(Instance instance, @Nullable ChunkCallback callback) {
         return apply(instance, 0, 0, callback);
@@ -101,6 +102,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param callback The callback to be executed when the batch is applied.
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
+    @Nullable
     public ChunkBatch apply(Instance instance, int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
@@ -119,6 +121,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
+    @Nullable
     public ChunkBatch apply(Instance instance, Chunk chunk, @Nullable ChunkCallback callback) {
         return apply(instance, chunk, callback, true);
     }
@@ -132,6 +135,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
+    @Nullable
     public ChunkBatch unsafeApply(Instance instance, Chunk chunk, @Nullable ChunkCallback callback) {
         return apply(instance, chunk, callback, false);
     }
@@ -146,6 +150,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      *                     Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
+    @Nullable
     protected ChunkBatch apply(Instance instance,
                                Chunk chunk, @Nullable ChunkCallback callback,
                                boolean safeCallback) {

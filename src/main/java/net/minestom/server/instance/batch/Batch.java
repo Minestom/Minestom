@@ -68,4 +68,5 @@ public interface Batch<C> extends Block.Setter {
      */
     @Nullable
     Batch<C> apply(Instance instance, @Nullable C callback);
+
 }
