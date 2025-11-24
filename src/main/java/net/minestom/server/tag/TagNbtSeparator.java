@@ -2,6 +2,7 @@ package net.minestom.server.tag;
 
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.utils.nbt.BinaryTagUtil;
+import net.minestom.server.ServerFlag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,10 +54,16 @@ final class TagNbtSeparator {
             Tag tag = tagFunction.apply(key);
             consumer.accept(makeEntry(path, tag, BinaryTagUtil.nbtValueFromTag(nbt)));
         } else if (nbt instanceof CompoundBinaryTag nbtCompound) {
-            for (var ent : nbtCompound) {
-                var newPath = new ArrayList<>(path);
-                newPath.add(key);
-                convert(newPath, ent.getKey(), ent.getValue(), consumer);
+            if (nbtCompound.isEmpty()) {
+                if (ServerFlag.SERIALIZE_EMPTY_COMPOUND || path.isEmpty()) {
+                    consumer.accept(makeEntry(path, Tag.NBT(key), nbt));
+                }
+            } else {
+                for (var ent : nbtCompound) {
+                    var newPath = new ArrayList<>(path);
+                    newPath.add(key);
+                    convert(newPath, ent.getKey(), ent.getValue(), consumer);
+                }
             }
         } else if (nbt instanceof ListBinaryTag nbtList) {
             tagFunction = SUPPORTED_TYPES.get(nbtList.elementType());
