@@ -146,8 +146,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      *                     Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    @Nullable
-    protected ChunkBatch apply(Instance instance,
+    protected @Nullable ChunkBatch apply(Instance instance,
                                Chunk chunk, @Nullable ChunkCallback callback,
                                boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
