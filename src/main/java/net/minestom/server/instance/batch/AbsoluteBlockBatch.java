@@ -110,8 +110,7 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    @Nullable
-    public AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Consumer<AbsoluteBlockBatch> callback) {
+    public @Nullable AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Consumer<AbsoluteBlockBatch> callback) {
         return apply(instance, callback, false);
     }
 
