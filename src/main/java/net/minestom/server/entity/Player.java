@@ -323,7 +323,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // FIXME: when using Geyser, this line remove the skin of the client
         sendPlayPacket(getAddPlayerToList());
 
-        var infoUpdateEvent = new PlayerInfoUpdateEvent(this, PlayerInfoUpdateEvent.InfoUpdateType.UPDATE, (Set<Player>) MinecraftServer.getConnectionManager().getOnlinePlayers());
+        var infoUpdateEvent = new PlayerInfoUpdateEvent(this, PlayerInfoUpdateEvent.InfoUpdateType.UPDATE, new HashSet<>(MinecraftServer.getConnectionManager().getOnlinePlayers()));
         EventDispatcher.callCancellable(infoUpdateEvent, () -> {
             for (var player : infoUpdateEvent.getRecipients()) {
                 if (player != this) {
@@ -2411,7 +2411,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     private void sendPlayPacket(ServerPacket.Play packet, PlayerInfoUpdateEvent.InfoUpdateType type) {
-        var event = new PlayerInfoUpdateEvent(this, type, (Set<Player>) MinecraftServer.getConnectionManager().getOnlinePlayers());
+        var event = new PlayerInfoUpdateEvent(this, type, new HashSet<>(MinecraftServer.getConnectionManager().getOnlinePlayers()));
 
         EventDispatcher.callCancellable(event, () -> {
             for (Player recipient : event.getRecipients()) {
