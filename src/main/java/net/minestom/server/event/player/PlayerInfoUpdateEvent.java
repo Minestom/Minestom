@@ -4,6 +4,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,10 +19,10 @@ public class PlayerInfoUpdateEvent implements PlayerEvent, CancellableEvent {
 
     private boolean cancelled;
 
-    public PlayerInfoUpdateEvent(Player player, InfoUpdateType type, Set<Player> recipients) {
+    public PlayerInfoUpdateEvent(Player player, InfoUpdateType type, Collection<Player> recipients) {
         this.player = player;
         this.type = type;
-        this.recipients = recipients;
+        this.recipients = new HashSet<>(recipients);
     }
 
     @Override
