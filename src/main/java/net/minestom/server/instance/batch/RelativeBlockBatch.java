@@ -154,8 +154,7 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @param safeCallback If true, the callback will be executed in the next instance update. Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    @Nullable
-    protected AbsoluteBlockBatch apply(Instance instance, int x, int y, int z, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback, boolean safeCallback) {
+    protected @Nullable AbsoluteBlockBatch apply(Instance instance, int x, int y, int z, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback, boolean safeCallback) {
         return this.toAbsoluteBatch(x, y, z).apply(instance, callback, safeCallback);
     }
 
