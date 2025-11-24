@@ -97,7 +97,8 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Override
-    public @Nullable Batch<Consumer<AbsoluteBlockBatch>> apply(Instance instance, @Nullable Consumer<AbsoluteBlockBatch> callback) {
+    @Nullable
+    public Batch<Consumer<AbsoluteBlockBatch>> apply(Instance instance, @Nullable Consumer<AbsoluteBlockBatch> callback) {
         return apply(instance, callback, true);
     }
 
