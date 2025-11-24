@@ -6,6 +6,10 @@ import net.minestom.server.event.trait.PlayerEvent;
 
 import java.util.Set;
 
+/**
+ * Called when a player's information is updated or removed for a set of recipients.
+ * This event can be cancelled to prevent the update from occurring.
+ */
 public class PlayerInfoUpdateEvent implements PlayerEvent, CancellableEvent {
     private final Player player;
     private final InfoUpdateType type;
