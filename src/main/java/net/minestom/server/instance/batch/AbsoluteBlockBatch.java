@@ -123,8 +123,7 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      *                     Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    @Nullable
-    protected AbsoluteBlockBatch apply(Instance instance, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback, boolean safeCallback) {
+    protected @Nullable AbsoluteBlockBatch apply(Instance instance, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback, boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
 
         final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch(inverseOption) : null;
