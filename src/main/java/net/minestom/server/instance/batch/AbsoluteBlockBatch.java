@@ -9,6 +9,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -86,6 +87,20 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         } catch (InterruptedException e) {
             throw new RuntimeException("#awaitReady interrupted!", e);
         }
+    }
+
+    /**
+     * Gets the set of chunk indices that will be affected by applying this batch.
+     * <p>
+     * Each chunk index is a {@code long} value representing the unique identifier of a chunk,
+     * computed using {@link CoordConversion#chunkIndex(int, int)}.
+     *
+     * @return A set of chunk indices affected by this batch
+     */
+    @Override
+    @Contract(pure = true)
+    public Set<Long> getAffectedChunks() {
+        return new HashSet<>(chunkBatchesMap.keySet());
     }
 
     /**

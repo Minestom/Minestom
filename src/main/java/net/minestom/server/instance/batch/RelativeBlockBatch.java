@@ -3,6 +3,7 @@ package net.minestom.server.instance.batch;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
@@ -11,6 +12,10 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
 
 /**
  * A {@link Batch} which can be used when changes are required across chunk borders, and
@@ -79,6 +84,33 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         //final int block = (blockStateId << 16) | customBlockId;
         synchronized (blockIdMap) {
             this.blockIdMap.put(pos, block);
+        }
+    }
+
+    /**
+     * Removes the block at the specified position.
+     *
+     * @param x The x position of the block to remove
+     * @param y The y position of the block to remove
+     * @param z The z position of the block to remove
+     */
+    public void removeBlock(int x, int y, int z) {
+        if (firstEntry) return;
+
+        x -= offsetX;
+        y -= offsetY;
+        z -= offsetZ;
+
+        long pos = Short.toUnsignedLong((short)x);
+        pos = (pos << 16) | Short.toUnsignedLong((short)y);
+        pos = (pos << 16) | Short.toUnsignedLong((short)z);
+
+        synchronized (blockIdMap) {
+            this.blockIdMap.remove(pos);
+        }
+
+        if (blockIdMap.isEmpty()) {
+            firstEntry = true;
         }
     }
 
@@ -389,6 +421,73 @@ public class RelativeBlockBatch implements Batch<Runnable> {
     }
 
     /**
+     * Subtracts another batch from this batch, removing blocks at matching positions.
+     *
+     * @param other The other batch to subtract
+     * @return A new batch with blocks removed where the other batch has blocks
+     */
+    @Contract(pure = true)
+    public RelativeBlockBatch subtract(RelativeBlockBatch other) {
+        return subtractWithOffset(other, 0, 0, 0, null);
+    }
+
+    /**
+     * Subtracts another batch from this batch, removing blocks at matching positions and replacing them with a default block.
+     *
+     * @param other The other batch to subtract
+     * @param defaultBlock The block to set in place of removed blocks, or null to remove them
+     * @return A new batch with blocks removed or replaced where the other batch has blocks
+     */
+    @Contract(pure = true)
+    public RelativeBlockBatch subtract(RelativeBlockBatch other, @Nullable Block defaultBlock) {
+        return subtractWithOffset(other, 0, 0, 0, defaultBlock);
+    }
+
+    /**
+     * Subtracts another batch from this batch with an offset, removing blocks at matching positions.
+     *
+     * @param other The other batch to subtract
+     * @param dx The x offset to apply to the other batch's positions
+     * @param dy The y offset to apply to the other batch's positions
+     * @param dz The z offset to apply to the other batch's positions
+     * @return A new batch with blocks removed where the offset other batch has blocks
+     */
+    @Contract(pure = true)
+    public RelativeBlockBatch subtractWithOffset(RelativeBlockBatch other, int dx, int dy, int dz) {
+        return subtractWithOffset(other, dx, dy, dz, null);
+    }
+
+    /**
+     * Subtracts another batch from this batch with an offset, removing blocks at matching positions and replacing them with a default block.
+     *
+     * @param other The other batch to subtract
+     * @param dx The x offset to apply to the other batch's positions
+     * @param dy The y offset to apply to the other batch's positions
+     * @param dz The z offset to apply to the other batch's positions
+     * @param defaultBlock The block to set in place of removed blocks, or null to remove them
+     * @return A new batch with blocks removed or replaced where the offset other batch has blocks
+     */
+    @Contract(pure = true)
+    public RelativeBlockBatch subtractWithOffset(RelativeBlockBatch other, int dx, int dy, int dz, @Nullable Block defaultBlock) {
+        final RelativeBlockBatch subtracted = copy();
+
+        synchronized (other.blockIdMap) {
+            for (var entry : other.blockIdMap.long2ObjectEntrySet()) {
+                final long pos = entry.getLongKey();
+                final short relZ = (short) (pos & 0xFFFF);
+                final short relY = (short) ((pos >> 16) & 0xFFFF);
+                final short relX = (short) ((pos >> 32) & 0xFFFF);
+                final int absX = other.offsetX + relX + dx;
+                final int absY = other.offsetY + relY + dy;
+                final int absZ = other.offsetZ + relZ + dz;
+                if (defaultBlock == null) subtracted.removeBlock(absX, absY, absZ);
+                else subtracted.setBlock(absX, absY, absZ, defaultBlock);
+            }
+        }
+        return subtracted;
+    }
+
+    /**
      * Translates this batch by the specified offsets.
      *
      * @param dx The x offset to apply
@@ -411,6 +510,29 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         }
         return translated;
     }
+
+    /**
+     * Transforms this batch by applying a function to each block.
+     *
+     * @param transformer The function to apply to each block
+     * @return A new transformed batch
+     */
+    @Contract(pure = true)
+    public RelativeBlockBatch transform(Function<Block, Block> transformer) {
+        final RelativeBlockBatch transformed = new RelativeBlockBatch(this.options);
+        synchronized (blockIdMap) {
+            for (var entry : blockIdMap.long2ObjectEntrySet()) {
+                final long pos = entry.getLongKey();
+                final short relZ = (short) (pos & 0xFFFF);
+                final short relY = (short) ((pos >> 16) & 0xFFFF);
+                final short relX = (short) ((pos >> 32) & 0xFFFF);
+                final Block block = entry.getValue();
+                transformed.setBlock(offsetX + relX, offsetY + relY, offsetZ + relZ, transformer.apply(block));
+            }
+        }
+        return transformed;
+    }
+
 
     /**
      * Creates a copy of this batch.
@@ -474,6 +596,51 @@ public class RelativeBlockBatch implements Batch<Runnable> {
             }
         }
         return new BoundingBox(new Vec(minX, minY, minZ), new Vec(maxX + 1, maxY + 1, maxZ + 1));
+    }
+
+    /**
+     * Gets the set of chunk indices that will be affected by applying this batch at the origin (0, 0, 0) of the instance.
+     * <p>
+     * Each chunk index is a {@code long} value representing the unique identifier of a chunk,
+     * computed using {@link CoordConversion#chunkIndex(int, int)}.
+     *
+     * @return A set of chunk indices affected by this batch
+     */
+    @Override
+    @Contract(pure = true)
+    public Set<Long> getAffectedChunks() {
+        return getAffectedChunks(0, 0);
+    }
+
+    /**
+     * Gets the set of chunk indices that will be affected by applying this batch.
+     * <p>
+     * Each chunk index is a {@code long} value representing the unique identifier of a chunk,
+     * computed using {@link CoordConversion#chunkIndex(int, int)}.
+     *
+     * @param x The x position of the origin of the batch
+     * @param z The z position of the origin of the batch
+     * @return A set of chunk indices affected by this batch
+     */
+    @Contract(pure = true)
+    public Set<Long> getAffectedChunks(int x, int z) {
+        Set<Long> affectedChunks = new HashSet<>();
+        synchronized (blockIdMap) {
+            for (var entry : blockIdMap.long2ObjectEntrySet()) {
+                final long pos = entry.getLongKey();
+                final short relZ = (short) (pos & 0xFFFF);
+                final short relX = (short) ((pos >> 32) & 0xFFFF);
+
+                final int finalX = x + offsetX + relX;
+                final int finalZ = z + offsetZ + relZ;
+
+                final int chunkX = CoordConversion.globalToChunk(finalX);
+                final int chunkZ = CoordConversion.globalToChunk(finalZ);
+                final long chunkIndex = CoordConversion.chunkIndex(chunkX, chunkZ);
+                affectedChunks.add(chunkIndex);
+            }
+        }
+        return affectedChunks;
     }
 
     /**
