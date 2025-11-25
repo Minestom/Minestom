@@ -99,7 +99,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * Applies this batch to the given instance.
      *
      * @param instance The instance in which the batch should be applied
-     * @param callback The callback to be executed when the batch is applied
+     * @param callback The callback to be executed when the batch is applied, even if the batch is empty
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Override
@@ -112,7 +112,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * blocks have been applied, in an unknown thread.
      *
      * @param instance The instance in which the batch should be applied
-     * @param callback The callback to be executed when the batch is applied
+     * @param callback The callback to be executed when the batch is applied, even if the batch is empty
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Runnable callback) {
@@ -123,7 +123,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * Applies this batch to the given instance, and execute the callback depending on safeCallback.
      *
      * @param instance     The instance in which the batch should be applied
-     * @param callback     The callback to be executed when the batch is applied
+     * @param callback     The callback to be executed when the batch is applied, even if the batch is empty
      * @param safeCallback If true, the callback will be executed in the next instance update.
      *                     Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
@@ -135,6 +135,22 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         synchronized (chunkBatchesMap) {
             AtomicInteger counter = new AtomicInteger();
             Set<Chunk> updated = ConcurrentHashMap.newKeySet();
+
+            if (chunkBatchesMap.isEmpty()) {
+                if (inverse != null) inverse.readyLatch.countDown();
+                if (instance instanceof InstanceContainer) {
+                    // FIXME: put method in Instance instead
+                    ((InstanceContainer) instance).refreshLastBlockChangeTime();
+                }
+                if (callback != null) {
+                    if (safeCallback) {
+                        instance.scheduleNextTick(inst -> callback.run());
+                    } else {
+                        callback.run();
+                    }
+                }
+                return inverse;
+            }
 
             for (var entry : Long2ObjectMaps.fastIterable(chunkBatchesMap)) {
                 final long chunkIndex = entry.getLongKey();
