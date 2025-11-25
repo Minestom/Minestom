@@ -180,12 +180,14 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             }
 
             final IntSet sections = new IntArraySet();
-            synchronized (blocks) {
-                for (var entry : blocks.int2ObjectEntrySet()) {
-                    final int position = entry.getIntKey();
-                    final Block block = entry.getValue();
-                    final int section = apply(chunk, position, block, inverse);
-                    sections.add(section);
+            synchronized (chunk) {
+                synchronized (blocks) {
+                    for (var entry : blocks.int2ObjectEntrySet()) {
+                        final int position = entry.getIntKey();
+                        final Block block = entry.getValue();
+                        final int section = apply(chunk, position, block, inverse);
+                        sections.add(section);
+                    }
                 }
             }
 
