@@ -2,7 +2,9 @@ package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.validate.Check;
@@ -371,6 +373,21 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         return merged;
     }
 
+    public RelativeBlockBatch translate(int dx, int dy, int dz) {
+        final RelativeBlockBatch translated = new RelativeBlockBatch(this.options);
+        synchronized (blockIdMap) {
+            for (var entry : blockIdMap.long2ObjectEntrySet()) {
+                final long pos = entry.getLongKey();
+                final short relZ = (short) (pos & 0xFFFF);
+                final short relY = (short) ((pos >> 16) & 0xFFFF);
+                final short relX = (short) ((pos >> 32) & 0xFFFF);
+                final Block block = entry.getValue();
+                translated.setBlock(offsetX + relX + dx, offsetY + relY + dy, offsetZ + relZ + dz, block);
+            }
+        }
+        return translated;
+    }
+
     /**
      * Creates a copy of this batch.
      *
@@ -390,6 +407,36 @@ public class RelativeBlockBatch implements Batch<Runnable> {
             }
         }
         return copy;
+    }
+
+    public int getBlockCount() {
+        return blockIdMap.size();
+    }
+
+    public BoundingBox getBounds() {
+        if (blockIdMap.isEmpty()) {
+            return BoundingBox.ZERO;
+        }
+        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
+        synchronized (blockIdMap) {
+            for (var entry : blockIdMap.long2ObjectEntrySet()) {
+                final long pos = entry.getLongKey();
+                final short relZ = (short) (pos & 0xFFFF);
+                final short relY = (short) ((pos >> 16) & 0xFFFF);
+                final short relX = (short) ((pos >> 32) & 0xFFFF);
+                final int absX = offsetX + relX;
+                final int absY = offsetY + relY;
+                final int absZ = offsetZ + relZ;
+                minX = Math.min(minX, absX);
+                minY = Math.min(minY, absY);
+                minZ = Math.min(minZ, absZ);
+                maxX = Math.max(maxX, absX);
+                maxY = Math.max(maxY, absY);
+                maxZ = Math.max(maxZ, absZ);
+            }
+        }
+        return new BoundingBox(new Vec(minX, minY, minZ), new Vec(maxX + 1, maxY + 1, maxZ + 1));
     }
 
     /**
