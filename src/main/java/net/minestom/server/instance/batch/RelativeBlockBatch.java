@@ -246,6 +246,89 @@ public class RelativeBlockBatch implements Batch<Runnable> {
     }
 
     /**
+     * Mirrors this batch over the plane perpendicular to the X axis.
+     *
+     * @param origin The origin point to mirror around
+     * @return A new mirrored batch
+     */
+    public RelativeBlockBatch mirrorX(Point origin) {
+        return mirror(Axis.X, origin);
+    }
+
+    /**
+     * Mirrors this batch over the plane perpendicular to the Y axis.
+     *
+     * @param origin The origin point to mirror around
+     * @return A new mirrored batch
+     */
+    public RelativeBlockBatch mirrorY(Point origin) {
+        return mirror(Axis.Y, origin);
+    }
+
+    /**
+     * Mirrors this batch over the plane perpendicular to the Z axis.
+     *
+     * @param origin The origin point to mirror around
+     * @return A new mirrored batch
+     */
+    public RelativeBlockBatch mirrorZ(Point origin) {
+        return mirror(Axis.Z, origin);
+    }
+
+    /**
+     * Mirrors this batch over the plane perpendicular to the specified axis.
+     *
+     * @param axis The axis perpendicular to the mirror plane
+     * @param origin The origin point to mirror around
+     * @return A new mirrored batch
+     */
+    public RelativeBlockBatch mirror(Axis axis, Point origin) {
+        final RelativeBlockBatch mirrored = new RelativeBlockBatch(this.options);
+        final int originX = origin.blockX();
+        final int originY = origin.blockY();
+        final int originZ = origin.blockZ();
+
+        synchronized (blockIdMap) {
+            for (var entry : blockIdMap.long2ObjectEntrySet()) {
+                final long pos = entry.getLongKey();
+                final short relZ = (short) (pos & 0xFFFF);
+                final short relY = (short) ((pos >> 16) & 0xFFFF);
+                final short relX = (short) ((pos >> 32) & 0xFFFF);
+
+                final Block block = entry.getValue();
+
+                final int absX = offsetX + relX;
+                final int absY = offsetY + relY;
+                final int absZ = offsetZ + relZ;
+
+                final int newX, newY, newZ;
+                switch (axis) {
+                    case X -> {
+                        newX = 2 * originX - absX;
+                        newY = absY;
+                        newZ = absZ;
+                    }
+                    case Y -> {
+                        newX = absX;
+                        newY = 2 * originY - absY;
+                        newZ = absZ;
+                    }
+                    case Z -> {
+                        newX = absX;
+                        newY = absY;
+                        newZ = 2 * originZ - absZ;
+                    }
+                    default -> throw new IllegalArgumentException("Invalid axis: " + axis);
+                }
+
+                mirrored.setBlock(newX, newY, newZ, block);
+            }
+        }
+
+        return mirrored;
+    }
+
+    /**
      * Creates a copy of this batch.
      *
      * @return A new batch with the same blocks
