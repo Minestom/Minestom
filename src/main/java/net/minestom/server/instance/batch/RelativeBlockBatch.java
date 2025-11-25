@@ -329,6 +329,49 @@ public class RelativeBlockBatch implements Batch<Runnable> {
     }
 
     /**
+     * Merges this batch with another batch, starting with a copy of this batch and then
+     * adding blocks from the other batch, allowing the other batch's blocks to overwrite
+     * any conflicts.
+     *
+     * @param other The other batch to merge with
+     * @return A new merged batch
+     */
+    public RelativeBlockBatch mergeWith(RelativeBlockBatch other) {
+        return mergeWithOffset(other, 0, 0, 0);
+    }
+
+    /**
+     * Merges this batch with another batch, starting with a copy of this batch and then
+     * adding blocks from the other batch translated by the specified offset vector.
+     * Blocks from the other batch overwrite any conflicts.
+     *
+     * @param other The other batch to merge with
+     * @param dx The x offset to apply to the other batch's blocks
+     * @param dy The y offset to apply to the other batch's blocks
+     * @param dz The z offset to apply to the other batch's blocks
+     * @return A new merged batch
+     */
+    public RelativeBlockBatch mergeWithOffset(RelativeBlockBatch other, int dx, int dy, int dz) {
+        final RelativeBlockBatch merged = copy();
+
+        synchronized (other.blockIdMap) {
+            for (var entry : other.blockIdMap.long2ObjectEntrySet()) {
+                final long pos = entry.getLongKey();
+                final short relZ = (short) (pos & 0xFFFF);
+                final short relY = (short) ((pos >> 16) & 0xFFFF);
+                final short relX = (short) ((pos >> 32) & 0xFFFF);
+                final Block block = entry.getValue();
+                final int absX = other.offsetX + relX + dx;
+                final int absY = other.offsetY + relY + dy;
+                final int absZ = other.offsetZ + relZ + dz;
+                merged.setBlock(absX, absY, absZ, block);
+            }
+        }
+
+        return merged;
+    }
+
+    /**
      * Creates a copy of this batch.
      *
      * @return A new batch with the same blocks
