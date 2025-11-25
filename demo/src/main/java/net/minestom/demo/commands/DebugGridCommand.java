@@ -45,7 +45,7 @@ public class DebugGridCommand extends Command {
         relativeBlockBatch.apply(player.getInstance(), context.get(center).from(player), (inverse) -> {
             if(!replace)return;
             player.getInstance().scheduler().scheduleTask(()->{
-                if(inverse == null)return;
+                if (inverse == null) return;
                 inverse.apply(player.getInstance(), null);
             }, TaskSchedule.seconds(1), TaskSchedule.stop());
         });
