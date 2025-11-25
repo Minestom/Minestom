@@ -11,6 +11,7 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -191,6 +192,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     /**
      * Applies this batch in the current thread, executing the callback upon completion.
      */
+    @ApiStatus.Internal
     private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkBatch inverse,
                                    @Nullable ChunkCallback callback, boolean safeCallback) {
         try {
@@ -212,12 +214,14 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             }
 
             final IntSet sections = new IntArraySet();
-            synchronized (blocks) {
-                for (var entry : blocks.int2ObjectEntrySet()) {
-                    final int position = entry.getIntKey();
-                    final Block block = entry.getValue();
-                    final int section = apply(chunk, position, block, inverse);
-                    sections.add(section);
+            synchronized (chunk) {
+                synchronized (blocks) {
+                    for (var entry : blocks.int2ObjectEntrySet()) {
+                        final int position = entry.getIntKey();
+                        final Block block = entry.getValue();
+                        final int section = apply(chunk, position, block, inverse);
+                        sections.add(section);
+                    }
                 }
             }
 
