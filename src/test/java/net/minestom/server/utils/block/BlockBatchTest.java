@@ -4,7 +4,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.AbsoluteBlockBatch;
 import net.minestom.server.instance.batch.BatchOption;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.Material;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Assertions;
@@ -14,8 +13,6 @@ import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
 @EnvTest
 public class BlockBatchTest {
 
@@ -23,76 +20,83 @@ public class BlockBatchTest {
     public void inverseConsumerNotNull(Env env) {
         Instance instance = env.createFlatInstance();
 
-        AbsoluteBlockBatch blockBatch = new AbsoluteBlockBatch(new BatchOption().setCalculateInverse(false));
-        assertDoesNotThrow(() -> blockBatch.setBlock(0, 0, 0, Block.SNOW));
+        AbsoluteBlockBatch blockBatch = new AbsoluteBlockBatch(new BatchOption().setCalculateInverse(true));
+        blockBatch.setBlock(0, 0, 0, Block.SNOW);
 
         CountDownLatch latch = new CountDownLatch(1);
-        Assertions.assertTrue(env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1)));
+        instance.loadChunk(0, 0).join();
         blockBatch.apply(instance, (inverse) -> {
-            Assertions.assertNull(inverse);
+            Assertions.assertNotNull(inverse);
             latch.countDown();
         });
-        blockBatch.awaitReady();
-
-        Assertions.assertDoesNotThrow(()->{
+        env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1));
+        try {
             Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS));
-        });
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     public void inverseConsumerNull(Env env) {
         Instance instance = env.createFlatInstance();
 
-        AbsoluteBlockBatch blockBatch = new AbsoluteBlockBatch(new BatchOption());
-        assertDoesNotThrow(() -> blockBatch.setBlock(0, 0, 0, Block.SNOW));
+        AbsoluteBlockBatch blockBatch = new AbsoluteBlockBatch(new BatchOption().setCalculateInverse(false));
+        blockBatch.setBlock(0, 0, 0, Block.SNOW);
 
         CountDownLatch latch = new CountDownLatch(1);
-        Assertions.assertTrue(env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1)));
-
+        instance.loadChunk(0, 0).join();
         blockBatch.apply(instance, (inverse) -> {
             Assertions.assertNull(inverse);
             latch.countDown();
         });
-        Assertions.assertDoesNotThrow(()->{
+        env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1));
+        try {
             Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS));
-        });
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    public void inverseUnsafeConsumerNotNull(Env env) {
+    public void inverseConsumerNotNullUnsafe(Env env) {
         Instance instance = env.createFlatInstance();
 
         AbsoluteBlockBatch blockBatch = new AbsoluteBlockBatch(new BatchOption().setCalculateInverse(true));
-        assertDoesNotThrow(() -> blockBatch.setBlock(0, 0, 0, Block.SNOW));
+        blockBatch.setBlock(0, 0, 0, Block.SNOW);
 
         CountDownLatch latch = new CountDownLatch(1);
-        Assertions.assertTrue(env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1)));
-
-        blockBatch.unsafeApply(instance, (inverse) ->{
-            latch.countDown();
+        instance.loadChunk(0, 0).join();
+        blockBatch.unsafeApply(instance, (inverse) -> {
             Assertions.assertNotNull(inverse);
+            latch.countDown();
         });
-        Assertions.assertDoesNotThrow(()->{
+        env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1));
+        try {
             Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS));
-        });
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    public void inverseUnsafeConsumerNull(Env env) {
+    public void inverseConsumerNullUnsafe(Env env) {
         Instance instance = env.createFlatInstance();
 
-        AbsoluteBlockBatch blockBatch = new AbsoluteBlockBatch(new BatchOption());
-        assertDoesNotThrow(() -> blockBatch.setBlock(0, 0, 0, Block.SNOW));
+        AbsoluteBlockBatch blockBatch = new AbsoluteBlockBatch(new BatchOption().setCalculateInverse(false));
+        blockBatch.setBlock(0, 0, 0, Block.SNOW);
 
         CountDownLatch latch = new CountDownLatch(1);
-        Assertions.assertTrue(env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1)));
-
-        blockBatch.unsafeApply(instance, (inverse) ->{
+        instance.loadChunk(0, 0).join();
+        blockBatch.unsafeApply(instance, (inverse) -> {
             Assertions.assertNull(inverse);
             latch.countDown();
         });
-        Assertions.assertDoesNotThrow(()->{
+        env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1));
+        try {
             Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS));
-        });
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
