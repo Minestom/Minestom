@@ -9,6 +9,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -95,6 +96,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param quarterTurns The number of 90-degree clockwise turns
      * @return A new rotated batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch rotateX(Point origin, int quarterTurns) {
         return rotate(Axis.X, origin, quarterTurns);
     }
@@ -106,6 +108,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param quarterTurns The number of 90-degree clockwise turns
      * @return A new rotated batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch rotateY(Point origin, int quarterTurns) {
         return rotate(Axis.Y, origin, quarterTurns);
     }
@@ -117,6 +120,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param quarterTurns The number of 90-degree clockwise turns
      * @return A new rotated batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch rotateZ(Point origin, int quarterTurns) {
         return rotate(Axis.Z, origin, quarterTurns);
     }
@@ -129,6 +133,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param quarterTurns The number of 90-degree clockwise turns
      * @return A new rotated batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch rotate(Axis axis, Point origin, int quarterTurns) {
         return rotate(axis, origin, quarterTurns * 90D);
     }
@@ -144,6 +149,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @return A new rotated batch
      */
     @ApiStatus.Experimental
+    @Contract(pure = true)
     public RelativeBlockBatch rotateX(Point origin, double degrees) {
         return rotate(Axis.X, origin, degrees);
     }
@@ -159,6 +165,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @return A new rotated batch
      */
     @ApiStatus.Experimental
+    @Contract(pure = true)
     public RelativeBlockBatch rotateY(Point origin, double degrees) {
         return rotate(Axis.Y, origin, degrees);
     }
@@ -174,6 +181,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @return A new rotated batch
      */
     @ApiStatus.Experimental
+    @Contract(pure = true)
     public RelativeBlockBatch rotateZ(Point origin, double degrees) {
         return rotate(Axis.Z, origin, degrees);
     }
@@ -190,6 +198,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @return A new rotated batch
      */
     @ApiStatus.Experimental
+    @Contract(pure = true)
     public RelativeBlockBatch rotate(Axis axis, Point origin, double degrees) {
         degrees = ((degrees % 360) + 360) % 360;
 
@@ -253,6 +262,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param origin The origin point to mirror around
      * @return A new mirrored batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch mirrorX(Point origin) {
         return mirror(Axis.X, origin);
     }
@@ -263,6 +273,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param origin The origin point to mirror around
      * @return A new mirrored batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch mirrorY(Point origin) {
         return mirror(Axis.Y, origin);
     }
@@ -273,6 +284,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param origin The origin point to mirror around
      * @return A new mirrored batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch mirrorZ(Point origin) {
         return mirror(Axis.Z, origin);
     }
@@ -284,6 +296,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param origin The origin point to mirror around
      * @return A new mirrored batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch mirror(Axis axis, Point origin) {
         final RelativeBlockBatch mirrored = new RelativeBlockBatch(this.options);
         final int originX = origin.blockX();
@@ -338,6 +351,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param other The other batch to merge with
      * @return A new merged batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch mergeWith(RelativeBlockBatch other) {
         return mergeWithOffset(other, 0, 0, 0);
     }
@@ -353,6 +367,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param dz The z offset to apply to the other batch's blocks
      * @return A new merged batch
      */
+    @Contract(pure = true)
     public RelativeBlockBatch mergeWithOffset(RelativeBlockBatch other, int dx, int dy, int dz) {
         final RelativeBlockBatch merged = copy();
 
@@ -373,6 +388,15 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         return merged;
     }
 
+    /**
+     * Translates this batch by the specified offsets.
+     *
+     * @param dx The x offset to apply
+     * @param dy The y offset to apply
+     * @param dz The z offset to apply
+     * @return A new translated batch
+     */
+    @Contract(pure = true)
     public RelativeBlockBatch translate(int dx, int dy, int dz) {
         final RelativeBlockBatch translated = new RelativeBlockBatch(this.options);
         synchronized (blockIdMap) {
@@ -393,6 +417,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      *
      * @return A new batch with the same blocks
      */
+    @Contract(pure = true)
     public RelativeBlockBatch copy() {
         final RelativeBlockBatch copy = new RelativeBlockBatch(this.options);
         synchronized (blockIdMap) {
@@ -409,10 +434,22 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         return copy;
     }
 
+    /**
+     * Returns the number of blocks in this batch.
+     *
+     * @return The block count
+     */
+    @Contract(pure = true)
     public int getBlockCount() {
         return blockIdMap.size();
     }
 
+    /**
+     * Returns the bounding box of this batch.
+     *
+     * @return The bounding box
+     */
+    @Contract(pure = true)
     public BoundingBox getBounds() {
         if (blockIdMap.isEmpty()) {
             return BoundingBox.ZERO;
@@ -512,6 +549,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      *
      * @return An absolute batch of this batch at the origin
      */
+    @Contract(pure = true)
     public AbsoluteBlockBatch toAbsoluteBatch() {
         return toAbsoluteBatch(0, 0, 0);
     }
@@ -524,6 +562,7 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param z The z position of the batch in the world
      * @return An absolute batch of this batch at (x, y, z)
      */
+    @Contract(pure = true)
     public AbsoluteBlockBatch toAbsoluteBatch(int x, int y, int z) {
         final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options);
         synchronized (blockIdMap) {
