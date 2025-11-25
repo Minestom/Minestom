@@ -167,7 +167,71 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      */
     @Contract(pure = true)
     public RelativeBlockBatch rotate(Axis axis, Point origin, int quarterTurns) {
-        return rotate(axis, origin, quarterTurns * 90D);
+        quarterTurns = ((quarterTurns % 4) + 4) % 4;
+
+        if (quarterTurns == 0) return copy();
+
+        final RelativeBlockBatch rotated = new RelativeBlockBatch(this.options);
+        final int originX = origin.blockX();
+        final int originY = origin.blockY();
+        final int originZ = origin.blockZ();
+
+        int cos;
+        switch (quarterTurns) {
+            case 1 -> cos = 0;
+            case 2 -> cos = -1;
+            case 3 -> cos = 0;
+            default -> cos = 1;
+        }
+        int sin;
+        switch (quarterTurns) {
+            case 1 -> sin = 1;
+            case 2 -> sin = 0;
+            case 3 -> sin = -1;
+            default -> sin = 0;
+        }
+
+        synchronized (blockIdMap) {
+            for (var entry : blockIdMap.long2ObjectEntrySet()) {
+                final long pos = entry.getLongKey();
+                final short relZ = (short) (pos & 0xFFFF);
+                final short relY = (short) ((pos >> 16) & 0xFFFF);
+                final short relX = (short) ((pos >> 32) & 0xFFFF);
+
+                final Block block = entry.getValue();
+
+                final int absX = offsetX + relX;
+                final int absY = offsetY + relY;
+                final int absZ = offsetZ + relZ;
+
+                final int dx = absX - originX;
+                final int dy = absY - originY;
+                final int dz = absZ - originZ;
+
+                final int newX, newY, newZ;
+                switch (axis) {
+                    case X -> {
+                        newX = dx;
+                        newY = dy * cos - dz * sin;
+                        newZ = dy * sin + dz * cos;
+                    }
+                    case Y -> {
+                        newX = dx * cos + dz * sin;
+                        newY = dy;
+                        newZ = -dx * sin + dz * cos;
+                    }
+                    case Z -> {
+                        newX = dx * cos - dy * sin;
+                        newY = dx * sin + dy * cos;
+                        newZ = dz;
+                    }
+                    default -> throw new IllegalArgumentException("Invalid axis: " + axis);
+                }
+
+                rotated.setBlock(newX + originX, newY + originY, newZ + originZ, block);
+            }
+        }
+        return rotated;
     }
 
     /**
@@ -235,14 +299,18 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         degrees = ((degrees % 360) + 360) % 360;
 
         if (degrees == 0) return copy();
+        if (degrees % 90 == 0) {
+            int quarterTurns = (int) (degrees / 90);
+            return rotate(axis, origin, quarterTurns);
+        }
 
         final RelativeBlockBatch rotated = new RelativeBlockBatch(this.options);
         final int originX = origin.blockX();
         final int originY = origin.blockY();
         final int originZ = origin.blockZ();
 
-        final double cos = Math.cos(degrees);
-        final double sin = Math.sin(degrees);
+        final double cos = Math.cos(Math.toRadians(degrees));
+        final double sin = Math.sin(Math.toRadians(degrees));
 
         synchronized (blockIdMap) {
             for (var entry : blockIdMap.long2ObjectEntrySet()) {
