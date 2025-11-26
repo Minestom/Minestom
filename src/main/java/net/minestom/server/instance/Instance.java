@@ -901,9 +901,31 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Gets the chunk view distance of this instance, which defaults to {@link ServerFlag#CHUNK_VIEW_DISTANCE}.
      *
+     * @deprecated Use {@link #chunkViewDistance()} instead
      * @return The chunk view distance of this instance
      */
+    @Deprecated(forRemoval = true)
     public int viewDistance() {
+        return this.chunkViewDistance;
+    }
+
+    /**
+     * Sets the chunk view distance of this instance
+     *
+     * @deprecated Use {@link #chunkViewDistance()} instead
+     * @param newViewDistance the new chunk view distance
+     */
+    @Deprecated(forRemoval = true)
+    public void viewDistance(int newViewDistance) {
+        this.chunkViewDistance = newViewDistance;
+    }
+
+    /**
+     * Gets the chunk view distance of this instance, which defaults to {@link ServerFlag#CHUNK_VIEW_DISTANCE}.
+     *
+     * @return The chunk view distance of this instance
+     */
+    public int chunkViewDistance() {
         return this.chunkViewDistance;
     }
 
@@ -912,7 +934,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @param newViewDistance the new chunk view distance
      */
-    public void viewDistance(int newViewDistance) {
+    public void chunkViewDistance(int newViewDistance) {
         this.chunkViewDistance = newViewDistance;
     }
 
