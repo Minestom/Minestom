@@ -3,6 +3,9 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.BlockFace;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.List;
 
 public interface Shape {
     boolean isOccluded(Shape shape, BlockFace face);
@@ -46,6 +49,15 @@ public interface Shape {
      */
     default boolean intersectEntity(Point src, Entity entity) {
         return intersectBox(src.sub(entity.getPosition()), entity.getBoundingBox());
+    }
+
+    /**
+     * Gets the bounding boxes for this shape. More complex shapes, like stairs, have more than one box.
+     *
+     * @return the bounding boxes for this shape
+     */
+    default @Unmodifiable List<BoundingBox> boundingBoxes() {
+        return List.of(new BoundingBox(relativeStart().asVec(), relativeEnd().asVec()));
     }
 
     /**

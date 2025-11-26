@@ -119,12 +119,7 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
         return hitBlock;
     }
 
-    /**
-     * Gets the bounding boxes for this shape. There will be more than one bounds for more complex shapes e.g.
-     * stairs.
-     *
-     * @return the bounding boxes for this shape
-     */
+    @Override
     public @Unmodifiable List<BoundingBox> boundingBoxes() {
         return shapeData.boundingBoxes;
     }
