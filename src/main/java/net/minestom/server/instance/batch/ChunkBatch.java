@@ -11,10 +11,14 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -78,6 +82,35 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         } catch (InterruptedException e) {
             throw new RuntimeException("#awaitReady interrupted!", e);
         }
+    }
+
+    /**
+     * Gets the set of chunk indices that will be affected by applying this batch at the origin (0, 0, 0) of the instance.
+     * <p>
+     * Each chunk index is a {@code long} value representing the unique identifier of a chunk,
+     * computed using {@link CoordConversion#chunkIndex(int, int)}.
+     *
+     * @return A set of chunk indices affected by this batch
+     */
+    @Override
+    @Contract(pure = true)
+    public Set<Long> getAffectedChunks() {
+        return getAffectedChunks(0, 0);
+    }
+
+    /**
+     * Gets the set of chunk indices that will be affected by applying this batch.
+     * <p>
+     * Each chunk index is a {@code long} value representing the unique identifier of a chunk,
+     * computed using {@link CoordConversion#chunkIndex(int, int)}.
+     *
+     * @param chunkX The x chunk coordinate of the origin of the batch
+     * @param chunkZ The z chunk coordinate of the origin of the batch
+     * @return A set of chunk indices affected by this batch
+     */
+    @Contract(pure = true)
+    public Set<Long> getAffectedChunks(int chunkX, int chunkZ) {
+        return Set.of(CoordConversion.chunkIndex(chunkX, chunkZ));
     }
 
     /**
@@ -180,12 +213,14 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             }
 
             final IntSet sections = new IntArraySet();
-            synchronized (blocks) {
-                for (var entry : blocks.int2ObjectEntrySet()) {
-                    final int position = entry.getIntKey();
-                    final Block block = entry.getValue();
-                    final int section = apply(chunk, position, block, inverse);
-                    sections.add(section);
+            synchronized (chunk) {
+                synchronized (blocks) {
+                    for (var entry : blocks.int2ObjectEntrySet()) {
+                        final int position = entry.getIntKey();
+                        final Block block = entry.getValue();
+                        final int section = apply(chunk, position, block, inverse);
+                        sections.add(section);
+                    }
                 }
             }
 
