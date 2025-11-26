@@ -299,7 +299,13 @@ final class EntityView {
         @Override
         public int size() {
             synchronized (mutex) {
-                return viewableOption.bitSet.size();
+                Instance instance = entity.getInstance();
+                if (instance == null) return 0;
+                int count = 0;
+                for (IntIterator it = viewableOption.bitSet.intIterator(); it.hasNext(); ) {
+                    if (instance.getEntityById(it.nextInt()) != null) count++;
+                }
+                return count;
             }
         }
 
