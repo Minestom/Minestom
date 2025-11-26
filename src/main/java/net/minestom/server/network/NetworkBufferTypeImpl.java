@@ -336,7 +336,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                 length = Math.min(length, this.length);
             }
             if (length == 0) return new byte[0];
-            assert length > 0 : "Invalid remaining: " + length;
+            if (length <= 0) throw new IllegalStateException("Invalid remaining: " + length);
 
             final int arrayLength = Math.toIntExact(length);
             final byte[] bytes = new byte[arrayLength];

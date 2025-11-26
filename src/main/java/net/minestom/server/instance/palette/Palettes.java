@@ -26,7 +26,7 @@ public final class Palettes {
     }
 
     public static void unpack(int[] out, long[] in, int bitsPerEntry) {
-        assert in.length != 0 : "unpack input array is zero";
+        if (in.length == 0) throw new IllegalArgumentException("unpack input array is zero");
 
         final double intsPerLong = Math.floor(64d / bitsPerEntry);
         final int intsPerLongCeil = (int) Math.ceil(intsPerLong);

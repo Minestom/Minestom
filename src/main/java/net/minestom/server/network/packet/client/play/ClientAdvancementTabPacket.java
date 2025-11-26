@@ -14,7 +14,7 @@ public record ClientAdvancementTabPacket(AdvancementAction action,
         public void write(NetworkBuffer buffer, ClientAdvancementTabPacket value) {
             buffer.write(NetworkBuffer.Enum(AdvancementAction.class), value.action);
             if (value.action == AdvancementAction.OPENED_TAB) {
-                assert value.tabIdentifier != null;
+                if (value.tabIdentifier == null) throw new NullPointerException("tabIdentifier cannot be null");
                 buffer.write(STRING, value.tabIdentifier);
             }
         }

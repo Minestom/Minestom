@@ -47,7 +47,7 @@ public class Tag<T> {
         @Nullable Supplier<@Nullable T> defaultValue,
         PathEntry @Nullable [] path,
         @Nullable UnaryOperator<T> copy, int listScope) {
-        assert index == INDEX_MAP.get(key);
+        if (index != INDEX_MAP.get(key)) throw new IllegalStateException("Index mismatch for key: " + key);
         this.index = index;
         this.key = key;
         this.readComparator = readComparator;

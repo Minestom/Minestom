@@ -159,7 +159,7 @@ public class AnvilLoader implements ChunkLoader {
                 try {
                     final long regionIndex = regionIndex(regionX, regionZ);
                     LongSet previousVersion = perRegionLoadedChunks.put(regionIndex, new LongOpenHashSet());
-                    assert previousVersion == null : "The AnvilLoader cache should not already have data for this region.";
+                    if (previousVersion != null) throw new IllegalStateException("The AnvilLoader cache should not already have data for this region.");
                     return new RegionFile(regionPath);
                 } catch (IOException e) {
                     MinecraftServer.getExceptionManager().handleException(e);
@@ -283,7 +283,7 @@ public class AnvilLoader implements ChunkLoader {
             Section section = loadedChunk.getSectionAt(y);
             final int stateId = section.blockPalette().get(localX, localY, localZ);
             Block block = Block.fromStateId(stateId);
-            assert block != null;
+            if (block == null) throw new IllegalStateException("Unknown block state id " + stateId);
             // Load the block handler if the id is present
             if (blockEntity.get("id") instanceof StringBinaryTag blockEntityId) {
                 final BlockHandler handler = MinecraftServer.getBlockManager().getHandlerOrDummy(blockEntityId.value());
@@ -408,14 +408,14 @@ public class AnvilLoader implements ChunkLoader {
                 // Retrieve block data
                 if (section.blockPalette().singleValue() != -1) {
                     final Block block = Block.fromStateId(section.blockPalette().singleValue());
-                    assert block != null;
+                    if (block == null) throw new IllegalStateException("Unknown block state id " + section.blockPalette().singleValue());
                     final CompoundBinaryTag blockState = blockStateNbt(block);
                     blockPaletteEntries.add(blockState);
                 } else {
                     section.blockPalette().getAll((x, y, z, value) -> {
                         Block block = chunk.getBlock(x, globalSectionY + y, z, Block.Getter.Condition.CACHED);
                         if (block == null) block = Block.fromStateId(value);
-                        assert block != null;
+                        if (block == null) throw new IllegalStateException("Unknown block state id " + value);
                         final CompoundBinaryTag blockState = blockStateNbt(block);
                         int blockPaletteIndex = blockPaletteIndices.indexOf(value);
                         if (blockPaletteIndex == -1) {
@@ -445,14 +445,14 @@ public class AnvilLoader implements ChunkLoader {
                 if (section.biomePalette().singleValue() != -1) {
                     final RegistryKey<Biome> biomeKey = MinecraftServer.getBiomeRegistry()
                             .getKey(section.biomePalette().singleValue());
-                    assert biomeKey != null;
+                    if (biomeKey == null) throw new IllegalStateException("Unknown biome id " + section.biomePalette().singleValue());
                     final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
                     biomePalette.add(biomeName);
                 } else {
                     section.biomePalette().getAll((x, y, z, value) -> {
                         int biomeIndex = x + y * 4 * 4 + z * 4;
                         final RegistryKey<Biome> biomeKey = MinecraftServer.getBiomeRegistry().getKey(value);
-                        assert biomeKey != null;
+                        if (biomeKey == null) throw new IllegalStateException("Unknown biome id " + value);
                         final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
                         int biomePaletteIndex = biomePalette.indexOf(biomeName);
                         if (biomePaletteIndex == -1) {

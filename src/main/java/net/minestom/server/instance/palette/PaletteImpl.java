@@ -238,7 +238,7 @@ final class PaletteImpl implements Palette {
                 }
             }
         }
-        assert index == maxSize();
+        if (index != maxSize()) throw new IllegalArgumentException("Supplied array size (" + index + ") does not match palette size (" + maxSize() + ")");
         // Update palette content
         if (fillValue < 0) {
             makeDirect();
@@ -269,7 +269,7 @@ final class PaletteImpl implements Palette {
             cache[index] = newValue;
             if (newValue != 0) count.setPlain(count.getPlain() + 1);
         });
-        assert arrayIndex.getPlain() == maxSize();
+        if (arrayIndex.getPlain() != maxSize()) throw new IllegalArgumentException("Supplied array size (" + arrayIndex.getPlain() + ") does not match palette size (" + maxSize() + ")");
         // Update palette content
         makeDirect();
         updateAll(cache);
@@ -600,7 +600,7 @@ final class PaletteImpl implements Palette {
 
     private void updateAll(int[] paletteValues) {
         final int size = maxSize();
-        assert paletteValues.length >= size;
+        if (paletteValues.length < size) throw new IllegalArgumentException("Supplied palette size (" + paletteValues.length + ") is smaller than palette size (" + size + ")");
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = 64 / bitsPerEntry;
         final long clear = (1L << bitsPerEntry) - 1L;

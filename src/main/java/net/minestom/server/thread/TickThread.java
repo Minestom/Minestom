@@ -68,7 +68,7 @@ public class TickThread extends MinestomThread {
         final ReentrantLock lock = this.lock;
         final long tickTime = TimeUnit.NANOSECONDS.toMillis(this.tickTimeNanos);
         for (ThreadDispatcherImpl.Partition entry : entries) {
-            assert entry.thread() == this;
+            if (entry.thread() != this) throw new IllegalStateException("Thread mismatch");
             final List<Tickable> elements = entry.elements();
             if (elements.isEmpty()) continue;
             for (Tickable element : elements) {
@@ -78,7 +78,7 @@ public class TickThread extends MinestomThread {
                     lock.lock();
                 }
                 try {
-                    assert assertElement(element);
+                    if (!assertElement(element)) throw new IllegalStateException("Element assigned to another thread: " + element);
                     element.tick(tickTime);
                 } catch (Throwable e) {
                     MinecraftServer.getExceptionManager().handleException(e);

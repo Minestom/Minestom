@@ -658,7 +658,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                         throw new RuntimeException(e);
                     }
                     scheduler.process();
-                    assert isDone();
+                    if (!isDone()) throw new IllegalStateException("Not completed yet");
                 }
                 return super.join();
             }

@@ -65,7 +65,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
                             for (var entry : stateProperties) {
                                 final var k = entry.getKey();
                                 final var v = (List<String>) entry.getValue();
-                                assert v.size() < MAX_VALUES;
+                                if (v.size() >= MAX_VALUES) throw new IllegalStateException("Too many values for property " + k);
                                 propertyTypes[i++] = new PropertyType(k, v);
                             }
                         } else {
@@ -86,7 +86,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
                             final String query = stateEntry.getKey();
                             final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                             final var propertyMap = BlockUtils.parseProperties(query);
-                            assert propertyTypes.length == propertyMap.size();
+                            if (propertyTypes.length != propertyMap.size()) throw new IllegalStateException("Invalid properties for block " + namespace);
                             long propertiesValue = 0;
                             for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
                                 final byte keyIndex = findKeyIndexThrow(propertyTypes, entry.getKey(), null);
@@ -147,7 +147,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     @Override
     public Block withProperty(String property, String value) {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
-        assert propertyTypes != null;
+        if (propertyTypes == null) throw new IllegalStateException("Block " + name() + " has no properties");
         final byte keyIndex = findKeyIndexThrow(propertyTypes, property, this);
         final byte valueIndex = findValueIndexThrow(propertyTypes[keyIndex], value, this);
         final long updatedProperties = updateIndex(propertiesArray, keyIndex, valueIndex);
@@ -158,7 +158,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     public Block withProperties(Map<String, String> properties) {
         if (properties.isEmpty()) return this;
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
-        assert propertyTypes != null;
+        if (propertyTypes == null) throw new IllegalStateException("Block " + name() + " has no properties");
         long updatedProperties = this.propertiesArray;
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             final byte keyIndex = findKeyIndexThrow(propertyTypes, entry.getKey(), this);
@@ -191,7 +191,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     @Override
     public @Unmodifiable Map<String, String> properties() {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
-        assert propertyTypes != null;
+        if (propertyTypes == null) throw new IllegalStateException("Block " + name() + " has no properties");
         final int length = propertyTypes.length;
         if (length == 0) return Map.of();
         String[] keys = new String[length];
@@ -270,7 +270,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     private Block compute(long updatedProperties) {
         if (updatedProperties == this.propertiesArray) return this;
         final BlockImpl block = possibleProperties().get(updatedProperties);
-        assert block != null;
+        if (block == null) throw new IllegalStateException("No block found for properties " + properties());
         // Reuse the same block instance if possible
         if (nbt == null && handler == null) return block;
         // Otherwise copy with the nbt and handler

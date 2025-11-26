@@ -83,9 +83,14 @@ public final class LoginListener {
             if (auth instanceof Auth.Bungee) {
                 // LEGACY FORWARDING
                 // Use game profile set during handshake
-                assert connection instanceof PlayerSocketConnection;
-                final GameProfile bungeeProfile = ((PlayerSocketConnection) connection).gameProfile();
-                assert bungeeProfile != null;
+                if (!(connection instanceof PlayerSocketConnection socketConnection)) {
+                    throw new IllegalStateException("Bungee forwarding only works with socket connections");
+                }
+                final GameProfile bungeeProfile = socketConnection.gameProfile();
+                if (bungeeProfile == null) {
+                    connection.kick(Component.text("Bungee forwarding data not found", NamedTextColor.RED));
+                    return;
+                }
                 gameProfile = new GameProfile(bungeeProfile.uuid(), packet.username(), bungeeProfile.properties());
             } else {
                 gameProfile = new GameProfile(packet.profileId(), packet.username());
@@ -206,7 +211,7 @@ public final class LoginListener {
         if (!(connection instanceof PlayerSocketConnection socketConnection))
             throw new UnsupportedOperationException("Only socket");
         final GameProfile gameProfile = socketConnection.gameProfile();
-        assert gameProfile != null;
+        if (gameProfile == null) throw new IllegalStateException("Game profile not set");
         try {
             final Player player = MinecraftServer.getConnectionManager().createPlayer(connection, gameProfile);
             executeConfig(player, true);

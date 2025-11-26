@@ -30,12 +30,12 @@ public final class ArrayUtils {
         for (T object : collection) {
             result[i++] = function.applyAsInt(object);
         }
-        assert i == size;
+        if (i != size) throw new IllegalStateException("Size mismatch");
         return result;
     }
 
     public static <K, V> Map<K, V> toMap(K[] keys, V[] values, int length) {
-        assert keys.length >= length && keys.length == values.length;
+        if (keys.length < length || keys.length != values.length) throw new IllegalArgumentException("Invalid length");
         return switch (length) {
             case 0 -> Map.of();
             case 1 -> Map.of(keys[0], values[0]);

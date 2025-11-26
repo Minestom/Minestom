@@ -15,11 +15,11 @@ public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
         public void write(NetworkBuffer buffer, StopSoundPacket value) {
             buffer.write(BYTE, value.flags());
             if (value.flags == 3 || value.flags == 1) {
-                assert value.source != null;
+                if (value.source == null) throw new NullPointerException("source cannot be null");
                 buffer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source));
             }
             if (value.flags == 2 || value.flags == 3) {
-                assert value.sound != null;
+                if (value.sound == null) throw new NullPointerException("sound cannot be null");
                 buffer.write(STRING, value.sound);
             }
         }

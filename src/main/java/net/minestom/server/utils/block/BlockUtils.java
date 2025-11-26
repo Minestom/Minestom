@@ -63,7 +63,7 @@ public class BlockUtils {
         if (query.length() == 2) return Map.of();
 
         final int entries = StringUtils.countMatches(query, ',') + 1;
-        assert entries > 0;
+        if (entries <= 1) throw new IllegalArgumentException("Invalid block properties query: " + query);
         String[] keys = new String[entries];
         String[] values = new String[entries];
         int entryCount = 0;

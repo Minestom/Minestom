@@ -341,6 +341,6 @@ public class DynamicChunk extends Chunk {
 
     @ApiStatus.Internal
     void assertLock() {
-        assert Thread.holdsLock(this) : "Chunk must be locked before access";
+        if (!Thread.holdsLock(this)) throw new IllegalStateException("Chunk must be locked before access");
     }
 }

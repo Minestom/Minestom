@@ -173,7 +173,7 @@ public final class ConnectionManager {
 
     @ApiStatus.Internal
     public Player createPlayer(PlayerConnection connection, GameProfile gameProfile) {
-        assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
+        if (!ServerFlag.INSIDE_TEST && !Thread.currentThread().isVirtual()) throw new IllegalStateException("Must be inside test or on virtual thread");
         final Player player = playerProvider.createPlayer(connection, gameProfile);
         this.connectionPlayerMap.put(connection, player);
         return player;
@@ -191,7 +191,7 @@ public final class ConnectionManager {
     }
 
     public GameProfile transitionLoginToConfig(PlayerConnection connection, GameProfile gameProfile) {
-        assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
+        if (!ServerFlag.INSIDE_TEST && !Thread.currentThread().isVirtual()) throw new IllegalStateException("Must be inside test or on virtual thread");
         // Compression
         if (connection instanceof PlayerSocketConnection socketConnection) {
             final int threshold = MinecraftServer.getCompressionThreshold();
@@ -226,7 +226,7 @@ public final class ConnectionManager {
      */
     @ApiStatus.Internal
     public void doConfiguration(Player player, boolean isFirstConfig) {
-        assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
+        if (!ServerFlag.INSIDE_TEST && !Thread.currentThread().isVirtual()) throw new IllegalStateException("Must be inside test or on virtual thread");
         if (isFirstConfig) {
             configurationPlayers.add(player);
             keepAlivePlayers.add(player);

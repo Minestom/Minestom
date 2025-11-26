@@ -13,7 +13,7 @@ public interface EntityInstanceEvent extends EntityEvent, InstanceEvent {
     @Override
     default Instance getInstance() {
         final Instance instance = getEntity().getInstance();
-        assert instance != null : "EntityInstanceEvent is only supported on events where the entity's instance is non-null!";
+        if (instance == null) throw new IllegalStateException("EntityInstanceEvent is only supported on events where the entity's instance is non-null!");
         return instance;
     }
 }

@@ -36,14 +36,14 @@ final class TagNbtSeparator {
     }
 
     static Entry separateSingle(String key, BinaryTag nbt) {
-        assert !(nbt instanceof CompoundBinaryTag);
+        if (nbt instanceof CompoundBinaryTag) throw new IllegalStateException("nbt must not be a CompoundBinaryTag");
         AtomicReference<Entry<?>> entryRef = new AtomicReference<>();
         convert(new ArrayList<>(), key, nbt, entry -> {
-            assert entryRef.getPlain() == null : "Multiple entries found for nbt tag: " + key + " -> " + nbt;
+            if (entryRef.getPlain() != null) throw new IllegalStateException("Multiple entries found for nbt tag: " + key + " -> " + nbt);
             entryRef.setPlain(entry);
         });
         var entry = entryRef.getPlain();
-        assert entry != null;
+        if (entry == null) throw new IllegalStateException("Entry must not be null");
         return entry;
     }
 

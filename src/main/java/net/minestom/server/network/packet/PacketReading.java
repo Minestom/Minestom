@@ -100,7 +100,7 @@ public final class PacketReading {
             if (buffer.readableBytes() == 0 && packets.isEmpty()) return result;
             switch (result) {
                 case Result.Success<T> success -> {
-                    assert success.packets().size() == 1;
+                    if (success.packets().size() != 1) throw new IllegalStateException("Expected 1 packet, got " + success.packets().size());
                     final ParsedPacket<T> parsedPacket = success.packets().getFirst();
                     packets.add(parsedPacket);
                     state = parsedPacket.nextState();

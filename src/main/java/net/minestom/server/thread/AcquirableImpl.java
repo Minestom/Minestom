@@ -34,7 +34,7 @@ final class AcquirableImpl<T> implements Acquirable<T> {
             return new AcquiredImpl<>(unwrap(), null);
         }
         ReentrantLock lock = enter(assignedThread);
-        assert assignedThread.lock().isHeldByCurrentThread();
+        if (!assignedThread.lock().isHeldByCurrentThread()) throw new IllegalStateException("Lock acquired but not held by current thread");
         return new AcquiredImpl<>(unwrap(), lock);
     }
 
@@ -61,7 +61,7 @@ final class AcquirableImpl<T> implements Acquirable<T> {
         }
         ReentrantLock lock = enter(assignedThread);
         try {
-            assert assignedThread.lock().isHeldByCurrentThread();
+            if (!assignedThread.lock().isHeldByCurrentThread()) throw new IllegalStateException("Lock acquired but not held by current thread");
             consumer.accept(unwrap());
         } finally {
             leave(lock);

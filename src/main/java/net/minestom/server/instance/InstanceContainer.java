@@ -345,7 +345,7 @@ public class InstanceContainer extends Instance {
 
             EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
             final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
-            assert future == completableFuture : "Invalid future: " + future;
+            if (future != completableFuture) throw new IllegalStateException("Invalid future: " + future);
             completableFuture.complete(chunk);
         };
         Supplier<Chunk> loaderSupplier = () -> {

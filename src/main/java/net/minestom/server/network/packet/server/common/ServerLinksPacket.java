@@ -32,7 +32,7 @@ public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Con
                 if (value.knownType != null) {
                     buffer.write(KnownLinkType.NETWORK_TYPE, value.knownType);
                 } else {
-                    assert value.customType != null;
+                    if (value.customType == null) throw new NullPointerException("customType cannot be null when knownType is null");
                     buffer.write(NetworkBuffer.COMPONENT, value.customType);
                 }
                 buffer.write(NetworkBuffer.STRING, value.link);

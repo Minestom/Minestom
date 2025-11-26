@@ -138,7 +138,7 @@ public record AdvancementsPacket(
                 buffer.write(NetworkBuffer.Enum(FrameType.class), value.frameType);
                 buffer.write(NetworkBuffer.INT, value.flags);
                 if ((value.flags & 0x1) != 0) {
-                    assert value.backgroundTexture != null;
+                    if (value.backgroundTexture == null) throw new NullPointerException("backgroundTexture cannot be null if the flag is set");
                     buffer.write(NetworkBuffer.STRING, value.backgroundTexture);
                 }
                 buffer.write(NetworkBuffer.FLOAT, value.x);

@@ -159,8 +159,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         @Override
         public void referenceUpdate(Point point, @Nullable EntityTracker tracker) {
             final Instance currentInstance = tracker != null ? instance : null;
-            assert currentInstance == null || currentInstance.getEntityTracker() == tracker :
-                    "EntityTracker does not match current instance";
+            if (currentInstance != null && currentInstance.getEntityTracker() != tracker) {
+                throw new IllegalStateException("EntityTracker does not match current instance");
+            }
             viewEngine.updateTracker(currentInstance, point);
         }
     };
@@ -1325,7 +1326,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
 
         final Chunk chunk = getChunk();
-        assert chunk != null;
+        if (chunk == null) throw new NullPointerException("Entity does not have a chunk");
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
             // Send relative 0 velocity to avoid affecting it in this case
             PacketViewableUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position,
@@ -1396,7 +1397,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
         // Handle chunk switch
         final Instance instance = getInstance();
-        assert instance != null;
+        if (instance == null) throw new IllegalStateException("Entity does not have an instance");
         instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();

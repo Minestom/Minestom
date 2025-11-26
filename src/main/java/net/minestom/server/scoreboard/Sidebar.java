@@ -512,13 +512,8 @@ public class Sidebar implements Scoreboard {
             @Override
             public void write(NetworkBuffer buffer, NumberFormat value) {
                 buffer.write(NetworkBuffer.Enum(FormatType.class), value.formatType);
-                if (value.formatType == FormatType.STYLED) {
-                    assert value.content != null;
-                    buffer.write(NetworkBuffer.COMPONENT, value.content);
-                } else if (value.formatType == FormatType.FIXED) {
-                    assert value.content != null;
-                    buffer.write(NetworkBuffer.COMPONENT, value.content);
-                }
+                if (value.content == null) throw new NullPointerException("content cannot be null");
+                buffer.write(NetworkBuffer.COMPONENT, value.content);
             }
 
             @Override

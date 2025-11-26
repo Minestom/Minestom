@@ -190,7 +190,9 @@ public final class PacketWriting {
             } catch (IndexOutOfBoundsException e) {
                 success = false;
             }
-            assert !success || buffer.writeIndex() > 0;
+            if (success && buffer.writeIndex() <= 0) {
+                throw new IllegalStateException("Buffer write index must be greater than 0 if packet was successfully written");
+            }
             // Poll the packet only if fully written
             if (success) {
                 // Packet fully written

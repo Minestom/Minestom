@@ -258,7 +258,7 @@ public final class RegistryData {
         private final Shape occlusionShape;
 
         private BlockEntry(String namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
-            assert parent == null || !main.asMap().isEmpty() : "BlockEntry cannot be empty if it has a parent";
+            if (parent != null && parent.blockEntityType() != null) Check.fail("BlockEntry cannot have a parent block entity type");
             this.key = parent != null ? parent.key : Key.key(namespace);
             this.id = fromParent(parent, BlockEntry::id, main, "id", Properties::getInt, null);
             this.stateId = fromParent(parent, BlockEntry::stateId, main, "stateId", Properties::getInt, 0); // Parent doesnt have stateId; so we default to 0

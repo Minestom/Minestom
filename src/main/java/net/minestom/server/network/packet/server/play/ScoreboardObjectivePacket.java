@@ -22,9 +22,9 @@ public record ScoreboardObjectivePacket(String objectiveName, byte mode,
             buffer.write(STRING, value.objectiveName);
             buffer.write(BYTE, value.mode);
             if (value.mode == 0 || value.mode == 2) {
-                assert value.objectiveValue != null;
+                if (value.objectiveValue == null) throw new NullPointerException("objectiveValue cannot be null");
                 buffer.write(COMPONENT, value.objectiveValue);
-                assert value.type != null;
+                if (value.type == null) throw new NullPointerException("type cannot be null");
                 buffer.write(VAR_INT, value.type.ordinal());
                 buffer.write(Sidebar.NumberFormat.SERIALIZER.optional(), value.numberFormat);
             }

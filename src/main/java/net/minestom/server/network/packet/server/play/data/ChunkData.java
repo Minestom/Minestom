@@ -48,7 +48,7 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte [] data,
 
                 buffer.write(BlockEntityType.NETWORK_TYPE, registry.blockEntityType());
                 final CompoundBinaryTag nbt = BlockUtils.extractClientNbt(block);
-                assert nbt != null;
+                if (nbt == null) throw new IllegalStateException("Block entity without NBT: " + block);
                 buffer.write(NBT, nbt); // block nbt
             }
         }

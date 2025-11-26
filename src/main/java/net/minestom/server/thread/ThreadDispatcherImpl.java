@@ -79,7 +79,7 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
                     if (partition == null) break;
                     // Update chunk's thread
                     Partition partitionEntry = partitions.get(partition);
-                    assert partitionEntry != null;
+                    if (partitionEntry == null) throw new IllegalStateException("Partition not found: " + partition);
                     final TickThread previous = partitionEntry.thread;
                     final TickThread next = retrieveThread(partition);
                     if (next != previous) {

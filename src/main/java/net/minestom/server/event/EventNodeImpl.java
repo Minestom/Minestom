@@ -276,7 +276,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     void invalidateEventsFor(EventNodeImpl<? super T> node) {
-        assert Thread.holdsLock(GLOBAL_CHILD_LOCK);
+        if (!Thread.holdsLock(GLOBAL_CHILD_LOCK)) {
+            throw new IllegalStateException("invalidateEventsFor must be called while holding GLOBAL_CHILD_LOCK");
+        }
         for (Class<? extends T> eventType : listenerMap.keySet()) {
             node.invalidateEvent(eventType);
         }
@@ -343,8 +345,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         @Override
         public void call(E event) {
-            assert !(event instanceof AsyncEvent) || Thread.currentThread().isVirtual() :
-                    "AsyncEvent must be called within a Virtual Thread, got " + Thread.currentThread();
+            if (event instanceof AsyncEvent && !Thread.currentThread().isVirtual()) {
+                throw new IllegalStateException("AsyncEvent must be called within a Virtual Thread, got " + Thread.currentThread());
+            }
             final Consumer<E> listener = updatedListener();
             if (listener == null) return;
             try {

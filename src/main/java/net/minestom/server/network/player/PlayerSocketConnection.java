@@ -150,7 +150,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                         } else {
                             // To be processed during the next player tick
                             final Player player = getPlayer();
-                            assert player != null;
+                            if (player == null) throw new IllegalStateException("Player cannot be null");
                             player.addPacketToQueue(packet);
                         }
                     } catch (Exception e) {
@@ -166,8 +166,9 @@ public class PlayerSocketConnection extends PlayerConnection {
             case PacketReading.Result.Failure<ClientPacket> failure -> {
                 // Resize for next read
                 final long requiredCapacity = failure.requiredCapacity();
-                assert requiredCapacity > readBuffer.capacity() :
-                        "New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.capacity();
+                if (requiredCapacity <= readBuffer.capacity()) {
+                    throw new IllegalStateException("New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.capacity());
+                }
                 readBuffer.resize(requiredCapacity);
             }
         }
@@ -432,10 +433,10 @@ public class PlayerSocketConnection extends PlayerConnection {
                     throw new RuntimeException(e);
                 }
             } else {
-                assert this.writeThread == Thread.currentThread(): "writeThread should be the current thread";
+                if (this.writeThread != Thread.currentThread()) throw new IllegalStateException("writeThread should be the current thread");
                 this.writeSignaled.set(false);
                 LockSupport.park(this);
-                assert this.packetQueue.peek() != null : "packet queue should not be empty";
+                if (this.packetQueue.isEmpty()) throw new IllegalStateException("packet queue should not be empty");
             }
         }
         if (!channel.isConnected()) throw new EOFException("Channel is closed");
