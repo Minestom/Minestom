@@ -138,10 +138,6 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
 
             if (chunkBatchesMap.isEmpty()) {
                 if (inverse != null) inverse.readyLatch.countDown();
-                if (instance instanceof InstanceContainer) {
-                    // FIXME: put method in Instance instead
-                    ((InstanceContainer) instance).refreshLastBlockChangeTime();
-                }
                 if (callback != null) {
                     if (safeCallback) {
                         instance.scheduleNextTick(inst -> callback.run());

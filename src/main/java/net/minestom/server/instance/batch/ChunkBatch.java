@@ -192,7 +192,6 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     /**
      * Applies this batch in the current thread, executing the callback upon completion.
      */
-    @ApiStatus.Internal
     private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkBatch inverse,
                                    @Nullable ChunkCallback callback, boolean safeCallback) {
         try {

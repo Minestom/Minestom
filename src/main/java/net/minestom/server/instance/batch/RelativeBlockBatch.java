@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.Axis;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -817,9 +818,5 @@ public class RelativeBlockBatch implements Batch<Runnable> {
             }
         }
         return batch;
-    }
-
-    public enum Axis {
-        X, Y, Z
     }
 }
