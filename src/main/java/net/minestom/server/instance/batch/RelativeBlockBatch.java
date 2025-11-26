@@ -7,6 +7,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.function.Consumer;
 
@@ -95,7 +96,7 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Override
-    public @Nullable AbsoluteBlockBatch apply(Instance instance, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback) {
+    public @UnknownNullability AbsoluteBlockBatch apply(Instance instance, @Nullable Consumer<@UnknownNullability AbsoluteBlockBatch> callback) {
         return apply(instance, 0, 0, 0, callback);
     }
 
@@ -107,7 +108,7 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public @Nullable AbsoluteBlockBatch apply(Instance instance, Point position, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback) {
+    public @UnknownNullability AbsoluteBlockBatch apply(Instance instance, Point position, @Nullable Consumer<@UnknownNullability AbsoluteBlockBatch> callback) {
         return apply(instance, position.blockX(), position.blockY(), position.blockZ(), callback);
     }
 
@@ -121,7 +122,7 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public @Nullable AbsoluteBlockBatch apply(Instance instance, int x, int y, int z, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback) {
+    public @UnknownNullability AbsoluteBlockBatch apply(Instance instance, int x, int y, int z, @Nullable Consumer<@UnknownNullability AbsoluteBlockBatch> callback) {
         return apply(instance, x, y, z, callback, true);
     }
 
@@ -136,7 +137,7 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public @Nullable AbsoluteBlockBatch applyUnsafe(Instance instance, int x, int y, int z, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback) {
+    public @UnknownNullability AbsoluteBlockBatch applyUnsafe(Instance instance, int x, int y, int z, @Nullable Consumer<@UnknownNullability AbsoluteBlockBatch> callback) {
         return apply(instance, x, y, z, callback, false);
     }
 
@@ -151,7 +152,7 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @param safeCallback If true, the callback will be executed in the next instance update. Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    protected @Nullable AbsoluteBlockBatch apply(Instance instance, int x, int y, int z, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback, boolean safeCallback) {
+    protected @UnknownNullability AbsoluteBlockBatch apply(Instance instance, int x, int y, int z, @Nullable Consumer<@UnknownNullability AbsoluteBlockBatch> callback, boolean safeCallback) {
         return this.toAbsoluteBatch(x, y, z).apply(instance, callback, safeCallback);
     }
 
