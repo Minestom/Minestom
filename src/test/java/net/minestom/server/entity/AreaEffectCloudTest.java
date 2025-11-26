@@ -8,6 +8,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class AreaEffectCloudTest {
@@ -28,14 +29,14 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assert gotParticle == particle;
+        assertEquals(particle, gotParticle);
 
         Particle.Dust gotData = (Particle.Dust) gotParticle;
         assertNotNull(gotData);
-        assert gotData.color().red() == r;
-        assert gotData.color().green() == g;
-        assert gotData.color().blue() == b;
-        assert gotData.scale() == size;
+        assertEquals(r, gotData.color().red());
+        assertEquals(g, gotData.color().green());
+        assertEquals(b, gotData.color().blue());
+        assertEquals(size, gotData.scale());
     }
 
     @Test
@@ -60,17 +61,17 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assert gotParticle == particle;
+        assertEquals(particle, gotParticle);
 
         Particle.DustColorTransition gotData = (Particle.DustColorTransition) gotParticle;
         assertNotNull(gotData);
-        assert gotData.color().red() == r;
-        assert gotData.color().green() == g;
-        assert gotData.color().blue() == b;
-        assert gotData.scale() == size;
-        assert gotData.transitionColor().red() == r2;
-        assert gotData.transitionColor().green() == g2;
-        assert gotData.transitionColor().blue() == b2;
+        assertEquals(r, gotData.color().red());
+        assertEquals(g, gotData.color().green());
+        assertEquals(b, gotData.color().blue());
+        assertEquals(size, gotData.scale());
+        assertEquals(r2, gotData.transitionColor().red());
+        assertEquals(g2, gotData.transitionColor().green());
+        assertEquals(b2, gotData.transitionColor().blue());
     }
 
     @Test
@@ -83,10 +84,10 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assert gotParticle == particle;
+        assertEquals(particle, gotParticle);
 
         Particle.Block gotBlock = (Particle.Block) gotParticle;
-        assert gotBlock.block() == block;
+        assertEquals(block, gotBlock.block());
     }
 
     @Test
@@ -99,10 +100,10 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assert gotParticle == particle;
+        assertEquals(particle, gotParticle);
 
         Particle.BlockMarker gotBlock = (Particle.BlockMarker) gotParticle;
-        assert gotBlock.block() == block;
+        assertEquals(block, gotBlock.block());
     }
 
     @Test
@@ -114,10 +115,10 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assert gotParticle == particle;
+        assertEquals(particle, gotParticle);
 
         Particle.Item gotBlock = (Particle.Item) gotParticle;
-        assert gotBlock.item().material() == Material.ACACIA_LOG;
+        assertEquals(Material.ACACIA_LOG, gotBlock.item().material());
     }
 
     @Test
@@ -129,9 +130,9 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assert gotParticle == particle;
+        assertEquals(particle, gotParticle);
 
         Particle.SculkCharge gotBlock = (Particle.SculkCharge) gotParticle;
-        assert gotBlock.roll() == 3;
+        assertEquals(3, gotBlock.roll());
     }
 }
