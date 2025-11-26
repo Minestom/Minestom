@@ -822,7 +822,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return the entity instance, can be null if the entity doesn't have an instance yet
      */
-    public @Nullable Instance getInstance() {
+    public @UnknownNullability Instance getInstance() {
         return instance;
     }
 

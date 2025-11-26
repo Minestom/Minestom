@@ -352,7 +352,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
     }
 
-    private int entityViewDistance(@Nullable Instance instance) {
+    private static int entityViewDistance(@Nullable Instance instance) {
         if (instance != null) return instance.entityViewDistance();
         else return ServerFlag.ENTITY_VIEW_DISTANCE;
     }
