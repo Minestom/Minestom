@@ -168,7 +168,7 @@ public class HeldClickIntegrationTest {
     private void _heldClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, int target) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
-            assert openInventory != null;
+            assertNotNull(openInventory);
             // Do not touch slot
         } else {
             int offset = openInventory != null ? openInventory.getInnerSize() : 0;
