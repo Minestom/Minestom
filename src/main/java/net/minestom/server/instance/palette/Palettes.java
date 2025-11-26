@@ -1,7 +1,6 @@
 package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
-import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
@@ -79,8 +78,16 @@ public final class Palettes {
     }
 
     public static int sectionIndex(int dimension, int x, int y, int z) {
-        final int dimensionBitCount = MathUtils.bitsToRepresent(dimension - 1);
+        final int dimensionBitCount = dimensionBits(dimension);
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
+    }
+
+    public static int paletteBits(int paletteSize) {
+        return Integer.SIZE - Integer.numberOfLeadingZeros(paletteSize - 1);
+    }
+
+    public static int dimensionBits(int dimension) {
+        return Integer.numberOfTrailingZeros(dimension); // Always a power of 2
     }
 
     // Validation
@@ -90,6 +97,13 @@ public final class Palettes {
             throw new IllegalArgumentException("Coordinates must be non-negative");
         if (x >= dimension || y >= dimension || z >= dimension)
             throw new IllegalArgumentException("Coordinates must be less than the dimension size, got " + x + ", " + y + ", " + z + " for dimension " + dimension);
+    }
+
+    public static void validateValue(int value, int directBits) {
+        if (value < 0)
+            throw new IllegalArgumentException("Palette values must be non-negative");
+        if (value >= (1 << directBits))
+            throw new IllegalArgumentException("Palette values must fit in the direct bits size");
     }
 
     public static void validateDimension(int dimension) {
@@ -174,7 +188,7 @@ public final class Palettes {
         }
 
         final int dimensionMinus = dimension - 1;
-        final int dimensionBits = MathUtils.bitsToRepresent(dimension - 1);
+        final int dimensionBits = dimensionBits(dimension);
         final int finalXTravel = dimensionMinus - maxX;
         final int initialZTravel = minZ << dimensionBits;
         final int finalZTravel = (dimensionMinus - maxZ) << dimensionBits;

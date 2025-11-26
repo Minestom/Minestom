@@ -202,23 +202,6 @@ public class PaletteCopyTest {
             assertEquals(0, target.bitsPerEntry());
             assertTrue(target.compare(source));
         }
-
-        @Test
-        @DisplayName("Copy high value entries")
-        void copyHighValueEntries() {
-            Palette source = Palette.blocks();
-            Palette target = Palette.blocks();
-
-            int highValue = 1_000_000;
-            source.set(0, 0, 0, highValue);
-            source.set(15, 15, 15, highValue + 1);
-
-            target.copyFrom(source);
-
-            assertTrue(target.compare(source));
-            assertEquals(highValue, target.get(0, 0, 0));
-            assertEquals(highValue + 1, target.get(15, 15, 15));
-        }
     }
 
     @Nested

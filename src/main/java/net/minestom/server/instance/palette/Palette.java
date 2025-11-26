@@ -1,15 +1,13 @@
 package net.minestom.server.instance.palette;
 
-import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -34,7 +32,7 @@ public sealed interface Palette permits PaletteImpl {
     int BLOCK_PALETTE_MIN_BITS = 4;
     int BLOCK_PALETTE_MAX_BITS = 8;
     @ApiStatus.Internal
-    int BLOCK_PALETTE_DIRECT_BITS = MathUtils.bitsToRepresent(Block.statesCount() - 1);
+    int BLOCK_PALETTE_DIRECT_BITS = Palettes.paletteBits(Block.statesCount());
 
     int BIOME_DIMENSION = 4;
     int BIOME_PALETTE_MIN_BITS = 1;
@@ -43,8 +41,14 @@ public sealed interface Palette permits PaletteImpl {
     @ApiStatus.Internal
     static int biomePaletteDirectBits() {
         final var process = MinecraftServer.process();
-        if (process == null) return 7; // Vanilla biome direct bits as of 1.21.10
-        return MathUtils.bitsToRepresent(process.biome().size() - 1);
+        // 7 == Vanilla biome direct bits as of 1.21.10
+        final int biomeDirectBits = process != null ? Palettes.paletteBits(process.biome().size()) : 7;
+        if (BiomePaletteHolder.BIOME_DIRECT_BITS == 0) {
+            BiomePaletteHolder.BIOME_DIRECT_BITS = biomeDirectBits;
+        } else if (biomeDirectBits != BiomePaletteHolder.BIOME_DIRECT_BITS) {
+            throw new IllegalStateException("Biome direct bits must not change after chunk creation");
+        }
+        return biomeDirectBits;
     }
 
     static Palette blocks(int bitsPerEntry) {
@@ -63,10 +67,12 @@ public sealed interface Palette permits PaletteImpl {
         return empty(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, biomePaletteDirectBits());
     }
 
+    @ApiStatus.Internal
     static Palette empty(int dimension, int minBitsPerEntry, int maxBitsPerEntry, int directBits) {
         return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry, (byte) directBits);
     }
 
+    @ApiStatus.Internal
     static Palette sized(int dimension, int minBitsPerEntry, int maxBitsPerEntry, int directBits, int bitsPerEntry) {
         return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry, (byte) directBits, (byte) bitsPerEntry);
     }
@@ -110,11 +116,6 @@ public sealed interface Palette permits PaletteImpl {
     default void fill(Point min, Point max, int value) {
         fill(min.blockX(), min.blockY(), min.blockZ(), max.blockX(), max.blockY(), max.blockZ(), value);
     }
-
-    /**
-     * Efficiently offsets all values in the palette by the given offset.
-     */
-    void offset(int offset);
 
     /**
      * Efficiently copies values from another palette with the given offset.
@@ -182,14 +183,12 @@ public sealed interface Palette permits PaletteImpl {
 
     /**
      * Gets the highest y position where predicate returns true, or -1 if none matched.
-     * <p>
-     * It is assumed that the predicate result is independent of passed coordinates.
      *
      * @param x the x coordinate to check at
      * @param z the z coordinate to check at
      * @return the highest y position where predicate returns true, or -1 if none matched.
      */
-    int height(int x, int z, EntryPredicate predicate);
+    int height(int x, int z, IntPredicate predicate);
 
     /**
      * Returns the number of bits used per entry.
@@ -276,24 +275,30 @@ public sealed interface Palette permits PaletteImpl {
         boolean get(int x, int y, int z, int value);
     }
 
-    NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS);
-
-    static NetworkBuffer.Type<Palette> biomeSerializer(int biomeCount) {
-        final int directBits = MathUtils.bitsToRepresent(biomeCount - 1);
-        return serializer(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, directBits);
+    @ApiStatus.Internal
+    final class BiomePaletteHolder {
+        private static int BIOME_DIRECT_BITS = 0;
+        @Nullable
+        private static NetworkBuffer.Type<Palette> BIOME_SERIALIZER = null;
     }
 
+    NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS);
+
+    static NetworkBuffer.Type<Palette> biomeSerializer() {
+        if (BiomePaletteHolder.BIOME_SERIALIZER != null) return BiomePaletteHolder.BIOME_SERIALIZER;
+        final var biomeSerializer = serializer(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, biomePaletteDirectBits());
+        BiomePaletteHolder.BIOME_SERIALIZER = biomeSerializer;
+        return biomeSerializer;
+    }
+
+    @ApiStatus.Internal
     static NetworkBuffer.Type<Palette> serializer(int dimension, int minIndirect, int maxIndirect, int directBits) {
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, Palette palette) {
                 final PaletteImpl value = (PaletteImpl) palette;
-                Check.argCondition(dimension != value.dimension,
-                        "Palette must be of dimension {0}, got {1}", dimension, value.dimension);
-                if (directBits != value.directBits && value.isDirect()) {
-                    value.values = Palettes.remap(dimension, value.directBits, directBits, value.values, Int2IntFunction.identity());
-                    value.directBits = (byte) directBits;
-                    value.bitsPerEntry = value.directBits;
+                if (!value.isPaletteType(dimension, minIndirect, maxIndirect, directBits)) {
+                    throw new IllegalArgumentException("Palettes must be serialized with the proper serializer");
                 }
                 final byte bitsPerEntry = value.bitsPerEntry;
                 buffer.write(BYTE, bitsPerEntry);
@@ -323,8 +328,13 @@ public sealed interface Palette permits PaletteImpl {
                 }
                 if (!result.isDirect()) {
                     // Indirect palette
+                    if (bitsPerEntry < minIndirect)
+                        throw new IllegalArgumentException("Palette bits per entry out of bounds");
                     final int[] palette = buffer.read(VAR_INT_ARRAY);
+                    for (final int value : palette) Palettes.validateValue(value, directBits);
                     result.paletteIndexMap = new PaletteIndexMap(palette);
+                } else if (bitsPerEntry != directBits) {
+                    throw new IllegalArgumentException("Palette bits per entry out of bounds");
                 }
                 final long[] data = new long[Palettes.arrayLength(dimension, bitsPerEntry)];
                 for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
