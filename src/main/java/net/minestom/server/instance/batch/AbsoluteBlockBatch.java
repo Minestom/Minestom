@@ -10,6 +10,7 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -97,7 +98,7 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Override
-    public @Nullable Batch<Consumer<AbsoluteBlockBatch>> apply(Instance instance, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback) {
+    public @UnknownNullability AbsoluteBlockBatch apply(Instance instance, @Nullable Consumer<@UnknownNullability AbsoluteBlockBatch> callback) {
         return apply(instance, callback, true);
     }
 
@@ -109,7 +110,7 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public @Nullable AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback) {
+    public @UnknownNullability AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Consumer<@UnknownNullability AbsoluteBlockBatch> callback) {
         return apply(instance, callback, false);
     }
 
@@ -122,7 +123,7 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      *                     Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    protected @Nullable AbsoluteBlockBatch apply(Instance instance, @Nullable Consumer<@Nullable AbsoluteBlockBatch> callback, boolean safeCallback) {
+    protected @UnknownNullability AbsoluteBlockBatch apply(Instance instance, @Nullable Consumer<@UnknownNullability AbsoluteBlockBatch> callback, boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
 
         final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch(inverseOption) : null;
