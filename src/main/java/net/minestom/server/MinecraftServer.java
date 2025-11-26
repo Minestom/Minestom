@@ -14,6 +14,7 @@ import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.velocity.VelocityProxy;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -217,6 +218,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * Gets the chunk view distance of the server.
      * <p>
      * Deprecated in favor of {@link ServerFlag#CHUNK_VIEW_DISTANCE}
+     * Each instance has its own chunk view distance that can be retrieved with {@link Instance#viewDistance()}.
      *
      * @return the chunk view distance
      */
@@ -229,6 +231,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * Gets the entity view distance of the server.
      * <p>
      * Deprecated in favor of {@link ServerFlag#ENTITY_VIEW_DISTANCE}
+     * Each instance has its own entity view distance that can be retrieved with {@link Instance#entityViewDistance()}.
      *
      * @return the entity view distance
      */

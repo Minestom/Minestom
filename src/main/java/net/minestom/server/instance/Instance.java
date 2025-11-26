@@ -120,6 +120,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
 
     protected int chunkViewDistance = ServerFlag.CHUNK_VIEW_DISTANCE;
+    protected int entityViewDistance = ServerFlag.ENTITY_VIEW_DISTANCE;
 
     // the uuid of this instance
     protected UUID uuid;
@@ -909,11 +910,30 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Sets the chunk view distance of this instance
      *
-     * @param newViewDistance the new view distance
+     * @param newViewDistance the new chunk view distance
      */
     public void viewDistance(int newViewDistance) {
         this.chunkViewDistance = newViewDistance;
     }
+
+    /**
+     * Gets the entity view distance of this instance, which defaults to {@link ServerFlag#ENTITY_VIEW_DISTANCE}.
+     *
+     * @return The entity view distance of this instance in chunks
+     */
+    public int entityViewDistance() {
+        return this.entityViewDistance;
+    }
+
+    /**
+     * Sets the entity view distance of this instance
+     *
+     * @param newViewDistance the new entity view distance in chunks
+     */
+    public void entityViewDistance(int newViewDistance) {
+        this.entityViewDistance = newViewDistance;
+    }
+
 
     /**
      * Shows a {@link BossBar} to all players in the instance and tracks it.

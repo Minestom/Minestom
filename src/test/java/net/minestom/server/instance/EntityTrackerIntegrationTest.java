@@ -26,7 +26,7 @@ public class EntityTrackerIntegrationTest {
     public void maxDistance(Env env) {
         final Instance instance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = ServerFlag.ENTITY_VIEW_DISTANCE;
+        final int viewDistanceInChunks = instance.entityViewDistance();
 
         final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();
@@ -56,7 +56,7 @@ public class EntityTrackerIntegrationTest {
         final Instance instance = env.createFlatInstance();
         final Instance anotherInstance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = ServerFlag.ENTITY_VIEW_DISTANCE;
+        final int viewDistanceInChunks = instance.entityViewDistance();
 
         final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();

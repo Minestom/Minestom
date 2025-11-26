@@ -16,7 +16,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 final class EntityView {
-    private static final int RANGE = ServerFlag.ENTITY_VIEW_DISTANCE;
     private final Entity entity;
     private final Set<Player> manualViewers = new HashSet<>();
 
@@ -269,8 +268,9 @@ final class EntityView {
             final Instance instance = trackedLocation.instance();
             final Point point = trackedLocation.point();
 
+            int dynamicRange = entity.getInstance() != null ? entity.getInstance().entityViewDistance() : ServerFlag.ENTITY_VIEW_DISTANCE;
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
-            instance.getEntityTracker().nearbyEntitiesByChunkRange(point, RANGE, target,
+            instance.getEntityTracker().nearbyEntitiesByChunkRange(point, dynamicRange, target,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
             this.lastSize = entityMap.size();
             return entityMap.values();
