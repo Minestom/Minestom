@@ -268,7 +268,7 @@ final class EntityView {
             final Instance instance = trackedLocation.instance();
             final Point point = trackedLocation.point();
 
-            int dynamicRange = instance.entityViewDistance();
+            int dynamicRange = EntityView.this.entity.viewDistance();
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
             instance.getEntityTracker().nearbyEntitiesByChunkRange(point, dynamicRange, target,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
