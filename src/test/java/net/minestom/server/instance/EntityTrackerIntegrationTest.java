@@ -26,7 +26,6 @@ public class EntityTrackerIntegrationTest {
     public void maxDistance(Env env) {
         final Instance instance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = instance.entityViewDistance();
 
         final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();
@@ -41,6 +40,8 @@ public class EntityTrackerIntegrationTest {
                 viewersCount.decrementAndGet();
             }
         };
+        final int viewDistanceInChunks = entity.viewDistance();
+
         entity.setInstance(instance, spawnPos).join();
         assertEquals(1, viewersCount.get());
         viewer.teleport(new Pos(viewDistanceInChunks * 16 + 15, 41, 0)).join(); // viewer at max chunk range
@@ -56,7 +57,6 @@ public class EntityTrackerIntegrationTest {
         final Instance instance = env.createFlatInstance();
         final Instance anotherInstance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = instance.entityViewDistance();
 
         final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();
@@ -71,6 +71,8 @@ public class EntityTrackerIntegrationTest {
                 viewersCount.decrementAndGet();
             }
         };
+        final int viewDistanceInChunks = entity.viewDistance();
+
         entity.setInstance(instance, spawnPos).join();
         assertEquals(1, viewersCount.get());
         viewer.teleport(new Pos(viewDistanceInChunks * 16 + 15, 41, 0)).join(); // viewer at max chunk range

@@ -170,6 +170,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final EventNode<EntityEvent> eventNode;
+    private int viewDistance = -1;
 
     private final UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -1889,5 +1890,47 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @Contract(pure = true)
     public Pointers pointers() {
         return ENTITY_POINTERS_SUPPLIER.view(this);
+    }
+
+    /**
+     * Sets the entity view distance of this entity.
+     *
+     * @param newViewDistance the new entity view distance in chunks
+     */
+    public void viewDistance(int newViewDistance) {
+        viewDistance = newViewDistance;
+    }
+
+    /**
+     * Clears the custom entity view distance, causing the entity to fall back to the instance's entity view distance.
+     */
+    public void clearViewDistance() {
+        viewDistance = -1;
+    }
+
+    /**
+     * Gets the entity view distance of this entity, which defaults to the instance's entity view distance
+     * or {@link ServerFlag#ENTITY_VIEW_DISTANCE} if no instance is set.
+     *
+     * @return The entity view distance in chunks
+     */
+    public int viewDistance() {
+        return viewDistance < 0 ?
+                instance != null ? instance.entityViewDistance() : ServerFlag.ENTITY_VIEW_DISTANCE :
+                viewDistance;
+    }
+
+    /**
+     * Gets the raw entity view distance value of this entity.
+     * <p>
+     * This may return a negative number if no custom view distance is set, in which case
+     * the instance's entity view distance should be used instead.
+     * Use {@link #viewDistance()} to get the real entity view distance in chunks.
+     *
+     * @return The raw entity view distance in chunks
+     */
+    @ApiStatus.Internal
+    public int actualViewDistance() {
+        return viewDistance;
     }
 }

@@ -939,18 +939,21 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
-     * Gets the entity view distance of this instance, which defaults to {@link ServerFlag#ENTITY_VIEW_DISTANCE}.
+     * Gets the default entity view distance of this instance, which defaults to {@link ServerFlag#ENTITY_VIEW_DISTANCE}.
+     * <p>
+     * It's preferred to use {@link Entity#viewDistance()} to get the view distance per-entity,
+     * as this method only returns the instance-wide default.
      *
-     * @return The entity view distance of this instance in chunks
+     * @return The default entity view distance of this instance in chunks
      */
     public int entityViewDistance() {
         return this.entityViewDistance;
     }
 
     /**
-     * Sets the entity view distance of this instance
+     * Sets the default entity view distance of this instance
      *
-     * @param newViewDistance the new entity view distance in chunks
+     * @param newViewDistance the new default entity view distance in chunks
      */
     public void entityViewDistance(int newViewDistance) {
         this.entityViewDistance = newViewDistance;

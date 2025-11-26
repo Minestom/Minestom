@@ -59,7 +59,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             update.referenceUpdate(point, this);
-            nearbyEntitiesByChunkRange(point, entityViewDistance(entity.getInstance()), target, newEntity -> {
+            nearbyEntitiesByChunkRange(point, entity.viewDistance(), target, newEntity -> {
                 if (newEntity == entity) return;
                 update.add(newEntity);
             });
@@ -83,7 +83,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             update.referenceUpdate(point, null);
-            nearbyEntitiesByChunkRange(point, entityViewDistance(entity.getInstance()), target, newEntity -> {
+            nearbyEntitiesByChunkRange(point, entity.viewDistance(), target, newEntity -> {
                 if (newEntity == entity) return;
                 update.remove(newEntity);
             });
@@ -132,7 +132,7 @@ final class EntityTrackerImpl implements EntityTracker {
                 public void remove(T removed) {
                     if (entity != removed) update.remove(removed);
                 }
-            }, entityViewDistance(entity.getInstance()));
+            }, entity.viewDistance());
             update.referenceUpdate(newPoint, this);
         }
     }
@@ -350,10 +350,5 @@ final class EntityTrackerImpl implements EntityTracker {
                 references().forEach(action);
             }
         }
-    }
-
-    private static int entityViewDistance(@Nullable Instance instance) {
-        if (instance != null) return instance.entityViewDistance();
-        else return ServerFlag.ENTITY_VIEW_DISTANCE;
     }
 }
