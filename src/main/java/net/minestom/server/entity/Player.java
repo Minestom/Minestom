@@ -2392,7 +2392,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public int effectiveViewDistance() {
         Instance instance = this.instance;
-        int maxViewDistance = instance != null ? instance.viewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
+        int maxViewDistance = instance != null ? instance.chunkViewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
         return Math.min(settings.viewDistance(), maxViewDistance) + 1;
     }
 
