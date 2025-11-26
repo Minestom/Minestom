@@ -31,7 +31,7 @@ shadow = "9.2.2"
 blossom = "2.1.0"
 nmcp = "1.2.0"
 jmh-plugin = "0.7.3"
-jcstress-plugin = "0.8.15"
+jcstress-plugin = "0.9.0"
 
 [libraries]
 
