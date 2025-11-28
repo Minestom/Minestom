@@ -35,7 +35,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -146,9 +151,10 @@ public final class RegistryData {
      * <p>Tags will be loaded from <code>/tags/{registryKey.path()}.json</code></p>
      */
     @ApiStatus.Internal
-    public static <T extends StaticProtocolObject<T>> Registry<T> createStaticRegistry(Key registryKey, Loader<T> loader) {
+    public static <T extends StaticProtocolObject<T>> Registry<T> createStaticRegistry(RegistryKey<Registry<T>> registryKey, Loader<T> loader) {
         // Create the registry (data)
-        var entries = RegistryData.load(String.format("%s.json", registryKey.value()), true);
+        final Key key = registryKey.key();
+        var entries = RegistryData.load(String.format("%s.json", key.value()), true);
         Map<Key, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
         for (var entry : entries.asMap().keySet()) {
@@ -158,7 +164,7 @@ public final class RegistryData {
             namespaces.put(value.key(), value);
         }
         // Load tags if they exist
-        Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = loadTags(registryKey);
+        Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = loadTags(key);
         return new StaticRegistry<>(registryKey, namespaces, ids, tags);
     }
 
