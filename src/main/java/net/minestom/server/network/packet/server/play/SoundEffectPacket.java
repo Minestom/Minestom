@@ -12,9 +12,9 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record SoundEffectPacket(
         SoundEvent soundEvent,
         Source source,
-        int x,
-        int y,
-        int z,
+        double x,
+        double y,
+        double z,
         float volume,
         float pitch,
         long seed
@@ -24,9 +24,9 @@ public record SoundEffectPacket(
         public void write(NetworkBuffer buffer, SoundEffectPacket value) {
             buffer.write(SoundEvent.NETWORK_TYPE, value.soundEvent());
             buffer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source()));
-            buffer.write(INT, value.x() * 8);
-            buffer.write(INT, value.y() * 8);
-            buffer.write(INT, value.z() * 8);
+            buffer.write(INT, (int)(value.x() * 8));
+            buffer.write(INT, (int)(value.y() * 8));
+            buffer.write(INT, (int)(value.z() * 8));
             buffer.write(FLOAT, value.volume());
             buffer.write(FLOAT, value.pitch());
             buffer.write(LONG, value.seed());
@@ -36,9 +36,9 @@ public record SoundEffectPacket(
         public SoundEffectPacket read(NetworkBuffer buffer) {
             return new SoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
                     buffer.read(NetworkBuffer.Enum(Source.class)),
-                    buffer.read(INT) * 8,
-                    buffer.read(INT) * 8,
-                    buffer.read(INT) * 8,
+                    buffer.read(INT) / 8.0,
+                    buffer.read(INT) / 8.0,
+                    buffer.read(INT) / 8.0,
                     buffer.read(FLOAT),
                     buffer.read(FLOAT),
                     buffer.read(LONG));
@@ -46,6 +46,6 @@ public record SoundEffectPacket(
     };
 
     public SoundEffectPacket(SoundEvent soundEvent, Source source, Point position, float volume, float pitch, long seed) {
-        this(soundEvent, source, position.blockX(), position.blockY(), position.blockZ(), volume, pitch, seed);
+        this(soundEvent, source, position.x(), position.y(), position.z(), volume, pitch, seed);
     }
 }
