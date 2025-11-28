@@ -5,19 +5,19 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class BeaconInventory extends Inventory {
 
     private short powerLevel;
-    private PotionEffect firstPotionEffect;
-    private PotionEffect secondPotionEffect;
+    private @Nullable PotionEffect firstPotionEffect;
+    private @Nullable PotionEffect secondPotionEffect;
 
-    public BeaconInventory(@NotNull Component title) {
+    public BeaconInventory(Component title) {
         super(InventoryType.BEACON, title);
     }
 
-    public BeaconInventory(@NotNull String title) {
+    public BeaconInventory(String title) {
         super(InventoryType.BEACON, title);
     }
 
@@ -45,7 +45,7 @@ public class BeaconInventory extends Inventory {
      *
      * @return the first potion effect, can be null
      */
-    public PotionEffect getFirstPotionEffect() {
+    public @Nullable PotionEffect getFirstPotionEffect() {
         return firstPotionEffect;
     }
 
@@ -54,9 +54,9 @@ public class BeaconInventory extends Inventory {
      *
      * @param firstPotionEffect the new first potion effect, can be null
      */
-    public void setFirstPotionEffect(PotionEffect firstPotionEffect) {
+    public void setFirstPotionEffect(@Nullable PotionEffect firstPotionEffect) {
         this.firstPotionEffect = firstPotionEffect;
-        sendProperty(InventoryProperty.BEACON_FIRST_POTION, (short) firstPotionEffect.id());
+        sendProperty(InventoryProperty.BEACON_FIRST_POTION, firstPotionEffect == null ? -1 : (short) firstPotionEffect.id());
     }
 
     /**
@@ -64,7 +64,7 @@ public class BeaconInventory extends Inventory {
      *
      * @return the second potion effect, can be null
      */
-    public PotionEffect getSecondPotionEffect() {
+    public @Nullable PotionEffect getSecondPotionEffect() {
         return secondPotionEffect;
     }
 
@@ -73,8 +73,8 @@ public class BeaconInventory extends Inventory {
      *
      * @param secondPotionEffect the new second potion effect, can be null
      */
-    public void setSecondPotionEffect(PotionEffect secondPotionEffect) {
+    public void setSecondPotionEffect(@Nullable PotionEffect secondPotionEffect) {
         this.secondPotionEffect = secondPotionEffect;
-        sendProperty(InventoryProperty.BEACON_SECOND_POTION, (short) secondPotionEffect.id());
+        sendProperty(InventoryProperty.BEACON_SECOND_POTION, secondPotionEffect == null ? -1 : (short) secondPotionEffect.id());
     }
 }

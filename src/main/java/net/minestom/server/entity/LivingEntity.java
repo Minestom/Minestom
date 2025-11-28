@@ -1,7 +1,9 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
@@ -21,23 +23,20 @@ import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.AttributeList;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.thread.Acquirable;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -47,13 +46,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
-    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(NamespaceID.from("minecraft:sprinting"), 0.3, AttributeOperation.MULTIPLY_TOTAL);
+    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("sprinting"), 0.3, AttributeOperation.ADD_MULTIPLIED_TOTAL);
 
     /**
      * IDs of modifiers that are protected from removal by methods like {@link AttributeInstance#clearModifiers()}.
      */
     @ApiStatus.Internal
-    public static final Set<NamespaceID> PROTECTED_MODIFIERS = Set.of(SPRINTING_SPEED_MODIFIER.id());
+    public static final Set<Key> PROTECTED_MODIFIERS = Set.of(SPRINTING_SPEED_MODIFIER.id());
 
     // ItemStack pickup
     protected boolean canPickupItem;
@@ -92,15 +91,16 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private ItemStack leggings = ItemStack.AIR;
     private ItemStack boots = ItemStack.AIR;
     private ItemStack bodyEquipment = ItemStack.AIR;
+    private ItemStack saddleEquipment = ItemStack.AIR;
 
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
      */
-    public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
+    public LivingEntity(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
     }
 
-    public LivingEntity(@NotNull EntityType entityType) {
+    public LivingEntity(EntityType entityType) {
         this(entityType, UUID.randomUUID());
     }
 
@@ -111,13 +111,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // We must set the sprinting attribute serverside because when we resend modifiers it overwrites what
         // the client has, meaning if they are sprinting and we send no modifiers, they will no longer be
         // getting the speed boost of sprinting.
-        final AttributeInstance speed = getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        final AttributeInstance speed = getAttribute(Attribute.MOVEMENT_SPEED);
         if (sprinting) speed.addModifier(SPRINTING_SPEED_MODIFIER);
         else speed.removeModifier(SPRINTING_SPEED_MODIFIER);
     }
 
     @Override
-    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
+    public ItemStack getEquipment(EquipmentSlot slot) {
         return switch (slot) {
             case MAIN_HAND -> mainHandItem;
             case OFF_HAND -> offHandItem;
@@ -126,11 +126,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             case CHESTPLATE -> chestplate;
             case HELMET -> helmet;
             case BODY -> bodyEquipment;
+            case SADDLE -> saddleEquipment;
         };
     }
 
     @Override
-    public void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
+    public void setEquipment(EquipmentSlot slot, ItemStack itemStack) {
         ItemStack oldItem = getEquipment(slot);
         ItemStack newItem = slotChangeEvent(itemStack, slot);
 
@@ -142,18 +143,18 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             case CHESTPLATE -> chestplate = newItem;
             case HELMET -> helmet = newItem;
             case BODY -> bodyEquipment = newItem;
+            case SADDLE -> saddleEquipment = newItem;
         }
 
         syncEquipment(slot);
         updateEquipmentAttributes(oldItem, newItem, slot);
     }
 
-    private ItemStack slotChangeEvent(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
+    private ItemStack slotChangeEvent(ItemStack itemStack, EquipmentSlot slot) {
         EntityEquipEvent entityEquipEvent = new EntityEquipEvent(this, itemStack, slot);
         EventDispatcher.call(entityEquipEvent);
         return entityEquipEvent.getEquippedItem();
     }
-
 
     /**
      * Updates the current attributes of the living entity based on
@@ -163,8 +164,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param slot         The slot that changed, this will determine what modifiers are actually changed
      */
     @ApiStatus.Internal
-    public void updateEquipmentAttributes(@NotNull ItemStack oldItemStack, @NotNull ItemStack newItemStack, @NotNull EquipmentSlot slot) {
-        AttributeList oldAttributes = oldItemStack.get(ItemComponent.ATTRIBUTE_MODIFIERS);
+    public void updateEquipmentAttributes(ItemStack oldItemStack, ItemStack newItemStack, EquipmentSlot slot) {
+        AttributeList oldAttributes = oldItemStack.get(DataComponents.ATTRIBUTE_MODIFIERS);
         // Remove old attributes
         if (oldAttributes != null) {
             for (AttributeList.Modifier modifier : oldAttributes.modifiers()) {
@@ -175,7 +176,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 }
             }
         }
-        AttributeList newAttributes = newItemStack.get(ItemComponent.ATTRIBUTE_MODIFIERS);
+        AttributeList newAttributes = newItemStack.get(DataComponents.ATTRIBUTE_MODIFIERS);
         // Add new attributes
         if (newAttributes != null) {
             for (AttributeList.Modifier modifier : newAttributes.modifiers()) {
@@ -198,19 +199,17 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-            final Point loweredPosition = position.sub(0, .5, 0);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (this instanceof Player player && !itemEntity.isViewer(player)) return;
                         if (!itemEntity.isPickable()) return;
-                        if (expandedBoundingBox.intersectEntity(loweredPosition, itemEntity)) {
-                            PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
-                            EventDispatcher.callCancellable(pickupItemEvent, () -> {
-                                final ItemStack item = itemEntity.getItemStack();
-                                sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.amount()));
-                                itemEntity.remove();
-                            });
-                        }
+                        if (!expandedBoundingBox.intersectEntity(position, itemEntity)) return;
+                        final PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
+                        EventDispatcher.callCancellable(pickupItemEvent, () -> {
+                            final ItemStack item = itemEntity.getItemStack();
+                            sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.amount()));
+                            itemEntity.remove();
+                        });
                     });
         }
     }
@@ -260,8 +259,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void kill() {
         refreshIsDead(true); // So the entity isn't killed over and over again
-        triggerStatus((byte) 3); // Start death animation status
-        setPose(Pose.DYING);
+        triggerStatus((byte) EntityStatuses.LivingEntity.PLAY_DEATH_SOUND); // Start death animation status
+        setPose(EntityPose.DYING);
         setHealth(0);
 
         // Reset velocity
@@ -313,7 +312,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         remainingFireTicks = fireTicks;
     }
 
-    public boolean damage(@NotNull DynamicRegistry.Key<DamageType> type, float amount) {
+    public boolean damage(RegistryKey<DamageType> type, float amount) {
         return damage(new Damage(type, null, null, null, amount));
     }
 
@@ -323,10 +322,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param damage the damage to be applied
      * @return true if damage has been applied, false if it didn't
      */
-    public boolean damage(@NotNull Damage damage) {
+    public boolean damage(Damage damage) {
         if (isDead())
             return false;
-        if (isInvulnerable() || isImmune(damage.getType())) {
+        if (isImmune(damage.getType())) {
             return false;
         }
 
@@ -338,10 +337,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             float remainingDamage = entityDamageEvent.getDamage().getAmount();
 
             if (entityDamageEvent.shouldAnimate()) {
-                sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+                sendPacketToViewersAndSelf(new DamageEventPacket(
+                        getEntityId(), damage.getTypeId(),
+                        damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1,
+                        damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1,
+                        damage.getSourcePosition()
+                ));
             }
-
-            sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getTypeId(), damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1, damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1, damage.getSourcePosition()));
 
             // Additional hearts support
             if (this instanceof Player player) {
@@ -383,8 +385,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param type the type of damage
      * @return true if this entity is immune to the given type of damage
      */
-    public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
-        return false;
+    public boolean isImmune(RegistryKey<DamageType> type) {
+        if (type.equals(DamageType.OUT_OF_WORLD)) {
+            return false;
+        }
+        return isInvulnerable();
     }
 
     /**
@@ -402,7 +407,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param health the new entity health
      */
     public void setHealth(float health) {
-        this.health = Math.min(health, (float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
+        this.health = Math.min(health, (float) getAttributeValue(Attribute.MAX_HEALTH));
         if (this.health <= 0 && !isDead) {
             kill();
         }
@@ -424,10 +429,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#GENERIC_MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
      */
     public void heal() {
-        setHealth((float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
+        setHealth((float) getAttributeValue(Attribute.MAX_HEALTH));
     }
 
     /**
@@ -436,7 +441,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute the attribute instance to get
      * @return the attribute instance
      */
-    public @NotNull AttributeInstance getAttribute(@NotNull Attribute attribute) {
+    public AttributeInstance getAttribute(Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
                 s -> new AttributeInstance(attribute, this::onAttributeChanged));
     }
@@ -446,7 +451,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return a collection of all attribute instances on this entity
      */
-    public @NotNull @UnmodifiableView Collection<AttributeInstance> getAttributes() {
+    public @UnmodifiableView Collection<AttributeInstance> getAttributes() {
         return unmodifiableModifiers;
     }
 
@@ -455,12 +460,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @param attributeInstance the modified attribute instance
      */
-    protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
+    protected void onAttributeChanged(AttributeInstance attributeInstance) {
+        if (!shouldSendAttributes()) return;
+
         boolean self = false;
         if (this instanceof Player player) {
             PlayerConnection playerConnection = player.playerConnection;
             // connection null during Player initialization (due to #super call)
-            self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
+            self = playerConnection != null && playerConnection.getServerState() == ConnectionState.PLAY;
         }
         EntityAttributesPacket propertiesPacket = new EntityAttributesPacket(getEntityId(), List.of(
                 new EntityAttributesPacket.Property(
@@ -481,7 +488,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute the attribute value to get
      * @return the attribute value
      */
-    public double getAttributeValue(@NotNull Attribute attribute) {
+    public double getAttributeValue(Attribute attribute) {
         AttributeInstance instance = attributeModifiers.get(attribute.name());
         return (instance != null) ? instance.getValue() : attribute.defaultValue();
     }
@@ -513,17 +520,29 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         this.canPickupItem = canPickupItem;
     }
 
+    /**
+     * Check if this entity should send an {@link EntityAttributesPacket}. This is true for players and entities whose
+     * spawn type is {@code LIVING}, but false for others.
+     *
+     * @return true if this entity needs to send attributes, false otherwise
+     */
+    protected boolean shouldSendAttributes() {
+        return this.entityType.registry().shouldSendAttributes();
+    }
+
     @Override
-    public void updateNewViewer(@NotNull Player player) {
+    public void updateNewViewer(Player player) {
         super.updateNewViewer(player);
         player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
-        player.sendPacket(new LazyPacket(this::getPropertiesPacket));
+
+        if (shouldSendAttributes())
+            player.sendPacket(new LazyPacket(this::getPropertiesPacket));
     }
 
     @Override
     public void setBoundingBox(BoundingBox boundingBox) {
         super.setBoundingBox(boundingBox);
-        this.expandedBoundingBox = boundingBox.expand(1, .5, 1);
+        this.expandedBoundingBox = boundingBox.growSymmetrically(1, .5, 1);
     }
 
     /**
@@ -578,11 +597,34 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         if (meta != null) {
             meta.setNotifyAboutChanges(false);
             meta.setHandActive(isHandActive);
-            meta.setActiveHand(offHand ? Player.Hand.OFF : Player.Hand.MAIN);
+            meta.setActiveHand(offHand ? PlayerHand.OFF : PlayerHand.MAIN);
             meta.setInRiptideSpinAttack(riptideSpinAttack);
-            meta.setNotifyAboutChanges(true);
 
             updatePose(); // Riptide spin attack has a pose
+
+            meta.setNotifyAboutChanges(true);
+        }
+    }
+
+    /**
+     * Kicks the entity out of the bed.
+     */
+    public void leaveBed() {
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setBedInWhichSleepingPosition(null);
+        }
+    }
+
+    /**
+     * Sets the {@code point} of the bed in which the entity is sleeping in.
+     *
+     * @param point the position of the bed
+     */
+    public void enterBed(Point point) {
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setBedInWhichSleepingPosition(point);
         }
     }
 
@@ -609,7 +651,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return an {@link EntityAttributesPacket} linked to this entity
      */
-    protected @NotNull EntityAttributesPacket getPropertiesPacket() {
+    protected EntityAttributesPacket getPropertiesPacket() {
         List<EntityAttributesPacket.Property> properties = new ArrayList<>();
         for (AttributeInstance instance : attributeModifiers.values()) {
             properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getBaseValue(), instance.getModifiers()));
@@ -681,14 +723,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @Override
     public void takeKnockback(float strength, final double x, final double z) {
-        strength *= (float) (1 - getAttributeValue(Attribute.GENERIC_KNOCKBACK_RESISTANCE));
+        strength *= (float) (1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE));
         super.takeKnockback(strength, x, z);
     }
 
     @SuppressWarnings("unchecked")
     @ApiStatus.Experimental
     @Override
-    public @NotNull Acquirable<? extends LivingEntity> acquirable() {
+    public Acquirable<? extends LivingEntity> acquirable() {
         return (Acquirable<? extends LivingEntity>) super.acquirable();
     }
 }

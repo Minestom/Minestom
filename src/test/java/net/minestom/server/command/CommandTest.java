@@ -2,7 +2,6 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -34,7 +33,7 @@ public class CommandTest {
 
         var command = new Command("command") {
             @Override
-            public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
+            public void globalListener(CommandSender sender, CommandContext context, String command) {
                 hasRun.set(true);
                 context.setArg("key", "value", "value");
             }

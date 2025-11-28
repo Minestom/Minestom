@@ -1,9 +1,9 @@
 package net.minestom.server.event.server;
 
+import net.minestom.server.event.trait.AsyncEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
@@ -14,7 +14,7 @@ import java.time.Duration;
  *
  * @see ServerListPingEvent
  */
-public class ClientPingServerEvent implements CancellableEvent {
+public class ClientPingServerEvent implements CancellableEvent, AsyncEvent {
     private static final Duration DEFAULT_DELAY = Duration.of(0, TimeUnit.MILLISECOND);
 
     private final PlayerConnection connection;
@@ -29,7 +29,7 @@ public class ClientPingServerEvent implements CancellableEvent {
      * @param connection the player connection
      * @param payload    the payload the client sent
      */
-    public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload) {
+    public ClientPingServerEvent(PlayerConnection connection, long payload) {
         this.connection = connection;
         this.payload = payload;
         this.delay = DEFAULT_DELAY;
@@ -41,7 +41,7 @@ public class ClientPingServerEvent implements CancellableEvent {
      * @param connection the player connection
      * @param payload    the payload the client sent
      */
-    public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, Duration delay) {
+    public ClientPingServerEvent(PlayerConnection connection, long payload, Duration delay) {
         this.connection = connection;
         this.payload = payload;
         this.delay = delay;
@@ -53,7 +53,7 @@ public class ClientPingServerEvent implements CancellableEvent {
      *
      * @return the connection.
      */
-    public @NotNull PlayerConnection getConnection() {
+    public PlayerConnection getConnection() {
         return connection;
     }
 
@@ -82,7 +82,7 @@ public class ClientPingServerEvent implements CancellableEvent {
      *
      * @return the delay
      */
-    public @NotNull Duration getDelay() {
+    public Duration getDelay() {
         return delay;
     }
 
@@ -91,7 +91,7 @@ public class ClientPingServerEvent implements CancellableEvent {
      *
      * @param delay the delay
      */
-    public void addDelay(@NotNull Duration delay) {
+    public void addDelay(Duration delay) {
         this.delay = this.delay.plus(delay);
     }
 
@@ -100,7 +100,7 @@ public class ClientPingServerEvent implements CancellableEvent {
      *
      * @param delay the delay
      */
-    public void setDelay(@NotNull Duration delay) {
+    public void setDelay(Duration delay) {
         this.delay = delay;
     }
 

@@ -1,12 +1,11 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.item.ItemUpdateStateEvent;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Event when an item is used without clicking on a block.
@@ -14,13 +13,13 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, CancellableEvent {
 
     private final Player player;
-    private final Player.Hand hand;
+    private final PlayerHand hand;
     private final ItemStack itemStack;
 
     private long itemUseTime;
     private boolean cancelled;
 
-    public PlayerUseItemEvent(@NotNull Player player, @NotNull Player.Hand hand, @NotNull ItemStack itemStack, long itemUseTime) {
+    public PlayerUseItemEvent(Player player, PlayerHand hand, ItemStack itemStack, long itemUseTime) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
@@ -32,7 +31,7 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
      *
      * @return the hand used
      */
-    public @NotNull Player.Hand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
@@ -42,13 +41,13 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
      * @return the item
      */
     @Override
-    public @NotNull ItemStack getItemStack() {
+    public ItemStack getItemStack() {
         return itemStack;
     }
 
     /**
      * Gets the item usage duration. After this amount of milliseconds,
-     * the animation will stop automatically and {@link ItemUpdateStateEvent} is called.
+     * the animation will stop automatically and {@link net.minestom.server.event.item.PlayerFinishItemUseEvent} is called.
      *
      * @return the item use time
      */
@@ -76,7 +75,7 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

@@ -1,12 +1,11 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockUtils;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -31,13 +30,13 @@ public class BlockClientNbtTest {
     public void handler() {
         var handler = new BlockHandler() {
             @Override
-            public @NotNull Collection<Tag<?>> getBlockEntityTags() {
+            public Collection<Tag<?>> getBlockEntityTags() {
                 return List.of(Tag.String("test"));
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public Key getKey() {
+                return Key.key("minestom:test");
             }
         };
 

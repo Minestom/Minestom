@@ -1,8 +1,8 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -33,7 +33,7 @@ final class BlockLight implements Light {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
         // Apply section light
         blockPalette.getAllPresent((x, y, z, stateId) -> {
-            final Block block = Block.fromStateId((short) stateId);
+            final Block block = Block.fromStateId(stateId);
             assert block != null;
             final byte lightEmission = (byte) block.registry().lightEmission();
 
@@ -42,78 +42,6 @@ final class BlockLight implements Light {
                 lightSources.enqueue((short) (index | (lightEmission << 12)));
             }
         });
-        return lightSources;
-    }
-
-    private ShortArrayFIFOQueue buildExternalQueue(Palette blockPalette,
-                                                   Point[] neighbors, byte[] content,
-                                                   LightLookup lightLookup,
-                                                   PaletteLookup paletteLookup) {
-        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
-
-        for (int i = 0; i < neighbors.length; i++) {
-            final BlockFace face = BlockFace.values()[i];
-            Point neighborSection = neighbors[i];
-            if (neighborSection == null) continue;
-
-            Palette otherPalette = paletteLookup.palette(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
-            Light otherLight = lightLookup.light(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
-
-            for (int bx = 0; bx < 16; bx++) {
-                for (int by = 0; by < 16; by++) {
-                    final int k = switch (face) {
-                        case WEST, BOTTOM, NORTH -> 0;
-                        case EAST, TOP, SOUTH -> 15;
-                    };
-
-                    final byte lightEmission = (byte) Math.max(switch (face) {
-                        case NORTH, SOUTH -> (byte) otherLight.getLevel(bx, by, 15 - k);
-                        case WEST, EAST -> (byte) otherLight.getLevel(15 - k, bx, by);
-                        default -> (byte) otherLight.getLevel(bx, 15 - k, by);
-                    } - 1, 0);
-
-                    final int posTo = switch (face) {
-                        case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
-                        case WEST, EAST -> k | (by << 4) | (bx << 8);
-                        default -> bx | (by << 4) | (k << 8);
-                    };
-
-                    if (content != null) {
-                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
-                        if (lightEmission <= internalEmission) continue;
-                    }
-
-                    final Block blockTo = switch (face) {
-                        case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
-                        case WEST, EAST -> getBlock(blockPalette, k, bx, by);
-                        default -> getBlock(blockPalette, bx, k, by);
-                    };
-
-                    final Block blockFrom = (switch (face) {
-                        case NORTH, SOUTH -> getBlock(otherPalette, bx, by, 15 - k);
-                        case WEST, EAST -> getBlock(otherPalette, 15 - k, bx, by);
-                        default -> getBlock(otherPalette, bx, 15 - k, by);
-                    });
-
-                    if (blockTo == null && blockFrom != null) {
-                        if (blockFrom.registry().collisionShape().isOccluded(Block.AIR.registry().collisionShape(), face.getOppositeFace()))
-                            continue;
-                    } else if (blockTo != null && blockFrom == null) {
-                        if (Block.AIR.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face))
-                            continue;
-                    } else if (blockTo != null && blockFrom != null) {
-                        if (blockFrom.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face.getOppositeFace()))
-                            continue;
-                    }
-
-                    if (lightEmission > 0) {
-                        final int index = posTo | (lightEmission << 12);
-                        lightSources.enqueue((short) index);
-                    }
-                }
-            }
-        }
-
         return lightSources;
     }
 
@@ -132,7 +60,7 @@ final class BlockLight implements Light {
     @Override
     @ApiStatus.Internal
     public void set(byte[] copyArray) {
-        this.content = copyArray.clone();
+        this.content = lazyArray(copyArray);
         this.contentPropagation = this.content;
         this.isValidBorders = true;
         this.needsSend.set(true);
@@ -145,10 +73,10 @@ final class BlockLight implements Light {
 
     @Override
     public byte[] array() {
-        if (content == null) return new byte[0];
+        if (content == null) return UNSET_CONTENT;
         if (contentPropagation == null) return content;
         var res = LightCompute.bake(contentPropagation, content);
-        if (res == EMPTY_CONTENT) return new byte[0];
+        if (res == EMPTY_CONTENT) return UNSET_CONTENT;
         return res;
     }
 
@@ -170,7 +98,6 @@ final class BlockLight implements Light {
         ShortArrayFIFOQueue queue = buildInternalQueue(blockPalette);
         this.content = LightCompute.compute(blockPalette, queue);
         // Propagate changes to neighbors and self
-        Set<Point> toUpdate = new HashSet<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
@@ -183,8 +110,7 @@ final class BlockLight implements Light {
                 }
             }
         }
-        toUpdate.add(new Vec(chunkX, chunkY, chunkZ));
-        return toUpdate;
+        return Set.of(new BlockVec(chunkX, chunkY, chunkZ));
     }
 
     @Override
@@ -192,9 +118,7 @@ final class BlockLight implements Light {
                                         Point[] neighbors,
                                         LightLookup lightLookup,
                                         PaletteLookup paletteLookup) {
-        if (!isValidBorders) {
-            return Set.of();
-        }
+        if (!isValidBorders) return Set.of();
         ShortArrayFIFOQueue queue = buildExternalQueue(blockPalette, neighbors, content, lightLookup, paletteLookup);
         final byte[] contentPropagationTemp = LightCompute.compute(blockPalette, queue);
         this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
@@ -203,7 +127,7 @@ final class BlockLight implements Light {
         for (int i = 0; i < neighbors.length; i++) {
             final Point neighbor = neighbors[i];
             if (neighbor == null) continue;
-            final BlockFace face = BlockFace.values()[i];
+            final BlockFace face = FACES[i];
             if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {
                 toUpdate.add(neighbor);
             }

@@ -1,19 +1,30 @@
 package net.minestom.server.network.player;
 
+import net.kyori.adventure.text.object.PlayerHeadObjectContents;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Function;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record GameProfile(@NotNull UUID uuid, @NotNull String name,
-                          @NotNull List<@NotNull Property> properties) implements NetworkBuffer.Writer {
+public record GameProfile(
+        UUID uuid, String name,
+        List<Property> properties
+) {
     public static final int MAX_PROPERTIES = 1024;
 
     public GameProfile {
+        Objects.requireNonNull(uuid, "uuid");
+        Objects.requireNonNull(name, "name");
+        Objects.requireNonNull(properties, "properties");
         if (name.isBlank())
             throw new IllegalArgumentException("Name cannot be blank");
         if (name.length() > 16)
@@ -21,33 +32,48 @@ public record GameProfile(@NotNull UUID uuid, @NotNull String name,
         properties = List.copyOf(properties);
     }
 
-    public GameProfile(@NotNull NetworkBuffer reader) {
-        this(reader.read(NetworkBuffer.UUID), reader.read(STRING), reader.readCollection(Property::new, MAX_PROPERTIES));
+    public GameProfile(UUID uuid, String name) {
+        this(uuid, name, List.of());
     }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.UUID, uuid);
-        writer.write(STRING, name);
-        writer.writeCollection(properties);
-    }
+    public static final NetworkBuffer.Type<GameProfile> SERIALIZER = NetworkBufferTemplate.template(
+            NetworkBuffer.UUID, GameProfile::uuid,
+            STRING, GameProfile::name,
+            Property.SERIALIZER.list(MAX_PROPERTIES), GameProfile::properties,
+            GameProfile::new);
+    public static final StructCodec<GameProfile> CODEC = StructCodec.struct(
+            "id", Codec.UUID, GameProfile::uuid,
+            "name", Codec.STRING, GameProfile::name,
+            "properties", Property.LIST_CODEC.optional(List.of()), GameProfile::properties,
+            GameProfile::new);
 
-    public record Property(@NotNull String name, @NotNull String value,
-                           @Nullable String signature) implements NetworkBuffer.Writer {
-        public Property(@NotNull String name, @NotNull String value) {
+    public record Property(String name, String value, @Nullable String signature) implements PlayerHeadObjectContents.ProfileProperty {
+        public Property {
+            Objects.requireNonNull(name, "name");
+            Objects.requireNonNull(value, "value");
+        }
+
+        public Property(String name, String value) {
             this(name, value, null);
         }
 
-        public Property(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), reader.read(STRING),
-                    reader.readOptional(STRING));
-        }
+        public static final NetworkBuffer.Type<Property> SERIALIZER = NetworkBufferTemplate.template(
+                STRING, Property::name,
+                STRING, Property::value,
+                STRING.optional(), Property::signature,
+                Property::new);
+        public static final Codec<Property> CODEC = StructCodec.struct(
+                "name", Codec.STRING, Property::name,
+                "value", Codec.STRING, Property::value,
+                "signature", Codec.STRING.optional(), Property::signature,
+                Property::new);
 
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(STRING, name);
-            writer.write(STRING, value);
-            writer.writeOptional(STRING, signature);
-        }
+        public static final Codec<List<Property>> LIST_CODEC = Codec
+                .Either(Codec.STRING.mapValue(Codec.STRING), CODEC.list())
+                .transform(either -> either.unify(
+                        map -> map.entrySet().stream().map(
+                                entry -> new Property(entry.getKey(), entry.getValue(), null)
+                        ).toList(), Function.identity()),
+                        Either::right);
     }
 }

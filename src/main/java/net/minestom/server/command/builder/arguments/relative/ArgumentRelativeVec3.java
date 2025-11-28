@@ -1,7 +1,7 @@
 package net.minestom.server.command.builder.arguments.relative;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.coordinate.Vec;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -12,13 +12,13 @@ import java.util.function.Function;
  */
 public class ArgumentRelativeVec3 extends ArgumentRelativeVec {
 
-    public ArgumentRelativeVec3(@NotNull String id) {
+    public ArgumentRelativeVec3(String id) {
         super(id, 3);
     }
 
     @Override
-    public String parser() {
-        return "minecraft:vec3";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.VEC3;
     }
 
     @Override

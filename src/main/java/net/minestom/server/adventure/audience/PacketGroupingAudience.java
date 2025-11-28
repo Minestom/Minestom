@@ -10,6 +10,7 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
@@ -19,8 +20,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.ActionBarPacket;
 import net.minestom.server.network.packet.server.play.ClearTitlesPacket;
 import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
-import net.minestom.server.utils.PacketUtils;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.utils.PacketSendingUtils;
 
 import java.util.Collection;
 
@@ -28,7 +28,6 @@ import java.util.Collection;
  * An audience implementation that sends grouped packets if possible.
  */
 public interface PacketGroupingAudience extends ForwardingAudience {
-
     /**
      * Creates a packet grouping audience that copies an iterable of players. The
      * underlying collection is not copied, so changes to the collection will be
@@ -37,7 +36,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * @param players the players
      * @return the audience
      */
-    static @NotNull PacketGroupingAudience of(@NotNull Collection<Player> players) {
+    static PacketGroupingAudience of(Collection<Player> players) {
         return () -> players;
     }
 
@@ -46,35 +45,35 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      *
      * @return the connections
      */
-    @NotNull Collection<@NotNull Player> getPlayers();
+    Collection<Player> getPlayers();
 
     /**
      * Broadcast a ServerPacket to all players of this audience
      *
      * @param packet the packet to broadcast
      */
-    default void sendGroupedPacket(@NotNull ServerPacket packet) {
-        PacketUtils.sendGroupedPacket(getPlayers(), packet);
+    default void sendGroupedPacket(ServerPacket packet) {
+        PacketSendingUtils.sendGroupedPacket(getPlayers(), packet);
     }
 
     @Deprecated
     @Override
-    default void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
+    default void sendMessage(Identity source, Component message, MessageType type) {
         Messenger.sendMessage(this.getPlayers(), message, ChatPosition.fromMessageType(type), source.uuid());
     }
 
     @Override
-    default void sendActionBar(@NotNull Component message) {
+    default void sendActionBar(Component message) {
         sendGroupedPacket(new ActionBarPacket(message));
     }
 
     @Override
-    default void sendPlayerListHeaderAndFooter(@NotNull Component header, @NotNull Component footer) {
+    default void sendPlayerListHeaderAndFooter(Component header, Component footer) {
         sendGroupedPacket(new PlayerListHeaderAndFooterPacket(header, footer));
     }
 
     @Override
-    default <T> void sendTitlePart(@NotNull TitlePart<T> part, @NotNull T value) {
+    default <T> void sendTitlePart(TitlePart<T> part, T value) {
         sendGroupedPacket(AdventurePacketConvertor.createTitlePartPacket(part, value));
     }
 
@@ -89,12 +88,12 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     }
 
     @Override
-    default void showBossBar(@NotNull BossBar bar) {
+    default void showBossBar(BossBar bar) {
         MinecraftServer.getBossBarManager().addBossBar(this.getPlayers(), bar);
     }
 
     @Override
-    default void hideBossBar(@NotNull BossBar bar) {
+    default void hideBossBar(BossBar bar) {
         MinecraftServer.getBossBarManager().removeBossBar(this.getPlayers(), bar);
     }
 
@@ -103,17 +102,17 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * @param sound The sound to play
      * @param point The point in this instance at which to play the sound
      */
-    default void playSound(@NotNull Sound sound, @NotNull Point point) {
+    default void playSound(Sound sound, Point point) {
         playSound(sound, point.x(), point.y(), point.z());
     }
 
     @Override
-    default void playSound(@NotNull Sound sound, double x, double y, double z) {
+    default void playSound(Sound sound, double x, double y, double z) {
         sendGroupedPacket(AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
     }
 
     @Override
-    default void playSound(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
+    default void playSound(Sound sound, Sound.Emitter emitter) {
         if (emitter != Sound.Emitter.self()) {
             sendGroupedPacket(AdventurePacketConvertor.createSoundPacket(sound, emitter));
         } else {
@@ -125,12 +124,21 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     }
 
     @Override
-    default void stopSound(@NotNull SoundStop stop) {
+    default void stopSound(SoundStop stop) {
         sendGroupedPacket(AdventurePacketConvertor.createSoundStopPacket(stop));
     }
 
+    /**
+     * Send a {@link Notification} to the audience.
+     * @param notification the {@link Notification} to send
+     */
+    default void sendNotification(Notification notification) {
+        sendGroupedPacket(notification.buildAddPacket());
+        sendGroupedPacket(notification.buildRemovePacket());
+    }
+
     @Override
-    default @NotNull Iterable<? extends Audience> audiences() {
+    default Iterable<? extends Audience> audiences() {
         return this.getPlayers();
     }
 }

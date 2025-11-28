@@ -1,25 +1,27 @@
 package net.minestom.server.potion;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects permits PotionEffectImpl {
-
-    NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.map(PotionEffectImpl::getId, PotionEffect::id);
+public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>, PotionEffects permits PotionEffectImpl {
+    NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionEffect::fromId, PotionEffect::id);
+    Codec<PotionEffect> CODEC = Codec.KEY.transform(PotionEffect::fromKey, PotionEffect::key);
 
     @Contract(pure = true)
-    @NotNull Registry.PotionEffectEntry registry();
+    RegistryData.PotionEffectEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default Key key() {
+        return registry().key();
     }
 
     @Override
@@ -27,19 +29,23 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
         return registry().id();
     }
 
-    static @NotNull Collection<@NotNull PotionEffect> values() {
-        return PotionEffectImpl.values();
+    static Collection<PotionEffect> values() {
+        return PotionEffectImpl.REGISTRY.values();
     }
 
-    static @Nullable PotionEffect fromNamespaceId(@NotNull String namespaceID) {
-        return PotionEffectImpl.getSafe(namespaceID);
+    static @Nullable PotionEffect fromKey(@KeyPattern String key) {
+        return fromKey(Key.key(key));
     }
 
-    static @Nullable PotionEffect fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable PotionEffect fromKey(Key key) {
+        return PotionEffectImpl.REGISTRY.get(key);
     }
 
     static @Nullable PotionEffect fromId(int id) {
-        return PotionEffectImpl.getId(id);
+        return PotionEffectImpl.REGISTRY.get(id);
+    }
+
+    static Registry<PotionEffect> staticRegistry() {
+        return PotionEffectImpl.REGISTRY;
     }
 }

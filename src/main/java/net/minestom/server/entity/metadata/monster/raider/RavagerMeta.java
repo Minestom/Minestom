@@ -2,13 +2,9 @@ package net.minestom.server.entity.metadata.monster.raider;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
 
 public class RavagerMeta extends RaiderMeta {
-    public static final byte OFFSET = RaiderMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
-    public RavagerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public RavagerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

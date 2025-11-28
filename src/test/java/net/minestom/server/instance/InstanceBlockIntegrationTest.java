@@ -7,7 +7,6 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.tag.Tag;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
@@ -84,15 +83,15 @@ public class InstanceBlockIntegrationTest {
     public void handlerPresentInPlacementRuleUpdate(Env env) {
 
         AtomicReference<Block> currentBlock = new AtomicReference<>();
-        env.process().block().registerHandler(SuspiciousGravelBlockHandler.INSTANCE.getNamespaceId(), () -> SuspiciousGravelBlockHandler.INSTANCE);
+        env.process().block().registerHandler(SuspiciousGravelBlockHandler.INSTANCE.getKey(), () -> SuspiciousGravelBlockHandler.INSTANCE);
         env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.SUSPICIOUS_GRAVEL) {
             @Override
-            public @Nullable Block blockPlace(@NotNull PlacementState placementState) {
+            public @Nullable Block blockPlace(PlacementState placementState) {
                 return block;
             }
 
             @Override
-            public @NotNull Block blockUpdate(@NotNull UpdateState updateState) {
+            public Block blockUpdate(UpdateState updateState) {
                 currentBlock.set(updateState.currentBlock());
                 return super.blockUpdate(updateState);
             }

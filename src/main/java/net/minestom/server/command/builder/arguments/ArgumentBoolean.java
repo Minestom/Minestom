@@ -1,8 +1,8 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a boolean value.
@@ -17,9 +17,8 @@ public class ArgumentBoolean extends Argument<Boolean> {
         super(id);
     }
 
-    @NotNull
     @Override
-    public Boolean parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public Boolean parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         if (input.equalsIgnoreCase("true"))
             return true;
         if (input.equalsIgnoreCase("false"))
@@ -29,8 +28,8 @@ public class ArgumentBoolean extends Argument<Boolean> {
     }
 
     @Override
-    public String parser() {
-        return "brigadier:bool";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.BOOL;
     }
     @Override
     public String toString() {

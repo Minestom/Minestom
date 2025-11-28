@@ -1,0 +1,41 @@
+name: Performance Problem
+description: Report a performance problem which is related to Minestom
+labels: [ "needs triage", "performance" ]
+projects: ["minestom/6"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before creating an issue regarding to the performance, please reach out for support on our [Discord](https://discord.gg/minestom/)
+        or in the [Discussions](https://github.com/Minestom/Minestom/discussions)!
+        
+        **Please be aware: Performance issues can sometimes depend on your specific implementation and not on Minestom itself. If the situation is clear and it's not a problem with the project, we will close the issue without any comment.**
+  - type: input
+    attributes:
+      label: Used Minestom version
+      description: Which version of Minestom are you using?
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the performance problem
+      description: If applicable, please describe your issue.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Other
+      description: |
+        Please include other helpful links below.
+        The more information we receive, the quicker and more effective we can be at finding the solution to the issue.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting your issue, please make sure you have done the following:
+        
+        1. You are running the latest version of Minestom from [Release page](https://github.com/Minestom/Minestom)
+        2. You searched for and ensured there isn't already an open issue regarding this
+        3. Your version of Minecraft is supported by Minestom

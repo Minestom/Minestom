@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.UnknownNullability;
 
 /**
@@ -18,6 +19,9 @@ import org.jetbrains.annotations.UnknownNullability;
  * @param collisionPoints the points where the entity collided
  * @param collisionShapes the shapes the entity collided with
  * @param collisionShapePositions the positions of the shapes the entity collided with
+ * @param hasCollision if the entity collided
+ * @param res sweep result of the collision
+ * @param cached if the result was due to quickly exiting
  */
 @ApiStatus.Experimental
 public record PhysicsResult(
@@ -32,6 +36,10 @@ public record PhysicsResult(
         @UnknownNullability Shape @UnknownNullability [] collisionShapes,
         @UnknownNullability Point @UnknownNullability [] collisionShapePositions,
         boolean hasCollision,
-        SweepResult res
+        SweepResult res,
+        boolean cached
 ) {
+    public PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround, boolean collisionX, boolean collisionY, boolean collisionZ, Vec originalDelta, Point[] collisionPoints, Shape[] collisionShapes, Point[] collisionShapePositions, boolean hasCollision, SweepResult res) {
+        this(newPosition, newVelocity, isOnGround, collisionX, collisionY, collisionZ, originalDelta, collisionPoints, collisionShapes, collisionShapePositions, hasCollision, res, false);
+    }
 }

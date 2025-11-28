@@ -1,29 +1,21 @@
 package net.minestom.server;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.registry.RegistryData;
+import org.jetbrains.annotations.UnknownNullability;
 
-record FeatureFlagImpl(@NotNull Registry.FeatureFlagEntry registry) implements FeatureFlag {
+record FeatureFlagImpl(RegistryData.FeatureFlagEntry registry) implements FeatureFlag {
+    static final Registry<FeatureFlag> REGISTRY = RegistryData.createStaticRegistry(Key.key("feature_flag"),
+            (namespace, properties) -> new FeatureFlagImpl(RegistryData.featureFlag(namespace, properties)));
 
-    private static final Registry.Container<FeatureFlagImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.FEATURE_FLAGS,
-            (namespace, properties) -> new FeatureFlagImpl(Registry.featureFlag(namespace, properties)));
-
-    static FeatureFlag get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static FeatureFlag getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static FeatureFlag getId(int id) {
-        return CONTAINER.getId(id);
+    static @UnknownNullability FeatureFlag get(String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override
-    public @NotNull NamespaceID namespace() {
-        return registry.namespace();
+    public Key key() {
+        return registry.key();
     }
 
     @Override

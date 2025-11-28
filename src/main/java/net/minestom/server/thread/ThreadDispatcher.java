@@ -1,14 +1,11 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.Tickable;
-import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
-import java.util.concurrent.CountDownLatch;
+import java.util.List;
 import java.util.function.IntFunction;
 
 /**
@@ -19,70 +16,54 @@ import java.util.function.IntFunction;
  * It is recommended that {@link Tickable}s being added to a dispatcher also implement {@link AcquirableSource}, as
  * doing so will allow the user to synchronize external access to them using the {@link Acquirable} API.
  * <p>
- * Instances of this class can be obtained by calling {@link ThreadDispatcher#of(ThreadProvider, int)}, or a similar
+ * Instances of this class can be obtained by calling {@link ThreadDispatcher#dispatcher(ThreadProvider, int)}, or a similar
  * overload.
+ *
  * @see Acquirable
  * @see AcquirableSource
  */
-public final class ThreadDispatcher<P> {
-    private final ThreadProvider<P> provider;
-    private final List<TickThread> threads;
-
-    // Partition -> dispatching context
-    // Defines how computation is dispatched to the threads
-    private final Map<P, Partition> partitions = new WeakHashMap<>();
-    // Cache to retrieve the threading context from a tickable element
-    private final Map<Tickable, Partition> elements = new WeakHashMap<>();
-    // Queue to update partition linked thread
-    private final ArrayDeque<P> partitionUpdateQueue = new ArrayDeque<>();
-
-    // Requests consumed at the end of each tick
-    private final MessagePassingQueue<DispatchUpdate<P>> updates = new MpscUnboundedArrayQueue<>(1024);
-
-    private ThreadDispatcher(ThreadProvider<P> provider, int threadCount,
-                             @NotNull IntFunction<? extends TickThread> threadGenerator) {
-        this.provider = provider;
-        TickThread[] threads = new TickThread[threadCount];
-        Arrays.setAll(threads, threadGenerator);
-        this.threads = List.of(threads);
-        this.threads.forEach(Thread::start);
-    }
-
+public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDispatcherImpl {
     /**
      * Creates a new ThreadDispatcher using default thread names (ex. Ms-Tick-n).
+     * <p>Remember to start the dispatcher using {@link #start()}</p>
      *
-     * @param provider the {@link ThreadProvider} instance to be used for defining thread IDs
+     * @param provider    the {@link ThreadProvider} instance to be used for defining thread IDs
      * @param threadCount the number of threads to create for this dispatcher
+     * @param <P>         the dispatcher partition type
      * @return a new ThreadDispatcher instance
-     * @param <P> the dispatcher partition type
      */
-    public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider, int threadCount) {
-        return new ThreadDispatcher<>(provider, threadCount, TickThread::new);
+    @Contract(pure = true)
+    static <P, E extends Tickable> ThreadDispatcher<P, E> dispatcher(ThreadProvider<P> provider, int threadCount) {
+        return new ThreadDispatcherImpl<>(provider, threadCount, TickThread::new);
     }
 
     /**
      * Creates a new ThreadDispatcher using the caller-provided thread name generator {@code nameGenerator}. This is
      * useful to disambiguate custom ThreadDispatcher instances from ones used in core Minestom code.
+     * <p>Remember to start the dispatcher using {@link #start()}</p>
      *
-     * @param provider the {@link ThreadProvider} instance to be used for defining thread IDs
+     * @param provider      the {@link ThreadProvider} instance to be used for defining thread IDs
      * @param nameGenerator a function that should return unique names, given a thread index
-     * @param threadCount the number of threads to create for this dispatcher
+     * @param threadCount   the number of threads to create for this dispatcher
+     * @param <P>           the dispatcher partition type
      * @return a new ThreadDispatcher instance
-     * @param <P> the dispatcher partition type
      */
-    public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider,
-                                                      @NotNull IntFunction<String> nameGenerator, int threadCount) {
-        return new ThreadDispatcher<>(provider, threadCount, index -> new TickThread(nameGenerator.apply(index)));
+    @Contract(pure = true)
+    static <P, E extends Tickable> ThreadDispatcher<P, E> dispatcher(ThreadProvider<P> provider,
+                                                                              IntFunction<String> nameGenerator, int threadCount) {
+        return new ThreadDispatcherImpl<>(provider, threadCount, index -> new TickThread(nameGenerator.apply(index)));
     }
 
     /**
      * Creates a single-threaded dispatcher that uses default thread names.
+     * <p>Remember to start the dispatcher using {@link #start()}</p>
      *
-     * @return a new ThreadDispatcher instance
      * @param <P> the dispatcher partition type
+     * @return a new ThreadDispatcher instance
      */
-    public static <P> @NotNull ThreadDispatcher<P> singleThread() {
-        return of(ThreadProvider.counter(), 1);
+    @Contract(pure = true)
+    static <P, E extends Tickable> ThreadDispatcher<P, E> singleThread() {
+        return dispatcher(ThreadProvider.counter(), 1);
     }
 
     /**
@@ -94,39 +75,14 @@ public final class ThreadDispatcher<P> {
      */
     @Unmodifiable
     @ApiStatus.Internal
-    public @NotNull List<@NotNull TickThread> threads() {
-        return threads;
-    }
+    List<TickThread> threads();
 
     /**
      * Prepares the update by creating the {@link TickThread} tasks.
      *
-     * @param time the tick time in milliseconds
+     * @param time the tick time in nanos
      */
-    public synchronized void updateAndAwait(long time) {
-        // Update dispatcher
-        this.updates.drain(update -> {
-            switch (update) {
-                case DispatchUpdate.PartitionLoad<P> chunkUpdate -> processLoadedPartition(chunkUpdate.partition());
-                case DispatchUpdate.PartitionUnload<P> partitionUnload ->
-                        processUnloadedPartition(partitionUnload.partition());
-                case DispatchUpdate.ElementUpdate<P> elementUpdate ->
-                        processUpdatedElement(elementUpdate.tickable(), elementUpdate.partition());
-                case DispatchUpdate.ElementRemove<P> elementRemove -> processRemovedElement(elementRemove.tickable());
-                case null, default ->
-                        throw new IllegalStateException("Unknown update type: " +
-                                (update == null ? "null" : update.getClass().getSimpleName()));
-            }
-        });
-        // Tick all partitions
-        CountDownLatch latch = new CountDownLatch(threads.size());
-        for (TickThread thread : threads) thread.startTick(latch, time);
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    void updateAndAwait(long time);
 
     /**
      * Called at the end of each tick to clear removed tickables, refresh the partition linked to a tickable, and
@@ -134,197 +90,100 @@ public final class ThreadDispatcher<P> {
      *
      * @param nanoTimeout max time in nanoseconds to update partitions
      */
-    public void refreshThreads(long nanoTimeout) {
-        switch (provider.refreshType()) {
-            case NEVER -> {
-                // Do nothing
-            }
-            case ALWAYS -> {
-                final long currentTime = System.nanoTime();
-                int counter = partitionUpdateQueue.size();
-                while (true) {
-                    final P partition = partitionUpdateQueue.pollFirst();
-                    if (partition == null) break;
-                    // Update chunk's thread
-                    Partition partitionEntry = partitions.get(partition);
-                    assert partitionEntry != null;
-                    final TickThread previous = partitionEntry.thread;
-                    final TickThread next = retrieveThread(partition);
-                    if (next != previous) {
-                        partitionEntry.thread = next;
-                        previous.entries().remove(partitionEntry);
-                        next.entries().add(partitionEntry);
-                    }
-                    this.partitionUpdateQueue.addLast(partition);
-                    if (--counter <= 0 || System.nanoTime() - currentTime >= nanoTimeout) {
-                        break;
-                    }
-                }
-            }
-        }
-    }
+    void refreshThreads(long nanoTimeout);
 
     /**
      * Refreshes all thread as per {@link ThreadDispatcher#refreshThreads(long)}, with a timeout of
      * {@link Long#MAX_VALUE}.
      */
-    public void refreshThreads() {
+    default void refreshThreads() {
         refreshThreads(Long.MAX_VALUE);
     }
 
     /**
-     * Registers a new partition.
+     * Signals an update to the dispatcher.
+     * <p>
+     * This method is used to notify the dispatcher of changes that need to be processed, such as partition loads,
+     * unloads, or element updates.
+     * <p>
+     * Updates are processed at the start of each tick, before the actual ticking of elements.
      *
-     * @param partition the partition to register
+     * @param update the update to signal
      */
-    public void createPartition(@NotNull P partition) {
-        signalUpdate(new DispatchUpdate.PartitionLoad<>(partition));
+    void signalUpdate(ThreadDispatcher.Update<P, E> update);
+
+    default void createPartition(P partition) {
+        signalUpdate(new Update.PartitionLoad<>(partition));
+    }
+
+    default void deletePartition(P partition) {
+        signalUpdate(new Update.PartitionUnload<>(partition));
+    }
+
+    default void updateElement(E element, P partition) {
+        signalUpdate(new Update.ElementUpdate<>(element, partition));
+    }
+
+    default void removeElement(E element) {
+        signalUpdate(new Update.ElementRemove<>(element));
     }
 
     /**
-     * Deletes an existing partition.
-     *
-     * @param partition the partition to delete
+     * Starts all the {@link TickThread tick threads}.
+     * <p>
+     * This will throw an {@link IllegalThreadStateException} if the threads have already been started.
      */
-    public void deletePartition(@NotNull P partition) {
-        signalUpdate(new DispatchUpdate.PartitionUnload<>(partition));
-    }
+    void start();
 
     /**
-     * Updates a {@link Tickable}, signalling that it is a part of {@code partition}.
+     * Checks if all the {@link TickThread tick threads} are alive.
      *
-     * @param tickable the Tickable to update
-     * @param partition the partition the Tickable is part of
+     * @return true if all threads are alive, false otherwise
      */
-    public void updateElement(@NotNull Tickable tickable, @NotNull P partition) {
-        signalUpdate(new DispatchUpdate.ElementUpdate<>(tickable, partition));
-    }
-
-    /**
-     * Removes a {@link Tickable}.
-     *
-     * @param tickable the Tickable to remove
-     */
-    public void removeElement(@NotNull Tickable tickable) {
-        signalUpdate(new DispatchUpdate.ElementRemove<>(tickable));
-    }
+    boolean isAlive();
 
     /**
      * Shutdowns all the {@link TickThread tick threads}.
      * <p>
      * Action is irreversible.
      */
-    public void shutdown() {
-        this.threads.forEach(TickThread::shutdown);
-    }
-
-    private TickThread retrieveThread(P partition) {
-        final int threadId = provider.findThread(partition);
-        final int index = Math.abs(threadId) % threads.size();
-        return threads.get(index);
-    }
-
-    private void signalUpdate(@NotNull DispatchUpdate<P> update) {
-        this.updates.relaxedOffer(update);
-    }
-
-    private void processLoadedPartition(P partition) {
-        if (partitions.containsKey(partition)) return;
-        final TickThread thread = retrieveThread(partition);
-        final Partition partitionEntry = new Partition(thread);
-        thread.entries().add(partitionEntry);
-        this.partitions.put(partition, partitionEntry);
-        this.partitionUpdateQueue.add(partition);
-        if (partition instanceof Tickable tickable) {
-            processUpdatedElement(tickable, partition);
-        }
-    }
-
-    private void processUnloadedPartition(P partition) {
-        final Partition partitionEntry = partitions.remove(partition);
-        if (partitionEntry != null) {
-            TickThread thread = partitionEntry.thread;
-            thread.entries().remove(partitionEntry);
-        }
-        this.partitionUpdateQueue.remove(partition);
-        if (partition instanceof Tickable tickable) {
-            processRemovedElement(tickable);
-        }
-    }
-
-    private void processRemovedElement(Tickable tickable) {
-        Partition partition = elements.get(tickable);
-        if (partition != null) {
-            partition.elements.remove(tickable);
-        }
-    }
-
-    private void processUpdatedElement(Tickable tickable, P partition) {
-        Partition partitionEntry;
-
-        partitionEntry = elements.get(tickable);
-        // Remove from previous list
-        if (partitionEntry != null) {
-            partitionEntry.elements.remove(tickable);
-        }
-        // Add to new list
-        partitionEntry = partitions.get(partition);
-        if (partitionEntry != null) {
-            this.elements.put(tickable, partitionEntry);
-            partitionEntry.elements.add(tickable);
-            if (tickable instanceof AcquirableSource<?> acquirableSource) {
-                ((AcquirableImpl<?>) acquirableSource.acquirable()).updateThread(partitionEntry.thread());
-            }
-        }
-    }
-
-    /**
-     * A data structure which may contain {@link Tickable}s, and is assigned a single {@link TickThread}.
-     */
-    public static final class Partition {
-        private TickThread thread;
-        private final List<Tickable> elements = new ArrayList<>();
-
-        private Partition(TickThread thread) {
-            this.thread = thread;
-        }
-
-        /**
-         * The {@link TickThread} used by this partition.
-         * <p>
-         * This method is marked internal to reflect {@link TickThread}s own internal status.
-         *
-         * @return the TickThread used by this partition
-         */
-        @ApiStatus.Internal
-        public @NotNull TickThread thread() {
-            return thread;
-        }
-
-        /**
-         * The {@link Tickable}s assigned to this partition.
-         *
-         * @return the tickables assigned to this partition
-         */
-        public @NotNull List<Tickable> elements() {
-            return elements;
-        }
-    }
+    void shutdown();
 
     @ApiStatus.Internal
-    sealed interface DispatchUpdate<P> permits
-            DispatchUpdate.PartitionLoad, DispatchUpdate.PartitionUnload,
-            DispatchUpdate.ElementUpdate, DispatchUpdate.ElementRemove {
-        record PartitionLoad<P>(@NotNull P partition) implements DispatchUpdate<P> {
+    @SuppressWarnings("unused")
+    sealed interface Update<P, E> {
+
+        /**
+         * Registers a new partition.
+         *
+         * @param partition the partition to register
+         */
+        record PartitionLoad<P, E>(P partition) implements Update<P, E> {
         }
 
-        record PartitionUnload<P>(@NotNull P partition) implements DispatchUpdate<P> {
+        /**
+         * Deletes an existing partition.
+         *
+         * @param partition the partition to delete
+         */
+        record PartitionUnload<P, E>(P partition) implements Update<P, E> {
         }
 
-        record ElementUpdate<P>(@NotNull Tickable tickable, P partition) implements DispatchUpdate<P> {
+        /**
+         * Updates an element}, signalling that it is a part of {@code partition}.
+         *
+         * @param element   the element to update
+         * @param partition the partition the Tickable is part of
+         */
+        record ElementUpdate<P, E>(E element, P partition) implements Update<P, E> {
         }
 
-        record ElementRemove<P>(@NotNull Tickable tickable) implements DispatchUpdate<P> {
+        /**
+         * Removes an element.
+         *
+         * @param element the element to remove
+         */
+        record ElementRemove<P, E>(E element) implements Update<P, E> {
         }
     }
 }

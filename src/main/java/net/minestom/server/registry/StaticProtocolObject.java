@@ -1,27 +1,24 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface StaticProtocolObject extends ProtocolObject, Keyed {
-
-    @Contract(pure = true)
-    @NotNull NamespaceID namespace();
+public interface StaticProtocolObject<T> extends RegistryKey<T> {
 
     @Contract(pure = true)
-    default @NotNull String name() {
-        return namespace().asString();
+    default String name() {
+        return key().asString();
     }
 
     @Override
     @Contract(pure = true)
-    default @NotNull Key key() {
-        return namespace();
-    }
+    Key key();
 
     @Contract(pure = true)
     int id();
+
+    default @Nullable Object registry() {
+        return null;
+    }
 }

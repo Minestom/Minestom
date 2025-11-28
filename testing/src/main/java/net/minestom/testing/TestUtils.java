@@ -1,7 +1,8 @@
 package net.minestom.testing;
 
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
+import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.coordinate.Point;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -34,7 +35,7 @@ public final class TestUtils {
 
     public static void assertEqualsSNBT(String snbt, BinaryTag compound) {
         try {
-            final var converted = TagStringIOExt.readTag(snbt);
+            final var converted = MinestomAdventure.tagStringIO().asTag(snbt);
             assertEquals(converted, compound);
         } catch (IOException e) {
             fail(e);
@@ -53,6 +54,10 @@ public final class TestUtils {
 
     public static void assertEqualsIgnoreSpace(String s1, String s2) {
         assertEqualsIgnoreSpace(s1, s2, true);
+    }
+
+    public static void assertPoint(Point p1, Point p2) {
+        assertTrue(p1.samePoint(p2), String.format("Points don't match! Expected: %s, but got: %s", p1, p2));
     }
 
     private static String stripExtraSpaces(String s) {

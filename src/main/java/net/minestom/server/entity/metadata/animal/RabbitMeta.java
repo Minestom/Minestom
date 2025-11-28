@@ -1,33 +1,56 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.network.NetworkBuffer;
+import org.jetbrains.annotations.Nullable;
 
 public class RabbitMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
-    public RabbitMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public RabbitMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    @NotNull
-    public Type getType() {
-        int id = super.metadata.getIndex(OFFSET, 0);
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#RABBIT_VARIANT} instead.
+     */
+    @Deprecated
+    public void setVariant(RabbitMeta.Variant variant) {
+        int id = variant == Variant.KILLER_BUNNY ? 99 : variant.ordinal();
+        metadata.set(MetadataDef.Rabbit.TYPE, id);
+    }
+
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#RABBIT_VARIANT} instead.
+     */
+    @Deprecated
+    public RabbitMeta.Variant getVariant() {
+        int id = metadata.get(MetadataDef.Rabbit.TYPE);
         if (id == 99) {
-            return Type.KILLER_BUNNY;
+            return Variant.KILLER_BUNNY;
         }
-        return Type.VALUES[id];
+        return Variant.VALUES[id];
     }
 
-    public void setType(@NotNull Type value) {
-        int id = value == Type.KILLER_BUNNY ? 99 : value.ordinal();
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(id));
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(DataComponent<T> component) {
+        if (component == DataComponents.RABBIT_VARIANT)
+            return (T) getVariant();
+        return super.get(component);
     }
 
-    public enum Type {
+    @Override
+    protected <T> void set(DataComponent<T> component, T value) {
+        if (component == DataComponents.RABBIT_VARIANT)
+            setVariant((Variant) value);
+        else super.set(component, value);
+    }
+
+    public enum Variant {
         BROWN,
         WHITE,
         BLACK,
@@ -36,7 +59,10 @@ public class RabbitMeta extends AnimalMeta {
         SALT_AND_PEPPER,
         KILLER_BUNNY;
 
-        private final static Type[] VALUES = values();
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
+        public static final Codec<Variant> CODEC = Codec.Enum(Variant.class);
+
+        private final static Variant[] VALUES = values();
     }
 
 }

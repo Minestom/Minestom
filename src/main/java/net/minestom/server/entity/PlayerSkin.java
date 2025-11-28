@@ -3,9 +3,13 @@ package net.minestom.server.entity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.mojang.MojangUtils;
 import org.jetbrains.annotations.Blocking;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,7 +27,7 @@ public record PlayerSkin(String textures, String signature) {
      * @return a player skin based on the UUID, null if not found
      */
     @Blocking
-    public static @Nullable PlayerSkin fromUuid(@NotNull String uuid) {
+    public static @Nullable PlayerSkin fromUuid(String uuid) {
         final JsonObject jsonObject = MojangUtils.fromUuid(uuid);
         if (jsonObject == null) return null;
         try {
@@ -49,7 +53,7 @@ public record PlayerSkin(String textures, String signature) {
      * @return a skin based on a Minecraft username, null if not found
      */
     @Blocking
-    public static @Nullable PlayerSkin fromUsername(@NotNull String username) {
+    public static @Nullable PlayerSkin fromUsername(String username) {
         final JsonObject jsonObject = MojangUtils.fromUsername(username);
         if (jsonObject == null) return null;
         try {
@@ -61,19 +65,30 @@ public record PlayerSkin(String textures, String signature) {
         }
     }
 
-    /**
-     * @deprecated use {@link #textures()}
-     */
-    @Deprecated
-    public String getTextures() {
-        return textures;
+    public record Patch(
+            @Nullable Key body,
+            @Nullable Key cape,
+            @Nullable Key elytra,
+            @Nullable Boolean slim
+    ) {
+        public static final Patch EMPTY = new Patch(null, null, null, null);
+
+        public static final NetworkBuffer.Type<Patch> NETWORK_TYPE = NetworkBufferTemplate.template(
+                NetworkBuffer.KEY.optional(), Patch::body,
+                NetworkBuffer.KEY.optional(), Patch::cape,
+                NetworkBuffer.KEY.optional(), Patch::elytra,
+                NetworkBuffer.BOOLEAN.optional(), Patch::slim,
+                Patch::new);
+        public static final StructCodec<Patch> CODEC = StructCodec.struct(
+                "body", Codec.KEY.optional(), Patch::body,
+                "cape", Codec.KEY.optional(), Patch::cape,
+                "elytra", Codec.KEY.optional(), Patch::elytra,
+                "slim", Codec.BOOLEAN.optional(), Patch::slim,
+                Patch::new);
+
+        public Patch(Key body) {
+            this(body, null, null, null);
+        }
     }
 
-    /**
-     * @deprecated use {@link #signature()}
-     */
-    @Deprecated
-    public String getSignature() {
-        return signature;
-    }
 }

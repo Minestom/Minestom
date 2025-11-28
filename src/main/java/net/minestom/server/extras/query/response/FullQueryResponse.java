@@ -2,17 +2,14 @@ package net.minestom.server.extras.query.response;
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.extras.query.Query;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.network.NetworkBuffer;
 
 import java.util.*;
 
 /**
  * A full query response containing a dynamic set of responses.
  */
-public class FullQueryResponse implements Writeable {
+public class FullQueryResponse {
     private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
     private static final byte[] PADDING_10 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
             PADDING_11 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -43,7 +40,7 @@ public class FullQueryResponse implements Writeable {
      * @param key   the key
      * @param value the value
      */
-    public void put(@NotNull QueryKey key, @NotNull String value) {
+    public void put(QueryKey key, String value) {
         this.put(key.getKey(), value);
     }
 
@@ -53,7 +50,7 @@ public class FullQueryResponse implements Writeable {
      * @param key   the key
      * @param value the value
      */
-    public void put(@NotNull String key, @NotNull String value) {
+    public void put(String key, String value) {
         this.kv.put(key, value);
     }
 
@@ -62,7 +59,7 @@ public class FullQueryResponse implements Writeable {
      *
      * @return the map
      */
-    public @NotNull Map<String, String> getKeyValuesMap() {
+    public Map<String, String> getKeyValuesMap() {
         return this.kv;
     }
 
@@ -71,7 +68,7 @@ public class FullQueryResponse implements Writeable {
      *
      * @param map the map
      */
-    public void setKeyValuesMap(@NotNull Map<String, String> map) {
+    public void setKeyValuesMap(Map<String, String> map) {
         this.kv = Objects.requireNonNull(map, "map");
     }
 
@@ -80,7 +77,7 @@ public class FullQueryResponse implements Writeable {
      *
      * @param players the players
      */
-    public void addPlayers(@NotNull String @NotNull ... players) {
+    public void addPlayers(String ... players) {
         Collections.addAll(this.players, players);
     }
 
@@ -89,7 +86,7 @@ public class FullQueryResponse implements Writeable {
      *
      * @param players the players
      */
-    public void addPlayers(@NotNull Collection<String> players) {
+    public void addPlayers(Collection<String> players) {
         this.players.addAll(players);
     }
 
@@ -98,7 +95,7 @@ public class FullQueryResponse implements Writeable {
      *
      * @return the list
      */
-    public @NotNull List<String> getPlayers() {
+    public List<String> getPlayers() {
         return this.players;
     }
 
@@ -107,7 +104,7 @@ public class FullQueryResponse implements Writeable {
      *
      * @param players the players
      */
-    public void setPlayers(@NotNull List<String> players) {
+    public void setPlayers(List<String> players) {
         this.players = Objects.requireNonNull(players, "players");
     }
 
@@ -125,24 +122,27 @@ public class FullQueryResponse implements Writeable {
         return builder.toString();
     }
 
-    @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeBytes(PADDING_11);
-
-        // key-values
-        for (var entry : this.kv.entrySet()) {
-            writer.writeNullTerminatedString(entry.getKey(), Query.CHARSET);
-            writer.writeNullTerminatedString(entry.getValue(), Query.CHARSET);
+    public static final NetworkBuffer.Type<FullQueryResponse> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(NetworkBuffer buffer, FullQueryResponse value) {
+            buffer.write(NetworkBuffer.RAW_BYTES, PADDING_11);
+            // key-values
+            for (var entry : value.kv.entrySet()) {
+                buffer.write(NetworkBuffer.STRING_TERMINATED, entry.getKey());
+                buffer.write(NetworkBuffer.STRING_TERMINATED, entry.getValue());
+            }
+            buffer.write(NetworkBuffer.STRING_TERMINATED, "");
+            buffer.write(NetworkBuffer.RAW_BYTES, PADDING_10);
+            // players
+            for (String player : value.players) {
+                buffer.write(NetworkBuffer.STRING_TERMINATED, player);
+            }
+            buffer.write(NetworkBuffer.STRING_TERMINATED, "");
         }
 
-        writer.writeNullTerminatedString("", Query.CHARSET);
-        writer.writeBytes(PADDING_10);
-
-        // players
-        for (String player : this.players) {
-            writer.writeNullTerminatedString(player, Query.CHARSET);
+        @Override
+        public FullQueryResponse read(NetworkBuffer buffer) {
+            throw new UnsupportedOperationException("FullQueryResponse is write-only");
         }
-
-        writer.writeNullTerminatedString("", Query.CHARSET);
-    }
+    };
 }

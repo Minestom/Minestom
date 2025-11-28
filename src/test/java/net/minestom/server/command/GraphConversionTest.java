@@ -4,8 +4,6 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Enum;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,7 +21,7 @@ public class GraphConversionTest {
         var first = Literal("first");
         foo.addSyntax(GraphConversionTest::dummyExecutor, first);
         var graph = Graph.builder(Literal("foo"))
-                .append(first).build();
+                .append(first, dummyExecution).build();
         assertEqualsGraph(graph, foo);
     }
 
@@ -37,7 +35,8 @@ public class GraphConversionTest {
         foo.addSyntax(GraphConversionTest::dummyExecutor, second);
 
         var graph = Graph.builder(Literal("foo"))
-                .append(first).append(second)
+                .append(first, dummyExecution)
+                .append(second, dummyExecution)
                 .build();
         assertEqualsGraph(graph, foo);
     }
@@ -56,9 +55,9 @@ public class GraphConversionTest {
         foo.addSyntax(GraphConversionTest::dummyExecutor, baz, a);
 
         var graph = Graph.builder(Literal("foo"))
-                .append(bar)
+                .append(bar, dummyExecution)
                 .append(baz, builder ->
-                        builder.append(a))
+                        builder.append(a, dummyExecution))
                 .build();
         assertEqualsGraph(graph, foo);
     }
@@ -75,7 +74,7 @@ public class GraphConversionTest {
 
         // The two syntax shall start from the same node
         var graph = Graph.builder(Literal("foo"))
-                .append(bar, builder -> builder.append(number))
+                .append(bar, dummyExecution, builder -> builder.append(number, dummyExecution))
                 .build();
         assertEqualsGraph(graph, foo);
     }
@@ -100,8 +99,8 @@ public class GraphConversionTest {
         // The two syntax shall start from the same node
         var graph = Graph.builder(Literal("main"))
                 .append(Literal("sub"), builder ->
-                        builder.append(bar, builder1 -> builder1.append(number)))
-                .append(Literal("baz"))
+                        builder.append(bar, dummyExecution, builder1 -> builder1.append(number, dummyExecution)))
+                .append(Literal("baz"), dummyExecution)
                 .build();
         assertEqualsGraph(graph, main);
     }
@@ -131,4 +130,6 @@ public class GraphConversionTest {
 
     private static void dummyExecutor(CommandSender sender, CommandContext context) {
     }
+
+    private static final Graph.Execution dummyExecution = new GraphImpl.ExecutionImpl(null, null, null, GraphConversionTest::dummyExecutor, null);
 }

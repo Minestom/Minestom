@@ -27,7 +27,7 @@ public class GraphTest {
         var node = result.root();
         assertEquals(Literal(""), node.argument());
         assertEquals(1, node.next().size());
-        assertEquals(Literal("foo"), node.next().get(0).argument());
+        assertEquals(Literal("foo"), node.next().getFirst().argument());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class GraphTest {
                 .build();
         var node = result.root();
         assertThrows(Exception.class, () -> result.root().next().add(node));
-        assertThrows(Exception.class, () -> result.root().next().get(0).next().add(node));
+        assertThrows(Exception.class, () -> result.root().next().getFirst().next().add(node));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class GraphTest {
 
         var node = result.root();
         assertThrows(Exception.class, () -> result.root().next().add(node));
-        assertThrows(Exception.class, () -> result.root().next().get(0).next().add(node));
+        assertThrows(Exception.class, () -> result.root().next().getFirst().next().add(node));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class GraphTest {
 
         var node = result.root();
         assertThrows(Exception.class, () -> result.root().next().add(node));
-        assertThrows(Exception.class, () -> result.root().next().get(0).next().add(node));
+        assertThrows(Exception.class, () -> result.root().next().getFirst().next().add(node));
     }
 
     private static void dummyExecutor(CommandSender sender, CommandContext context) {

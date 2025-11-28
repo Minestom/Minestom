@@ -1,29 +1,30 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.network.debug.DebugSubscription;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.NotNull;
 
-public record DebugSamplePacket(long @NotNull [] sample, @NotNull Type type) implements ServerPacket.Play {
+import static net.minestom.server.network.NetworkBuffer.Enum;
+import static net.minestom.server.network.NetworkBuffer.LONG_ARRAY;
 
-    public DebugSamplePacket(@NotNull NetworkBuffer buffer) {
-        this(buffer.read(NetworkBuffer.LONG_ARRAY), buffer.readEnum(Type.class));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.LONG_ARRAY, sample);
-        writer.writeEnum(Type.class, type);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.DEBUG_SAMPLE;
-    }
+public record DebugSamplePacket(long [] sample, Type type) implements ServerPacket.Play {
+    public static final NetworkBuffer.Type<DebugSamplePacket> SERIALIZER = NetworkBufferTemplate.template(
+            LONG_ARRAY, DebugSamplePacket::sample,
+            Enum(Type.class), DebugSamplePacket::type,
+            DebugSamplePacket::new);
 
     public enum Type {
-        TICK_TIME
-    }
+        TICK_TIME(DebugSubscription.DEDICATED_SERVER_TICK_TIME);
 
+        private final DebugSubscription<?> debugSubscription;
+
+        Type(DebugSubscription<?> debugSubscription) {
+            this.debugSubscription = debugSubscription;
+        }
+
+        public DebugSubscription<?> getDebugSubscription() {
+            return debugSubscription;
+        }
+    }
 }

@@ -3,15 +3,15 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityPose;
 import net.minestom.server.instance.block.BlockFace;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
 /**
- * See https://wiki.vg/Entity_metadata#Mobs_2
+ * See <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Entity_metadata#Entities">the entity bounding box list</a>.
  */
 public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
     private static final BoundingBox SLEEPING = new BoundingBox(0.2, 0.2, 0.2);
@@ -21,7 +21,7 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
     final static BoundingBox ZERO = new BoundingBox(Vec.ZERO, Vec.ZERO);
 
     public BoundingBox(double width, double height, double depth, Point offset) {
-        this(Vec.fromPoint(offset), new Vec(width, height, depth).add(offset));
+        this(offset.asVec(), new Vec(width, height, depth).add(offset));
     }
 
     public BoundingBox(double width, double height, double depth) {
@@ -29,19 +29,19 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
     }
 
     @Override
-    public boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face) {
+    public boolean isOccluded(Shape shape, BlockFace face) {
         return false;
     }
 
     @Override
-    public boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox) {
+    public boolean intersectBox(Point positionRelative, BoundingBox boundingBox) {
         return (minX() + positionRelative.x() <= boundingBox.maxX() - Vec.EPSILON / 2 && maxX() + positionRelative.x() >= boundingBox.minX() + Vec.EPSILON / 2) &&
                 (minY() + positionRelative.y() <= boundingBox.maxY() - Vec.EPSILON / 2 && maxY() + positionRelative.y() >= boundingBox.minY() + Vec.EPSILON / 2) &&
                 (minZ() + positionRelative.z() <= boundingBox.maxZ() - Vec.EPSILON / 2 && maxZ() + positionRelative.z() >= boundingBox.minZ() + Vec.EPSILON / 2);
     }
 
     @Override
-    public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point shapePos, BoundingBox moving, SweepResult finalResult) {
         if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult)) {
             finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
             finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
@@ -68,7 +68,7 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
      * @param z the Z offset
      * @return a new {@link BoundingBox} expanded
      */
-    public @NotNull BoundingBox expand(double x, double y, double z) {
+    public BoundingBox expand(double x, double y, double z) {
         return new BoundingBox(width() + x, height() + y, depth() + z);
     }
 
@@ -80,7 +80,7 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
      * @param z the Z offset
      * @return a new bounding box contracted
      */
-    public @NotNull BoundingBox contract(double x, double y, double z) {
+    public BoundingBox contract(double x, double y, double z) {
         return new BoundingBox(width() - x, height() - y, depth() - z);
     }
 
@@ -90,8 +90,43 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
      * @param offset the offset
      * @return a new bounding box with an offset.
      */
-    public @NotNull BoundingBox withOffset(Point offset) {
+    public BoundingBox withOffset(Point offset) {
         return new BoundingBox(width(), height(), depth(), offset);
+    }
+
+    /**
+     * Creates a new {@link BoundingBox} with an expanded size from its center in every plane.
+     * <p>
+     * Equivalent to an expansion and an offset where the point is the three-axis offset.
+     * Particularly useful when you already use centered and aligned minY=0 position.
+     *
+     * @param x the X offset, this will be applied on both sides
+     * @param y the Y offset, this will be applied on both sides
+     * @param z the Z offset, this will be applied on both sides
+     * @return a new {@link BoundingBox} expanded and centered from the original minY
+     */
+    @Contract(pure = true)
+    public BoundingBox grow(double x, double y, double z) {
+        final double newWidth = width() + x, newDepth = depth() + z;
+        final Vec centerOffset = new Vec(-newWidth / 2, minY() - y / 2, -newDepth / 2);
+        return new BoundingBox(newWidth, height() + y, newDepth, centerOffset);
+    }
+
+    /**
+     * Creates a new {@link BoundingBox} with an expanded size from its center in every plane.
+     * <p>
+     * Equivalent to a double expansion and an offset where the point is the three-axis offset.
+     * Particularly useful when you already use centered and aligned minY=0 position.
+     *
+     * @param x the X offset, this will be applied on both sides
+     * @param y the Y offset, this will be applied on both sides
+     * @param z the Z offset, this will be applied on both sides
+     * @return a new {@link BoundingBox} expanded and centered from the original minY
+     */
+    @Contract(pure = true)
+    public BoundingBox growSymmetrically(double x, double y, double z) {
+        // Double all amounts to make it symmetric conformance to xyz
+        return grow(x * 2, y * 2, z * 2);
     }
 
     public double width() {
@@ -253,7 +288,7 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
         }
     }
 
-    public static @Nullable BoundingBox fromPose(@NotNull Entity.Pose pose) {
+    public static @Nullable BoundingBox fromPose(EntityPose pose) {
         return switch (pose) {
             case FALL_FLYING, SWIMMING, SPIN_ATTACK -> SMALL;
             case SLEEPING, DYING -> SLEEPING;
@@ -262,8 +297,8 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
         };
     }
 
-    public static @NotNull BoundingBox fromPoints(@NotNull Point a, @NotNull Point b) {
-        Vec aVec = Vec.fromPoint(a);
+    public static BoundingBox fromPoints(Point a, Point b) {
+        Vec aVec = a.asVec();
         Vec min = aVec.min(b);
         Vec max = aVec.max(b);
         Vec dimensions = max.sub(min);

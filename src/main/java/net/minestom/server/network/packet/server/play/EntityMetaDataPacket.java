@@ -4,8 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,45 +14,43 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record EntityMetaDataPacket(int entityId,
-                                   @NotNull Map<Integer, Metadata.Entry<?>> entries) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+                                   Map<Integer, Metadata.Entry<?>> entries) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public EntityMetaDataPacket {
         entries = Map.copyOf(entries);
     }
 
-    public EntityMetaDataPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), readEntries(reader));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, entityId);
-        for (var entry : entries.entrySet()) {
-            writer.write(BYTE, entry.getKey().byteValue());
-            writer.write(entry.getValue());
+    public static final NetworkBuffer.Type<EntityMetaDataPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(NetworkBuffer buffer, EntityMetaDataPacket value) {
+            buffer.write(VAR_INT, value.entityId);
+            for (Map.Entry<Integer, Metadata.Entry<?>> entry : value.entries.entrySet()) {
+                buffer.write(BYTE, entry.getKey().byteValue());
+                buffer.write(Metadata.Entry.SERIALIZER, entry.getValue());
+            }
+            buffer.write(BYTE, (byte) 0xFF); // End
         }
-        writer.write(BYTE, (byte) 0xFF); // End
-    }
 
-    private static Map<Integer, Metadata.Entry<?>> readEntries(@NotNull NetworkBuffer reader) {
+        @Override
+        public EntityMetaDataPacket read(NetworkBuffer buffer) {
+            return new EntityMetaDataPacket(buffer.read(VAR_INT), readEntries(buffer));
+        }
+    };
+
+    private static Map<Integer, Metadata.Entry<?>> readEntries(NetworkBuffer reader) {
         Map<Integer, Metadata.Entry<?>> entries = new HashMap<>();
         while (true) {
             final byte index = reader.read(BYTE);
             if (index == (byte) 0xFF) { // reached the end
                 break;
             }
-            final int type = reader.read(VAR_INT);
-            entries.put((int) index, Metadata.Entry.read(type, reader));
+            Metadata.Entry<?> entry = Metadata.Entry.SERIALIZER.read(reader);
+            entries.put((int) index, entry);
         }
         return entries;
     }
 
     @Override
-    public int playId() {
-        return ServerPacketIdentifier.ENTITY_METADATA;
-    }
-
-    @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         return this.entries.values()
                 .stream()
                 .map(Metadata.Entry::value)
@@ -64,7 +60,7 @@ public record EntityMetaDataPacket(int entityId,
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         final var entries = new HashMap<Integer, Metadata.Entry<?>>();
 
         this.entries.forEach((key, value) -> {
@@ -73,7 +69,7 @@ public record EntityMetaDataPacket(int entityId,
 
             if (v instanceof Component c) {
                 var translated = operator.apply(c);
-                entries.put(key, t == Metadata.TYPE_OPT_CHAT ? Metadata.OptChat(translated) : Metadata.Chat(translated));
+                entries.put(key, t == Metadata.TYPE_OPT_CHAT ? Metadata.OptComponent(translated) : Metadata.Component(translated));
             } else {
                 entries.put(key, value);
             }

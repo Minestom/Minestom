@@ -7,8 +7,8 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentCommand;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -33,7 +33,7 @@ record GraphImpl(NodeImpl root) implements Graph {
     }
 
     @Override
-    public boolean compare(@NotNull Graph graph, @NotNull Comparator comparator) {
+    public boolean compare(Graph graph, Comparator comparator) {
         return compare(root, graph.root(), comparator);
     }
 
@@ -43,8 +43,10 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
 
         @Override
-        public Graph.@NotNull Builder append(@NotNull Argument<?> argument, @Nullable Execution execution,
-                                             @NotNull Consumer<Graph.Builder> consumer) {
+        public Graph.Builder append(
+                Argument<?> argument, @Nullable Execution execution,
+                Consumer<Graph.Builder> consumer
+        ) {
             BuilderImpl builder = new BuilderImpl(argument, execution);
             consumer.accept(builder);
             this.children.add(builder);
@@ -52,13 +54,13 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
 
         @Override
-        public Graph.@NotNull Builder append(@NotNull Argument<?> argument, @Nullable Execution execution) {
+        public Graph.Builder append(Argument<?> argument, @Nullable Execution execution) {
             this.children.add(new BuilderImpl(argument, List.of(), execution));
             return this;
         }
 
         @Override
-        public @NotNull GraphImpl build() {
+        public GraphImpl build() {
             return new GraphImpl(NodeImpl.fromBuilder(this));
         }
     }
@@ -90,6 +92,7 @@ record GraphImpl(NodeImpl root) implements Graph {
             int node2Value = argumentValue(node2.argument());
             return Integer.compare(node1Value, node2Value);
         };
+
         private static int argumentValue(Argument<?> argument) {
             if (argument.getClass() == ArgumentCommand.class) return -3000;
             if (argument.getClass() == ArgumentLiteral.class) return -2000;
@@ -97,9 +100,13 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    record ExecutionImpl(Predicate<CommandSender> predicate,
-                         CommandExecutor defaultExecutor, CommandExecutor globalListener,
-                         CommandExecutor executor, CommandCondition condition) implements Execution {
+    record ExecutionImpl(
+            @UnknownNullability Predicate<CommandSender> predicate,
+            @UnknownNullability CommandExecutor defaultExecutor,
+            @Nullable CommandExecutor globalListener,
+            @Nullable CommandExecutor executor,
+            @Nullable CommandCondition condition
+    ) implements Execution {
         @Override
         public boolean test(CommandSender commandSender) {
             return predicate.test(commandSender);
@@ -114,13 +121,21 @@ record GraphImpl(NodeImpl root) implements Graph {
             for (var syntax : command.getSyntaxes()) {
                 if (syntax.getArguments().length == 0) {
                     executor = syntax.getExecutor();
-                    condition = syntax.getCommandCondition();
+                    CommandCondition syntaxCondition = syntax.getCommandCondition();
+                    if (syntaxCondition != null && defaultCondition != null) {
+                        condition = (sender, commandString) ->
+                            defaultCondition.canUse(sender, commandString) && syntaxCondition.canUse(sender, commandString);
+                    } else if (syntaxCondition != null) {
+                        condition = syntaxCondition;
+                    }
                     break;
                 }
             }
-            final CommandExecutor globalListener = (sender, context) -> command.globalListener(sender, context, context.getInput());
+            final CommandExecutor globalListener = (sender, context) -> command.globalListener(sender, context,
+                                                                                               context.getInput());
 
-            return new ExecutionImpl(commandSender -> defaultCondition == null || defaultCondition.canUse(commandSender, null),
+            return new ExecutionImpl(
+                    commandSender -> defaultCondition == null || defaultCondition.canUse(commandSender, null),
                     defaultExecutor, globalListener, executor, condition);
         }
 
@@ -128,7 +143,7 @@ record GraphImpl(NodeImpl root) implements Graph {
             final CommandExecutor executor = syntax.getExecutor();
             final CommandCondition condition = syntax.getCommandCondition();
             return new ExecutionImpl(commandSender -> condition == null || condition.canUse(commandSender, null),
-                    null, null, executor, condition);
+                                     null, null, executor, condition);
         }
     }
 
@@ -190,9 +205,10 @@ record GraphImpl(NodeImpl root) implements Graph {
         return Word(command.getName()).from(command.getNames());
     }
 
-    static boolean compare(@NotNull Node first, Node second, @NotNull Comparator comparator) {
+    static boolean compare(Node first, Node second, Comparator comparator) {
         return switch (comparator) {
             case TREE -> {
+                if (!compareExecution(first, second)) yield false;
                 if (!first.argument().equals(second.argument())) yield false;
                 if (first.next().size() != second.next().size()) yield false;
                 for (int i = 0; i < first.next().size(); i++) {
@@ -203,5 +219,15 @@ record GraphImpl(NodeImpl root) implements Graph {
                 yield true;
             }
         };
+    }
+
+    private static boolean compareExecution(Node firstNode, Node secondNode) {
+        Execution first = firstNode.execution(), second = secondNode.execution();
+        boolean firstExecutor = first != null && first.executor() != null,
+                firstCondition = first != null && first.condition() != null;
+        boolean secondExecutor = second != null && second.executor() != null,
+                secondCondition = second != null && second.condition() != null;
+        return firstExecutor == secondExecutor &&
+                firstCondition == secondCondition;
     }
 }

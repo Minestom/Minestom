@@ -1,52 +1,55 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.NumberBinaryTag;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.kyori.adventure.nbt.FloatBinaryTag.floatBinaryTag;
-
 public interface LevelBasedValue {
 
-    @NotNull BinaryTagSerializer<LevelBasedValue> TAGGED_NBT_TYPE = BinaryTagSerializer.registryTaggedUnion(
-            Registries::enchantmentLevelBasedValues, LevelBasedValue::nbtType, "type");
-    @NotNull BinaryTagSerializer<LevelBasedValue> NBT_TYPE = new BinaryTagSerializer<>() {
+    StructCodec<LevelBasedValue> TAGGED_CODEC = Codec.RegistryTaggedUnion(
+            Registries::enchantmentLevelBasedValues, LevelBasedValue::codec);
+    Codec<LevelBasedValue> CODEC = new Codec<>() {
         @Override
-        public @NotNull BinaryTag write(@NotNull Context context, @NotNull LevelBasedValue value) {
-            if (value instanceof Constant constant) return floatBinaryTag(constant.value);
-            return TAGGED_NBT_TYPE.write(context, value);
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable LevelBasedValue value) {
+            if (value instanceof Constant(float constantValue))
+                return new Result.Ok<>(coder.createFloat(constantValue));
+            return TAGGED_CODEC.encode(coder, value);
         }
 
         @Override
-        public @NotNull LevelBasedValue read(@NotNull Context context, @NotNull BinaryTag tag) {
-            if (tag instanceof NumberBinaryTag number) return new Constant(number.floatValue());
-            return TAGGED_NBT_TYPE.read(context, tag);
+        public <D> Result<LevelBasedValue> decode(Transcoder<D> coder, D value) {
+            final Result<Float> numberResult = coder.getFloat(value);
+            if (numberResult instanceof Result.Ok(Float number))
+                return new Result.Ok<>(new Constant(number));
+            return TAGGED_CODEC.decode(coder, value);
         }
     };
 
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> createDefaultRegistry() {
-        final DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
+    static DynamicRegistry<StructCodec<? extends LevelBasedValue>> createDefaultRegistry() {
+        final DynamicRegistry<StructCodec<? extends LevelBasedValue>> registry = DynamicRegistry.create(Key.key("minestom:enchantment_value_effect"));
         // Note that constant is omitted from the registry, it has serialization handled out of band above.
-        registry.register("linear", Linear.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("clamped", Clamped.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("fraction", Fraction.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("levels_squared", LevelsSquared.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("lookup", Lookup.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("linear", Linear.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("clamped", Clamped.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("fraction", Fraction.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("levels_squared", LevelsSquared.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("lookup", Lookup.CODEC, DataPack.MINECRAFT_CORE);
         return registry;
     }
 
     float calc(int level);
 
-    @NotNull BinaryTagSerializer<? extends LevelBasedValue> nbtType();
+    StructCodec<? extends LevelBasedValue> codec();
 
     record Constant(float value) implements LevelBasedValue {
 
@@ -56,15 +59,15 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Constant> nbtType() {
-            throw new UnsupportedOperationException("Constant values are serialized as a special case, see LevelBasedValue.NBT_TYPE");
+        public StructCodec<Constant> codec() {
+            throw new UnsupportedOperationException("Constant values are serialized as a special case, see LevelBasedValue.CODEC");
         }
     }
 
     record Linear(float base, float perLevelAboveFirst) implements LevelBasedValue {
-        public static final BinaryTagSerializer<Linear> NBT_TYPE = BinaryTagSerializer.object(
-                "base", BinaryTagSerializer.FLOAT, Linear::base,
-                "per_level_above_first", BinaryTagSerializer.FLOAT, Linear::perLevelAboveFirst,
+        public static final StructCodec<Linear> CODEC = StructCodec.struct(
+                "base", Codec.FLOAT, Linear::base,
+                "per_level_above_first", Codec.FLOAT, Linear::perLevelAboveFirst,
                 Linear::new
         );
 
@@ -74,16 +77,16 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Linear> nbtType() {
-            return NBT_TYPE;
+        public StructCodec<Linear> codec() {
+            return CODEC;
         }
     }
 
-    record Clamped(@NotNull LevelBasedValue value, float min, float max) implements LevelBasedValue {
-        public static final BinaryTagSerializer<Clamped> NBT_TYPE = BinaryTagSerializer.object(
-                "value", LevelBasedValue.NBT_TYPE, Clamped::value,
-                "min", BinaryTagSerializer.FLOAT, Clamped::min,
-                "max", BinaryTagSerializer.FLOAT, Clamped::max,
+    record Clamped(LevelBasedValue value, float min, float max) implements LevelBasedValue {
+        public static final StructCodec<Clamped> CODEC = StructCodec.struct(
+                "value", LevelBasedValue.CODEC, Clamped::value,
+                "min", Codec.FLOAT, Clamped::min,
+                "max", Codec.FLOAT, Clamped::max,
                 Clamped::new
         );
 
@@ -93,15 +96,16 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Clamped> nbtType() {
-            return NBT_TYPE;
+        public StructCodec<Clamped> codec() {
+            return CODEC;
         }
     }
 
-    record Fraction(@NotNull LevelBasedValue numerator, @NotNull LevelBasedValue denominator) implements LevelBasedValue {
-        public static final BinaryTagSerializer<Fraction> NBT_TYPE = BinaryTagSerializer.object(
-                "numerator", LevelBasedValue.NBT_TYPE, Fraction::numerator,
-                "denominator", LevelBasedValue.NBT_TYPE, Fraction::denominator,
+    record Fraction(LevelBasedValue numerator,
+                    LevelBasedValue denominator) implements LevelBasedValue {
+        public static final StructCodec<Fraction> CODEC = StructCodec.struct(
+                "numerator", LevelBasedValue.CODEC, Fraction::numerator,
+                "denominator", LevelBasedValue.CODEC, Fraction::denominator,
                 Fraction::new
         );
 
@@ -112,14 +116,14 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Fraction> nbtType() {
-            return NBT_TYPE;
+        public StructCodec<Fraction> codec() {
+            return CODEC;
         }
     }
 
     record LevelsSquared(float added) implements LevelBasedValue {
-        public static final BinaryTagSerializer<LevelsSquared> NBT_TYPE = BinaryTagSerializer.object(
-                "added", BinaryTagSerializer.FLOAT, LevelsSquared::added,
+        public static final StructCodec<LevelsSquared> CODEC = StructCodec.struct(
+                "added", Codec.FLOAT, LevelsSquared::added,
                 LevelsSquared::new
         );
 
@@ -129,15 +133,15 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<LevelsSquared> nbtType() {
-            return NBT_TYPE;
+        public StructCodec<LevelsSquared> codec() {
+            return CODEC;
         }
     }
 
-    record Lookup(@NotNull List<Float> values, @NotNull LevelBasedValue fallback) implements LevelBasedValue {
-        public static final BinaryTagSerializer<Lookup> NBT_TYPE = BinaryTagSerializer.object(
-                "values", BinaryTagSerializer.FLOAT.list(), Lookup::values,
-                "fallback", LevelBasedValue.NBT_TYPE, Lookup::fallback,
+    record Lookup(List<Float> values, LevelBasedValue fallback) implements LevelBasedValue {
+        public static final StructCodec<Lookup> CODEC = StructCodec.struct(
+                "values", Codec.FLOAT.list(), Lookup::values,
+                "fallback", LevelBasedValue.CODEC, Lookup::fallback,
                 Lookup::new
         );
 
@@ -148,8 +152,8 @@ public interface LevelBasedValue {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Lookup> nbtType() {
-            return NBT_TYPE;
+        public StructCodec<Lookup> codec() {
+            return CODEC;
         }
     }
 

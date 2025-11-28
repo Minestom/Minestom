@@ -2,10 +2,10 @@ package net.minestom.server.event;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.event.trait.AsyncEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
@@ -41,8 +41,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     volatile int priority;
     volatile EventNodeImpl<? super T> parent;
 
-    EventNodeImpl(@NotNull String name,
-                  @NotNull EventFilter<T, ?> filter,
+    EventNodeImpl(String name,
+                  EventFilter<T, ?> filter,
                   @Nullable BiPredicate<T, Object> predicate) {
         this.name = name;
         this.filter = filter;
@@ -52,13 +52,13 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
+    public <E extends T> ListenerHandle<E> getHandle(Class<E> handleType) {
         return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
                 aClass -> new Handle<>((Class<T>) aClass));
     }
 
     @Override
-    public <E extends T> @NotNull List<EventNode<E>> findChildren(@NotNull String name, Class<E> eventType) {
+    public <E extends T> List<EventNode<E>> findChildren(String name, Class<E> eventType) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return List.of();
@@ -74,12 +74,12 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Contract(pure = true)
-    public @NotNull Set<@NotNull EventNode<T>> getChildren() {
+    public Set<EventNode<T>> getChildren() {
         return Collections.unmodifiableSet(children);
     }
 
     @Override
-    public <E extends T> void replaceChildren(@NotNull String name, @NotNull Class<E> eventType, @NotNull EventNode<E> eventNode) {
+    public <E extends T> void replaceChildren(String name, Class<E> eventType, EventNode<E> eventNode) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
@@ -95,7 +95,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public void removeChildren(@NotNull String name, @NotNull Class<? extends T> eventType) {
+    public void removeChildren(String name, Class<? extends T> eventType) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
@@ -110,7 +110,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public @NotNull EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
+    public EventNode<T> addChild(EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var childImpl = (EventNodeImpl<? extends T>) child;
             Check.stateCondition(!ServerFlag.EVENT_NODE_ALLOW_MULTIPLE_PARENTS && childImpl.parent != null, "Node already has a parent");
@@ -123,7 +123,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public @NotNull EventNode<T> removeChild(@NotNull EventNode<? extends T> child) {
+    public EventNode<T> removeChild(EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var childImpl = (EventNodeImpl<? extends T>) child;
             final boolean result = this.children.remove(childImpl);
@@ -135,7 +135,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public @NotNull EventNode<T> addListener(@NotNull EventListener<? extends T> listener) {
+    public EventNode<T> addListener(EventListener<? extends T> listener) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var eventType = listener.eventType();
             ListenerEntry<T> entry = getEntry(eventType);
@@ -146,7 +146,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener) {
+    public EventNode<T> removeListener(EventListener<? extends T> listener) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var eventType = listener.eventType();
             ListenerEntry<T> entry = listenerMap.get(eventType);
@@ -157,7 +157,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public @NotNull <E extends T, H> EventNode<E> map(@NotNull H value, @NotNull EventFilter<E, H> filter) {
+    public <E extends T, H> EventNode<E> map(H value, EventFilter<E, H> filter) {
         EventNodeImpl<E> node;
         synchronized (GLOBAL_CHILD_LOCK) {
             node = new EventNodeLazyImpl<>(this, value, filter);
@@ -173,7 +173,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public void unmap(@NotNull Object value) {
+    public void unmap(Object value) {
         synchronized (GLOBAL_CHILD_LOCK) {
             Map<Object, WeakReference<EventNodeLazyImpl<T>>> registered = new WeakHashMap<>(registeredMappedNode);
             final WeakReference<EventNodeLazyImpl<T>> mappedNodeRef = registered.remove(value);
@@ -186,7 +186,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public void register(@NotNull EventBinding<? extends T> binding) {
+    public void register(EventBinding<? extends T> binding) {
         synchronized (GLOBAL_CHILD_LOCK) {
             for (var eventType : binding.eventTypes()) {
                 ListenerEntry<T> entry = getEntry((Class<? extends T>) eventType);
@@ -197,7 +197,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public void unregister(@NotNull EventBinding<? extends T> binding) {
+    public void unregister(EventBinding<? extends T> binding) {
         synchronized (GLOBAL_CHILD_LOCK) {
             for (var eventType : binding.eventTypes()) {
                 ListenerEntry<T> entry = listenerMap.get(eventType);
@@ -209,12 +209,12 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public @NotNull Class<T> getEventType() {
+    public Class<T> getEventType() {
         return eventType;
     }
 
     @Override
-    public @NotNull String getName() {
+    public String getName() {
         return name;
     }
 
@@ -224,7 +224,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public @NotNull EventNode<T> setPriority(int priority) {
+    public EventNode<T> setPriority(int priority) {
         this.priority = priority;
         return this;
     }
@@ -258,7 +258,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         buffer.append(String.format("%s - EventType: %s - Priority: %d", graph.name(), graph.eventType(), graph.priority()));
         buffer.append('\n');
         var nextNodes = graph.children();
-        for (Iterator<? extends @NotNull Graph> iterator = nextNodes.iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends Graph> iterator = nextNodes.iterator(); iterator.hasNext(); ) {
             Graph next = iterator.next();
             if (iterator.hasNext()) {
                 genToStringTree(buffer, childrenPrefix + '├' + '─' + " ", childrenPrefix + '│' + "   ", next);
@@ -292,8 +292,19 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
                     aClass -> new Handle<>((Class<T>) aClass));
             handle.invalidate();
         });
+        invalidateRecursiveSuperclasses(eventClass);
         final EventNodeImpl<? super T> parent = this.parent;
         if (parent != null) parent.invalidateEvent(eventClass);
+    }
+
+    private void invalidateRecursiveSuperclasses(Class<?> eventClass) {
+        if (RecursiveEvent.class.isAssignableFrom(eventClass)) {
+            for (var cls : this.handleMap.keySet()) {
+                if (eventClass.isAssignableFrom(cls)) {
+                    this.handleMap.get(cls).invalidate();
+                }
+            }
+        }
     }
 
     private ListenerEntry<T> getEntry(Class<? extends T> type) {
@@ -331,7 +342,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
 
         @Override
-        public void call(@NotNull E event) {
+        public void call(E event) {
+            assert !(event instanceof AsyncEvent) || Thread.currentThread().isVirtual() :
+                    "AsyncEvent must be called within a Virtual Thread, got " + Thread.currentThread();
             final Consumer<E> listener = updatedListener();
             if (listener == null) return;
             try {
@@ -423,7 +436,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
          * <p>
          * Most computation should ideally be done outside the consumers as a one-time cost.
          */
-        private @Nullable Consumer<E> listenersConsumer(@NotNull ListenerEntry<E> entry) {
+        private @Nullable Consumer<E> listenersConsumer(ListenerEntry<E> entry) {
             final EventListener<E>[] listenersCopy = entry.listeners.toArray(EventListener[]::new);
             final Consumer<E>[] bindingsCopy = entry.bindingConsumers.toArray(Consumer[]::new);
             final boolean listenersEmpty = listenersCopy.length == 0;
@@ -500,7 +513,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             };
         }
 
-        void callListener(@NotNull EventListener<E> listener, E event) {
+        void callListener(EventListener<E> listener, E event) {
             var node = (EventNodeImpl<E>) EventNodeImpl.this;
             EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {

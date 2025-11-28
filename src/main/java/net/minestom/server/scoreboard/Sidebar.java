@@ -3,18 +3,20 @@ package net.minestom.server.scoreboard;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents a sidebar which can contain up to 16 {@link ScoreboardLine}.
@@ -57,7 +59,7 @@ public class Sidebar implements Scoreboard {
      * @deprecated Use {@link #Sidebar(Component)}
      */
     @Deprecated
-    public Sidebar(@NotNull String title) {
+    public Sidebar(String title) {
         this(Component.text(title));
     }
 
@@ -66,7 +68,7 @@ public class Sidebar implements Scoreboard {
      *
      * @param title The title of the sidebar
      */
-    public Sidebar(@NotNull Component title) {
+    public Sidebar(Component title) {
         this.title = title;
 
         this.objectiveName = SCOREBOARD_PREFIX + COUNTER.incrementAndGet();
@@ -84,8 +86,17 @@ public class Sidebar implements Scoreboard {
      * @deprecated Use {@link #setTitle(Component)}
      */
     @Deprecated
-    public void setTitle(@NotNull String title) {
+    public void setTitle(String title) {
         this.setTitle(Component.text(title));
+    }
+
+    /**
+     * Gets the {@link Sidebar} title
+     *
+     * @return The sidebar title
+     */
+    public Component getTitle() {
+        return title;
     }
 
     /**
@@ -93,7 +104,7 @@ public class Sidebar implements Scoreboard {
      *
      * @param title The new sidebar title
      */
-    public void setTitle(@NotNull Component title) {
+    public void setTitle(Component title) {
         this.title = title;
         sendPacketToViewers(new ScoreboardObjectivePacket(objectiveName, (byte) 2, title,
                 ScoreboardObjectivePacket.Type.INTEGER, null));
@@ -107,7 +118,7 @@ public class Sidebar implements Scoreboard {
      * @throws IllegalArgumentException if the sidebar already contains the line {@code scoreboardLine}
      *                                  or has a line with the same id
      */
-    public void createLine(@NotNull ScoreboardLine scoreboardLine) {
+    public void createLine(ScoreboardLine scoreboardLine) {
         synchronized (lines) {
             Check.stateCondition(lines.size() >= MAX_LINES_COUNT, "You cannot have more than " + MAX_LINES_COUNT + "  lines");
             Check.argCondition(lines.contains(scoreboardLine), "You cannot add two times the same ScoreboardLine");
@@ -136,7 +147,7 @@ public class Sidebar implements Scoreboard {
      * @param id      The identifier of the {@link ScoreboardLine}
      * @param content The new content for the {@link ScoreboardLine}
      */
-    public void updateLineContent(@NotNull String id, @NotNull Component content) {
+    public void updateLineContent(String id, Component content) {
         final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.refreshContent(content);
@@ -150,11 +161,25 @@ public class Sidebar implements Scoreboard {
      * @param id    The identifier of the team
      * @param score The new score for the {@link ScoreboardLine}
      */
-    public void updateLineScore(@NotNull String id, int score) {
+    public void updateLineScore(String id, int score) {
         final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.line = score;
             sendPacketToViewers(scoreboardLine.getLineScoreUpdatePacket(objectiveName, score));
+        }
+    }
+
+    /**
+     * Updates a {@link ScoreboardLine} number format through the given identifier.
+     *
+     * @param id           The identifier of the {@link ScoreboardLine}
+     * @param numberFormat The new number format for the {@link ScoreboardLine}
+     */
+    public void updateLineNumberFormat(String id, NumberFormat numberFormat) {
+        final ScoreboardLine scoreboardLine = getLine(id);
+        if (scoreboardLine != null) {
+            scoreboardLine.numberFormat = numberFormat;
+            sendPacketsToViewers(scoreboardLine.getNumberFormatPacket(objectiveName, numberFormat));
         }
     }
 
@@ -165,7 +190,7 @@ public class Sidebar implements Scoreboard {
      * @return a {@link ScoreboardLine} or {@code null}
      */
     @Nullable
-    public ScoreboardLine getLine(@NotNull String id) {
+    public ScoreboardLine getLine(String id) {
         for (ScoreboardLine line : lines) {
             if (line.id.equals(id))
                 return line;
@@ -178,7 +203,6 @@ public class Sidebar implements Scoreboard {
      *
      * @return an unmodifiable set containing the sidebar's lines
      */
-    @NotNull
     public Set<ScoreboardLine> getLines() {
         return Collections.unmodifiableSet(lines);
     }
@@ -188,7 +212,7 @@ public class Sidebar implements Scoreboard {
      *
      * @param id the identifier of the {@link ScoreboardLine}
      */
-    public void removeLine(@NotNull String id) {
+    public void removeLine(String id) {
         this.lines.removeIf(line -> {
             if (line.id.equals(id)) {
 
@@ -203,7 +227,7 @@ public class Sidebar implements Scoreboard {
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
+    public boolean addViewer(Player player) {
         final boolean result = this.viewers.add(player);
         if (result) {
             ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
@@ -219,7 +243,7 @@ public class Sidebar implements Scoreboard {
     }
 
     @Override
-    public boolean removeViewer(@NotNull Player player) {
+    public boolean removeViewer(Player player) {
         final boolean result = this.viewers.remove(player);
         if (!result) return false;
         ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
@@ -231,14 +255,13 @@ public class Sidebar implements Scoreboard {
         return true;
     }
 
-    @NotNull
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
     }
 
     @Override
-    public @NotNull String getObjectiveName() {
+    public String getObjectiveName() {
         return this.objectiveName;
     }
 
@@ -275,11 +298,11 @@ public class Sidebar implements Scoreboard {
          */
         private SidebarTeam sidebarTeam;
 
-        public ScoreboardLine(@NotNull String id, @NotNull Component content, int line) {
+        public ScoreboardLine(String id, Component content, int line) {
             this(id, content, line, null);
         }
 
-        public ScoreboardLine(@NotNull String id, @NotNull Component content, int line, @Nullable NumberFormat numberFormat) {
+        public ScoreboardLine(String id, Component content, int line, @Nullable NumberFormat numberFormat) {
             this.id = id;
             this.content = content;
             this.line = line;
@@ -293,7 +316,7 @@ public class Sidebar implements Scoreboard {
          *
          * @return the line identifier
          */
-        public @NotNull String getId() {
+        public String getId() {
             return id;
         }
 
@@ -302,7 +325,7 @@ public class Sidebar implements Scoreboard {
          *
          * @return The line content
          */
-        public @NotNull Component getContent() {
+        public Component getContent() {
             return sidebarTeam == null ? content : sidebarTeam.getPrefix();
         }
 
@@ -370,6 +393,17 @@ public class Sidebar implements Scoreboard {
         }
 
         /**
+         * Gets a number format update packet
+         *
+         * @param objectiveName The objective name to be updated
+         * @param numberFormat  The new number format
+         * @return a {@link UpdateScorePacket}
+         */
+        private UpdateScorePacket getNumberFormatPacket(String objectiveName, NumberFormat numberFormat) {
+            return new UpdateScorePacket(entityName, objectiveName, line, Component.empty(), numberFormat);
+        }
+
+        /**
          * Refresh the prefix of the {@link SidebarTeam}
          *
          * @param content The new content
@@ -393,7 +427,7 @@ public class Sidebar implements Scoreboard {
         private final byte friendlyFlags = 0x00;
         private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
         private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private final NamedTextColor teamColor = NamedTextColor.DARK_GREEN;
+        private final NamedTextColor teamColor = NamedTextColor.WHITE;
 
 
         /**
@@ -466,51 +500,44 @@ public class Sidebar implements Scoreboard {
          *
          * @param prefix The refreshed prefix
          */
-        private void refreshPrefix(@NotNull Component prefix) {
+        private void refreshPrefix(Component prefix) {
             this.prefix = prefix;
         }
     }
 
 
-    public static class NumberFormat implements NetworkBuffer.Writer {
-        private final FormatType formatType;
-        private final Component content;
-
+    public record NumberFormat(FormatType formatType, @Nullable Component content) implements ComponentHolder<NumberFormat> {
         private NumberFormat() {
-            this.content = null;
-            this.formatType = FormatType.BLANK;
+            this(FormatType.BLANK, null);
         }
 
-        private NumberFormat(@NotNull Component content, @NotNull FormatType formatType) {
-            this.content = content;
-            this.formatType = formatType;
-        }
-
-        public NumberFormat(NetworkBuffer reader) {
-            this.formatType = FormatType.values()[reader.read(NetworkBuffer.VAR_INT)];
-            if (formatType != FormatType.BLANK) this.content = reader.read(NetworkBuffer.COMPONENT);
-            else this.content = null;
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, formatType.ordinal());
-            if (formatType == FormatType.STYLED) {
-                assert content != null;
-                writer.write(NetworkBuffer.COMPONENT, content);
+        public static final NetworkBuffer.Type<NumberFormat> SERIALIZER = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(NetworkBuffer buffer, NumberFormat value) {
+                buffer.write(NetworkBuffer.Enum(FormatType.class), value.formatType);
+                if (value.formatType == FormatType.STYLED) {
+                    assert value.content != null;
+                    buffer.write(NetworkBuffer.COMPONENT, value.content);
+                } else if (value.formatType == FormatType.FIXED) {
+                    assert value.content != null;
+                    buffer.write(NetworkBuffer.COMPONENT, value.content);
+                }
             }
-            else if (formatType == FormatType.FIXED) {
-                assert content != null;
-                writer.write(NetworkBuffer.COMPONENT, content);
+
+            @Override
+            public NumberFormat read(NetworkBuffer buffer) {
+                final FormatType formatType = buffer.read(NetworkBuffer.Enum(FormatType.class));
+                final Component content = formatType != FormatType.BLANK ? buffer.read(NetworkBuffer.COMPONENT) : null;
+                return new NumberFormat(formatType, content);
             }
-        }
+        };
 
         /**
          * A number format which has no sidebar score displayed
          *
          * @return a blank number format
          */
-        public static @NotNull NumberFormat blank() {
+        public static NumberFormat blank() {
             return new NumberFormat();
         }
 
@@ -519,8 +546,8 @@ public class Sidebar implements Scoreboard {
          *
          * @param style a styled component
          */
-        public static @NotNull NumberFormat styled(@NotNull Component style) {
-            return new NumberFormat(style, FormatType.STYLED);
+        public static NumberFormat styled(Component style) {
+            return new NumberFormat(FormatType.STYLED, style);
         }
 
         /**
@@ -528,8 +555,23 @@ public class Sidebar implements Scoreboard {
          *
          * @param content the fixed component
          */
-        public static @NotNull NumberFormat fixed(@NotNull Component content) {
-            return new NumberFormat(content, FormatType.FIXED);
+        public static NumberFormat fixed(Component content) {
+            return new NumberFormat(FormatType.FIXED, content);
+        }
+
+        @Override
+        public Collection<Component> components() {
+            return content != null ? List.of(content) : List.of();
+        }
+
+        @Override
+        public NumberFormat copyWithOperator(UnaryOperator<Component> operator) {
+            if (content == null) return this;
+
+            return new NumberFormat(
+                    formatType,
+                    operator.apply(content)
+            );
         }
 
         private enum FormatType {

@@ -1,66 +1,43 @@
 package net.minestom.server.registry;
 
-import net.kyori.adventure.key.Keyed;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
-import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
- * using a {@link Key} object as opposed to the record type. For example, a biome should be stored as
- * `DynamicRegistry.Key Biome`, as opposed to `Biome` directly.</p>
+ * using a {@link RegistryKey} object as opposed to the record type. For example, a biome should be stored as
+ * `RegistryKey Biome`, as opposed to `Biome` directly.</p>
  *
  * <p>Builtin registries should be accessed via a {@link Registries} instance (currently implemented by
  * {@link net.minestom.server.ServerProcess}, or from {@link net.minestom.server.MinecraftServer} static methods.</p>
  *
  * @param <T> The type of the registry entries
- *
  * @see Registries
  */
-public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
+public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRegistryImpl {
 
-    /**
-     * A key for a {@link ProtocolObject} in a {@link DynamicRegistry}.
-     *
-     * @param <T> Unused, except to provide compile-time safety and self documentation.
-     */
-    sealed interface Key<T> extends Keyed permits DynamicRegistryImpl.KeyImpl {
-
-        static <T> @NotNull Key<T> of(@NotNull String namespace) {
-            return new DynamicRegistryImpl.KeyImpl<>(NamespaceID.from(namespace));
-        }
-
-        static <T> @NotNull Key<T> of(@NotNull NamespaceID namespace) {
-            return new DynamicRegistryImpl.KeyImpl<>(namespace);
-        }
-
-        @Contract(pure = true)
-        @NotNull NamespaceID namespace();
-
-        @Contract(pure = true)
-        default @NotNull String name() {
-            return namespace().asString();
-        }
-
-        @Override
-        @Contract(pure = true)
-        default @NotNull net.kyori.adventure.key.Key key() {
-            return namespace();
-        }
+    @SafeVarargs
+    static <T> DynamicRegistry<T> fromMap(Key key, Map.Entry<Key, T>... entries) {
+        var registry = new DynamicRegistryImpl<T>(key, null);
+        for (var entry : entries)
+            registry.register(entry.getKey(), entry.getValue(), DataPack.MINESTOM_UNNAMED);
+        return registry.compact();
     }
 
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id) {
-        return new DynamicRegistryImpl<>(id, null);
+    static <T> DynamicRegistry<T> create(Key key) {
+        return new DynamicRegistryImpl<>(key, null);
     }
 
     /**
@@ -69,96 +46,71 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType) {
-        return new DynamicRegistryImpl<>(id, nbtType);
+    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec) {
+        return new DynamicRegistryImpl<>(key, codec);
     }
 
     /**
-     * Creates a new empty registry of the given type. Should only be used internally.
+     * Creates a new registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
-        return create(id, nbtType, resource, loader, null);
+    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, RegistryData.Resource resource) {
+        return create(key, codec, null, resource, null, null);
     }
 
     /**
-     * Creates a new empty registry of the given type. Should only be used internally.
+     * Creates a new registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader,
-            @Nullable Comparator<String> idComparator) {
-        final DynamicRegistry<T> registry = new DynamicRegistryImpl<>(id, nbtType);
-        DynamicRegistryImpl.loadStaticRegistry(registry, resource, loader, idComparator);
+    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource) {
+        return create(key, codec, registries, resource, null, null);
+    }
+
+    /**
+     * Creates a new registry of the given type. Should only be used internally.
+     *
+     * @see Registries
+     */
+    @ApiStatus.Internal
+    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
+        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key, codec);
+        DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator, Objects.requireNonNullElse(readCodec, codec));
+        return registry.compact();
+    }
+
+    @ApiStatus.Internal
+    static DynamicRegistry<Enchantment> createForEnchantmentsWithSelfReferentialLoadingNightmare(
+            Key key, Codec<Enchantment> codec,
+            RegistryData.Resource resource, Registries registries
+    ) {
+        final DynamicRegistryImpl<Enchantment> registry = new DynamicRegistryImpl<>(key, codec);
+        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
+            @Override
+            public DynamicRegistry<Enchantment> enchantment() {
+                return registry;
+            }
+        }, registry, resource, null, codec);
+        return registry.compact();
+    }
+
+    @ApiStatus.Internal
+    static DynamicRegistry<Dialog> createForDialogWithSelfReferentialLoadingNightmare(
+            Key key, Codec<Dialog> codec,
+            RegistryData.Resource resource, Registries registries
+    ) {
+        final DynamicRegistryImpl<Dialog> registry = new DynamicRegistryImpl<>(key, codec);
+        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
+            @Override
+            public DynamicRegistry<Dialog> dialog() {
+                return registry;
+            }
+        }, registry, resource, null, codec);
         return registry;
     }
-
-    /**
-     * Creates a new empty registry of the given type. Should only be used internally.
-     *
-     * @see Registries
-     */
-    @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registries registries, @NotNull Registry.Resource resource) {
-        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, nbtType);
-        DynamicRegistryImpl.loadStaticSnbtRegistry(registries, registry, resource);
-        return registry;
-    }
-
-    @NotNull String id();
-
-    @Nullable T get(int id);
-    @Nullable T get(@NotNull NamespaceID namespace);
-    default @Nullable T get(@NotNull Key<T> key) {
-        return get(key.namespace());
-    }
-
-    @Nullable Key<T> getKey(int id);
-    @Nullable Key<T> getKey(@NotNull T value);
-    @Nullable NamespaceID getName(int id);
-    @Nullable DataPack getPack(int id);
-    default @Nullable DataPack getPack(@NotNull Key<T> key) {
-        final int id = getId(key);
-        return id == -1 ? null : getPack(id);
-    }
-
-    /**
-     * Returns the protocol ID associated with the given {@link NamespaceID}, or -1 if none is registered.
-     *
-     * @see #register(NamespaceID, T)
-     */
-    int getId(@NotNull NamespaceID id);
-
-    /**
-     * Returns the protocol ID associated with the given {@link Key}, or -1 if none is registered.
-     *
-     * @see #register(NamespaceID, T)
-     */
-    default int getId(@NotNull Key<T> key) {
-        return getId(key.namespace());
-    }
-
-
-    /**
-     * <p>Returns the entries in this registry as an immutable list. The indices in the returned list correspond
-     * to the protocol ID of each entry.</p>
-     *
-     * <p>Note: The returned list is not guaranteed to update with the registry,
-     * it should be fetched again for updated values.</p>
-     *
-     * @return An immutable list of the entries in this registry.
-     */
-    @NotNull List<T> values();
 
     /**
      * <p>Register an object to this registry, overwriting the previous entry if any is present.</p>
@@ -173,23 +125,21 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @param object The entry to register
      * @return The new ID of the registered object
      */
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object) {
-        return register(NamespaceID.from(id), object, null);
+    default RegistryKey<T> register(String id, T object) {
+        return register(Key.key(id), object, DataPack.MINESTOM_UNNAMED);
     }
 
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID id, @NotNull T object) {
-        return register(id, object, null);
-    }
-
-    @ApiStatus.Internal
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object, @Nullable DataPack pack) {
-        return register(NamespaceID.from(id), object, pack);
+    default RegistryKey<T> register(Key id, T object) {
+        return register(id, object, DataPack.MINESTOM_UNNAMED);
     }
 
     @ApiStatus.Internal
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID id, @NotNull T object, @Nullable DataPack pack) {
-        return register(id, object);
+    default RegistryKey<T> register(String id, T object, DataPack pack) {
+        return register(Key.key(id), object, pack);
     }
+
+    @ApiStatus.Internal
+    RegistryKey<T> register(Key id, T object, DataPack pack);
 
     /**
      * <p>Removes an object from this registry.</p>
@@ -203,20 +153,21 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * <p>Note: the new registry will not be sent to existing players. They must be returned to
      * the configuration phase to receive new registry data. See {@link Player#startConfigurationPhase()}.</p>
      *
-     * @param namespaceId The id of the entry to remove
+     * @param key The id of the entry to remove
      * @return True if the object was removed, false if it was not present
      * @throws UnsupportedOperationException If the system property <code>minestom.registry.unsafe-remove</code> is not set to <code>true</code>
      */
-    boolean remove(@NotNull NamespaceID namespaceId) throws UnsupportedOperationException;
+    boolean remove(Key key) throws UnsupportedOperationException;
 
     /**
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
-     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(NamespaceID, T)}.</p>
+     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(Key, T)}.</p>
      *
+     * @param registries     Registries provider
      * @param excludeVanilla Whether to exclude vanilla entries
      * @return A {@link SendablePacket} containing the registry data
      */
     @ApiStatus.Internal
-    @NotNull SendablePacket registryDataPacket(boolean excludeVanilla);
+    SendablePacket registryDataPacket(Registries registries, boolean excludeVanilla);
 
 }

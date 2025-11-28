@@ -2,36 +2,27 @@ package net.minestom.server.entity.metadata.minecart;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
 
 public class CommandBlockMinecartMeta extends AbstractMinecartMeta {
-    public static final byte OFFSET = AbstractMinecartMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 2;
-
-    public CommandBlockMinecartMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public CommandBlockMinecartMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public @NotNull String getCommand() {
-        return super.metadata.getIndex(OFFSET, "");
+    public String getCommand() {
+        return metadata.get(MetadataDef.MinecartCommandBlock.COMMAND);
     }
 
-    public void setCommand(@NotNull String value) {
-        super.metadata.setIndex(OFFSET, Metadata.String(value));
+    public void setCommand(String value) {
+        metadata.set(MetadataDef.MinecartCommandBlock.COMMAND, value);
     }
 
-    public @NotNull Component getLastOutput() {
-        return super.metadata.getIndex(OFFSET + 1, Component.empty());
+    public Component getLastOutput() {
+        return metadata.get(MetadataDef.MinecartCommandBlock.LAST_OUTPUT);
     }
 
-    public void setLastOutput(@NotNull Component value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.Chat(value));
-    }
-
-    @Override
-    public int getObjectData() {
-        return 6;
+    public void setLastOutput(Component value) {
+        metadata.set(MetadataDef.MinecartCommandBlock.LAST_OUTPUT, value);
     }
 }

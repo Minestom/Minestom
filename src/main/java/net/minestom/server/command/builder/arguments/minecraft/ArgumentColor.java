@@ -2,10 +2,10 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an argument which will give you a {@link Style} containing the colour or no
@@ -21,9 +21,8 @@ public class ArgumentColor extends Argument<Style> {
         super(id);
     }
 
-    @NotNull
     @Override
-    public Style parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public Style parse(CommandSender sender, String input) throws ArgumentSyntaxException {
 
         // check for colour
         NamedTextColor color = NamedTextColor.NAMES.value(input);
@@ -40,8 +39,8 @@ public class ArgumentColor extends Argument<Style> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:color";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.COLOR;
     }
 
     @Override

@@ -5,44 +5,50 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.minestom.demo.block.SignHandler;
 import net.minestom.demo.block.TestBlockHandler;
+import net.minestom.demo.block.placement.BedPlacementRule;
 import net.minestom.demo.block.placement.DripstonePlacementRule;
 import net.minestom.demo.commands.*;
+import net.minestom.demo.recipe.ShapelessRecipe;
+import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.entity.Player;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.event.server.ServerListPingEvent;
-import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
-import net.minestom.server.ping.ResponseData;
-import net.minestom.server.recipe.RecipeCategory;
-import net.minestom.server.recipe.ShapedRecipe;
-import net.minestom.server.recipe.ShapelessRecipe;
-import net.minestom.server.utils.identity.NamedAndIdentified;
+import net.minestom.server.ping.Status;
+import net.minestom.server.recipe.RecipeBookCategory;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.TagKey;
 import net.minestom.server.utils.time.TimeUnit;
-import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.setProperty("minestom.experiment.pose-updates", "true");
-
+        System.setProperty("minestom.new-socket-write-lock", "true");
         MinecraftServer.setCompressionThreshold(0);
 
-        MinecraftServer minecraftServer = MinecraftServer.init();
+        MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Offline());
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
-        blockManager.registerHandler(TestBlockHandler.INSTANCE.getNamespaceId(), () -> TestBlockHandler.INSTANCE);
+        var beds = Block.values().stream().filter(block -> BlockEntityType.BED.equals(block.registry().blockEntityType())).toList();
+        beds.forEach(block -> blockManager.registerBlockPlacementRule(new BedPlacementRule(block)));
+        blockManager.registerHandler(TestBlockHandler.INSTANCE.getKey(), () -> TestBlockHandler.INSTANCE);
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());
@@ -82,6 +88,12 @@ public class Main {
         commandManager.register(new CookieCommand());
         commandManager.register(new WorldBorderCommand());
         commandManager.register(new TransferCommand());
+        commandManager.register(new TestInstabreakCommand());
+        commandManager.register(new AttributeCommand());
+        commandManager.register(new PrimedTNTCommand());
+        commandManager.register(new SleepCommand());
+        commandManager.register(new MinecartCommand());
+        commandManager.register(new BelowNameCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
@@ -89,78 +101,73 @@ public class Main {
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night"));
 
+        RegistryTag<Block> tag = Block.staticRegistry().getTag(TagKey.ofHash("#minecraft:all_signs"));
+        SignHandler signHandler = new SignHandler();
+        for (RegistryKey<Block> key : Objects.requireNonNull(tag)) {
+            blockManager.registerHandler(key.key(), () -> signHandler);
+        }
+
+        byte[] favicon;
+
+        try (InputStream stream = Main.class.getResourceAsStream("/minestom.png")) {
+            favicon = Objects.requireNonNull(stream).readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
-            ResponseData responseData = event.getResponseData();
-            responseData.addEntry(NamedAndIdentified.named("The first line is separated from the others"));
-            responseData.addEntry(NamedAndIdentified.named("Could be a name, or a message"));
+            int onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
+            Status.PlayerInfo.Builder builder = Status.PlayerInfo.builder(Status.PlayerInfo.online(20))
+                    .sample("The first line is separated from the others")
+                    .sample("Could be a name, or a message");
 
             // on modern versions, you can obtain the player connection directly from the event
             if (event.getConnection() != null) {
-                responseData.addEntry(NamedAndIdentified.named("IP test: " + event.getConnection().getRemoteAddress().toString()));
-
-                responseData.addEntry(NamedAndIdentified.named("Connection Info:"));
                 String ip = event.getConnection().getServerAddress();
-                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                        .append(Component.text(" IP: ", NamedTextColor.GRAY))
-                        .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW))));
-                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                        .append(Component.text(" PORT: ", NamedTextColor.GRAY))
-                        .append(Component.text(event.getConnection().getServerPort()))));
-                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                        .append(Component.text(" VERSION: ", NamedTextColor.GRAY))
-                        .append(Component.text(event.getConnection().getProtocolVersion()))));
+                builder = builder
+                        .sample("IP test: " + event.getConnection().getRemoteAddress().toString())
+                        .sample("Connection Info:")
+                        .sample(Component.text('-', NamedTextColor.DARK_GRAY)
+                                .append(Component.text(" IP: ", NamedTextColor.GRAY))
+                                .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW)))
+                        .sample(Component.text('-', NamedTextColor.DARK_GRAY)
+                                .append(Component.text(" PORT: ", NamedTextColor.GRAY))
+                                .append(Component.text(event.getConnection().getServerPort())))
+                        .sample(Component.text('-', NamedTextColor.DARK_GRAY)
+                                .append(Component.text(" VERSION: ", NamedTextColor.GRAY))
+                                .append(Component.text(event.getConnection().getProtocolVersion())));
             }
-            responseData.addEntry(NamedAndIdentified.named(Component.text("Time", NamedTextColor.YELLOW)
-                    .append(Component.text(": ", NamedTextColor.GRAY))
-                    .append(Component.text(System.currentTimeMillis(), Style.style(TextDecoration.ITALIC)))));
 
-            // components will be converted the legacy section sign format so they are displayed in the client
-            responseData.addEntry(NamedAndIdentified.named(Component.text("You can use ").append(Component.text("styling too!", NamedTextColor.RED, TextDecoration.BOLD))));
+            builder = builder
+                    .sample(Component.text("Time", NamedTextColor.YELLOW)
+                            .append(Component.text(": ", NamedTextColor.GRAY))
+                            .append(Component.text(System.currentTimeMillis(), Style.style(TextDecoration.ITALIC))))
+                    // components will be converted the legacy section sign format so they are displayed in the client
+                    .sample(Component.text("You can use ").append(Component.text("styling too!", NamedTextColor.RED, TextDecoration.BOLD)));
 
-            // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
-            // on legacy versions, colors will be converted to the section format so it'll work there too
-            responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
-            //responseData.setPlayersHidden(true);
+            event.setStatus(Status.builder()
+                    // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
+                    // on legacy versions, colors will be converted to the section format so it'll work there too
+                    .description(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)))
+                    .favicon(favicon)
+                    .playerInfo(builder.build())
+                    .build());
         });
 
-        var ironBlockRecipe = new ShapedRecipe(
-                "minestom:test", 2, 2, "",
-                RecipeCategory.Crafting.MISC,
-                List.of(
-                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT)))
-                ), ItemStack.of(Material.IRON_BLOCK), true) {
-            @Override
-            public boolean shouldShow(@NotNull Player player) {
-                return true;
-            }
-        };
-        MinecraftServer.getRecipeManager().addRecipe(ironBlockRecipe);
-        var recipe = new ShapelessRecipe(
-                "minestom:test2", "abc",
-                RecipeCategory.Crafting.MISC,
-                List.of(
-                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.DIRT)))
-                ),
+        MinecraftServer.getRecipeManager().addRecipe(new ShapelessRecipe(
+                RecipeBookCategory.CRAFTING_MISC,
+                List.of(Material.DIRT),
                 ItemStack.builder(Material.GOLD_BLOCK)
-                        .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
+                        .set(DataComponents.CUSTOM_NAME, Component.text("abc"))
                         .build()
-        ) {
-            @Override
-            public boolean shouldShow(@NotNull Player player) {
-                return true;
-            }
-        };
-        MinecraftServer.getRecipeManager().addRecipe(recipe);
+        ));
 
         new PlayerInit().init();
 
 //        VelocityProxy.enable("abcdef");
         //BungeeCordProxy.enable();
 
-        MojangAuth.init();
+//        MojangAuth.init();
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));

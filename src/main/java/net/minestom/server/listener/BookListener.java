@@ -10,8 +10,10 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 public class BookListener {
 
     public static void listener(ClientEditBookPacket packet, Player player) {
-        int slot = PlayerInventoryUtils.convertClientInventorySlot(packet.slot());
-        ItemStack itemStack = player.getInventory().getItemStack(slot);
+        int minestomSlot = PlayerInventoryUtils.convertPlayerInventorySlotToMinestomSlot(packet.slot());
+        if (!PlayerInventoryUtils.isHotbarOrOffHandSlot(minestomSlot)) return;
+
+        final ItemStack itemStack = player.getInventory().getItemStack(minestomSlot);
         EventDispatcher.call(new EditBookEvent(player, itemStack, packet.pages(), packet.title()));
     }
 

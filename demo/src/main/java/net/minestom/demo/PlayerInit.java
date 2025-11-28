@@ -1,24 +1,31 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.object.ObjectContents;
+import net.minestom.demo.entity.PlayerEntity;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.FrameType;
-import net.minestom.server.advancements.notifications.Notification;
-import net.minestom.server.advancements.notifications.NotificationCenter;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.Damage;
-import net.minestom.server.entity.metadata.projectile.FireworkRocketMeta;
+import net.minestom.server.entity.metadata.avatar.MannequinMeta;
+import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.event.item.ItemDropEvent;
-import net.minestom.server.event.item.PickupItemEvent;
+import net.minestom.server.event.inventory.CreativeInventoryActionEvent;
+import net.minestom.server.event.item.*;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.instance.Instance;
@@ -26,29 +33,31 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
-import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
-import net.minestom.server.item.component.EnchantmentList;
-import net.minestom.server.item.component.LodestoneTracker;
-import net.minestom.server.item.component.PotionContents;
-import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.item.component.Consumable;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
-import net.minestom.server.potion.CustomPotionEffect;
-import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
+import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
+import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -94,20 +103,12 @@ public class PlayerInit {
                 itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
-
-                var firework = new Entity(EntityType.FIREWORK_ROCKET);
-                firework.setInstance(player.getInstance());
-                var meta = (FireworkRocketMeta) firework.getEntityMeta();
-                meta.setFireworkInfo(ItemStack.of(Material.FIREWORK_ROCKET));
-                meta.setShooter(player);
-                player.addPassenger(firework);
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
                 final Player player = event.getPlayer();
 
                 // Show off adding and removing feature flags
-                event.addFeatureFlag(FeatureFlag.BUNDLE);
                 event.removeFeatureFlag(FeatureFlag.TRADE_REBALANCE); // not enabled by default, just removed for demonstration
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
@@ -121,10 +122,15 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
+
+                player.sendMessage(Component.text("click me for less health ")
+                                           .clickEvent(ClickEvent.runCommand("health set 2"))
+                                           .append(Component.object(ObjectContents.sprite(Key.key("block/stone"))))
+                                           .append(Component.object(ObjectContents.playerHead("Minestom"))));
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
-                        .set(ItemComponent.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
-                        .set(ItemComponent.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
+                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(Block.STONE)))
+                        .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(Block.DIAMOND_ORE)))
                         .build();
                 player.getInventory().addItemStack(itemStack);
 
@@ -132,57 +138,139 @@ public class PlayerInit {
                         "hello", "world"
                 )));
 
-                player.setChestplate(ItemStack.of(Material.ELYTRA));
-
                 player.sendPacket(new ServerLinksPacket(
                         new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.NEWS, "https://minestom.net"),
                         new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.BUG_REPORT, "https://minestom.net"),
                         new ServerLinksPacket.Entry(Component.text("Hello world!"), "https://minestom.net")
                 ));
 
+                // TODO(1.21.2): Handle bundle slot selection
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
-                        .set(ItemComponent.BUNDLE_CONTENTS, List.of(
+                        .set(DataComponents.BUNDLE_CONTENTS, List.of(
                                 ItemStack.of(Material.DIAMOND, 5),
                                 ItemStack.of(Material.RABBIT_FOOT, 5)
                         ))
                         .build();
                 player.getInventory().addItemStack(bundle);
 
-                player.getInventory().addItemStack(ItemStack.builder(Material.COMPASS)
-                        .set(ItemComponent.LODESTONE_TRACKER, new LodestoneTracker(player.getInstance().getDimensionName(), new Vec(10, 10, 10), true))
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-                        .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(
-                                Enchantment.SHARPNESS, 10
-                        )))
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.BLACK_BANNER)
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.POTION)
-                        .set(ItemComponent.POTION_CONTENTS, new PotionContents(null, null, List.of(
-                                new CustomPotionEffect(PotionEffect.JUMP_BOOST, new CustomPotionEffect.Settings((byte) 4,
-                                        45 * 20, false, true, true, null))
-                        )))
-                        .customName(Component.text("Sharpness 10 Sword").append(Component.space()).append(Component.text("§c§l[LEGENDARY]")))
-                        .build());
-
+                PlayerInventory inventory = event.getPlayer().getInventory();
+                inventory.addItemStack(getFoodItem(20));
+                inventory.addItemStack(ItemStack.of(Material.PURPLE_BED));
 
                 if (event.isFirstSpawn()) {
-                    Notification notification = new Notification(
+                    event.getPlayer().sendNotification(new Notification(
                             Component.text("Welcome!"),
                             FrameType.TASK,
                             Material.IRON_SWORD
-                    );
-                    NotificationCenter.send(notification, event.getPlayer());
+                    ));
 
                     player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
+
+                    var happyGhast = new LivingEntity(EntityType.HAPPY_GHAST);
+                    happyGhast.setNoGravity(true);
+                    happyGhast.setBodyEquipment(ItemStack.of(Material.GREEN_HARNESS));
+                    happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
+
+                    var copperGolem = new LivingEntity(EntityType.COPPER_GOLEM);
+                    copperGolem.setNoGravity(true);
+                    copperGolem.setItemInMainHand(ItemStack.of(Material.STICK));
+                    ((CopperGolemMeta) copperGolem.getEntityMeta()).setState(CopperGolemMeta.State.GETTING_ITEM);
+                    copperGolem.setInstance(player.getInstance(), new Pos(-10, 40, 5, -133, 0));
+
+                    player.getInstance().setBlock(new Vec(-12, 40, 5), Block.WEATHERED_COPPER_GOLEM_STATUE.withProperty("copper_golem_pose", "star"));
+
+                    player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
+                            Either.left(happyGhast.getUuid()),
+                            TrackedWaypointPacket.Icon.DEFAULT,
+                            new TrackedWaypointPacket.Target.Vec3i(happyGhast.getPosition())
+                    )));
+
+                    var playerEntity = new PlayerEntity();
+                    playerEntity.setInstance(player.getInstance(), new Pos(-2.5, 40, 6.7, -163, 0));
+                    player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
+                            Either.left(playerEntity.getUuid()),
+                            TrackedWaypointPacket.Icon.DEFAULT,
+                            new TrackedWaypointPacket.Target.Vec3i(playerEntity.getPosition())
+                    )));
+
+                    var mannequinEntity = new LivingEntity(EntityType.MANNEQUIN);
+                    mannequinEntity.setNoGravity(true);
+                    var mannequinMeta = (MannequinMeta) mannequinEntity.getEntityMeta();
+                    mannequinEntity.set(DataComponents.CUSTOM_NAME, Component.text("Minestom"));
+                    mannequinMeta.setCustomNameVisible(true);
+                    mannequinMeta.setProfile(new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of())));
+                    mannequinMeta.setImmovable(true);
+                    mannequinMeta.setDescription(Component.text("npc"));
+                    mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
+                    mannequinEntity.setItemInMainHand(ItemStack.of(Material.PLAYER_HEAD).with(DataComponents.PROFILE,
+                          new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of()))));
+                    player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
+                            Either.left(mannequinEntity.getUuid()),
+                            TrackedWaypointPacket.Icon.DEFAULT,
+                            new TrackedWaypointPacket.Target.Vec3i(mannequinEntity.getPosition())
+                    )));
                 }
+            })
+            .addListener(PlayerGameModeRequestEvent.class, event -> {
+                final Player player = event.getPlayer();
+                if (player.getPermissionLevel() >= 2) {
+                    player.setGameMode(event.getRequestedGameMode());
+                }
+            })
+            .addListener(PlayerChatEvent.class, event -> {
+                var dialog = new Dialog.MultiAction(
+                        new DialogMetadata(
+                                Component.text("Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?").hoverEvent(HoverEvent.showText(Component.text("Hover text here"))),
+                                null, true, false,
+                                DialogAfterAction.CLOSE,
+                                List.of(
+                                        new DialogBody.PlainMessage(Component.text("plain message here").hoverEvent(HoverEvent.showText(Component.text("Hover text here"))), DialogBody.PlainMessage.DEFAULT_WIDTH),
+                                        new DialogBody.Item(ItemStack.of(Material.DIAMOND, 5),
+                                                new DialogBody.PlainMessage(Component.text("item message"), DialogBody.PlainMessage.DEFAULT_WIDTH),
+                                                false, true, 16, 16)
+                                ),
+                                List.of(
+                                        new DialogInput.Text("text", DialogInput.DEFAULT_WIDTH * 2, Component.text("Enter some text")
+                                                .hoverEvent(HoverEvent.showText(Component.text("Hover text here"))), true, "", Integer.MAX_VALUE, new DialogInput.Text.Multiline(15, null)),
+                                        new DialogInput.Boolean("bool", Component.text("Checkbox"), false, "true", "false"),
+                                        new DialogInput.SingleOption("single_option", DialogInput.DEFAULT_WIDTH, List.of(
+                                                new DialogInput.SingleOption.Option("option1", Component.text("Option 1"), true),
+                                                new DialogInput.SingleOption.Option("option2", Component.text("Option 2"), false),
+                                                new DialogInput.SingleOption.Option("option3", Component.text("Option 3"), false)
+                                        ), Component.text("Single option"), true),
+                                        new DialogInput.NumberRange("number_range", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r2ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r3ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r4ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r5ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r6ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f)
+                                )
+                        ),
+                        List.of(
+                                new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, new DialogAction.DynamicCustom(Key.key("done_action"), null)),
+                                new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, null)
+                        ),
+                        null, 2
+                );
+
+                event.getPlayer().sendMessage(Component.text("Click for dialog!").clickEvent(ClickEvent.showDialog(dialog)));
+            })
+            .addListener(PlayerCustomClickEvent.class, event -> {
+                String payload = "null";
+                if (event.getPayload() != null) {
+                    try {
+                        payload = MinestomAdventure.tagStringIO().asString(event.getPayload());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                System.out.println(event.getKey() + " -> " + payload);
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
@@ -191,8 +279,50 @@ public class PlayerInit {
 
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
+            .addListener(PlayerBlockBreakEvent.class, event -> {
+                var instance = event.getInstance();
+                var block = event.getBlock();
+                var pos = event.getBlockPosition();
+                if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
+                var isHead = "head".equals(block.getProperty("part"));
+                var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
+                var otherBlock = instance.getBlock(other);
+                if (otherBlock.id() == block.id()) {
+                    instance.setBlock(other, Block.AIR);
+                }
+            })
+            .addListener(PlayerBlockInteractEvent.class, event -> {
+                var player = event.getPlayer();
+                var instance = event.getInstance();
+                var block = event.getBlock();
+                if (event.getBlock().key().asMinimalString().endsWith("_bed")) {
+                    var pos = event.getBlockPosition();
+                    if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
+                    var isHead = "head".equals(block.getProperty("part"));
+                    var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                    var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
+                    var otherBlock = instance.getBlock(other);
+                    if (otherBlock.id() == block.id()) {
+                        player.setVelocity(Vec.ZERO);
+                        player.swingMainHand();
+                        player.enterBed((isHead ? pos : other));
+                    }
+                }
+            })
+            .addListener(PlayerLeaveBedEvent.class, event -> {
+                var player = event.getPlayer();
+                boolean snooze = ThreadLocalRandom.current().nextFloat() < 0.7f;
+                if (snooze) {
+                    event.setCancelled(true);
+                    player.playSound(Sound.sound(SoundEvent.ENTITY_ALLAY_ITEM_THROWN, Sound.Source.PLAYER, 1f, 0.6f));
+                    player.sendActionBar(Component.text("I'm too tired to stand up!"));
+                } else {
+                    player.sendActionBar(Component.empty());
+                }
+            })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
-                if (event.getHand() != Player.Hand.MAIN) return;
+                if (event.getHand() != PlayerHand.MAIN) return;
 
                 var itemStack = event.getItemStack();
                 var block = event.getInstance().getBlock(event.getPosition());
@@ -206,16 +336,61 @@ public class PlayerInit {
                 event.getInstance().setBlock(event.getPosition(), block);
 
             })
-            .addListener(PlayerBlockPlaceEvent.class, event -> {
-//                event.setDoBlockUpdates(false);
+            .addListener(PlayerBeginItemUseEvent.class, event -> {
+                final Player player = event.getPlayer();
+                final ItemStack itemStack = event.getItemStack();
+                final boolean hasProjectile = !itemStack.get(DataComponents.CHARGED_PROJECTILES, List.of()).isEmpty();
+                if (itemStack.material() == Material.CROSSBOW && hasProjectile) {
+                    // "shoot" the arrow
+                    player.setItemInHand(event.getHand(), itemStack.without(DataComponents.CHARGED_PROJECTILES));
+                    event.getPlayer().sendMessage("pew pew!");
+                    event.setItemUseDuration(0); // Do not start using the item
+                    return;
+                }
+            })
+            .addListener(PlayerFinishItemUseEvent.class, event -> {
+                if (event.getItemStack().material() == Material.APPLE) {
+                    event.getPlayer().sendMessage("yummy yummy apple");
+                }
+            })
+            .addListener(PlayerCancelItemUseEvent.class, event -> {
+                final Player player = event.getPlayer();
+                final ItemStack itemStack = event.getItemStack();
+                if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
+                    player.setItemInHand(event.getHand(), itemStack.with(DataComponents.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
+                    return;
+                }
             })
             .addListener(PlayerBlockInteractEvent.class, event -> {
                 var block = event.getBlock();
                 var rawOpenProp = block.getProperty("open");
-                if (rawOpenProp == null) return;
+                if (rawOpenProp != null) {
+                    block = block.withProperty("open", String.valueOf(!Boolean.parseBoolean(rawOpenProp)));
+                    event.getInstance().setBlock(event.getBlockPosition(), block);
+                }
 
-                block = block.withProperty("open", String.valueOf(!Boolean.parseBoolean(rawOpenProp)));
-                event.getInstance().setBlock(event.getBlockPosition(), block);
+                if (block.id() == Block.CRAFTING_TABLE.id()) {
+                    event.getPlayer().openInventory(new Inventory(InventoryType.CRAFTING, "Crafting"));
+                }
+            })
+            .addListener(CreativeInventoryActionEvent.class, event -> {
+                if (event.getClickedItem().material() == Material.APPLE) {
+                    event.setClickedItem(ItemStack.of(Material.GOLDEN_APPLE, event.getClickedItem().amount()));
+                } else if (event.getClickedItem().material() == Material.ENCHANTED_GOLDEN_APPLE) {
+                    event.setCancelled(true);
+                }
+            })
+            .addListener(PlayerBlockPlaceEvent.class, event -> {
+                Block block = event.getBlock();
+                BlockHandler handler = block.handler();
+                if (handler != null) return;
+                event.setBlock(event.getBlock().withHandler(MinecraftServer.getBlockManager().getHandler(block.key().asString())));
+            })
+            .addListener(PlayerEditSignEvent.class, event -> {
+                event.getLines()
+                        .stream()
+                        .map(Component::text)
+                        .forEach(comp -> event.getPlayer().sendMessage(comp));
             });
 
     {
@@ -232,22 +407,6 @@ public class PlayerInit {
         instanceContainer.setChunkSupplier(LightingChunk::new);
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
-
-//        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
-//        instanceManager.registerInstance(i2);
-//        i2.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
-//        i2.setChunkSupplier(LightingChunk::new);
-
-        // System.out.println("start");
-        // var chunks = new ArrayList<CompletableFuture<Chunk>>();
-        // ChunkUtils.forChunksInRange(0, 0, 32, (x, z) -> chunks.add(instanceContainer.loadChunk(x, z)));
-
-        // CompletableFuture.runAsync(() -> {
-        //     CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
-        //     System.out.println("load end");
-        //     LightingChunk.relight(instanceContainer, instanceContainer.getChunks());
-        //     System.out.println("light end");
-        // });
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
@@ -281,5 +440,17 @@ public class PlayerInit {
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
         }).repeat(10, TimeUnit.SERVER_TICK).schedule();
+    }
+
+    public static ItemStack getFoodItem(int consumeTicks) {
+        return ItemStack.builder(Material.IRON_NUGGET)
+                .amount(64)
+                .set(DataComponents.CONSUMABLE, new Consumable(
+                        (float) consumeTicks / 20,
+                        ItemAnimation.EAT,
+                        SoundEvent.BLOCK_CHAIN_STEP,
+                        true,
+                        new ArrayList<>()))
+                .build();
     }
 }

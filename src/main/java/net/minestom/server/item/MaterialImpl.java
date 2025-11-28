@@ -1,28 +1,16 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.registry.RegistryData;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.Collection;
+record MaterialImpl(RegistryData.MaterialEntry registry) implements Material {
+    static final Registry<Material> REGISTRY = RegistryData.createStaticRegistry(Key.key("item"),
+            (namespace, properties) -> new MaterialImpl(RegistryData.material(namespace, properties)));
 
-record MaterialImpl(Registry.MaterialEntry registry) implements Material {
-    private static final Registry.Container<Material> CONTAINER = Registry.createStaticContainer(Registry.Resource.ITEMS,
-            (namespace, properties) -> new MaterialImpl(Registry.material(namespace, properties)));
-
-    static Material get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static Material getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static Material getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<Material> values() {
-        return CONTAINER.values();
+    static @UnknownNullability Material get(String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override

@@ -1,7 +1,6 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -23,9 +22,10 @@ public class CommandParseTest {
     public void singleParameterlessCommand() {
         final AtomicBoolean b = new AtomicBoolean();
         var foo = Graph.merge(Graph.builder(Literal("foo"), createExecutor(b)).build());
-        assertValid(foo, "foo", b);
+
+        // even though we add extra, it's still /foo so we'll call the default executor
+        assertValid(foo, "foo bar baz", b);
         assertUnknown(foo, "bar");
-        assertSyntaxError(foo, "foo bar baz");
     }
 
     @Test
@@ -39,8 +39,6 @@ public class CommandParseTest {
         assertValid(graph, "foo", b);
         assertValid(graph, "bar", b1);
         assertUnknown(graph, "baz");
-        assertSyntaxError(graph, "foo bar baz");
-        assertSyntaxError(graph, "bar 25");
     }
 
     @Test
@@ -50,20 +48,30 @@ public class CommandParseTest {
         var foo = Graph.merge(Graph.builder(Literal("foo"))
                 .append(Literal("add"),
                         x -> x.append(Word("name"), createExecutor(add)))
-                .append(Word("action").from("inc", "dec"),
+                .append(Word("type").from("inc", "dec"),
                         x -> x.append(ArgumentType.Integer("num"), createExecutor(action)))
                 .build());
+
+        // Regular/Expected usage of the command
         assertValid(foo, "foo add test", add);
         assertValid(foo, "foo add inc", add);
         assertValid(foo, "foo add 157", add);
         assertValid(foo, "foo inc 157", action);
         assertValid(foo, "foo dec 157", action);
+
+        // Since foo doesn't have a default executor, we want these to throw a syntax error
         assertSyntaxError(foo, "foo 15");
         assertSyntaxError(foo, "foo asd");
+
+        // Foo and the inc argument both don't have a default executor (only a regular executor for inc), so these will fail
         assertSyntaxError(foo, "foo inc");
         assertSyntaxError(foo, "foo inc asd");
-        assertSyntaxError(foo, "foo inc 15 dec");
-        assertSyntaxError(foo, "foo inc 15 20");
+
+        // A valid command is provided, even if we have extra data we'll still accept it
+        assertValid(foo, "foo inc 15 dec", action);
+        assertValid(foo, "foo inc 15 20", action);
+
+        // None of these are registered commands, make sure the correct command valuation is provided back
         assertUnknown(foo, "bar");
         assertUnknown(foo, "add");
     }
@@ -94,14 +102,15 @@ public class CommandParseTest {
     @Test
     public void singleCommandSingleEnumArg() {
         enum A {a, b}
-        final AtomicBoolean b = new AtomicBoolean();
-        var foo = Graph.merge(Graph.builder(Literal("foo"))
-                .append(ArgumentType.Enum("test", A.class), createExecutor(b))
+        final AtomicBoolean rootExecutor = new AtomicBoolean();
+        final AtomicBoolean argExecutor = new AtomicBoolean();
+        var foo = Graph.merge(Graph.builder(Literal("foo"), createExecutor(rootExecutor))
+                .append(ArgumentType.Enum("test", A.class), createExecutor(argExecutor))
                 .build());
-        assertValid(foo, "foo a", b);
-        assertValid(foo, "foo b", b);
-        assertSyntaxError(foo, "foo c");
-        assertSyntaxError(foo, "foo");
+        assertValid(foo, "foo a", argExecutor);
+        assertValid(foo, "foo b", argExecutor);
+        assertValid(foo, "foo c", rootExecutor);
+        assertValid(foo, "foo", rootExecutor);
     }
 
     @Test
@@ -146,7 +155,6 @@ public class CommandParseTest {
         return CommandParser.parser().parse(new ServerSender(), graph, input);
     }
 
-    @NotNull
     private static Graph.Execution createExecutor(AtomicBoolean atomicBoolean) {
         return new GraphImpl.ExecutionImpl(null, null, null, (sender, context) -> atomicBoolean.set(true), null);
     }

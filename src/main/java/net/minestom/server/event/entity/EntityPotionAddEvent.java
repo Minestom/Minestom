@@ -1,21 +1,22 @@
 package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.potion.Potion;
-import org.jetbrains.annotations.NotNull;
 
-public class EntityPotionAddEvent implements EntityInstanceEvent {
+public class EntityPotionAddEvent implements EntityInstanceEvent, CancellableEvent {
 
     private final Entity entity;
     private final Potion potion;
 
-    public EntityPotionAddEvent(@NotNull Entity entity, @NotNull Potion potion) {
+    private boolean cancelled = false;
+
+    public EntityPotionAddEvent(Entity entity, Potion potion) {
         this.entity = entity;
         this.potion = potion;
     }
 
-    @NotNull
     @Override
     public Entity getEntity() {
         return entity;
@@ -26,8 +27,17 @@ public class EntityPotionAddEvent implements EntityInstanceEvent {
      *
      * @return the added potion.
      */
-    @NotNull
     public Potion getPotion() {
         return potion;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

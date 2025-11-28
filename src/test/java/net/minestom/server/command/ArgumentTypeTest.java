@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.IntArrayBinaryTag;
 import net.kyori.adventure.nbt.IntBinaryTag;
@@ -14,18 +15,17 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.Range;
 import net.minestom.server.utils.location.RelativeVec;
-import net.minestom.server.utils.math.FloatRange;
-import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.TimeUnit;
 import org.junit.jupiter.api.Test;
 
@@ -129,14 +129,14 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentFloatRange() {
         var arg = ArgumentType.FloatRange("float_range");
-        assertArg(arg, new FloatRange(0f, 50f), "0..50");
-        assertArg(arg, new FloatRange(0f, 0f), "0..0");
-        assertArg(arg, new FloatRange(-50f, 0f), "-50..0");
-        assertArg(arg, new FloatRange(-Float.MAX_VALUE, 50f), "..50");
-        assertArg(arg, new FloatRange(0f, Float.MAX_VALUE), "0..");
-        assertArg(arg, new FloatRange(-Float.MAX_VALUE, Float.MAX_VALUE), "-3.4028235E38..3.4028235E38");
-        assertArg(arg, new FloatRange(0.5f, 24f), "0.5..24");
-        assertArg(arg, new FloatRange(12f, 45.6f), "12..45.6");
+        assertArg(arg, new Range.Float(0f, 50f), "0..50");
+        assertArg(arg, new Range.Float(0f, 0f), "0..0");
+        assertArg(arg, new Range.Float(-50f, 0f), "-50..0");
+        assertArg(arg, new Range.Float(-Float.MAX_VALUE, 50f), "..50");
+        assertArg(arg, new Range.Float(0f, Float.MAX_VALUE), "0..");
+        assertArg(arg, new Range.Float(-Float.MAX_VALUE, Float.MAX_VALUE), "-3.4028235E38..3.4028235E38");
+        assertArg(arg, new Range.Float(0.5f, 24f), "0.5..24");
+        assertArg(arg, new Range.Float(12f, 45.6f), "12..45.6");
         assertInvalidArg(arg, "..");
         assertInvalidArg(arg, "0..50..");
     }
@@ -145,12 +145,12 @@ public class ArgumentTypeTest {
     public void testArgumentIntRange() {
         var arg = ArgumentType.IntRange("int_range");
 
-        assertArg(arg, new IntRange(0, 50), "0..50");
-        assertArg(arg, new IntRange(0, 0), "0..0");
-        assertArg(arg, new IntRange(-50, 0), "-50..0");
-        assertArg(arg, new IntRange(Integer.MIN_VALUE, 50), "..50");
-        assertArg(arg, new IntRange(0, Integer.MAX_VALUE), "0..");
-        assertArg(arg, new IntRange(Integer.MIN_VALUE, Integer.MAX_VALUE), "-2147483648..2147483647");
+        assertArg(arg, new Range.Int(0, 50), "0..50");
+        assertArg(arg, new Range.Int(0, 0), "0..0");
+        assertArg(arg, new Range.Int(-50, 0), "-50..0");
+        assertArg(arg, new Range.Int(Integer.MIN_VALUE, 50), "..50");
+        assertArg(arg, new Range.Int(0, Integer.MAX_VALUE), "0..");
+        assertArg(arg, new Range.Int(Integer.MIN_VALUE, Integer.MAX_VALUE), "-2147483648..2147483647");
 
         assertInvalidArg(arg, "..");
         assertInvalidArg(arg, "-2147483649..2147483647");
@@ -165,10 +165,10 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.ItemStack("item_stack");
         assertArg(arg, ItemStack.AIR, "air");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5), "glass_pane[custom_model_data=5]");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5).withTag(Tag.String("tag"), "value"), "glass_pane[custom_model_data=5]{tag:value}");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5).with(ItemComponent.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
-                "glass_pane[custom_model_data=5,minecraft:custom_data={hi:232}]{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5), "glass_pane[repair_cost=5]");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).withTag(Tag.String("tag"), "value"), "glass_pane[repair_cost=5]{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).with(DataComponents.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
+                "glass_pane[repair_cost=5,minecraft:custom_data={hi:232}]{tag:value}");
     }
 
     @Test
@@ -211,9 +211,14 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentResourceLocation() {
         var arg = ArgumentType.ResourceLocation("resource_location");
-        assertArg(arg, "minecraft:resource_location_example", "minecraft:resource_location_example");
+
+        assertArg(arg, Key.key("foo:bar"), "foo:bar");
+        assertArg(arg, Key.key("minecraft:air"), "air");
+        assertArg(arg, Key.key("minecraft:foo/bar"), "foo/bar");
+
         assertInvalidArg(arg, "minecraft:invalid resource location");
-        //assertInvalidArg(arg, "minecraft:");
+        assertInvalidArg(arg, "!");
+        assertInvalidArg(arg, "a/b:empty");
     }
 
     @Test
@@ -283,8 +288,8 @@ public class ArgumentTypeTest {
 
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, false), "-3 14 +255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, false), "~-3 14 +255");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, true, false), "-3 ~14 +255");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), "-3 14 ~+255");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, true, false), "-3 ~14 +255");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, false, true), "-3 14 ~+255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, true, true), "~-3 ~14 ~+255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.LOCAL, true, true, true), "^-3 ^14 ^+255");
 
@@ -307,8 +312,8 @@ public class ArgumentTypeTest {
 
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, false), "-3 14.25");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, false), "~-3 14.25");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), "-3 ~14.25");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), "-3 ~14.25");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, false, true), "-3 ~14.25");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, false, true), "-3 ~14.25");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, true), "~-3 ~14.25");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.LOCAL, true, false, true), "^-3 ^14.25");
 
@@ -328,8 +333,8 @@ public class ArgumentTypeTest {
 
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, false), "-3 14.25 +255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, false), "~-3 14.25 +255");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, true, false), "-3 ~14.25 +255");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), "-3 14.25 ~+255");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, true, false), "-3 ~14.25 +255");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, false, true), "-3 14.25 ~+255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, true, true), "~-3 ~14.25 ~+255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.LOCAL, true, true, true), "^-3 ^14.25 ^+255");
 
@@ -455,7 +460,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentMapWithSender() {
+    public void testArgumentTransformWithSender() {
         var serverSender = new ServerSender();
 
         var arg = ArgumentType.Word("word").from("word1", "word2", "word3")

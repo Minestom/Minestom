@@ -2,7 +2,6 @@ package net.minestom.server.utils.chunk;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Used to customize which type of {@link Chunk} an implementation should use.
@@ -18,5 +17,5 @@ public interface ChunkSupplier {
      * @param chunkZ   the chunk Z
      * @return a newly {@link Chunk} object, cannot be null
      */
-    @NotNull Chunk createChunk(@NotNull Instance instance, int chunkX, int chunkZ);
+    Chunk createChunk(Instance instance, int chunkX, int chunkZ);
 }

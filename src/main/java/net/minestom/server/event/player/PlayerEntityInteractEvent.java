@@ -3,8 +3,8 @@ package net.minestom.server.event.player;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a {@link Player} interacts (right-click) with an {@link Entity}.
@@ -13,11 +13,11 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
 
     private final Player player;
     private final Entity entityTarget;
-    private final Player.Hand hand;
+    private final PlayerHand hand;
     private final Point interactPosition;
 
-    public PlayerEntityInteractEvent(@NotNull Player player, @NotNull Entity entityTarget, @NotNull Player.Hand hand,
-                                     @NotNull Point interactPosition) {
+    public PlayerEntityInteractEvent(Player player, Entity entityTarget, PlayerHand hand,
+                                     Point interactPosition) {
         this.player = player;
         this.entityTarget = entityTarget;
         this.hand = hand;
@@ -25,7 +25,7 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -34,7 +34,6 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
      *
      * @return the {@link Entity}
      */
-    @NotNull
     public Entity getTarget() {
         return entityTarget;
     }
@@ -44,8 +43,7 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
      *
      * @return the hand
      */
-    @NotNull
-    public Player.Hand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
@@ -55,7 +53,6 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
      * @see net.minestom.server.network.packet.client.play.ClientInteractEntityPacket.InteractAt
      * @return the interaction position
      */
-    @NotNull
     public Point getInteractPosition() {
         return interactPosition;
     }

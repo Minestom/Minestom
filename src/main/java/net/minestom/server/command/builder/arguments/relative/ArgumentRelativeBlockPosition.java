@@ -1,6 +1,6 @@
 package net.minestom.server.command.builder.arguments.relative;
 
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.command.ArgumentParserType;
 
 import java.util.function.Function;
 
@@ -11,13 +11,13 @@ import java.util.function.Function;
  */
 public class ArgumentRelativeBlockPosition extends ArgumentRelativeVec {
 
-    public ArgumentRelativeBlockPosition(@NotNull String id) {
+    public ArgumentRelativeBlockPosition(String id) {
         super(id, 3);
     }
 
     @Override
-    public String parser() {
-        return "minecraft:block_pos";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.BLOCK_POS;
     }
 
     @Override

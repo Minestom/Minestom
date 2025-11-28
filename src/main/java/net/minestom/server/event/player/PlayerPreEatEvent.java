@@ -1,11 +1,11 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called before the PlayerEatEvent and can be used to change the eating time
@@ -16,12 +16,12 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
 
     private final Player player;
     private final ItemStack foodItem;
-    private final Player.Hand hand;
+    private final PlayerHand hand;
     private long eatingTime;
 
     private boolean cancelled;
 
-    public PlayerPreEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, @NotNull Player.Hand hand, long eatingTime) {
+    public PlayerPreEatEvent(Player player, ItemStack foodItem, PlayerHand hand, long eatingTime) {
         this.player = player;
         this.foodItem = foodItem;
         this.hand = hand;
@@ -35,11 +35,11 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
      * @deprecated use getItemStack() for the eaten item
      */
     @Deprecated
-    public @NotNull ItemStack getFoodItem() {
+    public ItemStack getFoodItem() {
         return foodItem;
     }
 
-    public @NotNull Player.Hand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
@@ -72,7 +72,7 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -82,5 +82,5 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
      * @return the food item
      */
     @Override
-    public @NotNull ItemStack getItemStack() { return foodItem; }
+    public ItemStack getItemStack() { return foodItem; }
 }

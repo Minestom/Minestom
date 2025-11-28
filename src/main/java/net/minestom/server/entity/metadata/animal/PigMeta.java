@@ -1,32 +1,56 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.registry.RegistryKey;
+import org.jetbrains.annotations.Nullable;
 
 public class PigMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 2;
-
-    public PigMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public PigMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public boolean isHasSaddle() {
-        return super.metadata.getIndex(OFFSET, false);
-    }
-
-    public void setHasSaddle(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
-    }
-
     public int getTimeToBoost() {
-        return super.metadata.getIndex(OFFSET + 1, 0);
+        return metadata.get(MetadataDef.Pig.BOOST_TIME);
     }
 
     public void setTimeToBoost(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Pig.BOOST_TIME, value);
+    }
+
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#PIG_VARIANT} instead.
+     */
+    @Deprecated
+    public RegistryKey<PigVariant> getVariant() {
+        return metadata.get(MetadataDef.Pig.VARIANT);
+    }
+
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#PIG_VARIANT} instead.
+     */
+    @Deprecated
+    public void setVariant(RegistryKey<PigVariant> value) {
+        metadata.set(MetadataDef.Pig.VARIANT, value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(DataComponent<T> component) {
+        if (component == DataComponents.PIG_VARIANT)
+            return (T) getVariant();
+        return super.get(component);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> void set(DataComponent<T> component, T value) {
+        if (component == DataComponents.PIG_VARIANT)
+            setVariant((RegistryKey<PigVariant>) value);
+        else super.set(component, value);
     }
 
 }

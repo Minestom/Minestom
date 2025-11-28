@@ -5,7 +5,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.time.Cooldown;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +22,10 @@ import static net.minestom.server.ping.ServerListPingType.OPEN_TO_LAN;
  * Utility class to manage opening the server to LAN. Note that this <b>doesn't</b> actually
  * open your server to LAN if it isn't already visible to anyone on your local network.
  * Instead it simply sends the packets needed to trick the Minecraft client into thinking
- * that this is a single-player world that has been opened to LANfor it to be displayed on
+ * that this is a single-player world that has been opened to LAN for it to be displayed on
  * the bottom of the server list.
  *
- * @see <a href="https://wiki.vg/Server_List_Ping#Ping_via_LAN_.28Open_to_LAN_in_Singleplayer.29">wiki.vg</a>
+ * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Server_List_Ping#Ping_via_LAN_(Open_to_LAN_in_Singleplayer)">the Minecraft wiki</a>
  */
 public class OpenToLAN {
     private static final InetSocketAddress PING_ADDRESS = new InetSocketAddress("224.0.2.60", 4445);
@@ -56,7 +55,7 @@ public class OpenToLAN {
      * @param config the configuration
      * @return {@code true} if it was opened successfully, {@code false} otherwise
      */
-    public static boolean open(@NotNull OpenToLANConfig config) {
+    public static boolean open(OpenToLANConfig config) {
         Objects.requireNonNull(config, "config");
         if (socket != null) return false;
 
@@ -102,21 +101,26 @@ public class OpenToLAN {
      * Performs the ping.
      */
     private static void ping() {
-        if (!MinecraftServer.getServer().isOpen()) return;
-        if (packet == null || eventCooldown.isReady(System.currentTimeMillis())) {
-            final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
-            EventDispatcher.call(event);
+        Thread.startVirtualThread(() -> {
+            try {
+                if (!MinecraftServer.getServer().isOpen()) return;
+                if (packet == null || eventCooldown.isReady(System.nanoTime())) {
+                    final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
+                    EventDispatcher.call(event);
 
-            final byte[] data = OPEN_TO_LAN.getPingResponse(event.getResponseData()).getBytes(StandardCharsets.UTF_8);
-            packet = new DatagramPacket(data, data.length, PING_ADDRESS);
+                    final byte[] data = OPEN_TO_LAN.getPingResponse(event.getStatus()).getBytes(StandardCharsets.UTF_8);
+                    packet = new DatagramPacket(data, data.length, PING_ADDRESS);
+                    eventCooldown.refreshLastUpdate(System.nanoTime());
+                }
 
-            eventCooldown.refreshLastUpdate(System.currentTimeMillis());
-        }
-
-        try {
-            socket.send(packet);
-        } catch (IOException e) {
-            LOGGER.warn("Could not send Open to LAN packet!", e);
-        }
+                try {
+                    socket.send(packet);
+                } catch (IOException e) {
+                    LOGGER.warn("Could not send Open to LAN packet!", e);
+                }
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+        });
     }
 }

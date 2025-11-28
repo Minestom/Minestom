@@ -1,16 +1,22 @@
 package net.minestom.server.entity.metadata.item;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.item.ItemStack;
 
-public class EyeOfEnderMeta extends ItemContainingMeta {
-    public static final byte OFFSET = ItemContainingMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+public class EyeOfEnderMeta extends EntityMeta {
+    public EyeOfEnderMeta(Entity entity, MetadataHolder metadata) {
+        super(entity, metadata);
+    }
 
-    public EyeOfEnderMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
-        super(entity, metadata, Material.ENDER_EYE);
+    public ItemStack getItem() {
+        return metadata.get(MetadataDef.EyeOfEnder.ITEM);
+    }
+
+    public void setItem(ItemStack value) {
+        metadata.set(MetadataDef.EyeOfEnder.ITEM, value);
     }
 
 }

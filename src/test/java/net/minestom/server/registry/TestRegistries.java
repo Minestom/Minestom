@@ -1,18 +1,25 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.animal.ChickenVariant;
+import net.minestom.server.entity.metadata.animal.CowVariant;
+import net.minestom.server.entity.metadata.animal.FrogVariant;
+import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -25,14 +32,22 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<TrimMaterial> trimMaterial = null;
     public DynamicRegistry<TrimPattern> trimPattern = null;
     public DynamicRegistry<BannerPattern> bannerPattern = null;
-    public DynamicRegistry<WolfMeta.Variant> wolfVariant = null;
+    public DynamicRegistry<WolfVariant> wolfVariant = null;
     public DynamicRegistry<Enchantment> enchantment = null;
-    public DynamicRegistry<PaintingMeta.Variant> paintingVariant = null;
+    public DynamicRegistry<PaintingVariant> paintingVariant = null;
     public DynamicRegistry<JukeboxSong> jukeboxSong = null;
-    public DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
-    public DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects = null;
-    public DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects = null;
-    public DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects = null;
+    public DynamicRegistry<Instrument> instrument = null;
+    public DynamicRegistry<WolfSoundVariant> wolfSoundVariant = null;
+    public DynamicRegistry<CatVariant> catVariant = null;
+    public DynamicRegistry<ChickenVariant> chickenVariant = null;
+    public DynamicRegistry<CowVariant> cowVariant = null;
+    public DynamicRegistry<FrogVariant> frogVariant = null;
+    public DynamicRegistry<PigVariant> pigVariant = null;
+    public DynamicRegistry<Dialog> dialog = null;
+    public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
+    public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
+    public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
+    public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects = null;
 
     public TestRegistries() {
 
@@ -43,77 +58,117 @@ public class TestRegistries implements Registries {
     }
 
     @Override
-    public @NotNull DynamicRegistry<ChatType> chatType() {
+    public DynamicRegistry<ChatType> chatType() {
         return Objects.requireNonNull(chatType);
     }
 
     @Override
-    public @NotNull DynamicRegistry<DimensionType> dimensionType() {
+    public DynamicRegistry<DimensionType> dimensionType() {
         return Objects.requireNonNull(dimensionType);
     }
 
     @Override
-    public @NotNull DynamicRegistry<Biome> biome() {
+    public DynamicRegistry<Biome> biome() {
         return Objects.requireNonNull(biome);
     }
 
     @Override
-    public @NotNull DynamicRegistry<DamageType> damageType() {
+    public DynamicRegistry<DamageType> damageType() {
         return Objects.requireNonNull(damageType);
     }
 
     @Override
-    public @NotNull DynamicRegistry<TrimMaterial> trimMaterial() {
+    public DynamicRegistry<TrimMaterial> trimMaterial() {
         return Objects.requireNonNull(trimMaterial);
     }
 
     @Override
-    public @NotNull DynamicRegistry<TrimPattern> trimPattern() {
+    public DynamicRegistry<TrimPattern> trimPattern() {
         return Objects.requireNonNull(trimPattern);
     }
 
     @Override
-    public @NotNull DynamicRegistry<BannerPattern> bannerPattern() {
+    public DynamicRegistry<BannerPattern> bannerPattern() {
         return Objects.requireNonNull(bannerPattern);
     }
 
     @Override
-    public @NotNull DynamicRegistry<WolfMeta.Variant> wolfVariant() {
+    public DynamicRegistry<WolfVariant> wolfVariant() {
         return Objects.requireNonNull(wolfVariant);
     }
 
     @Override
-    public @NotNull DynamicRegistry<Enchantment> enchantment() {
+    public DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
+        return Objects.requireNonNull(wolfSoundVariant);
+    }
+
+    @Override
+    public DynamicRegistry<CatVariant> catVariant() {
+        return Objects.requireNonNull(catVariant);
+    }
+
+    @Override
+    public DynamicRegistry<ChickenVariant> chickenVariant() {
+        return Objects.requireNonNull(chickenVariant);
+    }
+
+    @Override
+    public DynamicRegistry<CowVariant> cowVariant() {
+        return Objects.requireNonNull(cowVariant);
+    }
+
+    @Override
+    public DynamicRegistry<FrogVariant> frogVariant() {
+        return Objects.requireNonNull(frogVariant);
+    }
+
+    @Override
+    public DynamicRegistry<PigVariant> pigVariant() {
+        return Objects.requireNonNull(pigVariant);
+    }
+
+    @Override
+    public DynamicRegistry<Enchantment> enchantment() {
         return Objects.requireNonNull(enchantment);
     }
 
     @Override
-    public @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant() {
+    public DynamicRegistry<PaintingVariant> paintingVariant() {
         return Objects.requireNonNull(paintingVariant);
     }
 
     @Override
-    public @NotNull DynamicRegistry<JukeboxSong> jukeboxSong() {
+    public DynamicRegistry<JukeboxSong> jukeboxSong() {
         return Objects.requireNonNull(jukeboxSong);
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public DynamicRegistry<Instrument> instrument() {
+        return instrument;
+    }
+
+    @Override
+    public DynamicRegistry<Dialog> dialog() {
+        return dialog;
+    }
+
+    @Override
+    public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return Objects.requireNonNull(enchantmentLevelBasedValues);
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects() {
+    public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return Objects.requireNonNull(enchantmentValueEffects);
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects() {
+    public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
         return Objects.requireNonNull(enchantmentEntityEffects);
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
+    public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return Objects.requireNonNull(enchantmentLocationEffects);
     }
 }

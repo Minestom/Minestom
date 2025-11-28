@@ -10,13 +10,16 @@ import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -47,8 +50,8 @@ public class Command {
     private final String[] aliases;
     private final String[] names;
 
-    private CommandExecutor defaultExecutor;
-    private CommandCondition condition;
+    private @Nullable CommandExecutor defaultExecutor;
+    private @Nullable CommandCondition condition;
 
     private final List<Command> subcommands;
     private final List<CommandSyntax> syntaxes;
@@ -60,7 +63,7 @@ public class Command {
      * @param aliases the command aliases
      * @see #Command(String)
      */
-    public Command(@NotNull String name, @Nullable String... aliases) {
+    public Command(String name, String... aliases) {
         this.name = name;
         this.aliases = aliases;
         this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
@@ -75,7 +78,7 @@ public class Command {
      * @param name the name of the command
      * @see #Command(String, String...)
      */
-    public Command(@NotNull String name) {
+    public Command(String name) {
         this(name, new String[0]);
     }
 
@@ -112,15 +115,20 @@ public class Command {
      * @param callback the callback for the argument
      * @param argument the argument which get the callback
      */
-    public void setArgumentCallback(@NotNull ArgumentCallback callback, @NotNull Argument<?> argument) {
+    public void setArgumentCallback(ArgumentCallback callback, Argument<?> argument) {
         argument.setCallback(callback);
     }
 
-    public void addSubcommand(@NotNull Command command) {
+    public void addSubcommand(Command command) {
         this.subcommands.add(command);
     }
 
-    @NotNull
+    public void addSubcommands(Command... commands) {
+        for (Command command : commands) {
+            addSubcommand(command);
+        }
+    }
+
     public List<Command> getSubcommands() {
         return Collections.unmodifiableList(subcommands);
     }
@@ -136,10 +144,9 @@ public class Command {
      * @return the created {@link CommandSyntax syntaxes},
      * there can be multiple of them when optional arguments are used
      */
-    @NotNull
     public Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition commandCondition,
-                                                          @NotNull CommandExecutor executor,
-                                                          @NotNull Argument<?>... args) {
+                                                          CommandExecutor executor,
+                                                          Argument<?>... args) {
         // Check optional argument(s)
         boolean hasOptional = false;
         {
@@ -205,7 +212,7 @@ public class Command {
      *
      * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
      */
-    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
+    public Collection<CommandSyntax> addSyntax(CommandExecutor executor, Argument<?>... args) {
         return addConditionalSyntax(null, executor, args);
     }
 
@@ -219,7 +226,7 @@ public class Command {
      * @return the newly created {@link CommandSyntax syntaxes}.
      */
     @ApiStatus.Experimental
-    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull String format) {
+    public Collection<CommandSyntax> addSyntax(CommandExecutor executor, String format) {
         return addSyntax(executor, ArgumentType.generate(format));
     }
 
@@ -228,7 +235,7 @@ public class Command {
      *
      * @return the main command's name
      */
-    public @NotNull String getName() {
+    public String getName() {
         return name;
     }
 
@@ -237,7 +244,7 @@ public class Command {
      *
      * @return the command aliases, can be null or empty
      */
-    public @Nullable String[] getAliases() {
+    public String[] getAliases() {
         return aliases;
     }
 
@@ -248,7 +255,7 @@ public class Command {
      *
      * @return this command names
      */
-    public @NotNull String[] getNames() {
+    public String[] getNames() {
         return names;
     }
 
@@ -280,7 +287,7 @@ public class Command {
      * @return a collection containing all this command syntaxes
      * @see #addSyntax(CommandExecutor, Argument[])
      */
-    public @NotNull Collection<CommandSyntax> getSyntaxes() {
+    public Collection<CommandSyntax> getSyntaxes() {
         return syntaxes;
     }
 
@@ -296,11 +303,11 @@ public class Command {
      * @param context the UNCHECKED context of the command, some can be null even when unexpected
      * @param command the raw UNCHECKED received command
      */
-    public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
+    public void globalListener(CommandSender sender, @UnknownNullability CommandContext context, String command) {
     }
 
     @ApiStatus.Experimental
-    public @NotNull Set<String> getSyntaxesStrings() {
+    public Set<String> getSyntaxesStrings() {
         Set<String> syntaxes = new HashSet<>();
 
         Consumer<String> syntaxConsumer = syntaxString -> {
@@ -318,7 +325,7 @@ public class Command {
     }
 
     @ApiStatus.Experimental
-    public @NotNull String getSyntaxesTree() {
+    public String getSyntaxesTree() {
         Node commandNode = new Node();
         commandNode.names.addAll(Arrays.asList(getNames()));
 
@@ -394,7 +401,7 @@ public class Command {
         return jsonObject.toString();
     }
 
-    public static boolean isValidName(@NotNull Command command, @NotNull String name) {
+    public static boolean isValidName(Command command, String name) {
         for (String commandName : command.getNames()) {
             if (commandName.equals(name)) {
                 return true;
@@ -403,7 +410,7 @@ public class Command {
         return false;
     }
 
-    private void processNode(@NotNull Node node, @NotNull JsonObject jsonObject) {
+    private void processNode(Node node, JsonObject jsonObject) {
         BiConsumer<String, Consumer<JsonArray>> processor = (s, consumer) -> {
             JsonArray array = new JsonArray();
             consumer.accept(array);

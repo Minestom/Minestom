@@ -1,7 +1,6 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -14,7 +13,7 @@ public interface TransactionOption<T> {
      * The remaining, can be air.
      */
     TransactionOption<ItemStack> ALL = (inventory, result, itemChangesMap) -> {
-        itemChangesMap.forEach(inventory::safeItemInsert);
+        itemChangesMap.forEach(inventory::setItemStack);
         return result;
     };
 
@@ -26,7 +25,7 @@ public interface TransactionOption<T> {
     TransactionOption<Boolean> ALL_OR_NOTHING = (inventory, result, itemChangesMap) -> {
         if (result.isAir()) {
             // Item can be fully placed inside the inventory, do so
-            itemChangesMap.forEach(inventory::safeItemInsert);
+            itemChangesMap.forEach(inventory::setItemStack);
             return true;
         } else {
             // Inventory cannot accept the item fully
@@ -41,13 +40,13 @@ public interface TransactionOption<T> {
      */
     TransactionOption<Boolean> DRY_RUN = (inventory, result, itemChangesMap) -> result.isAir();
 
-    @NotNull T fill(@NotNull AbstractInventory inventory,
-                    @NotNull ItemStack result,
-                    @NotNull Map<@NotNull Integer, @NotNull ItemStack> itemChangesMap);
+    T fill(AbstractInventory inventory,
+                    ItemStack result,
+                    Map<Integer, ItemStack> itemChangesMap);
 
-    default @NotNull T fill(@NotNull TransactionType type,
-                            @NotNull AbstractInventory inventory,
-                            @NotNull ItemStack itemStack) {
+    default T fill(TransactionType type,
+                            AbstractInventory inventory,
+                            ItemStack itemStack) {
         var pair = type.process(inventory, itemStack);
         return fill(inventory, pair.left(), pair.right());
     }

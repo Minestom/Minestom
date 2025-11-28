@@ -2,14 +2,13 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.PlayerEvent;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 
 /**
  * Called by the SpectateListener when a player starts spectating an entity.
  */
 @SuppressWarnings("ClassCanBeRecord")
-public class PlayerSpectateEvent implements PlayerEvent {
+public class PlayerSpectateEvent implements PlayerInstanceEvent {
     private final Player player;
     private final Entity target;
 
@@ -23,7 +22,7 @@ public class PlayerSpectateEvent implements PlayerEvent {
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

@@ -1,13 +1,13 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,7 +26,7 @@ public interface BlockHandler {
      *
      * @param placement the placement details
      */
-    default void onPlace(@NotNull Placement placement) {
+    default void onPlace(Placement placement) {
     }
 
     /**
@@ -34,7 +34,7 @@ public interface BlockHandler {
      *
      * @param destroy the destroy details
      */
-    default void onDestroy(@NotNull Destroy destroy) {
+    default void onDestroy(Destroy destroy) {
     }
 
     /**
@@ -44,7 +44,7 @@ public interface BlockHandler {
      * @param interaction the interaction details
      * @return true to let the block interaction happens, false to cancel
      */
-    default boolean onInteract(@NotNull Interaction interaction) {
+    default boolean onInteract(Interaction interaction) {
         return true;
     }
 
@@ -53,10 +53,10 @@ public interface BlockHandler {
      *
      * @param touch the contact details
      */
-    default void onTouch(@NotNull Touch touch) {
+    default void onTouch(Touch touch) {
     }
 
-    default void tick(@NotNull Tick tick) {
+    default void tick(Tick tick) {
     }
 
     default boolean isTickable() {
@@ -69,7 +69,7 @@ public interface BlockHandler {
      * @return The list of tags from this block's block entity that should be sent to the player
      * @see <a href="https://minecraft.wiki/w/Block_entity">Block entity on the Minecraft wiki</a>
      */
-    default @NotNull Collection<Tag<?>> getBlockEntityTags() {
+    default Collection<Tag<?>> getBlockEntityTags() {
         return List.of();
     }
 
@@ -82,48 +82,54 @@ public interface BlockHandler {
      * <p>
      * Used to write the block entity in the anvil world format.
      *
-     * @return the namespace id of this handler
+     * @return the key of this handler
      */
-    @NotNull NamespaceID getNamespaceId();
+    Key getKey();
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
      */
     sealed class Placement permits PlayerPlacement {
         private final Block block;
+        private final Block previousBlock;
         private final Instance instance;
         private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Placement(Block block, Instance instance, Point blockPosition) {
+        public Placement(Block block, Block previousBlock, Instance instance, Point blockPosition) {
             this.block = block;
+            this.previousBlock = previousBlock;
             this.instance = instance;
             this.blockPosition = blockPosition;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Block getPreviousBlock() {
+            return previousBlock;
+        }
+
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
     }
 
     final class PlayerPlacement extends Placement {
         private final Player player;
-        private final Player.Hand hand;
+        private final PlayerHand hand;
         private final BlockFace blockFace;
         private final float cursorX, cursorY, cursorZ;
 
         @ApiStatus.Internal
-        public PlayerPlacement(Block block, Instance instance, Point blockPosition,
-                               Player player, Player.Hand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
-            super(block, instance, blockPosition);
+        public PlayerPlacement(Block block, Block previousBlock, Instance instance, Point blockPosition,
+                               Player player, PlayerHand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+            super(block, previousBlock, instance, blockPosition);
             this.player = player;
             this.hand = hand;
             this.blockFace = blockFace;
@@ -132,15 +138,15 @@ public interface BlockHandler {
             this.cursorZ = cursorZ;
         }
 
-        public @NotNull Player getPlayer() {
+        public Player getPlayer() {
             return player;
         }
 
-        public @NotNull Player.Hand getHand() {
+        public PlayerHand getHand() {
             return hand;
         }
 
-        public @NotNull BlockFace getBlockFace() {
+        public BlockFace getBlockFace() {
             return blockFace;
         }
 
@@ -159,25 +165,31 @@ public interface BlockHandler {
 
     sealed class Destroy permits PlayerDestroy {
         private final Block block;
+        private final Block newBlock;
         private final Instance instance;
         private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Destroy(Block block, Instance instance, Point blockPosition) {
+        public Destroy(Block block, Block newBlock, Instance instance, Point blockPosition) {
             this.block = block;
+            this.newBlock = newBlock;
             this.instance = instance;
             this.blockPosition = blockPosition;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Block getNewBlock() {
+            return newBlock;
+        }
+
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
     }
@@ -186,12 +198,12 @@ public interface BlockHandler {
         private final Player player;
 
         @ApiStatus.Internal
-        public PlayerDestroy(Block block, Instance instance, Point blockPosition, Player player) {
-            super(block, instance, blockPosition);
+        public PlayerDestroy(Block block, Block newBlock, Instance instance, Point blockPosition, Player player) {
+            super(block, newBlock, instance, blockPosition);
             this.player = player;
         }
 
-        public @NotNull Player getPlayer() {
+        public Player getPlayer() {
             return player;
         }
     }
@@ -203,10 +215,10 @@ public interface BlockHandler {
         private final Point blockPosition;
         private final Point cursorPosition;
         private final Player player;
-        private final Player.Hand hand;
+        private final PlayerHand hand;
 
         @ApiStatus.Internal
-        public Interaction(Block block, Instance instance, BlockFace blockFace, Point blockPosition, Point cursorPosition, Player player, Player.Hand hand) {
+        public Interaction(Block block, Instance instance, BlockFace blockFace, Point blockPosition, Point cursorPosition, Player player, PlayerHand hand) {
             this.block = block;
             this.instance = instance;
             this.blockFace = blockFace;
@@ -216,31 +228,31 @@ public interface BlockHandler {
             this.hand = hand;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull BlockFace getBlockFace() {
+        public BlockFace getBlockFace() {
             return blockFace;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
 
-        public @NotNull Point getCursorPosition() {
+        public Point getCursorPosition() {
             return cursorPosition;
         }
 
-        public @NotNull Player getPlayer() {
+        public Player getPlayer() {
             return player;
         }
 
-        public @NotNull Player.Hand getHand() {
+        public PlayerHand getHand() {
             return hand;
         }
     }
@@ -259,19 +271,19 @@ public interface BlockHandler {
             this.touching = touching;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
 
-        public @NotNull Entity getTouching() {
+        public Entity getTouching() {
             return touching;
         }
     }
@@ -288,15 +300,15 @@ public interface BlockHandler {
             this.blockPosition = blockPosition;
         }
 
-        public @NotNull Block getBlock() {
+        public Block getBlock() {
             return block;
         }
 
-        public @NotNull Instance getInstance() {
+        public Instance getInstance() {
             return instance;
         }
 
-        public @NotNull Point getBlockPosition() {
+        public Point getBlockPosition() {
             return blockPosition;
         }
     }
@@ -309,19 +321,19 @@ public interface BlockHandler {
     final class Dummy implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
-        public static @NotNull BlockHandler get(@NotNull String namespace) {
+        public static BlockHandler get(String namespace) {
             return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
-        private final NamespaceID namespace;
+        private final Key key;
 
         private Dummy(String name) {
-            namespace = NamespaceID.from(name);
+            key = Key.key(name);
         }
 
         @Override
-        public @NotNull NamespaceID getNamespaceId() {
-            return namespace;
+        public Key getKey() {
+            return key;
         }
     }
 }

@@ -1,7 +1,6 @@
 package net.minestom.server.entity.pathfinding.followers;
 
 import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -9,13 +8,12 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.utils.position.PositionUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FlyingNodeFollower implements NodeFollower {
     private final Entity entity;
 
-    public FlyingNodeFollower(@NotNull Entity entity) {
+    public FlyingNodeFollower(Entity entity) {
         this.entity = entity;
     }
 
@@ -27,7 +25,7 @@ public class FlyingNodeFollower implements NodeFollower {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
-    public void moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
+    public void moveTowards(Point direction, double speed, Point lookAt) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
@@ -55,7 +53,7 @@ public class FlyingNodeFollower implements NodeFollower {
         }
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
-        this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
+        this.entity.refreshPosition(physicsResult.newPosition().asPos().withView(yaw, pitch));
     }
 
     @Override
@@ -63,14 +61,14 @@ public class FlyingNodeFollower implements NodeFollower {
     }
 
     @Override
-    public boolean isAtPoint(@NotNull Point point) {
+    public boolean isAtPoint(Point point) {
         return entity.getPosition().sameBlock(point);
     }
 
     @Override
     public double movementSpeed() {
         if (entity instanceof LivingEntity living) {
-            return living.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue();
+            return living.getAttribute(Attribute.MOVEMENT_SPEED).getValue();
         }
 
         return 0.1f;

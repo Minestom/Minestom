@@ -1,115 +1,133 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.BinaryTagTypes;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.ListBinaryTag;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInTooltip) {
-    public static final AttributeList EMPTY = new AttributeList(List.of(), true);
+public record AttributeList(List<Modifier> modifiers) {
+    public static final AttributeList EMPTY = new AttributeList(List.of());
 
-    public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, AttributeList value) {
-            buffer.writeCollection(Modifier.NETWORK_TYPE, value.modifiers);
-            buffer.write(NetworkBuffer.BOOLEAN, value.showInTooltip);
+    public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = Modifier.NETWORK_TYPE.list(Short.MAX_VALUE)
+            .transform(AttributeList::new, AttributeList::modifiers);
+    public static final Codec<AttributeList> CODEC = Modifier.CODEC.list(Short.MAX_VALUE)
+            .transform(AttributeList::new, AttributeList::modifiers);
+
+    public record Modifier(
+            Attribute attribute,
+            AttributeModifier modifier,
+            EquipmentSlotGroup slot,
+            Display display
+    ) {
+        public static final NetworkBuffer.Type<Modifier> NETWORK_TYPE = NetworkBufferTemplate.template(
+                Attribute.NETWORK_TYPE, Modifier::attribute,
+                AttributeModifier.NETWORK_TYPE, Modifier::modifier,
+                NetworkBuffer.Enum(EquipmentSlotGroup.class), Modifier::slot,
+                Display.NETWORK_TYPE, Modifier::display,
+                Modifier::new);
+        public static final Codec<Modifier> CODEC = StructCodec.struct(
+                "type", Attribute.CODEC, Modifier::attribute,
+                StructCodec.INLINE, AttributeModifier.CODEC, Modifier::modifier,
+                "slot", EquipmentSlotGroup.CODEC.optional(EquipmentSlotGroup.ANY), Modifier::slot,
+                "display", Display.CODEC.optional(Display.Default.INSTANCE), Modifier::display,
+                Modifier::new);
+
+        public Modifier(
+                Attribute attribute,
+                AttributeModifier modifier,
+                EquipmentSlotGroup slot
+        ) {
+            this(attribute, modifier, slot, Display.Default.INSTANCE);
         }
 
-        @Override
-        public AttributeList read(@NotNull NetworkBuffer buffer) {
-            return new AttributeList(buffer.readCollection(Modifier.NETWORK_TYPE, Short.MAX_VALUE),
-                    buffer.read(NetworkBuffer.BOOLEAN));
-        }
-    };
-
-    public static final BinaryTagSerializer<AttributeList> NBT_TYPE = new BinaryTagSerializer<>() {
-        @Override
-        public @NotNull BinaryTag write(@NotNull AttributeList value) {
-            ListBinaryTag.Builder<BinaryTag> modifiers = ListBinaryTag.builder();
-            for (Modifier modifier : value.modifiers) {
-                modifiers.add(Modifier.NBT_TYPE.write(modifier));
-            }
-            return CompoundBinaryTag.builder()
-                    .put("modifiers", modifiers.build())
-                    .putBoolean("show_in_tooltip", value.showInTooltip)
-                    .build();
-        }
-
-        @Override
-        public @NotNull AttributeList read(@NotNull BinaryTag tag) {
-            return switch (tag) {
-                case CompoundBinaryTag compound -> new AttributeList(
-                        compound.getList("modifiers", BinaryTagTypes.COMPOUND).stream().map(Modifier.NBT_TYPE::read).toList(),
-                        compound.getBoolean("show_in_tooltip", true)
-                );
-                case ListBinaryTag list -> new AttributeList(list.stream().map(Modifier.NBT_TYPE::read).toList());
-                default -> EMPTY;
-            };
-        }
-    };
-
-    public record Modifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier, @NotNull EquipmentSlotGroup slot) {
-        public static final NetworkBuffer.Type<Modifier> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, Modifier value) {
-                buffer.write(Attribute.NETWORK_TYPE, value.attribute);
-                buffer.write(AttributeModifier.NETWORK_TYPE, value.modifier);
-                buffer.writeEnum(EquipmentSlotGroup.class, value.slot);
-            }
-
-            @Override
-            public Modifier read(@NotNull NetworkBuffer buffer) {
-                return new Modifier(buffer.read(Attribute.NETWORK_TYPE),
-                        buffer.read(AttributeModifier.NETWORK_TYPE),
-                        buffer.readEnum(EquipmentSlotGroup.class));
-            }
-        };
-        public static final BinaryTagSerializer<Modifier> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-                tag -> new Modifier(
-                        Attribute.NBT_TYPE.read(tag.get("type")),
-                        AttributeModifier.NBT_TYPE.read(tag),
-                        tag.get("slot") instanceof BinaryTag slot ? EquipmentSlotGroup.NBT_TYPE.read(slot) : EquipmentSlotGroup.ANY
-                ),
-                modifier -> CompoundBinaryTag.builder()
-                        .put("type", Attribute.NBT_TYPE.write(modifier.attribute))
-                        .put((CompoundBinaryTag) AttributeModifier.NBT_TYPE.write(modifier.modifier))
-                        .put("slot", EquipmentSlotGroup.NBT_TYPE.write(modifier.slot))
-                        .build()
-        );
     }
 
     public AttributeList {
         modifiers = List.copyOf(modifiers);
     }
 
-    public AttributeList(@NotNull List<Modifier> modifiers) {
-        this(modifiers, true);
+    public AttributeList(Modifier modifier) {
+        this(List.of(modifier));
     }
 
-    public AttributeList(@NotNull Modifier modifier, boolean showInTooltip) {
-        this(List.of(modifier), showInTooltip);
-    }
-
-    public AttributeList(@NotNull Modifier modifier) {
-        this(modifier, true);
-    }
-
-    public @NotNull AttributeList with(@NotNull Modifier modifier) {
+    public AttributeList with(Modifier modifier) {
         List<Modifier> newModifiers = new ArrayList<>(modifiers);
         newModifiers.add(modifier);
-        return new AttributeList(newModifiers, showInTooltip);
+        return new AttributeList(newModifiers);
     }
 
-    public @NotNull AttributeList withTooltip(boolean showInTooltip) {
-        return new AttributeList(modifiers, showInTooltip);
+    public AttributeList remove(Modifier modifier) {
+        List<Modifier> newModifiers = new ArrayList<>(modifiers);
+        newModifiers.remove(modifier);
+        return new AttributeList(newModifiers);
     }
+
+    public sealed interface Display {
+        NetworkBuffer.Type<Display> NETWORK_TYPE = Type.NETWORK_TYPE
+                .unionType(Display::dataSerializer, Display::targetToType);
+        Codec<Display> CODEC = Type.CODEC.unionType(Display::codec, Display::targetToType);
+
+        record Default() implements Display {
+            public static final Default INSTANCE = new Default();
+
+            public static final NetworkBuffer.Type<Default> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
+            public static final StructCodec<Default> CODEC = StructCodec.struct(INSTANCE);
+        }
+
+        record Hidden() implements Display {
+            public static final Hidden INSTANCE = new Hidden();
+
+            public static final NetworkBuffer.Type<Hidden> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
+            public static final StructCodec<Hidden> CODEC = StructCodec.struct(INSTANCE);
+        }
+
+        record Override(Component component) implements Display {
+            public static final NetworkBuffer.Type<Override> NETWORK_TYPE = NetworkBufferTemplate.template(
+                    NetworkBuffer.COMPONENT, Override::component,
+                    Override::new);
+            public static final StructCodec<Override> CODEC = StructCodec.struct(
+                    "value", Codec.COMPONENT, Override::component,
+                    Override::new);
+        }
+
+
+        enum Type {
+            DEFAULT, HIDDEN, OVERRIDE;
+
+            public static final NetworkBuffer.Type<Type> NETWORK_TYPE = NetworkBuffer.Enum(Type.class);
+            public static final Codec<Type> CODEC = Codec.Enum(Type.class);
+        }
+
+        private static NetworkBuffer.Type<? extends Display> dataSerializer(Type type) {
+            return switch (type) {
+                case DEFAULT -> Default.NETWORK_TYPE;
+                case HIDDEN -> Hidden.NETWORK_TYPE;
+                case OVERRIDE -> Override.NETWORK_TYPE;
+            };
+        }
+
+        private static StructCodec<? extends Display> codec(Type type) {
+            return switch (type) {
+                case DEFAULT -> Default.CODEC;
+                case HIDDEN -> Hidden.CODEC;
+                case OVERRIDE -> Override.CODEC;
+            };
+        }
+
+        private static Type targetToType(Display display) {
+            return switch (display) {
+                case Default ignored -> Type.DEFAULT;
+                case Hidden ignored -> Type.HIDDEN;
+                case Override ignored -> Type.OVERRIDE;
+            };
+        }
+    }
+
 }
