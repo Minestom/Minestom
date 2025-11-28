@@ -49,7 +49,7 @@ public abstract class PlayerConnection {
 
     private PlayerPublicKey playerPublicKey;
     volatile boolean online;
-    private Boolean wasTransferred;
+    private volatile Boolean wasTransferred;
 
     private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
@@ -291,8 +291,8 @@ public abstract class PlayerConnection {
      * @param port The port of the server to transfer the player to.
      */
     public void transfer(@NotNull String host, int port) {
-        EventDispatcher.callCancellable(new OutgoingTransferEvent(this.player, host, port), () ->
-                this.sendPacket(new TransferPacket(host, port)));
+        OutgoingTransferEvent event = new OutgoingTransferEvent(this.player, host, port);
+        EventDispatcher.callCancellable(event, () -> this.sendPacket(new TransferPacket(event.getHost(), event.getPort())));
     }
 
     /**
