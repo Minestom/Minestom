@@ -14,8 +14,8 @@ public record EntityPositionAndRotationPacket(int entityId, short deltaX, short 
             SHORT, EntityPositionAndRotationPacket::deltaX,
             SHORT, EntityPositionAndRotationPacket::deltaY,
             SHORT, EntityPositionAndRotationPacket::deltaZ,
-            LP_ROTATION, EntityPositionAndRotationPacket::yaw,
-            LP_ROTATION, EntityPositionAndRotationPacket::pitch,
+            LP_ANGLE, EntityPositionAndRotationPacket::yaw,
+            LP_ANGLE, EntityPositionAndRotationPacket::pitch,
             BOOLEAN, EntityPositionAndRotationPacket::onGround,
             EntityPositionAndRotationPacket::new
     );

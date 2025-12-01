@@ -82,7 +82,6 @@ import java.util.zip.DataFormatException;
  * @see Factory to create custom allocators
  * @see IOView to interface with existing code
  */
-@SuppressWarnings("GrazieInspection")
 public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
     Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
@@ -131,7 +130,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
     Type<Vec> LP_VECTOR3 = new NetworkBufferTypeImpl.LpVector3Type();
     Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
-    Type<Float> LP_ROTATION = BYTE.transform(to -> to * 360f / 256f, from -> (byte) (from * 256 / 360));
+    Type<Float> LP_ANGLE = BYTE.transform(to -> to * 360f / 256f, from -> (byte) (from * 256f / 360f));
 
     Type<@Nullable Component> OPT_CHAT = COMPONENT.optional();
     Type<@Nullable Point> OPT_BLOCK_POSITION = BLOCK_POSITION.optional();

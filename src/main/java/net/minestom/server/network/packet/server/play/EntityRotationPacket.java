@@ -10,8 +10,8 @@ public record EntityRotationPacket(int entityId, float yaw, float pitch,
                                    boolean onGround) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<EntityRotationPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, EntityRotationPacket::entityId,
-            LP_ROTATION, EntityRotationPacket::yaw,
-            LP_ROTATION, EntityRotationPacket::pitch,
+            LP_ANGLE, EntityRotationPacket::yaw,
+            LP_ANGLE, EntityRotationPacket::pitch,
             BOOLEAN, EntityRotationPacket::onGround,
             EntityRotationPacket::new
     );

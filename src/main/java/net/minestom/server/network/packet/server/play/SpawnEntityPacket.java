@@ -24,9 +24,9 @@ public record SpawnEntityPacket(
             buffer.write(EntityType.NETWORK_TYPE, value.type);
             buffer.write(VECTOR3D, value.position);
             buffer.write(LP_VECTOR3, value.velocity);
-            buffer.write(LP_ROTATION, value.position.pitch());
-            buffer.write(LP_ROTATION, value.position.yaw());
-            buffer.write(LP_ROTATION, value.headRot);
+            buffer.write(LP_ANGLE, value.position.pitch());
+            buffer.write(LP_ANGLE, value.position.yaw());
+            buffer.write(LP_ANGLE, value.headRot);
             buffer.write(VAR_INT, value.data);
         }
 
@@ -37,9 +37,9 @@ public record SpawnEntityPacket(
             EntityType type = buffer.read(EntityType.NETWORK_TYPE);
             Point xyz = buffer.read(VECTOR3D);
             Vec velocity = buffer.read(LP_VECTOR3);
-            float pitch = buffer.read(LP_ROTATION);
-            float yaw = buffer.read(LP_ROTATION);
-            float headRot = buffer.read(LP_ROTATION);
+            float pitch = buffer.read(LP_ANGLE);
+            float yaw = buffer.read(LP_ANGLE);
+            float headRot = buffer.read(LP_ANGLE);
             int data = buffer.read(VAR_INT);
             return new SpawnEntityPacket(
                     entityId, uuid, type,
