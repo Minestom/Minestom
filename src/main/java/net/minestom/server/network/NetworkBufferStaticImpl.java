@@ -51,7 +51,7 @@ final class NetworkBufferStaticImpl extends NetworkBufferImpl {
     }
 
     @Override
-    public void requireCapacity(long requestedSize) {
+    public void requireCapacity(long requestedSize) throws IndexOutOfBoundsException {
         // IndexOutOfBoundsException required due to ensureWritable
         throw new IndexOutOfBoundsException("Static buffer cannot be resized to %d".formatted(requestedSize));
     }
@@ -64,18 +64,5 @@ final class NetworkBufferStaticImpl extends NetworkBufferImpl {
     @Override
     public void trim() {
         throw new UnsupportedOperationException("Static buffer cannot resized for trim");
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof NetworkBufferStaticImpl that)) return false;
-        return Objects.equals(arena, that.arena) && segment.equals(that.segment);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hashCode(arena);
-        result = 31 * result + segment.hashCode();
-        return result;
     }
 }

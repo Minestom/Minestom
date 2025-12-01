@@ -87,7 +87,7 @@ final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
     }
 
     @Override
-    public void requireCapacity(long targetSize) {
+    public void requireCapacity(long targetSize) throws IndexOutOfBoundsException {
         final long capacity = capacity();
         final long newCapacity = this.autoResize.resize(capacity, targetSize);
         if (newCapacity <= capacity)
@@ -96,20 +96,5 @@ final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
             throw new IndexOutOfBoundsException("Buffer is full below the target size: " + newCapacity + " -> " + targetSize);
         }
         resize(newCapacity);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof NetworkBufferResizeableImpl that)) return false;
-        return arena.equals(that.arena) && segment.equals(that.segment) && autoResize.equals(that.autoResize) && arenaSupplier.equals(that.arenaSupplier);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = arena.hashCode();
-        result = 31 * result + segment.hashCode();
-        result = 31 * result + autoResize.hashCode();
-        result = 31 * result + arenaSupplier.hashCode();
-        return result;
     }
 }

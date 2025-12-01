@@ -219,7 +219,7 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     }
 
     // Throws IndexOutOfBoundsException if capacity cannot be ensured
-    protected abstract void requireCapacity(long targetSize);
+    protected abstract void requireCapacity(long targetSize) throws IndexOutOfBoundsException;
 
     @Override
     public final void ensureReadable(long length) {
@@ -549,5 +549,15 @@ sealed abstract class NetworkBufferImpl implements NetworkBuffer permits Network
     @Contract(pure = true)
     static NetworkBufferImpl impl(NetworkBuffer buffer) {
         return (NetworkBufferImpl) buffer;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        return this == o;
+    }
+
+    @Override
+    public final int hashCode() {
+        return System.identityHashCode(this);
     }
 }

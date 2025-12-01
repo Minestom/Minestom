@@ -1017,6 +1017,28 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     IOView ioView();
 
     /**
+     * Tests to see if the current buffer equals in identity to the other buffer.
+     * <br>
+     * Note: This relies on {@code this == obj}.
+     *
+     * @param obj   the reference object with which to compare.
+     * @return true if equal in identity
+     */
+    @Override
+    boolean equals(@Nullable Object obj);
+
+    /**
+     * The unique hashcode conforming to {@link Object#hashCode()}.
+     * <br>
+     * Note: This relies on identity using {@link System#identityHashCode(Object)}.
+     *
+     * @return the hash code.
+     * @see #equals(Object)
+     */
+    @Override
+    int hashCode();
+
+    /**
      * A type is a writer/reader for {@link T} it attempts to provide a bidirectional guarantee.
      * Through {@link #write(NetworkBuffer, Object)} and {@link #read(NetworkBuffer)}.
      * <br>
