@@ -220,7 +220,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * Gets the chunk view distance of the server.
      * <p>
      * Deprecated in favor of {@link ServerFlag#CHUNK_VIEW_DISTANCE}
-     * Each instance has its own chunk view distance that can be retrieved with {@link Instance#chunkViewDistance()}.
+     * Each instance has its own chunk view distance that can be retrieved with {@link Instance#getChunkViewDistance()}.
      *
      * @return the chunk view distance
      */
@@ -233,7 +233,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * Gets the entity view distance of the server.
      * <p>
      * Deprecated in favor of {@link ServerFlag#ENTITY_VIEW_DISTANCE}
-     * Each entity has its own view distance that can be retrieved with {@link Entity#viewDistance()}.
+     * Each entity has its own view distance that can be retrieved with {@link Entity#getViewDistance()}.
      *
      * @return the entity view distance
      */

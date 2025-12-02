@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.pointer.PointersSupplier;
@@ -31,10 +30,7 @@ import net.minestom.server.event.entity.*;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.event.trait.EntityEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.EntityTracker;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
@@ -1376,6 +1372,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         passenger.refreshCoordinate(newPassengerPos);
     }
 
+    @ApiStatus.Internal
+    protected void refreshCoordinate(Point newPosition) {
+        refreshCoordinate(newPosition, false);
+    }
+
     /**
      * Used to refresh the entity and its passengers position
      * - put the entity in the right instance chunk
@@ -1385,9 +1386,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * WARNING: unsafe, should only be used internally in Minestom. Use {@link #teleport(Pos)} instead.
      *
      * @param newPosition the new position
+     * @param force whether to force a refresh even if the chunk didn't change
+     * (used for entity view distance updates)
      */
     @ApiStatus.Internal
-    protected void refreshCoordinate(Point newPosition) {
+    protected void refreshCoordinate(Point newPosition, boolean force) {
         // Passengers update
         final Set<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) {
@@ -1398,7 +1401,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // Handle chunk switch
         final Instance instance = getInstance();
         assert instance != null;
-        instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate, force);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();
         final int newChunkX = newPosition.chunkX();
@@ -1894,18 +1897,23 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     /**
      * Sets the entity view distance of this entity.
+     * <p>
+     * This setting assumes this entity is a viewer, and will only affect
+     * the entities it can see.
      *
      * @param newViewDistance the new entity view distance in chunks
      */
-    public void viewDistance(int newViewDistance) {
+    public void setViewDistance(int newViewDistance) {
+        if (viewDistance == newViewDistance) return;
         viewDistance = newViewDistance;
+        refreshCoordinate(position, true);
     }
 
     /**
      * Clears the custom entity view distance, causing the entity to fall back to the instance's entity view distance.
      */
     public void clearViewDistance() {
-        viewDistance = -1;
+        setViewDistance(-1);
     }
 
     /**
@@ -1914,9 +1922,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return The entity view distance in chunks
      */
-    public int viewDistance() {
+    public int getViewDistance() {
         return viewDistance < 0 ?
-                instance != null ? instance.entityViewDistance() : ServerFlag.ENTITY_VIEW_DISTANCE :
+                instance != null ? instance.getEntityViewDistance() : ServerFlag.ENTITY_VIEW_DISTANCE :
                 viewDistance;
     }
 
@@ -1925,12 +1933,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * <p>
      * This may return a negative number if no custom view distance is set, in which case
      * the instance's entity view distance should be used instead.
-     * Use {@link #viewDistance()} to get the real entity view distance in chunks.
+     * Use {@link #getViewDistance()} to get the real entity view distance in chunks.
      *
      * @return The raw entity view distance in chunks
      */
     @ApiStatus.Internal
-    public int actualViewDistance() {
+    public int getRawViewDistance() {
         return viewDistance;
     }
 }

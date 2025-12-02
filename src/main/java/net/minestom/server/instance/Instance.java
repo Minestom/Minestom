@@ -901,7 +901,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Gets the chunk view distance of this instance, which defaults to {@link ServerFlag#CHUNK_VIEW_DISTANCE}.
      *
-     * @deprecated Use {@link #chunkViewDistance()} instead
+     * @deprecated Use {@link #getChunkViewDistance()} instead
      * @return The chunk view distance of this instance
      */
     @Deprecated(forRemoval = true)
@@ -912,7 +912,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Sets the chunk view distance of this instance
      *
-     * @deprecated Use {@link #chunkViewDistance()} instead
+     * @deprecated Use {@link #setChunkViewDistance(int)} instead
      * @param newViewDistance the new chunk view distance
      */
     @Deprecated(forRemoval = true)
@@ -925,7 +925,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return The chunk view distance of this instance
      */
-    public int chunkViewDistance() {
+    public int getChunkViewDistance() {
         return this.chunkViewDistance;
     }
 
@@ -934,19 +934,19 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @param newViewDistance the new chunk view distance
      */
-    public void chunkViewDistance(int newViewDistance) {
+    public void setChunkViewDistance(int newViewDistance) {
         this.chunkViewDistance = newViewDistance;
     }
 
     /**
      * Gets the default entity view distance of this instance, which defaults to {@link ServerFlag#ENTITY_VIEW_DISTANCE}.
      * <p>
-     * It's preferred to use {@link Entity#viewDistance()} to get the view distance per-entity,
+     * It's preferred to use {@link Entity#getViewDistance()} to get the view distance per-entity,
      * as this method only returns the instance-wide default.
      *
      * @return The default entity view distance of this instance in chunks
      */
-    public int entityViewDistance() {
+    public int getEntityViewDistance() {
         return this.entityViewDistance;
     }
 
@@ -955,7 +955,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @param newViewDistance the new default entity view distance in chunks
      */
-    public void entityViewDistance(int newViewDistance) {
+    public void setEntityViewDistance(int newViewDistance) {
         this.entityViewDistance = newViewDistance;
     }
 

@@ -59,7 +59,7 @@ public class EntityTrackerTest {
         tracker.register(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, updater);
         assertEquals(1, tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES).size());
 
-        tracker.move(ent1, new Vec(32, 0, 32), EntityTracker.Target.ENTITIES, updater);
+        tracker.move(ent1, new Vec(32, 0, 32), EntityTracker.Target.ENTITIES, updater, false);
         assertEquals(0, tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES).size());
         assertEquals(1, tracker.chunkEntities(new Vec(32, 0, 32), EntityTracker.Target.ENTITIES).size());
     }
@@ -107,7 +107,7 @@ public class EntityTrackerTest {
                 assertNotSame(ent1, entity);
                 assertSame(ent2, entity);
             }
-        });
+        }, false);
 
         tracker.move(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, new EntityTracker.Update<>() {
             @Override
@@ -120,7 +120,7 @@ public class EntityTrackerTest {
             public void remove(Entity entity) {
                 fail("no entity to remove");
             }
-        });
+        }, false);
     }
 
     @Test
@@ -170,7 +170,7 @@ public class EntityTrackerTest {
         assertEquals(0, entities.size());
 
         // Chunk border
-        tracker.move(ent1, new Vec(16, 0, 0), EntityTracker.Target.ENTITIES, updater);
+        tracker.move(ent1, new Vec(16, 0, 0), EntityTracker.Target.ENTITIES, updater, false);
         entities.add(ent1);
         tracker.nearbyEntities(new Vec(15, 0, 0), 2, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());

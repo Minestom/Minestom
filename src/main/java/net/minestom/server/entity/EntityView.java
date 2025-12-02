@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
@@ -268,7 +267,7 @@ final class EntityView {
             final Instance instance = trackedLocation.instance();
             final Point point = trackedLocation.point();
 
-            int dynamicRange = EntityView.this.entity.viewDistance();
+            int dynamicRange = EntityView.this.entity.getViewDistance();
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
             instance.getEntityTracker().nearbyEntitiesByChunkRange(point, dynamicRange, target,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));

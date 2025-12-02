@@ -58,7 +58,7 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
      * position is in a different chunk.
      */
     <T extends Entity> void move(Entity entity, Point newPoint,
-                                 Target<T> target, @Nullable Update<T> update);
+                                 Target<T> target, @Nullable Update<T> update, boolean force);
 
     @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, Target<T> target);
 

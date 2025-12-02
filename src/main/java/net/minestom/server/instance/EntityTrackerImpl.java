@@ -59,7 +59,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             update.referenceUpdate(point, this);
-            nearbyEntitiesByChunkRange(point, entity.viewDistance(), target, newEntity -> {
+            nearbyEntitiesByChunkRange(point, entity.getViewDistance(), target, newEntity -> {
                 if (newEntity == entity) return;
                 update.add(newEntity);
             });
@@ -83,7 +83,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         if (update != null) {
             update.referenceUpdate(point, null);
-            nearbyEntitiesByChunkRange(point, entity.viewDistance(), target, newEntity -> {
+            nearbyEntitiesByChunkRange(point, entity.getViewDistance(), target, newEntity -> {
                 if (newEntity == entity) return;
                 update.remove(newEntity);
             });
@@ -93,7 +93,7 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public @Nullable Entity getEntityById(int id) {
         EntityTrackerEntry entry = entriesByEntityId.get(id);
-        return entry == null ? null : entry.getEntity();
+        return entry.getEntity();
     }
 
     @Override
@@ -104,7 +104,7 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public <T extends Entity> void move(Entity entity, Point newPoint,
-                                        Target<T> target, @Nullable Update<T> update) {
+                                        Target<T> target, @Nullable Update<T> update, boolean forceUpdate) {
         EntityTrackerEntry entry = entriesByEntityId.get(entity.getEntityId());
         if (entry == null) {
             LOGGER.warn("Attempted to move unregistered entity {} in the entity tracker", entity.getEntityId());
@@ -112,7 +112,8 @@ final class EntityTrackerImpl implements EntityTracker {
         }
         Point oldPoint = entry.getLastPosition();
         entry.setLastPosition(newPoint);
-        if (oldPoint == null || oldPoint.sameChunk(newPoint)) return;
+        if (oldPoint == null) return;
+        if (!forceUpdate && oldPoint.sameChunk(newPoint)) return;
         final long oldIndex = CoordConversion.chunkIndex(oldPoint);
         final long newIndex = CoordConversion.chunkIndex(newPoint);
         for (TargetEntry<Entity> targetEntry : targetEntries) {
@@ -132,7 +133,7 @@ final class EntityTrackerImpl implements EntityTracker {
                 public void remove(T removed) {
                     if (entity != removed) update.remove(removed);
                 }
-            }, entity.viewDistance());
+            }, entity.getViewDistance());
             update.referenceUpdate(newPoint, this);
         }
     }
