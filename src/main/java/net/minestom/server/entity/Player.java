@@ -2335,7 +2335,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             final Vec old = chunksLoadedByClient;
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
             ChunkRange.chunksInRangeDiffering(newX, newZ, (int) old.x(), (int) old.z(),
-                    this.effectiveViewDistance(), chunkAdder, chunkRemover);
+                    this.effectiveViewDistance(), this.effectiveViewDistance(), chunkAdder, chunkRemover);
             this.chunksLoadedByClient = new Vec(newX, newZ);
         }
     }

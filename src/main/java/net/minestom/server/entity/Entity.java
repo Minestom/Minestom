@@ -1372,11 +1372,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         passenger.refreshCoordinate(newPassengerPos);
     }
 
-    @ApiStatus.Internal
-    protected void refreshCoordinate(Point newPosition) {
-        refreshCoordinate(newPosition, false);
-    }
-
     /**
      * Used to refresh the entity and its passengers position
      * - put the entity in the right instance chunk
@@ -1386,11 +1381,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * WARNING: unsafe, should only be used internally in Minestom. Use {@link #teleport(Pos)} instead.
      *
      * @param newPosition the new position
-     * @param force whether to force a refresh even if the chunk didn't change
-     * (used for entity view distance updates)
      */
     @ApiStatus.Internal
-    protected void refreshCoordinate(Point newPosition, boolean force) {
+    protected void refreshCoordinate(Point newPosition) {
         // Passengers update
         final Set<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) {
@@ -1401,7 +1394,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // Handle chunk switch
         final Instance instance = getInstance();
         assert instance != null;
-        instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate, force);
+        instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();
         final int newChunkX = newPosition.chunkX();
@@ -1896,17 +1889,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Sets the entity view distance of this entity.
+     * Sets the view distance of this entity.
      * <p>
-     * This setting assumes this entity is a viewer, and will only affect
-     * the entities it can see.
+     * This setting assumes this entity is a viewer, and modifying it will only affect
+     * the entities this entity can see.
+     * Currently, players are the only viewers, so setting this for other
+     * entities will have no effect.
      *
      * @param newViewDistance the new entity view distance in chunks
      */
     public void setViewDistance(int newViewDistance) {
         if (viewDistance == newViewDistance) return;
         viewDistance = newViewDistance;
-        refreshCoordinate(position, true);
+        instance.getEntityTracker().updateViewDistance(this, newViewDistance, trackingTarget, trackingUpdate);
     }
 
     /**
@@ -1917,14 +1912,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Gets the entity view distance of this entity, which defaults to the instance's entity view distance
+     * Gets the view distance of this entity, which defaults to the instance's entity view distance
      * or {@link ServerFlag#ENTITY_VIEW_DISTANCE} if no instance is set.
      *
      * @return The entity view distance in chunks
      */
     public int getViewDistance() {
         return viewDistance < 0 ?
-                instance != null ? instance.getEntityViewDistance() : ServerFlag.ENTITY_VIEW_DISTANCE :
+                instance != null ? instance.getEntityTracker().getDefaultViewDistance() : ServerFlag.ENTITY_VIEW_DISTANCE :
                 viewDistance;
     }
 
@@ -1940,5 +1935,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     public int getRawViewDistance() {
         return viewDistance;
+    }
+
+    /**
+     * Used internally to force tracker updates when the instance default
+     * view distance changes. The new distance parameter is only passed to avoid
+     * having to access the instance for each entity on each update -
+     * otherwise it can be derived from {@link EntityTracker#getDefaultViewDistance()}.
+     *
+     * @param newViewDistance The new instance default view distance
+     */
+    @ApiStatus.Internal
+    public void refreshDefaultViewDistance(int newViewDistance) {
+        if (viewDistance >= 0) return;
+        instance.getEntityTracker().updateViewDistance(this, newViewDistance, trackingTarget, trackingUpdate);
     }
 }

@@ -120,7 +120,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
 
     protected int chunkViewDistance = ServerFlag.CHUNK_VIEW_DISTANCE;
-    protected int entityViewDistance = ServerFlag.ENTITY_VIEW_DISTANCE;
 
     // the uuid of this instance
     protected UUID uuid;
@@ -910,7 +909,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
-     * Sets the chunk view distance of this instance
+     * Sets the chunk view distance of this instance.
      *
      * @deprecated Use {@link #setChunkViewDistance(int)} instead
      * @param newViewDistance the new chunk view distance
@@ -930,7 +929,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
-     * Sets the chunk view distance of this instance
+     * Sets the chunk view distance of this instance.
      *
      * @param newViewDistance the new chunk view distance
      */
@@ -939,26 +938,22 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
-     * Gets the default entity view distance of this instance, which defaults to {@link ServerFlag#ENTITY_VIEW_DISTANCE}.
-     * <p>
-     * It's preferred to use {@link Entity#getViewDistance()} to get the view distance per-entity,
-     * as this method only returns the instance-wide default.
+     * Gets the default entity view distance of this instance. This is an alias for {@link EntityTracker#getDefaultViewDistance()}.
      *
      * @return The default entity view distance of this instance in chunks
      */
     public int getEntityViewDistance() {
-        return this.entityViewDistance;
+        return this.entityTracker.getDefaultViewDistance();
     }
 
     /**
-     * Sets the default entity view distance of this instance
+     * Sets the default entity view distance of this instance. This is an alias for {@link EntityTracker#setDefaultViewDistance(int)}.
      *
      * @param newViewDistance the new default entity view distance in chunks
      */
     public void setEntityViewDistance(int newViewDistance) {
-        this.entityViewDistance = newViewDistance;
+        this.entityTracker.setDefaultViewDistance(newViewDistance);
     }
-
 
     /**
      * Shows a {@link BossBar} to all players in the instance and tracks it.
