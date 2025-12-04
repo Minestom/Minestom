@@ -33,7 +33,7 @@ public interface NetworkBufferFactory {
     @Contract(pure = true)
     static NetworkBufferFactory staticFactory() {
         final class Holder {
-            static final NetworkBufferFactory INSTANCE = NetworkBufferProvider.get().createStaticFactory();
+            static final NetworkBufferFactory INSTANCE = NetworkBufferProvider.networkBufferProvider().createStaticFactory();
         }
         return Holder.INSTANCE;
     }
@@ -47,7 +47,7 @@ public interface NetworkBufferFactory {
     @Contract(pure = true)
     static NetworkBufferFactory resizeableFactory() {
         final class Holder {
-            static final NetworkBufferFactory INSTANCE = NetworkBufferProvider.get().createResizeableFactory();
+            static final NetworkBufferFactory INSTANCE = NetworkBufferProvider.networkBufferProvider().createResizeableFactory();
         }
         return Holder.INSTANCE;
     }

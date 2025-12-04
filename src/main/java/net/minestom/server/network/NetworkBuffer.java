@@ -326,7 +326,7 @@ public interface NetworkBuffer {
     static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, Registries registries) {
         Objects.requireNonNull(segment, "segment");
         Objects.requireNonNull(registries, "registries");
-        return NetworkBufferProvider.get().wrap(segment, readIndex, writeIndex);
+        return NetworkBufferProvider.networkBufferProvider().wrap(segment, readIndex, writeIndex);
     }
 
     /**
@@ -342,7 +342,7 @@ public interface NetworkBuffer {
     @ApiStatus.Experimental
     static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex) {
         Objects.requireNonNull(segment, "segment");
-        return NetworkBufferProvider.get().wrap(segment, readIndex, writeIndex);
+        return NetworkBufferProvider.networkBufferProvider().wrap(segment, readIndex, writeIndex);
     }
 
     /**
@@ -359,7 +359,7 @@ public interface NetworkBuffer {
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, Registries registries) {
         Objects.requireNonNull(bytes, "bytes");
         Objects.requireNonNull(registries, "registries");
-        return NetworkBufferProvider.get().wrap(bytes, readIndex, writeIndex, registries);
+        return NetworkBufferProvider.networkBufferProvider().wrap(bytes, readIndex, writeIndex, registries);
     }
 
     /**
@@ -374,7 +374,7 @@ public interface NetworkBuffer {
     @Contract("_, _, _ -> new")
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
         Objects.requireNonNull(bytes, "bytes");
-        return NetworkBufferProvider.get().wrap(bytes, readIndex, writeIndex);
+        return NetworkBufferProvider.networkBufferProvider().wrap(bytes, readIndex, writeIndex);
     }
 
     /**
@@ -390,7 +390,7 @@ public interface NetworkBuffer {
     static byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries) {
         Objects.requireNonNull(writing, "writing");
         Objects.requireNonNull(registries, "registries");
-        return NetworkBufferProvider.get().makeArray(writing, registries);
+        return NetworkBufferProvider.networkBufferProvider().makeArray(writing, registries);
     }
 
     /**
@@ -405,7 +405,7 @@ public interface NetworkBuffer {
     @Contract("_ -> new")
     static byte[] makeArray(Consumer<NetworkBuffer> writing) {
         Objects.requireNonNull(writing, "writing");
-        return NetworkBufferProvider.get().makeArray(writing);
+        return NetworkBufferProvider.networkBufferProvider().makeArray(writing);
     }
 
     /**
@@ -424,7 +424,7 @@ public interface NetworkBuffer {
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, Registries registries) {
         Objects.requireNonNull(type, "type");
         Objects.requireNonNull(registries, "registries");
-        return NetworkBufferProvider.get().makeArray(type, value, registries);
+        return NetworkBufferProvider.networkBufferProvider().makeArray(type, value, registries);
     }
 
     /**
@@ -441,7 +441,7 @@ public interface NetworkBuffer {
     @Contract("_, _ -> new")
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
         Objects.requireNonNull(type, "type");
-        return NetworkBufferProvider.get().makeArray(type, value);
+        return NetworkBufferProvider.networkBufferProvider().makeArray(type, value);
     }
 
     /**
@@ -1103,7 +1103,7 @@ public interface NetworkBuffer {
         @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value, Registries registries) {
             Objects.requireNonNull(registries, "registries");
-            return NetworkBufferProvider.get().sizeOf(this, value, registries);
+            return NetworkBufferProvider.networkBufferProvider().sizeOf(this, value, registries);
         }
 
         /**
@@ -1115,7 +1115,7 @@ public interface NetworkBuffer {
         @Contract(pure = true)
         @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value) {
-            return NetworkBufferProvider.get().sizeOf(this, value);
+            return NetworkBufferProvider.networkBufferProvider().sizeOf(this, value);
         }
 
         /**

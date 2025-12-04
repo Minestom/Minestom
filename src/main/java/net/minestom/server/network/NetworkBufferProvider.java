@@ -168,10 +168,11 @@ public interface NetworkBufferProvider {
     /**
      * Gets the current provider instance
      * <br>
-     * Note: currently only one instance per lifetime due to pooling not being under the server process.
+     * Note: currently only one instance per lifetime due to pooling not being under the server process, but this may change.
      * @return the current {@link NetworkBufferProvider}.
      */
-    static NetworkBufferProvider get() {
+    @ApiStatus.Experimental
+    static NetworkBufferProvider networkBufferProvider() {
         final class Holder {
             static final NetworkBufferProvider INSTANCE = determineProvider();
         }
