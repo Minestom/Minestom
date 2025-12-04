@@ -30,11 +30,7 @@ public class BlockBatchTest {
             latch.countDown();
         });
         env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1));
-        try {
-            Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        Assertions.assertDoesNotThrow(()->Assertions.assertTrue(latch.await(1, TimeUnit.SECONDS)));
     }
 
     @Test
