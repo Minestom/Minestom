@@ -45,6 +45,16 @@ public record SoundEffectPacket(
         }
     };
 
+    /**
+     * @deprecated Sound effect position will be snapped to block corners. Instead, use
+     * {@link #SoundEffectPacket(SoundEvent, Source, Point, float, float, long)} or
+     * {@link #SoundEffectPacket(SoundEvent, Source, double, double, double, float, float, long)}
+     */
+    @Deprecated(forRemoval = true)
+    public SoundEffectPacket(SoundEvent soundEvent, Source source, int x, int y, int z, float volume, float pitch, long seed) {
+        this(soundEvent, source, (double) x, y, z, volume, pitch, seed);
+    }
+
     public SoundEffectPacket(SoundEvent soundEvent, Source source, Point position, float volume, float pitch, long seed) {
         this(soundEvent, source, position.x(), position.y(), position.z(), volume, pitch, seed);
     }
