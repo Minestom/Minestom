@@ -1,4 +1,4 @@
-package net.minestom.server.network;
+package net.minestom.server.network.foreign;
 
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.validate.Check;
@@ -14,17 +14,17 @@ import java.util.function.Supplier;
  * Represents {@link #resizableBuffer(long, Registries)}.
  * <br>
  * Which are the most commonly used when the bounds of the application are unknown for example {@link #makeArray(Type, Object)}.
- * These will be converted into {@link NetworkBufferStaticImpl} if applicable, for example {@link #readOnly()}.
+ * These will be converted into {@link NetworkBufferStaticSegmentImpl} if applicable, for example {@link #readOnly()}.
  */
 @ApiStatus.Internal
-final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
+final class NetworkBufferResizeableSegmentImpl extends NetworkBufferSegmentImpl {
     private final AutoResize autoResize;
     private final Supplier<Arena> arenaSupplier;
 
     private Arena arena;
     private MemorySegment segment;
 
-    NetworkBufferResizeableImpl(Arena arena, MemorySegment segment, long readIndex, long writeIndex, AutoResize autoResize, @Nullable Registries registries, Supplier<Arena> arenaSupplier) {
+    NetworkBufferResizeableSegmentImpl(Arena arena, MemorySegment segment, long readIndex, long writeIndex, AutoResize autoResize, @Nullable Registries registries, Supplier<Arena> arenaSupplier) {
         this.arena = Objects.requireNonNull(arena, "arena");
         this.segment = Objects.requireNonNull(segment, "segment");
         Check.argCondition(segment.address() == MemorySegment.NULL.address(), "Segment address cannot be NULL");
@@ -66,7 +66,7 @@ final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
         if (length < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (length == capacity) throw new IllegalArgumentException("New size is the same as the current size");
         final Arena arena = arenaSupplier.get(); // We need to use a new arena to allow the old one to deallocate.
-        final MemorySegment newSegment = NetworkBufferAllocator.allocate(arena, length);
+        final MemorySegment newSegment = NetworkBufferSegmentAllocator.allocate(arena, length);
         MemorySegment.copy(this.segment, 0, newSegment, 0, capacity);
         this.segment = newSegment;
         this.arena = arena;
@@ -78,7 +78,7 @@ final class NetworkBufferResizeableImpl extends NetworkBufferImpl {
         if (readableBytes == capacity()) return;
         final Arena arena = this.arenaSupplier.get();
         final MemorySegment oldSegment = this.segment;
-        final MemorySegment segment = NetworkBufferAllocator.allocate(arena, readableBytes);
+        final MemorySegment segment = NetworkBufferSegmentAllocator.allocate(arena, readableBytes);
         MemorySegment.copy(oldSegment, readIndex(), segment, 0, readableBytes);
         this.segment = segment;
         this.arena = arena;

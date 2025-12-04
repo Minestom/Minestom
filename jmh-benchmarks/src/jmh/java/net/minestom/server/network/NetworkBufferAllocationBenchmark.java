@@ -20,7 +20,7 @@ public class NetworkBufferAllocationBenchmark {
     @Benchmark
     public void createConfined(Blackhole blackhole) {
         try (var arena = Arena.ofConfined()) {
-            var settings = NetworkBuffer.Factory.staticFactory().arena(arena);
+            var settings = NetworkBufferFactory.staticFactory().arena(arena);
             var allocation = settings.allocate(length);
             blackhole.consume(allocation);
         }

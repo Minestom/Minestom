@@ -181,5 +181,6 @@ module net.minestom.server {
     exports net.minestom.server.utils.validate;
     exports net.minestom.server.world;
     exports net.minestom.server.world.biome;
+    exports net.minestom.server.network.foreign;
 
 }

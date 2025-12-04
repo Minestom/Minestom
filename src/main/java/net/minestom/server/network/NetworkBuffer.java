@@ -10,6 +10,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityPose;
+import net.minestom.server.network.foreign.NetworkBufferSegmentAllocator;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
@@ -75,14 +76,14 @@ import java.util.zip.DataFormatException;
  * <br>
  *
  * <b>Note:</b> These are not thread safe, because of their index tracking,
- * also buffers will attempt to use native allocation through {@link NetworkBufferAllocator} if available.
+ * also buffers will attempt to use native allocation through {@link NetworkBufferSegmentAllocator} if available.
  *
  * @see Type for custom types
  * @see NetworkBufferTemplate for templating
- * @see Factory to create custom allocators
+ * @see NetworkBufferFactory to create custom allocators
  * @see IOView to interface with existing code
  */
-public sealed interface NetworkBuffer permits NetworkBufferImpl {
+public interface NetworkBuffer {
     Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
     Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
@@ -236,53 +237,53 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Creates a new static buffer using {@link Factory#staticFactory()}.
+     * Creates a new static buffer using {@link NetworkBufferFactory#staticFactory()}.
      *
-     * @param size       the size to use for {@link Factory#allocate(long)}
+     * @param size       the size to use for {@link NetworkBufferFactory#allocate(long)}
      * @param registries the registries to use
      * @return the new network buffer
      */
     @Contract("_, _ -> new")
     static NetworkBuffer staticBuffer(long size, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return NetworkBuffer.Factory.staticFactory().registry(registries).allocate(size);
+        return NetworkBufferFactory.staticFactory().registry(registries).allocate(size);
     }
 
     /**
-     * Creates a new static buffer using {@link Factory#staticFactory()}.
+     * Creates a new static buffer using {@link NetworkBufferFactory#staticFactory()}.
      *
-     * @param size the size to use for {@link Factory#allocate(long)}
+     * @param size the size to use for {@link NetworkBufferFactory#allocate(long)}
      * @return the new network buffer
      */
     @Contract("_ -> new")
     static NetworkBuffer staticBuffer(long size) {
-        return NetworkBuffer.Factory.staticFactory().allocate(size);
+        return NetworkBufferFactory.staticFactory().allocate(size);
     }
 
     /**
-     * Creates a resizeable buffer using {@link Factory#resizeableFactory()}
+     * Creates a resizeable buffer using {@link NetworkBufferFactory#resizeableFactory()}
      *
-     * @param initialSize the initial size to use for {@link Factory#allocate(long)}
+     * @param initialSize the initial size to use for {@link NetworkBufferFactory#allocate(long)}
      * @param registries  the registries to use
      * @return the new buffer
      */
     @Contract("_, _ -> new")
     static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return NetworkBuffer.Factory.resizeableFactory()
+        return NetworkBufferFactory.resizeableFactory()
                 .registry(registries)
                 .allocate(initialSize);
     }
 
     /**
-     * Creates a resizeable buffer using {@link Factory#resizeableFactory()}
+     * Creates a resizeable buffer using {@link NetworkBufferFactory#resizeableFactory()}
      *
-     * @param initialSize the initial size to use for {@link Factory#allocate(long)}
+     * @param initialSize the initial size to use for {@link NetworkBufferFactory#allocate(long)}
      * @return the new buffer
      */
     @Contract("_ -> new")
     static NetworkBuffer resizableBuffer(int initialSize) {
-        return NetworkBuffer.Factory.resizeableFactory().allocate(initialSize);
+        return NetworkBufferFactory.resizeableFactory().allocate(initialSize);
     }
 
     /**
@@ -322,10 +323,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract("_, _, _, _ -> new")
     @ApiStatus.Experimental
-    static NetworkBuffer wrap(MemorySegment segment, int readIndex, int writeIndex, Registries registries) {
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, Registries registries) {
         Objects.requireNonNull(segment, "segment");
         Objects.requireNonNull(registries, "registries");
-        return NetworkBufferImpl.wrap(segment, readIndex, writeIndex, registries);
+        return NetworkBufferProvider.get().wrap(segment, readIndex, writeIndex);
     }
 
     /**
@@ -339,9 +340,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract("_, _, _ -> new")
     @ApiStatus.Experimental
-    static NetworkBuffer wrap(MemorySegment segment, int readIndex, int writeIndex) {
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex) {
         Objects.requireNonNull(segment, "segment");
-        return NetworkBufferImpl.wrap(segment, readIndex, writeIndex, null);
+        return NetworkBufferProvider.get().wrap(segment, readIndex, writeIndex);
     }
 
     /**
@@ -358,7 +359,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, Registries registries) {
         Objects.requireNonNull(bytes, "bytes");
         Objects.requireNonNull(registries, "registries");
-        return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
+        return NetworkBufferProvider.get().wrap(bytes, readIndex, writeIndex, registries);
     }
 
     /**
@@ -373,7 +374,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Contract("_, _, _ -> new")
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
         Objects.requireNonNull(bytes, "bytes");
-        return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex);
+        return NetworkBufferProvider.get().wrap(bytes, readIndex, writeIndex);
     }
 
     /**
@@ -389,11 +390,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries) {
         Objects.requireNonNull(writing, "writing");
         Objects.requireNonNull(registries, "registries");
-        try (Arena arena = Arena.ofConfined()) {
-            final Factory factory = NetworkBuffer.Factory.resizeableFactory().arena(arena).registry(registries);
-            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
-            return buffer.extractWrittenBytes(writing);
-        }
+        return NetworkBufferProvider.get().makeArray(writing, registries);
     }
 
     /**
@@ -408,11 +405,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Contract("_ -> new")
     static byte[] makeArray(Consumer<NetworkBuffer> writing) {
         Objects.requireNonNull(writing, "writing");
-        try (Arena arena = Arena.ofConfined()) {
-            final Factory factory = NetworkBuffer.Factory.resizeableFactory().arena(arena);
-            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
-            return buffer.extractWrittenBytes(writing);
-        }
+        return NetworkBufferProvider.get().makeArray(writing);
     }
 
     /**
@@ -431,11 +424,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, Registries registries) {
         Objects.requireNonNull(type, "type");
         Objects.requireNonNull(registries, "registries");
-        try (Arena arena = Arena.ofConfined()) {
-            final Factory factory = NetworkBuffer.Factory.resizeableFactory().arena(arena).registry(registries);
-            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
-            return buffer.extractWrittenBytes(type, value);
-        }
+        return NetworkBufferProvider.get().makeArray(type, value, registries);
     }
 
     /**
@@ -452,11 +441,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Contract("_, _ -> new")
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
         Objects.requireNonNull(type, "type");
-        try (Arena arena = Arena.ofConfined()) {
-            final Factory factory = NetworkBuffer.Factory.resizeableFactory().arena(arena);
-            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
-            return buffer.extractWrittenBytes(type, value);
-        }
+        return NetworkBufferProvider.get().makeArray(type, value);
     }
 
     /**
@@ -477,14 +462,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
                      NetworkBuffer dstBuffer, long dstOffset, long length) {
         Objects.requireNonNull(srcBuffer, "srcBuffer");
         Objects.requireNonNull(dstBuffer, "dstBuffer");
-        NetworkBufferImpl.copy(srcBuffer, srcOffset, dstBuffer, dstOffset, length);
+        srcBuffer.copyTo(srcOffset, dstBuffer, dstOffset, length);
     }
 
     /**
      * @param buffer1 the buffer
      * @param buffer2 the buffer
      * @return if they are equals
-     * @deprecated Use contentEquals instead.
+     * @deprecated Use NetworkBuffer#contentEquals instead.
      */
     @Deprecated(forRemoval = true)
     static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
@@ -505,7 +490,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static boolean contentEquals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
         Objects.requireNonNull(buffer1, "buffer1");
         Objects.requireNonNull(buffer2, "buffer2");
-        return NetworkBufferImpl.contentEquals(buffer1, buffer2);
+        return buffer1.contentEquals(buffer2);
     }
 
     /**
@@ -582,6 +567,22 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract(mutates = "param2")
     void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
+
+
+    /**
+     * Copies the src {@link NetworkBuffer} into the destination {@link NetworkBuffer}
+     * <br>
+     *
+     * @param srcOffset  the source offset
+     * @param destBuffer the destination
+     * @param destOffset the destination offset
+     * @param length     the length to copy
+     * @throws UnsupportedOperationException if {@code srcBuffer} is a dummy
+     * @throws UnsupportedOperationException if {@code dstBuffer} is a dummy
+     * @throws UnsupportedOperationException if {@code dstBuffer} is read-only
+     */
+    @Contract(mutates = "param2")
+    void copyTo(long srcOffset, NetworkBuffer destBuffer, long destOffset, long length);
 
     /**
      * Fill the buffer with the byte value specified.
@@ -792,7 +793,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Resize the buffer to {@code length} the new {@link #capacity()}.
      * <br>
      * Note: This throws away the existing arena so it can be freed.
-     * You can set a fixed arena by {@link Factory#arena(Arena)}
+     * You can set a fixed arena by {@link NetworkBufferFactory#arena(Arena)}
      *
      * @param length the new size
      * @throws IllegalArgumentException      if {@code length < 0}
@@ -842,7 +843,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void trim();
 
     /**
-     * Creates a copy of the buffer trimmed using the factory to {@link Factory#staticFactory()}.
+     * Creates a copy of the buffer trimmed using the factory to {@link NetworkBufferFactory#staticFactory()}.
      * <br>
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
      *
@@ -850,11 +851,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract("-> new")
     default NetworkBuffer trimmed() {
-        return trimmed(NetworkBuffer.Factory.staticFactory());
+        return trimmed(NetworkBufferFactory.staticFactory());
     }
 
     /**
-     * Creates a copy of the buffer trimmed using the factory to {@link Factory#allocate(long)}.
+     * Creates a copy of the buffer trimmed using the factory to {@link NetworkBufferFactory#allocate(long)}.
      * <br>
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
      *
@@ -862,10 +863,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the trimmed buffer
      */
     @Contract("_, -> new")
-    NetworkBuffer trimmed(Factory factory);
+    NetworkBuffer trimmed(NetworkBufferFactory factory);
 
     /**
-     * Copies the current buffer using the factory specified {@link Factory#staticFactory()}
+     * Copies the current buffer using the factory specified {@link NetworkBufferFactory#staticFactory()}
      * with the index to the length using {@link #readIndex()} and {@link #writeIndex()}.
      *
      * @param index  the starting index
@@ -878,21 +879,21 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Copies the current buffer using the {@link Factory} with the index to the length with
+     * Copies the current buffer using the {@link NetworkBufferFactory} with the index to the length with
      * the using {@link #readIndex()} and {@link #writeIndex()}.
      *
-     * @param factory the {@link Factory} which {@link Factory#allocate(long)} will be used for the new buffer.
+     * @param factory the {@link NetworkBufferFactory} which {@link NetworkBufferFactory#allocate(long)} will be used for the new buffer.
      * @param index   the index
      * @param length  the length
      * @return the copy of the current buffer into a new buffer
      */
     @Contract("_, _, _ -> new")
-    default NetworkBuffer copy(Factory factory, long index, long length) {
+    default NetworkBuffer copy(NetworkBufferFactory factory, long index, long length) {
         return copy(factory, index, length, readIndex(), writeIndex());
     }
 
     /**
-     * Copies the current buffer using the factory specified {@link Factory#staticFactory()}
+     * Copies the current buffer using the factory specified {@link NetworkBufferFactory#staticFactory()}
      * with the index to the length with the new specified read and write indexes.
      *
      * @param index      the starting index
@@ -903,13 +904,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      */
     @Contract("_, _, _, _ -> new")
     default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
-        return copy(NetworkBuffer.Factory.staticFactory(), index, length, readIndex, writeIndex);
+        return copy(NetworkBufferFactory.staticFactory(), index, length, readIndex, writeIndex);
     }
 
     /**
-     * Copies the current buffer using the {@link Factory} with the index to the length with the new specified read and write indexes.
+     * Copies the current buffer using the {@link NetworkBufferFactory} with the index to the length with the new specified read and write indexes.
      *
-     * @param factory    the {@link Factory} which {@link Factory#allocate(long)} will be used for the new buffer.
+     * @param factory    the {@link NetworkBufferFactory} which {@link NetworkBufferFactory#allocate(long)} will be used for the new buffer.
      * @param index      the starting index
      * @param length     the length
      * @param readIndex  the new read index
@@ -917,7 +918,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the copy of the current buffer into a new buffer
      */
     @Contract("_, _, _, _, _ -> new")
-    NetworkBuffer copy(Factory factory, long index, long length, long readIndex, long writeIndex);
+    NetworkBuffer copy(NetworkBufferFactory factory, long index, long length, long readIndex, long writeIndex);
 
     /**
      * Creates a slice from the starting index to the length passing the read index and write index supplied
@@ -1000,7 +1001,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
     /**
-     * The registries used when creating with {@link Factory#registry(Registries)}
+     * The registries used when creating with {@link NetworkBufferFactory#registry(Registries)}
      *
      * @return the registries
      */
@@ -1014,14 +1015,39 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @return the io view.
      */
     @Contract(pure = true, value = "-> new")
-    IOView ioView();
+    default IOView ioView() {
+        return () -> NetworkBuffer.this;
+    }
+
+    /**
+     * Gets the direct view of this buffer.
+     * <br>
+     * Used for direct access to read and write at indexes. Used for implementations like {@link #BYTE}
+     *
+     * @return the direct view
+     */
+    @ApiStatus.OverrideOnly
+    @Contract(pure = true, value = "-> this")
+    Direct direct();
+
+    /**
+     * Checks if the contents of one buffer in its entirety.
+     * Buffers with the same address and capacity will always be true.
+     * <br>
+     * Note: Dummy buffers are never equal in content.
+     *
+     * @param buffer the right buffer
+     * @return true if the content is equal
+     */
+    @Contract(pure = true)
+    boolean contentEquals(NetworkBuffer buffer);
 
     /**
      * Tests to see if the current buffer equals in identity to the other buffer.
      * <br>
      * Note: This relies on {@code this == obj}.
      *
-     * @param obj   the reference object with which to compare.
+     * @param obj the reference object with which to compare.
      * @return true if equal in identity
      */
     @Override
@@ -1078,7 +1104,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value, Registries registries) {
             Objects.requireNonNull(registries, "registries");
-            return NetworkBufferTypeImpl.sizeOf(this, value, registries);
+            return NetworkBufferProvider.get().sizeOf(this, value, registries);
         }
 
         /**
@@ -1090,7 +1116,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         @Contract(pure = true)
         @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value) {
-            return NetworkBufferTypeImpl.sizeOf(this, value, null);
+            return NetworkBufferProvider.get().sizeOf(this, value);
         }
 
         /**
@@ -1227,103 +1253,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     /**
-     * Factory for creating a {@link NetworkBuffer} through {@link Factory#staticFactory()}
-     * or {@link Factory#resizeableFactory()}.
-     * <br>
-     * Useful for creating buffers with specific configuration like arenas, auto resizing, and registries.
-     * <br>
-     * Factories are immutable and can be used across threads if the {@link Arena} supports it.
-     * You also shouldn't rely on the identity of them due to being a value class candidate.
-     * <br>
-     * For example, using a confined arena for a manged lifetime.
-     * <pre>{@code
-     * try (Arena arena = Arena.ofConfined()) {
-     *      var factory = NetworkBuffer.Factory.staticFactory().arena(arena);
-     *      NetworkBuffer buffer = factory.allocate(1024);
-     *      // Do things with the buffer
-     * }}</pre>
-     */
-    sealed interface Factory permits NetworkBufferImpl.FactoryImpl {
-        /**
-         * Gets the static factory where {@link #arena(Supplier)} is set.
-         *
-         * @return the static factory.
-         */
-        @Contract(pure = true)
-        static Factory staticFactory() {
-            return NetworkBufferImpl.FactoryImpl.STATIC;
-        }
-
-        /**
-         * Gets the resizeable factory where {@link #autoResize(AutoResize)} is set and built off {@link #staticFactory()}
-         * using the {@link #autoResize(AutoResize)} of {@link AutoResize#DOUBLE}.
-         *
-         * @return the resizeable factory.
-         */
-        @Contract(pure = true)
-        static Factory resizeableFactory() {
-            return NetworkBufferImpl.FactoryImpl.RESIZEABLE;
-        }
-
-        /**
-         * Sets the arena used for allocations.
-         * <br>
-         * Otherwise, if left unset, the default arena will be used.
-         *
-         * @param arena the arena
-         * @return the new factory
-         */
-        @ApiStatus.Experimental
-        @Contract(pure = true, value = "_ -> new")
-        Factory arena(Arena arena);
-
-        /**
-         * Sets the new arena strategy.
-         * Called when we want to reallocate memory to a fresh arena, for example, during copy or initialization.
-         * <br>
-         * Note you should use {@link #arena(Arena)} if you use a singleton instance.
-         * <br>
-         * Otherwise, if left unset, the default arena will be used.
-         *
-         * @param arenaSupplier the supplier
-         * @return the new factory
-         */
-        @ApiStatus.Experimental
-        @Contract(pure = true, value = "_ -> new")
-        Factory arena(Supplier<Arena> arenaSupplier);
-
-        /**
-         * Sets the auto-resizing strategy.
-         * <br>
-         * Otherwise, if left unset, the buffer will never be resized and is considered a static buffer
-         * unless it's a {@link #resizeableFactory()}.
-         *
-         * @param autoResize the {@link AutoResize} strategy
-         * @return the new factory
-         */
-        @Contract(pure = true, value = "_ -> new")
-        Factory autoResize(AutoResize autoResize);
-
-        /**
-         * Sets a registry for buffers to use.
-         *
-         * @param registries the registry
-         * @return the new factory
-         */
-        @Contract(pure = true, value = "_ -> new")
-        Factory registry(Registries registries);
-
-        /**
-         * Builds a new network buffer from this factory with {@code length} allocated.
-         *
-         * @param length the size of the buffer, or initial size if {@link AutoResize} is set.
-         * @return the new network buffer
-         */
-        @Contract("_ -> new")
-        NetworkBuffer allocate(long length);
-    }
-
-    /**
      * Resize strategy for a {@link NetworkBuffer}.
      */
     @FunctionalInterface
@@ -1355,100 +1284,218 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * <br>
      * You should never rely on the identity of {@link IOView} as it is a value class candidate.
      */
-    sealed interface IOView extends DataInput, DataOutput permits NetworkBufferIOViewImpl {
+    interface IOView extends DataInput, DataOutput {
 
-        /**
-         * @throws UnsupportedOperationException not implemented.
-         */
+        @Deprecated(forRemoval = true)
         @Override
-        @Deprecated
         @Contract("-> fail")
-        String readLine();
-
-        // Override DataInput methods to remove checked exceptions
-        @Override
-        void readFully(byte[] b);
+        default String readLine() {
+            throw new UnsupportedOperationException("Deprecated method readLine() called, not implemented");
+        }
 
         @Override
-        void readFully(byte[] b, int off, int len);
+        default void readFully(byte[] bytes) {
+            readFully(bytes, 0, bytes.length);
+        }
 
         @Override
-        int skipBytes(int n);
+        default void readFully(byte[] bytes, int off, int len) {
+            Objects.requireNonNull(bytes, "bytes");
+            NetworkBuffer buffer = buffer();
+            buffer.ensureReadable(len);
+            buffer.copyTo(buffer.readIndex(), bytes, off, len);
+            buffer.advanceRead(len);
+        }
 
         @Override
-        boolean readBoolean();
+        default int skipBytes(int n) {
+            NetworkBuffer buffer = buffer();
+            long readableBytes = buffer.readableBytes();
+            if (n > readableBytes) {
+                n = (int) readableBytes;
+            }
+            if (n > 0) buffer.advanceRead(n);
+            return n;
+        }
 
         @Override
-        byte readByte();
+        default boolean readBoolean() {
+            return buffer().read(BOOLEAN);
+        }
 
         @Override
-        int readUnsignedByte();
+        default byte readByte() {
+            return buffer().read(BYTE);
+        }
 
         @Override
-        short readShort();
+        default int readUnsignedByte() {
+            return buffer().read(UNSIGNED_BYTE);
+        }
 
         @Override
-        int readUnsignedShort();
+        default short readShort() {
+            return buffer().read(SHORT);
+        }
 
         @Override
-        char readChar();
+        default int readUnsignedShort() {
+            return buffer().read(UNSIGNED_SHORT);
+        }
 
         @Override
-        int readInt();
+        default char readChar() {
+            return (char) readUnsignedShort();
+        }
 
         @Override
-        long readLong();
+        default int readInt() {
+            return buffer().read(INT);
+        }
 
         @Override
-        float readFloat();
+        default long readLong() {
+            return buffer().read(LONG);
+        }
 
         @Override
-        double readDouble();
+        default float readFloat() {
+            return buffer().read(FLOAT);
+        }
 
         @Override
-        String readUTF();
-
-        // Override DataOutput methods to remove checked exceptions
-        @Override
-        void write(int b);
+        default double readDouble() {
+            return buffer().read(DOUBLE);
+        }
 
         @Override
-        void write(byte[] b);
+        default String readUTF() {
+            return buffer().read(STRING_IO_UTF8);
+        }
 
         @Override
-        void write(byte[] b, int off, int len);
+        default void write(int lower) {
+            buffer().write(BYTE, (byte) lower);
+        }
 
         @Override
-        void writeBoolean(boolean v);
+        default void write(byte[] bytes) {
+            Objects.requireNonNull(bytes, "bytes");
+            buffer().write(RAW_BYTES, bytes);
+        }
 
         @Override
-        void writeByte(int v);
+        default void write(byte[] bytes, int off, int len) {
+            Objects.requireNonNull(bytes, "bytes");
+            buffer().write(RAW_BYTES, Arrays.copyOfRange(bytes, off, off + len));
+        }
 
         @Override
-        void writeShort(int v);
+        default void writeBoolean(boolean value) {
+            buffer().write(BOOLEAN, value);
+        }
 
         @Override
-        void writeChar(int v);
+        default void writeByte(int value) {
+            buffer().write(BYTE, (byte) value);
+        }
 
         @Override
-        void writeInt(int v);
+        default void writeShort(int value) {
+            buffer().write(UNSIGNED_SHORT, value);
+        }
 
         @Override
-        void writeLong(long v);
+        default void writeChar(int value) {
+            buffer().write(UNSIGNED_SHORT, value);
+        }
 
         @Override
-        void writeFloat(float v);
+        default void writeInt(int value) {
+            buffer().write(INT, value);
+        }
 
         @Override
-        void writeDouble(double v);
+        default void writeLong(long value) {
+            buffer().write(LONG, value);
+        }
 
         @Override
-        void writeBytes(String s);
+        default void writeFloat(float value) {
+            buffer().write(FLOAT, value);
+        }
 
         @Override
-        void writeChars(String s);
+        default void writeDouble(double value) {
+            buffer().write(DOUBLE, value);
+        }
 
         @Override
-        void writeUTF(String s);
+        default void writeBytes(String value) {
+            Objects.requireNonNull(value, "value");
+            NetworkBuffer buffer = buffer();
+            for (int i = 0; i < value.length(); i++) {
+                buffer.write(BYTE, (byte) value.charAt(i)); // Low byte only
+            }
+        }
+
+        @Override
+        default void writeChars(String value) {
+            Objects.requireNonNull(value, "value");
+            NetworkBuffer buffer = buffer();
+            for (int i = 0; i < value.length(); i++) {
+                buffer.write(UNSIGNED_SHORT, (int) value.charAt(i));
+            }
+        }
+
+        @Override
+        default void writeUTF(String value) {
+            Objects.requireNonNull(value, "value");
+            buffer().write(STRING_IO_UTF8, value);
+        }
+
+        @ApiStatus.OverrideOnly
+        NetworkBuffer buffer();
+    }
+
+    @ApiStatus.OverrideOnly
+    interface Direct {
+        // Internal writing methods
+        void putBytes(long index, byte[] value);
+
+        void getBytes(long index, byte[] value);
+
+        void putByte(long index, byte value);
+
+        byte getByte(long index);
+
+        void putShort(long index, short value);
+
+        short getShort(long index);
+
+        void putInt(long index, int value);
+
+        int getInt(long index);
+
+        void putLong(long index, long value);
+
+        long getLong(long index);
+
+        void putFloat(long index, float value);
+
+        float getFloat(long index);
+
+        void putDouble(long index, double value);
+
+        double getDouble(long index);
+
+        // Warning this is writing a null terminated string
+        void putString(long index, String value);
+
+        // Warning this is reading a null terminated string
+        String getString(long index);
+
+        // Non prefixed variant
+        String getString(long index, int length);
     }
 }

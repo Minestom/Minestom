@@ -389,11 +389,6 @@ public class NetworkBufferIOViewTest {
         assertEquals("Test", view.readUTF());
     }
 
-    @Test
-    public void testBufferNotNull() {
-        assertThrows(NullPointerException.class, () -> new NetworkBufferIOViewImpl(null));
-    }
-
     // Tests comparing against Java's DataInputStream/DataOutputStream
 
     @Test

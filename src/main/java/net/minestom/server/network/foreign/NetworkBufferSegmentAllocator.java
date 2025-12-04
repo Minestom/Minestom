@@ -1,6 +1,7 @@
-package net.minestom.server.network;
+package net.minestom.server.network.foreign;
 
 import net.minestom.server.ServerFlag;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
@@ -32,11 +33,11 @@ import java.util.function.Consumer;
  * </ul>
  */
 @ApiStatus.Internal
-final class NetworkBufferAllocator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkBufferAllocator.class);
+public final class NetworkBufferSegmentAllocator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkBufferSegmentAllocator.class);
     // true if we use system malloc and free.
     private static final boolean ENABLE_NATIVE = ServerFlag.FORCE_NATIVE_ALLOCATION
-            || (ServerFlag.ATTEMPT_NATIVE_ALLOCATION && NetworkBufferAllocator.class.getModule().isNativeAccessEnabled());
+            || (ServerFlag.ATTEMPT_NATIVE_ALLOCATION && NetworkBufferSegmentAllocator.class.getModule().isNativeAccessEnabled());
 
     // malloc(size_t size) -> void*
     private static final @UnknownNullability MethodHandle MALLOC_HANDLE;
@@ -55,7 +56,7 @@ final class NetworkBufferAllocator {
                     Linker.nativeLinker().defaultLookup().find("free").orElseThrow(),
                     FunctionDescriptor.ofVoid(ValueLayout.ADDRESS)
             );
-            SEGMENT_CLEANER = NetworkBufferAllocator::free;
+            SEGMENT_CLEANER = NetworkBufferSegmentAllocator::free;
             LOGGER.info("Using native malloc/free implementation for NetworkBuffer allocations.");
         } else {
             MALLOC_HANDLE = null;
@@ -98,7 +99,7 @@ final class NetworkBufferAllocator {
         } catch (Exception e) {
             // We need to attempt to clean if it failed to reinterpret.
             // This might cause another exception to bubble up which you wouldn't see the initial error.
-            NetworkBufferAllocator.free(segment);
+            NetworkBufferSegmentAllocator.free(segment);
             throw new IllegalStateException("Failed to reinterpret native memory: %d:%d".formatted(segment.address(), byteSize), e);
         }
     }

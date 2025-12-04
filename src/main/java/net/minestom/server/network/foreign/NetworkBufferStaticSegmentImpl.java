@@ -1,5 +1,6 @@
-package net.minestom.server.network;
+package net.minestom.server.network.foreign;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -12,14 +13,14 @@ import java.util.Objects;
  * Represents a {@link NetworkBuffer#staticBuffer(long, Registries)}.
  * <br>
  * Not resizeable, including shrinking, but have the benefit of final {@link Arena} and {@link MemorySegment}.
- * Which makes this an excellent wrapper class for {@link #wrap(MemorySegment, int, int, Registries)}.
+ * Which makes this an excellent wrapper class for {@link NetworkBuffer#wrap(MemorySegment, long, long, Registries)}.
  */
 @ApiStatus.Internal
-final class NetworkBufferStaticImpl extends NetworkBufferImpl {
+final class NetworkBufferStaticSegmentImpl extends NetworkBufferSegmentImpl {
     private final @Nullable Arena arena;
     private final MemorySegment segment;
 
-    NetworkBufferStaticImpl(@Nullable Arena arena, MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
+    NetworkBufferStaticSegmentImpl(@Nullable Arena arena, MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
         this.arena = arena;
         this.segment = Objects.requireNonNull(segment, "segment");
         super(readIndex, writeIndex, registries);

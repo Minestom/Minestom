@@ -18,7 +18,6 @@ import java.util.zip.DataFormatException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SendablePacketTest {
-
     @Test
     public void lazy() {
         var packet = new SystemChatPacket(Component.text("Hello World!"), false);

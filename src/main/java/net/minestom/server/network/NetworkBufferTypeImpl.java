@@ -31,7 +31,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static net.minestom.server.network.NetworkBuffer.*;
-import static net.minestom.server.network.NetworkBufferImpl.impl;
 
 final class NetworkBufferTypeImpl {
     static final int SEGMENT_BITS = 0x7F;
@@ -52,13 +51,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Boolean value) {
             buffer.ensureWritable(1);
-            impl(buffer)._putByte(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
+            buffer.direct().putByte(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
             buffer.advanceWrite(1);
         }
 
         @Override
         public Boolean read(NetworkBuffer buffer) {
-            final byte value = impl(buffer)._getByte(buffer.readIndex());
+            final byte value = buffer.direct().getByte(buffer.readIndex());
             buffer.advanceRead(1);
             return value == 1;
         }
@@ -68,13 +67,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Byte value) {
             buffer.ensureWritable(1);
-            impl(buffer)._putByte(buffer.writeIndex(), value);
+            buffer.direct().putByte(buffer.writeIndex(), value);
             buffer.advanceWrite(1);
         }
 
         @Override
         public Byte read(NetworkBuffer buffer) {
-            final byte value = impl(buffer)._getByte(buffer.readIndex());
+            final byte value = buffer.direct().getByte(buffer.readIndex());
             buffer.advanceRead(1);
             return value;
         }
@@ -84,13 +83,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
             buffer.ensureWritable(1);
-            impl(buffer)._putByte(buffer.writeIndex(), (byte) (value & 0xFF));
+            buffer.direct().putByte(buffer.writeIndex(), (byte) (value & 0xFF));
             buffer.advanceWrite(1);
         }
 
         @Override
         public Short read(NetworkBuffer buffer) {
-            final byte value = impl(buffer)._getByte(buffer.readIndex());
+            final byte value = buffer.direct().getByte(buffer.readIndex());
             buffer.advanceRead(1);
             return (short) (value & 0xFF);
         }
@@ -100,13 +99,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
             buffer.ensureWritable(2);
-            impl(buffer)._putShort(buffer.writeIndex(), value);
+            buffer.direct().putShort(buffer.writeIndex(), value);
             buffer.advanceWrite(2);
         }
 
         @Override
         public Short read(NetworkBuffer buffer) {
-            final short value = impl(buffer)._getShort(buffer.readIndex());
+            final short value = buffer.direct().getShort(buffer.readIndex());
             buffer.advanceRead(2);
             return value;
         }
@@ -116,13 +115,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
             buffer.ensureWritable(2);
-            impl(buffer)._putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
+            buffer.direct().putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
             buffer.advanceWrite(2);
         }
 
         @Override
         public Integer read(NetworkBuffer buffer) {
-            final short value = impl(buffer)._getShort(buffer.readIndex());
+            final short value = buffer.direct().getShort(buffer.readIndex());
             buffer.advanceRead(2);
             return value & 0xFFFF;
         }
@@ -132,13 +131,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
             buffer.ensureWritable(4);
-            impl(buffer)._putInt(buffer.writeIndex(), value);
+            buffer.direct().putInt(buffer.writeIndex(), value);
             buffer.advanceWrite(4);
         }
 
         @Override
         public Integer read(NetworkBuffer buffer) {
-            final int value = impl(buffer)._getInt(buffer.readIndex());
+            final int value = buffer.direct().getInt(buffer.readIndex());
             buffer.advanceRead(4);
             return value;
         }
@@ -148,13 +147,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(4);
-            impl(buffer)._putInt(buffer.writeIndex(), (int) (value & 0xFFFFFFFFL));
+            buffer.direct().putInt(buffer.writeIndex(), (int) (value & 0xFFFFFFFFL));
             buffer.advanceWrite(4);
         }
 
         @Override
         public Long read(NetworkBuffer buffer) {
-            final int value = impl(buffer)._getInt(buffer.readIndex());
+            final int value = buffer.direct().getInt(buffer.readIndex());
             buffer.advanceRead(4);
             return value & 0xFFFFFFFFL;
         }
@@ -164,13 +163,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(8);
-            impl(buffer)._putLong(buffer.writeIndex(), value);
+            buffer.direct().putLong(buffer.writeIndex(), value);
             buffer.advanceWrite(8);
         }
 
         @Override
         public Long read(NetworkBuffer buffer) {
-            final long value = impl(buffer)._getLong(buffer.readIndex());
+            final long value = buffer.direct().getLong(buffer.readIndex());
             buffer.advanceRead(8);
             return value;
         }
@@ -180,13 +179,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Float value) {
             buffer.ensureWritable(4);
-            impl(buffer)._putFloat(buffer.writeIndex(), value);
+            buffer.direct().putFloat(buffer.writeIndex(), value);
             buffer.advanceWrite(4);
         }
 
         @Override
         public Float read(NetworkBuffer buffer) {
-            final float value = impl(buffer)._getFloat(buffer.readIndex());
+            final float value = buffer.direct().getFloat(buffer.readIndex());
             buffer.advanceRead(4);
             return value;
         }
@@ -196,13 +195,13 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, Double value) {
             buffer.ensureWritable(8);
-            impl(buffer)._putDouble(buffer.writeIndex(), value);
+            buffer.direct().putDouble(buffer.writeIndex(), value);
             buffer.advanceWrite(8);
         }
 
         @Override
         public Double read(NetworkBuffer buffer) {
-            final double value = impl(buffer)._getDouble(buffer.readIndex());
+            final double value = buffer.direct().getDouble(buffer.readIndex());
             buffer.advanceRead(8);
             return value;
         }
@@ -214,14 +213,14 @@ final class NetworkBufferTypeImpl {
             buffer.ensureWritable(5);
             long index = buffer.writeIndex();
             int value = boxed;
-            var nio = impl(buffer);
+            var nio = buffer.direct();
             while (true) {
                 if ((value & ~SEGMENT_BITS) == 0) {
-                    nio._putByte(index++, (byte) value);
+                    nio.putByte(index++, (byte) value);
                     buffer.advanceWrite(index - buffer.writeIndex());
                     return;
                 }
-                nio._putByte(index++, (byte) ((byte) (value & SEGMENT_BITS) | CONTINUE_BIT));
+                nio.putByte(index++, (byte) ((byte) (value & SEGMENT_BITS) | CONTINUE_BIT));
                 // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
                 value >>>= 7;
             }
@@ -233,7 +232,7 @@ final class NetworkBufferTypeImpl {
             // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L393
             int result = 0;
             for (int shift = 0; ; shift += 7) {
-                byte b = impl(buffer)._getByte(index++);
+                byte b = buffer.direct().getByte(index++);
                 result |= (b & 0x7f) << shift;
                 if (b >= 0) {
                     buffer.advanceRead(index - buffer.readIndex());
@@ -264,10 +263,10 @@ final class NetworkBufferTypeImpl {
             Check.argCondition(value < 0 || value >= (1 << 21), "VarInt3 out of bounds: {0}", value);
             buffer.ensureWritable(3);
             final long startIndex = buffer.writeIndex();
-            var impl = impl(buffer);
-            impl._putByte(startIndex, (byte) (value & 0x7F | 0x80));
-            impl._putByte(startIndex + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
-            impl._putByte(startIndex + 2, (byte) (value >>> 14));
+            var impl = buffer.direct();
+            impl.putByte(startIndex, (byte) (value & 0x7F | 0x80));
+            impl.putByte(startIndex + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
+            impl.putByte(startIndex + 2, (byte) (value >>> 14));
             buffer.advanceWrite(3);
         }
 
@@ -286,11 +285,11 @@ final class NetworkBufferTypeImpl {
             int size = 0;
             while (true) {
                 if ((value & ~((long) SEGMENT_BITS)) == 0) {
-                    impl(buffer)._putByte(buffer.writeIndex() + size, (byte) value.intValue());
+                    buffer.direct().putByte(buffer.writeIndex() + size, (byte) value.intValue());
                     buffer.advanceWrite(size + 1);
                     return;
                 }
-                impl(buffer)._putByte(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
+                buffer.direct().putByte(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
                 size++;
                 // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
                 value >>>= 7;
@@ -304,7 +303,7 @@ final class NetworkBufferTypeImpl {
             int position = 0;
             byte currentByte;
             while (true) {
-                currentByte = impl(buffer)._getByte(buffer.readIndex() + length);
+                currentByte = buffer.direct().getByte(buffer.readIndex() + length);
                 length++;
                 value |= (long) (currentByte & SEGMENT_BITS) << position;
                 if ((currentByte & CONTINUE_BIT) == 0) break;
@@ -325,7 +324,7 @@ final class NetworkBufferTypeImpl {
             final int length = value.length;
             if (length == 0) return; // TODO, should we allow zero length when length is fixed?
             buffer.ensureWritable(length);
-            impl(buffer)._putBytes(buffer.writeIndex(), value);
+            buffer.direct().putBytes(buffer.writeIndex(), value);
             buffer.advanceWrite(length);
         }
 
@@ -339,7 +338,7 @@ final class NetworkBufferTypeImpl {
             buffer.ensureReadable(length);
             final int arrayLength = Math.toIntExact(length);
             final byte[] bytes = new byte[arrayLength];
-            impl(buffer)._getBytes(buffer.readIndex(), bytes);
+            buffer.direct().getBytes(buffer.readIndex(), bytes);
             buffer.advanceRead(arrayLength);
             return bytes;
         }
@@ -354,8 +353,11 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public String read(NetworkBuffer buffer) {
-            final byte[] bytes = buffer.read(BYTE_ARRAY);
-            return new String(bytes, StandardCharsets.UTF_8);
+            final int length = buffer.read(VAR_INT);
+            buffer.ensureReadable(length);
+            String string = buffer.direct().getString(buffer.readIndex(), length);
+            buffer.advanceRead(length);
+            return string;
         }
     }
 
@@ -365,8 +367,9 @@ final class NetworkBufferTypeImpl {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
             final int length = bytes.length + 1;
             buffer.ensureWritable(length);
-            impl(buffer)._putBytes(buffer.writeIndex(), bytes);
-            impl(buffer)._putByte(buffer.writeIndex() + bytes.length, (byte) 0); // null terminator
+            var impl = buffer.direct();
+            impl.putBytes(buffer.writeIndex(), bytes);
+            impl.putByte(buffer.writeIndex() + bytes.length, (byte) 0); // null terminator
             buffer.advanceWrite(length);
         }
 
@@ -1086,26 +1089,26 @@ final class NetworkBufferTypeImpl {
 
             buffer.write(UNSIGNED_SHORT, utflen);
             buffer.ensureWritable(utflen); // throw early if possible
-            var impl = (NetworkBufferImpl) buffer;
+            var impl = buffer.direct();
             long offset = buffer.writeIndex();
             if (copyableBytes > 0) { // write if we have any copyableBytes
                 byte[] ascii = new byte[copyableBytes];
                 value.getBytes(0, copyableBytes, ascii, 0);
-                impl._putBytes(offset, ascii);
+                impl.putBytes(offset, ascii);
                 offset += copyableBytes;
             }
 
             for (int i = copyableBytes; i < strlen; i++) { // Excerpt from ModifiedUtf#putChar
                 int c = value.charAt(i);
                 if (c != 0 && c < 0x80) {
-                    impl._putByte(offset++, (byte) c);
+                    impl.putByte(offset++, (byte) c);
                 } else if (c >= 0x800) {
-                    impl._putByte(offset++, (byte) (0xE0 | c >> 12 & 0x0F));
-                    impl._putByte(offset++, (byte) (0x80 | c >> 6  & 0x3F));
-                    impl._putByte(offset++, (byte) (0x80 | c       & 0x3F));
+                    impl.putByte(offset++, (byte) (0xE0 | c >> 12 & 0x0F));
+                    impl.putByte(offset++, (byte) (0x80 | c >> 6  & 0x3F));
+                    impl.putByte(offset++, (byte) (0x80 | c       & 0x3F));
                 } else {
-                    impl._putByte(offset++, (byte) (0xC0 | c >> 6 & 0x1F));
-                    impl._putByte(offset++, (byte) (0x80 | c      & 0x3F));
+                    impl.putByte(offset++, (byte) (0xC0 | c >> 6 & 0x1F));
+                    impl.putByte(offset++, (byte) (0x80 | c      & 0x3F));
                 }
             }
             buffer.writeIndex(offset);
@@ -1120,11 +1123,5 @@ final class NetworkBufferTypeImpl {
                 throw new IllegalStateException("failed to read string", e);
             }
         }
-    }
-
-    static <T> long sizeOf(Type<T> type, T value, @Nullable Registries registries) {
-        NetworkBuffer buffer = NetworkBufferImpl.dummy(registries);
-        type.write(buffer, value);
-        return buffer.writeIndex();
     }
 }

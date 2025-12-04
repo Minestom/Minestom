@@ -470,7 +470,7 @@ public interface PacketRegistry<T> {
             final PacketInfo<T> info = packetInfo(packetId);
             try {
                 final T packet = info.serializer().read(reader);
-                assert packet.getClass().isInstance(info.packetClass()) : "Packet class mismatch";
+                assert info.packetClass().isInstance(packet) : "Packet class mismatch expected " + info.packetClass() + " got " + packet.getClass();
                 return packet;
             } catch (RuntimeException e) {
                 throw new IllegalStateException("Packet id 0x%X (%s) failed to read in %s_%s!".formatted(packetId, info.packetClass().getSimpleName(), side().name(), state().name()), e);
