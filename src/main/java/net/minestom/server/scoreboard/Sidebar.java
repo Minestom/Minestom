@@ -103,8 +103,7 @@ public class Sidebar implements Scoreboard {
      */
     public void setTitle(Component title) {
         this.title = title;
-        sendPacketToViewers(new ScoreboardObjectivePacket(objectiveName, (byte) 2, title,
-                ScoreboardObjectivePacket.Type.INTEGER, null));
+        sendPacketToViewers(getUpdateObjectivePacket(title, ScoreboardObjectivePacket.Type.INTEGER));
     }
 
     /**
@@ -503,15 +502,11 @@ public class Sidebar implements Scoreboard {
     }
 
 
-    public record NumberFormat(FormatType formatType, Component content) {
-        private NumberFormat() {
-            this(FormatType.BLANK, null);
-        }
-
+    public record NumberFormat(FormatType formatType, @Nullable Component content) {
         public static final NetworkBuffer.Type<NumberFormat> SERIALIZER = new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, NumberFormat value) {
-                buffer.write(NetworkBuffer.Enum(FormatType.class), value.formatType);
+                buffer.write(FormatType.NETWORK_TYPE, value.formatType);
                 if (value.formatType == FormatType.STYLED) {
                     assert value.content != null;
                     buffer.write(NetworkBuffer.COMPONENT, value.content);
@@ -523,7 +518,7 @@ public class Sidebar implements Scoreboard {
 
             @Override
             public NumberFormat read(NetworkBuffer buffer) {
-                final FormatType formatType = buffer.read(NetworkBuffer.Enum(FormatType.class));
+                final FormatType formatType = buffer.read(FormatType.NETWORK_TYPE);
                 final Component content = formatType != FormatType.BLANK ? buffer.read(NetworkBuffer.COMPONENT) : null;
                 return new NumberFormat(formatType, content);
             }
@@ -535,7 +530,7 @@ public class Sidebar implements Scoreboard {
          * @return a blank number format
          */
         public static NumberFormat blank() {
-            return new NumberFormat();
+            return new NumberFormat(FormatType.BLANK, null);
         }
 
         /**
@@ -557,7 +552,11 @@ public class Sidebar implements Scoreboard {
         }
 
         private enum FormatType {
-            BLANK, STYLED, FIXED
+            BLANK,
+            STYLED,
+            FIXED;
+
+            public static final NetworkBuffer.Type<FormatType> NETWORK_TYPE = NetworkBuffer.Enum(FormatType.class);
         }
     }
 }

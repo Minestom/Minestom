@@ -37,6 +37,8 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.NetworkBufferProvider;
+import net.minestom.server.network.foreign.NetworkBufferSegmentProvider;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -97,6 +99,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<FrogVariant> frogVariant;
     private final DynamicRegistry<PigVariant> pigVariant;
 
+    private final NetworkBufferProvider networkBufferProvider;
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
     private final PacketParser<ClientPacket> packetParser;
@@ -151,6 +154,8 @@ final class ServerProcessImpl implements ServerProcess {
         this.frogVariant = FrogVariant.createDefaultRegistry();
         this.pigVariant = PigVariant.createDefaultRegistry();
 
+        // Needs to happen early enough before any pools have allocated their first segment.
+        this.networkBufferProvider = new NetworkBufferSegmentProvider();
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
         this.packetParser = PacketVanilla.CLIENT_PACKET_PARSER;
@@ -364,6 +369,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public Server server() {
         return server;
+    }
+
+    @Override
+    public NetworkBufferProvider networkBufferProvider() {
+        return networkBufferProvider;
     }
 
     @Override

@@ -75,6 +75,7 @@ public final class PacketViewableUtils {
 
     private static final class ViewableStorage {
         private static final ObjectPool<NetworkBuffer> POOL = ObjectPool.pool(
+                ServerFlag.VIEWABLE_POOL_SIZE,
                 () -> NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
                 NetworkBuffer::clear);
         // Player id -> list of offsets to ignore (32:32 bits)
@@ -95,8 +96,7 @@ public final class PacketViewableUtils {
 
         private synchronized void process(Viewable viewable) {
             if (buffer.writeIndex() == 0) return;
-            NetworkBuffer copy = buffer.copy(0, buffer.writeIndex());
-            copy.readOnly();
+            final NetworkBuffer copy = buffer.trimmed().readOnly(); // Used after release for writing (copy)
             viewable.getViewers().forEach(player -> processPlayer(player, copy));
             this.buffer.clear();
             this.entityIdMap.clear();

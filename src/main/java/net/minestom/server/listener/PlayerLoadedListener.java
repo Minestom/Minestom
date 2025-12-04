@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.client.play.ClientPlayerLoadedPacket;
 
 public final class PlayerLoadedListener {
 
-    public static void listener(ClientPlayerLoadedPacket packet, Player player) {
+    public static void listener(ClientPlayerLoadedPacket ignored, Player player) {
         EventDispatcher.call(new PlayerLoadedEvent(player));
     }
 

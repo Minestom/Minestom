@@ -12,6 +12,6 @@ import org.jetbrains.annotations.ApiStatus;
 public record BufferedPacket(NetworkBuffer buffer,
                              long index, long length) implements SendablePacket {
     public BufferedPacket {
-        buffer.readOnly();
+        buffer = buffer.readOnly();
     }
 }
