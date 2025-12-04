@@ -10,9 +10,15 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
-import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * The provider used to interface with {@link net.minestom.server.ServerProcess#networkBufferProvider()}.
+ * <br>
+ * This uses {@link MemorySegment} as the backing with {@link NetworkBufferSegmentAllocator} for faster malloc implementations if available.
+ * <br>
+ * The implementation assumes all preconditions are valid as checked in {@link NetworkBuffer}
+ */
 public final class NetworkBufferSegmentProvider implements NetworkBufferProvider {
 
     @Override
@@ -27,34 +33,26 @@ public final class NetworkBufferSegmentProvider implements NetworkBufferProvider
 
     @Override
     public NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, Registries registries) {
-        Objects.requireNonNull(segment, "segment");
-        Objects.requireNonNull(registries, "registries");
-        return NetworkBufferSegmentImpl.wrap(segment, readIndex, writeIndex, registries);
+        return new NetworkBufferStaticSegmentImpl(null, segment, readIndex, writeIndex, registries);
     }
 
     @Override
     public NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex) {
-        Objects.requireNonNull(segment, "segment");
-        return NetworkBufferSegmentImpl.wrap(segment, readIndex, writeIndex, null);
+        return new NetworkBufferStaticSegmentImpl(null, segment, readIndex, writeIndex, null);
     }
 
     @Override
     public NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, Registries registries) {
-        Objects.requireNonNull(bytes, "bytes");
-        Objects.requireNonNull(registries, "registries");
         return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
     }
 
     @Override
     public NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
-        Objects.requireNonNull(bytes, "bytes");
         return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex);
     }
 
     @Override
     public byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries) {
-        Objects.requireNonNull(writing, "writing");
-        Objects.requireNonNull(registries, "registries");
         try (Arena arena = Arena.ofConfined()) {
             final NetworkBufferFactory factory = NetworkBufferFactory.resizeableFactory().arena(arena).registry(registries);
             final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
@@ -64,7 +62,6 @@ public final class NetworkBufferSegmentProvider implements NetworkBufferProvider
 
     @Override
     public byte[] makeArray(Consumer<NetworkBuffer> writing) {
-        Objects.requireNonNull(writing, "writing");
         try (Arena arena = Arena.ofConfined()) {
             final NetworkBufferFactory factory = NetworkBufferFactory.resizeableFactory().arena(arena);
             final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
@@ -74,8 +71,6 @@ public final class NetworkBufferSegmentProvider implements NetworkBufferProvider
 
     @Override
     public <T extends @UnknownNullability Object> byte[] makeArray(NetworkBuffer.Type<T> type, T value, Registries registries) {
-        Objects.requireNonNull(type, "type");
-        Objects.requireNonNull(registries, "registries");
         try (Arena arena = Arena.ofConfined()) {
             final NetworkBufferFactory factory = NetworkBufferFactory.resizeableFactory().arena(arena).registry(registries);
             final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
@@ -85,7 +80,6 @@ public final class NetworkBufferSegmentProvider implements NetworkBufferProvider
 
     @Override
     public <T extends @UnknownNullability Object> byte[] makeArray(NetworkBuffer.Type<T> type, T value) {
-        Objects.requireNonNull(type, "type");
         try (Arena arena = Arena.ofConfined()) {
             final NetworkBufferFactory factory = NetworkBufferFactory.resizeableFactory().arena(arena);
             final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
@@ -101,7 +95,7 @@ public final class NetworkBufferSegmentProvider implements NetworkBufferProvider
     }
 
     @Override
-    public <T> long sizeOf(NetworkBuffer.Type<T> type, T value) {
+    public <T extends @UnknownNullability Object> long sizeOf(NetworkBuffer.Type<T> type, T value) {
         return sizeOf(type, value, null);
     }
 }

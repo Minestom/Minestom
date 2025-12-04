@@ -5,7 +5,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferFactory;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -222,9 +221,10 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
 
     protected abstract boolean isDummy();
 
+    // These methods are very hot, force inline the Check if code size intrinsics don't allow it.
     @Override
     public final void ensureWritable(long length) {
-        Check.argCondition(length < 0, "Length must be non-negative found {0}", length);
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative found " + length);
         if (writableBytes() >= length) return;
         requireCapacity(writeIndex() + length);
     }
@@ -234,7 +234,7 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
 
     @Override
     public final void ensureReadable(long length) {
-        Check.argCondition(length < 0, "Length must be non-negative found {0}", length);
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative found " + length);
         if (readableBytes() < length)
             throw new IndexOutOfBoundsException(length + " is too large to be readable: " + readableBytes());
     }
@@ -484,14 +484,6 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
         byte[] bytes = new byte[length];
         getBytes(index, bytes);
         return new String(bytes, StandardCharsets.UTF_8);
-    }
-
-    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
-        Objects.requireNonNull(segment, "segment"); // Doesn't make sense with a null segment.
-        return new NetworkBufferStaticSegmentImpl(
-                null, segment,
-                readIndex, writeIndex, registries
-        );
     }
 
     final void assertReadOnly() { // These are already handled; but we can do these sooner before going into the types.

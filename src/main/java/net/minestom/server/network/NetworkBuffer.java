@@ -810,7 +810,6 @@ public interface NetworkBuffer {
      * Otherwise, the buffer will be resized using {@link #resize(long)} if {@link #isResizable()} is true.
      *
      * @param length the length to ensure
-     * @throws IllegalArgumentException  if {@code length < 0}
      * @throws IndexOutOfBoundsException if the resize does not permit the length to be written
      * @throws IndexOutOfBoundsException if the buffer is static and needs to be resized.
      */
@@ -1454,13 +1453,20 @@ public interface NetworkBuffer {
             buffer().write(STRING_IO_UTF8, value);
         }
 
+        /**
+         * You should avoid using this in your code and instead pass the buffer around.
+         *
+         * @return the backing buffer
+         */
         @ApiStatus.OverrideOnly
         NetworkBuffer buffer();
     }
 
+    /**
+     * Used in a {@link NetworkBuffer} implementation to allow {@link #BYTE} to write to the backing buffer.
+     */
     @ApiStatus.OverrideOnly
     interface Direct {
-        // Internal writing methods
         void putBytes(long index, byte[] value);
 
         void getBytes(long index, byte[] value);

@@ -17,6 +17,7 @@ import java.util.function.Consumer;
  * Represents a provider for factories and static methods found in {@link NetworkBuffer}.
  * <br>
  * This can be used to notify Minestom of your own NetworkBuffer implementation to be used.
+ * Note: Implementations should be able to assume invariants like nullability is already conformed.
  */
 @ApiStatus.Experimental
 public interface NetworkBufferProvider {
@@ -153,7 +154,6 @@ public interface NetworkBufferProvider {
      * @return the number of bytes that {@link T} occupies.
      */
     <T extends @UnknownNullability Object> long sizeOf(NetworkBuffer.Type<T> type, T value, Registries registries);
-
 
     /**
      * Get the byte size of the serialized {@link T}, this should be deterministic.

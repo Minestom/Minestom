@@ -42,9 +42,10 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template that always returns {@link R}
+     *
      * @param value the value to return
+     * @param <R>   the type of the value
      * @return the new template
-     * @param <R> the type of the value
      */
     public static <R> Type<R> template(R value) {
         Objects.requireNonNull(value, "value");
@@ -62,9 +63,10 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template that uses a supplier to get a value {@link R}
+     *
      * @param supplier the supplier to get the value
+     * @param <R>      the type of the value
      * @return the new template
-     * @param <R> the type of the value
      */
     public static <R> Type<R> template(Supplier<R> supplier) {
         Objects.requireNonNull(supplier, "supplier");
@@ -82,12 +84,13 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with one parameter
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
+     *
+     * @param p1   the first parameter {@link Type}
+     * @param g1   the first parameter getter
      * @param ctor the constructor for {@link R}
-     * @return the new template
      * @param <P1> the type of the first parameter
-     * @param <R> the type of the value
+     * @param <R>  the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, R> Type<R> template(Type<P1> p1, Function<R, P1> g1, F1<P1, R> ctor) {
         Objects.requireNonNull(p1, "p1");
@@ -108,15 +111,16 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with two parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
+     *
+     * @param p1   the first parameter {@link Type}
+     * @param g1   the first parameter getter
+     * @param p2   the second parameter {@link Type}
+     * @param g2   the second parameter getter
      * @param ctor the constructor for {@link R}
-     * @return the new template
      * @param <P1> the type of the first parameter
      * @param <P2> the type of the second parameter
-     * @param <R> the type of the value
+     * @param <R>  the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -143,18 +147,19 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with three parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
+     *
+     * @param p1   the first parameter {@link Type}
+     * @param g1   the first parameter getter
+     * @param p2   the second parameter {@link Type}
+     * @param g2   the second parameter getter
+     * @param p3   the third parameter {@link Type}
+     * @param g3   the third parameter getter
      * @param ctor the constructor for {@link R}
-     * @return the new template
      * @param <P1> the type of the first parameter
      * @param <P2> the type of the second parameter
      * @param <P3> the type of the third parameter
-     * @param <R> the type of the value
+     * @param <R>  the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -184,21 +189,22 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with four parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
+     *
+     * @param p1   the first parameter {@link Type}
+     * @param g1   the first parameter getter
+     * @param p2   the second parameter {@link Type}
+     * @param g2   the second parameter getter
+     * @param p3   the third parameter {@link Type}
+     * @param g3   the third parameter getter
+     * @param p4   the fourth parameter {@link Type}
+     * @param g4   the fourth parameter getter
      * @param ctor the constructor for {@link R}
-     * @return the new template
      * @param <P1> the type of the first parameter
      * @param <P2> the type of the second parameter
      * @param <P3> the type of the third parameter
      * @param <P4> the type of the fourth parameter
-     * @param <R> the type of the value
+     * @param <R>  the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -235,24 +241,25 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with five parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
+     *
+     * @param p1   the first parameter {@link Type}
+     * @param g1   the first parameter getter
+     * @param p2   the second parameter {@link Type}
+     * @param g2   the second parameter getter
+     * @param p3   the third parameter {@link Type}
+     * @param g3   the third parameter getter
+     * @param p4   the fourth parameter {@link Type}
+     * @param g4   the fourth parameter getter
+     * @param p5   the fifth parameter {@link Type}
+     * @param g5   the fifth parameter getter
      * @param ctor the constructor for {@link R}
-     * @return the new template
      * @param <P1> the type of the first parameter
      * @param <P2> the type of the second parameter
      * @param <P3> the type of the third parameter
      * @param <P4> the type of the fourth parameter
      * @param <P5> the type of the fifth parameter
-     * @param <R> the type of the value
+     * @param <R>  the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -293,27 +300,28 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with six parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
+     *
+     * @param p1   the first parameter {@link Type}
+     * @param g1   the first parameter getter
+     * @param p2   the second parameter {@link Type}
+     * @param g2   the second parameter getter
+     * @param p3   the third parameter {@link Type}
+     * @param g3   the third parameter getter
+     * @param p4   the fourth parameter {@link Type}
+     * @param g4   the fourth parameter getter
+     * @param p5   the fifth parameter {@link Type}
+     * @param g5   the fifth parameter getter
+     * @param p6   the sixth parameter {@link Type}
+     * @param g6   the sixth parameter getter
      * @param ctor the constructor for {@link R}
-     * @return the new template
      * @param <P1> the type of the first parameter
      * @param <P2> the type of the second parameter
      * @param <P3> the type of the third parameter
      * @param <P4> the type of the fourth parameter
      * @param <P5> the type of the fifth parameter
      * @param <P6> the type of the sixth parameter
-     * @param <R> the type of the value
+     * @param <R>  the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -358,22 +366,22 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with seven parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
+     *
+     * @param p1   the first parameter {@link Type}
+     * @param g1   the first parameter getter
+     * @param p2   the second parameter {@link Type}
+     * @param g2   the second parameter getter
+     * @param p3   the third parameter {@link Type}
+     * @param g3   the third parameter getter
+     * @param p4   the fourth parameter {@link Type}
+     * @param g4   the fourth parameter getter
+     * @param p5   the fifth parameter {@link Type}
+     * @param g5   the fifth parameter getter
+     * @param p6   the sixth parameter {@link Type}
+     * @param g6   the sixth parameter getter
+     * @param p7   the seventh parameter {@link Type}
+     * @param g7   the seventh parameter getter
      * @param ctor the constructor for {@link R}
-     * @return the new template
      * @param <P1> the type of the first parameter
      * @param <P2> the type of the second parameter
      * @param <P3> the type of the third parameter
@@ -381,7 +389,8 @@ public final class NetworkBufferTemplate {
      * @param <P5> the type of the fifth parameter
      * @param <P6> the type of the sixth parameter
      * @param <P7> the type of the seventh parameter
-     * @param <R> the type of the value
+     * @param <R>  the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -430,24 +439,24 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with eight parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
+     *
+     * @param p1   the first parameter {@link Type}
+     * @param g1   the first parameter getter
+     * @param p2   the second parameter {@link Type}
+     * @param g2   the second parameter getter
+     * @param p3   the third parameter {@link Type}
+     * @param g3   the third parameter getter
+     * @param p4   the fourth parameter {@link Type}
+     * @param g4   the fourth parameter getter
+     * @param p5   the fifth parameter {@link Type}
+     * @param g5   the fifth parameter getter
+     * @param p6   the sixth parameter {@link Type}
+     * @param g6   the sixth parameter getter
+     * @param p7   the seventh parameter {@link Type}
+     * @param g7   the seventh parameter getter
+     * @param p8   the eighth parameter {@link Type}
+     * @param g8   the eighth parameter getter
      * @param ctor the constructor for {@link R}
-     * @return the new template
      * @param <P1> the type of the first parameter
      * @param <P2> the type of the second parameter
      * @param <P3> the type of the third parameter
@@ -456,7 +465,8 @@ public final class NetworkBufferTemplate {
      * @param <P6> the type of the sixth parameter
      * @param <P7> the type of the seventh parameter
      * @param <P8> the type of the eighth parameter
-     * @param <R> the type of the value
+     * @param <R>  the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -465,23 +475,23 @@ public final class NetworkBufferTemplate {
             Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
             F8<P1, P2, P3, P4, P5, P6, P7, P8, R> ctor
     ) {
-            Objects.requireNonNull(p1, "p1");
-            Objects.requireNonNull(g1, "g1");
-            Objects.requireNonNull(p2, "p2");
-            Objects.requireNonNull(g2, "g2");
-            Objects.requireNonNull(p3, "p3");
-            Objects.requireNonNull(g3, "g3");
-            Objects.requireNonNull(p4, "p4");
-            Objects.requireNonNull(g4, "g4");
-            Objects.requireNonNull(p5, "p5");
-            Objects.requireNonNull(g5, "g5");
-            Objects.requireNonNull(p6, "p6");
-            Objects.requireNonNull(g6, "g6");
-            Objects.requireNonNull(p7, "p7");
-            Objects.requireNonNull(g7, "g7");
-            Objects.requireNonNull(p8, "p8");
-            Objects.requireNonNull(g8, "g8");
-            Objects.requireNonNull(ctor, "ctor");
+        Objects.requireNonNull(p1, "p1");
+        Objects.requireNonNull(g1, "g1");
+        Objects.requireNonNull(p2, "p2");
+        Objects.requireNonNull(g2, "g2");
+        Objects.requireNonNull(p3, "p3");
+        Objects.requireNonNull(g3, "g3");
+        Objects.requireNonNull(p4, "p4");
+        Objects.requireNonNull(g4, "g4");
+        Objects.requireNonNull(p5, "p5");
+        Objects.requireNonNull(g5, "g5");
+        Objects.requireNonNull(p6, "p6");
+        Objects.requireNonNull(g6, "g6");
+        Objects.requireNonNull(p7, "p7");
+        Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(ctor, "ctor");
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -509,26 +519,26 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with nine parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
+     *
+     * @param p1   the first parameter {@link Type}
+     * @param g1   the first parameter getter
+     * @param p2   the second parameter {@link Type}
+     * @param g2   the second parameter getter
+     * @param p3   the third parameter {@link Type}
+     * @param g3   the third parameter getter
+     * @param p4   the fourth parameter {@link Type}
+     * @param g4   the fourth parameter getter
+     * @param p5   the fifth parameter {@link Type}
+     * @param g5   the fifth parameter getter
+     * @param p6   the sixth parameter {@link Type}
+     * @param g6   the sixth parameter getter
+     * @param p7   the seventh parameter {@link Type}
+     * @param g7   the seventh parameter getter
+     * @param p8   the eighth parameter {@link Type}
+     * @param g8   the eighth parameter getter
+     * @param p9   the ninth parameter {@link Type}
+     * @param g9   the ninth parameter getter
      * @param ctor the constructor for {@link R}
-     * @return the new template
      * @param <P1> the type of the first parameter
      * @param <P2> the type of the second parameter
      * @param <P3> the type of the third parameter
@@ -538,7 +548,8 @@ public final class NetworkBufferTemplate {
      * @param <P7> the type of the seventh parameter
      * @param <P8> the type of the eighth parameter
      * @param <P9> the type of the ninth parameter
-     * @param <R> the type of the value
+     * @param <R>  the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -595,39 +606,40 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with ten parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -688,42 +700,43 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with eleven parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -788,45 +801,46 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with twelve parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param p12 the twelfth parameter {@link Type}
-     * @param g12 the twelfth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param p12   the twelfth parameter {@link Type}
+     * @param g12   the twelfth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
      * @param <P12> the type of the twelfth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -894,48 +908,49 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with thirteen parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param p12 the twelfth parameter {@link Type}
-     * @param g12 the twelfth parameter getter
-     * @param p13 the thirteenth parameter {@link Type}
-     * @param g13 the thirteenth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param p12   the twelfth parameter {@link Type}
+     * @param g12   the twelfth parameter getter
+     * @param p13   the thirteenth parameter {@link Type}
+     * @param g13   the thirteenth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
      * @param <P12> the type of the twelfth parameter
      * @param <P13> the type of the thirteenth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -1009,51 +1024,52 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with fourteen parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param p12 the twelfth parameter {@link Type}
-     * @param g12 the twelfth parameter getter
-     * @param p13 the thirteenth parameter {@link Type}
-     * @param g13 the thirteenth parameter getter
-     * @param p14 the fourteenth parameter {@link Type}
-     * @param g14 the fourteenth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param p12   the twelfth parameter {@link Type}
+     * @param g12   the twelfth parameter getter
+     * @param p13   the thirteenth parameter {@link Type}
+     * @param g13   the thirteenth parameter getter
+     * @param p14   the fourteenth parameter {@link Type}
+     * @param g14   the fourteenth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
      * @param <P12> the type of the twelfth parameter
      * @param <P13> the type of the thirteenth parameter
      * @param <P14> the type of the fourteenth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -1130,54 +1146,55 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with fifteen parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param p12 the twelfth parameter {@link Type}
-     * @param g12 the twelfth parameter getter
-     * @param p13 the thirteenth parameter {@link Type}
-     * @param g13 the thirteenth parameter getter
-     * @param p14 the fourteenth parameter {@link Type}
-     * @param g14 the fourteenth parameter getter
-     * @param p15 the fifteenth parameter {@link Type}
-     * @param g15 the fifteenth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param p12   the twelfth parameter {@link Type}
+     * @param g12   the twelfth parameter getter
+     * @param p13   the thirteenth parameter {@link Type}
+     * @param g13   the thirteenth parameter getter
+     * @param p14   the fourteenth parameter {@link Type}
+     * @param g14   the fourteenth parameter getter
+     * @param p15   the fifteenth parameter {@link Type}
+     * @param g15   the fifteenth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
      * @param <P12> the type of the twelfth parameter
      * @param <P13> the type of the thirteenth parameter
      * @param <P14> the type of the fourteenth parameter
      * @param <P15> the type of the fifteenth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -1259,49 +1276,49 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with sixteen parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param p12 the twelfth parameter {@link Type}
-     * @param g12 the twelfth parameter getter
-     * @param p13 the thirteenth parameter {@link Type}
-     * @param g13 the thirteenth parameter getter
-     * @param p14 the fourteenth parameter {@link Type}
-     * @param g14 the fourteenth parameter getter
-     * @param p15 the fifteenth parameter {@link Type}
-     * @param g15 the fifteenth parameter getter
-     * @param p16 the sixteenth parameter {@link Type}
-     * @param g16 the sixteenth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param p12   the twelfth parameter {@link Type}
+     * @param g12   the twelfth parameter getter
+     * @param p13   the thirteenth parameter {@link Type}
+     * @param g13   the thirteenth parameter getter
+     * @param p14   the fourteenth parameter {@link Type}
+     * @param g14   the fourteenth parameter getter
+     * @param p15   the fifteenth parameter {@link Type}
+     * @param g15   the fifteenth parameter getter
+     * @param p16   the sixteenth parameter {@link Type}
+     * @param g16   the sixteenth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
      * @param <P12> the type of the twelfth parameter
@@ -1309,7 +1326,8 @@ public final class NetworkBufferTemplate {
      * @param <P14> the type of the fourteenth parameter
      * @param <P15> the type of the fifteenth parameter
      * @param <P16> the type of the sixteenth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -1394,51 +1412,51 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with seventeen parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param p12 the twelfth parameter {@link Type}
-     * @param g12 the twelfth parameter getter
-     * @param p13 the thirteenth parameter {@link Type}
-     * @param g13 the thirteenth parameter getter
-     * @param p14 the fourteenth parameter {@link Type}
-     * @param g14 the fourteenth parameter getter
-     * @param p15 the fifteenth parameter {@link Type}
-     * @param g15 the fifteenth parameter getter
-     * @param p16 the sixteenth parameter {@link Type}
-     * @param g16 the sixteenth parameter getter
-     * @param p17 the seventeenth parameter {@link Type}
-     * @param g17 the seventeenth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param p12   the twelfth parameter {@link Type}
+     * @param g12   the twelfth parameter getter
+     * @param p13   the thirteenth parameter {@link Type}
+     * @param g13   the thirteenth parameter getter
+     * @param p14   the fourteenth parameter {@link Type}
+     * @param g14   the fourteenth parameter getter
+     * @param p15   the fifteenth parameter {@link Type}
+     * @param g15   the fifteenth parameter getter
+     * @param p16   the sixteenth parameter {@link Type}
+     * @param g16   the sixteenth parameter getter
+     * @param p17   the seventeenth parameter {@link Type}
+     * @param g17   the seventeenth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
      * @param <P12> the type of the twelfth parameter
@@ -1447,7 +1465,8 @@ public final class NetworkBufferTemplate {
      * @param <P15> the type of the fifteenth parameter
      * @param <P16> the type of the sixteenth parameter
      * @param <P17> the type of the seventeenth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -1537,53 +1556,53 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with eighteen parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param p12 the twelfth parameter {@link Type}
-     * @param g12 the twelfth parameter getter
-     * @param p13 the thirteenth parameter {@link Type}
-     * @param g13 the thirteenth parameter getter
-     * @param p14 the fourteenth parameter {@link Type}
-     * @param g14 the fourteenth parameter getter
-     * @param p15 the fifteenth parameter {@link Type}
-     * @param g15 the fifteenth parameter getter
-     * @param p16 the sixteenth parameter {@link Type}
-     * @param g16 the sixteenth parameter getter
-     * @param p17 the seventeenth parameter {@link Type}
-     * @param g17 the seventeenth parameter getter
-     * @param p18 the eighteenth parameter {@link Type}
-     * @param g18 the eighteenth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param p12   the twelfth parameter {@link Type}
+     * @param g12   the twelfth parameter getter
+     * @param p13   the thirteenth parameter {@link Type}
+     * @param g13   the thirteenth parameter getter
+     * @param p14   the fourteenth parameter {@link Type}
+     * @param g14   the fourteenth parameter getter
+     * @param p15   the fifteenth parameter {@link Type}
+     * @param g15   the fifteenth parameter getter
+     * @param p16   the sixteenth parameter {@link Type}
+     * @param g16   the sixteenth parameter getter
+     * @param p17   the seventeenth parameter {@link Type}
+     * @param g17   the seventeenth parameter getter
+     * @param p18   the eighteenth parameter {@link Type}
+     * @param g18   the eighteenth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
      * @param <P12> the type of the twelfth parameter
@@ -1593,7 +1612,8 @@ public final class NetworkBufferTemplate {
      * @param <P16> the type of the sixteenth parameter
      * @param <P17> the type of the seventeenth parameter
      * @param <P18> the type of the eighteenth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -1686,55 +1706,55 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with nineteen parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param p12 the twelfth parameter {@link Type}
-     * @param g12 the twelfth parameter getter
-     * @param p13 the thirteenth parameter {@link Type}
-     * @param g13 the thirteenth parameter getter
-     * @param p14 the fourteenth parameter {@link Type}
-     * @param g14 the fourteenth parameter getter
-     * @param p15 the fifteenth parameter {@link Type}
-     * @param g15 the fifteenth parameter getter
-     * @param p16 the sixteenth parameter {@link Type}
-     * @param g16 the sixteenth parameter getter
-     * @param p17 the seventeenth parameter {@link Type}
-     * @param g17 the seventeenth parameter getter
-     * @param p18 the eighteenth parameter {@link Type}
-     * @param g18 the eighteenth parameter getter
-     * @param p19 the nineteenth parameter {@link Type}
-     * @param g19 the nineteenth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param p12   the twelfth parameter {@link Type}
+     * @param g12   the twelfth parameter getter
+     * @param p13   the thirteenth parameter {@link Type}
+     * @param g13   the thirteenth parameter getter
+     * @param p14   the fourteenth parameter {@link Type}
+     * @param g14   the fourteenth parameter getter
+     * @param p15   the fifteenth parameter {@link Type}
+     * @param g15   the fifteenth parameter getter
+     * @param p16   the sixteenth parameter {@link Type}
+     * @param g16   the sixteenth parameter getter
+     * @param p17   the seventeenth parameter {@link Type}
+     * @param g17   the seventeenth parameter getter
+     * @param p18   the eighteenth parameter {@link Type}
+     * @param g18   the eighteenth parameter getter
+     * @param p19   the nineteenth parameter {@link Type}
+     * @param g19   the nineteenth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
      * @param <P12> the type of the twelfth parameter
@@ -1744,7 +1764,8 @@ public final class NetworkBufferTemplate {
      * @param <P16> the type of the sixteenth parameter
      * @param <P17> the type of the seventeenth parameter
      * @param <P18> the type of the eighteenth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
@@ -1841,57 +1862,57 @@ public final class NetworkBufferTemplate {
 
     /**
      * Creates a template with twenty parameters
-     * @param p1 the first parameter {@link Type}
-     * @param g1 the first parameter getter
-     * @param p2 the second parameter {@link Type}
-     * @param g2 the second parameter getter
-     * @param p3 the third parameter {@link Type}
-     * @param g3 the third parameter getter
-     * @param p4 the fourth parameter {@link Type}
-     * @param g4 the fourth parameter getter
-     * @param p5 the fifth parameter {@link Type}
-     * @param g5 the fifth parameter getter
-     * @param p6 the sixth parameter {@link Type}
-     * @param g6 the sixth parameter getter
-     * @param p7 the seventh parameter {@link Type}
-     * @param g7 the seventh parameter getter
-     * @param p8 the eighth parameter {@link Type}
-     * @param g8 the eighth parameter getter
-     * @param p9 the ninth parameter {@link Type}
-     * @param g9 the ninth parameter getter
-     * @param p10 the tenth parameter {@link Type}
-     * @param g10 the tenth parameter getter
-     * @param p11 the eleventh parameter {@link Type}
-     * @param g11 the eleventh parameter getter
-     * @param p12 the twelfth parameter {@link Type}
-     * @param g12 the twelfth parameter getter
-     * @param p13 the thirteenth parameter {@link Type}
-     * @param g13 the thirteenth parameter getter
-     * @param p14 the fourteenth parameter {@link Type}
-     * @param g14 the fourteenth parameter getter
-     * @param p15 the fifteenth parameter {@link Type}
-     * @param g15 the fifteenth parameter getter
-     * @param p16 the sixteenth parameter {@link Type}
-     * @param g16 the sixteenth parameter getter
-     * @param p17 the seventeenth parameter {@link Type}
-     * @param g17 the seventeenth parameter getter
-     * @param p18 the eighteenth parameter {@link Type}
-     * @param g18 the eighteenth parameter getter
-     * @param p19 the nineteenth parameter {@link Type}
-     * @param g19 the nineteenth parameter getter
-     * @param p20 the twentieth parameter {@link Type}
-     * @param g20 the twentieth parameter getter
-     * @param ctor the constructor for {@link R}
-     * @return the new template
-     * @param <P1> the type of the first parameter
-     * @param <P2> the type of the second parameter
-     * @param <P3> the type of the third parameter
-     * @param <P4> the type of the fourth parameter
-     * @param <P5> the type of the fifth parameter
-     * @param <P6> the type of the sixth parameter
-     * @param <P7> the type of the seventh parameter
-     * @param <P8> the type of the eighth parameter
-     * @param <P9> the type of the ninth parameter
+     *
+     * @param p1    the first parameter {@link Type}
+     * @param g1    the first parameter getter
+     * @param p2    the second parameter {@link Type}
+     * @param g2    the second parameter getter
+     * @param p3    the third parameter {@link Type}
+     * @param g3    the third parameter getter
+     * @param p4    the fourth parameter {@link Type}
+     * @param g4    the fourth parameter getter
+     * @param p5    the fifth parameter {@link Type}
+     * @param g5    the fifth parameter getter
+     * @param p6    the sixth parameter {@link Type}
+     * @param g6    the sixth parameter getter
+     * @param p7    the seventh parameter {@link Type}
+     * @param g7    the seventh parameter getter
+     * @param p8    the eighth parameter {@link Type}
+     * @param g8    the eighth parameter getter
+     * @param p9    the ninth parameter {@link Type}
+     * @param g9    the ninth parameter getter
+     * @param p10   the tenth parameter {@link Type}
+     * @param g10   the tenth parameter getter
+     * @param p11   the eleventh parameter {@link Type}
+     * @param g11   the eleventh parameter getter
+     * @param p12   the twelfth parameter {@link Type}
+     * @param g12   the twelfth parameter getter
+     * @param p13   the thirteenth parameter {@link Type}
+     * @param g13   the thirteenth parameter getter
+     * @param p14   the fourteenth parameter {@link Type}
+     * @param g14   the fourteenth parameter getter
+     * @param p15   the fifteenth parameter {@link Type}
+     * @param g15   the fifteenth parameter getter
+     * @param p16   the sixteenth parameter {@link Type}
+     * @param g16   the sixteenth parameter getter
+     * @param p17   the seventeenth parameter {@link Type}
+     * @param g17   the seventeenth parameter getter
+     * @param p18   the eighteenth parameter {@link Type}
+     * @param g18   the eighteenth parameter getter
+     * @param p19   the nineteenth parameter {@link Type}
+     * @param g19   the nineteenth parameter getter
+     * @param p20   the twentieth parameter {@link Type}
+     * @param g20   the twentieth parameter getter
+     * @param ctor  the constructor for {@link R}
+     * @param <P1>  the type of the first parameter
+     * @param <P2>  the type of the second parameter
+     * @param <P3>  the type of the third parameter
+     * @param <P4>  the type of the fourth parameter
+     * @param <P5>  the type of the fifth parameter
+     * @param <P6>  the type of the sixth parameter
+     * @param <P7>  the type of the seventh parameter
+     * @param <P8>  the type of the eighth parameter
+     * @param <P9>  the type of the ninth parameter
      * @param <P10> the type of the tenth parameter
      * @param <P11> the type of the eleventh parameter
      * @param <P12> the type of the twelfth parameter
@@ -1903,7 +1924,8 @@ public final class NetworkBufferTemplate {
      * @param <P18> the type of the eighteenth parameter
      * @param <P19> the type of the nineteenth parameter
      * @param <P20> the type of the twentieth parameter
-     * @param <R> the type of the value
+     * @param <R>   the type of the value
+     * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, P20 extends @UnknownNullability Object, R> Type<R> template(
             Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
