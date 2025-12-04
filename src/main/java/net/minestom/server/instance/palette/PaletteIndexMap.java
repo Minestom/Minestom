@@ -87,15 +87,6 @@ final class PaletteIndexMap implements Cloneable {
         return size;
     }
 
-    int maxValue() {
-        int result = 0;
-        for (int index = 0; index < size; index++) {
-            final int value = indexToValue[index];
-            if (value > result) result = value;
-        }
-        return result;
-    }
-
     int find(final int value) {
         if (value == 0) return containsNullKey ? n : ~n;
         int curr;

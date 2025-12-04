@@ -304,13 +304,17 @@ public sealed interface Palette permits PaletteImpl {
                 buffer.write(BYTE, bitsPerEntry);
                 if (bitsPerEntry == 0) {
                     buffer.write(VAR_INT, value.count);
+                } else if (value.isDirect()) {
+                    if (value.bitsPerEntry != directBits) {
+                        value.writeValuesResized(buffer, directBits);
+                    } else {
+                        for (final long l : value.values) buffer.write(LONG, l);
+                    }
                 } else {
-                    if (!value.isDirect()) {
-                        final int paletteSize = value.paletteIndexMap.size();
-                        buffer.write(VAR_INT, paletteSize);
-                        for (int index = 0; index < paletteSize; index++) {
-                            buffer.write(VAR_INT, value.paletteIndexMap.indexToValue(index));
-                        }
+                    final int paletteSize = value.paletteIndexMap.size();
+                    buffer.write(VAR_INT, paletteSize);
+                    for (int index = 0; index < paletteSize; index++) {
+                        buffer.write(VAR_INT, value.paletteIndexMap.indexToValue(index));
                     }
                     for (final long l : value.values) buffer.write(LONG, l);
                 }

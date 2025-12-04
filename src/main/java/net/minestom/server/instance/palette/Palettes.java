@@ -1,6 +1,7 @@
 package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
@@ -44,6 +45,10 @@ public final class Palettes {
         final int elementCount = dimension * dimension * dimension;
         final int valuesPerLong = 64 / bitsPerEntry;
         return (elementCount + valuesPerLong - 1) / valuesPerLong;
+    }
+
+    public static int directBitsPerEntry(int maxValue, int maxBitsPerEntry, int directBits) {
+        return Math.clamp(64 / (64 / MathUtils.bitsToRepresent(maxValue)), maxBitsPerEntry + 1, directBits);
     }
 
     public static int read(int dimension, int bitsPerEntry, long[] values,
@@ -131,6 +136,26 @@ public final class Palettes {
             final int end = Math.min(valuesPerLong, size - idx);
             for (int j = 0; j < end; j++, idx++) {
                 if (((int) (block & mask)) == paletteIndex) result++;
+                block >>>= bitsPerEntry;
+            }
+        }
+        return result;
+    }
+
+    public static int singleValue(int dimension, int bitsPerEntry, long[] values) {
+        int result = -1;
+        final int size = dimension * dimension * dimension;
+        final int valuesPerLong = 64 / bitsPerEntry;
+        final int mask = (1 << bitsPerEntry) - 1;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            final int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                if (result < 0) {
+                    result = (int) (block & mask);
+                } else if (result != (block & mask)) {
+                    return -1;
+                }
                 block >>>= bitsPerEntry;
             }
         }
