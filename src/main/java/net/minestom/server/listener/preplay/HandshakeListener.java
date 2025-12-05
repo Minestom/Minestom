@@ -36,7 +36,7 @@ public final class HandshakeListener {
      */
     private static final Component INVALID_BUNGEE_FORWARDING = Component.text("Invalid connection, please connect through the BungeeCord proxy. If you believe this is an error, contact a server administrator.", NamedTextColor.RED);
 
-    public static void listener(@NotNull ClientHandshakePacket packet, @NotNull PlayerConnection connection) {
+    public static void listener(ClientHandshakePacket packet, PlayerConnection connection) {
         String address = packet.serverAddress();
         switch (packet.intent()) {
             case STATUS -> {
@@ -65,9 +65,9 @@ public final class HandshakeListener {
         }
     }
 
-    private static String handleBungeeForwarding(@NotNull String address,
-                                                 @NotNull PlayerSocketConnection socketConnection,
-                                                 @NotNull Auth.Bungee bungee) {
+    private static String handleBungeeForwarding(String address,
+                                                 PlayerSocketConnection socketConnection,
+                                                 Auth.Bungee bungee) {
         final String[] split = address.split("\00");
 
         if (split.length == 3 || split.length == 4) {
