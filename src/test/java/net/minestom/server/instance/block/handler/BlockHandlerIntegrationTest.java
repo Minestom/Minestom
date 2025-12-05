@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static net.minestom.testing.TestUtils.assertPoint;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -70,7 +71,7 @@ class BlockHandlerIntegrationTest {
             @Override
             public boolean onInteract(Interaction interaction) {
                 interacted.set(true);
-                assertEquals(blockPosition, interaction.getBlockPosition());
+                assertPoint(blockPosition, interaction.getBlockPosition());
                 return false;
             }
 
@@ -81,7 +82,7 @@ class BlockHandlerIntegrationTest {
         };
 
         instance.setBlock(blockPosition, Block.STONE.withHandler(handler));
-        var player = env.createPlayer(instance, blockPosition.asPosition());
+        var player = env.createPlayer(instance, blockPosition.asPos());
         player.addPacketToQueue(new ClientPlayerBlockPlacementPacket(PlayerHand.MAIN, blockPosition, BlockFace.TOP, 0, 0, 0, false, false, 1));
         player.interpretPacketQueue(); // Use packets
 
@@ -98,7 +99,7 @@ class BlockHandlerIntegrationTest {
             @Override
             public void tick(Tick tick) {
                 ticked.set(true);
-                assertEquals(tick.getBlockPosition(), blockPosition.asVec());
+                assertPoint(blockPosition.asVec(), tick.getBlockPosition());
             }
 
             @Override
@@ -131,7 +132,7 @@ class BlockHandlerIntegrationTest {
             @Override
             public void tick(Tick tick) {
                 ticked.set(true);
-                assertEquals(tick.getBlockPosition(), blockPosition.asVec());
+                assertPoint(blockPosition.asVec(), tick.getBlockPosition());
             }
 
             @Override
