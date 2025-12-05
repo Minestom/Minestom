@@ -57,6 +57,7 @@ public final class HandshakeListener {
         if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
             // Incorrect client version
             connection.kick(INVALID_VERSION_TEXT);
+            return address;
         }
 
         connection.markTransferred(packet.intent() == ClientHandshakePacket.Intent.TRANSFER);

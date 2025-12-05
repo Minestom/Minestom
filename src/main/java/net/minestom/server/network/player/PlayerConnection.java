@@ -296,8 +296,8 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * Returns whether the player was redirected from another server.
-     * @return Whether the player was redirected from another server.
+     * Returns whether the player has indicated that they were redirected from another server.
+     * @return Whether the player has indicated that they were redirected from another server.
      */
     public boolean wasTransferred() {
         if (this.wasTransferred == null) {
