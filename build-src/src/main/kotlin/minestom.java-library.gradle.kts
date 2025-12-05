@@ -74,6 +74,9 @@ tasks.withType<Test> {
     jvmArgs("-Dminestom.viewable-packet=false")
     jvmArgs("-Dminestom.inside-test=true")
     jvmArgs("-Dminestom.acquirable-strict=true")
+    // Either or, because reflection is required, would assume unsafe variant is faster than atomic.
+    // This prevents native image from working without this flag enabled.
+    jvmArgs("-Dminestom.unsafe-collections=true")
     minHeapSize = "512m"
     maxHeapSize = "1024m"
 }

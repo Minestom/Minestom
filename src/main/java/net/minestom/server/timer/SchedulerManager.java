@@ -1,12 +1,15 @@
 package net.minestom.server.timer;
 
+import net.minestom.server.ServerFlag;
+import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
+import org.jctools.queues.atomic.MpscUnboundedAtomicArrayQueue;
 
 import java.util.function.Supplier;
 
 public final class SchedulerManager implements Scheduler {
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final MpmcUnboundedXaddArrayQueue<Runnable> shutdownTasks = new MpmcUnboundedXaddArrayQueue<>(1024);
+    private final MessagePassingQueue<Runnable> shutdownTasks = ServerFlag.UNSAFE_COLLECTIONS ? new MpmcUnboundedXaddArrayQueue<>(1024) : new MpscUnboundedAtomicArrayQueue<>(1024); // Single consumer in atomic mode.
 
     @Override
     public void process() {

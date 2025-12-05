@@ -71,6 +71,7 @@ public final class ServerFlag {
     public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = booleanProperty("minestom.event.multiple-parents");
     public static final boolean FASTER_SOCKET_WRITES = booleanProperty("minestom.new-socket-write-lock"); // TODO: promote to default
     public static final boolean ACQUIRABLE_STRICT = booleanProperty("minestom.acquirable-strict", false);
+    public static final boolean UNSAFE_COLLECTIONS = booleanProperty("minestom.unsafe-collections", false); // Likely to be removed in the future
 
     public static boolean INSIDE_TEST = booleanProperty("minestom.inside-test", false);
 
