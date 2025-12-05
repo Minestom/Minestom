@@ -41,7 +41,20 @@ public final class HandshakeListener {
         switch (packet.intent()) {
             case STATUS -> {
             }
-            case LOGIN, TRANSFER -> address = handlePlayerLogin(packet, connection, address);
+            case LOGIN, TRANSFER -> {
+                if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
+                    // Incorrect client version
+                    connection.kick(INVALID_VERSION_TEXT);
+                } else {
+                    connection.markTransferred(packet.intent() == ClientHandshakePacket.Intent.TRANSFER);
+                    final Auth auth = MinecraftServer.process().auth();
+
+                    // Bungee support (IP forwarding)
+                    if (auth instanceof Auth.Bungee bungee && connection instanceof PlayerSocketConnection socketConnection) {
+                        address = handleBungeeForwarding(address, socketConnection, bungee);
+                    }
+                }
+            }
             default -> {
                 // Unexpected error
             }
@@ -52,83 +65,71 @@ public final class HandshakeListener {
         }
     }
 
-    private static String handlePlayerLogin(@NotNull ClientHandshakePacket packet, @NotNull PlayerConnection connection,
-                                            @NotNull String address) {
-        if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
-            // Incorrect client version
-            connection.kick(INVALID_VERSION_TEXT);
-            return address;
-        }
+    private static String handleBungeeForwarding(@NotNull String address,
+                                                 @NotNull PlayerSocketConnection socketConnection,
+                                                 @NotNull Auth.Bungee bungee) {
+        final String[] split = address.split("\00");
 
-        connection.markTransferred(packet.intent() == ClientHandshakePacket.Intent.TRANSFER);
-
-        // Bungee support (IP forwarding)
-        final Auth auth = MinecraftServer.process().auth();
-        if (auth instanceof Auth.Bungee bungee && connection instanceof PlayerSocketConnection socketConnection) {
-            final String[] split = address.split("\00");
-
-            if (split.length == 3 || split.length == 4) {
-                boolean hasProperties = split.length == 4;
-                if (bungee.guard() && !hasProperties) {
-                    bungeeDisconnect(socketConnection);
-                    return address;
-                }
-
-                address = split[0];
-
-                final SocketAddress socketAddress = new InetSocketAddress(split[1],
-                        ((InetSocketAddress) connection.getRemoteAddress()).getPort());
-                socketConnection.setRemoteAddress(socketAddress);
-
-                UUID playerUuid = UUID.fromString(
-                        split[2]
-                                .replaceFirst(
-                                        "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
-                                )
-                );
-
-                List<GameProfile.Property> properties = new ArrayList<>();
-                if (hasProperties) {
-                    boolean foundBungeeGuardToken = false;
-                    final String rawPropertyJson = split[3];
-                    final JsonArray propertyJson = JsonParser.parseString(rawPropertyJson).getAsJsonArray();
-                    for (JsonElement element : propertyJson) {
-                        final JsonObject jsonObject = element.getAsJsonObject();
-                        final JsonElement name = jsonObject.get("name");
-                        final JsonElement value = jsonObject.get("value");
-                        final JsonElement signature = jsonObject.get("signature");
-                        if (name == null || value == null) continue;
-
-                        final String nameString = name.getAsString();
-                        final String valueString = value.getAsString();
-                        final String signatureString = signature == null ? null : signature.getAsString();
-
-                        if (bungee.guard() && nameString.equals("bungeeguard-token")) {
-                            if (foundBungeeGuardToken || !bungee.validToken(valueString)) {
-                                bungeeDisconnect(socketConnection);
-                                return address;
-                            }
-
-                            foundBungeeGuardToken = true;
-                        }
-
-                        properties.add(new GameProfile.Property(nameString, valueString, signatureString));
-                    }
-
-                    if (bungee.guard() && !foundBungeeGuardToken) {
-                        bungeeDisconnect(socketConnection);
-                        return address;
-                    }
-                }
-
-                final GameProfile gameProfile = new GameProfile(playerUuid, "test", properties);
-                socketConnection.UNSAFE_setProfile(gameProfile);
-            } else {
+        if (split.length == 3 || split.length == 4) {
+            final boolean hasProperties = split.length == 4;
+            if (bungee.guard() && !hasProperties) {
                 bungeeDisconnect(socketConnection);
                 return address;
             }
+
+            final String forwardedAddress = split[0];
+
+            final SocketAddress socketAddress = new InetSocketAddress(split[1],
+                    ((InetSocketAddress) socketConnection.getRemoteAddress()).getPort());
+            socketConnection.setRemoteAddress(socketAddress);
+
+            final UUID playerUuid = UUID.fromString(
+                    split[2]
+                            .replaceFirst(
+                                    "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
+                            )
+            );
+
+            List<GameProfile.Property> properties = new ArrayList<>();
+            if (hasProperties) {
+                boolean foundBungeeGuardToken = false;
+                final String rawPropertyJson = split[3];
+                final JsonArray propertyJson = JsonParser.parseString(rawPropertyJson).getAsJsonArray();
+                for (JsonElement element : propertyJson) {
+                    final JsonObject jsonObject = element.getAsJsonObject();
+                    final JsonElement name = jsonObject.get("name");
+                    final JsonElement value = jsonObject.get("value");
+                    final JsonElement signature = jsonObject.get("signature");
+                    if (name == null || value == null) continue;
+
+                    final String nameString = name.getAsString();
+                    final String valueString = value.getAsString();
+                    final String signatureString = signature == null ? null : signature.getAsString();
+
+                    if (bungee.guard() && nameString.equals("bungeeguard-token")) {
+                        if (foundBungeeGuardToken || !bungee.validToken(valueString)) {
+                            bungeeDisconnect(socketConnection);
+                            return address;
+                        }
+
+                        foundBungeeGuardToken = true;
+                    }
+
+                    properties.add(new GameProfile.Property(nameString, valueString, signatureString));
+                }
+
+                if (bungee.guard() && !foundBungeeGuardToken) {
+                    bungeeDisconnect(socketConnection);
+                    return address;
+                }
+            }
+
+            final GameProfile gameProfile = new GameProfile(playerUuid, "test", properties);
+            socketConnection.UNSAFE_setProfile(gameProfile);
+            return forwardedAddress;
         }
 
+        bungeeDisconnect(socketConnection);
         return address;
     }
 
