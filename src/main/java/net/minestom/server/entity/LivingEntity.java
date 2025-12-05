@@ -61,6 +61,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected boolean isDead;
 
     protected Damage lastDamage;
+    protected long lastDamageTick;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
@@ -333,6 +334,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         EventDispatcher.callCancellable(entityDamageEvent, () -> {
             // Set the last damage type since the event is not cancelled
             this.lastDamage = entityDamageEvent.getDamage();
+            this.lastDamageTick = getAliveTicks();
 
             float remainingDamage = entityDamageEvent.getDamage().getAmount();
 
@@ -424,6 +426,15 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public @Nullable Damage getLastDamageSource() {
         return lastDamage;
+    }
+
+    /**
+     * Gets the tick from {@link Entity#getAliveTicks()} at which the entity was last damaged.
+     *
+     * @return the last damage tick
+     */
+    public long getLastDamageTick() {
+        return lastDamageTick;
     }
 
     /**
