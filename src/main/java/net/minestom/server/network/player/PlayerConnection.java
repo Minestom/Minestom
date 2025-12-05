@@ -49,7 +49,7 @@ public abstract class PlayerConnection {
 
     private PlayerPublicKey playerPublicKey;
     volatile boolean online;
-    private volatile Boolean wasTransferred;
+    private volatile @Nullable Boolean wasTransferred;
 
     private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
