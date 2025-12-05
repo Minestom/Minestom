@@ -38,25 +38,23 @@ public final class HandshakeListener {
     public static void listener(ClientHandshakePacket packet, PlayerConnection connection) {
         String address = packet.serverAddress();
         switch (packet.intent()) {
-            case STATUS -> {
-            }
-            case LOGIN, TRANSFER -> {
+            case TRANSFER:
+                connection.markTransferred(true);
+            case LOGIN:
                 if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
                     // Incorrect client version
                     connection.kick(INVALID_VERSION_TEXT);
-                } else {
-                    connection.markTransferred(packet.intent() == ClientHandshakePacket.Intent.TRANSFER);
-                    final Auth auth = MinecraftServer.process().auth();
-
-                    // Bungee support (IP forwarding)
-                    if (auth instanceof Auth.Bungee bungee && connection instanceof PlayerSocketConnection socketConnection) {
-                        address = handleBungeeForwarding(address, socketConnection, bungee);
-                    }
+                    break;
                 }
-            }
-            default -> {
-                // Unexpected error
-            }
+
+                final Auth auth = MinecraftServer.process().auth();
+
+                // Bungee support (IP forwarding)
+                if (auth instanceof Auth.Bungee bungee && connection instanceof PlayerSocketConnection socketConnection) {
+                    address = handleBungeeForwarding(address, socketConnection, bungee);
+                }
+            default:
+                break;
         }
 
         if (connection instanceof PlayerSocketConnection socketConnection) {

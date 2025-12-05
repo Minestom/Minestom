@@ -49,7 +49,7 @@ public abstract class PlayerConnection {
 
     private PlayerPublicKey playerPublicKey;
     volatile boolean online;
-    private volatile @Nullable Boolean wasTransferred;
+    private volatile boolean wasTransferred;
 
     private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
@@ -300,17 +300,13 @@ public abstract class PlayerConnection {
      * @return Whether the player has indicated that they were redirected from another server.
      */
     public boolean wasTransferred() {
-        if (this.wasTransferred == null) {
-            throw new IllegalStateException("The player has not completed the handshake process yet!");
-        }
-
         return this.wasTransferred;
     }
 
     @ApiStatus.Internal
     public void markTransferred(boolean wasTransferred) {
-        if (this.wasTransferred != null) {
-            throw new IllegalStateException("Transfer state already set");
+        if (!wasTransferred && this.wasTransferred) {
+            throw new IllegalStateException("Cannot mark transferred connection as non-transferred");
         }
 
         this.wasTransferred = wasTransferred;
