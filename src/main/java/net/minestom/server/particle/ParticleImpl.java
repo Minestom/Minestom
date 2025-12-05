@@ -6,16 +6,18 @@ import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 final class ParticleImpl {
-    static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(Key.key("particle"),
+    static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.PARTICLE,
             (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
 
-    static @UnknownNullability Particle get(String key) {
-        return REGISTRY.get(Key.key(key));
+    static @UnknownNullability Particle get(RegistryKey<Particle> key) {
+        return REGISTRY.get(key);
     }
 
     private static Particle defaultParticle(Key key, int id) {
