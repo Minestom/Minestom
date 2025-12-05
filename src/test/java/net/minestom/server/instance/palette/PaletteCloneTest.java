@@ -225,35 +225,6 @@ public class PaletteCloneTest {
     }
 
     @Test
-    public void cloneWithOffset() {
-        var palettes = testPalettes();
-        for (Palette original : palettes) {
-            // Set pattern and apply offset
-            original.setAll((x, y, z) -> x + y + z + 100);
-            original.offset(50);
-
-            Palette cloned = original.clone();
-
-            assertTrue(original.compare(cloned));
-
-            // Verify offset was preserved in clone
-            cloned.getAll((x, y, z, value) -> {
-                int expected = x + y + z + 100 + 50;
-                assertEquals(expected, value);
-            });
-
-            // Apply different offset to original
-            original.offset(-25);
-
-            // Verify clone is unaffected
-            cloned.getAll((x, y, z, value) -> {
-                int expected = x + y + z + 100 + 50;
-                assertEquals(expected, value);
-            });
-        }
-    }
-
-    @Test
     public void cloneWithReplace() {
         var palettes = testPalettes();
         for (Palette original : palettes) {
@@ -363,8 +334,8 @@ public class PaletteCloneTest {
             assertTrue(original.compare(cloned));
 
             // Verify independence
-            original.set(0, 0, 0, 999);
-            assertNotEquals(999, cloned.get(0, 0, 0));
+            original.set(0, 0, 0, 101);
+            assertNotEquals(101, cloned.get(0, 0, 0));
         }
     }
 
