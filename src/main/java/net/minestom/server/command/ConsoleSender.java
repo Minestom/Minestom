@@ -1,6 +1,5 @@
 package net.minestom.server.command;
 
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.text.Component;
@@ -26,7 +25,7 @@ public class ConsoleSender implements CommandSender {
     }
 
     @Override
-    public void sendMessage(Identity source, Component message, MessageType type) {
+    public void sendMessage(Component message) {
         LOGGER.info(message);
     }
 
