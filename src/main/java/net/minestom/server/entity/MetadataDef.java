@@ -114,9 +114,8 @@ public sealed class MetadataDef {
 
     public static final class AreaEffectCloud extends MetadataDef {
         public static final Entry<Float> RADIUS = index(0, Metadata::Float, 0.5f);
-        public static final Entry<Integer> COLOR = index(1, Metadata::VarInt, 0);
-        public static final Entry<Boolean> IGNORE_RADIUS_AND_SINGLE_POINT = index(2, Metadata::Boolean, false);
-        public static final Entry<Particle> PARTICLE = index(3, Metadata::Particle, Particle.EFFECT);
+        public static final Entry<Boolean> WAITING = index(1, Metadata::Boolean, false);
+        public static final Entry<Particle> PARTICLE = index(2, Metadata::Particle, Particle.EFFECT);
     }
 
     public static final class FishingHook extends MetadataDef {
