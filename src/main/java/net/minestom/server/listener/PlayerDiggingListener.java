@@ -20,7 +20,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Tool;
-import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerActionPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.utils.block.BlockBreakCalculation;
@@ -28,29 +28,29 @@ import net.minestom.server.utils.block.BlockUtils;
 
 public final class PlayerDiggingListener {
 
-    public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
-        final ClientPlayerDiggingPacket.Status status = packet.status();
+    public static void playerActionListener(ClientPlayerActionPacket packet, Player player) {
+        final ClientPlayerActionPacket.Status status = packet.status();
         final Point blockPosition = packet.blockPosition();
         final Instance instance = player.getInstance();
         if (instance == null) return;
 
         DiggingResult diggingResult = null;
-        if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
+        if (status == ClientPlayerActionPacket.Status.STARTED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
-        } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
+        } else if (status == ClientPlayerActionPacket.Status.CANCELLED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = cancelDigging(player, instance, blockPosition);
-        } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
+        } else if (status == ClientPlayerActionPacket.Status.FINISHED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
-        } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
+        } else if (status == ClientPlayerActionPacket.Status.DROP_ITEM_STACK) {
             dropStack(player);
-        } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
+        } else if (status == ClientPlayerActionPacket.Status.DROP_ITEM) {
             dropSingle(player);
-        } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {
+        } else if (status == ClientPlayerActionPacket.Status.UPDATE_ITEM_STATE) {
             updateItemState(player);
-        } else if (status == ClientPlayerDiggingPacket.Status.SWAP_ITEM_HAND) {
+        } else if (status == ClientPlayerActionPacket.Status.SWAP_ITEM_HAND) {
             swapItemHand(player);
         }
         // Acknowledge start/cancel/finish digging status

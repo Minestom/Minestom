@@ -281,6 +281,8 @@ public final class ConnectionManager {
             player.sendPacket(registries.cowVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.frogVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.pigVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.zombieNautilusVariant().registryDataPacket(registries, excludeVanilla));
+            // TODO: TEST_ENVIRONMENT, TEST_INSTANCE
 
             sendRegistryTags(player);
         }

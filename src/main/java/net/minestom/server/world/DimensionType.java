@@ -6,7 +6,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryData;
-import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.IntProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -15,33 +15,28 @@ import org.jetbrains.annotations.Nullable;
  * https://minecraft.wiki/w/Custom_dimension
  */
 public sealed interface DimensionType extends DimensionTypes permits DimensionTypeImpl {
-
     Key OVERWORLD_EFFECTS = Key.key("overworld");
 
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
 
     Codec<DimensionType> REGISTRY_CODEC = StructCodec.struct(
-            "ultrawarm", Codec.BOOLEAN, DimensionType::ultrawarm,
-            "natural", Codec.BOOLEAN, DimensionType::natural,
-            "coordinate_scale", Codec.DOUBLE, DimensionType::coordinateScale,
+            "has_fixed_time", Codec.LONG.optional(), DimensionType::fixedTime,
             "has_skylight", Codec.BOOLEAN, DimensionType::hasSkylight,
             "has_ceiling", Codec.BOOLEAN, DimensionType::hasCeiling,
-            "ambient_light", Codec.FLOAT, DimensionType::ambientLight,
-            "fixed_time", Codec.LONG.optional(), DimensionType::fixedTime,
-            "piglin_safe", Codec.BOOLEAN, DimensionType::piglinSafe,
-            "bed_works", Codec.BOOLEAN, DimensionType::bedWorks,
-            "respawn_anchor_works", Codec.BOOLEAN, DimensionType::respawnAnchorWorks,
-            "has_raids", Codec.BOOLEAN, DimensionType::hasRaids,
-            "logical_height", Codec.INT, DimensionType::logicalHeight,
-            "cloud_height", Codec.INT.optional(), DimensionType::cloudHeight,
+            "coordinate_scale", Codec.DOUBLE, DimensionType::coordinateScale,
             "min_y", Codec.INT, DimensionType::minY,
             "height", Codec.INT, DimensionType::height,
+            "logical_height", Codec.INT, DimensionType::logicalHeight,
             "infiniburn", Codec.STRING, DimensionType::infiniburn,
-            "effects", Codec.KEY.optional(OVERWORLD_EFFECTS), DimensionType::effects,
-            "monster_spawn_block_light_limit", Codec.INT, DimensionType::monsterSpawnBlockLightLimit,
-            "monster_spawn_light_level", Codec.INT.orElse(Codec.UNIT.transform(ignored -> 0, ignored -> Unit.INSTANCE)), DimensionType::monsterSpawnLightLevel,
-            DimensionType::create);
+            "ambient_light", Codec.FLOAT, DimensionType::ambientLight,
+            "monster_spawn_light_level", IntProvider.CODEC, DimensionType::monsterSpawnBlockLightLimit,
+            "monster_spawn_block_light_limit", Codec.INT, DimensionType::monsterSpawnLightLevel,
+            "skybox", Skybox.CODEC.optional(Skybox.OVERWORLD), DimensionType::skybox,
+            "cardinal_light", CardinalLight.CODEC.optional(CardinalLight.DEFAULT), DimensionType::cardinalLight,
+            // TODO: attributes
+            // TODO: timeline
+            DimensionTypeImpl::new);
 
     static DimensionType create(
             boolean ultrawarm, boolean natural, double coordinateScale, boolean hasSkylight, boolean hasCeiling,
@@ -124,6 +119,21 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
 
     default int totalHeight() {
         return minY() + height();
+    }
+
+    enum Skybox {
+        NONE,
+        OVERWORLD,
+        END;
+
+        public static final Codec<Skybox> CODEC = Codec.Enum(Skybox.class);
+    }
+
+    enum CardinalLight {
+        DEFAULT,
+        NETHER;
+
+        public static final Codec<CardinalLight> CODEC = Codec.Enum(CardinalLight.class);
     }
 
     final class Builder {

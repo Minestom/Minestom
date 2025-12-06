@@ -81,7 +81,7 @@ public class PlayerIntegrationTest {
         ClientSettingsPacket packet = new ClientSettingsPacket(new ClientSettings(
                 Locale.US, (byte) 16,
                 ChatMessageType.FULL, true,
-                (byte) 127, ClientSettings.MainHand.LEFT,
+                (byte) 127, MainHand.LEFT,
                 true, true,
                 ClientSettings.ParticleSetting.ALL
         ));
@@ -97,7 +97,7 @@ public class PlayerIntegrationTest {
         var collector = connection.trackIncoming();
         env.tick();
         env.tick();
-        assertEquals(ClientSettings.MainHand.LEFT, player.getSettings().mainHand());
+        assertEquals(MainHand.LEFT, player.getSettings().mainHand());
 
         boolean found = false;
         for (ServerPacket serverPacket : collector.collect()) {

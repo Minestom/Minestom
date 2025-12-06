@@ -3,10 +3,7 @@ package net.minestom.server.registry;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.ChickenVariant;
-import net.minestom.server.entity.metadata.animal.CowVariant;
-import net.minestom.server.entity.metadata.animal.FrogVariant;
-import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -43,6 +40,7 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<CowVariant> cowVariant = null;
     public DynamicRegistry<FrogVariant> frogVariant = null;
     public DynamicRegistry<PigVariant> pigVariant = null;
+    public DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant = null;
     public DynamicRegistry<Dialog> dialog = null;
     public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
     public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
@@ -125,6 +123,11 @@ public class TestRegistries implements Registries {
     @Override
     public DynamicRegistry<PigVariant> pigVariant() {
         return Objects.requireNonNull(pigVariant);
+    }
+
+    @Override
+    public DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
+        return Objects.requireNonNull(zombieNautilusVariant);
     }
 
     @Override

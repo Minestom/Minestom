@@ -10,10 +10,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.ChickenVariant;
-import net.minestom.server.entity.metadata.animal.CowVariant;
-import net.minestom.server.entity.metadata.animal.FrogVariant;
-import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -97,6 +94,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<CowVariant> cowVariant;
     private final DynamicRegistry<FrogVariant> frogVariant;
     private final DynamicRegistry<PigVariant> pigVariant;
+    private final DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
@@ -152,6 +150,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.cowVariant = CowVariant.createDefaultRegistry();
         this.frogVariant = FrogVariant.createDefaultRegistry();
         this.pigVariant = PigVariant.createDefaultRegistry();
+        this.zombieNautilusVariant = ZombieNautilusVariant.createDefaultRegistry();
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
@@ -262,6 +261,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public DynamicRegistry<PigVariant> pigVariant() {
         return pigVariant;
+    }
+
+    @Override
+    public DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
+        return zombieNautilusVariant;
     }
 
     @Override

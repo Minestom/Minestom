@@ -4,10 +4,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.ChickenVariant;
-import net.minestom.server.entity.metadata.animal.CowVariant;
-import net.minestom.server.entity.metadata.animal.FrogVariant;
-import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -99,6 +96,8 @@ public interface Registries {
     DynamicRegistry<FrogVariant> frogVariant();
 
     DynamicRegistry<PigVariant> pigVariant();
+
+    DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant();
 
     DynamicRegistry<Dialog> dialog();
 
@@ -242,6 +241,11 @@ public interface Registries {
         @Override
         public DynamicRegistry<PigVariant> pigVariant() {
             return delegate.pigVariant();
+        }
+
+        @Override
+        public DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
+            return delegate.zombieNautilusVariant();
         }
 
         @Override
