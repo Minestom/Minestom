@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.util.TriState;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.Registries;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -85,6 +87,8 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     Codec<Unit> UNIT = StructCodec.struct(Unit.INSTANCE);
 
     Codec<Boolean> BOOLEAN = new PrimitiveImpl<>(Transcoder::createBoolean, Transcoder::getBoolean);
+
+    Codec<TriState> TRI_STATE = new CodecImpl.TriStateImpl();
 
     Codec<Byte> BYTE = new PrimitiveImpl<>(Transcoder::createByte, Transcoder::getByte);
 
@@ -448,6 +452,27 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     @Contract(pure = true, value = "_ -> new")
     default <V> Codec<@Unmodifiable Map<T, V>> mapValue(Codec<V> valueCodec) {
         return mapValue(valueCodec, Integer.MAX_VALUE);
+    }
+
+    @Contract(pure = true, value = "_, _, _ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, int maxSize, boolean cached) {
+        return new CodecImpl.TypedMapImpl<>(Codec.this, mapper,
+                maxSize, cached ? new ConcurrentHashMap<>() : null);
+    }
+
+    @Contract(pure = true, value = "_, _ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, int maxSize) {
+        return mapValueTyped(mapper, maxSize, false);
+    }
+
+    @Contract(pure = true, value = "_, _ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, boolean cached) {
+        return mapValueTyped(mapper, Integer.MAX_VALUE, cached);
+    }
+
+    @Contract(pure = true, value = "_ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper) {
+        return mapValueTyped(mapper, Integer.MAX_VALUE, false);
     }
 
     /**

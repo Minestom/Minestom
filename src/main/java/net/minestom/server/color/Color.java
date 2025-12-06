@@ -42,6 +42,7 @@ public class Color implements RGBLike {
             .transform(Color::new, color -> Color.fromRGBLike(color).asRGB());
 
     public static final RGBLike WHITE = new Color(255, 255, 255);
+    public static final RGBLike BLACK = new Color(0, 0, 0);
 
     private final int red;
     private final int green;

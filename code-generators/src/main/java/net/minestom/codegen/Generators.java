@@ -71,6 +71,7 @@ public final class Generators {
         generator.generateKeys(resource("pig_variant.json"), "net.minestom.server.entity.metadata.animal", "PigVariant");
         generator.generateKeys(resource("zombie_nautilus_variant.json"), "net.minestom.server.entity.metadata.animal", "ZombieNautilusVariant");
         generator.generateKeys(resource("worldgen/biome.json"), "net.minestom.server.world.biome", "Biome");
+        generator.generateKeys(resource("timeline.json"), "net.minestom.server.world.timeline", "Timeline");
 
         System.out.println("Finished generating code");
     }

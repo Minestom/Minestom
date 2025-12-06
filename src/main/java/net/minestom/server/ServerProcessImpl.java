@@ -52,6 +52,7 @@ import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.time.Tick;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.timeline.Timeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,6 +96,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<FrogVariant> frogVariant;
     private final DynamicRegistry<PigVariant> pigVariant;
     private final DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant;
+    private final DynamicRegistry<Timeline> timeline;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
@@ -151,6 +153,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.frogVariant = FrogVariant.createDefaultRegistry();
         this.pigVariant = PigVariant.createDefaultRegistry();
         this.zombieNautilusVariant = ZombieNautilusVariant.createDefaultRegistry();
+        this.timeline = Timeline.createDefaultRegistry();
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
@@ -186,6 +189,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public DynamicRegistry<Dialog> dialog() {
         return dialog;
+    }
+
+    @Override
+    public DynamicRegistry<Timeline> timeline() {
+        return timeline;
     }
 
     @Override

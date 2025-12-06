@@ -212,7 +212,8 @@ public final class RegistryData {
         TRIM_PATTERNS("trim_pattern.json"),
         WOLF_VARIANTS("wolf_variant.json"),
         WOLF_SOUND_VARIANTS("wolf_sound_variant.json"),
-        ZOMBIE_NAUTILUS_VARIANTS("zombie_nautilus_variant.json");
+        ZOMBIE_NAUTILUS_VARIANTS("zombie_nautilus_variant.json"),
+        TIMELINES("timeline.json");
 
         private final String name;
 

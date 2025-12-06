@@ -23,6 +23,7 @@ import net.minestom.server.message.ChatType;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.timeline.Timeline;
 
 /**
  * <p>Provides access to all the dynamic registries. {@link net.minestom.server.ServerProcess} is the most relevant
@@ -100,6 +101,8 @@ public interface Registries {
     DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant();
 
     DynamicRegistry<Dialog> dialog();
+
+    DynamicRegistry<Timeline> timeline();
 
     // The following are _not_ sent to the client.
 
@@ -251,6 +254,11 @@ public interface Registries {
         @Override
         public DynamicRegistry<Dialog> dialog() {
             return delegate.dialog();
+        }
+
+        @Override
+        public DynamicRegistry<Timeline> timeline() {
+            return delegate.timeline();
         }
 
         @Override

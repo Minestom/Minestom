@@ -7,33 +7,36 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.world.attribute.EnvironmentAttributeMap;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
 
 public sealed interface Biome extends Biomes permits BiomeImpl {
     Codec<Biome> REGISTRY_CODEC = StructCodec.struct(
-            "temperature", Codec.FLOAT, Biome::temperature,
-            "downfall", Codec.FLOAT, Biome::downfall,
             "has_precipitation", Codec.BOOLEAN, Biome::hasPrecipitation,
+            "temperature", Codec.FLOAT, Biome::temperature,
             "temperature_modifier", TemperatureModifier.CODEC.optional(TemperatureModifier.NONE), Biome::temperatureModifier,
-            "effects", BiomeEffects.CODEC.optional(BiomeEffects.PLAINS_EFFECTS), Biome::effects,
-            Biome::create);
-    Codec<Biome> NETWORK_CODEC = StructCodec.struct(
-            "temperature", Codec.FLOAT, Biome::temperature,
             "downfall", Codec.FLOAT, Biome::downfall,
-            "has_precipitation", Codec.BOOLEAN, Biome::hasPrecipitation,
-            "temperature_modifier", TemperatureModifier.CODEC, Biome::temperatureModifier,
+            "attributes", EnvironmentAttributeMap.CODEC.optional(EnvironmentAttributeMap.EMPTY), Biome::attributes,
             "effects", BiomeEffects.CODEC, Biome::effects,
             Biome::create);
+    // We dont currently read generation or mob spawn settings. If we do, we will need
+    // to have a separate network codec which does not serialize those fields.
+    Codec<Biome> NETWORK_CODEC = REGISTRY_CODEC;
 
-    static Biome create(float temperature, float downfall, boolean hasPrecipitation,
-                                 TemperatureModifier temperatureModifier, BiomeEffects effects) {
-        return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier);
+    static Biome create(
+            boolean hasPrecipitation,
+            float temperature,
+            TemperatureModifier temperatureModifier,
+            float downfall,
+            EnvironmentAttributeMap attributes,
+            BiomeEffects effects
+    ) {
+        return new BiomeImpl(hasPrecipitation, temperature, temperatureModifier, downfall, attributes, effects);
     }
 
-    static Builder builder() {
-        return new Builder();
-    }
+//    static Builder builder() {
+//        return new Builder();
+//    }
 
     /**
      * <p>Creates a new registry for biomes, loading the vanilla trim biomes.</p>
@@ -51,21 +54,18 @@ public sealed interface Biome extends Biomes permits BiomeImpl {
         );
     }
 
-    float temperature();
-
-    float downfall();
-
-    BiomeEffects effects();
-
     boolean hasPrecipitation();
+
+    float temperature();
 
     TemperatureModifier temperatureModifier();
 
-    enum TemperatureModifier {
-        NONE, FROZEN;
+    float downfall();
 
-        public static final Codec<TemperatureModifier> CODEC = Codec.Enum(TemperatureModifier.class);
-    }
+    EnvironmentAttributeMap attributes();
+
+    BiomeEffects effects();
+
 
     interface Setter {
         void setBiome(int x, int y, int z, RegistryKey<Biome> biome);
@@ -83,49 +83,56 @@ public sealed interface Biome extends Biomes permits BiomeImpl {
         }
     }
 
-    final class Builder {
-        private float temperature = 0.25f;
-        private float downfall = 0.8f;
-        private BiomeEffects effects = BiomeEffects.PLAINS_EFFECTS;
-        private boolean hasPrecipitation = false;
-        private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
+    enum TemperatureModifier {
+        NONE, FROZEN;
 
-        private Builder() {
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public Builder temperature(float temperature) {
-            this.temperature = temperature;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public Builder downfall(float downfall) {
-            this.downfall = downfall;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public Builder effects(BiomeEffects effects) {
-            this.effects = effects;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public Builder hasPrecipitation(boolean precipitation) {
-            this.hasPrecipitation = precipitation;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public Builder temperatureModifier(TemperatureModifier temperatureModifier) {
-            this.temperatureModifier = temperatureModifier;
-            return this;
-        }
-
-        @Contract(pure = true)
-        public Biome build() {
-            return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier);
-        }
+        public static final Codec<TemperatureModifier> CODEC = Codec.Enum(TemperatureModifier.class);
     }
+
+//    final class Builder {
+//        private boolean hasPrecipitation;
+//        private float temperature;
+//        private TemperatureModifier temperatureModifier;
+//        private float downfall;
+//        private EnvironmentAttributeMap attributes;
+//        private BiomeEffects effects;
+//
+//        private Builder() {
+//        }
+//
+//        @Contract(value = "_ -> this", pure = true)
+//        public Builder temperature(float temperature) {
+//            this.temperature = temperature;
+//            return this;
+//        }
+//
+//        @Contract(value = "_ -> this", pure = true)
+//        public Builder downfall(float downfall) {
+//            this.downfall = downfall;
+//            return this;
+//        }
+//
+//        @Contract(value = "_ -> this", pure = true)
+//        public Builder effects(BiomeEffects effects) {
+//            this.effects = effects;
+//            return this;
+//        }
+//
+//        @Contract(value = "_ -> this", pure = true)
+//        public Builder hasPrecipitation(boolean precipitation) {
+//            this.hasPrecipitation = precipitation;
+//            return this;
+//        }
+//
+//        @Contract(value = "_ -> this", pure = true)
+//        public Builder temperatureModifier(TemperatureModifier temperatureModifier) {
+//            this.temperatureModifier = temperatureModifier;
+//            return this;
+//        }
+//
+//        @Contract(pure = true)
+//        public Biome build() {
+//            return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier);
+//        }
+//    }
 }
