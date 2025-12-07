@@ -55,8 +55,8 @@ public sealed interface Timeline extends Timelines permits TimelineImpl {
     ) {
         public static <T, Arg> Codec<Track<T, Arg>> codec(EnvironmentAttribute<T> attribute) {
             //noinspection unchecked
-            return attribute.type().modifierCodec().unionType("modifier",
-                    modifier -> fullCodec((Modifier<T, Arg>) modifier), Track::modifier);
+            return attribute.type().modifierCodec().optional(new Modifier.Override<>(attribute.valueCodec()))
+                    .unionType("modifier", modifier -> fullCodec((Modifier<T, Arg>) modifier), Track::modifier);
         }
 
         private static <T, Arg> StructCodec<Track<T, Arg>> fullCodec(Modifier<T, Arg> modifier) {

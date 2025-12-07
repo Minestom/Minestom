@@ -141,7 +141,7 @@ final class CodecImpl {
                     case Result.Error(String error) -> new Result.Error<>(error);
                 };
             } catch (Exception e) {
-                return new Result.Error<>(e.getMessage());
+                return new Result.Error<>(e.getClass().getSimpleName() + ": " + e.getMessage());
             }
         }
 
@@ -370,7 +370,9 @@ final class CodecImpl {
         @SuppressWarnings("unchecked")
         @Override
         public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
-            final Result<T> keyResult = map.getValue(keyField).map(key -> keyCodec.decode(coder, key));
+            Result<T> keyResult = map.getValue(keyField).map(key -> keyCodec.decode(coder, key));
+            if (keyResult instanceof Result.Error<T> && keyCodec instanceof OptionalImpl(var _, var defaultValue))
+                keyResult = new Result.Ok<>(defaultValue);
             if (!(keyResult instanceof Result.Ok(T key)))
                 return keyResult.cast();
             final StructCodec<? extends R> serializer = serializers.apply(key);

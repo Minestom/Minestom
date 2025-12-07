@@ -7,6 +7,7 @@ import net.minestom.server.world.attribute.EnvironmentAttribute.Modifier;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 record EnvironmentAttributeTypeImpl<T>(
         Key key,
@@ -25,7 +26,8 @@ record EnvironmentAttributeTypeImpl<T>(
         final var inverse = new HashMap<Modifier<T, ?>, Modifier.Operator>(operators.size());
         for (var entry : operators.entrySet()) inverse.put(entry.getValue(), entry.getKey());
 
-        final Codec<Modifier<T, ?>> modifierCodec = Modifier.Operator.CODEC.transform(withOverride::get, inverse::get);
+        final Codec<Modifier<T, ?>> modifierCodec = Modifier.Operator.CODEC.transform(op ->
+                Objects.requireNonNull(withOverride.get(op), () -> "unsupported operator: " + op), inverse::get);
         return new EnvironmentAttributeTypeImpl<>(Key.key(key), codec, modifierCodec);
     }
 }

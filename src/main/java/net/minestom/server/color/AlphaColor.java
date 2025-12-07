@@ -1,5 +1,6 @@
 package net.minestom.server.color;
 
+import net.kyori.adventure.text.format.ShadowColor;
 import net.kyori.adventure.util.ARGBLike;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
@@ -21,6 +22,9 @@ public final class AlphaColor extends Color implements ARGBLike {
             AlphaColor::new, color -> fromARGBLike(color).asARGB());
     public static final Codec<ARGBLike> CODEC = Codec.INT.transform(
             AlphaColor::new, color -> fromARGBLike(color).asARGB());
+    public static final Codec<ARGBLike> STRING_CODEC = Codec.STRING.transform(
+            hex -> (ARGBLike) Objects.requireNonNull(ShadowColor.fromHexString(hex)),
+            color -> ShadowColor.shadowColor(color).asHexString()).orElse(CODEC);
 
     public static final AlphaColor WHITE = new AlphaColor(255, 255, 255, 255);
     public static final AlphaColor BLACK = new AlphaColor(0, 0, 0, 0);
