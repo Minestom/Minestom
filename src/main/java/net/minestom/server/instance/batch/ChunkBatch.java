@@ -95,22 +95,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     @Override
     @Contract(pure = true)
     public Set<Long> getAffectedChunks() {
-        return getAffectedChunks(0, 0);
-    }
-
-    /**
-     * Gets the set of chunk indices that will be affected by applying this batch.
-     * <p>
-     * Each chunk index is a {@code long} value representing the unique identifier of a chunk,
-     * computed using {@link CoordConversion#chunkIndex(int, int)}.
-     *
-     * @param chunkX The x chunk coordinate of the origin of the batch
-     * @param chunkZ The z chunk coordinate of the origin of the batch
-     * @return A set of chunk indices affected by this batch
-     */
-    @Contract(pure = true)
-    public Set<Long> getAffectedChunks(int chunkX, int chunkZ) {
-        return Set.of(CoordConversion.chunkIndex(chunkX, chunkZ));
+        return Set.of(CoordConversion.chunkIndex(0, 0));
     }
 
     /**
