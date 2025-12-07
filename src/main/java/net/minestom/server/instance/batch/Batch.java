@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -80,6 +81,6 @@ public interface Batch<C> extends Block.Setter {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    @Nullable
+    @UnknownNullability
     Batch<C> apply(Instance instance, @Nullable C callback);
 }
