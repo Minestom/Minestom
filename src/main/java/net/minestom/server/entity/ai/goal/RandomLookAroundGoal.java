@@ -2,13 +2,13 @@ package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.Goal;
 
 import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class RandomLookAroundGoal extends GoalSelector {
+public class RandomLookAroundGoal extends Goal {
     private static final Random RANDOM = new Random();
     private final int chancePerTick;
     private final Supplier<Integer> minimalLookTimeSupplier;
@@ -51,11 +51,11 @@ public class RandomLookAroundGoal extends GoalSelector {
     }
 
     @Override
-    public boolean shouldStart() {
+    public boolean canStart() {
         if (RANDOM.nextInt(chancePerTick) != 0) {
             return false;
         }
-        return entityCreature.getNavigator().getPathPosition() == null;
+        return entityCreature.getNavigator().getTargetPosition() == null;
     }
 
     @Override
