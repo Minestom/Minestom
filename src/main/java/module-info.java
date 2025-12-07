@@ -87,14 +87,11 @@ module net.minestom.server {
     exports net.minestom.server.event.server;
     exports net.minestom.server.event.trait;
     exports net.minestom.server.exception;
-    exports net.minestom.server.extras;
-    exports net.minestom.server.extras.bungee;
     exports net.minestom.server.extras.lan;
     exports net.minestom.server.extras.mojangAuth;
     exports net.minestom.server.extras.query;
     exports net.minestom.server.extras.query.event;
     exports net.minestom.server.extras.query.response;
-    exports net.minestom.server.extras.velocity;
     exports net.minestom.server.game;
     exports net.minestom.server.gamedata;
     exports net.minestom.server.instance;
