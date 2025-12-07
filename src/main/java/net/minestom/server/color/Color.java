@@ -1,5 +1,6 @@
 package net.minestom.server.color;
 
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
@@ -40,6 +41,9 @@ public class Color implements RGBLike {
 
     public static final Codec<RGBLike> CODEC = Codec.INT
             .transform(Color::new, color -> Color.fromRGBLike(color).asRGB());
+    public static final Codec<RGBLike> STRING_CODEC = Codec.STRING.transform(
+            hex -> (RGBLike) Objects.requireNonNull(TextColor.fromHexString(hex)),
+            color -> TextColor.color(color).asHexString()).orElse(CODEC);
 
     public static final RGBLike WHITE = new Color(255, 255, 255);
     public static final RGBLike BLACK = new Color(0, 0, 0);

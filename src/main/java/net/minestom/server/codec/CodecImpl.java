@@ -323,7 +323,7 @@ final class CodecImpl {
                 // The throwing decode here is fine since we are already iterating over known keys.
                 final Result<V> valueResult = valueCodec.decode(coder, map.getValue(key).orElseThrow());
                 if (!(valueResult instanceof Result.Ok(V decodedValue)))
-                    return valueResult.cast();
+                    return valueResult.mapError(e -> key + ": " + e).cast();
                 decodedMap.put(decodedKey, decodedValue);
             }
             return new Result.Ok<>(Map.copyOf(decodedMap));

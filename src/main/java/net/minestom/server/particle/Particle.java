@@ -5,6 +5,7 @@ import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.color.AlphaColor;
 import net.minestom.server.color.Color;
@@ -14,6 +15,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -41,13 +43,25 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     Codec<Particle> CODEC = new Codec<>() {
         @Override
         public <D> Result<Particle> decode(Transcoder<D> coder, D value) {
-            return new Result.Error<>("particles cannot be decoded");
+            Result<Transcoder.MapLike<D>> mapResult = coder.getMap(value);
+            if (!(mapResult instanceof Result.Ok(Transcoder.MapLike<D> map)))
+                return mapResult.cast();
+
+            Result<Particle> particleResult = map.getValue("type")
+                    .map(coder::getString).mapResult(ParticleImpl::get);
+            if (!(particleResult instanceof Result.Ok(Particle particle)))
+                return particleResult.cast();
+
+            //noinspection unchecked
+            return (Result<Particle>) particle.codec().decodeFromMap(coder, map);
         }
 
         @Override
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable Particle value) {
             if (value == null) return new Result.Error<>("null");
-            return value.encode(coder);
+
+            //noinspection unchecked
+            return ((StructCodec<@NotNull Particle>) value.codec()).encode(coder, value);
         }
     };
 
@@ -71,9 +85,12 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
 
     void writeData(NetworkBuffer writer);
 
-    <D> Result<D> encode(Transcoder<D> coder);
+    StructCodec<? extends Particle> codec();
 
     record Simple(Key key, int id) implements Particle {
+        public static final StructCodec<Simple> CODEC = StructCodec.struct(
+                "type", Codec.KEY, Simple::key,
+                ParticleImpl::get);
 
         @Override
         public Particle readData(NetworkBuffer reader) {
@@ -85,15 +102,16 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
-    record Block(Key key, int id,
-                 net.minestom.server.instance.block.Block block) implements Particle {
+    record Block(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+        public static final StructCodec<Block> CODEC = StructCodec.struct(
+                "type", Codec.KEY, Block::key,
+                "block_state", net.minestom.server.instance.block.Block.STATE_CODEC, Block::block,
+                (key, block) -> ParticleImpl.<Block>get(key).withBlock(block));
 
         @Contract(pure = true)
         public Block withBlock(net.minestom.server.instance.block.Block block) {
@@ -114,16 +132,16 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(block.state()))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
-    record BlockMarker(Key key, int id,
-                       net.minestom.server.instance.block.Block block) implements Particle {
+    record BlockMarker(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+        public static final StructCodec<BlockMarker> CODEC = StructCodec.struct(
+                "type", Codec.KEY, BlockMarker::key,
+                "block_state", net.minestom.server.instance.block.Block.STATE_CODEC, BlockMarker::block,
+                (key, block) -> ParticleImpl.<BlockMarker>get(key).withBlock(block));
 
         @Contract(pure = true)
         public BlockMarker withBlock(net.minestom.server.instance.block.Block block) {
@@ -144,15 +162,17 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(block.state()))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record Dust(Key key, int id, RGBLike color, float scale) implements Particle {
+        public static final StructCodec<Dust> CODEC = StructCodec.struct(
+                "type", Codec.KEY, Dust::key,
+                "color", Color.CODEC, Dust::color,
+                "scale", Codec.FLOAT, Dust::scale,
+                (type, color, scale) -> ParticleImpl.<Dust>get(type).withProperties(color, scale));
 
         @Contract(pure = true)
         public Dust withProperties(RGBLike color, float scale) {
@@ -181,20 +201,24 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            final Result<D> colorResult = Color.CODEC.encode(coder, color);
-            if (!(colorResult instanceof Result.Ok(D colorData)))
-                return colorResult.cast();
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("color", colorData)
-                    .put("scale", coder.createFloat(scale))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
-    record DustColorTransition(Key key, int id, RGBLike color,
-                               RGBLike transitionColor, float scale) implements Particle {
+    record DustColorTransition(
+            Key key, int id,
+            RGBLike color,
+            RGBLike transitionColor,
+            float scale
+    ) implements Particle {
+        public static final StructCodec<DustColorTransition> CODEC = StructCodec.struct(
+                "type", Codec.KEY, DustColorTransition::key,
+                "from_color", Color.CODEC, DustColorTransition::color,
+                "to_color", Color.CODEC, DustColorTransition::transitionColor,
+                "scale", Codec.FLOAT, DustColorTransition::scale,
+                (type, from, to, scale) ->
+                        ParticleImpl.<DustColorTransition>get(type).withProperties(from, to, scale));
 
         @Contract(pure = true)
         public DustColorTransition withProperties(RGBLike color, RGBLike transitionColor, float scale) {
@@ -231,24 +255,16 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            final Result<D> fromColorResult = Color.CODEC.encode(coder, color);
-            if (!(fromColorResult instanceof Result.Ok(D fromColorData)))
-                return fromColorResult.cast();
-            final Result<D> toColorResult = Color.CODEC.encode(coder, transitionColor);
-            if (!(toColorResult instanceof Result.Ok(D toColorData)))
-                return toColorResult.cast();
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("from_color", fromColorData)
-                    .put("to_color", toColorData)
-                    .put("scale", coder.createFloat(scale))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
-    record DustPillar(Key key, int id,
-                      net.minestom.server.instance.block.Block block) implements Particle {
+    record DustPillar(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+        public static final StructCodec<DustPillar> CODEC = StructCodec.struct(
+                "type", Codec.KEY, DustPillar::key,
+                "block_state", net.minestom.server.instance.block.Block.STATE_CODEC, DustPillar::block,
+                (key, block) -> ParticleImpl.<DustPillar>get(key).withBlock(block));
 
         @Contract(pure = true)
         public DustPillar withBlock(net.minestom.server.instance.block.Block block) {
@@ -269,16 +285,16 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(block.state()))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
-    record FallingDust(Key key, int id,
-                       net.minestom.server.instance.block.Block block) implements Particle {
+    record FallingDust(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+        public static final StructCodec<FallingDust> CODEC = StructCodec.struct(
+                "type", Codec.KEY, FallingDust::key,
+                "block_state", net.minestom.server.instance.block.Block.STATE_CODEC, FallingDust::block,
+                (key, block) -> ParticleImpl.<FallingDust>get(key).withBlock(block));
 
         @Contract(pure = true)
         public FallingDust withBlock(net.minestom.server.instance.block.Block block) {
@@ -299,15 +315,16 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(block.state()))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record Item(Key key, int id, ItemStack item) implements Particle {
+        public static final StructCodec<Item> CODEC = StructCodec.struct(
+                "type", Codec.KEY, Item::key,
+                "item", ItemStack.CODEC, Item::item,
+                (type, item) -> ParticleImpl.<Item>get(type).withItem(item));
 
         @Contract(pure = true)
         public Item withItem(ItemStack item) {
@@ -325,18 +342,16 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            final Result<D> itemResult = ItemStack.CODEC.encode(coder, item);
-            if (!(itemResult instanceof Result.Ok(D itemData)))
-                return itemResult.cast();
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("item", itemData)
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record EntityEffect(Key key, int id, AlphaColor color) implements Particle {
+        public static final StructCodec<EntityEffect> CODEC = StructCodec.struct(
+                "type", Codec.KEY, EntityEffect::key,
+                "color", AlphaColor.CODEC, EntityEffect::color,
+                (type, color) -> ParticleImpl.<EntityEffect>get(type).withColor(color));
 
         @Contract(pure = true)
         public EntityEffect withColor(AlphaColor color) {
@@ -364,18 +379,16 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            final Result<D> colorResult = AlphaColor.CODEC.encode(coder, color);
-            if (!(colorResult instanceof Result.Ok(D colorData)))
-                return colorResult.cast();
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("color", colorData)
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record SculkCharge(Key key, int id, float roll) implements Particle {
+        public static final StructCodec<SculkCharge> CODEC = StructCodec.struct(
+                "type", Codec.KEY, SculkCharge::key,
+                "roll", Codec.FLOAT, SculkCharge::roll,
+                (type, roll) -> ParticleImpl.<SculkCharge>get(type).withRoll(roll));
 
         @Contract(pure = true)
         public SculkCharge withRoll(float roll) {
@@ -393,15 +406,16 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("roll", coder.createFloat(roll))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record Shriek(Key key, int id, int delay) implements Particle {
+        public static final StructCodec<Shriek> CODEC = StructCodec.struct(
+                "type", Codec.KEY, Shriek::key,
+                "delay", Codec.INT, Shriek::delay,
+                (type, delay) -> ParticleImpl.<Shriek>get(type).withDelay(delay));
 
         @Contract(pure = true)
         public Shriek withDelay(int delay) {
@@ -419,21 +433,23 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("delay", coder.createInt(delay))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
-    record Vibration(Key key, int id, SourceType sourceType,
-                     @Nullable Point sourceBlockPosition, int sourceEntityId, float sourceEntityEyeHeight,
-                     int travelTicks) implements Particle {
+    record Vibration(
+            Key key, int id,
+            SourceType sourceType,
+            @Nullable Point sourceBlockPosition,
+            int sourceEntityId,
+            float sourceEntityEyeHeight,
+            int travelTicks
+    ) implements Particle {
 
         @Contract(pure = true)
         public Vibration withProperties(SourceType sourceType, @Nullable Point sourceBlockPosition,
-                                                 int sourceEntityId, float sourceEntityEyeHeight, int travelTicks) {
+                                        int sourceEntityId, float sourceEntityEyeHeight, int travelTicks) {
             return new Vibration(key(), id(), sourceType, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
         }
 
@@ -472,8 +488,8 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Error<>("Vibration particle cannot be serialized to NBT");
+        public StructCodec<? extends Particle> codec() {
+            throw new UnsupportedOperationException("Vibration particle cannot be serialized to NBT");
         }
 
         public enum SourceType {
@@ -481,8 +497,19 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Trail(Key key, int id, Point target, RGBLike color,
-                 int duration) implements Particle {
+    record Trail(
+            Key key, int id,
+            Point target,
+            RGBLike color,
+            int duration
+    ) implements Particle {
+        public static final StructCodec<Trail> CODEC = StructCodec.struct(
+                "type", Codec.KEY, Trail::key,
+                "target", Codec.VECTOR3D, Trail::target,
+                "color", Color.CODEC, Trail::color,
+                "duration", Codec.INT, Trail::duration,
+                (type, target, color, duration) ->
+                        ParticleImpl.<Trail>get(type).withProperties(target, color, duration));
 
         public Trail withProperties(Point target, RGBLike color, int duration) {
             return new Trail(key(), id(), target, color, duration);
@@ -513,31 +540,24 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            final Result<D> colorResult = Color.CODEC.encode(coder, color);
-            if (!(colorResult instanceof Result.Ok(D colorData)))
-                return colorResult.cast();
-            final Result<D> targetResult = Codec.VECTOR3D.encode(coder, target);
-            if (!(targetResult instanceof Result.Ok(D targetData)))
-                return targetResult.cast();
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("target", targetData)
-                    .put("color", colorData)
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
-    record BlockCrumble(Key key, int id,
-                        net.minestom.server.instance.block.Block block) implements Particle {
+    record BlockCrumble(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+        public static final StructCodec<BlockCrumble> CODEC = StructCodec.struct(
+                "type", Codec.KEY, BlockCrumble::key,
+                "block_state", net.minestom.server.instance.block.Block.STATE_CODEC, BlockCrumble::block,
+                (key, block) -> ParticleImpl.<BlockCrumble>get(key).withBlock(block));
 
         @Contract(pure = true)
-        public Block withBlock(net.minestom.server.instance.block.Block block) {
-            return new Block(key(), id(), block);
+        public BlockCrumble withBlock(net.minestom.server.instance.block.Block block) {
+            return new BlockCrumble(key(), id(), block);
         }
 
         @Override
-        public Block readData(NetworkBuffer reader) {
+        public BlockCrumble readData(NetworkBuffer reader) {
             short blockState = reader.read(NetworkBuffer.VAR_INT).shortValue();
             var block = net.minestom.server.instance.block.Block.fromStateId(blockState);
             Check.stateCondition(block == null, "Block state " + blockState + " is invalid");
@@ -550,15 +570,17 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(block.state()))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record TintedLeaves(Key key, int id, AlphaColor color) implements Particle {
+        public static final StructCodec<TintedLeaves> CODEC = StructCodec.struct(
+                "type", Codec.KEY, TintedLeaves::key,
+                "color", AlphaColor.CODEC, TintedLeaves::color,
+                (type, color) -> ParticleImpl.<TintedLeaves>get(type).withColor(color));
+
         @Contract(pure = true)
         public TintedLeaves withColor(AlphaColor color) {
             return new TintedLeaves(key(), id(), color);
@@ -585,18 +607,16 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            final Result<D> colorResult = AlphaColor.CODEC.encode(coder, color);
-            if (!(colorResult instanceof Result.Ok(D colorData)))
-                return colorResult.cast();
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("color", colorData)
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record DragonBreath(Key key, int id, float power) implements Particle {
+        public static final StructCodec<DragonBreath> CODEC = StructCodec.struct(
+                "type", Codec.KEY, DragonBreath::key,
+                "power", Codec.FLOAT, DragonBreath::power,
+                (type, power) -> ParticleImpl.<DragonBreath>get(type).withPower(power));
 
         @Contract(pure = true)
         public DragonBreath withPower(float power) {
@@ -614,15 +634,17 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("power", coder.createFloat(power))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record Effect(Key key, int id, RGBLike color, float power) implements Particle {
+        public static final StructCodec<Effect> CODEC = StructCodec.struct(
+                "type", Codec.KEY, Effect::key,
+                "color", Color.CODEC, Effect::color,
+                "power", Codec.FLOAT, Effect::power,
+                (type, color, power) -> ParticleImpl.<Effect>get(type).withProperties(color, power));
 
         @Contract(pure = true)
         public Effect withColor(RGBLike color) {
@@ -651,19 +673,17 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            final Result<D> colorResult = Color.CODEC.encode(coder, color);
-            if (!(colorResult instanceof Result.Ok(D colorData)))
-                return colorResult.cast();
-            return new Result.Ok<>(coder.createMap()
-                    .put("type", coder.createString(key.asString()))
-                    .put("color", colorData)
-                    .put("power", coder.createFloat(power))
-                    .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record Flash(Key key, int id, AlphaColor color) implements Particle {
+        public static final StructCodec<Flash> CODEC = StructCodec.struct(
+                "type", Codec.KEY, Flash::key,
+                "color", Color.CODEC, Flash::color,
+                (type, color) -> ParticleImpl.<Flash>get(type).withColor(color));
+
         @Contract(pure = true)
         public Flash withColor(AlphaColor color) {
             return new Flash(key(), id(), color);
@@ -690,18 +710,17 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            final Result<D> colorResult = AlphaColor.CODEC.encode(coder, color);
-            if (!(colorResult instanceof Result.Ok(D colorData)))
-                return colorResult.cast();
-            return new Result.Ok<>(coder.createMap()
-                       .put("type", coder.createString(key.asString()))
-                       .put("color", colorData)
-                       .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 
     record InstantEffect(Key key, int id, RGBLike color, float power) implements Particle {
+        public static final StructCodec<InstantEffect> CODEC = StructCodec.struct(
+                "type", Codec.KEY, InstantEffect::key,
+                "color", Color.CODEC, InstantEffect::color,
+                "power", Codec.FLOAT, InstantEffect::power,
+                (key, color, power) -> ParticleImpl.<InstantEffect>get(key).withProperties(color, power));
 
         @Contract(pure = true)
         public InstantEffect withColor(RGBLike color) {
@@ -730,15 +749,8 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder) {
-            final Result<D> colorResult = Color.CODEC.encode(coder, color);
-            if (!(colorResult instanceof Result.Ok(D colorData)))
-                return colorResult.cast();
-            return new Result.Ok<>(coder.createMap()
-                       .put("type", coder.createString(key.asString()))
-                       .put("color", colorData)
-                       .put("power", coder.createFloat(power))
-                       .build());
+        public StructCodec<? extends Particle> codec() {
+            return CODEC;
         }
     }
 

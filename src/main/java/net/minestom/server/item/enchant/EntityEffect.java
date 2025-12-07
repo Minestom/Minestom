@@ -33,6 +33,8 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         registry.register("damage_entity", DamageEntity.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("explode", Explode.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("ignite", Ignite.CODEC, DataPack.MINECRAFT_CORE);
+        // apply_impulse
+        // apply_exhaustion
         registry.register("play_sound", PlaySound.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("replace_block", ReplaceBlock.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("replace_disk", ReplaceDisc.CODEC, DataPack.MINECRAFT_CORE);

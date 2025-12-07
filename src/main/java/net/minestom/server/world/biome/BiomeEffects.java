@@ -16,10 +16,10 @@ public record BiomeEffects(
         GrassColorModifier grassColorModifier
 ) {
     public static final Codec<BiomeEffects> CODEC = StructCodec.struct(
-            "water_color", Color.CODEC, BiomeEffects::waterColor,
-            "foliage_color", Color.CODEC.optional(), BiomeEffects::foliageColor,
-            "dry_foliage_color", Color.CODEC.optional(), BiomeEffects::dryFoliageColor,
-            "grass_color", Color.CODEC.optional(), BiomeEffects::grassColor,
+            "water_color", Color.STRING_CODEC, BiomeEffects::waterColor,
+            "foliage_color", Color.STRING_CODEC.optional(), BiomeEffects::foliageColor,
+            "dry_foliage_color", Color.STRING_CODEC.optional(), BiomeEffects::dryFoliageColor,
+            "grass_color", Color.STRING_CODEC.optional(), BiomeEffects::grassColor,
             "grass_color_modifier", GrassColorModifier.CODEC.optional(GrassColorModifier.NONE), BiomeEffects::grassColorModifier,
             BiomeEffects::new);
 

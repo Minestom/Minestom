@@ -17,7 +17,7 @@ public record AmbientSounds(
     public static final Codec<AmbientSounds> CODEC = StructCodec.struct(
             "loop", SoundEvent.CODEC.optional(), AmbientSounds::loop,
             "mood", Mood.CODEC.optional(), AmbientSounds::mood,
-            "additions", Additions.CODEC.list().optional(List.of()), AmbientSounds::additions,
+            "additions", Additions.CODEC.listOrSingle().optional(List.of()), AmbientSounds::additions,
             AmbientSounds::new);
 
     public record Mood(

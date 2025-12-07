@@ -62,9 +62,9 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
-    static DynamicRegistry<DimensionType> createDefaultRegistry() {
+    static DynamicRegistry<DimensionType> createDefaultRegistry(Registries registries) {
         return DynamicRegistry.create(Key.key("dimension_type"),
-                REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
+                REGISTRY_CODEC, registries, RegistryData.Resource.DIMENSION_TYPES);
     }
 
     boolean hasFixedTime();

@@ -135,7 +135,6 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dialog = Dialog.createDefaultRegistry(this);
-        this.dimensionType = DimensionType.createDefaultRegistry();
         this.biome = Biome.createDefaultRegistry();
         this.damageType = DamageType.createDefaultRegistry();
         this.trimMaterial = TrimMaterial.createDefaultRegistry();
@@ -154,6 +153,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.pigVariant = PigVariant.createDefaultRegistry();
         this.zombieNautilusVariant = ZombieNautilusVariant.createDefaultRegistry();
         this.timeline = Timeline.createDefaultRegistry();
+        this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();

@@ -20,7 +20,7 @@ sealed interface EnvironmentAttributeTypes permits EnvironmentAttribute.Type {
     EnvironmentAttribute.Type<TriState> TRI_STATE = register("tri_state", Codec.TRI_STATE, Map.of());
     EnvironmentAttribute.Type<Float> FLOAT = register("float", Codec.FLOAT, EnvironmentAttribute.Modifier.FLOAT_OPERATORS);
     EnvironmentAttribute.Type<Float> ANGLE_DEGREES = register("angle_degrees", Codec.FLOAT, EnvironmentAttribute.Modifier.FLOAT_OPERATORS);
-    EnvironmentAttribute.Type<RGBLike> RGB_COLOR = register("rgb_color", Color.CODEC, Map.of()); // TODO
+    EnvironmentAttribute.Type<RGBLike> RGB_COLOR = register("rgb_color", Color.STRING_CODEC, Map.of()); // TODO
     EnvironmentAttribute.Type<ARGBLike> ARGB_COLOR = register("argb_color", AlphaColor.CODEC, Map.of()); // TODO
     EnvironmentAttribute.Type<MoonPhase> MOON_PHASE = register("moon_phase", MoonPhase.CODEC, Map.of());
     EnvironmentAttribute.Type<EntityActivity> ACTIVITY = register("activity", EntityActivity.CODEC, Map.of());
