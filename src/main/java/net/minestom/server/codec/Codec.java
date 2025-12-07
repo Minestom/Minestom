@@ -524,4 +524,21 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
         return new CodecImpl.OrElseImpl<>(this, other);
     }
 
+    /**
+     * Creates a or else codec where it will attempt to use the first codec
+     * then use the second one and transform via mapper if it fails.
+     * <br>
+     * If both codecs fail the first error will be returned instead.
+     *
+     * @param other the other codec
+     * @param mapper the mapper to transform the error into a value of {@link T}
+     * @return the or else codec of {@link T}
+     */
+    @Contract(pure = true, value = "_ -> new")
+    default <S> Codec<T> orElse(Codec<S> other, ThrowingFunction<S, T> mapper) {
+        return new CodecImpl.OrElseImpl<>(this, other.transform(mapper, _ -> {
+            throw new UnsupportedOperationException("unreachable");
+        }));
+    }
+
 }
