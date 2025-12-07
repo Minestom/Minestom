@@ -49,4 +49,28 @@ public record SoundEffectPacket(
     public SoundEffectPacket(SoundEvent soundEvent, Source source, int x, int y, int z, float volume, float pitch, long seed) {
         this(soundEvent, source, new Vec(x, y, z), volume, pitch, seed);
     }
+
+    /**
+     * @deprecated Use {@link #origin()} with {@link Point#blockX()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public int x() {
+        return origin.blockX();
+    }
+
+    /**
+     * @deprecated Use {@link #origin()} with {@link Point#blockY()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public int y() {
+        return origin.blockY();
+    }
+
+    /**
+     * @deprecated Use {@link #origin()} with {@link Point#blockZ()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public int z() {
+        return origin.blockZ();
+    }
 }
