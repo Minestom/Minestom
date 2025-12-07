@@ -142,9 +142,9 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
                 if (inverse != null) inverse.readyLatch.countDown();
                 if (callback != null) {
                     if (safeCallback) {
-                        instance.scheduleNextTick(inst -> callback.run());
+                        instance.scheduleNextTick(inst -> callback.accept(inverse));
                     } else {
-                        callback.run();
+                        callback.accept(inverse);
                     }
                 }
                 return inverse;
