@@ -1,6 +1,5 @@
 package net.minestom.server.world.timeline;
 
-import net.minestom.server.codec.Codec;
 import net.minestom.server.world.attribute.EnvironmentAttribute;
 import org.jetbrains.annotations.Nullable;
 

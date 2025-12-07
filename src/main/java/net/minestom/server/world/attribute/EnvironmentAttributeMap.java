@@ -5,6 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.utils.Either;
 import net.minestom.server.world.attribute.EnvironmentAttribute.Modifier;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> entries) {
@@ -13,6 +14,10 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> 
     public static final Codec<EnvironmentAttributeMap> CODEC = EnvironmentAttribute.CODEC
             .mapValueTyped(Entry::codec0, true)
             .transform(EnvironmentAttributeMap::new, EnvironmentAttributeMap::entries);
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public EnvironmentAttributeMap {
         entries = Map.copyOf(entries);
@@ -51,5 +56,22 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> 
 
     }
 
+    public static final class Builder {
+        private final Map<EnvironmentAttribute<?>, Entry<?, ?>> entries = new HashMap<>();
+
+        public <T> Builder set(EnvironmentAttribute<T> attribute, T value) {
+            entries.put(attribute, new Entry<>(value, new Modifier.Override<>(attribute.valueCodec())));
+            return this;
+        }
+
+        public <T, Arg> Builder modify(EnvironmentAttribute<T> attribute, Modifier<T, Arg> modifier, Arg argument) {
+            entries.put(attribute, new Entry<>(argument, modifier));
+            return this;
+        }
+
+        public EnvironmentAttributeMap build() {
+            return new EnvironmentAttributeMap(entries);
+        }
+    }
 
 }

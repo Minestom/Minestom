@@ -14,6 +14,7 @@ import net.minestom.server.world.attribute.EnvironmentAttribute.Modifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,9 @@ public sealed interface Timeline extends Timelines permits TimelineImpl {
         return new TimelineImpl(periodTicks, tracks);
     }
 
-    // TODO: builder
+    static Builder builder() {
+        return new Builder();
+    }
 
     /// Creates a new registry for timelines, loading the vanilla timelines.
     ///
@@ -75,5 +78,35 @@ public sealed interface Timeline extends Timelines permits TimelineImpl {
                     "value", valueCodec, Keyframe::value,
                     Keyframe::new);
         }
+    }
+
+    final class Builder {
+        private @Nullable Integer periodTicks;
+        private Map<EnvironmentAttribute<?>, Track<?, ?>> tracks = new HashMap<>();
+
+        public Builder periodTicks(int ticks) {
+            this.periodTicks = ticks;
+            return this;
+        }
+
+        public Builder periodTicks(@Nullable Integer ticks) {
+            this.periodTicks = ticks;
+            return this;
+        }
+
+        public <T, Arg> Builder track(EnvironmentAttribute<T> attribute, Track<T, Arg> track) {
+            tracks.put(attribute, track);
+            return this;
+        }
+
+        public Builder tracks(Map<EnvironmentAttribute<?>, Track<?, ?>> tracks) {
+            this.tracks = tracks;
+            return this;
+        }
+
+        public Timeline build() {
+            return Timeline.create(periodTicks, tracks);
+        }
+
     }
 }

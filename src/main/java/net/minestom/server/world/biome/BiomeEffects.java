@@ -15,6 +15,8 @@ public record BiomeEffects(
         @Nullable RGBLike grassColor,
         GrassColorModifier grassColorModifier
 ) {
+    public static final BiomeEffects DEFAULT = new BiomeEffects(new Color(0x3f76e4), null, null, null, GrassColorModifier.NONE);
+
     public static final Codec<BiomeEffects> CODEC = StructCodec.struct(
             "water_color", Color.STRING_CODEC, BiomeEffects::waterColor,
             "foliage_color", Color.STRING_CODEC.optional(), BiomeEffects::foliageColor,
@@ -34,7 +36,7 @@ public record BiomeEffects(
     }
 
     public static final class Builder {
-        private @Nullable RGBLike waterColor;
+        private RGBLike waterColor = new Color(0x3f76e4);
         private @Nullable RGBLike foliageColor;
         private @Nullable RGBLike dryFoliageColor;
         private @Nullable RGBLike grassColor;
