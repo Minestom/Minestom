@@ -10,10 +10,7 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.PlayerCancelItemUseEvent;
-import net.minestom.server.event.player.PlayerCancelDiggingEvent;
-import net.minestom.server.event.player.PlayerFinishDiggingEvent;
-import net.minestom.server.event.player.PlayerStartDiggingEvent;
-import net.minestom.server.event.player.PlayerSwapItemEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -26,7 +23,7 @@ import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.utils.block.BlockBreakCalculation;
 import net.minestom.server.utils.block.BlockUtils;
 
-public final class PlayerDiggingListener {
+public final class PlayerActionListener {
 
     public static void playerActionListener(ClientPlayerActionPacket packet, Player player) {
         final ClientPlayerActionPacket.Status status = packet.status();
@@ -52,6 +49,8 @@ public final class PlayerDiggingListener {
             updateItemState(player);
         } else if (status == ClientPlayerActionPacket.Status.SWAP_ITEM_HAND) {
             swapItemHand(player);
+        } else if (status == ClientPlayerActionPacket.Status.STAB) {
+            stab(player);
         }
         // Acknowledge start/cancel/finish digging status
         if (diggingResult != null) {
@@ -205,6 +204,13 @@ public final class PlayerDiggingListener {
         } else {
             player.getInventory().update();
         }
+    }
+
+    private static void stab(Player player) {
+        final ItemStack itemInMainHand = player.getItemInMainHand();
+        if (!itemInMainHand.has(DataComponents.PIERCING_WEAPON))
+            return;
+        EventDispatcher.call(new PlayerStabEvent(player));
     }
 
     private record DiggingResult(Block block, boolean success) {
