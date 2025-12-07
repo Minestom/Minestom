@@ -5,9 +5,9 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Queue;
 import java.util.function.BiPredicate;
 
 /**
@@ -174,7 +174,7 @@ public final class PacketWriting {
         }
     }
 
-    public static <T> void writeQueue(NetworkBuffer buffer, Queue<T> queue, int minWrite,
+    public static <T> void writeQueue(NetworkBuffer buffer, MessagePassingQueue<T> queue, int minWrite,
                                       BiPredicate<NetworkBuffer, T> writer) {
         // The goal of this method is to write at the very least `minWrite` packets if the queue permits it.
         // The buffer is resized if it cannot hold this minimum.

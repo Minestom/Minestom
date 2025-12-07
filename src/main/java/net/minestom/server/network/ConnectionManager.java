@@ -27,9 +27,9 @@ import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.StringUtils;
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -53,9 +53,9 @@ public final class ConnectionManager {
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
     // Players waiting to be spawned (post configuration state)
-    private final MessagePassingQueue<Player> playWaitingPlayers = new MpscUnboundedArrayQueue<>(64);
+    private final MessagePassingQueue<Player> playWaitingPlayers = ConcurrentMessageQueues.mpscUnboundedArrayQueue(64);
     // Players waiting to be (re) configured
-    private final MessagePassingQueue<Player> configWaitingPlayers = new MpscUnboundedArrayQueue<>(64);
+    private final MessagePassingQueue<Player> configWaitingPlayers = ConcurrentMessageQueues.mpscUnboundedArrayQueue(64);
     // Players in configuration state
     private final Set<Player> configurationPlayers = new CopyOnWriteArraySet<>();
     // Players in play state
