@@ -58,6 +58,8 @@ public interface Batch<C> extends Block.Setter {
      * <p>
      * Each chunk index is a {@code long} value representing the unique identifier of a chunk,
      * computed using {@link CoordConversion#chunkIndex(int, int)}.
+     * <p>
+     * The X/Z values can be derived from this index with {@link CoordConversion#chunkIndexGetX(long)} and {@link CoordConversion#chunkIndexGetZ(long)}, respectively.
      *
      * @return A set of chunk indices affected by this batch
      */
