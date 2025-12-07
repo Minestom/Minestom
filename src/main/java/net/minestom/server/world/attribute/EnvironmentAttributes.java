@@ -28,9 +28,9 @@ sealed interface EnvironmentAttributes permits EnvironmentAttribute {
     EnvironmentAttribute<ARGBLike> SUNRISE_SUNSET_COLOR = register("visual/sunrise_sunset_color", Type.ARGB_COLOR, AlphaColor.TRANSPARENT);
     EnvironmentAttribute<ARGBLike> CLOUD_COLOR = register("visual/cloud_color", Type.ARGB_COLOR, AlphaColor.TRANSPARENT);
     EnvironmentAttribute<Float> CLOUD_HEIGHT = register("visual/cloud_height", Type.FLOAT, 192.33f);
-    EnvironmentAttribute<Float> SUN_ANGLE = register("visual/sun_angle", Type.FLOAT, 0f);
-    EnvironmentAttribute<Float> MOON_ANGLE = register("visual/moon_angle", Type.FLOAT, 0f);
-    EnvironmentAttribute<Float> STAR_ANGLE = register("visual/star_angle", Type.FLOAT, 0f);
+    EnvironmentAttribute<Float> SUN_ANGLE = register("visual/sun_angle", Type.ANGLE_DEGREES, 0f);
+    EnvironmentAttribute<Float> MOON_ANGLE = register("visual/moon_angle", Type.ANGLE_DEGREES, 0f);
+    EnvironmentAttribute<Float> STAR_ANGLE = register("visual/star_angle", Type.ANGLE_DEGREES, 0f);
     EnvironmentAttribute<MoonPhase> MOON_PHASE = register("visual/moon_phase", Type.MOON_PHASE, MoonPhase.FULL_MOON);
     EnvironmentAttribute<Float> STAR_BRIGHTNESS = register("visual/star_brightness", Type.FLOAT, 0f);
     EnvironmentAttribute<RGBLike> SKY_LIGHT_COLOR = register("visual/sky_light_color", Type.RGB_COLOR, Color.WHITE);
