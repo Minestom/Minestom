@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
 import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.identity.Identity;
@@ -900,10 +899,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     @Override
-    @SuppressWarnings({"UnstableApiUsage", "deprecation"})
-    public void sendMessage(final Identity source, final Component message, final MessageType type) {
-        // Note to readers: this method may be deprecated, however it is in fact required.
-        Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
+    public void sendMessage(Component message) {
+        Messenger.sendMessage(this, message, ChatPosition.SYSTEM_MESSAGE, null);
     }
 
     /**
