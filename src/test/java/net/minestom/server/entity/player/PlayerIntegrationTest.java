@@ -104,7 +104,7 @@ public class PlayerIntegrationTest {
             if (!(serverPacket instanceof EntityMetaDataPacket metaDataPacket)) {
                 continue;
             }
-            assertEquals((byte) 0, metaDataPacket.entries().get(MetadataDef.Player.MAIN_HAND.index()).value(),
+            assertEquals(MainHand.LEFT, metaDataPacket.entries().get(MetadataDef.Player.MAIN_HAND.index()).value(),
                     "EntityMetaDataPacket has the incorrect hand after client settings update.");
             found = true;
         }

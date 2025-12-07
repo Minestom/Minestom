@@ -454,22 +454,58 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
         return mapValue(valueCodec, Integer.MAX_VALUE);
     }
 
+    /**
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}
+     * where the codec for {@link V} is determined by the key {@link T}
+     *
+     * @param mapper  the function to get the codec for {@link V} from {@link T}
+     * @param maxSize the max size before returning an error result.
+     * @param cached  whether to cache codecs for each key
+     * @param <V>     the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
     @Contract(pure = true, value = "_, _, _ -> new")
     default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, int maxSize, boolean cached) {
         return new CodecImpl.TypedMapImpl<>(Codec.this, mapper,
                 maxSize, cached ? new ConcurrentHashMap<>() : null);
     }
 
+    /**
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}
+     * where the codec for {@link V} is determined by the key {@link T}
+     *
+     * @param mapper  the function to get the codec for {@link V} from {@link T}
+     * @param maxSize the max size before returning an error result.
+     * @param <V>     the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
     @Contract(pure = true, value = "_, _ -> new")
     default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, int maxSize) {
         return mapValueTyped(mapper, maxSize, false);
     }
 
+    /**
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}
+     * where the codec for {@link V} is determined by the key {@link T}
+     *
+     * @param mapper  the function to get the codec for {@link V} from {@link T}
+     * @param cached  whether to cache codecs for each key
+     * @param <V>     the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
     @Contract(pure = true, value = "_, _ -> new")
     default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, boolean cached) {
         return mapValueTyped(mapper, Integer.MAX_VALUE, cached);
     }
 
+    /**
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}
+     * where the codec for {@link V} is determined by the key {@link T}
+     *
+     * @param mapper  the function to get the codec for {@link V} from {@link T}
+     * @param <V>     the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
     @Contract(pure = true, value = "_ -> new")
     default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper) {
         return mapValueTyped(mapper, Integer.MAX_VALUE, false);
