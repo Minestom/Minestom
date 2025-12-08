@@ -144,6 +144,20 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * Blocks from the other batch overwrite any conflicts.
      *
      * @param other The other batch to merge with
+     * @param offset The offset to apply to the other batch's blocks
+     * @return A new merged batch
+     */
+    @Contract(pure = true)
+    public RelativeBlockBatch mergeWithOffset(RelativeBlockBatch other, Point offset) {
+        return mergeWithOffset(other, offset.blockX(), offset.blockY(), offset.blockZ());
+    }
+
+    /**
+     * Merges this batch with another batch, starting with a copy of this batch and then
+     * adding blocks from the other batch translated by the specified offset vector.
+     * Blocks from the other batch overwrite any conflicts.
+     *
+     * @param other The other batch to merge with
      * @param dx The x offset to apply to the other batch's blocks
      * @param dy The y offset to apply to the other batch's blocks
      * @param dz The z offset to apply to the other batch's blocks
@@ -208,6 +222,31 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
     }
 
     /**
+     * Subtracts another batch from this batch with an offset, removing blocks at matching positions.
+     *
+     * @param other The other batch to subtract
+     * @param offset The offset to apply to the other batch's positions
+     * @return A new batch with blocks removed where the offset other batch has blocks
+     */
+    @Contract(pure = true)
+    public RelativeBlockBatch subtractWithOffset(RelativeBlockBatch other, Point offset) {
+        return subtractWithOffset(other, offset.blockX(), offset.blockY(), offset.blockZ(), null);
+    }
+
+    /**
+     * Subtracts another batch from this batch with an offset, removing blocks at matching positions and replacing them with a default block.
+     *
+     * @param other The other batch to subtract
+     * @param offset The offset to apply to the other batch's positions
+     * @param defaultBlock The block to set in place of removed blocks, or null to remove them
+     * @return A new batch with blocks removed or replaced where the offset other batch has blocks
+     */
+    @Contract(pure = true)
+    public RelativeBlockBatch subtractWithOffset(RelativeBlockBatch other, Point offset, @Nullable Block defaultBlock) {
+        return subtractWithOffset(other, offset.blockX(), offset.blockY(), offset.blockZ(), defaultBlock);
+    }
+
+    /**
      * Subtracts another batch from this batch with an offset, removing blocks at matching positions and replacing them with a default block.
      *
      * @param other The other batch to subtract
@@ -235,6 +274,17 @@ public class RelativeBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
             }
         }
         return subtracted;
+    }
+
+    /**
+     * Translates this batch by the specified offset.
+     *
+     * @param offset The offset to apply
+     * @return A new translated batch
+     */
+    @Contract(pure = true)
+    public RelativeBlockBatch translate(Point offset) {
+        return translate(offset.blockX(), offset.blockY(), offset.blockZ());
     }
 
     /**
