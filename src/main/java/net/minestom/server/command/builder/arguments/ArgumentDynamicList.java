@@ -34,6 +34,9 @@ public class ArgumentDynamicList extends Argument<String> {
 
     /**
      * Sets the function to get the dynamic restrictions. Read the class Javadoc ({@link ArgumentDynamicList}) for more information.
+     * <p>
+     * <strong>Important</strong>: if this function returns a very large list, the packet sent to the player could exceed limits
+     * or consume significant resources. It is recommended to implement a size limit within the function, but this is the caller's responsibility.
      *
      * @param dynamicRestrictions the function to get the dynamic restrictions
      * @return this argument, for chaining
