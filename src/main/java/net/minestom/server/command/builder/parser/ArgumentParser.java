@@ -35,6 +35,7 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put("float", ArgumentFloat::new);
         ARGUMENT_FUNCTION_MAP.put("string", ArgumentString::new);
         ARGUMENT_FUNCTION_MAP.put("word", ArgumentWord::new);
+        ARGUMENT_FUNCTION_MAP.put("dynamiclist", ArgumentDynamicList::new);
         ARGUMENT_FUNCTION_MAP.put("stringarray", ArgumentStringArray::new);
         ARGUMENT_FUNCTION_MAP.put("command", ArgumentCommand::new);
         // TODO enum
