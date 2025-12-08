@@ -70,6 +70,9 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         if (components != DataComponentMap.EMPTY) {
             components = DataComponentMap.diff(material.prototype(), components);
         }
+
+        // Having items with amount being 0 and material not being air kicks players
+        if (amount == 0) material = Material.AIR;
     }
 
     @Override
