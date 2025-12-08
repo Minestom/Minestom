@@ -13,7 +13,7 @@ import java.util.Collection;
 
 public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attributes permits AttributeImpl {
     NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Attribute::fromId, Attribute::id);
-    Codec<Attribute> CODEC = Codec.STRING.transform(AttributeImpl::get, Attribute::name);
+    Codec<Attribute> CODEC = Codec.STRING.transform(Attribute::fromKey, Attribute::name);
 
     @Contract(pure = true)
     RegistryData.AttributeEntry registry();

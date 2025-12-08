@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
@@ -40,7 +41,7 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
      */
     @ApiStatus.Internal
     static DynamicRegistry<WolfVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("wolf_variant"), REGISTRY_CODEC, RegistryData.Resource.WOLF_VARIANTS);
+        return DynamicRegistry.create(BuiltinRegistries.WOLF_VARIANT, REGISTRY_CODEC, RegistryData.Resource.WOLF_VARIANTS);
     }
 
     Assets assets();

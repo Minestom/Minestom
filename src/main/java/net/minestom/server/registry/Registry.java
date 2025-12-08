@@ -33,6 +33,12 @@ public sealed interface Registry<T> extends Keyed permits StaticRegistry, Dynami
     }
 
     /**
+     * Returns the typed registry key of {@link #key()} for this registry.
+     * @return the registry key
+     */
+    RegistryKey<? extends Registry<T>> registryKey();
+
+    /**
      * Returns the number of entries present in this registry.
      */
     int size();
