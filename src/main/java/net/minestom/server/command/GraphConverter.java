@@ -113,6 +113,24 @@ final class GraphConverter {
                     res[i] = id.getAndIncrement();
                 }
                 return res;
+            } else if (argument instanceof ArgumentDynamicList dynamic) {
+                var sender = player == null ? MinecraftServer.getCommandManager().getConsoleSender() : player;
+                List<String> entries = dynamic.getDynamicRestrictions(sender);
+                if (entries == null || entries.isEmpty()) return getDefault(node, to, redirects, id, redirect, argument, isExecutable);
+
+                final int[] res = new int[entries.size()];
+                for (int i = 0; i < res.length; i++) {
+                    String entry = entries.get(i);
+                    final DeclareCommandsPacket.Node subNode = new DeclareCommandsPacket.Node();
+                    subNode.children = node.children;
+                    subNode.flags = literal(isExecutable, false);
+                    subNode.name = entry;
+                    if (redirect != null) {
+                        subNode.flags |= 0x8;
+                        redirects.add((graph, root) -> subNode.redirectedNode = redirect.get());
+                    }
+                }
+                return res;
             } else if (argument instanceof ArgumentGroup special) {
                 List<Argument<?>> entries = special.group();
                 int[] res = null;
@@ -164,22 +182,34 @@ final class GraphConverter {
                 r.set(id.get());
                 return res;
             } else {
-                final boolean hasSuggestion = argument.hasSuggestion();
-                node.flags = arg(isExecutable, hasSuggestion);
-                node.name = argument.getId();
-                node.parser = argument.parser();
-                node.properties = argument.nodeProperties();
-                if (redirect != null) {
-                    node.flags |= 0x8;
-                    redirects.add((graph, root) -> node.redirectedNode = redirect.get());
-                }
-                if (hasSuggestion) {
-                    node.suggestionsType = argument.suggestionType().getIdentifier();
-                }
-                to.add(node);
-                return new int[]{id.getAndIncrement()};
+                return getDefault(node, to, redirects, id, redirect, argument, isExecutable);
             }
         }
+    }
+
+    private static int[] getDefault(
+            DeclareCommandsPacket.Node node,
+            List<DeclareCommandsPacket.Node> to,
+            List<BiConsumer<Graph, Integer>> redirects,
+            AtomicInteger id,
+            @Nullable AtomicInteger redirect,
+            Argument<?> argument,
+            boolean isExecutable
+    ) {
+        final boolean hasSuggestion = argument.hasSuggestion();
+        node.flags = arg(isExecutable, hasSuggestion);
+        node.name = argument.getId();
+        node.parser = argument.parser();
+        node.properties = argument.nodeProperties();
+        if (redirect != null) {
+            node.flags |= 0x8;
+            redirects.add((_, _) -> node.redirectedNode = redirect.get());
+        }
+        if (hasSuggestion) {
+            node.suggestionsType = argument.suggestionType().getIdentifier();
+        }
+        to.add(node);
+        return new int[]{id.getAndIncrement()};
     }
 
     private static byte literal(boolean executable, boolean hasRedirect) {

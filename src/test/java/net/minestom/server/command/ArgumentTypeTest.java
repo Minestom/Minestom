@@ -30,6 +30,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -457,6 +458,27 @@ public class ArgumentTypeTest {
 
         assertInvalidArg(arg, "word");
         assertInvalidArg(arg, "word4");
+    }
+
+    @Test
+    public void testArgumentDynamicList() {
+        final List<String> dynamicValues = new ArrayList<>(List.of("dynamic1", "dynamic2", "dynamic3"));
+        var arg = ArgumentType.DynamicList("dynamic_list").from(sender -> dynamicValues);
+
+        assertArg(arg, "dynamic1", "dynamic1");
+        assertArg(arg, "dynamic2", "dynamic2");
+        assertArg(arg, "dynamic3", "dynamic3");
+
+        assertInvalidArg(arg, "dynamic");
+        assertInvalidArg(arg, "dynamic4");
+
+        dynamicValues.add("dynamic4");
+
+        assertArg(arg, "dynamic4", "dynamic4");
+
+        dynamicValues.remove("dynamic2");
+
+        assertInvalidArg(arg, "dynamic2");
     }
 
     @Test

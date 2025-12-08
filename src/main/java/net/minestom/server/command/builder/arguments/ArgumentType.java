@@ -85,6 +85,13 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentDynamicList
+     */
+    public static ArgumentDynamicList DynamicList(String id) {
+        return new ArgumentDynamicList(id);
+    }
+
+    /**
      * @see ArgumentStringArray
      */
     public static ArgumentStringArray StringArray(String id) {
