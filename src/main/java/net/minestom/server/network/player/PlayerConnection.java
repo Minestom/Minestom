@@ -7,6 +7,7 @@ import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.OutgoingTransferEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionState;
@@ -15,11 +16,13 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.CookieRequestPacket;
 import net.minestom.server.network.packet.server.common.CookieStorePacket;
 import net.minestom.server.network.packet.server.common.DisconnectPacket;
+import net.minestom.server.network.packet.server.common.TransferPacket;
 import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
@@ -46,6 +49,7 @@ public abstract class PlayerConnection {
 
     private PlayerPublicKey playerPublicKey;
     volatile boolean online;
+    private volatile boolean wasTransferred;
 
     private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
@@ -279,6 +283,33 @@ public abstract class PlayerConnection {
             future.complete(clientPacks);
             knownPacksFuture = null;
         }
+    }
+
+    /**
+     * Redirects the player to another server.
+     * @param host The host of the server to transfer the player to.
+     * @param port The port of the server to transfer the player to.
+     */
+    public void transfer(@NotNull String host, int port) {
+        OutgoingTransferEvent event = new OutgoingTransferEvent(this.player, host, port);
+        EventDispatcher.callCancellable(event, () -> this.sendPacket(new TransferPacket(event.getHost(), event.getPort())));
+    }
+
+    /**
+     * Returns whether the player has indicated that they were redirected from another server.
+     * @return Whether the player has indicated that they were redirected from another server.
+     */
+    public boolean wasTransferred() {
+        return this.wasTransferred;
+    }
+
+    @ApiStatus.Internal
+    public void markTransferred(boolean wasTransferred) {
+        if (!wasTransferred && this.wasTransferred) {
+            throw new IllegalStateException("Cannot mark transferred connection as non-transferred");
+        }
+
+        this.wasTransferred = wasTransferred;
     }
 
     @Override
