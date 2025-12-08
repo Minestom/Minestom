@@ -32,6 +32,12 @@ public class ArgumentDynamicList extends Argument<String> {
         super(id);
     }
 
+    /**
+     * Sets the function to get the dynamic restrictions. Read the class Javadoc ({@link ArgumentDynamicList}) for more information.
+     *
+     * @param dynamicRestrictions the function to get the dynamic restrictions
+     * @return this argument, for chaining
+     */
     public ArgumentDynamicList from(Function<CommandSender, List<String>> dynamicRestrictions) {
         this.dynamicRestrictions = dynamicRestrictions;
         return this;
