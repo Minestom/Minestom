@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -59,6 +60,9 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
      */
     <T extends Entity> void move(Entity entity, Point newPoint,
                                  Target<T> target, @Nullable Update<T> update);
+
+    <T extends Entity> void updateViewDistance(Entity entity, int newViewDistance,
+                                               Target<T> target, @Nullable Update<T> update);
 
     @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, Target<T> target);
 
@@ -142,4 +146,21 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
             // Empty
         }
     }
+
+    /**
+     * Gets the default entity view distance of this instance, which defaults to {@link ServerFlag#ENTITY_VIEW_DISTANCE}.
+     * <p>
+     * It's preferred to use {@link Entity#getViewDistance()} to get the view distance per-entity,
+     * as this method only returns the instance-wide default.
+     *
+     * @return The default entity view distance of this instance in chunks
+     */
+    int getDefaultViewDistance();
+
+    /**
+     * Sets the default entity view distance of this instance
+     *
+     * @param newViewDistance the new default entity view distance in chunks
+     */
+    void setDefaultViewDistance(int newViewDistance);
 }

@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.pointer.PointersSupplier;
@@ -31,10 +30,7 @@ import net.minestom.server.event.entity.*;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.event.trait.EntityEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.EntityTracker;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
@@ -170,6 +166,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final EventNode<EntityEvent> eventNode;
+    private int viewDistance = -1;
 
     private final UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -1889,5 +1886,68 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @Contract(pure = true)
     public Pointers pointers() {
         return ENTITY_POINTERS_SUPPLIER.view(this);
+    }
+
+    /**
+     * Sets the view distance of this entity.
+     * <p>
+     * This setting assumes this entity is a viewer, and modifying it will only affect
+     * the entities this entity can see.
+     * Currently, players are the only viewers, so setting this for other
+     * entities will have no effect.
+     *
+     * @param newViewDistance the new entity view distance in chunks
+     */
+    public void setViewDistance(int newViewDistance) {
+        if (viewDistance == newViewDistance) return;
+        viewDistance = newViewDistance;
+        instance.getEntityTracker().updateViewDistance(this, newViewDistance, trackingTarget, trackingUpdate);
+    }
+
+    /**
+     * Clears the custom entity view distance, causing the entity to fall back to the instance's entity view distance.
+     */
+    public void clearViewDistance() {
+        setViewDistance(-1);
+    }
+
+    /**
+     * Gets the view distance of this entity, which defaults to the instance's entity view distance
+     * or {@link ServerFlag#ENTITY_VIEW_DISTANCE} if no instance is set.
+     *
+     * @return The entity view distance in chunks
+     */
+    public int getViewDistance() {
+        return viewDistance < 0 ?
+                instance != null ? instance.getEntityTracker().getDefaultViewDistance() : ServerFlag.ENTITY_VIEW_DISTANCE :
+                viewDistance;
+    }
+
+    /**
+     * Gets the raw entity view distance value of this entity.
+     * <p>
+     * This may return a negative number if no custom view distance is set, in which case
+     * the instance's entity view distance should be used instead.
+     * Use {@link #getViewDistance()} to get the real entity view distance in chunks.
+     *
+     * @return The raw entity view distance in chunks
+     */
+    @ApiStatus.Internal
+    public int getRawViewDistance() {
+        return viewDistance;
+    }
+
+    /**
+     * Used internally to force tracker updates when the instance default
+     * view distance changes. The new distance parameter is only passed to avoid
+     * having to access the instance for each entity on each update -
+     * otherwise it can be derived from {@link EntityTracker#getDefaultViewDistance()}.
+     *
+     * @param newViewDistance The new instance default view distance
+     */
+    @ApiStatus.Internal
+    public void refreshDefaultViewDistance(int newViewDistance) {
+        if (viewDistance >= 0) return;
+        instance.getEntityTracker().updateViewDistance(this, newViewDistance, trackingTarget, trackingUpdate);
     }
 }
