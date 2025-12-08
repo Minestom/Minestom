@@ -60,7 +60,7 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assertEquals(particle, gotParticle);
+        assertSame(particle, gotParticle);
 
         Particle.DustColorTransition gotData = (Particle.DustColorTransition) gotParticle;
         assertNotNull(gotData);
