@@ -15,7 +15,7 @@ import java.util.function.Function;
  * Represents a single word in the command, with valid words dynamically provided by a function.
  * <p>
  * <strong>Important</strong>: the dynamic list is sent exactly once (automatically) when the player joins, for use in tab completion.
- * The return value of {@link #getDynamicRestrictions(CommandSender)} will not be re-evaluated until you manually refresh the player's
+ * The return value of the dynamic restriction function will not be re-evaluated on the client until you manually refresh the player's
  * command list with {@link Player#refreshCommands()}. However, server-side validation will still work as normal, obtaining fresh values
  * each time the argument is parsed.
  * <p>
