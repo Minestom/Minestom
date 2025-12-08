@@ -8,8 +8,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AreaEffectCloudTest {
     @Test
@@ -29,7 +28,7 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assertEquals(particle, gotParticle);
+        assertSame(particle, gotParticle);
 
         Particle.Dust gotData = (Particle.Dust) gotParticle;
         assertNotNull(gotData);
@@ -84,10 +83,10 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assertEquals(particle, gotParticle);
+        assertSame(particle, gotParticle);
 
         Particle.Block gotBlock = (Particle.Block) gotParticle;
-        assertEquals(block, gotBlock.block());
+        assertSame(block, gotBlock.block());
     }
 
     @Test
@@ -100,10 +99,10 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assertEquals(particle, gotParticle);
+        assertSame(particle, gotParticle);
 
         Particle.BlockMarker gotBlock = (Particle.BlockMarker) gotParticle;
-        assertEquals(block, gotBlock.block());
+        assertSame(block, gotBlock.block());
     }
 
     @Test
@@ -115,10 +114,10 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assertEquals(particle, gotParticle);
+        assertSame(particle, gotParticle);
 
         Particle.Item gotBlock = (Particle.Item) gotParticle;
-        assertEquals(Material.ACACIA_LOG, gotBlock.item().material());
+        assertSame(Material.ACACIA_LOG, gotBlock.item().material());
     }
 
     @Test
@@ -130,7 +129,7 @@ public class AreaEffectCloudTest {
         meta.setParticle(particle);
 
         var gotParticle = meta.getParticle();
-        assertEquals(particle, gotParticle);
+        assertSame(particle, gotParticle);
 
         Particle.SculkCharge gotBlock = (Particle.SculkCharge) gotParticle;
         assertEquals(3, gotBlock.roll());
