@@ -53,6 +53,7 @@ import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Stats;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.io.IOException;
@@ -428,8 +429,8 @@ public class PlayerInit {
             if (LAST_TICK.get() == null || MinecraftServer.getConnectionManager().getOnlinePlayerCount() == 0)
                 return;
 
-            long ramUsage = benchmarkManager.getUsedMemory();
-            ramUsage /= 1e6; // bytes to MB
+            long ramUsage = Stats.getUsedMemory();
+            ramUsage /= 1024 * 1024; // bytes to MB
 
             TickMonitor tickMonitor = LAST_TICK.get();
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
