@@ -428,7 +428,7 @@ public class PlayerInit {
             if (LAST_TICK.get() == null || MinecraftServer.getConnectionManager().getOnlinePlayerCount() == 0)
                 return;
 
-            long ramUsage = benchmarkManager.getUsedMemory();
+            long ramUsage = BenchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
             TickMonitor tickMonitor = LAST_TICK.get();
