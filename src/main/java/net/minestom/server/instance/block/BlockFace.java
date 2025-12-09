@@ -78,29 +78,44 @@ public enum BlockFace {
     }
 
     /**
-     * Gets the relative BlockFace by rotating the given direction around the reference face.
+     * Computes the rotated BlockFace by adding two horizontal BlockFaces.
      * Only works for horizontal faces; returns null for TOP/BOTTOM or invalid inputs.
      *
-     * @param reference the reference BlockFace (must be horizontal)
-     * @param direction the direction to rotate (must be horizontal)
-     * @return the rotated BlockFace, or null if invalid
+     * @param other the BlockFace to add
+     * @return the rotated horizontal BlockFace, or null if invalid
      */
-    public static @Nullable BlockFace relative(BlockFace reference, BlockFace direction) {
-        if (reference == TOP || reference == BOTTOM || direction == TOP || direction == BOTTOM) {
-            return null;
-        }
-
-        if (reference == NORTH) return direction;
-
+    public @Nullable BlockFace add(BlockFace other) {
         BlockFace[] horizontals = {NORTH, EAST, SOUTH, WEST};
-        int refIndex = -1, dirIndex = -1;
-        for (int i = 0; i < horizontals.length; i++) {
-            if (horizontals[i] == reference) refIndex = i;
-            if (horizontals[i] == direction) dirIndex = i;
-        }
-        if (refIndex == -1 || dirIndex == -1) return null;
 
-        int resultIndex = (refIndex + dirIndex) % 4;
+        int aIndex = -1, bIndex = -1;
+        for (int i = 0; i < horizontals.length; i++) {
+            if (horizontals[i] == this) aIndex = i;
+            if (horizontals[i] == other) bIndex = i;
+        }
+        if (aIndex == -1 || bIndex == -1) return null;
+
+        int resultIndex = (aIndex + bIndex) % 4;
+        return horizontals[resultIndex];
+    }
+
+    /**
+     * Computes the BlockFace by subtracting two horizontal BlockFaces.
+     * Only works for horizontal faces; returns null for TOP/BOTTOM or invalid inputs.
+     *
+     * @param other the BlockFace to subtract
+     * @return the resulting horizontal BlockFace, or null if invalid
+     */
+    public @Nullable BlockFace subtract(BlockFace other) {
+        BlockFace[] horizontals = {NORTH, EAST, SOUTH, WEST};
+
+        int aIndex = -1, bIndex = -1;
+        for (int i = 0; i < horizontals.length; i++) {
+            if (horizontals[i] == this) aIndex = i;
+            if (horizontals[i] == other) bIndex = i;
+        }
+        if (aIndex == -1 || bIndex == -1) return null;
+
+        int resultIndex = (aIndex - bIndex + 4) % 4;
         return horizontals[resultIndex];
     }
 }
