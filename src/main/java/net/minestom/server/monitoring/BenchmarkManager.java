@@ -96,7 +96,7 @@ public final class BenchmarkManager {
      *
      * @return the memory used by the server
      */
-    public long getUsedMemory() {
+    public static long getUsedMemory() {
         return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
 
