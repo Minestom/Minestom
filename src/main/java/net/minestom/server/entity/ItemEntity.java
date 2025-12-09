@@ -221,17 +221,6 @@ public class ItemEntity extends Entity {
     public void setPickupDelay(Duration delay) {
         this.pickupDelay = delay.toMillis();
     }
-
-    /**
-     * Used to know if the ItemEntity can be picked up.
-     *
-     * @return the elapsed time in milliseconds since this entity has spawned
-     * @deprecated use {@link #getTimeSinceSpawn()} instead, does the same thing with better naming
-     */
-    @Deprecated(forRemoval = true)
-    public long getSpawnTime() {
-        return getTimeSinceSpawn();
-    }
     
     /**
      * Used to know if the ItemEntity can be picked up.

@@ -25,11 +25,12 @@ public class EffectComponent {
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> SMASH_DAMAGE_PER_FALLEN_BLOCK = register("smash_damage_per_fallen_block", ConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> KNOCKBACK = register("knockback", ConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> ARMOR_EFFECTIVENESS = register("armor_effectiveness", ConditionalEffect.codec(ValueEffect.CODEC).list());
-    public static final DataComponent<List<TargetedConditionalEffect<EntityEffect>>> POST_ATTACK = register("post_attack", TargetedConditionalEffect.nbtType(EntityEffect.CODEC).list());
+    public static final DataComponent<List<TargetedConditionalEffect<EntityEffect>>> POST_ATTACK = register("post_attack", TargetedConditionalEffect.codec(EntityEffect.CODEC).list());
+    public static final DataComponent<List<ConditionalEffect<EntityEffect>>> POST_PIERCING_ATTACK = register("post_piercing_attack", ConditionalEffect.codec(EntityEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<EntityEffect>>> HIT_BLOCK = register("hit_block", ConditionalEffect.codec(EntityEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> ITEM_DAMAGE = register("item_damage", ConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<List<AttributeEffect>> ATTRIBUTES = register("attributes", AttributeEffect.CODEC.list());
-    public static final DataComponent<List<TargetedConditionalEffect<ValueEffect>>> EQUIPMENT_DROPS = register("equipment_drops", TargetedConditionalEffect.nbtType(ValueEffect.CODEC).list());
+    public static final DataComponent<List<TargetedConditionalEffect<ValueEffect>>> EQUIPMENT_DROPS = register("equipment_drops", TargetedConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<LocationEffect>>> LOCATION_CHANGED = register("location_changed", ConditionalEffect.codec(LocationEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<EntityEffect>>> TICK = register("tick", ConditionalEffect.codec(EntityEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> AMMO_USE = register("ammo_use", ConditionalEffect.codec(ValueEffect.CODEC).list());

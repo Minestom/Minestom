@@ -8,6 +8,7 @@ import net.minestom.server.color.Color;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.VillagerType;
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.ParrotMeta;
@@ -40,7 +41,10 @@ public class DataComponents {
     public static final DataComponent<Integer> MAX_DAMAGE = register("max_damage", NetworkBuffer.VAR_INT, Codec.INT);
     public static final DataComponent<Integer> DAMAGE = register("damage", NetworkBuffer.VAR_INT, Codec.INT);
     public static final DataComponent<Unit> UNBREAKABLE = register("unbreakable", NetworkBuffer.UNIT, Codec.UNIT);
+    public static final DataComponent<UseEffects> USE_EFFECTS = register("use_effects", UseEffects.NETWORK_TYPE, UseEffects.CODEC);
     public static final DataComponent<Component> CUSTOM_NAME = register("custom_name", NetworkBuffer.COMPONENT, Codec.COMPONENT);
+    public static final DataComponent<Float> MINIMUM_ATTACK_CHARGE = register("minimum_attack_charge", NetworkBuffer.FLOAT, Codec.FLOAT);
+    public static final DataComponent<RegistryKey<DamageType>> DAMAGE_TYPE = register("damage_type", DamageType.NETWORK_TYPE, DamageType.CODEC);
     public static final DataComponent<Component> ITEM_NAME = register("item_name", NetworkBuffer.COMPONENT, Codec.COMPONENT);
     public static final DataComponent<String> ITEM_MODEL = register("item_model", NetworkBuffer.STRING, Codec.STRING);
     public static final DataComponent<List<Component>> LORE = register("lore", NetworkBuffer.COMPONENT.list(256), Codec.COMPONENT.list(256));
@@ -62,6 +66,7 @@ public class DataComponents {
     public static final DataComponent<DamageResistant> DAMAGE_RESISTANT = register("damage_resistant", DamageResistant.NETWORK_TYPE, DamageResistant.CODEC);
     public static final DataComponent<Tool> TOOL = register("tool", Tool.NETWORK_TYPE, Tool.CODEC);
     public static final DataComponent<Weapon> WEAPON = register("weapon", Weapon.NETWORK_TYPE, Weapon.CODEC);
+    public static final DataComponent<AttackRange> ATTACK_RANGE = register("attack_range", AttackRange.NETWORK_TYPE, AttackRange.CODEC);
     public static final DataComponent<Integer> ENCHANTABLE = register("enchantable", NetworkBuffer.VAR_INT, wrapObject("value", Codec.INT));
     public static final DataComponent<Equippable> EQUIPPABLE = register("equippable", Equippable.NETWORK_TYPE, Equippable.CODEC);
     public static final DataComponent<RegistryTag<Material>> REPAIRABLE = register("repairable", RegistryTag.networkType(Registries::material), wrapObject("items", RegistryTag.codec(Registries::material)));
@@ -69,6 +74,9 @@ public class DataComponents {
     public static final DataComponent<String> TOOLTIP_STYLE = register("tooltip_style", NetworkBuffer.STRING, Codec.STRING);
     public static final DataComponent<DeathProtection> DEATH_PROTECTION = register("death_protection", DeathProtection.NETWORK_TYPE, DeathProtection.CODEC);
     public static final DataComponent<BlocksAttacks> BLOCKS_ATTACKS = register("blocks_attacks", BlocksAttacks.NETWORK_TYPE, BlocksAttacks.NBT_TYPE);
+    public static final DataComponent<PiercingWeapon> PIERCING_WEAPON = register("piercing_weapon", PiercingWeapon.NETWORK_TYPE, PiercingWeapon.CODEC);
+    public static final DataComponent<KineticWeapon> KINETIC_WEAPON = register("kinetic_weapon", KineticWeapon.NETWORK_TYPE, KineticWeapon.CODEC);
+    public static final DataComponent<SwingAnimation> SWING_ANIMATION = register("swing_animation", SwingAnimation.NETWORK_TYPE, SwingAnimation.CODEC);
     public static final DataComponent<EnchantmentList> STORED_ENCHANTMENTS = register("stored_enchantments", EnchantmentList.NETWORK_TYPE, EnchantmentList.CODEC);
     public static final DataComponent<RGBLike> DYED_COLOR = register("dyed_color", Color.NETWORK_TYPE, Color.CODEC);
     public static final DataComponent<RGBLike> MAP_COLOR = register("map_color", Color.NETWORK_TYPE, Color.CODEC);
@@ -123,6 +131,7 @@ public class DataComponents {
     public static final DataComponent<RegistryKey<PigVariant>> PIG_VARIANT = register("pig/variant", PigVariant.NETWORK_TYPE, PigVariant.CODEC);
     public static final DataComponent<RegistryKey<CowVariant>> COW_VARIANT = register("cow/variant", CowVariant.NETWORK_TYPE, CowVariant.CODEC);
     public static final DataComponent<RegistryKey<ChickenVariant>> CHICKEN_VARIANT = register("chicken/variant", ChickenVariant.NETWORK_TYPE, ChickenVariant.CODEC);
+    public static final DataComponent<RegistryKey<ZombieNautilusVariant>> ZOMBIE_NAUTILUS_VARIANT = register("zombie_nautilus/variant", ZombieNautilusVariant.NETWORK_TYPE, ZombieNautilusVariant.CODEC);
     public static final DataComponent<RegistryKey<FrogVariant>> FROG_VARIANT = register("frog/variant", FrogVariant.NETWORK_TYPE, FrogVariant.CODEC);
     public static final DataComponent<HorseMeta.Color> HORSE_VARIANT = register("horse/variant", HorseMeta.Color.NETWORK_TYPE, HorseMeta.Color.NBT_TYPE);
     public static final DataComponent<Holder<PaintingVariant>> PAINTING_VARIANT = register("painting/variant", PaintingVariant.NETWORK_TYPE, PaintingVariant.CODEC);

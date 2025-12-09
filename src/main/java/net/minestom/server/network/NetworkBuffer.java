@@ -216,7 +216,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
             return set(Integer.MAX_VALUE);
         }
 
-        default Type<T> optional() {
+        default Type<@Nullable T> optional() {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
         }
 

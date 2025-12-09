@@ -3,10 +3,7 @@ package net.minestom.server.registry;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.ChickenVariant;
-import net.minestom.server.entity.metadata.animal.CowVariant;
-import net.minestom.server.entity.metadata.animal.FrogVariant;
-import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -20,38 +17,38 @@ import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.timeline.Timeline;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
 public class TestRegistries implements Registries {
-    public DynamicRegistry<ChatType> chatType = null;
-    public DynamicRegistry<DimensionType> dimensionType = null;
-    public DynamicRegistry<Biome> biome = null;
-    public DynamicRegistry<DamageType> damageType = null;
-    public DynamicRegistry<TrimMaterial> trimMaterial = null;
-    public DynamicRegistry<TrimPattern> trimPattern = null;
-    public DynamicRegistry<BannerPattern> bannerPattern = null;
-    public DynamicRegistry<WolfVariant> wolfVariant = null;
-    public DynamicRegistry<Enchantment> enchantment = null;
-    public DynamicRegistry<PaintingVariant> paintingVariant = null;
-    public DynamicRegistry<JukeboxSong> jukeboxSong = null;
-    public DynamicRegistry<Instrument> instrument = null;
-    public DynamicRegistry<WolfSoundVariant> wolfSoundVariant = null;
-    public DynamicRegistry<CatVariant> catVariant = null;
-    public DynamicRegistry<ChickenVariant> chickenVariant = null;
-    public DynamicRegistry<CowVariant> cowVariant = null;
-    public DynamicRegistry<FrogVariant> frogVariant = null;
-    public DynamicRegistry<PigVariant> pigVariant = null;
-    public DynamicRegistry<Dialog> dialog = null;
-    public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
-    public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
-    public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
-    public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects = null;
-
-    public TestRegistries() {
-
-    }
+    public @Nullable DynamicRegistry<ChatType> chatType = null;
+    public @Nullable DynamicRegistry<DimensionType> dimensionType = null;
+    public @Nullable DynamicRegistry<Biome> biome = null;
+    public @Nullable DynamicRegistry<DamageType> damageType = null;
+    public @Nullable DynamicRegistry<TrimMaterial> trimMaterial = null;
+    public @Nullable DynamicRegistry<TrimPattern> trimPattern = null;
+    public @Nullable DynamicRegistry<BannerPattern> bannerPattern = null;
+    public @Nullable DynamicRegistry<WolfVariant> wolfVariant = null;
+    public @Nullable DynamicRegistry<Enchantment> enchantment = null;
+    public @Nullable DynamicRegistry<PaintingVariant> paintingVariant = null;
+    public @Nullable DynamicRegistry<JukeboxSong> jukeboxSong = null;
+    public @Nullable DynamicRegistry<Instrument> instrument = null;
+    public @Nullable DynamicRegistry<WolfSoundVariant> wolfSoundVariant = null;
+    public @Nullable DynamicRegistry<CatVariant> catVariant = null;
+    public @Nullable DynamicRegistry<ChickenVariant> chickenVariant = null;
+    public @Nullable DynamicRegistry<CowVariant> cowVariant = null;
+    public @Nullable DynamicRegistry<FrogVariant> frogVariant = null;
+    public @Nullable DynamicRegistry<PigVariant> pigVariant = null;
+    public @Nullable DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant = null;
+    public @Nullable DynamicRegistry<Dialog> dialog = null;
+    public @Nullable DynamicRegistry<Timeline> timeline = null;
+    public @Nullable DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
+    public @Nullable DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
+    public @Nullable DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
+    public @Nullable DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects = null;
 
     public TestRegistries(Consumer<TestRegistries> init) {
         init.accept(this);
@@ -128,6 +125,11 @@ public class TestRegistries implements Registries {
     }
 
     @Override
+    public DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
+        return Objects.requireNonNull(zombieNautilusVariant);
+    }
+
+    @Override
     public DynamicRegistry<Enchantment> enchantment() {
         return Objects.requireNonNull(enchantment);
     }
@@ -144,12 +146,17 @@ public class TestRegistries implements Registries {
 
     @Override
     public DynamicRegistry<Instrument> instrument() {
-        return instrument;
+        return Objects.requireNonNull(instrument);
     }
 
     @Override
     public DynamicRegistry<Dialog> dialog() {
-        return dialog;
+        return Objects.requireNonNull(dialog);
+    }
+
+    @Override
+    public DynamicRegistry<Timeline> timeline() {
+        return Objects.requireNonNull(timeline);
     }
 
     @Override

@@ -4,6 +4,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.MainHand;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Chunk;
@@ -17,7 +18,6 @@ import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.player.ClientSettings;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -133,7 +133,7 @@ public class PlayerMovementIntegrationTest {
         player.refreshSettings(new ClientSettings(
                 Locale.US, (byte) viewDistance,
                 ChatMessageType.FULL, true,
-                (byte) 0, ClientSettings.MainHand.RIGHT,
+                (byte) 0, MainHand.RIGHT,
                 false, true,
                 ClientSettings.ParticleSetting.ALL
         ));
@@ -164,14 +164,14 @@ public class PlayerMovementIntegrationTest {
 
         var tracker = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,
-                ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT,
+                ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
         tracker.assertCount(chunkDifference);
 
         var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, finalViewDistance,
-                ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT,
+                ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
 

@@ -10,10 +10,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.ChickenVariant;
-import net.minestom.server.entity.metadata.animal.CowVariant;
-import net.minestom.server.entity.metadata.animal.FrogVariant;
-import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -55,6 +52,7 @@ import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.time.Tick;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.timeline.Timeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +95,8 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<CowVariant> cowVariant;
     private final DynamicRegistry<FrogVariant> frogVariant;
     private final DynamicRegistry<PigVariant> pigVariant;
+    private final DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant;
+    private final DynamicRegistry<Timeline> timeline;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
@@ -135,7 +135,6 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dialog = Dialog.createDefaultRegistry(this);
-        this.dimensionType = DimensionType.createDefaultRegistry();
         this.biome = Biome.createDefaultRegistry();
         this.damageType = DamageType.createDefaultRegistry();
         this.trimMaterial = TrimMaterial.createDefaultRegistry();
@@ -152,6 +151,9 @@ final class ServerProcessImpl implements ServerProcess {
         this.cowVariant = CowVariant.createDefaultRegistry();
         this.frogVariant = FrogVariant.createDefaultRegistry();
         this.pigVariant = PigVariant.createDefaultRegistry();
+        this.zombieNautilusVariant = ZombieNautilusVariant.createDefaultRegistry();
+        this.timeline = Timeline.createDefaultRegistry();
+        this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
@@ -187,6 +189,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public DynamicRegistry<Dialog> dialog() {
         return dialog;
+    }
+
+    @Override
+    public DynamicRegistry<Timeline> timeline() {
+        return timeline;
     }
 
     @Override
@@ -262,6 +269,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public DynamicRegistry<PigVariant> pigVariant() {
         return pigVariant;
+    }
+
+    @Override
+    public DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
+        return zombieNautilusVariant;
     }
 
     @Override

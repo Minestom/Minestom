@@ -12,9 +12,6 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.extras.MojangAuth;
-import net.minestom.server.extras.bungee.BungeeCordProxy;
-import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -83,7 +80,7 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public static MinecraftServer init() {
-        return init(defaultAuth());
+        return init(new Auth.Offline());
     }
 
     @ApiStatus.Internal
@@ -95,15 +92,7 @@ public final class MinecraftServer implements MinecraftConstants {
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
-        return updateProcess(defaultAuth());
-    }
-
-    @SuppressWarnings("removal")
-    private static Auth defaultAuth() {
-        if (MojangAuth.isEnabled()) return new Auth.Online(MojangAuth.getKeyPair());
-        if (VelocityProxy.isEnabled()) return new Auth.Velocity(VelocityProxy.getKey());
-        if (BungeeCordProxy.isEnabled()) return new Auth.Bungee(BungeeCordProxy.getBungeeGuardTokens());
-        return new Auth.Offline();
+        return updateProcess(new Auth.Offline());
     }
 
     /**

@@ -29,6 +29,8 @@ sealed interface DamageTypes permits DamageType {
 
     RegistryKey<DamageType> STING = RegistryKey.unsafeOf("sting");
 
+    RegistryKey<DamageType> SPEAR = RegistryKey.unsafeOf("spear");
+
     RegistryKey<DamageType> IN_FIRE = RegistryKey.unsafeOf("in_fire");
 
     RegistryKey<DamageType> ARROW = RegistryKey.unsafeOf("arrow");

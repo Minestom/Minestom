@@ -1566,7 +1566,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         PlayerMeta playerMeta = getPlayerMeta();
         if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
         playerMeta.setDisplayedSkinParts(settings.displayedSkinParts());
-        playerMeta.setRightMainHand(settings.mainHand() == ClientSettings.MainHand.RIGHT);
+        playerMeta.setMainHand(settings.mainHand());
         if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
 
         final byte previousViewDistance = previous.viewDistance();

@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.util.TriState;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.Registries;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -85,6 +87,8 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     Codec<Unit> UNIT = StructCodec.struct(Unit.INSTANCE);
 
     Codec<Boolean> BOOLEAN = new PrimitiveImpl<>(Transcoder::createBoolean, Transcoder::getBoolean);
+
+    Codec<TriState> TRI_STATE = new CodecImpl.TriStateImpl();
 
     Codec<Byte> BYTE = new PrimitiveImpl<>(Transcoder::createByte, Transcoder::getByte);
 
@@ -451,6 +455,63 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     }
 
     /**
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}
+     * where the codec for {@link V} is determined by the key {@link T}
+     *
+     * @param mapper  the function to get the codec for {@link V} from {@link T}
+     * @param maxSize the max size before returning an error result.
+     * @param cached  whether to cache codecs for each key
+     * @param <V>     the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
+    @Contract(pure = true, value = "_, _, _ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, int maxSize, boolean cached) {
+        return new CodecImpl.TypedMapImpl<>(Codec.this, mapper,
+                maxSize, cached ? new ConcurrentHashMap<>() : null);
+    }
+
+    /**
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}
+     * where the codec for {@link V} is determined by the key {@link T}
+     *
+     * @param mapper  the function to get the codec for {@link V} from {@link T}
+     * @param maxSize the max size before returning an error result.
+     * @param <V>     the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
+    @Contract(pure = true, value = "_, _ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, int maxSize) {
+        return mapValueTyped(mapper, maxSize, false);
+    }
+
+    /**
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}
+     * where the codec for {@link V} is determined by the key {@link T}
+     *
+     * @param mapper  the function to get the codec for {@link V} from {@link T}
+     * @param cached  whether to cache codecs for each key
+     * @param <V>     the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
+    @Contract(pure = true, value = "_, _ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, boolean cached) {
+        return mapValueTyped(mapper, Integer.MAX_VALUE, cached);
+    }
+
+    /**
+     * Creates an unmodifiable map of key {@link T} and value of {@link V}
+     * where the codec for {@link V} is determined by the key {@link T}
+     *
+     * @param mapper  the function to get the codec for {@link V} from {@link T}
+     * @param <V>     the value type
+     * @return the map codec of type {@link T} and {@link V}
+     */
+    @Contract(pure = true, value = "_ -> new")
+    default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper) {
+        return mapValueTyped(mapper, Integer.MAX_VALUE, false);
+    }
+
+    /**
      * Creates a union type of type {@link R}. See {@link #unionType(String, Function, Function)}
      * <br>
      * Useful when you have an interface of {@link T} and want a codec subclasses of {@link T}
@@ -497,6 +558,23 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     @Contract(pure = true, value = "_ -> new")
     default Codec<T> orElse(Codec<T> other) {
         return new CodecImpl.OrElseImpl<>(this, other);
+    }
+
+    /**
+     * Creates a or else codec where it will attempt to use the first codec
+     * then use the second one and transform via mapper if it fails.
+     * <br>
+     * If both codecs fail the first error will be returned instead.
+     *
+     * @param other the other codec
+     * @param mapper the mapper to transform the error into a value of {@link T}
+     * @return the or else codec of {@link T}
+     */
+    @Contract(pure = true, value = "_ -> new")
+    default <S> Codec<T> orElse(Codec<S> other, ThrowingFunction<S, T> mapper) {
+        return new CodecImpl.OrElseImpl<>(this, other.transform(mapper, _ -> {
+            throw new UnsupportedOperationException("unreachable");
+        }));
     }
 
 }

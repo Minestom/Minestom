@@ -34,25 +34,4 @@ public record RespawnPacket(
             BYTE, RespawnPacket::copyData,
             RespawnPacket::new);
 
-    /**
-     * @deprecated Use {@link RespawnPacket#RespawnPacket(int, String, long, GameMode, GameMode, boolean, boolean, WorldPos, int, int, byte)}
-     * @param dimensionType dimensionType
-     * @param worldName worldName
-     * @param hashedSeed hashedSeed
-     * @param gameMode gameMode
-     * @param previousGameMode previousGameMode
-     * @param isDebug isDebug
-     * @param isFlat isFlat
-     * @param deathLocation deathLocation
-     * @param portalCooldown portalCooldown
-     * @param copyData copyData
-     * @param seaLevel seaLevel
-     */
-    @Deprecated(forRemoval = true)
-    public RespawnPacket(int dimensionType, String worldName,
-                         long hashedSeed, GameMode gameMode, GameMode previousGameMode,
-                         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
-                         int portalCooldown, byte copyData, int seaLevel) {
-        this(dimensionType, worldName, hashedSeed, gameMode, previousGameMode, isDebug, isFlat, deathLocation, portalCooldown, seaLevel, copyData);
-    }
 }

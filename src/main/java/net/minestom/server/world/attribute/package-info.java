@@ -1,4 +1,4 @@
 @NotNullByDefault
-package net.minestom.server.extras;
+package net.minestom.server.world.attribute;
 
 import org.jetbrains.annotations.NotNullByDefault;

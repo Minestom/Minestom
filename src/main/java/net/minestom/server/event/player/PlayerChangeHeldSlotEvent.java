@@ -25,16 +25,6 @@ public class PlayerChangeHeldSlotEvent implements PlayerInstanceEvent, Cancellab
     }
 
     /**
-     * Gets the slot which the player will hold.
-     * @deprecated Use {@link #getNewSlot()} instead.
-     * @return the future slot
-     */
-    @Deprecated(forRemoval = true)
-    public byte getSlot() {
-        return newSlot;
-    }
-
-    /**
      * Gets the slot number that the player is currently holding
      *
      * @return The slot index that the player currently is holding
@@ -49,19 +39,6 @@ public class PlayerChangeHeldSlotEvent implements PlayerInstanceEvent, Cancellab
      */
     public byte getNewSlot() {
         return newSlot;
-    }
-
-    /**
-     * Changes the final held slot of the player.
-     *
-     * @param slot the new held slot
-     * @deprecated Use {@link #setNewSlot(byte)} instead
-     * @throws IllegalArgumentException if <code>slot</code> is not between 0 and 8
-     */
-    @Deprecated(forRemoval = true)
-    public void setSlot(byte slot) {
-        Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "The held slot needs to be between 0 and 8");
-        this.newSlot = slot;
     }
 
     /**

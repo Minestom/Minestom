@@ -159,6 +159,10 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_CHICKEN_VARIANT, value, ChickenVariant.NETWORK_TYPE);
     }
 
+    public static Entry<RegistryKey<ZombieNautilusVariant>> ZombieNautilusVariant(RegistryKey<ZombieNautilusVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_ZOMBIE_NAUTILUS_VARIANT, value, ZombieNautilusVariant.NETWORK_TYPE);
+    }
+
     public static Entry<Holder<PaintingVariant>> PaintingVariant(Holder<PaintingVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, PaintingVariant.NETWORK_TYPE);
     }
@@ -191,6 +195,10 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_RESOLVABLE_PROFILE, value, ResolvableProfile.NETWORK_TYPE);
     }
 
+    public static Entry<MainHand> MainHand(MainHand value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_MAIN_HAND, value, MainHand.NETWORK_TYPE);
+    }
+
     private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
 
     public static final byte TYPE_BYTE = nextId();
@@ -221,6 +229,7 @@ public final class Metadata {
     public static final byte TYPE_FROG_VARIANT = nextId();
     public static final byte TYPE_PIG_VARIANT = nextId();
     public static final byte TYPE_CHICKEN_VARIANT = nextId();
+    public static final byte TYPE_ZOMBIE_NAUTILUS_VARIANT = nextId();
     public static final byte TYPE_OPT_GLOBAL_POSITION = nextId(); // Unused by protocol it seems
     public static final byte TYPE_PAINTING_VARIANT = nextId();
     public static final byte TYPE_SNIFFER_STATE = nextId();
@@ -230,6 +239,7 @@ public final class Metadata {
     public static final byte TYPE_VECTOR3 = nextId();
     public static final byte TYPE_QUATERNION = nextId();
     public static final byte TYPE_RESOLVABLE_PROFILE = nextId();
+    public static final byte TYPE_MAIN_HAND = nextId();
 
     // Impl Note: Adding an entry here requires that a default value entry is added in MetadataImpl.EMPTY_VALUES
 

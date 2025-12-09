@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.util.TriState;
 import net.minestom.server.codec.Transcoder.ListBuilder;
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
@@ -78,6 +79,31 @@ final class CodecImpl {
         }
     }
 
+    record TriStateImpl() implements Codec<TriState> {
+        @Override
+        public <D> Result<TriState> decode(Transcoder<D> coder, D value) {
+            final Result<Boolean> boolResult = coder.getBoolean(value);
+            if (boolResult instanceof Result.Ok(Boolean bool))
+                return new Result.Ok<>(TriState.byBoolean(bool));
+            final Result<String> stringResult = coder.getString(value);
+            if (stringResult instanceof Result.Ok(String string)) {
+                if ("true".equalsIgnoreCase(string)) return new Result.Ok<>(TriState.TRUE);
+                if ("false".equalsIgnoreCase(string)) return new Result.Ok<>(TriState.FALSE);
+                if ("default".equalsIgnoreCase(string)) return new Result.Ok<>(TriState.NOT_SET);
+            }
+            return new Result.Error<>("expected true, false, or \"default\", got: " + stringResult);
+        }
+
+        @Override
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable TriState value) {
+            return switch (value) {
+                case TRUE -> new Result.Ok<>(coder.createBoolean(true));
+                case FALSE -> new Result.Ok<>(coder.createBoolean(false));
+                case null, default -> new Result.Ok<>(coder.createString("default"));
+            };
+        }
+    }
+
     record OptionalImpl<T>(Codec<T> inner, @Nullable T defaultValue) implements Codec<T> {
         OptionalImpl {
             Objects.requireNonNull(inner, "inner");
@@ -115,7 +141,7 @@ final class CodecImpl {
                     case Result.Error(String error) -> new Result.Error<>(error);
                 };
             } catch (Exception e) {
-                return new Result.Error<>(e.getMessage());
+                return new Result.Error<>(e.getClass().getSimpleName() + ": " + e.getMessage());
             }
         }
 
@@ -263,6 +289,73 @@ final class CodecImpl {
         }
     }
 
+    record TypedMapImpl<K, V>(
+            Codec<K> keyCodec,
+            Function<K, Codec<V>> valueMapper,
+            int maxSize,
+            @Nullable Map<K, Codec<V>> mutableResolvedValueCache
+    ) implements Codec<@Unmodifiable Map<K, V>> {
+        TypedMapImpl {
+            Objects.requireNonNull(keyCodec, "keyCodec");
+            Objects.requireNonNull(valueMapper, "valueMapper");
+        }
+
+        @Override
+        public <D> Result<@Unmodifiable Map<K, V>> decode(Transcoder<D> coder, D value) {
+            final Result<MapLike<D>> mapResult = coder.getMap(value);
+            if (!(mapResult instanceof Result.Ok(MapLike<D> map)))
+                return mapResult.cast();
+
+            if (map.size() > maxSize)
+                return new Result.Error<>("Map size exceeds maximum allowed size: " + maxSize);
+            if (map.isEmpty()) return new Result.Ok<>(Map.of());
+
+            final Map<K, V> decodedMap = new HashMap<>(map.size());
+            for (final String key : map.keys()) {
+                final Result<K> keyResult = keyCodec.decode(coder, coder.createString(key));
+                if (!(keyResult instanceof Result.Ok(K decodedKey)))
+                    return keyResult.cast();
+
+                final Codec<V> valueCodec = mutableResolvedValueCache != null
+                        ? mutableResolvedValueCache.computeIfAbsent(decodedKey, valueMapper)
+                        : valueMapper.apply(decodedKey);
+
+                // The throwing decode here is fine since we are already iterating over known keys.
+                final Result<V> valueResult = valueCodec.decode(coder, map.getValue(key).orElseThrow());
+                if (!(valueResult instanceof Result.Ok(V decodedValue)))
+                    return valueResult.mapError(e -> key + ": " + e).cast();
+                decodedMap.put(decodedKey, decodedValue);
+            }
+            return new Result.Ok<>(Map.copyOf(decodedMap));
+        }
+
+        @Override
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable Map<K, V> value) {
+            if (value == null) return new Result.Error<>("null");
+            if (value.size() > maxSize)
+                return new Result.Error<>("Map size exceeds maximum allowed size: " + maxSize);
+            if (value.isEmpty()) return new Result.Ok<>(coder.createMap().build());
+
+            final MapBuilder<D> map = coder.createMap();
+            for (final Map.Entry<K, V> entry : value.entrySet()) {
+                final Result<D> keyResult = keyCodec.encode(coder, entry.getKey());
+                if (!(keyResult instanceof Result.Ok(D encodedKey)))
+                    return keyResult.cast();
+
+                final Codec<V> valueCodec = mutableResolvedValueCache != null
+                        ? mutableResolvedValueCache.computeIfAbsent(entry.getKey(), valueMapper)
+                        : valueMapper.apply(entry.getKey());
+
+                final Result<D> valueResult = valueCodec.encode(coder, entry.getValue());
+                if (!(valueResult instanceof Result.Ok(D encodedValue)))
+                    return valueResult.cast();
+                map.put(encodedKey, encodedValue);
+            }
+
+            return new Result.Ok<>(map.build());
+        }
+    }
+
     record UnionImpl<T, R>(
             String keyField, Codec<T> keyCodec,
             Function<T, @Nullable StructCodec<? extends R>> serializers,
@@ -277,7 +370,9 @@ final class CodecImpl {
         @SuppressWarnings("unchecked")
         @Override
         public <D> Result<R> decodeFromMap(Transcoder<D> coder, MapLike<D> map) {
-            final Result<T> keyResult = map.getValue(keyField).map(key -> keyCodec.decode(coder, key));
+            Result<T> keyResult = map.getValue(keyField).map(key -> keyCodec.decode(coder, key));
+            if (keyResult instanceof Result.Error<T> && keyCodec instanceof OptionalImpl(var _, var defaultValue))
+                keyResult = new Result.Ok<>(defaultValue);
             if (!(keyResult instanceof Result.Ok(T key)))
                 return keyResult.cast();
             final StructCodec<? extends R> serializer = serializers.apply(key);

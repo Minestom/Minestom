@@ -23,10 +23,7 @@ import net.minestom.server.entity.metadata.item.*;
 import net.minestom.server.entity.metadata.minecart.*;
 import net.minestom.server.entity.metadata.monster.*;
 import net.minestom.server.entity.metadata.monster.raider.*;
-import net.minestom.server.entity.metadata.monster.skeleton.BoggedMeta;
-import net.minestom.server.entity.metadata.monster.skeleton.SkeletonMeta;
-import net.minestom.server.entity.metadata.monster.skeleton.StrayMeta;
-import net.minestom.server.entity.metadata.monster.skeleton.WitherSkeletonMeta;
+import net.minestom.server.entity.metadata.monster.skeleton.*;
 import net.minestom.server.entity.metadata.monster.zombie.*;
 import net.minestom.server.entity.metadata.other.*;
 import net.minestom.server.entity.metadata.projectile.*;
@@ -191,6 +188,7 @@ public final class MetadataHolder {
         map.put("minecraft:breeze", BreezeMeta::new);
         map.put("minecraft:breeze_wind_charge", BreezeWindChargeMeta::new);
         map.put("minecraft:camel", CamelMeta::new);
+        map.put("minecraft:camel_husk", CamelHuskMeta::new);
         map.put("minecraft:cat", CatMeta::new);
         map.put("minecraft:cave_spider", CaveSpiderMeta::new);
         map.put("minecraft:cherry_boat", BoatMeta::new);
@@ -250,6 +248,7 @@ public final class MetadataHolder {
         map.put("minecraft:mannequin", MannequinMeta::new);
         map.put("minecraft:marker", MarkerMeta::new);
         map.put("minecraft:minecart", MinecartMeta::new);
+        map.put("minecraft:nautilus", NautilusMeta::new);
         map.put("minecraft:chest_minecart", ChestMinecartMeta::new);
         map.put("minecraft:command_block_minecart", CommandBlockMinecartMeta::new);
         map.put("minecraft:furnace_minecart", FurnaceMinecartMeta::new);
@@ -268,6 +267,7 @@ public final class MetadataHolder {
         map.put("minecraft:pale_oak_chest_boat", BoatMeta::new);
         map.put("minecraft:panda", PandaMeta::new);
         map.put("minecraft:parrot", ParrotMeta::new);
+        map.put("minecraft:parched", ParchedMeta::new);
         map.put("minecraft:phantom", PhantomMeta::new);
         map.put("minecraft:pig", PigMeta::new);
         map.put("minecraft:piglin", PiglinMeta::new);
@@ -321,6 +321,7 @@ public final class MetadataHolder {
         map.put("minecraft:zoglin", ZoglinMeta::new);
         map.put("minecraft:zombie", ZombieMeta::new);
         map.put("minecraft:zombie_horse", ZombieHorseMeta::new);
+        map.put("minecraft:zombie_nautilus", ZombieNautilusMeta::new);
         map.put("minecraft:zombie_villager", ZombieVillagerMeta::new);
         map.put("minecraft:zombified_piglin", ZombifiedPiglinMeta::new);
         map.put("minecraft:player", PlayerMeta::new);

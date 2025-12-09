@@ -6,7 +6,8 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
 public record ServerDataPacket(Component motd, byte @Nullable [] iconBase64) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ServerDataPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -14,23 +15,4 @@ public record ServerDataPacket(Component motd, byte @Nullable [] iconBase64) imp
             BYTE_ARRAY.optional(), ServerDataPacket::iconBase64,
             ServerDataPacket::new);
 
-    /**
-     * No longer exists
-     * @deprecated Use {@link ServerDataPacket(Component, byte[])}
-     * @param motd motd
-     * @param iconBase64 icon
-     * @param forRemoval enforcesSecureChat
-     */
-    @Deprecated(forRemoval = true)
-    public ServerDataPacket(Component motd, @Nullable byte[] iconBase64, boolean forRemoval) {
-        this(motd, iconBase64);
-    }
-    /**
-     * No longer exists
-     * @deprecated Use {@link ServerDataPacket(Component, byte[])}
-     */
-    @Deprecated(forRemoval = true)
-    boolean enforcesSecureChat() {
-        return false;
-    }
 }
