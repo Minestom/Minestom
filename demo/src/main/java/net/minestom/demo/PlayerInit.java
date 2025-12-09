@@ -430,7 +430,7 @@ public class PlayerInit {
                 return;
 
             long ramUsage = Stats.getUsedMemory();
-            ramUsage /= 1e6; // bytes to MB
+            ramUsage /= 1024 * 1024; // bytes to MB
 
             TickMonitor tickMonitor = LAST_TICK.get();
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")

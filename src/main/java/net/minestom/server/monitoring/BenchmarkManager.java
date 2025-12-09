@@ -100,7 +100,7 @@ public final class BenchmarkManager {
      */
     @Deprecated(forRemoval = true)
     public static long getUsedMemory() {
-        return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        return Stats.getUsedMemory();
     }
 
     public Map<String, ThreadResult> getResultMap() {
