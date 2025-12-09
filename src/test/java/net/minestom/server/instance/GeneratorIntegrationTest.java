@@ -104,7 +104,7 @@ public class GeneratorIntegrationTest {
     public void explicitChunkGenerate(Env env) {
         var instance = env.createEmptyInstance();
         Generator generator = unit -> {
-            assert Thread.currentThread().isVirtual();
+            assertTrue(Thread.currentThread().isVirtual());
             unit.modifier().fill(Block.GRASS_BLOCK);
         };
         instance.generateChunk(0, 0, generator).join();
