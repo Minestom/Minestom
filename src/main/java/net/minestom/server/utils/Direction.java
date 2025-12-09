@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.coordinate.Vec;
+import org.jetbrains.annotations.Nullable;
 
 public enum Direction {
     DOWN(0, -1, 0),
@@ -69,5 +70,47 @@ public enum Direction {
             case NORTH -> SOUTH;
             case SOUTH -> NORTH;
         };
+    }
+
+    private static final Direction[] HORIZONTALS = {NORTH, EAST, SOUTH, WEST};
+
+    /**
+     * Adds two horizontal directions together, treating them as rotations.
+     * NORTH acts as the identity (adding NORTH returns the original direction).
+     * Other directions rotate clockwise: EAST = 90°, SOUTH = 180°, WEST = 270°.
+     *
+     * @param other the horizontal Direction to add to this Direction
+     * @return the resulting horizontal Direction, or null if either direction is not horizontal
+     */
+    public @Nullable Direction add(Direction other) {
+        int aIndex = -1, bIndex = -1;
+        for (int i = 0; i < HORIZONTALS.length; i++) {
+            if (HORIZONTALS[i] == this) aIndex = i;
+            if (HORIZONTALS[i] == other) bIndex = i;
+        }
+        if (aIndex == -1 || bIndex == -1) return null;
+
+        int resultIndex = (aIndex + bIndex) % 4;
+        return HORIZONTALS[resultIndex];
+    }
+
+    /**
+     * Subtracts another horizontal direction from this one, treating them as rotations.
+     * NORTH acts as the identity (subtracting NORTH returns the original direction).
+     * Other directions rotate counter-clockwise: EAST = -90°, SOUTH = -180°, WEST = -270°.
+     *
+     * @param other the horizontal Direction to subtract from this Direction
+     * @return the resulting horizontal Direction, or null if either direction is not horizontal
+     */
+    public @Nullable Direction subtract(Direction other) {
+        int aIndex = -1, bIndex = -1;
+        for (int i = 0; i < HORIZONTALS.length; i++) {
+            if (HORIZONTALS[i] == this) aIndex = i;
+            if (HORIZONTALS[i] == other) bIndex = i;
+        }
+        if (aIndex == -1 || bIndex == -1) return null;
+
+        int resultIndex = (aIndex - bIndex + 4) % 4;
+        return HORIZONTALS[resultIndex];
     }
 }
