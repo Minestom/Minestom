@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block;
 
 import net.minestom.server.utils.Direction;
+import org.jetbrains.annotations.Nullable;
 
 public enum BlockFace {
     BOTTOM(Direction.DOWN),
@@ -74,5 +75,32 @@ public enum BlockFace {
             case WEST -> WEST;
             case EAST -> EAST;
         };
+    }
+
+    /**
+     * Gets the relative BlockFace by rotating the given direction around the reference face.
+     * Only works for horizontal faces; returns null for TOP/BOTTOM or invalid inputs.
+     *
+     * @param reference the reference BlockFace (must be horizontal)
+     * @param direction the direction to rotate (must be horizontal)
+     * @return the rotated BlockFace, or null if invalid
+     */
+    public static @Nullable BlockFace relative(BlockFace reference, BlockFace direction) {
+        if (reference == TOP || reference == BOTTOM || direction == TOP || direction == BOTTOM) {
+            return null;
+        }
+
+        if (reference == NORTH) return direction;
+
+        BlockFace[] horizontals = {NORTH, EAST, SOUTH, WEST};
+        int refIndex = -1, dirIndex = -1;
+        for (int i = 0; i < horizontals.length; i++) {
+            if (horizontals[i] == reference) refIndex = i;
+            if (horizontals[i] == direction) dirIndex = i;
+        }
+        if (refIndex == -1 || dirIndex == -1) return null;
+
+        int resultIndex = (refIndex + dirIndex) % 4;
+        return horizontals[resultIndex];
     }
 }
