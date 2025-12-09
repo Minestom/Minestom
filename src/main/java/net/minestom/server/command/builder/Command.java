@@ -2,11 +2,9 @@ package net.minestom.server.command.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
-import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -377,6 +375,15 @@ public class Command {
                             arguments = new ArrayList<>();
 
                             node = findNode.apply(node, Set.of(argumentWord.getRestrictions()));
+                            continue;
+                        }
+                    } else if (argument instanceof ArgumentDynamicList argumentDynamicList) {
+                        List<String> restrictions = argumentDynamicList.getDynamicRestrictions(MinecraftServer.getCommandManager().getConsoleSender());
+                        if (restrictions != null) {
+                            addArguments.accept(node, arguments);
+                            arguments = new ArrayList<>();
+
+                            node = findNode.apply(node, new HashSet<>(restrictions));
                             continue;
                         }
                     }

@@ -26,7 +26,7 @@ public class ArgumentDynamicList extends Argument<String> {
     public static final int SPACE_ERROR = 1;
     public static final int RESTRICTION_ERROR = 2;
 
-    protected Function<CommandSender, List<String>> dynamicRestrictions;
+    protected Function<CommandSender, @Nullable List<String>> dynamicRestrictions;
 
     public ArgumentDynamicList(String id) {
         super(id);
@@ -41,7 +41,7 @@ public class ArgumentDynamicList extends Argument<String> {
      * @param dynamicRestrictions the function to get the dynamic restrictions
      * @return this argument, for chaining
      */
-    public ArgumentDynamicList from(Function<CommandSender, List<String>> dynamicRestrictions) {
+    public ArgumentDynamicList from(Function<CommandSender, @Nullable List<String>> dynamicRestrictions) {
         this.dynamicRestrictions = dynamicRestrictions;
         return this;
     }
@@ -51,9 +51,8 @@ public class ArgumentDynamicList extends Argument<String> {
         if (input.contains(StringUtils.SPACE))
             throw new ArgumentSyntaxException("Word cannot contain space character", input, SPACE_ERROR);
 
-        // Get dynamic restrictions
         List<String> restrictions = dynamicRestrictions.apply(sender);
-        if (restrictions != null && !restrictions.isEmpty()) {
+        if (restrictions != null) {
             for (String r : restrictions) {
                 if (input.equals(r))
                     return input;
@@ -61,7 +60,7 @@ public class ArgumentDynamicList extends Argument<String> {
             throw new ArgumentSyntaxException("Word needs to be in the dynamic restriction list", input, RESTRICTION_ERROR);
         }
 
-        return input; // If no restrictions, accept any word
+        return input; // if restrictions is null, accept any input
     }
 
     @Override
@@ -74,7 +73,7 @@ public class ArgumentDynamicList extends Argument<String> {
         return NetworkBuffer.makeArray(NetworkBuffer.VAR_INT, 0); // Single word
     }
 
-    public List<String> getDynamicRestrictions(CommandSender sender) {
+    public @Nullable List<String> getDynamicRestrictions(CommandSender sender) {
         return dynamicRestrictions.apply(sender);
     }
 
