@@ -735,6 +735,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return result;
     }
 
+    /**
+     * Gets entities located in the bounding box.
+     *
+     * @param box the bounding box
+     * @return entities located in the bounding box.
+     */
     public Collection<Entity> getBoundingBoxEntities(BoundingBox box) {
         List<Entity> result = new ArrayList<>();
         this.entityTracker.boundingBoxEntities(box, EntityTracker.Target.ENTITIES, result::add);
