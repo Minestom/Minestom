@@ -119,6 +119,11 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
         return hitBlock;
     }
 
+    @Override
+    public boolean contains(Point point) {
+        return boundingBoxes().stream().anyMatch(boundingBox -> boundingBox.contains(point));
+    }
+
     /**
      * Gets the bounding boxes for this shape. There will be more than one bounds for more complex shapes e.g.
      * stairs.

@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -173,6 +174,46 @@ public class EntityTrackerTest {
         tracker.move(ent1, new Vec(16, 0, 0), EntityTracker.Target.ENTITIES, updater);
         entities.add(ent1);
         tracker.nearbyEntities(new Vec(15, 0, 0), 2, EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
+        assertEquals(0, entities.size());
+    }
+
+    @Test
+    public void boundingBoxEntities() {
+        var ent1 = new Entity(EntityType.ZOMBIE);
+        var ent2 = new Entity(EntityType.ZOMBIE);
+        var ent3 = new Entity(EntityType.ZOMBIE);
+        var updater = new EntityTracker.Update<>() {
+            @Override
+            public void add(Entity entity) {
+                // Empty
+            }
+
+            @Override
+            public void remove(Entity entity) {
+                // Empty
+            }
+        };
+
+        EntityTracker tracker = EntityTracker.newTracker();
+        tracker.register(ent1, new Vec(0, 0, 0), EntityTracker.Target.ENTITIES, updater);
+        tracker.register(ent2, new Vec(5, 0, 5), EntityTracker.Target.ENTITIES, updater);
+        tracker.register(ent3, new Vec(20, 0, 20), EntityTracker.Target.ENTITIES, updater);
+
+        Set<Entity> entities = new HashSet<>();
+
+        // Empty box
+        tracker.boundingBoxEntities(new BoundingBox(new Vec(10, 10, 10), new Vec(15, 15, 15)), EntityTracker.Target.ENTITIES, entities::add);
+        assertTrue(entities.isEmpty());
+
+        // Box containing ent1 and ent2
+        entities.add(ent1);
+        entities.add(ent2);
+        tracker.boundingBoxEntities(new BoundingBox(new Vec(-1, -1, -1), new Vec(10, 10, 10)), EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
+        assertEquals(0, entities.size());
+
+        // Box containing only ent3
+        entities.add(ent3);
+        tracker.boundingBoxEntities(new BoundingBox(new Vec(15, -1, 15), new Vec(25, 10, 25)), EntityTracker.Target.ENTITIES, entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
     }
 

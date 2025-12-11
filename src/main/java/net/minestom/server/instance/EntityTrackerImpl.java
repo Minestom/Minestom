@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.Viewable;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
@@ -196,6 +197,28 @@ final class EntityTrackerImpl implements EntityTracker {
             });
         }
     }
+
+    @Override
+    public <T extends Entity> void boundingBoxEntities(BoundingBox boundingBox, Target<T> target, Consumer<T> query) {
+        final Long2ObjectSyncMap<List<Entity>> entities = targetEntries[target.ordinal()].chunkEntities;
+        final int minChunkX = CoordConversion.globalToChunk(boundingBox.minX());
+        final int minChunkZ = CoordConversion.globalToChunk(boundingBox.minZ());
+        final int maxChunkX = CoordConversion.globalToChunk(boundingBox.maxX());
+        final int maxChunkZ = CoordConversion.globalToChunk(boundingBox.maxZ());
+        for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
+            for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
+                final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
+                if (chunkEntities == null || chunkEntities.isEmpty()) continue;
+                chunkEntities.forEach(entity -> {
+                    final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
+                    if (boundingBox.contains(position)) {
+                        query.accept(entity);
+                    }
+                });
+            }
+        }
+    }
+
 
     @Override
     public @UnmodifiableView <T extends Entity> Set<T> entities(Target<T> target) {

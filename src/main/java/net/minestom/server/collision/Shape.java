@@ -49,6 +49,14 @@ public interface Shape {
     }
 
     /**
+     * Checks if the given point is inside the shape.
+     *
+     * @param point the point to check
+     * @return true if the point is inside the shape, false otherwise
+     */
+    boolean contains(Point point);
+
+    /**
      * Relative Start
      *
      * @return Start of shape

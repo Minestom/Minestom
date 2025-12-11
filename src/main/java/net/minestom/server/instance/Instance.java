@@ -17,6 +17,7 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -731,6 +732,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public Collection<Entity> getNearbyEntities(Point point, double range) {
         List<Entity> result = new ArrayList<>();
         this.entityTracker.nearbyEntities(point, range, EntityTracker.Target.ENTITIES, result::add);
+        return result;
+    }
+
+    public Collection<Entity> getBoundingBoxEntities(BoundingBox box) {
+        List<Entity> result = new ArrayList<>();
+        this.entityTracker.boundingBoxEntities(box, EntityTracker.Target.ENTITIES, result::add);
         return result;
     }
 
