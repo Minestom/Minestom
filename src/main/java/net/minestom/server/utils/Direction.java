@@ -1,6 +1,8 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.coordinate.Vec;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 public enum Direction {
     DOWN(0, -1, 0),
@@ -69,5 +71,69 @@ public enum Direction {
             case NORTH -> SOUTH;
             case SOUTH -> NORTH;
         };
+    }
+
+    /**
+     * Mirrors this direction across the specified horizontal axis.
+     *
+     * @param axis the Axis to mirror across
+     * @return the mirrored Direction, the same Direction if unaffected by the axis, or null if mirroring across Y axis
+     */
+    public @UnknownNullability Direction mirror(Axis axis) {
+        return switch (axis) {
+            case X -> switch (this) {
+                case EAST -> WEST;
+                case WEST -> EAST;
+                default -> this;
+            };
+            case Z -> switch (this) {
+                case NORTH -> SOUTH;
+                case SOUTH -> NORTH;
+                default -> this;
+            };
+            default -> null;
+        };
+    }
+
+    private static final Direction[] HORIZONTALS = {NORTH, EAST, SOUTH, WEST};
+
+    /**
+     * Adds two horizontal directions together, treating them as rotations.
+     * NORTH acts as the identity (adding NORTH returns the original direction).
+     * Other directions rotate clockwise: EAST = 90°, SOUTH = 180°, WEST = 270°.
+     *
+     * @param other the horizontal Direction to add to this Direction
+     * @return the resulting horizontal Direction, or null if either direction is not horizontal
+     */
+    public @UnknownNullability Direction add(Direction other) {
+        int aIndex = -1, bIndex = -1;
+        for (int i = 0; i < HORIZONTALS.length; i++) {
+            if (HORIZONTALS[i] == this) aIndex = i;
+            if (HORIZONTALS[i] == other) bIndex = i;
+        }
+        if (aIndex == -1 || bIndex == -1) return null;
+
+        int resultIndex = (aIndex + bIndex) % 4;
+        return HORIZONTALS[resultIndex];
+    }
+
+    /**
+     * Subtracts another horizontal direction from this one, treating them as rotations.
+     * NORTH acts as the identity (subtracting NORTH returns the original direction).
+     * Other directions rotate counter-clockwise: EAST = -90°, SOUTH = -180°, WEST = -270°.
+     *
+     * @param other the horizontal Direction to subtract from this Direction
+     * @return the resulting horizontal Direction, or null if either direction is not horizontal
+     */
+    public @UnknownNullability Direction subtract(Direction other) {
+        int aIndex = -1, bIndex = -1;
+        for (int i = 0; i < HORIZONTALS.length; i++) {
+            if (HORIZONTALS[i] == this) aIndex = i;
+            if (HORIZONTALS[i] == other) bIndex = i;
+        }
+        if (aIndex == -1 || bIndex == -1) return null;
+
+        int resultIndex = (aIndex - bIndex + 4) % 4;
+        return HORIZONTALS[resultIndex];
     }
 }
