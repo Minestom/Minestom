@@ -2,6 +2,7 @@ package net.minestom.server.instance.block;
 
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 public enum BlockFace {
     BOTTOM(Direction.DOWN),
@@ -95,7 +96,7 @@ public enum BlockFace {
      * @param other the BlockFace to add
      * @return the rotated horizontal BlockFace, or null if invalid
      */
-    public @Nullable BlockFace add(BlockFace other) {
+    public @UnknownNullability BlockFace add(BlockFace other) {
         Direction newDirection = direction.add(other.direction);
         return newDirection != null ? fromDirection(newDirection) : null;
     }
@@ -107,7 +108,7 @@ public enum BlockFace {
      * @param other the BlockFace to subtract
      * @return the resulting horizontal BlockFace, or null if invalid
      */
-    public @Nullable BlockFace subtract(BlockFace other) {
+    public @UnknownNullability BlockFace subtract(BlockFace other) {
         Direction newDirection = direction.subtract(other.direction);
         return newDirection != null ? fromDirection(newDirection) : null;
     }

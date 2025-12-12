@@ -2,6 +2,7 @@ package net.minestom.server.utils;
 
 import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 public enum Direction {
     DOWN(0, -1, 0),
@@ -82,7 +83,7 @@ public enum Direction {
      * @param other the horizontal Direction to add to this Direction
      * @return the resulting horizontal Direction, or null if either direction is not horizontal
      */
-    public @Nullable Direction add(Direction other) {
+    public @UnknownNullability Direction add(Direction other) {
         int aIndex = -1, bIndex = -1;
         for (int i = 0; i < HORIZONTALS.length; i++) {
             if (HORIZONTALS[i] == this) aIndex = i;
@@ -102,7 +103,7 @@ public enum Direction {
      * @param other the horizontal Direction to subtract from this Direction
      * @return the resulting horizontal Direction, or null if either direction is not horizontal
      */
-    public @Nullable Direction subtract(Direction other) {
+    public @UnknownNullability Direction subtract(Direction other) {
         int aIndex = -1, bIndex = -1;
         for (int i = 0; i < HORIZONTALS.length; i++) {
             if (HORIZONTALS[i] == this) aIndex = i;
