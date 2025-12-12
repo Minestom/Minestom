@@ -73,6 +73,28 @@ public enum Direction {
         };
     }
 
+    /**
+     * Mirrors this direction across the specified horizontal axis.
+     *
+     * @param axis the Axis to mirror across
+     * @return the mirrored Direction, the same Direction if unaffected by the axis, or null if mirroring across Y axis
+     */
+    public @UnknownNullability Direction mirror(Axis axis) {
+        return switch (axis) {
+            case X -> switch (this) {
+                case EAST -> WEST;
+                case WEST -> EAST;
+                default -> this;
+            };
+            case Z -> switch (this) {
+                case NORTH -> SOUTH;
+                case SOUTH -> NORTH;
+                default -> this;
+            };
+            default -> null;
+        };
+    }
+
     private static final Direction[] HORIZONTALS = {NORTH, EAST, SOUTH, WEST};
 
     /**
