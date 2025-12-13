@@ -1,7 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.Viewable;
-import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ExperienceOrb;
@@ -81,9 +81,9 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
                                            Target<T> target, Consumer<T> query);
 
     /**
-     * Gets the entities within a bounding box.
+     * Gets the entities within an area.
      */
-    <T extends Entity> void boundingBoxEntities(BoundingBox box, Target<T> target, Consumer<T> query);
+    <T extends Entity> void areaEntities(Area.Cuboid area, Target<T> target, Consumer<T> query);
 
     /**
      * Gets all the entities tracked by this class.

@@ -17,7 +17,7 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
-import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -736,14 +736,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
-     * Gets entities located in the bounding box.
+     * Gets entities located in the area.
      *
-     * @param box the bounding box
-     * @return entities located in the bounding box.
+     * @param area the area
+     * @return entities located in the area.
      */
-    public Collection<Entity> getBoundingBoxEntities(BoundingBox box) {
+    public Collection<Entity> getAreaEntities(Area.Cuboid area) {
         List<Entity> result = new ArrayList<>();
-        this.entityTracker.boundingBoxEntities(box, EntityTracker.Target.ENTITIES, result::add);
+        this.entityTracker.areaEntities(area, EntityTracker.Target.ENTITIES, result::add);
         return result;
     }
 
