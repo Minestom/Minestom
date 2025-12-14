@@ -197,10 +197,10 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public <T extends Entity> void areaEntities(Area.Cuboid area, Target<T> target, Consumer<T> query) {
         final Long2ObjectSyncMap<List<Entity>> entities = targetEntries[target.ordinal()].chunkEntities;
-        final int minChunkX = CoordConversion.globalToChunk(area.min().chunkX());
-        final int minChunkZ = CoordConversion.globalToChunk(area.min().chunkZ());
-        final int maxChunkX = CoordConversion.globalToChunk(area.max().chunkX());
-        final int maxChunkZ = CoordConversion.globalToChunk(area.max().chunkZ());
+        final int minChunkX = area.min().chunkX();
+        final int minChunkZ = area.min().chunkZ();
+        final int maxChunkX = area.max().chunkX();
+        final int maxChunkZ = area.max().chunkZ();
         for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
             for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
                 final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
