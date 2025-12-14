@@ -56,6 +56,13 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
         return false;
     }
 
+    @Override
+    public boolean contains(Point point) {
+        return point.x() >= minX() && point.x() <= maxX() &&
+                point.y() >= minY() && point.y() <= maxY() &&
+                point.z() >= minZ() && point.z() <= maxZ();
+    }
+
     public boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
         return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
     }
