@@ -24,7 +24,7 @@ final class NetworkBufferResizeableSegmentImpl extends NetworkBufferSegmentImpl 
     private Arena arena;
     private MemorySegment segment;
 
-    NetworkBufferResizeableSegmentImpl(Arena arena, MemorySegment segment, long readIndex, long writeIndex, AutoResize autoResize, @Nullable Registries registries, Supplier<Arena> arenaSupplier) {
+    NetworkBufferResizeableSegmentImpl(Arena arena, MemorySegment segment, long readIndex, long writeIndex, AutoResize autoResize, Supplier<Arena> arenaSupplier, @Nullable Registries registries) {
         this.arena = Objects.requireNonNull(arena, "arena");
         this.segment = Objects.requireNonNull(segment, "segment");
         Check.argCondition(segment.address() == MemorySegment.NULL.address(), "Segment address cannot be NULL");

@@ -1,13 +1,14 @@
 package net.minestom.server.network;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.network.foreign.NetworkBufferSegmentProvider;
 import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.UnknownNullability;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.foreign.MemorySegment;
 import java.util.Objects;
@@ -181,7 +182,11 @@ public interface NetworkBufferProvider {
 
     private static NetworkBufferProvider determineProvider() {
         ServerProcess serverProcess = MinecraftServer.process();
-        if (serverProcess == null && ServerFlag.INSIDE_TEST) return new NetworkBufferSegmentProvider(); // Temporary for tests
+        if (serverProcess == null) {
+            Logger logger = LoggerFactory.getLogger(NetworkBufferProvider.class); // Don't store in a field for API.
+            logger.warn("No server process found, defaulting to default network buffer provider");
+            return new NetworkBufferSegmentProvider(); // Fallback to default provider if no server process is available
+        }
         return Objects.requireNonNull(serverProcess, "Network buffers cannot be created without a server.").networkBufferProvider();
     }
 }

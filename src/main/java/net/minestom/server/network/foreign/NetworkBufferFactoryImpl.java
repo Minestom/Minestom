@@ -47,7 +47,7 @@ record NetworkBufferFactoryImpl(Supplier<Arena> arenaSupplier, @Nullable Network
         final Arena arena = Objects.requireNonNull(arenaSupplier.get(), "arena");
         final MemorySegment segment = NetworkBufferSegmentAllocator.allocate(arena, length);
         if (autoResize != null) {
-            return new NetworkBufferResizeableSegmentImpl(arena, segment, 0, 0, autoResize, registries, arenaSupplier);
+            return new NetworkBufferResizeableSegmentImpl(arena, segment, 0, 0, autoResize, arenaSupplier, registries);
         } else {
             return new NetworkBufferStaticSegmentImpl(arena, segment, 0, 0, registries);
         }

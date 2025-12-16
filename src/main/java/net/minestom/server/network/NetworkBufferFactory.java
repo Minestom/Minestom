@@ -32,10 +32,7 @@ public interface NetworkBufferFactory {
      */
     @Contract(pure = true)
     static NetworkBufferFactory staticFactory() {
-        final class Holder {
-            static final NetworkBufferFactory INSTANCE = NetworkBufferProvider.networkBufferProvider().createStaticFactory();
-        }
-        return Holder.INSTANCE;
+        return NetworkBufferProvider.networkBufferProvider().createStaticFactory();
     }
 
     /**
@@ -46,10 +43,7 @@ public interface NetworkBufferFactory {
      */
     @Contract(pure = true)
     static NetworkBufferFactory resizeableFactory() {
-        final class Holder {
-            static final NetworkBufferFactory INSTANCE = NetworkBufferProvider.networkBufferProvider().createResizeableFactory();
-        }
-        return Holder.INSTANCE;
+        return NetworkBufferProvider.networkBufferProvider().createResizeableFactory();
     }
 
     /**

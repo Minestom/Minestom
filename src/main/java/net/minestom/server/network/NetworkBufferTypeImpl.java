@@ -322,7 +322,7 @@ final class NetworkBufferTypeImpl {
                 throw new IllegalArgumentException("Invalid length: " + value.length + " != " + length);
             }
             final int length = value.length;
-            if (length == 0) return; // TODO, should we allow zero length when length is fixed?
+            if (length == 0) return;
             buffer.ensureWritable(length);
             buffer.direct().putBytes(buffer.writeIndex(), value);
             buffer.advanceWrite(length);

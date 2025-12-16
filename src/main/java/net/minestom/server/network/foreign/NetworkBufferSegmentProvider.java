@@ -5,6 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferFactory;
 import net.minestom.server.network.NetworkBufferProvider;
 import net.minestom.server.registry.Registries;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -20,15 +21,17 @@ import java.util.function.Consumer;
  * The implementation assumes all preconditions are valid as checked in {@link NetworkBuffer}
  */
 public final class NetworkBufferSegmentProvider implements NetworkBufferProvider {
+    private static final NetworkBufferFactory STATIC_FACTORY = new NetworkBufferFactoryImpl(Arena::ofAuto, null, null);
+    private static final NetworkBufferFactory RESIZEABLE_FACTORY = STATIC_FACTORY.autoResize(NetworkBuffer.AutoResize.DOUBLE);
 
     @Override
     public NetworkBufferFactory createStaticFactory() {
-        return new NetworkBufferFactoryImpl(Arena::ofAuto, null, null);
+        return STATIC_FACTORY;
     }
 
     @Override
     public NetworkBufferFactory createResizeableFactory() {
-        return createStaticFactory().autoResize(NetworkBuffer.AutoResize.DOUBLE);
+        return RESIZEABLE_FACTORY;
     }
 
     @Override
@@ -97,5 +100,21 @@ public final class NetworkBufferSegmentProvider implements NetworkBufferProvider
     @Override
     public <T extends @UnknownNullability Object> long sizeOf(NetworkBuffer.Type<T> type, T value) {
         return sizeOf(type, value, null);
+    }
+
+    /**
+     * Get the underlying {@link MemorySegment} of the {@link NetworkBufferSegmentImpl}.
+     * <br>
+     * You avoid using this method and instead wrap a segment instead.
+     *
+     * @param buffer the buffer
+     * @return the memory segment
+     * @throws IllegalStateException if the buffer is not a supported implementation
+     */
+    @ApiStatus.Experimental
+    public static MemorySegment segment(NetworkBuffer buffer) {
+        if (!(buffer instanceof NetworkBufferSegmentImpl bufferImpl))
+            throw new IllegalArgumentException("Unsupported NetworkBuffer implementation: " + buffer.getClass());
+        return bufferImpl.segment();
     }
 }

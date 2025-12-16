@@ -478,12 +478,18 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
     }
 
     // For JDK:8369564 https://github.com/openjdk/jdk/pull/28043
+    // Current implementation only supports VAR_INT lengths sadly.
     @Override
-    public final String getString(long index, int length) {
+    public final String getString(long index, int byteLength) {
         assertDummy();
-        byte[] bytes = new byte[length];
+        byte[] bytes = new byte[byteLength];
         getBytes(index, bytes);
         return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public String getString(long index, long byteLength) {
+        return getString(index, Math.toIntExact(byteLength));
     }
 
     final void assertReadOnly() { // These are already handled; but we can do these sooner before going into the types.

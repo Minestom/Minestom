@@ -1502,6 +1502,9 @@ public interface NetworkBuffer {
         String getString(long index);
 
         // Non prefixed variant
-        String getString(long index, int length);
+        String getString(long index, long byteLength);
+
+        // Non prefixed variant
+        String getString(long index, int byteLength);
     }
 }
