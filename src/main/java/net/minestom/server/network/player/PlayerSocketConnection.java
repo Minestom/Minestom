@@ -442,7 +442,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                 return;
             }
         }
-        final Queue<SendablePacket> packetQueue = this.packetQueue;
+        final MessagePassingQueue<SendablePacket> packetQueue = this.packetQueue;
         if (packetQueue.isEmpty()) return; // Nothing to write, no need to access the pool
         final NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         // Write to buffer

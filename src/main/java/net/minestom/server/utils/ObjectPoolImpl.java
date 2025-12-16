@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
+import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
 
 import java.lang.ref.Cleaner;
@@ -14,12 +16,12 @@ import java.util.function.UnaryOperator;
 
 // This is important to be a record cause of static final field trusting stops
 // once the terminator in the chain is no longer foldable, so regular final field previously
-record ObjectPoolImpl<T>(Queue<SoftReference<T>> pool, Supplier<T> supplier,
+record ObjectPoolImpl<T>(MessagePassingQueue<SoftReference<T>> pool, Supplier<T> supplier,
                          UnaryOperator<T> sanitizer) implements ObjectPool<T> {
     private static final Cleaner CLEANER = Cleaner.create();
 
     public ObjectPoolImpl(int size, Supplier<T> supplier, UnaryOperator<T> sanitizer) {
-        this(new MpmcUnboundedXaddArrayQueue<>(size), supplier, sanitizer);
+        this(ConcurrentMessageQueues.mpmcSpecialUnboundedArrayQueue(size), supplier, sanitizer);
     }
 
     @Override
