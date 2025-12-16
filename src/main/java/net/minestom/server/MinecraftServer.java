@@ -2,6 +2,7 @@ package net.minestom.server;
 
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
@@ -261,6 +262,10 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static AdvancementManager getAdvancementManager() {
         return serverProcess.advancement();
+    }
+
+    public static ClickCallbackManager getClickCallbackManager() {
+        return serverProcess.clickCallbackManager();
     }
 
     public static DynamicRegistry<ChatType> getChatTypeRegistry() {

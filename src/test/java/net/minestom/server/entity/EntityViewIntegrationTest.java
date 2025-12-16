@@ -195,4 +195,23 @@ public class EntityViewIntegrationTest {
         assertEquals(2, vehicle2.getViewers().size());
         assertTrue(vehicle2.getViewers().contains(p1));
     }
+
+    @Test
+    public void sizeMatchesIteratorIncludingNullPlayers(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 40, 0)).join();
+        var set = entity.getViewers();
+
+        env.createPlayer(instance, new Pos(0, 40, 0));
+        assertEquals(1, set.size());
+
+        entity.viewEngine.viewableOption.bitSet.add(-1);
+
+        assertEquals(1, set.size());
+
+        long iteratorCount = 0;
+        for (var _ : set) iteratorCount++;
+        assertEquals(set.size(), iteratorCount);
+    }
 }

@@ -2,6 +2,7 @@ package net.minestom.server;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
@@ -113,6 +114,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final BenchmarkManager benchmark;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
+    private final ClickCallbackManager clickCallbackManager;
 
     private final Server server;
 
@@ -169,6 +171,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.benchmark = new BenchmarkManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
+        this.clickCallbackManager = new ClickCallbackManager();
 
         this.server = new Server(packetParser);
 
@@ -387,6 +390,11 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
+    public ClickCallbackManager clickCallbackManager() {
+        return clickCallbackManager;
+    }
+
+    @Override
     public void start(SocketAddress socketAddress) {
         if (!started.compareAndSet(false, true)) {
             throw new IllegalStateException("Server already started");
@@ -469,6 +477,9 @@ final class ServerProcessImpl implements ServerProcess {
 
             // Server tick (chunks/entities)
             serverTick(nanoTime);
+
+            // The click callback provider needs ticking to clean up the cache.
+            clickCallbackManager().tick(nanoTime);
 
             scheduler().processTickEnd();
 

@@ -6,11 +6,12 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
+import java.util.ArrayList;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -30,16 +31,42 @@ public record UpdateScorePacket(
             UpdateScorePacket::new
     );
 
-    // TODO support NumberFormat
     @Override
-    public @Unmodifiable Collection<Component> components() {
-        if (displayName == null) return List.of();
-        return List.of(displayName);
+    public Collection<Component> components() {
+        List<Component> list = new ArrayList<>();
+
+        if (displayName != null) {
+            list.add(displayName);
+        }
+
+        if (numberFormat != null) {
+            list.addAll(numberFormat.components());
+        }
+
+        return List.copyOf(list);
     }
 
     @Override
     public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
-        if (displayName == null) return this;
-        return new UpdateScorePacket(entityName, objectiveName, score, operator.apply(displayName), numberFormat);
+        if (displayName == null && numberFormat == null) return this;
+
+        Component name = displayName;
+        if (displayName != null) {
+            name = operator.apply(displayName);
+        }
+
+        Sidebar.NumberFormat format = numberFormat;
+        if (numberFormat != null) {
+            format = numberFormat.copyWithOperator(operator);
+        }
+
+
+        return new UpdateScorePacket(
+                entityName,
+                objectiveName,
+                score,
+                name,
+                format
+        );
     }
 }

@@ -1,6 +1,7 @@
 package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
@@ -122,6 +123,11 @@ public interface ServerProcess extends Registries, Snapshotable {
      * Handles the server ticks.
      */
     Ticker ticker();
+
+    /**
+     * The click callback manager.
+     */
+    ClickCallbackManager clickCallbackManager();
 
     void start(SocketAddress socketAddress);
 
