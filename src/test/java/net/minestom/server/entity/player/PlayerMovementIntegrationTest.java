@@ -17,7 +17,6 @@ import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.player.ClientSettings;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -149,34 +148,39 @@ public class PlayerMovementIntegrationTest {
 
     @Test
     public void testSettingsViewDistanceExpansionAndShrink(Env env) {
-        int startingViewDistance = 8;
         byte endViewDistance = 12;
         byte finalViewDistance = 10;
         var instance = env.createFlatInstance();
+        instance.viewDistance(20);
         var connection = env.createConnection();
         Pos startingPlayerPos = new Pos(0, 42, 0);
         var player = connection.connect(instance, startingPlayerPos);
 
-        int chunkDifference = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(startingViewDistance);
+        int startingEffective = player.effectiveViewDistance();
+        int maxEffective = Math.min(endViewDistance, instance.viewDistance()) + 1;
 
         // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
-        ChunkRange.chunksInRange(0, 0, endViewDistance, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
+        ChunkRange.chunksInRange(0, 0, maxEffective, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
 
         var tracker = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,
                 ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
-        tracker.assertCount(chunkDifference);
+        int expandedEffective = player.effectiveViewDistance();
+        int expectedLoadedChunks = ChunkRange.chunksCount(expandedEffective) - ChunkRange.chunksCount(startingEffective);
+        tracker.assertCount(expectedLoadedChunks);
 
         var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
+        int previousEffective = player.effectiveViewDistance();
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, finalViewDistance,
                 ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
 
-        int chunkDifference1 = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(finalViewDistance);
-        tracker1.assertCount(chunkDifference1);
+        int shrunkEffective = player.effectiveViewDistance();
+        int expectedUnloadedChunks = ChunkRange.chunksCount(previousEffective) - ChunkRange.chunksCount(shrunkEffective);
+        tracker1.assertCount(expectedUnloadedChunks);
     }
 
     @Test
