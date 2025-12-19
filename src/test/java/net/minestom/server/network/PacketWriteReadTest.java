@@ -369,7 +369,7 @@ public class PacketWriteReadTest {
         addServerPackets(new SetTitleSubTitlePacket(COMPONENT));
         addServerPackets(new SetTitleTextPacket(COMPONENT));
         addServerPackets(new SetTitleTimePacket(10, 70, 20));
-        addServerPackets(new SoundEffectPacket(SoundEvent.ENTITY_PLAYER_HURT, net.kyori.adventure.sound.Sound.Source.PLAYER, VEC.blockX(), VEC.blockY(), VEC.blockZ(), 1.0f, 1.0f, 0L));
+        addServerPackets(new SoundEffectPacket(SoundEvent.BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE, Sound.Source.VOICE, VEC, 1.0f, 1.0f, 0L), new SoundEffectPacket(SoundEvent.ENTITY_PLAYER_HURT, net.kyori.adventure.sound.Sound.Source.PLAYER, new Vec(0.25, 0.125, 0.125), 1.0f, 1.0f, 0L));
         addServerPackets(new SpawnEntityPacket(5, UUID.randomUUID(), EntityType.ZOMBIE, new Pos(0, 64, 0, 0, 0), 9.84375f, 0, Vec.ONE));
         addServerPackets(new SpawnPositionPacket(new WorldPos("overworld", VEC), 0f, 1f));
         addServerPackets(new StartConfigurationPacket());
