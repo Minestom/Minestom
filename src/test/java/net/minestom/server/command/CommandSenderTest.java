@@ -1,6 +1,5 @@
 package net.minestom.server.command;
 
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -41,7 +40,7 @@ public class CommandSenderTest {
         }
 
         @Override
-        public void sendMessage(Identity source, Component message, MessageType type) {
+        public void sendMessage(Component message) {
             mostRecentMessage = message;
         }
 
