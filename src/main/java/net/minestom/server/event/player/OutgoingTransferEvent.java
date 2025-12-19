@@ -8,6 +8,8 @@ import java.util.Objects;
 
 /**
  * Called when a {@link Player} is about to be redirected to another server.
+ * <br>
+ * It can be canceled to prevent the transfer from occurring.
  */
 public class OutgoingTransferEvent implements PlayerEvent, CancellableEvent {
     private final Player player;
@@ -38,7 +40,8 @@ public class OutgoingTransferEvent implements PlayerEvent, CancellableEvent {
 
     /**
      * Returns the address of the target server that the player will be transferred to.
-     * @return The address of the target server that the player will be transferred to.
+     *
+     * @return the target host, usually an IP or domain name
      */
     public String getHost() {
         return this.host;
@@ -46,7 +49,8 @@ public class OutgoingTransferEvent implements PlayerEvent, CancellableEvent {
 
     /**
      * Returns the port of the target server that the player will be transferred to.
-     * @return The port of the target server that the player will be transferred to.
+     *
+     * @return the target port
      */
     public int getPort() {
         return this.port;
@@ -54,7 +58,8 @@ public class OutgoingTransferEvent implements PlayerEvent, CancellableEvent {
 
     /**
      * Changes the address of the target server that the player will be transferred to.
-     * @param host The address of the target server that the player will be transferred to
+     *
+     * @param host the address of the target server, usually an IP or domain name
      */
     public void setHost(String host) {
         this.host = Objects.requireNonNull(host);
@@ -62,7 +67,8 @@ public class OutgoingTransferEvent implements PlayerEvent, CancellableEvent {
 
     /**
      * Changes the port of the target server that the player will be transferred to.
-     * @param port The port of the target server that the player will be transferred to
+     *
+     * @param port the target port
      */
     public void setPort(int port) {
         this.port = port;

@@ -22,7 +22,6 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
@@ -286,18 +285,20 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * Redirects the player to another server.
-     * @param host The host of the server to transfer the player to.
-     * @param port The port of the server to transfer the player to.
+     * Attempts to transfer the player to another server, using the {@link TransferPacket}.
+     *
+     * @param host the host, usually an IP or domain name.
+     * @param port the port, usually 25565.
      */
-    public void transfer(@NotNull String host, int port) {
+    public void transfer(String host, int port) {
         OutgoingTransferEvent event = new OutgoingTransferEvent(this.player, host, port);
         EventDispatcher.callCancellable(event, () -> this.sendPacket(new TransferPacket(event.getHost(), event.getPort())));
     }
 
     /**
      * Returns whether the player has indicated that they were redirected from another server.
-     * @return Whether the player has indicated that they were redirected from another server.
+     *
+     * @return true if the client marked itself as transferred, false otherwise
      */
     public boolean wasTransferred() {
         return this.wasTransferred;
