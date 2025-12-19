@@ -17,8 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class LeftClickIntegrationTest {
@@ -281,7 +280,7 @@ public class LeftClickIntegrationTest {
     private void _leftClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, boolean shift) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
-            assert openInventory != null;
+            assertNotNull(openInventory);
             // Do not touch slot
         } else {
             int offset = openInventory != null ? openInventory.getInnerSize() : 0;

@@ -8,6 +8,7 @@ import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.OutgoingTransferEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionState;
@@ -16,6 +17,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.CookieRequestPacket;
 import net.minestom.server.network.packet.server.common.CookieStorePacket;
 import net.minestom.server.network.packet.server.common.DisconnectPacket;
+import net.minestom.server.network.packet.server.common.TransferPacket;
 import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
@@ -47,6 +49,7 @@ public abstract class PlayerConnection {
 
     private @Nullable PlayerPublicKey playerPublicKey;
     private volatile boolean online;
+    private volatile boolean wasTransferred;
 
     private @Nullable LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
@@ -280,6 +283,35 @@ public abstract class PlayerConnection {
             future.complete(clientPacks);
             knownPacksFuture = null;
         }
+    }
+
+    /**
+     * Attempts to transfer the player to another server, using the {@link TransferPacket}.
+     *
+     * @param host the host, usually an IP or domain name.
+     * @param port the port, usually 25565.
+     */
+    public void transfer(String host, int port) {
+        OutgoingTransferEvent event = new OutgoingTransferEvent(this.player, host, port);
+        EventDispatcher.callCancellable(event, () -> this.sendPacket(new TransferPacket(event.getHost(), event.getPort())));
+    }
+
+    /**
+     * Returns whether the player has indicated that they were redirected from another server.
+     *
+     * @return true if the client marked itself as transferred, false otherwise
+     */
+    public boolean wasTransferred() {
+        return this.wasTransferred;
+    }
+
+    @ApiStatus.Internal
+    public void markTransferred(boolean wasTransferred) {
+        if (!wasTransferred && this.wasTransferred) {
+            throw new IllegalStateException("Cannot mark transferred connection as non-transferred");
+        }
+
+        this.wasTransferred = wasTransferred;
     }
 
     @Override
