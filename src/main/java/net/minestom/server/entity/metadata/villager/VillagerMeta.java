@@ -68,7 +68,15 @@ public class VillagerMeta extends AbstractVillagerMeta {
         EXPERT,
         MASTER;
 
-        public static final NetworkBuffer.Type<Level> NETWORK_TYPE = NetworkBuffer.Enum(Level.class);
+        private int encode() {
+            return this.ordinal() + 1;  // Villager levels are 1-indexed
+        }
+
+        private static Level decode(int value) {
+            return Level.values()[value - 1];
+        }
+
+        public static final NetworkBuffer.Type<Level> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Level::decode, Level::encode);
     }
 
 }
