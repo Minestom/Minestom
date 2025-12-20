@@ -32,6 +32,8 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         registry.register("damage_entity", DamageEntity.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("explode", Explode.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("ignite", Ignite.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("apply_impulse", ApplyImpulse.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("apply_exhaustion", ApplyExhaustion.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("play_sound", PlaySound.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("replace_block", ReplaceBlock.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("replace_disk", ReplaceDisc.CODEC, DataPack.MINECRAFT_CORE);
@@ -155,13 +157,41 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
+    record ApplyImpulse(
+            Point direction,
+            Point coordinateScale,
+            LevelBasedValue magnitude
+    ) implements EntityEffect, LocationEffect {
+        public static final StructCodec<ApplyImpulse> CODEC = StructCodec.struct(
+                "direction", Codec.VECTOR3D, ApplyImpulse::direction,
+                "coordinate_scale", Codec.VECTOR3D, ApplyImpulse::coordinateScale,
+                "magnitude", LevelBasedValue.CODEC, ApplyImpulse::magnitude,
+                ApplyImpulse::new);
+
+        @Override
+        public StructCodec<ApplyImpulse> codec() {
+            return CODEC;
+        }
+    }
+
+    record ApplyExhaustion(LevelBasedValue amount) implements EntityEffect, LocationEffect {
+        public static final StructCodec<ApplyExhaustion> CODEC = StructCodec.struct(
+                "amount", LevelBasedValue.CODEC, ApplyExhaustion::amount,
+                ApplyExhaustion::new);
+
+        @Override
+        public StructCodec<ApplyExhaustion> codec() {
+            return CODEC;
+        }
+    }
+
     record PlaySound(
-            SoundEvent soundEvent,
+            List<SoundEvent> soundEvent,
             Codec.RawValue volume,
             Codec.RawValue pitch
     ) implements EntityEffect, LocationEffect {
         public static final StructCodec<PlaySound> CODEC = StructCodec.struct(
-                "sound", SoundEvent.CODEC, PlaySound::soundEvent,
+                "sound", SoundEvent.CODEC.listOrSingle(255), PlaySound::soundEvent,
                 "volume", Codec.RAW_VALUE, PlaySound::volume,
                 "pitch", Codec.RAW_VALUE, PlaySound::pitch,
                 PlaySound::new);

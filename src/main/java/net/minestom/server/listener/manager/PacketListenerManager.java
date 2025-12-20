@@ -79,7 +79,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerPositionPacket.class, PlayerPositionListener::playerPositionListener);
         setPlayListener(ClientPlayerPositionAndRotationPacket.class, PlayerPositionListener::playerPositionAndLookListener);
         setPlayListener(ClientTeleportConfirmPacket.class, PlayerPositionListener::teleportConfirmListener);
-        setPlayListener(ClientPlayerDiggingPacket.class, PlayerDiggingListener::playerDiggingListener);
+        setPlayListener(ClientPlayerActionPacket.class, PlayerActionListener::playerActionListener);
         setPlayListener(ClientAnimationPacket.class, AnimationListener::animationListener);
         setPlayListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
         setPlayListener(ClientUseItemPacket.class, UseItemListener::useItemListener);

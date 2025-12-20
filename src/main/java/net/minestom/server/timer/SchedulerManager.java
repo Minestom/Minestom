@@ -1,13 +1,13 @@
 package net.minestom.server.timer;
 
-import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
+import org.jctools.queues.MessagePassingQueue;
 
 import java.util.function.Supplier;
 
 public final class SchedulerManager implements Scheduler {
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final MpmcUnboundedXaddArrayQueue<Runnable> shutdownTasks = new MpmcUnboundedXaddArrayQueue<>(1024);
-
+    private final MessagePassingQueue<Runnable> shutdownTasks = ConcurrentMessageQueues.mpscUnboundedArrayQueue(1024);
     @Override
     public void process() {
         this.scheduler.process();

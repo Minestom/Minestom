@@ -3,6 +3,7 @@ package net.minestom.server.entity.damage;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
@@ -19,6 +20,7 @@ public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
             "death_message_type", Codec.STRING.optional("default"), DamageType::deathMessageType,
             DamageType::create);
 
+    NetworkBuffer.Type<RegistryKey<DamageType>> NETWORK_TYPE = RegistryKey.networkType(Registries::damageType);
     Codec<RegistryKey<DamageType>> CODEC = RegistryKey.codec(Registries::damageType);
 
     static DamageType create(

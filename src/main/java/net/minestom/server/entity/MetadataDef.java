@@ -114,9 +114,8 @@ public sealed class MetadataDef {
 
     public static final class AreaEffectCloud extends MetadataDef {
         public static final Entry<Float> RADIUS = index(0, Metadata::Float, 0.5f);
-        public static final Entry<Integer> COLOR = index(1, Metadata::VarInt, 0);
-        public static final Entry<Boolean> IGNORE_RADIUS_AND_SINGLE_POINT = index(2, Metadata::Boolean, false);
-        public static final Entry<Particle> PARTICLE = index(3, Metadata::Particle, Particle.EFFECT);
+        public static final Entry<Boolean> WAITING = index(1, Metadata::Boolean, false);
+        public static final Entry<Particle> PARTICLE = index(2, Metadata::Particle, Particle.EFFECT);
     }
 
     public static final class FishingHook extends MetadataDef {
@@ -222,7 +221,7 @@ public sealed class MetadataDef {
     }
 
     public static sealed class Avatar extends LivingEntity {
-        public static final Entry<Byte> MAIN_HAND = index(0, Metadata::Byte, (byte) 1);
+        public static final Entry<MainHand> MAIN_HAND = index(0, Metadata::MainHand, MainHand.RIGHT);
         public static final Entry<Byte> DISPLAYED_MODEL_PARTS_FLAGS = index(1, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_CAPE_ENABLED = bitMask(1, (byte) 0x01, false);
         public static final Entry<Boolean> IS_JACKET_ENABLED = bitMask(1, (byte) 0x02, false);
@@ -353,7 +352,7 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_ANGRY = bitMask(0, (byte) 0x02, false);
         public static final Entry<Boolean> HAS_STUNG = bitMask(0, (byte) 0x04, false);
         public static final Entry<Boolean> HAS_NECTAR = bitMask(0, (byte) 0x08, false);
-        public static final Entry<Integer> ANGER_TIME_TICKS = index(1, Metadata::VarInt, 0);
+        public static final Entry<Long> ANGER_TIME_TICKS = index(1, Metadata::VarLong, -1L);
     }
 
     public static final class GlowSquid extends AgeableMob {
@@ -468,7 +467,7 @@ public sealed class MetadataDef {
     public static final class Wolf extends TameableAnimal {
         public static final Entry<Boolean> IS_BEGGING = index(0, Metadata::Boolean, false);
         public static final Entry<Integer> COLLAR_COLOR = index(1, Metadata::VarInt, 14);
-        public static final Entry<Integer> ANGER_TIME = index(2, Metadata::VarInt, 0);
+        public static final Entry<Long> ANGER_TIME = index(2, Metadata::VarLong, -1L);
         public static final Entry<RegistryKey<WolfVariant>> VARIANT = index(3, Metadata::WolfVariant, WolfVariant.PALE);
         public static final Entry<RegistryKey<WolfSoundVariant>> SOUND_VARIANT = index(4, Metadata::WolfSoundVariant,
                                                                                        WolfSoundVariant.CLASSIC);
@@ -476,6 +475,14 @@ public sealed class MetadataDef {
 
     public static final class Parrot extends TameableAnimal {
         public static final Entry<Integer> VARIANT = index(0, Metadata::VarInt, 0);
+    }
+
+    public static sealed class AbstractNautilus extends TameableAnimal {
+        public static final Entry<Boolean> DASH = index(0, Metadata::Boolean, false);
+    }
+
+    public static final class ZombieNautilus extends AbstractNautilus {
+        public static final Entry<RegistryKey<ZombieNautilusVariant>> VARIANT = index(0, Metadata::ZombieNautilusVariant, ZombieNautilusVariant.TEMPERATE);
     }
 
     public static sealed class AbstractVillager extends AgeableMob {

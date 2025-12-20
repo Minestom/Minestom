@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -113,7 +114,7 @@ public class AdventurePacketConvertor {
         if (minestomSound == null) minestomSound = SoundEvent.of(sound.name(), null);
 
         final long seed = sound.seed().orElse(ThreadLocalRandom.current().nextLong());
-        return new SoundEffectPacket(minestomSound, sound.source(), (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), seed);
+        return new SoundEffectPacket(minestomSound, sound.source(), new Vec(x, y, z), sound.volume(), sound.pitch(), seed);
     }
 
     /**
