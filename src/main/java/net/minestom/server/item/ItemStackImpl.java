@@ -31,7 +31,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
                 }
 
                 if (value.amount() <= 0) {
-                    throw new IllegalArgumentException("ItemStack amount must be greater than 0 if not air");
+                    throw new IllegalArgumentException(String.format("ItemStack %s amount must be greater than 0 if not air", value));
                 }
 
                 buffer.write(NetworkBuffer.VAR_INT, value.amount());
