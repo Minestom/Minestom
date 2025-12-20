@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * Represents a {@link NetworkBuffer#staticBuffer(long, Registries)}.
  * <br>
- * Not resizeable, including shrinking, but have the benefit of final {@link Arena} and {@link MemorySegment}.
+ * Not resizeable, including shrinking, but has the benefit of final {@link Arena} and {@link MemorySegment}.
  * Which makes this an excellent wrapper class for {@link NetworkBuffer#wrap(MemorySegment, long, long, Registries)}.
  */
 @ApiStatus.Internal

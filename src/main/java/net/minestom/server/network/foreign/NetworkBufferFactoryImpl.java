@@ -10,6 +10,13 @@ import java.lang.foreign.MemorySegment;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+/**
+ * Immutable Factory for {@link NetworkBuffer} instances.
+ *
+ * @param arenaSupplier the supplier of the {@link Arena} to use for allocations
+ * @param autoResize the auto-resize strategy to use, or {@code null} for no auto-resize
+ * @param registries the registries to use, or {@code null} for no registries
+ */
 record NetworkBufferFactoryImpl(Supplier<Arena> arenaSupplier, @Nullable NetworkBuffer.AutoResize autoResize,
                                 @Nullable Registries registries) implements NetworkBufferFactory {
 
