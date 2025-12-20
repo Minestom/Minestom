@@ -88,4 +88,6 @@ public interface PotionEffectKeys {
     RegistryKey<PotionEffect> OOZING = RegistryKey.unsafeOf("oozing");
 
     RegistryKey<PotionEffect> INFESTED = RegistryKey.unsafeOf("infested");
+
+    RegistryKey<PotionEffect> BREATH_OF_THE_NAUTILUS = RegistryKey.unsafeOf("breath_of_the_nautilus");
 }

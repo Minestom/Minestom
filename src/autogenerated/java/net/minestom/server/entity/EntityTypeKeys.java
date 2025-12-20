@@ -51,6 +51,8 @@ public interface EntityTypeKeys {
 
     RegistryKey<EntityType> CAMEL = RegistryKey.unsafeOf("camel");
 
+    RegistryKey<EntityType> CAMEL_HUSK = RegistryKey.unsafeOf("camel_husk");
+
     RegistryKey<EntityType> CAT = RegistryKey.unsafeOf("cat");
 
     RegistryKey<EntityType> CAVE_SPIDER = RegistryKey.unsafeOf("cave_spider");
@@ -185,6 +187,8 @@ public interface EntityTypeKeys {
 
     RegistryKey<EntityType> MULE = RegistryKey.unsafeOf("mule");
 
+    RegistryKey<EntityType> NAUTILUS = RegistryKey.unsafeOf("nautilus");
+
     RegistryKey<EntityType> OAK_BOAT = RegistryKey.unsafeOf("oak_boat");
 
     RegistryKey<EntityType> OAK_CHEST_BOAT = RegistryKey.unsafeOf("oak_chest_boat");
@@ -200,6 +204,8 @@ public interface EntityTypeKeys {
     RegistryKey<EntityType> PALE_OAK_CHEST_BOAT = RegistryKey.unsafeOf("pale_oak_chest_boat");
 
     RegistryKey<EntityType> PANDA = RegistryKey.unsafeOf("panda");
+
+    RegistryKey<EntityType> PARCHED = RegistryKey.unsafeOf("parched");
 
     RegistryKey<EntityType> PARROT = RegistryKey.unsafeOf("parrot");
 
@@ -308,6 +314,8 @@ public interface EntityTypeKeys {
     RegistryKey<EntityType> ZOMBIE = RegistryKey.unsafeOf("zombie");
 
     RegistryKey<EntityType> ZOMBIE_HORSE = RegistryKey.unsafeOf("zombie_horse");
+
+    RegistryKey<EntityType> ZOMBIE_NAUTILUS = RegistryKey.unsafeOf("zombie_nautilus");
 
     RegistryKey<EntityType> ZOMBIE_VILLAGER = RegistryKey.unsafeOf("zombie_villager");
 

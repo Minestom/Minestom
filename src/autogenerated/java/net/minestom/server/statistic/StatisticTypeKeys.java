@@ -55,6 +55,8 @@ public interface StatisticTypeKeys {
 
     RegistryKey<StatisticType> STRIDER_ONE_CM = RegistryKey.unsafeOf("strider_one_cm");
 
+    RegistryKey<StatisticType> NAUTILUS_ONE_CM = RegistryKey.unsafeOf("nautilus_one_cm");
+
     RegistryKey<StatisticType> JUMP = RegistryKey.unsafeOf("jump");
 
     RegistryKey<StatisticType> DROP = RegistryKey.unsafeOf("drop");

@@ -2271,45 +2271,171 @@ public interface MaterialKeys {
 
     RegistryKey<Material> GLISTERING_MELON_SLICE = RegistryKey.unsafeOf("glistering_melon_slice");
 
+    RegistryKey<Material> CHICKEN_SPAWN_EGG = RegistryKey.unsafeOf("chicken_spawn_egg");
+
+    RegistryKey<Material> COW_SPAWN_EGG = RegistryKey.unsafeOf("cow_spawn_egg");
+
+    RegistryKey<Material> PIG_SPAWN_EGG = RegistryKey.unsafeOf("pig_spawn_egg");
+
+    RegistryKey<Material> SHEEP_SPAWN_EGG = RegistryKey.unsafeOf("sheep_spawn_egg");
+
+    RegistryKey<Material> CAMEL_SPAWN_EGG = RegistryKey.unsafeOf("camel_spawn_egg");
+
+    RegistryKey<Material> DONKEY_SPAWN_EGG = RegistryKey.unsafeOf("donkey_spawn_egg");
+
+    RegistryKey<Material> HORSE_SPAWN_EGG = RegistryKey.unsafeOf("horse_spawn_egg");
+
+    RegistryKey<Material> MULE_SPAWN_EGG = RegistryKey.unsafeOf("mule_spawn_egg");
+
+    RegistryKey<Material> CAT_SPAWN_EGG = RegistryKey.unsafeOf("cat_spawn_egg");
+
+    RegistryKey<Material> PARROT_SPAWN_EGG = RegistryKey.unsafeOf("parrot_spawn_egg");
+
+    RegistryKey<Material> WOLF_SPAWN_EGG = RegistryKey.unsafeOf("wolf_spawn_egg");
+
     RegistryKey<Material> ARMADILLO_SPAWN_EGG = RegistryKey.unsafeOf("armadillo_spawn_egg");
-
-    RegistryKey<Material> ALLAY_SPAWN_EGG = RegistryKey.unsafeOf("allay_spawn_egg");
-
-    RegistryKey<Material> AXOLOTL_SPAWN_EGG = RegistryKey.unsafeOf("axolotl_spawn_egg");
 
     RegistryKey<Material> BAT_SPAWN_EGG = RegistryKey.unsafeOf("bat_spawn_egg");
 
     RegistryKey<Material> BEE_SPAWN_EGG = RegistryKey.unsafeOf("bee_spawn_egg");
 
-    RegistryKey<Material> BLAZE_SPAWN_EGG = RegistryKey.unsafeOf("blaze_spawn_egg");
+    RegistryKey<Material> FOX_SPAWN_EGG = RegistryKey.unsafeOf("fox_spawn_egg");
 
-    RegistryKey<Material> BOGGED_SPAWN_EGG = RegistryKey.unsafeOf("bogged_spawn_egg");
+    RegistryKey<Material> GOAT_SPAWN_EGG = RegistryKey.unsafeOf("goat_spawn_egg");
 
-    RegistryKey<Material> BREEZE_SPAWN_EGG = RegistryKey.unsafeOf("breeze_spawn_egg");
+    RegistryKey<Material> LLAMA_SPAWN_EGG = RegistryKey.unsafeOf("llama_spawn_egg");
 
-    RegistryKey<Material> CAT_SPAWN_EGG = RegistryKey.unsafeOf("cat_spawn_egg");
+    RegistryKey<Material> OCELOT_SPAWN_EGG = RegistryKey.unsafeOf("ocelot_spawn_egg");
 
-    RegistryKey<Material> CAMEL_SPAWN_EGG = RegistryKey.unsafeOf("camel_spawn_egg");
+    RegistryKey<Material> PANDA_SPAWN_EGG = RegistryKey.unsafeOf("panda_spawn_egg");
 
-    RegistryKey<Material> CAVE_SPIDER_SPAWN_EGG = RegistryKey.unsafeOf("cave_spider_spawn_egg");
+    RegistryKey<Material> POLAR_BEAR_SPAWN_EGG = RegistryKey.unsafeOf("polar_bear_spawn_egg");
 
-    RegistryKey<Material> CHICKEN_SPAWN_EGG = RegistryKey.unsafeOf("chicken_spawn_egg");
+    RegistryKey<Material> RABBIT_SPAWN_EGG = RegistryKey.unsafeOf("rabbit_spawn_egg");
+
+    RegistryKey<Material> AXOLOTL_SPAWN_EGG = RegistryKey.unsafeOf("axolotl_spawn_egg");
 
     RegistryKey<Material> COD_SPAWN_EGG = RegistryKey.unsafeOf("cod_spawn_egg");
 
-    RegistryKey<Material> COPPER_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("copper_golem_spawn_egg");
-
-    RegistryKey<Material> COW_SPAWN_EGG = RegistryKey.unsafeOf("cow_spawn_egg");
-
-    RegistryKey<Material> CREEPER_SPAWN_EGG = RegistryKey.unsafeOf("creeper_spawn_egg");
-
     RegistryKey<Material> DOLPHIN_SPAWN_EGG = RegistryKey.unsafeOf("dolphin_spawn_egg");
 
-    RegistryKey<Material> DONKEY_SPAWN_EGG = RegistryKey.unsafeOf("donkey_spawn_egg");
+    RegistryKey<Material> FROG_SPAWN_EGG = RegistryKey.unsafeOf("frog_spawn_egg");
+
+    RegistryKey<Material> GLOW_SQUID_SPAWN_EGG = RegistryKey.unsafeOf("glow_squid_spawn_egg");
+
+    RegistryKey<Material> NAUTILUS_SPAWN_EGG = RegistryKey.unsafeOf("nautilus_spawn_egg");
+
+    RegistryKey<Material> PUFFERFISH_SPAWN_EGG = RegistryKey.unsafeOf("pufferfish_spawn_egg");
+
+    RegistryKey<Material> SALMON_SPAWN_EGG = RegistryKey.unsafeOf("salmon_spawn_egg");
+
+    RegistryKey<Material> SQUID_SPAWN_EGG = RegistryKey.unsafeOf("squid_spawn_egg");
+
+    RegistryKey<Material> TADPOLE_SPAWN_EGG = RegistryKey.unsafeOf("tadpole_spawn_egg");
+
+    RegistryKey<Material> TROPICAL_FISH_SPAWN_EGG = RegistryKey.unsafeOf("tropical_fish_spawn_egg");
+
+    RegistryKey<Material> TURTLE_SPAWN_EGG = RegistryKey.unsafeOf("turtle_spawn_egg");
+
+    RegistryKey<Material> ALLAY_SPAWN_EGG = RegistryKey.unsafeOf("allay_spawn_egg");
+
+    RegistryKey<Material> MOOSHROOM_SPAWN_EGG = RegistryKey.unsafeOf("mooshroom_spawn_egg");
+
+    RegistryKey<Material> SNIFFER_SPAWN_EGG = RegistryKey.unsafeOf("sniffer_spawn_egg");
+
+    RegistryKey<Material> COPPER_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("copper_golem_spawn_egg");
+
+    RegistryKey<Material> IRON_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("iron_golem_spawn_egg");
+
+    RegistryKey<Material> SNOW_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("snow_golem_spawn_egg");
+
+    RegistryKey<Material> TRADER_LLAMA_SPAWN_EGG = RegistryKey.unsafeOf("trader_llama_spawn_egg");
+
+    RegistryKey<Material> VILLAGER_SPAWN_EGG = RegistryKey.unsafeOf("villager_spawn_egg");
+
+    RegistryKey<Material> WANDERING_TRADER_SPAWN_EGG = RegistryKey.unsafeOf("wandering_trader_spawn_egg");
+
+    RegistryKey<Material> BOGGED_SPAWN_EGG = RegistryKey.unsafeOf("bogged_spawn_egg");
+
+    RegistryKey<Material> CAMEL_HUSK_SPAWN_EGG = RegistryKey.unsafeOf("camel_husk_spawn_egg");
 
     RegistryKey<Material> DROWNED_SPAWN_EGG = RegistryKey.unsafeOf("drowned_spawn_egg");
 
+    RegistryKey<Material> HUSK_SPAWN_EGG = RegistryKey.unsafeOf("husk_spawn_egg");
+
+    RegistryKey<Material> PARCHED_SPAWN_EGG = RegistryKey.unsafeOf("parched_spawn_egg");
+
+    RegistryKey<Material> SKELETON_SPAWN_EGG = RegistryKey.unsafeOf("skeleton_spawn_egg");
+
+    RegistryKey<Material> SKELETON_HORSE_SPAWN_EGG = RegistryKey.unsafeOf("skeleton_horse_spawn_egg");
+
+    RegistryKey<Material> STRAY_SPAWN_EGG = RegistryKey.unsafeOf("stray_spawn_egg");
+
+    RegistryKey<Material> WITHER_SPAWN_EGG = RegistryKey.unsafeOf("wither_spawn_egg");
+
+    RegistryKey<Material> WITHER_SKELETON_SPAWN_EGG = RegistryKey.unsafeOf("wither_skeleton_spawn_egg");
+
+    RegistryKey<Material> ZOMBIE_SPAWN_EGG = RegistryKey.unsafeOf("zombie_spawn_egg");
+
+    RegistryKey<Material> ZOMBIE_HORSE_SPAWN_EGG = RegistryKey.unsafeOf("zombie_horse_spawn_egg");
+
+    RegistryKey<Material> ZOMBIE_NAUTILUS_SPAWN_EGG = RegistryKey.unsafeOf("zombie_nautilus_spawn_egg");
+
+    RegistryKey<Material> ZOMBIE_VILLAGER_SPAWN_EGG = RegistryKey.unsafeOf("zombie_villager_spawn_egg");
+
+    RegistryKey<Material> CAVE_SPIDER_SPAWN_EGG = RegistryKey.unsafeOf("cave_spider_spawn_egg");
+
+    RegistryKey<Material> SPIDER_SPAWN_EGG = RegistryKey.unsafeOf("spider_spawn_egg");
+
+    RegistryKey<Material> BREEZE_SPAWN_EGG = RegistryKey.unsafeOf("breeze_spawn_egg");
+
+    RegistryKey<Material> CREAKING_SPAWN_EGG = RegistryKey.unsafeOf("creaking_spawn_egg");
+
+    RegistryKey<Material> CREEPER_SPAWN_EGG = RegistryKey.unsafeOf("creeper_spawn_egg");
+
     RegistryKey<Material> ELDER_GUARDIAN_SPAWN_EGG = RegistryKey.unsafeOf("elder_guardian_spawn_egg");
+
+    RegistryKey<Material> GUARDIAN_SPAWN_EGG = RegistryKey.unsafeOf("guardian_spawn_egg");
+
+    RegistryKey<Material> PHANTOM_SPAWN_EGG = RegistryKey.unsafeOf("phantom_spawn_egg");
+
+    RegistryKey<Material> SILVERFISH_SPAWN_EGG = RegistryKey.unsafeOf("silverfish_spawn_egg");
+
+    RegistryKey<Material> SLIME_SPAWN_EGG = RegistryKey.unsafeOf("slime_spawn_egg");
+
+    RegistryKey<Material> WARDEN_SPAWN_EGG = RegistryKey.unsafeOf("warden_spawn_egg");
+
+    RegistryKey<Material> WITCH_SPAWN_EGG = RegistryKey.unsafeOf("witch_spawn_egg");
+
+    RegistryKey<Material> EVOKER_SPAWN_EGG = RegistryKey.unsafeOf("evoker_spawn_egg");
+
+    RegistryKey<Material> PILLAGER_SPAWN_EGG = RegistryKey.unsafeOf("pillager_spawn_egg");
+
+    RegistryKey<Material> RAVAGER_SPAWN_EGG = RegistryKey.unsafeOf("ravager_spawn_egg");
+
+    RegistryKey<Material> VINDICATOR_SPAWN_EGG = RegistryKey.unsafeOf("vindicator_spawn_egg");
+
+    RegistryKey<Material> VEX_SPAWN_EGG = RegistryKey.unsafeOf("vex_spawn_egg");
+
+    RegistryKey<Material> BLAZE_SPAWN_EGG = RegistryKey.unsafeOf("blaze_spawn_egg");
+
+    RegistryKey<Material> GHAST_SPAWN_EGG = RegistryKey.unsafeOf("ghast_spawn_egg");
+
+    RegistryKey<Material> HAPPY_GHAST_SPAWN_EGG = RegistryKey.unsafeOf("happy_ghast_spawn_egg");
+
+    RegistryKey<Material> HOGLIN_SPAWN_EGG = RegistryKey.unsafeOf("hoglin_spawn_egg");
+
+    RegistryKey<Material> MAGMA_CUBE_SPAWN_EGG = RegistryKey.unsafeOf("magma_cube_spawn_egg");
+
+    RegistryKey<Material> PIGLIN_SPAWN_EGG = RegistryKey.unsafeOf("piglin_spawn_egg");
+
+    RegistryKey<Material> PIGLIN_BRUTE_SPAWN_EGG = RegistryKey.unsafeOf("piglin_brute_spawn_egg");
+
+    RegistryKey<Material> STRIDER_SPAWN_EGG = RegistryKey.unsafeOf("strider_spawn_egg");
+
+    RegistryKey<Material> ZOGLIN_SPAWN_EGG = RegistryKey.unsafeOf("zoglin_spawn_egg");
+
+    RegistryKey<Material> ZOMBIFIED_PIGLIN_SPAWN_EGG = RegistryKey.unsafeOf("zombified_piglin_spawn_egg");
 
     RegistryKey<Material> ENDER_DRAGON_SPAWN_EGG = RegistryKey.unsafeOf("ender_dragon_spawn_egg");
 
@@ -2317,125 +2443,7 @@ public interface MaterialKeys {
 
     RegistryKey<Material> ENDERMITE_SPAWN_EGG = RegistryKey.unsafeOf("endermite_spawn_egg");
 
-    RegistryKey<Material> EVOKER_SPAWN_EGG = RegistryKey.unsafeOf("evoker_spawn_egg");
-
-    RegistryKey<Material> FOX_SPAWN_EGG = RegistryKey.unsafeOf("fox_spawn_egg");
-
-    RegistryKey<Material> FROG_SPAWN_EGG = RegistryKey.unsafeOf("frog_spawn_egg");
-
-    RegistryKey<Material> GHAST_SPAWN_EGG = RegistryKey.unsafeOf("ghast_spawn_egg");
-
-    RegistryKey<Material> HAPPY_GHAST_SPAWN_EGG = RegistryKey.unsafeOf("happy_ghast_spawn_egg");
-
-    RegistryKey<Material> GLOW_SQUID_SPAWN_EGG = RegistryKey.unsafeOf("glow_squid_spawn_egg");
-
-    RegistryKey<Material> GOAT_SPAWN_EGG = RegistryKey.unsafeOf("goat_spawn_egg");
-
-    RegistryKey<Material> GUARDIAN_SPAWN_EGG = RegistryKey.unsafeOf("guardian_spawn_egg");
-
-    RegistryKey<Material> HOGLIN_SPAWN_EGG = RegistryKey.unsafeOf("hoglin_spawn_egg");
-
-    RegistryKey<Material> HORSE_SPAWN_EGG = RegistryKey.unsafeOf("horse_spawn_egg");
-
-    RegistryKey<Material> HUSK_SPAWN_EGG = RegistryKey.unsafeOf("husk_spawn_egg");
-
-    RegistryKey<Material> IRON_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("iron_golem_spawn_egg");
-
-    RegistryKey<Material> LLAMA_SPAWN_EGG = RegistryKey.unsafeOf("llama_spawn_egg");
-
-    RegistryKey<Material> MAGMA_CUBE_SPAWN_EGG = RegistryKey.unsafeOf("magma_cube_spawn_egg");
-
-    RegistryKey<Material> MOOSHROOM_SPAWN_EGG = RegistryKey.unsafeOf("mooshroom_spawn_egg");
-
-    RegistryKey<Material> MULE_SPAWN_EGG = RegistryKey.unsafeOf("mule_spawn_egg");
-
-    RegistryKey<Material> OCELOT_SPAWN_EGG = RegistryKey.unsafeOf("ocelot_spawn_egg");
-
-    RegistryKey<Material> PANDA_SPAWN_EGG = RegistryKey.unsafeOf("panda_spawn_egg");
-
-    RegistryKey<Material> PARROT_SPAWN_EGG = RegistryKey.unsafeOf("parrot_spawn_egg");
-
-    RegistryKey<Material> PHANTOM_SPAWN_EGG = RegistryKey.unsafeOf("phantom_spawn_egg");
-
-    RegistryKey<Material> PIG_SPAWN_EGG = RegistryKey.unsafeOf("pig_spawn_egg");
-
-    RegistryKey<Material> PIGLIN_SPAWN_EGG = RegistryKey.unsafeOf("piglin_spawn_egg");
-
-    RegistryKey<Material> PIGLIN_BRUTE_SPAWN_EGG = RegistryKey.unsafeOf("piglin_brute_spawn_egg");
-
-    RegistryKey<Material> PILLAGER_SPAWN_EGG = RegistryKey.unsafeOf("pillager_spawn_egg");
-
-    RegistryKey<Material> POLAR_BEAR_SPAWN_EGG = RegistryKey.unsafeOf("polar_bear_spawn_egg");
-
-    RegistryKey<Material> PUFFERFISH_SPAWN_EGG = RegistryKey.unsafeOf("pufferfish_spawn_egg");
-
-    RegistryKey<Material> RABBIT_SPAWN_EGG = RegistryKey.unsafeOf("rabbit_spawn_egg");
-
-    RegistryKey<Material> RAVAGER_SPAWN_EGG = RegistryKey.unsafeOf("ravager_spawn_egg");
-
-    RegistryKey<Material> SALMON_SPAWN_EGG = RegistryKey.unsafeOf("salmon_spawn_egg");
-
-    RegistryKey<Material> SHEEP_SPAWN_EGG = RegistryKey.unsafeOf("sheep_spawn_egg");
-
     RegistryKey<Material> SHULKER_SPAWN_EGG = RegistryKey.unsafeOf("shulker_spawn_egg");
-
-    RegistryKey<Material> SILVERFISH_SPAWN_EGG = RegistryKey.unsafeOf("silverfish_spawn_egg");
-
-    RegistryKey<Material> SKELETON_SPAWN_EGG = RegistryKey.unsafeOf("skeleton_spawn_egg");
-
-    RegistryKey<Material> SKELETON_HORSE_SPAWN_EGG = RegistryKey.unsafeOf("skeleton_horse_spawn_egg");
-
-    RegistryKey<Material> SLIME_SPAWN_EGG = RegistryKey.unsafeOf("slime_spawn_egg");
-
-    RegistryKey<Material> SNIFFER_SPAWN_EGG = RegistryKey.unsafeOf("sniffer_spawn_egg");
-
-    RegistryKey<Material> SNOW_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("snow_golem_spawn_egg");
-
-    RegistryKey<Material> SPIDER_SPAWN_EGG = RegistryKey.unsafeOf("spider_spawn_egg");
-
-    RegistryKey<Material> SQUID_SPAWN_EGG = RegistryKey.unsafeOf("squid_spawn_egg");
-
-    RegistryKey<Material> STRAY_SPAWN_EGG = RegistryKey.unsafeOf("stray_spawn_egg");
-
-    RegistryKey<Material> STRIDER_SPAWN_EGG = RegistryKey.unsafeOf("strider_spawn_egg");
-
-    RegistryKey<Material> TADPOLE_SPAWN_EGG = RegistryKey.unsafeOf("tadpole_spawn_egg");
-
-    RegistryKey<Material> TRADER_LLAMA_SPAWN_EGG = RegistryKey.unsafeOf("trader_llama_spawn_egg");
-
-    RegistryKey<Material> TROPICAL_FISH_SPAWN_EGG = RegistryKey.unsafeOf("tropical_fish_spawn_egg");
-
-    RegistryKey<Material> TURTLE_SPAWN_EGG = RegistryKey.unsafeOf("turtle_spawn_egg");
-
-    RegistryKey<Material> VEX_SPAWN_EGG = RegistryKey.unsafeOf("vex_spawn_egg");
-
-    RegistryKey<Material> VILLAGER_SPAWN_EGG = RegistryKey.unsafeOf("villager_spawn_egg");
-
-    RegistryKey<Material> VINDICATOR_SPAWN_EGG = RegistryKey.unsafeOf("vindicator_spawn_egg");
-
-    RegistryKey<Material> WANDERING_TRADER_SPAWN_EGG = RegistryKey.unsafeOf("wandering_trader_spawn_egg");
-
-    RegistryKey<Material> WARDEN_SPAWN_EGG = RegistryKey.unsafeOf("warden_spawn_egg");
-
-    RegistryKey<Material> WITCH_SPAWN_EGG = RegistryKey.unsafeOf("witch_spawn_egg");
-
-    RegistryKey<Material> WITHER_SPAWN_EGG = RegistryKey.unsafeOf("wither_spawn_egg");
-
-    RegistryKey<Material> WITHER_SKELETON_SPAWN_EGG = RegistryKey.unsafeOf("wither_skeleton_spawn_egg");
-
-    RegistryKey<Material> WOLF_SPAWN_EGG = RegistryKey.unsafeOf("wolf_spawn_egg");
-
-    RegistryKey<Material> ZOGLIN_SPAWN_EGG = RegistryKey.unsafeOf("zoglin_spawn_egg");
-
-    RegistryKey<Material> CREAKING_SPAWN_EGG = RegistryKey.unsafeOf("creaking_spawn_egg");
-
-    RegistryKey<Material> ZOMBIE_SPAWN_EGG = RegistryKey.unsafeOf("zombie_spawn_egg");
-
-    RegistryKey<Material> ZOMBIE_HORSE_SPAWN_EGG = RegistryKey.unsafeOf("zombie_horse_spawn_egg");
-
-    RegistryKey<Material> ZOMBIE_VILLAGER_SPAWN_EGG = RegistryKey.unsafeOf("zombie_villager_spawn_egg");
-
-    RegistryKey<Material> ZOMBIFIED_PIGLIN_SPAWN_EGG = RegistryKey.unsafeOf("zombified_piglin_spawn_egg");
 
     RegistryKey<Material> EXPERIENCE_BOTTLE = RegistryKey.unsafeOf("experience_bottle");
 
@@ -2521,6 +2529,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> DIAMOND_HORSE_ARMOR = RegistryKey.unsafeOf("diamond_horse_armor");
 
+    RegistryKey<Material> NETHERITE_HORSE_ARMOR = RegistryKey.unsafeOf("netherite_horse_armor");
+
     RegistryKey<Material> LEATHER_HORSE_ARMOR = RegistryKey.unsafeOf("leather_horse_armor");
 
     RegistryKey<Material> LEAD = RegistryKey.unsafeOf("lead");
@@ -2593,6 +2603,20 @@ public interface MaterialKeys {
 
     RegistryKey<Material> SHIELD = RegistryKey.unsafeOf("shield");
 
+    RegistryKey<Material> WOODEN_SPEAR = RegistryKey.unsafeOf("wooden_spear");
+
+    RegistryKey<Material> STONE_SPEAR = RegistryKey.unsafeOf("stone_spear");
+
+    RegistryKey<Material> COPPER_SPEAR = RegistryKey.unsafeOf("copper_spear");
+
+    RegistryKey<Material> IRON_SPEAR = RegistryKey.unsafeOf("iron_spear");
+
+    RegistryKey<Material> GOLDEN_SPEAR = RegistryKey.unsafeOf("golden_spear");
+
+    RegistryKey<Material> DIAMOND_SPEAR = RegistryKey.unsafeOf("diamond_spear");
+
+    RegistryKey<Material> NETHERITE_SPEAR = RegistryKey.unsafeOf("netherite_spear");
+
     RegistryKey<Material> TOTEM_OF_UNDYING = RegistryKey.unsafeOf("totem_of_undying");
 
     RegistryKey<Material> SHULKER_SHELL = RegistryKey.unsafeOf("shulker_shell");
@@ -2652,6 +2676,16 @@ public interface MaterialKeys {
     RegistryKey<Material> TRIDENT = RegistryKey.unsafeOf("trident");
 
     RegistryKey<Material> NAUTILUS_SHELL = RegistryKey.unsafeOf("nautilus_shell");
+
+    RegistryKey<Material> IRON_NAUTILUS_ARMOR = RegistryKey.unsafeOf("iron_nautilus_armor");
+
+    RegistryKey<Material> GOLDEN_NAUTILUS_ARMOR = RegistryKey.unsafeOf("golden_nautilus_armor");
+
+    RegistryKey<Material> DIAMOND_NAUTILUS_ARMOR = RegistryKey.unsafeOf("diamond_nautilus_armor");
+
+    RegistryKey<Material> NETHERITE_NAUTILUS_ARMOR = RegistryKey.unsafeOf("netherite_nautilus_armor");
+
+    RegistryKey<Material> COPPER_NAUTILUS_ARMOR = RegistryKey.unsafeOf("copper_nautilus_armor");
 
     RegistryKey<Material> HEART_OF_THE_SEA = RegistryKey.unsafeOf("heart_of_the_sea");
 

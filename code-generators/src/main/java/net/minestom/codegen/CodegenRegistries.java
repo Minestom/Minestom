@@ -229,6 +229,20 @@ public final class CodegenRegistries {
                         .packageName("net.minestom.server.dialog")
                         .typeName("Dialog")
                         .generatedName("Dialogs")
+                        .build(),
+                builder().dynamicType()
+                        .generator(RegistryGenerator::new)
+                        .namespace("zombie_nautilus_variant")
+                        .packageName("net.minestom.server.entity.metadata.animal")
+                        .typeName("ZombieNautilusVariant")
+                        .generatedName("ZombieNautilusVariants")
+                        .build(),
+                builder().dynamicType()
+                        .generator(RegistryGenerator::new)
+                        .namespace("timeline")
+                        .packageName("net.minestom.server.world.timeline")
+                        .typeName("Timeline")
+                        .generatedName("Timelines")
                         .build()
         );
     }

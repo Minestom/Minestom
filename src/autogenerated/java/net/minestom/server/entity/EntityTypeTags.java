@@ -11,87 +11,95 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("all")
 @ApiStatus.NonExtendable
 public interface EntityTypeTags {
-    TagKey<EntityType> FOLLOWABLE_FRIENDLY_MOBS = TagKey.unsafeOf("followable_friendly_mobs");
-
-    TagKey<EntityType> ILLAGER = TagKey.unsafeOf("illager");
-
-    TagKey<EntityType> REDIRECTABLE_PROJECTILE = TagKey.unsafeOf("redirectable_projectile");
-
-    TagKey<EntityType> AXOLOTL_ALWAYS_HOSTILES = TagKey.unsafeOf("axolotl_always_hostiles");
-
-    TagKey<EntityType> CAN_TURN_IN_BOATS = TagKey.unsafeOf("can_turn_in_boats");
-
-    TagKey<EntityType> IMPACT_PROJECTILES = TagKey.unsafeOf("impact_projectiles");
-
-    TagKey<EntityType> ARROWS = TagKey.unsafeOf("arrows");
-
-    TagKey<EntityType> SENSITIVE_TO_BANE_OF_ARTHROPODS = TagKey.unsafeOf("sensitive_to_bane_of_arthropods");
-
-    TagKey<EntityType> DISMOUNTS_UNDERWATER = TagKey.unsafeOf("dismounts_underwater");
-
-    TagKey<EntityType> CANNOT_BE_PUSHED_ONTO_BOATS = TagKey.unsafeOf("cannot_be_pushed_onto_boats");
-
-    TagKey<EntityType> CAN_EQUIP_SADDLE = TagKey.unsafeOf("can_equip_saddle");
-
-    TagKey<EntityType> FREEZE_HURTS_EXTRA_TYPES = TagKey.unsafeOf("freeze_hurts_extra_types");
-
-    TagKey<EntityType> IGNORES_POISON_AND_REGEN = TagKey.unsafeOf("ignores_poison_and_regen");
-
-    TagKey<EntityType> IMMUNE_TO_INFESTED = TagKey.unsafeOf("immune_to_infested");
-
-    TagKey<EntityType> FALL_DAMAGE_IMMUNE = TagKey.unsafeOf("fall_damage_immune");
-
-    TagKey<EntityType> CANDIDATE_FOR_IRON_GOLEM_GIFT = TagKey.unsafeOf("candidate_for_iron_golem_gift");
-
-    TagKey<EntityType> UNDEAD = TagKey.unsafeOf("undead");
-
-    TagKey<EntityType> SKELETONS = TagKey.unsafeOf("skeletons");
-
-    TagKey<EntityType> BOAT = TagKey.unsafeOf("boat");
-
     TagKey<EntityType> SENSITIVE_TO_SMITE = TagKey.unsafeOf("sensitive_to_smite");
-
-    TagKey<EntityType> FREEZE_IMMUNE_ENTITY_TYPES = TagKey.unsafeOf("freeze_immune_entity_types");
-
-    TagKey<EntityType> AXOLOTL_HUNT_TARGETS = TagKey.unsafeOf("axolotl_hunt_targets");
-
-    TagKey<EntityType> INVERTED_HEALING_AND_HARM = TagKey.unsafeOf("inverted_healing_and_harm");
-
-    TagKey<EntityType> CAN_BREATHE_UNDER_WATER = TagKey.unsafeOf("can_breathe_under_water");
-
-    TagKey<EntityType> POWDER_SNOW_WALKABLE_MOBS = TagKey.unsafeOf("powder_snow_walkable_mobs");
-
-    TagKey<EntityType> WITHER_FRIENDS = TagKey.unsafeOf("wither_friends");
-
-    TagKey<EntityType> BEEHIVE_INHABITORS = TagKey.unsafeOf("beehive_inhabitors");
-
-    TagKey<EntityType> NON_CONTROLLING_RIDER = TagKey.unsafeOf("non_controlling_rider");
-
-    TagKey<EntityType> NOT_SCARY_FOR_PUFFERFISH = TagKey.unsafeOf("not_scary_for_pufferfish");
 
     TagKey<EntityType> ACCEPTS_IRON_GOLEM_GIFT = TagKey.unsafeOf("accepts_iron_golem_gift");
 
-    TagKey<EntityType> ZOMBIES = TagKey.unsafeOf("zombies");
-
-    TagKey<EntityType> ILLAGER_FRIENDS = TagKey.unsafeOf("illager_friends");
-
     TagKey<EntityType> AQUATIC = TagKey.unsafeOf("aquatic");
 
-    TagKey<EntityType> IMMUNE_TO_OOZING = TagKey.unsafeOf("immune_to_oozing");
+    TagKey<EntityType> SKELETONS = TagKey.unsafeOf("skeletons");
 
-    TagKey<EntityType> CAN_EQUIP_HARNESS = TagKey.unsafeOf("can_equip_harness");
+    TagKey<EntityType> CAN_TURN_IN_BOATS = TagKey.unsafeOf("can_turn_in_boats");
+
+    TagKey<EntityType> POWDER_SNOW_WALKABLE_MOBS = TagKey.unsafeOf("powder_snow_walkable_mobs");
+
+    TagKey<EntityType> AXOLOTL_ALWAYS_HOSTILES = TagKey.unsafeOf("axolotl_always_hostiles");
 
     TagKey<EntityType> NO_ANGER_FROM_WIND_CHARGE = TagKey.unsafeOf("no_anger_from_wind_charge");
 
-    TagKey<EntityType> FROG_FOOD = TagKey.unsafeOf("frog_food");
+    TagKey<EntityType> INVERTED_HEALING_AND_HARM = TagKey.unsafeOf("inverted_healing_and_harm");
+
+    TagKey<EntityType> CAN_EQUIP_HARNESS = TagKey.unsafeOf("can_equip_harness");
+
+    TagKey<EntityType> REDIRECTABLE_PROJECTILE = TagKey.unsafeOf("redirectable_projectile");
+
+    TagKey<EntityType> AXOLOTL_HUNT_TARGETS = TagKey.unsafeOf("axolotl_hunt_targets");
+
+    TagKey<EntityType> ZOMBIES = TagKey.unsafeOf("zombies");
+
+    TagKey<EntityType> UNDEAD = TagKey.unsafeOf("undead");
+
+    TagKey<EntityType> CAN_BREATHE_UNDER_WATER = TagKey.unsafeOf("can_breathe_under_water");
 
     TagKey<EntityType> ARTHROPOD = TagKey.unsafeOf("arthropod");
 
+    TagKey<EntityType> WITHER_FRIENDS = TagKey.unsafeOf("wither_friends");
+
+    TagKey<EntityType> IMMUNE_TO_OOZING = TagKey.unsafeOf("immune_to_oozing");
+
+    TagKey<EntityType> FALL_DAMAGE_IMMUNE = TagKey.unsafeOf("fall_damage_immune");
+
+    TagKey<EntityType> BOAT = TagKey.unsafeOf("boat");
+
+    TagKey<EntityType> IMPACT_PROJECTILES = TagKey.unsafeOf("impact_projectiles");
+
+    TagKey<EntityType> FREEZE_IMMUNE_ENTITY_TYPES = TagKey.unsafeOf("freeze_immune_entity_types");
+
+    TagKey<EntityType> DISMOUNTS_UNDERWATER = TagKey.unsafeOf("dismounts_underwater");
+
+    TagKey<EntityType> CANDIDATE_FOR_IRON_GOLEM_GIFT = TagKey.unsafeOf("candidate_for_iron_golem_gift");
+
     TagKey<EntityType> DEFLECTS_PROJECTILES = TagKey.unsafeOf("deflects_projectiles");
 
-    TagKey<EntityType> SENSITIVE_TO_IMPALING = TagKey.unsafeOf("sensitive_to_impaling");
+    TagKey<EntityType> FREEZE_HURTS_EXTRA_TYPES = TagKey.unsafeOf("freeze_hurts_extra_types");
+
+    TagKey<EntityType> ILLAGER = TagKey.unsafeOf("illager");
+
+    TagKey<EntityType> BEEHIVE_INHABITORS = TagKey.unsafeOf("beehive_inhabitors");
+
+    TagKey<EntityType> CAN_WEAR_NAUTILUS_ARMOR = TagKey.unsafeOf("can_wear_nautilus_armor");
+
+    TagKey<EntityType> RAIDERS = TagKey.unsafeOf("raiders");
+
+    TagKey<EntityType> CANNOT_BE_PUSHED_ONTO_BOATS = TagKey.unsafeOf("cannot_be_pushed_onto_boats");
+
+    TagKey<EntityType> SENSITIVE_TO_BANE_OF_ARTHROPODS = TagKey.unsafeOf("sensitive_to_bane_of_arthropods");
+
+    TagKey<EntityType> ILLAGER_FRIENDS = TagKey.unsafeOf("illager_friends");
+
+    TagKey<EntityType> NAUTILUS_HOSTILES = TagKey.unsafeOf("nautilus_hostiles");
+
+    TagKey<EntityType> ARROWS = TagKey.unsafeOf("arrows");
+
+    TagKey<EntityType> NON_CONTROLLING_RIDER = TagKey.unsafeOf("non_controlling_rider");
+
+    TagKey<EntityType> FOLLOWABLE_FRIENDLY_MOBS = TagKey.unsafeOf("followable_friendly_mobs");
+
+    TagKey<EntityType> FROG_FOOD = TagKey.unsafeOf("frog_food");
+
+    TagKey<EntityType> IGNORES_POISON_AND_REGEN = TagKey.unsafeOf("ignores_poison_and_regen");
+
+    TagKey<EntityType> CAN_FLOAT_WHILE_RIDDEN = TagKey.unsafeOf("can_float_while_ridden");
+
+    TagKey<EntityType> NOT_SCARY_FOR_PUFFERFISH = TagKey.unsafeOf("not_scary_for_pufferfish");
+
+    TagKey<EntityType> BURN_IN_DAYLIGHT = TagKey.unsafeOf("burn_in_daylight");
+
+    TagKey<EntityType> IMMUNE_TO_INFESTED = TagKey.unsafeOf("immune_to_infested");
 
     TagKey<EntityType> CAN_WEAR_HORSE_ARMOR = TagKey.unsafeOf("can_wear_horse_armor");
 
-    TagKey<EntityType> RAIDERS = TagKey.unsafeOf("raiders");
+    TagKey<EntityType> CAN_EQUIP_SADDLE = TagKey.unsafeOf("can_equip_saddle");
+
+    TagKey<EntityType> SENSITIVE_TO_IMPALING = TagKey.unsafeOf("sensitive_to_impaling");
 }

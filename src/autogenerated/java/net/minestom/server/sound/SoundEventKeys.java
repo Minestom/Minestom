@@ -169,6 +169,10 @@ public interface SoundEventKeys {
 
     RegistryKey<SoundEvent> ITEM_ARMOR_UNEQUIP_WOLF = RegistryKey.unsafeOf("item.armor.unequip_wolf");
 
+    RegistryKey<SoundEvent> ITEM_ARMOR_EQUIP_NAUTILUS = RegistryKey.unsafeOf("item.armor.equip_nautilus");
+
+    RegistryKey<SoundEvent> ITEM_ARMOR_UNEQUIP_NAUTILUS = RegistryKey.unsafeOf("item.armor.unequip_nautilus");
+
     RegistryKey<SoundEvent> ENTITY_ARMOR_STAND_BREAK = RegistryKey.unsafeOf("entity.armor_stand.break");
 
     RegistryKey<SoundEvent> ENTITY_ARMOR_STAND_FALL = RegistryKey.unsafeOf("entity.armor_stand.fall");
@@ -222,6 +226,24 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> BLOCK_AZALEA_LEAVES_PLACE = RegistryKey.unsafeOf("block.azalea_leaves.place");
 
     RegistryKey<SoundEvent> BLOCK_AZALEA_LEAVES_STEP = RegistryKey.unsafeOf("block.azalea_leaves.step");
+
+    RegistryKey<SoundEvent> ENTITY_BABY_NAUTILUS_AMBIENT = RegistryKey.unsafeOf("entity.baby_nautilus.ambient");
+
+    RegistryKey<SoundEvent> ENTITY_BABY_NAUTILUS_AMBIENT_LAND = RegistryKey.unsafeOf("entity.baby_nautilus.ambient_land");
+
+    RegistryKey<SoundEvent> ENTITY_BABY_NAUTILUS_DEATH = RegistryKey.unsafeOf("entity.baby_nautilus.death");
+
+    RegistryKey<SoundEvent> ENTITY_BABY_NAUTILUS_DEATH_LAND = RegistryKey.unsafeOf("entity.baby_nautilus.death_land");
+
+    RegistryKey<SoundEvent> ENTITY_BABY_NAUTILUS_EAT = RegistryKey.unsafeOf("entity.baby_nautilus.eat");
+
+    RegistryKey<SoundEvent> ENTITY_BABY_NAUTILUS_HURT = RegistryKey.unsafeOf("entity.baby_nautilus.hurt");
+
+    RegistryKey<SoundEvent> ENTITY_BABY_NAUTILUS_HURT_LAND = RegistryKey.unsafeOf("entity.baby_nautilus.hurt_land");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_RIDING = RegistryKey.unsafeOf("entity.nautilus.riding");
+
+    RegistryKey<SoundEvent> ENTITY_BABY_NAUTILUS_SWIM = RegistryKey.unsafeOf("entity.baby_nautilus.swim");
 
     RegistryKey<SoundEvent> BLOCK_BAMBOO_BREAK = RegistryKey.unsafeOf("block.bamboo.break");
 
@@ -482,6 +504,28 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> BLOCK_CALCITE_HIT = RegistryKey.unsafeOf("block.calcite.hit");
 
     RegistryKey<SoundEvent> BLOCK_CALCITE_FALL = RegistryKey.unsafeOf("block.calcite.fall");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_AMBIENT = RegistryKey.unsafeOf("entity.camel_husk.ambient");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_DASH = RegistryKey.unsafeOf("entity.camel_husk.dash");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_DASH_READY = RegistryKey.unsafeOf("entity.camel_husk.dash_ready");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_DEATH = RegistryKey.unsafeOf("entity.camel_husk.death");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_EAT = RegistryKey.unsafeOf("entity.camel_husk.eat");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_HURT = RegistryKey.unsafeOf("entity.camel_husk.hurt");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_SADDLE = RegistryKey.unsafeOf("entity.camel_husk.saddle");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_SIT = RegistryKey.unsafeOf("entity.camel_husk.sit");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_STAND = RegistryKey.unsafeOf("entity.camel_husk.stand");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_STEP = RegistryKey.unsafeOf("entity.camel_husk.step");
+
+    RegistryKey<SoundEvent> ENTITY_CAMEL_HUSK_STEP_SAND = RegistryKey.unsafeOf("entity.camel_husk.step_sand");
 
     RegistryKey<SoundEvent> ENTITY_CAMEL_AMBIENT = RegistryKey.unsafeOf("entity.camel.ambient");
 
@@ -1797,6 +1841,12 @@ public interface SoundEventKeys {
 
     RegistryKey<SoundEvent> ITEM_LODESTONE_COMPASS_LOCK = RegistryKey.unsafeOf("item.lodestone_compass.lock");
 
+    RegistryKey<SoundEvent> ITEM_SPEAR_LUNGE_1 = RegistryKey.unsafeOf("item.spear.lunge_1");
+
+    RegistryKey<SoundEvent> ITEM_SPEAR_LUNGE_2 = RegistryKey.unsafeOf("item.spear.lunge_2");
+
+    RegistryKey<SoundEvent> ITEM_SPEAR_LUNGE_3 = RegistryKey.unsafeOf("item.spear.lunge_3");
+
     RegistryKey<SoundEvent> ITEM_MACE_SMASH_AIR = RegistryKey.unsafeOf("item.mace.smash_air");
 
     RegistryKey<SoundEvent> ITEM_MACE_SMASH_GROUND = RegistryKey.unsafeOf("item.mace.smash_ground");
@@ -2037,6 +2087,30 @@ public interface SoundEventKeys {
 
     RegistryKey<SoundEvent> MUSIC_UNDER_WATER = RegistryKey.unsafeOf("music.under_water");
 
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_AMBIENT = RegistryKey.unsafeOf("entity.nautilus.ambient");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_AMBIENT_LAND = RegistryKey.unsafeOf("entity.nautilus.ambient_land");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_DASH = RegistryKey.unsafeOf("entity.nautilus.dash");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_DASH_LAND = RegistryKey.unsafeOf("entity.nautilus.dash_land");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_DASH_READY = RegistryKey.unsafeOf("entity.nautilus.dash_ready");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_DASH_READY_LAND = RegistryKey.unsafeOf("entity.nautilus.dash_ready_land");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_DEATH = RegistryKey.unsafeOf("entity.nautilus.death");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_DEATH_LAND = RegistryKey.unsafeOf("entity.nautilus.death_land");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_EAT = RegistryKey.unsafeOf("entity.nautilus.eat");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_HURT = RegistryKey.unsafeOf("entity.nautilus.hurt");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_HURT_LAND = RegistryKey.unsafeOf("entity.nautilus.hurt_land");
+
+    RegistryKey<SoundEvent> ENTITY_NAUTILUS_SWIM = RegistryKey.unsafeOf("entity.nautilus.swim");
+
     RegistryKey<SoundEvent> BLOCK_NETHER_BRICKS_BREAK = RegistryKey.unsafeOf("block.nether_bricks.break");
 
     RegistryKey<SoundEvent> BLOCK_NETHER_BRICKS_STEP = RegistryKey.unsafeOf("block.nether_bricks.step");
@@ -2253,6 +2327,14 @@ public interface SoundEventKeys {
 
     RegistryKey<SoundEvent> ENTITY_PANDA_BITE = RegistryKey.unsafeOf("entity.panda.bite");
 
+    RegistryKey<SoundEvent> ENTITY_PARCHED_AMBIENT = RegistryKey.unsafeOf("entity.parched.ambient");
+
+    RegistryKey<SoundEvent> ENTITY_PARCHED_DEATH = RegistryKey.unsafeOf("entity.parched.death");
+
+    RegistryKey<SoundEvent> ENTITY_PARCHED_HURT = RegistryKey.unsafeOf("entity.parched.hurt");
+
+    RegistryKey<SoundEvent> ENTITY_PARCHED_STEP = RegistryKey.unsafeOf("entity.parched.step");
+
     RegistryKey<SoundEvent> ENTITY_PARROT_AMBIENT = RegistryKey.unsafeOf("entity.parrot.ambient");
 
     RegistryKey<SoundEvent> ENTITY_PARROT_DEATH = RegistryKey.unsafeOf("entity.parrot.death");
@@ -2268,6 +2350,8 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_BOGGED = RegistryKey.unsafeOf("entity.parrot.imitate.bogged");
 
     RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_BREEZE = RegistryKey.unsafeOf("entity.parrot.imitate.breeze");
+
+    RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_CAMEL_HUSK = RegistryKey.unsafeOf("entity.parrot.imitate.camel_husk");
 
     RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_CREAKING = RegistryKey.unsafeOf("entity.parrot.imitate.creaking");
 
@@ -2296,6 +2380,8 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_MAGMA_CUBE = RegistryKey.unsafeOf("entity.parrot.imitate.magma_cube");
 
     RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_PHANTOM = RegistryKey.unsafeOf("entity.parrot.imitate.phantom");
+
+    RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_PARCHED = RegistryKey.unsafeOf("entity.parrot.imitate.parched");
 
     RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_PIGLIN = RegistryKey.unsafeOf("entity.parrot.imitate.piglin");
 
@@ -2332,6 +2418,10 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_ZOGLIN = RegistryKey.unsafeOf("entity.parrot.imitate.zoglin");
 
     RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_ZOMBIE = RegistryKey.unsafeOf("entity.parrot.imitate.zombie");
+
+    RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_ZOMBIE_HORSE = RegistryKey.unsafeOf("entity.parrot.imitate.zombie_horse");
+
+    RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_ZOMBIE_NAUTILUS = RegistryKey.unsafeOf("entity.parrot.imitate.zombie_nautilus");
 
     RegistryKey<SoundEvent> ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER = RegistryKey.unsafeOf("entity.parrot.imitate.zombie_villager");
 
@@ -2546,6 +2636,24 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> BLOCK_NETHER_ORE_STEP = RegistryKey.unsafeOf("block.nether_ore.step");
 
     RegistryKey<SoundEvent> BLOCK_REDSTONE_TORCH_BURNOUT = RegistryKey.unsafeOf("block.redstone_torch.burnout");
+
+    RegistryKey<SoundEvent> BLOCK_RESIN_BREAK = RegistryKey.unsafeOf("block.resin.break");
+
+    RegistryKey<SoundEvent> BLOCK_RESIN_FALL = RegistryKey.unsafeOf("block.resin.fall");
+
+    RegistryKey<SoundEvent> BLOCK_RESIN_PLACE = RegistryKey.unsafeOf("block.resin.place");
+
+    RegistryKey<SoundEvent> BLOCK_RESIN_STEP = RegistryKey.unsafeOf("block.resin.step");
+
+    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_BREAK = RegistryKey.unsafeOf("block.resin_bricks.break");
+
+    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_FALL = RegistryKey.unsafeOf("block.resin_bricks.fall");
+
+    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_HIT = RegistryKey.unsafeOf("block.resin_bricks.hit");
+
+    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_PLACE = RegistryKey.unsafeOf("block.resin_bricks.place");
+
+    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_STEP = RegistryKey.unsafeOf("block.resin_bricks.step");
 
     RegistryKey<SoundEvent> BLOCK_RESPAWN_ANCHOR_AMBIENT = RegistryKey.unsafeOf("block.respawn_anchor.ambient");
 
@@ -2833,23 +2941,17 @@ public interface SoundEventKeys {
 
     RegistryKey<SoundEvent> BLOCK_SPAWNER_STEP = RegistryKey.unsafeOf("block.spawner.step");
 
-    RegistryKey<SoundEvent> BLOCK_RESIN_BREAK = RegistryKey.unsafeOf("block.resin.break");
+    RegistryKey<SoundEvent> ITEM_SPEAR_USE = RegistryKey.unsafeOf("item.spear.use");
 
-    RegistryKey<SoundEvent> BLOCK_RESIN_FALL = RegistryKey.unsafeOf("block.resin.fall");
+    RegistryKey<SoundEvent> ITEM_SPEAR_HIT = RegistryKey.unsafeOf("item.spear.hit");
 
-    RegistryKey<SoundEvent> BLOCK_RESIN_PLACE = RegistryKey.unsafeOf("block.resin.place");
+    RegistryKey<SoundEvent> ITEM_SPEAR_ATTACK = RegistryKey.unsafeOf("item.spear.attack");
 
-    RegistryKey<SoundEvent> BLOCK_RESIN_STEP = RegistryKey.unsafeOf("block.resin.step");
+    RegistryKey<SoundEvent> ITEM_SPEAR_WOOD_USE = RegistryKey.unsafeOf("item.spear_wood.use");
 
-    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_BREAK = RegistryKey.unsafeOf("block.resin_bricks.break");
+    RegistryKey<SoundEvent> ITEM_SPEAR_WOOD_HIT = RegistryKey.unsafeOf("item.spear_wood.hit");
 
-    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_FALL = RegistryKey.unsafeOf("block.resin_bricks.fall");
-
-    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_HIT = RegistryKey.unsafeOf("block.resin_bricks.hit");
-
-    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_PLACE = RegistryKey.unsafeOf("block.resin_bricks.place");
-
-    RegistryKey<SoundEvent> BLOCK_RESIN_BRICKS_STEP = RegistryKey.unsafeOf("block.resin_bricks.step");
+    RegistryKey<SoundEvent> ITEM_SPEAR_WOOD_ATTACK = RegistryKey.unsafeOf("item.spear_wood.attack");
 
     RegistryKey<SoundEvent> BLOCK_SPORE_BLOSSOM_BREAK = RegistryKey.unsafeOf("block.spore_blossom.break");
 
@@ -3515,13 +3617,41 @@ public interface SoundEventKeys {
 
     RegistryKey<SoundEvent> ENTITY_ZOMBIE_HORSE_AMBIENT = RegistryKey.unsafeOf("entity.zombie_horse.ambient");
 
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_HORSE_ANGRY = RegistryKey.unsafeOf("entity.zombie_horse.angry");
+
     RegistryKey<SoundEvent> ENTITY_ZOMBIE_HORSE_DEATH = RegistryKey.unsafeOf("entity.zombie_horse.death");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_HORSE_EAT = RegistryKey.unsafeOf("entity.zombie_horse.eat");
 
     RegistryKey<SoundEvent> ENTITY_ZOMBIE_HORSE_HURT = RegistryKey.unsafeOf("entity.zombie_horse.hurt");
 
     RegistryKey<SoundEvent> ENTITY_ZOMBIE_HURT = RegistryKey.unsafeOf("entity.zombie.hurt");
 
     RegistryKey<SoundEvent> ENTITY_ZOMBIE_INFECT = RegistryKey.unsafeOf("entity.zombie.infect");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_AMBIENT = RegistryKey.unsafeOf("entity.zombie_nautilus.ambient");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_AMBIENT_LAND = RegistryKey.unsafeOf("entity.zombie_nautilus.ambient_land");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_DASH = RegistryKey.unsafeOf("entity.zombie_nautilus.dash");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_DASH_LAND = RegistryKey.unsafeOf("entity.zombie_nautilus.dash_land");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_DASH_READY = RegistryKey.unsafeOf("entity.zombie_nautilus.dash_ready");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_DASH_READY_LAND = RegistryKey.unsafeOf("entity.zombie_nautilus.dash_ready_land");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_DEATH = RegistryKey.unsafeOf("entity.zombie_nautilus.death");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_DEATH_LAND = RegistryKey.unsafeOf("entity.zombie_nautilus.death_land");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_EAT = RegistryKey.unsafeOf("entity.zombie_nautilus.eat");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_HURT = RegistryKey.unsafeOf("entity.zombie_nautilus.hurt");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_HURT_LAND = RegistryKey.unsafeOf("entity.zombie_nautilus.hurt_land");
+
+    RegistryKey<SoundEvent> ENTITY_ZOMBIE_NAUTILUS_SWIM = RegistryKey.unsafeOf("entity.zombie_nautilus.swim");
 
     RegistryKey<SoundEvent> ENTITY_ZOMBIFIED_PIGLIN_AMBIENT = RegistryKey.unsafeOf("entity.zombified_piglin.ambient");
 
@@ -3552,4 +3682,8 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> EVENT_MOB_EFFECT_RAID_OMEN = RegistryKey.unsafeOf("event.mob_effect.raid_omen");
 
     RegistryKey<SoundEvent> ITEM_SADDLE_UNEQUIP = RegistryKey.unsafeOf("item.saddle.unequip");
+
+    RegistryKey<SoundEvent> ITEM_NAUTILUS_SADDLE_UNDERWATER_EQUIP = RegistryKey.unsafeOf("item.nautilus_saddle_underwater_equip");
+
+    RegistryKey<SoundEvent> ITEM_NAUTILUS_SADDLE_EQUIP = RegistryKey.unsafeOf("item.nautilus_saddle_equip");
 }

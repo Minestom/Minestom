@@ -10,6 +10,7 @@ import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
 import net.minestom.server.entity.metadata.animal.FrogVariant;
 import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.ZombieNautilusVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -34,6 +35,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -190,6 +192,11 @@ public interface BuiltinRegistries {
     RegistryKey<DynamicRegistry<PigVariant>> PIG_VARIANT = RegistryKey.unsafeOf("pig_variant");
 
     /**
+     * The dynamic registry key for {@link Timeline}
+     */
+    RegistryKey<DynamicRegistry<Timeline>> TIMELINE = RegistryKey.unsafeOf("timeline");
+
+    /**
      * The dynamic registry key for {@link TrimMaterial}
      */
     RegistryKey<DynamicRegistry<TrimMaterial>> TRIM_MATERIAL = RegistryKey.unsafeOf("trim_material");
@@ -213,4 +220,9 @@ public interface BuiltinRegistries {
      * The dynamic registry key for {@link Biome}
      */
     RegistryKey<DynamicRegistry<Biome>> WORLDGEN_BIOME = RegistryKey.unsafeOf("worldgen/biome");
+
+    /**
+     * The dynamic registry key for {@link ZombieNautilusVariant}
+     */
+    RegistryKey<DynamicRegistry<ZombieNautilusVariant>> ZOMBIE_NAUTILUS_VARIANT = RegistryKey.unsafeOf("zombie_nautilus_variant");
 }

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.ApiStatus;
 public interface InstrumentTags {
     TagKey<Instrument> GOAT_HORNS = TagKey.unsafeOf("goat_horns");
 
-    TagKey<Instrument> REGULAR_GOAT_HORNS = TagKey.unsafeOf("regular_goat_horns");
-
     TagKey<Instrument> SCREAMING_GOAT_HORNS = TagKey.unsafeOf("screaming_goat_horns");
+
+    TagKey<Instrument> REGULAR_GOAT_HORNS = TagKey.unsafeOf("regular_goat_horns");
 }
