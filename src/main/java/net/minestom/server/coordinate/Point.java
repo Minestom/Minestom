@@ -13,7 +13,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
 /**
  * Represents a 3D point.
  */
-public sealed interface Point permits Vec, Pos, BlockVec {
+public sealed interface Point permits BlockVec, Pos, SectionVec, Vec {
 
     /**
      * Gets the X coordinate.
@@ -322,28 +322,19 @@ public sealed interface Point permits Vec, Pos, BlockVec {
 
     @Contract(pure = true)
     default Pos asPos() {
-        return switch (this) {
-            case Pos pos -> pos;
-            case Vec vec -> new Pos(vec.x(), vec.y(), vec.z());
-            case BlockVec blockVec -> new Pos(blockVec.blockX(), blockVec.blockY(), blockVec.blockZ());
-        };
+        if (this instanceof Pos pos) return pos;
+        return new Pos(x(), y(), z());
     }
 
     @Contract(pure = true)
     default Vec asVec() {
-        return switch (this) {
-            case Vec vec -> vec;
-            case Pos pos -> new Vec(pos.x(), pos.y(), pos.z());
-            case BlockVec blockVec -> new Vec(blockVec.blockX(), blockVec.blockY(), blockVec.blockZ());
-        };
+        if (this instanceof Vec vec) return vec;
+        return new Vec(x(), y(), z());
     }
 
     @Contract(pure = true)
     default BlockVec asBlockVec() {
-        return switch (this) {
-            case BlockVec blockVec -> blockVec;
-            case Pos pos -> new BlockVec(pos.blockX(), pos.blockY(), pos.blockZ());
-            case Vec vec -> new BlockVec(vec.blockX(), vec.blockY(), vec.blockZ());
-        };
+        if (this instanceof BlockVec blockVec) return blockVec;
+        return new BlockVec(blockX(), blockY(), blockZ());
     }
 }

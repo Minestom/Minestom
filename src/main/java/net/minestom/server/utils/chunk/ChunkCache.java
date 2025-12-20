@@ -5,17 +5,18 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 @ApiStatus.Internal
 public final class ChunkCache implements Block.Getter {
     private final Instance instance;
-    private Chunk chunk;
+    private @Nullable Chunk chunk;
 
-    private final Block defaultBlock;
+    private final @Nullable Block defaultBlock;
 
-    public ChunkCache(Instance instance, Chunk chunk,
-                      Block defaultBlock) {
+    public ChunkCache(Instance instance, @Nullable Chunk chunk,
+                      @Nullable Block defaultBlock) {
         this.instance = instance;
         this.chunk = chunk;
         this.defaultBlock = defaultBlock;
@@ -32,7 +33,7 @@ public final class ChunkCache implements Block.Getter {
         final int chunkZ = CoordConversion.globalToChunk(z);
         if (chunk == null || !chunk.isLoaded() ||
                 chunk.getChunkX() != chunkX || chunk.getChunkZ() != chunkZ) {
-            this.chunk = chunk = this.instance.getChunk(chunkX, chunkZ);
+            this.chunk = chunk = this.instance.getChunkManager().getLoadedChunkManaged(chunkX, chunkZ);
         }
         if (chunk != null) {
             synchronized (chunk) {
