@@ -2,6 +2,7 @@ package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
@@ -345,6 +346,14 @@ class UpdateHandler {
         }
         var loaded = new State.Loaded(chunk);
         this.chunks.put(chunkIndex, loaded);
+        this.singleThreadedManager.loadedChunksManaged.put(chunkIndex, chunk);
+        try {
+            // TODO chunks can block us... This is undesirable
+            this.singleThreadedManager.chunkAccess.onLoad(chunk);
+        } catch (Throwable t) {
+            MinecraftServer.getExceptionManager().handleException(t);
+        }
+
         for (var claim : loading.claimsRegisteredForCallback) {
             if (this.singleThreadedManager.hasClaim(claim)) {
                 var data = this.singleThreadedManager.claimMap.get(claim);

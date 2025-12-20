@@ -312,6 +312,10 @@ class TaskSchedulerThread implements Runnable {
         return this.singleThreadedManager.loadedChunk(chunkX, chunkZ);
     }
 
+    public @Nullable Chunk getLoadedChunkManaged(int chunkX, int chunkZ) {
+        return this.singleThreadedManager.loadedChunkManaged(chunkX, chunkZ);
+    }
+
     private void handleTask(Task task) {
         switch (task) {
             case Task.AddClaim(var chunkAndClaim) ->
@@ -403,6 +407,10 @@ class TaskSchedulerThread implements Runnable {
 
     public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunks() {
         return this.singleThreadedManager.loadedChunks();
+    }
+
+    public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunksManaged() {
+        return this.singleThreadedManager.loadedChunksManaged();
     }
 
     private void registerEvents() {

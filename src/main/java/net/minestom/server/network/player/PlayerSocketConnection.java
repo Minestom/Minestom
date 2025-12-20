@@ -435,8 +435,9 @@ public class PlayerSocketConnection extends PlayerConnection {
             } else {
                 assert this.writeThread == Thread.currentThread(): "writeThread should be the current thread";
                 this.writeSignaled.set(false);
-                LockSupport.park(this);
-                assert this.packetQueue.peek() != null : "packet queue should not be empty";
+                while (packetQueue.peek() == null)
+                    LockSupport.park(this);
+//                assert this.packetQueue.peek() != null : "packet queue should not be empty";
             }
         }
         if (!channel.isConnected()) throw new EOFException("Channel is closed");

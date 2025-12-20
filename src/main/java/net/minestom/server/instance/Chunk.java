@@ -275,7 +275,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return true if the chunk is loaded
      */
-    public boolean isLoaded() {
+    public final boolean isLoaded() {
         return loaded;
     }
 

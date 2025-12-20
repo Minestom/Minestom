@@ -3,10 +3,12 @@ package net.minestom.server.instance.light;
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.SectionVec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -28,23 +30,28 @@ public final class LightCompute {
     }
 
     static byte[] lazyArray(byte[] content) {
+        assert content != null;
         if (content == null || content.length == 0) return EMPTY_CONTENT;
         else if (Arrays.equals(content, EMPTY_CONTENT)) return EMPTY_CONTENT;
         else if (Arrays.equals(content, CONTENT_FULLY_LIT)) return CONTENT_FULLY_LIT;
         else return content.clone();
     }
 
+    /**
+     * Calculate the light that comes in from neighbouring chunks.
+     * This does not modify any neighbouring chunks.
+     */
     static ShortArrayFIFOQueue buildExternalQueue(Palette blockPalette,
-                                                  Point[] neighbors, byte[] content,
+                                                  @Nullable SectionVec[] neighbors, byte @Nullable [] content,
                                                   Light.LightLookup lightLookup,
                                                   Light.PaletteLookup paletteLookup) {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
         for (int i = 0; i < neighbors.length; i++) {
-            Point neighborSection = neighbors[i];
+            SectionVec neighborSection = neighbors[i];
             if (neighborSection == null) continue;
-            Palette otherPalette = paletteLookup.palette(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
+            Palette otherPalette = paletteLookup.palette(neighborSection.sectionX(), neighborSection.sectionY(), neighborSection.sectionZ());
             if (otherPalette == null) continue;
-            Light otherLight = lightLookup.light(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
+            Light otherLight = lightLookup.light(neighborSection.sectionX(), neighborSection.sectionY(), neighborSection.sectionZ());
             if (otherLight == null) continue;
 
             final BlockFace face = FACES[i];
@@ -189,11 +196,11 @@ public final class LightCompute {
         return ((value >>> ((index & 1) << 2)) & 0xF);
     }
 
-    public static Block getBlock(Palette palette, int x, int y, int z) {
+    public static @Nullable Block getBlock(Palette palette, int x, int y, int z) {
         return Block.fromStateId(palette.get(x, y, z));
     }
 
-    public static byte[] bake(byte[] content1, byte[] content2) {
+    public static byte[] bake(byte @Nullable [] content1, byte @Nullable [] content2) {
         if (content1 == null && content2 == null) return EMPTY_CONTENT;
         if (content1 == EMPTY_CONTENT && content2 == EMPTY_CONTENT) return EMPTY_CONTENT;
 
@@ -231,7 +238,8 @@ public final class LightCompute {
         return lightMax;
     }
 
-    public static boolean compareBorders(byte[] content, byte[] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {
+    public static boolean compareBorders(byte @Nullable [] content, byte @Nullable [] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {
+        assert contentPropagationTemp != null;
         if (content == null && contentPropagation == null && contentPropagationTemp == null) return true;
 
         final int k = switch (face) {

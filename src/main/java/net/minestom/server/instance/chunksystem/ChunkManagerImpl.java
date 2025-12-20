@@ -33,8 +33,18 @@ class ChunkManagerImpl implements ChunkManager {
     }
 
     @Override
+    public @Nullable Chunk getLoadedChunkManaged(int chunkX, int chunkZ) {
+        return taskSchedulerThread.getLoadedChunkManaged(chunkX, chunkZ);
+    }
+
+    @Override
     public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunks() {
         return taskSchedulerThread.getLoadedChunks();
+    }
+
+    @Override
+    public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunksManaged() {
+        return taskSchedulerThread.getLoadedChunksManaged();
     }
 
     @Override
