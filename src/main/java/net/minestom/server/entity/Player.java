@@ -88,6 +88,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -96,7 +97,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.worldevent.WorldEvent;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jctools.queues.MpscArrayQueue;
+import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -177,7 +178,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final MpscArrayQueue<ClientPacket> packets = new MpscArrayQueue<>(ServerFlag.PLAYER_PACKET_QUEUE_SIZE);
+    private final MessagePassingQueue<ClientPacket> packets = ConcurrentMessageQueues.mpscArrayQueue(ServerFlag.PLAYER_PACKET_QUEUE_SIZE);
     private final boolean levelFlat;
     private ClientSettings settings = ClientSettings.DEFAULT;
     private float exp;
