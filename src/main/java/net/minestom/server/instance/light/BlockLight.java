@@ -1,8 +1,7 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
-import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.SectionVec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -105,12 +104,12 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public Set<Point> calculateInternal(Palette blockPalette,
-                                        int chunkX, int chunkY, int chunkZ,
-                                        int[] heightmap, int maxY,
-                                        LightLookup lightLookup) {
+    public Set<SectionVec> calculateInternal(Palette blockPalette,
+                                             int chunkX, int chunkY, int chunkZ,
+                                             int[] heightmap, int maxY,
+                                             LightLookup lightLookup) {
         this.isValidBorders = true;
-        // Update single section with base lighting changes
+        // Update a single section with base lighting changes
         ShortArrayFIFOQueue queue = buildInternalQueue(blockPalette);
         this.content = LightCompute.compute(blockPalette, queue);
         // Propagate changes to neighbors and self
@@ -126,22 +125,24 @@ final class BlockLight implements Light {
                 }
             }
         }
-        return Set.of(new BlockVec(chunkX, chunkY, chunkZ));
+        return Set.of(new SectionVec(chunkX, chunkY, chunkZ));
     }
 
     @Override
-    public Set<Point> calculateExternal(Palette blockPalette,
-                                        Point[] neighbors,
-                                        LightLookup lightLookup,
-                                        PaletteLookup paletteLookup) {
+    public Set<SectionVec> calculateExternal(Palette blockPalette,
+                                             @Nullable SectionVec[] neighbors,
+                                             LightLookup lightLookup,
+                                             PaletteLookup paletteLookup) {
         if (!isValidBorders) return Set.of();
+        // Calculate incoming emissions from neighbors
         ShortArrayFIFOQueue queue = buildExternalQueue(blockPalette, neighbors, content, lightLookup, paletteLookup);
+        // Compute the light levels based on the emissions from neighbors
         final byte[] contentPropagationTemp = LightCompute.compute(blockPalette, queue);
         this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
         // Propagate changes to neighbors and self
-        Set<Point> toUpdate = new HashSet<>();
+        Set<SectionVec> toUpdate = new HashSet<>();
         for (int i = 0; i < neighbors.length; i++) {
-            final Point neighbor = neighbors[i];
+            final SectionVec neighbor = neighbors[i];
             if (neighbor == null) continue;
             final BlockFace face = FACES[i];
             if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {

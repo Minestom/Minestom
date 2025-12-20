@@ -112,14 +112,16 @@ public interface ChunkManager {
     /**
      * Gets the loaded {@link Chunk} at a position.
      * <p>
-     * WARNING: this should only return already-loaded chunk, use {@link #addClaim(int, int)} or similar to load one instead.
+     * WARNING: this will only return already-loaded chunks, use {@link #addClaim(int, int)} or overloads to load one instead.
      * <p>
-     * WARNING: the returned chunk can be unloaded as soon as this call returns. The better approach is to use {@link #addClaim(int, int)} to get a chunk.
-     * @implNote
-     * After the callback {@link ClaimCallbacks#chunkLoaded(ChunkClaim, Chunk)} or {@link ClaimCallbacks#allChunksLoaded(ChunkClaim)} is called, the given chunk
+     * WARNING: the returned chunk can be unloaded (on the chunk's tick thread) as soon as this call returns.
+     * The better approach is to use {@link #addClaim(int, int)} to get a chunk.
+     *
+     * @implNote After the callback {@link ClaimCallbacks#chunkLoaded(ChunkClaim, Chunk)} or
+     * {@link ClaimCallbacks#allChunksLoaded(ChunkClaim)} is called, the given chunk
      * could still not be returned by this method. This is because the "loadedChunks" HashMap is updated on the chunk tick thread (partition).
      * This behavior makes {@link InstanceChunkLoadEvent} and {@link InstanceChunkUnloadEvent} more consistent, but creates this inconsistency instead.
-     * This could change in the future, when a better alternative presents itself, hence this is an implementation note.
+     * This could change in the future, when a better alternative presents itself.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -128,12 +130,38 @@ public interface ChunkManager {
     @Nullable Chunk getLoadedChunk(int chunkX, int chunkZ);
 
     /**
-     * Get the currently loaded chunks. This is only ever updated in the instance's tick thread.
+     * Gets the loaded {@link Chunk} at a position.
+     * <p>
+     * WARNING: this should only return already-loaded chunks, use {@link #addClaim(int, int)} or overloads to load one instead.
+     * <p>
+     * WARNING: the returned chunk can be unloaded as soon as this call returns. The better approach is to use {@link #addClaim(int, int)} to get a chunk.
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return the chunk at the specified position, null if not loaded
+     * @implNote The chunk will be accessible from {@link ClaimCallbacks#chunkLoaded(ChunkClaim, Chunk)} and
+     * {@link ClaimCallbacks#allChunksLoaded(ChunkClaim)}.
+     */
+    @ApiStatus.Experimental
+    @Nullable Chunk getLoadedChunkManaged(int chunkX, int chunkZ);
+
+    /**
+     * Get the currently loaded chunks. This is only ever updated in the chunks's tick thread.
      *
      * @return the currently loaded chunks
      */
     @UnmodifiableView
     @NotNull Collection<@NotNull Chunk> getLoadedChunks();
+
+    /**
+     * Get the currently loaded chunks. This is only ever updated in the managers thread.
+     * Use this for things like lighting.
+     *
+     * @return the currently loaded chunks
+     */
+    @ApiStatus.Experimental
+    @UnmodifiableView
+    @NotNull Collection<@NotNull Chunk> getLoadedChunksManaged();
 
     /**
      * @see #addClaim(int, int)

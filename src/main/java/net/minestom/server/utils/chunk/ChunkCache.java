@@ -33,7 +33,7 @@ public final class ChunkCache implements Block.Getter {
         final int chunkZ = CoordConversion.globalToChunk(z);
         if (chunk == null || !chunk.isLoaded() ||
                 chunk.getChunkX() != chunkX || chunk.getChunkZ() != chunkZ) {
-            this.chunk = chunk = this.instance.getChunk(chunkX, chunkZ);
+            this.chunk = chunk = this.instance.getChunkManager().getLoadedChunkManaged(chunkX, chunkZ);
         }
         if (chunk != null) {
             chunk.lockReadLock();

@@ -56,13 +56,24 @@ class SingleThreadedManager {
      */
     private final TaskTracking taskTracking = new TaskTracking();
     final ChunkWorker chunkWorker;
-    private final ChunkAccess chunkAccess;
+    final ChunkAccess chunkAccess;
     private final Instance instance;
     /**
-     * Loaded chunks that are visible to the outside.
+     * Loaded chunks that are visible from the outside.
      * This is thread-safe for read-only usages.
+     * <p>
+     * This is updated on the chunk's own tick thread for consistency with
+     * chunk loading/unloading events
      */
     private final Long2ObjectSyncMap<Chunk> loadedChunks = Long2ObjectSyncMap.hashmap();
+    /**
+     * Loaded chunks that are visible from the outside.
+     * This is thread-safe for read-only usages.
+     * <p>
+     * This is updated on the manager thread. This here so chunks can be found immediately
+     * after being loaded, and not only once the chunk first ticks.
+     */
+    final Long2ObjectSyncMap<Chunk> loadedChunksManaged = Long2ObjectSyncMap.hashmap();
 
     PriorityDrop priorityDrop = switch (ServerFlag.CHUNK_SYSTEM_PRIORITY_DROP) {
         case "simple" -> new PriorityDrop.Simple();
@@ -100,8 +111,18 @@ class SingleThreadedManager {
         return Collections.unmodifiableCollection(this.loadedChunks.values());
     }
 
+    @NotNull
+    @UnmodifiableView
+    Collection<Chunk> loadedChunksManaged() {
+        return Collections.unmodifiableCollection(this.loadedChunksManaged.values());
+    }
+
     @Nullable Chunk loadedChunk(int x, int z) {
         return this.loadedChunks.get(chunkIndex(x, z));
+    }
+
+    @Nullable Chunk loadedChunkManaged(int x, int z) {
+        return this.loadedChunksManaged.get(chunkIndex(x, z));
     }
 
     /**
@@ -192,6 +213,7 @@ class SingleThreadedManager {
             copyTarget.addCopiedClaim(chunkAndClaim);
             list.add(chunkAndClaim);
             copyTarget.loadedChunks.put(index, chunk);
+            copyTarget.loadedChunksManaged.put(index, chunk);
 
             dispatcher.createPartition(chunk);
         }
@@ -295,7 +317,6 @@ class SingleThreadedManager {
         if (!this.updateHandler.tryChangeToLoaded(chunk)) {
             return;
         }
-        this.chunkAccess.onLoad(chunk);
 
         var chunkIndex = chunkIndex(x, z);
         var claims = this.claimsByChunk.get(chunkIndex);
@@ -307,10 +328,8 @@ class SingleThreadedManager {
         // add this scheduler before adding the dispatcher partition to make sure it is executed first
         this.taskTracking.runningTickScheduledCount.incrementAndGet();
         Runnable task = () -> {
-            var old = this.loadedChunks.put(chunkIndex, chunk);
-            if (old != null) {
-                LOGGER.error("Existing chunk loaded at ({}, {}): {}", x, z, old);
-            }
+            assert !this.loadedChunks.containsKey(chunkIndex);
+            this.loadedChunks.put(chunkIndex, chunk);
             var event = new InstanceChunkLoadEvent(this.instance, chunk);
             EventDispatcher.call(event);
             this.taskTracking.runningTickScheduledCount.decrementAndGet();
@@ -418,6 +437,7 @@ class SingleThreadedManager {
         if (callbacks != null) {
             callbacks.onUnloadStarted(x, z);
         }
+        this.loadedChunksManaged.remove(chunkIndex, chunk);
         this.taskTracking.runningTickScheduledCount.addAndGet(2);
         Runnable runInstance = () -> {
             this.instance.getEntityTracker().chunkEntities(chunk.getChunkX(), chunk.getChunkZ(), EntityTracker.Target.ENTITIES).forEach(e -> {
@@ -433,6 +453,7 @@ class SingleThreadedManager {
             EventDispatcher.call(new InstanceChunkUnloadEvent(this.instance, chunk));
             this.chunkAccess.unload(chunk);
             MinecraftServer.process().dispatcher().deletePartition(chunk);
+            assert this.loadedChunks.get(chunkIndex) == chunk;
             if (!this.loadedChunks.remove(chunkIndex, chunk)) {
                 LOGGER.error("Failed to remove loaded chunk at ({}, {}): {}", x, z, chunk);
             }
