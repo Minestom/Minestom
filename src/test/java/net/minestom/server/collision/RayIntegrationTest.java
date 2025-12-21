@@ -132,6 +132,10 @@ public class RayIntegrationTest {
         Vec origin = new Vec(0.5, 3, 0.5);
         Ray ray = new Ray(origin, new Vec(0, -10, 0));
 
+        Ray.Intersection<Entity> intersection = ray.firstEntity(instance.getEntities());
+        assertNotNull(intersection);
+        assertEquals(entity1, intersection.object());
+
         List<Entity> entities = new ArrayList<>();
         ray.entities(instance.getEntities()).forEach(e -> entities.add(e.object()));
         assertEquals(2, entities.size());

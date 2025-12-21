@@ -207,13 +207,16 @@ public record Ray(
      * @param <S> any Shape - for example, a{@link BoundingBox}
      */
     public <S extends Shape> @Nullable Intersection<S> findFirst(Collection<? extends S> shapes) {
-        ArrayList<Intersection<S>> result = new ArrayList<>(shapes.size());
+        Intersection<S> best = null;
+        double bestT = distance();
         for (S e: shapes) {
             Intersection<S> r = cast(e);
-            if (r != null) result.add(r);
+            if (r != null && r.t() <= bestT) {
+                best = r;
+                bestT = r.t();
+            }
         }
-        if (result.isEmpty()) return null;
-        return Collections.min(result);
+        return best;
     }
 
     /**
@@ -227,7 +230,7 @@ public record Ray(
     public <E extends Entity> List<Intersection<E>> entities(Collection<? extends E> entities) {
         ArrayList<Intersection<E>> result = new ArrayList<>(entities.size());
         for (E e: entities) {
-            Intersection<E> r = cast(e, e.getPosition().asVec());
+            Intersection<E> r = cast(e, e.getPosition());
             if (r != null) result.add(r);
         }
         return result;
@@ -242,11 +245,30 @@ public record Ray(
     public <E extends Entity> List<Intersection<E>> entitiesSorted(Collection<? extends E> entities) {
         ArrayList<Intersection<E>> result = new ArrayList<>(entities.size());
         for (E e: entities) {
-            Intersection<E> r = cast(e, e.getPosition().asVec());
+            Intersection<E> r = cast(e, e.getPosition());
             if (r != null) result.add(r);
         }
         Collections.sort(result);
         return result;
+    }
+
+    /**
+     * Get the closest entity collision to the ray's origin.
+     * @param entities the entities to check against
+     * @return the closest result or null if there is none
+     * @param <E> any Entity - if you're using {@link net.minestom.server.instance.EntityTracker}, you might use {@link net.minestom.server.entity.Player}
+     */
+    public <E extends Entity> @Nullable Intersection<E> firstEntity(Collection<? extends E> entities) {
+        Intersection<E> best = null;
+        double bestT = distance();
+        for (E e: entities) {
+            Intersection<E> r = cast(e, e.getPosition());
+            if (r != null && r.t() <= bestT) {
+                best = r;
+                bestT = r.t();
+            }
+        }
+        return best;
     }
 
     /**
