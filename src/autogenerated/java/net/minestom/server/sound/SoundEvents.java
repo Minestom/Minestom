@@ -165,6 +165,10 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ITEM_ARMOR_UNEQUIP_WOLF = BuiltinSoundEvent.get("item.armor.unequip_wolf");
 
+    SoundEvent ITEM_ARMOR_EQUIP_NAUTILUS = BuiltinSoundEvent.get("item.armor.equip_nautilus");
+
+    SoundEvent ITEM_ARMOR_UNEQUIP_NAUTILUS = BuiltinSoundEvent.get("item.armor.unequip_nautilus");
+
     SoundEvent ENTITY_ARMOR_STAND_BREAK = BuiltinSoundEvent.get("entity.armor_stand.break");
 
     SoundEvent ENTITY_ARMOR_STAND_FALL = BuiltinSoundEvent.get("entity.armor_stand.fall");
@@ -218,6 +222,24 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent BLOCK_AZALEA_LEAVES_PLACE = BuiltinSoundEvent.get("block.azalea_leaves.place");
 
     SoundEvent BLOCK_AZALEA_LEAVES_STEP = BuiltinSoundEvent.get("block.azalea_leaves.step");
+
+    SoundEvent ENTITY_BABY_NAUTILUS_AMBIENT = BuiltinSoundEvent.get("entity.baby_nautilus.ambient");
+
+    SoundEvent ENTITY_BABY_NAUTILUS_AMBIENT_LAND = BuiltinSoundEvent.get("entity.baby_nautilus.ambient_land");
+
+    SoundEvent ENTITY_BABY_NAUTILUS_DEATH = BuiltinSoundEvent.get("entity.baby_nautilus.death");
+
+    SoundEvent ENTITY_BABY_NAUTILUS_DEATH_LAND = BuiltinSoundEvent.get("entity.baby_nautilus.death_land");
+
+    SoundEvent ENTITY_BABY_NAUTILUS_EAT = BuiltinSoundEvent.get("entity.baby_nautilus.eat");
+
+    SoundEvent ENTITY_BABY_NAUTILUS_HURT = BuiltinSoundEvent.get("entity.baby_nautilus.hurt");
+
+    SoundEvent ENTITY_BABY_NAUTILUS_HURT_LAND = BuiltinSoundEvent.get("entity.baby_nautilus.hurt_land");
+
+    SoundEvent ENTITY_NAUTILUS_RIDING = BuiltinSoundEvent.get("entity.nautilus.riding");
+
+    SoundEvent ENTITY_BABY_NAUTILUS_SWIM = BuiltinSoundEvent.get("entity.baby_nautilus.swim");
 
     SoundEvent BLOCK_BAMBOO_BREAK = BuiltinSoundEvent.get("block.bamboo.break");
 
@@ -478,6 +500,28 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent BLOCK_CALCITE_HIT = BuiltinSoundEvent.get("block.calcite.hit");
 
     SoundEvent BLOCK_CALCITE_FALL = BuiltinSoundEvent.get("block.calcite.fall");
+
+    SoundEvent ENTITY_CAMEL_HUSK_AMBIENT = BuiltinSoundEvent.get("entity.camel_husk.ambient");
+
+    SoundEvent ENTITY_CAMEL_HUSK_DASH = BuiltinSoundEvent.get("entity.camel_husk.dash");
+
+    SoundEvent ENTITY_CAMEL_HUSK_DASH_READY = BuiltinSoundEvent.get("entity.camel_husk.dash_ready");
+
+    SoundEvent ENTITY_CAMEL_HUSK_DEATH = BuiltinSoundEvent.get("entity.camel_husk.death");
+
+    SoundEvent ENTITY_CAMEL_HUSK_EAT = BuiltinSoundEvent.get("entity.camel_husk.eat");
+
+    SoundEvent ENTITY_CAMEL_HUSK_HURT = BuiltinSoundEvent.get("entity.camel_husk.hurt");
+
+    SoundEvent ENTITY_CAMEL_HUSK_SADDLE = BuiltinSoundEvent.get("entity.camel_husk.saddle");
+
+    SoundEvent ENTITY_CAMEL_HUSK_SIT = BuiltinSoundEvent.get("entity.camel_husk.sit");
+
+    SoundEvent ENTITY_CAMEL_HUSK_STAND = BuiltinSoundEvent.get("entity.camel_husk.stand");
+
+    SoundEvent ENTITY_CAMEL_HUSK_STEP = BuiltinSoundEvent.get("entity.camel_husk.step");
+
+    SoundEvent ENTITY_CAMEL_HUSK_STEP_SAND = BuiltinSoundEvent.get("entity.camel_husk.step_sand");
 
     SoundEvent ENTITY_CAMEL_AMBIENT = BuiltinSoundEvent.get("entity.camel.ambient");
 
@@ -1793,6 +1837,12 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ITEM_LODESTONE_COMPASS_LOCK = BuiltinSoundEvent.get("item.lodestone_compass.lock");
 
+    SoundEvent ITEM_SPEAR_LUNGE_1 = BuiltinSoundEvent.get("item.spear.lunge_1");
+
+    SoundEvent ITEM_SPEAR_LUNGE_2 = BuiltinSoundEvent.get("item.spear.lunge_2");
+
+    SoundEvent ITEM_SPEAR_LUNGE_3 = BuiltinSoundEvent.get("item.spear.lunge_3");
+
     SoundEvent ITEM_MACE_SMASH_AIR = BuiltinSoundEvent.get("item.mace.smash_air");
 
     SoundEvent ITEM_MACE_SMASH_GROUND = BuiltinSoundEvent.get("item.mace.smash_ground");
@@ -2033,6 +2083,30 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent MUSIC_UNDER_WATER = BuiltinSoundEvent.get("music.under_water");
 
+    SoundEvent ENTITY_NAUTILUS_AMBIENT = BuiltinSoundEvent.get("entity.nautilus.ambient");
+
+    SoundEvent ENTITY_NAUTILUS_AMBIENT_LAND = BuiltinSoundEvent.get("entity.nautilus.ambient_land");
+
+    SoundEvent ENTITY_NAUTILUS_DASH = BuiltinSoundEvent.get("entity.nautilus.dash");
+
+    SoundEvent ENTITY_NAUTILUS_DASH_LAND = BuiltinSoundEvent.get("entity.nautilus.dash_land");
+
+    SoundEvent ENTITY_NAUTILUS_DASH_READY = BuiltinSoundEvent.get("entity.nautilus.dash_ready");
+
+    SoundEvent ENTITY_NAUTILUS_DASH_READY_LAND = BuiltinSoundEvent.get("entity.nautilus.dash_ready_land");
+
+    SoundEvent ENTITY_NAUTILUS_DEATH = BuiltinSoundEvent.get("entity.nautilus.death");
+
+    SoundEvent ENTITY_NAUTILUS_DEATH_LAND = BuiltinSoundEvent.get("entity.nautilus.death_land");
+
+    SoundEvent ENTITY_NAUTILUS_EAT = BuiltinSoundEvent.get("entity.nautilus.eat");
+
+    SoundEvent ENTITY_NAUTILUS_HURT = BuiltinSoundEvent.get("entity.nautilus.hurt");
+
+    SoundEvent ENTITY_NAUTILUS_HURT_LAND = BuiltinSoundEvent.get("entity.nautilus.hurt_land");
+
+    SoundEvent ENTITY_NAUTILUS_SWIM = BuiltinSoundEvent.get("entity.nautilus.swim");
+
     SoundEvent BLOCK_NETHER_BRICKS_BREAK = BuiltinSoundEvent.get("block.nether_bricks.break");
 
     SoundEvent BLOCK_NETHER_BRICKS_STEP = BuiltinSoundEvent.get("block.nether_bricks.step");
@@ -2249,6 +2323,14 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ENTITY_PANDA_BITE = BuiltinSoundEvent.get("entity.panda.bite");
 
+    SoundEvent ENTITY_PARCHED_AMBIENT = BuiltinSoundEvent.get("entity.parched.ambient");
+
+    SoundEvent ENTITY_PARCHED_DEATH = BuiltinSoundEvent.get("entity.parched.death");
+
+    SoundEvent ENTITY_PARCHED_HURT = BuiltinSoundEvent.get("entity.parched.hurt");
+
+    SoundEvent ENTITY_PARCHED_STEP = BuiltinSoundEvent.get("entity.parched.step");
+
     SoundEvent ENTITY_PARROT_AMBIENT = BuiltinSoundEvent.get("entity.parrot.ambient");
 
     SoundEvent ENTITY_PARROT_DEATH = BuiltinSoundEvent.get("entity.parrot.death");
@@ -2264,6 +2346,8 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent ENTITY_PARROT_IMITATE_BOGGED = BuiltinSoundEvent.get("entity.parrot.imitate.bogged");
 
     SoundEvent ENTITY_PARROT_IMITATE_BREEZE = BuiltinSoundEvent.get("entity.parrot.imitate.breeze");
+
+    SoundEvent ENTITY_PARROT_IMITATE_CAMEL_HUSK = BuiltinSoundEvent.get("entity.parrot.imitate.camel_husk");
 
     SoundEvent ENTITY_PARROT_IMITATE_CREAKING = BuiltinSoundEvent.get("entity.parrot.imitate.creaking");
 
@@ -2292,6 +2376,8 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent ENTITY_PARROT_IMITATE_MAGMA_CUBE = BuiltinSoundEvent.get("entity.parrot.imitate.magma_cube");
 
     SoundEvent ENTITY_PARROT_IMITATE_PHANTOM = BuiltinSoundEvent.get("entity.parrot.imitate.phantom");
+
+    SoundEvent ENTITY_PARROT_IMITATE_PARCHED = BuiltinSoundEvent.get("entity.parrot.imitate.parched");
 
     SoundEvent ENTITY_PARROT_IMITATE_PIGLIN = BuiltinSoundEvent.get("entity.parrot.imitate.piglin");
 
@@ -2328,6 +2414,10 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent ENTITY_PARROT_IMITATE_ZOGLIN = BuiltinSoundEvent.get("entity.parrot.imitate.zoglin");
 
     SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE = BuiltinSoundEvent.get("entity.parrot.imitate.zombie");
+
+    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_HORSE = BuiltinSoundEvent.get("entity.parrot.imitate.zombie_horse");
+
+    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_NAUTILUS = BuiltinSoundEvent.get("entity.parrot.imitate.zombie_nautilus");
 
     SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER = BuiltinSoundEvent.get("entity.parrot.imitate.zombie_villager");
 
@@ -2542,6 +2632,24 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent BLOCK_NETHER_ORE_STEP = BuiltinSoundEvent.get("block.nether_ore.step");
 
     SoundEvent BLOCK_REDSTONE_TORCH_BURNOUT = BuiltinSoundEvent.get("block.redstone_torch.burnout");
+
+    SoundEvent BLOCK_RESIN_BREAK = BuiltinSoundEvent.get("block.resin.break");
+
+    SoundEvent BLOCK_RESIN_FALL = BuiltinSoundEvent.get("block.resin.fall");
+
+    SoundEvent BLOCK_RESIN_PLACE = BuiltinSoundEvent.get("block.resin.place");
+
+    SoundEvent BLOCK_RESIN_STEP = BuiltinSoundEvent.get("block.resin.step");
+
+    SoundEvent BLOCK_RESIN_BRICKS_BREAK = BuiltinSoundEvent.get("block.resin_bricks.break");
+
+    SoundEvent BLOCK_RESIN_BRICKS_FALL = BuiltinSoundEvent.get("block.resin_bricks.fall");
+
+    SoundEvent BLOCK_RESIN_BRICKS_HIT = BuiltinSoundEvent.get("block.resin_bricks.hit");
+
+    SoundEvent BLOCK_RESIN_BRICKS_PLACE = BuiltinSoundEvent.get("block.resin_bricks.place");
+
+    SoundEvent BLOCK_RESIN_BRICKS_STEP = BuiltinSoundEvent.get("block.resin_bricks.step");
 
     SoundEvent BLOCK_RESPAWN_ANCHOR_AMBIENT = BuiltinSoundEvent.get("block.respawn_anchor.ambient");
 
@@ -2829,23 +2937,17 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent BLOCK_SPAWNER_STEP = BuiltinSoundEvent.get("block.spawner.step");
 
-    SoundEvent BLOCK_RESIN_BREAK = BuiltinSoundEvent.get("block.resin.break");
+    SoundEvent ITEM_SPEAR_USE = BuiltinSoundEvent.get("item.spear.use");
 
-    SoundEvent BLOCK_RESIN_FALL = BuiltinSoundEvent.get("block.resin.fall");
+    SoundEvent ITEM_SPEAR_HIT = BuiltinSoundEvent.get("item.spear.hit");
 
-    SoundEvent BLOCK_RESIN_PLACE = BuiltinSoundEvent.get("block.resin.place");
+    SoundEvent ITEM_SPEAR_ATTACK = BuiltinSoundEvent.get("item.spear.attack");
 
-    SoundEvent BLOCK_RESIN_STEP = BuiltinSoundEvent.get("block.resin.step");
+    SoundEvent ITEM_SPEAR_WOOD_USE = BuiltinSoundEvent.get("item.spear_wood.use");
 
-    SoundEvent BLOCK_RESIN_BRICKS_BREAK = BuiltinSoundEvent.get("block.resin_bricks.break");
+    SoundEvent ITEM_SPEAR_WOOD_HIT = BuiltinSoundEvent.get("item.spear_wood.hit");
 
-    SoundEvent BLOCK_RESIN_BRICKS_FALL = BuiltinSoundEvent.get("block.resin_bricks.fall");
-
-    SoundEvent BLOCK_RESIN_BRICKS_HIT = BuiltinSoundEvent.get("block.resin_bricks.hit");
-
-    SoundEvent BLOCK_RESIN_BRICKS_PLACE = BuiltinSoundEvent.get("block.resin_bricks.place");
-
-    SoundEvent BLOCK_RESIN_BRICKS_STEP = BuiltinSoundEvent.get("block.resin_bricks.step");
+    SoundEvent ITEM_SPEAR_WOOD_ATTACK = BuiltinSoundEvent.get("item.spear_wood.attack");
 
     SoundEvent BLOCK_SPORE_BLOSSOM_BREAK = BuiltinSoundEvent.get("block.spore_blossom.break");
 
@@ -3511,13 +3613,41 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ENTITY_ZOMBIE_HORSE_AMBIENT = BuiltinSoundEvent.get("entity.zombie_horse.ambient");
 
+    SoundEvent ENTITY_ZOMBIE_HORSE_ANGRY = BuiltinSoundEvent.get("entity.zombie_horse.angry");
+
     SoundEvent ENTITY_ZOMBIE_HORSE_DEATH = BuiltinSoundEvent.get("entity.zombie_horse.death");
+
+    SoundEvent ENTITY_ZOMBIE_HORSE_EAT = BuiltinSoundEvent.get("entity.zombie_horse.eat");
 
     SoundEvent ENTITY_ZOMBIE_HORSE_HURT = BuiltinSoundEvent.get("entity.zombie_horse.hurt");
 
     SoundEvent ENTITY_ZOMBIE_HURT = BuiltinSoundEvent.get("entity.zombie.hurt");
 
     SoundEvent ENTITY_ZOMBIE_INFECT = BuiltinSoundEvent.get("entity.zombie.infect");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_AMBIENT = BuiltinSoundEvent.get("entity.zombie_nautilus.ambient");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_AMBIENT_LAND = BuiltinSoundEvent.get("entity.zombie_nautilus.ambient_land");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH = BuiltinSoundEvent.get("entity.zombie_nautilus.dash");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_LAND = BuiltinSoundEvent.get("entity.zombie_nautilus.dash_land");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_READY = BuiltinSoundEvent.get("entity.zombie_nautilus.dash_ready");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_READY_LAND = BuiltinSoundEvent.get("entity.zombie_nautilus.dash_ready_land");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DEATH = BuiltinSoundEvent.get("entity.zombie_nautilus.death");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DEATH_LAND = BuiltinSoundEvent.get("entity.zombie_nautilus.death_land");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_EAT = BuiltinSoundEvent.get("entity.zombie_nautilus.eat");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_HURT = BuiltinSoundEvent.get("entity.zombie_nautilus.hurt");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_HURT_LAND = BuiltinSoundEvent.get("entity.zombie_nautilus.hurt_land");
+
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_SWIM = BuiltinSoundEvent.get("entity.zombie_nautilus.swim");
 
     SoundEvent ENTITY_ZOMBIFIED_PIGLIN_AMBIENT = BuiltinSoundEvent.get("entity.zombified_piglin.ambient");
 
@@ -3548,4 +3678,8 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent EVENT_MOB_EFFECT_RAID_OMEN = BuiltinSoundEvent.get("event.mob_effect.raid_omen");
 
     SoundEvent ITEM_SADDLE_UNEQUIP = BuiltinSoundEvent.get("item.saddle.unequip");
+
+    SoundEvent ITEM_NAUTILUS_SADDLE_UNDERWATER_EQUIP = BuiltinSoundEvent.get("item.nautilus_saddle_underwater_equip");
+
+    SoundEvent ITEM_NAUTILUS_SADDLE_EQUIP = BuiltinSoundEvent.get("item.nautilus_saddle_equip");
 }
