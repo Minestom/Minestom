@@ -196,7 +196,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     public void setBiome(int x, int y, int z, RegistryKey<Biome> biome) {
         Chunk chunk = getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
         if (chunk == null) return;
-        chunk.setBiome(x, y, z, biome);
+        synchronized (chunk) {
+            chunk.setBiome(x, y, z, biome);
+        }
     }
 
     public void setBlock(Point blockPosition, Block block, boolean doBlockUpdates) {
