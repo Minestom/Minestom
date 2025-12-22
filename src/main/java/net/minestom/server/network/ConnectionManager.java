@@ -27,9 +27,9 @@ import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.StringUtils;
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -53,9 +53,9 @@ public final class ConnectionManager {
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
     // Players waiting to be spawned (post configuration state)
-    private final MessagePassingQueue<Player> playWaitingPlayers = new MpscUnboundedArrayQueue<>(64);
+    private final MessagePassingQueue<Player> playWaitingPlayers = ConcurrentMessageQueues.mpscUnboundedArrayQueue(64);
     // Players waiting to be (re) configured
-    private final MessagePassingQueue<Player> configWaitingPlayers = new MpscUnboundedArrayQueue<>(64);
+    private final MessagePassingQueue<Player> configWaitingPlayers = ConcurrentMessageQueues.mpscUnboundedArrayQueue(64);
     // Players in configuration state
     private final Set<Player> configurationPlayers = new CopyOnWriteArraySet<>();
     // Players in play state
@@ -263,7 +263,6 @@ public final class ConnectionManager {
 
             Registries registries = MinecraftServer.process();
             player.sendPacket(registries.chatType().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.dimensionType().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.biome().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.dialog().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.damageType().registryDataPacket(registries, excludeVanilla));
@@ -281,6 +280,11 @@ public final class ConnectionManager {
             player.sendPacket(registries.cowVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.frogVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.pigVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.zombieNautilusVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.timeline().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.dimensionType().registryDataPacket(registries, excludeVanilla));
+            // MUST BE IN SYNC WITH #createTagsPacket
+            // TODO: TEST_ENVIRONMENT, TEST_INSTANCE
 
             sendRegistryTags(player);
         }
@@ -398,19 +402,36 @@ public final class ConnectionManager {
         // The following are the registries which contain tags used by the vanilla client.
         // We don't care about registries unused by the client.
         final Registries registries = MinecraftServer.process();
-        entries.add(registries.bannerPattern().tagRegistry());
-        entries.add(registries.biome().tagRegistry());
+
+        // static registries (with tags)
         entries.add(registries.blocks().tagRegistry());
-        entries.add(registries.catVariant().tagRegistry());
-        entries.add(registries.damageType().tagRegistry());
-        entries.add(registries.dialog().tagRegistry());
-        entries.add(registries.enchantment().tagRegistry());
         entries.add(registries.entityType().tagRegistry());
         entries.add(registries.fluid().tagRegistry());
         entries.add(registries.gameEvent().tagRegistry());
-        entries.add(registries.instrument().tagRegistry());
         entries.add(registries.material().tagRegistry());
+        // dynamic registries
+        entries.add(registries.chatType().tagRegistry());
+        entries.add(registries.biome().tagRegistry());
+        entries.add(registries.dialog().tagRegistry());
+        entries.add(registries.damageType().tagRegistry());
+        entries.add(registries.trimMaterial().tagRegistry());
+        entries.add(registries.trimPattern().tagRegistry());
+        entries.add(registries.bannerPattern().tagRegistry());
+        entries.add(registries.enchantment().tagRegistry());
         entries.add(registries.paintingVariant().tagRegistry());
+        entries.add(registries.jukeboxSong().tagRegistry());
+        entries.add(registries.instrument().tagRegistry());
+        entries.add(registries.wolfVariant().tagRegistry());
+        entries.add(registries.wolfSoundVariant().tagRegistry());
+        entries.add(registries.catVariant().tagRegistry());
+        entries.add(registries.chickenVariant().tagRegistry());
+        entries.add(registries.cowVariant().tagRegistry());
+        entries.add(registries.frogVariant().tagRegistry());
+        entries.add(registries.pigVariant().tagRegistry());
+        entries.add(registries.zombieNautilusVariant().tagRegistry());
+        entries.add(registries.timeline().tagRegistry());
+        entries.add(registries.dimensionType().tagRegistry());
+        // MUST BE IN SYNC WITH #doConfiguration
 
         return new TagsPacket(entries);
     }

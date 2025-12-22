@@ -2,6 +2,7 @@ package net.minestom.server;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
@@ -9,10 +10,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.ChickenVariant;
-import net.minestom.server.entity.metadata.animal.CowVariant;
-import net.minestom.server.entity.metadata.animal.FrogVariant;
-import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -54,6 +52,7 @@ import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.time.Tick;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.timeline.Timeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,6 +95,8 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<CowVariant> cowVariant;
     private final DynamicRegistry<FrogVariant> frogVariant;
     private final DynamicRegistry<PigVariant> pigVariant;
+    private final DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant;
+    private final DynamicRegistry<Timeline> timeline;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
@@ -110,6 +111,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final BenchmarkManager benchmark;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
+    private final ClickCallbackManager clickCallbackManager;
 
     private final Server server;
 
@@ -133,7 +135,6 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dialog = Dialog.createDefaultRegistry(this);
-        this.dimensionType = DimensionType.createDefaultRegistry();
         this.biome = Biome.createDefaultRegistry();
         this.damageType = DamageType.createDefaultRegistry();
         this.trimMaterial = TrimMaterial.createDefaultRegistry();
@@ -150,6 +151,9 @@ final class ServerProcessImpl implements ServerProcess {
         this.cowVariant = CowVariant.createDefaultRegistry();
         this.frogVariant = FrogVariant.createDefaultRegistry();
         this.pigVariant = PigVariant.createDefaultRegistry();
+        this.zombieNautilusVariant = ZombieNautilusVariant.createDefaultRegistry();
+        this.timeline = Timeline.createDefaultRegistry();
+        this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
@@ -164,6 +168,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.benchmark = new BenchmarkManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
+        this.clickCallbackManager = new ClickCallbackManager();
 
         this.server = new Server(packetParser);
 
@@ -184,6 +189,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public DynamicRegistry<Dialog> dialog() {
         return dialog;
+    }
+
+    @Override
+    public DynamicRegistry<Timeline> timeline() {
+        return timeline;
     }
 
     @Override
@@ -259,6 +269,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public DynamicRegistry<PigVariant> pigVariant() {
         return pigVariant;
+    }
+
+    @Override
+    public DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
+        return zombieNautilusVariant;
     }
 
     @Override
@@ -377,6 +392,11 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
+    public ClickCallbackManager clickCallbackManager() {
+        return clickCallbackManager;
+    }
+
+    @Override
     public void start(SocketAddress socketAddress) {
         if (!started.compareAndSet(false, true)) {
             throw new IllegalStateException("Server already started");
@@ -459,6 +479,9 @@ final class ServerProcessImpl implements ServerProcess {
 
             // Server tick (chunks/entities)
             serverTick(nanoTime);
+
+            // The click callback provider needs ticking to clean up the cache.
+            clickCallbackManager().tick(nanoTime);
 
             scheduler().processTickEnd();
 

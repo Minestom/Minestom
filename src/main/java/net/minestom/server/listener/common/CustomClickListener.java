@@ -1,6 +1,7 @@
 package net.minestom.server.listener.common;
 
 import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerConfigCustomClickEvent;
@@ -11,6 +12,7 @@ import net.minestom.server.network.packet.client.common.ClientCustomClickActionP
 public final class CustomClickListener {
 
     public static void listener(ClientCustomClickActionPacket listener, Player player) {
+        MinecraftServer.getClickCallbackManager().consumeCustomClick(player, listener);
         var event = player.getPlayerConnection().getClientState() == ConnectionState.PLAY
                 ? new PlayerCustomClickEvent(player, listener.key(), listener.payload().type() == BinaryTagTypes.END ? null : listener.payload())
                 : new PlayerConfigCustomClickEvent(player, listener.key(), listener.payload().type() == BinaryTagTypes.END ? null : listener.payload());

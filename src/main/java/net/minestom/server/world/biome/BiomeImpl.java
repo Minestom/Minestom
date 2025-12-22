@@ -1,13 +1,22 @@
 package net.minestom.server.world.biome;
 
+import net.minestom.server.world.attribute.EnvironmentAttributeMap;
+
+import java.util.Objects;
+
 record BiomeImpl(
-        float temperature,
-        float downfall,
-       BiomeEffects effects,
         boolean hasPrecipitation,
-        TemperatureModifier temperatureModifier
+        float temperature,
+        TemperatureModifier temperatureModifier,
+        float downfall,
+        EnvironmentAttributeMap attributes,
+        BiomeEffects effects
 ) implements Biome {
-    // https://minecraft.wiki/w/Rain
-    private final static double SNOW_TEMPERATURE = 0.15;
+
+    public BiomeImpl {
+        Objects.requireNonNull(temperatureModifier, "temperatureModifier");
+        Objects.requireNonNull(attributes, "attributes");
+        Objects.requireNonNull(effects, "effects");
+    }
 
 }
