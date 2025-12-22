@@ -2,15 +2,15 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.BlockEvent;
-import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.event.trait.*;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
-public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
+public class PlayerBlockBreakEvent implements PlayerEvent, BlockInstanceEvent, CancellableEvent {
 
     private final Player player;
+    private final Instance instance;
     private final Block block;
     private Block resultBlock;
     private final BlockVec blockPosition;
@@ -18,15 +18,20 @@ public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, C
 
     private boolean cancelled;
 
-    public PlayerBlockBreakEvent(Player player,
+    public PlayerBlockBreakEvent(Player player, Instance instance,
                                  Block block, Block resultBlock, BlockVec blockPosition,
                                  BlockFace blockFace) {
         this.player = player;
-
+        this.instance = instance;
         this.block = block;
         this.resultBlock = resultBlock;
         this.blockPosition = blockPosition;
         this.blockFace = blockFace;
+    }
+
+    @Override
+    public Instance getInstance() {
+        return instance;
     }
 
     /**

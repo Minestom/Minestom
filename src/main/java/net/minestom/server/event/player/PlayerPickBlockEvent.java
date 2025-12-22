@@ -2,28 +2,35 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.BlockEvent;
-import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.event.trait.BlockInstanceEvent;
+import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
 /**
  * Called when a player tries to pick a block (middle-click).
  */
-public class PlayerPickBlockEvent implements PlayerInstanceEvent, BlockEvent {
+public class PlayerPickBlockEvent implements PlayerEvent, BlockInstanceEvent {
 
     private final Player player;
 
+    private final Instance instance;
     private final Block block;
     private final BlockVec blockPosition;
     private final boolean includeData;
 
-    public PlayerPickBlockEvent(Player player, Block block,
+    public PlayerPickBlockEvent(Player player, Instance instance, Block block,
                                 BlockVec blockPosition, boolean includeData) {
         this.player = player;
-
+        this.instance = instance;
         this.block = block;
         this.blockPosition = blockPosition;
         this.includeData = includeData;
+    }
+
+    @Override
+    public Instance getInstance() {
+        return instance;
     }
 
     /**

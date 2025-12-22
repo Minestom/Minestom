@@ -4,9 +4,8 @@ import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
-import net.minestom.server.event.trait.BlockEvent;
-import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.event.trait.*;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
@@ -14,10 +13,11 @@ import net.minestom.server.instance.block.BlockFace;
  * Called when a player interacts with a block (right-click).
  * This is also called when a block is placed.
  */
-public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
+public class PlayerBlockInteractEvent implements PlayerEvent, BlockInstanceEvent, CancellableEvent {
 
     private final Player player;
     private final PlayerHand hand;
+    private final Instance instance;
     private final Block block;
     private final BlockVec blockPosition;
     private final Point cursorPosition;
@@ -31,11 +31,12 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
 
     private boolean cancelled;
 
-    public PlayerBlockInteractEvent(Player player, PlayerHand hand,
+    public PlayerBlockInteractEvent(Player player, PlayerHand hand, Instance instance,
                                     Block block, BlockVec blockPosition, Point cursorPosition,
                                     BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
+        this.instance = instance;
         this.block = block;
         this.blockPosition = blockPosition;
         this.cursorPosition = cursorPosition;
@@ -58,6 +59,11 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      */
     public void setBlockingItemUse(boolean blocks) {
         this.blocksItemUse = blocks;
+    }
+
+    @Override
+    public Instance getInstance() {
+        return instance;
     }
 
     @Override

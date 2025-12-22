@@ -4,18 +4,18 @@ import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
-import net.minestom.server.event.trait.BlockEvent;
-import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.event.trait.*;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
 /**
  * Called when a player tries placing a block.
  */
-public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
+public class PlayerBlockPlaceEvent implements PlayerEvent, BlockInstanceEvent, CancellableEvent {
 
     private final Player player;
+    private final Instance instance;
     private Block block;
     private final BlockFace blockFace;
     private final BlockVec blockPosition;
@@ -27,10 +27,11 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
 
     private boolean cancelled;
 
-    public PlayerBlockPlaceEvent(Player player, Block block,
+    public PlayerBlockPlaceEvent(Player player, Instance instance, Block block,
                                  BlockFace blockFace, BlockVec blockPosition,
                                  Point cursorPosition, PlayerHand hand) {
         this.player = player;
+        this.instance = instance;
         this.block = block;
         this.blockFace = blockFace;
         this.blockPosition = blockPosition;
@@ -38,6 +39,11 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
         this.hand = hand;
         this.consumeBlock = true;
         this.doBlockUpdates = true;
+    }
+
+    @Override
+    public Instance getInstance() {
+        return instance;
     }
 
     /**
