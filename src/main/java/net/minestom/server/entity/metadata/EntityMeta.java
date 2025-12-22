@@ -203,6 +203,18 @@ public class EntityMeta {
     }
 
     /**
+     * Retrieves the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to retrieve the value from.
+     * @param <T>   The type of the metadata value.
+     * @return The value associated with the specified metadata entry.
+     */
+    @ApiStatus.Internal
+    public <T> T get(MetadataDef.Entry<T> entry) {
+        return metadata.get(entry);
+    }
+
+    /**
      * Sets the value of the specified metadata entry.
      *
      * @param entry The metadata entry to be updated.
