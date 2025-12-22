@@ -202,4 +202,14 @@ public class EntityMeta {
             metadata.set(MetadataDef.CUSTOM_NAME, (Component) value);
     }
 
+    /**
+     * Sets the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to be updated.
+     * @param value The value to assign to the specified metadata entry.
+     * @param <T>   The type of the metadata value.
+     */
+    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+        metadata.set(entry, value);
+    }
 }
