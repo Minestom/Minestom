@@ -15,7 +15,7 @@ import net.minestom.server.instance.block.BlockFace;
  * (could be because of high latency or a modified client) so cancelling {@link PlayerBlockBreakEvent} is also necessary.
  * Could be fixed in future Minestom version.
  */
-public class PlayerStartDiggingEvent implements PlayerEvent, BlockInstanceEvent, CancellableEvent {
+public class PlayerStartDiggingEvent implements PlayerEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
     private final Instance instance;

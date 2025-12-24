@@ -2,14 +2,14 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.BlockInstanceEvent;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
 import java.util.List;
 
-public class PlayerEditSignEvent implements PlayerEvent, BlockInstanceEvent {
+public class PlayerEditSignEvent implements PlayerEvent, BlockEvent {
     private final Player player;
     private final Instance instance;
     private final Block block;

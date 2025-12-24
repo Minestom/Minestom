@@ -13,7 +13,7 @@ import net.minestom.server.instance.block.BlockFace;
  * Called when a player interacts with a block (right-click).
  * This is also called when a block is placed.
  */
-public class PlayerBlockInteractEvent implements PlayerEvent, BlockInstanceEvent, CancellableEvent {
+public class PlayerBlockInteractEvent implements PlayerEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
     private final PlayerHand hand;
