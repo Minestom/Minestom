@@ -36,7 +36,7 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.chunksystem.ChunkClaim;
 import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.instance.generator.Generator;
-import net.minestom.server.instance.light.Light;
+import net.minestom.server.instance.light.OldLight;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
@@ -1073,7 +1073,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         var chunk = getChunkAt(blockX, blockZ);
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
-        Light light = section.blockLight();
+        OldLight light = section.blockLight();
         int sectionCoordinate = CoordConversion.globalToChunk(blockY);
 
         int coordX = CoordConversion.globalToSectionRelative(blockX);
@@ -1089,7 +1089,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         var chunk = getChunkAt(blockX, blockZ);
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
-        Light light = section.skyLight();
+        OldLight light = section.skyLight();
         int sectionCoordinate = CoordConversion.globalToChunk(blockY);
 
         int coordX = CoordConversion.globalToSectionRelative(blockX);

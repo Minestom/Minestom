@@ -31,11 +31,11 @@ import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
+import net.minestom.server.instance.light.LightingChunk;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
@@ -60,6 +60,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PlayerInit {
@@ -402,7 +403,8 @@ public class PlayerInit {
             var start = System.nanoTime();
 
 //             50 ms for every chunk
-            while (System.nanoTime() - start < java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50)) ;
+//            while (System.nanoTime() - start < java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50)) ;
+            LockSupport.parkNanos(java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50));
 
             if (unit.absoluteStart().blockY() < 40 && unit.absoluteEnd().blockY() > 40) {
                 unit.modifier().setBlock(unit.absoluteStart().blockX(), 40, unit.absoluteStart().blockZ(), Block.TORCH);
@@ -413,19 +415,19 @@ public class PlayerInit {
         instanceContainer.setTime(12000);
 //        instanceContainer.getChunkManager().addClaim(0, 0, 10);
 
-        var instance2 = instanceManager.createInstanceContainer();
-        instance2.setGenerator(unit -> {
-            var start = System.nanoTime();
-
-//             50 ms for every chunk
-            while (System.nanoTime() - start < java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50)) ;
-            unit.modifier().fillHeight(0, 34, Block.STONE);
-            unit.modifier().fillHeight(34, 39, Block.DIRT);
-            unit.modifier().fillHeight(39, 40, Block.GRASS_BLOCK);
-        });
-        instance2.setChunkSupplier(LightingChunk::new);
-        instance2.setTimeRate(0);
-        instance2.setTime(12000);
+//        var instance2 = instanceManager.createInstanceContainer();
+//        instance2.setGenerator(unit -> {
+//            var start = System.nanoTime();
+//
+////             50 ms for every chunk
+//            while (System.nanoTime() - start < java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50)) ;
+//            unit.modifier().fillHeight(0, 34, Block.STONE);
+//            unit.modifier().fillHeight(34, 39, Block.DIRT);
+//            unit.modifier().fillHeight(39, 40, Block.GRASS_BLOCK);
+//        });
+//        instance2.setChunkSupplier(LightingChunk::new);
+//        instance2.setTimeRate(0);
+//        instance2.setTime(12000);
 //        instance2.getChunkManager().addClaim(0, 0, 10);
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));

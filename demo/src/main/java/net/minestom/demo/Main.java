@@ -42,6 +42,10 @@ public class Main {
         System.setProperty("minestom.new-socket-write-lock", "true");
         System.setProperty("minestom.chunk-view-distance", "32");
         MinecraftServer.setCompressionThreshold(0);
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            System.err.println("Exception in " + t.getName());
+            e.printStackTrace();
+        });
 
         MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Offline());
 

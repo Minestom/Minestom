@@ -103,7 +103,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public abstract Section getSection(int section);
 
     public abstract Heightmap motionBlockingHeightmap();
+
     public abstract Heightmap worldSurfaceHeightmap();
+
     public abstract void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
 
     public Section getSectionAt(int blockY) {
@@ -121,9 +123,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     @Override
     public final void tick(long time) {
-        scheduler.processTick();
-        tick0(time);
-        scheduler.processTickEnd();
+        synchronized (this) {
+            scheduler.processTick();
+            tick0(time);
+            scheduler.processTickEnd();
+        }
     }
 
     protected abstract void tick0(long time);
@@ -282,12 +286,14 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     /**
      * Called when the chunk has been successfully loaded.
      */
-    protected void onLoad() {}
+    protected void onLoad() {
+    }
 
     /**
      * Called when the chunk generator has finished generating the chunk.
      */
-    public void onGenerate() {}
+    public void onGenerate() {
+    }
 
     @Override
     public String toString() {

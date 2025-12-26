@@ -1,7 +1,6 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.SectionVec;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -15,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static net.minestom.server.instance.light.LightCompute.*;
 
-final class SkyLight implements Light {
+final class SkyLight implements OldLight {
     private byte @Nullable [] content;
     private byte @Nullable [] contentPropagation;
     private byte @Nullable [] contentPropagationSwap;

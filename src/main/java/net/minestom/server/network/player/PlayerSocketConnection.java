@@ -45,7 +45,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.LockSupport;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.zip.DataFormatException;
 
 /**
@@ -94,7 +96,8 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     // Write lock as the default behavior of the writing thread is to park itself
     // Requires ServerFlag.FASTER_SOCKET_WRITES to be enabled
-    private final AtomicBoolean writeSignaled = new AtomicBoolean(false);
+    private final ReentrantLock writeSignalLock = new ReentrantLock();
+    private final Condition writableCondition = writeSignalLock.newCondition();
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
@@ -213,9 +216,9 @@ public class PlayerSocketConnection extends PlayerConnection {
     // Requires ServerFlag.FASTER_SOCKET_WRITES
     private void unlockWriteThread() {
         if (!ServerFlag.FASTER_SOCKET_WRITES) return;
-        if (!this.writeSignaled.compareAndExchange(false, true)) {
-            LockSupport.unpark(writeThread);
-        }
+        writeSignalLock.lock();
+        writableCondition.signal();
+        writeSignalLock.unlock();
     }
 
     @Override
@@ -433,11 +436,12 @@ public class PlayerSocketConnection extends PlayerConnection {
                     throw new RuntimeException(e);
                 }
             } else {
-                assert this.writeThread == Thread.currentThread(): "writeThread should be the current thread";
-                this.writeSignaled.set(false);
-                while (packetQueue.peek() == null)
-                    LockSupport.park(this);
-//                assert this.packetQueue.peek() != null : "packet queue should not be empty";
+                assert this.writeThread == Thread.currentThread() : "writeThread should be the current thread";
+                writeSignalLock.lock();
+                while (packetQueue.isEmpty())
+                    writableCondition.awaitUninterruptibly();
+                writeSignalLock.unlock();
+                assert this.packetQueue.peek() != null : "packet queue should not be empty";
             }
         }
         if (!channel.isConnected()) throw new EOFException("Channel is closed");

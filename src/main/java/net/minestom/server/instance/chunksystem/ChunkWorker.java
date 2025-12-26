@@ -118,12 +118,12 @@ public class ChunkWorker {
      * We need this unconventional logic to make sure the manager thread can wake up from other sources, too
      */
     static void signalWhenReady(ManagerSignaling signaling) {
-        if (AVAILABLE_TASKS.availablePermits() > 0) {
+        if (AVAILABLE_TASKS.availablePermits() > 0) { // Short-circuit. A worker is ready, so we signal immediately.
             signaling.signal();
         } else {
             WAITING_LOCK.lock();
             try {
-                if (AVAILABLE_TASKS.availablePermits() > 0) {
+                if (AVAILABLE_TASKS.availablePermits() > 0) { // Re-check condition that could have changed. Worker is ready, so we signal.
                     signaling.signal();
                     return;
                 }
@@ -230,6 +230,6 @@ public class ChunkWorker {
                 // and if there is nothing important to do, then do generation.
                 setPriority(Thread.MIN_PRIORITY);
             }
-        }, null, true);
+        }, null, false);
     }
 }
