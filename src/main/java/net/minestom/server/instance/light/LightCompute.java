@@ -2,7 +2,6 @@ package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.collision.Shape;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.SectionVec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -43,15 +42,15 @@ public final class LightCompute {
      */
     static ShortArrayFIFOQueue buildExternalQueue(Palette blockPalette,
                                                   @Nullable SectionVec[] neighbors, byte @Nullable [] content,
-                                                  Light.LightLookup lightLookup,
-                                                  Light.PaletteLookup paletteLookup) {
+                                                  OldLight.LightLookup lightLookup,
+                                                  OldLight.PaletteLookup paletteLookup) {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
         for (int i = 0; i < neighbors.length; i++) {
             SectionVec neighborSection = neighbors[i];
             if (neighborSection == null) continue;
             Palette otherPalette = paletteLookup.palette(neighborSection.sectionX(), neighborSection.sectionY(), neighborSection.sectionZ());
             if (otherPalette == null) continue;
-            Light otherLight = lightLookup.light(neighborSection.sectionX(), neighborSection.sectionY(), neighborSection.sectionZ());
+            OldLight otherLight = lightLookup.light(neighborSection.sectionX(), neighborSection.sectionY(), neighborSection.sectionZ());
             if (otherLight == null) continue;
 
             final BlockFace face = FACES[i];

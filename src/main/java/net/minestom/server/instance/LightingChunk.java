@@ -11,7 +11,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
-import net.minestom.server.instance.light.Light;
+import net.minestom.server.instance.light.OldLight;
 import net.minestom.server.instance.light.LightGenerationData;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
@@ -366,7 +366,7 @@ public class LightingChunk extends DynamicChunk {
         Set<Chunk> responseChunks = ConcurrentHashMap.newKeySet();
         List<CompletableFuture<Void>> tasks = new ArrayList<>();
 
-        Light.LightLookup lightLookup = (x, y, z) -> {
+        OldLight.LightLookup lightLookup = (x, y, z) -> {
             LightingChunk chunk = data.get(x, z);
             if (chunk == null) return null;
             if (y - chunk.getMinSection() < 0 || y - chunk.getMaxSection() >= 0) return null;
@@ -377,7 +377,7 @@ public class LightingChunk extends DynamicChunk {
             };
         };
 
-        Light.PaletteLookup paletteLookup = (x, y, z) -> {
+        OldLight.PaletteLookup paletteLookup = (x, y, z) -> {
             LightingChunk chunk = data.get(x, z);
             if (chunk == null) return null;
             if (y - chunk.getMinSection() < 0 || y - chunk.getMaxSection() >= 0) return null;
@@ -391,7 +391,7 @@ public class LightingChunk extends DynamicChunk {
             Section section = chunk.getSection(point.sectionY());
             responseChunks.add(chunk);
 
-            Light light = switch (type) {
+            OldLight light = switch (type) {
                 case BLOCK -> section.blockLight();
                 case SKY -> section.skyLight();
             };
@@ -405,7 +405,7 @@ public class LightingChunk extends DynamicChunk {
                                 chunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
                                 lightLookup);
                         case EXTERNAL -> light.calculateExternal(blockPalette,
-                                Light.getNeighbors(data, chunk, point.sectionY()),
+                                OldLight.getNeighbors(data, chunk, point.sectionY()),
                                 lightLookup, paletteLookup);
                     };
 

@@ -5,6 +5,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.event.instance.InstanceRegisterEvent;
 import net.minestom.server.event.instance.InstanceUnregisterEvent;
 import net.minestom.server.instance.*;
+import net.minestom.server.instance.chunksystem.SingleThreadedManager.IterationResult;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
@@ -146,16 +147,10 @@ class TaskSchedulerThread implements Runnable {
     private void run(boolean waitForSignal) {
         while (!this.exit) {
             this.signaling.startIteration();
-            this.singleThreadedManagerLock.lock();
-            SingleThreadedManager.IterationResult res;
-            try {
-                res = this.syncWork(this.singleThreadedManager::workIteration);
-            } finally {
-                this.singleThreadedManagerLock.unlock();
-            }
+            var res = this.syncWork(this.singleThreadedManager::workIteration);
 
             if (this.exit) continue;
-            if (res == SingleThreadedManager.IterationResult.WAIT_FOR_SIGNAL_OR_WORKER) {
+            if (res == IterationResult.WAIT_FOR_SIGNAL_OR_WORKER) {
                 ChunkWorker.signalWhenReady(this.signaling);
 
                 // We don't check waitForSignal input parameter here.
@@ -165,7 +160,7 @@ class TaskSchedulerThread implements Runnable {
                     // A problem occurred. Probably an InterruptedException
                     break;
                 }
-            } else if (res == SingleThreadedManager.IterationResult.WAIT_FOR_SIGNAL) {
+            } else if (res == IterationResult.WAIT_FOR_SIGNAL) {
                 if (!waitForSignal) break;
                 if (this.signaling.waitForSignal()) {
                     // A problem occurred. Probably an InterruptedException
@@ -187,12 +182,12 @@ class TaskSchedulerThread implements Runnable {
      */
     private <T> T syncWork(Supplier<T> supplier) {
         this.singleThreadedManagerLock.lock();
-        while (true) {
-            var task = this.tasks.poll();
-            if (task == null) break;
-            this.handleTask(task);
-        }
         try {
+            while (true) {
+                var task = this.tasks.poll();
+                if (task == null) break;
+                this.handleTask(task);
+            }
             return supplier.get();
         } finally {
             this.singleThreadedManagerLock.unlock();
@@ -318,8 +313,7 @@ class TaskSchedulerThread implements Runnable {
 
     private void handleTask(Task task) {
         switch (task) {
-            case Task.AddClaim(var chunkAndClaim) ->
-                    this.singleThreadedManager.addClaim(chunkAndClaim);
+            case Task.AddClaim(var chunkAndClaim) -> this.singleThreadedManager.addClaim(chunkAndClaim);
             case Task.RemoveClaim(var claim, var future) -> this.singleThreadedManager.removeClaim(claim, future);
             case Task.ChunkGenerationFinished(var chunk) -> this.singleThreadedManager.chunkGenerationFinished(chunk);
             case Task.SaveChunk(var chunk, var future) -> this.singleThreadedManager.saveChunk(chunk, future);
@@ -483,7 +477,8 @@ class TaskSchedulerThread implements Runnable {
         record SaveChunkCompleted(@NotNull Chunk chunk) implements Task {
         }
 
-        record EnqueueUpdate(@NotNull PrioritizedUpdate update, @NotNull SingleThreadedManager.ClaimData claimData, boolean disablePropagation) implements Task {
+        record EnqueueUpdate(@NotNull PrioritizedUpdate update, @NotNull SingleThreadedManager.ClaimData claimData,
+                             boolean disablePropagation) implements Task {
         }
 
         record FinishUnloadAfterPartition(@NotNull UpdateHandler.State.Unloading unloading) implements Task {

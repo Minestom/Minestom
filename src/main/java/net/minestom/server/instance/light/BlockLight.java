@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static net.minestom.server.instance.light.LightCompute.*;
 
-final class BlockLight implements Light {
+final class BlockLight implements OldLight {
     private byte @Nullable [] content;
     private byte @Nullable [] contentPropagation;
     private byte @Nullable [] contentPropagationSwap;

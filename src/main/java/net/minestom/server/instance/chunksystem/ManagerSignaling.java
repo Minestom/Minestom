@@ -32,22 +32,20 @@ class ManagerSignaling {
      */
     public boolean waitForSignal() {
         // check signaled, if we have already been signaled we can avoid having to lock
-        if (!this.signalled) {
-            this.signalLock.lock();
+        if (this.signalled) return false;
+        this.signalLock.lock();
+        try {
+            // Re-check condition. May have changed since locking, and we don't want to deadlock
+            if (this.signalled) return false;
             try {
-                // Re-check condition. May have changed since locking, and we don't want to deadlock
-                if (!this.signalled) {
-                    try {
-                        // TODO we could also use awaitUninterruptibly, but should we?
-                        this.hasSignalled.await();
-                    } catch (InterruptedException e) {
-                        LOGGER.error("Unexpected interrupt. Someone is meddling with the ChunkClaimManager, this is not allowed! Shutting ChunkClaimManager down!", e);
-                        return true;
-                    }
-                }
-            } finally {
-                this.signalLock.unlock();
+                // TODO we could also use awaitUninterruptibly, but should we?
+                this.hasSignalled.await();
+            } catch (InterruptedException e) {
+                LOGGER.error("Unexpected interrupt. Someone is meddling with the ChunkClaimManager, this is not allowed! Shutting ChunkClaimManager down!", e);
+                return true;
             }
+        } finally {
+            this.signalLock.unlock();
         }
         return false;
     }

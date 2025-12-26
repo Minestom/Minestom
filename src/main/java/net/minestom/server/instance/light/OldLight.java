@@ -1,6 +1,5 @@
 package net.minestom.server.instance.light;
 
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.SectionVec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.palette.Palette;
@@ -10,12 +9,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
-public interface Light {
-    static Light sky() {
+public interface OldLight {
+    static OldLight sky() {
         return new SkyLight();
     }
 
-    static Light block() {
+    static OldLight block() {
         return new BlockLight();
     }
 
@@ -65,7 +64,7 @@ public interface Light {
 
     @FunctionalInterface
     interface LightLookup {
-        @Nullable Light light(int x, int y, int z);
+        @Nullable OldLight light(int x, int y, int z);
     }
 
     @FunctionalInterface
