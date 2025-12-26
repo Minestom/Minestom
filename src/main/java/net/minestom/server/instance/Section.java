@@ -1,17 +1,11 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.instance.light.Light;
+import net.minestom.server.instance.light.OldLight;
 import net.minestom.server.instance.palette.Palette;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-
-import static net.minestom.server.instance.light.LightCompute.CONTENT_FULLY_LIT;
-import static net.minestom.server.instance.light.LightCompute.EMPTY_CONTENT;
-
-public record Section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
+public record Section(Palette blockPalette, Palette biomePalette, OldLight skyLight, OldLight blockLight) {
     public Section(Palette blockPalette, Palette biomePalette) {
-        this(blockPalette, biomePalette, Light.sky(), Light.block());
+        this(blockPalette, biomePalette, OldLight.sky(), OldLight.block());
     }
 
     public Section() {
@@ -30,8 +24,8 @@ public record Section(Palette blockPalette, Palette biomePalette, Light skyLight
 
     @Override
     public Section clone() {
-        final Light skyLight = Light.sky();
-        final Light blockLight = Light.block();
+        final OldLight skyLight = OldLight.sky();
+        final OldLight blockLight = OldLight.block();
 
         skyLight.set(this.skyLight.array());
         blockLight.set(this.blockLight.array());

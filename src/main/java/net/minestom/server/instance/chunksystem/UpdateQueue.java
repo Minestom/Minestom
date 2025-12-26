@@ -47,6 +47,7 @@ class UpdateQueue {
             SingleThreadedManager.callbacks.addUpdate(update.x(), update.z(), update.updateType());
         }
 
+        // Periodic cleanup based on size to release out-of-date data/memory when the system is under pressure
         if (this.updateQueue.size() > (this.lastUpdateQueueCleanupSize << 2) + 100) {
             // We use this formula to make sure we don't do updates too often.
             cleanupUpdateQueue();
@@ -80,6 +81,10 @@ class UpdateQueue {
     boolean resetUpdated() {
         var updated = this.updated;
         this.updated = false;
+        return updated;
+    }
+
+    boolean updated() {
         return updated;
     }
 

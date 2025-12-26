@@ -13,6 +13,7 @@ import net.minestom.server.network.packet.server.play.ChunkBatchStartPacket;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ public class PlayerChunkQueue {
     // When we have to re-sort everything, because the player moved, this queue will be replaced
     // entirely. The other option is to remove all elements, change the comparator,
     // then add all elements again, which is arguably worse.
-    private Long2ObjectSortedMap<@Nullable Chunk> chunkQueue = new Long2ObjectRBTreeMap<>(this.compareChunkDistance(0, 0));
+    private Long2ObjectSortedMap<@UnknownNullability Chunk> chunkQueue = new Long2ObjectRBTreeMap<>(this.compareChunkDistance(0, 0));
     private final LongSet visibleChunks = new LongOpenHashSet();
     private boolean needsChunkPositionSync;
     private float targetChunksPerTick;
@@ -129,9 +130,10 @@ public class PlayerChunkQueue {
         try {
             // Queue is empty, do nothing
             if (chunkQueue.isEmpty()) {
+                // Reset to prevent lag spikes when new chunks are in queue and all would be sent at the same time
+                pendingChunkCount = 0;
                 return;
             }
-
 
             player.sendPacket(new ChunkBatchStartPacket());
             int batchSize = 0;

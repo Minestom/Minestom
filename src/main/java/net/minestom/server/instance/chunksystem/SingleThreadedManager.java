@@ -134,6 +134,7 @@ class SingleThreadedManager {
             if (count++ == 5) {
                 // Exit this loop and restart it, this makes sure all tasks are handled
                 // If there are no tasks, this will immediately restart workIteration
+                this.updateQueue.resetUpdated();
                 return IterationResult.RUN_AGAIN;
             }
 
@@ -145,9 +146,13 @@ class SingleThreadedManager {
             var result = this.updateHandler.workUpdate(update, disablePropagation);
             if (result instanceof UpdateResult.WaitingForWorker) {
                 // The worker is busy. Exit loop here
+                // This is to make sure we keep processing new incoming unloads/removeClaims, even
+                // if another update that was processed wants us to wait for a worker.
+                var updatedSinceLastReset = this.updateQueue.resetUpdated();
                 // We need to submit the update again, it hasn't been handled yet
                 this.updateQueue.enqueue(update, null);
-                if (this.updateQueue.resetUpdated()) {
+                this.updateQueue.resetUpdated();
+                if (updatedSinceLastReset) {
                     return IterationResult.RUN_AGAIN;
                 }
                 return IterationResult.WAIT_FOR_SIGNAL_OR_WORKER;
@@ -161,6 +166,8 @@ class SingleThreadedManager {
             }
         }
         if (this.updateQueue.resetUpdated()) {
+            // This is to make sure we keep processing new incoming unloads/removeClaims, even
+            // if another update that was processed wants us to wait for a worker.
             return IterationResult.RUN_AGAIN;
         }
         return IterationResult.WAIT_FOR_SIGNAL;
@@ -377,7 +384,7 @@ class SingleThreadedManager {
 
     void completeIfLoaded(int x, int z, ChunkAndClaim chunkAndClaim) {
         var chunk = this.updateHandler.getLoaded(x, z);
-        if(chunk == null) return;
+        if (chunk == null) return;
         this.taskSchedulerThread.complete(chunkAndClaim.chunkFuture(), chunk);
     }
 
@@ -444,8 +451,7 @@ class SingleThreadedManager {
                 if (e instanceof Player p) {
                     LOGGER.warn("Disconnecting player because of unloaded chunk {}", p.getUsername());
                     p.kick("Your chunk was unloaded");
-                }
-                else e.remove();
+                } else e.remove();
             });
             this.taskTracking.runningTickScheduledCount.decrementAndGet();
         };
