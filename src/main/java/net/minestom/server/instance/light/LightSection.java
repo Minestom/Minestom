@@ -1,16 +1,16 @@
 package net.minestom.server.instance.light;
 
 import net.minestom.server.instance.Section;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.light.LightEngine.WorkTypeTracker;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -35,10 +35,9 @@ public class LightSection {
     private final int sectionX;
     private final int sectionY;
     private final int sectionZ;
-    private final WorkTypeTracker<Integer> trackerBlockLightInternal = new WorkTypeTracker.Hash<>();
-    private final WorkTypeTracker<Integer> trackerBlockLightExternal = new WorkTypeTracker.Hash<>();
-    private final WorkTypeTracker<Integer> trackerFullBlockRelight = new WorkTypeTracker.Hash<>();
     private final BlockLightSection blockLightSection;
+    private final AtomicBoolean resendThisSectionBlockLight = new AtomicBoolean(false);
+    private final AtomicBoolean resendThisSectionSkyLight = new AtomicBoolean(false);
 
     public LightSection(LightEngine engine, LightingChunk chunk, @Nullable Section chunkSection, int sectionY) {
         this.engine = engine;
@@ -48,6 +47,14 @@ public class LightSection {
         this.sectionX = chunk.getChunkX();
         this.sectionZ = chunk.getChunkZ();
         this.blockLightSection = new BlockLightSection(this);
+    }
+
+    public AtomicBoolean resendThisSectionBlockLight() {
+        return resendThisSectionBlockLight;
+    }
+
+    public AtomicBoolean resendThisSectionSkyLight() {
+        return resendThisSectionSkyLight;
     }
 
     public int sectionX() {
@@ -63,15 +70,21 @@ public class LightSection {
     }
 
     public void resendBlockLight() {
-        chunk.scheduleResend();
+        resendThisSectionBlockLight.set(true);
+        chunk.scheduleSpecificResend();
     }
 
     public void resendSkyLight() {
-        chunk.scheduleResend();
+        resendThisSectionSkyLight.set(true);
+        chunk.scheduleSpecificResend();
     }
 
     public LightData<byte[]> getBlockLight() {
         return blockLight.get();
+    }
+
+    public LightData<byte[]> getBlockLightExternal() {
+        return blockLightExternal.get();
     }
 
     public LightData<InternalBlockLight> getBlockLightInternal() {
@@ -95,50 +108,61 @@ public class LightSection {
     }
 
     public void blockChanged() {
-        runAsync(trackerFullBlockRelight, sectionY, this::fullBlockRelight);
+        runAsync(chunk.trackerFullBlockRelight, sectionY, this::fullBlockRelight);
     }
 
-    private void bakeAfterRelightAndPropagate() {
-        var bakedLightChanged = bakeBlockLight().asBoolean();
+    private void bakeAfterRelightAndPropagate(int depth) {
+        var baked = bakeBlockLight();
+        var bakedLightChanged = baked.asBoolean();
+        // TODO more efficient propagate, only in changed directions
         if (bakedLightChanged) {
             resendBlockLight();
+            var oldData = baked.oldData().data();
+            var newData = blockLight.get().data();
+            depth++;
             // We need to send to neighbors to recalculate
-            scheduleBlockRelight(up);
-            scheduleBlockRelight(down);
+            if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.TOP))
+                scheduleBlockRelight(up, depth);
+            if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.BOTTOM))
+                scheduleBlockRelight(down, depth);
             var neighborSnapshot = chunk.createNeighborSnapshot();
-            scheduleNeighborBlockRelight(neighborSnapshot.east());
-            scheduleNeighborBlockRelight(neighborSnapshot.north());
-            scheduleNeighborBlockRelight(neighborSnapshot.south());
-            scheduleNeighborBlockRelight(neighborSnapshot.west());
+            if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.EAST))
+                scheduleNeighborBlockRelight(neighborSnapshot.east(), depth);
+            if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.NORTH))
+                scheduleNeighborBlockRelight(neighborSnapshot.north(), depth);
+            if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.SOUTH))
+                scheduleNeighborBlockRelight(neighborSnapshot.south(), depth);
+            if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.WEST))
+                scheduleNeighborBlockRelight(neighborSnapshot.west(), depth);
         }
     }
 
-    void relightExternalBlockLightAsync() {
-        runAsync(trackerBlockLightExternal, sectionY, this::relightExternalBlockLight);
+    void relightExternalBlockLightAsync(int depth) {
+        runAsync(chunk.trackerBlockLightExternal, sectionY, () -> relightExternalBlockLight(depth));
     }
 
-    private void relightExternalBlockLight() {
+    private void relightExternalBlockLight(int depth) {
         if (blockLightSection.relightBlockLightExternal().asBoolean()) {
-            bakeAfterRelightAndPropagate();
+            bakeAfterRelightAndPropagate(depth);
         }
     }
 
     private void fullBlockRelight() {
-        var modified1 = blockLightSection.relightBlockLightInternal().asBoolean();
-        var modified2 = blockLightSection.relightBlockLightExternal().asBoolean();
-        if (modified1 || modified2) {
-            bakeAfterRelightAndPropagate();
+        var modifiedInternal = blockLightSection.relightBlockLightInternal().asBoolean();
+        var modifiedExternal = blockLightSection.relightBlockLightExternal().asBoolean();
+        if (modifiedInternal || modifiedExternal) {
+            bakeAfterRelightAndPropagate(0);
         }
     }
 
-    private void scheduleNeighborBlockRelight(@Nullable LightingChunk neighbor) {
+    private void scheduleNeighborBlockRelight(@Nullable LightingChunk neighbor, int depth) {
         if (neighbor == null) return;
-        scheduleBlockRelight(neighbor.getLightSection(sectionY));
+        neighbor.getLightSection(sectionY).relightExternalBlockLightAsync(depth);
     }
 
-    private void scheduleBlockRelight(@Nullable LightSection section) {
+    private void scheduleBlockRelight(@Nullable LightSection section, int depth) {
         if (section == null) return;
-        section.relightExternalBlockLightAsync();
+        section.relightExternalBlockLightAsync(depth);
     }
 
     /**
@@ -217,22 +241,12 @@ public class LightSection {
         }
     }
 
-    public <T> CompletableFuture<@UnknownNullability T> supplyAsync(Callable<@UnknownNullability T> supplier) {
-        return engine.scheduleFutureWork(() -> ChunkUtils.isLoaded(chunk), supplier);
-    }
-
     public CompletableFuture<@Nullable Void> runAsync(Runnable runnable) {
-        return engine.scheduleFutureWork(() -> ChunkUtils.isLoaded(chunk), () -> {
-            runnable.run();
-            return null;
-        });
+        return engine.scheduleFutureWork(() -> ChunkUtils.isLoaded(chunk), runnable);
     }
 
     public <WorkKey> CompletableFuture<@Nullable Void> runAsync(WorkTypeTracker<WorkKey> tracker, WorkKey workKey, Runnable runnable) {
-        return engine.scheduleFutureWork(tracker, workKey, () -> ChunkUtils.isLoaded(chunk), () -> {
-            runnable.run();
-            return null;
-        });
+        return engine.scheduleFutureWork(tracker, workKey, () -> ChunkUtils.isLoaded(chunk), runnable);
     }
 
     record LightUpdateResult<T>(LightUpdateResultType type, LightData<T> oldData) {

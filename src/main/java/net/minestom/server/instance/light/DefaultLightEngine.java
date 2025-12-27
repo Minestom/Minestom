@@ -1,14 +1,20 @@
 package net.minestom.server.instance.light;
 
+import net.minestom.server.MinecraftServer;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
 
+@ApiStatus.Internal
 public final class DefaultLightEngine implements LightEngine {
     private static final Exception PRECONDITION_FAILED = new Exception("Precondition failed");
     private static final DefaultLightEngine INSTANCE = new DefaultLightEngine();
     // We can immediately submit just over the available processor count tasks. All threads should be busy the entire time.
     private final Semaphore freeSubmits = new Semaphore(Runtime.getRuntime().availableProcessors() + 2);
+    @ApiStatus.Internal
     public static final AtomicInteger WORKING_COUNT = new AtomicInteger();
     private final ExecutorService workerService;
 
@@ -31,14 +37,15 @@ public final class DefaultLightEngine implements LightEngine {
         return workerService;
     }
 
-    private <T> void scheduleThenRelease(CompletableFuture<T> future, BooleanSupplier precondition, Callable<T> work) {
+    private void scheduleThenRelease(CompletableFuture<@Nullable Void> future, BooleanSupplier precondition, Runnable work) {
         workerService.submit(() -> {
             try {
                 if (!precondition.getAsBoolean()) {
                     future.completeExceptionally(PRECONDITION_FAILED);
                     return;
                 }
-                future.complete(work.call());
+                work.run();
+                future.complete(null);
             } catch (Throwable t) {
                 future.completeExceptionally(t);
             } finally {
@@ -48,14 +55,10 @@ public final class DefaultLightEngine implements LightEngine {
     }
 
     @Override
-    public <T> CompletableFuture<T> scheduleFutureWork(BooleanSupplier precondition, Callable<T> work) {
-        var future = new CompletableFuture<T>();
+    public CompletableFuture<@Nullable Void> scheduleFutureWork(BooleanSupplier precondition, Runnable work) {
+        var future = new CompletableFuture<@Nullable Void>();
         WORKING_COUNT.incrementAndGet();
         future.whenComplete((_, _) -> WORKING_COUNT.decrementAndGet());
-//        future.exceptionally(_ -> null).orTimeout(15 ,TimeUnit.SECONDS).exceptionally(t -> {
-//            t.printStackTrace();
-//            return null;
-//        });
         if (freeSubmits.tryAcquire()) {
             // Short-circuit virtual thread
             scheduleThenRelease(future, precondition, work);
@@ -79,21 +82,11 @@ public final class DefaultLightEngine implements LightEngine {
     }
 
     @Override
-    public <WorkKey, T> CompletableFuture<T> scheduleFutureWork(WorkTypeTracker<WorkKey> tracker, WorkKey workKey, BooleanSupplier precondition, Callable<T> work) {
-//        if (true) return scheduleFutureWork(precondition, work);
+    public <WorkKey> CompletableFuture<@Nullable Void> scheduleFutureWork(WorkTypeTracker<WorkKey> tracker, WorkKey workKey, BooleanSupplier precondition, Runnable
+            work) {
         var future = tracker.add(workKey, precondition, work);
-//        var original = new Exception();
-//        future.exceptionally(t -> null).orTimeout(5, TimeUnit.SECONDS).exceptionally(t -> {
-//            t.addSuppressed(original);
-//            t.printStackTrace();
-//            return null;
-//        });
         WORKING_COUNT.incrementAndGet();
         future.whenComplete((_, _) -> WORKING_COUNT.decrementAndGet());
-//        future.exceptionally(_ -> null).orTimeout(5 ,TimeUnit.SECONDS).exceptionally(t -> {
-//            t.printStackTrace();
-//            return null;
-//        });
         var pollers = tracker.pollers();
         if (pollers.get() > 0) {
             // At least 1 poller after we have submitted. The task will be found.
@@ -137,12 +130,12 @@ public final class DefaultLightEngine implements LightEngine {
                     break;
                 }
             } catch (Throwable t) {
-                t.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(t);
             }
         });
     }
 
-    private <T> void handleEntry(WorkEntry<T> entry) {
+    private <T> void handleEntry(WorkEntry entry) {
         scheduleThenRelease(entry.future(), entry.precondition(), entry.work());
     }
 

@@ -10,8 +10,6 @@ import net.minestom.server.instance.light.LightSection.LightUpdateResult;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.locks.LockSupport;
-
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 
 final class BlockLightSection {
@@ -41,7 +39,7 @@ final class BlockLightSection {
         var content = selfLight.data();
         var blockPalette = selfLight.palette();
         var neighbors = new @Nullable LightSection[]{
-                posX, posY, posZ, negX, negY, negZ
+                negY, posY, negZ, posZ, negX, posX // Order must be same as order in BlockFace enum
         };
         var lightSources = new ShortArrayFIFOQueue(0);
         for (var i = 0; i < neighbors.length; i++) {
@@ -100,6 +98,11 @@ final class BlockLightSection {
                         if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
                             continue;
                     }
+                    if (lightEmission >= 14){
+                        System.out.println(face);
+                        System.out.println(blockFrom);
+                        System.out.println(blockTo);
+                    }
 
                     final int index = posTo | (lightEmission << 12);
                     lightSources.enqueue((short) index);
@@ -110,8 +113,6 @@ final class BlockLightSection {
         var externalLight = LightCompute.compute(blockPalette, lightSources);
 
         var newData = new LightData<>(externalLight, version);
-
-        LockSupport.parkNanos(50_000);
 
         return section.updateBlockLightExternal(newData);
     }
@@ -138,6 +139,8 @@ final class BlockLightSection {
             Palette blockPalette;
             synchronized (section.chunk) {
                 // We need to clone the palette, because palettes are not thread-safe
+                // We clone for a read-only copy, that is tread-safe.
+                // This assumes reading from a palette does no internal modification (which could be unsafe)
                 blockPalette = section.chunkSection.blockPalette().clone();
             }
             var internalLightSources = getBlockLightInternalSources(blockPalette);
