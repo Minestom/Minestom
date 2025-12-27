@@ -7,6 +7,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.pathfinding.followers.GroundNodeFollower;
 import net.minestom.server.entity.pathfinding.followers.NodeFollower;
+import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
 import net.minestom.server.entity.pathfinding.generators.NodeGenerator;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -35,7 +36,7 @@ public final class Navigator {
     private boolean canFloat;
     private int maxFallDistance = 5;
 
-    NodeGenerator nodeGenerator = new net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator();
+    NodeGenerator nodeGenerator = new GroundNodeGenerator();
     private NodeFollower nodeFollower;
     private Pos lastProgress;
     private int stuckTicks;
@@ -205,8 +206,8 @@ public final class Navigator {
         double heightDiff = current.y() - entity.getPosition().y();
         if (path.getCurrentType() == PNode.Type.JUMP && heightDiff > maxStepHeight) {
             double horizDist = Math.sqrt(
-                Math.pow(current.x() - entity.getPosition().x(), 2) +
-                Math.pow(current.z() - entity.getPosition().z(), 2)
+                    Math.pow(current.x() - entity.getPosition().x(), 2) +
+                            Math.pow(current.z() - entity.getPosition().z(), 2)
             );
             if (horizDist < 1.5 && entity.isOnGround()) {
                 nodeFollower.jump(current, next);

@@ -10,6 +10,9 @@ public final class PhysicsUtils {
 
     private static final double DEFAULT_STEP_HEIGHT = 1;
 
+    private PhysicsUtils() {
+    }
+
     /**
      * Simulate the entity's movement physics
      * <p>
@@ -18,17 +21,17 @@ public final class PhysicsUtils {
      * is on ground, it will attempt to step up onto the obstacle. Then the velocity
      * is adjusted by applying air resistance and friction.
      *
-     * @param position the current entity position
-     * @param velocity the current entity velocity in blocks/tick
-     * @param boundingBox the current entity bounding box
-     * @param worldBorder the world border to test bounds against
-     * @param blockGetter the block getter to test block collisions against
+     * @param position     the current entity position
+     * @param velocity     the current entity velocity in blocks/tick
+     * @param boundingBox  the current entity bounding box
+     * @param worldBorder  the world border to test bounds against
+     * @param blockGetter  the block getter to test block collisions against
      * @param aerodynamics the current entity aerodynamics
-     * @param noGravity whether the entity has no gravity
-     * @param hasPhysics whether the entity has physics
-     * @param onGround whether the entity is on the ground
-     * @param flying whether the entity is flying
-     * @param previous the physics result from the previous simulation or null
+     * @param noGravity    whether the entity has no gravity
+     * @param hasPhysics   whether the entity has physics
+     * @param onGround     whether the entity is on the ground
+     * @param flying       whether the entity is flying
+     * @param previous     the physics result from the previous simulation or null
      * @return a {@link PhysicsResult} containing the resulting physics state of this simulation
      */
     public static PhysicsResult simulateMovement(Pos position, Vec velocity, BoundingBox boundingBox,
@@ -83,7 +86,7 @@ public final class PhysicsUtils {
     }
 
     private static @Nullable PhysicsResult tryStepUp(Pos position, Vec velocity, BoundingBox boundingBox,
-                                                      Block.Getter blockGetter, double stepHeight) {
+                                                     Block.Getter blockGetter, double stepHeight) {
         if (velocity.x() == 0 && velocity.z() == 0) {
             return null;
         }
@@ -176,6 +179,4 @@ public final class PhysicsUtils {
                 Math.abs(z) < Vec.EPSILON ? 0 : z
         );
     }
-
-    private PhysicsUtils() {}
 }

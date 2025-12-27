@@ -1,5 +1,6 @@
 package net.minestom.server.entity.pathfinding;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 
 import java.util.Locale;
@@ -12,7 +13,7 @@ public final class PathTypeResolver {
 
     private PathTypeResolver() {}
 
-    public static PathType getPathType(Block.Getter getter, net.minestom.server.coordinate.Point point) {
+    public static PathType getPathType(Block.Getter getter, Point point) {
         Block block = getter.getBlock(point.blockX(), point.blockY(), point.blockZ(), Block.Getter.Condition.NONE);
         PathType typeHere = classify(block);
 
