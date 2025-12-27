@@ -30,6 +30,9 @@ public class LightingChunk extends DynamicChunk {
     private @Nullable WeakReference<@Nullable LightingChunk> east;
     private @Nullable WeakReference<@Nullable LightingChunk> south;
     private @Nullable WeakReference<@Nullable LightingChunk> west;
+    private volatile boolean mayRequireSpecificSectionResend = false;
+    final LightEngine.WorkTypeTracker<Integer> trackerBlockLightExternal = new LightEngine.WorkTypeTracker.Hash<>();
+    final LightEngine.WorkTypeTracker<Integer> trackerFullBlockRelight = new LightEngine.WorkTypeTracker.Hash<>();
     private volatile boolean neighborUpdated = false;
 
     private static final Set<Key> DIFFUSE_SKY_LIGHT = Set.of(Block.COBWEB.key(), Block.ICE.key(), Block.HONEY_BLOCK.key(), Block.SLIME_BLOCK.key(), Block.WATER.key(), Block.ACACIA_LEAVES.key(), Block.AZALEA_LEAVES.key(), Block.BIRCH_LEAVES.key(), Block.DARK_OAK_LEAVES.key(), Block.FLOWERING_AZALEA_LEAVES.key(), Block.JUNGLE_LEAVES.key(), Block.CHERRY_LEAVES.key(), Block.OAK_LEAVES.key(), Block.SPRUCE_LEAVES.key(), Block.SPAWNER.key(), Block.BEACON.key(), Block.END_GATEWAY.key(), Block.CHORUS_PLANT.key(), Block.CHORUS_FLOWER.key(), Block.FROSTED_ICE.key(), Block.SEAGRASS.key(), Block.TALL_SEAGRASS.key(), Block.LAVA.key());
@@ -174,6 +177,27 @@ public class LightingChunk extends DynamicChunk {
         return new LightData(skyMask, blockMask, emptySkyMask, emptyBlockMask, skyLights, blockLights);
     }
 
+    protected LightData createPartialLightData() {
+        BitSet skyMask = new BitSet();
+        BitSet blockMask = new BitSet();
+        BitSet emptySkyMask = new BitSet();
+        BitSet emptyBlockMask = new BitSet();
+        List<byte[]> skyLights = new ArrayList<>();
+        List<byte[]> blockLights = new ArrayList<>();
+
+        for (var i = 0; i < lightSections.size(); i++) {
+            var section = lightSections.get(i);
+            if (section.resendThisSectionBlockLight().compareAndSet(true, false)) {
+                addLight(blockMask, emptyBlockMask, blockLights, i, section.getBlockLight().data());
+            }
+            if (section.resendThisSectionSkyLight().compareAndSet(true, false)) {
+                addLight(skyMask, emptySkyMask, skyLights, i, section.getSkyLight().data());
+            }
+        }
+
+        return new LightData(skyMask, blockMask, emptySkyMask, emptyBlockMask, skyLights, blockLights);
+    }
+
     private void addLight(BitSet mask, BitSet emptyMask, List<byte[]> list, int index, byte[] data) {
         if (data == LightCompute.EMPTY_CONTENT) {
             emptyMask.set(index);
@@ -190,7 +214,11 @@ public class LightingChunk extends DynamicChunk {
 
         if (resendLight) {
             resendLight = false;
+            mayRequireSpecificSectionResend = false;
             sendLight();
+        } else if (mayRequireSpecificSectionResend) {
+            mayRequireSpecificSectionResend = false;
+            sendPartialLight();
         }
         if (neighborUpdated) {
             neighborUpdated = false;
@@ -200,7 +228,7 @@ public class LightingChunk extends DynamicChunk {
 
     private void updateExternalLighting() {
         for (var lightSection : lightSections) {
-            lightSection.relightExternalBlockLightAsync();
+            lightSection.relightExternalBlockLightAsync(0);
         }
     }
 
@@ -216,12 +244,20 @@ public class LightingChunk extends DynamicChunk {
         }
     }
 
-    public void scheduleResend() {
+    void scheduleSpecificResend() {
+        mayRequireSpecificSectionResend = true;
+    }
+
+    public void scheduleFullResend() {
         resendLight = true;
     }
 
     public void sendLight() {
         sendPacketToViewers(new UpdateLightPacket(chunkX, chunkZ, createLightData(true)));
+    }
+
+    public void sendPartialLight() {
+        sendPacketToViewers(new UpdateLightPacket(chunkX, chunkZ, createPartialLightData()));
     }
 
     private List<LightSection> initSections() {
