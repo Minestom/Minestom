@@ -118,7 +118,7 @@ public final class LightCompute {
      * @param lightPre     shorts queue in format: [4bit light level][4bit y][4bit z][4bit x]
      * @return lighting wrapped in Result
      */
-    static byte [] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
+    static byte[] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
         if (lightPre.isEmpty()) return EMPTY_CONTENT;
 
         final byte[] lightArray = new byte[LIGHT_LENGTH];
@@ -235,6 +235,27 @@ public final class LightCompute {
             lightMax[i] = (byte) (lower | (upper << 4));
         }
         return lightMax;
+    }
+
+    public static boolean hasBorderChanged(byte[] oldLight, byte[] newLight, BlockFace face) {
+        final int k = switch (face) {
+            case WEST, BOTTOM, NORTH -> 0;
+            case EAST, TOP, SOUTH -> 15;
+        };
+        for (int bx = 0; bx < SECTION_SIZE; bx++) {
+            for (int by = 0; by < SECTION_SIZE; by++) {
+                final int posFrom = switch (face) {
+                    case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
+                    case WEST, EAST -> k | (by << 4) | (bx << 8);
+                    default -> bx | (by << 4) | (k << 8);
+                };
+
+                final int valueFrom = getLight(oldLight, posFrom);
+                final int valueTo = getLight(newLight, posFrom);
+                if (valueFrom != valueTo) return true;
+            }
+        }
+        return false;
     }
 
     public static boolean compareBorders(byte @Nullable [] content, byte @Nullable [] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {

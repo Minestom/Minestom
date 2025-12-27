@@ -404,7 +404,6 @@ public class PlayerInit {
 
 //             50 ms for every chunk
 //            while (System.nanoTime() - start < java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50)) ;
-            LockSupport.parkNanos(java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50));
 
             if (unit.absoluteStart().blockY() < 40 && unit.absoluteEnd().blockY() > 40) {
                 unit.modifier().setBlock(unit.absoluteStart().blockX(), 40, unit.absoluteStart().blockZ(), Block.TORCH);
