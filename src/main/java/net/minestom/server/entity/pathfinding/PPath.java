@@ -11,11 +11,20 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class PPath {
     private final Runnable onComplete;
     private final List<PNode> nodes = new ArrayList<>();
-
     private final double pathVariance;
     private final double maxDistance;
     private int index = 0;
     private final AtomicReference<State> state = new AtomicReference<>(State.CALCULATING);
+
+    public enum State {
+        CALCULATING, FOLLOWING, TERMINATING, TERMINATED, COMPUTED, BEST_EFFORT, INVALID
+    }
+
+    public PPath(double maxDistance, double pathVariance, Runnable onComplete) {
+        this.onComplete = onComplete;
+        this.maxDistance = maxDistance;
+        this.pathVariance = pathVariance;
+    }
 
     public Point getNext() {
         if (index + 1 >= nodes.size()) return null;
@@ -27,24 +36,12 @@ public final class PPath {
         state.set(newState);
     }
 
-    public enum State {
-        CALCULATING,
-        FOLLOWING,
-        TERMINATING, TERMINATED, COMPUTED, BEST_EFFORT, INVALID
-    }
-
-    State getState() {
+    public State getState() {
         return state.get();
     }
 
     public List<PNode> getNodes() {
         return nodes;
-    }
-
-    public PPath(double maxDistance, double pathVariance, Runnable onComplete) {
-        this.onComplete = onComplete;
-        this.maxDistance = maxDistance;
-        this.pathVariance = pathVariance;
     }
 
     void runComplete() {
@@ -58,8 +55,7 @@ public final class PPath {
 
     @Nullable PNode.Type getCurrentType() {
         if (index >= nodes.size()) return null;
-        var current = nodes.get(index);
-        return current.getType();
+        return nodes.get(index).getType();
     }
 
     @Nullable Point getCurrent() {

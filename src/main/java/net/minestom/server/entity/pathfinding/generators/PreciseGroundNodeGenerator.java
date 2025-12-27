@@ -6,6 +6,7 @@ import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.pathfinding.PathType;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.block.Block;
 
@@ -13,10 +14,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.OptionalDouble;
 import java.util.Set;
+import java.util.function.Function;
 
 public class PreciseGroundNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
-    private final static int MAX_FALL_DISTANCE = 5;
+    private static final int MAX_FALL_DISTANCE = 5;
+    private Function<PathType, Float> malusProvider = PathType::getMalus;
+    private double maxStepHeight = 1.0;
+    private boolean canFloat;
 
     @Override
     public Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited, PNode current, Point goal, BoundingBox boundingBox) {
@@ -44,7 +49,8 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
 
                 if (nodeWalk != null && !visited.contains(nodeWalk)) nearby.add(nodeWalk);
 
-                for (int i = 1; i <= 1; ++i) {
+                final int maxJumpHeight = (int) Math.ceil(Math.max(1.0, maxStepHeight));
+                for (int i = 1; i <= maxJumpHeight; ++i) {
                     Point jumpPoint = new Vec(current.blockX() + 0.5 + x, current.y() + i, current.blockZ() + 0.5 + z);
                     OptionalDouble jumpPointY = gravitySnap(getter, jumpPoint.x(), jumpPoint.y(), jumpPoint.z(), boundingBox, MAX_FALL_DISTANCE);
                     if (jumpPointY.isEmpty()) continue;
@@ -67,8 +73,8 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
         if (snapped.isPresent()) {
             var snappedPoint = new Vec(point.x(), snapped.getAsDouble(), point.z());
 
-            var n = newNode(start, cost, snappedPoint, goal);
-            if (closed.contains(n)) {
+            var n = newNode(getter, start, cost, snappedPoint, goal);
+            if (n == null || closed.contains(n)) {
                 return null;
             }
 
@@ -94,11 +100,11 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
 
     private PNode createJump(Block.Getter getter, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
         if (Math.abs(point.y() - start.y()) < Vec.EPSILON) return null;
-        if (point.y() - start.y() > 2) return null;
+        if (point.y() - start.y() > maxStepHeight + 0.5) return null;
         if (point.blockX() != start.blockX() && point.blockZ() != start.blockZ()) return null;
 
-        var n = newNode(start, cost, point, goal);
-        if (closed.contains(n)) return null;
+        var n = newNode(getter, start, cost, point, goal);
+        if (n == null || closed.contains(n)) return null;
 
         if (pointInvalid(getter, point, boundingBox)) return null;
         if (pointInvalid(getter, new Vec(start.x(), start.y() + 1, start.z()), boundingBox)) return null;
@@ -107,8 +113,12 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
         return n;
     }
 
-    private PNode newNode(PNode current, double cost, Point point, Point goal) {
-        tempNode.setG(current.g() + cost);
+    private PNode newNode(Block.Getter getter, PNode current, double cost, Point point, Point goal) {
+        PathType pathType = resolvePathType(getter, point);
+        float malus = malusProvider.apply(pathType);
+        if (malus < 0) return null;
+
+        tempNode.setG(current.g() + cost + malus);
         tempNode.setH(heuristic(point, goal));
         tempNode.setPoint(point.x(), point.y(), point.z());
 
@@ -140,5 +150,35 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
         final Point diff = end.sub(start);
         PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox, start.asPos(), diff.asVec(), null, false);
         return !res.collisionZ() && !res.collisionY() && !res.collisionX();
+    }
+
+    @Override
+    public void setPathMalusProvider(Function<PathType, Float> provider) {
+        this.malusProvider = provider;
+    }
+
+    @Override
+    public float pathMalus(PathType type) {
+        return malusProvider.apply(type);
+    }
+
+    @Override
+    public void setMaxUpStep(double stepHeight) {
+        this.maxStepHeight = Math.max(0.0, stepHeight);
+    }
+
+    @Override
+    public double maxUpStep() {
+        return maxStepHeight;
+    }
+
+    @Override
+    public void setCanFloat(boolean canFloat) {
+        this.canFloat = canFloat;
+    }
+
+    @Override
+    public boolean canFloatFlag() {
+        return canFloat;
     }
 }
