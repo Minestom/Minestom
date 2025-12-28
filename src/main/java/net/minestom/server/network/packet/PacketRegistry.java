@@ -174,7 +174,7 @@ public interface PacketRegistry<T> {
                     entry(ClientPingRequestPacket.class, ClientPingRequestPacket.SERIALIZER),
                     entry(ClientPlaceRecipePacket.class, ClientPlaceRecipePacket.SERIALIZER),
                     entry(ClientPlayerAbilitiesPacket.class, ClientPlayerAbilitiesPacket.SERIALIZER),
-                    entry(ClientPlayerDiggingPacket.class, ClientPlayerDiggingPacket.SERIALIZER),
+                    entry(ClientPlayerActionPacket.class, ClientPlayerActionPacket.SERIALIZER),
                     entry(ClientEntityActionPacket.class, ClientEntityActionPacket.SERIALIZER),
                     entry(ClientInputPacket.class, ClientInputPacket.SERIALIZER),
                     entry(ClientPlayerLoadedPacket.class, ClientPlayerLoadedPacket.SERIALIZER),

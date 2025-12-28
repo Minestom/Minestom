@@ -1217,7 +1217,7 @@ public interface NetworkBuffer {
          * Creates an optional type for {@link T}, which allows it to have null values.
          * <br>
          * Note the encoding prefixes all {@link T} behind {@link #BOOLEAN} where its value if {@link T} is not null.
-         * For example a not null {@link T} would be true, and {@code null} would be false.
+         * For example, a not null {@link T} would be true, and {@code null} would be false.
          *
          * @return the new optional type
          */

@@ -1,6 +1,7 @@
 package net.minestom.server.network.player;
 
 import net.minestom.server.ServerFlag;
+import net.minestom.server.entity.MainHand;
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.NetworkBuffer;
@@ -39,7 +40,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
             Enum(ChatMessageType.class), ClientSettings::chatMessageType,
             BOOLEAN, ClientSettings::chatColors,
             BYTE, ClientSettings::displayedSkinParts,
-            Enum(MainHand.class), ClientSettings::mainHand,
+            MainHand.NETWORK_TYPE, ClientSettings::mainHand,
             BOOLEAN, ClientSettings::enableTextFiltering,
             BOOLEAN, ClientSettings::allowServerListings,
             ParticleSetting.NETWORK_TYPE, ClientSettings::particleSetting,
@@ -61,14 +62,6 @@ public record ClientSettings(Locale locale, byte viewDistance,
     @Deprecated
     public int effectiveViewDistance() {
         return Math.min(viewDistance(), ServerFlag.CHUNK_VIEW_DISTANCE);
-    }
-
-    /**
-     * Represents where is located the main hand of the player (can be changed in Minecraft option).
-     */
-    public enum MainHand {
-        LEFT,
-        RIGHT
     }
 
     public enum ParticleSetting {

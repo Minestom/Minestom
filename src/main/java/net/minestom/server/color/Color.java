@@ -1,5 +1,6 @@
 package net.minestom.server.color;
 
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
@@ -38,14 +39,22 @@ public class Color implements RGBLike {
         }
     };
 
-    public static final Codec<RGBLike> CODEC = Codec.INT
-            .transform(Color::new, color -> Color.fromRGBLike(color).asRGB());
+    public static final Codec<RGBLike> CODEC = Codec.INT.<RGBLike>transform(Color::new, color -> Color.fromRGBLike(color).asRGB())
+            .orElse(Codec.VECTOR3D, vector -> new Color((float) vector.x(), (float) vector.y(), (float) vector.z()));
+    public static final Codec<RGBLike> STRING_CODEC = Codec.STRING.transform(
+            hex -> (RGBLike) Objects.requireNonNull(TextColor.fromHexString(hex)),
+            color -> TextColor.color(color).asHexString()).orElse(CODEC);
 
     public static final RGBLike WHITE = new Color(255, 255, 255);
+    public static final RGBLike BLACK = new Color(0, 0, 0);
 
     private final int red;
     private final int green;
     private final int blue;
+
+    public Color(float red, float green, float blue) {
+        this((int) (red * 255), (int) (green * 255), (int) (blue * 255));
+    }
 
     public Color(int red, int green, int blue) {
         Check.argCondition(!MathUtils.isBetween(red, 0, 255), "Red is not between 0-255: {0}", red);

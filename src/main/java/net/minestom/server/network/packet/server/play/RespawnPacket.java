@@ -34,4 +34,5 @@ public record RespawnPacket(
             VAR_INT, RespawnPacket::seaLevel,
             BYTE, RespawnPacket::copyData,
             RespawnPacket::new);
+
 }
