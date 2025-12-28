@@ -1,25 +1,26 @@
 package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
 
 import java.util.function.DoubleUnaryOperator;
 
-import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
-
 /**
- * Represents an immutable 3D vector.
+ * Represents a 3D vector with double-precision coordinates.
  * <p>
- * To become a value then primitive type.
+ * This is the fundamental coordinate type for precise spatial calculations.
+ * Supports standard vector operations including dot product, cross product,
+ * normalization, and rotation.
+ *
+ * @param x the X coordinate
+ * @param y the Y coordinate
+ * @param z the Z coordinate
  */
 public record Vec(double x, double y, double z) implements Point {
     public static final Vec ZERO = new Vec(0);
     public static final Vec ONE = new Vec(1);
     public static final Vec SECTION = new Vec(SECTION_SIZE);
-
-    public static final double EPSILON = 0.000001;
+    public static final Vec REGION = new Vec(REGION_SIZE);
 
     /**
      * Creates a new vec with the [x;z] coordinates set. Y is set to 0.
@@ -55,154 +56,173 @@ public record Vec(double x, double y, double z) implements Point {
     }
 
     /**
-     * Creates a new point with coordinated depending on {@code this}.
+     * Applies the given operator to this vector's coordinates (x/y/z).
      *
-     * @param operator the operator
-     * @return the created point
+     * @param operator the operator to apply
+     * @return the resulting vector
      */
-    @Contract(pure = true)
     public Vec apply(Operator operator) {
         return operator.apply(x, y, z);
     }
 
     @Override
-    @Contract(pure = true)
+    @Contract("_ -> new")
     public Vec withX(DoubleUnaryOperator operator) {
         return new Vec(operator.applyAsDouble(x), y, z);
     }
 
     @Override
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     public Vec withX(double x) {
         return new Vec(x, y, z);
     }
 
     @Override
-    @Contract(pure = true)
+    @Contract("_ -> new")
     public Vec withY(DoubleUnaryOperator operator) {
         return new Vec(x, operator.applyAsDouble(y), z);
     }
 
     @Override
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     public Vec withY(double y) {
         return new Vec(x, y, z);
     }
 
     @Override
-    @Contract(pure = true)
+    @Contract("_ -> new")
     public Vec withZ(DoubleUnaryOperator operator) {
         return new Vec(x, y, operator.applyAsDouble(z));
     }
 
     @Override
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     public Vec withZ(double z) {
         return new Vec(x, y, z);
     }
 
     @Override
+    @Contract(pure = true, value = "_, _, _ -> new")
     public Vec add(double x, double y, double z) {
         return new Vec(this.x + x, this.y + y, this.z + z);
     }
 
     @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec add(Point point) {
         return add(point.x(), point.y(), point.z());
     }
 
     @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec add(double value) {
         return add(value, value, value);
     }
 
     @Override
+    @Contract(pure = true, value = "_, _, _ -> new")
     public Vec sub(double x, double y, double z) {
         return new Vec(this.x - x, this.y - y, this.z - z);
     }
 
     @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec sub(Point point) {
         return sub(point.x(), point.y(), point.z());
     }
 
     @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec sub(double value) {
         return sub(value, value, value);
     }
 
     @Override
+    @Contract(pure = true, value = "_, _, _ -> new")
     public Vec mul(double x, double y, double z) {
         return new Vec(this.x * x, this.y * y, this.z * z);
     }
 
     @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec mul(Point point) {
         return mul(point.x(), point.y(), point.z());
     }
 
     @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec mul(double value) {
         return mul(value, value, value);
     }
 
     @Override
+    @Contract(pure = true, value = "_, _, _ -> new")
     public Vec div(double x, double y, double z) {
         return new Vec(this.x / x, this.y / y, this.z / z);
     }
 
     @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec div(Point point) {
         return div(point.x(), point.y(), point.z());
     }
 
     @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec div(double value) {
         return div(value, value, value);
     }
 
     @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec relative(BlockFace face) {
-        final Direction direction = face.toDirection();
-        return add(direction.normalX(), direction.normalY(), direction.normalZ());
+        return (Vec) Point.super.relative(face);
     }
 
-    @Contract(pure = true)
+    @Override
+    @Contract(pure = true, value = "-> new")
     public Vec neg() {
         return new Vec(-x, -y, -z);
     }
 
-    @Contract(pure = true)
+    @Override
+    @Contract(pure = true, value = "-> new")
     public Vec abs() {
         return new Vec(Math.abs(x), Math.abs(y), Math.abs(z));
     }
 
-    @Contract(pure = true)
+    @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec min(Point point) {
         return new Vec(Math.min(x, point.x()), Math.min(y, point.y()), Math.min(z, point.z()));
     }
 
-    @Contract(pure = true)
+    @Override
+    @Contract(pure = true, value = "_, _, _ -> new")
     public Vec min(double x, double y, double z) {
         return new Vec(Math.min(this.x, x), Math.min(this.y, y), Math.min(this.z, z));
     }
 
-    @Contract(pure = true)
+    @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec min(double value) {
         return new Vec(Math.min(x, value), Math.min(y, value), Math.min(z, value));
     }
 
-    @Contract(pure = true)
+    @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec max(Point point) {
         return new Vec(Math.max(x, point.x()), Math.max(y, point.y()), Math.max(z, point.z()));
     }
 
-    @Contract(pure = true)
+    @Override
+    @Contract(pure = true, value = "_, _, _ -> new")
     public Vec max(double x, double y, double z) {
         return new Vec(Math.max(this.x, x), Math.max(this.y, y), Math.max(this.z, z));
     }
 
-    @Contract(pure = true)
+    @Override
+    @Contract(pure = true, value = "_ -> new")
     public Vec max(double value) {
         return new Vec(Math.max(x, value), Math.max(y, value), Math.max(z, value));
     }
@@ -216,91 +236,19 @@ public record Vec(double x, double y, double z) implements Point {
         return new Pos(x, y, z);
     }
 
-    /**
-     * Gets the magnitude of the vector squared.
-     *
-     * @return the magnitude
-     */
-    @Contract(pure = true)
-    public double lengthSquared() {
-        return MathUtils.square(x) + MathUtils.square(y) + MathUtils.square(z);
-    }
-
-    /**
-     * Gets the magnitude of the vector, defined as sqrt(x^2+y^2+z^2). The
-     * value of this method is not cached and uses a costly square-root
-     * function, so do not repeatedly call this method to get the vector's
-     * magnitude. NaN will be returned if the inner result of the sqrt()
-     * function overflows, which will be caused if the length is too long.
-     *
-     * @return the magnitude
-     */
-    @Contract(pure = true)
-    public double length() {
-        return Math.sqrt(lengthSquared());
-    }
-
-    /**
-     * Converts this vector to a unit vector (a vector with length of 1).
-     *
-     * @return the same vector
-     */
-    @Contract(pure = true)
+    @Override
+    @Contract(pure = true, value = "-> new")
     public Vec normalize() {
         final double length = length();
         return new Vec(x / length, y / length, z / length);
     }
 
-    /**
-     * Returns if a vector is normalized
-     *
-     * @return whether the vector is normalised
-     */
-    public boolean isNormalized() {
-        return Math.abs(lengthSquared() - 1) < EPSILON;
-    }
-
-    /**
-     * Gets the angle between this vector and another in radians.
-     *
-     * @param vec the other vector
-     * @return angle in radians
-     */
-    @Contract(pure = true)
-    public double angle(Vec vec) {
-        final double dot = MathUtils.clamp(dot(vec) / (length() * vec.length()), -1.0, 1.0);
-        return Math.acos(dot);
-    }
-
-    /**
-     * Calculates the dot product of this vector with another. The dot product
-     * is defined as x1*x2+y1*y2+z1*z2. The returned value is a scalar.
-     *
-     * @param vec the other vector
-     * @return dot product
-     */
-    @Contract(pure = true)
-    public double dot(Vec vec) {
-        return x * vec.x + y * vec.y + z * vec.z;
-    }
-
-    /**
-     * Calculates the cross product of this vector with another. The cross
-     * product is defined as:
-     * <ul>
-     * <li>x = y1 * z2 - y2 * z1
-     * <li>y = z1 * x2 - z2 * x1
-     * <li>z = x1 * y2 - x2 * y1
-     * </ul>
-     *
-     * @param o the other vector
-     * @return the same vector
-     */
-    @Contract(pure = true)
-    public Vec cross(Vec o) {
-        return new Vec(y * o.z - o.y * z,
-                z * o.x - o.z * x,
-                x * o.y - o.x * y);
+    @Override
+    @Contract(pure = true, value = "_ -> new")
+    public Vec cross(Point point) {
+        return new Vec(y * point.z() - point.y() * z,
+                z * point.x() - point.z() * x,
+                x * point.y() - point.x() * y);
     }
 
     /**
@@ -369,11 +317,26 @@ public record Vec(double x, double y, double z) implements Point {
         return new Vec(newX, newY, z);
     }
 
+    /**
+     * Rotates the vector around the x, y, and z axes.
+     *
+     * @param angleX the angle to rotate around the x-axis in radians
+     * @param angleY the angle to rotate around the y-axis in radians
+     * @param angleZ the angle to rotate around the z-axis in radians
+     * @return a new, rotated vector
+     */
     @Contract(pure = true)
     public Vec rotate(double angleX, double angleY, double angleZ) {
         return rotateAroundX(angleX).rotateAroundY(angleY).rotateAroundZ(angleZ);
     }
 
+    /**
+     * Rotates the vector from a given yaw and pitch.
+     *
+     * @param yawDegrees   the yaw in degrees
+     * @param pitchDegrees the pitch in degrees
+     * @return a new, rotated vector
+     */
     @Contract(pure = true)
     public Vec rotateFromView(float yawDegrees, float pitchDegrees) {
         final double yaw = Math.toRadians(-1 * (yawDegrees + 90));
@@ -402,6 +365,12 @@ public record Vec(double x, double y, double z) implements Point {
         return new Vec(x, y, z);
     }
 
+    /**
+     * Rotates the vector from a position's view (yaw/pitch).
+     *
+     * @param pos the position containing the view
+     * @return a new, rotated vector
+     */
     @Contract(pure = true)
     public Vec rotateFromView(Pos pos) {
         return rotateFromView(pos.yaw(), pos.pitch());
@@ -470,47 +439,90 @@ public record Vec(double x, double y, double z) implements Point {
         return new Vec(newX, newY, newZ);
     }
 
-    /**
-     * Calculates a linear interpolation between this vector with another
-     * vector.
-     *
-     * @param vec   the other vector
-     * @param alpha The alpha value, must be between 0.0 and 1.0
-     * @return Linear interpolated vector
-     */
-    @Contract(pure = true)
-    public Vec lerp(Vec vec, double alpha) {
-        return new Vec(x + (alpha * (vec.x - x)),
-                y + (alpha * (vec.y - y)),
-                z + (alpha * (vec.z - z)));
+    @Override
+    @Contract(pure = true, value = "_, _ -> new")
+    public Vec lerp(Point point, double alpha) {
+        return new Vec(x + (alpha * (point.x() - x)),
+                y + (alpha * (point.y() - y)),
+                z + (alpha * (point.z() - z)));
     }
 
+    @Override
+    @Contract(pure = true, value = "_, _, _ -> new")
+    public Vec lerp(Point point, double alpha, Easing easing) {
+        return (Vec) Point.super.lerp(point, alpha, easing);
+    }
+
+    /**
+     * Calculates an interpolation between this vector and a target vector.
+     *
+     * @param target        the target vector
+     * @param alpha         the alpha value, must be between 0.0 and 1.0
+     * @param interpolation the interpolation function to use
+     * @return the interpolated vector
+     * @deprecated use {@link #lerp(Point, double, Easing)} instead
+     */
+    @Deprecated(forRemoval = true)
     @Contract(pure = true)
     public Vec interpolate(Vec target, double alpha, Interpolation interpolation) {
         return lerp(target, interpolation.apply(alpha));
     }
 
+    /**
+     * Does nothing as this is already a {@link Vec}.
+     * <p>
+     * Marked as deprecated to warn against redundant usage.
+     *
+     * @return this vector
+     */
+    @Deprecated
+    @Override
+    @Contract(pure = true, value = "-> this")
+    public Vec asVec() {
+        return this;
+    }
+
+    /**
+     * A functional interface representing an operation on the components of a {@link Vec}.
+     */
     @FunctionalInterface
     public interface Operator {
         Operator EPSILON = operator(v -> Math.abs(v) < Vec.EPSILON ? 0 : v);
         Operator FLOOR = operator(Math::floor);
         Operator SIGNUM = operator(Math::signum);
-        Operator ABS = operator(Math::abs);
-        Operator NEG = operator(v -> -v);
         Operator CEIL = operator(Math::ceil);
+        Operator ROUND = operator(Math::round);
 
+        /**
+         * Shortcut utility to apply the operator on all 3 components.
+         *
+         * @param operator the unary operator to use
+         * @return the vector operator
+         */
         static Operator operator(DoubleUnaryOperator operator) {
             return (x, y, z) -> new Vec(operator.applyAsDouble(x), operator.applyAsDouble(y), operator.applyAsDouble(z));
         }
 
+        /**
+         * Applies the operator to the given x, y, z components.
+         *
+         * @param x the x component
+         * @param y the y component
+         * @param z the z component
+         * @return the resulting vector
+         */
         Vec apply(double x, double y, double z);
     }
 
+    /**
+     * @deprecated use {@link Easing} instead
+     */
+    @Deprecated(forRemoval = true)
     @FunctionalInterface
-    public interface Interpolation {
+    public interface Interpolation extends Easing {
         Interpolation LINEAR = a -> a;
         Interpolation SMOOTH = a -> a * a * (3 - 2 * a);
 
-        double apply(double a);
+        double apply(double alpha);
     }
 }
