@@ -67,6 +67,7 @@ import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticCategory;
 import net.minestom.server.utils.Rotation;
+import net.minestom.server.utils.WeightedList;
 import net.minestom.server.world.Difficulty;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -329,7 +330,7 @@ public class PacketWriteReadTest {
         addServerPackets(new EntityStatusPacket(5, (byte) 2));
         addServerPackets(new EntityTeleportPacket(5, new Pos(0, 64, 0, 0, 0), Vec.ZERO, RelativeFlags.NONE, false));
         addServerPackets(new EntityVelocityPacket(5, Vec.ONE));
-        addServerPackets(new ExplosionPacket(VEC, 4.0f, 3, null, Particle.FLAME, SoundEvent.ENTITY_GENERIC_EXPLODE, List.of()));
+        addServerPackets(new ExplosionPacket(VEC, 4.0f, 3, null, Particle.FLAME, SoundEvent.ENTITY_GENERIC_EXPLODE, WeightedList.of()));
         addServerPackets(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, VEC, null));
         addServerPackets(new HeldItemChangePacket((byte) 0));
         addServerPackets(new HitAnimationPacket(5, 90f));
@@ -486,35 +487,35 @@ public class PacketWriteReadTest {
                 new ClientSettingsPacket(ClientSettings.DEFAULT),
                 new ClientSettingsPacket(new ClientSettings(
                         Locale.UK, (byte) 2, ChatMessageType.FULL, false,
-                        (byte) 0x01, ClientSettings.MainHand.LEFT,
+                        (byte) 0x01, MainHand.LEFT,
                         false, false,
                         ClientSettings.ParticleSetting.MINIMAL
                 )),
                 new ClientSettingsPacket(new ClientSettings(
                         Locale.CANADA_FRENCH, (byte) 32,
                         ChatMessageType.SYSTEM, true,
-                        (byte) 0x7F, ClientSettings.MainHand.RIGHT,
+                        (byte) 0x7F, MainHand.RIGHT,
                         true, false,
                         ClientSettings.ParticleSetting.DECREASED
                 )),
                 new ClientSettingsPacket(new ClientSettings(
                         Locale.GERMANY, (byte) 12,
                         ChatMessageType.FULL, true,
-                        (byte) 0x3F, ClientSettings.MainHand.LEFT,
+                        (byte) 0x3F, MainHand.LEFT,
                         true, false,
                         ClientSettings.ParticleSetting.ALL
                 )),
                 new ClientSettingsPacket(new ClientSettings(
                         Locale.JAPAN, (byte) 4,
                         ChatMessageType.NONE, true,
-                        (byte) 0x7F, ClientSettings.MainHand.RIGHT,
+                        (byte) 0x7F, MainHand.RIGHT,
                         true, true,
                         ClientSettings.ParticleSetting.ALL
                 )),
                 new ClientSettingsPacket(new ClientSettings(
                         Locale.FRANCE, (byte) 8,
                         ChatMessageType.SYSTEM, false,
-                        (byte) 0x2A, ClientSettings.MainHand.LEFT,
+                        (byte) 0x2A, MainHand.LEFT,
                         false, true,
                         ClientSettings.ParticleSetting.MINIMAL
                 ))
@@ -588,7 +589,7 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientPickItemFromEntityPacket(124, true), new ClientPickItemFromEntityPacket(124, false), new ClientPickItemFromEntityPacket(Integer.MAX_VALUE, true), new ClientPickItemFromEntityPacket(Integer.MIN_VALUE, false));
         addClientPackets(new ClientPlaceRecipePacket((byte) 10, 10, true), new ClientPlaceRecipePacket((byte) 51, 14, false));
         addClientPackets(new ClientPlayerAbilitiesPacket((byte) 0x02));
-        addClientPackets(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.STARTED_DIGGING, Vec.ZERO, BlockFace.BOTTOM, Integer.MAX_VALUE), new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK, Vec.ONE, BlockFace.TOP, Integer.MIN_VALUE));
+        addClientPackets(new ClientPlayerActionPacket(ClientPlayerActionPacket.Status.STARTED_DIGGING, Vec.ZERO, BlockFace.BOTTOM, Integer.MAX_VALUE), new ClientPlayerActionPacket(ClientPlayerActionPacket.Status.DROP_ITEM_STACK, Vec.ONE, BlockFace.TOP, Integer.MIN_VALUE));
         addClientPackets(new ClientEntityActionPacket(10, ClientEntityActionPacket.Action.LEAVE_BED, 0), new ClientEntityActionPacket(15, ClientEntityActionPacket.Action.START_SPRINTING, 0), new ClientEntityActionPacket(321, ClientEntityActionPacket.Action.START_FLYING_ELYTRA, 0));
         addClientPackets(new ClientInputPacket(true, false, true, false, false, false, true), new ClientInputPacket(false, true, true, false, false, false, true));
         addClientPackets(new ClientPlayerLoadedPacket());
