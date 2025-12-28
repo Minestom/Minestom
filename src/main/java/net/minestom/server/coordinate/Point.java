@@ -27,6 +27,10 @@ import static net.minestom.server.coordinate.CoordConversion.*;
  *   <li>Type conversions are explicit to avoid precision loss</li>
  * </ul>
  * <p>
+ * Avoid relying on {@link Object#equals(Object)} for direct Point comparison, as different implementations
+ * may represent the same 3D coordinates but be different instances. Use
+ * {@link #samePoint(Point)} or {@link #samePoint(Point, double)} instead.
+ * <p>
  * Usage: Prefer accepting {@link Point} in method parameters when only
  * coordinate access (x/y/z) is needed. This avoids forcing callers to convert
  * between specific implementations.
@@ -478,6 +482,30 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     @Contract(pure = true)
     default boolean samePoint(Point point, double epsilon) {
         return samePoint(point.x(), point.y(), point.z(), epsilon);
+    }
+
+    /**
+     * Checks it two points have similar (x/y/z) coordinates within {@link #EPSILON}.
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
+     * @return true if the two positions are similar within {@link #EPSILON}
+     */
+    @Contract(pure = true)
+    default boolean similarPoint(double x, double y, double z) {
+        return samePoint(x, y, z, EPSILON);
+    }
+
+    /**
+     * Checks it two points have similar (x/y/z) coordinates within {@link #EPSILON}.
+     *
+     * @param point the point to compare
+     * @return true if the two positions are similar within {@link #EPSILON}
+     */
+    @Contract(pure = true)
+    default boolean similarPoint(Point point) {
+        return samePoint(point, EPSILON);
     }
 
     /**
