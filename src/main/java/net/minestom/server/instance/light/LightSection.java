@@ -71,6 +71,7 @@ public class LightSection {
 
     public void resendBlockLight() {
         resendThisSectionBlockLight.set(true);
+        resendThisSectionSkyLight.set(true); // TODO remove this once skylight is implemented
         chunk.scheduleSpecificResend();
     }
 
