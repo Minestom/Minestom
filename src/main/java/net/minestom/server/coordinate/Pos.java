@@ -60,7 +60,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     }
 
     /**
-     * Creates a position from a point with default view (yaw/pitch = 0).
+     * Creates a position from a point with the default view (yaw/pitch = 0).
      *
      * @param point the point containing the coordinates (x/y/z)
      * @deprecated Use {@link Point#asPos()} instead
@@ -86,7 +86,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
 
     /**
      * Fixes a pitch value that is not between -90.0f and 90.0f
-     * So for example -135.0f becomes -90.0f and 225.0f becomes 90.0f
+     * So for example, -135.0f becomes -90.0f and 225.0f becomes 90.0f
      *
      * @param pitch The possible "wrong" pitch
      * @return a fixed pitch

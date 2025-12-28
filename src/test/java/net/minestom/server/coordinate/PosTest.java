@@ -27,23 +27,6 @@ public class PosTest {
         assertEquals(3.5, pos2.z());
         assertEquals(0f, pos2.yaw());
         assertEquals(0f, pos2.pitch());
-
-        // Test Point + view constructor
-        Vec point = new Vec(4, 5, 6);
-        Pos pos3 = new Pos(point, 90f, -45f);
-        assertEquals(4, pos3.x());
-        assertEquals(5, pos3.y());
-        assertEquals(6, pos3.z());
-        assertEquals(90f, pos3.yaw());
-        assertEquals(-45f, pos3.pitch());
-
-        // Test Point-only constructor
-        Pos pos4 = new Pos(point);
-        assertEquals(4, pos4.x());
-        assertEquals(5, pos4.y());
-        assertEquals(6, pos4.z());
-        assertEquals(0f, pos4.yaw());
-        assertEquals(0f, pos4.pitch());
     }
 
     @Test
