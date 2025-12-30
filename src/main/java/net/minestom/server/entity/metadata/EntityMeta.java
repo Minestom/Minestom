@@ -209,7 +209,7 @@ public class EntityMeta {
      * @param <T>   The type of the metadata value.
      * @return The value associated with the specified metadata entry.
      */
-    @ApiStatus.Internal
+    @ApiStatus.Experimental
     public <T> T get(MetadataDef.Entry<T> entry) {
         return metadata.get(entry);
     }
@@ -221,7 +221,7 @@ public class EntityMeta {
      * @param value The value to assign to the specified metadata entry.
      * @param <T>   The type of the metadata value.
      */
-    @ApiStatus.Internal
+    @ApiStatus.Experimental
     public <T> void set(MetadataDef.Entry<T> entry, T value) {
         metadata.set(entry, value);
     }
