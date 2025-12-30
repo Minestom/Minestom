@@ -3,14 +3,14 @@ package net.minestom.server.event.player;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
 /**
  * Called when a player tries to pick a block (middle-click).
  */
-public class PlayerPickBlockEvent implements PlayerEvent, BlockEvent {
+public class PlayerPickBlockEvent implements PlayerInstanceEvent, BlockEvent {
 
     private final Player player;
 

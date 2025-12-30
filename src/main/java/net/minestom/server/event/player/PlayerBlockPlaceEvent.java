@@ -12,7 +12,7 @@ import net.minestom.server.instance.block.BlockFace;
 /**
  * Called when a player tries placing a block.
  */
-public class PlayerBlockPlaceEvent implements PlayerEvent, BlockEvent, CancellableEvent {
+public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
     private final Instance instance;

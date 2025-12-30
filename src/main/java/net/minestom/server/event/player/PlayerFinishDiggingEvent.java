@@ -3,14 +3,14 @@ package net.minestom.server.event.player;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
 /**
  * Called when a {@link Player} successfully finishes digging a block
  */
-public class PlayerFinishDiggingEvent implements PlayerEvent, BlockEvent {
+public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent {
     private final Player player;
     private final Instance instance;
     private Block block;

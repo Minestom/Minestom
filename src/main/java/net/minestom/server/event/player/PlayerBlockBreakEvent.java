@@ -7,7 +7,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
-public class PlayerBlockBreakEvent implements PlayerEvent, BlockEvent, CancellableEvent {
+public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
     private final Instance instance;
