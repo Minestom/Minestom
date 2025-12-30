@@ -103,7 +103,7 @@ public final class AlphaColor extends Color implements ARGBLike {
     }
 
     /**
-     * Gets the color as an RGBR integer.
+     * Gets the color as an RGBA integer.
      *
      * @return An integer representation of this color, as 0xRRGGBBAA
      */
