@@ -754,7 +754,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     @Override
     public RegistryKey<Biome> getBiome(int x, int y, int z) {
         Chunk chunk = getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
-        return Objects.requireNonNull(chunk).getBiome(x, y, z);
+        Objects.requireNonNull(chunk);
+        synchronized (chunk) {
+            return chunk.getBiome(x, y, z);
+        }
     }
 
     /**
