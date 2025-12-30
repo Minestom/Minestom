@@ -27,11 +27,11 @@ public final class AlphaColor extends Color implements ARGBLike {
 
     public static final Codec<ARGBLike> RGBA_STRING_CODEC = Codec.STRING.transform(
             hex -> (ARGBLike) Objects.requireNonNull(fromRGBAHexString(hex)),
-            color -> "#" + Integer.toHexString(AlphaColor.fromARGBLike(color).asRGBA())).orElse(CODEC);
+            color -> String.format("#%08X", AlphaColor.fromARGBLike(color).asRGBA())).orElse(CODEC);
 
     public static final Codec<ARGBLike> ARGB_STRING_CODEC = Codec.STRING.transform(
             hex -> (ARGBLike) Objects.requireNonNull(fromARGBHexString(hex)),
-            color -> "#" + Integer.toHexString(AlphaColor.fromARGBLike(color).asARGB())).orElse(CODEC);
+            color -> String.format("#%08X", AlphaColor.fromARGBLike(color).asARGB())).orElse(CODEC);
 
     public static final AlphaColor WHITE = new AlphaColor(255, 255, 255, 255);
     public static final AlphaColor BLACK = new AlphaColor(255, 0, 0, 0);
