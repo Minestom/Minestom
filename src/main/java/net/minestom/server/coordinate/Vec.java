@@ -50,7 +50,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @return the converted vector
      * @deprecated use {@link Point#asVec()} instead
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public static Vec fromPoint(Point point) {
         if (point instanceof Vec vec) return vec;
         return new Vec(point.x(), point.y(), point.z());
@@ -231,7 +231,7 @@ public record Vec(double x, double y, double z) implements Point {
     /**
      * @deprecated use {@link Point#asPos()} instead.
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     @Contract(pure = true)
     public Pos asPosition() {
         return new Pos(x, y, z);

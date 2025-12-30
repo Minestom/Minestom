@@ -62,7 +62,7 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
      * @param point the point
      * @deprecated Use {@link Point#asBlockVec()} instead
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public BlockVec(Point point) {
         this(point.blockX(), point.blockY(), point.blockZ());
     }
