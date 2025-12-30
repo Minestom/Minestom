@@ -30,7 +30,8 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     public static final BlockVec ZERO = new BlockVec(0);
     public static final BlockVec ONE = new BlockVec(1);
     public static final BlockVec SECTION = new BlockVec(SECTION_SIZE);
-    public static final BlockVec REGION = new BlockVec(REGION_SIZE);
+    public static final BlockVec CHUNK = new BlockVec(SECTION_SIZE, 0, SECTION_SIZE);
+    public static final BlockVec REGION = new BlockVec(REGION_SIZE, 0, REGION_SIZE);
 
     /**
      * Narrows an assumed global coordinate to a block coordinate by flooring the value.

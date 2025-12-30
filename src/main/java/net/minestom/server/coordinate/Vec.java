@@ -20,7 +20,8 @@ public record Vec(double x, double y, double z) implements Point {
     public static final Vec ZERO = new Vec(0);
     public static final Vec ONE = new Vec(1);
     public static final Vec SECTION = new Vec(SECTION_SIZE);
-    public static final Vec REGION = new Vec(REGION_SIZE);
+    public static final Vec CHUNK = new Vec(SECTION_SIZE, SECTION_SIZE);
+    public static final Vec REGION = new Vec(REGION_SIZE, REGION_SIZE);
 
     /**
      * Creates a new vec with the [x;z] coordinates set. Y is set to 0.

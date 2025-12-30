@@ -20,22 +20,37 @@ import static net.minestom.server.coordinate.CoordConversion.*;
  *   <li>{@link BlockVec} - Integer block-aligned coordinates</li>
  * </ul>
  * <p>
+ * <b>Coordinate Scale:</b>
+ * <ul>
+ *   <li>Block: Individual voxel position (1 block)</li>
+ *   <li>Section: 16 blocks ({@link #SECTION_SIZE})</li>
+ *   <li>Chunk: Same as a section in X and Z axis ({@link #SECTION_SIZE})</li>
+ *   <li>Region: 512 blocks or 32 sections ({@link #REGION_SIZE})</li>
+ * </ul>
+ * <p>
  * <b>Coordinate Conventions:</b>
  * <ul>
  *   <li>Three {@code double} values represent global coordinates</li>
+ *   <li>Three {@code double} values following two {@code float} values represent global position coordinates</li>
  *   <li>Three {@code int} values represent global block coordinates</li>
- *   <li>Type conversions are explicit to avoid precision loss</li>
+ * </ul>
+ * <p>
+ * <b>Directionality:</b>
+ * <ul>
+ *     <li>X increases towards East, decreases towards West</li>
+ *     <li>Y increases upwards, decreases downwards</li>
+ *     <li>Z increases towards South, decreases towards North</li>
  * </ul>
  * <p>
  * Avoid relying on {@link Object#equals(Object)} for direct Point comparison, as different implementations
- * may represent the same 3D coordinates but be different instances. Use
- * {@link #samePoint(Point)} or {@link #samePoint(Point, double)} instead.
+ * may represent the same 3D coordinates but be different instances. Use {@link #samePoint(Point)}
+ * or {@link #samePoint(Point, double)} instead. You can also ensure both points are of the same implementation, but this is fragile.
  * <p>
  * Usage: Prefer accepting {@link Point} in method parameters when only
  * coordinate access (x/y/z) is needed. This avoids forcing callers to convert
  * between specific implementations.
  * <p>
- * All implementations are immutable and subject to become value types.
+ * All implementations are immutable and subject to become value types. Type conversions are also explicit to avoid precision loss.
  */
 public sealed interface Point permits Vec, Pos, BlockVec {
     /**
