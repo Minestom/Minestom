@@ -7,7 +7,7 @@ import net.minestom.server.color.AlphaColor;
 import net.minestom.server.utils.Either;
 
 non-sealed interface ColorModifier<Arg> extends EnvironmentAttribute.Modifier<RGBLike, Arg> {
-    Codec<RGBLike> MAYBE_ARGB_CODEC = Codec.Either(AlphaColor.STRING_CODEC, net.minestom.server.color.Color.STRING_CODEC).transform(
+    Codec<RGBLike> MAYBE_ARGB_CODEC = Codec.Either(AlphaColor.RGBA_STRING_CODEC, net.minestom.server.color.Color.STRING_CODEC).transform(
             either -> either.unify(c -> c, c -> c),
             color -> color instanceof ARGBLike argb && argb.alpha() != 255 ? Either.left(argb) : Either.right(color));
 
@@ -19,7 +19,7 @@ non-sealed interface ColorModifier<Arg> extends EnvironmentAttribute.Modifier<RG
 
         @java.lang.Override
         public Codec<ARGBLike> argumentCodec() {
-            return AlphaColor.STRING_CODEC;
+            return AlphaColor.RGBA_STRING_CODEC;
         }
     };
     ColorModifier<RGBLike> ADD = new ColorModifier<>() {
@@ -87,7 +87,7 @@ non-sealed interface ColorModifier<Arg> extends EnvironmentAttribute.Modifier<RG
 
         @java.lang.Override
         public Codec<ARGBLike> argumentCodec() {
-            return AlphaColor.STRING_CODEC;
+            return AlphaColor.RGBA_STRING_CODEC;
         }
     };
     ColorModifier<BlendToGray> BLEND_TO_GRAY = new ColorModifier<>() {

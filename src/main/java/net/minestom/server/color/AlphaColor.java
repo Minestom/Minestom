@@ -1,12 +1,13 @@
 package net.minestom.server.color;
 
-import net.kyori.adventure.text.format.ShadowColor;
 import net.kyori.adventure.util.ARGBLike;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
+import org.intellij.lang.annotations.Pattern;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -20,11 +21,17 @@ public final class AlphaColor extends Color implements ARGBLike {
 
     public static final NetworkBuffer.Type<ARGBLike> NETWORK_TYPE = NetworkBuffer.INT.transform(
             AlphaColor::new, color -> fromARGBLike(color).asARGB());
+
     public static final Codec<ARGBLike> CODEC = Codec.INT.<ARGBLike>transform(AlphaColor::new, color -> fromARGBLike(color).asARGB())
             .orElse(Codec.FLOAT.list(4), floats -> new AlphaColor(floats.get(3), floats.get(0), floats.get(1), floats.get(2)));
-    public static final Codec<ARGBLike> STRING_CODEC = Codec.STRING.transform(
-            hex -> (ARGBLike) Objects.requireNonNull(ShadowColor.fromHexString(hex)),
-            color -> ShadowColor.shadowColor(color).asHexString()).orElse(CODEC);
+
+    public static final Codec<ARGBLike> RGBA_STRING_CODEC = Codec.STRING.transform(
+            hex -> (ARGBLike) Objects.requireNonNull(fromRGBAHexString(hex)),
+            color -> "#" + Integer.toHexString(AlphaColor.fromARGBLike(color).asRGBA())).orElse(CODEC);
+
+    public static final Codec<ARGBLike> ARGB_STRING_CODEC = Codec.STRING.transform(
+            hex -> (ARGBLike) Objects.requireNonNull(fromARGBHexString(hex)),
+            color -> "#" + Integer.toHexString(AlphaColor.fromARGBLike(color).asARGB())).orElse(CODEC);
 
     public static final AlphaColor WHITE = new AlphaColor(255, 255, 255, 255);
     public static final AlphaColor BLACK = new AlphaColor(255, 0, 0, 0);
@@ -87,12 +94,65 @@ public final class AlphaColor extends Color implements ARGBLike {
     }
 
     /**
-     * Gets the color as an RGB integer.
+     * Gets the color as an ARGB integer.
      *
-     * @return An integer representation of this color, as 0xRRGGBB
+     * @return An integer representation of this color, as 0xAARRGGBB
      */
     public int asARGB() {
         return (alpha << 24) + asRGB();
+    }
+
+    /**
+     * Gets the color as an RGBR integer.
+     *
+     * @return An integer representation of this color, as 0xRRGGBBAA
+     */
+    public int asRGBA() {
+        return (asRGB() << 4) + alpha;
+    }
+
+    /**
+     * Attempt to parse a color from a {@code #}-prefixed hex string.
+     * <p>
+     * This string must be in the format {@code #RRGGBBAA}.
+     * @param hexRGBA the input value
+     * @return a color if possible, or null if any components are invalid
+     */
+    static @Nullable AlphaColor fromRGBAHexString(@Pattern("#[0-9a-fA-F]{8}") final String hexRGBA) {
+        if (hexRGBA.length() != 9) return null;
+        if (!hexRGBA.startsWith("#")) return null;
+
+        try {
+            final int r = Integer.parseInt(hexRGBA.substring(1, 3), 16);
+            final int g = Integer.parseInt(hexRGBA.substring(3, 5), 16);
+            final int b = Integer.parseInt(hexRGBA.substring(5, 7), 16);
+            final int a = Integer.parseInt(hexRGBA.substring(7, 9), 16);
+            return new AlphaColor(a, r, g, b);
+        } catch (final NumberFormatException ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * Attempt to parse a color from a {@code #}-prefixed hex string.
+     * <p>
+     * This string must be in the format {@code #AARRGGBB}.
+     * @param hexARGB the input value
+     * @return a color if possible, or null if any components are invalid
+     */
+    static @Nullable AlphaColor fromARGBHexString(@Pattern("#[0-9a-fA-F]{8}") final String hexARGB) {
+        if (hexARGB.length() != 9) return null;
+        if (!hexARGB.startsWith("#")) return null;
+
+        try {
+            final int a = Integer.parseInt(hexARGB.substring(1, 3), 16);
+            final int r = Integer.parseInt(hexARGB.substring(3, 5), 16);
+            final int g = Integer.parseInt(hexARGB.substring(5, 7), 16);
+            final int b = Integer.parseInt(hexARGB.substring(7, 9), 16);
+            return new AlphaColor(a, r, g, b);
+        } catch (final NumberFormatException ignored) {
+            return null;
+        }
     }
 
     @Override
