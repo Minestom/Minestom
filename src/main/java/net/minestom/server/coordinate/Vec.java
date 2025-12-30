@@ -264,7 +264,7 @@ public record Vec(double x, double y, double z) implements Point {
      *              in radians
      * @return a new, rotated vector
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     public Vec rotateAroundX(double angle) {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
@@ -286,7 +286,7 @@ public record Vec(double x, double y, double z) implements Point {
      *              in radians
      * @return a new, rotated vector
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     public Vec rotateAroundY(double angle) {
         final double angleCos = Math.cos(angle);
         final double angleSin = Math.sin(angle);
@@ -308,7 +308,7 @@ public record Vec(double x, double y, double z) implements Point {
      *              in radians
      * @return a new, rotated vector
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     public Vec rotateAroundZ(double angle) {
         final double angleCos = Math.cos(angle);
         final double angleSin = Math.sin(angle);
@@ -326,7 +326,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @param angleZ the angle to rotate around the z-axis in radians
      * @return a new, rotated vector
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _, _ -> new")
     public Vec rotate(double angleX, double angleY, double angleZ) {
         return rotateAroundX(angleX).rotateAroundY(angleY).rotateAroundZ(angleZ);
     }
@@ -338,7 +338,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @param pitchDegrees the pitch in degrees
      * @return a new, rotated vector
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ _, _ -> new")
     public Vec rotateFromView(float yawDegrees, float pitchDegrees) {
         final double yaw = Math.toRadians(-1 * (yawDegrees + 90));
         final double pitch = Math.toRadians(-pitchDegrees);
@@ -372,7 +372,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @param pos the position containing the view
      * @return a new, rotated vector
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_ -> new")
     public Vec rotateFromView(Pos pos) {
         return rotateFromView(pos.yaw(), pos.pitch());
     }
@@ -396,7 +396,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @param angle the angle to rotate the vector around the axis
      * @return a new vector
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _ -> new")
     public Vec rotateAroundAxis(Vec axis, double angle) throws IllegalArgumentException {
         return rotateAroundNonUnitAxis(axis.isNormalized() ? axis : axis.normalize(), angle);
     }
@@ -419,7 +419,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @param angle the angle to rotate the vector around the axis
      * @return a new vector
      */
-    @Contract(pure = true)
+    @Contract(pure = true, value = "_, _ -> new")
     public Vec rotateAroundNonUnitAxis(Vec axis, double angle) throws IllegalArgumentException {
         final double x = x(), y = y(), z = z();
         final double x2 = axis.x(), y2 = axis.y(), z2 = axis.z();
