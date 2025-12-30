@@ -1,5 +1,6 @@
 package net.minestom.server.color;
 
+import net.kyori.adventure.text.format.ShadowColor;
 import net.kyori.adventure.util.ARGBLike;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
@@ -17,12 +18,28 @@ import java.util.Objects;
 public final class AlphaColor extends Color implements ARGBLike {
     private static final int BIT_MASK = 0xff;
 
-    public static final NetworkBuffer.Type<AlphaColor> NETWORK_TYPE = NetworkBuffer.INT.transform(AlphaColor::new, AlphaColor::asARGB);
-    public static final Codec<AlphaColor> CODEC = Codec.INT.transform(AlphaColor::new, AlphaColor::asARGB);
+    public static final NetworkBuffer.Type<ARGBLike> NETWORK_TYPE = NetworkBuffer.INT.transform(
+            AlphaColor::new, color -> fromARGBLike(color).asARGB());
+    public static final Codec<ARGBLike> CODEC = Codec.INT.<ARGBLike>transform(AlphaColor::new, color -> fromARGBLike(color).asARGB())
+            .orElse(Codec.FLOAT.list(4), floats -> new AlphaColor(floats.get(3), floats.get(0), floats.get(1), floats.get(2)));
+    public static final Codec<ARGBLike> STRING_CODEC = Codec.STRING.transform(
+            hex -> (ARGBLike) Objects.requireNonNull(ShadowColor.fromHexString(hex)),
+            color -> ShadowColor.shadowColor(color).asHexString()).orElse(CODEC);
 
     public static final AlphaColor WHITE = new AlphaColor(255, 255, 255, 255);
+    public static final AlphaColor BLACK = new AlphaColor(255, 0, 0, 0);
+    public static final AlphaColor TRANSPARENT = new AlphaColor(0, 0, 0, 0);
+
+    public static AlphaColor fromARGBLike(ARGBLike argbLike) {
+        if (argbLike instanceof AlphaColor alphaColor) return alphaColor;
+        return new AlphaColor(argbLike.alpha(), argbLike.red(), argbLike.green(), argbLike.blue());
+    }
 
     private final int alpha;
+
+    public AlphaColor(float alpha, float red, float green, float blue) {
+        this((int) (alpha * 255), (int) (red * 255), (int) (green * 255), (int) (blue * 255));
+    }
 
     public AlphaColor(int alpha, int red, int green, int blue) {
         super(red, green, blue);

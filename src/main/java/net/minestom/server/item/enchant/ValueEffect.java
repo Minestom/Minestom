@@ -22,6 +22,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("multiply", Multiply.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("remove_binomial", RemoveBinomial.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("exponential", Exponential.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("set", Set.CODEC, DataPack.MINECRAFT_CORE);
         return registry;
     }
@@ -100,8 +101,27 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
     }
 
+    record Exponential(LevelBasedValue base, LevelBasedValue exponent) implements ValueEffect {
+        public static final StructCodec<Exponential> CODEC = StructCodec.struct(
+                "base", LevelBasedValue.CODEC, Exponential::base,
+                "exponent", LevelBasedValue.CODEC, Exponential::exponent,
+                Exponential::new);
+
+        @Override
+        public float apply(float base, int level) {
+            return base * (float) Math.pow(this.base.calc(level), this.exponent.calc(level));
+        }
+
+        @Override
+        public StructCodec<? extends ValueEffect> codec() {
+            return CODEC;
+        }
+    }
+
     record Set(LevelBasedValue value) implements ValueEffect {
-        public static final StructCodec<Set> CODEC = StructCodec.struct("value", LevelBasedValue.CODEC, Set::value, Set::new);
+        public static final StructCodec<Set> CODEC = StructCodec.struct(
+                "value", LevelBasedValue.CODEC, Set::value,
+                Set::new);
 
         @Override
         public float apply(float base, int level) {
