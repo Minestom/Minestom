@@ -1,13 +1,11 @@
 package net.minestom.server.instance.chunksystem;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Comparator;
 
 /**
  * {@link PrioritizedUpdate#updateType} should only be used for prioritizing, not to execute different update functionality
  */
-record PrioritizedUpdate(@NotNull UpdateType updateType, double priority, int x, int z, @NotNull ChunkClaim origin) {
+record PrioritizedUpdate(UpdateType updateType, double priority, int x, int z, ChunkClaim origin) {
     /**
      * This comparator first compares by update type, then by priority.
      * Update type order is:

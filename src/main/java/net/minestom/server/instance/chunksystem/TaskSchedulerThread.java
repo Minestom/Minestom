@@ -1,15 +1,19 @@
 package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.Function;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.event.instance.InstanceRegisterEvent;
 import net.minestom.server.event.instance.InstanceUnregisterEvent;
-import net.minestom.server.instance.*;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.ChunkLoader;
+import net.minestom.server.instance.DynamicChunk;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.chunksystem.SingleThreadedManager.IterationResult;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -83,9 +87,12 @@ import java.util.function.Supplier;
  * </ul>
  */
 class TaskSchedulerThread implements Runnable {
+    private static final ReentrantLock SHUTDOWN_LOCK = new ReentrantLock();
+    private static final Set<TaskSchedulerThread> SUBMITTED_SHUTDOWNS = new HashSet<>();
+    private static boolean submittedShutdownTask;
     // Needed to make this reusable.
     private final ReentrantLock mainLock = new ReentrantLock();
-    private CompletableFuture<Void> shutdownFuture = new CompletableFuture<>();
+    private CompletableFuture<@Nullable Void> shutdownFuture = new CompletableFuture<>();
 
     private final ReentrantLock singleThreadedManagerLock = new ReentrantLock();
     private final SingleThreadedManager singleThreadedManager;
@@ -97,9 +104,9 @@ class TaskSchedulerThread implements Runnable {
     private final AtomicBoolean testRunning = new AtomicBoolean(false);
     private volatile boolean exit = false;
 
-    public TaskSchedulerThread(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable ChunkLoader chunkLoader, ChunkAccess chunkAccess) {
+    public TaskSchedulerThread(Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable ChunkLoader chunkLoader){
         this.instance = instance;
-        this.singleThreadedManager = new SingleThreadedManager(this, chunkAccess, Objects.requireNonNullElse(chunkLoader, ChunkLoader.noop()), Objects.requireNonNullElse(chunkSupplier, DynamicChunk::new));
+        this.singleThreadedManager = new SingleThreadedManager(this, Objects.requireNonNullElse(chunkLoader, ChunkLoader.noop()), Objects.requireNonNullElse(chunkSupplier, DynamicChunk::new));
         this.singleThreadedManager.chunkLoader.loadInstance(instance);
 
         this.registerEvents();
@@ -107,9 +114,13 @@ class TaskSchedulerThread implements Runnable {
 
     @Override
     public void run() {
-        this.run(true);
+        try {
+            this.run(true);
 
-        shutdownFuture.complete(null);
+            shutdownFuture.complete(null);
+        } catch (Throwable t) {
+            MinecraftServer.getExceptionManager().handleException(t);
+        }
         // after we shut down normally, we shouldn't have to process the remaining tasks.
         // TODO check in the future if this assumption holds
     }
@@ -194,7 +205,7 @@ class TaskSchedulerThread implements Runnable {
         }
     }
 
-    public @NotNull ChunkLoader getChunkLoader() {
+    public ChunkLoader getChunkLoader() {
         this.singleThreadedManagerLock.lock();
         try {
             return this.singleThreadedManager.chunkLoader;
@@ -212,7 +223,7 @@ class TaskSchedulerThread implements Runnable {
         }
     }
 
-    public @NotNull ChunkSupplier getChunkSupplier() {
+    public ChunkSupplier getChunkSupplier() {
         this.singleThreadedManagerLock.lock();
         try {
             return this.singleThreadedManager.chunkSupplier;
@@ -239,7 +250,7 @@ class TaskSchedulerThread implements Runnable {
         }
     }
 
-    public @NotNull PriorityDrop getPriorityDrop() {
+    public PriorityDrop getPriorityDrop() {
         this.singleThreadedManagerLock.lock();
         try {
             return this.singleThreadedManager.priorityDrop;
@@ -248,7 +259,7 @@ class TaskSchedulerThread implements Runnable {
         }
     }
 
-    public void setPriorityDrop(@NotNull PriorityDrop priorityDrop) {
+    public void setPriorityDrop(PriorityDrop priorityDrop) {
         this.singleThreadedManagerLock.lock();
         try {
             this.singleThreadedManager.priorityDrop = Objects.requireNonNull(priorityDrop);
@@ -261,7 +272,7 @@ class TaskSchedulerThread implements Runnable {
         return this.instance;
     }
 
-    public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
+    public void setChunkSupplier(ChunkSupplier chunkSupplier) {
         this.singleThreadedManagerLock.lock();
         try {
             this.singleThreadedManager.chunkSupplier = chunkSupplier;
@@ -288,7 +299,7 @@ class TaskSchedulerThread implements Runnable {
         }
     }
 
-    @NotNull Collection<ChunkAndClaim> singleClaimCopy(TaskSchedulerThread copyTarget, int priority) {
+    Collection<ChunkAndClaim> singleClaimCopy(TaskSchedulerThread copyTarget, int priority) {
         this.singleThreadedManagerLock.lock();
         try {
             if (!copyTarget.singleThreadedManagerLock.tryLock())
@@ -346,7 +357,7 @@ class TaskSchedulerThread implements Runnable {
      * One problem with this is order... Starting a virtual thread per future removes any guarantees about the order of updates...
      * One possible approach would be an update queue with a lock and start a virtual thread that does all required queue work.
      */
-    <T> void complete(CompletableFuture<T> future, T value) {
+    <T> void complete(CompletableFuture<@UnknownNullability T> future, @UnknownNullability T value) {
         future.complete(value);
         //        Thread.startVirtualThread(() -> future.complete(value));
     }
@@ -374,43 +385,43 @@ class TaskSchedulerThread implements Runnable {
         });
     }
 
-    public void addClaimAsync(@NotNull ChunkAndClaim chunkAndClaim) {
+    public void addClaimAsync(ChunkAndClaim chunkAndClaim) {
         // Used for tests to start async ticking
         this.addTask(new Task.AddClaim(chunkAndClaim));
     }
 
-    public void removeClaimAsync(@NotNull ChunkClaim claim, @NotNull CompletableFuture<Void> future) {
+    public void removeClaimAsync(ChunkClaim claim, CompletableFuture<Void> future) {
         this.addTask(new Task.RemoveClaim(claim, future));
     }
 
-    public void saveChunkAsync(@NotNull Chunk chunk, CompletableFuture<Void> future) {
+    public void saveChunkAsync(Chunk chunk, CompletableFuture<Void> future) {
         this.addTask(new Task.SaveChunk(chunk, future));
     }
 
-    public void saveChunksAsync(@NotNull CompletableFuture<Void> future) {
+    public void saveChunksAsync(CompletableFuture<Void> future) {
         this.addTask(new Task.SaveChunks(future));
     }
 
-    public void saveInstanceDataAsync(@NotNull CompletableFuture<Void> future) {
+    public void saveInstanceDataAsync(CompletableFuture<Void> future) {
         this.addTask(new Task.SaveInstanceData(future));
     }
 
-    public void saveInstanceDataAndChunksAsync(@NotNull CompletableFuture<Void> future) {
+    public void saveInstanceDataAndChunksAsync(CompletableFuture<Void> future) {
         this.addTask(new Task.SaveInstanceDataAndChunks(future));
     }
 
-    public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunks() {
+    public @UnmodifiableView Collection<Chunk> getLoadedChunks() {
         return this.singleThreadedManager.loadedChunks();
     }
 
-    public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunksManaged() {
+    public @UnmodifiableView Collection<Chunk> getLoadedChunksManaged() {
         return this.singleThreadedManager.loadedChunksManaged();
     }
 
     private void registerEvents() {
         // Don't register this inside tests
         if (!ServerFlag.ASYNC_CHUNK_SYSTEM) return;
-        this.instance.eventNode().addListener(InstanceRegisterEvent.class, event -> {
+        this.instance.eventNode().addListener(InstanceRegisterEvent.class, _ -> {
             this.mainLock.lock();
             try {
                 this.shutdownFuture = new CompletableFuture<>();
@@ -418,8 +429,38 @@ class TaskSchedulerThread implements Runnable {
             } finally {
                 this.mainLock.unlock();
             }
+
+            // We need to make sure all threads are shutdown when the server is shutdown.
+            // Because InstanceUnregisterEvent isn't called, we hook into the shutdown
+            // hooks of the scheduler. Not the nicest, but it works
+            SHUTDOWN_LOCK.lock();
+            try {
+                if (!submittedShutdownTask) {
+                    submittedShutdownTask = true;
+                    MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
+                        SHUTDOWN_LOCK.lock();
+                        try {
+                            var futures = new ArrayList<CompletableFuture<?>>();
+                            for (TaskSchedulerThread thread : SUBMITTED_SHUTDOWNS) {
+                                futures.add(thread.shutdown());
+                            }
+                            CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
+                        } finally {
+                            SHUTDOWN_LOCK.unlock();
+                        }
+                    });
+                }
+                SUBMITTED_SHUTDOWNS.add(this);
+            } finally {
+                SHUTDOWN_LOCK.unlock();
+            }
         });
-        this.instance.eventNode().addListener(InstanceUnregisterEvent.class, event -> {
+        this.instance.eventNode().addListener(InstanceUnregisterEvent.class, _ -> {
+            try {
+                SUBMITTED_SHUTDOWNS.remove(this);
+            } finally {
+                SHUTDOWN_LOCK.unlock();
+            }
             this.mainLock.lock();
             try {
                 this.shutdown().join();
@@ -453,38 +494,38 @@ class TaskSchedulerThread implements Runnable {
         record AddClaim(ChunkAndClaim chunkAndClaim) implements Task {
         }
 
-        record RemoveClaim(@NotNull ChunkClaim claim, @NotNull CompletableFuture<Void> future) implements Task {
+        record RemoveClaim(ChunkClaim claim, CompletableFuture<Void> future) implements Task {
         }
 
-        record SaveChunk(@NotNull Chunk chunk, @NotNull CompletableFuture<Void> future) implements Task {
+        record SaveChunk(Chunk chunk, CompletableFuture<Void> future) implements Task {
         }
 
-        record SaveChunks(@NotNull CompletableFuture<Void> future) implements Task {
+        record SaveChunks(CompletableFuture<Void> future) implements Task {
         }
 
-        record SaveInstanceData(@NotNull CompletableFuture<Void> future) implements Task {
+        record SaveInstanceData(CompletableFuture<Void> future) implements Task {
         }
 
-        record SaveInstanceDataAndChunks(@NotNull CompletableFuture<Void> future) implements Task {
+        record SaveInstanceDataAndChunks(CompletableFuture<Void> future) implements Task {
         }
 
-        record ChunkGenerationFinished(@NotNull Chunk chunk) implements Task {
+        record ChunkGenerationFinished(Chunk chunk) implements Task {
         }
 
         record SaveInstanceDataCompleted() implements Task {
         }
 
-        record SaveChunkCompleted(@NotNull Chunk chunk) implements Task {
+        record SaveChunkCompleted(Chunk chunk) implements Task {
         }
 
-        record EnqueueUpdate(@NotNull PrioritizedUpdate update, @NotNull SingleThreadedManager.ClaimData claimData,
+        record EnqueueUpdate(PrioritizedUpdate update, SingleThreadedManager.ClaimData claimData,
                              boolean disablePropagation) implements Task {
         }
 
-        record FinishUnloadAfterPartition(@NotNull UpdateHandler.State.Unloading unloading) implements Task {
+        record FinishUnloadAfterPartition(UpdateHandler.State.Unloading unloading) implements Task {
         }
 
-        record FinishUnloadAfterSaveAndPartition(@NotNull UpdateHandler.State.Unloading unloading) implements Task {
+        record FinishUnloadAfterSaveAndPartition(UpdateHandler.State.Unloading unloading) implements Task {
         }
     }
 }

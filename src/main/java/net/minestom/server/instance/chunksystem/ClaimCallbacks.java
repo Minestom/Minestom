@@ -1,7 +1,6 @@
 package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.Chunk;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Callbacks that will be called for a {@link ChunkClaim}.
@@ -22,7 +21,7 @@ public interface ClaimCallbacks {
      *
      * @param claim the claim whose chunks are loaded.
      */
-    default void allChunksLoaded(@NotNull ChunkClaim claim) {
+    default void allChunksLoaded(ChunkClaim claim) {
     }
 
     /**
@@ -45,6 +44,6 @@ public interface ClaimCallbacks {
      * <b>TL;DR</b> If you need the {@link Chunk} instance, always use the passed instance, never
      * use {@link ChunkManager#getLoadedChunk(int, int)}. This also applies when you run delayed logic.
      */
-    default void chunkLoaded(@NotNull ChunkClaim claim, @NotNull Chunk chunk) {
+    default void chunkLoaded(ChunkClaim claim, Chunk chunk) {
     }
 }

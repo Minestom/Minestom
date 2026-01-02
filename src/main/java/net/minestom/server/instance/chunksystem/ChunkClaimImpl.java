@@ -1,6 +1,5 @@
 package net.minestom.server.instance.chunksystem;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -14,9 +13,9 @@ final class ChunkClaimImpl implements ChunkClaim {
     private final int radius;
     private final int priority;
     private final Shape shape;
-    private final ClaimCallbacks callbacks;
+    private final @Nullable ClaimCallbacks callbacks;
 
-    ChunkClaimImpl(int chunkX, int chunkZ, int radius, int priority, Shape shape, ClaimCallbacks callbacks) {
+    ChunkClaimImpl(int chunkX, int chunkZ, int radius, int priority, Shape shape, @Nullable ClaimCallbacks callbacks) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.radius = radius;
@@ -46,7 +45,7 @@ final class ChunkClaimImpl implements ChunkClaim {
     }
 
     @Override
-    public @NotNull Shape shape() {
+    public Shape shape() {
         return shape;
     }
 

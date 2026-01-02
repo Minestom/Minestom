@@ -115,8 +115,20 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
     }
 
     @Override
-    public synchronized void shutdown() {
-        this.threads.forEach(TickThread::shutdown);
+    public void shutdown() {
+        if (Thread.currentThread() instanceof TickThread thread && thread.lock().isHeldByCurrentThread()) {
+            // We are inside TickThread. If we try to synchronize on the dispatcher instance,
+            // we will run into a deadlock:
+            // dispatcher: #updateAndAwait(...) { synchronized(dispatcher) { ... await TickThread#tick() completion } }
+            // TickThread: #tick() { ... shutdown() -> dispatcher.shutdown() -> synchronized(dispatcher) -> deadlock }
+            // But we are in luck: the threads list can't change, because the updateAndAwait has the lock and is waiting.
+            // So we can safely read from it.
+            this.threads.forEach(TickThread::shutdown);
+            return;
+        }
+        synchronized (this) {
+            this.threads.forEach(TickThread::shutdown);
+        }
     }
 
     private TickThread retrieveThread(P partition) {

@@ -3,6 +3,7 @@ package net.minestom.server.instance.light;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.CoordConversion;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
@@ -10,27 +11,34 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
+import java.util.Set;
 
 public class LightingChunk extends DynamicChunk {
     private static final LightEngine LIGHT_ENGINE = LightEngine.getDefault();
-    public static boolean announce = false;
+    // A reusable WeakReference to reduce allocations.
+    private final WeakReference<@Nullable LightingChunk> selfReference = new WeakReference<>(this);
     private final int minLightSection;
     private final int maxLightSection;
     private int highestBlock;
     private int @Nullable [] occlusionMap;
     private final List<LightSection> lightSections;
     private volatile boolean resendLight = false;
+    // The following 4 WeakReferences are read-only
     private @Nullable WeakReference<@Nullable LightingChunk> north;
     private @Nullable WeakReference<@Nullable LightingChunk> east;
     private @Nullable WeakReference<@Nullable LightingChunk> south;
     private @Nullable WeakReference<@Nullable LightingChunk> west;
     private volatile boolean mayRequireSpecificSectionResend = false;
+    private volatile int resendAfter = 0; // TODO
     final LightEngine.WorkTypeTracker<Integer> trackerBlockLightExternal = new LightEngine.WorkTypeTracker.Hash<>();
     final LightEngine.WorkTypeTracker<Integer> trackerFullBlockRelight = new LightEngine.WorkTypeTracker.Hash<>();
     private volatile boolean neighborUpdated = false;
@@ -107,6 +115,8 @@ public class LightingChunk extends DynamicChunk {
      * Passing a NeighborSnapshot would imply fetching the snapshot before the version ID, which is illegal.
      */
     public NeighborSnapshot createNeighborSnapshot() {
+        // It is important that we do not set the WeakReference fields to null if they do not hold a value anymore.
+        // This is because of possible race conditions if another neighbor were to load, populating the field again.
         return new NeighborSnapshot(north == null ? null : north.get(), east == null ? null : east.get(), south == null ? null : south.get(), west == null ? null : west.get());
     }
 
@@ -117,15 +127,13 @@ public class LightingChunk extends DynamicChunk {
         occlusionMap = null;
         var sectionY = CoordConversion.globalToSection(y);
         // TODO change this to a timer in case of many block changes
-        announce = true;
         getLightSection(sectionY).blockChanged();
     }
 
     @Override
-    protected void onLoad() {
-        super.onLoad();
+    public void onLoadManaged() {
         // We need to announce to our neighbors that we are loaded now.
-        // This connects us with the neighbors, and invalidates their external lighting for us.
+        // This connects us with the neighbors and invalidates their external lighting for us.
         // This connection stays up until chunks are unloaded.
         // onLoad is an ideal place because of its threading implications
         announceNeighborLoad(BlockFace.NORTH);
@@ -145,13 +153,11 @@ public class LightingChunk extends DynamicChunk {
 
     private void receiveNeighborLoad(LightingChunk neighbor, BlockFace originDirection) {
         switch (originDirection) {
-            case NORTH -> north = new WeakReference<>(neighbor);
-            case EAST -> east = new WeakReference<>(neighbor);
-            case SOUTH -> south = new WeakReference<>(neighbor);
-            case WEST -> west = new WeakReference<>(neighbor);
-            default -> {
-                return;
-            }
+            case NORTH -> north = neighbor.selfReference;
+            case EAST -> east = neighbor.selfReference;
+            case SOUTH -> south = neighbor.selfReference;
+            case WEST -> west = neighbor.selfReference;
+            default -> throw new IllegalArgumentException();
         }
         // Neighbor has updated. We now invalidate the external lighting
         // We want to keep work on chunk management thread to a minimum, so we delegate via flag
@@ -215,9 +221,11 @@ public class LightingChunk extends DynamicChunk {
         if (resendLight) {
             resendLight = false;
             mayRequireSpecificSectionResend = false;
+            chunkCache.invalidate();
             sendLight();
         } else if (mayRequireSpecificSectionResend) {
             mayRequireSpecificSectionResend = false;
+            chunkCache.invalidate();
             sendPartialLight();
         }
         if (neighborUpdated) {
@@ -238,10 +246,14 @@ public class LightingChunk extends DynamicChunk {
         for (var lightSection : lightSections) {
             lightSection.generatorRelightBlockLightInternal();
         }
-        for (var lightSection : lightSections) {
-            lightSection.generatorRelightBlockLightExternal();
-            lightSection.bakeBlockLight();
-        }
+        LightSection.generatorRelightBlockLightExternalAndBakeSync(lightSections);
+    }
+
+    @Override
+    public void onLoadedFromStorage() {
+        super.onLoadedFromStorage();
+        // TODO we may want to recalculate light if the loader doesn't store/read light data.
+        //  for now we assume the loader supports light
     }
 
     void scheduleSpecificResend() {
@@ -252,12 +264,26 @@ public class LightingChunk extends DynamicChunk {
         resendLight = true;
     }
 
+    @Override
+    public Chunk copy(Instance instance, int chunkX, int chunkZ) {
+        var sections = this.sections.stream().map(Section::clone).toList();
+        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
+        lightingChunk.entries.putAll(entries);
+        for (int i = 0; i < lightingChunk.lightSections.size(); i++) {
+            lightingChunk.lightSections.get(i).copyInternalLighting(lightSections.get(i));
+            lightingChunk.lightSections.get(i).bakeBlockLight();
+        }
+        return lightingChunk;
+    }
+
     public void sendLight() {
-        sendPacketToViewers(new UpdateLightPacket(chunkX, chunkZ, createLightData(true)));
+        // CachedPacket here is an optimization to do the actual packet creation work on the network thread
+        sendPacketToViewers(new CachedPacket(() -> new UpdateLightPacket(chunkX, chunkZ, createLightData(true))));
     }
 
     public void sendPartialLight() {
-        sendPacketToViewers(new UpdateLightPacket(chunkX, chunkZ, createPartialLightData()));
+        // CachedPacket here is an optimization to do the actual packet creation work on the network thread
+        sendPacketToViewers(new CachedPacket(() -> new UpdateLightPacket(chunkX, chunkZ, createPartialLightData())));
     }
 
     private List<LightSection> initSections() {

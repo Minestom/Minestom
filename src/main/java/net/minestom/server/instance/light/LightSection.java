@@ -8,7 +8,9 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,10 +22,15 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @ApiStatus.Experimental
 public class LightSection {
-    private final AtomicReference<LightData<byte[]>> skyLight = new AtomicReference<>(new LightData<>(LightCompute.EMPTY_CONTENT, -1));
-    private final AtomicReference<LightData<byte[]>> blockLight = new AtomicReference<>(new LightData<>(LightCompute.EMPTY_CONTENT, -1));
-    private final AtomicReference<LightData<InternalBlockLight>> blockLightInternal = new AtomicReference<>(new LightData<>(new InternalBlockLight(LightCompute.EMPTY_CONTENT, Palette.blocks()), -1));
-    private final AtomicReference<LightData<byte[]>> blockLightExternal = new AtomicReference<>(new LightData<>(LightCompute.EMPTY_CONTENT, -1));
+    private static final LightData<byte[]> INITIAL_SKY = new LightData<>(LightCompute.EMPTY_CONTENT, -1);
+    private static final LightData<byte[]> INITIAL_BLOCK = new LightData<>(LightCompute.EMPTY_CONTENT, -1);
+    private static final LightData<InternalBlockLight> INITIAL_BLOCK_INTERNAL = new LightData<>(new InternalBlockLight(LightCompute.EMPTY_CONTENT, Palette.blocks()), -1);
+    private static final LightData<byte[]> INITIAL_BLOCK_EXTERNAL = new LightData<>(LightCompute.EMPTY_CONTENT, -1);
+
+    private final AtomicReference<LightData<byte[]>> skyLight = new AtomicReference<>(INITIAL_SKY);
+    private final AtomicReference<LightData<byte[]>> blockLight = new AtomicReference<>(INITIAL_BLOCK);
+    private final AtomicReference<LightData<InternalBlockLight>> blockLightInternal = new AtomicReference<>(INITIAL_BLOCK_INTERNAL);
+    private final AtomicReference<LightData<byte[]>> blockLightExternal = new AtomicReference<>(INITIAL_BLOCK_EXTERNAL);
     private final AtomicInteger skyLightVersion = new AtomicInteger();
     private final AtomicInteger blockLightVersion = new AtomicInteger();
     private final AtomicInteger blockLightInternalVersion = new AtomicInteger();
@@ -121,7 +128,7 @@ public class LightSection {
             var oldData = baked.oldData().data();
             var newData = blockLight.get().data();
             depth++;
-            // We need to send to neighbors to recalculate
+            // We need to tell neighbors to recalculate
             if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.TOP))
                 scheduleBlockRelight(up, depth);
             if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.BOTTOM))
@@ -172,12 +179,37 @@ public class LightSection {
      * Used to ensure correct internal block lighting immediately after chunk generation.
      */
     public void generatorRelightBlockLightInternal() {
-        // We do not care about modified result here, we bake no matter what
+        // We do not care about the modified result here, we bake no matter what
         blockLightSection.relightBlockLightInternal();
     }
 
-    public void generatorRelightBlockLightExternal() {
-        blockLightSection.relightBlockLightExternal();
+    public static void generatorRelightBlockLightExternalAndBakeSync(List<LightSection> sections) {
+        for (var section : sections) {
+            // We need to bake once in the beginning to be able to relight external block light
+            section.bakeBlockLight();
+        }
+        // We recalculate the block light until nothing changes.
+        var modified = new ArrayList<>(sections);
+        var newModified = new ArrayList<LightSection>(modified.size());
+        while (!modified.isEmpty()) {
+            for (var section : modified) {
+                var result = section.blockLightSection.relightBlockLightExternal();
+                if (result.asBoolean()) {
+                    // External light changed.
+                    // Does baking make a difference?
+                    if (section.bakeBlockLight().asBoolean()) {
+                        // Light changed, we need to recalculate neighbors
+                        newModified.add(section);
+                    }
+                }
+            }
+
+            // clear the old modified data and swap
+            modified.clear();
+            var tmp = modified;
+            modified = newModified;
+            newModified = tmp;
+        }
     }
 
     public CompletableFuture<@Nullable Void> relightSkyLight() {
@@ -203,6 +235,10 @@ public class LightSection {
         var data = LightCompute.bake(l1.data().data(), l2.data());
         var lightData = new LightData<>(data, v);
         return updateLightData(output, lightData, EqualityTester.BYTE_ARRAY);
+    }
+
+    void copyInternalLighting(LightSection other) {
+        this.updateBlockLightInternal(other.getBlockLightInternal());
     }
 
     private interface EqualityTester<T> {

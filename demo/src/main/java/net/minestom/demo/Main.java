@@ -41,6 +41,8 @@ public class Main {
     public static void main(String[] args) {
         System.setProperty("minestom.new-socket-write-lock", "true");
         System.setProperty("minestom.chunk-view-distance", "32");
+        System.setProperty("minestom.dispatcher-threads", Integer.toString(Runtime.getRuntime().availableProcessors()));
+        System.setProperty("minestom.tps", "50");
         MinecraftServer.setCompressionThreshold(0);
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             System.err.println("Exception in " + t.getName());
@@ -101,6 +103,7 @@ public class Main {
         commandManager.register(new BelowNameCommand());
         commandManager.register(new CopyInstanceCommand());
         commandManager.register(new LoadedChunksCommand());
+        commandManager.register(new TestLightCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

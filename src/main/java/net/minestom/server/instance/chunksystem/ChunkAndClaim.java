@@ -2,7 +2,6 @@ package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.instance.Chunk;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -16,5 +15,5 @@ import java.util.concurrent.CompletableFuture;
  *                    call returns. Use this carefully, and consider the implications!
  * @param claim  the claim
  */
-public record ChunkAndClaim(@NotNull CompletableFuture<@NotNull Chunk> chunkFuture, @NotNull ChunkClaim claim) {
+public record ChunkAndClaim(CompletableFuture<Chunk> chunkFuture, ChunkClaim claim) {
 }

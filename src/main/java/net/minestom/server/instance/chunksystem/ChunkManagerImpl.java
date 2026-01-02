@@ -7,7 +7,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.chunksystem.ChunkClaim.Shape;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -18,13 +17,11 @@ import java.util.concurrent.CompletableFuture;
 class ChunkManagerImpl implements ChunkManager {
     private final Instance instance;
     private final TaskSchedulerThread taskSchedulerThread;
-    private final ChunkAccess chunkAccess;
     private int defaultPriority;
 
-    public ChunkManagerImpl(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable ChunkLoader chunkLoader, @NotNull ChunkAccess chunkAccess) {
+    public ChunkManagerImpl(Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable ChunkLoader chunkLoader) {
         this.instance = instance;
-        this.taskSchedulerThread = new TaskSchedulerThread(instance, chunkSupplier, chunkLoader, chunkAccess);
-        this.chunkAccess = chunkAccess;
+        this.taskSchedulerThread = new TaskSchedulerThread(instance, chunkSupplier, chunkLoader);
     }
 
     @Override
@@ -38,76 +35,76 @@ class ChunkManagerImpl implements ChunkManager {
     }
 
     @Override
-    public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunks() {
+    public @UnmodifiableView Collection<Chunk> getLoadedChunks() {
         return taskSchedulerThread.getLoadedChunks();
     }
 
     @Override
-    public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunksManaged() {
+    public @UnmodifiableView Collection<Chunk> getLoadedChunksManaged() {
         return taskSchedulerThread.getLoadedChunksManaged();
     }
 
     @Override
-    public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, @NotNull Shape shape, @Nullable ClaimCallbacks callbacks) {
+    public ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, Shape shape, @Nullable ClaimCallbacks callbacks) {
         var chunkAndClaim = new ChunkAndClaim(new CompletableFuture<>(), new ChunkClaimImpl(chunkX, chunkZ, radius, priority, shape, callbacks));
         this.taskSchedulerThread.addClaimAsync(chunkAndClaim);
         return chunkAndClaim;
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> removeClaim(@NotNull ChunkClaim claim) {
+    public CompletableFuture<Void> removeClaim(ChunkClaim claim) {
         var future = new CompletableFuture<Void>();
         this.taskSchedulerThread.removeClaimAsync(claim, future);
         return future;
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveInstanceData() {
+    public CompletableFuture<Void> saveInstanceData() {
         var future = new CompletableFuture<Void>();
         this.taskSchedulerThread.saveInstanceDataAsync(future);
         return future;
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk) {
+    public CompletableFuture<Void> saveChunk(Chunk chunk) {
         var future = new CompletableFuture<Void>();
         this.taskSchedulerThread.saveChunkAsync(chunk, future);
         return future;
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunks() {
+    public CompletableFuture<Void> saveChunks() {
         var future = new CompletableFuture<Void>();
         this.taskSchedulerThread.saveChunksAsync(future);
         return future;
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveInstanceDataAndChunks() {
+    public CompletableFuture<Void> saveInstanceDataAndChunks() {
         var future = new CompletableFuture<Void>();
         this.taskSchedulerThread.saveInstanceDataAndChunksAsync(future);
         return future;
     }
 
     @Override
-    public void setChunkLoader(@NotNull ChunkLoader chunkLoader) {
+    public void setChunkLoader(ChunkLoader chunkLoader) {
         this.taskSchedulerThread.setChunkLoader(Objects.requireNonNull(chunkLoader, "Chunk loader cannot be null"));
     }
 
     @Override
-    public @NotNull ChunkLoader getChunkLoader() {
+    public ChunkLoader getChunkLoader() {
         return this.taskSchedulerThread.getChunkLoader();
     }
 
     @Override
-    public @NotNull Pair<ChunkManager, Collection<ChunkAndClaim>> singleClaimCopy(@NotNull Instance targetInstance) {
+    public Pair<ChunkManager, Collection<ChunkAndClaim>> singleClaimCopy(Instance targetInstance) {
         var copy = baseCopy(targetInstance);
         var claims = this.taskSchedulerThread.singleClaimCopy(copy.taskSchedulerThread, copy.getDefaultPriority());
         return Pair.of(copy, claims);
     }
 
-    private ChunkManagerImpl baseCopy(@NotNull Instance targetInstance) {
-        var chunkManager = new ChunkManagerImpl(targetInstance, getChunkSupplier(), null, chunkAccess);
+    private ChunkManagerImpl baseCopy(Instance targetInstance) {
+        var chunkManager = new ChunkManagerImpl(targetInstance, getChunkSupplier(), null);
         chunkManager.setGenerator(getGenerator());
         chunkManager.setAutosaveEnabled(isAutosaveEnabled());
         chunkManager.setDefaultPriority(getDefaultPriority());
@@ -116,32 +113,32 @@ class ChunkManagerImpl implements ChunkManager {
     }
 
     @Override
-    public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ) {
+    public ChunkAndClaim addClaim(int chunkX, int chunkZ) {
         return addClaim(chunkX, chunkZ, 0);
     }
 
     @Override
-    public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius) {
+    public ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius) {
         return addClaim(chunkX, chunkZ, radius, Shape.SQUARE);
     }
 
     @Override
-    public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, @NotNull Shape shape) {
+    public ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, Shape shape) {
         return addClaim(chunkX, chunkZ, radius, this.getDefaultPriority(), shape);
     }
 
     @Override
-    public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority) {
+    public ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority) {
         return addClaim(chunkX, chunkZ, radius, priority, Shape.SQUARE);
     }
 
     @Override
-    public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, @NotNull Shape shape) {
+    public ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, Shape shape) {
         return addClaim(chunkX, chunkZ, radius, priority, shape, null);
     }
 
     @Override
-    public @NotNull Instance getInstance() {
+    public Instance getInstance() {
         return instance;
     }
 
@@ -156,12 +153,12 @@ class ChunkManagerImpl implements ChunkManager {
     }
 
     @Override
-    public void setChunkSupplier(@NotNull ChunkSupplier supplier) {
+    public void setChunkSupplier(ChunkSupplier supplier) {
         this.taskSchedulerThread.setChunkSupplier(Objects.requireNonNull(supplier));
     }
 
     @Override
-    public @NotNull ChunkSupplier getChunkSupplier() {
+    public ChunkSupplier getChunkSupplier() {
         return this.taskSchedulerThread.getChunkSupplier();
     }
 
@@ -176,12 +173,12 @@ class ChunkManagerImpl implements ChunkManager {
     }
 
     @Override
-    public @NotNull PriorityDrop getPriorityDrop() {
+    public PriorityDrop getPriorityDrop() {
         return this.taskSchedulerThread.getPriorityDrop();
     }
 
     @Override
-    public void setPriorityDrop(@NotNull PriorityDrop priorityDrop) {
+    public void setPriorityDrop(PriorityDrop priorityDrop) {
         this.taskSchedulerThread.setPriorityDrop(priorityDrop);
     }
 

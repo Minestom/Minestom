@@ -180,12 +180,12 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    protected void onLoad() {
+    public void onLoad() {
         invalidate();
 
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
-                Chunk neighborChunk = instance.getChunkManager().getLoadedChunkManaged(chunkX + x, chunkZ + z);
+                Chunk neighborChunk = instance.getChunkManager().getLoadedChunk(chunkX + x, chunkZ + z);
                 if (neighborChunk instanceof LightingChunk light) {
                     if (light.doneInit) {
                         light.resendTimer.set(20);
