@@ -1,8 +1,14 @@
 package net.minestom.server.instance.chunksystem;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -16,18 +22,15 @@ import java.util.stream.Collectors;
  *
  * @param <T>
  */
+@SuppressWarnings("unused")
 public class IntervalTree<T> {
 
     static final boolean RED = false;
     static final boolean BLACK = true;
 
-    private Node<T> root;
+    private @Nullable Node<T> root;
     private int size = 0;
     private int modCount;
-
-    // Constructor to initialize the Red-Black Tree
-    public IntervalTree() {
-    }
 
     private void addEntry(int start, int end, T data, Node<T> parent, boolean addToLeft) {
         Node<T> e = new Node<>(start, end, data, parent);
@@ -87,29 +90,34 @@ public class IntervalTree<T> {
     }
 
     public List<Node<T>> searchNodes(int point) {
-        var nodes = new ArrayList<Node<T>>();
-        this.search(this.root, point, nodes);
-        return nodes;
+        var nodes = this.search(this.root, point, null);
+        return nodes == null ? List.of() : nodes.collect();
     }
 
-    private void search(Node<T> node, int point, List<Node<T>> result) {
-        if (node == null) return;
-        if (point > node.maxEnd) return;
+    public void searchNodes(ReusableList<Node<T>> targetList, int point) {
+        this.search(this.root, point, targetList);
+    }
+
+    private @Nullable ReusableList<Node<T>> search(@Nullable Node<T> node, int point, @Nullable ReusableList<Node<T>> result) {
+        if (node == null) return result;
+        if (point > node.maxEnd) return result;
 
 
         // left checks handled by recursion
-        this.search(node.left, point, result);
+        result = this.search(node.left, point, result);
 
-        if (point >= node.start && point <= node.end.lastKey()) {
+        if (point >= node.start && point <= node.end.lastIntKey()) {
+            if (result == null) result = new ReusableList<>();
             result.add(node);
         }
 
         if (point >= node.start) {
-            this.search(node.right, point, result);
+            result = this.search(node.right, point, result);
         }
+        return result;
     }
 
-    public Node<T> getRoot() {
+    public @Nullable Node<T> getRoot() {
         return this.root;
     }
 
@@ -155,7 +163,7 @@ public class IntervalTree<T> {
      *                              and this map uses natural ordering, or its comparator
      *                              does not permit null keys
      */
-    final Node<T> getEntry(int key) {
+    final @Nullable Node<T> getEntry(int key) {
         // Offload comparator-based version for sake of performance
         Node<T> p = this.root;
         while (p != null) {
@@ -170,8 +178,9 @@ public class IntervalTree<T> {
     /**
      * From CLR
      */
-    private void rotateLeft(Node<T> p) {
+    private void rotateLeft(@Nullable Node<T> p) {
         if (p != null) {
+            assert p.right != null;
             Node<T> r = p.right;
             p.right = r.left;
             if (r.left != null) r.left.parent = p;
@@ -190,8 +199,9 @@ public class IntervalTree<T> {
     /**
      * From CLR
      */
-    private void rotateRight(Node<T> p) {
+    private void rotateRight(@Nullable Node<T> p) {
         if (p != null) {
+            assert p.left != null;
             Node<T> l = p.left;
             p.left = l.right;
             if (l.right != null) l.right.parent = p;
@@ -218,9 +228,13 @@ public class IntervalTree<T> {
      * From CLR
      */
     private void fixAfterInsertion(Node<T> x) {
+        assert this.root != null;
         x.color = RED;
 
-        while (x != null && x != this.root && x.parent.color == RED) {
+        while (x != null && x != this.root) {
+            assert x.parent != null;
+            if (!(x.parent.color == RED)) break;
+
             if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
                 Node<T> y = rightOf(parentOf(parentOf(x)));
                 if (colorOf(y) == RED) {
@@ -269,6 +283,7 @@ public class IntervalTree<T> {
         // point to successor.
         if (p.left != null && p.right != null) {
             Node<T> s = successor(p);
+            assert s != null;
             p.replaceData(s);
             this.fixMaxEnd(p);
             p = s;
@@ -370,30 +385,30 @@ public class IntervalTree<T> {
         setColor(x, BLACK);
     }
 
-    private static boolean colorOf(Node<?> p) {
+    private static boolean colorOf(@Nullable Node<?> p) {
         return (p == null ? BLACK : p.color);
     }
 
-    private static <T> Node<T> parentOf(Node<T> p) {
+    private static <T> @Nullable Node<T> parentOf(@Nullable Node<T> p) {
         return (p == null ? null : p.parent);
     }
 
-    private static void setColor(Node<?> p, boolean c) {
+    private static void setColor(@Nullable Node<?> p, boolean c) {
         if (p != null) p.color = c;
     }
 
-    private static <T> Node<T> leftOf(Node<T> p) {
+    private static <T> @Nullable Node<T> leftOf(@Nullable Node<T> p) {
         return (p == null) ? null : p.left;
     }
 
-    private static <T> Node<T> rightOf(Node<T> p) {
+    private static <T> @Nullable Node<T> rightOf(@Nullable Node<T> p) {
         return (p == null) ? null : p.right;
     }
 
     /**
      * Returns the successor of the specified Entry, or null if no such.
      */
-    static <T> Node<T> successor(Node<T> t) {
+    static <T> @Nullable Node<T> successor(@Nullable Node<T> t) {
         if (t == null) return null;
         else if (t.right != null) {
             Node<T> p = t.right;
@@ -413,7 +428,7 @@ public class IntervalTree<T> {
     /**
      * Returns the predecessor of the specified Entry, or null if no such.
      */
-    static <T> Node<T> predecessor(Node<T> t) {
+    static <T> @Nullable Node<T> predecessor(@Nullable Node<T> t) {
         if (t == null) return null;
         else if (t.left != null) {
             Node<T> p = t.left;
@@ -437,10 +452,10 @@ public class IntervalTree<T> {
     public boolean equals(Object other) {
         if (!(other instanceof IntervalTree<?> tree)) return false;
         if (this.size != tree.size) return false;
-        return this.equals(this.root, tree.root);
+        return equals(this.root, tree.root);
     }
 
-    private boolean equals(Node<?> node, Node<?> o) {
+    private static boolean equals(@Nullable Node<?> node, @Nullable Node<?> o) {
         if (node == null && o == null) return true;
         if (node == null || o == null) return false;
         return node.equalsDown(o);
@@ -461,9 +476,10 @@ public class IntervalTree<T> {
         return tree;
     }
 
-    private Node<T> deepCopy(Node<T> origin, Function<T, T> copyFunction) {
+    private @Nullable Node<T> deepCopy(@Nullable Node<T> origin, Function<T, T> copyFunction) {
         if (origin == null) return null;
         var node = this.copySingleWithoutLinks(origin, copyFunction);
+        assert node != null;
         var left = this.deepCopy(origin.left, copyFunction);
         var right = this.deepCopy(origin.right, copyFunction);
         if (left != null) {
@@ -477,14 +493,15 @@ public class IntervalTree<T> {
         return node;
     }
 
-    private Node<T> copySingleWithoutLinks(Node<T> origin, Function<T, T> copyFunction) {
+    @Contract("null,_->null;_,_->_")
+    private @Nullable Node<T> copySingleWithoutLinks(@Nullable Node<T> origin, Function<T, T> copyFunction) {
         if (origin == null) return null;
         var node = new Node<T>(0, 0, null, null);
         node.start = origin.start;
         node.maxEnd = origin.maxEnd;
         node.color = origin.color;
-        for (var entry : origin.end.entrySet()) {
-            node.end.put(entry.getKey(), copyFunction.apply(entry.getValue()));
+        for (var entry : origin.end.int2ObjectEntrySet()) {
+            node.end.put(entry.getIntKey(), copyFunction.apply(entry.getValue()));
         }
         return node;
     }
@@ -506,33 +523,33 @@ public class IntervalTree<T> {
         return list.toArray(Node[]::new);
     }
 
-    private void preOrder(Consumer<Node<T>> consumer, Node<T> node) {
+    private void preOrder(Consumer<Node<T>> consumer, @Nullable Node<T> node) {
         if (node == null) return;
         consumer.accept(node);
         this.preOrder(consumer, node.left);
         this.preOrder(consumer, node.right);
     }
 
-    private void inOrder(Consumer<Node<T>> consumer, Node<T> node) {
+    private void inOrder(Consumer<Node<T>> consumer, @Nullable Node<T> node) {
         if (node == null) return;
         this.inOrder(consumer, node.left);
         consumer.accept(node);
         this.inOrder(consumer, node.right);
     }
 
-    private int height(Node<T> node) {
+    private int height(@Nullable Node<T> node) {
         if (node == null) return 0;
         return 1 + Math.max(this.height(node.left), this.height(node.right));
     }
 
     public static class Node<T> {
         public int start;
-        public TreeMap<Integer, T> end = new TreeMap<>();
-        public Node<T> left, right, parent;
+        public Int2ObjectRBTreeMap<@UnknownNullability T> end = new Int2ObjectRBTreeMap<>();
+        public @Nullable Node<T> parent, left, right;
         public boolean color;
         public int maxEnd;
 
-        public Node(int start, int end, T data, @Nullable IntervalTree.Node<T> parent) {
+        public Node(int start, int end, @Nullable T data, @Nullable IntervalTree.Node<T> parent) {
             this.start = start;
             if (data != null) this.forceAdd(end, data);
             this.maxEnd = end;
@@ -545,14 +562,8 @@ public class IntervalTree<T> {
         }
 
         private boolean delete(int end) {
-            var removed = this.end.remove(end);
-            return removed != null;
+            return this.end.remove(end) != null;
         }
-
-//        private T add(int end, T data) {
-//            this.end.put(end, data);
-//            return data;
-//        }
 
         @Override
         public boolean equals(Object obj) {
@@ -560,7 +571,7 @@ public class IntervalTree<T> {
             return this.equalsDown(other) && this.equalsUp(other);
         }
 
-        private boolean equalsUp(Node<?> other) {
+        private boolean equalsUp(@Nullable Node<?> other) {
             if (other == null) return false;
             if (this.hasDifferingValues(other)) return false;
             if (this.parent == null && other.parent == null) return true;
@@ -568,7 +579,7 @@ public class IntervalTree<T> {
             return this.parent.equalsUp(other.parent);
         }
 
-        private boolean equalsDown(Node<?> other) {
+        private boolean equalsDown(@Nullable Node<?> other) {
             if (other == null) return false;
             if (this.hasDifferingValues(other)) return false;
             if (this.left != null) {
@@ -588,7 +599,7 @@ public class IntervalTree<T> {
         }
 
         public int calculateMaxEnd() {
-            var val = this.end.lastKey();
+            var val = this.end.lastIntKey();
             if (this.left != null) {
                 val = Math.max(val, this.left.maxEnd);
             }
@@ -600,12 +611,12 @@ public class IntervalTree<T> {
 
         private void replaceData(Node<T> other) {
             this.start = other.start;
-            this.end = new TreeMap<>(other.end);
+            this.end = new Int2ObjectRBTreeMap<>(other.end);
         }
 
-        static String toStringRecursive(Node<?> node) {
+        static String toStringRecursive(@Nullable Node<?> node) {
             if (node == null) return "[nil]";
-            return node.end.entrySet().stream().map(e -> "[[%d,%d]=%s,left=%s,right=%s]".formatted(node.start, e.getKey(), e.getValue(), toStringRecursive(node.left), toStringRecursive(node.right))).collect(Collectors.joining(", "));
+            return node.end.int2ObjectEntrySet().stream().map(e -> "[[%d,%d]=%s,left=%s,right=%s]".formatted(node.start, e.getIntKey(), e.getValue(), toStringRecursive(node.left), toStringRecursive(node.right))).collect(Collectors.joining(", "));
         }
 
         public String toStringRecursive() {
@@ -615,7 +626,7 @@ public class IntervalTree<T> {
         @Override
         public String toString() {
             if (this.end.isEmpty()) return "[nil]";
-            return this.end.entrySet().stream().map(e -> "[%d,%d]=%s".formatted(start, e.getKey(), e.getValue())).collect(Collectors.joining(", "));
+            return this.end.int2ObjectEntrySet().stream().map(e -> "[%d,%d]=%s".formatted(start, e.getIntKey(), e.getValue())).collect(Collectors.joining(", "));
         }
     }
 }

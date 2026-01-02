@@ -14,7 +14,6 @@ import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -25,14 +24,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class ChunkGenerationHandler {
     private final Instance instance;
-    private Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
-
+    // TODO this is in theory a memory leak...
+    //  but to fix this the entire chunk generation must be reworked
+    private final Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
 
     public ChunkGenerationHandler(Instance instance) {
         this.instance = instance;
     }
 
-    public @NotNull Chunk createChunk(@NotNull ChunkSupplier chunkSupplier, @Nullable Generator generator, int chunkX, int chunkZ) {
+    public Chunk createChunk(ChunkSupplier chunkSupplier, @Nullable Generator generator, int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(instance, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         if (generator == null || !chunk.shouldGenerate()) {
@@ -72,7 +72,7 @@ class ChunkGenerationHandler {
                             forkChunk.sendChunk();
                         } else {
                             final long index = CoordConversion.chunkIndex(start);
-                            this.generationForks.compute(index, (i, sectionModifiers) -> {
+                            this.generationForks.compute(index, (_, sectionModifiers) -> {
                                 if (sectionModifiers == null) sectionModifiers = new ArrayList<>();
                                 sectionModifiers.add(sectionModifier);
                                 return sectionModifiers;
@@ -95,7 +95,7 @@ class ChunkGenerationHandler {
     }
 
     private void processFork(Chunk chunk) {
-        this.generationForks.compute(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), (aLong, sectionModifiers) -> {
+        this.generationForks.compute(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), (_, sectionModifiers) -> {
             if (sectionModifiers != null) {
                 for (var sectionModifier : sectionModifiers) {
                     applyFork(chunk, sectionModifier);

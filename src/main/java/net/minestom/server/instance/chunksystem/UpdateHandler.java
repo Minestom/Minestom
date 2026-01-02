@@ -2,13 +2,11 @@ package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.chunksystem.SingleThreadedManager.UpdateResult;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +33,11 @@ class UpdateHandler {
      * Managed by loaders themselves and won't be interfered with.
      * This can differ from the state in the chunks HashMap, because the chunk can be unloaded while being loaded.
      */
-    private final Long2ObjectMap<State.Loading> loadingChunks = new Long2ObjectOpenHashMap<>();
-    private final Long2ObjectMap<State> chunks = new Long2ObjectOpenHashMap<>();
-    private final Long2ObjectMap<SaveState> savingChunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<State.@Nullable Loading> loadingChunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<@Nullable State> chunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<@Nullable SaveState> savingChunks = new Long2ObjectOpenHashMap<>();
+    // Cache for tree queries to reduce memory allocations
+    private final ReusableList<ChunkClaimTree.CompleteEntry> claimEntryCache = new ReusableList<>();
     private boolean savingInstance;
     private @Nullable CompletableFuture<Void> saveInstanceDelayed;
 
@@ -45,21 +45,25 @@ class UpdateHandler {
         this.singleThreadedManager = singleThreadedManager;
     }
 
-    UpdateResult workUpdate(@NotNull PrioritizedUpdate update, boolean disablePropagation) {
+    UpdateResult workUpdate(PrioritizedUpdate update, boolean disablePropagation) {
         if (update.updateType().isLoad() && !this.singleThreadedManager.hasClaim(update.origin())) {
             // Claim of update no longer exists, update is invalid
             return UpdateResult.INVALID_UPDATE;
         }
         var x = update.x();
         var z = update.z();
-        var entries = this.singleThreadedManager.tree.findEntries(x, z);
-        if (entries.isEmpty()) {
+        this.singleThreadedManager.tree.findEntries(this.claimEntryCache, x, z);
+        if (this.claimEntryCache.isEmpty()) {
             return this.updateNoRemainingClaims(update, disablePropagation);
         }
-        return this.updateWithClaims(update, disablePropagation, entries);
+        try {
+            return this.updateWithClaims(update, disablePropagation, this.claimEntryCache);
+        } finally {
+            this.claimEntryCache.clear();
+        }
     }
 
-    private UpdateResult updateWithClaims(@NotNull PrioritizedUpdate update, boolean disablePropagation, @NotNull List<ChunkClaimTree.CompleteEntry> entries) {
+    private UpdateResult updateWithClaims(PrioritizedUpdate update, boolean disablePropagation, ReusableList<ChunkClaimTree.CompleteEntry> entries) {
         var x = update.x();
         var z = update.z();
         var chunkIndex = chunkIndex(x, z);
@@ -72,7 +76,7 @@ class UpdateHandler {
             // TODO would be nice if we can find a nice optimization to reduce
             //  number of chunks affected by unload propagation. Might be very
             //  difficult though, to future me: think of all edge cases, there are quite a few
-            this.singleThreadedManager.updateQueue.propagateUpdates(update, claimData, disablePropagation);
+            this.singleThreadedManager.updateQueue.propagateUpdates(update, null, disablePropagation);
             return UpdateResult.INVALID_UPDATE;
         }
 
@@ -89,17 +93,21 @@ class UpdateHandler {
         var currentState = this.chunks.get(chunkIndex);
         return switch (currentState) {
             case null -> {
+                // We do not know the chunk. Default "load chunk" case.
                 this.singleThreadedManager.updateQueue.propagateUpdates(update, claimData, disablePropagation);
                 if (!this.loadingChunks.containsKey(chunkIndex)) {
-                    yield this.updateFirstLoad(update, claimData, entries);
+                    yield this.updateFirstLoad(update, claimData);
                 } else {
-                    if (this.loadingChunks.get(chunkIndex).claimsRegisteredForCallback.add(update.origin())) {
+                    var loadingChunk = this.loadingChunks.get(chunkIndex);
+                    assert loadingChunk != null;
+                    if (loadingChunk.claimsRegisteredForCallback.add(update.origin())) {
                         claimData.startLoad();
                     }
                 }
                 yield UpdateResult.LOAD_SCHEDULED_EXISTING;
             }
             case State.Loading loading -> {
+                // TODO can this case even happen?
                 this.singleThreadedManager.updateQueue.propagateUpdates(update, claimData, disablePropagation);
                 if (loading.claimsRegisteredForCallback.add(update.origin())) {
                     claimData.startLoad();
@@ -107,11 +115,15 @@ class UpdateHandler {
                 yield UpdateResult.LOAD_SCHEDULED_EXISTING;
             }
             case State.Loaded loaded -> {
+                // Chunk already loaded, so we just add the claim and propagate updates for priority.
                 this.singleThreadedManager.updateQueue.propagateUpdates(update, claimData, disablePropagation);
                 callbackLoaded(claimData, loaded.chunk);
                 yield UpdateResult.UPDATE_PROPAGATED_FOR_LOADED;
             }
             case State.Unloading unloading -> {
+                // We are currently unloading the chunk, but now we want it back.
+                // Here, as an assumed optimization, we copy the chunk from the one we still have in memory.
+                // Should be faster than generating a new chunk
                 this.singleThreadedManager.updateQueue.propagateUpdates(update, claimData, disablePropagation);
                 yield updateLoadChunkFromMemory(update, claimData, unloading);
             }
@@ -138,7 +150,7 @@ class UpdateHandler {
         }
     }
 
-    private UpdateResult updateLoadChunkFromMemory(@NotNull PrioritizedUpdate update, @NotNull SingleThreadedManager.ClaimData claimData, State.Unloading unloading) {
+    private UpdateResult updateLoadChunkFromMemory(PrioritizedUpdate update, SingleThreadedManager.ClaimData claimData, State.Unloading unloading) {
         var x = update.x();
         var z = update.z();
         if (unloading.partitionDeleted.isDone()) {
@@ -157,7 +169,7 @@ class UpdateHandler {
         return new UpdateResult.WaitingForFuture(unloading.partitionDeleted, true);
     }
 
-    private UpdateResult updateFirstLoad(@NotNull PrioritizedUpdate update, @NotNull SingleThreadedManager.ClaimData claimData, @NotNull List<ChunkClaimTree.CompleteEntry> entries) {
+    private UpdateResult updateFirstLoad(PrioritizedUpdate update, SingleThreadedManager.ClaimData claimData) {
         if (!ChunkWorker.tryReserve()) {
             // No worker available, delay update
             return UpdateResult.WAITING_FOR_WORKER;
@@ -186,7 +198,7 @@ class UpdateHandler {
         }
     }
 
-    private UpdateResult updateNoRemainingClaims(@NotNull PrioritizedUpdate update, boolean disablePropagation) {
+    private UpdateResult updateNoRemainingClaims(PrioritizedUpdate update, boolean disablePropagation) {
         // Chunk is not supposed to be loaded.
         // Check if chunk is loaded, if so, then unload
         if (update.updateType().isLoad()) {
@@ -223,7 +235,6 @@ class UpdateHandler {
         var z = chunk.getChunkZ();
         var chunkIndex = chunkIndex(x, z);
 
-        if (currentState == null) throw new IllegalStateException();
         if (currentState instanceof State.Unloading) {
             // Already unloading, nothing to do
             return;
@@ -281,6 +292,7 @@ class UpdateHandler {
         var z = chunk.getChunkZ();
         var chunkIndex = chunkIndex(x, z);
         var saveTask = this.savingChunks.remove(chunkIndex);
+        assert saveTask != null;
         if (callbacks != null) {
             callbacks.onSaveComplete(chunk);
         }
@@ -331,8 +343,9 @@ class UpdateHandler {
         var z = chunk.getChunkZ();
         var chunkIndex = chunkIndex(x, z);
         var loading = this.loadingChunks.remove(chunkIndex);
-        var entries = this.singleThreadedManager.tree.findEntries(x, z);
-        if (entries.isEmpty()) {
+        assert loading != null;
+        this.singleThreadedManager.tree.findEntries(this.claimEntryCache, x, z);
+        if (this.claimEntryCache.isEmpty()) {
             // Chunk has no remaining claims, it should not be loaded.
             // This can happen if a claim is removed while a chunk is in generation.
             this.chunks.remove(chunkIndex, loading);
@@ -341,18 +354,16 @@ class UpdateHandler {
             }
             return false;
         }
+        this.claimEntryCache.clear(); // Reset cache
         if (callbacks != null) {
             callbacks.onLoadCompleted(x, z);
         }
         var loaded = new State.Loaded(chunk);
         this.chunks.put(chunkIndex, loaded);
         this.singleThreadedManager.loadedChunksManaged.put(chunkIndex, chunk);
-        try {
-            // TODO chunks can block us... This is undesirable
-            this.singleThreadedManager.chunkAccess.onLoad(chunk);
-        } catch (Throwable t) {
-            MinecraftServer.getExceptionManager().handleException(t);
-        }
+        // TODO chunks can block us... This is undesirable
+        chunk.setLoaded();
+        chunk.onLoadManaged();
 
         for (var claim : loading.claimsRegisteredForCallback) {
             if (this.singleThreadedManager.hasClaim(claim)) {
@@ -373,13 +384,15 @@ class UpdateHandler {
         return null;
     }
 
-    List<Chunk> singleClaimCopyTo(@NotNull UpdateHandler copyTarget, @NotNull Instance copyInstance) {
+    List<Chunk> singleClaimCopyTo(UpdateHandler copyTarget, Instance copyInstance) {
         var chunks = new ArrayList<Chunk>();
         for (var state : this.chunks.values()) {
             if (!(state instanceof State.Loaded loaded)) continue;
             var originalChunk = loaded.chunk;
             var chunk = originalChunk.copy(copyInstance, originalChunk.getChunkX(), originalChunk.getChunkZ());
-            if(!chunk.isLoaded())throw new IllegalStateException("Copied chunk not loaded");
+            assert chunk.getClass() == originalChunk.getClass() : "The chunk class " + chunk.getClass().getName()
+                    + " does not specify a \"copy\" method that keeps the class. New Class: " + chunk.getClass().getName();
+            assert !chunk.isLoaded() : "Copied chunk must not be loaded";
             chunks.add(chunk);
             copyTarget.chunks.put(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), new State.Loaded(chunk));
         }
@@ -387,11 +400,11 @@ class UpdateHandler {
     }
 
     static final class SaveState {
-        final @NotNull CompletableFuture<Void> future;
-        final @NotNull Chunk chunk;
+        final CompletableFuture<Void> future;
+        final Chunk chunk;
         @Nullable SaveState runAfter;
 
-        public SaveState(@NotNull CompletableFuture<Void> future, @NotNull Chunk chunk) {
+        public SaveState(CompletableFuture<Void> future, Chunk chunk) {
             this.future = future;
             this.chunk = chunk;
         }
@@ -403,19 +416,19 @@ class UpdateHandler {
         }
 
         static final class Loaded extends State {
-            final @NotNull Chunk chunk;
+            final Chunk chunk;
 
-            public Loaded(@NotNull Chunk chunk) {
+            public Loaded(Chunk chunk) {
                 this.chunk = chunk;
             }
         }
 
         static final class Unloading extends State {
-            final @NotNull Chunk chunk;
-            final @NotNull CompletableFuture<Void> unloadFuture = new CompletableFuture<>();
-            final @NotNull CompletableFuture<Void> partitionDeleted = new CompletableFuture<>();
+            final Chunk chunk;
+            final CompletableFuture<Void> unloadFuture = new CompletableFuture<>();
+            final CompletableFuture<Void> partitionDeleted = new CompletableFuture<>();
 
-            public Unloading(@NotNull Chunk chunk) {
+            public Unloading(Chunk chunk) {
                 this.chunk = chunk;
             }
         }
