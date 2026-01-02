@@ -8,7 +8,6 @@ import net.minestom.server.instance.*;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -23,7 +22,7 @@ import static net.minestom.server.instance.chunksystem.ChunkClaim.Shape;
  * {@code Instance#getChunkManager()}
  */
 public interface ChunkManager {
-    @NotNull Instance getInstance();
+    Instance getInstance();
 
     /**
      * The default priority for all chunk loads.
@@ -51,7 +50,7 @@ public interface ChunkManager {
      * @param supplier the new {@link ChunkSupplier} of this instance, chunks need to be non-null
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
-    void setChunkSupplier(@NotNull ChunkSupplier supplier);
+    void setChunkSupplier(ChunkSupplier supplier);
 
     /**
      * Get the chunk supplier.
@@ -60,7 +59,7 @@ public interface ChunkManager {
      *
      * @return the chunk supplier
      */
-    @NotNull ChunkSupplier getChunkSupplier();
+    ChunkSupplier getChunkSupplier();
 
     /**
      * Changes the generator used for newly generated chunks.
@@ -82,7 +81,7 @@ public interface ChunkManager {
      * @return the priority drop function
      */
     @ApiStatus.Experimental
-    @NotNull PriorityDrop getPriorityDrop();
+    PriorityDrop getPriorityDrop();
 
     /**
      * Change the current {@link PriorityDrop} function for this {@link ChunkManager}.
@@ -92,7 +91,7 @@ public interface ChunkManager {
      * @see PriorityDrop
      */
     @ApiStatus.Experimental
-    void setPriorityDrop(@NotNull PriorityDrop priorityDrop);
+    void setPriorityDrop(PriorityDrop priorityDrop);
 
     /**
      * @return whether autosave is enabled
@@ -151,7 +150,7 @@ public interface ChunkManager {
      * @return the currently loaded chunks
      */
     @UnmodifiableView
-    @NotNull Collection<@NotNull Chunk> getLoadedChunks();
+    Collection<Chunk> getLoadedChunks();
 
     /**
      * Get the currently loaded chunks. This is only ever updated in the managers thread.
@@ -161,47 +160,47 @@ public interface ChunkManager {
      */
     @ApiStatus.Experimental
     @UnmodifiableView
-    @NotNull Collection<@NotNull Chunk> getLoadedChunksManaged();
+    Collection<Chunk> getLoadedChunksManaged();
 
     /**
      * @see #addClaim(int, int)
      */
-    default @NotNull ChunkAndClaim addClaim(@NotNull Point point) {
+    default ChunkAndClaim addClaim(Point point) {
         return addClaim(point.chunkX(), point.chunkZ());
     }
 
     /**
      * @see #addClaim(int, int, int)
      */
-    default @NotNull ChunkAndClaim addClaim(@NotNull Point point, int radius) {
+    default ChunkAndClaim addClaim(Point point, int radius) {
         return addClaim(point.chunkX(), point.chunkZ(), radius);
     }
 
     /**
      * @see #addClaim(int, int, int, Shape)
      */
-    default @NotNull ChunkAndClaim addClaim(@NotNull Point point, int radius, @NotNull Shape shape) {
+    default ChunkAndClaim addClaim(Point point, int radius, Shape shape) {
         return addClaim(point.chunkX(), point.chunkZ(), radius, shape);
     }
 
     /**
      * @see #addClaim(int, int, int, int)
      */
-    default @NotNull ChunkAndClaim addClaim(@NotNull Point point, int radius, int priority) {
+    default ChunkAndClaim addClaim(Point point, int radius, int priority) {
         return addClaim(point.chunkX(), point.chunkZ(), radius, priority);
     }
 
     /**
      * @see #addClaim(int, int, int, int, Shape)
      */
-    default @NotNull ChunkAndClaim addClaim(@NotNull Point point, int radius, int priority, @NotNull Shape shape) {
+    default ChunkAndClaim addClaim(Point point, int radius, int priority, Shape shape) {
         return addClaim(point.chunkX(), point.chunkZ(), radius, priority, shape);
     }
 
     /**
      * @see #addClaim(int, int, int, int, Shape, ClaimCallbacks)
      */
-    default @NotNull ChunkAndClaim addClaim(@NotNull Point point, int radius, int priority, @NotNull Shape shape, @Nullable ClaimCallbacks callbacks) {
+    default ChunkAndClaim addClaim(Point point, int radius, int priority, Shape shape, @Nullable ClaimCallbacks callbacks) {
         return addClaim(point.chunkX(), point.chunkZ(), radius, priority, shape, callbacks);
     }
 
@@ -215,7 +214,7 @@ public interface ChunkManager {
      * @param chunkZ the chunk Z, in chunk coordinate space
      * @return the {@link ChunkAndClaim} used to remove the claim.
      */
-    @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ);
+    ChunkAndClaim addClaim(int chunkX, int chunkZ);
 
     /**
      * Adds a claim to a chunk.
@@ -228,7 +227,7 @@ public interface ChunkManager {
      * @param radius the radius of this {@link ChunkClaim}. Use 0 to only load a single chunk.
      * @return the {@link ChunkAndClaim} used to remove the claim.
      */
-    @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius);
+    ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius);
 
     /**
      * Adds a claim to a chunk.
@@ -241,7 +240,7 @@ public interface ChunkManager {
      * @param radius the radius of this {@link ChunkClaim}. Use 0 to only load a single chunk.
      * @return the {@link ChunkAndClaim} used to remove the claim.
      */
-    @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, @NotNull Shape shape);
+    ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, Shape shape);
 
     /**
      * Adds a claim to a chunk.
@@ -255,7 +254,7 @@ public interface ChunkManager {
      * @param priority the priority of the claim. Higher priorities get processed before lower priorities.
      * @return the {@link ChunkAndClaim} used to remove the claim.
      */
-    @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority);
+    ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority);
 
     /**
      * Adds a claim to a chunk.
@@ -271,7 +270,7 @@ public interface ChunkManager {
      * @param shape    the shape of the claim. Only matters with radius >= 1
      * @return the {@link ChunkAndClaim} used to remove the claim.
      */
-    @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, @NotNull Shape shape);
+    ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, Shape shape);
 
     /**
      * Adds a claim to a chunk.
@@ -286,7 +285,7 @@ public interface ChunkManager {
      * @param callbacks the callbacks to use for this claim
      * @return the {@link ChunkAndClaim} used to remove the claim.
      */
-    @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, @NotNull Shape shape, @Nullable ClaimCallbacks callbacks);
+    ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, Shape shape, @Nullable ClaimCallbacks callbacks);
 
     /**
      * Removes a claim from a chunk.
@@ -297,7 +296,7 @@ public interface ChunkManager {
      * @param claim the {@link ChunkClaim} that should be removed
      * @return a future for when the claim was removed.
      */
-    @NotNull CompletableFuture<Void> removeClaim(@NotNull ChunkClaim claim);
+    CompletableFuture<Void> removeClaim(ChunkClaim claim);
 
     /**
      * Saves the current instance tags
@@ -310,7 +309,7 @@ public interface ChunkManager {
      * If not, please state your use case and open an issue on GitHub
      */
     @Deprecated
-    @NotNull CompletableFuture<Void> saveInstanceData();
+    CompletableFuture<Void> saveInstanceData();
 
     /**
      * Saves a {@link Chunk} to storage.
@@ -321,7 +320,7 @@ public interface ChunkManager {
      * If not, please state your use case and open an issue on GitHub
      */
     @Deprecated
-    @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk);
+    CompletableFuture<Void> saveChunk(Chunk chunk);
 
     /**
      * Saves all loaded chunks to storage.
@@ -332,7 +331,7 @@ public interface ChunkManager {
      * If not, please state your use case and open an issue on GitHub
      */
     @Deprecated
-    @NotNull CompletableFuture<Void> saveChunks();
+    CompletableFuture<Void> saveChunks();
 
     /**
      * Saves the instance data and all chunks to storage
@@ -344,7 +343,7 @@ public interface ChunkManager {
      * If not, please state your use case and open an issue on GitHub
      */
     @Deprecated
-    @NotNull CompletableFuture<Void> saveInstanceDataAndChunks();
+    CompletableFuture<Void> saveInstanceDataAndChunks();
 
 
     /**
@@ -354,14 +353,14 @@ public interface ChunkManager {
      *
      * @param chunkLoader the new {@link ChunkLoader}
      */
-    void setChunkLoader(@NotNull ChunkLoader chunkLoader);
+    void setChunkLoader(ChunkLoader chunkLoader);
 
     /**
      * Gets the {@link ChunkLoader} of this chunk manager.
      *
      * @return the {@link ChunkLoader} of this chunk manager
      */
-    @NotNull ChunkLoader getChunkLoader();
+    ChunkLoader getChunkLoader();
 
     /**
      * Copies this {@link ChunkManager} with a claim per loaded chunk.
@@ -375,7 +374,7 @@ public interface ChunkManager {
      * @return a pair of the copy and claims
      */
     @ApiStatus.Experimental
-    @NotNull Pair<ChunkManager, Collection<ChunkAndClaim>> singleClaimCopy(@NotNull Instance targetInstance);
+    Pair<ChunkManager, Collection<ChunkAndClaim>> singleClaimCopy(Instance targetInstance);
 
     /**
      * Allows creating a {@link ChunkManager} for any generic instance.
@@ -388,7 +387,7 @@ public interface ChunkManager {
      * @param chunkLoader   a {@link ChunkLoader} to use, null to use {@link ChunkLoader#noop()}
      * @return a {@link ChunkManager} for that instance
      */
-    static @NotNull ChunkManager createFor(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable ChunkLoader chunkLoader) {
-        return new ChunkManagerImpl(instance, chunkSupplier, chunkLoader, ChunkSystemChunkAccessImpl.INSTANCE);
+    static ChunkManager createFor(Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable ChunkLoader chunkLoader) {
+        return new ChunkManagerImpl(instance, chunkSupplier, chunkLoader);
     }
 }

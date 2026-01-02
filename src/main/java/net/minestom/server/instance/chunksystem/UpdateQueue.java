@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.ObjectRBTreeSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import it.unimi.dsi.fastutil.objects.ObjectSortedSet;
 import net.minestom.server.coordinate.Vec;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 class UpdateQueue {
@@ -84,21 +83,16 @@ class UpdateQueue {
         return updated;
     }
 
-    boolean updated() {
-        return updated;
-    }
-
-    private boolean propagateUpdate(@NotNull ChunkClaim origin, @Nullable SingleThreadedManager.ClaimData claimData, double originUpdatePriority, int x, int z, UpdateType updateType) {
-        if (!propagatesTo(origin, originUpdatePriority, x, z, updateType)) return false;
+    private void propagateUpdate(ChunkClaim origin, @Nullable SingleThreadedManager.ClaimData claimData, double originUpdatePriority, int x, int z, UpdateType updateType) {
+        if (!propagatesTo(origin, originUpdatePriority, x, z, updateType)) return;
         var tree = this.singleThreadedManager.tree;
         var priorityDrop = this.singleThreadedManager.priorityDrop;
 
         var priority = tree.calculatePriority(priorityDrop, origin.priority(), origin.chunkX(), origin.chunkZ(), x, z);
         this.enqueue(new PrioritizedUpdate(updateType, priority, x, z, origin), claimData);
-        return true;
     }
 
-    private boolean propagatesTo(@NotNull ChunkClaim origin, double fromUpdatePriority, int x, int z, UpdateType updateType) {
+    private boolean propagatesTo(ChunkClaim origin, double fromUpdatePriority, int x, int z, UpdateType updateType) {
         if (!origin.contains(x, z)) {
             return false;
         }
@@ -118,12 +112,12 @@ class UpdateQueue {
         return requiredPriority + Vec.EPSILON < fromUpdatePriority;
     }
 
-    void propagateUpdates(@NotNull PrioritizedUpdate originUpdate, @Nullable SingleThreadedManager.ClaimData claimData, boolean disablePropagation) {
+    void propagateUpdates(PrioritizedUpdate originUpdate, @Nullable SingleThreadedManager.ClaimData claimData, boolean disablePropagation) {
         if (disablePropagation) return;
         propagateUpdates(originUpdate, claimData);
     }
 
-    private void propagateUpdates(@NotNull PrioritizedUpdate originUpdate, @Nullable SingleThreadedManager.ClaimData claimData) {
+    private void propagateUpdates(PrioritizedUpdate originUpdate, @Nullable SingleThreadedManager.ClaimData claimData) {
         var x = originUpdate.x();
         var z = originUpdate.z();
         var origin = originUpdate.origin();

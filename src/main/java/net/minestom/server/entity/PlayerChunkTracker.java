@@ -18,7 +18,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Responsible for loading chunks around and sending chunks to the player
+ * Responsible for loading chunks around and sending chunks to the player.
+ * <p>
+ * This class interacts with the chunk-system and tells the send-queue which chunks to send.
+ * The send-queue then is responsible for sending the chunks in the correct order, with rate limits, etc.
  */
 public class PlayerChunkTracker {
     private static final ChunkClaim.Shape CLAIM_SHAPE = ServerFlag.INSIDE_TEST ? ChunkClaim.Shape.SQUARE : ChunkClaim.Shape.CIRCLE;
@@ -57,7 +60,7 @@ public class PlayerChunkTracker {
      * @param tracked     the new chunk to track
      * @param sendUnloads whether unload packets should be sent
      */
-    public void changeTracked(Tracked tracked, boolean sendUnloads) {
+    private void changeTracked(Tracked tracked, boolean sendUnloads) {
         lock.lock();
         try {
             if (this.tracked == null) {
@@ -211,21 +214,20 @@ public class PlayerChunkTracker {
             }
             tracked.untrack();
             tracked = null;
+
+            // Clear all chunks
+            var it = chunksSentOrInQueue.longIterator();
+            while (it.hasNext()) {
+                var chunkIndex = it.nextLong();
+                var chunkX = CoordConversion.chunkIndexGetX(chunkIndex);
+                var chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
+                player.getChunkQueue().cancelSend(chunkX, chunkZ);
+                unloadChunk(chunkX, chunkZ);
+            }
+            chunksSentOrInQueue.clear();
         } finally {
             lock.unlock();
         }
-        // We can do this outside the lock:
-        // It is illegal for the callbacks to change visibleChunks if tracked is null
-        // By doing this outside the lock, we allow the callbacks to acquire the lock and do the check,
-        // then the callbacks will decide not to do anything.
-        var it = chunksSentOrInQueue.longIterator();
-        while (it.hasNext()) {
-            var chunkIndex = it.nextLong();
-            var chunkX = CoordConversion.chunkIndexGetX(chunkIndex);
-            var chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
-            unloadChunk(chunkX, chunkZ);
-        }
-        chunksSentOrInQueue.clear();
     }
 
     private void unloadChunk(int x, int z) {

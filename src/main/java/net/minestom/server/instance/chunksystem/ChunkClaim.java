@@ -1,7 +1,6 @@
 package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.Chunk;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -47,7 +46,7 @@ public sealed interface ChunkClaim permits ChunkClaimImpl {
      *
      * @return the shape of this claim
      */
-    @NotNull Shape shape();
+    Shape shape();
 
     /**
      * Get the callbacks for this claim. Null if no callbacks were specified
@@ -74,7 +73,7 @@ public sealed interface ChunkClaim permits ChunkClaimImpl {
      */
     @FunctionalInterface
     interface Shape {
-        @NotNull Shape CIRCLE = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
+        Shape CIRCLE = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
             var radiusSqX = radiusX * radiusX;
             var radiusSqZ = radiusZ * radiusZ;
             var dx = x - ox;
@@ -83,19 +82,19 @@ public sealed interface ChunkClaim permits ChunkClaimImpl {
             var dzSq = dz * dz;
             return (float) dxSq / radiusSqX + (float) dzSq / radiusSqZ <= 1;
         };
-        @NotNull Shape SQUARE = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
+        Shape SQUARE = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
             var dx = Math.abs(x - ox);
             var dz = Math.abs(z - oz);
             return dx <= radiusX && dz <= radiusZ;
         };
-        @NotNull Shape DIAMOND = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
+        Shape DIAMOND = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
             var dx = (float) Math.abs(x - ox);
             var dz = (float) Math.abs(z - oz);
             var d = dx / radiusX + dz / radiusZ;
             return d <= 1F;
         };
 
-        default boolean isInRadius(@NotNull ChunkClaim claim, int x, int z) {
+        default boolean isInRadius(ChunkClaim claim, int x, int z) {
             return isInRadius(claim.radius(), claim.radius(), claim.chunkX(), claim.chunkZ(), x, z);
         }
 

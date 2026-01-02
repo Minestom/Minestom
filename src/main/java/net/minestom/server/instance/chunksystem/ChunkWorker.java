@@ -1,5 +1,6 @@
 package net.minestom.server.instance.chunksystem;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkLoader;
@@ -7,8 +8,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +27,8 @@ public class ChunkWorker {
      * Use a common worker pool for all managers. A manager may only submit a task if he holds
      * a permit in {@link #AVAILABLE_TASKS}
      */
-    private static ExecutorService WORKER_EXECUTOR;
-    private static ExecutorService SAVE_EXECUTOR;
+    private static @UnknownNullability ExecutorService WORKER_EXECUTOR;
+    private static @UnknownNullability ExecutorService SAVE_EXECUTOR;
     /**
      * We allow twice the number of available processors to be submitted before waiting.
      * This is so we don't waste time.
@@ -41,26 +42,28 @@ public class ChunkWorker {
     private final TaskSchedulerThread taskSchedulerThread;
     private final ChunkGenerationHandler chunkGenerationHandler;
     private final Instance instance;
-    private final ChunkAccess chunkAccess;
 
-    ChunkWorker(TaskSchedulerThread taskSchedulerThread, ChunkAccess chunkAccess) {
+    ChunkWorker(TaskSchedulerThread taskSchedulerThread) {
         this.taskSchedulerThread = taskSchedulerThread;
         this.instance = taskSchedulerThread.getInstance();
         this.chunkGenerationHandler = new ChunkGenerationHandler(this.instance);
-        this.chunkAccess = chunkAccess;
     }
 
     void workerCopyFromMemory(Chunk unloading, int x, int z) {
         try {
             var copy = unloading.copy(unloading.getInstance(), x, z);
+            assert copy.getClass() == unloading.getClass() : "The chunk class " + copy.getClass().getName()
+                    + " does not specify a \"copy\" method that keeps the class. New Class: " + copy.getClass().getName();
+            assert !copy.isLoaded() : "Copied chunk must not be loaded";
+            copy.onReloadFromMemoryCopy(unloading);
             // TODO copy entities
             this.workerFinishedGeneration(copy);
         } catch (Throwable throwable) {
-            LOGGER.error("Exception while re-loading chunk", throwable);
+            MinecraftServer.getExceptionManager().handleException(new ChunkSystemException("Exception while re-loading chunk", throwable));
         }
     }
 
-    void workerGenerateChunk(int x, int z, @NotNull ChunkLoader loader, @NotNull ChunkSupplier supplier, @Nullable Generator generator) {
+    void workerGenerateChunk(int x, int z, ChunkLoader loader, ChunkSupplier supplier, @Nullable Generator generator) {
         if (!loader.supportsParallelLoading()) {
             // TODO maybe revisit and add locking to allow for non-parallel loaders, but not right now
             synchronized (WARNED_LOADERS) {
@@ -73,9 +76,11 @@ public class ChunkWorker {
 
         var chunk = loader.loadChunk(instance, x, z);
         if (chunk == null) {
-            // Loader couldn't load the chunk, generate it
+            // Loader couldn't load the chunk from storage, generate it instead
             chunk = this.chunkGenerationHandler.createChunk(supplier, generator, x, z);
             chunk.onGenerate();
+        } else {
+            chunk.onLoadedFromStorage();
         }
 
         this.workerFinishedGeneration(chunk);
@@ -151,7 +156,7 @@ public class ChunkWorker {
             try {
                 runnable.run();
             } catch (Throwable t) {
-                LOGGER.error("Exception during task on worker", t);
+                MinecraftServer.getExceptionManager().handleException(new ChunkSystemException("Exception during task on worker", t));
             } finally {
                 release();
                 signalAll();

@@ -3,13 +3,13 @@ package net.minestom.server.instance.chunksystem;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.instance.chunksystem.ChunkClaim.Shape;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Utility data structure to store N entries (priority, shape) in a 2D interval tree (x,z)
@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
  */
 public class ChunkClaimTree {
     private final IntervalTree<IntervalTree<Entries>> tree = new IntervalTree<>();
+    // Reusable caches to reduce ArrayList allocations.
+    private final ReusableList<IntervalTree.Node<IntervalTree<Entries>>> xCache = new ReusableList<>();
+    private final ReusableList<IntervalTree.Node<Entries>> zCache = new ReusableList<>();
     private int size;
 
     /**
@@ -30,7 +33,7 @@ public class ChunkClaimTree {
      * @param priority the load priority of the region
      * @param shape    the shape of the region
      */
-    public void insert(int x, int z, int size, int priority, @NotNull Shape shape) {
+    public void insert(int x, int z, int size, int priority, Shape shape) {
         this.insert(x - size, z - size, x + size, z + size, priority, shape);
     }
 
@@ -45,7 +48,7 @@ public class ChunkClaimTree {
      * @param priority the load priority of the region
      * @param shape    the shape of the region
      */
-    public void insert(int minX, int minZ, int maxX, int maxZ, int priority, @NotNull Shape shape) {
+    public void insert(int minX, int minZ, int maxX, int maxZ, int priority, Shape shape) {
         var treeZ = this.tree.insertOrGet(minX, maxX, IntervalTree::new);
         var entries = treeZ.insertOrGet(minZ, maxZ, Entries::new);
         entries.add(new Entry(priority, shape));
@@ -53,15 +56,15 @@ public class ChunkClaimTree {
     }
 
     @ApiStatus.Internal
-    public void insert(@NotNull CompleteEntry entry) {
+    public void insert(CompleteEntry entry) {
         this.insert(entry.minX, entry.minZ, entry.maxX, entry.maxZ, entry.entry.priority, entry.entry.shape);
     }
 
-    public void delete(int x, int z, int size, int priority, @NotNull Shape shape) {
+    public void delete(int x, int z, int size, int priority, Shape shape) {
         delete(x - size, z - size, x + size, z + size, priority, shape);
     }
 
-    public void delete(int minX, int minZ, int maxX, int maxZ, int priority, @NotNull Shape shape) {
+    public void delete(int minX, int minZ, int maxX, int maxZ, int priority, Shape shape) {
         var treeZ = this.tree.get(minX, maxX);
         if (treeZ == null) throw new IllegalStateException("Tried to remove entry which was not in X tree");
         var entryList = treeZ.get(minZ, maxZ);
@@ -77,7 +80,7 @@ public class ChunkClaimTree {
     }
 
     @ApiStatus.Internal
-    public void delete(@NotNull CompleteEntry entry) {
+    public void delete(CompleteEntry entry) {
         this.delete(entry.minX, entry.minZ, entry.maxX, entry.maxZ, entry.entry.priority, entry.entry.shape);
     }
 
@@ -90,83 +93,92 @@ public class ChunkClaimTree {
         return this.tree.toString();
     }
 
-    private boolean forEntries(int x, int z, Predicate<CompleteEntry> function) {
-        var nodesTreeX = this.tree.searchNodes(x);
-        for (var nodeTreeX : nodesTreeX) {
-            var minX = nodeTreeX.start;
-            for (var treeXEntry : nodeTreeX.end.entrySet()) {
-                var maxX = treeXEntry.getKey();
-                var widthX = maxX - minX;
-                var radiusX = widthX / 2;
-                var centerX = minX + radiusX;
-                var treeZ = treeXEntry.getValue();
-                var nodesTreeZ = treeZ.searchNodes(z);
-                for (var nodeTreeZ : nodesTreeZ) {
-                    var minZ = nodeTreeZ.start;
-                    for (var treeZEntry : nodeTreeZ.end.entrySet()) {
-                        var maxZ = treeZEntry.getKey();
-                        var widthZ = maxZ - minZ;
-                        var radiusZ = widthZ / 2;
-                        var centerZ = minZ + radiusX;
-                        var entries = treeZEntry.getValue();
-                        for (var entry : entries) {
-                            var shape = entry.shape();
-                            if (shape.isInRadius(radiusX, radiusZ, centerX, centerZ, x, z)) {
-                                if (!function.test(new CompleteEntry(minX, minZ, maxX, maxZ, entry))) {
-                                    return false;
+    private void forEntries(int x, int z, Predicate<CompleteEntry> function) {
+        this.tree.searchNodes(xCache, x);
+        try {
+            for (var nodeTreeX : xCache) {
+                var minX = nodeTreeX.start;
+                for (var treeXEntry : nodeTreeX.end.int2ObjectEntrySet()) {
+                    var maxX = treeXEntry.getIntKey();
+                    var widthX = maxX - minX;
+                    var radiusX = widthX / 2;
+                    var centerX = minX + radiusX;
+                    var treeZ = treeXEntry.getValue();
+                    treeZ.searchNodes(zCache, z);
+                    try {
+                        for (var nodeTreeZ : zCache) {
+                            var minZ = nodeTreeZ.start;
+                            for (var treeZEntry : nodeTreeZ.end.int2ObjectEntrySet()) {
+                                var maxZ = treeZEntry.getIntKey();
+                                var widthZ = maxZ - minZ;
+                                var radiusZ = widthZ / 2;
+                                var centerZ = minZ + radiusX;
+                                var entries = treeZEntry.getValue();
+                                for (var entry : entries) {
+                                    var shape = entry.shape();
+                                    if (shape.isInRadius(radiusX, radiusZ, centerX, centerZ, x, z)) {
+                                        if (!function.test(new CompleteEntry(minX, minZ, maxX, maxZ, entry))) {
+                                            return;
+                                        }
+                                    }
                                 }
                             }
                         }
+                    } finally {
+                        zCache.reuseLastIterator();
+                        zCache.clear();
                     }
                 }
             }
+        } finally {
+            xCache.reuseLastIterator();
+            xCache.clear();
         }
-        return true;
     }
 
-    public boolean noEntries(int x, int z) {
-        return this.forEntries(x, z, e -> false);
+    public void findEntries(ReusableList<CompleteEntry> result, int x, int z) {
+        this.forEntries(x, z, e -> {
+            result.add(e);
+            return true;
+        });
     }
 
     public List<CompleteEntry> findEntries(int x, int z) {
-        var resultEntries = new ArrayList<CompleteEntry>(1);
-        this.forEntries(x, z, e -> {
-            resultEntries.add(e);
-            return true;
-        });
-        return resultEntries;
+        var resultEntries = new ReusableList<CompleteEntry>();
+        findEntries(resultEntries, x, z);
+        return resultEntries.collect();
     }
 
-    public @Nullable CompleteEntry findHighestPriorityEntry(@NotNull PriorityDrop priorityDrop, int x, int z) {
-        var entries = this.findEntries(x, z);
-        if (entries.isEmpty()) return null;
-        return findHighestPriorityEntry(entries, priorityDrop, x, z);
-    }
-
-    public @NotNull CompleteEntry findHighestPriorityEntry(@NotNull List<CompleteEntry> entries, @NotNull PriorityDrop priorityDrop, int x, int z) {
+    public CompleteEntry findHighestPriorityEntry(ReusableList<CompleteEntry> entries, PriorityDrop priorityDrop, int x, int z) {
         var comparator = entryPriorityComparator(priorityDrop, x, z);
-        return entries.stream().max(comparator).orElseThrow();
+        var stream = StreamSupport.stream(Spliterators.spliterator(entries.iterator(), entries.size(), 0), false);
+        try {
+            return stream.max(comparator).orElseThrow();
+        } finally {
+            entries.reuseLastIterator();
+        }
     }
 
     /**
      * Calculates the priority of a given {@code entry} for a chunk at {@code x,z}
      */
-    public double calculatePriority(@NotNull PriorityDrop priorityDrop, @NotNull CompleteEntry entry, int x, int z) {
+    public double calculatePriority(PriorityDrop priorityDrop, CompleteEntry entry, int x, int z) {
         return this.calculatePriority(priorityDrop, entry.entry().priority, entry.centerX(), entry.centerZ(), x, z);
     }
 
     /**
      * Calculates the priority of a given {@code entry} for a chunk at {@code x,z}
      */
-    public double calculatePriority(@NotNull PriorityDrop priorityDrop, double priority, int claimX, int claimZ, int x, int z) {
+    public double calculatePriority(PriorityDrop priorityDrop, double priority, int claimX, int claimZ, int x, int z) {
         return priority - priorityDrop.calculate(claimX, claimZ, x, z);
     }
 
-    public Comparator<ChunkClaimTree.CompleteEntry> entryPriorityComparator(@NotNull PriorityDrop priorityDrop, int x, int z) {
+    public Comparator<ChunkClaimTree.CompleteEntry> entryPriorityComparator(PriorityDrop priorityDrop, int x, int z) {
         return Comparator.comparingDouble(e -> calculatePriority(priorityDrop, e, x, z));
     }
 
-    public record Entries(Int2ObjectRBTreeMap<ArrayList<Entry>> byPriority) implements Iterable<Entry> {
+    public record Entries(
+            Int2ObjectRBTreeMap<@UnknownNullability ArrayList<Entry>> byPriority) implements Iterable<Entry> {
         private Entries() {
             this(new Int2ObjectRBTreeMap<>(Comparator.reverseOrder()));
         }
@@ -176,7 +188,7 @@ public class ChunkClaimTree {
         }
 
         public void add(Entry entry) {
-            this.byPriority.computeIfAbsent(entry.priority, prio -> new ArrayList<>(4)).add(entry);
+            this.byPriority.computeIfAbsent(entry.priority, _ -> new ArrayList<>(4)).add(entry);
         }
 
         public void remove(Entry entry) {
@@ -195,13 +207,13 @@ public class ChunkClaimTree {
         }
 
         @Override
-        public @NotNull Iterator<Entry> iterator() {
+        public Iterator<Entry> iterator() {
             return new It(this.byPriority.values().iterator());
         }
 
         private static class It implements Iterator<Entry> {
             private final Iterator<ArrayList<Entry>> it;
-            private Iterator<Entry> it2 = null;
+            private @Nullable Iterator<Entry> it2 = null;
 
             public It(Iterator<ArrayList<Entry>> it) {
                 this.it = it;
@@ -228,7 +240,7 @@ public class ChunkClaimTree {
         }
     }
 
-    public record CompleteEntry(int minX, int minZ, int maxX, int maxZ, @NotNull Entry entry) {
+    public record CompleteEntry(int minX, int minZ, int maxX, int maxZ, Entry entry) {
         public int centerX() {
             return minX + (maxX - minX) / 2;
         }
@@ -238,6 +250,6 @@ public class ChunkClaimTree {
         }
     }
 
-    public record Entry(int priority, @NotNull Shape shape) {
+    public record Entry(int priority, Shape shape) {
     }
 }

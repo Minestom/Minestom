@@ -20,6 +20,7 @@ import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ import static net.minestom.server.instance.chunksystem.TaskSchedulerThread.link;
 
 @SuppressWarnings("DuplicatedCode")
 class SingleThreadedManager {
-    static InternalCallbacks callbacks = null;
+    static @Nullable InternalCallbacks callbacks = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleThreadedManager.class);
 
     final ChunkClaimTree tree = new ChunkClaimTree();
@@ -47,8 +48,8 @@ class SingleThreadedManager {
     /**
      * Identity strategy, so we can identify the correct claims and remove them.
      */
-    final Object2ObjectMap<ChunkClaim, ClaimData> claimMap = new Object2ObjectOpenHashMap<>();
-    private final Long2ObjectMap<Collection<ClaimData>> claimsByChunk = new Long2ObjectOpenHashMap<>();
+    final Object2ObjectMap<ChunkClaim, @UnknownNullability ClaimData> claimMap = new Object2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<@UnknownNullability Collection<ClaimData>> claimsByChunk = new Long2ObjectOpenHashMap<>();
 
     /**
      * Utility to track running tasks.
@@ -56,7 +57,6 @@ class SingleThreadedManager {
      */
     private final TaskTracking taskTracking = new TaskTracking();
     final ChunkWorker chunkWorker;
-    final ChunkAccess chunkAccess;
     private final Instance instance;
     /**
      * Loaded chunks that are visible from the outside.
@@ -89,29 +89,26 @@ class SingleThreadedManager {
     /**
      * the chunk loader, used when trying to load/save a chunk from another source
      */
-    @NotNull ChunkLoader chunkLoader;
+    ChunkLoader chunkLoader;
     /**
      * used to supply a new chunk object at a position when requested
      */
-    @NotNull ChunkSupplier chunkSupplier;
+    ChunkSupplier chunkSupplier;
     boolean autosaveEnabled;
 
-    public SingleThreadedManager(@NotNull TaskSchedulerThread taskSchedulerThread, @NotNull ChunkAccess chunkAccess, @NotNull ChunkLoader chunkLoader, @NotNull ChunkSupplier chunkSupplier) {
+    public SingleThreadedManager(TaskSchedulerThread taskSchedulerThread, ChunkLoader chunkLoader, ChunkSupplier chunkSupplier) {
         this.taskSchedulerThread = taskSchedulerThread;
-        this.chunkAccess = chunkAccess;
         this.chunkLoader = chunkLoader;
         this.chunkSupplier = chunkSupplier;
-        this.chunkWorker = new ChunkWorker(taskSchedulerThread, chunkAccess);
+        this.chunkWorker = new ChunkWorker(taskSchedulerThread);
         this.instance = taskSchedulerThread.getInstance();
     }
 
-    @NotNull
     @UnmodifiableView
     Collection<Chunk> loadedChunks() {
         return Collections.unmodifiableCollection(this.loadedChunks.values());
     }
 
-    @NotNull
     @UnmodifiableView
     Collection<Chunk> loadedChunksManaged() {
         return Collections.unmodifiableCollection(this.loadedChunksManaged.values());
@@ -157,7 +154,7 @@ class SingleThreadedManager {
                 }
                 return IterationResult.WAIT_FOR_SIGNAL_OR_WORKER;
             } else if (result instanceof UpdateResult.WaitingForFuture(var future, var d)) {
-                future.whenComplete((o, throwable) -> this.taskSchedulerThread.addTask(new Task.EnqueueUpdate(update, claimData, d)));
+                future.whenComplete((_, _) -> this.taskSchedulerThread.addTask(new Task.EnqueueUpdate(update, claimData, d)));
                 continue;
             }
 
@@ -182,7 +179,7 @@ class SingleThreadedManager {
         var claimData = new ClaimData(claim, chunkAndClaim.chunkFuture());
         var chunkIndex = chunkIndex(x, z);
         this.claimMap.put(claim, claimData);
-        this.claimsByChunk.computeIfAbsent(chunkIndex, c -> new HashSet<>(4)).add(claimData);
+        this.claimsByChunk.computeIfAbsent(chunkIndex, _ -> new HashSet<>(4)).add(claimData);
 
         // If the chunk is already loaded, we can complete the future right here.
         // The new claim has been inserted into the map, the chunk may not be unloaded
@@ -204,10 +201,10 @@ class SingleThreadedManager {
         var claimData = new ClaimData(claim, chunkAndClaim.chunkFuture());
         var chunkIndex = chunkIndex(x, z);
         this.claimMap.put(claim, claimData);
-        this.claimsByChunk.computeIfAbsent(chunkIndex, c -> new HashSet<>(4)).add(claimData);
+        this.claimsByChunk.computeIfAbsent(chunkIndex, _ -> new HashSet<>(4)).add(claimData);
     }
 
-    @NotNull Collection<ChunkAndClaim> singleClaimCopy(@NotNull SingleThreadedManager copyTarget, int priority) {
+    Collection<ChunkAndClaim> singleClaimCopy(SingleThreadedManager copyTarget, int priority) {
         var copiedChunks = this.updateHandler.singleClaimCopyTo(copyTarget.updateHandler, copyTarget.instance);
         var list = new ArrayList<ChunkAndClaim>();
         var dispatcher = MinecraftServer.process().dispatcher();
@@ -227,7 +224,7 @@ class SingleThreadedManager {
         return List.copyOf(list);
     }
 
-    void removeClaim(ChunkClaim claim, CompletableFuture<Void> future) {
+    void removeClaim(ChunkClaim claim, CompletableFuture<@Nullable Void> future) {
         var claimedChunk = this.claimMap.remove(claim);
         if (claimedChunk == null) {
             this.taskSchedulerThread.completeExceptionally(future, new IllegalStateException("The claim you attempted to remove is not valid"));
@@ -337,6 +334,7 @@ class SingleThreadedManager {
         Runnable task = () -> {
             assert !this.loadedChunks.containsKey(chunkIndex);
             this.loadedChunks.put(chunkIndex, chunk);
+            chunk.onLoad();
             var event = new InstanceChunkLoadEvent(this.instance, chunk);
             EventDispatcher.call(event);
             this.taskTracking.runningTickScheduledCount.decrementAndGet();
@@ -360,9 +358,9 @@ class SingleThreadedManager {
             var saveFuture = new CompletableFuture<Void>();
 
             this.saveChunk(chunk, saveFuture);
-            saveFuture.whenComplete((unused, throwable) -> {
+            saveFuture.whenComplete((_, throwable) -> {
                 if (throwable != null) {
-                    LOGGER.error("Exception when saving chunk", throwable);
+                    MinecraftServer.getExceptionManager().handleException(new ChunkSystemException("Exception when saving chunk", throwable));
                     return;
                 }
                 this.taskSchedulerThread.addTask(new Task.FinishUnloadAfterSaveAndPartition(unloading));
@@ -377,7 +375,7 @@ class SingleThreadedManager {
         }
     }
 
-    void finishUnloadChunkAfterSaveAndPartition(@NotNull UpdateHandler.State.Unloading unloading) {
+    void finishUnloadChunkAfterSaveAndPartition(UpdateHandler.State.Unloading unloading) {
         this.updateHandler.finishUnloadAfterSaveAndPartition(unloading);
         this.taskSchedulerThread.complete(unloading.unloadFuture, null);
     }
@@ -388,7 +386,7 @@ class SingleThreadedManager {
         this.taskSchedulerThread.complete(chunkAndClaim.chunkFuture(), chunk);
     }
 
-    private void submitUpdate(int x, int z, UpdateType updateType, ChunkClaim claim, @NotNull ClaimData claimData) {
+    private void submitUpdate(int x, int z, UpdateType updateType, ChunkClaim claim, ClaimData claimData) {
         this.updateQueue.enqueue(new PrioritizedUpdate(updateType, claim.priority(), x, z, claim), claimData);
         if (ServerFlag.INSIDE_TEST) {
             if (this.updateQueue.size() > 50000) {
@@ -418,7 +416,7 @@ class SingleThreadedManager {
             try {
                 this.chunkWorker.workerGenerateChunk(x, z, loader, supplier, generator);
             } catch (Throwable throwable) {
-                LOGGER.error("Exception during chunk loading/generation", throwable);
+                MinecraftServer.getExceptionManager().handleException(new ChunkSystemException("Exception during chunk loading/generation", throwable));
             }
         });
     }
@@ -431,7 +429,7 @@ class SingleThreadedManager {
             try {
                 this.chunkWorker.workerCopyFromMemory(chunk, x, z);
             } catch (Throwable throwable) {
-                LOGGER.error("Exception when copying chunk from old (in memory)", throwable);
+                MinecraftServer.getExceptionManager().handleException(new ChunkSystemException("Exception when copying chunk from old (in memory)", throwable));
             }
         });
     }
@@ -444,6 +442,9 @@ class SingleThreadedManager {
         if (callbacks != null) {
             callbacks.onUnloadStarted(x, z);
         }
+        // TODO chunks can block us... This is undesirable
+        chunk.onUnloadManaged();
+        chunk.setUnloaded();
         this.loadedChunksManaged.remove(chunkIndex, chunk);
         this.taskTracking.runningTickScheduledCount.addAndGet(2);
         Runnable runInstance = () -> {
@@ -456,16 +457,24 @@ class SingleThreadedManager {
             this.taskTracking.runningTickScheduledCount.decrementAndGet();
         };
         Runnable runChunk = () -> {
+            chunk.onUnload();
             EventDispatcher.call(new InstanceChunkUnloadEvent(this.instance, chunk));
-            this.chunkAccess.unload(chunk);
             MinecraftServer.process().dispatcher().deletePartition(chunk);
             assert this.loadedChunks.get(chunkIndex) == chunk;
             if (!this.loadedChunks.remove(chunkIndex, chunk)) {
                 LOGGER.error("Failed to remove loaded chunk at ({}, {}): {}", x, z, chunk);
             }
             this.taskSchedulerThread.complete(unloading.partitionDeleted, null);
-            this.taskSchedulerThread.addTask(new Task.FinishUnloadAfterPartition(unloading));
-            this.taskTracking.runningTickScheduledCount.decrementAndGet();
+            Thread.startVirtualThread(() -> {
+                try {
+                    // TODO remove this once testing is complete
+                    // Keep for 100 seconds
+                    Thread.sleep(100000);
+                } catch (InterruptedException _) {
+                }
+                this.taskSchedulerThread.addTask(new Task.FinishUnloadAfterPartition(unloading));
+                this.taskTracking.runningTickScheduledCount.decrementAndGet();
+            });
         };
         if (!ServerFlag.ASYNC_CHUNK_SYSTEM) {
             runInstance.run();

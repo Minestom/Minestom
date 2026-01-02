@@ -30,6 +30,7 @@ public final class DefaultLightEngine implements LightEngine {
             }
         };
         this.workerService = new ForkJoinPool(Runtime.getRuntime().availableProcessors(), factory, null, false);
+        MinecraftServer.getSchedulerManager().buildShutdownTask(this.workerService::shutdown);
     }
 
     @Override
@@ -57,8 +58,8 @@ public final class DefaultLightEngine implements LightEngine {
     @Override
     public CompletableFuture<@Nullable Void> scheduleFutureWork(BooleanSupplier precondition, Runnable work) {
         var future = new CompletableFuture<@Nullable Void>();
-        WORKING_COUNT.incrementAndGet();
-        future.whenComplete((_, _) -> WORKING_COUNT.decrementAndGet());
+//        WORKING_COUNT.incrementAndGet();
+//        future.whenComplete((_, _) -> WORKING_COUNT.decrementAndGet());
         if (freeSubmits.tryAcquire()) {
             // Short-circuit virtual thread
             scheduleThenRelease(future, precondition, work);
@@ -85,8 +86,8 @@ public final class DefaultLightEngine implements LightEngine {
     public <WorkKey> CompletableFuture<@Nullable Void> scheduleFutureWork(WorkTypeTracker<WorkKey> tracker, WorkKey workKey, BooleanSupplier precondition, Runnable
             work) {
         var future = tracker.add(workKey, precondition, work);
-        WORKING_COUNT.incrementAndGet();
-        future.whenComplete((_, _) -> WORKING_COUNT.decrementAndGet());
+//        WORKING_COUNT.incrementAndGet();
+//        future.whenComplete((_, _) -> WORKING_COUNT.decrementAndGet());
         var pollers = tracker.pollers();
         if (pollers.get() > 0) {
             // At least 1 poller after we have submitted. The task will be found.

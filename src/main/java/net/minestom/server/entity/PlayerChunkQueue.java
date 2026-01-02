@@ -15,13 +15,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.VisibleForTesting;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PlayerChunkQueue {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerChunkQueue.class);
     private final Player player;
     private final ReentrantLock lock = new ReentrantLock();
     // This may seem counterintuitive, but this queue will get replaced quite frequently.
