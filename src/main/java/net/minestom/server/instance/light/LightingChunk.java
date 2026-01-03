@@ -21,7 +21,13 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
+/* TODO
+    send light data as part of a ChunkBatch to measure time elapsed as not to take up too much bandwidth.
+    Otherwise 32 chunk view distance with even just a few sections per chunk of data can destroy network throughput.
+    This would be better in a separate PR though, let's first confirm correctness.
+ */
 public class LightingChunk extends DynamicChunk {
     private static final LightEngine LIGHT_ENGINE = LightEngine.getDefault();
     // A reusable WeakReference to reduce allocations.
@@ -38,7 +44,7 @@ public class LightingChunk extends DynamicChunk {
     private @Nullable WeakReference<@Nullable LightingChunk> south;
     private @Nullable WeakReference<@Nullable LightingChunk> west;
     private volatile boolean mayRequireSpecificSectionResend = false;
-    private volatile int resendAfter = 0; // TODO
+    private final AtomicInteger resendSpecificAfter = new AtomicInteger(); // TODO
     final LightEngine.WorkTypeTracker<Integer> trackerBlockLightExternal = new LightEngine.WorkTypeTracker.Hash<>();
     final LightEngine.WorkTypeTracker<Integer> trackerFullBlockRelight = new LightEngine.WorkTypeTracker.Hash<>();
     private volatile boolean neighborUpdated = false;
@@ -183,7 +189,7 @@ public class LightingChunk extends DynamicChunk {
         return new LightData(skyMask, blockMask, emptySkyMask, emptyBlockMask, skyLights, blockLights);
     }
 
-    protected LightData createPartialLightData() {
+    protected LightData createPartialLightData(BitSet targetBlockSections, BitSet targetSkySections) {
         BitSet skyMask = new BitSet();
         BitSet blockMask = new BitSet();
         BitSet emptySkyMask = new BitSet();
@@ -193,10 +199,10 @@ public class LightingChunk extends DynamicChunk {
 
         for (var i = 0; i < lightSections.size(); i++) {
             var section = lightSections.get(i);
-            if (section.resendThisSectionBlockLight().compareAndSet(true, false)) {
+            if (targetBlockSections.get(i)) {
                 addLight(blockMask, emptyBlockMask, blockLights, i, section.getBlockLight().data());
             }
-            if (section.resendThisSectionSkyLight().compareAndSet(true, false)) {
+            if (targetSkySections.get(i)) {
                 addLight(skyMask, emptySkyMask, skyLights, i, section.getSkyLight().data());
             }
         }
@@ -223,7 +229,7 @@ public class LightingChunk extends DynamicChunk {
             mayRequireSpecificSectionResend = false;
             chunkCache.invalidate();
             sendLight();
-        } else if (mayRequireSpecificSectionResend) {
+        } else if (mayRequireSpecificSectionResend && resendSpecificAfter.getAndDecrement() == 0) {
             mayRequireSpecificSectionResend = false;
             chunkCache.invalidate();
             sendPartialLight();
@@ -250,6 +256,15 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
+    public void onReloadFromMemoryCopy(Chunk oldInMemoryChunk) {
+        super.onReloadFromMemoryCopy(oldInMemoryChunk);
+        // Internal light should already be valid because of #copy(...)
+        // Only external light missing. External in this case is still bound to the chunk.
+        // So only vertical sections pass to each other, no neighbor chunks are known yet.
+        LightSection.generatorRelightBlockLightExternalAndBakeSync(lightSections);
+    }
+
+    @Override
     public void onLoadedFromStorage() {
         super.onLoadedFromStorage();
         // TODO we may want to recalculate light if the loader doesn't store/read light data.
@@ -257,6 +272,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     void scheduleSpecificResend() {
+        resendSpecificAfter.set(200); // Resend after 20 ticks
         mayRequireSpecificSectionResend = true;
     }
 
@@ -271,6 +287,9 @@ public class LightingChunk extends DynamicChunk {
         lightingChunk.entries.putAll(entries);
         for (int i = 0; i < lightingChunk.lightSections.size(); i++) {
             lightingChunk.lightSections.get(i).copyInternalLighting(lightSections.get(i));
+            // No external lighting after copying. Still gotta bake the light
+            // TODO we may want to use the following, commented out code:
+            //  LightSection.generatorRelightBlockLightExternalAndBakeSync(lightSections);
             lightingChunk.lightSections.get(i).bakeBlockLight();
         }
         return lightingChunk;
@@ -282,8 +301,23 @@ public class LightingChunk extends DynamicChunk {
     }
 
     public void sendPartialLight() {
+        var targetBlockSections = new BitSet();
+        var targetSkySections = new BitSet();
+
+        // This must be done here, because the supplier in CachedPacket may be evaluated multiple times,
+        // and the AtomicBooleans would not be true the second time.
+        for (var i = 0; i < lightSections.size(); i++) {
+            var section = lightSections.get(i);
+            if (section.resendThisSectionBlockLight().compareAndSet(true, false)) {
+                targetBlockSections.set(i);
+            }
+            if (section.resendThisSectionSkyLight().compareAndSet(true, false)) {
+                targetSkySections.set(i);
+            }
+        }
+
         // CachedPacket here is an optimization to do the actual packet creation work on the network thread
-        sendPacketToViewers(new CachedPacket(() -> new UpdateLightPacket(chunkX, chunkZ, createPartialLightData())));
+        sendPacketToViewers(new CachedPacket(() -> new UpdateLightPacket(chunkX, chunkZ, createPartialLightData(targetBlockSections, targetSkySections))));
     }
 
     private List<LightSection> initSections() {
