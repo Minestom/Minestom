@@ -8,7 +8,10 @@ import net.minestom.server.network.packet.PacketWriting;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.ref.SoftReference;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -20,19 +23,31 @@ import java.util.function.Supplier;
  */
 @ApiStatus.Internal
 public final class CachedPacket implements SendablePacket {
+    private static final VarHandle PACKET_HANDLE;
+
+    static {
+        try {
+            PACKET_HANDLE = MethodHandles.lookup().findVarHandle(CachedPacket.class, "packet", SoftReference.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     private final Supplier<ServerPacket> packetSupplier;
-    private volatile @Nullable SoftReference<FramedPacket> packet;
+    @SuppressWarnings("unused") // VarHandle
+    private @Nullable SoftReference<FramedPacket> packet;
 
     public CachedPacket(Supplier<ServerPacket> packetSupplier) {
         this.packetSupplier = packetSupplier;
     }
 
     public CachedPacket(ServerPacket packet) {
+        Objects.requireNonNull(packet, "packet");
         this(() -> packet);
     }
 
     public void invalidate() {
-        this.packet = null;
+        PACKET_HANDLE.setRelease(this, null);
     }
 
     public ServerPacket packet(ConnectionState state) {
@@ -46,28 +61,46 @@ public final class CachedPacket implements SendablePacket {
     }
 
     private @Nullable FramedPacket updatedCache(ConnectionState state) {
-        if (!ServerFlag.CACHED_PACKET)
-            return null;
-        SoftReference<FramedPacket> ref = packet;
+        if (!ServerFlag.CACHED_PACKET) return null;
+        // Try to get the cached packet if it has been set.
+        // Also, if it hasn't been GC'd
+        SoftReference<FramedPacket> ref = getAcquire();
         FramedPacket cache;
-        if (ref == null || (cache = ref.get()) == null) {
-            final ServerPacket packet = packetSupplier.get();
-            final NetworkBuffer buffer = PacketWriting.allocateTrimmedPacket(state, packet,
-                    MinecraftServer.getCompressionThreshold());
-            cache = new FramedPacket(packet, buffer);
-            this.packet = new SoftReference<>(cache);
-        }
+        if (ref != null && (cache = ref.get()) != null) return cache;
+        // Create a new cached packet
+        final ServerPacket packet = packetSupplier.get();
+        final NetworkBuffer buffer = PacketWriting.allocateTrimmedPacket(state, packet,
+                MinecraftServer.getCompressionThreshold());
+        cache = new FramedPacket(packet, buffer);
+        SoftReference<FramedPacket> softRef = new SoftReference<>(cache);
+        // Perform an exchange to set the new cached packet
+        // If we lost, we use the existing one.
+        @SuppressWarnings("unchecked")
+        SoftReference<FramedPacket> witness = (SoftReference<FramedPacket>)
+                PACKET_HANDLE.compareAndExchangeRelease(this, ref, softRef);
+        // We won, return our packet.
+        if (witness == ref) return cache;
+        // If there was a witness, check if it has been GC'd
+        // If not, we use the witness packet to prevent duplication.
+        FramedPacket cacheWitness;
+        if (witness != null && (cacheWitness = witness.get()) != null) return cacheWitness;
+        // Could've just been garbage collected, use ours.
         return cache;
     }
 
     public boolean isValid() {
-        final SoftReference<FramedPacket> ref = packet;
+        final SoftReference<FramedPacket> ref = getAcquire();
         return ref != null && ref.get() != null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private @Nullable SoftReference<FramedPacket> getAcquire() {
+        return (SoftReference<FramedPacket>) PACKET_HANDLE.getAcquire(this);
     }
 
     @Override
     public String toString() {
-        final SoftReference<FramedPacket> ref = packet;
+        final SoftReference<FramedPacket> ref = getAcquire();
         final FramedPacket cache = ref != null ? ref.get() : null;
         return String.format("CachedPacket{cache=%s}", cache);
     }
