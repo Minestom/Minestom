@@ -127,7 +127,7 @@ public class GeneratorIntegrationTest {
         var instance = env.createEmptyInstance();
         DynamicChunk chunk = (DynamicChunk) instance.loadChunk(0, 0).join();
         Generator generator = unit -> {
-            chunk.assertLock();
+            chunk.assertWriteLock();
             unit.modifier().fill(Block.GRASS_BLOCK);
         };
         instance.generateChunk(0, 0, generator).join();

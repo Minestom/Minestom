@@ -12,6 +12,7 @@ dependencies {
 
 application {
     mainClass.set("net.minestom.demo.Main")
+    applicationDefaultJvmArgs += "-ea"
 }
 
 tasks.withType<ShadowJar> {
