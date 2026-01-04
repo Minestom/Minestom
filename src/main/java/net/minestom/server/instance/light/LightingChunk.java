@@ -272,7 +272,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     void scheduleSpecificResend() {
-        resendSpecificAfter.set(200); // Resend after 20 ticks
+        resendSpecificAfter.set(1); // Resend after 20 ticks
         mayRequireSpecificSectionResend = true;
     }
 
