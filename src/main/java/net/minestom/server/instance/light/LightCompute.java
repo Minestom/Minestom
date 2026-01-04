@@ -145,7 +145,6 @@ public final class LightCompute {
             final int z = (index >> 4) & 15;
             final int y = (index >> 8) & 15;
             final int lightLevel = (index >> 12) & 15;
-            final byte newLightLevel = (byte) (lightLevel - 1);
 
             for (Direction direction : DIRECTIONS) {
                 final int xO = x + direction.normalX();
@@ -159,6 +158,9 @@ public final class LightCompute {
 
                 // Section
                 final int newIndex = xO | (zO << 4) | (yO << 8);
+                final Block targetBlock = Objects.requireNonNullElse(getBlock(blockPalette, xO, yO, zO), Block.AIR);
+                final int opacity = targetBlock.registry().lightBlocked();
+                final byte newLightLevel = (byte) Math.max(lightLevel - Math.max(opacity, 1), 0);
 
                 if (getLight(lightArray, newIndex) < newLightLevel) {
                     final Block currentBlock = Objects.requireNonNullElse(getBlock(blockPalette, x, y, z), Block.AIR);

@@ -58,12 +58,15 @@ final class BlockLightSection {
             for (int bx = 0; bx < 16; bx++) {
                 for (int by = 0; by < 16; by++) {
 
-                    final byte lightEmission = (byte) Math.max(switch (face) {
+                    final byte neighborLight = switch (face) {
                         case NORTH, SOUTH -> (byte) getLight(otherLight, bx, by, 15 - k);
                         case WEST, EAST -> (byte) getLight(otherLight, 15 - k, bx, by);
                         default -> (byte) getLight(otherLight, bx, 15 - k, by);
-                    } - 1, 0);
-                    if (lightEmission <= 0) continue;
+                    };
+                    // Can't be brighter than this. For the actual brightness we need the opacity,
+                    // but we can first check with max values to optimize
+                    final byte maxSelfLight = (byte) Math.max(neighborLight - 1, 0);
+                    if (maxSelfLight == 0) continue;
 
                     final int posTo = switch (face) {
                         case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
@@ -71,18 +74,21 @@ final class BlockLightSection {
                         default -> bx | (by << 4) | (k << 8);
                     };
 
-                    if (content != LightCompute.EMPTY_CONTENT) {
-                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
-                        if (lightEmission <= internalEmission) continue;
-                    }
-
-                    final @Nullable Block blockTo = switch (face) {
+                    final Block blockTo = switch (face) {
                         case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
                         case WEST, EAST -> getBlock(blockPalette, k, bx, by);
                         default -> getBlock(blockPalette, bx, k, by);
                     };
 
-                    final @Nullable Block blockFrom = switch (face) {
+                    final int opacity = blockTo.registry().lightBlocked();
+                    final byte lightEmission = (byte) Math.max(neighborLight - Math.max(opacity, 1), 0);
+                    if (lightEmission == 0) continue;
+                    if (content != LightCompute.EMPTY_CONTENT) {
+                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
+                        if (lightEmission <= internalEmission) continue;
+                    }
+
+                    final Block blockFrom = switch (face) {
                         case NORTH, SOUTH -> getBlock(otherPalette, bx, by, 15 - k);
                         case WEST, EAST -> getBlock(otherPalette, 15 - k, bx, by);
                         default -> getBlock(otherPalette, bx, 15 - k, by);
@@ -97,11 +103,6 @@ final class BlockLightSection {
                     } else if (blockTo != null && blockFrom != null) {
                         if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
                             continue;
-                    }
-                    if (lightEmission >= 14){
-                        System.out.println(face);
-                        System.out.println(blockFrom);
-                        System.out.println(blockTo);
                     }
 
                     final int index = posTo | (lightEmission << 12);
@@ -127,8 +128,10 @@ final class BlockLightSection {
         return ((value >>> ((index & 1) << 2)) & 0xF);
     }
 
-    public static @Nullable Block getBlock(Palette palette, int x, int y, int z) {
-        return Block.fromStateId(palette.get(x, y, z));
+    public static Block getBlock(Palette palette, int x, int y, int z) {
+        var block = Block.fromStateId(palette.get(x, y, z));
+        assert block != null;
+        return block;
     }
 
     private LightData<InternalBlockLight> prepareBlockLightInternal(int version) {
