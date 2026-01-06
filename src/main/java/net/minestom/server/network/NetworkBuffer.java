@@ -768,7 +768,7 @@ public interface NetworkBuffer {
      *
      * @return new static buffer
      */
-    @Contract(pure = true, value = "-> new")
+    @Contract(pure = true)
     NetworkBuffer readOnly();
 
     /**
