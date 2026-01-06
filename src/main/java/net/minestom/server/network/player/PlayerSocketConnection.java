@@ -422,7 +422,6 @@ public class PlayerSocketConnection extends PlayerConnection {
             } else {
                 LockSupport.park(this);
             }
-            assert this.packetQueue.peek() != null : "packet queue should not be empty";
         } else {
             Thread.sleep(1000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
         }

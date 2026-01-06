@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 /**
  * Represents a packet that is lazily allocated. Potentially in a different thread.
  * <p>
- * Supplier must be thread-safe. The result must be non-null
+ * The supplier will be called at most once, the first time {@link #packet()} is called.
  */
 @ApiStatus.Internal
 public final class LazyPacket implements SendablePacket {
@@ -25,7 +25,9 @@ public final class LazyPacket implements SendablePacket {
         }
     }
 
-    private final Supplier<ServerPacket> packetSupplier;
+    // To be replaced by StabeValue/LazyConstant when available.
+    // Cleared once called. (voltiale for simplicity)
+    private volatile @Nullable Supplier<ServerPacket> packetSupplier;
     @SuppressWarnings("unused") // VarHandle
     private @Nullable ServerPacket packet;
 
@@ -38,8 +40,11 @@ public final class LazyPacket implements SendablePacket {
         if (packet == null) {
             synchronized (this) {
                 if ((packet = getAcquire()) == null) {
+                    Supplier<ServerPacket> packetSupplier = this.packetSupplier;
+                    assert packetSupplier != null;
                     packet = Objects.requireNonNull(packetSupplier.get(), "packetSupplier returned null");
                     PACKET_HANDLE.setRelease(this, packet);
+                    this.packetSupplier = null;
                 }
             }
         }
@@ -52,6 +57,6 @@ public final class LazyPacket implements SendablePacket {
 
     @Override
     public String toString() {
-        return String.format("LazyPacket{packet=%s}", packet);
+        return String.format("LazyPacket{packet=%s}", packet());
     }
 }

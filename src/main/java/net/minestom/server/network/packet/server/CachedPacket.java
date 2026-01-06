@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  * <p>
  * The cache is stored in a {@link SoftReference} and is invalidated when {@link #invalidate()} is called.
  * <p>
- * Packet supplier must be thread-safe.
+ * Packet supplier must be thread-safe, a result must be non-null, and the same state should be validated.
  */
 @ApiStatus.Internal
 public final class CachedPacket implements SendablePacket {
@@ -93,15 +93,15 @@ public final class CachedPacket implements SendablePacket {
         return ref != null && ref.get() != null;
     }
 
-    @SuppressWarnings("unchecked")
-    private @Nullable SoftReference<FramedPacket> getAcquire() {
-        return (SoftReference<FramedPacket>) PACKET_HANDLE.getAcquire(this);
-    }
-
     @Override
     public String toString() {
         final SoftReference<FramedPacket> ref = getAcquire();
         final FramedPacket cache = ref != null ? ref.get() : null;
         return String.format("CachedPacket{cache=%s}", cache);
+    }
+
+    @SuppressWarnings("unchecked")
+    private @Nullable SoftReference<FramedPacket> getAcquire() {
+        return (SoftReference<FramedPacket>) PACKET_HANDLE.getAcquire(this);
     }
 }
