@@ -25,6 +25,8 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.NetworkBufferProvider;
+import net.minestom.server.network.foreign.NetworkBufferSegmentProvider;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
@@ -46,6 +48,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.function.Supplier;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -81,13 +84,24 @@ public final class MinecraftServer implements MinecraftConstants {
         return new MinecraftServer();
     }
 
+    @ApiStatus.Experimental
+    public static MinecraftServer init(Auth auth, Supplier<NetworkBufferProvider> bufferSegmentProvider) {
+        updateProcess(auth, bufferSegmentProvider);
+        return new MinecraftServer();
+    }
+
     public static MinecraftServer init() {
         return init(new Auth.Offline());
     }
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess(Auth auth) {
-        ServerProcess process = new ServerProcessImpl(auth);
+        return updateProcess(auth, NetworkBufferSegmentProvider::new);
+    }
+
+    @ApiStatus.Internal
+    public static ServerProcess updateProcess(Auth auth, Supplier<NetworkBufferProvider> bufferSegmentProvider) {
+        ServerProcess process = new ServerProcessImpl(auth, bufferSegmentProvider);
         serverProcess = process;
         return process;
     }

@@ -65,6 +65,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 final class ServerProcessImpl implements ServerProcess {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
@@ -124,7 +125,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
-    public ServerProcessImpl(Auth auth) {
+    public ServerProcessImpl(Auth auth, Supplier<NetworkBufferProvider> networkBufferProvider) {
         this.auth = auth;
         this.exception = new ExceptionManager();
 
@@ -159,7 +160,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines
 
         // Needs to happen early enough before any pools have allocated their first segment.
-        this.networkBufferProvider = new NetworkBufferSegmentProvider();
+        this.networkBufferProvider = networkBufferProvider.get();
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
         this.packetParser = PacketVanilla.CLIENT_PACKET_PARSER;
