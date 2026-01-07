@@ -12,6 +12,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementAction;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.crypto.*;
@@ -93,6 +94,7 @@ public class PacketWriteReadTest {
     private static final String OG = "TheMode911";
     private static final Component COMPONENT = Component.text("Hey");
     private static final Vec VEC = new Vec(5, 5, 5);
+    private static final BlockVec BLOCK_VEC = new BlockVec(5, 5, 5);
 
     @SafeVarargs
     private static <T extends ServerPacket> void addServerPackets(T... packets) {
@@ -210,10 +212,10 @@ public class PacketWriteReadTest {
         addServerPackets(new AcknowledgeBlockChangePacket(0));
         addServerPackets(new ActionBarPacket(COMPONENT));
         addServerPackets(new AttachEntityPacket(5, 10));
-        addServerPackets(new BlockActionPacket(VEC, (byte) 5, (byte) 5, 5));
-        addServerPackets(new BlockBreakAnimationPacket(5, VEC, (byte) 5));
-        addServerPackets(new BlockChangePacket(VEC, 0));
-        addServerPackets(new BlockEntityDataPacket(VEC, BlockEntityType.SIGN, CompoundBinaryTag.builder().putString("key", "value").build()));
+        addServerPackets(new BlockActionPacket(BLOCK_VEC, (byte) 5, (byte) 5, 5));
+        addServerPackets(new BlockBreakAnimationPacket(5, BLOCK_VEC, (byte) 5));
+        addServerPackets(new BlockChangePacket(BLOCK_VEC, 0));
+        addServerPackets(new BlockEntityDataPacket(BLOCK_VEC, BlockEntityType.SIGN, CompoundBinaryTag.builder().putString("key", "value").build()));
         addServerPackets(
                 new BossBarPacket(UUID.randomUUID(), new BossBarPacket.AddAction(COMPONENT, 5f, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS, (byte) 2)),
                 new BossBarPacket(UUID.randomUUID(), new BossBarPacket.RemoveAction()),
@@ -253,7 +255,7 @@ public class PacketWriteReadTest {
         addServerPackets(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         addServerPackets(new DisconnectPacket(COMPONENT));
         addServerPackets(new DisplayScoreboardPacket((byte) 5, "scoreboard"));
-        addServerPackets(new WorldEventPacket(5, VEC, 5, false));
+        addServerPackets(new WorldEventPacket(5, BLOCK_VEC, 5, false));
         addServerPackets(new EndCombatEventPacket(5));
         addServerPackets(new EnterCombatEventPacket());
         addServerPackets(new EntityAnimationPacket(5, EntityAnimationPacket.Animation.TAKE_DAMAGE));
@@ -341,8 +343,8 @@ public class PacketWriteReadTest {
         addServerPackets(new NbtQueryResponsePacket(5, CompoundBinaryTag.builder().putString("key", "value").build()));
         addServerPackets(new OpenBookPacket(PlayerHand.MAIN));
         addServerPackets(new OpenHorseWindowPacket((byte) 5, 5, 5));
-        addServerPackets(new OpenSignEditorPacket(VEC, true));
         addServerPackets(new OpenWindowPacket(5, 5, COMPONENT));
+        addServerPackets(new OpenSignEditorPacket(BLOCK_VEC, true), new OpenSignEditorPacket(BlockVec.ONE, false), new OpenSignEditorPacket(BlockVec.ZERO, true));
         addServerPackets(new ParticlePacket(Particle.FLAME, VEC, Vec.ZERO, 0.1f, 10));
         addServerPackets(new PlayerAbilitiesPacket((byte) 0x0F, 0.05f, 0.1f));
         addServerPackets(new PlayerListHeaderAndFooterPacket(COMPONENT, COMPONENT));
@@ -372,7 +374,7 @@ public class PacketWriteReadTest {
         addServerPackets(new SetTitleTimePacket(10, 70, 20));
         addServerPackets(new SoundEffectPacket(SoundEvent.BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE, Sound.Source.VOICE, VEC, 1.0f, 1.0f, 0L), new SoundEffectPacket(SoundEvent.ENTITY_PLAYER_HURT, net.kyori.adventure.sound.Sound.Source.PLAYER, new Vec(0.25, 0.125, 0.125), 1.0f, 1.0f, 0L));
         addServerPackets(new SpawnEntityPacket(5, UUID.randomUUID(), EntityType.ZOMBIE, new Pos(0, 64, 0, 0, 0), 9.84375f, 0, Vec.ONE));
-        addServerPackets(new SpawnPositionPacket(new WorldPos("overworld", VEC), 0f, 1f));
+        addServerPackets(new SpawnPositionPacket(new WorldPos("overworld", BLOCK_VEC), 0f, 1f));
         addServerPackets(new StartConfigurationPacket());
         addServerPackets(new StatisticsPacket(List.of(new StatisticsPacket.Statistic(StatisticCategory.BROKEN, 5, 100))));
         addServerPackets(
@@ -410,22 +412,22 @@ public class PacketWriteReadTest {
         addServerPackets(new DamageEventPacket(5, 1, 2, 3, VEC));
         addServerPackets(new DeclareCommandsPacket(List.of(), 0));
         addServerPackets(new BundlePacket());
-        addServerPackets(new DebugBlockValuePacket(Vec.ONE, new DebugSubscription.Update<>(DebugSubscription.BEE_HIVES, new DebugHiveInfo(Block.BEEHIVE, 1, 0, true))));
-        addServerPackets(new DebugChunkValuePacket(1, 1, new DebugSubscription.Update<>(DebugSubscription.POIS, new DebugPoiInfo(VEC, DebugPoiInfo.Type.BUTCHER, 1))));
-        addServerPackets(new DebugEntityValuePacket(0, new DebugSubscription.Update<>(DebugSubscription.ENTITY_PATHS, new DebugPathInfo(new DebugPathInfo.Path(true, 0, VEC, List.of(), new DebugPathInfo.Data(Set.of(), List.of(), List.of())), 1))));
-        addServerPackets(new DebugEventPacket(new DebugSubscription.Event<>(DebugSubscription.NEIGHBOR_UPDATES, Vec.ZERO)));
+        addServerPackets(new DebugBlockValuePacket(BlockVec.ONE, new DebugSubscription.Update<>(DebugSubscription.BEE_HIVES, new DebugHiveInfo(Block.BEEHIVE, 1, 0, true))));
+        addServerPackets(new DebugChunkValuePacket(1, 1, new DebugSubscription.Update<>(DebugSubscription.POIS, new DebugPoiInfo(BLOCK_VEC, DebugPoiInfo.Type.BUTCHER, 1))));
+        addServerPackets(new DebugEntityValuePacket(0, new DebugSubscription.Update<>(DebugSubscription.ENTITY_PATHS, new DebugPathInfo(new DebugPathInfo.Path(true, 0, BLOCK_VEC, List.of(), new DebugPathInfo.Data(Set.of(), List.of(), List.of())), 1))));
+        addServerPackets(new DebugEventPacket(new DebugSubscription.Event<>(DebugSubscription.NEIGHBOR_UPDATES, BlockVec.ZERO)));
         addServerPackets(new DebugSamplePacket(new long[0], DebugSamplePacket.Type.TICK_TIME)); // Legacy debug wrapper, maybe it will change.
         addServerPackets(new DeleteChatPacket(new MessageSignature(new byte[256])));
         addServerPackets(new DisguisedChatPacket(Component.text("Hey"), 0, Component.text("Message"), null));
         addServerPackets(new EntityPositionSyncPacket(1, VEC, VEC, 1f, 1f, false));
-        addServerPackets(new GameTestHighlightPosPacket(VEC, VEC));
+        addServerPackets(new GameTestHighlightPosPacket(BLOCK_VEC, BLOCK_VEC));
         addServerPackets(new UpdateLightPacket(0, 0, new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
         addServerPackets(new MoveMinecartPacket(1, List.of(new MoveMinecartPacket.LerpStep(VEC, Vec.ZERO, 1f, 1f, 1f))));
         addServerPackets(new PlayerChatMessagePacket(0, UUID.randomUUID(), 0, new MessageSignature(new byte[256]), new SignedMessageBody.Packed("hey", Instant.EPOCH, 0L, new LastSeenMessages.Packed(List.of())), null, new FilterMask(FilterMask.Type.FULLY_FILTERED, new BitSet()), 1, Component.text("hey"), null));
         addServerPackets(new RecipeBookSettingsPacket(false, false, true, false, false, false, false, false));
         addServerPackets(new RemoveEntityEffectPacket(0, PotionEffect.BAD_OMEN));
         addServerPackets(new ResetScorePacket("dummy_score", null), new ResetScorePacket("duoka", "testObjective"));
-        addServerPackets(new TestInstanceBlockStatus(Component.text("Minestom is cool"), null), new TestInstanceBlockStatus(Component.text("Where is season 5 william?"), VEC));
+        addServerPackets(new TestInstanceBlockStatus(Component.text("Minestom is cool"), null), new TestInstanceBlockStatus(Component.text("Where is season 5 william?"), BLOCK_VEC));
         addServerPackets(new EntityEffectPacket(0, new Potion(PotionEffect.ABSORPTION, 1, 150)));
         addServerPackets(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.UNTRACK, new TrackedWaypointPacket.Waypoint("test", TrackedWaypointPacket.Icon.DEFAULT, new TrackedWaypointPacket.Target.Empty())));
     }
@@ -545,7 +547,7 @@ public class PacketWriteReadTest {
 
         // Play
         addClientPackets(new ClientTeleportConfirmPacket(325626), new ClientTeleportConfirmPacket(Integer.MAX_VALUE), new ClientTeleportConfirmPacket(Integer.MIN_VALUE));
-        addClientPackets(new ClientQueryBlockNbtPacket(1325, Vec.ZERO), new ClientQueryBlockNbtPacket(-15, Vec.ONE));
+        addClientPackets(new ClientQueryBlockNbtPacket(1325, BLOCK_VEC), new ClientQueryBlockNbtPacket(-15, BlockVec.ONE));
         addClientPackets(new ClientSelectBundleItemPacket(32, 65), new ClientSelectBundleItemPacket(Integer.MAX_VALUE, Integer.MAX_VALUE));
         addClientPackets(new ClientChangeDifficultyPacket(Difficulty.EASY, false), new ClientChangeDifficultyPacket(Difficulty.HARD, true), new ClientChangeDifficultyPacket(Difficulty.PEACEFUL, true));
         addClientPackets(new ClientChangeGameModePacket(GameMode.ADVENTURE), new ClientChangeGameModePacket(GameMode.SURVIVAL), new ClientChangeGameModePacket(GameMode.CREATIVE), new ClientChangeGameModePacket(GameMode.SPECTATOR));
@@ -577,24 +579,24 @@ public class PacketWriteReadTest {
                 new ClientInteractEntityPacket(Integer.MAX_VALUE, new ClientInteractEntityPacket.Interact(PlayerHand.OFF), false),
                 new ClientInteractEntityPacket(2365, new ClientInteractEntityPacket.Attack(), false)
         );
-        addClientPackets(new ClientGenerateStructurePacket(Vec.ZERO, Integer.MAX_VALUE, true));
+        addClientPackets(new ClientGenerateStructurePacket(BlockVec.ZERO, Integer.MAX_VALUE, true));
         addClientPackets(new ClientLockDifficultyPacket(true), new ClientLockDifficultyPacket(false));
-        addClientPackets(new ClientPlayerPositionPacket(Vec.ONE, (byte) ClientPlayerPositionPacket.FLAG_HORIZONTAL_COLLISION), new ClientPlayerPositionPacket(Vec.ZERO, (byte) ClientPlayerPositionPacket.FLAG_ON_GROUND));
+        addClientPackets(new ClientPlayerPositionPacket(Vec.ONE, ClientPlayerPositionPacket.FLAG_HORIZONTAL_COLLISION), new ClientPlayerPositionPacket(Vec.ZERO, (byte) ClientPlayerPositionPacket.FLAG_ON_GROUND));
         addClientPackets(new ClientPlayerPositionAndRotationPacket(Pos.ZERO, true, true), new ClientPlayerPositionAndRotationPacket(new Pos(10, 10, 10, 0f, 0f), false, true));
         addClientPackets(new ClientPlayerPositionStatusPacket(true, false), new ClientPlayerPositionStatusPacket(false, false), new ClientPlayerPositionStatusPacket(false, true), new ClientPlayerPositionStatusPacket(true, true));
         addClientPackets(new ClientVehicleMovePacket(new Pos(5, 5, 5, 45f, 45f), true));
         addClientPackets(new ClientVehicleMovePacket(new Pos(6, 5, 6, 82f, 12.5f), false));
         addClientPackets(new ClientSteerBoatPacket(true, false), new ClientSteerBoatPacket(false, false), new ClientSteerBoatPacket(true, true), new ClientSteerBoatPacket(false, true));
-        addClientPackets(new ClientPickItemFromBlockPacket(Vec.ONE, true), new ClientPickItemFromBlockPacket(Vec.ZERO, false));
+        addClientPackets(new ClientPickItemFromBlockPacket(BlockVec.ONE, true), new ClientPickItemFromBlockPacket(BlockVec.ZERO, false));
         addClientPackets(new ClientPickItemFromEntityPacket(124, true), new ClientPickItemFromEntityPacket(124, false), new ClientPickItemFromEntityPacket(Integer.MAX_VALUE, true), new ClientPickItemFromEntityPacket(Integer.MIN_VALUE, false));
         addClientPackets(new ClientPlaceRecipePacket((byte) 10, 10, true), new ClientPlaceRecipePacket((byte) 51, 14, false));
         addClientPackets(new ClientPlayerAbilitiesPacket((byte) 0x02));
-        addClientPackets(new ClientPlayerActionPacket(ClientPlayerActionPacket.Status.STARTED_DIGGING, Vec.ZERO, BlockFace.BOTTOM, Integer.MAX_VALUE), new ClientPlayerActionPacket(ClientPlayerActionPacket.Status.DROP_ITEM_STACK, Vec.ONE, BlockFace.TOP, Integer.MIN_VALUE));
+        addClientPackets(new ClientPlayerActionPacket(ClientPlayerActionPacket.Status.STARTED_DIGGING, BlockVec.ZERO, BlockFace.BOTTOM, Integer.MAX_VALUE), new ClientPlayerActionPacket(ClientPlayerActionPacket.Status.DROP_ITEM_STACK, BlockVec.ONE, BlockFace.TOP, Integer.MIN_VALUE));
         addClientPackets(new ClientEntityActionPacket(10, ClientEntityActionPacket.Action.LEAVE_BED, 0), new ClientEntityActionPacket(15, ClientEntityActionPacket.Action.START_SPRINTING, 0), new ClientEntityActionPacket(321, ClientEntityActionPacket.Action.START_FLYING_ELYTRA, 0));
         addClientPackets(new ClientInputPacket(true, false, true, false, false, false, true), new ClientInputPacket(false, true, true, false, false, false, true));
         addClientPackets(new ClientPlayerLoadedPacket());
         addClientPackets(new ClientPlayerRotationPacket(45f, 90f, true, false), new ClientPlayerRotationPacket(180f, -45f, false, true));
-        addClientPackets(new ClientPlayerBlockPlacementPacket(PlayerHand.MAIN, Vec.ONE, BlockFace.TOP, 0.5f, 0.5f, 0.5f, false, false, 0), new ClientPlayerBlockPlacementPacket(PlayerHand.OFF, Vec.ZERO, BlockFace.BOTTOM, 1f, 1f, 1f, true, true, Integer.MAX_VALUE));
+        addClientPackets(new ClientPlayerBlockPlacementPacket(PlayerHand.MAIN, BlockVec.ONE, BlockFace.TOP, 0.5f, 0.5f, 0.5f, false, false, 0), new ClientPlayerBlockPlacementPacket(PlayerHand.OFF, BlockVec.ZERO, BlockFace.BOTTOM, 1f, 1f, 1f, true, true, Integer.MAX_VALUE));
         addClientPackets(new ClientUseItemPacket(PlayerHand.MAIN, 0, 45f, 90f), new ClientUseItemPacket(PlayerHand.OFF, Integer.MAX_VALUE, 180f, -45f));
         addClientPackets(new ClientSpectatePacket(UUID.randomUUID()), new ClientSpectatePacket(new UUID(0, 0)));
         addClientPackets(new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.CRAFTING, true, false), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.FURNACE, false, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.BLAST_FURNACE, true, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.SMOKER, false, false));
@@ -604,16 +606,16 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientSelectTradePacket(0), new ClientSelectTradePacket(5), new ClientSelectTradePacket(Integer.MAX_VALUE));
         addClientPackets(new ClientSetBeaconEffectPacket(PotionType.STRENGTH, PotionType.REGENERATION), new ClientSetBeaconEffectPacket(null, null), new ClientSetBeaconEffectPacket(PotionType.fromKey("strength"), null));
         addClientPackets(new ClientHeldItemChangePacket((short) 0), new ClientHeldItemChangePacket((short) 8), new ClientHeldItemChangePacket((short) 4));
-        addClientPackets(new ClientUpdateCommandBlockPacket(Vec.ONE, "/say hello", ClientUpdateCommandBlockPacket.Mode.REDSTONE, (byte) 0), new ClientUpdateCommandBlockPacket(Vec.ZERO, "/tp @p 0 100 0", ClientUpdateCommandBlockPacket.Mode.AUTO, (byte) 0x01));
+        addClientPackets(new ClientUpdateCommandBlockPacket(BlockVec.ONE, "/say hello", ClientUpdateCommandBlockPacket.Mode.REDSTONE, (byte) 0), new ClientUpdateCommandBlockPacket(BlockVec.ZERO, "/tp @p 0 100 0", ClientUpdateCommandBlockPacket.Mode.AUTO, (byte) 0x01));
         addClientPackets(new ClientUpdateCommandBlockMinecartPacket(100, "/say minecart", true), new ClientUpdateCommandBlockMinecartPacket(Integer.MAX_VALUE, "", false));
         addClientPackets(new ClientCreativeInventoryActionPacket((short) 36, ItemStack.of(Material.DIAMOND_SWORD)), new ClientCreativeInventoryActionPacket((short) -1, ItemStack.AIR));
-        addClientPackets(new ClientUpdateJigsawBlockPacket(Vec.ONE, "minecraft:village/plains/houses", "minecraft:village/plains/terminators", "minecraft:village/plains/town_centers", "minecraft:air", "rollable", 5, 10));
-        addClientPackets(new ClientUpdateStructureBlockPacket(Vec.ZERO, ClientUpdateStructureBlockPacket.Action.UPDATE_DATA, ClientUpdateStructureBlockPacket.Mode.SAVE, "mystructure", new Vec(0, 0, 0), new Vec(10, 10, 10), ClientUpdateStructureBlockPacket.Mirror.NONE, Rotation.NONE, "", 1.0f, 0L, (byte) 0), new ClientUpdateStructureBlockPacket(Vec.ONE, ClientUpdateStructureBlockPacket.Action.SAVE, ClientUpdateStructureBlockPacket.Mode.LOAD, "test", new Vec(5, 5, 5), new Vec(20, 20, 20), ClientUpdateStructureBlockPacket.Mirror.LEFT_RIGHT, Rotation.CLOCKWISE, "metadata", 0.5f, 12345L, ClientUpdateStructureBlockPacket.SHOW_BOUNDING_BOX));
-        addClientPackets(new ClientUpdateSignPacket(Vec.ZERO, true, List.of("Line 1", "Line 2", "Line 3", "Line 4")), new ClientUpdateSignPacket(Vec.ONE, false, List.of("", "", "", "")));
+        addClientPackets(new ClientUpdateJigsawBlockPacket(BlockVec.ONE, "minecraft:village/plains/houses", "minecraft:village/plains/terminators", "minecraft:village/plains/town_centers", "minecraft:air", "rollable", 5, 10));
+        addClientPackets(new ClientUpdateStructureBlockPacket(BlockVec.ZERO, ClientUpdateStructureBlockPacket.Action.UPDATE_DATA, ClientUpdateStructureBlockPacket.Mode.SAVE, "mystructure", BlockVec.ZERO, new BlockVec(10, 10, 10), ClientUpdateStructureBlockPacket.Mirror.NONE, Rotation.NONE, "", 1.0f, 0L, (byte) 0), new ClientUpdateStructureBlockPacket(BlockVec.ONE, ClientUpdateStructureBlockPacket.Action.SAVE, ClientUpdateStructureBlockPacket.Mode.LOAD, "test", new BlockVec(5, 5, 5), new BlockVec(20, 20, 20), ClientUpdateStructureBlockPacket.Mirror.LEFT_RIGHT, Rotation.CLOCKWISE, "metadata", 0.5f, 12345L, ClientUpdateStructureBlockPacket.SHOW_BOUNDING_BOX));
+        addClientPackets(new ClientUpdateSignPacket(BlockVec.ZERO, true, List.of("Line 1", "Line 2", "Line 3", "Line 4")), new ClientUpdateSignPacket(BlockVec.ONE, false, List.of("", "", "", "")));
         addClientPackets(new ClientAnimationPacket(PlayerHand.MAIN), new ClientAnimationPacket(PlayerHand.OFF));
         addClientPackets(new ClientRecipeBookSeenRecipePacket(0), new ClientRecipeBookSeenRecipePacket(100), new ClientRecipeBookSeenRecipePacket(Integer.MAX_VALUE));
-        addClientPackets(new ClientSetTestBlockPacket(Vec.ZERO, ClientSetTestBlockPacket.TestBlockMode.START, "test started"), new ClientSetTestBlockPacket(Vec.ONE, ClientSetTestBlockPacket.TestBlockMode.FAIL, "test failed"), new ClientSetTestBlockPacket(Vec.ZERO, ClientSetTestBlockPacket.TestBlockMode.ACCEPT, ""));
-        addClientPackets(new ClientTestInstanceBlockActionPacket(Vec.ZERO, ClientTestInstanceBlockActionPacket.Action.INIT, new ClientTestInstanceBlockActionPacket.Data("mytest", new Vec(10, 10, 10), 0, false, ClientTestInstanceBlockActionPacket.Status.CLEARED, null)), new ClientTestInstanceBlockActionPacket(Vec.ONE, ClientTestInstanceBlockActionPacket.Action.RUN, new ClientTestInstanceBlockActionPacket.Data(null, new Vec(5, 5, 5), 1, true, ClientTestInstanceBlockActionPacket.Status.RUNNING, Component.text("Error!"))));
+        addClientPackets(new ClientSetTestBlockPacket(BlockVec.ZERO, ClientSetTestBlockPacket.TestBlockMode.START, "test started"), new ClientSetTestBlockPacket(BlockVec.ONE, ClientSetTestBlockPacket.TestBlockMode.FAIL, "test failed"), new ClientSetTestBlockPacket(BlockVec.ZERO, ClientSetTestBlockPacket.TestBlockMode.ACCEPT, ""));
+        addClientPackets(new ClientTestInstanceBlockActionPacket(BlockVec.ZERO, ClientTestInstanceBlockActionPacket.Action.INIT, new ClientTestInstanceBlockActionPacket.Data("mytest", new BlockVec(10, 10, 10), 0, false, ClientTestInstanceBlockActionPacket.Status.CLEARED, null)), new ClientTestInstanceBlockActionPacket(BlockVec.ONE, ClientTestInstanceBlockActionPacket.Action.RUN, new ClientTestInstanceBlockActionPacket.Data(null, new BlockVec(5, 5, 5), 1, true, ClientTestInstanceBlockActionPacket.Status.RUNNING, Component.text("Error!"))));
     }
 
     private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet, Env env) {

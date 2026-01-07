@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -458,7 +459,7 @@ final class NetworkBufferTypeImpl {
             final int x = (int) (value >> 38);
             final int y = (int) (value << 52 >> 52);
             final int z = (int) (value << 26 >> 38);
-            return new Vec(x, y, z);
+            return new BlockVec(x, y, z);
         }
     }
 
@@ -632,7 +633,7 @@ final class NetworkBufferTypeImpl {
             final int x = buffer.read(VAR_INT);
             final int y = buffer.read(VAR_INT);
             final int z = buffer.read(VAR_INT);
-            return new Vec(x, y, z);
+            return new BlockVec(x, y, z);
         }
     }
 
@@ -649,7 +650,7 @@ final class NetworkBufferTypeImpl {
             final byte x = buffer.read(BYTE);
             final byte y = buffer.read(BYTE);
             final byte z = buffer.read(BYTE);
-            return new Vec(x, y, z);
+            return new BlockVec(x, y, z);
         }
     }
 
