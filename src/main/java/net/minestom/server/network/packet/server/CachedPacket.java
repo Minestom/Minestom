@@ -47,6 +47,7 @@ public final class CachedPacket implements SendablePacket {
     }
 
     public void invalidate() {
+        if (!ServerFlag.CACHED_PACKET) return;
         PACKET_HANDLE.setRelease(this, null);
     }
 

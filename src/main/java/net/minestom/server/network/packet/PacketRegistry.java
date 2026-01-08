@@ -466,7 +466,7 @@ public interface PacketRegistry<T> {
             this.packetsByClass = ArrayUtils.toMap(packetInfoClasses, packetInfos, suppliers.length);
         }
 
-        public T create(int packetId, NetworkBuffer reader) {
+        public final T create(int packetId, NetworkBuffer reader) {
             final PacketInfo<T> info = packetInfo(packetId);
             try {
                 final T packet = info.serializer().read(reader);
@@ -478,7 +478,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public PacketInfo<T> packetInfo(Class<?> packetClass) {
+        public final PacketInfo<T> packetInfo(Class<?> packetClass) {
             final PacketInfo<T> info = packetsByClass.get(packetClass);
             if (info == null) {
                 throw new IllegalStateException("Packet type %s cannot be sent in state %s_%s!".formatted(packetClass.getSimpleName(), side().name(), state().name()));
@@ -487,7 +487,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public PacketInfo<T> packetInfo(int packetId) {
+        public final PacketInfo<T> packetInfo(int packetId) {
             if (packetId < 0 || packetId >= packetsById.size()) {
                 throw new IllegalStateException("Packet id 0x%X isn't registered or isn't registered in state %s_%s".formatted(packetId, side().name(), state().name()));
             }
@@ -495,7 +495,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @Unmodifiable Collection<PacketInfo<T>> packets() {
+        public final @Unmodifiable Collection<PacketInfo<T>> packets() {
             return packetsById;
         }
 
