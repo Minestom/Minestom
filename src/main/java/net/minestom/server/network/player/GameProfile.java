@@ -25,8 +25,6 @@ public record GameProfile(
         Objects.requireNonNull(uuid, "uuid");
         Objects.requireNonNull(name, "name");
         Objects.requireNonNull(properties, "properties");
-        if (name.isBlank())
-            throw new IllegalArgumentException("Name cannot be blank");
         if (name.length() > 16)
             throw new IllegalArgumentException("Name length cannot be greater than 16 characters");
         properties = List.copyOf(properties);
