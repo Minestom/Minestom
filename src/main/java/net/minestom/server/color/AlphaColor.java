@@ -126,18 +126,19 @@ public final class AlphaColor extends Color implements ARGBLike {
      * Attempt to parse a color from a {@code #}-prefixed hex string.
      * <p>
      * This string must be in the format {@code #RRGGBBAA}.
+     *
      * @param hexRGBA the input value
      * @return a color if possible, or null if any components are invalid
      */
-    static @Nullable AlphaColor fromRGBAHexString(@Pattern("#[0-9a-fA-F]{8}") final String hexRGBA) {
+    public static @Nullable AlphaColor fromRGBAHexString(@Pattern("#[0-9a-fA-F]{8}") final String hexRGBA) {
         if (hexRGBA.length() != 9) return null;
         if (!hexRGBA.startsWith("#")) return null;
 
         try {
-            int rgb = HexFormat.fromHexDigits(hexRGBA, 1, 7);
-            int alpha = HexFormat.fromHexDigits(hexRGBA, 7, 9);
-            return new AlphaColor((alpha << 24) + rgb);
-        } catch (final NumberFormatException ignored) {
+            int rgba = HexFormat.fromHexDigits(hexRGBA, 1, 9);
+            int argb = Integer.rotateRight(rgba, 8);
+            return new AlphaColor(argb);
+        } catch (NumberFormatException _) {
             return null;
         }
     }
@@ -146,17 +147,18 @@ public final class AlphaColor extends Color implements ARGBLike {
      * Attempt to parse a color from a {@code #}-prefixed hex string.
      * <p>
      * This string must be in the format {@code #AARRGGBB}.
+     *
      * @param hexARGB the input value
      * @return a color if possible, or null if any components are invalid
      */
-    static @Nullable AlphaColor fromARGBHexString(@Pattern("#[0-9a-fA-F]{8}") final String hexARGB) {
+    public static @Nullable AlphaColor fromARGBHexString(@Pattern("#[0-9a-fA-F]{8}") final String hexARGB) {
         if (hexARGB.length() != 9) return null;
         if (!hexARGB.startsWith("#")) return null;
 
         try {
             int argb = HexFormat.fromHexDigits(hexARGB, 1, 9);
             return new AlphaColor(argb);
-        } catch (final NumberFormatException ignored) {
+        } catch (NumberFormatException _) {
             return null;
         }
     }
