@@ -11,7 +11,7 @@ public record ClientDebugSubscriptionRequestPacket(
         Set<DebugSubscription<?>> subscriptions
 ) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientDebugSubscriptionRequestPacket> SERIALIZER = NetworkBufferTemplate.template(
-            DebugSubscription.NETWORK_TYPE.set(), ClientDebugSubscriptionRequestPacket::subscriptions,
+            DebugSubscription.NETWORK_TYPE.set(DebugSubscription.values().size()), ClientDebugSubscriptionRequestPacket::subscriptions,
             ClientDebugSubscriptionRequestPacket::new);
 
     public ClientDebugSubscriptionRequestPacket {

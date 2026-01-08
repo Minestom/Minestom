@@ -15,8 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class PathfinderIntegrationTest {
@@ -60,7 +59,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
@@ -80,7 +79,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
@@ -101,7 +100,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
@@ -125,8 +124,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
-
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
@@ -139,8 +137,8 @@ public class PathfinderIntegrationTest {
         nodes.add(node1);
         nodes.add(node2);
 
-        assert node1.equals(node2);
-        assert nodes.size() == 1;
+        assertEquals(node1, node2);
+        assertEquals(1, nodes.size());
     }
 
     @Test
@@ -190,7 +188,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
