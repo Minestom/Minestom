@@ -2,9 +2,8 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.BlockEvent;
-import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.event.trait.*;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 
@@ -19,18 +18,26 @@ import net.minestom.server.instance.block.BlockFace;
 public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
+    private final Instance instance;
     private final Block block;
     private final BlockVec blockPosition;
     private final BlockFace blockFace;
 
     private boolean cancelled;
 
-    public PlayerStartDiggingEvent(Player player, Block block, BlockVec blockPosition,
+    public PlayerStartDiggingEvent(Player player, Instance instance, Block block,
+                                   BlockVec blockPosition,
                                    BlockFace blockFace) {
         this.player = player;
+        this.instance = instance;
         this.block = block;
         this.blockPosition = blockPosition;
         this.blockFace = blockFace;
+    }
+
+    @Override
+    public Instance getInstance() {
+        return instance;
     }
 
     /**
