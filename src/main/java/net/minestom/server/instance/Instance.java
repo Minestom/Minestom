@@ -53,6 +53,7 @@ import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -76,7 +77,7 @@ import java.util.stream.Collectors;
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
-public abstract class Instance implements Block.Getter, Block.Setter,
+public abstract class Instance implements Block.Getter, Block.Setter, Biome.Getter, Biome.Setter,
         Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience, Pointered, Identified {
 
     // Adventure pointers
@@ -189,6 +190,15 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     public void setBlock(int x, int y, int z, Block block) {
         setBlock(x, y, z, block, true);
+    }
+
+    @Override
+    public void setBiome(int x, int y, int z, RegistryKey<Biome> biome) {
+        Chunk chunk = getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
+        if (chunk == null) return;
+        synchronized (chunk) {
+            chunk.setBiome(x, y, z, biome);
+        }
     }
 
     public void setBlock(Point blockPosition, Block block, boolean doBlockUpdates) {
@@ -741,6 +751,15 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return block;
     }
 
+    @Override
+    public RegistryKey<Biome> getBiome(int x, int y, int z) {
+        Chunk chunk = getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
+        Objects.requireNonNull(chunk);
+        synchronized (chunk) {
+            return chunk.getBiome(x, y, z);
+        }
+    }
+
     /**
      * Sends a {@link BlockActionPacket} for all the viewers of the specific position.
      *
@@ -787,17 +806,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the instance unique id
      */
     public UUID getUuid() {
-        return uuid;
-    }
-
-    /**
-     * Gets the instance unique id.
-     *
-     * @return the instance unique id
-     * @deprecated Replace with {@link Instance#getUuid()}
-     */
-    @Deprecated(forRemoval = true)
-    public UUID getUniqueId() {
         return uuid;
     }
 

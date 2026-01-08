@@ -1,4 +1,4 @@
 @NotNullByDefault
-package net.minestom.server.extras.bungee;
+package net.minestom.server.world.timeline;
 
 import org.jetbrains.annotations.NotNullByDefault;
