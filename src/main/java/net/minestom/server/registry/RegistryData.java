@@ -257,8 +257,11 @@ public final class RegistryData {
         private final @Nullable BlockEntityType blockEntityType;
         private final @Nullable Material material;
         private final @Nullable BlockSoundType blockSoundType;
+        private final Shape shape;
         private final Shape collisionShape;
+        private final Shape interactionShape;
         private final Shape occlusionShape;
+        private final Shape visualShape;
 
         private BlockEntry(String namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
             assert parent == null || !main.asMap().isEmpty() : "BlockEntry cannot be empty if it has a parent";
@@ -297,7 +300,15 @@ public final class RegistryData {
                 }, null);
             }
             { // Unique special case where the shape strings can mutate but arent saved after the parse.
+                this.shape = fromParent(parent, BlockEntry::shape, main, "shape", (properties, string) -> {
+                    String shape = properties.getString(string);
+                    return CollisionUtils.parseCollisionShape(internCache, shape);
+                }, null);
                 this.collisionShape = fromParent(parent, BlockEntry::collisionShape, main, "collisionShape", (properties, string) -> {
+                    String shape = properties.getString(string);
+                    return CollisionUtils.parseCollisionShape(internCache, shape);
+                }, null);
+                this.interactionShape = fromParent(parent, BlockEntry::interactionShape, main, "interactionShape", (properties, string) -> {
                     String shape = properties.getString(string);
                     return CollisionUtils.parseCollisionShape(internCache, shape);
                 }, null);
@@ -311,6 +322,10 @@ public final class RegistryData {
                         return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
                     }
                     return parent.occlusionShape();
+                }, null);
+                this.visualShape = fromParent(parent, BlockEntry::visualShape, main, "visualShape", (properties, string) -> {
+                    String shape = properties.getString(string);
+                    return CollisionUtils.parseCollisionShape(internCache, shape);
                 }, null);
             }
             var redstoneConductor = fromParent(parent, BlockEntry::isRedstoneConductor, main, "redstoneConductor", Properties::getBoolean, null);
@@ -450,12 +465,24 @@ public final class RegistryData {
             return (packedFlags & SIGNAL_SOURCE_OFFSET) != 0;
         }
 
+        public Shape shape() {
+            return shape;
+        }
+
         public Shape collisionShape() {
             return collisionShape;
         }
 
+        public Shape interactionShape() {
+            return interactionShape;
+        }
+
         public Shape occlusionShape() {
             return occlusionShape;
+        }
+
+        public Shape visualShape() {
+            return visualShape;
         }
 
         public @Nullable BlockSoundType getBlockSoundType() {
