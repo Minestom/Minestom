@@ -2,14 +2,14 @@ package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.Goal;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class RandomStrollGoal extends GoalSelector {
+public class RandomStrollGoal extends Goal {
 
     private static final long DELAY = TimeUnit.MILLISECONDS.toNanos(2500);
 
@@ -26,7 +26,7 @@ public class RandomStrollGoal extends GoalSelector {
     }
 
     @Override
-    public boolean shouldStart() {
+    public boolean canStart() {
         return System.nanoTime() - lastStroll >= DELAY;
     }
 

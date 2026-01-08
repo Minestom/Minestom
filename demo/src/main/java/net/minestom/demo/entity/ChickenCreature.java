@@ -2,38 +2,36 @@ package net.minestom.demo.entity;
 
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.ai.goal.RandomStrollGoal;
+import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.goal.*;
+import net.minestom.server.entity.ai.target.ClosestEntityTarget;
+import net.minestom.server.entity.ai.target.LastEntityDamagerTarget;
 import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.utils.time.TimeUnit;
 
-import java.util.List;
+import java.time.Duration;
 
 public class ChickenCreature extends EntityCreature {
 
     public ChickenCreature() {
         super(EntityType.CHICKEN);
 
-        addAIGroup(
-                List.of(
-//                        new DoNothingGoal(this, 500, 0.1f),
-//                        new MeleeAttackGoal(this, 500, 2, TimeUnit.MILLISECOND),
-                        new RandomStrollGoal(this, 2)
-                ),
-                List.of(
-//                        new LastEntityDamagerTarget(this, 15),
-//                        new ClosestEntityTarget(this, 15, LivingEntity.class)
-                )
-        );
+        GoalSelector.Slot move = new GoalSelector.Slot();
+        GoalSelector.Slot look = new GoalSelector.Slot();
+        GoalSelector.Slot damage = new GoalSelector.Slot();
 
-        // Another way to register previously added EntityAIGroup, using specialized builder:
-//        addAIGroup(
-//                new EntityAIGroupBuilder()
-//                        .addGoalSelector(new DoNothingGoal(this, 500, .1F))
-//                        .addGoalSelector(new MeleeAttackGoal(this, 500, 2, TimeUnit.MILLISECOND))
-//                        .addGoalSelector(new RandomStrollGoal(this, 2))
-//                        .addTargetSelector(new LastEntityDamagerTarget(this, 15))
-//                        .addTargetSelector(new ClosestEntityTarget(this, 15, LivingEntity.class))
-//                        .build()
-//        );
+        getAi()
+                .addGoal(move, new FollowTargetGoal(this, Duration.of(1, TimeUnit.SECOND), 8))
+                .addGoal(move, new DoNothingGoal(this, 500, 0.1f))
+                //.addGoal(damage, new MeleeAttackGoal(this, 3, 2, TimeUnit.MILLISECOND))
+                .addGoal(damage, new RangedAttackGoal(this, 20, 5, 0, 1, TimeUnit.SECOND))
+                .addGoal(move, look, new RandomStrollGoal(this, 3))
+                .addGoal(look, new RandomLookAroundGoal(this, 10));
+
+        getAi()
+                .addTargetSelector(new LastEntityDamagerTarget(this, 30, 200))
+                .addTargetSelector(new ClosestEntityTarget(this, 30, 50, entity -> entity instanceof LivingEntity));
 
         getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
     }

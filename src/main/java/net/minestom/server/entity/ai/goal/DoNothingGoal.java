@@ -1,13 +1,13 @@
 package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.Goal;
 import net.minestom.server.utils.MathUtils;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class DoNothingGoal extends GoalSelector {
+public class DoNothingGoal extends Goal {
 
     private static final Random RANDOM = new Random();
 
@@ -39,7 +39,7 @@ public class DoNothingGoal extends GoalSelector {
     }
 
     @Override
-    public boolean shouldStart() {
+    public boolean canStart() {
         return RANDOM.nextFloat() <= chance;
     }
 
