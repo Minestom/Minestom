@@ -68,25 +68,7 @@ public final class CachedPacket implements SendablePacket {
         SoftReference<FramedPacket> ref = getAcquire();
         FramedPacket cache;
         if (ref != null && (cache = ref.get()) != null) return cache;
-        // Create a new cached packet
-        final ServerPacket packet = packetSupplier.get();
-        final NetworkBuffer buffer = PacketWriting.allocateTrimmedPacket(state, packet,
-                MinecraftServer.getCompressionThreshold());
-        cache = new FramedPacket(packet, buffer);
-        SoftReference<FramedPacket> softRef = new SoftReference<>(cache);
-        // Perform an exchange to set the new cached packet
-        // If we lost, we use the existing one.
-        @SuppressWarnings("unchecked")
-        SoftReference<FramedPacket> witness = (SoftReference<FramedPacket>)
-                PACKET_HANDLE.compareAndExchangeRelease(this, ref, softRef);
-        // We won, return our packet.
-        if (witness == ref) return cache;
-        // If there was a witness, check if it has been GC'd
-        // If not, we use the witness packet to prevent duplication.
-        FramedPacket cacheWitness;
-        if (witness != null && (cacheWitness = witness.get()) != null) return cacheWitness;
-        // Could've just been garbage collected, use ours.
-        return cache;
+        return updateCache(ref, state);
     }
 
     public boolean isValid() {
@@ -104,5 +86,30 @@ public final class CachedPacket implements SendablePacket {
     @SuppressWarnings("unchecked")
     private @Nullable SoftReference<FramedPacket> getAcquire() {
         return (SoftReference<FramedPacket>) PACKET_HANDLE.getAcquire(this);
+    }
+
+    // Slow cache update
+    private FramedPacket updateCache(@Nullable SoftReference<FramedPacket> ref, ConnectionState state) {
+        // Create a new cached packet
+        final ServerPacket packet = packetSupplier.get();
+        final NetworkBuffer buffer = PacketWriting.allocateTrimmedPacket(state, packet,
+                MinecraftServer.getCompressionThreshold());
+        final FramedPacket cache = new FramedPacket(packet, buffer);
+        SoftReference<FramedPacket> softRef = new SoftReference<>(cache);
+        // Perform an exchange to set the new cached packet
+        // If we lost, we use the existing one.
+        @SuppressWarnings("unchecked")
+        SoftReference<FramedPacket> witness = (SoftReference<FramedPacket>)
+                PACKET_HANDLE.compareAndExchangeRelease(this, ref, softRef);
+        // We won, return our packet.
+        if (witness == ref) return cache;
+        // If there was a witness, check if it has been GC'd
+        // If not, we use the witness packet to prevent duplication.
+        FramedPacket cacheWitness;
+        if (witness != null && (cacheWitness = witness.get()) != null) return cacheWitness;
+        // Could've just been garbage collected, use ours.
+        // Likely we are running low on memory if SoftRefrence's are being cleared
+        // Or the packet is now invalidated, we still send the stale packet.
+        return cache;
     }
 }
