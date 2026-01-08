@@ -393,8 +393,10 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      */
     @Contract(pure = true, value = "_ -> new")
     default Codec<@Unmodifiable @Nullable List<T>> listOrSingle(int maxSize) {
-        return Codec.this.list(maxSize).orElse(Codec.this.transform(
-                (it) -> it == null ? null : List.of(it), list -> list.isEmpty() ? null : list.getFirst()));
+        return Either(Codec.this.list(maxSize), Codec.this).transform(
+                either -> either.unify(Function.identity(), List::of),
+                list -> list.size() == 1 ? Either.right(list.getFirst()) : Either.left(list)
+        );
     }
 
     /**
