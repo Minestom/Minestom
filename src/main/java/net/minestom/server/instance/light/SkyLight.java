@@ -1,11 +1,11 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
-import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.SectionVec;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,10 +14,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static net.minestom.server.instance.light.LightCompute.*;
 
-final class SkyLight implements Light {
-    private byte[] content;
-    private byte[] contentPropagation;
-    private byte[] contentPropagationSwap;
+final class SkyLight implements OldLight {
+    private byte @Nullable [] content;
+    private byte @Nullable [] contentPropagation;
+    private byte @Nullable [] contentPropagationSwap;
 
     private volatile boolean isValidBorders = true;
     private final AtomicBoolean needsSend = new AtomicBoolean(false);
@@ -91,10 +91,7 @@ final class SkyLight implements Light {
     }
 
     @Override
-    public Set<Point> calculateInternal(Palette blockPalette,
-                                        int chunkX, int chunkY, int chunkZ,
-                                        int[] heightmap, int maxY,
-                                        LightLookup lightLookup) {
+    public Set<SectionVec> calculateInternal(Palette blockPalette, int chunkX, int chunkY, int chunkZ, int[] heightmap, int maxY, LightLookup lightLookup) {
         this.isValidBorders = true;
 
         // Update single section with base lighting changes
@@ -113,29 +110,29 @@ final class SkyLight implements Light {
         }
 
         // Propagate changes to neighbors and self
-        Set<Point> toUpdate = new HashSet<>();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                for (int k = -1; k <= 1; k++) {
-                    final int neighborX = chunkX + i;
-                    final int neighborY = chunkY + j;
-                    final int neighborZ = chunkZ + k;
+        Set<SectionVec> toUpdate = new HashSet<>();
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    final int neighborX = chunkX + x;
+                    final int neighborY = chunkY + y;
+                    final int neighborZ = chunkZ + z;
                     if (!(lightLookup.light(neighborX, neighborY, neighborZ) instanceof SkyLight skyLight))
                         continue;
                     skyLight.contentPropagation = null;
-                    toUpdate.add(new BlockVec(neighborX, neighborY, neighborZ));
+                    toUpdate.add(new SectionVec(neighborX, neighborY, neighborZ));
                 }
             }
         }
-        toUpdate.add(new BlockVec(chunkX, chunkY, chunkZ));
+        toUpdate.add(new SectionVec(chunkX, chunkY, chunkZ));
         return toUpdate;
     }
 
     @Override
-    public Set<Point> calculateExternal(Palette blockPalette,
-                                        Point[] neighbors,
-                                        LightLookup lightLookup,
-                                        PaletteLookup paletteLookup) {
+    public Set<SectionVec> calculateExternal(Palette blockPalette,
+                                             @Nullable SectionVec[] neighbors,
+                                             LightLookup lightLookup,
+                                             PaletteLookup paletteLookup) {
         if (!isValidBorders) return Set.of();
         byte[] contentPropagationTemp = CONTENT_FULLY_LIT;
         if (!fullyLit) {
@@ -146,9 +143,9 @@ final class SkyLight implements Light {
             this.contentPropagationSwap = null;
         }
         // Propagate changes to neighbors and self
-        Set<Point> toUpdate = new HashSet<>();
+        Set<SectionVec> toUpdate = new HashSet<>();
         for (int i = 0; i < neighbors.length; i++) {
-            final Point neighbor = neighbors[i];
+            final SectionVec neighbor = neighbors[i];
             if (neighbor == null) continue;
             final BlockFace face = FACES[i];
             if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {

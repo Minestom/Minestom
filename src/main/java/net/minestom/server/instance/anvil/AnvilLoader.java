@@ -14,6 +14,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.light.LightCompute;
 import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
@@ -400,9 +401,9 @@ public class AnvilLoader implements ChunkLoader {
 
                 // Lighting
                 byte[] skyLight = section.skyLight().array();
-                if (skyLight != null && skyLight.length > 0) sectionData.putByteArray("SkyLight", skyLight);
+                if (skyLight != null && skyLight.length > 0 && skyLight != LightCompute.EMPTY_CONTENT) sectionData.putByteArray("SkyLight", skyLight);
                 byte[] blockLight = section.blockLight().array();
-                if (blockLight != null && blockLight.length > 0) sectionData.putByteArray("BlockLight", blockLight);
+                if (blockLight != null && blockLight.length > 0 && skyLight != LightCompute.EMPTY_CONTENT) sectionData.putByteArray("BlockLight", blockLight);
 
                 final int globalSectionY = sectionY * 16;
                 // Retrieve block data

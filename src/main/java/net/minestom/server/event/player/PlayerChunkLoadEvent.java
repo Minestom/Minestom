@@ -4,7 +4,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 
 /**
- * Called when a player receive a new chunk data.
+ * Called when a chunk is being sent to a player.
+ * <p>
+ * This is always called on the player's tick thread
  */
 public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
 

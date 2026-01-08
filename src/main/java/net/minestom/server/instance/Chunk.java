@@ -15,6 +15,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
+import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
@@ -53,8 +54,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     private final boolean shouldGenerate;
     private boolean readOnly;
 
-    protected volatile boolean loaded = true;
+    protected volatile boolean loaded = false;
     private final Viewable viewable;
+    private final Scheduler scheduler = Scheduler.newScheduler();
 
     // Data
     private final TagHandler tagHandler = TagHandler.newHandler();
@@ -101,7 +103,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public abstract Section getSection(int section);
 
     public abstract Heightmap motionBlockingHeightmap();
+
     public abstract Heightmap worldSurfaceHeightmap();
+
     public abstract void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
 
     public Section getSectionAt(int blockY) {
@@ -118,7 +122,15 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param time the time of the update in milliseconds
      */
     @Override
-    public abstract void tick(long time);
+    public final void tick(long time) {
+        synchronized (this) {
+            scheduler.processTick();
+            tick0(time);
+            scheduler.processTickEnd();
+        }
+    }
+
+    protected abstract void tick0(long time);
 
     /**
      * Sends the chunk data to {@code player}.
@@ -171,6 +183,15 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     public Instance getInstance() {
         return instance;
+    }
+
+    /**
+     * Gets a scheduler to run tasks on the Chunk thread
+     *
+     * @return the chunk's scheduler
+     */
+    public Scheduler getScheduler() {
+        return scheduler;
     }
 
     /**
@@ -258,19 +279,71 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return true if the chunk is loaded
      */
-    public boolean isLoaded() {
+    public final boolean isLoaded() {
         return loaded;
     }
 
     /**
-     * Called when the chunk has been successfully loaded.
+     * Called when the chunk generator has finished generating the chunk.
+     *
+     * @implNote This is called in a chunk generation worker thread.
      */
-    protected void onLoad() {}
+    public void onGenerate() {
+    }
 
     /**
-     * Called when the chunk generator has finished generating the chunk.
+     * Called when the chunk has been successfully loaded.
+     * <p>
+     * Loaded, in this case, means that the chunk is a valid chunk in an instance now.
+     *
+     * @see #onLoadedFromStorage()
      */
-    public void onGenerate() {}
+    public void onLoad() {
+    }
+
+    /**
+     * Called when the chunk has been successfully created by a {@link ChunkLoader}.
+     * <p>
+     * This is basically the {@link #onGenerate()} replacement for when a chunk is loaded from storage instead of generated.
+     *
+     * @implNote This is called in a chunk generation worker thread.
+     */
+    @ApiStatus.Experimental
+    public void onLoadedFromStorage() {
+    }
+
+    /**
+     * Called when the chunk system is re-loading a chunk from memory and copying that chunk.
+     *
+     * @implNote This is called in a chunk generation worker thread.
+     */
+    @ApiStatus.Experimental
+    public void onReloadFromMemoryCopy(Chunk oldInMemoryChunk) {
+    }
+
+    /**
+     * Called when the chunk has been successfully unloaded.
+     */
+    public void onUnload() {
+    }
+
+    /**
+     * Called when the chunk has been successfully loaded.
+     * <p>
+     * This is called on the chunk management thread, so keep work in here to a minimum.
+     */
+    @ApiStatus.Experimental
+    public void onLoadManaged() {
+    }
+
+    /**
+     * Called right before the chunk is unloaded.
+     * <p>
+     * This is called on the chunk management thread, so keep work in here to a minimum.
+     */
+    @ApiStatus.Experimental
+    public void onUnloadManaged() {
+    }
 
     @Override
     public String toString() {
@@ -298,9 +371,22 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     }
 
     /**
-     * Sets the chunk as "unloaded".
+     * Sets the chunk as "loaded".
+     * <p>
+     * May only be called by the chunk management thread.
      */
-    protected void unload() {
+    @ApiStatus.Internal
+    public final void setLoaded() {
+        this.loaded = true;
+    }
+
+    /**
+     * Sets the chunk as "unloaded".
+     * <p>
+     * May only be called by the chunk management thread.
+     */
+    @ApiStatus.Internal
+    public final void setUnloaded() {
         this.loaded = false;
     }
 

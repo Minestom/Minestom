@@ -17,6 +17,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.chunksystem.ChunkWorker;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
@@ -89,6 +90,7 @@ public final class MinecraftServer implements MinecraftConstants {
     public static ServerProcess updateProcess(Auth auth) {
         ServerProcess process = new ServerProcessImpl(auth);
         serverProcess = process;
+        ChunkWorker.globalInit();
         return process;
     }
 

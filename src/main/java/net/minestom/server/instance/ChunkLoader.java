@@ -82,7 +82,9 @@ public interface ChunkLoader {
     }
 
     /**
-     * Supports for instance/chunk saving in virtual threads.
+     * Supports for instance/chunk saving in parallel.
+     * This makes no guarantee about what thread this is saved in.
+     * {@code false} only guarantees that no two tasks are ever executed in parallel.
      *
      * @return true if the chunk loader supports parallel saving
      */
@@ -91,7 +93,9 @@ public interface ChunkLoader {
     }
 
     /**
-     * Supports for instance/chunk loading in virtual threads.
+     * Supports for instance/chunk loading in parallel.
+     * This makes no guarantee about what thread this is saved in.
+     * {@code false} only guarantees that no two tasks are ever executed in parallel.
      *
      * @return true if the chunk loader supports parallel loading
      */
