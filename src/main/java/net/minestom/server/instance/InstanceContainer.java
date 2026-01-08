@@ -157,7 +157,8 @@ public class InstanceContainer extends Instance {
             return;
         }
 
-        synchronized (chunk) {
+        chunk.lockWriteLock();
+        try {
             // Refresh the last block change time
             this.lastBlockChangeTime = System.nanoTime();
             final BlockVec blockPosition = new BlockVec(x, y, z);
@@ -210,6 +211,8 @@ public class InstanceContainer extends Instance {
                 }
             }
             EventDispatcher.call(new InstanceBlockUpdateEvent(this, blockPosition, block));
+        } finally {
+            chunk.unlockWriteLock();
         }
     }
 
@@ -460,20 +463,20 @@ public class InstanceContainer extends Instance {
     }
 
     private void applyFork(Chunk chunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
-        synchronized (chunk) {
+        chunk.withWriteLock(() -> {
             Section section = chunk.getSectionAt(sectionModifier.start().blockY());
             Palette currentBlocks = section.blockPalette();
             // -1 is necessary because forked units handle explicit changes by changing AIR 0 to 1
             sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
             applyGenerationData(chunk, sectionModifier);
-        }
+        });
     }
 
     private void applyGenerationData(Chunk chunk, GeneratorImpl.SectionModifierImpl section) {
         var cache = section.genSection().specials();
         if (cache.isEmpty()) return;
         final int height = section.start().blockY();
-        synchronized (chunk) {
+        chunk.withWriteLock(() -> {
             Int2ObjectMaps.fastForEach(cache, blockEntry -> {
                 final int index = blockEntry.getIntKey();
                 final Block block = blockEntry.getValue();
@@ -482,7 +485,7 @@ public class InstanceContainer extends Instance {
                 final int z = CoordConversion.chunkBlockIndexGetZ(index);
                 chunk.setBlock(x, y, z, block);
             });
-        }
+        });
     }
 
     @Override
@@ -627,10 +630,10 @@ public class InstanceContainer extends Instance {
         CompletableFuture<Void> future = new CompletableFuture<>();
         Thread.startVirtualThread(() -> {
             Chunk chunk = loadChunk(chunkX, chunkZ).join();
-            synchronized (chunk) {
+            chunk.withWriteLock(() -> {
                 generateChunk(chunk, generator);
                 chunk.invalidate();
-            }
+            });
             chunk.sendChunk();
             future.complete(null);
         });
