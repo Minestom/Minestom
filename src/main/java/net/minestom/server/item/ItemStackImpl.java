@@ -30,6 +30,10 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
                     return;
                 }
 
+                if (value.amount() <= 0) {
+                    throw new IllegalArgumentException(String.format("ItemStack %s amount must be greater than 0 if not air", value));
+                }
+
                 buffer.write(NetworkBuffer.VAR_INT, value.amount());
                 buffer.write(NetworkBuffer.VAR_INT, value.material().id());
                 buffer.write(componentPatchType, ((ItemStackImpl) value).components());
@@ -70,6 +74,9 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         if (components != DataComponentMap.EMPTY) {
             components = DataComponentMap.diff(material.prototype(), components);
         }
+
+        // Having items with amount being 0 and material not being air kicks players
+        if (amount == 0) material = Material.AIR;
     }
 
     @Override
@@ -96,7 +103,8 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public ItemStack withMaterial(Material material) {
-        return new ItemStackImpl(material, amount, components);
+        if (material == Material.AIR) return ItemStack.AIR;
+        return new ItemStackImpl(material, Math.max(1, amount), components);
     }
 
     @Override
