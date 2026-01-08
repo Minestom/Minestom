@@ -1,10 +1,12 @@
 package net.minestom.server.instance.batch;
 
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
@@ -51,6 +53,18 @@ public interface Batch<C> extends Block.Setter {
      * Removes all block data from this batch.
      */
     void clear();
+
+    /**
+     * Gets the set of chunk indices that will be affected by applying this batch.
+     * <p>
+     * Each chunk index is a {@code long} value representing the unique identifier of a chunk,
+     * computed using {@link CoordConversion#chunkIndex(int, int)}.
+     * <p>
+     * The X/Z values can be derived from this index with {@link CoordConversion#chunkIndexGetX(long)} and {@link CoordConversion#chunkIndexGetZ(long)}, respectively.
+     *
+     * @return A set of chunk indices affected by this batch
+     */
+    Set<Long> getAffectedChunks();
 
     /**
      * Called to apply the batch to the given instance.
