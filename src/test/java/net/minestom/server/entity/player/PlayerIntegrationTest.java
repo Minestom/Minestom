@@ -9,6 +9,7 @@ import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerGameModeChangeEvent;
+import net.minestom.server.event.player.PlayerInfoUpdateEvent;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -290,4 +291,18 @@ public class PlayerIntegrationTest {
         player.remove(true);
     }
 
+    @Test
+    public void playerInfoUpdateEvent(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var listener = env.listen(PlayerInfoUpdateEvent.class);
+        listener.followup(event -> {
+            assertEquals(player, event.getPlayer());
+            assertEquals(PlayerInfoUpdateEvent.InfoUpdateType.UPDATE, event.getType());
+        });
+
+        player.setDisplayName(Component.text("Test Display Name"));
+    }
 }

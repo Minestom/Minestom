@@ -323,17 +323,19 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        PacketSendingUtils.broadcastPlayPacket(getAddPlayerToList());
+        sendPlayerInfo(getAddPlayerToList());
 
-        var connectionManager = MinecraftServer.getConnectionManager();
-        for (var player : connectionManager.getOnlinePlayers()) {
-            if (player != this) {
-                sendPacket(player.getAddPlayerToList());
-                if (player.displayName != null) {
-                    sendPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, player.infoEntry()));
+        var infoUpdateEvent = new PlayerInfoUpdateEvent(this, PlayerInfoUpdateEvent.InfoUpdateType.UPDATE, MinecraftServer.getConnectionManager().getOnlinePlayers());
+        EventDispatcher.callCancellable(infoUpdateEvent, () -> {
+            for (var player : infoUpdateEvent.getEffectiveRecipients()) {
+                if (player != this) {
+                    sendPacket(player.getAddPlayerToList());
+                    if (player.displayName != null) {
+                        sendPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, player.infoEntry()));
+                    }
                 }
             }
-        }
+        });
 
         //Teams
         for (Team team : MinecraftServer.getTeamManager().getTeams()) {
@@ -590,7 +592,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         resetChunkQueue();
 
         // Remove from the tab-list
-        PacketSendingUtils.broadcastPlayPacket(getRemovePlayerToList());
+        sendPlayerInfo(getRemovePlayerToList());
 
         super.remove(permanent);
         // Prevent the player from being stuck in loading screen, or just unable to interact with the server
@@ -1186,7 +1188,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
+        sendPlayerInfo(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
     }
 
     /**
@@ -1230,11 +1232,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         {
             // Remove player
-            PacketSendingUtils.broadcastPlayPacket(removePlayerPacket);
+            sendPlayerInfo(removePlayerPacket);
             sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
-            PacketSendingUtils.broadcastPlayPacket(addPlayerPacket);
+            sendPlayerInfo(addPlayerPacket);
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
@@ -1646,7 +1648,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.ordinal()));
-            PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, infoEntry()));
+            sendPlayerInfo(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, infoEntry()));
         }
 
         // The client updates their abilities based on the GameMode as follows
@@ -2144,7 +2146,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void refreshLatency(int latency) {
         this.latency = latency;
         if (getPlayerConnection().getServerState() == ConnectionState.PLAY) {
-            PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
+            sendPlayerInfo(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
         }
     }
 
@@ -2402,5 +2404,19 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public Acquirable<? extends Player> acquirable() {
         return (Acquirable<? extends Player>) super.acquirable();
+    }
+
+    protected void sendPlayerInfo(PlayerInfoUpdatePacket packet) {
+        sendPlayerInfo(packet, PlayerInfoUpdateEvent.InfoUpdateType.UPDATE);
+    }
+
+    protected void sendPlayerInfo(PlayerInfoRemovePacket packet) {
+        sendPlayerInfo(packet, PlayerInfoUpdateEvent.InfoUpdateType.REMOVE);
+    }
+
+    private void sendPlayerInfo(ServerPacket.Play packet, PlayerInfoUpdateEvent.InfoUpdateType type) {
+        var event = new PlayerInfoUpdateEvent(this, type, MinecraftServer.getConnectionManager().getOnlinePlayers());
+
+        EventDispatcher.callCancellable(event, () -> PacketSendingUtils.sendGroupedPacket(event.getEffectiveRecipients(), packet));
     }
 }
