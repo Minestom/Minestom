@@ -1,6 +1,5 @@
 package net.minestom.server.entity.pathfinding.followers;
 
-import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -12,9 +11,18 @@ import org.jetbrains.annotations.Nullable;
 
 public class GroundNodeFollower implements NodeFollower {
     private final Entity entity;
+    private double maxStepHeight = 0.6;
 
     public GroundNodeFollower(Entity entity) {
         this.entity = entity;
+    }
+
+    public void setMaxStepHeight(double maxStepHeight) {
+        this.maxStepHeight = maxStepHeight;
+    }
+
+    public double getMaxStepHeight() {
+        return maxStepHeight;
     }
 
     /**
@@ -22,49 +30,65 @@ public class GroundNodeFollower implements NodeFollower {
      * Gravity is still applied but the entity will not attempt to jump
      * Also update the yaw/pitch of the entity to look along 'direction'
      *
-     * @param direction the targeted position
-     * @param speed     define how far the entity will move
+     * @param target the targeted position
+     * @param speed  define how far the entity will move
+     * @param lookAt the position to look at
      */
-    public void moveTowards(Point direction, double speed, Point lookAt) {
-        final Pos position = entity.getPosition();
-        final double dx = direction.x() - position.x();
-        final double dy = direction.y() - position.y();
-        final double dz = direction.z() - position.z();
+    @Override
+    public void moveTowards(Point target, double speed, Point lookAt) {
+        final Pos pos = entity.getPosition();
+        final double dx = target.x() - pos.x();
+        final double dy = target.y() - pos.y();
+        final double dz = target.z() - pos.z();
 
-        final double dxLook = lookAt.x() - position.x();
-        final double dyLook = lookAt.y() - position.y();
-        final double dzLook = lookAt.z() - position.z();
+        final double dxLook = lookAt.x() - pos.x();
+        final double dyLook = lookAt.y() - pos.y();
+        final double dzLook = lookAt.z() - pos.z();
 
-        // the purpose of these few lines is to slow down entities when they reach their destination
-        final double distSquared = dx * dx + dy * dy + dz * dz;
-        if (speed > distSquared) {
-            speed = distSquared;
+        final double horizDistSq = dx * dx + dz * dz;
+        final double horizDist = Math.sqrt(horizDistSq);
+
+        if (horizDistSq < 2.5E-7) {
+            entity.setVelocity(new Vec(0, entity.getVelocity().y(), 0));
+            return;
         }
 
+        speed = Math.min(speed, horizDist);
+
         final double radians = Math.atan2(dz, dx);
-        final double speedX = Math.cos(radians) * speed;
-        final double speedZ = Math.sin(radians) * speed;
+        final double velX = Math.cos(radians) * speed * 20;
+        final double velZ = Math.sin(radians) * speed * 20;
+
         final float yaw = PositionUtils.getLookYaw(dxLook, dzLook);
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
-        final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, 0, speedZ));
-        this.entity.refreshPosition(physicsResult.newPosition().asPos().withView(yaw, pitch));
+        Vec currentVel = entity.getVelocity();
+        entity.setVelocity(new Vec(velX, currentVel.y(), velZ));
+        entity.setView(yaw, pitch);
     }
 
     @Override
-    public void jump(@Nullable Point point, @Nullable Point target) {
-        if (entity.isOnGround()) {
-            jump(4f);
-        }
+    public void jump(@Nullable Point target, @Nullable Point next) {
+        if (!entity.isOnGround() || target == null) return;
+
+        Pos pos = entity.getPosition();
+        double dx = target.x() - pos.x();
+        double dz = target.z() - pos.z();
+
+        double horizDist = Math.sqrt(dx * dx + dz * dz);
+        if (horizDist < 0.01) horizDist = 0.01;
+
+        double speed = movementSpeed() * 20;
+        double velX = (dx / horizDist) * speed;
+        double velZ = (dz / horizDist) * speed;
+
+        entity.setVelocity(new Vec(velX, 8.4, velZ));
     }
 
     @Override
     public boolean isAtPoint(Point point) {
-        return entity.getPosition().sameBlock(point);
-    }
-
-    public void jump(float height) {
-        this.entity.setVelocity(new Vec(0, height * 2.5f, 0));
+        final double tolerance = Math.max(0.35, entity.getBoundingBox().width() * 0.6);
+        return entity.getPosition().distance(point) <= tolerance;
     }
 
     @Override
@@ -72,7 +96,6 @@ public class GroundNodeFollower implements NodeFollower {
         if (entity instanceof LivingEntity living) {
             return living.getAttribute(Attribute.MOVEMENT_SPEED).getValue();
         }
-
-        return 0.1f;
+        return 0.1;
     }
 }

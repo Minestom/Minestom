@@ -83,7 +83,7 @@ final class TagHandlerImpl implements TagHandler {
 
     @Override
     public <T> @Nullable T getAndSetTag(Tag<T> tag, @Nullable T value) {
-        return updateTag0(tag, _ -> value, true);
+        return updateTag0(tag, ignored -> value, true);
     }
 
     @Override

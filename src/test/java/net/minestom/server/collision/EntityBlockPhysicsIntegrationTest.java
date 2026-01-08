@@ -1,8 +1,5 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.utils.block.BlockIterator;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -10,6 +7,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.other.SlimeMeta;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.block.BlockIterator;
+import net.minestom.server.utils.chunk.ChunkCache;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -91,6 +92,99 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0));
         assertEqualsPoint(new Pos(0, 42.5, 0), res.newPosition());
+    }
+
+    @Test
+    public void entityJumpStepsOntoBlockOneHigher(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+        instance.setBlock(0, 40, 0, Block.STONE);
+        instance.setBlock(1, 40, 0, Block.STONE);
+        instance.setBlock(1, 41, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 41, 0.5)).join();
+
+        var chunkCache = new ChunkCache(instance, entity.getChunk(), Block.STONE);
+        var velocity = new Vec(0.4, 0.42, 0);
+        var physicsResult = PhysicsUtils.simulateMovement(
+                entity.getPosition(),
+                velocity,
+                entity.getBoundingBox(),
+                instance.getWorldBorder(),
+                chunkCache,
+                entity.getAerodynamics(),
+                entity.hasNoGravity(),
+                true,
+                true,
+                false,
+                null
+        );
+
+        assertTrue(physicsResult.newPosition().y() > entity.getPosition().y());
+        assertTrue(physicsResult.newPosition().x() > entity.getPosition().x());
+    }
+
+    @Test
+    public void entityJumpStepsOntoFullBlock(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+        instance.setBlock(0, 40, 0, Block.STONE);
+        instance.setBlock(1, 40, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 41, 0.5)).join();
+
+        var chunkCache = new ChunkCache(instance, entity.getChunk(), Block.STONE);
+        var velocity = new Vec(0.4, 0.42, 0);
+        var physicsResult = PhysicsUtils.simulateMovement(
+                entity.getPosition(),
+                velocity,
+                entity.getBoundingBox(),
+                instance.getWorldBorder(),
+                chunkCache,
+                entity.getAerodynamics(),
+                entity.hasNoGravity(),
+                true,
+                true,
+                false,
+                null
+        );
+
+        assertTrue(physicsResult.newPosition().y() > entity.getPosition().y());
+        assertTrue(physicsResult.newPosition().x() > entity.getPosition().x());
+    }
+
+    @Test
+    public void entityWalksUpFullBlock(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+        instance.setBlock(0, 40, 0, Block.STONE);
+        instance.setBlock(1, 40, 0, Block.STONE);
+        instance.setBlock(1, 41, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 41, 0.5)).join();
+
+        var chunkCache = new ChunkCache(instance, entity.getChunk(), Block.STONE);
+        var velocity = new Vec(0.4, 0.0, 0);
+        var physicsResult = PhysicsUtils.simulateMovement(
+                entity.getPosition(),
+                velocity,
+                entity.getBoundingBox(),
+                instance.getWorldBorder(),
+                chunkCache,
+                entity.getAerodynamics(),
+                entity.hasNoGravity(),
+                true,
+                true,
+                false,
+                null
+        );
+
+        assertTrue(physicsResult.newPosition().y() > entity.getPosition().y());
+        assertTrue(physicsResult.newPosition().x() > entity.getPosition().x());
+        assertTrue(physicsResult.isOnGround());
     }
 
     @Test
