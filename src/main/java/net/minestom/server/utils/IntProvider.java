@@ -7,6 +7,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.Random;
 
 public sealed interface IntProvider {
     Codec<IntProvider> CODEC = new Codec<>() {
-        public static final Registry<StructCodec<? extends IntProvider>> REGISTRY = DynamicRegistry.fromMap(Key.key("int_provider"),
+        public static final Registry<StructCodec<? extends IntProvider>> REGISTRY = DynamicRegistry.fromMap(RegistryKey.unsafeOf("int_provider"),
                 Map.entry(Key.key("uniform"), Uniform.CODEC));
         private static final StructCodec<IntProvider> TAGGED_CODEC = Codec.RegistryTaggedUnion(REGISTRY, IntProvider::codec);
 

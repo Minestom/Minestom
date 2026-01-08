@@ -1,9 +1,9 @@
 package net.minestom.server.world.biome;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
@@ -48,7 +48,7 @@ public sealed interface Biome extends Biomes permits BiomeImpl {
     @ApiStatus.Internal
     static DynamicRegistry<Biome> createDefaultRegistry() {
         return DynamicRegistry.create(
-                Key.key("worldgen/biome"), NETWORK_CODEC, null, RegistryData.Resource.BIOMES,
+                BuiltinRegistries.WORLDGEN_BIOME, NETWORK_CODEC, null, RegistryData.Resource.BIOMES,
                 // We force plains to be first because it allows convenient palette initialization.
                 // Maybe worth switching to fetching plains in the palette in the future to avoid this.
                 (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0,
