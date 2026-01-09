@@ -14,7 +14,7 @@ import java.lang.foreign.MemorySegment;
 import java.util.function.Consumer;
 
 /**
- * The provider used to interface with {@link net.minestom.server.ServerProcess#networkBufferProvider()}.
+ * The provider used to interface with {@link NetworkBufferProvider#networkBufferProvider()}.
  * <br>
  * This uses {@link MemorySegment} as the backing with {@link NetworkBufferSegmentAllocator} for faster malloc implementations if available.
  * <br>
