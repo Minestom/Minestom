@@ -406,7 +406,7 @@ public class PacketWriteReadTest {
         // TODO, these chunk* skips important paths
         addServerPackets(new ChunkBatchStartPacket());
         addServerPackets(new ChunkBatchFinishedPacket(100));
-        addServerPackets(new ChunkDataPacket(0, 0, new ChunkData(Map.of(), new byte[0], Map.of()), new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
+        addServerPackets(new ChunkDataPacket(0, 0, new ChunkData(Map.of(), new byte[0], List.of()), new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
         addServerPackets(new ChunkBiomesPacket(List.of()), new ChunkBiomesPacket(List.of(new ChunkBiomesPacket.ChunkBiomeData(0, 0, new byte[0]))));
         addServerPackets(new CustomChatCompletionPacket(CustomChatCompletionPacket.Action.ADD, List.of("entry1", "entry2")));
         addServerPackets(new DamageEventPacket(5, 1, 2, 3, VEC));

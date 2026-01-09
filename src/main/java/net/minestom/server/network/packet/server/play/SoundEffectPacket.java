@@ -19,7 +19,7 @@ public record SoundEffectPacket(
         float pitch,
         long seed
 ) implements ServerPacket.Play {
-    private static final NetworkBuffer.Type<Point> VECTOR3FI = new Type<>() {
+    private static final NetworkBuffer.Type<Point> VECTOR3FI = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
             buffer.write(INT, (int) value.x());

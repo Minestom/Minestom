@@ -43,6 +43,7 @@ public final class ServerFlag {
     public static final int DEFAULT_RESIZEABLE_SIZE = intProperty("minestom.default-resizeable-size", 256);
     public static final boolean ATTEMPT_NATIVE_ALLOCATION = booleanProperty("minestom.attempt-native-allocation", true);
     public static final boolean FORCE_NATIVE_ALLOCATION = booleanProperty("minestom.force-native-allocation", false);
+    public static final String NETWORK_BUFFER_PROVIDER = stringProperty("minestom.network-buffer-provider", "");
 
     // Network object pooling
     public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 16_383);

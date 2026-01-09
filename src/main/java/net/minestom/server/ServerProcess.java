@@ -14,7 +14,6 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.NetworkBufferProvider;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.socket.Server;
@@ -108,11 +107,6 @@ public interface ServerProcess extends Registries, Snapshotable {
      * Exposed socket server.
      */
     Server server();
-
-    /**
-     * The network buffer provider used when interfacing with any network buffers.
-     */
-    NetworkBufferProvider networkBufferProvider();
 
     /**
      * Dispatcher for tickable game objects.

@@ -34,6 +34,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.zip.DataFormatException;
 
 /**
@@ -208,6 +209,20 @@ public interface NetworkBuffer {
     @Contract(pure = true, value = "_ -> new")
     static <T> Type<T> Lazy(Supplier<Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
+    }
+
+    /**
+     * Pass the type required for serialization for an inner part. Useful to break initialization where you only need one layer deep.
+     * <br>
+     * Note your implementation should be thread safe, and should normally be called once. This may be updated to become a stable value.
+     *
+     * @param supplier the supplier
+     * @param <T>      the type
+     * @return the new type
+     */
+    @Contract(pure = true, value = "_ -> new")
+    static <T> Type<T> Recursive(UnaryOperator<Type<T>> supplier) {
+        return new NetworkBufferTypeImpl.RecursiveType<>(supplier).delegate();
     }
 
     /**

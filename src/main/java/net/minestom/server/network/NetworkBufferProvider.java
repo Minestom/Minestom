@@ -1,7 +1,6 @@
 package net.minestom.server.network;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerProcess;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.network.foreign.NetworkBufferSegmentProvider;
 import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.ApiStatus;
@@ -11,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.foreign.MemorySegment;
-import java.util.Objects;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 
 /**
@@ -22,6 +21,38 @@ import java.util.function.Consumer;
  */
 @ApiStatus.Experimental
 public interface NetworkBufferProvider {
+
+    /**
+     * Gets the current provider instance
+     * <br>
+     * Note: currently only one instance per lifetime due to pooling not being under the server process, but this may change.
+     *
+     * @return the current {@link NetworkBufferProvider}.
+     */
+    @ApiStatus.Experimental
+    static NetworkBufferProvider networkBufferProvider() {
+        final class Holder {
+            static final NetworkBufferProvider INSTANCE = determineProvider();
+        }
+        return Holder.INSTANCE;
+    }
+
+    private static NetworkBufferProvider determineProvider() {
+        String provider = ServerFlag.NETWORK_BUFFER_PROVIDER;
+        if (!provider.isBlank()) {
+            try {
+                return (NetworkBufferProvider) Class.forName(provider).getDeclaredConstructor().newInstance();
+            } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
+                     IllegalAccessException | NoSuchMethodException e) {
+                // Lazy load the logger and fallback.
+                Logger logger = LoggerFactory.getLogger(NetworkBufferProvider.class);
+                logger.warn("Failed to load custom NetworkBufferProvider: {}", provider, e);
+            }
+        }
+
+        // Fallback to Foreign.
+        return new NetworkBufferSegmentProvider();
+    }
 
     /**
      * Creates the static factory instance used in {@link NetworkBuffer#staticBuffer(long)}
@@ -165,28 +196,4 @@ public interface NetworkBufferProvider {
      * @return the number of bytes that {@link T} occupies.
      */
     <T extends @UnknownNullability Object> long sizeOf(NetworkBuffer.Type<T> type, T value);
-
-    /**
-     * Gets the current provider instance
-     * <br>
-     * Note: currently only one instance per lifetime due to pooling not being under the server process, but this may change.
-     * @return the current {@link NetworkBufferProvider}.
-     */
-    @ApiStatus.Experimental
-    static NetworkBufferProvider networkBufferProvider() {
-        final class Holder {
-            static final NetworkBufferProvider INSTANCE = determineProvider();
-        }
-        return Holder.INSTANCE;
-    }
-
-    private static NetworkBufferProvider determineProvider() {
-        ServerProcess serverProcess = MinecraftServer.process();
-        if (serverProcess == null) {
-            Logger logger = LoggerFactory.getLogger(NetworkBufferProvider.class); // Don't store in a field for API.
-            logger.warn("No server process found, defaulting to default network buffer provider");
-            return new NetworkBufferSegmentProvider(); // Fallback to default provider if no server process is available
-        }
-        return Objects.requireNonNull(serverProcess, "Network buffers cannot be created without a server.").networkBufferProvider();
-    }
 }

@@ -40,10 +40,7 @@ public enum GameMode {
 
     private static final GameMode[] VALUES = values();
 
-    public static final NetworkBuffer.Type<GameMode> NETWORK_TYPE = BYTE.transform(
-            id -> VALUES[id],
-            gameMode -> (byte) gameMode.ordinal()
-    );
+    public static final NetworkBuffer.Type<GameMode> NETWORK_TYPE = NetworkBuffer.Enum(GameMode.class);
 
     public static final NetworkBuffer.Type<@Nullable GameMode> OPT_NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override

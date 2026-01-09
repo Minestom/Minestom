@@ -30,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -865,6 +866,29 @@ final class NetworkBufferTypeImpl {
                 return this.type = Objects.requireNonNull(supplier.get(), "type");
             }
             return type;
+        }
+    }
+
+    static final class RecursiveType<T> implements Type<T> {
+        private final Type<T> delegate;
+
+        public RecursiveType(UnaryOperator<Type<T>> supplier) {
+            Objects.requireNonNull(supplier, "supplier");
+            this.delegate = Objects.requireNonNull(supplier.apply(this), "delegate");
+        }
+
+        @Override
+        public void write(NetworkBuffer buffer, T value) {
+            delegate.write(buffer, value);
+        }
+
+        @Override
+        public T read(NetworkBuffer buffer) {
+            return delegate.read(buffer);
+        }
+
+        public Type<T> delegate() {
+            return this.delegate;
         }
     }
 
