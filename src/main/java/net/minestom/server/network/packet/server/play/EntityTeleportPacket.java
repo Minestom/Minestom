@@ -31,7 +31,7 @@ public record EntityTeleportPacket(
             // Order is x,y,z for position, then x,y,z for delta move, then yaw and pitch
             Point absPosition = buffer.read(VECTOR3D);
             Point deltaMovement = buffer.read(VECTOR3D);
-            return new EntityTeleportPacket(entityId, new Pos(absPosition, buffer.read(FLOAT), buffer.read(FLOAT)),
+            return new EntityTeleportPacket(entityId, absPosition.asPos().withView(buffer.read(FLOAT), buffer.read(FLOAT)),
                             deltaMovement, buffer.read(INT), buffer.read(BOOLEAN));
         }
     };
