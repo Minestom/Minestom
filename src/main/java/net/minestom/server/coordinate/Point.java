@@ -2,7 +2,6 @@ package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 
@@ -404,7 +403,8 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      */
     @Contract(pure = true)
     default double distanceSquared(double x, double y, double z) {
-        return MathUtils.square(x() - x) + MathUtils.square(y() - y) + MathUtils.square(z() - z);
+        final double xDiff = x() - x, yDiff = y() - y, zDiff = z() - z;
+        return (xDiff * xDiff) + (yDiff * yDiff) + (zDiff * zDiff);
     }
 
     /**
@@ -577,7 +577,8 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      */
     @Contract(pure = true)
     default double lengthSquared() {
-        return MathUtils.square(x()) + MathUtils.square(y()) + MathUtils.square(z());
+        final double x = x(), y = y(), z = z();
+        return (x * x) + (y * y) + (z * z);
     }
 
     /**
@@ -612,7 +613,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      */
     @Contract(pure = true)
     default double angle(Point point) {
-        final double dot = MathUtils.clamp(dot(point) / (length() * point.length()), -1.0, 1.0);
+        final double dot = Math.clamp(dot(point) / (length() * point.length()), -1.0, 1.0);
         return Math.acos(dot);
     }
 

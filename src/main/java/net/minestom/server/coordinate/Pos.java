@@ -2,7 +2,6 @@ package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.Contract;
 
@@ -89,7 +88,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * So for example, -135.0f becomes -90.0f and 225.0f becomes 90.0f
      *
      * @param pitch The possible "wrong" pitch
-     * @return a fixed pitch
+     * @return a fixed pitch in the range [-90.0f, 90.0f]
      */
     public static float fixPitch(float pitch) {
         return Math.clamp(pitch, -90.0f, 90.0f);
@@ -177,7 +176,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
             return withPitch(point.y() > 0 ? -90f : 90f);
         }
         final double theta = Math.atan2(-x, z);
-        final double xz = Math.sqrt(MathUtils.square(x) + MathUtils.square(z));
+        final double xz = Math.sqrt((x * x) + (z * z));
         final double _2PI = 2 * Math.PI;
         return withView((float) Math.toDegrees((theta + _2PI) % _2PI),
                 (float) Math.toDegrees(Math.atan(-point.y() / xz)));
