@@ -159,6 +159,16 @@ public class ItemTest {
         assertEquals(EntityType.CAMEL, item2.material().registry().spawnEntityType());
     }
 
+    @Test
+    public void testModifyMaterialAmountNonzero() {
+        var airItem = ItemStack.of(Material.AIR, 0);
+        assertEquals(0, airItem.amount());
+        var nonAirItem = airItem.withMaterial(Material.DIAMOND);
+        assertEquals(1, nonAirItem.amount());
+        var airAgainItem = nonAirItem.withMaterial(Material.AIR);
+        assertEquals(0, airAgainItem.amount());
+    }
+
     static ItemStack createItem() {
         return ItemStack.builder(Material.STONE)
                 .set(DataComponents.CUSTOM_NAME, Component.text("Display name!", NamedTextColor.GREEN))
