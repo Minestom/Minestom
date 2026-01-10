@@ -1,6 +1,5 @@
 package net.minestom.server.listener;
 
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -19,7 +18,7 @@ public class PlayerPickListener {
         final Block block = instance.getBlock(packet.pos());
         final boolean includeData = packet.includeData();
 
-        PlayerPickBlockEvent playerPickBlockEvent = new PlayerPickBlockEvent(player, block, new BlockVec(packet.pos()), includeData);
+        PlayerPickBlockEvent playerPickBlockEvent = new PlayerPickBlockEvent(player, block, packet.pos().asBlockVec(), includeData);
         EventDispatcher.call(playerPickBlockEvent);
     }
 
