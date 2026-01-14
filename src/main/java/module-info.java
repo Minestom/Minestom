@@ -18,7 +18,6 @@ module net.minestom.server {
     requires jdk.jfr;
     requires java.desktop;
     requires java.management;
-    requires jdk.unsupported;
 
     // EXPORTS
     exports net.minestom.server;
@@ -147,7 +146,6 @@ module net.minestom.server {
     exports net.minestom.server.network.player;
     exports net.minestom.server.network.plugin;
     exports net.minestom.server.network.socket;
-    exports net.minestom.server.network.unsafe;
     exports net.minestom.server.particle;
     exports net.minestom.server.ping;
     exports net.minestom.server.potion;
