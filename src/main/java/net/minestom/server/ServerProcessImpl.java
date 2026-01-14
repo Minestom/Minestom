@@ -57,6 +57,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -421,6 +422,8 @@ final class ServerProcessImpl implements ServerProcess {
         // Init server
         try {
             server.init(socketAddress);
+        } catch (BindException e) {
+            throw new RuntimeException("Failed to bind server", e);
         } catch (IOException e) {
             exception.handleException(e);
             throw new RuntimeException(e);
