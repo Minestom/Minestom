@@ -68,7 +68,7 @@ public final class NetworkBufferTemplate {
      * @param <R>      the type of the value
      * @return the new template
      */
-    public static <R> Type<R> template(Supplier<R> supplier) {
+    public static <R> Type<R> template(Supplier<? extends R> supplier) {
         Objects.requireNonNull(supplier, "supplier");
         return new NetworkBuffer.Type<>() {
             @Override
@@ -92,7 +92,7 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, R> Type<R> template(Type<P1> p1, Function<R, P1> g1, F1<P1, R> ctor) {
+    public static <P1 extends @UnknownNullability Object, R> Type<R> template(Type<P1> p1, Function<? super R, ? extends P1> g1, F1<? super P1, ? extends R> ctor) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(ctor, "ctor");
@@ -123,8 +123,8 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            F2<P1, P2, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            F2<? super P1, ? super P2, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -162,8 +162,8 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, F3<P1, P2, P3, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, F3<? super P1, ? super P2, ? super P3, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -207,9 +207,9 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            F4<P1, P2, P3, P4, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            F4<? super P1, ? super P2, ? super P3, ? super P4, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -262,9 +262,9 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, F5<P1, P2, P3, P4, P5, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, F5<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -324,10 +324,10 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            F6<P1, P2, P3, P4, P5, P6, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            F6<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -393,10 +393,10 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, F7<P1, P2, P3, P4, P5, P6, P7, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, F7<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -469,11 +469,11 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            F8<P1, P2, P3, P4, P5, P6, P7, P8, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            F8<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -552,11 +552,11 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, F9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, F9<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -642,12 +642,12 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            F10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            F10<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -739,12 +739,12 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, F11<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, F11<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -843,12 +843,12 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12, F12<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12, F12<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -953,14 +953,14 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
-            Type<P13> p13, Function<R, P13> g13,
-            F13<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
+            Type<P13> p13, Function<? super R, ? extends P13> g13,
+            F13<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1072,14 +1072,14 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
-            Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
-            F14<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
+            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
+            F14<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1197,15 +1197,15 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
-            Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
-            Type<P15> p15, Function<R, P15> g15,
-            F15<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
+            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
+            Type<P15> p15, Function<? super R, ? extends P15> g15,
+            F15<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1330,15 +1330,15 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
-            Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
-            Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
-            F16<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
+            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
+            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
+            F16<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1469,16 +1469,16 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
-            Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
-            Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
-            Type<P17> p17, Function<R, P17> g17,
-            F17<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
+            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
+            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
+            Type<P17> p17, Function<? super R, ? extends P17> g17,
+            F17<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1616,16 +1616,16 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
-            Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
-            Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
-            Type<P17> p17, Function<R, P17> g17, Type<P18> p18, Function<R, P18> g18,
-            F18<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
+            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
+            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
+            Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
+            F18<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1768,16 +1768,16 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
-            Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
-            Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
-            Type<P17> p17, Function<R, P17> g17, Type<P18> p18, Function<R, P18> g18,
-            Type<P19> p19, Function<R, P19> g19, F19<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
+            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
+            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
+            Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
+            Type<P19> p19, Function<? super R, ? extends P19> g19, F19<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1928,17 +1928,17 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, P20 extends @UnknownNullability Object, R> Type<R> template(
-            Type<P1> p1, Function<R, P1> g1, Type<P2> p2, Function<R, P2> g2,
-            Type<P3> p3, Function<R, P3> g3, Type<P4> p4, Function<R, P4> g4,
-            Type<P5> p5, Function<R, P5> g5, Type<P6> p6, Function<R, P6> g6,
-            Type<P7> p7, Function<R, P7> g7, Type<P8> p8, Function<R, P8> g8,
-            Type<P9> p9, Function<R, P9> g9, Type<P10> p10, Function<R, P10> g10,
-            Type<P11> p11, Function<R, P11> g11, Type<P12> p12, Function<R, P12> g12,
-            Type<P13> p13, Function<R, P13> g13, Type<P14> p14, Function<R, P14> g14,
-            Type<P15> p15, Function<R, P15> g15, Type<P16> p16, Function<R, P16> g16,
-            Type<P17> p17, Function<R, P17> g17, Type<P18> p18, Function<R, P18> g18,
-            Type<P19> p19, Function<R, P19> g19, Type<P20> p20, Function<R, P20> g20,
-            F20<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, R> ctor
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
+            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
+            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
+            Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
+            Type<P19> p19, Function<? super R, ? extends P19> g19, Type<P20> p20, Function<? super R, ? extends P20> g20,
+            F20<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? super P20, ? extends R> ctor
     ) {
 
         Objects.requireNonNull(p1, "p1");
