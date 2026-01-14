@@ -44,7 +44,8 @@ public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaki
     }
 
     public record Attack() implements Type {
-        public static final NetworkBuffer.Type<Attack> SERIALIZER = NetworkBufferTemplate.template(new Attack());
+        public static final Attack INSTANCE = new Attack();
+        public static final NetworkBuffer.Type<Attack> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 
         @ApiStatus.Internal
         @Override

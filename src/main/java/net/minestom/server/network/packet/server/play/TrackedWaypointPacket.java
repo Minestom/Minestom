@@ -72,7 +72,8 @@ public record TrackedWaypointPacket(
                 .unionType(Target::dataSerializer, Target::targetToType);
 
         record Empty() implements Target {
-            public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBufferTemplate.template(new Empty());
+            public static final Empty INSTANCE = new Empty();
+            public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
         }
 
         record Vec3i(Point point) implements Target {

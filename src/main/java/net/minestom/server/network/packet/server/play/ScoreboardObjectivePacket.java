@@ -93,7 +93,8 @@ public record ScoreboardObjectivePacket(String objectiveName, Mode mode) impleme
     }
 
     public record Destroy() implements Mode {
-        public static final NetworkBuffer.Type<Destroy> SERIALIZER = NetworkBufferTemplate.template(new Destroy());
+        public static final Destroy INSTANCE = new Destroy();
+        public static final NetworkBuffer.Type<Destroy> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 
         @ApiStatus.Internal
         @Override

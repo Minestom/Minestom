@@ -36,7 +36,8 @@ public record StopSoundPacket(Action action) implements ServerPacket.Play {
     }
 
     public record All() implements Action {
-        public static final Type<All> SERIALIZER = NetworkBufferTemplate.template(new All());
+        public static final All INSTANCE = new All();
+        public static final Type<All> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 
         @Override
         public byte flag() {
