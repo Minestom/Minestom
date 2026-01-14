@@ -380,7 +380,7 @@ public class Team implements PacketGroupingAudience {
      * @return the packet to remove the team
      */
     public TeamsPacket createTeamDestructionPacket() {
-        return new TeamsPacket(teamName, new TeamsPacket.RemoveTeamAction());
+        return new TeamsPacket(teamName, TeamsPacket.RemoveTeamAction.INSTANCE);
     }
 
     /**

@@ -205,7 +205,7 @@ public final class AdventurePacketConvertor {
         } else if (sound != null) {
             return new StopSoundPacket(new StopSoundPacket.Sound(sound));
         } else {
-            return new StopSoundPacket(new StopSoundPacket.All());
+            return new StopSoundPacket(StopSoundPacket.All.INSTANCE);
         }
     }
 

@@ -461,7 +461,7 @@ public class Sidebar implements Scoreboard {
          * @return a {@link TeamsPacket} which destroyed a team
          */
         private TeamsPacket getDestructionPacket() {
-            return new TeamsPacket(teamName, new TeamsPacket.RemoveTeamAction());
+            return new TeamsPacket(teamName, TeamsPacket.RemoveTeamAction.INSTANCE);
         }
 
         /**

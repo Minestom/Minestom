@@ -786,7 +786,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         chunkQueueLock.lock();
         try {
             int batchSize = 0;
-            sendPacket(new ChunkBatchStartPacket());
+            sendPacket(ChunkBatchStartPacket.INSTANCE);
             while (!chunkQueue.isEmpty() && pendingChunkCount >= 1f) {
                 long chunkIndex = chunkQueue.dequeueLong();
                 int chunkX = CoordConversion.chunkIndexGetX(chunkIndex), chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);

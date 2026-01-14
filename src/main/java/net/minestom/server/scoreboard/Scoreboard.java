@@ -45,7 +45,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @return the destruction objective packet
      */
     default ScoreboardObjectivePacket getDestructionObjectivePacket() {
-        return new ScoreboardObjectivePacket(getObjectiveName(), new ScoreboardObjectivePacket.Destroy());
+        return new ScoreboardObjectivePacket(getObjectiveName(), ScoreboardObjectivePacket.Destroy.INSTANCE);
     }
 
     /**
