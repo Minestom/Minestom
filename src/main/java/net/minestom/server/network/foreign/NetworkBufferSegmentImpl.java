@@ -48,6 +48,7 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
         this.readIndex = readIndex;
         this.writeIndex = writeIndex;
         this.registries = registries;
+        super();
     }
 
     protected abstract MemorySegment segment();
@@ -113,7 +114,7 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
     }
 
     @Override
-    public final byte[] extractReadBytes(Consumer<NetworkBuffer> extractor) {
+    public final byte[] extractReadBytes(Consumer<? super NetworkBuffer> extractor) {
         assertDummy();
         final long startingPosition = readIndex();
         extractor.accept(this);
@@ -123,7 +124,7 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
     }
 
     @Override
-    public final byte[] extractWrittenBytes(Consumer<NetworkBuffer> extractor) {
+    public final byte[] extractWrittenBytes(Consumer<? super NetworkBuffer> extractor) {
         assertDummy();
         assertReadOnly();
         final long startingPosition = writeIndex();
@@ -477,9 +478,6 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
         return segment().getString(index);
     }
 
-    // For JDK:8369564 https://github.com/openjdk/jdk/pull/28043
-    // Current implementation only supports VAR_INT lengths sadly.
-    @Override
     public final String getString(long index, int byteLength) {
         assertDummy();
         byte[] bytes = new byte[byteLength];
@@ -488,7 +486,12 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
     }
 
     @Override
-    public String getString(long index, long byteLength) {
+    public final String getString(long index, long byteLength) {
+        if (NetworkBufferSegmentMethods.STRING_SUPPORTED) {
+            // We can use the better no String copy method!
+            return NetworkBufferSegmentMethods.getString(segment(), index, StandardCharsets.UTF_8, byteLength);
+        }
+        // Only supports int for small.
         return getString(index, Math.toIntExact(byteLength));
     }
 

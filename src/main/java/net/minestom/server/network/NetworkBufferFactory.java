@@ -71,7 +71,7 @@ public interface NetworkBufferFactory {
      */
     @ApiStatus.Experimental
     @Contract(pure = true, value = "_ -> new")
-    NetworkBufferFactory arena(Supplier<Arena> arenaSupplier);
+    NetworkBufferFactory arena(Supplier<? extends Arena> arenaSupplier);
 
     /**
      * Sets the auto-resizing strategy.

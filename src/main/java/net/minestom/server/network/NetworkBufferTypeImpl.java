@@ -818,13 +818,7 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             // Write to another buffer and copy (kinda inefficient, but currently unused serverside so its ok for now)
-            final Registries registries = buffer.registries();
-            final byte[] componentData;
-            if (registries != null) {
-                componentData = NetworkBuffer.makeArray(parent, value, registries);
-            } else {
-                componentData = NetworkBuffer.makeArray(parent, value);
-            }
+            final byte[] componentData = NetworkBuffer.makeArray(parent, value, buffer.registries());
             buffer.write(NetworkBuffer.BYTE_ARRAY, componentData);
         }
 

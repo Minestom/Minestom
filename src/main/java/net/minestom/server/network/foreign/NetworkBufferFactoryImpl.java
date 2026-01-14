@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  * @param autoResize the auto-resize strategy to use, or {@code null} for no auto-resize
  * @param registries the registries to use, or {@code null} for no registries
  */
-record NetworkBufferFactoryImpl(Supplier<Arena> arenaSupplier, @Nullable NetworkBuffer.AutoResize autoResize,
+record NetworkBufferFactoryImpl(Supplier<? extends Arena> arenaSupplier, @Nullable NetworkBuffer.AutoResize autoResize,
                                 @Nullable Registries registries) implements NetworkBufferFactory {
 
     public NetworkBufferFactoryImpl {
@@ -32,7 +32,7 @@ record NetworkBufferFactoryImpl(Supplier<Arena> arenaSupplier, @Nullable Network
     }
 
     @Override
-    public NetworkBufferFactoryImpl arena(Supplier<Arena> arenaSupplier) {
+    public NetworkBufferFactoryImpl arena(Supplier<? extends Arena> arenaSupplier) {
         Objects.requireNonNull(arenaSupplier, "arenaSupplier");
         return new NetworkBufferFactoryImpl(arenaSupplier, autoResize, registries);
     }

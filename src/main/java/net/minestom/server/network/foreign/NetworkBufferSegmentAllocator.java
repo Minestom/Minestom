@@ -32,11 +32,10 @@ import java.util.function.Consumer;
  * ({@link ServerFlag#FORCE_NATIVE_ALLOCATION}).</li>
  * </ul>
  */
-@ApiStatus.Internal
 public final class NetworkBufferSegmentAllocator {
     private static final Logger LOGGER = LoggerFactory.getLogger(NetworkBufferSegmentAllocator.class);
     // true if we use system malloc and free.
-    private static final boolean ENABLE_NATIVE = ServerFlag.FORCE_NATIVE_ALLOCATION
+    public static final boolean ENABLE_NATIVE = ServerFlag.FORCE_NATIVE_ALLOCATION
             || (ServerFlag.ATTEMPT_NATIVE_ALLOCATION && NetworkBufferSegmentAllocator.class.getModule().isNativeAccessEnabled());
 
     // malloc(size_t size) -> void*
@@ -76,7 +75,8 @@ public final class NetworkBufferSegmentAllocator {
      * @throws IllegalStateException if memory fails to be allocated or reinterpreted
      * @return the new {@link MemorySegment} with size {@code byteSize} for {@code arena}
      */
-    public static MemorySegment allocate(Arena arena, long byteSize) {
+    @ApiStatus.Internal
+    static MemorySegment allocate(Arena arena, long byteSize) {
         Objects.requireNonNull(arena, "arena");
         if (!ENABLE_NATIVE) {
             // Fall back to regular implementation, we check for not nullness, as Arena is implementable
@@ -98,9 +98,12 @@ public final class NetworkBufferSegmentAllocator {
             return segment.reinterpret(byteSize, arena, SEGMENT_CLEANER);
         } catch (Exception e) {
             // We need to attempt to clean if it failed to reinterpret.
-            // This might cause another exception to bubble up which you wouldn't see the initial error.
-            NetworkBufferSegmentAllocator.free(segment);
-            throw new IllegalStateException("Failed to reinterpret native memory: %d:%d".formatted(segment.address(), byteSize), e);
+            try {
+                throw new IllegalStateException("Failed to reinterpret native memory: %d:%d".formatted(segment.address(), byteSize), e);
+            } finally {
+                // Attempt to free could cause another exception.
+                NetworkBufferSegmentAllocator.free(segment);
+            }
         }
     }
 

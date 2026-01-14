@@ -5,6 +5,7 @@ import net.minestom.server.network.foreign.NetworkBufferSegmentProvider;
 import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,20 +84,7 @@ public interface NetworkBufferProvider {
      */
     @Contract("_, _, _, _ -> new")
     @ApiStatus.Experimental
-    NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, Registries registries);
-
-    /**
-     * Wrap the {@link MemorySegment} into a {@link NetworkBuffer} without registries.
-     * Useful when you already have a memory segment.
-     *
-     * @param segment    the segment
-     * @param readIndex  the {@link NetworkBuffer#readIndex()}
-     * @param writeIndex the {@link NetworkBuffer#writeIndex()}
-     * @return the new {@link NetworkBuffer}
-     */
-    @Contract("_, _, _ -> new")
-    @ApiStatus.Experimental
-    NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex);
+    NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries);
 
     /**
      * Wrap the byte array into a {@link NetworkBuffer} with the registries.
@@ -109,19 +97,7 @@ public interface NetworkBufferProvider {
      * @return the new {@link NetworkBuffer}
      */
     @Contract("_, _, _, _ -> new")
-    NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, Registries registries);
-
-    /**
-     * Wrap the byte array into a {@link NetworkBuffer}.
-     * Useful when you already have a {@code byte[]}.
-     *
-     * @param bytes      the bytes
-     * @param readIndex  the {@link NetworkBuffer#readIndex()}
-     * @param writeIndex the {@link NetworkBuffer#writeIndex()}
-     * @return the new {@link NetworkBuffer}
-     */
-    @Contract("_, _, _ -> new")
-    NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex);
+    NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries);
 
     /**
      * Creates a byte array from the consumer and with registries.
@@ -133,19 +109,7 @@ public interface NetworkBufferProvider {
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
      */
     @Contract("_, _ -> new")
-    byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries);
-
-    /**
-     * Creates a byte array from the consumer and without registries.
-     * <br>
-     * Note: only the current thread can use the buffer.
-     * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
-     *
-     * @param writing consumer of the {@link NetworkBuffer}
-     * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
-     */
-    @Contract("_ -> new")
-    byte[] makeArray(Consumer<NetworkBuffer> writing);
+    byte[] makeArray(Consumer<? super NetworkBuffer> writing, @Nullable Registries registries);
 
     /**
      * Creates a byte array from the type and value registries.
@@ -160,21 +124,7 @@ public interface NetworkBufferProvider {
      * @return the smallest byte array to represent {@link T}
      */
     @Contract("_ ,_, _ -> new")
-    <T extends @UnknownNullability Object> byte[] makeArray(NetworkBuffer.Type<T> type, T value, Registries registries);
-
-    /**
-     * Creates a byte array from the type and value without registries.
-     * <br>
-     * Note: only the current thread can use the buffer.
-     * Similar to {@link NetworkBuffer#makeArray(Consumer, Registries)}
-     *
-     * @param type  the {@link NetworkBuffer.Type} for {@link T}
-     * @param value the value
-     * @param <T>   the type
-     * @return the smallest byte array to represent {@link T}
-     */
-    @Contract("_, _ -> new")
-    <T extends @UnknownNullability Object> byte[] makeArray(NetworkBuffer.Type<T> type, T value);
+    <T extends @UnknownNullability Object> byte[] makeArray(NetworkBuffer.Type<T> type, T value, @Nullable Registries registries);
 
     /**
      * Get the byte size of the serialized {@link T}, this should be deterministic.
@@ -185,15 +135,5 @@ public interface NetworkBufferProvider {
      * @param <T>        the type
      * @return the number of bytes that {@link T} occupies.
      */
-    <T extends @UnknownNullability Object> long sizeOf(NetworkBuffer.Type<T> type, T value, Registries registries);
-
-    /**
-     * Get the byte size of the serialized {@link T}, this should be deterministic.
-     *
-     * @param type  the type
-     * @param value the value
-     * @param <T>   the type
-     * @return the number of bytes that {@link T} occupies.
-     */
-    <T extends @UnknownNullability Object> long sizeOf(NetworkBuffer.Type<T> type, T value);
+    <T extends @UnknownNullability Object> long sizeOf(NetworkBuffer.Type<T> type, T value, @Nullable Registries registries);
 }

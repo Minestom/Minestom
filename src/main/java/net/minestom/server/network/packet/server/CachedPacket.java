@@ -33,11 +33,11 @@ public final class CachedPacket implements SendablePacket {
         }
     }
 
-    private final Supplier<ServerPacket> packetSupplier;
+    private final Supplier<? extends ServerPacket> packetSupplier;
     @SuppressWarnings("unused") // VarHandle
     private @Nullable SoftReference<FramedPacket> packet;
 
-    public CachedPacket(Supplier<ServerPacket> packetSupplier) {
+    public CachedPacket(Supplier<? extends ServerPacket> packetSupplier) {
         this.packetSupplier = packetSupplier;
     }
 

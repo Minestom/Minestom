@@ -19,12 +19,12 @@ import java.util.function.Supplier;
 @ApiStatus.Internal
 final class NetworkBufferResizeableSegmentImpl extends NetworkBufferSegmentImpl {
     private final AutoResize autoResize;
-    private final Supplier<Arena> arenaSupplier;
+    private final Supplier<? extends Arena> arenaSupplier;
 
     private Arena arena;
     private MemorySegment segment;
 
-    NetworkBufferResizeableSegmentImpl(Arena arena, MemorySegment segment, long readIndex, long writeIndex, AutoResize autoResize, Supplier<Arena> arenaSupplier, @Nullable Registries registries) {
+    NetworkBufferResizeableSegmentImpl(Arena arena, MemorySegment segment, long readIndex, long writeIndex, AutoResize autoResize, Supplier<? extends Arena> arenaSupplier, @Nullable Registries registries) {
         this.arena = Objects.requireNonNull(arena, "arena");
         this.segment = Objects.requireNonNull(segment, "segment");
         Check.argCondition(segment.address() == MemorySegment.NULL.address(), "Segment address cannot be NULL");

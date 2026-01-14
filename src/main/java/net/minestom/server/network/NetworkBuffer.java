@@ -338,10 +338,9 @@ public interface NetworkBuffer {
      */
     @Contract("_, _, _, _ -> new")
     @ApiStatus.Experimental
-    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, Registries registries) {
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
         Objects.requireNonNull(segment, "segment");
-        Objects.requireNonNull(registries, "registries");
-        return NetworkBufferProvider.networkBufferProvider().wrap(segment, readIndex, writeIndex);
+        return NetworkBufferProvider.networkBufferProvider().wrap(segment, readIndex, writeIndex, registries);
     }
 
     /**
@@ -356,8 +355,7 @@ public interface NetworkBuffer {
     @Contract("_, _, _ -> new")
     @ApiStatus.Experimental
     static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex) {
-        Objects.requireNonNull(segment, "segment");
-        return NetworkBufferProvider.networkBufferProvider().wrap(segment, readIndex, writeIndex);
+        return wrap(segment, readIndex, writeIndex, null);
     }
 
     /**
@@ -371,9 +369,8 @@ public interface NetworkBuffer {
      * @return the new {@link NetworkBuffer}
      */
     @Contract("_, _, _, _ -> new")
-    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, Registries registries) {
+    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
         Objects.requireNonNull(bytes, "bytes");
-        Objects.requireNonNull(registries, "registries");
         return NetworkBufferProvider.networkBufferProvider().wrap(bytes, readIndex, writeIndex, registries);
     }
 
@@ -388,8 +385,7 @@ public interface NetworkBuffer {
      */
     @Contract("_, _, _ -> new")
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
-        Objects.requireNonNull(bytes, "bytes");
-        return NetworkBufferProvider.networkBufferProvider().wrap(bytes, readIndex, writeIndex);
+        return wrap(bytes, readIndex, writeIndex, null);
     }
 
     /**
@@ -402,9 +398,8 @@ public interface NetworkBuffer {
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
      */
     @Contract("_, _ -> new")
-    static byte[] makeArray(Consumer<NetworkBuffer> writing, Registries registries) {
+    static byte[] makeArray(Consumer<? super NetworkBuffer> writing, @Nullable Registries registries) {
         Objects.requireNonNull(writing, "writing");
-        Objects.requireNonNull(registries, "registries");
         return NetworkBufferProvider.networkBufferProvider().makeArray(writing, registries);
     }
 
@@ -418,9 +413,8 @@ public interface NetworkBuffer {
      * @return the smallest byte array to represent the contents of {@link NetworkBuffer}
      */
     @Contract("_ -> new")
-    static byte[] makeArray(Consumer<NetworkBuffer> writing) {
-        Objects.requireNonNull(writing, "writing");
-        return NetworkBufferProvider.networkBufferProvider().makeArray(writing);
+    static byte[] makeArray(Consumer<? super NetworkBuffer> writing) {
+        return makeArray(writing, null);
     }
 
     /**
@@ -436,9 +430,8 @@ public interface NetworkBuffer {
      * @return the smallest byte array to represent {@link T}
      */
     @Contract("_ ,_, _ -> new")
-    static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, Registries registries) {
+    static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, @Nullable Registries registries) {
         Objects.requireNonNull(type, "type");
-        Objects.requireNonNull(registries, "registries");
         return NetworkBufferProvider.networkBufferProvider().makeArray(type, value, registries);
     }
 
@@ -455,8 +448,7 @@ public interface NetworkBuffer {
      */
     @Contract("_, _ -> new")
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
-        Objects.requireNonNull(type, "type");
-        return NetworkBufferProvider.networkBufferProvider().makeArray(type, value);
+        return makeArray(type, value, null);
     }
 
     /**
@@ -649,7 +641,7 @@ public interface NetworkBuffer {
      * @return the bytes extracted
      */
     @Contract(mutates = "this", value = "_ -> new")
-    byte[] extractReadBytes(Consumer<NetworkBuffer> extractor);
+    byte[] extractReadBytes(Consumer<? super NetworkBuffer> extractor);
 
     /**
      * Consume read bytes from the extractor. Using {@link #readIndex()}
@@ -674,7 +666,7 @@ public interface NetworkBuffer {
      * @return the bytes extracted
      */
     @Contract(mutates = "this", value = "_ -> new")
-    byte[] extractWrittenBytes(Consumer<NetworkBuffer> extractor);
+    byte[] extractWrittenBytes(Consumer<? super NetworkBuffer> extractor);
 
     /**
      * Clears the data tracked by this buffer by setting the {@link #index(long, long)} to 0.
@@ -852,6 +844,8 @@ public interface NetworkBuffer {
      * Resizes this buffer to be trimmed and assigns it to this {@link NetworkBuffer}.
      * <br>
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
+     *
+     * @throws UnsupportedOperationException if this buffer cannot be trimmed (resized)
      */
     @Contract(mutates = "this")
     void trim();
@@ -1116,8 +1110,7 @@ public interface NetworkBuffer {
          */
         @Contract(pure = true)
         @Range(from = 0, to = Long.MAX_VALUE)
-        default long sizeOf(T value, Registries registries) {
-            Objects.requireNonNull(registries, "registries");
+        default long sizeOf(T value, @Nullable Registries registries) {
             return NetworkBufferProvider.networkBufferProvider().sizeOf(this, value, registries);
         }
 
@@ -1130,7 +1123,7 @@ public interface NetworkBuffer {
         @Contract(pure = true)
         @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value) {
-            return NetworkBufferProvider.networkBufferProvider().sizeOf(this, value);
+            return NetworkBufferProvider.networkBufferProvider().sizeOf(this, value, null);
         }
 
         /**
@@ -1518,8 +1511,5 @@ public interface NetworkBuffer {
 
         // Non prefixed variant
         String getString(long index, long byteLength);
-
-        // Non prefixed variant
-        String getString(long index, int byteLength);
     }
 }
