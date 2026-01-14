@@ -65,6 +65,7 @@ public final class PacketViewableUtils {
     public static void flush() {
         if (!ServerFlag.VIEWABLE_PACKET) return;
         Map<Viewable, ViewableStorage> map = storageMap;
+        if (map.isEmpty()) return;
         map.entrySet().parallelStream().forEach(entry ->
                 entry.getValue().process(entry.getKey()));
     }
