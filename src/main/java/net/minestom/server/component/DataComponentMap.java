@@ -116,6 +116,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
 
     /**
      * Adds the component, overwriting any prior value if present.
+     * <br>
+     * Note: {@link DataComponent#freeze(T)} will be called, so identity may be mutated.
      *
      * @return A new map with the component set to the value
      */
