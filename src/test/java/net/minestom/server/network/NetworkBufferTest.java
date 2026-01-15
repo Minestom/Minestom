@@ -91,8 +91,10 @@ public class NetworkBufferTest {
         assertEquals(10, buffer1.capacity());
 
         var buffer2 = NetworkBuffer.staticBuffer(10);
-        NetworkBuffer.copy(buffer1, 0, buffer2, 0, 10);
         assertEquals(10, buffer2.capacity());
+        NetworkBuffer.copy(buffer1, 0, buffer2, 0, 10);
+        buffer2.advanceWrite(10);
+        assertEquals(10, buffer2.writeIndex());
 
         assertEquals(6, buffer2.read(INT));
         assertEquals((short) 2, buffer2.read(SHORT));
@@ -109,8 +111,10 @@ public class NetworkBufferTest {
         assertEquals(10, buffer1.capacity());
 
         var buffer2 = NetworkBuffer.staticBuffer(4);
-        NetworkBuffer.copy(buffer1, 6, buffer2, 0, 4);
         assertEquals(4, buffer2.capacity());
+        NetworkBuffer.copy(buffer1, 6, buffer2, 0, 4);
+        buffer2.advanceWrite(4);
+        assertEquals(4, buffer2.writeIndex());
 
         assertEquals(3.5f, buffer2.read(FLOAT));
     }
@@ -125,9 +129,11 @@ public class NetworkBufferTest {
         assertEquals(10, buffer1.capacity());
 
         var buffer2 = NetworkBuffer.staticBuffer(8);
+        assertEquals(8, buffer2.capacity());
         buffer2.write(INT, 5);
         NetworkBuffer.copy(buffer1, 6, buffer2, 4, 4);
-        assertEquals(8, buffer2.capacity());
+        buffer2.advanceWrite(4);
+        assertEquals(8, buffer2.writeIndex());
 
         assertEquals(5, buffer2.read(INT));
         assertEquals(3.5f, buffer2.read(FLOAT));
@@ -525,14 +531,14 @@ public class NetworkBufferTest {
 
     @Test
     public void optional() {
-        assertBufferTypeOptional(BOOLEAN, null, new byte[]{0});
-        assertBufferTypeOptional(BOOLEAN, true, new byte[]{1, 1});
+        assertBufferType(BOOLEAN.optional(), null, new byte[]{0});
+        assertBufferType(BOOLEAN.optional(), true, new byte[]{1, 1});
     }
 
     @Test
     public void collection() {
-        assertBufferTypeCollection(BOOLEAN, List.of(), new byte[]{0});
-        assertBufferTypeCollection(BOOLEAN, List.of(true), new byte[]{0x01, 0x01});
+        assertBufferType(BOOLEAN.list(), List.of(), new byte[]{0});
+        assertBufferType(BOOLEAN.list(), List.of(true), new byte[]{0x01, 0x01});
     }
 
     @Test
@@ -708,6 +714,8 @@ public class NetworkBufferTest {
             var bytes = new byte[expected.length];
             buffer.copyTo(0, bytes, 0, bytes.length);
             assertArrayEquals(expected, bytes, "Invalid bytes: " + Arrays.toString(expected) + " != " + Arrays.toString(bytes));
+            var sizeOf = type.sizeOf(value);
+            assertEquals(expected.length, sizeOf, "Mismatch in sizeOf and expected length");
         }
 
         // Ensure resize support
@@ -753,55 +761,6 @@ public class NetworkBufferTest {
 
     static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value) {
         assertBufferType(null, type, value, null);
-    }
-
-    static <T> void assertBufferTypeOptional(@Nullable Env env, NetworkBuffer.Type<T> type, @Nullable T value, byte @Nullable [] expected) {
-        assertBufferType(env, type, value, expected, new Action<T>() {
-            @Override
-            public void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value) {
-                buffer.write(type.optional(), value);
-            }
-
-            @Override
-            public T read(NetworkBuffer buffer, NetworkBuffer.Type<T> type) {
-                return buffer.read(type.optional());
-            }
-        });
-    }
-
-    static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value, byte @Nullable [] expected) {
-        assertBufferTypeOptional(null, type, value, expected);
-    }
-
-    static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value) {
-        assertBufferTypeOptional(type, value, null);
-    }
-
-    static <T> void assertBufferTypeCollection(@Nullable Env env, NetworkBuffer.Type<T> type, List<T> values, byte @Nullable [] expected) {
-        var buffer = networkBuffer(env);
-        buffer.write(type.list(), values);
-        assertEquals(0, buffer.readIndex());
-        if (expected != null) assertEquals(expected.length, buffer.writeIndex());
-
-        var actual = buffer.read(type.list(Integer.MAX_VALUE));
-
-        assertEquals(values, actual);
-        if (expected != null) assertEquals(expected.length, buffer.readIndex());
-        if (expected != null) assertEquals(expected.length, buffer.writeIndex());
-
-        if (expected != null) {
-            var bytes = new byte[expected.length];
-            buffer.copyTo(0, bytes, 0, bytes.length);
-            assertArrayEquals(expected, bytes, "Invalid bytes: " + Arrays.toString(expected) + " != " + Arrays.toString(bytes));
-        }
-    }
-
-    static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> values, byte @Nullable [] expected) {
-        assertBufferTypeCollection(null, type, values, expected);
-    }
-
-    static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> value) {
-        assertBufferTypeCollection(null, type, value, null);
     }
 
     interface Action<T> {

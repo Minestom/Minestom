@@ -1103,6 +1103,8 @@ public interface NetworkBuffer {
 
         /**
          * Determines the sizeOf {@link T} using the registries provided.
+         * <br>
+         * Consider overriding this version as {@link #sizeOf(Object)} calls into this.
          *
          * @param value      the value to get the size of
          * @param registries the registries
@@ -1116,6 +1118,8 @@ public interface NetworkBuffer {
 
         /**
          * Determines the sizeOf {@link T}.
+         * <br>
+         * Consider overriding {@link #sizeOf(Object, Registries)} instead if applicable.
          *
          * @param value the value to get the size of
          * @return the size
@@ -1123,7 +1127,7 @@ public interface NetworkBuffer {
         @Contract(pure = true)
         @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value) {
-            return NetworkBufferProvider.networkBufferProvider().sizeOf(this, value, null);
+            return sizeOf(value, null);
         }
 
         /**
@@ -1243,7 +1247,7 @@ public interface NetworkBuffer {
          * @return the new union type for {@link T} using {@link R}
          */
         @Contract(pure = true, value = "_, _ -> new")
-        default <R> Type<R> unionType(Function<T, NetworkBuffer.Type<? extends R>> serializers, Function<R, ? extends T> keyFunc) {
+        default <R> Type<R> unionType(Function<T, NetworkBuffer.Type<? extends R>> serializers, Function<? super R, ? extends T> keyFunc) {
             return new NetworkBufferTypeImpl.UnionType<>(this, keyFunc, serializers);
         }
 

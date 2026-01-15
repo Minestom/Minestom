@@ -47,200 +47,276 @@ final class NetworkBufferTypeImpl {
         public Unit read(NetworkBuffer buffer) {
             return Unit.INSTANCE;
         }
+
+        @Override
+        public long sizeOf(Unit value, @Nullable Registries registries) {
+            return 0;
+        }
     }
 
     record BooleanType() implements Type<Boolean> {
         @Override
         public void write(NetworkBuffer buffer, Boolean value) {
-            buffer.ensureWritable(1);
+            buffer.ensureWritable(Byte.BYTES);
             buffer.direct().putByte(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
-            buffer.advanceWrite(1);
+            buffer.advanceWrite(Byte.BYTES);
         }
 
         @Override
         public Boolean read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Byte.BYTES);
             final byte value = buffer.direct().getByte(buffer.readIndex());
-            buffer.advanceRead(1);
+            buffer.advanceRead(Byte.BYTES);
             return value == 1;
+        }
+
+        @Override
+        public long sizeOf(Boolean value, @Nullable Registries registries) {
+            return Byte.BYTES;
         }
     }
 
     record ByteType() implements Type<Byte> {
         @Override
         public void write(NetworkBuffer buffer, Byte value) {
-            buffer.ensureWritable(1);
+            buffer.ensureWritable(Byte.BYTES);
             buffer.direct().putByte(buffer.writeIndex(), value);
-            buffer.advanceWrite(1);
+            buffer.advanceWrite(Byte.BYTES);
         }
 
         @Override
         public Byte read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Byte.BYTES);
             final byte value = buffer.direct().getByte(buffer.readIndex());
-            buffer.advanceRead(1);
+            buffer.advanceRead(Byte.BYTES);
             return value;
+        }
+
+        @Override
+        public long sizeOf(Byte value, @Nullable Registries registries) {
+            return Byte.BYTES;
         }
     }
 
     record UnsignedByteType() implements Type<Short> {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
-            buffer.ensureWritable(1);
+            buffer.ensureWritable(Byte.BYTES);
             buffer.direct().putByte(buffer.writeIndex(), (byte) (value & 0xFF));
-            buffer.advanceWrite(1);
+            buffer.advanceWrite(Byte.BYTES);
         }
 
         @Override
         public Short read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Byte.BYTES);
             final byte value = buffer.direct().getByte(buffer.readIndex());
-            buffer.advanceRead(1);
+            buffer.advanceRead(Byte.BYTES);
             return (short) (value & 0xFF);
+        }
+
+        @Override
+        public long sizeOf(Short value, @Nullable Registries registries) {
+            return Byte.BYTES;
         }
     }
 
     record ShortType() implements Type<Short> {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
-            buffer.ensureWritable(2);
+            buffer.ensureWritable(Short.BYTES);
             buffer.direct().putShort(buffer.writeIndex(), value);
-            buffer.advanceWrite(2);
+            buffer.advanceWrite(Short.BYTES);
         }
 
         @Override
         public Short read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Short.BYTES);
             final short value = buffer.direct().getShort(buffer.readIndex());
-            buffer.advanceRead(2);
+            buffer.advanceRead(Short.BYTES);
             return value;
+        }
+
+        @Override
+        public long sizeOf(Short value, @Nullable Registries registries) {
+            return Short.BYTES;
         }
     }
 
     record UnsignedShortType() implements Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
-            buffer.ensureWritable(2);
+            buffer.ensureWritable(Short.BYTES);
             buffer.direct().putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
-            buffer.advanceWrite(2);
+            buffer.advanceWrite(Short.BYTES);
         }
 
         @Override
         public Integer read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Short.BYTES);
             final short value = buffer.direct().getShort(buffer.readIndex());
-            buffer.advanceRead(2);
+            buffer.advanceRead(Short.BYTES);
             return value & 0xFFFF;
+        }
+
+        @Override
+        public long sizeOf(Integer value, @Nullable Registries registries) {
+            return Short.BYTES;
         }
     }
 
     record IntType() implements Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
-            buffer.ensureWritable(4);
+            buffer.ensureWritable(Integer.BYTES);
             buffer.direct().putInt(buffer.writeIndex(), value);
-            buffer.advanceWrite(4);
+            buffer.advanceWrite(Integer.BYTES);
         }
 
         @Override
         public Integer read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Integer.BYTES);
             final int value = buffer.direct().getInt(buffer.readIndex());
-            buffer.advanceRead(4);
+            buffer.advanceRead(Integer.BYTES);
             return value;
+        }
+
+        @Override
+        public long sizeOf(Integer value, @Nullable Registries registries) {
+            return Integer.BYTES;
         }
     }
 
     record UnsignedIntType() implements Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
-            buffer.ensureWritable(4);
+            buffer.ensureWritable(Integer.BYTES);
             buffer.direct().putInt(buffer.writeIndex(), (int) (value & 0xFFFFFFFFL));
-            buffer.advanceWrite(4);
+            buffer.advanceWrite(Integer.BYTES);
         }
 
         @Override
         public Long read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Integer.BYTES);
             final int value = buffer.direct().getInt(buffer.readIndex());
-            buffer.advanceRead(4);
+            buffer.advanceRead(Integer.BYTES);
             return value & 0xFFFFFFFFL;
+        }
+
+        @Override
+        public long sizeOf(Long value, @Nullable Registries registries) {
+            return Integer.BYTES;
         }
     }
 
     record LongType() implements Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
-            buffer.ensureWritable(8);
+            buffer.ensureWritable(Long.BYTES);
             buffer.direct().putLong(buffer.writeIndex(), value);
-            buffer.advanceWrite(8);
+            buffer.advanceWrite(Long.BYTES);
         }
 
         @Override
         public Long read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Long.BYTES);
             final long value = buffer.direct().getLong(buffer.readIndex());
-            buffer.advanceRead(8);
+            buffer.advanceRead(Long.BYTES);
             return value;
+        }
+
+        @Override
+        public long sizeOf(Long value, @Nullable Registries registries) {
+            return Long.BYTES;
         }
     }
 
     record FloatType() implements Type<Float> {
         @Override
         public void write(NetworkBuffer buffer, Float value) {
-            buffer.ensureWritable(4);
+            buffer.ensureWritable(Float.BYTES);
             buffer.direct().putFloat(buffer.writeIndex(), value);
-            buffer.advanceWrite(4);
+            buffer.advanceWrite(Float.BYTES);
         }
 
         @Override
         public Float read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Float.BYTES);
             final float value = buffer.direct().getFloat(buffer.readIndex());
-            buffer.advanceRead(4);
+            buffer.advanceRead(Float.BYTES);
             return value;
+        }
+
+        @Override
+        public long sizeOf(Float value, @Nullable Registries registries) {
+            return Float.BYTES;
         }
     }
 
     record DoubleType() implements Type<Double> {
         @Override
         public void write(NetworkBuffer buffer, Double value) {
-            buffer.ensureWritable(8);
+            buffer.ensureWritable(Double.BYTES);
             buffer.direct().putDouble(buffer.writeIndex(), value);
-            buffer.advanceWrite(8);
+            buffer.advanceWrite(Double.BYTES);
         }
 
         @Override
         public Double read(NetworkBuffer buffer) {
+            buffer.ensureReadable(Double.BYTES);
             final double value = buffer.direct().getDouble(buffer.readIndex());
-            buffer.advanceRead(8);
+            buffer.advanceRead(Double.BYTES);
             return value;
+        }
+
+        @Override
+        public long sizeOf(Double value, @Nullable Registries registries) {
+            return Double.BYTES;
         }
     }
 
     record VarIntType() implements Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer boxed) {
-            buffer.ensureWritable(5);
-            long index = buffer.writeIndex();
             int value = boxed;
+            if (buffer.writableBytes() < 5) {
+                buffer.ensureWritable(sizeOf(value));
+            }
+            long index = buffer.writeIndex();
             var nio = buffer.direct();
-            while (true) {
+            for (long i = 0; i < 4; i++) { // Using a counted loop allows easier unrolling.
                 if ((value & ~SEGMENT_BITS) == 0) {
-                    nio.putByte(index++, (byte) value);
-                    buffer.advanceWrite(index - buffer.writeIndex());
-                    return;
+                    break;
                 }
-                nio.putByte(index++, (byte) ((byte) (value & SEGMENT_BITS) | CONTINUE_BIT));
+                nio.putByte(index++, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
                 // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
                 value >>>= 7;
             }
+            nio.putByte(index++, (byte) value);
+            buffer.advanceWrite(index - buffer.writeIndex());
         }
 
         @Override
         public Integer read(NetworkBuffer buffer) {
-            long index = buffer.readIndex();
-            // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L393
             int result = 0;
-            for (int shift = 0; ; shift += 7) {
-                byte b = buffer.direct().getByte(index++);
-                result |= (b & 0x7f) << shift;
+            for (int i = 0; i < 5; i++) {
+                byte b = BYTE.read(buffer);
+                result |= (b & SEGMENT_BITS) << (i * 7);
                 if (b >= 0) {
-                    buffer.advanceRead(index - buffer.readIndex());
                     return result;
                 }
             }
+            throw new IllegalStateException("VarInt is too big");
+        }
+
+        int sizeOf(int value) {
+            int normal = value | -(value >>> 31) | 1;
+            int bits = 32 - Integer.numberOfLeadingZeros(normal);
+            return (bits + 6) / 7;
+        }
+
+        @Override
+        public long sizeOf(Integer value, @Nullable Registries registries) {
+            return sizeOf(value.intValue());
         }
     }
 
@@ -255,6 +331,11 @@ final class NetworkBufferTypeImpl {
             final int value = buffer.read(VAR_INT);
             return value == 0 ? null : value - 1;
         }
+
+        @Override
+        public long sizeOf(@Nullable Integer value) {
+            return VAR_INT.sizeOf(value == null ? 0 : value + 1);
+        }
     }
 
     record VarInt3Type() implements Type<Integer> {
@@ -266,8 +347,8 @@ final class NetworkBufferTypeImpl {
             buffer.ensureWritable(3);
             final long startIndex = buffer.writeIndex();
             var impl = buffer.direct();
-            impl.putByte(startIndex, (byte) (value & 0x7F | 0x80));
-            impl.putByte(startIndex + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
+            impl.putByte(startIndex, (byte) ((value & SEGMENT_BITS) | CONTINUE_BIT));
+            impl.putByte(startIndex + 1, (byte) (((value >>> 7) & SEGMENT_BITS) | CONTINUE_BIT));
             impl.putByte(startIndex + 2, (byte) (value >>> 14));
             buffer.advanceWrite(3);
         }
@@ -310,10 +391,21 @@ final class NetworkBufferTypeImpl {
                 value |= (long) (currentByte & SEGMENT_BITS) << position;
                 if ((currentByte & CONTINUE_BIT) == 0) break;
                 position += 7;
-                if (position >= 64) throw new RuntimeException("VarLong is too big");
+                if (position >= 64) throw new IllegalStateException("VarLong is too big");
             }
             buffer.advanceRead(length);
             return value;
+        }
+
+        public long sizeOf(long value) {
+            long normal = value | -(value >>> 63) | 1;
+            int bits = 64 - Long.numberOfLeadingZeros(normal);
+            return (bits + 6) / 7;
+        }
+
+        @Override
+        public long sizeOf(Long value, @Nullable Registries registries) {
+            return sizeOf(value.longValue());
         }
     }
 
@@ -343,6 +435,11 @@ final class NetworkBufferTypeImpl {
             buffer.direct().getBytes(buffer.readIndex(), bytes);
             buffer.advanceRead(arrayLength);
             return bytes;
+        }
+
+        @Override
+        public long sizeOf(byte[] value, @Nullable Registries registries) {
+            return length;
         }
     }
 
@@ -1051,7 +1148,7 @@ final class NetworkBufferTypeImpl {
     }
 
     record UnionType<T, K>(
-            Type<K> keyType, Function<T, ? extends K> keyFunc,
+            Type<K> keyType, Function<? super T, ? extends K> keyFunc,
             Function<K, NetworkBuffer.@Nullable Type<? extends T>> serializers
     ) implements Type<T> {
         public UnionType {

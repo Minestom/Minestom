@@ -146,6 +146,7 @@ public final class PacketReading {
             packetLength = buffer.read(VAR_INT);
         } catch (IndexOutOfBoundsException e) {
             // Couldn't read a single var-int
+            buffer.readIndex(beginMark);
             return new Result.Failure<>(MAX_VAR_INT_SIZE);
         }
         final long readerStart = buffer.readIndex();
