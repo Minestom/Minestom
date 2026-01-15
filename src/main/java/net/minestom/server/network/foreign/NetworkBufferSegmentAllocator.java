@@ -80,10 +80,29 @@ public final class NetworkBufferSegmentAllocator {
         Objects.requireNonNull(arena, "arena");
         if (!ENABLE_NATIVE) {
             // Fall back to regular implementation, we check for not nullness, as Arena is implementable
-            return Objects.requireNonNull(arena.allocate(byteSize), "segment");
+            final MemorySegment segment = arena.allocate(byteSize);
+            Objects.requireNonNull(segment, "segment");
+            assert !segment.isReadOnly() : "Allocated segment is read-only: %d:%d".formatted(segment.address(), byteSize);
+            return segment;
         }
-        // We can use native implementation, which involves checking bounds early.
-        Check.argCondition(byteSize < 0, "Cannot allocate a negative size found {}", byteSize);
+        // We can use native implementation.
+        final MemorySegment segment = malloc(byteSize);
+        try {
+            return segment.reinterpret(byteSize, arena, SEGMENT_CLEANER);
+        } catch (RuntimeException e) {
+            // We need to attempt to clean if it failed to reinterpret.
+            try {
+                throw new IllegalStateException("Failed to reinterpret native memory: %d:%d".formatted(segment.address(), byteSize), e);
+            } finally {
+                // Attempt to free could cause another exception.
+                NetworkBufferSegmentAllocator.free(segment);
+            }
+        }
+    }
+
+    private static MemorySegment malloc(long byteSize) {
+        if (byteSize < 0) throw new IllegalArgumentException("Cannot allocate a negative size found %d".formatted(byteSize));
+        if (!ENABLE_NATIVE) throw new IllegalStateException("Cannot malloc without native access.");
         final MemorySegment segment;
         try {
             segment = (MemorySegment) MALLOC_HANDLE.invokeExact(byteSize);
@@ -93,18 +112,7 @@ public final class NetworkBufferSegmentAllocator {
         // malloc mostly returns NULL when byteSize > 0 for OOM.
         if (byteSize > 0 && segment.address() == MemorySegment.NULL.address())
             throw new OutOfMemoryError("Failed to allocate native memory: %d".formatted(byteSize));
-
-        try {
-            return segment.reinterpret(byteSize, arena, SEGMENT_CLEANER);
-        } catch (Exception e) {
-            // We need to attempt to clean if it failed to reinterpret.
-            try {
-                throw new IllegalStateException("Failed to reinterpret native memory: %d:%d".formatted(segment.address(), byteSize), e);
-            } finally {
-                // Attempt to free could cause another exception.
-                NetworkBufferSegmentAllocator.free(segment);
-            }
-        }
+        return segment;
     }
 
     private static void free(MemorySegment segment) {

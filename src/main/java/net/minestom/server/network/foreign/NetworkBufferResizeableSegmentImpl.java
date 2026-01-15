@@ -27,8 +27,6 @@ final class NetworkBufferResizeableSegmentImpl extends NetworkBufferSegmentImpl 
     NetworkBufferResizeableSegmentImpl(Arena arena, MemorySegment segment, long readIndex, long writeIndex, AutoResize autoResize, Supplier<? extends Arena> arenaSupplier, @Nullable Registries registries) {
         this.arena = Objects.requireNonNull(arena, "arena");
         this.segment = Objects.requireNonNull(segment, "segment");
-        Check.argCondition(segment.address() == MemorySegment.NULL.address(), "Segment address cannot be NULL");
-        Check.argCondition(segment.isReadOnly(), "segment is read only, should be static");
         this.autoResize = Objects.requireNonNull(autoResize, "autoResize");
         this.arenaSupplier = Objects.requireNonNull(arenaSupplier, "arenaSupplier");
         super(readIndex, writeIndex, registries);
