@@ -1,7 +1,9 @@
 package net.minestom.server.network;
 
 import net.minestom.server.network.NetworkBuffer.Type;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Functions.*;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Objects;
@@ -58,6 +60,11 @@ public final class NetworkBufferTemplate {
             public R read(NetworkBuffer buffer) {
                 return value;
             }
+
+            @Override
+            public long sizeOf(R value, @Nullable Registries registries) {
+                return 0;
+            }
         };
     }
 
@@ -78,6 +85,11 @@ public final class NetworkBufferTemplate {
             @Override
             public R read(NetworkBuffer buffer) {
                 return Objects.requireNonNull(supplier.get(), "value");
+            }
+
+            @Override
+            public long sizeOf(R value, @Nullable Registries registries) {
+                return 0;
             }
         };
     }

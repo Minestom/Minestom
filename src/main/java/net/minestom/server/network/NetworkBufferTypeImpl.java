@@ -38,22 +38,6 @@ final class NetworkBufferTypeImpl {
     static final int SEGMENT_BITS = 0x7F;
     static final int CONTINUE_BIT = 0x80;
 
-    record UnitType() implements Type<Unit> {
-        @Override
-        public void write(NetworkBuffer buffer, Unit value) {
-        }
-
-        @Override
-        public Unit read(NetworkBuffer buffer) {
-            return Unit.INSTANCE;
-        }
-
-        @Override
-        public long sizeOf(Unit value, @Nullable Registries registries) {
-            return 0;
-        }
-    }
-
     record BooleanType() implements Type<Boolean> {
         @Override
         public void write(NetworkBuffer buffer, Boolean value) {

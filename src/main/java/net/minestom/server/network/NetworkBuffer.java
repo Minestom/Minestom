@@ -85,7 +85,7 @@ import java.util.zip.DataFormatException;
  * @see IOView to interface with existing code
  */
 public interface NetworkBuffer {
-    Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
+    Type<Unit> UNIT = NetworkBufferTemplate.template(Unit.INSTANCE);
     Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
     Type<Short> UNSIGNED_BYTE = new NetworkBufferTypeImpl.UnsignedByteType();
