@@ -53,7 +53,15 @@
     },
     {
       "type": "java.lang.String",
-      "serializable": true
+      "serializable": true,
+      "methods": [
+        {
+          "name": "getBytesLength",
+          "parameterTypes": [
+            "java.nio.charset.Charset"
+          ]
+        }
+      ]
     },
     {
       "type": "java.lang.String[]"
@@ -61,6 +69,30 @@
     {
       "type": "java.lang.Throwable",
       "serializable": true
+    },
+    {
+      "type": "java.lang.foreign.MemorySegment",
+      "methods": [
+        {
+          "name": "copy",
+          "parameterTypes": [
+            "java.lang.String",
+            "java.nio.charset.Charset",
+            "int",
+            "java.lang.foreign.MemorySegment",
+            "long",
+            "int"
+          ]
+        },
+        {
+          "name": "getString",
+          "parameterTypes": [
+            "long",
+            "java.nio.charset.Charset",
+            "long"
+          ]
+        }
+      ]
     },
     {
       "type": "java.lang.reflect.RecordComponent"
@@ -114,6 +146,9 @@
     },
     {
       "type": "jdk.internal.misc.Unsafe"
+    },
+    {
+      "type": "net.minestom.server.adventure.provider.MinestomAnsiComponentSerializerProvider"
     },
     {
       "type": "net.minestom.server.adventure.provider.MinestomComponentLoggerProvider"
@@ -196,6 +231,22 @@
       ]
     },
     {
+      "type": "net.minestom.server.network.packet.server.CachedPacket",
+      "fields": [
+        {
+          "name": "packet"
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.LazyPacket",
+      "fields": [
+        {
+          "name": "packet"
+        }
+      ]
+    },
+    {
       "type": "net.minestom.server.timer.TaskImpl",
       "fields": [
         {
@@ -204,112 +255,28 @@
       ]
     },
     {
-      "type": "org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
-      "fields": [
-        {
-          "name": "producerLimit"
-        }
-      ]
+      "type": "org.jctools.queues.atomic.BaseMpscLinkedAtomicArrayQueueColdProducerFields"
     },
     {
-      "type": "org.jctools.queues.BaseMpscLinkedArrayQueueConsumerFields",
-      "fields": [
-        {
-          "name": "consumerIndex"
-        }
-      ]
+      "type": "org.jctools.queues.atomic.BaseMpscLinkedAtomicArrayQueueConsumerFields"
     },
     {
-      "type": "org.jctools.queues.BaseMpscLinkedArrayQueueProducerFields",
-      "fields": [
-        {
-          "name": "producerIndex"
-        }
-      ]
+      "type": "org.jctools.queues.atomic.BaseMpscLinkedAtomicArrayQueueProducerFields"
     },
     {
-      "type": "org.jctools.queues.MpUnboundedXaddArrayQueueConsumerFields",
-      "fields": [
-        {
-          "name": "consumerChunk"
-        },
-        {
-          "name": "consumerIndex"
-        }
-      ]
+      "type": "org.jctools.queues.atomic.MpmcAtomicArrayQueueConsumerIndexField"
     },
     {
-      "type": "org.jctools.queues.MpUnboundedXaddArrayQueueProducerChunk",
-      "fields": [
-        {
-          "name": "producerChunk"
-        },
-        {
-          "name": "producerChunkIndex"
-        }
-      ]
+      "type": "org.jctools.queues.atomic.MpmcAtomicArrayQueueProducerIndexField"
     },
     {
-      "type": "org.jctools.queues.MpUnboundedXaddArrayQueueProducerFields",
-      "fields": [
-        {
-          "name": "producerIndex"
-        }
-      ]
+      "type": "org.jctools.queues.atomic.MpscAtomicArrayQueueConsumerIndexField"
     },
     {
-      "type": "org.jctools.queues.MpUnboundedXaddChunk",
-      "fields": [
-        {
-          "name": "index"
-        },
-        {
-          "name": "next"
-        },
-        {
-          "name": "prev"
-        }
-      ]
+      "type": "org.jctools.queues.atomic.MpscAtomicArrayQueueProducerIndexField"
     },
     {
-      "type": "org.jctools.queues.MpscArrayQueueConsumerIndexField",
-      "fields": [
-        {
-          "name": "consumerIndex"
-        }
-      ]
-    },
-    {
-      "type": "org.jctools.queues.MpscArrayQueueProducerIndexField",
-      "fields": [
-        {
-          "name": "producerIndex"
-        }
-      ]
-    },
-    {
-      "type": "org.jctools.queues.MpscArrayQueueProducerLimitField",
-      "fields": [
-        {
-          "name": "producerLimit"
-        }
-      ]
-    },
-    {
-      "type": "org.jctools.queues.SpscArrayQueueConsumerIndexField",
-      "fields": [
-        {
-          "name": "consumerIndex"
-        }
-      ]
-    },
-    {
-      "type": "org.jctools.queues.SpscArrayQueueProducerIndexFields",
-      "fields": [
-        {
-          "name": "producerIndex"
-        }
-      ]
+      "type": "org.jctools.queues.atomic.MpscAtomicArrayQueueProducerLimitField"
     },
     {
       "type": "space.vectrix.flare.fastutil.Int2ObjectSyncMapImpl$ExpungingEntryImpl"
@@ -344,14 +311,6 @@
         },
         {
           "name": "threadContentionMonitoringSupport"
-        }
-      ]
-    },
-    {
-      "type": "sun.misc.Unsafe",
-      "fields": [
-        {
-          "name": "theUnsafe"
         }
       ]
     },
@@ -629,6 +588,9 @@
       "glob": "tags/sound_event.json"
     },
     {
+      "glob": "tags/timeline.json"
+    },
+    {
       "glob": "tags/trim_material.json"
     },
     {
@@ -647,6 +609,12 @@
       "glob": "tags/worldgen/biome.json"
     },
     {
+      "glob": "tags/zombie_nautilus_variant.json"
+    },
+    {
+      "glob": "timeline.json"
+    },
+    {
       "glob": "trim_material.json"
     },
     {
@@ -663,6 +631,9 @@
     },
     {
       "glob": "worldgen/biome.json"
+    },
+    {
+      "glob": "zombie_nautilus_variant.json"
     },
     {
       "module": "jdk.jfr",
