@@ -7,11 +7,10 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
-
-import java.util.ArrayList;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 

@@ -6,7 +6,8 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.OPTIONAL_NBT_COMPOUND;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record NbtQueryResponsePacket(int transactionId, @Nullable CompoundBinaryTag data) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<NbtQueryResponsePacket> SERIALIZER = NetworkBufferTemplate.template(

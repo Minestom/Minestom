@@ -17,7 +17,6 @@ import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.json.JsonUtil;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;

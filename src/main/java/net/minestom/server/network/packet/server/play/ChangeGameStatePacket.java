@@ -4,7 +4,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
 public record ChangeGameStatePacket(Reason reason, float value) implements ServerPacket.Play {

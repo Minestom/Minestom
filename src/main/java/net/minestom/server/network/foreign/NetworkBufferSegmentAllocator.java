@@ -2,7 +2,6 @@ package net.minestom.server.network.foreign;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;

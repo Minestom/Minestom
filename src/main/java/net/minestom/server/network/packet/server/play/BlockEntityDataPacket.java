@@ -8,7 +8,8 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
+import static net.minestom.server.network.NetworkBuffer.OPTIONAL_NBT_COMPOUND;
 
 public record BlockEntityDataPacket(Point blockPosition,
                                     BlockEntityType type,
