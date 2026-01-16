@@ -123,6 +123,8 @@ public final class Server {
                 connection.disconnect();
                 break;
             }
+            // Connection was disconnected
+            if (!connection.isOnline()) break;
         }
         // Ensure the write thread gets unlocked once the read thread stops.
         connection.unlockWriteThread();

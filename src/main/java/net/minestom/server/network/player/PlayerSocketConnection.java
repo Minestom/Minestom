@@ -136,9 +136,14 @@ public class PlayerSocketConnection extends PlayerConnection {
                     compression()
             );
         } catch (DataFormatException | RuntimeException e) {
+            // Pass any errors to the exception manager
+            // Except ones that were generated in the starting state of X (Likely garbage)
+            // Should cutdown on random packets sent to the server from scanners causing stack traces.
+            // Note: if the last packet is the one that errors in a different state, this can't account for that.
+            if (startingState.ordinal() > ServerFlag.SUPPRESS_PACKET_ERROR_LEVEL)
+                MinecraftServer.getExceptionManager().handleException(e);
             // If anything is thrown, all packets in the queue will be lost here.
             // So it's highly recommended to disconnect to avoid more invalid state.
-            MinecraftServer.getExceptionManager().handleException(e);
             if (ServerFlag.REJECT_MALFORMED_PACKET) disconnect();
             return;
         }
@@ -159,7 +164,10 @@ public class PlayerSocketConnection extends PlayerConnection {
                             player.addPacketToQueue(packet);
                         }
                     } catch (Exception e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+                        if (startingState.ordinal() > ServerFlag.SUPPRESS_PACKET_ERROR_LEVEL)
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        // Note this does not affect packets in the queue.
+                        if (ServerFlag.REJECT_MISUSED_PACKET) disconnect();
                     }
                 }
                 // Compact in case of incomplete read

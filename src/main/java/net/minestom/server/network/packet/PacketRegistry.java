@@ -453,7 +453,7 @@ public interface PacketRegistry<T> {
         private final Map<Class<T>, PacketInfo<T>> packetsByClass;
 
         @SuppressWarnings("unchecked")
-        @SafeVarargs PacketRegistryTemplate(Entry<? extends T>... suppliers) {
+        protected @SafeVarargs PacketRegistryTemplate(Entry<? extends T>... suppliers) {
             Class<T>[] packetInfoClasses = new Class[suppliers.length];
             PacketInfo<T>[] packetInfos = new PacketInfo[suppliers.length];
             for (int i = 0; i < suppliers.length; i++) {
@@ -499,7 +499,7 @@ public interface PacketRegistry<T> {
             return packetsById;
         }
 
-        record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
+        protected record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
             public Entry {
                 Objects.requireNonNull(type, "type");
                 Objects.requireNonNull(reader, "reader");

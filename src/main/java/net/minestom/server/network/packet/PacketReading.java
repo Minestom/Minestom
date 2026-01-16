@@ -157,7 +157,7 @@ public final class PacketReading {
         }
         final int maxPacketSize = maxPacketSize(state);
         if (packetLength > maxPacketSize) {
-            throw new IllegalStateException("Packet too large: %d > %d:%s".formatted(packetLength, maxPacketSize, state.name()));
+            throw new DataFormatException("Packet too large: %d > %d:%s".formatted(packetLength, maxPacketSize, state.name()));
         }
         // READ PAYLOAD https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Packet_format
         if (buffer.readableBytes() < packetLength) {
@@ -210,11 +210,14 @@ public final class PacketReading {
     private static <T> T readPayload(NetworkBuffer buffer, PacketRegistry<T> registry) {
         final int packetId = buffer.read(VAR_INT);
         final T packet = registry.create(packetId, buffer);
-        if (buffer.readableBytes() != 0) {
-            LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})",
-                    packet.getClass().getSimpleName(), Integer.toHexString(packetId), buffer);
-        }
+        warnUnreadBytes(buffer, packet, packetId);
         return packet;
+    }
+
+    private static void warnUnreadBytes(NetworkBuffer buffer, Object packet, int packetId) {
+        if (!ServerFlag.WARN_UNREAD_BYTES_PACKET || buffer.readableBytes() == 0) return;
+        LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})",
+                packet.getClass().getSimpleName(), Integer.toHexString(packetId), buffer);
     }
 
     public static int maxPacketSize(ConnectionState state) {

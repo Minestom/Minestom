@@ -38,6 +38,9 @@ public final class ServerFlag {
     public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
     public static final int SOCKET_TIMEOUT = intProperty("minestom.socket-timeout", 15_000);
     public static final boolean REJECT_MALFORMED_PACKET = booleanProperty("minestom.reject-malformed-packet", true);
+    public static final boolean REJECT_MISUSED_PACKET = booleanProperty("minestom.reject-misused-packet", true);
+    public static final int SUPPRESS_PACKET_ERROR_LEVEL = intProperty("minestom.suppress-packet-error-level", -1); // >= ConnectionState.ordinal() state will be suppressed.
+    public static final boolean WARN_UNREAD_BYTES_PACKET = booleanProperty("minestom.warn-unread-bytes-packet", true);
     public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = booleanProperty("minestom.automatic-component-translation", false);
 
     // Network buffers
