@@ -45,7 +45,7 @@ public record ScoreboardObjectivePacket(String objectiveName, Mode mode) impleme
      * Represents a mode in the protocol.
      */
     public sealed interface Mode {
-        @ApiStatus.Internal
+        @ApiStatus.OverrideOnly
         byte id();
 
         private static NetworkBuffer.Type<? extends Mode> typeFromId(byte id) {
@@ -85,7 +85,6 @@ public record ScoreboardObjectivePacket(String objectiveName, Mode mode) impleme
             return new Create(operator.apply(objectiveValue), type, numberFormat);
         }
 
-        @ApiStatus.Internal
         @Override
         public byte id() {
             return 0;
@@ -96,7 +95,6 @@ public record ScoreboardObjectivePacket(String objectiveName, Mode mode) impleme
         public static final Destroy INSTANCE = new Destroy();
         public static final NetworkBuffer.Type<Destroy> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 
-        @ApiStatus.Internal
         @Override
         public byte id() {
             return 1;
@@ -130,7 +128,6 @@ public record ScoreboardObjectivePacket(String objectiveName, Mode mode) impleme
             return new Update(operator.apply(objectiveValue), type, numberFormat);
         }
 
-        @ApiStatus.Internal
         @Override
         public byte id() {
             return 2;

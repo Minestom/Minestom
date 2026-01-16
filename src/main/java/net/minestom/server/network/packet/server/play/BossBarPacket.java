@@ -20,21 +20,9 @@ public record BossBarPacket(UUID uuid,
                             Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<BossBarPacket> SERIALIZER = NetworkBufferTemplate.template(
             UUID, BossBarPacket::uuid,
-            VAR_INT.unionType(BossBarPacket::actionSerializer, Action::id), BossBarPacket::action,
+  /*VarInt*/BYTE.unionType(Action::serializer, Action::id), BossBarPacket::action,
             BossBarPacket::new
     );
-
-    private static Type<? extends Action> actionSerializer(int id) {
-        return switch (id) {
-            case 0 -> AddAction.SERIALIZER;
-            case 1 -> RemoveAction.SERIALIZER;
-            case 2 -> UpdateHealthAction.SERIALIZER;
-            case 3 -> UpdateTitleAction.SERIALIZER;
-            case 4 -> UpdateStyleAction.SERIALIZER;
-            case 5 -> UpdateFlagsAction.SERIALIZER;
-            default -> throw new RuntimeException("Unknown action id");
-        };
-    }
 
     @Override
     public Collection<Component> components() {
@@ -51,8 +39,20 @@ public record BossBarPacket(UUID uuid,
     }
 
     public sealed interface Action {
-        @ApiStatus.Internal
-        int id();
+        private static Type<? extends Action> serializer(byte id) {
+            return switch (id) {
+                case 0 -> AddAction.SERIALIZER;
+                case 1 -> RemoveAction.SERIALIZER;
+                case 2 -> UpdateHealthAction.SERIALIZER;
+                case 3 -> UpdateTitleAction.SERIALIZER;
+                case 4 -> UpdateStyleAction.SERIALIZER;
+                case 5 -> UpdateFlagsAction.SERIALIZER;
+                default -> throw new RuntimeException("Unknown action id");
+            };
+        }
+
+        @ApiStatus.OverrideOnly
+        byte id();
     }
 
     public record AddAction(Component title, float health, BossBar.Color color,
@@ -73,7 +73,7 @@ public record BossBarPacket(UUID uuid,
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 0;
         }
 
@@ -93,7 +93,7 @@ public record BossBarPacket(UUID uuid,
         public static final NetworkBuffer.Type<RemoveAction> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 
         @Override
-        public int id() {
+        public byte id() {
             return 1;
         }
     }
@@ -109,7 +109,7 @@ public record BossBarPacket(UUID uuid,
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 2;
         }
     }
@@ -125,7 +125,7 @@ public record BossBarPacket(UUID uuid,
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 3;
         }
 
@@ -153,7 +153,7 @@ public record BossBarPacket(UUID uuid,
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 4;
         }
     }
@@ -169,7 +169,7 @@ public record BossBarPacket(UUID uuid,
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 5;
         }
     }

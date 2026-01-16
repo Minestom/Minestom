@@ -11,23 +11,23 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaking) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientInteractEntityPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientInteractEntityPacket::targetId,
-            VAR_INT.unionType(ClientInteractEntityPacket::typeSerializer, Type::id), ClientInteractEntityPacket::type,
+  /*VarInt*/BYTE.unionType(Type::serializer, Type::id), ClientInteractEntityPacket::type,
             BOOLEAN, ClientInteractEntityPacket::sneaking,
             ClientInteractEntityPacket::new
     );
 
-    private static NetworkBuffer.Type<? extends Type> typeSerializer(int id) {
-        return switch (id) {
-            case 0 -> Interact.SERIALIZER;
-            case 1 -> Attack.SERIALIZER;
-            case 2 -> InteractAt.SERIALIZER;
-            default -> throw new RuntimeException("Unknown action id: " + id);
-        };
-    }
+    public sealed interface Type {
+        private static NetworkBuffer.Type<? extends Type> serializer(byte id) {
+            return switch (id) {
+                case 0 -> Interact.SERIALIZER;
+                case 1 -> Attack.SERIALIZER;
+                case 2 -> InteractAt.SERIALIZER;
+                default -> throw new RuntimeException("Unknown action id: " + id);
+            };
+        }
 
-    public sealed interface Type permits Interact, Attack, InteractAt {
-        @ApiStatus.Internal
-        int id();
+        @ApiStatus.OverrideOnly
+        byte id();
     }
 
     public record Interact(PlayerHand hand) implements Type {
@@ -36,9 +36,8 @@ public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaki
                 Interact::new
         );
 
-        @ApiStatus.Internal
         @Override
-        public int id() {
+        public byte id() {
             return 0;
         }
     }
@@ -47,9 +46,8 @@ public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaki
         public static final Attack INSTANCE = new Attack();
         public static final NetworkBuffer.Type<Attack> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 
-        @ApiStatus.Internal
         @Override
-        public int id() {
+        public byte id() {
             return 1;
         }
     }
@@ -64,9 +62,8 @@ public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaki
                 InteractAt::new
         );
 
-        @ApiStatus.Internal
         @Override
-        public int id() {
+        public byte id() {
             return 2;
         }
     }

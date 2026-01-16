@@ -19,6 +19,8 @@ public record SoundEffectPacket(
         float pitch,
         long seed
 ) implements ServerPacket.Play {
+    // Vector3 fixed int, Uses a Vec here due to BlockVec being instantly converted for the transform.
+    // Only packet to use a structure like this (wonderful)
     private static final NetworkBuffer.Type<Point> VECTOR3FI = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, Point value) {

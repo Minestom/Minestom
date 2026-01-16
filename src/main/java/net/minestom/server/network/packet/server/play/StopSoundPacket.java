@@ -12,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record StopSoundPacket(Action action) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<StopSoundPacket> SERIALIZER = NetworkBufferTemplate.template(
-            BYTE.unionType(Action::typeFromId, Action::flag), StopSoundPacket::action,
+            BYTE.unionType(Action::serializer, Action::flag), StopSoundPacket::action,
             StopSoundPacket::new
     );
 
@@ -21,7 +21,7 @@ public record StopSoundPacket(Action action) implements ServerPacket.Play {
     }
 
     public sealed interface Action {
-        private static Type<? extends Action> typeFromId(byte id) {
+        private static Type<? extends Action> serializer(byte id) {
             return switch (id) {
                 case 0b00 -> All.SERIALIZER;
                 case 0b01 -> Source.SERIALIZER;
@@ -31,7 +31,7 @@ public record StopSoundPacket(Action action) implements ServerPacket.Play {
             };
         }
 
-        @ApiStatus.Internal
+        @ApiStatus.OverrideOnly
         byte flag();
     }
 

@@ -18,6 +18,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.crypto.*;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
@@ -409,7 +410,7 @@ public class PacketWriteReadTest {
         addServerPackets(new ChunkDataPacket(0, 0, new ChunkData(Map.of(), new byte[0], List.of()), new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
         addServerPackets(new ChunkBiomesPacket(List.of()), new ChunkBiomesPacket(List.of(new ChunkBiomesPacket.ChunkBiomeData(0, 0, new byte[0]))));
         addServerPackets(new CustomChatCompletionPacket(CustomChatCompletionPacket.Action.ADD, List.of("entry1", "entry2")));
-        addServerPackets(new DamageEventPacket(5, 1, 2, 3, VEC));
+        addServerPackets(new DamageEventPacket(5, DamageType.ARROW, 2, 3, VEC), new DamageEventPacket(50, DamageType.WITHER, null, null, null));
         addServerPackets(new DeclareCommandsPacket(List.of(), 0));
         addServerPackets(new BundlePacket());
         addServerPackets(new DebugBlockValuePacket(BlockVec.ONE, new DebugSubscription.Update<>(DebugSubscription.BEE_HIVES, new DebugHiveInfo(Block.BEEHIVE, 1, 0, true))));

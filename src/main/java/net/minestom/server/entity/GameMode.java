@@ -38,11 +38,11 @@ public enum GameMode {
         return instantBreak;
     }
 
-    private static final GameMode[] VALUES = values();
-
     public static final NetworkBuffer.Type<GameMode> NETWORK_TYPE = NetworkBuffer.Enum(GameMode.class);
 
     public static final NetworkBuffer.Type<@Nullable GameMode> OPT_NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        private static final GameMode[] VALUES = values();
+
         @Override
         public void write(NetworkBuffer buffer, @Nullable GameMode value) {
             buffer.write(BYTE, value != null ? (byte) value.ordinal() : -1);

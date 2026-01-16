@@ -13,14 +13,33 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ParticlePacket(Particle particle, boolean overrideLimiter, boolean longDistance,
                              Point origin, Point offset, float maxSpeed, int particleCount) implements ServerPacket.Play {
+
+    public ParticlePacket {
+        Objects.requireNonNull(particle, "particle");
+        Objects.requireNonNull(origin, "origin");
+        Objects.requireNonNull(offset, "offset");
+    }
+
+    /**
+     * @deprecated use {@link #ParticlePacket(Particle, Point, Point, float, int)} instead
+     */
+    @Deprecated(forRemoval = true)
     public ParticlePacket(Particle particle, boolean overrideLimiter, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
         this(particle, overrideLimiter, longDistance, new Vec(x, y, z), new Vec(offsetX, offsetY, offsetZ), maxSpeed, particleCount);
     }
 
+    /**
+     * @deprecated use {@link #ParticlePacket(Particle, Point, Point, float, int)} instead
+     */
+    @Deprecated(forRemoval = true)
     public ParticlePacket(Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
         this(particle, false, false, new Vec(x, y, z), new Vec(offsetX, offsetY, offsetZ), maxSpeed, particleCount);
     }
 
+    /**
+     * @deprecated use {@link #ParticlePacket(Particle, Point, Point, float, int)} instead
+     */
+    @Deprecated(forRemoval = true)
     public ParticlePacket(Particle particle, Point origin, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
         this(particle, false, false, origin, new Vec(offsetX, offsetY, offsetZ), maxSpeed, particleCount);
     }
@@ -33,12 +52,6 @@ public record ParticlePacket(Particle particle, boolean overrideLimiter, boolean
                            Point offset, float maxSpeed,
                            int particleCount, Particle particle) {
         this(particle, overrideLimiter, longDistance, origin, offset, maxSpeed, particleCount);
-    }
-
-    public ParticlePacket {
-        Objects.requireNonNull(particle, "particle");
-        Objects.requireNonNull(origin, "origin");
-        Objects.requireNonNull(offset, "offset");
     }
 
     public static final NetworkBuffer.Type<ParticlePacket> SERIALIZER = NetworkBufferTemplate.template(

@@ -24,24 +24,13 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
 
     public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, TeamsPacket::teamName,
-            BYTE.unionType(TeamsPacket::actionSerializer, Action::id), TeamsPacket::action,
+            BYTE.unionType(Action::serializer, Action::id), TeamsPacket::action,
             TeamsPacket::new
     );
 
     @Override
     public Collection<Component> components() {
         return this.action instanceof ComponentHolder<?> holder ? holder.components() : List.of();
-    }
-
-    private static Type<? extends Action> actionSerializer(int id) {
-        return switch (id) {
-            case 0 -> CreateTeamAction.SERIALIZER;
-            case 1 -> RemoveTeamAction.SERIALIZER;
-            case 2 -> UpdateTeamAction.SERIALIZER;
-            case 3 -> AddEntitiesToTeamAction.SERIALIZER;
-            case 4 -> RemoveEntitiesToTeamAction.SERIALIZER;
-            default -> throw new RuntimeException("Unknown action id");
-        };
     }
 
     @Override
@@ -55,7 +44,18 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     }
 
     public sealed interface Action {
-        @ApiStatus.Internal
+        private static Type<? extends Action> serializer(int id) {
+            return switch (id) {
+                case 0 -> CreateTeamAction.SERIALIZER;
+                case 1 -> RemoveTeamAction.SERIALIZER;
+                case 2 -> UpdateTeamAction.SERIALIZER;
+                case 3 -> AddEntitiesToTeamAction.SERIALIZER;
+                case 4 -> RemoveEntitiesToTeamAction.SERIALIZER;
+                default -> throw new RuntimeException("Unknown action id");
+            };
+        }
+
+        @ApiStatus.OverrideOnly
         byte id();
     }
 

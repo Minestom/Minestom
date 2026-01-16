@@ -3,6 +3,7 @@ package net.minestom.server.entity.pathfinding;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.pathfinding.followers.GroundNodeFollower;
@@ -241,7 +242,7 @@ public final class Navigator {
         if (path == null) return;
 
         for (PNode point : path.getNodes()) {
-            var packet = new ParticlePacket(Particle.COMPOSTER, point.x(), point.y() + 0.5, point.z(), 0, 0, 0, 0, 1);
+            var packet = new ParticlePacket(Particle.COMPOSTER, new Vec(point.x(), point.y(), point.z()).add(0, 0.5, 0), Vec.ZERO, 0, 1);
             entity.sendPacketToViewers(packet);
         }
     }
