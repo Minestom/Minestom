@@ -13,17 +13,23 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
-import net.minestom.server.network.packet.client.status.StatusRequestPacket;
+import net.minestom.server.network.packet.client.status.ClientStatusRequestPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.configuration.*;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
-import org.jetbrains.annotations.UnknownNullability;
+import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public interface PacketRegistry<T> {
-    @UnknownNullability
     T create(int packetId, NetworkBuffer reader);
 
     PacketInfo<T> packetInfo(Class<?> packetClass);
@@ -38,21 +44,28 @@ public interface PacketRegistry<T> {
 
     ConnectionSide side();
 
+    @Unmodifiable Collection<PacketInfo<T>> packets();
+
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
+        public PacketInfo {
+            Objects.requireNonNull(packetClass, "packetClass");
+            Check.argCondition(id < 0, "id `{0}` must be non negative", id);
+            Objects.requireNonNull(serializer, "serializer");
+        }
     }
 
-    abstract sealed class Client extends PacketRegistryTemplate<ClientPacket> {
-        @SafeVarargs Client(Entry<? extends ClientPacket>... suppliers) {
+    abstract sealed class Client<T extends ClientPacket> extends PacketRegistryTemplate<ClientPacket> {
+        @SafeVarargs Client(Entry<? extends T>... suppliers) {
             super(suppliers);
         }
 
         @Override
-        public ConnectionSide side() {
+        public final ConnectionSide side() {
             return ConnectionSide.CLIENT;
         }
     }
 
-    final class ClientHandshake extends Client {
+    final class ClientHandshake extends Client<ClientPacket.Handshake> {
         public ClientHandshake() {
             super(
                     entry(ClientHandshakePacket.class, ClientHandshakePacket.SERIALIZER)
@@ -65,10 +78,10 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientStatus extends Client {
+    final class ClientStatus extends Client<ClientPacket.Status> {
         public ClientStatus() {
             super(
-                    entry(StatusRequestPacket.class, StatusRequestPacket.SERIALIZER),
+                    entry(ClientStatusRequestPacket.class, ClientStatusRequestPacket.SERIALIZER),
                     entry(ClientPingRequestPacket.class, ClientPingRequestPacket.SERIALIZER)
             );
         }
@@ -79,7 +92,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientLogin extends Client {
+    final class ClientLogin extends Client<ClientPacket.Login> {
         public ClientLogin() {
             super(
                     entry(ClientLoginStartPacket.class, ClientLoginStartPacket.SERIALIZER),
@@ -96,7 +109,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientConfiguration extends Client {
+    final class ClientConfiguration extends Client<ClientPacket.Configuration> {
         public ClientConfiguration() {
             super(
                     entry(ClientSettingsPacket.class, ClientSettingsPacket.SERIALIZER),
@@ -118,7 +131,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientPlay extends Client {
+    final class ClientPlay extends Client<ClientPacket.Play> {
         public ClientPlay() {
             super(
                     entry(ClientTeleportConfirmPacket.class, ClientTeleportConfirmPacket.SERIALIZER),
@@ -196,18 +209,18 @@ public interface PacketRegistry<T> {
         }
     }
 
-    abstract sealed class Server extends PacketRegistryTemplate<ServerPacket> {
-        @SafeVarargs Server(Entry<? extends ServerPacket>... suppliers) {
+    abstract sealed class Server<T extends ServerPacket> extends PacketRegistryTemplate<ServerPacket> {
+        @SafeVarargs Server(Entry<? extends T>... suppliers) {
             super(suppliers);
         }
 
         @Override
-        public ConnectionSide side() {
+        public final ConnectionSide side() {
             return ConnectionSide.SERVER;
         }
     }
 
-    final class ServerHandshake extends Server {
+    final class ServerHandshake extends Server<ServerPacket> { // No type
         public ServerHandshake() {
             super(
                     // Empty
@@ -220,7 +233,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerStatus extends Server {
+    final class ServerStatus extends Server<ServerPacket.Status> {
         public ServerStatus() {
             super(
                     entry(ResponsePacket.class, ResponsePacket.SERIALIZER),
@@ -234,7 +247,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerLogin extends Server {
+    final class ServerLogin extends Server<ServerPacket.Login> {
         public ServerLogin() {
             super(
                     entry(LoginDisconnectPacket.class, LoginDisconnectPacket.SERIALIZER),
@@ -252,7 +265,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerConfiguration extends Server {
+    final class ServerConfiguration extends Server<ServerPacket.Configuration> {
         public ServerConfiguration() {
             super(
                     entry(CookieRequestPacket.class, CookieRequestPacket.SERIALIZER),
@@ -284,7 +297,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerPlay extends Server {
+    final class ServerPlay extends Server<ServerPacket.Play> {
         public ServerPlay() {
             super(
                     entry(BundlePacket.class, BundlePacket.SERIALIZER),
@@ -435,62 +448,66 @@ public interface PacketRegistry<T> {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     abstract sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
-        private final PacketInfo<? extends T>[] suppliers;
-        private final ClassValue<PacketInfo<T>> packetIds = new ClassValue<>() {
-            @Override
-            protected PacketInfo<T> computeValue(Class<?> type) {
-                for (PacketInfo<? extends T> info : suppliers) {
-                    if (info != null && info.packetClass == type) {
-                        return (PacketInfo<T>) info;
-                    }
-                }
-                throw new IllegalStateException("Packet type " + type + " cannot be sent in state " + side().name() + "_" + state().name() + "!");
-            }
-        };
+        private final List<PacketInfo<T>> packetsById;
+        private final Map<Class<T>, PacketInfo<T>> packetsByClass;
 
-        @SafeVarargs PacketRegistryTemplate(Entry<? extends T>... suppliers) {
-            PacketInfo<? extends T>[] packetInfos = new PacketInfo[suppliers.length];
+        @SuppressWarnings("unchecked")
+        protected @SafeVarargs PacketRegistryTemplate(Entry<? extends T>... suppliers) {
+            Class<T>[] packetInfoClasses = new Class[suppliers.length];
+            PacketInfo<T>[] packetInfos = new PacketInfo[suppliers.length];
             for (int i = 0; i < suppliers.length; i++) {
-                final Entry<? extends T> entry = suppliers[i];
-                if (entry == null) continue;
-                packetInfos[i] = new PacketInfo(entry.type, i, entry.reader);
+                final Entry<T> entry = (Entry<T>) suppliers[i]; // ? extends T -> ? implements T so T is safe here, but shouldn't be required...
+                Check.notNull(entry, "Missing entry for 0x{0} in state {1} for {2}", Integer.toHexString(i), state().name(), side().name());
+                packetInfoClasses[i] = entry.type;
+                packetInfos[i] = new PacketInfo<>(entry.type, i, entry.reader);
             }
-            this.suppliers = packetInfos;
+            this.packetsById = List.of(packetInfos);
+            this.packetsByClass = ArrayUtils.toMap(packetInfoClasses, packetInfos, suppliers.length);
         }
 
-        public @UnknownNullability T create(int packetId, NetworkBuffer reader) {
+        public final T create(int packetId, NetworkBuffer reader) {
             final PacketInfo<T> info = packetInfo(packetId);
-            final NetworkBuffer.Type<T> supplier = info.serializer;
-            final T packet = supplier.read(reader);
-            if (packet == null) {
-                throw new IllegalStateException("Packet " + info.packetClass + " failed to read!");
+            try {
+                final T packet = info.serializer().read(reader);
+                assert info.packetClass().isInstance(packet) : "Packet class mismatch expected " + info.packetClass() + " got " + packet.getClass();
+                return packet;
+            } catch (RuntimeException e) {
+                throw new IllegalStateException("Packet id 0x%X (%s) failed to read in %s_%s!".formatted(packetId, info.packetClass().getSimpleName(), side().name(), state().name()), e);
             }
-            return packet;
         }
 
         @Override
-        public PacketInfo<T> packetInfo(Class<?> packetClass) {
-            return packetIds.get(packetClass);
-        }
-
-        @Override
-        public PacketInfo<T> packetInfo(int packetId) {
-            final PacketInfo<T> info;
-            if (packetId < 0 || packetId >= suppliers.length || (info = (PacketInfo<T>) suppliers[packetId]) == null) {
-                throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
+        public final PacketInfo<T> packetInfo(Class<?> packetClass) {
+            final PacketInfo<T> info = packetsByClass.get(packetClass);
+            if (info == null) {
+                throw new IllegalStateException("Packet type %s cannot be sent in state %s_%s!".formatted(packetClass.getSimpleName(), side().name(), state().name()));
             }
             return info;
         }
 
-
-        record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
+        @Override
+        public final PacketInfo<T> packetInfo(int packetId) {
+            if (packetId < 0 || packetId >= packetsById.size()) {
+                throw new IllegalStateException("Packet id 0x%X isn't registered or isn't registered in state %s_%s".formatted(packetId, side().name(), state().name()));
+            }
+            return packetsById.get(packetId);
         }
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        static <T> Entry<T> entry(Class<T> type, NetworkBuffer.Type<T> reader) {
-            return new Entry<>((Class) type, reader);
+        @Override
+        public final @Unmodifiable Collection<PacketInfo<T>> packets() {
+            return packetsById;
+        }
+
+        protected record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
+            public Entry {
+                Objects.requireNonNull(type, "type");
+                Objects.requireNonNull(reader, "reader");
+            }
+        }
+
+        static <T extends Record> Entry<T> entry(Class<T> type, NetworkBuffer.Type<T> reader) {
+            return new Entry<>(type, reader);
         }
     }
 

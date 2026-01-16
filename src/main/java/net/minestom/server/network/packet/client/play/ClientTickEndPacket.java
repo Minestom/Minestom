@@ -4,8 +4,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
-public record ClientTickEndPacket() implements ClientPacket {
-    public static final NetworkBuffer.Type<ClientTickEndPacket> SERIALIZER =
-            NetworkBufferTemplate.template(new ClientTickEndPacket());
-
+public record ClientTickEndPacket() implements ClientPacket.Play {
+    public static final ClientTickEndPacket INSTANCE = new ClientTickEndPacket();
+    public static final NetworkBuffer.Type<ClientTickEndPacket> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 }

@@ -10,4 +10,8 @@ public record DebugChunkValuePacket(long chunkPos, DebugSubscription.Update<?> u
             NetworkBuffer.LONG, DebugChunkValuePacket::chunkPos,
             DebugSubscription.Update.NETWORK_TYPE, DebugChunkValuePacket::update,
             DebugChunkValuePacket::new);
+
+    public DebugChunkValuePacket(int chunkX, int chunkZ, DebugSubscription.Update<?> update) {
+        this((long) chunkX | (long) chunkZ << 32, update);
+    }
 }

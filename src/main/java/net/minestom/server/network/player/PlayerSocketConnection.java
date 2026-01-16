@@ -25,13 +25,14 @@ import net.minestom.server.network.packet.client.login.ClientEncryptionResponseP
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
-import net.minestom.server.network.packet.client.status.StatusRequestPacket;
+import net.minestom.server.network.packet.client.status.ClientStatusRequestPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.Cipher;
@@ -58,7 +59,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private static final Set<Class<? extends ClientPacket>> IMMEDIATE_PROCESS_PACKETS = Set.of(
             ClientHandshakePacket.class, // First received packet
             ClientCookieResponsePacket.class,
-            StatusRequestPacket.class,
+            ClientStatusRequestPacket.class,
             ClientPingRequestPacket.class,
             ClientKeepAlivePacket.class, // Used to calculate latency
             ClientLoginStartPacket.class,
@@ -73,13 +74,13 @@ public class PlayerSocketConnection extends PlayerConnection {
     private SocketAddress remoteAddress;
 
     //Could be null. Only used for Mojang Auth
-    private volatile EncryptionContext encryptionContext;
+    private volatile @Nullable EncryptionContext encryptionContext;
     private byte[] nonce = new byte[4];
 
     // Data from client packets
-    private String loginUsername;
-    private GameProfile gameProfile;
-    private String serverAddress;
+    private @Nullable String loginUsername;
+    private @Nullable GameProfile gameProfile;
+    private @Nullable String serverAddress;
     private int serverPort;
     private int protocolVersion;
 
@@ -88,6 +89,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private final Thread readThread, writeThread;
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
+    private @Nullable NetworkBuffer writeLeftover = null;
     // Index where compression starts, linked to `sentPacketCounter`
     // Used instead of a simple boolean so we can get proper timing for serialization
     private volatile long compressionStart = Long.MAX_VALUE;
@@ -133,9 +135,16 @@ public class PlayerSocketConnection extends PlayerConnection {
                     startingState, PacketVanilla::nextClientState,
                     compression()
             );
-        } catch (DataFormatException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            disconnect();
+        } catch (DataFormatException | RuntimeException e) {
+            // Pass any errors to the exception manager
+            // Except ones that were generated in the starting state of X (Likely garbage)
+            // Should cutdown on random packets sent to the server from scanners causing stack traces.
+            // Note: if the last packet is the one that errors in a different state, this can't account for that.
+            if (startingState.ordinal() > ServerFlag.SUPPRESS_PACKET_ERROR_LEVEL)
+                MinecraftServer.getExceptionManager().handleException(e);
+            // If anything is thrown, all packets in the queue will be lost here.
+            // So it's highly recommended to disconnect to avoid more invalid state.
+            if (ServerFlag.REJECT_MALFORMED_PACKET) disconnect();
             return;
         }
         switch (result) {
@@ -155,13 +164,16 @@ public class PlayerSocketConnection extends PlayerConnection {
                             player.addPacketToQueue(packet);
                         }
                     } catch (Exception e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+                        if (startingState.ordinal() > ServerFlag.SUPPRESS_PACKET_ERROR_LEVEL)
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        // Note this does not affect packets in the queue.
+                        if (ServerFlag.REJECT_MISUSED_PACKET) disconnect();
                     }
                 }
                 // Compact in case of incomplete read
                 readBuffer.compact();
             }
-            case PacketReading.Result.Empty<ClientPacket> ignored -> {
+            case PacketReading.Result.Empty<ClientPacket> _ -> {
                 // Empty
             }
             case PacketReading.Result.Failure<ClientPacket> failure -> {
@@ -201,21 +213,27 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void sendPacket(SendablePacket packet) {
         this.packetQueue.relaxedOffer(packet);
-        unlockWriteThread();
+        tryUnlockWriteThread();
     }
 
     @Override
-    public void sendPackets(Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<? extends SendablePacket> packets) {
         for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(packet);
-        unlockWriteThread();
+        tryUnlockWriteThread();
     }
 
     // Requires ServerFlag.FASTER_SOCKET_WRITES
-    private void unlockWriteThread() {
+    public void tryUnlockWriteThread() {
         if (!ServerFlag.FASTER_SOCKET_WRITES) return;
-        if (!this.writeSignaled.compareAndExchange(false, true)) {
-            LockSupport.unpark(writeThread);
+        if (this.writeSignaled.compareAndSet(false, true)) {
+            unlockWriteThread();
         }
+    }
+
+    @ApiStatus.Internal
+    public void unlockWriteThread() {
+        if (!ServerFlag.FASTER_SOCKET_WRITES) return;
+        LockSupport.unpark(writeThread);
     }
 
     @Override
@@ -230,7 +248,6 @@ public class PlayerSocketConnection extends PlayerConnection {
      *
      * @param remoteAddress the new connection remote address
      */
-    @ApiStatus.Internal
     public void setRemoteAddress(SocketAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
@@ -349,7 +366,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
             }
             // Translation
-            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding) {
+            if (ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding) {
                 packet = ((ServerPacket.ComponentHolding) packet).copyWithOperator(component ->
                         MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
@@ -406,11 +423,30 @@ public class PlayerSocketConnection extends PlayerConnection {
         return true;
     }
 
-    private NetworkBuffer writeLeftover = null;
+    @Blocking
+    public void awaitFlush() throws InterruptedException {
+        // Consume queued packets
+        final var packetQueue = this.packetQueue;
+        if (!packetQueue.isEmpty()) return;
+        if (ServerFlag.FASTER_SOCKET_WRITES) {
+            assert this.writeThread == Thread.currentThread() : "writeThread should be the current thread";
+            this.writeSignaled.set(false);
+            // We cant sleep forever if writeLeftover still exists, we fall back to a fixed parkNanos, which is also spirituous
+            final NetworkBuffer writeLeftover = this.writeLeftover;
+            if (writeLeftover != null) {
+                LockSupport.parkNanos(writeLeftover, 1_000_000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
+            } else {
+                LockSupport.park(this);
+            }
+        } else {
+            Thread.sleep(1000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
+        }
+    }
 
     public void flushSync() throws IOException {
+        if (!channel.isConnected()) throw new EOFException("Channel is closed");
         // Write leftover if any
-        NetworkBuffer leftover = this.writeLeftover;
+        final NetworkBuffer leftover = this.writeLeftover;
         if (leftover != null) {
             final boolean success = leftover.writeChannel(channel);
             if (success) {
@@ -421,26 +457,9 @@ public class PlayerSocketConnection extends PlayerConnection {
                 return;
             }
         }
-        // Consume queued packets
-        var packetQueue = this.packetQueue;
-        if (packetQueue.isEmpty()) {
-            if (!ServerFlag.FASTER_SOCKET_WRITES) {
-                try {
-                    // Can probably be improved by waking up at the end of the tick
-                    // But this work well enough and without additional state.
-                    Thread.sleep(1000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                assert this.writeThread == Thread.currentThread(): "writeThread should be the current thread";
-                this.writeSignaled.set(false);
-                LockSupport.park(this);
-                assert this.packetQueue.peek() != null : "packet queue should not be empty";
-            }
-        }
-        if (!channel.isConnected()) throw new EOFException("Channel is closed");
-        NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
+        final MessagePassingQueue<SendablePacket> packetQueue = this.packetQueue;
+        if (packetQueue.isEmpty()) return; // Nothing to write, no need to access the pool
+        final NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         // Write to buffer
         PacketWriting.writeQueue(buffer, packetQueue, 1, (b, packet) -> {
             final boolean compressed = sentPacketCounter.get() > compressionStart;

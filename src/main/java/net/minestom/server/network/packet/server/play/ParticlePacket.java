@@ -1,7 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.particle.Particle;
 
@@ -9,55 +11,57 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ParticlePacket(Particle particle, boolean overrideLimiter, boolean longDistance, double x, double y, double z,
-                             float offsetX, float offsetY, float offsetZ, float maxSpeed,
-                             int particleCount) implements ServerPacket.Play {
+public record ParticlePacket(Particle particle, boolean overrideLimiter, boolean longDistance,
+                             Point origin, Point offset, float maxSpeed, int particleCount) implements ServerPacket.Play {
+
+    public ParticlePacket {
+        Objects.requireNonNull(particle, "particle");
+        Objects.requireNonNull(origin, "origin");
+        Objects.requireNonNull(offset, "offset");
+    }
+
+    /**
+     * @deprecated use {@link #ParticlePacket(Particle, Point, Point, float, int)} instead
+     */
+    @Deprecated(forRemoval = true)
+    public ParticlePacket(Particle particle, boolean overrideLimiter, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
+        this(particle, overrideLimiter, longDistance, new Vec(x, y, z), new Vec(offsetX, offsetY, offsetZ), maxSpeed, particleCount);
+    }
+
+    /**
+     * @deprecated use {@link #ParticlePacket(Particle, Point, Point, float, int)} instead
+     */
+    @Deprecated(forRemoval = true)
     public ParticlePacket(Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
-        this(particle, false, false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
+        this(particle, false, false, new Vec(x, y, z), new Vec(offsetX, offsetY, offsetZ), maxSpeed, particleCount);
     }
 
-    public ParticlePacket(Particle particle, boolean overrideLimiter, boolean longDistance, Point position, Point offset, float maxSpeed, int particleCount) {
-        this(particle, overrideLimiter, longDistance, position.x(), position.y(), position.z(), (float) offset.x(), (float) offset.y(), (float) offset.z(), maxSpeed, particleCount);
+    /**
+     * @deprecated use {@link #ParticlePacket(Particle, Point, Point, float, int)} instead
+     */
+    @Deprecated(forRemoval = true)
+    public ParticlePacket(Particle particle, Point origin, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
+        this(particle, false, false, origin, new Vec(offsetX, offsetY, offsetZ), maxSpeed, particleCount);
     }
 
-    public ParticlePacket(Particle particle, Point position, Point offset, float maxSpeed, int particleCount) {
-        this(particle, false, false, position, offset, maxSpeed, particleCount);
+    public ParticlePacket(Particle particle, Point origin, Point offset, float maxSpeed, int particleCount) {
+        this(particle, false, false, origin, offset, maxSpeed, particleCount);
     }
 
-    public static final NetworkBuffer.Type<ParticlePacket> SERIALIZER = new Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, ParticlePacket value) {
-            buffer.write(BOOLEAN, value.overrideLimiter);
-            buffer.write(BOOLEAN, value.longDistance);
-            buffer.write(DOUBLE, value.x);
-            buffer.write(DOUBLE, value.y);
-            buffer.write(DOUBLE, value.z);
-            buffer.write(FLOAT, value.offsetX);
-            buffer.write(FLOAT, value.offsetY);
-            buffer.write(FLOAT, value.offsetZ);
-            buffer.write(FLOAT, value.maxSpeed);
-            buffer.write(INT, value.particleCount);
-            buffer.write(VAR_INT, value.particle.id());
-            value.particle.writeData(buffer);
-        }
+    private ParticlePacket(boolean overrideLimiter, boolean longDistance, Point origin,
+                           Point offset, float maxSpeed,
+                           int particleCount, Particle particle) {
+        this(particle, overrideLimiter, longDistance, origin, offset, maxSpeed, particleCount);
+    }
 
-        @Override
-        public ParticlePacket read(NetworkBuffer buffer) {
-            Boolean overrideLimiter = buffer.read(BOOLEAN);
-            Boolean longDistance = buffer.read(BOOLEAN);
-            Double x = buffer.read(DOUBLE);
-            Double y = buffer.read(DOUBLE);
-            Double z = buffer.read(DOUBLE);
-            Float offsetX = buffer.read(FLOAT);
-            Float offsetY = buffer.read(FLOAT);
-            Float offsetZ = buffer.read(FLOAT);
-            Float maxSpeed = buffer.read(FLOAT);
-            Integer particleCount = buffer.read(INT);
-
-            Particle particle = Particle.fromId(buffer.read(VAR_INT));
-            Objects.requireNonNull(particle);
-
-            return new ParticlePacket(particle.readData(buffer), overrideLimiter, longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
-        }
-    };
+    public static final NetworkBuffer.Type<ParticlePacket> SERIALIZER = NetworkBufferTemplate.template(
+            BOOLEAN, ParticlePacket::overrideLimiter,
+            BOOLEAN, ParticlePacket::longDistance,
+            VECTOR3D, ParticlePacket::origin,
+            VECTOR3, ParticlePacket::offset,
+            FLOAT, ParticlePacket::maxSpeed,
+            INT, ParticlePacket::particleCount,
+            Particle.NETWORK_TYPE, ParticlePacket::particle,
+            ParticlePacket::new
+    );
 }

@@ -1,4 +1,4 @@
-package net.minestom.server.utils;
+package net.minestom.server.utils.collection;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.PacketVanilla;

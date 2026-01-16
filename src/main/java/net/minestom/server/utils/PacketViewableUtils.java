@@ -16,6 +16,7 @@ import net.minestom.server.network.packet.server.BufferedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.utils.collection.ObjectPool;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,6 +66,7 @@ public final class PacketViewableUtils {
     public static void flush() {
         if (!ServerFlag.VIEWABLE_PACKET) return;
         Map<Viewable, ViewableStorage> map = storageMap;
+        if (map.isEmpty()) return;
         map.entrySet().parallelStream().forEach(entry ->
                 entry.getValue().process(entry.getKey()));
     }
@@ -75,6 +77,7 @@ public final class PacketViewableUtils {
 
     private static final class ViewableStorage {
         private static final ObjectPool<NetworkBuffer> POOL = ObjectPool.pool(
+                ServerFlag.VIEWABLE_POOL_SIZE,
                 () -> NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
                 NetworkBuffer::clear);
         // Player id -> list of offsets to ignore (32:32 bits)
@@ -95,8 +98,7 @@ public final class PacketViewableUtils {
 
         private synchronized void process(Viewable viewable) {
             if (buffer.writeIndex() == 0) return;
-            NetworkBuffer copy = buffer.copy(0, buffer.writeIndex());
-            copy.readOnly();
+            final NetworkBuffer copy = buffer.trimmed().readOnly(); // Used after release for writing (copy)
             viewable.getViewers().forEach(player -> processPlayer(player, copy));
             this.buffer.clear();
             this.entityIdMap.clear();

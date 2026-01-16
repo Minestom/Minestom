@@ -5,5 +5,6 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
 public record BundlePacket() implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<BundlePacket> SERIALIZER = NetworkBufferTemplate.template(new BundlePacket());
+    public static final BundlePacket INSTANCE = new BundlePacket();
+    public static final NetworkBuffer.Type<BundlePacket> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 }

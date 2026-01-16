@@ -76,42 +76,42 @@ public class CommandTestUtils {
                 builder.append(i);
                 builder.append('=');
                 // Meta
-                if ((node.flags & 0x3) == 0) {
+                if ((node.flags() & 0x3) == 0) {
                     builder.append("$root$");
                 } else {
-                    if ((node.flags & 0x3) == 1) {
+                    if ((node.flags() & 0x3) == 1) {
                         builder.append("'");
-                        builder.append(node.name);
+                        builder.append(node.name());
                         builder.append("'");
                     } else {
-                        builder.append(node.name);
+                        builder.append(node.name());
                         builder.append(' ');
-                        builder.append(node.parser);
+                        builder.append(node.parser());
 
-                        if (node.properties != null) {
+                        if (node.properties() != null) {
                             builder.append(' ');
-                            builder.append(new BigInteger(node.properties).toString(16));
+                            builder.append(new BigInteger(node.properties()).toString(16));
                         }
                     }
                 }
-                if ((node.flags & 0x4) == 0x4) {
+                if ((node.flags() & 0x4) == 0x4) {
                     builder.append(" executable");
                 }
-                if ((node.flags & 0x10) == 0x10) {
+                if ((node.flags() & 0x10) == 0x10) {
                     builder.append(' ');
-                    builder.append(node.suggestionsType);
+                    builder.append(node.suggestionsType());
                 }
                 builder.append(lineSeparator);
-                if (node.children.length > 0) {
+                if (node.children().length > 0) {
                     builder.append(i);
                     builder.append("->");
-                    builder.append(Arrays.stream(node.children).mapToObj(String::valueOf).collect(Collectors.joining(" ")));
+                    builder.append(Arrays.stream(node.children()).mapToObj(String::valueOf).collect(Collectors.joining(" ")));
                     builder.append(lineSeparator);
                 }
-                if ((node.flags & 0x8) == 0x8) {
+                if ((node.flags() & 0x8) == 0x8) {
                     builder.append(i);
                     builder.append("+>");
-                    builder.append(node.redirectedNode);
+                    builder.append(node.redirectedNode());
                     builder.append(lineSeparator);
                 }
             }
@@ -244,33 +244,33 @@ public class CommandTestUtils {
         List<DeclareCommandsPacket.Node> nodes = packet.nodes();
         for (int i = 0; i < nodes.size(); i++) {
             DeclareCommandsPacket.Node node = nodes.get(i);
-            if ((node.flags & 0x3) != 0) {
+            if ((node.flags() & 0x3) != 0) {
                 builder.append(i);
                 builder.append(" [label=");
                 builder.append('"');
-                if ((node.flags & 0x3) == 1) {
+                if ((node.flags() & 0x3) == 1) {
                     builder.append("'");
-                    builder.append(node.name);
+                    builder.append(node.name());
                     builder.append("'");
                 } else {
-                    builder.append(node.name);
+                    builder.append(node.name());
                 }
                 builder.append('"');
-                if ((node.flags & 0x4) == 0x4) {
+                if ((node.flags() & 0x4) == 0x4) {
                     builder.append(",bgcolor=gray,style=filled");
                 }
                 builder.append("]");
                 builder.append(statementSeparator);
             }
-            if (node.children.length == 0 && (node.flags & 0x8) == 0) continue;
+            if (node.children().length == 0 && (node.flags() & 0x8) == 0) continue;
             builder.append(i);
             builder.append(" -> { ");
-            if ((node.flags & 0x8) == 0) {
-                builder.append(Arrays.stream(node.children).mapToObj(Integer::toString).collect(Collectors.joining(" ")));
+            if ((node.flags() & 0x8) == 0) {
+                builder.append(Arrays.stream(node.children()).mapToObj(Integer::toString).collect(Collectors.joining(" ")));
                 builder.append(" }");
                 builder.append(statementSeparator);
             } else {
-                builder.append(node.redirectedNode);
+                builder.append(node.redirectedNode());
                 builder.append(" } [style = dotted]");
                 builder.append(statementSeparator);
             }

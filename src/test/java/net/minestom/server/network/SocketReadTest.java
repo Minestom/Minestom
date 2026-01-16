@@ -5,6 +5,8 @@ import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -13,11 +15,12 @@ import java.util.zip.DataFormatException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@EnvTest // PacketPool
 public class SocketReadTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void complete(boolean compressed) throws DataFormatException {
+    public void complete(boolean compressed, Env ignored) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketVanilla.PACKET_POOL.get();
@@ -33,7 +36,7 @@ public class SocketReadTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void completeTwo(boolean compressed) throws DataFormatException {
+    public void completeTwo(boolean compressed, Env ignored) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketVanilla.PACKET_POOL.get();
@@ -50,7 +53,7 @@ public class SocketReadTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void insufficientLength(boolean compressed) throws DataFormatException {
+    public void insufficientLength(boolean compressed, Env ignored) throws DataFormatException {
         // Write a complete packet then the next packet length without any payload
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
@@ -74,7 +77,7 @@ public class SocketReadTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void incomplete(boolean compressed) throws DataFormatException {
+    public void incomplete(boolean compressed, Env ignored) throws DataFormatException {
         // Write a complete packet and incomplete var-int length for the next packet
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
@@ -94,14 +97,14 @@ public class SocketReadTest {
 
         // Try to read the next packet
         readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Empty<ClientPacket>)) {
-            throw new AssertionError("Expected an empty result, got " + readResult);
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket>)) {
+            throw new AssertionError("Expected an failure result, got " + readResult);
         }
     }
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void resize(boolean compressed) throws DataFormatException {
+    public void resize(boolean compressed, Env ignored) throws DataFormatException {
         // Write a complete packet that is larger than the buffer capacity
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
@@ -120,7 +123,7 @@ public class SocketReadTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void resizeHeader(boolean compressed) throws DataFormatException {
+    public void resizeHeader(boolean compressed, Env ignored) throws DataFormatException {
         // Write a buffer where you cannot read the packet length
 
         var buffer = NetworkBuffer.staticBuffer(1);
@@ -132,13 +135,6 @@ public class SocketReadTest {
         }
         // 5 = max var-int size
         assertEquals(5, failure.requiredCapacity());
-    }
-
-    private static int getVarIntSize(int input) {
-        return (input & 0xFFFFFF80) == 0
-                ? 1 : (input & 0xFFFFC000) == 0
-                ? 2 : (input & 0xFFE00000) == 0
-                ? 3 : (input & 0xF0000000) == 0
-                ? 4 : 5;
+        assertEquals(0, buffer.readIndex(), "Buffer should reset on failure");
     }
 }

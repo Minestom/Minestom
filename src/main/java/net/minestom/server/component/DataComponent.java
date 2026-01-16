@@ -10,6 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.function.UnaryOperator;
 
 /**
  * A common type to represent all forms of component in the game. Each group of component types has its own declaration
@@ -58,6 +59,14 @@ public sealed interface DataComponent<T> extends StaticProtocolObject<DataCompon
     T read(NetworkBuffer reader);
     void write(NetworkBuffer writer, T value);
 
+    /**
+     * Freezes the given value if possible. For example, collections should be frozen.
+     *
+     * @param value the value to freeze
+     * @return the frozen value, or the original value if it could not be frozen
+     */
+    T freeze(T value);
+
     static @Nullable DataComponent<?> fromKey(@KeyPattern String key) {
         return fromKey(Key.key(key));
     }
@@ -78,8 +87,9 @@ public sealed interface DataComponent<T> extends StaticProtocolObject<DataCompon
     static <T> DataComponent<T> createHeadless(
             int id, Key key,
             @Nullable NetworkBuffer.Type<T> network,
-            @Nullable Codec<T> codec
+            @Nullable Codec<T> codec,
+            @Nullable UnaryOperator<T> freeze
     ) {
-        return new DataComponentImpl<>(id, key, network, codec);
+        return new DataComponentImpl<>(id, key, network, codec, freeze);
     }
 }

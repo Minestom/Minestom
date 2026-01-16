@@ -66,7 +66,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
     @Override
     public <T> DataComponentMap set(DataComponent<T> component, T value) {
         Int2ObjectMap<Object> newComponents = new Int2ObjectArrayMap<>(components);
-        newComponents.put(component.id(), value);
+        newComponents.put(component.id(), component.freeze(value));
         return new DataComponentMapImpl(newComponents);
     }
 

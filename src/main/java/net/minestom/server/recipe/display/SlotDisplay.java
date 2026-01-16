@@ -17,22 +17,14 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
     NetworkBuffer.Type<SlotDisplay> NETWORK_TYPE = SlotDisplayType.NETWORK_TYPE
             .unionType(SlotDisplay::dataSerializer, SlotDisplay::slotDisplayToType);
 
-    final class Empty implements SlotDisplay {
+    record Empty() implements SlotDisplay {
         public static final Empty INSTANCE = new Empty();
-
         public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
-
-        private Empty() {
-        }
     }
 
-    final class AnyFuel implements SlotDisplay {
+    record AnyFuel() implements SlotDisplay {
         public static final AnyFuel INSTANCE = new AnyFuel();
-
         public static final NetworkBuffer.Type<AnyFuel> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
-
-        private AnyFuel() {
-        }
     }
 
     record Item(Material material) implements SlotDisplay {

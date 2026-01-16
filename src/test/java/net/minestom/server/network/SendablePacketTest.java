@@ -18,7 +18,6 @@ import java.util.zip.DataFormatException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SendablePacketTest {
-
     @Test
     public void lazy() {
         var packet = new SystemChatPacket(Component.text("Hello World!"), false);
@@ -41,7 +40,7 @@ public class SendablePacketTest {
         var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet,
                 MinecraftServer.getCompressionThreshold());
         var cachedBuffer = cached.body(ConnectionState.PLAY);
-        assertTrue(NetworkBuffer.equals(buffer, cachedBuffer));
+        assertTrue(NetworkBuffer.contentEquals(buffer, cachedBuffer));
         // May fail in the very unlikely case where soft references are cleared
         // Rare enough to make this test worth it
         assertSame(cached.body(ConnectionState.PLAY), cachedBuffer);

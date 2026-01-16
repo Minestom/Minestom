@@ -23,19 +23,19 @@ public class CommandPacketTest {
         assertEquals(3, packet.nodes().size());
         final DeclareCommandsPacket.Node root = packet.nodes().get(packet.rootIndex());
         assertNotNull(root);
-        assertNodeType(DeclareCommandsPacket.NodeType.ROOT, root.flags);
-        assertEquals(1, root.children.length);
-        final DeclareCommandsPacket.Node cmd = packet.nodes().get(root.children[0]);
+        assertNodeType(DeclareCommandsPacket.NodeType.ROOT, root.flags());
+        assertEquals(1, root.children().length);
+        final DeclareCommandsPacket.Node cmd = packet.nodes().get(root.children()[0]);
         assertNotNull(cmd);
-        assertNodeType(DeclareCommandsPacket.NodeType.LITERAL, cmd.flags);
-        assertEquals(1, cmd.children.length);
-        assertEquals("foo", cmd.name);
-        final DeclareCommandsPacket.Node arg = packet.nodes().get(cmd.children[0]);
+        assertNodeType(DeclareCommandsPacket.NodeType.LITERAL, cmd.flags());
+        assertEquals(1, cmd.children().length);
+        assertEquals("foo", cmd.name());
+        final DeclareCommandsPacket.Node arg = packet.nodes().get(cmd.children()[0]);
         assertNotNull(arg);
-        assertNodeType(DeclareCommandsPacket.NodeType.ARGUMENT, arg.flags);
-        assertExecutable(arg.flags);
-        assertEquals(0, arg.children.length);
-        assertEquals("bar", arg.name);
+        assertNodeType(DeclareCommandsPacket.NodeType.ARGUMENT, arg.flags());
+        assertExecutable(arg.flags());
+        assertEquals(0, arg.children().length);
+        assertEquals("bar", arg.name());
     }
 
     @Test
@@ -248,7 +248,7 @@ public class CommandPacketTest {
     }
 
     private static void assertExecutable(byte flags) {
-        assertTrue((flags & DeclareCommandsPacket.IS_EXECUTABLE) != 0);
+        assertTrue((flags & DeclareCommandsPacket.Node.IS_EXECUTABLE) != 0);
     }
 
     private static void dummyExecutor(CommandSender sender, CommandContext context) {
