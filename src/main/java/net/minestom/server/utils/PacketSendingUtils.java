@@ -97,7 +97,7 @@ public final class PacketSendingUtils {
      * @see CachedPacket#body(ConnectionState)
      */
     static boolean shouldUseCachePacket(final ServerPacket packet) {
-        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return true;
+        if (!ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION) return true;
         if (!(packet instanceof ServerPacket.ComponentHolding holder)) return true;
         return !containsTranslatableComponents(holder);
     }
