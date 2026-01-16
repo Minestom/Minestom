@@ -217,7 +217,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @Override
-    public void sendPackets(Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<? extends SendablePacket> packets) {
         for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(packet);
         tryUnlockWriteThread();
     }
@@ -225,7 +225,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     // Requires ServerFlag.FASTER_SOCKET_WRITES
     public void tryUnlockWriteThread() {
         if (!ServerFlag.FASTER_SOCKET_WRITES) return;
-        if (!this.writeSignaled.compareAndExchange(false, true)) {
+        if (this.writeSignaled.compareAndSet(false, true)) {
             unlockWriteThread();
         }
     }

@@ -1542,7 +1542,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.playerConnection.sendPackets(packets);
     }
 
-    public void sendPackets(Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<? extends SendablePacket> packets) {
         this.playerConnection.sendPackets(packets);
     }
 

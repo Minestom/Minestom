@@ -24,6 +24,7 @@ import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.net.SocketAddress;
 import java.util.Collection;
@@ -83,7 +84,7 @@ public abstract class PlayerConnection {
      */
     public abstract void sendPacket(SendablePacket packet);
 
-    public void sendPackets(Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<? extends SendablePacket> packets) {
         packets.forEach(this::sendPacket);
     }
 
