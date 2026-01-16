@@ -145,7 +145,8 @@ public interface NetworkBuffer {
     /**
      * Creates an enum type from the enum class
      * <br>
-     * Encoded as a {@link #VAR_INT} from the ordinal
+     * Encoded as a {@link #VAR_INT} from the ordinal value, unless the enum has less than 128 values,
+     * in which case it will be encoded as a {@link #BYTE}, which should be a single VarInt value.
      *
      * @param enumClass the enum class
      * @param <E>       the enum type
@@ -155,6 +156,11 @@ public interface NetworkBuffer {
     static <E extends Enum<E>> Type<E> Enum(Class<E> enumClass) {
         Objects.requireNonNull(enumClass, "enumClass");
         final E[] values = enumClass.getEnumConstants();
+        // Use byte transform for small enums (likely the case).
+        if (values.length < 128)
+            // 0x7F (127) is the max value for a single byte VarInt.
+            return BYTE.transform(integer -> values[integer], it -> (byte) it.ordinal());
+        // Otherwise use VAR_INT
         return VAR_INT.transform(integer -> values[integer], Enum::ordinal);
     }
 
