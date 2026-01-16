@@ -213,21 +213,27 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void sendPacket(SendablePacket packet) {
         this.packetQueue.relaxedOffer(packet);
-        unlockWriteThread();
+        tryUnlockWriteThread();
     }
 
     @Override
     public void sendPackets(Collection<SendablePacket> packets) {
         for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(packet);
-        unlockWriteThread();
+        tryUnlockWriteThread();
     }
 
     // Requires ServerFlag.FASTER_SOCKET_WRITES
-    public void unlockWriteThread() {
+    public void tryUnlockWriteThread() {
         if (!ServerFlag.FASTER_SOCKET_WRITES) return;
         if (!this.writeSignaled.compareAndExchange(false, true)) {
-            LockSupport.unpark(writeThread);
+            unlockWriteThread();
         }
+    }
+
+    @ApiStatus.Internal
+    public void unlockWriteThread() {
+        if (!ServerFlag.FASTER_SOCKET_WRITES) return;
+        LockSupport.unpark(writeThread);
     }
 
     @Override
