@@ -13,7 +13,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
-import net.minestom.server.utils.ObjectPool;
+import net.minestom.server.utils.collection.ObjectPool;
 import org.jetbrains.annotations.ApiStatus;
 
 /**

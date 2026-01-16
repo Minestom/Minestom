@@ -1,6 +1,7 @@
-package net.minestom.server.utils;
+package net.minestom.server.utils.collection;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,7 +40,7 @@ public sealed interface ObjectPool<T> permits ObjectPoolImpl, ObjectPoolImpl.Unp
 
     Holder<T> hold();
 
-    <R> R use(Function<T, R> function);
+    <R> R use(Function<? super T, R> function);
 
     interface Holder<T> extends Supplier<T>, AutoCloseable {
         @Override

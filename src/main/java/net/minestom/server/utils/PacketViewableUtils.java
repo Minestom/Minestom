@@ -16,6 +16,7 @@ import net.minestom.server.network.packet.server.BufferedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.utils.collection.ObjectPool;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 

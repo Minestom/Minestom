@@ -1,13 +1,12 @@
-package net.minestom.server.utils;
+package net.minestom.server.utils.collection;
 
-import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.ref.Cleaner;
 import java.lang.ref.SoftReference;
 import java.util.Collection;
-import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -16,7 +15,7 @@ import java.util.function.UnaryOperator;
 
 // This is important to be a record cause of static final field trusting stops
 // once the terminator in the chain is no longer foldable, so regular final field previously
-record ObjectPoolImpl<T>(MessagePassingQueue<SoftReference<T>> pool, Supplier<T> supplier,
+record ObjectPoolImpl<T>(MessagePassingQueue<@Nullable SoftReference<T>> pool, Supplier<T> supplier,
                          UnaryOperator<T> sanitizer) implements ObjectPool<T> {
     private static final Cleaner CLEANER = Cleaner.create();
 
@@ -78,7 +77,7 @@ record ObjectPoolImpl<T>(MessagePassingQueue<SoftReference<T>> pool, Supplier<T>
     }
 
     @Override
-    public <R> R use(Function<T, R> function) {
+    public <R> R use(Function<? super T, R> function) {
         T object = get();
         try {
             return function.apply(object);
@@ -177,7 +176,7 @@ record ObjectPoolImpl<T>(MessagePassingQueue<SoftReference<T>> pool, Supplier<T>
         }
 
         @Override
-        public <R> R use(Function<T, R> function) {
+        public <R> R use(Function<? super T, R> function) {
             return function.apply(get());
         }
     }

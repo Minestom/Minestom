@@ -4,7 +4,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferFactory;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.ObjectPool;
+import net.minestom.server.utils.collection.ObjectPool;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
