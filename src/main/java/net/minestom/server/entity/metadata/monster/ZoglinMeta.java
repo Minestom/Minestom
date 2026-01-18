@@ -5,7 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class ZoglinMeta extends MonsterMeta {
+public final class ZoglinMeta extends MonsterMeta {
     public ZoglinMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

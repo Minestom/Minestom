@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 
-public class ArmadilloMeta extends AnimalMeta {
+public final class ArmadilloMeta extends AnimalMeta {
     public ArmadilloMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

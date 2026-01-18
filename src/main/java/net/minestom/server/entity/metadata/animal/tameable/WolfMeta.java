@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
-public class WolfMeta extends TameableAnimalMeta {
+public final class WolfMeta extends TameableAnimalMeta {
     public WolfMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

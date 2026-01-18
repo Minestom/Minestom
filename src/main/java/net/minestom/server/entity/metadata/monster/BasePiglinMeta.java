@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class BasePiglinMeta extends MonsterMeta {
+public sealed abstract class BasePiglinMeta extends MonsterMeta permits PiglinBruteMeta, PiglinMeta {
     protected BasePiglinMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

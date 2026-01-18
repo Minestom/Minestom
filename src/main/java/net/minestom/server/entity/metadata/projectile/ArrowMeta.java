@@ -6,8 +6,8 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.Nullable;
 
-public class ArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
-    private Entity shooter;
+public final class ArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
+    private @Nullable Entity shooter;
 
     public ArrowMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);

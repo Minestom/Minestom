@@ -5,7 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class PiglinMeta extends BasePiglinMeta {
+public final class PiglinMeta extends BasePiglinMeta {
     public PiglinMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

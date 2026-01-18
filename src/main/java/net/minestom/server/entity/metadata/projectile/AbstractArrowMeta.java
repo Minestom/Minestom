@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 
-public class AbstractArrowMeta extends EntityMeta {
+public sealed abstract class AbstractArrowMeta extends EntityMeta permits ArrowMeta, SpectralArrowMeta, ThrownTridentMeta {
     protected AbstractArrowMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

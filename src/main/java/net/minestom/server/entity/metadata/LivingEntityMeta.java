@@ -5,12 +5,14 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.PlayerHand;
+import net.minestom.server.entity.metadata.avatar.AvatarMeta;
+import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class LivingEntityMeta extends EntityMeta {
+public sealed class LivingEntityMeta extends EntityMeta permits MobMeta, AvatarMeta, ArmorStandMeta {
     protected LivingEntityMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

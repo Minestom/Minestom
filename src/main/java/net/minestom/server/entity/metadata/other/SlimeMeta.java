@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.MobMeta;
 
-public class SlimeMeta extends MobMeta {
+public sealed class SlimeMeta extends MobMeta permits MagmaCubeMeta {
     public SlimeMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

@@ -6,7 +6,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.Nullable;
 
-public class InteractionMeta extends EntityMeta {
+public final class InteractionMeta extends EntityMeta {
     public InteractionMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

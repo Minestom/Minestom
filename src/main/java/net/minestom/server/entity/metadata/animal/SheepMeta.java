@@ -8,7 +8,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.Nullable;
 
-public class SheepMeta extends AnimalMeta {
+public final class SheepMeta extends AnimalMeta {
     private static final DyeColor[] DYE_VALUES = DyeColor.values();
 
     public SheepMeta(Entity entity, MetadataHolder metadata) {

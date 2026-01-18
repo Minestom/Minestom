@@ -3,7 +3,7 @@ package net.minestom.server.entity.metadata.minecart;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataHolder;
 
-public abstract class AbstractMinecartContainerMeta extends AbstractMinecartMeta {
+public abstract sealed class AbstractMinecartContainerMeta extends AbstractMinecartMeta permits ChestMinecartMeta, HopperMinecartMeta {
     protected AbstractMinecartContainerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

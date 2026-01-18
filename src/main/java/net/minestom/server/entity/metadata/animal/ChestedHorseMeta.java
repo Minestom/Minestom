@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class ChestedHorseMeta extends AbstractHorseMeta {
+public sealed abstract class ChestedHorseMeta extends AbstractHorseMeta permits DonkeyMeta, LlamaMeta, MuleMeta {
     protected ChestedHorseMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

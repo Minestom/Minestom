@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.water.WaterAnimalMeta;
 
-public class AbstractFishMeta extends WaterAnimalMeta {
+public sealed class AbstractFishMeta extends WaterAnimalMeta permits CodMeta, PufferfishMeta, SalmonMeta, TadpoleMeta, TropicalFishMeta {
     protected AbstractFishMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

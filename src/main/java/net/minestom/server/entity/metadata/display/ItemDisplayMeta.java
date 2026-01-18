@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.item.ItemStack;
 
-public class ItemDisplayMeta extends AbstractDisplayMeta {
+public final class ItemDisplayMeta extends AbstractDisplayMeta {
     public ItemDisplayMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

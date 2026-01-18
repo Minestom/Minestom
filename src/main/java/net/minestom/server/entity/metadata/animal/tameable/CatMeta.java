@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
-public class CatMeta extends TameableAnimalMeta {
+public final class CatMeta extends TameableAnimalMeta {
     private static final DyeColor[] DYE_VALUES = DyeColor.values();
 
     public CatMeta(Entity entity, MetadataHolder metadata) {

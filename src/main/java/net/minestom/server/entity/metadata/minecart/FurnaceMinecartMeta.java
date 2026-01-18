@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class FurnaceMinecartMeta extends AbstractMinecartMeta {
+public final class FurnaceMinecartMeta extends AbstractMinecartMeta {
     public FurnaceMinecartMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

@@ -1,10 +1,8 @@
 package net.minestom.server.entity.metadata;
 
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.MetadataDef;
-import net.minestom.server.entity.MetadataHolder;
+import module net.minestom.server;
 
-public class MobMeta extends LivingEntityMeta {
+public sealed class MobMeta extends LivingEntityMeta permits PathfinderMobMeta, AmbientCreatureMeta, FlyingMeta, EnderDragonMeta, SlimeMeta {
     protected MobMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

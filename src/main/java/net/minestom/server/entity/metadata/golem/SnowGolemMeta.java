@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class SnowGolemMeta extends AbstractGolemMeta {
+public final class SnowGolemMeta extends AbstractGolemMeta {
     public SnowGolemMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

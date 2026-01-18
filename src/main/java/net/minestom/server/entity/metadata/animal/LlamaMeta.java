@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class LlamaMeta extends ChestedHorseMeta {
+public final class LlamaMeta extends ChestedHorseMeta {
     public LlamaMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.AgeableMobMeta;
 
-public class AbstractVillagerMeta extends AgeableMobMeta {
+public sealed class AbstractVillagerMeta extends AgeableMobMeta permits VillagerMeta {
     protected AbstractVillagerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

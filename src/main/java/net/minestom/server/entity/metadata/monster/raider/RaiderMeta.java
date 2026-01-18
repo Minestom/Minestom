@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.monster.MonsterMeta;
 
-public class RaiderMeta extends MonsterMeta {
+public sealed class RaiderMeta extends MonsterMeta permits AbstractIllagerMeta, RavagerMeta, WitchMeta {
     protected RaiderMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

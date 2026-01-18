@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class ParrotMeta extends TameableAnimalMeta {
+public final class ParrotMeta extends TameableAnimalMeta {
     public ParrotMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

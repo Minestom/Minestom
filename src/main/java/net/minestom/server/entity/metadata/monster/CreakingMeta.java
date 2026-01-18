@@ -6,7 +6,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.Nullable;
 
-public class CreakingMeta extends MonsterMeta {
+public final class CreakingMeta extends MonsterMeta {
     public CreakingMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

@@ -8,7 +8,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
-public class ChickenMeta extends AnimalMeta {
+public final class ChickenMeta extends AnimalMeta {
     public ChickenMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

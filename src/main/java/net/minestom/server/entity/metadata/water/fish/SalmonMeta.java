@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SalmonMeta extends AbstractFishMeta {
+public final class SalmonMeta extends AbstractFishMeta {
     public SalmonMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

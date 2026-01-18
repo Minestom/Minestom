@@ -6,7 +6,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.instance.block.Block;
 
-public class PrimedTntMeta extends EntityMeta {
+public final class PrimedTntMeta extends EntityMeta {
     public PrimedTntMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

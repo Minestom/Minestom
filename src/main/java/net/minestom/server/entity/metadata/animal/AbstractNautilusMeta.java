@@ -5,8 +5,8 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.animal.tameable.TameableAnimalMeta;
 
-public class AbstractNautilusMeta extends TameableAnimalMeta {
-    public AbstractNautilusMeta(Entity entity, MetadataHolder metadata) {
+public sealed abstract class AbstractNautilusMeta extends TameableAnimalMeta permits NautilusMeta, ZombieNautilusMeta {
+    protected AbstractNautilusMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -6,8 +6,8 @@ import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-public class GuardianMeta extends MonsterMeta {
-    private Entity target;
+public sealed class GuardianMeta extends MonsterMeta permits ElderGuardianMeta {
+    private @Nullable Entity target;
 
     public GuardianMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
@@ -30,7 +30,7 @@ public class GuardianMeta extends MonsterMeta {
         metadata.set(MetadataDef.Guardian.TARGET_EID, value);
     }
 
-    public Entity getTarget() {
+    public @Nullable Entity getTarget() {
         return this.target;
     }
 

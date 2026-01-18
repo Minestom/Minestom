@@ -7,7 +7,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 
-public class AbstractDisplayMeta extends EntityMeta {
+public sealed abstract class AbstractDisplayMeta extends EntityMeta permits BlockDisplayMeta, ItemDisplayMeta, TextDisplayMeta {
     protected AbstractDisplayMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

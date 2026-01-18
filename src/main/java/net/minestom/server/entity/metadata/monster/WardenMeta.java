@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class WardenMeta extends MonsterMeta {
+public final class WardenMeta extends MonsterMeta {
     public WardenMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

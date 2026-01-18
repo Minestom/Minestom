@@ -8,7 +8,7 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.instance.block.Block;
 
-public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
+public final class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
     private Block block = Block.STONE;
 
     public FallingBlockMeta(Entity entity, MetadataHolder metadata) {

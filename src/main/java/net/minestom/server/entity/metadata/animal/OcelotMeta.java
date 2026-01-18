@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class OcelotMeta extends AnimalMeta {
+public final class OcelotMeta extends AnimalMeta {
     public OcelotMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

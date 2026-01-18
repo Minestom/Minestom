@@ -9,8 +9,8 @@ import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class FireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    private Entity shooter;
+public final class FireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
+    private @Nullable Entity shooter;
 
     public FireballMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
