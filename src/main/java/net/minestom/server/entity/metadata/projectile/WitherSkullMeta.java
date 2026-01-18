@@ -15,11 +15,11 @@ public final class WitherSkullMeta extends EntityMeta implements ObjectDataProvi
     }
 
     public boolean isInvulnerable() {
-        return metadata.get(MetadataDef.WitherSkull.IS_INVULNERABLE);
+        return get(MetadataDef.WitherSkull.IS_INVULNERABLE);
     }
 
     public void setInvulnerable(boolean value) {
-        metadata.set(MetadataDef.WitherSkull.IS_INVULNERABLE, value);
+        set(MetadataDef.WitherSkull.IS_INVULNERABLE, value);
     }
 
     @Override

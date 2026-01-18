@@ -10,11 +10,11 @@ public final class BlazeMeta extends MonsterMeta {
     }
 
     public boolean isOnFire() {
-        return metadata.get(MetadataDef.Blaze.IS_ON_FIRE);
+        return get(MetadataDef.Blaze.IS_ON_FIRE);
     }
 
     public void setOnFire(boolean value) {
-        metadata.set(MetadataDef.Blaze.IS_ON_FIRE, value);
+        set(MetadataDef.Blaze.IS_ON_FIRE, value);
     }
 
 }

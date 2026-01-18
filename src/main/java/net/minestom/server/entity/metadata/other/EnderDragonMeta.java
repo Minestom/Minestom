@@ -11,11 +11,11 @@ public final class EnderDragonMeta extends MobMeta {
     }
 
     public Phase getPhase() {
-        return Phase.VALUES[metadata.get(MetadataDef.EnderDragon.DRAGON_PHASE)];
+        return Phase.VALUES[get(MetadataDef.EnderDragon.DRAGON_PHASE)];
     }
 
     public void setPhase(Phase value) {
-        metadata.set(MetadataDef.EnderDragon.DRAGON_PHASE, value.ordinal());
+        set(MetadataDef.EnderDragon.DRAGON_PHASE, value.ordinal());
     }
 
     public enum Phase {

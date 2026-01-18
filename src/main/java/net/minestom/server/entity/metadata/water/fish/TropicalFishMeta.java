@@ -20,7 +20,7 @@ public final class TropicalFishMeta extends AbstractFishMeta {
      */
     @Deprecated
     public Variant getVariant() {
-        return Variant.fromPackedId(metadata.get(MetadataDef.TropicalFish.VARIANT));
+        return Variant.fromPackedId(get(MetadataDef.TropicalFish.VARIANT));
     }
 
     /**
@@ -28,7 +28,7 @@ public final class TropicalFishMeta extends AbstractFishMeta {
      */
     @Deprecated
     public void setVariant(Variant variant) {
-        metadata.set(MetadataDef.TropicalFish.VARIANT, variant.packedId());
+        set(MetadataDef.TropicalFish.VARIANT, variant.packedId());
     }
 
     @Override

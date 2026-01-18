@@ -10,11 +10,11 @@ public final class PillagerMeta extends AbstractIllagerMeta {
     }
 
     public boolean isChargingCrossbow() {
-        return metadata.get(MetadataDef.Pillager.IS_CHARGING);
+        return get(MetadataDef.Pillager.IS_CHARGING);
     }
 
     public void setChargingCrossbow(boolean value) {
-        metadata.set(MetadataDef.Pillager.IS_CHARGING, value);
+        set(MetadataDef.Pillager.IS_CHARGING, value);
     }
 
 }

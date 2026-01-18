@@ -10,75 +10,75 @@ public final class PandaMeta extends AnimalMeta {
     }
 
     public int getBreedTimer() {
-        return metadata.get(MetadataDef.Panda.BREED_TIMER);
+        return get(MetadataDef.Panda.BREED_TIMER);
     }
 
     public void setBreedTimer(int value) {
-        metadata.set(MetadataDef.Panda.BREED_TIMER, value);
+        set(MetadataDef.Panda.BREED_TIMER, value);
     }
 
     public int getSneezeTimer() {
-        return metadata.get(MetadataDef.Panda.SNEEZE_TIMER);
+        return get(MetadataDef.Panda.SNEEZE_TIMER);
     }
 
     public void setSneezeTimer(int value) {
-        metadata.set(MetadataDef.Panda.SNEEZE_TIMER, value);
+        set(MetadataDef.Panda.SNEEZE_TIMER, value);
     }
 
     public int getEatTimer() {
-        return metadata.get(MetadataDef.Panda.EAT_TIMER);
+        return get(MetadataDef.Panda.EAT_TIMER);
     }
 
     public void setEatTimer(int value) {
-        metadata.set(MetadataDef.Panda.EAT_TIMER, value);
+        set(MetadataDef.Panda.EAT_TIMER, value);
     }
 
     public Gene getMainGene() {
-        return Gene.VALUES[metadata.get(MetadataDef.Panda.MAIN_GENE)];
+        return Gene.VALUES[get(MetadataDef.Panda.MAIN_GENE)];
     }
 
     public void setMainGene(Gene value) {
-        metadata.set(MetadataDef.Panda.MAIN_GENE, (byte) value.ordinal());
+        set(MetadataDef.Panda.MAIN_GENE, (byte) value.ordinal());
     }
 
     public Gene getHiddenGene() {
-        return Gene.VALUES[metadata.get(MetadataDef.Panda.HIDDEN_GENE)];
+        return Gene.VALUES[get(MetadataDef.Panda.HIDDEN_GENE)];
     }
 
     public void setHiddenGene(Gene value) {
-        metadata.set(MetadataDef.Panda.HIDDEN_GENE, (byte) value.ordinal());
+        set(MetadataDef.Panda.HIDDEN_GENE, (byte) value.ordinal());
     }
 
     public boolean isSneezing() {
-        return metadata.get(MetadataDef.Panda.IS_SNEEZING);
+        return get(MetadataDef.Panda.IS_SNEEZING);
     }
 
     public void setSneezing(boolean value) {
-        metadata.set(MetadataDef.Panda.IS_SNEEZING, value);
+        set(MetadataDef.Panda.IS_SNEEZING, value);
     }
 
     public boolean isRolling() {
-        return metadata.get(MetadataDef.Panda.IS_ROLLING);
+        return get(MetadataDef.Panda.IS_ROLLING);
     }
 
     public void setRolling(boolean value) {
-        metadata.set(MetadataDef.Panda.IS_ROLLING, value);
+        set(MetadataDef.Panda.IS_ROLLING, value);
     }
 
     public boolean isSitting() {
-        return metadata.get(MetadataDef.Panda.IS_SITTING);
+        return get(MetadataDef.Panda.IS_SITTING);
     }
 
     public void setSitting(boolean value) {
-        metadata.set(MetadataDef.Panda.IS_SITTING, value);
+        set(MetadataDef.Panda.IS_SITTING, value);
     }
 
     public boolean isOnBack() {
-        return metadata.get(MetadataDef.Panda.IS_ON_BACK);
+        return get(MetadataDef.Panda.IS_ON_BACK);
     }
 
     public void setOnBack(boolean value) {
-        metadata.set(MetadataDef.Panda.IS_ON_BACK, value);
+        set(MetadataDef.Panda.IS_ON_BACK, value);
     }
 
     public enum Gene {

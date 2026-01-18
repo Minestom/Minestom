@@ -10,11 +10,11 @@ public final class OcelotMeta extends AnimalMeta {
     }
 
     public boolean isTrusting() {
-        return metadata.get(MetadataDef.Ocelot.IS_TRUSTING);
+        return get(MetadataDef.Ocelot.IS_TRUSTING);
     }
 
     public void setTrusting(boolean value) {
-        metadata.set(MetadataDef.Ocelot.IS_TRUSTING, value);
+        set(MetadataDef.Ocelot.IS_TRUSTING, value);
     }
 
 }

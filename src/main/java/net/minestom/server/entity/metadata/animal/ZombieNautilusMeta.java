@@ -11,11 +11,11 @@ public final class ZombieNautilusMeta extends AbstractNautilusMeta {
     }
 
     public RegistryKey<ZombieNautilusVariant> getVariant() {
-        return this.metadata.get(MetadataDef.ZombieNautilus.VARIANT);
+        return this.get(MetadataDef.ZombieNautilus.VARIANT);
     }
 
     public void setVariant(RegistryKey<ZombieNautilusVariant> value) {
-        this.metadata.set(MetadataDef.ZombieNautilus.VARIANT, value);
+        this.set(MetadataDef.ZombieNautilus.VARIANT, value);
     }
 
 }

@@ -10,11 +10,11 @@ public sealed abstract class BasePiglinMeta extends MonsterMeta permits PiglinBr
     }
 
     public boolean isImmuneToZombification() {
-        return metadata.get(MetadataDef.BasePiglin.IMMUNE_ZOMBIFICATION);
+        return get(MetadataDef.BasePiglin.IMMUNE_ZOMBIFICATION);
     }
 
     public void setImmuneToZombification(boolean value) {
-        metadata.set(MetadataDef.BasePiglin.IMMUNE_ZOMBIFICATION, value);
+        set(MetadataDef.BasePiglin.IMMUNE_ZOMBIFICATION, value);
     }
 
 }

@@ -10,11 +10,11 @@ public final class GhastMeta extends FlyingMeta {
     }
 
     public boolean isAttacking() {
-        return metadata.get(MetadataDef.Ghast.IS_ATTACKING);
+        return get(MetadataDef.Ghast.IS_ATTACKING);
     }
 
     public void setAttacking(boolean value) {
-        metadata.set(MetadataDef.Ghast.IS_ATTACKING, value);
+        set(MetadataDef.Ghast.IS_ATTACKING, value);
     }
 
 }

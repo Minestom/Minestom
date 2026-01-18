@@ -10,18 +10,18 @@ public sealed class CamelMeta extends AbstractHorseMeta permits CamelHuskMeta {
     }
 
     public boolean isDashing() {
-        return metadata.get(MetadataDef.Camel.DASHING);
+        return get(MetadataDef.Camel.DASHING);
     }
 
     public void setDashing(boolean value) {
-        metadata.set(MetadataDef.Camel.DASHING, value);
+        set(MetadataDef.Camel.DASHING, value);
     }
 
     public long getLastPoseChangeTick() {
-        return metadata.get(MetadataDef.Camel.LAST_POSE_CHANGE_TICK);
+        return get(MetadataDef.Camel.LAST_POSE_CHANGE_TICK);
     }
 
     public void setLastPoseChangeTick(long value) {
-        metadata.set(MetadataDef.Camel.LAST_POSE_CHANGE_TICK, value);
+        set(MetadataDef.Camel.LAST_POSE_CHANGE_TICK, value);
     }
 }

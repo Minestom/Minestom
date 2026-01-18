@@ -15,11 +15,11 @@ public sealed abstract class HangingMeta extends EntityMeta implements ObjectDat
     }
 
     public Direction getDirection() {
-        return metadata.get(MetadataDef.Hanging.DIRECTION);
+        return get(MetadataDef.Hanging.DIRECTION);
     }
 
     public void setDirection(Direction direction) {
-        metadata.set(MetadataDef.Hanging.DIRECTION, direction);
+        set(MetadataDef.Hanging.DIRECTION, direction);
     }
 
     @Override

@@ -10,11 +10,11 @@ public final class PhantomMeta extends FlyingMeta {
     }
 
     public int getSize() {
-        return metadata.get(MetadataDef.Phantom.SIZE);
+        return get(MetadataDef.Phantom.SIZE);
     }
 
     public void setSize(int value) {
-        metadata.set(MetadataDef.Phantom.SIZE, value);
+        set(MetadataDef.Phantom.SIZE, value);
     }
 
 }

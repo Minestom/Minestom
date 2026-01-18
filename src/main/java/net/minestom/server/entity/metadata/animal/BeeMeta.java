@@ -10,35 +10,35 @@ public final class BeeMeta extends AnimalMeta {
     }
 
     public boolean isAngry() {
-        return metadata.get(MetadataDef.Bee.IS_ANGRY);
+        return get(MetadataDef.Bee.IS_ANGRY);
     }
 
     public void setAngry(boolean value) {
-        metadata.set(MetadataDef.Bee.IS_ANGRY, value);
+        set(MetadataDef.Bee.IS_ANGRY, value);
     }
 
     public boolean isHasStung() {
-        return metadata.get(MetadataDef.Bee.HAS_STUNG);
+        return get(MetadataDef.Bee.HAS_STUNG);
     }
 
     public void setHasStung(boolean value) {
-        metadata.set(MetadataDef.Bee.HAS_STUNG, value);
+        set(MetadataDef.Bee.HAS_STUNG, value);
     }
 
     public boolean isHasNectar() {
-        return metadata.get(MetadataDef.Bee.HAS_NECTAR);
+        return get(MetadataDef.Bee.HAS_NECTAR);
     }
 
     public void setHasNectar(boolean value) {
-        metadata.set(MetadataDef.Bee.HAS_NECTAR, value);
+        set(MetadataDef.Bee.HAS_NECTAR, value);
     }
 
     public long getAngerTicks() {
-        return metadata.get(MetadataDef.Bee.ANGER_TIME_TICKS);
+        return get(MetadataDef.Bee.ANGER_TIME_TICKS);
     }
 
     public void setAngerTicks(long value) {
-        metadata.set(MetadataDef.Bee.ANGER_TIME_TICKS, value);
+        set(MetadataDef.Bee.ANGER_TIME_TICKS, value);
     }
 
 }

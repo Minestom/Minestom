@@ -16,12 +16,12 @@ public final class WitherMeta extends MonsterMeta {
     }
 
     public int getCenterHeadEntityId() {
-        return metadata.get(MetadataDef.Wither.CENTER_HEAD_TARGET);
+        return get(MetadataDef.Wither.CENTER_HEAD_TARGET);
     }
 
     @ApiStatus.Internal
     public void setCenterHeadEntityId(int value) {
-        metadata.set(MetadataDef.Wither.CENTER_HEAD_TARGET, value);
+        set(MetadataDef.Wither.CENTER_HEAD_TARGET, value);
     }
 
     @Nullable
@@ -35,12 +35,12 @@ public final class WitherMeta extends MonsterMeta {
     }
 
     public int getLeftHeadEntityId() {
-        return metadata.get(MetadataDef.Wither.LEFT_HEAD_TARGET);
+        return get(MetadataDef.Wither.LEFT_HEAD_TARGET);
     }
 
     @ApiStatus.Internal
     public void setLeftHeadEntityId(int value) {
-        metadata.set(MetadataDef.Wither.LEFT_HEAD_TARGET, value);
+        set(MetadataDef.Wither.LEFT_HEAD_TARGET, value);
     }
 
     @Nullable
@@ -54,12 +54,12 @@ public final class WitherMeta extends MonsterMeta {
     }
 
     public int getRightHeadEntityId() {
-        return metadata.get(MetadataDef.Wither.RIGHT_HEAD_TARGET);
+        return get(MetadataDef.Wither.RIGHT_HEAD_TARGET);
     }
 
     @ApiStatus.Internal
     public void setRightHeadEntityId(int value) {
-        metadata.set(MetadataDef.Wither.RIGHT_HEAD_TARGET, value);
+        set(MetadataDef.Wither.RIGHT_HEAD_TARGET, value);
     }
 
     @Nullable
@@ -73,11 +73,11 @@ public final class WitherMeta extends MonsterMeta {
     }
 
     public int getInvulnerableTime() {
-        return metadata.get(MetadataDef.Wither.INVULNERABLE_TIME);
+        return get(MetadataDef.Wither.INVULNERABLE_TIME);
     }
 
     public void setInvulnerableTime(int value) {
-        metadata.set(MetadataDef.Wither.INVULNERABLE_TIME, value);
+        set(MetadataDef.Wither.INVULNERABLE_TIME, value);
     }
 
 }

@@ -12,10 +12,10 @@ public final class ExperienceOrbMeta extends EntityMeta {
     }
 
     public int getValue() {
-        return metadata.get(MetadataDef.ExperienceOrb.VALUE);
+        return get(MetadataDef.ExperienceOrb.VALUE);
     }
 
     public void setValue(int value) {
-        metadata.set(MetadataDef.ExperienceOrb.VALUE, value);
+        set(MetadataDef.ExperienceOrb.VALUE, value);
     }
 }

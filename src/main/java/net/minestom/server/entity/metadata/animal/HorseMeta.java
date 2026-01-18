@@ -19,7 +19,7 @@ public final class HorseMeta extends AbstractHorseMeta {
      */
     @Deprecated
     public Variant getVariant() {
-        return getVariantFromID(metadata.get(MetadataDef.Horse.VARIANT));
+        return getVariantFromID(get(MetadataDef.Horse.VARIANT));
     }
 
     /**
@@ -27,7 +27,7 @@ public final class HorseMeta extends AbstractHorseMeta {
      */
     @Deprecated
     public void setVariant(Variant variant) {
-        metadata.set(MetadataDef.Horse.VARIANT, getVariantID(variant.marking, variant.color));
+        set(MetadataDef.Horse.VARIANT, getVariantID(variant.marking, variant.color));
     }
 
     public static int getVariantID(Marking marking, Color color) {

@@ -15,19 +15,19 @@ public final class ZombieVillagerMeta extends ZombieMeta {
     }
 
     public boolean isConverting() {
-        return metadata.get(MetadataDef.ZombieVillager.IS_CONVERTING);
+        return get(MetadataDef.ZombieVillager.IS_CONVERTING);
     }
 
     public void setConverting(boolean value) {
-        metadata.set(MetadataDef.ZombieVillager.IS_CONVERTING, value);
+        set(MetadataDef.ZombieVillager.IS_CONVERTING, value);
     }
 
     public VillagerMeta.VillagerData getVillagerData() {
-        return metadata.get(MetadataDef.ZombieVillager.VILLAGER_DATA);
+        return get(MetadataDef.ZombieVillager.VILLAGER_DATA);
     }
 
     public void setVillagerData(VillagerMeta.VillagerData data) {
-        metadata.set(MetadataDef.Villager.VARIANT, data);
+        set(MetadataDef.Villager.VARIANT, data);
     }
 
     @Override

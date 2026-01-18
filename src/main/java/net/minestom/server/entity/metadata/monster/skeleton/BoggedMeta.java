@@ -10,10 +10,10 @@ public final class BoggedMeta extends AbstractSkeletonMeta {
     }
 
     public boolean isSheared() {
-        return metadata.get(MetadataDef.Bogged.IS_SHEARED);
+        return get(MetadataDef.Bogged.IS_SHEARED);
     }
 
     public void setSheared(boolean value) {
-        metadata.set(MetadataDef.Bogged.IS_SHEARED, value);
+        set(MetadataDef.Bogged.IS_SHEARED, value);
     }
 }

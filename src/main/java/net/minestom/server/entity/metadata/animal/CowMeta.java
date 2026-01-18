@@ -18,7 +18,7 @@ public final class CowMeta extends AnimalMeta {
      */
     @Deprecated
     public RegistryKey<CowVariant> getVariant() {
-        return metadata.get(MetadataDef.Cow.VARIANT);
+        return get(MetadataDef.Cow.VARIANT);
     }
 
     /**
@@ -26,7 +26,7 @@ public final class CowMeta extends AnimalMeta {
      */
     @Deprecated
     public void setVariant(RegistryKey<CowVariant> variant) {
-        metadata.set(MetadataDef.Cow.VARIANT, variant);
+        set(MetadataDef.Cow.VARIANT, variant);
     }
 
     @Override

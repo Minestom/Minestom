@@ -11,11 +11,11 @@ public sealed abstract class AbstractNautilusMeta extends TameableAnimalMeta per
     }
 
     public boolean isDashing() {
-        return metadata.get(MetadataDef.AbstractNautilus.DASH);
+        return get(MetadataDef.AbstractNautilus.DASH);
     }
 
     public void setDashing(boolean value) {
-        metadata.set(MetadataDef.AbstractNautilus.DASH, value);
+        set(MetadataDef.AbstractNautilus.DASH, value);
     }
 
 }

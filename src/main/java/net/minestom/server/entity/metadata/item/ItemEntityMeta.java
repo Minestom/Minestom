@@ -13,11 +13,11 @@ public final class ItemEntityMeta extends EntityMeta implements ObjectDataProvid
     }
 
     public ItemStack getItem() {
-        return metadata.get(MetadataDef.ItemEntity.ITEM);
+        return get(MetadataDef.ItemEntity.ITEM);
     }
 
     public void setItem(ItemStack value) {
-        metadata.set(MetadataDef.ItemEntity.ITEM, value);
+        set(MetadataDef.ItemEntity.ITEM, value);
     }
 
     @Override

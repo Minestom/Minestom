@@ -21,7 +21,7 @@ public final class CatMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public RegistryKey<CatVariant> getVariant() {
-        return metadata.get(MetadataDef.Cat.VARIANT);
+        return get(MetadataDef.Cat.VARIANT);
     }
 
     /**
@@ -29,23 +29,23 @@ public final class CatMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public void setVariant(RegistryKey<CatVariant> value) {
-        metadata.set(MetadataDef.Cat.VARIANT, value);
+        set(MetadataDef.Cat.VARIANT, value);
     }
 
     public boolean isLying() {
-        return metadata.get(MetadataDef.Cat.IS_LYING);
+        return get(MetadataDef.Cat.IS_LYING);
     }
 
     public void setLying(boolean value) {
-        metadata.set(MetadataDef.Cat.IS_LYING, value);
+        set(MetadataDef.Cat.IS_LYING, value);
     }
 
     public boolean isRelaxed() {
-        return metadata.get(MetadataDef.Cat.IS_RELAXED);
+        return get(MetadataDef.Cat.IS_RELAXED);
     }
 
     public void setRelaxed(boolean value) {
-        metadata.set(MetadataDef.Cat.IS_RELAXED, value);
+        set(MetadataDef.Cat.IS_RELAXED, value);
     }
 
     /**
@@ -53,7 +53,7 @@ public final class CatMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public DyeColor getCollarColor() {
-        return DYE_VALUES[metadata.get(MetadataDef.Cat.COLLAR_COLOR)];
+        return DYE_VALUES[get(MetadataDef.Cat.COLLAR_COLOR)];
     }
 
     /**
@@ -61,7 +61,7 @@ public final class CatMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public void setCollarColor(DyeColor value) {
-        metadata.set(MetadataDef.Cat.COLLAR_COLOR, value.ordinal());
+        set(MetadataDef.Cat.COLLAR_COLOR, value.ordinal());
     }
 
     @Override

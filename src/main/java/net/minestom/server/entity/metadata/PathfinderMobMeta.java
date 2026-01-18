@@ -7,7 +7,7 @@ import net.minestom.server.entity.metadata.monster.MonsterMeta;
 import net.minestom.server.entity.metadata.other.AllayMeta;
 import net.minestom.server.entity.metadata.water.WaterAnimalMeta;
 
-public sealed class PathfinderMobMeta extends MobMeta permits AgeableMobMeta, AbstractGolemMeta, MonsterMeta, AllayMeta, WaterAnimalMeta {
+public sealed abstract class PathfinderMobMeta extends MobMeta permits AgeableMobMeta, AbstractGolemMeta, MonsterMeta, AllayMeta, WaterAnimalMeta {
     protected PathfinderMobMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

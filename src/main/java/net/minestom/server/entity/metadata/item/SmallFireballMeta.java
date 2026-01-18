@@ -17,11 +17,11 @@ public final class SmallFireballMeta extends EntityMeta implements ObjectDataPro
     }
 
     public ItemStack getItem() {
-        return metadata.get(MetadataDef.SmartFireball.ITEM);
+        return get(MetadataDef.SmartFireball.ITEM);
     }
 
     public void setItem(ItemStack item) {
-        metadata.set(MetadataDef.SmartFireball.ITEM, item);
+        set(MetadataDef.SmartFireball.ITEM, item);
     }
 
     @Override

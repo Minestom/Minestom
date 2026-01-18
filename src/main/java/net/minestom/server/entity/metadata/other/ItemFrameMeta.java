@@ -12,19 +12,19 @@ public sealed class ItemFrameMeta extends HangingMeta permits GlowItemFrameMeta 
     }
 
     public ItemStack getItem() {
-        return metadata.get(MetadataDef.ItemFrame.ITEM);
+        return get(MetadataDef.ItemFrame.ITEM);
     }
 
     public void setItem(ItemStack value) {
-        metadata.set(MetadataDef.ItemFrame.ITEM, value);
+        set(MetadataDef.ItemFrame.ITEM, value);
     }
 
     public Rotation getRotation() {
-        return Rotation.values()[metadata.get(MetadataDef.ItemFrame.ROTATION)];
+        return Rotation.values()[get(MetadataDef.ItemFrame.ROTATION)];
     }
 
     public void setRotation(Rotation value) {
-        metadata.set(MetadataDef.ItemFrame.ROTATION, value.ordinal());
+        set(MetadataDef.ItemFrame.ROTATION, value.ordinal());
     }
 
 }

@@ -11,11 +11,11 @@ public final class PufferfishMeta extends AbstractFishMeta {
     }
 
     public State getState() {
-        return State.VALUES[metadata.get(MetadataDef.PufferFish.PUFF_STATE)];
+        return State.VALUES[get(MetadataDef.PufferFish.PUFF_STATE)];
     }
 
     public void setState(State state) {
-        metadata.set(MetadataDef.PufferFish.PUFF_STATE, state.ordinal());
+        set(MetadataDef.PufferFish.PUFF_STATE, state.ordinal());
         updateBoundingBox(state);
     }
 

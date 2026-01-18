@@ -10,19 +10,19 @@ public final class TurtleMeta extends AnimalMeta {
     }
 
     public boolean isHasEgg() {
-        return metadata.get(MetadataDef.Turtle.HAS_EGG);
+        return get(MetadataDef.Turtle.HAS_EGG);
     }
 
     public void setHasEgg(boolean value) {
-        metadata.set(MetadataDef.Turtle.HAS_EGG, value);
+        set(MetadataDef.Turtle.HAS_EGG, value);
     }
 
     public boolean isLayingEgg() {
-        return metadata.get(MetadataDef.Turtle.IS_LAYING_EGG);
+        return get(MetadataDef.Turtle.IS_LAYING_EGG);
     }
 
     public void setLayingEgg(boolean value) {
-        metadata.set(MetadataDef.Turtle.IS_LAYING_EGG, value);
+        set(MetadataDef.Turtle.IS_LAYING_EGG, value);
     }
 
 }

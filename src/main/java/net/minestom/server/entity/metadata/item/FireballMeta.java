@@ -17,11 +17,11 @@ public final class FireballMeta extends EntityMeta implements ObjectDataProvider
     }
 
     public ItemStack getItem() {
-        return metadata.get(MetadataDef.Fireball.ITEM);
+        return get(MetadataDef.Fireball.ITEM);
     }
 
     public void setItem(ItemStack value) {
-        metadata.set(MetadataDef.Fireball.ITEM, value);
+        set(MetadataDef.Fireball.ITEM, value);
     }
 
     @Override

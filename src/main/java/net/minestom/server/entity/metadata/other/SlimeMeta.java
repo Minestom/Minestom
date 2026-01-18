@@ -11,7 +11,7 @@ public sealed class SlimeMeta extends MobMeta permits MagmaCubeMeta {
     }
 
     public int getSize() {
-        return metadata.get(MetadataDef.Slime.SIZE);
+        return get(MetadataDef.Slime.SIZE);
     }
 
     public void setSize(int value) {
@@ -19,7 +19,7 @@ public sealed class SlimeMeta extends MobMeta permits MagmaCubeMeta {
             float boxSize = 0.51000005f * value;
             entity.setBoundingBox(boxSize, boxSize, boxSize);
         });
-        metadata.set(MetadataDef.Slime.SIZE, value);
+        set(MetadataDef.Slime.SIZE, value);
     }
 
 }

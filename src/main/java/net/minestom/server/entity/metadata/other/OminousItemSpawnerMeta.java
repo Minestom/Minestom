@@ -12,11 +12,11 @@ public final class OminousItemSpawnerMeta extends EntityMeta {
     }
 
     public ItemStack getItem() {
-        return metadata.get(MetadataDef.OminousItemSpawner.ITEM);
+        return get(MetadataDef.OminousItemSpawner.ITEM);
     }
 
     public void setItem(ItemStack value) {
-        metadata.set(MetadataDef.OminousItemSpawner.ITEM, value);
+        set(MetadataDef.OminousItemSpawner.ITEM, value);
     }
 
 }

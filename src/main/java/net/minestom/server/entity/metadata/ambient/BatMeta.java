@@ -10,11 +10,11 @@ public final class BatMeta extends AmbientCreatureMeta {
     }
 
     public boolean isHanging() {
-        return metadata.get(MetadataDef.Bat.IS_HANGING);
+        return get(MetadataDef.Bat.IS_HANGING);
     }
 
     public void setHanging(boolean value) {
-        metadata.set(MetadataDef.Bat.IS_HANGING, value);
+        set(MetadataDef.Bat.IS_HANGING, value);
     }
 
 }

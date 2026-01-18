@@ -12,7 +12,7 @@ public sealed class ZombieMeta extends MonsterMeta permits DrownedMeta, HuskMeta
     }
 
     public boolean isBaby() {
-        return metadata.get(MetadataDef.Zombie.IS_BABY);
+        return get(MetadataDef.Zombie.IS_BABY);
     }
 
     public void setBaby(boolean value) {
@@ -29,15 +29,15 @@ public sealed class ZombieMeta extends MonsterMeta permits DrownedMeta, HuskMeta
                 entity.setBoundingBox(width, bb.height() * 2, width);
             }
         });
-        metadata.set(MetadataDef.Zombie.IS_BABY, value);
+        set(MetadataDef.Zombie.IS_BABY, value);
     }
 
     public boolean isBecomingDrowned() {
-        return metadata.get(MetadataDef.Zombie.IS_BECOMING_DROWNED);
+        return get(MetadataDef.Zombie.IS_BECOMING_DROWNED);
     }
 
     public void setBecomingDrowned(boolean value) {
-        metadata.set(MetadataDef.Zombie.IS_BECOMING_DROWNED, value);
+        set(MetadataDef.Zombie.IS_BECOMING_DROWNED, value);
     }
 
 }

@@ -11,11 +11,11 @@ public final class ArmadilloMeta extends AnimalMeta {
     }
 
     public State getState() {
-        return metadata.get(MetadataDef.Armadillo.STATE);
+        return get(MetadataDef.Armadillo.STATE);
     }
 
     public void setState(State value) {
-        metadata.set(MetadataDef.Armadillo.STATE, value);
+        set(MetadataDef.Armadillo.STATE, value);
     }
 
     public enum State {

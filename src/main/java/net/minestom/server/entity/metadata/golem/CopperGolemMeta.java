@@ -13,19 +13,19 @@ public final class CopperGolemMeta extends AbstractGolemMeta {
     }
 
     public WeatherState getWeatherState() {
-        return metadata.get(MetadataDef.CopperGolem.WEATHER_STATE);
+        return get(MetadataDef.CopperGolem.WEATHER_STATE);
     }
 
     public void setWeatherState(WeatherState weatherState) {
-        metadata.set(MetadataDef.CopperGolem.WEATHER_STATE, weatherState);
+        set(MetadataDef.CopperGolem.WEATHER_STATE, weatherState);
     }
 
     public State getState() {
-        return metadata.get(MetadataDef.CopperGolem.STATE);
+        return get(MetadataDef.CopperGolem.STATE);
     }
 
     public void setState(State state) {
-        metadata.set(MetadataDef.CopperGolem.STATE, state);
+        set(MetadataDef.CopperGolem.STATE, state);
     }
 
     public enum WeatherState {

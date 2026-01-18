@@ -10,11 +10,11 @@ public final class WitchMeta extends RaiderMeta {
     }
 
     public boolean isDrinkingPotion() {
-        return metadata.get(MetadataDef.Witch.IS_DRINKING_POTION);
+        return get(MetadataDef.Witch.IS_DRINKING_POTION);
     }
 
     public void setDrinkingPotion(boolean value) {
-        super.metadata.set(MetadataDef.Witch.IS_DRINKING_POTION, value);
+        super.set(MetadataDef.Witch.IS_DRINKING_POTION, value);
     }
 
 }

@@ -12,26 +12,26 @@ public final class InteractionMeta extends EntityMeta {
     }
 
     public float getWidth() {
-        return metadata.get(MetadataDef.Interaction.WIDTH);
+        return get(MetadataDef.Interaction.WIDTH);
     }
 
     public void setWidth(float value) {
-        metadata.set(MetadataDef.Interaction.WIDTH, value);
+        set(MetadataDef.Interaction.WIDTH, value);
     }
 
     public float getHeight() {
-        return metadata.get(MetadataDef.Interaction.HEIGHT);
+        return get(MetadataDef.Interaction.HEIGHT);
     }
 
     public void setHeight(float value) {
-        metadata.set(MetadataDef.Interaction.HEIGHT, value);
+        set(MetadataDef.Interaction.HEIGHT, value);
     }
 
     public boolean getResponse() {
-        return metadata.get(MetadataDef.Interaction.RESPONSIVE);
+        return get(MetadataDef.Interaction.RESPONSIVE);
     }
 
     public void setResponse(boolean response) {
-        metadata.set(MetadataDef.Interaction.RESPONSIVE, response);
+        set(MetadataDef.Interaction.RESPONSIVE, response);
     }
 }

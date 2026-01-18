@@ -10,11 +10,11 @@ public final class SnowGolemMeta extends AbstractGolemMeta {
     }
 
     public boolean isHasPumpkinHat() {
-        return metadata.get(MetadataDef.SnowGolem.PUMPKIN_HAT);
+        return get(MetadataDef.SnowGolem.PUMPKIN_HAT);
     }
 
     public void setHasPumpkinHat(boolean value) {
-        metadata.set(MetadataDef.SnowGolem.PUMPKIN_HAT, value);
+        set(MetadataDef.SnowGolem.PUMPKIN_HAT, value);
     }
 
 }

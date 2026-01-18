@@ -11,19 +11,19 @@ public final class SnifferMeta extends AnimalMeta {
     }
 
     public State getState() {
-        return metadata.get(MetadataDef.Sniffer.STATE);
+        return get(MetadataDef.Sniffer.STATE);
     }
 
     public void setState(State value) {
-        metadata.set(MetadataDef.Sniffer.STATE, value);
+        set(MetadataDef.Sniffer.STATE, value);
     }
 
     public int getDropSeedAtTick() {
-        return metadata.get(MetadataDef.Sniffer.DROP_SEED_AT_TICK);
+        return get(MetadataDef.Sniffer.DROP_SEED_AT_TICK);
     }
 
     public void setDropSeedAtTick(int value) {
-        metadata.set(MetadataDef.Sniffer.DROP_SEED_AT_TICK, value);
+        set(MetadataDef.Sniffer.DROP_SEED_AT_TICK, value);
     }
 
     public enum State {

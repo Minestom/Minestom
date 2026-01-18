@@ -13,11 +13,11 @@ public sealed class VillagerMeta extends AbstractVillagerMeta permits WanderingT
     }
 
     public VillagerData getVillagerData() {
-        return metadata.get(MetadataDef.Villager.VARIANT);
+        return get(MetadataDef.Villager.VARIANT);
     }
 
     public void setVillagerData(VillagerData data) {
-        metadata.set(MetadataDef.Villager.VARIANT, data);
+        set(MetadataDef.Villager.VARIANT, data);
     }
 
     @Override

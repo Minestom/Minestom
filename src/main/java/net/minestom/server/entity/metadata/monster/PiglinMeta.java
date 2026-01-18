@@ -11,7 +11,7 @@ public final class PiglinMeta extends BasePiglinMeta {
     }
 
     public boolean isBaby() {
-        return metadata.get(MetadataDef.Piglin.IS_BABY);
+        return get(MetadataDef.Piglin.IS_BABY);
     }
 
     public void setBaby(boolean value) {
@@ -28,23 +28,23 @@ public final class PiglinMeta extends BasePiglinMeta {
                 entity.setBoundingBox(width, bb.height() * 2, width);
             }
         });
-        metadata.set(MetadataDef.Piglin.IS_BABY, value);
+        set(MetadataDef.Piglin.IS_BABY, value);
     }
 
     public boolean isChargingCrossbow() {
-        return metadata.get(MetadataDef.Piglin.IS_CHARGING_CROSSBOW);
+        return get(MetadataDef.Piglin.IS_CHARGING_CROSSBOW);
     }
 
     public void setChargingCrossbow(boolean value) {
-        metadata.set(MetadataDef.Piglin.IS_CHARGING_CROSSBOW, value);
+        set(MetadataDef.Piglin.IS_CHARGING_CROSSBOW, value);
     }
 
     public boolean isDancing() {
-        return metadata.get(MetadataDef.Piglin.IS_DANCING);
+        return get(MetadataDef.Piglin.IS_DANCING);
     }
 
     public void setDancing(boolean value) {
-        metadata.set(MetadataDef.Piglin.IS_DANCING, value);
+        set(MetadataDef.Piglin.IS_DANCING, value);
     }
 
 }

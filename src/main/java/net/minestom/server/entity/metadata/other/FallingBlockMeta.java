@@ -16,11 +16,11 @@ public final class FallingBlockMeta extends EntityMeta implements ObjectDataProv
     }
 
     public Point getSpawnPosition() {
-        return metadata.get(MetadataDef.FallingBlock.SPAWN_POSITION);
+        return get(MetadataDef.FallingBlock.SPAWN_POSITION);
     }
 
     public void setSpawnPosition(Point value) {
-        metadata.set(MetadataDef.FallingBlock.SPAWN_POSITION, value);
+        set(MetadataDef.FallingBlock.SPAWN_POSITION, value);
     }
 
     public Block getBlock() {

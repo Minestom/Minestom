@@ -10,19 +10,19 @@ public final class ThrownTridentMeta extends AbstractArrowMeta {
     }
 
     public byte getLoyaltyLevel() {
-        return metadata.get(MetadataDef.ThrownTrident.LOYALTY_LEVEL);
+        return get(MetadataDef.ThrownTrident.LOYALTY_LEVEL);
     }
 
     public void setLoyaltyLevel(byte value) {
-        metadata.set(MetadataDef.ThrownTrident.LOYALTY_LEVEL, value);
+        set(MetadataDef.ThrownTrident.LOYALTY_LEVEL, value);
     }
 
     public boolean isHasEnchantmentGlint() {
-        return metadata.get(MetadataDef.ThrownTrident.HAS_ENCHANTMENT_GLINT);
+        return get(MetadataDef.ThrownTrident.HAS_ENCHANTMENT_GLINT);
     }
 
     public void setHasEnchantmentGlint(boolean value) {
-        metadata.set(MetadataDef.ThrownTrident.HAS_ENCHANTMENT_GLINT, value);
+        set(MetadataDef.ThrownTrident.HAS_ENCHANTMENT_GLINT, value);
     }
 
 }

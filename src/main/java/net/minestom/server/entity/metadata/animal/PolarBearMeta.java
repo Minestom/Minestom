@@ -10,11 +10,11 @@ public final class PolarBearMeta extends AnimalMeta {
     }
 
     public boolean isStandingUp() {
-        return metadata.get(MetadataDef.PolarBear.IS_STANDING_UP);
+        return get(MetadataDef.PolarBear.IS_STANDING_UP);
     }
 
     public void setStandingUp(boolean value) {
-        metadata.set(MetadataDef.PolarBear.IS_STANDING_UP, value);
+        set(MetadataDef.PolarBear.IS_STANDING_UP, value);
     }
 
 }

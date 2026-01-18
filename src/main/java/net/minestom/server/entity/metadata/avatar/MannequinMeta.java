@@ -14,27 +14,27 @@ public final class MannequinMeta extends AvatarMeta {
     }
 
     public ResolvableProfile getProfile() {
-        return metadata.get(MetadataDef.Mannequin.PROFILE);
+        return get(MetadataDef.Mannequin.PROFILE);
     }
 
     public void setProfile(ResolvableProfile value) {
-        metadata.set(MetadataDef.Mannequin.PROFILE, value);
+        set(MetadataDef.Mannequin.PROFILE, value);
     }
 
     public boolean isImmovable() {
-        return metadata.get(MetadataDef.Mannequin.IMMOVABLE);
+        return get(MetadataDef.Mannequin.IMMOVABLE);
     }
 
     public void setImmovable(boolean value) {
-        metadata.set(MetadataDef.Mannequin.IMMOVABLE, value);
+        set(MetadataDef.Mannequin.IMMOVABLE, value);
     }
 
     public @Nullable Component getDescription() {
-        return metadata.get(MetadataDef.Mannequin.DESCRIPTION);
+        return get(MetadataDef.Mannequin.DESCRIPTION);
     }
 
     public void setDescription(@Nullable Component value) {
-        metadata.set(MetadataDef.Mannequin.DESCRIPTION, value);
+        set(MetadataDef.Mannequin.DESCRIPTION, value);
     }
 
 }

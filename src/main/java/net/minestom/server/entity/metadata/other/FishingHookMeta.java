@@ -17,12 +17,12 @@ public final class FishingHookMeta extends EntityMeta implements ObjectDataProvi
     }
 
     public int getHookedEntityId() {
-        return metadata.get(MetadataDef.FishingHook.HOOKED);
+        return get(MetadataDef.FishingHook.HOOKED);
     }
 
     @ApiStatus.Internal
     public void setHookedEntityId(int value) {
-        metadata.set(MetadataDef.FishingHook.HOOKED, value);
+        set(MetadataDef.FishingHook.HOOKED, value);
     }
 
     @Nullable
@@ -37,11 +37,11 @@ public final class FishingHookMeta extends EntityMeta implements ObjectDataProvi
     }
 
     public boolean isCatchable() {
-        return metadata.get(MetadataDef.FishingHook.IS_CATCHABLE);
+        return get(MetadataDef.FishingHook.IS_CATCHABLE);
     }
 
     public void setCatchable(boolean value) {
-        metadata.set(MetadataDef.FishingHook.IS_CATCHABLE, value);
+        set(MetadataDef.FishingHook.IS_CATCHABLE, value);
     }
 
     @Nullable

@@ -12,27 +12,27 @@ public final class AreaEffectCloudMeta extends EntityMeta {
     }
 
     public float getRadius() {
-        return metadata.get(MetadataDef.AreaEffectCloud.RADIUS);
+        return get(MetadataDef.AreaEffectCloud.RADIUS);
     }
 
     public void setRadius(float value) {
-        metadata.set(MetadataDef.AreaEffectCloud.RADIUS, value);
+        set(MetadataDef.AreaEffectCloud.RADIUS, value);
     }
 
     public boolean isWaiting() {
-        return metadata.get(MetadataDef.AreaEffectCloud.WAITING);
+        return get(MetadataDef.AreaEffectCloud.WAITING);
     }
 
     public void setWaiting(boolean value) {
-        metadata.set(MetadataDef.AreaEffectCloud.WAITING, value);
+        set(MetadataDef.AreaEffectCloud.WAITING, value);
     }
 
     public Particle getParticle() {
-        return metadata.get(MetadataDef.AreaEffectCloud.PARTICLE);
+        return get(MetadataDef.AreaEffectCloud.PARTICLE);
     }
 
     public void setParticle(Particle value) {
-        metadata.set(MetadataDef.AreaEffectCloud.PARTICLE, value);
+        set(MetadataDef.AreaEffectCloud.PARTICLE, value);
     }
 
 }

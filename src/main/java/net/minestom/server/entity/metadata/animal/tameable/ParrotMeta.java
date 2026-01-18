@@ -19,7 +19,7 @@ public final class ParrotMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public Color getColor() {
-        return Color.VALUES[metadata.get(MetadataDef.Parrot.VARIANT)];
+        return Color.VALUES[get(MetadataDef.Parrot.VARIANT)];
     }
 
     /**
@@ -27,7 +27,7 @@ public final class ParrotMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public void setColor(Color value) {
-        metadata.set(MetadataDef.Parrot.VARIANT, value.ordinal());
+        set(MetadataDef.Parrot.VARIANT, value.ordinal());
     }
 
     @Override

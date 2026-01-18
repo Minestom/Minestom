@@ -14,11 +14,11 @@ public final class ArrowMeta extends AbstractArrowMeta implements ObjectDataProv
     }
 
     public int getColor() {
-        return metadata.get(MetadataDef.Arrow.COLOR);
+        return get(MetadataDef.Arrow.COLOR);
     }
 
     public void setColor(int value) {
-        metadata.set(MetadataDef.Arrow.COLOR, value);
+        set(MetadataDef.Arrow.COLOR, value);
     }
 
     @Override

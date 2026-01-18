@@ -14,20 +14,20 @@ public sealed class GuardianMeta extends MonsterMeta permits ElderGuardianMeta {
     }
 
     public boolean isRetractingSpikes() {
-        return metadata.get(MetadataDef.Guardian.IS_RETRACTING_SPIKES);
+        return get(MetadataDef.Guardian.IS_RETRACTING_SPIKES);
     }
 
     public void setRetractingSpikes(boolean value) {
-        metadata.set(MetadataDef.Guardian.IS_RETRACTING_SPIKES, value);
+        set(MetadataDef.Guardian.IS_RETRACTING_SPIKES, value);
     }
 
     public int getTargetEntityId() {
-        return metadata.get(MetadataDef.Guardian.TARGET_EID);
+        return get(MetadataDef.Guardian.TARGET_EID);
     }
 
     @ApiStatus.Internal
     public void setTargetEntityId(int value) {
-        metadata.set(MetadataDef.Guardian.TARGET_EID, value);
+        set(MetadataDef.Guardian.TARGET_EID, value);
     }
 
     public @Nullable Entity getTarget() {

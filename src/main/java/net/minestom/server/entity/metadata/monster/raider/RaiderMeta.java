@@ -5,17 +5,17 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.monster.MonsterMeta;
 
-public sealed class RaiderMeta extends MonsterMeta permits AbstractIllagerMeta, RavagerMeta, WitchMeta {
+public sealed abstract class RaiderMeta extends MonsterMeta permits AbstractIllagerMeta, RavagerMeta, WitchMeta {
     protected RaiderMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isCelebrating() {
-        return metadata.get(MetadataDef.Raider.IS_CELEBRATING);
+        return get(MetadataDef.Raider.IS_CELEBRATING);
     }
 
     public void setCelebrating(boolean value) {
-        metadata.set(MetadataDef.Raider.IS_CELEBRATING, value);
+        set(MetadataDef.Raider.IS_CELEBRATING, value);
     }
 
 }

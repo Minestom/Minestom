@@ -12,11 +12,11 @@ public final class EyeOfEnderMeta extends EntityMeta {
     }
 
     public ItemStack getItem() {
-        return metadata.get(MetadataDef.EyeOfEnder.ITEM);
+        return get(MetadataDef.EyeOfEnder.ITEM);
     }
 
     public void setItem(ItemStack value) {
-        metadata.set(MetadataDef.EyeOfEnder.ITEM, value);
+        set(MetadataDef.EyeOfEnder.ITEM, value);
     }
 
 }

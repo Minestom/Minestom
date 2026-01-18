@@ -10,11 +10,11 @@ public final class HoglinMeta extends AnimalMeta {
     }
 
     public boolean isImmuneToZombification() {
-        return metadata.get(MetadataDef.Hoglin.IMMUNE_ZOMBIFICATION);
+        return get(MetadataDef.Hoglin.IMMUNE_ZOMBIFICATION);
     }
 
     public void setImmuneToZombification(boolean value) {
-        metadata.set(MetadataDef.Hoglin.IMMUNE_ZOMBIFICATION, value);
+        set(MetadataDef.Hoglin.IMMUNE_ZOMBIFICATION, value);
     }
 
 }

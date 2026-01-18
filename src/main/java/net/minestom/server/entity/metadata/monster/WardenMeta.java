@@ -10,11 +10,11 @@ public final class WardenMeta extends MonsterMeta {
     }
 
     public int getAngerLevel() {
-        return metadata.get(MetadataDef.Warden.ANGER_LEVEL);
+        return get(MetadataDef.Warden.ANGER_LEVEL);
     }
 
     public void setAngerLevel(int value) {
-        metadata.set(MetadataDef.Warden.ANGER_LEVEL, value);
+        set(MetadataDef.Warden.ANGER_LEVEL, value);
     }
 
 }

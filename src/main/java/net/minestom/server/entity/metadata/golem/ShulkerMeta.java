@@ -17,19 +17,19 @@ public final class ShulkerMeta extends AbstractGolemMeta {
     }
 
     public Direction getAttachFace() {
-        return metadata.get(MetadataDef.Shulker.ATTACH_FACE);
+        return get(MetadataDef.Shulker.ATTACH_FACE);
     }
 
     public void setAttachFace(Direction value) {
-        metadata.set(MetadataDef.Shulker.ATTACH_FACE, value);
+        set(MetadataDef.Shulker.ATTACH_FACE, value);
     }
 
     public byte getShieldHeight() {
-        return metadata.get(MetadataDef.Shulker.SHIELD_HEIGHT);
+        return get(MetadataDef.Shulker.SHIELD_HEIGHT);
     }
 
     public void setShieldHeight(byte value) {
-        metadata.set(MetadataDef.Shulker.SHIELD_HEIGHT, value);
+        set(MetadataDef.Shulker.SHIELD_HEIGHT, value);
     }
 
     /**
@@ -37,7 +37,7 @@ public final class ShulkerMeta extends AbstractGolemMeta {
      */
     @Deprecated
     public DyeColor getColor() {
-        return DYE_VALUES[metadata.get(MetadataDef.Shulker.COLOR)];
+        return DYE_VALUES[get(MetadataDef.Shulker.COLOR)];
     }
 
     /**
@@ -45,7 +45,7 @@ public final class ShulkerMeta extends AbstractGolemMeta {
      */
     @Deprecated
     public void setColor(DyeColor value) {
-        metadata.set(MetadataDef.Shulker.COLOR, (byte) value.ordinal());
+        set(MetadataDef.Shulker.COLOR, (byte) value.ordinal());
     }
 
     @Override

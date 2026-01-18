@@ -11,10 +11,10 @@ public final class BlockDisplayMeta extends AbstractDisplayMeta {
     }
 
     public Block getBlockStateId() {
-        return metadata.get(MetadataDef.BlockDisplay.DISPLAYED_BLOCK_STATE);
+        return get(MetadataDef.BlockDisplay.DISPLAYED_BLOCK_STATE);
     }
 
     public void setBlockState(Block value) {
-        metadata.set(MetadataDef.BlockDisplay.DISPLAYED_BLOCK_STATE, value);
+        set(MetadataDef.BlockDisplay.DISPLAYED_BLOCK_STATE, value);
     }
 }

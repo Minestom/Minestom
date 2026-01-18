@@ -19,7 +19,7 @@ public final class ChickenMeta extends AnimalMeta {
      */
     @Deprecated
     public RegistryKey<ChickenVariant> getVariant() {
-        return metadata.get(MetadataDef.Chicken.VARIANT);
+        return get(MetadataDef.Chicken.VARIANT);
     }
 
     /**
@@ -27,7 +27,7 @@ public final class ChickenMeta extends AnimalMeta {
      */
     @Deprecated
     public void setVariant(RegistryKey<ChickenVariant> variant) {
-        metadata.set(MetadataDef.Chicken.VARIANT, variant);
+        set(MetadataDef.Chicken.VARIANT, variant);
     }
 
     @Override

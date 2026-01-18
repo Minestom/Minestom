@@ -10,11 +10,11 @@ public sealed abstract class ChestedHorseMeta extends AbstractHorseMeta permits 
     }
 
     public boolean isHasChest() {
-        return metadata.get(MetadataDef.ChestedHorse.HAS_CHEST);
+        return get(MetadataDef.ChestedHorse.HAS_CHEST);
     }
 
     public void setHasChest(boolean value) {
-        metadata.set(MetadataDef.ChestedHorse.HAS_CHEST, value);
+        set(MetadataDef.ChestedHorse.HAS_CHEST, value);
     }
 
 }

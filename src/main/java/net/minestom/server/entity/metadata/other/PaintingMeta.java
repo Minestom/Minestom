@@ -19,7 +19,7 @@ public final class PaintingMeta extends HangingMeta {
      */
     @Deprecated
     public Holder<PaintingVariant> getVariant() {
-        return metadata.get(MetadataDef.Painting.VARIANT);
+        return get(MetadataDef.Painting.VARIANT);
     }
 
     /**
@@ -27,7 +27,7 @@ public final class PaintingMeta extends HangingMeta {
      */
     @Deprecated
     public void setVariant(Holder<PaintingVariant> value) {
-        metadata.set(MetadataDef.Painting.VARIANT, value);
+        set(MetadataDef.Painting.VARIANT, value);
     }
 
     @Override
