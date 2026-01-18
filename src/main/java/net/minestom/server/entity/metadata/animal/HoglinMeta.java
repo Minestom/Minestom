@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class HoglinMeta extends AnimalMeta {
+public final class HoglinMeta extends AnimalMeta {
     public HoglinMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

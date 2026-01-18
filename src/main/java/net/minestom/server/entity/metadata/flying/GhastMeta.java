@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class GhastMeta extends FlyingMeta {
+public final class GhastMeta extends FlyingMeta {
     public GhastMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

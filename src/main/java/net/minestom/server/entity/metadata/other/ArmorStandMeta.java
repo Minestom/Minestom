@@ -6,7 +6,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 
-public class ArmorStandMeta extends LivingEntityMeta {
+public final class ArmorStandMeta extends LivingEntityMeta {
     public ArmorStandMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

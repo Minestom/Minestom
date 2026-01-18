@@ -9,7 +9,7 @@ import net.minestom.server.entity.VillagerType;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import org.jetbrains.annotations.Nullable;
 
-public class ZombieVillagerMeta extends ZombieMeta {
+public final class ZombieVillagerMeta extends ZombieMeta {
     public ZombieVillagerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

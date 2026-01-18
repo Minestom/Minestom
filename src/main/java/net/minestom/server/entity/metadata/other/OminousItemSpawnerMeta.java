@@ -6,7 +6,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.item.ItemStack;
 
-public class OminousItemSpawnerMeta extends EntityMeta {
+public final class OminousItemSpawnerMeta extends EntityMeta {
     public OminousItemSpawnerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class ThrownTridentMeta extends AbstractArrowMeta {
+public final class ThrownTridentMeta extends AbstractArrowMeta {
     public ThrownTridentMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

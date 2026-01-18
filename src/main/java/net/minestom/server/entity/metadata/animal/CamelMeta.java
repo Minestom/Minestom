@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class CamelMeta extends AbstractHorseMeta {
+public sealed class CamelMeta extends AbstractHorseMeta permits CamelHuskMeta {
     public CamelMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

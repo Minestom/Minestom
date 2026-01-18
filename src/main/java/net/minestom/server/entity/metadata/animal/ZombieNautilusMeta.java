@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
 
-public class ZombieNautilusMeta extends AbstractNautilusMeta {
+public final class ZombieNautilusMeta extends AbstractNautilusMeta {
     public ZombieNautilusMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

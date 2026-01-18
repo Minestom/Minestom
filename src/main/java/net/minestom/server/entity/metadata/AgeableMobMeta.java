@@ -4,8 +4,11 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.entity.metadata.animal.AnimalMeta;
+import net.minestom.server.entity.metadata.villager.AbstractVillagerMeta;
+import net.minestom.server.entity.metadata.water.AgeableWaterAnimalMeta;
 
-public class AgeableMobMeta extends PathfinderMobMeta {
+public sealed class AgeableMobMeta extends PathfinderMobMeta permits AnimalMeta, AbstractVillagerMeta, AgeableWaterAnimalMeta {
     protected AgeableMobMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

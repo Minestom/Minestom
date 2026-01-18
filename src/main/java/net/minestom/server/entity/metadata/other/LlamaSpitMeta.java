@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 
-public class LlamaSpitMeta extends EntityMeta implements ObjectDataProvider {
+public final class LlamaSpitMeta extends EntityMeta implements ObjectDataProvider {
     public LlamaSpitMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

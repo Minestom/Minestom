@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class StriderMeta extends AnimalMeta {
+public final class StriderMeta extends AnimalMeta {
     public StriderMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

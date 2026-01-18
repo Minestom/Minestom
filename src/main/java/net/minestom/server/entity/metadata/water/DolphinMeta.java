@@ -5,7 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class DolphinMeta extends AgeableWaterAnimalMeta {
+public final class DolphinMeta extends AgeableWaterAnimalMeta {
     public DolphinMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class MooshroomMeta extends AnimalMeta {
+public final class MooshroomMeta extends AnimalMeta {
     public MooshroomMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

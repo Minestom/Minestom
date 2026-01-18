@@ -6,7 +6,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.monster.MonsterMeta;
 
-public class ZombieMeta extends MonsterMeta {
+public sealed class ZombieMeta extends MonsterMeta permits DrownedMeta, HuskMeta, ZombieVillagerMeta, ZombifiedPiglinMeta {
     public ZombieMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

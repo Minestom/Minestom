@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class SpiderMeta extends MonsterMeta {
+public sealed class SpiderMeta extends MonsterMeta permits CaveSpiderMeta {
     public SpiderMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

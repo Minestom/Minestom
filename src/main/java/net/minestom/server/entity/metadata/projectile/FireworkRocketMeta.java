@@ -8,8 +8,8 @@ import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
-    private Entity shooter;
+public final class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
+    private @Nullable Entity shooter;
 
     public FireworkRocketMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);

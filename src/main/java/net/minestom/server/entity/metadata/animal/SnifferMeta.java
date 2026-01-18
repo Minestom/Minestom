@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 
-public class SnifferMeta extends AnimalMeta {
+public final class SnifferMeta extends AnimalMeta {
     public SnifferMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

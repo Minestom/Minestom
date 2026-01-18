@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.PathfinderMobMeta;
 
-public class AllayMeta extends PathfinderMobMeta {
+public final class AllayMeta extends PathfinderMobMeta {
     public AllayMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

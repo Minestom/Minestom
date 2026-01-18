@@ -5,7 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class CommandBlockMinecartMeta extends AbstractMinecartMeta {
+public final class CommandBlockMinecartMeta extends AbstractMinecartMeta {
     public CommandBlockMinecartMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

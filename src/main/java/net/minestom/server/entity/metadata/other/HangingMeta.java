@@ -8,7 +8,7 @@ import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class HangingMeta extends EntityMeta implements ObjectDataProvider {
+public sealed abstract class HangingMeta extends EntityMeta implements ObjectDataProvider permits ItemFrameMeta, PaintingMeta {
 
     protected HangingMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);

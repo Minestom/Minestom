@@ -8,9 +8,9 @@ import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
-    private Entity hooked;
-    private Entity owner;
+public final class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
+    private @Nullable Entity hooked;
+    private @Nullable Entity owner;
 
     public FishingHookMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);

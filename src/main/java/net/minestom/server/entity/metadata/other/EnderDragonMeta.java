@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.MobMeta;
 
-public class EnderDragonMeta extends MobMeta {
+public final class EnderDragonMeta extends MobMeta {
     public EnderDragonMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

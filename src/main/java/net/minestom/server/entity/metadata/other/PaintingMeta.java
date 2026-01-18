@@ -8,7 +8,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.Holder;
 import org.jetbrains.annotations.Nullable;
 
-public class PaintingMeta extends HangingMeta {
+public final class PaintingMeta extends HangingMeta {
 
     public PaintingMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);

@@ -7,7 +7,7 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.item.ItemStack;
 
-public class ItemEntityMeta extends EntityMeta implements ObjectDataProvider {
+public final class ItemEntityMeta extends EntityMeta implements ObjectDataProvider {
     public ItemEntityMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

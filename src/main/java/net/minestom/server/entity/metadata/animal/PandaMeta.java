@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class PandaMeta extends AnimalMeta {
+public final class PandaMeta extends AnimalMeta {
     public PandaMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

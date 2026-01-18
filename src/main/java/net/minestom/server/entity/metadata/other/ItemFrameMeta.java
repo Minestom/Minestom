@@ -6,7 +6,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Rotation;
 
-public class ItemFrameMeta extends HangingMeta {
+public sealed class ItemFrameMeta extends HangingMeta permits GlowItemFrameMeta {
     public ItemFrameMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

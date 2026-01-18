@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class WitchMeta extends RaiderMeta {
+public final class WitchMeta extends RaiderMeta {
     public WitchMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

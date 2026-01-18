@@ -7,13 +7,18 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
+import net.minestom.server.entity.metadata.item.*;
+import net.minestom.server.entity.metadata.other.*;
+import net.minestom.server.entity.metadata.projectile.*;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
-public class EntityMeta {
+public sealed class EntityMeta permits AbstractVehicleMeta, LivingEntityMeta, AbstractDisplayMeta, EyeOfEnderMeta, FireballMeta, ItemEntityMeta, SmallFireballMeta, ThrownItemProjectileMeta, AreaEffectCloudMeta, EndCrystalMeta, EvokerFangsMeta, ExperienceOrbMeta, FallingBlockMeta, FishingHookMeta, HangingMeta, InteractionMeta, LeashKnotMeta, LightningBoltMeta, LlamaSpitMeta, MarkerMeta, OminousItemSpawnerMeta, PrimedTntMeta, ShulkerBulletMeta, TraderLlamaMeta, AbstractArrowMeta, AbstractWindChargeMeta, DragonFireballMeta, FireworkRocketMeta, WitherSkullMeta {
     private final WeakReference<Entity> entityRef;
     protected final MetadataHolder metadata;
 
@@ -210,7 +215,7 @@ public class EntityMeta {
      * @return The value associated with the specified metadata entry.
      */
     @ApiStatus.Experimental
-    public <T> T get(MetadataDef.Entry<T> entry) {
+    public <T extends @UnknownNullability Object> T get(MetadataDef.Entry<T> entry) {
         return metadata.get(entry);
     }
 
@@ -222,7 +227,7 @@ public class EntityMeta {
      * @param <T>   The type of the metadata value.
      */
     @ApiStatus.Experimental
-    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+    public <T extends @UnknownNullability Object> void set(MetadataDef.Entry<T> entry, T value) {
         metadata.set(entry, value);
     }
 }

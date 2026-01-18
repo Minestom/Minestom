@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class PolarBearMeta extends AnimalMeta {
+public final class PolarBearMeta extends AnimalMeta {
     public PolarBearMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

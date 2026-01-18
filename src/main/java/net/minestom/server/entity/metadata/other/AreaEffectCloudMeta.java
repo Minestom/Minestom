@@ -6,7 +6,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.particle.Particle;
 
-public class AreaEffectCloudMeta extends EntityMeta {
+public final class AreaEffectCloudMeta extends EntityMeta {
     public AreaEffectCloudMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

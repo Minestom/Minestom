@@ -19,6 +19,7 @@ import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
 import java.util.UUID;
@@ -651,12 +652,12 @@ public sealed class MetadataDef {
         return MetadataDefImpl.count(clazz);
     }
 
-    public sealed interface Entry<T> {
+    public sealed interface Entry<T extends @UnknownNullability Object> {
         int index();
 
         T defaultValue();
 
-        record Index<T>(int index, Function<T, Metadata.Entry<T>> function, T defaultValue) implements Entry<T> {
+        record Index<T extends @UnknownNullability Object>(int index, Function<T, Metadata.Entry<T>> function, T defaultValue) implements Entry<T> {
         }
 
         record BitMask(int index, byte bitMask, Boolean defaultValue) implements Entry<Boolean> {

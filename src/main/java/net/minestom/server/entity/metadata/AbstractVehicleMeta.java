@@ -3,8 +3,10 @@ package net.minestom.server.entity.metadata;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.entity.metadata.minecart.AbstractMinecartMeta;
+import net.minestom.server.entity.metadata.other.BoatMeta;
 
-public class AbstractVehicleMeta extends EntityMeta {
+public sealed class AbstractVehicleMeta extends EntityMeta permits AbstractMinecartMeta, BoatMeta {
     public AbstractVehicleMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

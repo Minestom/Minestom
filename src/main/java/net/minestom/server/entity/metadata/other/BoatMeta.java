@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.AbstractVehicleMeta;
 
-public class BoatMeta extends AbstractVehicleMeta {
+public final class BoatMeta extends AbstractVehicleMeta {
     public BoatMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

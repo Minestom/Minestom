@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class HorseMeta extends AbstractHorseMeta {
+public final class HorseMeta extends AbstractHorseMeta {
     public HorseMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

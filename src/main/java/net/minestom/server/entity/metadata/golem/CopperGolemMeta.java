@@ -5,27 +5,26 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.NotNull;
 
-public class CopperGolemMeta extends AbstractGolemMeta {
+public final class CopperGolemMeta extends AbstractGolemMeta {
 
-    public CopperGolemMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public CopperGolemMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public @NotNull WeatherState getWeatherState() {
+    public WeatherState getWeatherState() {
         return metadata.get(MetadataDef.CopperGolem.WEATHER_STATE);
     }
 
-    public void setWeatherState(@NotNull WeatherState weatherState) {
+    public void setWeatherState(WeatherState weatherState) {
         metadata.set(MetadataDef.CopperGolem.WEATHER_STATE, weatherState);
     }
 
-    public @NotNull State getState() {
+    public State getState() {
         return metadata.get(MetadataDef.CopperGolem.STATE);
     }
 
-    public void setState(@NotNull State state) {
+    public void setState(State state) {
         metadata.set(MetadataDef.CopperGolem.STATE, state);
     }
 

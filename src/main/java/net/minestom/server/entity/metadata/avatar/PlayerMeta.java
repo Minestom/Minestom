@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerMeta extends AvatarMeta {
+public final class PlayerMeta extends AvatarMeta {
     public PlayerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }

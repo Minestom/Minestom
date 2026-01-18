@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class ShulkerMeta extends AbstractGolemMeta {
+public final class ShulkerMeta extends AbstractGolemMeta {
     private static final DyeColor[] DYE_VALUES = DyeColor.values();
 
     public ShulkerMeta(Entity entity, MetadataHolder metadata) {
