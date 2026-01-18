@@ -8,29 +8,29 @@ import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
-    private Entity shooter;
+public final class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
+    private @Nullable Entity shooter;
 
     public FireworkRocketMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public ItemStack getFireworkInfo() {
-        return metadata.get(MetadataDef.FireworkRocketEntity.ITEM);
+        return get(MetadataDef.FireworkRocketEntity.ITEM);
     }
 
     public void setFireworkInfo(ItemStack value) {
-        metadata.set(MetadataDef.FireworkRocketEntity.ITEM, value);
+        set(MetadataDef.FireworkRocketEntity.ITEM, value);
     }
 
     @Nullable
     public Integer getShooterEntityId() {
-        return metadata.get(MetadataDef.FireworkRocketEntity.SHOOTER_ENTITY_ID);
+        return get(MetadataDef.FireworkRocketEntity.SHOOTER_ENTITY_ID);
     }
 
     @ApiStatus.Internal
     public void setShooterEntityId(@Nullable Integer value) {
-        metadata.set(MetadataDef.FireworkRocketEntity.SHOOTER_ENTITY_ID, value);
+        set(MetadataDef.FireworkRocketEntity.SHOOTER_ENTITY_ID, value);
     }
 
     @Override
@@ -47,11 +47,11 @@ public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
     }
 
     public boolean isShotAtAngle() {
-        return metadata.get(MetadataDef.FireworkRocketEntity.IS_SHOT_AT_ANGLE);
+        return get(MetadataDef.FireworkRocketEntity.IS_SHOT_AT_ANGLE);
     }
 
     public void setShotAtAngle(boolean value) {
-        metadata.set(MetadataDef.FireworkRocketEntity.IS_SHOT_AT_ANGLE, value);
+        set(MetadataDef.FireworkRocketEntity.IS_SHOT_AT_ANGLE, value);
     }
 
 }

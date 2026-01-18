@@ -8,7 +8,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
-public class FrogMeta extends AnimalMeta {
+public final class FrogMeta extends AnimalMeta {
     public FrogMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
@@ -18,7 +18,7 @@ public class FrogMeta extends AnimalMeta {
      */
     @Deprecated
     public RegistryKey<FrogVariant> getVariant() {
-        return metadata.get(MetadataDef.Frog.VARIANT);
+        return get(MetadataDef.Frog.VARIANT);
     }
 
     /**
@@ -26,15 +26,15 @@ public class FrogMeta extends AnimalMeta {
      */
     @Deprecated
     public void setVariant(RegistryKey<FrogVariant> value) {
-        metadata.set(MetadataDef.Frog.VARIANT, value);
+        set(MetadataDef.Frog.VARIANT, value);
     }
 
     public @Nullable Integer getTongueTarget() {
-        return metadata.get(MetadataDef.Frog.TONGUE_TARGET);
+        return get(MetadataDef.Frog.TONGUE_TARGET);
     }
 
     public void setTongueTarget(@Nullable Integer value) {
-        metadata.set(MetadataDef.Frog.TONGUE_TARGET, value);
+        set(MetadataDef.Frog.TONGUE_TARGET, value);
     }
 
     @Override

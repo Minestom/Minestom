@@ -5,25 +5,25 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 
-public class SnifferMeta extends AnimalMeta {
+public final class SnifferMeta extends AnimalMeta {
     public SnifferMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public State getState() {
-        return metadata.get(MetadataDef.Sniffer.STATE);
+        return get(MetadataDef.Sniffer.STATE);
     }
 
     public void setState(State value) {
-        metadata.set(MetadataDef.Sniffer.STATE, value);
+        set(MetadataDef.Sniffer.STATE, value);
     }
 
     public int getDropSeedAtTick() {
-        return metadata.get(MetadataDef.Sniffer.DROP_SEED_AT_TICK);
+        return get(MetadataDef.Sniffer.DROP_SEED_AT_TICK);
     }
 
     public void setDropSeedAtTick(int value) {
-        metadata.set(MetadataDef.Sniffer.DROP_SEED_AT_TICK, value);
+        set(MetadataDef.Sniffer.DROP_SEED_AT_TICK, value);
     }
 
     public enum State {

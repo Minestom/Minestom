@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class MooshroomMeta extends AnimalMeta {
+public final class MooshroomMeta extends AnimalMeta {
     public MooshroomMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
@@ -19,7 +19,7 @@ public class MooshroomMeta extends AnimalMeta {
      */
     @Deprecated
     public Variant getVariant() {
-        return Variant.VALUES[metadata.get(MetadataDef.Mooshroom.VARIANT)];
+        return Variant.VALUES[get(MetadataDef.Mooshroom.VARIANT)];
     }
 
     /**
@@ -27,7 +27,7 @@ public class MooshroomMeta extends AnimalMeta {
      */
     @Deprecated
     public void setVariant(Variant value) {
-        metadata.set(MetadataDef.Mooshroom.VARIANT, value.ordinal());
+        set(MetadataDef.Mooshroom.VARIANT, value.ordinal());
     }
 
     @Override

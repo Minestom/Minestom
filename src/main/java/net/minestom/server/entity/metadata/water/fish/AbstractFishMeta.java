@@ -5,16 +5,16 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.water.WaterAnimalMeta;
 
-public class AbstractFishMeta extends WaterAnimalMeta {
+public sealed abstract class AbstractFishMeta extends WaterAnimalMeta permits CodMeta, PufferfishMeta, SalmonMeta, TadpoleMeta, TropicalFishMeta {
     protected AbstractFishMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isFromBucket() {
-        return metadata.get(MetadataDef.AbstractFish.FROM_BUCKET);
+        return get(MetadataDef.AbstractFish.FROM_BUCKET);
     }
 
     public void setFromBucket(boolean value) {
-        metadata.set(MetadataDef.AbstractFish.FROM_BUCKET, value);
+        set(MetadataDef.AbstractFish.FROM_BUCKET, value);
     }
 }

@@ -4,17 +4,17 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class BasePiglinMeta extends MonsterMeta {
+public sealed abstract class BasePiglinMeta extends MonsterMeta permits PiglinBruteMeta, PiglinMeta {
     protected BasePiglinMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isImmuneToZombification() {
-        return metadata.get(MetadataDef.BasePiglin.IMMUNE_ZOMBIFICATION);
+        return get(MetadataDef.BasePiglin.IMMUNE_ZOMBIFICATION);
     }
 
     public void setImmuneToZombification(boolean value) {
-        metadata.set(MetadataDef.BasePiglin.IMMUNE_ZOMBIFICATION, value);
+        set(MetadataDef.BasePiglin.IMMUNE_ZOMBIFICATION, value);
     }
 
 }

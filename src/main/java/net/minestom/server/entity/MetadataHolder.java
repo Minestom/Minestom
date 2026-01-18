@@ -37,6 +37,7 @@ import net.minestom.server.entity.metadata.water.fish.*;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -66,13 +67,13 @@ public final class MetadataHolder {
         this.entity = entity;
     }
 
-    public <T> T get(MetadataDef.Entry<T> entry) {
+    public <T extends @UnknownNullability Object> T get(MetadataDef.Entry<T> entry) {
         final int id = entry.index();
 
         final Metadata.Entry<?> value = this.entries.get(id);
         if (value == null) return entry.defaultValue();
         return switch (entry) {
-            case MetadataDef.Entry.Index<T> v -> (T) value.value();
+            case MetadataDef.Entry.Index<T> _ -> (T) value.value();
             case MetadataDef.Entry.BitMask bitMask -> {
                 final byte maskValue = (byte) value.value();
                 yield (T) ((Boolean) getMaskBit(maskValue, bitMask.bitMask()));
@@ -84,7 +85,7 @@ public final class MetadataHolder {
         };
     }
 
-    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+    public <T extends @UnknownNullability Object> void set(MetadataDef.Entry<T> entry, T value) {
         final int id = entry.index();
 
         Metadata.Entry<?> result = switch (entry) {

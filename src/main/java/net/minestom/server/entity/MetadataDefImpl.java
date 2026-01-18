@@ -1,5 +1,7 @@
 package net.minestom.server.entity;
 
+import org.jetbrains.annotations.UnknownNullability;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -7,7 +9,7 @@ import java.util.function.Function;
 final class MetadataDefImpl {
     static final Map<String, Integer> MAX_INDEX = new HashMap<>();
 
-    static <T> MetadataDef.Entry.Index<T> index(int index, Function<T, Metadata.Entry<T>> function, T defaultValue) {
+    static <T extends @UnknownNullability Object> MetadataDef.Entry.Index<T> index(int index, Function<T, Metadata.Entry<T>> function, T defaultValue) {
         final String caller = caller();
         storeMaxIndex(caller, index);
         final int superIndex = findSuperIndex(caller);

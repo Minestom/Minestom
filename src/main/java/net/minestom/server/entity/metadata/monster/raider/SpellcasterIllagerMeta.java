@@ -4,17 +4,17 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class SpellcasterIllagerMeta extends AbstractIllagerMeta {
+public sealed abstract class SpellcasterIllagerMeta extends AbstractIllagerMeta permits EvokerMeta, IllusionerMeta {
     protected SpellcasterIllagerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public Spell getSpell() {
-        return Spell.VALUES[metadata.get(MetadataDef.SpellcasterIllager.SPELL)];
+        return Spell.VALUES[get(MetadataDef.SpellcasterIllager.SPELL)];
     }
 
     public void setSpell(Spell spell) {
-        metadata.set(MetadataDef.SpellcasterIllager.SPELL, (byte) spell.ordinal());
+        set(MetadataDef.SpellcasterIllager.SPELL, (byte) spell.ordinal());
     }
 
     public enum Spell {

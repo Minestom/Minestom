@@ -7,26 +7,26 @@ import net.minestom.server.entity.metadata.AbstractVehicleMeta;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractMinecartMeta extends AbstractVehicleMeta {
+public sealed abstract class AbstractMinecartMeta extends AbstractVehicleMeta permits AbstractMinecartContainerMeta, CommandBlockMinecartMeta, FurnaceMinecartMeta, MinecartMeta, SpawnerMinecartMeta, TntMinecartMeta {
     protected AbstractMinecartMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public @Nullable Block getCustomBlockState() {
-        return metadata.get(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_STATE);
+        return get(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_STATE);
     }
 
     public void setCustomBlockState(@Nullable Block value) {
-        metadata.set(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_STATE, value);
+        set(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_STATE, value);
     }
 
     // in 16th of a block
     public int getCustomBlockYPosition() {
-        return metadata.get(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_Y_POSITION);
+        return get(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_Y_POSITION);
     }
 
     public void setCustomBlockYPosition(int value) {
-        metadata.set(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_Y_POSITION, value);
+        set(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_Y_POSITION, value);
     }
 
 }
