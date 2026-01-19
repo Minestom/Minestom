@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import net.minestom.server.network.foreign.NetworkBufferSegmentProvider;
 import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -32,7 +33,7 @@ public interface NetworkBufferFactory {
      */
     @Contract(pure = true)
     static NetworkBufferFactory staticFactory() {
-        return NetworkBufferProvider.networkBufferProvider().createStaticFactory();
+        return NetworkBufferSegmentProvider.INSTANCE.createStaticFactory();
     }
 
     /**
@@ -43,7 +44,7 @@ public interface NetworkBufferFactory {
      */
     @Contract(pure = true)
     static NetworkBufferFactory resizeableFactory() {
-        return NetworkBufferProvider.networkBufferProvider().createResizeableFactory();
+        return NetworkBufferSegmentProvider.INSTANCE.createResizeableFactory();
     }
 
     /**

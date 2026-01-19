@@ -11,6 +11,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.network.foreign.NetworkBufferSegmentAllocator;
+import net.minestom.server.network.foreign.NetworkBufferSegmentProvider;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
@@ -346,7 +347,7 @@ public interface NetworkBuffer {
     @ApiStatus.Experimental
     static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
         Objects.requireNonNull(segment, "segment");
-        return NetworkBufferProvider.networkBufferProvider().wrap(segment, readIndex, writeIndex, registries);
+        return NetworkBufferSegmentProvider.INSTANCE.wrap(segment, readIndex, writeIndex, registries);
     }
 
     /**
@@ -377,7 +378,7 @@ public interface NetworkBuffer {
     @Contract("_, _, _, _ -> new")
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
         Objects.requireNonNull(bytes, "bytes");
-        return NetworkBufferProvider.networkBufferProvider().wrap(bytes, readIndex, writeIndex, registries);
+        return NetworkBufferSegmentProvider.INSTANCE.wrap(bytes, readIndex, writeIndex, registries);
     }
 
     /**
@@ -406,7 +407,7 @@ public interface NetworkBuffer {
     @Contract("_, _ -> new")
     static byte[] makeArray(Consumer<? super NetworkBuffer> writing, @Nullable Registries registries) {
         Objects.requireNonNull(writing, "writing");
-        return NetworkBufferProvider.networkBufferProvider().makeArray(writing, registries);
+        return NetworkBufferSegmentProvider.INSTANCE.makeArray(writing, registries);
     }
 
     /**
@@ -438,7 +439,7 @@ public interface NetworkBuffer {
     @Contract("_ ,_, _ -> new")
     static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, @Nullable Registries registries) {
         Objects.requireNonNull(type, "type");
-        return NetworkBufferProvider.networkBufferProvider().makeArray(type, value, registries);
+        return NetworkBufferSegmentProvider.INSTANCE.makeArray(type, value, registries);
     }
 
     /**
@@ -1119,7 +1120,7 @@ public interface NetworkBuffer {
         @Contract(pure = true)
         @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value, @Nullable Registries registries) {
-            return NetworkBufferProvider.networkBufferProvider().sizeOf(this, value, registries);
+            return NetworkBufferSegmentProvider.INSTANCE.sizeOf(this, value, registries);
         }
 
         /**
