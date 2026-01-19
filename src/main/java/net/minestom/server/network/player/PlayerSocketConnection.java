@@ -55,7 +55,7 @@ import java.util.zip.DataFormatException;
  * It is the implementation used for all network client.
  */
 @ApiStatus.Internal
-public class PlayerSocketConnection extends PlayerConnection {
+public final class PlayerSocketConnection extends PlayerConnection {
     private static final Set<Class<? extends ClientPacket>> IMMEDIATE_PROCESS_PACKETS = Set.of(
             ClientHandshakePacket.class, // First received packet
             ClientCookieResponsePacket.class,
