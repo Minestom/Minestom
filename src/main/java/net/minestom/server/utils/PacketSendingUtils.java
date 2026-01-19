@@ -7,7 +7,6 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.ComponentHolder;
-import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
@@ -63,8 +62,8 @@ public final class PacketSendingUtils {
      * @param packet    the packet to send to the players
      * @param predicate predicate to ignore specific players
      */
-    public static void sendGroupedPacket(Collection<Player> players, ServerPacket packet,
-                                         Predicate<Player> predicate) {
+    public static void sendGroupedPacket(Collection<? extends Player> players, ServerPacket packet,
+                                         Predicate<? super Player> predicate) {
         final SendablePacket sendablePacket = groupedPacket(packet);
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
@@ -77,7 +76,7 @@ public final class PacketSendingUtils {
      *
      * @see #sendGroupedPacket(Collection, ServerPacket, Predicate)
      */
-    public static void sendGroupedPacket(Collection<Player> players, ServerPacket packet) {
+    public static void sendGroupedPacket(Collection<? extends Player> players, ServerPacket packet) {
         final SendablePacket sendablePacket = groupedPacket(packet);
         players.forEach(player -> player.sendPacket(sendablePacket));
     }

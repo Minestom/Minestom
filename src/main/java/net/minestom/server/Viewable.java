@@ -65,7 +65,7 @@ public interface Viewable {
         }
     }
 
-    default void sendPacketsToViewers(Collection<SendablePacket> packets) {
+    default void sendPacketsToViewers(Collection<? extends SendablePacket> packets) {
         packets.forEach(this::sendPacketToViewers);
     }
 

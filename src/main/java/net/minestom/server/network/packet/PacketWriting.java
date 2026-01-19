@@ -175,7 +175,7 @@ public final class PacketWriting {
     }
 
     public static <T> void writeQueue(NetworkBuffer buffer, MessagePassingQueue<T> queue, int minWrite,
-                                      BiPredicate<NetworkBuffer, T> writer) {
+                                      BiPredicate<? super NetworkBuffer, ? super T> writer) {
         // The goal of this method is to write at the very least `minWrite` packets if the queue permits it.
         // The buffer is resized if it cannot hold this minimum.
         final int size = queue.size();
