@@ -8,6 +8,7 @@ import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
@@ -60,9 +61,18 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     <T extends Entity> void move(Entity entity, Point newPoint,
                                  Target<T> target, @Nullable Update<T> update);
 
-    @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, Target<T> target);
+    /**
+     * Gathers all the entities currently inside the chunk of target T.
+     * If empty, it returns an unmodifiable list; otherwise a view may be observed.
+     */
+    @Unmodifiable
+    <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, Target<T> target);
 
-    @UnmodifiableView
+    /**
+     * Gathers all the entities currently inside the chunk of target T.
+     * If empty, it returns an unmodifiable list; otherwise a view may be observed.
+     */
+    @Unmodifiable
     default <T extends Entity> Collection<T> chunkEntities(Point point, Target<T> target) {
         return chunkEntities(point.chunkX(), point.chunkZ(), target);
     }
@@ -95,6 +105,14 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     default Viewable viewable(int chunkX, int chunkZ) {
         return viewable(List.of(), chunkX, chunkZ);
     }
+
+    /**
+     * Unregisters the viewable, currently only supports ChunkView's
+     *
+     * @param viewable the viewable
+     */
+    @ApiStatus.Internal
+    void unregisterViewable(Viewable viewable);
 
     /**
      * Represents the type of entity you want to retrieve.

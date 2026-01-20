@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class ChunkViewerIntegrationTest {
@@ -58,5 +58,15 @@ public class ChunkViewerIntegrationTest {
             }
             assertEquals(ChunkRange.chunksCount(viewRadius), tracker.collect().size());
         }
+    }
+
+    @Test
+    public void testUnregister(Env env) {
+        var instance = env.createFlatInstance();
+        var chunk = instance.loadChunk(0, 0).join();
+        assertDoesNotThrow(() -> chunk.getViewers().size());
+        assertEquals(0, chunk.getViewers().size());
+        instance.unloadChunk(0, 0);
+        assertThrows(IllegalStateException.class, () -> chunk.getViewers().size());
     }
 }

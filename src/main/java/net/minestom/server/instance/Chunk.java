@@ -54,7 +54,10 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    private final Viewable viewable;
+    // Quite unfortunate to make package-private,
+    // This should be changed to not have a viewable due to its complexity.
+    // Chunks should not directly be aware of their instance, as a chunk should be able to have multiple instances.
+    final Viewable viewable;
 
     // Data
     private final TagHandler tagHandler = TagHandler.newHandler();

@@ -139,9 +139,10 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, Target<T> target) {
-        final TargetEntry<Entity> entry = targetEntries[target.ordinal()];
         //noinspection unchecked
-        var chunkEntities = (List<T>) entry.chunkEntities(CoordConversion.chunkIndex(chunkX, chunkZ));
+        final TargetEntry<T> entry = (TargetEntry<T>) targetEntries[target.ordinal()];
+        List<T> chunkEntities = entry.chunkEntities(CoordConversion.chunkIndex(chunkX, chunkZ));
+        if (chunkEntities == null) return List.of();
         return Collections.unmodifiableList(chunkEntities);
     }
 
@@ -206,12 +207,21 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public Viewable viewable(List<SharedInstance> sharedInstances, int chunkX, int chunkZ) {
         var entry = targetEntries[Target.PLAYERS.ordinal()];
-        return entry.viewers.computeIfAbsent(new ChunkViewKey(sharedInstances, chunkX, chunkZ), ChunkView::new);
+        return entry.viewable(this, sharedInstances, chunkX, chunkZ);
     }
 
-    private static class EntityTrackerEntry {
+    @Override
+    public void unregisterViewable(Viewable viewable) {
+        if (!(viewable instanceof ChunkView chunkView)) {
+            throw new IllegalArgumentException("viewable is not a ChunkView");
+        }
+        var entry = targetEntries[Target.PLAYERS.ordinal()];
+        entry.unregisterViewable(chunkView);
+    }
+
+    private static final class EntityTrackerEntry {
         private final Entity entity;
-        private Point lastPosition;
+        private @Nullable Point lastPosition;
 
         private EntityTrackerEntry(Entity entity, @Nullable Point lastPosition) {
             this.entity = entity;
@@ -265,41 +275,53 @@ final class EntityTrackerImpl implements EntityTracker {
         private final Set<T> entities = ConcurrentHashMap.newKeySet(); // Thread-safe since exposed
         private final Set<T> entitiesView = Collections.unmodifiableSet(entities);
         // Chunk index -> entities inside it
-        final Long2ObjectSyncMap<List<T>> chunkEntities = Long2ObjectSyncMap.hashmap();
-        final Map<ChunkViewKey, ChunkView> viewers = new ConcurrentHashMap<>();
+        final Long2ObjectSyncMap<@Nullable List<T>> chunkEntities = Long2ObjectSyncMap.hashmap();
+        // Chunk viewers (Only Players)
+        final Map<ChunkViewKey, ChunkView> viewers;
 
         TargetEntry(Target<T> target) {
             this.target = target;
+            this.viewers = target == Target.PLAYERS ? new ConcurrentHashMap<>() : Map.of();
         }
 
+        @Nullable
         List<T> chunkEntities(long index) {
-            return chunkEntities.computeIfAbsent(index, i -> (List<T>) new CopyOnWriteArrayList());
+            return chunkEntities.get(index);
         }
 
         void addToChunk(long index, T entity) {
-            chunkEntities(index).add(entity);
+            chunkEntities.computeIfAbsent(index, _ -> new CopyOnWriteArrayList<>()).add(entity);
         }
 
         void removeFromChunk(long index, T entity) {
             List<T> entities = chunkEntities.get(index);
-            if (entities != null) entities.remove(entity);
+            if (entities == null) return;
+            entities.remove(entity);
+            if (entities.isEmpty()) chunkEntities.remove(index);
+        }
+
+        Viewable viewable(EntityTracker tracker, List<SharedInstance> sharedInstances, int chunkX, int chunkZ) {
+            return viewers.computeIfAbsent(new ChunkViewKey(sharedInstances, chunkX, chunkZ), it -> new ChunkView(tracker, it));
+        }
+
+        void unregisterViewable(ChunkView viewable) {
+            viewers.remove(viewable.key, viewable);
+            // While this isn't thread safe, it should help people from reusing chunks.
+            viewable.lastReferenceCount = Integer.MIN_VALUE;
         }
     }
 
-    private final class ChunkView implements Viewable {
+    private static final class ChunkView extends AbstractSet<Player> implements Viewable {
+        private final EntityTracker tracker;
         private final ChunkViewKey key;
-        private final int chunkX, chunkZ;
         private final Point point;
-        final Set<Player> set = new SetImpl();
         private int lastReferenceCount;
 
-        private ChunkView(ChunkViewKey key) {
+        private ChunkView(EntityTracker tracker, ChunkViewKey key) {
+            this.tracker = tracker;
             this.key = key;
-
-            this.chunkX = key.chunkX;
-            this.chunkZ = key.chunkZ;
-
-            this.point = new Vec(CHUNK_SIZE_X * chunkX, 0, CHUNK_SIZE_Z * chunkZ);
+            this.point = new Vec(key.chunkX, key.chunkZ).mul(CHUNK_SIZE_X, 0, CHUNK_SIZE_Z);
+            super();
         }
 
         @Override
@@ -314,12 +336,13 @@ final class EntityTrackerImpl implements EntityTracker {
 
         @Override
         public Set<Player> getViewers() {
-            return set;
+            return this;
         }
 
         private Collection<Player> references() {
+            assertRegistered();
             Int2ObjectOpenHashMap<Player> entityMap = new Int2ObjectOpenHashMap<>(lastReferenceCount);
-            collectPlayers(EntityTrackerImpl.this, entityMap);
+            collectPlayers(this.tracker, entityMap);
             if (!key.sharedInstances.isEmpty()) {
                 for (SharedInstance instance : key.sharedInstances) {
                     collectPlayers(instance.getEntityTracker(), entityMap);
@@ -329,26 +352,30 @@ final class EntityTrackerImpl implements EntityTracker {
             return entityMap.values();
         }
 
-        private void collectPlayers(EntityTracker tracker, Int2ObjectOpenHashMap<Player> map) {
+        private void collectPlayers(EntityTracker tracker, Int2ObjectOpenHashMap<? super Player> map) {
             tracker.nearbyEntitiesByChunkRange(point, ServerFlag.CHUNK_VIEW_DISTANCE,
                     EntityTracker.Target.PLAYERS, (player) -> map.putIfAbsent(player.getEntityId(), player));
         }
 
-        final class SetImpl extends AbstractSet<Player> {
-            @Override
-            public Iterator<Player> iterator() {
-                return references().iterator();
-            }
+        // Implement the set here, no reason to have another object allocated for this for N chunks.
+        @Override
+        public Iterator<Player> iterator() {
+            return references().iterator();
+        }
 
-            @Override
-            public int size() {
-                return references().size();
-            }
+        @Override
+        public int size() {
+            return references().size();
+        }
 
-            @Override
-            public void forEach(Consumer<? super Player> action) {
-                references().forEach(action);
-            }
+        @Override
+        public void forEach(Consumer<? super Player> action) {
+            references().forEach(action);
+        }
+
+        private void assertRegistered() {
+            if (lastReferenceCount == Integer.MIN_VALUE)
+                throw new IllegalStateException("Cannot gather references from an unregistered chunk: (%d, %d)".formatted(key.chunkX, key.chunkZ));
         }
     }
 }

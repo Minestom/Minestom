@@ -279,6 +279,9 @@ public class InstanceContainer extends Instance {
         this.chunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ));
         chunk.unload();
         chunkLoader.unloadChunk(chunk);
+        // Ok, we are unloaded, unregister the entity tracker.
+        getEntityTracker().unregisterViewable(chunk.viewable);
+        // Delete the partition for ticking.
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.deletePartition(chunk);
     }
