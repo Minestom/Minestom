@@ -40,6 +40,12 @@ public class BlockVecTest {
         assertEquals(7, vec5.blockX());
         assertEquals(7, vec5.blockY());
         assertEquals(7, vec5.blockZ());
+
+        // Test double value constructor (int)
+        BlockVec vec6 = new BlockVec(6, 7);
+        assertEquals(6, vec6.blockX());
+        assertEquals(0, vec6.blockY());
+        assertEquals(7, vec6.blockZ());
     }
 
     @Test

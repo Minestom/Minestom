@@ -68,6 +68,16 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     }
 
     /**
+     * Creates a BlockVec with the blockX and blockZ, with blockY being zero.
+     *
+     * @param blockX the blockX
+     * @param blockZ the blockZ
+     */
+    public BlockVec(int blockX, int blockZ) {
+        this(blockX, 0, blockZ);
+    }
+
+    /**
      * Creates a block vector with the given value for all coordinates (x/y/z).
      *
      * @param value the value
