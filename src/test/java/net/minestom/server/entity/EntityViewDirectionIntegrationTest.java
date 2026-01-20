@@ -163,7 +163,7 @@ public class EntityViewDirectionIntegrationTest {
 
         e2.teleport(new Pos(0, 30, -2)).join();
         e1.lookAt(e2);
-        assertEquals(-180f, e1.getPosition().yaw(), EPSILON);
+        assertEquals(180f, e1.getPosition().yaw(), EPSILON);
         assertEquals(79.78f, e1.getPosition().pitch(), EPSILON);
     }
 }
