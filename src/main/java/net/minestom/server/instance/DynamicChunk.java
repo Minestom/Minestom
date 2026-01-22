@@ -273,6 +273,7 @@ public class DynamicChunk extends Chunk {
             for (var entry : this.entries.int2ObjectEntrySet()) {
                 final int index = entry.getIntKey();
                 final Block block = entry.getValue();
+                if (!block.registry().isBlockEntity()) continue;
                 entries.add(new ChunkData.BlockEntityInfo(index, block));
             }
         }
