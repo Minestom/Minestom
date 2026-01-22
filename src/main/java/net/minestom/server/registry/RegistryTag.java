@@ -2,6 +2,7 @@ package net.minestom.server.registry;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -49,4 +50,26 @@ public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKe
 
     int size();
 
+    /**
+     * A builder to eventually build a {@link RegistryTag}
+     * either backed by a registry with a {@link TagKey}, or direct.
+     *
+     * @param <T> the type of registry object.
+     */
+    sealed interface Builder<T> permits RegistryTagImpl.Builder {
+        static <T> Builder<T> of() {
+            return of(null);
+        }
+
+        @ApiStatus.Internal
+        static <T> Builder<T> of(@Nullable TagKey<T> key) {
+            return new RegistryTagImpl.Builder<>(key);
+        }
+
+        void add(RegistryKey<T> value);
+
+        void addAll(Collection<? extends RegistryKey<T>> values);
+
+        RegistryTag<T> build();
+    }
 }
