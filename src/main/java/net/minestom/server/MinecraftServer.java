@@ -68,9 +68,11 @@ public final class MinecraftServer implements MinecraftConstants {
     @Deprecated
     public static final int TICK_PER_SECOND = ServerFlag.SERVER_TICKS_PER_SECOND;
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
+    private static final boolean IMMUTABLE_SERVER_PROCESS = // Dont use for tests, or when explicitly disabled
+            !ServerFlag.ALLOW_MULTIPLE_INITIALIZATIONS && !ServerFlag.INSIDE_TEST;
 
     // In-Game Manager
-    private static volatile @UnknownNullability ServerProcess serverProcess;
+    private static volatile @UnknownNullability ServerProcess serverProcess; // Mutable holder, {@see ImmutableServerProcessHolder}
 
     private static int compressionThreshold = 256;
     private static String brandName = "Minestom";
@@ -87,9 +89,17 @@ public final class MinecraftServer implements MinecraftConstants {
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess(Auth auth) {
-        ServerProcess process = new ServerProcessImpl(auth);
-        serverProcess = process;
-        return process;
+        if (serverProcess != null && IMMUTABLE_SERVER_PROCESS) {
+            // It's likely that the server process is already initialized, and we are in immutable mode.
+            LOGGER.warn("""
+                    The server process is likely already initialized, but you are trying to initialize it again.
+                    This is not allowed in immutable mode. If you want to change the server process,
+                    you will need to restart the JVM and or set ServerFlag.ALLOW_MULTIPLE_INITIALIZATIONS to true.
+                    """);
+            return serverProcess;
+        }
+        serverProcess = new ServerProcessImpl(auth);
+        return process();
     }
 
     @ApiStatus.Internal
@@ -114,6 +124,7 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setBrandName(String brandName) {
         MinecraftServer.brandName = brandName;
+        if (serverProcess == null) return; // Use mutable holder here
         PacketSendingUtils.broadcastPlayPacket(PluginMessagePacket.brandPacket(brandName));
     }
 
@@ -133,43 +144,49 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setDifficulty(Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
+        if (serverProcess == null) return; // Use mutable holder here
         PacketSendingUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
     public static @UnknownNullability ServerProcess process() {
-        return serverProcess;
+        if (IMMUTABLE_SERVER_PROCESS) {
+            // The first caller will lock the process to be immutable.
+            return ImmutableServerProcessHolder.SERVER_PROCESS;
+        } else {
+            return serverProcess;
+        }
     }
 
     public static GlobalEventHandler getGlobalEventHandler() {
-        return serverProcess.eventHandler();
+        return process().eventHandler();
     }
 
     public static PacketListenerManager getPacketListenerManager() {
-        return serverProcess.packetListener();
+        return process().packetListener();
     }
 
     public static InstanceManager getInstanceManager() {
-        return serverProcess.instance();
+        return process().instance();
     }
 
     public static BlockManager getBlockManager() {
-        return serverProcess.block();
+        return process().block();
     }
 
     public static CommandManager getCommandManager() {
-        return serverProcess.command();
+        return process().command();
     }
 
     public static RecipeManager getRecipeManager() {
-        return serverProcess.recipe();
+        return process().recipe();
     }
 
     public static TeamManager getTeamManager() {
-        return serverProcess.team();
+        return process().team();
     }
 
     public static SchedulerManager getSchedulerManager() {
-        return serverProcess.scheduler();
+        return process().scheduler();
     }
 
     /**
@@ -178,27 +195,27 @@ public final class MinecraftServer implements MinecraftConstants {
      * @return the benchmark manager
      */
     public static BenchmarkManager getBenchmarkManager() {
-        return serverProcess.benchmark();
+        return process().benchmark();
     }
 
     public static ExceptionManager getExceptionManager() {
-        return serverProcess.exception();
+        return process().exception();
     }
 
     public static ConnectionManager getConnectionManager() {
-        return serverProcess.connection();
+        return process().connection();
     }
 
     public static BossBarManager getBossBarManager() {
-        return serverProcess.bossBar();
+        return process().bossBar();
     }
 
     public static PacketParser<ClientPacket> getPacketParser() {
-        return serverProcess.packetParser();
+        return process().packetParser();
     }
 
     public static boolean isStarted() {
-        return serverProcess.isAlive();
+        return process().isAlive();
     }
 
     public static boolean isStopping() {
@@ -247,52 +264,53 @@ public final class MinecraftServer implements MinecraftConstants {
      * @throws IllegalStateException if this is called after the server started
      */
     public static void setCompressionThreshold(int compressionThreshold) {
+        // This method could be called before init; Use the mutable holder to not accidentally initialize the immutable holder.
         Check.stateCondition(serverProcess != null && serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
         MinecraftServer.compressionThreshold = compressionThreshold;
     }
 
     public static AdvancementManager getAdvancementManager() {
-        return serverProcess.advancement();
+        return process().advancement();
     }
 
     public static ClickCallbackManager getClickCallbackManager() {
-        return serverProcess.clickCallbackManager();
+        return process().clickCallbackManager();
     }
 
     public static DynamicRegistry<ChatType> getChatTypeRegistry() {
-        return serverProcess.chatType();
+        return process().chatType();
     }
 
     public static DynamicRegistry<Dialog> getDialogRegistry() {
-        return serverProcess.dialog();
+        return process().dialog();
     }
 
     public static DynamicRegistry<DimensionType> getDimensionTypeRegistry() {
-        return serverProcess.dimensionType();
+        return process().dimensionType();
     }
 
     public static DynamicRegistry<Biome> getBiomeRegistry() {
-        return serverProcess.biome();
+        return process().biome();
     }
 
     public static DynamicRegistry<DamageType> getDamageTypeRegistry() {
-        return serverProcess.damageType();
+        return process().damageType();
     }
 
     public static DynamicRegistry<TrimMaterial> getTrimMaterialRegistry() {
-        return serverProcess.trimMaterial();
+        return process().trimMaterial();
     }
 
     public static DynamicRegistry<TrimPattern> getTrimPatternRegistry() {
-        return serverProcess.trimPattern();
+        return process().trimPattern();
     }
 
     public static DynamicRegistry<BannerPattern> getBannerPatternRegistry() {
-        return serverProcess.bannerPattern();
+        return process().bannerPattern();
     }
 
     public static DynamicRegistry<WolfVariant> getWolfVariantRegistry() {
-        return serverProcess.wolfVariant();
+        return process().wolfVariant();
     }
 
     public static DynamicRegistry<ZombieNautilusVariant> getZombieNautilusVariantRegistry() {
@@ -300,23 +318,23 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public static DynamicRegistry<Enchantment> getEnchantmentRegistry() {
-        return serverProcess.enchantment();
+        return process().enchantment();
     }
 
     public static DynamicRegistry<PaintingVariant> getPaintingVariantRegistry() {
-        return serverProcess.paintingVariant();
+        return process().paintingVariant();
     }
 
     public static DynamicRegistry<JukeboxSong> getJukeboxSongRegistry() {
-        return serverProcess.jukeboxSong();
+        return process().jukeboxSong();
     }
 
     public static DynamicRegistry<Instrument> getInstrumentRegistry() {
-        return serverProcess.instrument();
+        return process().instrument();
     }
 
     public static DynamicRegistry<Timeline> getTimelineRegistry() {
-        return serverProcess.timeline();
+        return process().timeline();
     }
 
     public static DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
@@ -336,7 +354,7 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public static Server getServer() {
-        return serverProcess.server();
+        return process().server();
     }
 
     /**
@@ -348,9 +366,9 @@ public final class MinecraftServer implements MinecraftConstants {
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
     public void start(SocketAddress address) {
-        serverProcess.start(address);
-        serverProcess.dispatcher().start();
-        new TickSchedulerThread(serverProcess).start();
+        process().start(address);
+        process().dispatcher().start();
+        new TickSchedulerThread(process()).start();
     }
 
     public void start(String address, int port) {
@@ -361,6 +379,20 @@ public final class MinecraftServer implements MinecraftConstants {
      * Stops this server properly (saves if needed, kicking players, etc.)
      */
     public static void stopCleanly() {
-        serverProcess.stop();
+        process().stop();
+    }
+
+    /**
+     * Allows Minestom to get constant folding for the server process;
+     * This has the side effect of not allowing the server process to be mutable,
+     * So using an immutable process will require a full JVM restart;
+     */
+    private static final class ImmutableServerProcessHolder {
+        static {
+            Check.stateCondition(!IMMUTABLE_SERVER_PROCESS, "ServerProcessHolder.Immutable should only be initialized when the server process is immutable.");
+            Check.notNull(serverProcess, "The server is not initialized yet; Did you forget to use MinecraftServer.init()?");
+        }
+
+        private static final ServerProcess SERVER_PROCESS = serverProcess;
     }
 }
