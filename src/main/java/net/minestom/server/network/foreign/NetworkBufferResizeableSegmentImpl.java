@@ -53,11 +53,6 @@ final class NetworkBufferResizeableSegmentImpl extends NetworkBufferSegmentImpl 
     }
 
     @Override
-    protected boolean isDummy() {
-        return false;
-    }
-
-    @Override
     public void resize(long length) {
         Check.argCondition(length < 0, "Length must be non-negative found {0}", length);
         final long capacity = capacity();
@@ -68,6 +63,19 @@ final class NetworkBufferResizeableSegmentImpl extends NetworkBufferSegmentImpl 
         MemorySegment.copy(this.segment, 0, newSegment, 0, capacity);
         this.segment = newSegment;
         this.arena = arena;
+    }
+
+    @Override
+    public boolean requestCapacity(long targetSize) {
+        final long capacity = capacity();
+        final long newCapacity = this.autoResize.resize(capacity, targetSize);
+        if (newCapacity <= capacity)
+            throw new IndexOutOfBoundsException("Buffer is full has been resized to the same capacity: " + capacity + " -> " + targetSize);
+        if (targetSize > newCapacity) {
+            throw new IndexOutOfBoundsException("Buffer is full below the target size: " + newCapacity + " -> " + targetSize);
+        }
+        resize(newCapacity);
+        return true;
     }
 
     @Override
@@ -82,17 +90,5 @@ final class NetworkBufferResizeableSegmentImpl extends NetworkBufferSegmentImpl 
         this.arena = arena;
         this.writeIndex(readableBytes);
         this.readIndex(0);
-    }
-
-    @Override
-    public void requireCapacity(long targetSize) throws IndexOutOfBoundsException {
-        final long capacity = capacity();
-        final long newCapacity = this.autoResize.resize(capacity, targetSize);
-        if (newCapacity <= capacity)
-            throw new IndexOutOfBoundsException("Buffer is full has been resized to the same capacity: " + capacity + " -> " + targetSize);
-        if (targetSize > newCapacity) {
-            throw new IndexOutOfBoundsException("Buffer is full below the target size: " + newCapacity + " -> " + targetSize);
-        }
-        resize(newCapacity);
     }
 }

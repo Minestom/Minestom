@@ -119,23 +119,6 @@ public final class NetworkBufferSegmentProvider {
     }
 
     /**
-     * Get the byte size of the serialized {@link T}, this should be deterministic.
-     * <br>
-     * The written length known as {@link NetworkBuffer#writeIndex()} minus the inital writeIndex, should equal the size below.
-     *
-     * @param type       the type
-     * @param value      the value
-     * @param registries the registries used
-     * @param <T>        the type
-     * @return the number of bytes that {@link T} occupies.
-     */
-    public <T extends @UnknownNullability Object> long sizeOf(NetworkBuffer.Type<T> type, T value, @Nullable Registries registries) {
-        NetworkBuffer buffer = NetworkBufferSegmentImpl.dummy(registries);
-        type.write(buffer, value);
-        return buffer.writeIndex();
-    }
-
-    /**
      * Get the underlying {@link MemorySegment} of the {@link NetworkBufferSegmentImpl}.
      * <br>
      * You avoid using this method and instead wrap a segment instead.

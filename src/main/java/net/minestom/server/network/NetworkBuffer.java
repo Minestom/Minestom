@@ -508,6 +508,24 @@ public interface NetworkBuffer {
     }
 
     /**
+     * Creates a dummy buffer, useful for size calculations
+     * <br>
+     * A dummy buffer is one that can always be written, modified, but never read from.
+     * Therefore, has an observed blank state, which could be reused over and over, also the benefit of no native allocations.
+     * <br>
+     * Operations that require the dummy buffer to be read or passed into logic where it's required will throw an exception.
+     *
+     * @param registries the registries to use if applicable
+     * @return the new dummy buffer
+     * @throws UnsupportedOperationException during usage, if directly called to read.
+     * @throws RuntimeException if used on another implementation, that requires more underlying access.
+     */
+    @Contract(pure = true, value = "_ -> new")
+    static NetworkBuffer dummy(@Nullable Registries registries) {
+        return new NetworkBufferDummy(0, registries);
+    }
+
+    /**
      * Writes the value of {@link T} at {@link #writeIndex()}
      * <br>
      * Writing may require resizing so any side effects of {@link #resize(long)} could happen.
@@ -518,7 +536,9 @@ public interface NetworkBuffer {
      * @throws IndexOutOfBoundsException if the write index is out of bounds.
      */
     @Contract(mutates = "this")
-    <T extends @UnknownNullability Object> void write(Type<T> type, T value) throws IndexOutOfBoundsException;
+    default <T extends @UnknownNullability Object> void write(Type<T> type, T value) throws IndexOutOfBoundsException {
+        type.write(this, value);
+    }
 
     /**
      * Reads the value of {@link T} at {@link #readIndex()}
@@ -529,7 +549,9 @@ public interface NetworkBuffer {
      * @throws IndexOutOfBoundsException if the read index is out of bounds.
      */
     @Contract(mutates = "this")
-    <T extends @UnknownNullability Object> T read(Type<T> type) throws IndexOutOfBoundsException;
+    default <T extends @UnknownNullability Object> T read(Type<T> type) throws IndexOutOfBoundsException {
+        return type.read(this);
+    }
 
     /**
      * Write the value of {@link T} using at {@code index}
@@ -543,7 +565,15 @@ public interface NetworkBuffer {
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     @Contract(mutates = "this")
-    <T extends @UnknownNullability Object> void writeAt(long index, Type<T> type, T value) throws IndexOutOfBoundsException;
+    default <T extends @UnknownNullability Object> void writeAt(long index, Type<T> type, T value) throws IndexOutOfBoundsException {
+        final long oldWriteIndex = writeIndex();
+        writeIndex(index);
+        try {
+            write(type, value);
+        } finally {
+            writeIndex(oldWriteIndex);
+        }
+    }
 
     /**
      * Read the value of {@link T} using at {@code index}
@@ -557,7 +587,15 @@ public interface NetworkBuffer {
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     @Contract(mutates = "this", value = "_, _ -> new")
-    <T extends @UnknownNullability Object> T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
+    default <T extends @UnknownNullability Object> T readAt(long index, Type<T> type) throws IndexOutOfBoundsException {
+        final long oldReadIndex = readIndex();
+        readIndex(index);
+        try {
+            return read(type);
+        } finally {
+            readIndex(oldReadIndex);
+        }
+    }
 
     /**
      * @param srcOffset  the source offset
@@ -684,7 +722,9 @@ public interface NetworkBuffer {
      * @return this
      */
     @Contract("-> this")
-    NetworkBuffer clear();
+    default NetworkBuffer clear() {
+        return index(0, 0);
+    }
 
     /**
      * Returns the write index tracked by this buffer
@@ -726,7 +766,11 @@ public interface NetworkBuffer {
      * @return this
      */
     @Contract(value = "_, _ -> this", mutates = "this")
-    NetworkBuffer index(long readIndex, long writeIndex);
+    default NetworkBuffer index(long readIndex, long writeIndex) {
+        writeIndex(writeIndex);
+        readIndex(readIndex);
+        return this;
+    }
 
     /**
      * Advances the write index and returns the previous index, while storing the new index into {@link #writeIndex()}
@@ -736,7 +780,12 @@ public interface NetworkBuffer {
      * @throws IllegalArgumentException if {@code length < 0}
      */
     @Contract(mutates = "this")
-    long advanceWrite(@Range(from = 0, to = Long.MAX_VALUE) long length);
+    default long advanceWrite(@Range(from = 0, to = Long.MAX_VALUE) long length) {
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative");
+        final long oldWriteIndex = writeIndex();
+        writeIndex(oldWriteIndex + length);
+        return oldWriteIndex;
+    }
 
     /**
      * Advances the read index and returns the previous index, while storing the new index into {@link #readIndex()}
@@ -746,7 +795,12 @@ public interface NetworkBuffer {
      * @throws IllegalArgumentException if {@code length < 0}
      */
     @Contract(mutates = "this")
-    long advanceRead(@Range(from = 0, to = Long.MAX_VALUE) long length);
+    default long advanceRead(@Range(from = 0, to = Long.MAX_VALUE) long length) {
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative");
+        final long oldReadIndex = readIndex();
+        readIndex(oldReadIndex + length);
+        return oldReadIndex;
+    }
 
     /**
      * Readable bytes are the number of bytes that have been written to the {@link #writeIndex()}
@@ -755,7 +809,9 @@ public interface NetworkBuffer {
      * @return the readable bytes
      */
     @Contract(pure = true)
-    long readableBytes();
+    default long readableBytes() {
+        return writeIndex() - readIndex();
+    }
 
     /**
      * Writeable bytes are the number of bytes that are left in the buffer from the {@link #writeIndex()}
@@ -764,7 +820,9 @@ public interface NetworkBuffer {
      * @return the writeable bytes
      */
     @Contract(pure = true)
-    long writableBytes();
+    default long writableBytes() {
+        return capacity() - writeIndex();
+    }
 
     /**
      * Gets the capacity for the buffer or its length.
@@ -824,11 +882,25 @@ public interface NetworkBuffer {
      * Otherwise, the buffer will be resized using {@link #resize(long)} if {@link #isResizable()} is true.
      *
      * @param length the length to ensure
-     * @throws IndexOutOfBoundsException if the resize does not permit the length to be written
-     * @throws IndexOutOfBoundsException if the buffer is static and needs to be resized.
+     * @throws IllegalArgumentException  if {@code length < 0}
+     * @throws IndexOutOfBoundsException if the upsize does not permit the length to be written
      */
     @Contract(mutates = "this")
-    void ensureWritable(@Range(from = 0, to = Long.MAX_VALUE) long length);
+    default void ensureWritable(@Range(from = 0, to = Long.MAX_VALUE) long length) throws IndexOutOfBoundsException {
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative found %d".formatted(length));
+        if (writableBytes() < length && !requestCapacity(writeIndex() + length))
+            throw new IndexOutOfBoundsException("%d is too long to be writeable: %d".formatted(length, writableBytes()));
+    }
+
+    /**
+     * Attempts to resize the current buffer, to the targetSize or greater using {@link AutoResize} strategy,
+     * then uses {@link #resize(long)}.
+     *
+     * @param targetSize the request size minimum we need
+     * @return true if successful, so at least targetSize is the new capacity.
+     */
+    @Contract(mutates = "this")
+    boolean requestCapacity(long targetSize);
 
     /**
      * Ensures that the buffer {@link #readableBytes()} is greater or equal to {@code length}.
@@ -838,24 +910,38 @@ public interface NetworkBuffer {
      * @throws IndexOutOfBoundsException if the buffer does not have enough data for this length.
      */
     @Contract(pure = true)
-    void ensureReadable(@Range(from = 0, to = Long.MAX_VALUE) long length);
+    default void ensureReadable(@Range(from = 0, to = Long.MAX_VALUE) long length) throws IndexOutOfBoundsException {
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative found %d".formatted(length));
+        if (readableBytes() < length)
+            throw new IndexOutOfBoundsException("%d is too long to be readable: %s".formatted(length, readableBytes()));
+    }
 
     /**
      * Compact (copies) all the data from the {@link #readIndex()} to the {@link #writeIndex()} to be zero aligned.
      * This does not change the buffer capacity, instead it's a simple copy.
      */
     @Contract(mutates = "this")
-    void compact();
+    default void compact() {
+        if (readIndex() == 0) return;
+        copyTo(readIndex(), this, 0, readableBytes());
+        writeIndex(readableBytes());
+        readIndex(0);
+    }
 
     /**
      * Resizes this buffer to be trimmed and assigns it to this {@link NetworkBuffer}.
      * <br>
-     * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
+     * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the occupied data.
+     * <br>
+     * Like {@link #compact()} the buffer will be zero aligned (by copy), but unlike compact the capacity may be shrunk.
      *
      * @throws UnsupportedOperationException if this buffer cannot be trimmed (resized)
+     * @see #trimmed()
      */
     @Contract(mutates = "this")
-    void trim();
+    default void trim() {
+        compact();
+    }
 
     /**
      * Creates a copy of the buffer trimmed using the factory to {@link NetworkBufferFactory#staticFactory()}.
@@ -863,6 +949,7 @@ public interface NetworkBuffer {
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
      *
      * @return the trimmed buffer
+     * @see #trim()
      */
     @Contract("-> new")
     default NetworkBuffer trimmed() {
@@ -876,9 +963,13 @@ public interface NetworkBuffer {
      *
      * @param factory the factory to allocate from
      * @return the trimmed buffer
+     * @see #trim()
      */
     @Contract("_, -> new")
-    NetworkBuffer trimmed(NetworkBufferFactory factory);
+    default NetworkBuffer trimmed(NetworkBufferFactory factory) {
+        final long readableBytes = readableBytes();
+        return copy(factory, readIndex(), readableBytes, 0, readableBytes);
+    }
 
     /**
      * Copies the current buffer using the factory specified {@link NetworkBufferFactory#staticFactory()}
@@ -1120,7 +1211,9 @@ public interface NetworkBuffer {
         @Contract(pure = true)
         @Range(from = 0, to = Long.MAX_VALUE)
         default long sizeOf(T value, @Nullable Registries registries) {
-            return NetworkBufferSegmentProvider.INSTANCE.sizeOf(this, value, registries);
+            final NetworkBuffer dummy = NetworkBuffer.dummy(registries);
+            dummy.write(this, value);
+            return dummy.writeIndex();
         }
 
         /**
@@ -1130,6 +1223,7 @@ public interface NetworkBuffer {
          *
          * @param value the value to get the size of
          * @return the size
+         * @see #sizeOf(Object, Registries)
          */
         @Contract(pure = true)
         @Range(from = 0, to = Long.MAX_VALUE)
@@ -1284,6 +1378,7 @@ public interface NetworkBuffer {
          * @param targetSize the target size of the buffer
          * @return the new capacity of the buffer
          */
+        @Contract(pure = true)
         long resize(long capacity, long targetSize);
     }
 

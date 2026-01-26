@@ -47,19 +47,13 @@ final class NetworkBufferStaticSegmentImpl extends NetworkBufferSegmentImpl {
     }
 
     @Override
-    protected boolean isDummy() {
-        return segment == MemorySegment.NULL;
-    }
-
-    @Override
-    public void requireCapacity(long requestedSize) throws IndexOutOfBoundsException {
-        // IndexOutOfBoundsException required due to ensureWritable
-        throw new IndexOutOfBoundsException("Static buffer cannot be resized to %d".formatted(requestedSize));
-    }
-
-    @Override
     public void resize(long length) {
         throw new UnsupportedOperationException("Static buffer cannot be resized to %d".formatted(length));
+    }
+
+    @Override
+    public boolean requestCapacity(long targetSize) {
+        return false;
     }
 
     @Override
