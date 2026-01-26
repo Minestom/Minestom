@@ -887,6 +887,12 @@ final class NetworkBufferTypeImpl {
         public @Nullable T read(NetworkBuffer buffer) {
             return buffer.read(BOOLEAN) ? buffer.read(parent) : null;
         }
+
+        @Override
+        public long sizeOf(T value, @Nullable Registries registries) {
+            if (value == null) return BOOLEAN.sizeOf(false, registries);
+            return BOOLEAN.sizeOf(true, registries) + parent.sizeOf(value, registries);
+        }
     }
 
     record LengthPrefixedType<T>(Type<T> parent, int maxLength) implements Type<T> {
@@ -941,6 +947,11 @@ final class NetworkBufferTypeImpl {
             }
             return type;
         }
+
+        @Override
+        public long sizeOf(T value, @Nullable Registries registries) {
+            return type().sizeOf(value, registries);
+        }
     }
 
     static final class RecursiveType<T> implements Type<T> {
@@ -963,6 +974,11 @@ final class NetworkBufferTypeImpl {
 
         public Type<T> delegate() {
             return this.delegate;
+        }
+
+        @Override
+        public long sizeOf(T value, @Nullable Registries registries) {
+            return delegate.sizeOf(value, registries);
         }
     }
 
@@ -1023,6 +1039,16 @@ final class NetworkBufferTypeImpl {
                 return Either.left(buffer.read(left));
             return Either.right(buffer.read(right));
         }
+
+        @Override
+        public long sizeOf(Either<L, R> value, @Nullable Registries registries) {
+            return switch (value) {
+                case Either.Left(L leftValue) ->
+                        BOOLEAN.sizeOf(true, registries) + left().sizeOf(leftValue, registries);
+                case Either.Right(R rightValue) ->
+                        BOOLEAN.sizeOf(false, registries) + right().sizeOf(rightValue, registries);
+            };
+        }
     }
 
     record TransformType<T, S>(Type<T> parent, Function<T, S> to,
@@ -1041,6 +1067,11 @@ final class NetworkBufferTypeImpl {
         @Override
         public S read(NetworkBuffer buffer) {
             return to.apply(parent.read(buffer));
+        }
+
+        @Override
+        public long sizeOf(S value) {
+            return parent().sizeOf(from.apply(value));
         }
     }
 
