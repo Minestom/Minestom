@@ -4,8 +4,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 
 /**
- * Called when a player stops sneaking.
+ * @deprecated Use {@link PlayerInputEvent} instead.
  */
+@Deprecated
 public class PlayerStopSneakingEvent implements PlayerInstanceEvent {
 
     private final Player player;

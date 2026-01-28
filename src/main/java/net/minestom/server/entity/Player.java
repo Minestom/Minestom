@@ -2207,16 +2207,24 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     public void refreshInput(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
-        this.inputs.refresh(forward, backward, left, right, jump, shift, sprint);
+        var oldForward = this.inputs.forward();
+        var oldBackward = this.inputs.backward();
+        var oldLeft = this.inputs.left();
+        var oldRight = this.inputs.right();
+        var oldJump = this.inputs.jump();
+        var oldShift = this.inputs.shift();
+        var oldSprint = this.inputs.sprint();
 
-        boolean oldSneakingState = isSneaking();
-        setSneaking(shift);
-        if (oldSneakingState != shift) {
-            if (shift) {
-                EventDispatcher.call(new PlayerStartSneakingEvent(this));
-            } else {
-                EventDispatcher.call(new PlayerStopSneakingEvent(this));
-            }
+        this.inputs.refresh(forward, backward, left, right, jump, shift, sprint);
+        this.setSneaking(shift);
+
+        var event = new PlayerInputEvent(this, oldForward, oldBackward, oldLeft, oldRight, oldJump, oldShift, oldSprint);
+        EventDispatcher.call(event);
+
+        if (event.hasPressedShiftKey()) {
+            EventDispatcher.call(new PlayerStartSneakingEvent(this));
+        } else if (event.hasReleasedShiftKey()) {
+            EventDispatcher.call(new PlayerStopSneakingEvent(this));
         }
     }
 
