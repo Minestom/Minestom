@@ -70,6 +70,8 @@ public final class PlayerSocketConnection extends PlayerConnection {
             ClientFinishConfigurationPacket.class // Enter play state
     );
 
+    private static final ListenerHandle<PlayerPacketOutEvent> OUTGOING_HANDLE = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
+
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
 
@@ -97,8 +99,6 @@ public final class PlayerSocketConnection extends PlayerConnection {
     // Write lock as the default behavior of the writing thread is to park itself
     // Requires ServerFlag.FASTER_SOCKET_WRITES to be enabled
     private final AtomicBoolean writeSignaled = new AtomicBoolean(false);
-
-    private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
     public PlayerSocketConnection(SocketChannel channel, SocketAddress remoteAddress, Thread readThread, Thread writeThread) {
         super();
@@ -357,11 +357,11 @@ public final class PlayerSocketConnection extends PlayerConnection {
         final ConnectionState state = getServerState();
         if (player != null) {
             // Outgoing event
-            if (outgoing.hasListener()) {
+            if (OUTGOING_HANDLE.hasListener()) {
                 final ServerPacket serverPacket = SendablePacket.extractServerPacket(state, packet);
                 if (serverPacket != null) { // Events are not called for buffered packets
                     PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
-                    outgoing.call(event);
+                    OUTGOING_HANDLE.call(event);
                     if (event.isCancelled()) return true;
                 }
             }
