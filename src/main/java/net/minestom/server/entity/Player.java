@@ -2207,13 +2207,13 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     public void refreshInput(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
-        var oldForward = this.inputs.forward();
-        var oldBackward = this.inputs.backward();
-        var oldLeft = this.inputs.left();
-        var oldRight = this.inputs.right();
-        var oldJump = this.inputs.jump();
-        var oldShift = this.inputs.shift();
-        var oldSprint = this.inputs.sprint();
+        boolean oldForward = this.inputs.forward();
+        boolean oldBackward = this.inputs.backward();
+        boolean oldLeft = this.inputs.left();
+        boolean oldRight = this.inputs.right();
+        boolean oldJump = this.inputs.jump();
+        boolean oldShift = this.inputs.shift();
+        boolean oldSprint = this.inputs.sprint();
 
         this.inputs.refresh(forward, backward, left, right, jump, shift, sprint);
         this.setSneaking(shift);

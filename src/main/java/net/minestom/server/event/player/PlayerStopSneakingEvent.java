@@ -6,7 +6,7 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 /**
  * @deprecated Use {@link PlayerInputEvent} instead.
  */
-@Deprecated
+@Deprecated(forRemoval = true)
 public class PlayerStopSneakingEvent implements PlayerInstanceEvent {
 
     private final Player player;
