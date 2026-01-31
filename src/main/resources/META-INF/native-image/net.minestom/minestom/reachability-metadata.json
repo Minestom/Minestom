@@ -127,6 +127,9 @@
       "type": "jdk.internal.misc.Unsafe"
     },
     {
+      "type": "net.minestom.server.adventure.provider.MinestomAnsiComponentSerializerProvider"
+    },
+    {
       "type": "net.minestom.server.adventure.provider.MinestomComponentLoggerProvider"
     },
     {
@@ -460,6 +463,9 @@
       "glob": "block.json"
     },
     {
+      "glob": "block_entity_types.json"
+    },
+    {
       "glob": "block_sound_type.json"
     },
     {
@@ -545,6 +551,9 @@
     },
     {
       "glob": "tags/block.json"
+    },
+    {
+      "glob": "tags/block_entity_types.json"
     },
     {
       "glob": "tags/block_sound_type.json"

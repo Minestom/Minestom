@@ -1,12 +1,9 @@
 package net.minestom.server.world;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
-import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.*;
 import net.minestom.server.utils.IntProvider;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.attribute.EnvironmentAttribute;
@@ -66,7 +63,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
      */
     @ApiStatus.Internal
     static DynamicRegistry<DimensionType> createDefaultRegistry(Registries registries) {
-        return DynamicRegistry.create(Key.key("dimension_type"),
+        return DynamicRegistry.create(BuiltinRegistries.DIMENSION_TYPE,
                 REGISTRY_CODEC, registries, RegistryData.Resource.DIMENSION_TYPES);
     }
 

@@ -1,12 +1,12 @@
 package net.minestom.server.item.armor;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
@@ -51,7 +51,7 @@ public sealed interface TrimMaterial extends Holder.Direct<TrimMaterial>, TrimMa
      */
     @ApiStatus.Internal
     static DynamicRegistry<TrimMaterial> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("trim_material"), REGISTRY_CODEC, RegistryData.Resource.TRIM_MATERIALS);
+        return DynamicRegistry.create(BuiltinRegistries.TRIM_MATERIAL, REGISTRY_CODEC, RegistryData.Resource.TRIM_MATERIALS);
     }
 
     String assetName();
