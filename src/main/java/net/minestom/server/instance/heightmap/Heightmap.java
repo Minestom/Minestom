@@ -72,7 +72,7 @@ public abstract class Heightmap {
             }
 
             final Palette blockPalette = chunk.getSection(sectionY).blockPalette();
-            final int localHeight = blockPalette.height(localX, localZ, (px, py, pz, value) -> {
+            final int localHeight = blockPalette.height(localX, localZ, (value) -> {
                 if (value == 0) return false;
                 final Block block = Block.fromStateId(value);
                 return block != null && checkBlock(block);
