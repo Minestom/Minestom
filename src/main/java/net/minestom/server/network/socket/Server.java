@@ -5,6 +5,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,18 +25,20 @@ public final class Server {
     private volatile boolean stop;
 
     private final PacketParser<ClientPacket> packetParser;
+    private final PacketParser<ServerPacket> packetWriter;
 
     private @UnknownNullability ServerSocketChannel serverSocket;
     private @UnknownNullability SocketAddress socketAddress;
     private @UnknownNullability String address;
     private int port;
 
-    public Server(PacketParser<ClientPacket> packetParser) {
+    public Server(PacketParser<ClientPacket> packetParser, PacketParser<ServerPacket> packetWriter) {
         this.packetParser = packetParser;
+        this.packetWriter = packetWriter;
     }
 
     public Server() {
-        this(PacketVanilla.CLIENT_PACKET_PARSER);
+        this(PacketVanilla.CLIENT_PACKET_PARSER, PacketVanilla.SERVER_PACKET_PARSER);
     }
 
     @ApiStatus.Internal
@@ -135,7 +138,7 @@ public final class Server {
         while (!stop) {
             try {
                 connection.awaitFlush();
-                connection.flushSync();
+                connection.flushSync(packetWriter);
             } catch (ClosedChannelException _) {
                 break; // We closed the socket during write, just exit.
             } catch (EOFException _) {
@@ -153,7 +156,7 @@ public final class Server {
             }
             if (!connection.isOnline()) {
                 try {
-                    connection.flushSync();
+                    connection.flushSync(packetWriter);
                     connection.getChannel().close();
                     break;
                 } catch (IOException e) {
@@ -186,6 +189,11 @@ public final class Server {
     @ApiStatus.Internal
     public PacketParser<ClientPacket> packetParser() {
         return packetParser;
+    }
+
+    @ApiStatus.Internal
+    public PacketParser<ServerPacket> packetWriter() {
+        return packetWriter;
     }
 
     public SocketAddress socketAddress() {

@@ -108,6 +108,7 @@ public final class PlayerSocketConnection extends PlayerConnection {
         this.readThread = readThread;
     }
 
+    @Blocking
     public void read(PacketParser<ClientPacket> packetParser) throws IOException {
         NetworkBuffer readBuffer = this.readBuffer;
         final long writeIndex = readBuffer.writeIndex();
@@ -339,9 +340,9 @@ public final class PlayerSocketConnection extends PlayerConnection {
         this.nonce = nonce;
     }
 
-    private boolean writeSendable(NetworkBuffer buffer, SendablePacket sendable, boolean compressed) {
+    private boolean writeSendable(NetworkBuffer buffer, PacketParser<ServerPacket> writer, SendablePacket sendable, boolean compressed) {
         final long start = buffer.writeIndex();
-        final boolean result = writePacketSync(buffer, sendable, compressed);
+        final boolean result = writePacketSync(buffer, writer, sendable, compressed);
         if (!result) return false;
         // Encrypt data
         final long length = buffer.writeIndex() - start;
@@ -352,13 +353,13 @@ public final class PlayerSocketConnection extends PlayerConnection {
         return true;
     }
 
-    private boolean writePacketSync(NetworkBuffer buffer, SendablePacket packet, boolean compressed) {
+    private boolean writePacketSync(NetworkBuffer buffer, PacketParser<ServerPacket> writer, SendablePacket packet, boolean compressed) {
         final Player player = getPlayer();
         final ConnectionState state = getServerState();
         if (player != null) {
             // Outgoing event
             if (OUTGOING_HANDLE.hasListener()) {
-                final ServerPacket serverPacket = SendablePacket.extractServerPacket(state, packet);
+                final ServerPacket serverPacket = SendablePacket.extractServerPacket(packet, state, writer);
                 if (serverPacket != null) { // Events are not called for buffered packets
                     PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
                     OUTGOING_HANDLE.call(event);
@@ -380,7 +381,7 @@ public final class PlayerSocketConnection extends PlayerConnection {
                     var nextState = PacketVanilla.nextServerState(serverPacket, state);
                     if (nextState != state) setServerState(nextState);
 
-                    PacketWriting.writeFramedPacket(buffer, state, serverPacket, compressionThreshold);
+                    PacketWriting.writeFramedPacket(buffer, writer, state, serverPacket, compressionThreshold);
                     yield true;
                 }
                 case FramedPacket framedPacket -> {
@@ -388,16 +389,16 @@ public final class PlayerSocketConnection extends PlayerConnection {
                     yield writeBuffer(buffer, body, 0, body.capacity());
                 }
                 case CachedPacket cachedPacket -> {
-                    final NetworkBuffer body = cachedPacket.body(state);
+                    final NetworkBuffer body = cachedPacket.body(state, writer);
                     if (body != null) {
                         yield writeBuffer(buffer, body, 0, body.capacity());
                     } else {
-                        PacketWriting.writeFramedPacket(buffer, state, cachedPacket.packet(state), compressionThreshold);
+                        PacketWriting.writeFramedPacket(buffer, writer, state, cachedPacket.packet(state, writer), compressionThreshold);
                         yield true;
                     }
                 }
                 case LazyPacket lazyPacket -> {
-                    PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
+                    PacketWriting.writeFramedPacket(buffer, writer, state, lazyPacket.packet(), compressionThreshold);
                     yield true;
                 }
                 case BufferedPacket bufferedPacket -> {
@@ -443,7 +444,8 @@ public final class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
-    public void flushSync() throws IOException {
+    @Blocking
+    public void flushSync(PacketParser<ServerPacket> writer) throws IOException {
         if (!channel.isConnected()) throw new EOFException("Channel is closed");
         // Write leftover if any
         final NetworkBuffer leftover = this.writeLeftover;
@@ -463,7 +465,7 @@ public final class PlayerSocketConnection extends PlayerConnection {
         // Write to buffer
         PacketWriting.writeQueue(buffer, packetQueue, 1, (b, packet) -> {
             final boolean compressed = sentPacketCounter.get() > compressionStart;
-            final boolean success = writeSendable(b, packet, compressed);
+            final boolean success = writeSendable(b, writer, packet, compressed);
             if (success) sentPacketCounter.getAndIncrement();
             return success;
         });

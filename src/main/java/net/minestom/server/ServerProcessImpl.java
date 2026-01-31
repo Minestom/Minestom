@@ -38,6 +38,7 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
@@ -101,6 +102,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
     private final PacketParser<ClientPacket> packetParser;
+    private final PacketParser<ServerPacket> packetWriter;
     private final InstanceManager instance;
     private final BlockManager block;
     private final CommandManager command;
@@ -158,6 +160,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
         this.packetParser = PacketVanilla.CLIENT_PACKET_PARSER;
+        this.packetWriter = PacketVanilla.SERVER_PACKET_PARSER;
         this.instance = new InstanceManager(this);
         this.block = new BlockManager();
         this.command = new CommandManager();
@@ -170,7 +173,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.bossBar = new BossBarManager();
         this.clickCallbackManager = new ClickCallbackManager();
 
-        this.server = new Server(packetParser);
+        this.server = new Server(packetParser, packetWriter);
 
         this.dispatcher = ThreadDispatcher.dispatcher(ThreadProvider.counter(), ServerFlag.DISPATCHER_THREADS);
         this.ticker = new TickerImpl();
@@ -374,6 +377,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public PacketParser<ClientPacket> packetParser() {
         return packetParser;
+    }
+
+    @Override
+    public PacketParser<ServerPacket> packetWriter() {
+        return packetWriter;
     }
 
     @Override

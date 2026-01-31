@@ -39,7 +39,7 @@ public class NetworkCachedPacketBenchmark {
     @Group("shared")
     @GroupThreads(3)
     public void packet(Blackhole blackhole) {
-        blackhole.consume(cachedPacket.packet(ConnectionState.PLAY));
+        blackhole.consume(cachedPacket.packet(ConnectionState.PLAY, PacketVanilla.SERVER_PACKET_PARSER));
     }
 
     @Benchmark

@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketWriting;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -51,24 +52,26 @@ public final class CachedPacket implements SendablePacket {
         PACKET_HANDLE.setRelease(this, null);
     }
 
-    public ServerPacket packet(ConnectionState state) {
-        FramedPacket cache = updatedCache(state);
+    public ServerPacket packet(ConnectionState state, @Nullable PacketParser<ServerPacket> writer) {
+        FramedPacket cache = updatedCache(state, writer);
         return cache != null ? cache.packet() : packetSupplier.get();
     }
 
-    public @Nullable NetworkBuffer body(ConnectionState state) {
-        FramedPacket cache = updatedCache(state);
+    public @Nullable NetworkBuffer body(ConnectionState state, @Nullable PacketParser<ServerPacket> writer) {
+        FramedPacket cache = updatedCache(state, writer);
         return cache != null ? cache.body() : null;
     }
 
-    private @Nullable FramedPacket updatedCache(ConnectionState state) {
+    private @Nullable FramedPacket updatedCache(ConnectionState state, @Nullable PacketParser<ServerPacket> writer) {
         if (!ServerFlag.CACHED_PACKET) return null;
         // Try to get the cached packet if it has been set.
         // Also, if it hasn't been GC'd
         SoftReference<FramedPacket> ref = getAcquire();
         FramedPacket cache;
         if (ref != null && (cache = ref.get()) != null) return cache;
-        return updateCache(ref, state);
+        // Start the slow path, but first check the writer exists.
+        if (writer == null) return null;
+        return updateCache(ref, state, writer);
     }
 
     public boolean isValid() {
@@ -89,10 +92,10 @@ public final class CachedPacket implements SendablePacket {
     }
 
     // Slow cache update
-    private FramedPacket updateCache(@Nullable SoftReference<FramedPacket> ref, ConnectionState state) {
+    private FramedPacket updateCache(@Nullable SoftReference<FramedPacket> ref, ConnectionState state, PacketParser<ServerPacket> writer) {
         // Create a new cached packet
         final ServerPacket packet = packetSupplier.get();
-        final NetworkBuffer buffer = PacketWriting.allocateTrimmedPacket(state, packet,
+        final NetworkBuffer buffer = PacketWriting.allocateTrimmedPacket(writer, state, packet,
                 MinecraftServer.getCompressionThreshold());
         final FramedPacket cache = new FramedPacket(packet, buffer);
         SoftReference<FramedPacket> softRef = new SoftReference<>(cache);
