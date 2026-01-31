@@ -36,7 +36,8 @@ public final class PacketWriting {
                                              ConnectionState state,
                                              T packet,
                                              int compressionThreshold) throws IndexOutOfBoundsException {
-        final PacketRegistry<T> registry = parser.stateRegistry(state);
+        @SuppressWarnings("unchecked") // We assume that T's registry is tied to the state.
+        final PacketRegistry<T> registry = (PacketRegistry<T>) parser.stateRegistry(state);
         writeFramedPacket(buffer, registry, packet, compressionThreshold);
     }
 
@@ -131,22 +132,21 @@ public final class PacketWriting {
             ConnectionState state,
             T packet,
             int compressionThreshold) {
-        NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
-        try {
-            return allocateTrimmedPacket(buffer, parser, state, packet, compressionThreshold);
-        } finally {
-            PacketVanilla.PACKET_POOL.add(buffer);
-        }
+        @SuppressWarnings("unchecked") // We assume that T's registry is tied to the state.
+        final PacketRegistry<T> registry = (PacketRegistry<T>) parser.stateRegistry(state);
+        return allocateTrimmedPacket(registry, packet, compressionThreshold);
     }
 
     public static <T> NetworkBuffer allocateTrimmedPacket(
-            NetworkBuffer tmpBuffer,
-            PacketParser<T> parser,
-            ConnectionState state,
+            PacketRegistry<T> registry,
             T packet,
             int compressionThreshold) {
-        final PacketRegistry<T> registry = parser.stateRegistry(state);
-        return allocateTrimmedPacket(tmpBuffer, registry, packet, compressionThreshold);
+        NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
+        try {
+            return allocateTrimmedPacket(buffer, registry, packet, compressionThreshold);
+        } finally {
+            PacketVanilla.PACKET_POOL.add(buffer);
+        }
     }
 
     public static <T> NetworkBuffer allocateTrimmedPacket(

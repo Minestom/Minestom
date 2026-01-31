@@ -636,7 +636,7 @@ public class PacketWriteReadTest {
                 ).flatMap(it -> packets(it, map));
     }
 
-    static <T> Stream<Arguments> packets(PacketRegistry<T> registry, Map<Class<? extends T>, ? extends Collection<T>> map) {
+    static <T> Stream<Arguments> packets(PacketRegistry<? extends T> registry, Map<Class<? extends T>, ? extends Collection<T>> map) {
         return registry.packets().stream().flatMap(info ->  {
             var tests = map.get(info.packetClass());
             var name = info.packetClass().getSimpleName();

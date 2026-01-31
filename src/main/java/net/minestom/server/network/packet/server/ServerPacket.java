@@ -16,6 +16,10 @@ import java.util.function.UnaryOperator;
  */
 public sealed interface ServerPacket extends SendablePacket {
 
+    // By default, this is not used.
+    non-sealed interface Handshake extends ServerPacket {
+    }
+
     non-sealed interface Configuration extends ServerPacket {
     }
 
