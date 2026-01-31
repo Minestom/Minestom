@@ -107,7 +107,7 @@ public class AnvilLoaderIntegrationTest {
         Instance instance = env.createFlatInstance(chunkLoader);
 
         Consumer<Chunk> checkChunk = chunk -> {
-            synchronized (chunk) {
+            chunk.withReadLock(() -> {
                 assertEquals(-4, chunk.getMinSection());
                 assertEquals(20, chunk.getMaxSection());
 
@@ -119,7 +119,7 @@ public class AnvilLoaderIntegrationTest {
                         }
                     }
                 }
-            }
+            });
         };
 
         for (int x = -2; x < 2; x++) {
