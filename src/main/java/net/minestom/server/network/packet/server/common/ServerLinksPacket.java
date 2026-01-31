@@ -1,15 +1,18 @@
 package net.minestom.server.network.packet.server.common;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.Nullable;
+import net.minestom.server.utils.Either;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
-public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Configuration, ServerPacket.Play {
+public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Configuration, ServerPacket.Play, ServerPacket.ComponentHolding {
     private static final int MAX_ENTRIES = 100;
 
     public static final NetworkBuffer.Type<ServerLinksPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -24,42 +27,42 @@ public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Con
         this(List.of(entries));
     }
 
-    public record Entry(@Nullable KnownLinkType knownType, @Nullable Component customType, String link) {
-        public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, Entry value) {
-                buffer.write(NetworkBuffer.BOOLEAN, value.knownType != null);
-                if (value.knownType != null) {
-                    buffer.write(KnownLinkType.NETWORK_TYPE, value.knownType);
-                } else {
-                    assert value.customType != null;
-                    buffer.write(NetworkBuffer.COMPONENT, value.customType);
-                }
-                buffer.write(NetworkBuffer.STRING, value.link);
-            }
+    @Override
+    public @Unmodifiable Collection<Component> components() {
+        if (entries.isEmpty()) return List.of();
+        return entries.stream().map(Entry::components).flatMap(Collection::stream).toList();
+    }
 
-            @Override
-            public Entry read(NetworkBuffer buffer) {
-                boolean known = buffer.read(NetworkBuffer.BOOLEAN);
-                if (known) {
-                    return new Entry(buffer.read(KnownLinkType.NETWORK_TYPE), buffer.read(NetworkBuffer.STRING));
-                } else {
-                    return new Entry(buffer.read(NetworkBuffer.COMPONENT), buffer.read(NetworkBuffer.STRING));
-                }
-            }
-        };
+    @Override
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
+        if (entries.isEmpty()) return this;
+        return new ServerLinksPacket(entries.stream().map(it -> it.copyWithOperator(operator)).toList());
+    }
 
-        public Entry {
-            Check.argCondition(knownType == null && customType == null, "One of knownType and customType must be present");
-            Check.argCondition(knownType != null && customType != null, "Only one of knownType and customType may be present");
-        }
+    public record Entry(Either<KnownLinkType, Component> payload, String link) implements ComponentHolder<Entry> {
+        public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = NetworkBufferTemplate.template(
+                NetworkBuffer.Either(KnownLinkType.NETWORK_TYPE, NetworkBuffer.COMPONENT), Entry::payload,
+                NetworkBuffer.STRING, Entry::link,
+                Entry::new);
 
         public Entry(KnownLinkType type, String link) {
-            this(type, null, link);
+            this(Either.left(type), link);
         }
 
         public Entry(Component type, String link) {
-            this(null, type, link);
+            this(Either.right(type), link);
+        }
+
+        @Override
+        public Collection<Component> components() {
+            if (payload instanceof Either.Right(Component value)) return List.of(value);
+            return List.of();
+        }
+
+        @Override
+        public Entry copyWithOperator(UnaryOperator<Component> operator) {
+            if (!(payload instanceof Either.Right(Component value))) return this;
+            return new Entry(operator.apply(value), link);
         }
     }
 

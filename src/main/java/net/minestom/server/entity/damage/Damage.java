@@ -65,8 +65,10 @@ public class Damage implements Taggable {
     /**
      * Gets the integer id of the damage type that has been set
      *
+     * @deprecated Use {@link #getType()} instead
      * @return The integer id of the damage type
      */
+    @Deprecated(forRemoval = true)
     public int getTypeId() {
         return DAMAGE_TYPE_REGISTRY.getId(typeKey);
     }

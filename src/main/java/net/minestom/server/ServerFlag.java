@@ -30,14 +30,30 @@ public final class ServerFlag {
     public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 15_000);
     public static final int PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE = intProperty("minestom.player.chunk-update-limiter-history-size", 5, 0, Integer.MAX_VALUE);
 
-    // Network buffers
+    // Networking
     public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
     public static final int MAX_PACKET_SIZE_PRE_AUTH = intProperty("minestom.max-packet-size-pre-auth", 8_192);
     public static final int SOCKET_SEND_BUFFER_SIZE = intProperty("minestom.send-buffer-size", 262_143);
     public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
     public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
     public static final int SOCKET_TIMEOUT = intProperty("minestom.socket-timeout", 15_000);
+    public static final boolean REJECT_MALFORMED_PACKET = booleanProperty("minestom.reject-malformed-packet", true);
+    public static final boolean REJECT_MISUSED_PACKET = booleanProperty("minestom.reject-misused-packet", true);
+    public static final int SUPPRESS_PACKET_ERROR_LEVEL = intProperty("minestom.suppress-packet-error-level", -1); // >= ConnectionState.ordinal() state will be suppressed.
+    public static final boolean WARN_UNREAD_BYTES_PACKET = booleanProperty("minestom.warn-unread-bytes-packet", true);
+    public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = booleanProperty("minestom.automatic-component-translation", false);
+
+    // Network buffers
+    public static final int DEFAULT_RESIZEABLE_SIZE = intProperty("minestom.default-resizeable-size", 256);
+    public static final boolean ATTEMPT_NATIVE_ALLOCATION = booleanProperty("minestom.attempt-native-allocation", true);
+    public static final boolean FORCE_NATIVE_ALLOCATION = booleanProperty("minestom.force-native-allocation", false);
+
+    // Network object pooling
     public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 16_383);
+    public static final int DECOMPRESS_POOL_SIZE = intProperty("minestom.decompress-pool-size", 32_767);
+    public static final int COMPRESS_POOL_SIZE = intProperty("minestom.compress-pool-size", 32_767);
+    public static final int PACKET_POOL_SIZE = intProperty("minestom.packet-buffer-pool-size", 32_767);
+    public static final int VIEWABLE_POOL_SIZE = intProperty("minestom.viewable-pool-size", 32_767);
 
     // Chunk update
     public static final float MIN_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.min-per-tick", 0.01f);

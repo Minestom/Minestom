@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientEditBookPacket(int slot, List<String> pages,
-                                   @Nullable String title) implements ClientPacket {
+                                   @Nullable String title) implements ClientPacket.Play {
     public static final int MAX_PAGES = 100;
     public static final int MAX_TITLE_LENGTH = 32;
     public static final int MAX_PAGE_LENGTH = 1024;

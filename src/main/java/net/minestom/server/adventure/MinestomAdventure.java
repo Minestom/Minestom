@@ -7,6 +7,7 @@ import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.util.Codec;
+import net.minestom.server.ServerFlag;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -34,8 +35,10 @@ public final class MinestomAdventure {
 
     /**
      * If components should be automatically translated in outgoing packets.
+     * @deprecated Use {@link ServerFlag#AUTOMATIC_COMPONENT_TRANSLATION} instead.
      */
-    public static boolean AUTOMATIC_COMPONENT_TRANSLATION = false;
+    @Deprecated(forRemoval = true) // make final to prevent builds that activate it as it would be no op.
+    public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION;
     // todo: Need to properly add a translator interface so it can check for presence of a key for the flattener.
     public static BiFunction<Component, Locale, Component> COMPONENT_TRANSLATOR = GlobalTranslator::render;
 

@@ -10,6 +10,8 @@ import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -17,8 +19,8 @@ import java.util.zip.DataFormatException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@EnvTest
 public class SendablePacketTest {
-
     @Test
     public void lazy() {
         var packet = new SystemChatPacket(Component.text("Hello World!"), false);
@@ -33,24 +35,25 @@ public class SendablePacketTest {
     }
 
     @Test
-    public void cached() {
+    public void cached(Env env) {
         var packet = new SystemChatPacket(Component.text("Hello World!"), false);
         var cached = new CachedPacket(packet);
-        assertSame(packet, cached.packet(ConnectionState.PLAY));
+        var packetWriter = env.process().packetWriter();
+        assertSame(packet, cached.packet(ConnectionState.PLAY, packetWriter));
 
         var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet,
                 MinecraftServer.getCompressionThreshold());
-        var cachedBuffer = cached.body(ConnectionState.PLAY);
-        assertTrue(NetworkBuffer.equals(buffer, cachedBuffer));
+        var cachedBuffer = cached.body(ConnectionState.PLAY, packetWriter);
+        assertTrue(NetworkBuffer.contentEquals(buffer, cachedBuffer));
         // May fail in the very unlikely case where soft references are cleared
         // Rare enough to make this test worth it
-        assertSame(cached.body(ConnectionState.PLAY), cachedBuffer);
+        assertSame(cached.body(ConnectionState.PLAY, packetWriter), cachedBuffer);
 
-        assertSame(packet, cached.packet(ConnectionState.PLAY));
+        assertSame(packet, cached.packet(ConnectionState.PLAY, packetWriter));
     }
 
     @Test
-    public void trimmed() throws DataFormatException {
+    public void trimmed(Env ignored) throws DataFormatException {
         var packet = new ClientAnimationPacket(PlayerHand.MAIN);
 
         var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet, 0);
