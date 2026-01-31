@@ -46,7 +46,7 @@ final class NetworkBufferDummy implements NetworkBuffer, NetworkBuffer.Direct {
     // Copy forwarding into the same buffer is applicable.
     @Override
     public void copyTo(long srcOffset, NetworkBuffer destBuffer, long destOffset, long length) {
-        if (this == destBuffer) return;
+        if (destBuffer instanceof NetworkBufferDummy) return;
         assertDummy();
     }
 
@@ -72,6 +72,7 @@ final class NetworkBufferDummy implements NetworkBuffer, NetworkBuffer.Direct {
         return writeIndex;
     }
 
+    @Contract("-> fail")
     @Override
     public long readIndex() {
         assertDummy();
@@ -95,7 +96,6 @@ final class NetworkBufferDummy implements NetworkBuffer, NetworkBuffer.Direct {
         return Long.MAX_VALUE;
     }
 
-    // You cant read from dummy buffers, so this is fine.
     @Override
     public NetworkBuffer readOnly() {
         return this;
@@ -156,12 +156,14 @@ final class NetworkBufferDummy implements NetworkBuffer, NetworkBuffer.Direct {
 
     @Override
     public long compress(long start, long length, NetworkBuffer output) {
+        if (output instanceof NetworkBufferDummy) return length;
         assertDummy();
         return 0;
     }
 
     @Override
     public long decompress(long start, long length, NetworkBuffer output) {
+        if (output instanceof NetworkBufferDummy) return length;
         assertDummy();
         return 0;
     }
@@ -277,6 +279,6 @@ final class NetworkBufferDummy implements NetworkBuffer, NetworkBuffer.Direct {
 
     @Override
     public String toString() {
-        return String.format("NetworkBufferDummy{r%d|w%d->%d, registries=%b}", readIndex(), writeIndex(), capacity(), registries() != null);
+        return String.format("NetworkBufferDummy{w%d, registries=%b}", writeIndex(), registries() != null);
     }
 }
