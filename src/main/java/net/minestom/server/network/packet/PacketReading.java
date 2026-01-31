@@ -171,28 +171,28 @@ public final class PacketReading {
             else return EMPTY_CLIENT_PACKET;
         }
         final long readerEnd = readerStart + packetLength;
-        final PacketRegistry<T> registry = parser.stateRegistry(state);
         // We create a slice here so capacity is enforced, we also set it to read only cause we dont want readers writing into this buffer.
         final NetworkBuffer slice = buffer.slice(readerStart, packetLength, 0, packetLength).readOnly();
-        final T packet = readFramedPacket(slice, registry, compressed);
+        final T packet = readFramedPacket(slice, parser, state, compressed);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
         buffer.readIndex(readerEnd);
         return new Result.Success<>(new ParsedPacket<>(nextState, packet));
     }
 
     private static <T> T readFramedPacket(NetworkBuffer buffer,
-                                          PacketRegistry<T> registry,
+                                          PacketParser<T> parser,
+                                          ConnectionState state,
                                           boolean compressed) throws DataFormatException {
         if (!compressed) {
             // No compression format
-            return readPayload(buffer, registry);
+            return readPayload(buffer, parser, state);
         }
 
         // READ COMPRESSION HEADER
         final int dataLength = buffer.read(VAR_INT);
         if (dataLength == 0) {
             // Uncompressed packet
-            return readPayload(buffer, registry);
+            return readPayload(buffer, parser, state);
         }
 
         // Decompress the packet into the pooled buffer
@@ -201,15 +201,15 @@ public final class PacketReading {
         try {
             if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
             buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
-            return readPayload(decompressed.readOnly(), registry); // Payload should not write into the buffer
+            return readPayload(decompressed.readOnly(), parser, state); // Payload should not write into the buffer
         } finally {
             PacketVanilla.PACKET_POOL.add(decompressed);
         }
     }
 
-    private static <T> T readPayload(NetworkBuffer buffer, PacketRegistry<T> registry) {
+    private static <T> T readPayload(NetworkBuffer buffer, PacketParser<T> registry, ConnectionState state) {
         final int packetId = buffer.read(VAR_INT);
-        final T packet = registry.create(packetId, buffer);
+        final T packet = registry.parse(state, packetId, buffer);
         warnUnreadBytes(buffer, packet, packetId);
         return packet;
     }
