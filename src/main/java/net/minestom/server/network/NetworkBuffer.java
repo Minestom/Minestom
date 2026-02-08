@@ -15,6 +15,7 @@ import net.minestom.server.network.foreign.NetworkBufferSegmentProvider;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
+import net.minestom.server.utils.Functions;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
 import net.minestom.server.utils.validate.Check;
@@ -174,7 +175,8 @@ public interface NetworkBuffer {
      */
     @Contract(pure = true, value = "_ -> new")
     static <E extends Enum<E>> Type<EnumSet<E>> EnumSet(Class<E> enumClass) {
-        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, enumClass.getEnumConstants());
+        final E[] values = enumClass.getEnumConstants();
+        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, values, FixedBitSet(values.length));
     }
 
     /**
@@ -188,7 +190,7 @@ public interface NetworkBuffer {
      */
     @Contract(pure = true, value = "_ -> new")
     static Type<BitSet> FixedBitSet(int length) {
-        return new NetworkBufferTypeImpl.FixedBitSetType(length);
+        return new NetworkBufferTypeImpl.FixedBitSetType(length, FixedRawBytes((length + 7) / Long.BYTES));
     }
 
     /**
@@ -1240,8 +1242,24 @@ public interface NetworkBuffer {
          * @return the new type that transforms {@link T}
          */
         @Contract(pure = true, value = "_, _ -> new")
-        default <S extends @UnknownNullability Object> Type<S> transform(Function<T, S> to, Function<S, T> from) {
+        default <S extends @UnknownNullability Object> Type<S> transform(Function<? super T, ? extends S> to, Function<? super S, ? extends T> from) {
             return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
+        }
+
+        /**
+         * Transform the current type {@link T} to {@link S} and {@link S} to {@link T}.
+         * <br>
+         * This call site is more optimized as we can look at the underlying implementation, please use this for templates.
+         *
+         * @param to   the function to call when reading your value
+         * @param from the function to call when writing your value
+         * @param <S>  type to
+         * @return the new type that transforms {@link T}
+         */
+        @Contract(pure = true, value = "_, _ -> new")
+        default <S extends @UnknownNullability Object> Type<S> transform(Functions.SF1<? super T, ? extends S> to, Functions.SF1<? super S, ? extends T> from) {
+            // Delegate back, we just want them to use the SF1 if possible.
+            return transform((Function<? super T, ? extends S>) to, from);
         }
 
         /**

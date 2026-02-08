@@ -1,14 +1,13 @@
 package net.minestom.server.network;
 
 import net.minestom.server.network.NetworkBuffer.Type;
+import net.minestom.server.network.template.NetworkTemplater;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Functions.*;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -40,8 +39,16 @@ import java.util.function.Supplier;
  *         };
  * }
  * }</pre>
+ * <br>
+ * Note: Templates should be stored in static final fields, or similar, as they perform no caching and will be more expensive if generated each call.
  */
 public final class NetworkBufferTemplate {
+
+    /**
+     * Marker to identify classes that are templates.
+     * @param <T> the type, nullable.
+     */
+    private /* template */ interface Template<T extends @UnknownNullability Object> extends Type<T> {}
 
     /**
      * Creates a template that always returns {@link R}
@@ -51,7 +58,7 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <R extends @UnknownNullability Object> Type<R> template(R value) {
-        return new NetworkBuffer.Type<>() {
+        return new Template<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
             }
@@ -77,7 +84,7 @@ public final class NetworkBufferTemplate {
      */
     public static <R extends @UnknownNullability Object> Type<R> template(Supplier<? extends R> supplier) {
         Objects.requireNonNull(supplier, "supplier");
-        return new NetworkBuffer.Type<>() {
+        return new Template<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
             }
@@ -104,26 +111,11 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(Type<P1> p1, Function<? super R, ? extends P1> g1, F1<? super P1, ? extends R> ctor) {
+    public static <P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(Type<P1> p1, SF1<? super R, ? extends P1> g1, SF1<? super P1, ? extends R> ctor) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(p1.read(buffer));
-            }
-
-            @Override
-            public long sizeOf(R value, @Nullable Registries registries) {
-                return p1.sizeOf(g1.apply(value), registries);
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, ctor);
     }
 
     /**
@@ -140,26 +132,15 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            F2<? super P1, ? super P2, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            SF2<? super P1, ? super P2, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
         Objects.requireNonNull(g2, "g2");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(p1.read(buffer), p2.read(buffer));
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, ctor);
     }
 
     /**
@@ -179,8 +160,8 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, F3<? super P1, ? super P2, ? super P3, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, SF3<? super P1, ? super P2, ? super P3, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -189,19 +170,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p3, "p3");
         Objects.requireNonNull(g3, "g3");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(p1.read(buffer), p2.read(buffer), p3.read(buffer));
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, ctor);
     }
 
     /**
@@ -224,9 +193,9 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            F4<? super P1, ? super P2, ? super P3, ? super P4, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            SF4<? super P1, ? super P2, ? super P3, ? super P4, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -237,23 +206,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p4, "p4");
         Objects.requireNonNull(g4, "g4");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, ctor);
     }
 
     /**
@@ -279,9 +232,9 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, F5<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, SF5<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -294,25 +247,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p5, "p5");
         Objects.requireNonNull(g5, "g5");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, ctor);
     }
 
     /**
@@ -341,10 +276,10 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            F6<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            SF6<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -359,26 +294,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p6, "p6");
         Objects.requireNonNull(g6, "g6");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, ctor);
     }
 
     /**
@@ -410,10 +326,10 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, F7<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, SF7<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -430,28 +346,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p7, "p7");
         Objects.requireNonNull(g7, "g7");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, ctor);
     }
 
     /**
@@ -486,11 +381,11 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            F8<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            SF8<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -509,29 +404,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p8, "p8");
         Objects.requireNonNull(g8, "g8");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, ctor);
     }
 
     /**
@@ -569,11 +442,11 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, F9<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, SF9<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -594,31 +467,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p9, "p9");
         Objects.requireNonNull(g9, "g9");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, ctor);
     }
 
     /**
@@ -659,12 +508,12 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            F10<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            SF10<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -687,32 +536,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p10, "p10");
         Objects.requireNonNull(g10, "g10");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, ctor);
     }
 
     /**
@@ -756,12 +580,12 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, F11<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, SF11<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -786,34 +610,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p11, "p11");
         Objects.requireNonNull(g11, "g11");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, ctor);
     }
 
     /**
@@ -860,12 +657,12 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12, F12<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, Type<P12> p12, SF1<? super R, ? extends P12> g12, SF12<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -892,35 +689,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p12, "p12");
         Objects.requireNonNull(g12, "g12");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-                p12.write(buffer, g12.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer), p12.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, ctor);
     }
 
     /**
@@ -970,14 +739,14 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13,
-            F13<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, Type<P12> p12, SF1<? super R, ? extends P12> g12,
+            Type<P13> p13, SF1<? super R, ? extends P13> g13,
+            SF13<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1006,37 +775,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p13, "p13");
         Objects.requireNonNull(g13, "g13");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-                p12.write(buffer, g12.apply(value));
-                p13.write(buffer, g13.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer), p12.read(buffer),
-                        p13.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, ctor);
     }
 
     /**
@@ -1089,14 +828,14 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            F14<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, Type<P12> p12, SF1<? super R, ? extends P12> g12,
+            Type<P13> p13, SF1<? super R, ? extends P13> g13, Type<P14> p14, SF1<? super R, ? extends P14> g14,
+            SF14<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1127,38 +866,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p14, "p14");
         Objects.requireNonNull(g14, "g14");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-                p12.write(buffer, g12.apply(value));
-                p13.write(buffer, g13.apply(value));
-                p14.write(buffer, g14.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer), p12.read(buffer),
-                        p13.read(buffer), p14.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, ctor);
     }
 
     /**
@@ -1214,15 +922,15 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15,
-            F15<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, Type<P12> p12, SF1<? super R, ? extends P12> g12,
+            Type<P13> p13, SF1<? super R, ? extends P13> g13, Type<P14> p14, SF1<? super R, ? extends P14> g14,
+            Type<P15> p15, SF1<? super R, ? extends P15> g15,
+            SF15<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1255,40 +963,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p15, "p15");
         Objects.requireNonNull(g15, "g15");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-                p12.write(buffer, g12.apply(value));
-                p13.write(buffer, g13.apply(value));
-                p14.write(buffer, g14.apply(value));
-                p15.write(buffer, g15.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer), p12.read(buffer),
-                        p13.read(buffer), p14.read(buffer),
-                        p15.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, ctor);
     }
 
     /**
@@ -1347,15 +1022,15 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
-            F16<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, Type<P12> p12, SF1<? super R, ? extends P12> g12,
+            Type<P13> p13, SF1<? super R, ? extends P13> g13, Type<P14> p14, SF1<? super R, ? extends P14> g14,
+            Type<P15> p15, SF1<? super R, ? extends P15> g15, Type<P16> p16, SF1<? super R, ? extends P16> g16,
+            SF16<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1390,41 +1065,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p16, "p16");
         Objects.requireNonNull(g16, "g16");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-                p12.write(buffer, g12.apply(value));
-                p13.write(buffer, g13.apply(value));
-                p14.write(buffer, g14.apply(value));
-                p15.write(buffer, g15.apply(value));
-                p16.write(buffer, g16.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer), p12.read(buffer),
-                        p13.read(buffer), p14.read(buffer),
-                        p15.read(buffer), p16.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, ctor);
     }
 
     /**
@@ -1486,16 +1127,16 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
-            Type<P17> p17, Function<? super R, ? extends P17> g17,
-            F17<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, Type<P12> p12, SF1<? super R, ? extends P12> g12,
+            Type<P13> p13, SF1<? super R, ? extends P13> g13, Type<P14> p14, SF1<? super R, ? extends P14> g14,
+            Type<P15> p15, SF1<? super R, ? extends P15> g15, Type<P16> p16, SF1<? super R, ? extends P16> g16,
+            Type<P17> p17, SF1<? super R, ? extends P17> g17,
+            SF17<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1532,43 +1173,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p17, "p17");
         Objects.requireNonNull(g17, "g17");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-                p12.write(buffer, g12.apply(value));
-                p13.write(buffer, g13.apply(value));
-                p14.write(buffer, g14.apply(value));
-                p15.write(buffer, g15.apply(value));
-                p16.write(buffer, g16.apply(value));
-                p17.write(buffer, g17.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer), p12.read(buffer),
-                        p13.read(buffer), p14.read(buffer),
-                        p15.read(buffer), p16.read(buffer),
-                        p17.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, ctor);
     }
 
     /**
@@ -1633,16 +1238,16 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
-            Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
-            F18<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, Type<P12> p12, SF1<? super R, ? extends P12> g12,
+            Type<P13> p13, SF1<? super R, ? extends P13> g13, Type<P14> p14, SF1<? super R, ? extends P14> g14,
+            Type<P15> p15, SF1<? super R, ? extends P15> g15, Type<P16> p16, SF1<? super R, ? extends P16> g16,
+            Type<P17> p17, SF1<? super R, ? extends P17> g17, Type<P18> p18, SF1<? super R, ? extends P18> g18,
+            SF18<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1681,44 +1286,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p18, "p18");
         Objects.requireNonNull(g18, "g18");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-                p12.write(buffer, g12.apply(value));
-                p13.write(buffer, g13.apply(value));
-                p14.write(buffer, g14.apply(value));
-                p15.write(buffer, g15.apply(value));
-                p16.write(buffer, g16.apply(value));
-                p17.write(buffer, g17.apply(value));
-                p18.write(buffer, g18.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer), p12.read(buffer),
-                        p13.read(buffer), p14.read(buffer),
-                        p15.read(buffer), p16.read(buffer),
-                        p17.read(buffer), p18.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, p18, g18, ctor);
     }
 
     /**
@@ -1785,16 +1353,16 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
-            Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
-            Type<P19> p19, Function<? super R, ? extends P19> g19, F19<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, Type<P12> p12, SF1<? super R, ? extends P12> g12,
+            Type<P13> p13, SF1<? super R, ? extends P13> g13, Type<P14> p14, SF1<? super R, ? extends P14> g14,
+            Type<P15> p15, SF1<? super R, ? extends P15> g15, Type<P16> p16, SF1<? super R, ? extends P16> g16,
+            Type<P17> p17, SF1<? super R, ? extends P17> g17, Type<P18> p18, SF1<? super R, ? extends P18> g18,
+            Type<P19> p19, SF1<? super R, ? extends P19> g19, SF19<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -1835,46 +1403,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p19, "p19");
         Objects.requireNonNull(g19, "g19");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-                p12.write(buffer, g12.apply(value));
-                p13.write(buffer, g13.apply(value));
-                p14.write(buffer, g14.apply(value));
-                p15.write(buffer, g15.apply(value));
-                p16.write(buffer, g16.apply(value));
-                p17.write(buffer, g17.apply(value));
-                p18.write(buffer, g18.apply(value));
-                p19.write(buffer, g19.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer), p12.read(buffer),
-                        p13.read(buffer), p14.read(buffer),
-                        p15.read(buffer), p16.read(buffer),
-                        p17.read(buffer), p18.read(buffer),
-                        p19.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, p18, g18, p19, g19, ctor);
     }
 
     /**
@@ -1945,19 +1474,18 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, P20 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
-            Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
-            Type<P19> p19, Function<? super R, ? extends P19> g19, Type<P20> p20, Function<? super R, ? extends P20> g20,
-            F20<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? super P20, ? extends R> ctor
+            Type<P1> p1, SF1<? super R, ? extends P1> g1, Type<P2> p2, SF1<? super R, ? extends P2> g2,
+            Type<P3> p3, SF1<? super R, ? extends P3> g3, Type<P4> p4, SF1<? super R, ? extends P4> g4,
+            Type<P5> p5, SF1<? super R, ? extends P5> g5, Type<P6> p6, SF1<? super R, ? extends P6> g6,
+            Type<P7> p7, SF1<? super R, ? extends P7> g7, Type<P8> p8, SF1<? super R, ? extends P8> g8,
+            Type<P9> p9, SF1<? super R, ? extends P9> g9, Type<P10> p10, SF1<? super R, ? extends P10> g10,
+            Type<P11> p11, SF1<? super R, ? extends P11> g11, Type<P12> p12, SF1<? super R, ? extends P12> g12,
+            Type<P13> p13, SF1<? super R, ? extends P13> g13, Type<P14> p14, SF1<? super R, ? extends P14> g14,
+            Type<P15> p15, SF1<? super R, ? extends P15> g15, Type<P16> p16, SF1<? super R, ? extends P16> g16,
+            Type<P17> p17, SF1<? super R, ? extends P17> g17, Type<P18> p18, SF1<? super R, ? extends P18> g18,
+            Type<P19> p19, SF1<? super R, ? extends P19> g19, Type<P20> p20, SF1<? super R, ? extends P20> g20,
+            SF20<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? super P20, ? extends R> ctor
     ) {
-
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -1999,46 +1527,6 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p20, "p20");
         Objects.requireNonNull(g20, "g20");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, R value) {
-                p1.write(buffer, g1.apply(value));
-                p2.write(buffer, g2.apply(value));
-                p3.write(buffer, g3.apply(value));
-                p4.write(buffer, g4.apply(value));
-                p5.write(buffer, g5.apply(value));
-                p6.write(buffer, g6.apply(value));
-                p7.write(buffer, g7.apply(value));
-                p8.write(buffer, g8.apply(value));
-                p9.write(buffer, g9.apply(value));
-                p10.write(buffer, g10.apply(value));
-                p11.write(buffer, g11.apply(value));
-                p12.write(buffer, g12.apply(value));
-                p13.write(buffer, g13.apply(value));
-                p14.write(buffer, g14.apply(value));
-                p15.write(buffer, g15.apply(value));
-                p16.write(buffer, g16.apply(value));
-                p17.write(buffer, g17.apply(value));
-                p18.write(buffer, g18.apply(value));
-                p19.write(buffer, g19.apply(value));
-                p20.write(buffer, g20.apply(value));
-            }
-
-            @Override
-            public R read(NetworkBuffer buffer) {
-                return ctor.apply(
-                        p1.read(buffer), p2.read(buffer),
-                        p3.read(buffer), p4.read(buffer),
-                        p5.read(buffer), p6.read(buffer),
-                        p7.read(buffer), p8.read(buffer),
-                        p9.read(buffer), p10.read(buffer),
-                        p11.read(buffer), p12.read(buffer),
-                        p13.read(buffer), p14.read(buffer),
-                        p15.read(buffer), p16.read(buffer),
-                        p17.read(buffer), p18.read(buffer),
-                        p19.read(buffer), p20.read(buffer)
-                );
-            }
-        };
+        return NetworkTemplater.templateN(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, p18, g18, p19, g19, p20, g20, ctor);
     }
 }

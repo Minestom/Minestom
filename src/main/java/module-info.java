@@ -144,6 +144,7 @@ module net.minestom.server {
     exports net.minestom.server.network.packet.server.play;
     exports net.minestom.server.network.packet.server.play.data;
     exports net.minestom.server.network.packet.server.status;
+    exports net.minestom.server.network.template;
     exports net.minestom.server.network.player;
     exports net.minestom.server.network.plugin;
     exports net.minestom.server.network.socket;
