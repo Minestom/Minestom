@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @ApiStatus.Internal
 public final class NetworkTemplater {
     private static final AtomicLong COUNTER = new AtomicLong();
-    private static final boolean DEBUG = true; // Really shouldn't be an option
+    private static final boolean DEBUG = false; // Really shouldn't be an option
 
     private NetworkTemplater() {
     }
