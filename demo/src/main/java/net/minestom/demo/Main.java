@@ -37,13 +37,18 @@ import java.util.List;
 import java.util.Objects;
 
 public class Main {
-
-    public static void main(String[] args) {
+    // Store this in a static final field for build time native compilation by Graal native-image
+    // Absolute horrible pattern, but MinecraftServer being initialized at compile time drops, any resource requirements.
+    // Likely would need a more complex configuration to exclude them, though.
+    static final MinecraftServer server;
+    static {
         System.setProperty("minestom.new-socket-write-lock", "true");
         MinecraftServer.setCompressionThreshold(0);
 
-        MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Offline());
+        server = MinecraftServer.init(new Auth.Offline());
+    }
 
+    public static void main(String[] args) {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
         var beds = Block.values().stream().filter(block -> BlockEntityType.BED.equals(block.registry().blockEntityType())).toList();
@@ -108,13 +113,13 @@ public class Main {
         }
 
         byte[] favicon;
-
         try (InputStream stream = Main.class.getResourceAsStream("/minestom.png")) {
             favicon = Objects.requireNonNull(stream).readAllBytes();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            favicon = new byte[0];
         }
 
+        byte[] finalFavicon = favicon;
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
             int onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
             Status.PlayerInfo.Builder builder = Status.PlayerInfo.builder(Status.PlayerInfo.online(20))
@@ -149,7 +154,7 @@ public class Main {
                     // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
                     // on legacy versions, colors will be converted to the section format so it'll work there too
                     .description(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)))
-                    .favicon(favicon)
+                    .favicon(finalFavicon)
                     .playerInfo(builder.build())
                     .build());
         });
@@ -172,7 +177,7 @@ public class Main {
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
 
-        minecraftServer.start("0.0.0.0", 25565);
+        server.start("0.0.0.0", 25565);
 //        minecraftServer.start(java.net.UnixDomainSocketAddress.of("minestom-demo.sock"));
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }

@@ -11,12 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 
 @ApiStatus.Internal
 public final class NetworkTemplater {
-    private static final AtomicLong COUNTER = new AtomicLong();
     private static final boolean DEBUG = false; // Really shouldn't be an option
 
     private NetworkTemplater() {
@@ -44,7 +42,7 @@ public final class NetworkTemplater {
 
         MethodHandle foldedCtor = TemplateReflection.conformConstructor(args[args.length - 1], args);
 
-        final ClassDesc thisClass = ClassDesc.of(caller.getPackageName(), "%s$TType$%d".formatted(caller.getSimpleName(), COUNTER.incrementAndGet()));
+        final ClassDesc thisClass = ClassDesc.of(caller.getPackageName(), "%s$TType".formatted(caller.getSimpleName()));
         byte[] bytes = new TemplateGenerator(thisClass, foldedCtor, fields, uniqueFields, fieldToUniqueIndex).build();
 
         // Dump the class if enabled

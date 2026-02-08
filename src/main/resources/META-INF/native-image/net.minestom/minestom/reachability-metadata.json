@@ -362,7 +362,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.collision.BlockBoundingBox$TType$104/0x00000000293a7268",
+      "type": "net.minestom.server.collision.BlockBoundingBox$TType/0x000000007039b9f0",
       "methods": [
         {
           "name": "<init>",
@@ -407,7 +407,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.color.Color$TType$13/0x00000000292184b0",
+      "type": "net.minestom.server.color.Color$TType/0x0000000070213b70",
       "methods": [
         {
           "name": "<init>",
@@ -494,7 +494,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.crypto.ArgumentSignatures$TType$80/0x000000002937bab0",
+      "type": "net.minestom.server.crypto.ArgumentSignatures$TType/0x0000000070376a80",
       "methods": [
         {
           "name": "<init>",
@@ -527,7 +527,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.crypto.ChatSession$TType$85/0x0000000029384cb8",
+      "type": "net.minestom.server.crypto.ChatSession$TType/0x000000007037ec80",
       "methods": [
         {
           "name": "<init>",
@@ -542,7 +542,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.crypto.Entry$TType$79/0x000000002937b298",
+      "type": "net.minestom.server.crypto.Entry$TType/0x0000000070376268",
       "methods": [
         {
           "name": "<init>",
@@ -610,7 +610,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.crypto.MessageSignature$TType$78/0x000000002937aa90",
+      "type": "net.minestom.server.crypto.MessageSignature$TType/0x0000000070373a30",
       "methods": [
         {
           "name": "<init>",
@@ -623,7 +623,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.crypto.Packed$TType$239/0x0000000029459278",
+      "type": "net.minestom.server.crypto.Packed$TType/0x0000000070450a28",
       "methods": [
         {
           "name": "<init>",
@@ -636,7 +636,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.crypto.Packed$TType$240/0x0000000029459a50",
+      "type": "net.minestom.server.crypto.Packed$TType/0x0000000070451200",
       "methods": [
         {
           "name": "<init>",
@@ -679,7 +679,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.crypto.PlayerPublicKey$TType$84/0x00000000293844b0",
+      "type": "net.minestom.server.crypto.PlayerPublicKey$TType/0x000000007037e478",
       "methods": [
         {
           "name": "<init>",
@@ -725,7 +725,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.crypto.Update$TType$81/0x000000002937cee0",
+      "type": "net.minestom.server.crypto.Update$TType/0x0000000070375000",
       "methods": [
         {
           "name": "<init>",
@@ -817,7 +817,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.entity.Patch$TType$3/0x00000000291e4728",
+      "type": "net.minestom.server.entity.Patch$TType/0x00000000701df728",
       "methods": [
         {
           "name": "<init>",
@@ -927,7 +927,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.entity.attribute.AttributeModifier$TType$11/0x000000002920d508",
+      "type": "net.minestom.server.entity.attribute.AttributeModifier$TType/0x000000007020b090",
       "methods": [
         {
           "name": "<init>",
@@ -972,7 +972,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.entity.metadata.other.PaintingVariant$TType$55/0x00000000292b6bd8",
+      "type": "net.minestom.server.entity.metadata.other.PaintingVariant$TType/0x00000000702b0c40",
       "methods": [
         {
           "name": "<init>",
@@ -1007,7 +1007,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.entity.metadata.villager.VillagerData$TType$340/0x000000002985f008",
+      "type": "net.minestom.server.entity.metadata.villager.VillagerData$TType/0x000000007080e9a0",
       "methods": [
         {
           "name": "<init>",
@@ -1131,7 +1131,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.instance.block.banner.BannerPattern$TType$52/0x000000002929a800",
+      "type": "net.minestom.server.instance.block.banner.BannerPattern$TType/0x00000000702999e0",
       "methods": [
         {
           "name": "<init>",
@@ -1175,7 +1175,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.instance.block.jukebox.JukeboxSong$TType$47/0x0000000029291c18",
+      "type": "net.minestom.server.instance.block.jukebox.JukeboxSong$TType/0x000000007028e728",
       "methods": [
         {
           "name": "<init>",
@@ -1224,7 +1224,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.instance.block.predicate.BlockPredicate$TType$10/0x000000002920a478",
+      "type": "net.minestom.server.instance.block.predicate.BlockPredicate$TType/0x0000000070208000",
       "methods": [
         {
           "name": "<init>",
@@ -1263,7 +1263,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.instance.block.predicate.DataComponentPredicates$TType$8/0x0000000029205000",
+      "type": "net.minestom.server.instance.block.predicate.DataComponentPredicates$TType/0x00000000702038c0",
       "methods": [
         {
           "name": "<init>",
@@ -1293,7 +1293,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.instance.block.predicate.PropertiesPredicate$TType$9/0x0000000029208000",
+      "type": "net.minestom.server.instance.block.predicate.PropertiesPredicate$TType/0x0000000070206bb8",
       "methods": [
         {
           "name": "<init>",
@@ -1326,7 +1326,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.instance.block.predicate.Range$TType$319/0x0000000029705da0",
+      "type": "net.minestom.server.instance.block.predicate.Range$TType/0x00000000706b4c20",
       "methods": [
         {
           "name": "<init>",
@@ -1341,7 +1341,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.Item$TType$320/0x000000002973b280",
+      "type": "net.minestom.server.item.Item$TType/0x00000000706e9938",
       "methods": [
         {
           "name": "<init>",
@@ -1452,7 +1452,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.armor.TrimMaterial$TType$41/0x0000000029282120",
+      "type": "net.minestom.server.item.armor.TrimMaterial$TType/0x0000000070279000",
       "methods": [
         {
           "name": "<init>",
@@ -1494,7 +1494,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.armor.TrimPattern$TType$42/0x00000000292864b0",
+      "type": "net.minestom.server.item.armor.TrimPattern$TType/0x0000000070280fb0",
       "methods": [
         {
           "name": "<init>",
@@ -1531,7 +1531,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.book.FilteredText$TType$37/0x000000002927a268",
+      "type": "net.minestom.server.item.book.FilteredText$TType/0x000000007027d718",
       "methods": [
         {
           "name": "<init>",
@@ -1546,7 +1546,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.book.FilteredText$TType$38/0x000000002927ac70",
+      "type": "net.minestom.server.item.book.FilteredText$TType/0x000000007027e120",
       "methods": [
         {
           "name": "<init>",
@@ -1561,7 +1561,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.ApplyEffects$TType$321/0x0000000029743e10",
+      "type": "net.minestom.server.item.component.ApplyEffects$TType/0x00000000706f2548",
       "methods": [
         {
           "name": "<init>",
@@ -1596,7 +1596,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.ArmorTrim$TType$43/0x0000000029287a08",
+      "type": "net.minestom.server.item.component.ArmorTrim$TType/0x0000000070282508",
       "methods": [
         {
           "name": "<init>",
@@ -1651,7 +1651,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.AttackRange$TType$23/0x000000002924eaf8",
+      "type": "net.minestom.server.item.component.AttackRange$TType/0x0000000070245a38",
       "methods": [
         {
           "name": "<init>",
@@ -1747,7 +1747,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Bee$TType$54/0x00000000292a6de0",
+      "type": "net.minestom.server.item.component.Bee$TType/0x000000007029ccb0",
       "methods": [
         {
           "name": "<init>",
@@ -1863,7 +1863,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.BlocksAttacks$TType$28/0x000000002925e000",
+      "type": "net.minestom.server.item.component.BlocksAttacks$TType/0x00000000702594f8",
       "methods": [
         {
           "name": "<init>",
@@ -1887,7 +1887,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Condition$TType$30/0x0000000029266ac8",
+      "type": "net.minestom.server.item.component.Condition$TType/0x00000000702652b8",
       "methods": [
         {
           "name": "<init>",
@@ -1938,7 +1938,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Consumable$TType$17/0x0000000029227890",
+      "type": "net.minestom.server.item.component.Consumable$TType/0x0000000070220dd0",
       "methods": [
         {
           "name": "<init>",
@@ -2069,7 +2069,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.CustomModelData$TType$14/0x0000000029219b88",
+      "type": "net.minestom.server.item.component.CustomModelData$TType/0x0000000070218238",
       "methods": [
         {
           "name": "<init>",
@@ -2088,7 +2088,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.DamageReduction$TType$26/0x00000000292584b0",
+      "type": "net.minestom.server.item.component.DamageReduction$TType/0x0000000070256238",
       "methods": [
         {
           "name": "<init>",
@@ -2120,7 +2120,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.DamageResistant$TType$19/0x0000000029241d08",
+      "type": "net.minestom.server.item.component.DamageResistant$TType/0x000000007023b2b8",
       "methods": [
         {
           "name": "<init>",
@@ -2148,7 +2148,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.DeathProtection$TType$25/0x0000000029253310",
+      "type": "net.minestom.server.item.component.DeathProtection$TType/0x00000000702521e8",
       "methods": [
         {
           "name": "<init>",
@@ -2161,7 +2161,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Effect$TType$36/0x000000002927e2f8",
+      "type": "net.minestom.server.item.component.Effect$TType/0x0000000070273758",
       "methods": [
         {
           "name": "<init>",
@@ -2190,7 +2190,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.EnchantmentList$TType$7/0x0000000029206a20",
+      "type": "net.minestom.server.item.component.EnchantmentList$TType/0x0000000070202580",
       "methods": [
         {
           "name": "<init>",
@@ -2268,7 +2268,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Equippable$TType$24/0x0000000029250728",
+      "type": "net.minestom.server.item.component.Equippable$TType/0x000000007024f5b8",
       "methods": [
         {
           "name": "<init>",
@@ -2334,7 +2334,7 @@
       "type": "net.minestom.server.item.component.FireworkExplosion$Shape"
     },
     {
-      "type": "net.minestom.server.item.component.FireworkExplosion$TType$50/0x000000002929d9c0",
+      "type": "net.minestom.server.item.component.FireworkExplosion$TType/0x00000000702977b8",
       "methods": [
         {
           "name": "<init>",
@@ -2374,7 +2374,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.FireworkList$TType$51/0x000000002929f3e8",
+      "type": "net.minestom.server.item.component.FireworkList$TType/0x0000000070298000",
       "methods": [
         {
           "name": "<init>",
@@ -2414,7 +2414,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Food$TType$16/0x000000002921ea38",
+      "type": "net.minestom.server.item.component.Food$TType/0x000000007021b670",
       "methods": [
         {
           "name": "<init>",
@@ -2431,7 +2431,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.ItemDamageFunction$TType$27/0x000000002925a370",
+      "type": "net.minestom.server.item.component.ItemDamageFunction$TType/0x0000000070255a38",
       "methods": [
         {
           "name": "<init>",
@@ -2526,7 +2526,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.KineticWeapon$TType$31/0x0000000029263c18",
+      "type": "net.minestom.server.item.component.KineticWeapon$TType/0x0000000070267260",
       "methods": [
         {
           "name": "<init>",
@@ -2553,7 +2553,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Layer$TType$53/0x00000000292a1480",
+      "type": "net.minestom.server.item.component.Layer$TType/0x000000007029b618",
       "methods": [
         {
           "name": "<init>",
@@ -2588,7 +2588,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.LodestoneTracker$TType$49/0x0000000029297ad0",
+      "type": "net.minestom.server.item.component.LodestoneTracker$TType/0x0000000070295ad0",
       "methods": [
         {
           "name": "<init>",
@@ -2603,7 +2603,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Modifier$TType$12/0x000000002920fb48",
+      "type": "net.minestom.server.item.component.Modifier$TType/0x00000000702106f8",
       "methods": [
         {
           "name": "<init>",
@@ -2652,7 +2652,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.PiercingWeapon$TType$29/0x00000000292649a0",
+      "type": "net.minestom.server.item.component.PiercingWeapon$TType/0x000000007025f000",
       "methods": [
         {
           "name": "<init>",
@@ -2670,7 +2670,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.PlaySound$TType$322/0x0000000029745130",
+      "type": "net.minestom.server.item.component.PlaySound$TType/0x00000000706f5a60",
       "methods": [
         {
           "name": "<init>",
@@ -2713,7 +2713,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.PotionContents$TType$35/0x000000002927c4b0",
+      "type": "net.minestom.server.item.component.PotionContents$TType/0x0000000070276830",
       "methods": [
         {
           "name": "<init>",
@@ -2732,7 +2732,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.RemoveEffects$TType$323/0x0000000029746230",
+      "type": "net.minestom.server.item.component.RemoveEffects$TType/0x00000000706f3880",
       "methods": [
         {
           "name": "<init>",
@@ -2745,7 +2745,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Rule$TType$20/0x0000000029243a90",
+      "type": "net.minestom.server.item.component.Rule$TType/0x0000000070241258",
       "methods": [
         {
           "name": "<init>",
@@ -2802,7 +2802,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.SwingAnimation$TType$32/0x000000002926e868",
+      "type": "net.minestom.server.item.component.SwingAnimation$TType/0x0000000070268ba8",
       "methods": [
         {
           "name": "<init>",
@@ -2820,7 +2820,7 @@
       "type": "net.minestom.server.item.component.SwingAnimation$Type"
     },
     {
-      "type": "net.minestom.server.item.component.TeleportRandomly$TType$324/0x0000000029747328",
+      "type": "net.minestom.server.item.component.TeleportRandomly$TType/0x00000000706f4b88",
       "methods": [
         {
           "name": "<init>",
@@ -2888,7 +2888,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Tool$TType$21/0x0000000029247518",
+      "type": "net.minestom.server.item.component.Tool$TType/0x0000000070242cc0",
       "methods": [
         {
           "name": "<init>",
@@ -2927,7 +2927,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.TooltipDisplay$TType$15/0x000000002921b670",
+      "type": "net.minestom.server.item.component.TooltipDisplay$TType/0x0000000070219d20",
       "methods": [
         {
           "name": "<init>",
@@ -2962,7 +2962,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.TypedCustomData$TType$44/0x000000002928e0e0",
+      "type": "net.minestom.server.item.component.TypedCustomData$TType/0x0000000070285800",
       "methods": [
         {
           "name": "<init>",
@@ -2977,7 +2977,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.TypedCustomData$TType$45/0x000000002928f428",
+      "type": "net.minestom.server.item.component.TypedCustomData$TType/0x0000000070286bc0",
       "methods": [
         {
           "name": "<init>",
@@ -3012,7 +3012,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.UseCooldown$TType$18/0x00000000292404e0",
+      "type": "net.minestom.server.item.component.UseCooldown$TType/0x000000007023f9e0",
       "methods": [
         {
           "name": "<init>",
@@ -3052,7 +3052,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.UseEffects$TType$6/0x00000000291edd40",
+      "type": "net.minestom.server.item.component.UseEffects$TType/0x00000000701ebc70",
       "methods": [
         {
           "name": "<init>",
@@ -3088,7 +3088,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.Weapon$TType$22/0x000000002924cdd8",
+      "type": "net.minestom.server.item.component.Weapon$TType/0x00000000702464e0",
       "methods": [
         {
           "name": "<init>",
@@ -3118,7 +3118,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.WritableBookContent$TType$39/0x000000002927b488",
+      "type": "net.minestom.server.item.component.WritableBookContent$TType/0x000000007027e938",
       "methods": [
         {
           "name": "<init>",
@@ -3166,7 +3166,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.component.WrittenBookContent$TType$40/0x00000000292804b0",
+      "type": "net.minestom.server.item.component.WrittenBookContent$TType/0x000000007027a238",
       "methods": [
         {
           "name": "<init>",
@@ -3208,7 +3208,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.item.instrument.Instrument$TType$46/0x000000002928a540",
+      "type": "net.minestom.server.item.instrument.Instrument$TType/0x00000000702889f0",
       "methods": [
         {
           "name": "<init>",
@@ -3243,7 +3243,7 @@
       "type": "net.minestom.server.message.ChatMessageType"
     },
     {
-      "type": "net.minestom.server.network.CompressiblePacket$TType$342/0x0000000029867278",
+      "type": "net.minestom.server.network.CompressiblePacket$TType/0x00000000708173a0",
       "methods": [
         {
           "name": "<init>",
@@ -3256,7 +3256,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.IntPacket$TType$341/0x0000000029863850",
+      "type": "net.minestom.server.network.IntPacket$TType/0x0000000070816b88",
       "methods": [
         {
           "name": "<init>",
@@ -3305,7 +3305,7 @@
       "type": "net.minestom.server.network.debug.DebugSubscription$Update"
     },
     {
-      "type": "net.minestom.server.network.debug.info.Data$TType$99/0x000000002939fa38",
+      "type": "net.minestom.server.network.debug.info.Data$TType/0x0000000070393000",
       "methods": [
         {
           "name": "<init>",
@@ -3352,7 +3352,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugBeeInfo$TType$94/0x0000000029390c18",
+      "type": "net.minestom.server.network.debug.info.DebugBeeInfo$TType/0x0000000070388c18",
       "methods": [
         {
           "name": "<init>",
@@ -3451,7 +3451,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugBrainDump$TType$95/0x0000000029393620",
+      "type": "net.minestom.server.network.debug.info.DebugBrainDump$TType/0x000000007038b620",
       "methods": [
         {
           "name": "<init>",
@@ -3506,7 +3506,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugBreezeInfo$TType$96/0x00000000293974e0",
+      "type": "net.minestom.server.network.debug.info.DebugBreezeInfo$TType/0x000000007038f4e0",
       "methods": [
         {
           "name": "<init>",
@@ -3541,7 +3541,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugGameEventInfo$TType$108/0x00000000293aa620",
+      "type": "net.minestom.server.network.debug.info.DebugGameEventInfo$TType/0x00000000703a0c48",
       "methods": [
         {
           "name": "<init>",
@@ -3571,7 +3571,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugGameEventListenerInfo$TType$107/0x00000000293a9498",
+      "type": "net.minestom.server.network.debug.info.DebugGameEventListenerInfo$TType/0x000000007039fba0",
       "methods": [
         {
           "name": "<init>",
@@ -3609,7 +3609,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugGoalInfo$TType$97/0x00000000293984b0",
+      "type": "net.minestom.server.network.debug.info.DebugGoalInfo$TType/0x0000000070394238",
       "methods": [
         {
           "name": "<init>",
@@ -3656,7 +3656,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugHiveInfo$TType$102/0x00000000293a2028",
+      "type": "net.minestom.server.network.debug.info.DebugHiveInfo$TType/0x0000000070399810",
       "methods": [
         {
           "name": "<init>",
@@ -3807,7 +3807,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugPathInfo$TType$101/0x00000000293a0a80",
+      "type": "net.minestom.server.network.debug.info.DebugPathInfo$TType/0x0000000070398268",
       "methods": [
         {
           "name": "<init>",
@@ -3847,7 +3847,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugPoiInfo$TType$103/0x00000000293a3358",
+      "type": "net.minestom.server.network.debug.info.DebugPoiInfo$TType/0x000000007039ab40",
       "methods": [
         {
           "name": "<init>",
@@ -3907,7 +3907,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.DebugStructureInfo$TType$106/0x00000000293a8a70",
+      "type": "net.minestom.server.network.debug.info.DebugStructureInfo$TType/0x000000007039f178",
       "methods": [
         {
           "name": "<init>",
@@ -3922,7 +3922,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.Node$TType$98/0x000000002939afd0",
+      "type": "net.minestom.server.network.debug.info.Node$TType/0x0000000070396d58",
       "methods": [
         {
           "name": "<init>",
@@ -3945,7 +3945,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.Path$TType$100/0x00000000293a0000",
+      "type": "net.minestom.server.network.debug.info.Path$TType/0x00000000703937d8",
       "methods": [
         {
           "name": "<init>",
@@ -3966,7 +3966,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.debug.info.Piece$TType$105/0x00000000293a8268",
+      "type": "net.minestom.server.network.debug.info.Piece$TType/0x000000007039e970",
       "methods": [
         {
           "name": "<init>",
@@ -4001,7 +4001,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.common.ClientCookieResponsePacket$TType$61/0x0000000029366460",
+      "type": "net.minestom.server.network.packet.client.common.ClientCookieResponsePacket$TType/0x000000007035ef60",
       "methods": [
         {
           "name": "<init>",
@@ -4036,7 +4036,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.common.ClientCustomClickActionPacket$TType$70/0x0000000029376390",
+      "type": "net.minestom.server.network.packet.client.common.ClientCustomClickActionPacket$TType/0x000000007036f8a0",
       "methods": [
         {
           "name": "<init>",
@@ -4066,7 +4066,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.common.ClientKeepAlivePacket$TType$65/0x000000002936a450",
+      "type": "net.minestom.server.network.packet.client.common.ClientKeepAlivePacket$TType/0x0000000070363810",
       "methods": [
         {
           "name": "<init>",
@@ -4094,7 +4094,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.common.ClientPingRequestPacket$TType$57/0x000000002935f760",
+      "type": "net.minestom.server.network.packet.client.common.ClientPingRequestPacket$TType/0x000000007035a180",
       "methods": [
         {
           "name": "<init>",
@@ -4127,7 +4127,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.common.ClientPluginMessagePacket$TType$64/0x0000000029369c38",
+      "type": "net.minestom.server.network.packet.client.common.ClientPluginMessagePacket$TType/0x0000000070362ff8",
       "methods": [
         {
           "name": "<init>",
@@ -4157,7 +4157,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.common.ClientPongPacket$TType$66/0x000000002936ac68",
+      "type": "net.minestom.server.network.packet.client.common.ClientPongPacket$TType/0x000000007036c278",
       "methods": [
         {
           "name": "<init>",
@@ -4202,7 +4202,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.common.ClientResourcePackStatusPacket$TType$67/0x000000002936bbd8",
+      "type": "net.minestom.server.network.packet.client.common.ClientResourcePackStatusPacket$TType/0x000000007036d1e8",
       "methods": [
         {
           "name": "<init>",
@@ -4232,7 +4232,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.common.ClientSettingsPacket$TType$63/0x00000000293691b8",
+      "type": "net.minestom.server.network.packet.client.common.ClientSettingsPacket$TType/0x0000000070362578",
       "methods": [
         {
           "name": "<init>",
@@ -4260,7 +4260,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket$TType$69/0x0000000029375608",
+      "type": "net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket$TType/0x000000007036eb18",
       "methods": [
         {
           "name": "<init>",
@@ -4318,7 +4318,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.handshake.ClientHandshakePacket$TType$56/0x000000002935e8c0",
+      "type": "net.minestom.server.network.packet.client.handshake.ClientHandshakePacket$TType/0x00000000703592e0",
       "methods": [
         {
           "name": "<init>",
@@ -4356,7 +4356,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket$TType$59/0x0000000029364f60",
+      "type": "net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket$TType/0x000000007035b8f8",
       "methods": [
         {
           "name": "<init>",
@@ -4390,7 +4390,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket$TType$60/0x00000000293659e0",
+      "type": "net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket$TType/0x000000007035e4e0",
       "methods": [
         {
           "name": "<init>",
@@ -4425,7 +4425,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.login.ClientLoginStartPacket$TType$58/0x00000000293644e0",
+      "type": "net.minestom.server.network.packet.client.login.ClientLoginStartPacket$TType/0x000000007035ae78",
       "methods": [
         {
           "name": "<init>",
@@ -4455,7 +4455,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientAnimationPacket$TType$140/0x00000000293d4d38",
+      "type": "net.minestom.server.network.packet.client.play.ClientAnimationPacket$TType/0x00000000703cc6f0",
       "methods": [
         {
           "name": "<init>",
@@ -4488,7 +4488,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientChangeDifficultyPacket$TType$74/0x0000000029373728",
+      "type": "net.minestom.server.network.packet.client.play.ClientChangeDifficultyPacket$TType/0x0000000070370268",
       "methods": [
         {
           "name": "<init>",
@@ -4518,7 +4518,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientChangeGameModePacket$TType$75/0x0000000029378000",
+      "type": "net.minestom.server.network.packet.client.play.ClientChangeGameModePacket$TType/0x0000000070370fa0",
       "methods": [
         {
           "name": "<init>",
@@ -4546,7 +4546,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientChatAckPacket$TType$76/0x0000000029378a38",
+      "type": "net.minestom.server.network.packet.client.play.ClientChatAckPacket$TType/0x00000000703719d8",
       "methods": [
         {
           "name": "<init>",
@@ -4604,7 +4604,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientChatMessagePacket$TType$83/0x000000002937efd8",
+      "type": "net.minestom.server.network.packet.client.play.ClientChatMessagePacket$TType/0x000000007037d108",
       "methods": [
         {
           "name": "<init>",
@@ -4643,7 +4643,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientChatSessionUpdatePacket$TType$86/0x00000000293854d0",
+      "type": "net.minestom.server.network.packet.client.play.ClientChatSessionUpdatePacket$TType/0x000000007037f498",
       "methods": [
         {
           "name": "<init>",
@@ -4671,7 +4671,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientChunkBatchReceivedPacket$TType$87/0x0000000029385ce8",
+      "type": "net.minestom.server.network.packet.client.play.ClientChunkBatchReceivedPacket$TType/0x000000007037fcb0",
       "methods": [
         {
           "name": "<init>",
@@ -4704,7 +4704,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientClickWindowButtonPacket$TType$90/0x000000002938c268",
+      "type": "net.minestom.server.network.packet.client.play.ClientClickWindowButtonPacket$TType/0x0000000070381180",
       "methods": [
         {
           "name": "<init>",
@@ -4766,7 +4766,7 @@
       "type": "net.minestom.server.network.packet.client.play.ClientClickWindowPacket$ClickType"
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientClickWindowPacket$TType$91/0x000000002938e250",
+      "type": "net.minestom.server.network.packet.client.play.ClientClickWindowPacket$TType/0x0000000070383168",
       "methods": [
         {
           "name": "<init>",
@@ -4804,7 +4804,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientCloseWindowPacket$TType$92/0x000000002938ea68",
+      "type": "net.minestom.server.network.packet.client.play.ClientCloseWindowPacket$TType/0x0000000070383980",
       "methods": [
         {
           "name": "<init>",
@@ -4832,7 +4832,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientCommandChatPacket$TType$77/0x0000000029379250",
+      "type": "net.minestom.server.network.packet.client.play.ClientCommandChatPacket$TType/0x00000000703721f0",
       "methods": [
         {
           "name": "<init>",
@@ -4865,7 +4865,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket$TType$136/0x00000000293c3420",
+      "type": "net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket$TType/0x00000000703baf28",
       "methods": [
         {
           "name": "<init>",
@@ -4895,7 +4895,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientDebugSubscriptionRequestPacket$TType$109/0x00000000293aae38",
+      "type": "net.minestom.server.network.packet.client.play.ClientDebugSubscriptionRequestPacket$TType/0x00000000703a1460",
       "methods": [
         {
           "name": "<init>",
@@ -4933,7 +4933,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientEditBookPacket$TType$110/0x00000000293abb00",
+      "type": "net.minestom.server.network.packet.client.play.ClientEditBookPacket$TType/0x00000000703a2128",
       "methods": [
         {
           "name": "<init>",
@@ -4978,7 +4978,7 @@
       "type": "net.minestom.server.network.packet.client.play.ClientEntityActionPacket$Action"
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientEntityActionPacket$TType$126/0x00000000293baef8",
+      "type": "net.minestom.server.network.packet.client.play.ClientEntityActionPacket$TType/0x00000000703b4b78",
       "methods": [
         {
           "name": "<init>",
@@ -5019,7 +5019,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientGenerateStructurePacket$TType$113/0x00000000293b4bc8",
+      "type": "net.minestom.server.network.packet.client.play.ClientGenerateStructurePacket$TType/0x00000000703a6ef0",
       "methods": [
         {
           "name": "<init>",
@@ -5051,7 +5051,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket$TType$133/0x00000000293c6340",
+      "type": "net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket$TType/0x00000000703b8000",
       "methods": [
         {
           "name": "<init>",
@@ -5079,7 +5079,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientInputPacket$TType$127/0x00000000293bb710",
+      "type": "net.minestom.server.network.packet.client.play.ClientInputPacket$TType/0x00000000703b5390",
       "methods": [
         {
           "name": "<init>",
@@ -5162,7 +5162,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientInteractEntityPacket$TType$112/0x00000000293afad0",
+      "type": "net.minestom.server.network.packet.client.play.ClientInteractEntityPacket$TType/0x00000000703a6000",
       "methods": [
         {
           "name": "<init>",
@@ -5197,7 +5197,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientLockDifficultyPacket$TType$114/0x00000000293b5600",
+      "type": "net.minestom.server.network.packet.client.play.ClientLockDifficultyPacket$TType/0x00000000703a7928",
       "methods": [
         {
           "name": "<init>",
@@ -5225,7 +5225,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientNameItemPacket$TType$130/0x00000000293bfbf0",
+      "type": "net.minestom.server.network.packet.client.play.ClientNameItemPacket$TType/0x00000000703b76f8",
       "methods": [
         {
           "name": "<init>",
@@ -5258,7 +5258,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPickItemFromBlockPacket$TType$121/0x00000000293b1000",
+      "type": "net.minestom.server.network.packet.client.play.ClientPickItemFromBlockPacket$TType/0x00000000703abbb8",
       "methods": [
         {
           "name": "<init>",
@@ -5293,7 +5293,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPickItemFromEntityPacket$TType$122/0x00000000293b1a80",
+      "type": "net.minestom.server.network.packet.client.play.ClientPickItemFromEntityPacket$TType/0x00000000703ae758",
       "methods": [
         {
           "name": "<init>",
@@ -5333,7 +5333,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPlaceRecipePacket$TType$123/0x00000000293b8238",
+      "type": "net.minestom.server.network.packet.client.play.ClientPlaceRecipePacket$TType/0x00000000703af420",
       "methods": [
         {
           "name": "<init>",
@@ -5365,7 +5365,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPlayerAbilitiesPacket$TType$124/0x00000000293b8a50",
+      "type": "net.minestom.server.network.packet.client.play.ClientPlayerAbilitiesPacket$TType/0x00000000703afc38",
       "methods": [
         {
           "name": "<init>",
@@ -5411,7 +5411,7 @@
       "type": "net.minestom.server.network.packet.client.play.ClientPlayerActionPacket$Status"
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPlayerActionPacket$TType$125/0x00000000293b9de0",
+      "type": "net.minestom.server.network.packet.client.play.ClientPlayerActionPacket$TType/0x00000000703aca38",
       "methods": [
         {
           "name": "<init>",
@@ -5484,7 +5484,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket$TType$144/0x00000000293de048",
+      "type": "net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket$TType/0x00000000703d15f8",
       "methods": [
         {
           "name": "<init>",
@@ -5529,7 +5529,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket$TType$116/0x00000000293b6b00",
+      "type": "net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket$TType/0x00000000703a8758",
       "methods": [
         {
           "name": "<init>",
@@ -5564,7 +5564,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket$TType$115/0x00000000293b6080",
+      "type": "net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket$TType/0x00000000703a5400",
       "methods": [
         {
           "name": "<init>",
@@ -5594,7 +5594,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPlayerPositionStatusPacket$TType$118/0x00000000293b2000",
+      "type": "net.minestom.server.network.packet.client.play.ClientPlayerPositionStatusPacket$TType/0x00000000703a9c38",
       "methods": [
         {
           "name": "<init>",
@@ -5632,7 +5632,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket$TType$117/0x00000000293b77c8",
+      "type": "net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket$TType/0x00000000703a9420",
       "methods": [
         {
           "name": "<init>",
@@ -5668,7 +5668,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientQueryBlockNbtPacket$TType$72/0x0000000029372000",
+      "type": "net.minestom.server.network.packet.client.play.ClientQueryBlockNbtPacket$TType/0x000000007036b410",
       "methods": [
         {
           "name": "<init>",
@@ -5703,7 +5703,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientQueryEntityNbtPacket$TType$111/0x00000000293ae978",
+      "type": "net.minestom.server.network.packet.client.play.ClientQueryEntityNbtPacket$TType/0x00000000703a2dc8",
       "methods": [
         {
           "name": "<init>",
@@ -5732,7 +5732,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientRecipeBookSeenRecipePacket$TType$129/0x00000000293bf3d8",
+      "type": "net.minestom.server.network.packet.client.play.ClientRecipeBookSeenRecipePacket$TType/0x00000000703b6ee0",
       "methods": [
         {
           "name": "<init>",
@@ -5765,7 +5765,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket$TType$73/0x0000000029372a80",
+      "type": "net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket$TType/0x0000000070369800",
       "methods": [
         {
           "name": "<init>",
@@ -5794,7 +5794,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientSelectTradePacket$TType$131/0x00000000293c4e80",
+      "type": "net.minestom.server.network.packet.client.play.ClientSelectTradePacket$TType/0x00000000703b2910",
       "methods": [
         {
           "name": "<init>",
@@ -5827,7 +5827,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientSetBeaconEffectPacket$TType$132/0x00000000293c5b28",
+      "type": "net.minestom.server.network.packet.client.play.ClientSetBeaconEffectPacket$TType/0x00000000703b35b8",
       "methods": [
         {
           "name": "<init>",
@@ -5870,7 +5870,7 @@
       "type": "net.minestom.server.network.packet.client.play.ClientSetRecipeBookStatePacket$BookType"
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientSetRecipeBookStatePacket$TType$128/0x00000000293be9a0",
+      "type": "net.minestom.server.network.packet.client.play.ClientSetRecipeBookStatePacket$TType/0x00000000703b64a8",
       "methods": [
         {
           "name": "<init>",
@@ -5911,7 +5911,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientSetTestBlockPacket$TType$139/0x00000000293d4000",
+      "type": "net.minestom.server.network.packet.client.play.ClientSetTestBlockPacket$TType/0x00000000703c79b8",
       "methods": [
         {
           "name": "<init>",
@@ -5971,7 +5971,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientSignedCommandChatPacket$TType$82/0x000000002937d930",
+      "type": "net.minestom.server.network.packet.client.play.ClientSignedCommandChatPacket$TType/0x0000000070375a50",
       "methods": [
         {
           "name": "<init>",
@@ -6008,7 +6008,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientSpectatePacket$TType$141/0x00000000293d5550",
+      "type": "net.minestom.server.network.packet.client.play.ClientSpectatePacket$TType/0x00000000703ccf08",
       "methods": [
         {
           "name": "<init>",
@@ -6039,7 +6039,7 @@
       "type": "net.minestom.server.network.packet.client.play.ClientStatusPacket$Action"
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientStatusPacket$TType$88/0x0000000029386950",
+      "type": "net.minestom.server.network.packet.client.play.ClientStatusPacket$TType/0x000000007037b940",
       "methods": [
         {
           "name": "<init>",
@@ -6072,7 +6072,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientSteerBoatPacket$TType$120/0x00000000293b3500",
+      "type": "net.minestom.server.network.packet.client.play.ClientSteerBoatPacket$TType/0x00000000703ab138",
       "methods": [
         {
           "name": "<init>",
@@ -6106,7 +6106,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientTabCompletePacket$TType$89/0x00000000293873d0",
+      "type": "net.minestom.server.network.packet.client.play.ClientTabCompletePacket$TType/0x00000000703804e0",
       "methods": [
         {
           "name": "<init>",
@@ -6136,7 +6136,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket$TType$71/0x0000000029377040",
+      "type": "net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket$TType/0x000000007036a768",
       "methods": [
         {
           "name": "<init>",
@@ -6220,7 +6220,7 @@
       "type": "net.minestom.server.network.packet.client.play.ClientTestInstanceBlockActionPacket$Status"
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientTestInstanceBlockActionPacket$TType$143/0x00000000293dc4b0",
+      "type": "net.minestom.server.network.packet.client.play.ClientTestInstanceBlockActionPacket$TType/0x00000000703cb800",
       "methods": [
         {
           "name": "<init>",
@@ -6262,7 +6262,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientUpdateCommandBlockMinecartPacket$TType$135/0x00000000293c29a0",
+      "type": "net.minestom.server.network.packet.client.play.ClientUpdateCommandBlockMinecartPacket$TType/0x00000000703ba4a8",
       "methods": [
         {
           "name": "<init>",
@@ -6312,7 +6312,7 @@
       "type": "net.minestom.server.network.packet.client.play.ClientUpdateCommandBlockPacket$Mode"
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientUpdateCommandBlockPacket$TType$134/0x00000000293c78f8",
+      "type": "net.minestom.server.network.packet.client.play.ClientUpdateCommandBlockPacket$TType/0x00000000703b95b8",
       "methods": [
         {
           "name": "<init>",
@@ -6380,7 +6380,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientUpdateJigsawBlockPacket$TType$137/0x00000000293c8e90",
+      "type": "net.minestom.server.network.packet.client.play.ClientUpdateJigsawBlockPacket$TType/0x00000000703bec18",
       "methods": [
         {
           "name": "<init>",
@@ -6493,7 +6493,7 @@
       "type": "net.minestom.server.network.packet.client.play.ClientUpdateStructureBlockPacket$Mode"
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientUpdateStructureBlockPacket$TType$138/0x00000000293ce9a0",
+      "type": "net.minestom.server.network.packet.client.play.ClientUpdateStructureBlockPacket$TType/0x00000000703c6678",
       "methods": [
         {
           "name": "<init>",
@@ -6553,7 +6553,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientUseItemPacket$TType$145/0x00000000293def88",
+      "type": "net.minestom.server.network.packet.client.play.ClientUseItemPacket$TType/0x00000000703d2538",
       "methods": [
         {
           "name": "<init>",
@@ -6591,7 +6591,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientVehicleMovePacket$TType$119/0x00000000293b2a80",
+      "type": "net.minestom.server.network.packet.client.play.ClientVehicleMovePacket$TType/0x00000000703aa6b8",
       "methods": [
         {
           "name": "<init>",
@@ -6631,7 +6631,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.ClientWindowSlotStatePacket$TType$93/0x000000002938f950",
+      "type": "net.minestom.server.network.packet.client.play.ClientWindowSlotStatePacket$TType/0x00000000703879a0",
       "methods": [
         {
           "name": "<init>",
@@ -6647,7 +6647,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.Data$TType$142/0x00000000293d7b50",
+      "type": "net.minestom.server.network.packet.client.play.Data$TType/0x00000000703cf508",
       "methods": [
         {
           "name": "<init>",
@@ -6670,7 +6670,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.Interact$TType$326/0x0000000029786f20",
+      "type": "net.minestom.server.network.packet.client.play.Interact$TType/0x000000007072ef30",
       "methods": [
         {
           "name": "<init>",
@@ -6683,7 +6683,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.client.play.InteractAt$TType$325/0x000000002975f808",
+      "type": "net.minestom.server.network.packet.client.play.InteractAt$TType/0x000000007070d238",
       "methods": [
         {
           "name": "<init>",
@@ -6731,7 +6731,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.CookieRequestPacket$TType$153/0x00000000293e9970",
+      "type": "net.minestom.server.network.packet.server.common.CookieRequestPacket$TType/0x00000000703daf20",
       "methods": [
         {
           "name": "<init>",
@@ -6764,7 +6764,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.CookieStorePacket$TType$162/0x00000000293f1178",
+      "type": "net.minestom.server.network.packet.server.common.CookieStorePacket$TType/0x00000000703e5888",
       "methods": [
         {
           "name": "<init>",
@@ -6794,7 +6794,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.CustomReportDetailsPacket$TType$169/0x00000000293f7a90",
+      "type": "net.minestom.server.network.packet.server.common.CustomReportDetailsPacket$TType/0x00000000703ee298",
       "methods": [
         {
           "name": "<init>",
@@ -6822,7 +6822,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.DisconnectPacket$TType$155/0x00000000293eb368",
+      "type": "net.minestom.server.network.packet.server.common.DisconnectPacket$TType/0x00000000703d9ab8",
       "methods": [
         {
           "name": "<init>",
@@ -6835,7 +6835,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.Entry$TType$170/0x00000000293f8758",
+      "type": "net.minestom.server.network.packet.server.common.Entry$TType/0x00000000703ef650",
       "methods": [
         {
           "name": "<init>",
@@ -6865,7 +6865,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.KeepAlivePacket$TType$156/0x00000000293ebff0",
+      "type": "net.minestom.server.network.packet.server.common.KeepAlivePacket$TType/0x00000000703e0730",
       "methods": [
         {
           "name": "<init>",
@@ -6893,7 +6893,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.PingPacket$TType$157/0x00000000293eca48",
+      "type": "net.minestom.server.network.packet.server.common.PingPacket$TType/0x00000000703e1188",
       "methods": [
         {
           "name": "<init>",
@@ -6921,7 +6921,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.PingResponsePacket$TType$147/0x00000000293e4cd0",
+      "type": "net.minestom.server.network.packet.server.common.PingResponsePacket$TType/0x00000000703dc278",
       "methods": [
         {
           "name": "<init>",
@@ -6954,7 +6954,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.PluginMessagePacket$TType$154/0x00000000293ea8b0",
+      "type": "net.minestom.server.network.packet.server.common.PluginMessagePacket$TType/0x00000000703d9000",
       "methods": [
         {
           "name": "<init>",
@@ -6969,7 +6969,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.Registry$TType$166/0x00000000293f6000",
+      "type": "net.minestom.server.network.packet.server.common.Registry$TType/0x00000000703ec808",
       "methods": [
         {
           "name": "<init>",
@@ -6999,7 +6999,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.ResourcePackPopPacket$TType$160/0x00000000293ef028",
+      "type": "net.minestom.server.network.packet.server.common.ResourcePackPopPacket$TType/0x00000000703e3768",
       "methods": [
         {
           "name": "<init>",
@@ -7047,7 +7047,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.ResourcePackPushPacket$TType$161/0x00000000293f04b0",
+      "type": "net.minestom.server.network.packet.server.common.ResourcePackPushPacket$TType/0x00000000703e4bc0",
       "methods": [
         {
           "name": "<init>",
@@ -7102,7 +7102,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.ServerLinksPacket$TType$171/0x00000000293f8f70",
+      "type": "net.minestom.server.network.packet.server.common.ServerLinksPacket$TType/0x00000000703ea000",
       "methods": [
         {
           "name": "<init>",
@@ -7136,7 +7136,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.ShowDialogPacket$TType$172/0x00000000293f9c10",
+      "type": "net.minestom.server.network.packet.server.common.ShowDialogPacket$TType/0x00000000703eaca0",
       "methods": [
         {
           "name": "<init>",
@@ -7149,7 +7149,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.ShowDialogPacket$TType$173/0x00000000293fa428",
+      "type": "net.minestom.server.network.packet.server.common.ShowDialogPacket$TType/0x00000000703eb4b8",
       "methods": [
         {
           "name": "<init>",
@@ -7162,7 +7162,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.Tag$TType$165/0x00000000293f3770",
+      "type": "net.minestom.server.network.packet.server.common.Tag$TType/0x00000000703ec000",
       "methods": [
         {
           "name": "<init>",
@@ -7212,7 +7212,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.TagsPacket$TType$167/0x00000000293f6818",
+      "type": "net.minestom.server.network.packet.server.common.TagsPacket$TType/0x00000000703ed020",
       "methods": [
         {
           "name": "<init>",
@@ -7265,7 +7265,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.TransferPacket$TType$163/0x00000000293f1bf8",
+      "type": "net.minestom.server.network.packet.server.common.TransferPacket$TType/0x00000000703e6308",
       "methods": [
         {
           "name": "<init>",
@@ -7295,7 +7295,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.configuration.CodeOfConductPacket$TType$174/0x00000000293fae78",
+      "type": "net.minestom.server.network.packet.server.configuration.CodeOfConductPacket$TType/0x00000000703e9000",
       "methods": [
         {
           "name": "<init>",
@@ -7308,13 +7308,13 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.configuration.Entry$TType$158/0x00000000293eddc0",
+      "type": "net.minestom.server.network.packet.server.configuration.Entry$TType/0x000000007036e300",
       "methods": [
         {
           "name": "<init>",
           "parameterTypes": [
             "net.minestom.server.network.NetworkBuffer$Type",
-            "net.minestom.server.network.NetworkBuffer$Type",
+            "java.lang.invoke.MethodHandle",
             "java.lang.invoke.MethodHandle",
             "java.lang.invoke.MethodHandle",
             "java.lang.invoke.MethodHandle"
@@ -7323,13 +7323,13 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.configuration.Entry$TType$68/0x0000000029374df0",
+      "type": "net.minestom.server.network.packet.server.configuration.Entry$TType/0x00000000703e2500",
       "methods": [
         {
           "name": "<init>",
           "parameterTypes": [
             "net.minestom.server.network.NetworkBuffer$Type",
-            "java.lang.invoke.MethodHandle",
+            "net.minestom.server.network.NetworkBuffer$Type",
             "java.lang.invoke.MethodHandle",
             "java.lang.invoke.MethodHandle",
             "java.lang.invoke.MethodHandle"
@@ -7378,7 +7378,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.configuration.RegistryDataPacket$TType$159/0x00000000293ee5c8",
+      "type": "net.minestom.server.network.packet.server.configuration.RegistryDataPacket$TType/0x00000000703e2d08",
       "methods": [
         {
           "name": "<init>",
@@ -7433,7 +7433,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket$TType$168/0x00000000293f7030",
+      "type": "net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket$TType/0x00000000703ed838",
       "methods": [
         {
           "name": "<init>",
@@ -7461,7 +7461,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.configuration.UpdateEnabledFeaturesPacket$TType$164/0x00000000293f2648",
+      "type": "net.minestom.server.network.packet.server.configuration.UpdateEnabledFeaturesPacket$TType/0x00000000703e6d58",
       "methods": [
         {
           "name": "<init>",
@@ -7504,7 +7504,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.login.EncryptionRequestPacket$TType$149/0x00000000293e6b68",
+      "type": "net.minestom.server.network.packet.server.login.EncryptionRequestPacket$TType/0x00000000703de110",
       "methods": [
         {
           "name": "<init>",
@@ -7537,7 +7537,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.login.LoginDisconnectPacket$TType$148/0x00000000293e59f0",
+      "type": "net.minestom.server.network.packet.server.login.LoginDisconnectPacket$TType/0x00000000703dcf98",
       "methods": [
         {
           "name": "<init>",
@@ -7575,7 +7575,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.login.LoginPluginRequestPacket$TType$152/0x00000000293e8f00",
+      "type": "net.minestom.server.network.packet.server.login.LoginPluginRequestPacket$TType/0x00000000703da4b0",
       "methods": [
         {
           "name": "<init>",
@@ -7607,7 +7607,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.login.LoginSuccessPacket$TType$150/0x00000000293e75b8",
+      "type": "net.minestom.server.network.packet.server.login.LoginSuccessPacket$TType/0x00000000703deb60",
       "methods": [
         {
           "name": "<init>",
@@ -7635,7 +7635,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.login.SetCompressionPacket$TType$151/0x00000000293e8000",
+      "type": "net.minestom.server.network.packet.server.login.SetCompressionPacket$TType/0x00000000703df5a8",
       "methods": [
         {
           "name": "<init>",
@@ -7663,7 +7663,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket$TType$178/0x00000000293fecc0",
+      "type": "net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket$TType/0x00000000703f2ea8",
       "methods": [
         {
           "name": "<init>",
@@ -7691,7 +7691,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ActionBarPacket$TType$262/0x0000000029486690",
+      "type": "net.minestom.server.network.packet.server.play.ActionBarPacket$TType/0x0000000070475e88",
       "methods": [
         {
           "name": "<init>",
@@ -7704,7 +7704,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.AddAction$TType$317/0x00000000296eb5a0",
+      "type": "net.minestom.server.network.packet.server.play.AddAction$TType/0x000000007069f698",
       "methods": [
         {
           "name": "<init>",
@@ -7723,7 +7723,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Advancement$TType$300/0x00000000294b1158",
+      "type": "net.minestom.server.network.packet.server.play.Advancement$TType/0x00000000704a7798",
       "methods": [
         {
           "name": "<init>",
@@ -7742,7 +7742,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.AdvancementMapping$TType$301/0x00000000294b1960",
+      "type": "net.minestom.server.network.packet.server.play.AdvancementMapping$TType/0x00000000704a2000",
       "methods": [
         {
           "name": "<init>",
@@ -7757,7 +7757,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.AdvancementProgress$TType$304/0x00000000294b64f0",
+      "type": "net.minestom.server.network.packet.server.play.AdvancementProgress$TType/0x00000000704a1a80",
       "methods": [
         {
           "name": "<init>",
@@ -7943,7 +7943,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.AdvancementsPacket$TType$306/0x00000000294b7748",
+      "type": "net.minestom.server.network.packet.server.play.AdvancementsPacket$TType/0x00000000704a8728",
       "methods": [
         {
           "name": "<init>",
@@ -7983,7 +7983,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.AttachEntityPacket$TType$274/0x000000002948cae0",
+      "type": "net.minestom.server.network.packet.server.play.AttachEntityPacket$TType/0x000000007047dcf8",
       "methods": [
         {
           "name": "<init>",
@@ -8027,7 +8027,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.BlockActionPacket$TType$181/0x0000000029405b18",
+      "type": "net.minestom.server.network.packet.server.play.BlockActionPacket$TType/0x00000000703f5000",
       "methods": [
         {
           "name": "<init>",
@@ -8070,7 +8070,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket$TType$179/0x00000000293ffbc0",
+      "type": "net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket$TType/0x00000000703f6000",
       "methods": [
         {
           "name": "<init>",
@@ -8107,7 +8107,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.BlockChangePacket$TType$182/0x0000000029406598",
+      "type": "net.minestom.server.network.packet.server.play.BlockChangePacket$TType/0x00000000703f5a80",
       "methods": [
         {
           "name": "<init>",
@@ -8147,7 +8147,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.BlockEntityDataPacket$TType$180/0x00000000294049a0",
+      "type": "net.minestom.server.network.packet.server.play.BlockEntityDataPacket$TType/0x00000000703f6cc8",
       "methods": [
         {
           "name": "<init>",
@@ -8164,7 +8164,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.BlockParticleInfo$TType$208/0x0000000029421320",
+      "type": "net.minestom.server.network.packet.server.play.BlockParticleInfo$TType/0x0000000070412710",
       "methods": [
         {
           "name": "<init>",
@@ -8238,7 +8238,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.BossBarPacket$TType$183/0x00000000294074a8",
+      "type": "net.minestom.server.network.packet.server.play.BossBarPacket$TType/0x00000000703f8be8",
       "methods": [
         {
           "name": "<init>",
@@ -8333,7 +8333,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.CameraPacket$TType$268/0x0000000029488278",
+      "type": "net.minestom.server.network.packet.server.play.CameraPacket$TType/0x0000000070479490",
       "methods": [
         {
           "name": "<init>",
@@ -8369,7 +8369,7 @@
       "type": "net.minestom.server.network.packet.server.play.ChangeGameStatePacket$Reason"
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ChangeGameStatePacket$TType$212/0x0000000029426c00",
+      "type": "net.minestom.server.network.packet.server.play.ChangeGameStatePacket$TType/0x000000007041c268",
       "methods": [
         {
           "name": "<init>",
@@ -8399,7 +8399,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ChunkBatchFinishedPacket$TType$185/0x0000000029402cb0",
+      "type": "net.minestom.server.network.packet.server.play.ChunkBatchFinishedPacket$TType/0x00000000703fa2e8",
       "methods": [
         {
           "name": "<init>",
@@ -8412,7 +8412,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ChunkBiomeData$TType$186/0x000000002940c000",
+      "type": "net.minestom.server.network.packet.server.play.ChunkBiomeData$TType/0x00000000703fb630",
       "methods": [
         {
           "name": "<init>",
@@ -8468,7 +8468,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ChunkBiomesPacket$TType$187/0x000000002940c818",
+      "type": "net.minestom.server.network.packet.server.play.ChunkBiomesPacket$TType/0x00000000703fe000",
       "methods": [
         {
           "name": "<init>",
@@ -8511,7 +8511,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ChunkDataPacket$TType$220/0x0000000029435d70",
+      "type": "net.minestom.server.network.packet.server.play.ChunkDataPacket$TType/0x0000000070427210",
       "methods": [
         {
           "name": "<init>",
@@ -8544,7 +8544,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ClearTitlesPacket$TType$188/0x000000002940d260",
+      "type": "net.minestom.server.network.packet.server.play.ClearTitlesPacket$TType/0x00000000703fea48",
       "methods": [
         {
           "name": "<init>",
@@ -8572,7 +8572,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.CloseWindowPacket$TType$192/0x000000002940a4f0",
+      "type": "net.minestom.server.network.packet.server.play.CloseWindowPacket$TType/0x0000000070400cf8",
       "methods": [
         {
           "name": "<init>",
@@ -8610,7 +8610,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.CollectItemPacket$TType$295/0x00000000294ae8c0",
+      "type": "net.minestom.server.network.packet.server.play.CollectItemPacket$TType/0x000000007049fcc0",
       "methods": [
         {
           "name": "<init>",
@@ -8625,7 +8625,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Create$TType$333/0x00000000297ef068",
+      "type": "net.minestom.server.network.packet.server.play.Create$TType/0x00000000707a7a50",
       "methods": [
         {
           "name": "<init>",
@@ -8642,7 +8642,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.CreateTeamAction$TType$338/0x0000000029812820",
+      "type": "net.minestom.server.network.packet.server.play.CreateTeamAction$TType/0x00000000707c1c20",
       "methods": [
         {
           "name": "<init>",
@@ -8665,7 +8665,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Criteria$TType$303/0x00000000294b3bc0",
+      "type": "net.minestom.server.network.packet.server.play.Criteria$TType/0x00000000704a1268",
       "methods": [
         {
           "name": "<init>",
@@ -8680,7 +8680,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.CriterionProgress$TType$302/0x00000000294b33b8",
+      "type": "net.minestom.server.network.packet.server.play.CriterionProgress$TType/0x00000000704a3a58",
       "methods": [
         {
           "name": "<init>",
@@ -8716,7 +8716,7 @@
       "type": "net.minestom.server.network.packet.server.play.CustomChatCompletionPacket$Action"
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.CustomChatCompletionPacket$TType$197/0x0000000029411ff8",
+      "type": "net.minestom.server.network.packet.server.play.CustomChatCompletionPacket$TType/0x0000000070405830",
       "methods": [
         {
           "name": "<init>",
@@ -8766,7 +8766,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DamageEventPacket$TType$198/0x00000000294133e8",
+      "type": "net.minestom.server.network.packet.server.play.DamageEventPacket$TType/0x0000000070406c20",
       "methods": [
         {
           "name": "<init>",
@@ -8806,7 +8806,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DeathCombatEventPacket$TType$243/0x0000000029466d50",
+      "type": "net.minestom.server.network.packet.server.play.DeathCombatEventPacket$TType/0x0000000070457758",
       "methods": [
         {
           "name": "<init>",
@@ -8841,7 +8841,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DebugBlockValuePacket$TType$199/0x0000000029416800",
+      "type": "net.minestom.server.network.packet.server.play.DebugBlockValuePacket$TType/0x000000007040c000",
       "methods": [
         {
           "name": "<init>",
@@ -8876,7 +8876,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DebugChunkValuePacket$TType$200/0x00000000294174b8",
+      "type": "net.minestom.server.network.packet.server.play.DebugChunkValuePacket$TType/0x000000007040ccb8",
       "methods": [
         {
           "name": "<init>",
@@ -8911,7 +8911,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DebugEntityValuePacket$TType$201/0x0000000029415a68",
+      "type": "net.minestom.server.network.packet.server.play.DebugEntityValuePacket$TType/0x000000007040d970",
       "methods": [
         {
           "name": "<init>",
@@ -8941,7 +8941,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DebugEventPacket$TType$202/0x0000000029418a28",
+      "type": "net.minestom.server.network.packet.server.play.DebugEventPacket$TType/0x000000007040e8f8",
       "methods": [
         {
           "name": "<init>",
@@ -8974,7 +8974,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DebugSamplePacket$TType$203/0x0000000029419b30",
+      "type": "net.minestom.server.network.packet.server.play.DebugSamplePacket$TType/0x000000007040fa00",
       "methods": [
         {
           "name": "<init>",
@@ -9012,7 +9012,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DeclareCommandsPacket$TType$191/0x000000002940fc08",
+      "type": "net.minestom.server.network.packet.server.play.DeclareCommandsPacket$TType/0x00000000704004e0",
       "methods": [
         {
           "name": "<init>",
@@ -9067,7 +9067,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DeclareRecipesPacket$TType$312/0x00000000294bba18",
+      "type": "net.minestom.server.network.packet.server.play.DeclareRecipesPacket$TType/0x00000000704b0000",
       "methods": [
         {
           "name": "<init>",
@@ -9097,7 +9097,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DeleteChatPacket$TType$204/0x000000002941a580",
+      "type": "net.minestom.server.network.packet.server.play.DeleteChatPacket$TType/0x000000007040a4f0",
       "methods": [
         {
           "name": "<init>",
@@ -9125,7 +9125,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DestroyEntitiesPacket$TType$254/0x0000000029477400",
+      "type": "net.minestom.server.network.packet.server.play.DestroyEntitiesPacket$TType/0x000000007046c4f0",
       "methods": [
         {
           "name": "<init>",
@@ -9168,7 +9168,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DisguisedChatPacket$TType$205/0x000000002941b750",
+      "type": "net.minestom.server.network.packet.server.play.DisguisedChatPacket$TType/0x000000007040b6c0",
       "methods": [
         {
           "name": "<init>",
@@ -9206,7 +9206,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.DisplayScoreboardPacket$TType$273/0x000000002948bd40",
+      "type": "net.minestom.server.network.packet.server.play.DisplayScoreboardPacket$TType/0x000000007047cf58",
       "methods": [
         {
           "name": "<init>",
@@ -9236,7 +9236,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EndCombatEventPacket$TType$242/0x0000000029465e10",
+      "type": "net.minestom.server.network.packet.server.play.EndCombatEventPacket$TType/0x00000000704535b0",
       "methods": [
         {
           "name": "<init>",
@@ -9272,7 +9272,7 @@
       "type": "net.minestom.server.network.packet.server.play.EntityAnimationPacket$Animation"
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityAnimationPacket$TType$175/0x00000000293fc4f8",
+      "type": "net.minestom.server.network.packet.server.play.EntityAnimationPacket$TType/0x00000000703f06e0",
       "methods": [
         {
           "name": "<init>",
@@ -9332,7 +9332,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityAttributesPacket$TType$308/0x00000000294bc808",
+      "type": "net.minestom.server.network.packet.server.play.EntityAttributesPacket$TType/0x00000000704aa090",
       "methods": [
         {
           "name": "<init>",
@@ -9347,7 +9347,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityData$TType$245/0x00000000294692b0",
+      "type": "net.minestom.server.network.packet.server.play.EntityData$TType/0x000000007045af40",
       "methods": [
         {
           "name": "<init>",
@@ -9382,7 +9382,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityEffectPacket$TType$310/0x00000000294be400",
+      "type": "net.minestom.server.network.packet.server.play.EntityEffectPacket$TType/0x00000000704abc88",
       "methods": [
         {
           "name": "<init>",
@@ -9417,7 +9417,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityHeadLookPacket$TType$258/0x000000002947f758",
+      "type": "net.minestom.server.network.packet.server.play.EntityHeadLookPacket$TType/0x000000007046aee8",
       "methods": [
         {
           "name": "<init>",
@@ -9477,7 +9477,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityPositionAndRotationPacket$TType$229/0x000000002944e4f0",
+      "type": "net.minestom.server.network.packet.server.play.EntityPositionAndRotationPacket$TType/0x000000007043f660",
       "methods": [
         {
           "name": "<init>",
@@ -9534,7 +9534,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityPositionPacket$TType$228/0x000000002944cc18",
+      "type": "net.minestom.server.network.packet.server.play.EntityPositionPacket$TType/0x000000007043dd88",
       "methods": [
         {
           "name": "<init>",
@@ -9593,7 +9593,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityPositionSyncPacket$TType$207/0x000000002941f910",
+      "type": "net.minestom.server.network.packet.server.play.EntityPositionSyncPacket$TType/0x0000000070410728",
       "methods": [
         {
           "name": "<init>",
@@ -9644,7 +9644,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityRotationPacket$TType$232/0x0000000029455978",
+      "type": "net.minestom.server.network.packet.server.play.EntityRotationPacket$TType/0x0000000070446a20",
       "methods": [
         {
           "name": "<init>",
@@ -9702,7 +9702,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntitySoundEffectPacket$TType$289/0x00000000294a04b0",
+      "type": "net.minestom.server.network.packet.server.play.EntitySoundEffectPacket$TType/0x0000000070490e90",
       "methods": [
         {
           "name": "<init>",
@@ -9744,7 +9744,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityStatusPacket$TType$206/0x000000002941e4e0",
+      "type": "net.minestom.server.network.packet.server.play.EntityStatusPacket$TType/0x00000000704094e0",
       "methods": [
         {
           "name": "<init>",
@@ -9779,7 +9779,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.EntityVelocityPacket$TType$275/0x000000002948d560",
+      "type": "net.minestom.server.network.packet.server.play.EntityVelocityPacket$TType/0x000000007047e778",
       "methods": [
         {
           "name": "<init>",
@@ -9794,7 +9794,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Entry$TType$250/0x0000000029470a50",
+      "type": "net.minestom.server.network.packet.server.play.Entry$TType/0x00000000704662b0",
       "methods": [
         {
           "name": "<init>",
@@ -9886,7 +9886,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ExplosionPacket$TType$210/0x0000000029422ed0",
+      "type": "net.minestom.server.network.packet.server.play.ExplosionPacket$TType/0x00000000704164b0",
       "methods": [
         {
           "name": "<init>",
@@ -9959,7 +9959,7 @@
       "type": "net.minestom.server.network.packet.server.play.FacePlayerPacket$FacePosition"
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.FacePlayerPacket$TType$246/0x0000000029469a88",
+      "type": "net.minestom.server.network.packet.server.play.FacePlayerPacket$TType/0x000000007045b718",
       "methods": [
         {
           "name": "<init>",
@@ -9996,7 +9996,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.GameTestHighlightPosPacket$TType$213/0x0000000029428990",
+      "type": "net.minestom.server.network.packet.server.play.GameTestHighlightPosPacket$TType/0x000000007041cf20",
       "methods": [
         {
           "name": "<init>",
@@ -10025,7 +10025,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.HeldItemChangePacket$TType$278/0x0000000029494000",
+      "type": "net.minestom.server.network.packet.server.play.HeldItemChangePacket$TType/0x00000000704851b8",
       "methods": [
         {
           "name": "<init>",
@@ -10058,7 +10058,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.HitAnimationPacket$TType$215/0x000000002942a538",
+      "type": "net.minestom.server.network.packet.server.play.HitAnimationPacket$TType/0x000000007041eac8",
       "methods": [
         {
           "name": "<init>",
@@ -10073,7 +10073,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Icon$TType$314/0x00000000294c0be8",
+      "type": "net.minestom.server.network.packet.server.play.Icon$TType/0x00000000704b26e8",
       "methods": [
         {
           "name": "<init>",
@@ -10088,7 +10088,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Icon$TType$339/0x0000000029854c18",
+      "type": "net.minestom.server.network.packet.server.play.Icon$TType/0x00000000708044b0",
       "methods": [
         {
           "name": "<init>",
@@ -10157,7 +10157,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket$TType$216/0x000000002942e238",
+      "type": "net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket$TType/0x000000007041a728",
       "methods": [
         {
           "name": "<init>",
@@ -10179,7 +10179,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ItemCost$TType$225/0x0000000029444728",
+      "type": "net.minestom.server.network.packet.server.play.ItemCost$TType/0x0000000070435830",
       "methods": [
         {
           "name": "<init>",
@@ -10305,7 +10305,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.JoinGamePacket$TType$224/0x000000002943e9a0",
+      "type": "net.minestom.server.network.packet.server.play.JoinGamePacket$TType/0x0000000070429cb0",
       "methods": [
         {
           "name": "<init>",
@@ -10345,7 +10345,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.LerpStep$TType$230/0x0000000029454000",
+      "type": "net.minestom.server.network.packet.server.play.LerpStep$TType/0x00000000704450a8",
       "methods": [
         {
           "name": "<init>",
@@ -10398,7 +10398,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Match$TType$189/0x000000002940e690",
+      "type": "net.minestom.server.network.packet.server.play.Match$TType/0x00000000703fd000",
       "methods": [
         {
           "name": "<init>",
@@ -10468,7 +10468,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.MoveMinecartPacket$TType$231/0x0000000029454808",
+      "type": "net.minestom.server.network.packet.server.play.MoveMinecartPacket$TType/0x00000000704458b0",
       "methods": [
         {
           "name": "<init>",
@@ -10503,7 +10503,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.MultiBlockChangePacket$TType$259/0x00000000294844e0",
+      "type": "net.minestom.server.network.packet.server.play.MultiBlockChangePacket$TType/0x000000007046bba0",
       "methods": [
         {
           "name": "<init>",
@@ -10538,7 +10538,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.NbtQueryResponsePacket$TType$294/0x00000000294ad9c8",
+      "type": "net.minestom.server.network.packet.server.play.NbtQueryResponsePacket$TType/0x000000007049edc8",
       "methods": [
         {
           "name": "<init>",
@@ -10568,7 +10568,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.OpenBookPacket$TType$234/0x0000000029456e18",
+      "type": "net.minestom.server.network.packet.server.play.OpenBookPacket$TType/0x000000007044c000",
       "methods": [
         {
           "name": "<init>",
@@ -10606,7 +10606,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.OpenHorseWindowPacket$TType$214/0x0000000029429888",
+      "type": "net.minestom.server.network.packet.server.play.OpenHorseWindowPacket$TType/0x000000007041de18",
       "methods": [
         {
           "name": "<init>",
@@ -10642,7 +10642,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.OpenSignEditorPacket$TType$236/0x000000002945ccb8",
+      "type": "net.minestom.server.network.packet.server.play.OpenSignEditorPacket$TType/0x000000007044dc10",
       "methods": [
         {
           "name": "<init>",
@@ -10682,7 +10682,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.OpenWindowPacket$TType$235/0x000000002945c000",
+      "type": "net.minestom.server.network.packet.server.play.OpenWindowPacket$TType/0x000000007044cf58",
       "methods": [
         {
           "name": "<init>",
@@ -10743,7 +10743,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ParticlePacket$TType$222/0x0000000029438000",
+      "type": "net.minestom.server.network.packet.server.play.ParticlePacket$TType/0x000000007042d8e0",
       "methods": [
         {
           "name": "<init>",
@@ -10787,7 +10787,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.PlaceGhostRecipePacket$TType$237/0x000000002945ea18",
+      "type": "net.minestom.server.network.packet.server.play.PlaceGhostRecipePacket$TType/0x000000007044f970",
       "methods": [
         {
           "name": "<init>",
@@ -10827,7 +10827,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket$TType$238/0x000000002945f910",
+      "type": "net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket$TType/0x000000007044a9a0",
       "methods": [
         {
           "name": "<init>",
@@ -10903,7 +10903,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.PlayerChatMessagePacket$TType$241/0x00000000294653c8",
+      "type": "net.minestom.server.network.packet.server.play.PlayerChatMessagePacket$TType/0x0000000070452b68",
       "methods": [
         {
           "name": "<init>",
@@ -10947,7 +10947,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.PlayerInfoRemovePacket$TType$244/0x0000000029467568",
+      "type": "net.minestom.server.network.packet.server.play.PlayerInfoRemovePacket$TType/0x0000000070458000",
       "methods": [
         {
           "name": "<init>",
@@ -10980,7 +10980,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket$TType$293/0x00000000294acd10",
+      "type": "net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket$TType/0x000000007049e110",
       "methods": [
         {
           "name": "<init>",
@@ -11034,7 +11034,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket$TType$247/0x000000002946aeb8",
+      "type": "net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket$TType/0x000000007045ec18",
       "methods": [
         {
           "name": "<init>",
@@ -11085,7 +11085,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.PlayerRotationPacket$TType$248/0x000000002946e238",
+      "type": "net.minestom.server.network.packet.server.play.PlayerRotationPacket$TType/0x000000007045d000",
       "methods": [
         {
           "name": "<init>",
@@ -11102,7 +11102,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ProgressMapping$TType$305/0x00000000294b6cf8",
+      "type": "net.minestom.server.network.packet.server.play.ProgressMapping$TType/0x00000000704a0400",
       "methods": [
         {
           "name": "<init>",
@@ -11137,7 +11137,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ProjectilePowerPacket$TType$313/0x00000000294b9758",
+      "type": "net.minestom.server.network.packet.server.play.ProjectilePowerPacket$TType/0x00000000704b0cb0",
       "methods": [
         {
           "name": "<init>",
@@ -11152,7 +11152,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Property$TType$307/0x00000000294bc000",
+      "type": "net.minestom.server.network.packet.server.play.Property$TType/0x00000000704a9888",
       "methods": [
         {
           "name": "<init>",
@@ -11229,7 +11229,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.RecipeBookAddPacket$TType$251/0x00000000294714d0",
+      "type": "net.minestom.server.network.packet.server.play.RecipeBookAddPacket$TType/0x0000000070466d30",
       "methods": [
         {
           "name": "<init>",
@@ -11259,7 +11259,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.RecipeBookRemovePacket$TType$252/0x0000000029471f20",
+      "type": "net.minestom.server.network.packet.server.play.RecipeBookRemovePacket$TType/0x0000000070467780",
       "methods": [
         {
           "name": "<init>",
@@ -11322,7 +11322,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.RecipeBookSettingsPacket$TType$253/0x0000000029473a70",
+      "type": "net.minestom.server.network.packet.server.play.RecipeBookSettingsPacket$TType/0x0000000070462cb0",
       "methods": [
         {
           "name": "<init>",
@@ -11362,7 +11362,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket$TType$255/0x0000000029478990",
+      "type": "net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket$TType/0x000000007046d1a8",
       "methods": [
         {
           "name": "<init>",
@@ -11376,7 +11376,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Requirement$TType$299/0x00000000294b0708",
+      "type": "net.minestom.server.network.packet.server.play.Requirement$TType/0x00000000704a6d48",
       "methods": [
         {
           "name": "<init>",
@@ -11409,7 +11409,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ResetScorePacket$TType$256/0x0000000029479648",
+      "type": "net.minestom.server.network.packet.server.play.ResetScorePacket$TType/0x000000007046de60",
       "methods": [
         {
           "name": "<init>",
@@ -11489,7 +11489,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.RespawnPacket$TType$257/0x000000002947b908",
+      "type": "net.minestom.server.network.packet.server.play.RespawnPacket$TType/0x000000007046a238",
       "methods": [
         {
           "name": "<init>",
@@ -11566,7 +11566,7 @@
       "type": "net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket$Mode"
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket$TType$279/0x00000000294951a0",
+      "type": "net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket$TType/0x0000000070486358",
       "methods": [
         {
           "name": "<init>",
@@ -11624,7 +11624,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SelectAdvancementTabPacket$TType$260/0x0000000029484f30",
+      "type": "net.minestom.server.network.packet.server.play.SelectAdvancementTabPacket$TType/0x0000000070474728",
       "methods": [
         {
           "name": "<init>",
@@ -11657,7 +11657,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ServerDataPacket$TType$261/0x0000000029485be8",
+      "type": "net.minestom.server.network.packet.server.play.ServerDataPacket$TType/0x00000000704753e0",
       "methods": [
         {
           "name": "<init>",
@@ -11692,7 +11692,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.ServerDifficultyPacket$TType$184/0x0000000029402268",
+      "type": "net.minestom.server.network.packet.server.play.ServerDifficultyPacket$TType/0x00000000703f98a0",
       "methods": [
         {
           "name": "<init>",
@@ -11727,7 +11727,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetCooldownPacket$TType$196/0x0000000029410ef0",
+      "type": "net.minestom.server.network.packet.server.play.SetCooldownPacket$TType/0x0000000070404728",
       "methods": [
         {
           "name": "<init>",
@@ -11757,7 +11757,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetCursorItemPacket$TType$271/0x000000002948a188",
+      "type": "net.minestom.server.network.packet.server.play.SetCursorItemPacket$TType/0x000000007047b3a0",
       "methods": [
         {
           "name": "<init>",
@@ -11795,7 +11795,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetExperiencePacket$TType$276/0x000000002948e778",
+      "type": "net.minestom.server.network.packet.server.play.SetExperiencePacket$TType/0x000000007047f990",
       "methods": [
         {
           "name": "<init>",
@@ -11831,7 +11831,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetPassengersPacket$TType$280/0x0000000029495c20",
+      "type": "net.minestom.server.network.packet.server.play.SetPassengersPacket$TType/0x0000000070486dd8",
       "methods": [
         {
           "name": "<init>",
@@ -11866,7 +11866,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPacket$TType$281/0x00000000294966a0",
+      "type": "net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPacket$TType/0x0000000070487858",
       "methods": [
         {
           "name": "<init>",
@@ -11911,7 +11911,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetSlotPacket$TType$195/0x0000000029410238",
+      "type": "net.minestom.server.network.packet.server.play.SetSlotPacket$TType/0x0000000070403a70",
       "methods": [
         {
           "name": "<init>",
@@ -11949,7 +11949,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetTickStatePacket$TType$297/0x00000000294aa988",
+      "type": "net.minestom.server.network.packet.server.play.SetTickStatePacket$TType/0x00000000704a4268",
       "methods": [
         {
           "name": "<init>",
@@ -11979,7 +11979,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetTitleSubTitlePacket$TType$285/0x0000000029498aa8",
+      "type": "net.minestom.server.network.packet.server.play.SetTitleSubTitlePacket$TType/0x000000007048cd20",
       "methods": [
         {
           "name": "<init>",
@@ -12007,7 +12007,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetTitleTextPacket$TType$287/0x000000002949a448",
+      "type": "net.minestom.server.network.packet.server.play.SetTitleTextPacket$TType/0x000000007048e6c0",
       "methods": [
         {
           "name": "<init>",
@@ -12045,7 +12045,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SetTitleTimePacket$TType$288/0x000000002949b340",
+      "type": "net.minestom.server.network.packet.server.play.SetTitleTimePacket$TType/0x000000007048f5b8",
       "methods": [
         {
           "name": "<init>",
@@ -12060,7 +12060,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Sound$TType$336/0x000000002980f4f0",
+      "type": "net.minestom.server.network.packet.server.play.Sound$TType/0x00000000707bef38",
       "methods": [
         {
           "name": "<init>",
@@ -12084,6 +12084,24 @@
             "float",
             "float",
             "long"
+          ]
+        },
+        {
+          "name": "lambda$static$2790d254$1",
+          "parameterTypes": [
+            "net.minestom.server.coordinate.Point"
+          ]
+        },
+        {
+          "name": "lambda$static$2790d254$2",
+          "parameterTypes": [
+            "net.minestom.server.coordinate.Point"
+          ]
+        },
+        {
+          "name": "lambda$static$2790d254$3",
+          "parameterTypes": [
+            "net.minestom.server.coordinate.Point"
           ]
         },
         {
@@ -12125,7 +12143,22 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SoundEffectPacket$TType$290/0x00000000294a2328",
+      "type": "net.minestom.server.network.packet.server.play.SoundEffectPacket$TType/0x0000000070491d90",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "net.minestom.server.network.template.PrimitiveType",
+            "java.lang.invoke.MethodHandle",
+            "java.lang.invoke.MethodHandle",
+            "java.lang.invoke.MethodHandle",
+            "java.lang.invoke.MethodHandle"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "net.minestom.server.network.packet.server.play.SoundEffectPacket$TType/0x00000000704936b0",
       "methods": [
         {
           "name": "<init>",
@@ -12147,7 +12180,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Source$TType$335/0x0000000029807998",
+      "type": "net.minestom.server.network.packet.server.play.Source$TType/0x00000000707be4f0",
       "methods": [
         {
           "name": "<init>",
@@ -12160,7 +12193,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SourceAndSound$TType$337/0x0000000029810000",
+      "type": "net.minestom.server.network.packet.server.play.SourceAndSound$TType/0x00000000707bfbe8",
       "methods": [
         {
           "name": "<init>",
@@ -12200,7 +12233,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SpawnPositionPacket$TType$272/0x000000002948b088",
+      "type": "net.minestom.server.network.packet.server.play.SpawnPositionPacket$TType/0x000000007047c2a0",
       "methods": [
         {
           "name": "<init>",
@@ -12216,7 +12249,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Statistic$TType$176/0x00000000293fda60",
+      "type": "net.minestom.server.network.packet.server.play.Statistic$TType/0x00000000703f1c48",
       "methods": [
         {
           "name": "<init>",
@@ -12272,7 +12305,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.StatisticsPacket$TType$177/0x00000000293fe278",
+      "type": "net.minestom.server.network.packet.server.play.StatisticsPacket$TType/0x00000000703f2460",
       "methods": [
         {
           "name": "<init>",
@@ -12285,7 +12318,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.StonecutterRecipe$TType$311/0x00000000294bb210",
+      "type": "net.minestom.server.network.packet.server.play.StonecutterRecipe$TType/0x00000000704adb98",
       "methods": [
         {
           "name": "<init>",
@@ -12368,7 +12401,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.StopSoundPacket$TType$291/0x00000000294a3438",
+      "type": "net.minestom.server.network.packet.server.play.StopSoundPacket$TType/0x000000007049c980",
       "methods": [
         {
           "name": "<init>",
@@ -12401,7 +12434,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.SystemChatPacket$TType$292/0x00000000294ac000",
+      "type": "net.minestom.server.network.packet.server.play.SystemChatPacket$TType/0x000000007049d400",
       "methods": [
         {
           "name": "<init>",
@@ -12466,7 +12499,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.TabCompletePacket$TType$190/0x000000002940ee68",
+      "type": "net.minestom.server.network.packet.server.play.TabCompletePacket$TType/0x00000000703fd7d8",
       "methods": [
         {
           "name": "<init>",
@@ -12562,7 +12595,7 @@
       "type": "net.minestom.server.network.packet.server.play.TeamsPacket$NameTagVisibility"
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.TeamsPacket$TType$282/0x0000000029497840",
+      "type": "net.minestom.server.network.packet.server.play.TeamsPacket$TType/0x0000000070482be8",
       "methods": [
         {
           "name": "<init>",
@@ -12597,7 +12630,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.TestInstanceBlockStatus$TType$296/0x00000000294afb28",
+      "type": "net.minestom.server.network.packet.server.play.TestInstanceBlockStatus$TType/0x000000007049a800",
       "methods": [
         {
           "name": "<init>",
@@ -12627,7 +12660,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.TickStepPacket$TType$298/0x00000000294ab3d0",
+      "type": "net.minestom.server.network.packet.server.play.TickStepPacket$TType/0x00000000704a4cb0",
       "methods": [
         {
           "name": "<init>",
@@ -12665,7 +12698,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.TimeUpdatePacket$TType$286/0x00000000294999a0",
+      "type": "net.minestom.server.network.packet.server.play.TimeUpdatePacket$TType/0x000000007048dc18",
       "methods": [
         {
           "name": "<init>",
@@ -12724,7 +12757,7 @@
       "type": "net.minestom.server.network.packet.server.play.TrackedWaypointPacket$Operation"
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.TrackedWaypointPacket$TType$316/0x00000000294c2720",
+      "type": "net.minestom.server.network.packet.server.play.TrackedWaypointPacket$TType/0x00000000704b6268",
       "methods": [
         {
           "name": "<init>",
@@ -12767,7 +12800,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Trade$TType$226/0x0000000029446538",
+      "type": "net.minestom.server.network.packet.server.play.Trade$TType/0x0000000070437640",
       "methods": [
         {
           "name": "<init>",
@@ -12859,7 +12892,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.TradeListPacket$TType$227/0x00000000294476f0",
+      "type": "net.minestom.server.network.packet.server.play.TradeListPacket$TType/0x000000007043c9a0",
       "methods": [
         {
           "name": "<init>",
@@ -12959,7 +12992,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UnloadChunkPacket$TType$211/0x0000000029423b80",
+      "type": "net.minestom.server.network.packet.server.play.UnloadChunkPacket$TType/0x0000000070417160",
       "methods": [
         {
           "name": "<init>",
@@ -12973,7 +13006,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Update$TType$334/0x0000000029804728",
+      "type": "net.minestom.server.network.packet.server.play.Update$TType/0x00000000707b5028",
       "methods": [
         {
           "name": "<init>",
@@ -12990,7 +13023,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateFlagsAction$TType$329/0x00000000297bd3c8",
+      "type": "net.minestom.server.network.packet.server.play.UpdateFlagsAction$TType/0x000000007076d3c8",
       "methods": [
         {
           "name": "<init>",
@@ -13003,7 +13036,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateHealthAction$TType$327/0x00000000297afb18",
+      "type": "net.minestom.server.network.packet.server.play.UpdateHealthAction$TType/0x000000007075fb18",
       "methods": [
         {
           "name": "<init>",
@@ -13041,7 +13074,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateHealthPacket$TType$277/0x000000002948f670",
+      "type": "net.minestom.server.network.packet.server.play.UpdateHealthPacket$TType/0x00000000704849a0",
       "methods": [
         {
           "name": "<init>",
@@ -13082,7 +13115,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateLightPacket$TType$223/0x0000000029438f00",
+      "type": "net.minestom.server.network.packet.server.play.UpdateLightPacket$TType/0x000000007042e7e0",
       "methods": [
         {
           "name": "<init>",
@@ -13133,7 +13166,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateScorePacket$TType$283/0x0000000029493a80",
+      "type": "net.minestom.server.network.packet.server.play.UpdateScorePacket$TType/0x0000000070480800",
       "methods": [
         {
           "name": "<init>",
@@ -13168,7 +13201,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateSimulationDistancePacket$TType$284/0x0000000029498000",
+      "type": "net.minestom.server.network.packet.server.play.UpdateSimulationDistancePacket$TType/0x000000007048c278",
       "methods": [
         {
           "name": "<init>",
@@ -13181,7 +13214,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateStyleAction$TType$328/0x00000000297bc988",
+      "type": "net.minestom.server.network.packet.server.play.UpdateStyleAction$TType/0x000000007076c988",
       "methods": [
         {
           "name": "<init>",
@@ -13195,7 +13228,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateTitleAction$TType$318/0x00000000296f4e20",
+      "type": "net.minestom.server.network.packet.server.play.UpdateTitleAction$TType/0x00000000706a5030",
       "methods": [
         {
           "name": "<init>",
@@ -13223,7 +13256,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateViewDistancePacket$TType$270/0x0000000029489970",
+      "type": "net.minestom.server.network.packet.server.play.UpdateViewDistancePacket$TType/0x000000007047ab88",
       "methods": [
         {
           "name": "<init>",
@@ -13256,7 +13289,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.UpdateViewPositionPacket$TType$269/0x0000000029488f28",
+      "type": "net.minestom.server.network.packet.server.play.UpdateViewPositionPacket$TType/0x000000007047a140",
       "methods": [
         {
           "name": "<init>",
@@ -13285,7 +13318,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.VehicleMovePacket$TType$233/0x00000000294563c8",
+      "type": "net.minestom.server.network.packet.server.play.VehicleMovePacket$TType/0x0000000070447470",
       "methods": [
         {
           "name": "<init>",
@@ -13298,7 +13331,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.Waypoint$TType$315/0x00000000294c1f18",
+      "type": "net.minestom.server.network.packet.server.play.Waypoint$TType/0x00000000704b3a18",
       "methods": [
         {
           "name": "<init>",
@@ -13345,7 +13378,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.WindowItemsPacket$TType$193/0x000000002940b430",
+      "type": "net.minestom.server.network.packet.server.play.WindowItemsPacket$TType/0x0000000070401c38",
       "methods": [
         {
           "name": "<init>",
@@ -13388,7 +13421,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.WindowPropertyPacket$TType$194/0x00000000294094b0",
+      "type": "net.minestom.server.network.packet.server.play.WindowPropertyPacket$TType/0x0000000070402b30",
       "methods": [
         {
           "name": "<init>",
@@ -13424,7 +13457,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.WorldBorderCenterPacket$TType$263/0x0000000029487340",
+      "type": "net.minestom.server.network.packet.server.play.WorldBorderCenterPacket$TType/0x0000000070476b38",
       "methods": [
         {
           "name": "<init>",
@@ -13463,7 +13496,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.WorldBorderLerpSizePacket$TType$264/0x0000000029482238",
+      "type": "net.minestom.server.network.packet.server.play.WorldBorderLerpSizePacket$TType/0x0000000070477a30",
       "methods": [
         {
           "name": "<init>",
@@ -13494,7 +13527,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.WorldBorderSizePacket$TType$265/0x0000000029482c80",
+      "type": "net.minestom.server.network.packet.server.play.WorldBorderSizePacket$TType/0x00000000704734f0",
       "methods": [
         {
           "name": "<init>",
@@ -13522,7 +13555,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.WorldBorderWarningDelayPacket$TType$266/0x00000000294836c8",
+      "type": "net.minestom.server.network.packet.server.play.WorldBorderWarningDelayPacket$TType/0x0000000070478000",
       "methods": [
         {
           "name": "<init>",
@@ -13550,7 +13583,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.WorldBorderWarningReachPacket$TType$267/0x0000000029481a78",
+      "type": "net.minestom.server.network.packet.server.play.WorldBorderWarningReachPacket$TType/0x0000000070478a48",
       "methods": [
         {
           "name": "<init>",
@@ -13593,7 +13626,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.WorldEventPacket$TType$221/0x0000000029436ee8",
+      "type": "net.minestom.server.network.packet.server.play.WorldEventPacket$TType/0x000000007042c238",
       "methods": [
         {
           "name": "<init>",
@@ -13611,7 +13644,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.data.BlockEntityInfo$TType$217/0x000000002942d4b0",
+      "type": "net.minestom.server.network.packet.server.play.data.BlockEntityInfo$TType/0x00000000704249a0",
       "methods": [
         {
           "name": "<init>",
@@ -13685,7 +13718,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.data.ChunkData$TType$218/0x000000002942dc88",
+      "type": "net.minestom.server.network.packet.server.play.data.ChunkData$TType/0x0000000070425178",
       "methods": [
         {
           "name": "<init>",
@@ -13742,7 +13775,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.data.LightData$TType$219/0x0000000029435598",
+      "type": "net.minestom.server.network.packet.server.play.data.LightData$TType/0x0000000070426a38",
       "methods": [
         {
           "name": "<init>",
@@ -13782,7 +13815,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.play.data.WorldPos$TType$48/0x0000000029296970",
+      "type": "net.minestom.server.network.packet.server.play.data.WorldPos$TType/0x0000000070294970",
       "methods": [
         {
           "name": "<init>",
@@ -13812,7 +13845,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.status.ResponsePacket$TType$146/0x00000000293e4278",
+      "type": "net.minestom.server.network.packet.server.status.ResponsePacket$TType/0x00000000703d36e8",
       "methods": [
         {
           "name": "<init>",
@@ -13889,7 +13922,7 @@
       "type": "net.minestom.server.network.player.ClientSettings$ParticleSetting"
     },
     {
-      "type": "net.minestom.server.network.player.ClientSettings$TType$62/0x00000000293689a0",
+      "type": "net.minestom.server.network.player.ClientSettings$TType/0x0000000070361d60",
       "methods": [
         {
           "name": "<init>",
@@ -13962,7 +13995,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.player.GameProfile$TType$4/0x00000000291e6330",
+      "type": "net.minestom.server.network.player.GameProfile$TType/0x00000000701e5450",
       "methods": [
         {
           "name": "<init>",
@@ -13979,7 +14012,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.player.Partial$TType$2/0x00000000291de9c8",
+      "type": "net.minestom.server.network.player.Partial$TType/0x00000000701daa70",
       "methods": [
         {
           "name": "<init>",
@@ -13996,7 +14029,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.player.Property$TType$1/0x00000000291da620",
+      "type": "net.minestom.server.network.player.Property$TType/0x00000000701d8900",
       "methods": [
         {
           "name": "<init>",
@@ -14057,7 +14090,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.player.ResolvableProfile$TType$5/0x00000000291e79b0",
+      "type": "net.minestom.server.network.player.ResolvableProfile$TType/0x00000000701e6ad0",
       "methods": [
         {
           "name": "<init>",
@@ -14135,7 +14168,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.potion.CustomPotionEffect$TType$34/0x0000000029277270",
+      "type": "net.minestom.server.potion.CustomPotionEffect$TType/0x0000000070275700",
       "methods": [
         {
           "name": "<init>",
@@ -14180,7 +14213,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.potion.Potion$TType$309/0x00000000294bdbf8",
+      "type": "net.minestom.server.potion.Potion$TType/0x00000000704ab480",
       "methods": [
         {
           "name": "<init>",
@@ -14215,7 +14248,7 @@
       "type": "net.minestom.server.potion.PotionType"
     },
     {
-      "type": "net.minestom.server.potion.Settings$TType$33/0x0000000029273698",
+      "type": "net.minestom.server.potion.Settings$TType/0x000000007026dc18",
       "methods": [
         {
           "name": "<init>",
@@ -14250,7 +14283,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.recipe.Ingredient$TType$249/0x0000000029470000",
+      "type": "net.minestom.server.recipe.Ingredient$TType/0x0000000070465860",
       "methods": [
         {
           "name": "<init>",
@@ -14266,7 +14299,7 @@
       "type": "net.minestom.server.recipe.RecipeBookCategory"
     },
     {
-      "type": "net.minestom.server.recipe.display.CraftingShapeless$TType$330/0x00000000297beef8",
+      "type": "net.minestom.server.recipe.display.CraftingShapeless$TType/0x000000007076eef8",
       "methods": [
         {
           "name": "<init>",
@@ -14282,7 +14315,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.recipe.display.Item$TType$331/0x00000000297bf998",
+      "type": "net.minestom.server.recipe.display.Item$TType/0x000000007076f998",
       "methods": [
         {
           "name": "<init>",
@@ -14295,7 +14328,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.recipe.display.ItemStack$TType$332/0x00000000297c0b60",
+      "type": "net.minestom.server.recipe.display.ItemStack$TType/0x000000007076ac00",
       "methods": [
         {
           "name": "<init>",
@@ -14421,7 +14454,7 @@
       "type": "net.minestom.server.utils.Either"
     },
     {
-      "type": "net.minestom.server.utils.Entry$TType$209/0x0000000029422208",
+      "type": "net.minestom.server.utils.Entry$TType/0x00000000704135f8",
       "methods": [
         {
           "name": "<init>",
@@ -22572,6 +22605,22 @@
           "declaringClass": "net.minestom.server.network.packet.server.play.SoundEffectPacket",
           "interfaces": [
             "net.minestom.server.utils.Functions$SF1"
+          ]
+        }
+      },
+      "methods": [
+        {
+          "name": "writeReplace",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": {
+        "lambda": {
+          "declaringClass": "net.minestom.server.network.packet.server.play.SoundEffectPacket",
+          "interfaces": [
+            "net.minestom.server.utils.Functions$SF3"
           ]
         }
       },
