@@ -7,10 +7,14 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerGameModeChangeEvent;
+import net.minestom.server.event.player.PlayerInputEvent;
+import net.minestom.server.listener.PlayerInputListener;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
+import net.minestom.server.network.packet.client.play.ClientInputPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.ClientSettings;
@@ -291,6 +295,89 @@ public class PlayerIntegrationTest {
         });
 
         player.remove(true);
+    }
+
+    @Test
+    public void inputsPressed(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
+
+        var events = env.trackEvent(PlayerInputEvent.class, EventFilter.PLAYER, player);
+        PlayerInputListener.listener(
+                new ClientInputPacket(true, true, true, true, true, true, true),
+                player
+        );
+
+        events.assertSingle(event -> {
+            assertFalse(event.hasReleasedForwardKey());
+            assertFalse(event.hasReleasedBackwardKey());
+            assertFalse(event.hasReleasedLeftKey());
+            assertFalse(event.hasReleasedRightKey());
+            assertFalse(event.hasReleasedJumpKey());
+            assertFalse(event.hasReleasedShiftKey());
+            assertFalse(event.hasReleasedSprintKey());
+
+            assertTrue(event.hasPressedForwardKey());
+            assertTrue(event.hasPressedBackwardKey());
+            assertTrue(event.hasPressedLeftKey());
+            assertTrue(event.hasPressedRightKey());
+            assertTrue(event.hasPressedJumpKey());
+            assertTrue(event.hasPressedShiftKey());
+            assertTrue(event.hasPressedSprintKey());
+
+            assertTrue(event.isHoldingForwardKey());
+            assertTrue(event.isHoldingBackwardKey());
+            assertTrue(event.isHoldingLeftKey());
+            assertTrue(event.isHoldingRightKey());
+            assertTrue(event.isHoldingJumpKey());
+            assertTrue(event.isHoldingShiftKey());
+            assertTrue(event.isHoldingSprintKey());
+        });
+    }
+
+    @Test
+    public void inputsReleased(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
+
+        PlayerInputListener.listener(
+                new ClientInputPacket(true, true, true, true, true, true, true),
+                player
+        );
+
+        var events = env.trackEvent(PlayerInputEvent.class, EventFilter.PLAYER, player);
+        PlayerInputListener.listener(
+                new ClientInputPacket(false, false, false, false, false, false, false),
+                player
+        );
+
+        events.assertSingle(event -> {
+            assertFalse(event.hasPressedForwardKey());
+            assertFalse(event.hasPressedBackwardKey());
+            assertFalse(event.hasPressedLeftKey());
+            assertFalse(event.hasPressedRightKey());
+            assertFalse(event.hasPressedJumpKey());
+            assertFalse(event.hasPressedShiftKey());
+            assertFalse(event.hasPressedSprintKey());
+
+            assertTrue(event.hasReleasedForwardKey());
+            assertTrue(event.hasReleasedBackwardKey());
+            assertTrue(event.hasReleasedLeftKey());
+            assertTrue(event.hasReleasedRightKey());
+            assertTrue(event.hasReleasedJumpKey());
+            assertTrue(event.hasReleasedShiftKey());
+            assertTrue(event.hasReleasedSprintKey());
+
+            assertFalse(event.isHoldingForwardKey());
+            assertFalse(event.isHoldingBackwardKey());
+            assertFalse(event.isHoldingLeftKey());
+            assertFalse(event.isHoldingRightKey());
+            assertFalse(event.isHoldingJumpKey());
+            assertFalse(event.isHoldingShiftKey());
+            assertFalse(event.isHoldingSprintKey());
+        });
     }
 
 }
