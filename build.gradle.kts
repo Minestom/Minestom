@@ -83,7 +83,8 @@ tasks.register<Test>("testWithAgent") {
     {"excludeClasses": "org.opentest4j.**"},
     {"excludeClasses": "org.gradle.**"},
     {"excludeClasses": "org.graalvm.**"},
-    {"excludeClasses": "net.minestom.testing.**"}
+    {"excludeClasses": "net.minestom.testing.**"},
+    {"excludeClasses": "net.minestom.server.network.template.**"}
   ],
   "regexRules": [
      {"excludeClasses": "net\\.minestom\\.server\\..*Test(\\$.*)?"},
