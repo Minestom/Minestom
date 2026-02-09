@@ -1,6 +1,7 @@
 package net.minestom.server.network.template;
 
 import net.minestom.server.network.NetworkBuffer.Type;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -9,8 +10,10 @@ import java.lang.constant.ClassDesc;
 import java.lang.invoke.MethodHandle;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @ApiStatus.Internal
@@ -20,16 +23,10 @@ public final class NetworkTemplater {
     private NetworkTemplater() {
     }
 
-    public static <T extends @UnknownNullability Object> Type<T> templateN(Object... args) {
-        Class<?> caller = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
-                .walk(frames -> frames
-                        .map(StackWalker.StackFrame::getDeclaringClass)
-                        .skip(2)
-                        .findFirst()).orElseThrow();
-        return templateN(caller, args);
-    }
+    public static <T extends @UnknownNullability Object> Type<T> templateN(Class<?> caller, Object... args) {
+        Objects.requireNonNull(caller, "caller");
+        nullCheckFieldArgs(args);
 
-    public static <T> Type<T> templateN(Class<?> caller, Object... args) {
         TemplateReflection.FieldAnalysis[] fields = new TemplateReflection.FieldAnalysis[args.length / 2];
         for (int i = 0; i < (args.length - 1) / 2; i++) {
             // HandleAligner unrolls the TransformingType and folds logic into the MethodHandle
@@ -86,12 +83,22 @@ public final class NetworkTemplater {
         return uniqueFields.toArray(new TemplateReflection.FieldAnalysis[0]);
     }
 
+    private static void nullCheckFieldArgs(Object... args) {
+        int ctorIndex = args.length - 1;  // implicit null check
+        for (int i = 0; i < ctorIndex; i += 2) {
+            int g = i + 1;
+            Check.notNull(args[i], "p{0}", i);
+            Check.notNull(args[g], "g{0}", g);
+        }
+        Objects.requireNonNull(args[ctorIndex], "ctor");
+    }
+
     // Dumps the current class into the dump folder to see the generated class
     private static void debug(ClassDesc thisClass, byte[] bytes) {
         if (!DEBUG) return;
         try {
             String pkg = thisClass.packageName();
-            Path path = java.nio.file.Paths.get("dump", pkg.replace('.', '/'), thisClass.displayName() + ".class");
+            Path path = Paths.get("dump", pkg.replace('.', '/'), thisClass.displayName() + ".class");
             Files.createDirectories(path.getParent());
             Files.write(path, bytes);
         } catch (IOException e) {

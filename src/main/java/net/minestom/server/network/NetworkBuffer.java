@@ -102,7 +102,7 @@ public interface NetworkBuffer {
     Type<@Nullable Integer> OPTIONAL_VAR_INT = new NetworkBufferTypeImpl.OptionalVarIntType();
     Type<Integer> VAR_INT_3 = new NetworkBufferTypeImpl.VarInt3Type();
     Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
-    Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
+    Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(NetworkBufferTypeImpl.RawBytesType.ALL);
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     Type<Key> KEY = STRING.transform(Key::key, Key::asString);
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();

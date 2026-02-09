@@ -598,9 +598,11 @@ final class NetworkBufferTypeImpl {
     }
 
     record RawBytesType(int length) implements Type<byte[]> {
+        public static final int ALL = -1;
+
         @Override
         public void write(NetworkBuffer buffer, byte[] value) {
-            if (length != -1 && value.length != length) {
+            if (length != ALL && value.length != length) {
                 throw new IllegalArgumentException("Invalid length: " + value.length + " != " + length);
             }
             final int length = value.length;
@@ -613,7 +615,7 @@ final class NetworkBufferTypeImpl {
         @Override
         public byte[] read(NetworkBuffer buffer) {
             long length = this.length;
-            if (this.length == -1) {
+            if (length == ALL) {
                 length = buffer.readableBytes();
             }
             if (length == 0) return new byte[0];
@@ -627,6 +629,7 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public long sizeOf(byte[] value, @Nullable Registries registries) {
+            if (length == ALL) return value.length;
             return length;
         }
     }
@@ -635,7 +638,7 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
-            buffer.write(BYTE_ARRAY, bytes);
+            BYTE_ARRAY.write(buffer, bytes);
         }
 
         @Override
@@ -1209,7 +1212,7 @@ final class NetworkBufferTypeImpl {
             Check.stateCondition(registries == null, "Buffer does not have registries");
             final Result<BinaryTag> result = nbtType.encode(new RegistryTranscoder<>(Transcoder.NBT, registries), value);
             switch (result) {
-                case Result.Ok(BinaryTag tag) -> buffer.write(NBT, tag);
+                case Result.Ok(BinaryTag tag) -> NBT.write(buffer, tag);
                 case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
             }
         }
@@ -1218,7 +1221,7 @@ final class NetworkBufferTypeImpl {
         public T read(NetworkBuffer buffer) {
             final Registries registries = buffer.registries();
             Check.stateCondition(registries == null, "Buffer does not have registries");
-            final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), buffer.read(NBT));
+            final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), NBT.read(buffer));
             return switch (result) {
                 case Result.Ok(T value) -> value;
                 case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
@@ -1392,7 +1395,7 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             final K key = keyFunc.apply(value);
-            buffer.write(keyType, key);
+            keyType.write(buffer, key);
             var serializer = serializers.apply(key);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
@@ -1401,7 +1404,7 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public T read(NetworkBuffer buffer) {
-            final K key = buffer.read(keyType);
+            final K key = keyType.read(buffer);
             var serializer = serializers.apply(key);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
