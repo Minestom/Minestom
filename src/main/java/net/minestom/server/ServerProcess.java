@@ -129,6 +129,8 @@ public interface ServerProcess extends Registries, Snapshotable {
 
     boolean isAlive();
 
+    void install(MinestomModule module);
+
     @ApiStatus.NonExtendable
     interface Ticker {
         void tick(long nanoTime);

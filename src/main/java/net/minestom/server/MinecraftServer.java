@@ -365,6 +365,6 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public void install(MinestomModule module) {
-        module.install(this);
+        serverProcess.install(module);
     }
 }

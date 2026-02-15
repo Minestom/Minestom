@@ -467,6 +467,11 @@ final class ServerProcessImpl implements ServerProcess {
         return new SnapshotImpl.Server(MappedCollection.plainReferences(instanceRefs), entityRefs);
     }
 
+    @Override
+    public void install(MinestomModule module) {
+        module.install(this);
+    }
+
     private final class TickerImpl implements Ticker {
         @Override
         public void tick(long nanoTime) {
