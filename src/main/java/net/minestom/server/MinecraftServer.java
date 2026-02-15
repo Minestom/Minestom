@@ -363,4 +363,8 @@ public final class MinecraftServer implements MinecraftConstants {
     public static void stopCleanly() {
         serverProcess.stop();
     }
+
+    public void install(MinestomModule module) {
+        module.install(this);
+    }
 }
