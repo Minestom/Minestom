@@ -118,6 +118,8 @@ import java.util.function.UnaryOperator;
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
 public class Player extends LivingEntity implements CommandSender, HoverEventSource<ShowEntity>, NamedAndIdentified {
+    private static final DynamicRegistry<DimensionType> DIMENSION_TYPE_REGISTRY = MinecraftServer.getDimensionTypeRegistry();
+
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final Component MISSING_REQUIRED_RESOURCE_PACK = Component.text("Required resource pack was not loaded.", NamedTextColor.RED);
 
@@ -250,7 +252,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         refreshAnswerKeepAlive(true);
 
         this.gameMode = GameMode.SURVIVAL;
-        this.dimensionTypeId = MinecraftServer.process().dimensionType().getId(DimensionType.OVERWORLD); // Default dimension
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(DimensionType.OVERWORLD); // Default dimension
         this.levelFlat = true;
         getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
 
@@ -282,7 +284,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.pendingInstance = null;
 
         this.removed = false;
-        this.dimensionTypeId = MinecraftServer.process().dimensionType().getId(spawnInstance.getDimensionType());
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType());
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
@@ -1607,7 +1609,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @return the player current dimension
      */
     public DimensionType getDimensionType() {
-        return Objects.requireNonNull(MinecraftServer.process().dimensionType().get(dimensionTypeId));
+        return DIMENSION_TYPE_REGISTRY.get(dimensionTypeId);
     }
 
     public PlayerInventory getInventory() {
@@ -1687,7 +1689,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     protected void sendDimension(RegistryKey<DimensionType> dimensionType, String dimensionName) {
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
-        this.dimensionTypeId = MinecraftServer.process().dimensionType().getId(dimensionType);
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
         sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
                 deathLocation, portalCooldown, DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL));

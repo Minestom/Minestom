@@ -20,7 +20,6 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.collection.ObjectPool;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Map;
 import java.util.Objects;
@@ -29,12 +28,7 @@ import java.util.WeakHashMap;
 @ApiStatus.Internal
 public final class PacketViewableUtils {
     // Viewable packets
-    private static volatile @UnknownNullability Map<Viewable, ViewableStorage> storageMap;
-
-    static {
-        // Only initialize if viewable packets are enabled
-        if (ServerFlag.VIEWABLE_PACKET) storageMap = new WeakHashMap<>();
-    }
+    private static volatile Map<Viewable, ViewableStorage> storageMap = new WeakHashMap<>();
 
     public static void prepareViewablePacket(Viewable viewable, ServerPacket serverPacket,
                                              @Nullable Entity entity) {

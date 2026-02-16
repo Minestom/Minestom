@@ -28,6 +28,8 @@ import static net.minestom.server.ping.ServerListPingType.OPEN_TO_LAN;
  * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Server_List_Ping#Ping_via_LAN_(Open_to_LAN_in_Singleplayer)">the Minecraft wiki</a>
  */
 public class OpenToLAN {
+    private static final InetSocketAddress PING_ADDRESS = new InetSocketAddress("224.0.2.60", 4445);
+
     private static final Logger LOGGER = LoggerFactory.getLogger(OpenToLAN.class);
 
     private static volatile Cooldown eventCooldown;
@@ -99,7 +101,6 @@ public class OpenToLAN {
      * Performs the ping.
      */
     private static void ping() {
-        final InetSocketAddress address = new InetSocketAddress("224.0.2.60", 4445);
         Thread.startVirtualThread(() -> {
             try {
                 if (!MinecraftServer.getServer().isOpen()) return;
@@ -108,7 +109,7 @@ public class OpenToLAN {
                     EventDispatcher.call(event);
 
                     final byte[] data = OPEN_TO_LAN.getPingResponse(event.getStatus()).getBytes(StandardCharsets.UTF_8);
-                    packet = new DatagramPacket(data, data.length, address);
+                    packet = new DatagramPacket(data, data.length, PING_ADDRESS);
                     eventCooldown.refreshLastUpdate(System.nanoTime());
                 }
 
