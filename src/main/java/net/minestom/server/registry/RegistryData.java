@@ -165,16 +165,22 @@ public final class RegistryData {
     @ApiStatus.Internal
     static <T> @Unmodifiable Map<TagKey<T>, RegistryTagImpl.Backed<T>> loadTags(Key registryKey) {
         final var tagJson = RegistryData.load(String.format("tags/%s.json", registryKey.value()), false);
-        final HashMap<TagKey<T>, RegistryTagImpl.Backed<T>> tags = new HashMap<>(tagJson.size());
+        final HashMap<TagKey<T>, RegistryTag.Builder<T>> tags = HashMap.newHashMap(tagJson.size());
         for (String tagName : tagJson.asMap().keySet()) {
             final TagKeyImpl<T> tagKey = new TagKeyImpl<>(Key.key(tagName));
-            final RegistryTagImpl.Backed<T> tagValue = tags.computeIfAbsent(tagKey, RegistryTagImpl.Backed::new);
+            final RegistryTag.Builder<T> tagValue = tags.computeIfAbsent(tagKey, RegistryTag.Builder::of);
             getTagValues(tagValue, tagJson, tagName);
+
         }
-        return Map.copyOf(tags);
+        // Coheres the data into the Backed typed. (well by building it at least)
+        Map<TagKey<T>, RegistryTagImpl.Backed<T>> backedTags = HashMap.newHashMap(tags.size());
+        for (var tag: tags.entrySet()) {
+            backedTags.put(tag.getKey(), (RegistryTagImpl.Backed<T>) tag.getValue().build());
+        }
+        return Map.copyOf(backedTags);
     }
 
-    private static <T> void getTagValues(RegistryTagImpl.Backed<T> tag, Properties main, String value) {
+    private static <T> void getTagValues(RegistryTag.Builder<T> tag, Properties main, String value) {
         Properties section = main.section(value);
         final List<String> tagValues = section.getList("values");
         tagValues.forEach(tagString -> {

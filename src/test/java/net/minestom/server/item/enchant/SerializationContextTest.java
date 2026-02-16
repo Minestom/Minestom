@@ -18,7 +18,7 @@ class SerializationContextTest {
     @Test
     void testValueEffectSerializationVanilla() {
         var registry = ValueEffect.createDefaultRegistry();
-        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffects = registry), true, false);
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffects = registry), true);
 
         var result = assertOk(ValueEffect.CODEC.encode(coder, new ValueEffect.Add(new LevelBasedValue.Constant(1))));
         assertEqualsSNBT("""
@@ -30,7 +30,7 @@ class SerializationContextTest {
     void testValueEffectSerializationCustom() {
         var registry = ValueEffect.createDefaultRegistry();
         registry.register("minestom:my_effect", MyEffect.CODEC); // NOT registered to MINECRAFT_CORE
-        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffects = registry), true, false);
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffects = registry), true);
 
         var result = assertOk(ValueEffect.CODEC.encode(coder, new MyEffect()));
         assertNull(result);
@@ -40,7 +40,7 @@ class SerializationContextTest {
     void testValueEffectSerializationCustomInList() {
         var registry = ValueEffect.createDefaultRegistry();
         registry.register("minestom:my_effect", MyEffect.CODEC); // NOT registered to MINECRAFT_CORE
-        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffects = registry), true, false);
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffects = registry), true);
 
         var result = assertOk(ValueEffect.CODEC.list().encode(coder, List.of(
                 new ValueEffect.Add(new LevelBasedValue.Constant(1)),
@@ -60,7 +60,7 @@ class SerializationContextTest {
         var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> {
             r.enchantmentLevelBasedValues = levelBasedValueRegistry;
             r.enchantmentValueEffects = valueEffectRegistry;
-        }), true, false);
+        }), true);
 
         var result = assertOk(ValueEffect.CODEC.encode(coder, new ValueEffect.Add(new MyLevelBasedValue())));
         assertNull(result); // Should get nothing because MyLevelBasedValue is missing and that would create an invalid Add

@@ -49,10 +49,14 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     private final Key key;
     private final Codec<T> codec;
+    // Allows bypassing of frozen checks, used for the cinit of ServerProcessImpl.
+    // TODO remove this, with a better builder system, where concurrent maps are not used.
+    private final boolean unsafe;
 
     DynamicRegistryImpl(Key key, @Nullable Codec<T> codec) {
         this.key = key;
         this.codec = codec;
+        this.unsafe = true; // Bypass frozen checks for init.
         // Expect stale data possibilities with unsafe ops.
         this.idToValue = new ArrayList<>();
         this.idToKey = new ArrayList<>();
@@ -71,6 +75,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                         List<DataPack> packById, Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
         this.key = key;
         this.codec = codec;
+        this.unsafe = false; // Respect frozen checks after compact/freeze.
         this.idToValue = idToValue;
         this.idToKey = idToKey;
         this.keyToId = keyToId;
@@ -127,7 +132,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public RegistryKey<T> register(Key key, T object, DataPack pack) {
-        if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
+        if (!unsafe && isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
         Check.notNull(key, "Key cannot be null");
         Check.notNull(object, "Object cannot be null");
         Check.notNull(pack, "Pack cannot be null");
@@ -156,7 +161,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public boolean remove(Key key) throws UnsupportedOperationException {
-        if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
+        if (!unsafe && isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
         Check.notNull(key, "Key cannot be null");
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
@@ -335,8 +340,12 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             final JsonElement json = JsonUtil.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8));
             if (!(json instanceof JsonObject root))
                 throw new IllegalStateException("Failed to load registry " + registry.key() + ": expected a JSON object, got " + json);
+            // Load tags if present (Required to be above)
+            // Due to the dependence while loading data.
+            Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = RegistryData.loadTags(registry.key());
+            registry.tags.putAll(tags);
 
-            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false, true) : Transcoder.JSON;
+            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false) : Transcoder.JSON;
             List<Map.Entry<String, JsonElement>> entries = new ArrayList<>(root.entrySet());
             if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
             for (Map.Entry<String, JsonElement> entry : entries) {
@@ -348,10 +357,6 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                     throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.key() + ": " + valueResult);
                 }
             }
-
-            // Load tags if present
-            Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = RegistryData.loadTags(registry.key());
-            registry.tags.putAll(tags);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
