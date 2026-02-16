@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Map;
 
 public sealed interface EntityType extends StaticProtocolObject<EntityType>, EntityTypes permits EntityTypeImpl {
     NetworkBuffer.Type<EntityType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(EntityType::fromId, EntityType::id);
@@ -40,6 +42,10 @@ public sealed interface EntityType extends StaticProtocolObject<EntityType>, Ent
 
     default double height() {
         return registry().height();
+    }
+
+    default Map<Attribute, Double> defaultAttributes() {
+        return registry().defaultAttributes();
     }
 
     static Collection<EntityType> values() {

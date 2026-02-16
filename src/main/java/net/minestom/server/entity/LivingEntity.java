@@ -68,6 +68,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>();
     private final Collection<AttributeInstance> unmodifiableModifiers =
             Collections.unmodifiableCollection(attributeModifiers.values());
+    private boolean applyingDefaultAttributes;
 
     // Abilities
     protected boolean invulnerable;
@@ -98,6 +99,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
+        applyDefaultAttributeValues();
     }
 
     public LivingEntity(EntityType entityType) {
@@ -432,7 +434,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
      */
     public void heal() {
-        setHealth((float) getAttributeValue(Attribute.MAX_HEALTH));
+        setHealth((float) getAttribute(Attribute.MAX_HEALTH).getValue());
     }
 
     /**
@@ -462,6 +464,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     protected void onAttributeChanged(AttributeInstance attributeInstance) {
         if (!shouldSendAttributes()) return;
+        // batch packets when applying default attributes
+        if (applyingDefaultAttributes) return;
 
         boolean self = false;
         if (this instanceof Player player) {
@@ -732,5 +736,20 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     public Acquirable<? extends LivingEntity> acquirable() {
         return (Acquirable<? extends LivingEntity>) super.acquirable();
+    }
+
+    /**
+     * Sets the attributes of this entity to their default vanilla values.
+     */
+    public void applyDefaultAttributeValues() {
+        var defaultAttributes = entityType.registry().defaultAttributes();
+        if (defaultAttributes.isEmpty()) return;
+        applyingDefaultAttributes = true;
+
+        for (var entry : defaultAttributes.entrySet()) {
+            getAttribute(entry.getKey()).setBaseValue(entry.getValue());
+        }
+
+        applyingDefaultAttributes = false;
     }
 }
