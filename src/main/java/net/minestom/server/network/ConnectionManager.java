@@ -258,7 +258,9 @@ public final class ConnectionManager {
                 player.getPlayerConnection().disconnect();
                 return;
             } catch (ExecutionException e) {
-                throw new RuntimeException("Error receiving known packs", e);
+                player.getPlayerConnection().disconnect();
+                MinecraftServer.getExceptionManager().handleException(e);
+                return;
             }
             boolean excludeVanilla = knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
 

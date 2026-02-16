@@ -19,9 +19,6 @@ public final class ServerFlag {
     public static final int ENTITY_SYNCHRONIZATION_TICKS = intProperty("minestom.entity-synchronization-ticks", 20);
     public static final int DISPATCHER_THREADS = intProperty("minestom.dispatcher-threads", 1);
     public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = intProperty("minestom.send-light-after-block-placement-delay", 100);
-    public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000); // 5s
-    public static final long KNOWN_PACKS_RESPONSE_TIMEOUT = longProperty("minestom.known-packs-response-timeout", 5 * 60_000); // 5m
-    public static final boolean ACCEPT_TRANSFERS = booleanProperty("minestom.accept-transfers", false);
 
     // Network rate limiting
     public static final int PLAYER_PACKET_PER_TICK = intProperty("minestom.packet-per-tick", 50);
@@ -37,11 +34,15 @@ public final class ServerFlag {
     public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
     public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
     public static final int SOCKET_TIMEOUT = intProperty("minestom.socket-timeout", 15_000);
+    public static final boolean SUPPRESS_CONNECTION_ACCEPT_ERRORS = booleanProperty("minestom.supress-connection-accept-errors", true);
     public static final boolean REJECT_MALFORMED_PACKET = booleanProperty("minestom.reject-malformed-packet", true);
     public static final boolean REJECT_MISUSED_PACKET = booleanProperty("minestom.reject-misused-packet", true);
     public static final int SUPPRESS_PACKET_ERROR_LEVEL = intProperty("minestom.suppress-packet-error-level", -1); // >= ConnectionState.ordinal() state will be suppressed.
     public static final boolean WARN_UNREAD_BYTES_PACKET = booleanProperty("minestom.warn-unread-bytes-packet", true);
     public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = booleanProperty("minestom.automatic-component-translation", false);
+    public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000); // 5s
+    public static final long KNOWN_PACKS_RESPONSE_TIMEOUT = longProperty("minestom.known-packs-response-timeout", 5 * 60_000); // 5m
+    public static final boolean ACCEPT_TRANSFERS = booleanProperty("minestom.accept-transfers", false);
 
     // Network buffers
     public static final int DEFAULT_RESIZEABLE_SIZE = intProperty("minestom.default-resizeable-size", 256);

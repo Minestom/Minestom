@@ -309,6 +309,12 @@ public final class PlayerSocketConnection extends PlayerConnection {
         return serverPort;
     }
 
+    @Override
+    public void disconnect() {
+        super.disconnect();
+        unlockWriteThread();
+    }
+
     /**
      * Gets the protocol version of a client.
      *
@@ -446,6 +452,7 @@ public final class PlayerSocketConnection extends PlayerConnection {
 
     @Blocking
     public void flushSync(PacketParser<ServerPacket> writer) throws IOException {
+        final var channel = this.channel;
         if (!channel.isConnected()) throw new EOFException("Channel is closed");
         // Write leftover if any
         final NetworkBuffer leftover = this.writeLeftover;
@@ -464,6 +471,7 @@ public final class PlayerSocketConnection extends PlayerConnection {
         final NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         // Write to buffer
         PacketWriting.writeQueue(buffer, packetQueue, 1, (b, packet) -> {
+            final AtomicLong sentPacketCounter = this.sentPacketCounter;
             final boolean compressed = sentPacketCounter.get() > compressionStart;
             final boolean success = writeSendable(b, writer, packet, compressed);
             if (success) sentPacketCounter.getAndIncrement();
