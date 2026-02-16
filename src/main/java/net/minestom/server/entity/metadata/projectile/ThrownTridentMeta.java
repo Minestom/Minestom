@@ -4,25 +4,25 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class ThrownTridentMeta extends AbstractArrowMeta {
+public final class ThrownTridentMeta extends AbstractArrowMeta {
     public ThrownTridentMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public byte getLoyaltyLevel() {
-        return metadata.get(MetadataDef.ThrownTrident.LOYALTY_LEVEL);
+        return get(MetadataDef.ThrownTrident.LOYALTY_LEVEL);
     }
 
     public void setLoyaltyLevel(byte value) {
-        metadata.set(MetadataDef.ThrownTrident.LOYALTY_LEVEL, value);
+        set(MetadataDef.ThrownTrident.LOYALTY_LEVEL, value);
     }
 
     public boolean isHasEnchantmentGlint() {
-        return metadata.get(MetadataDef.ThrownTrident.HAS_ENCHANTMENT_GLINT);
+        return get(MetadataDef.ThrownTrident.HAS_ENCHANTMENT_GLINT);
     }
 
     public void setHasEnchantmentGlint(boolean value) {
-        metadata.set(MetadataDef.ThrownTrident.HAS_ENCHANTMENT_GLINT, value);
+        set(MetadataDef.ThrownTrident.HAS_ENCHANTMENT_GLINT, value);
     }
 
 }

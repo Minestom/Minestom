@@ -7,17 +7,17 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.item.ItemStack;
 
-public class ItemEntityMeta extends EntityMeta implements ObjectDataProvider {
+public final class ItemEntityMeta extends EntityMeta implements ObjectDataProvider {
     public ItemEntityMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public ItemStack getItem() {
-        return metadata.get(MetadataDef.ItemEntity.ITEM);
+        return get(MetadataDef.ItemEntity.ITEM);
     }
 
     public void setItem(ItemStack value) {
-        metadata.set(MetadataDef.ItemEntity.ITEM, value);
+        set(MetadataDef.ItemEntity.ITEM, value);
     }
 
     @Override

@@ -4,18 +4,18 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class PufferfishMeta extends AbstractFishMeta {
+public final class PufferfishMeta extends AbstractFishMeta {
     public PufferfishMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
         updateBoundingBox(State.UNPUFFED);
     }
 
     public State getState() {
-        return State.VALUES[metadata.get(MetadataDef.PufferFish.PUFF_STATE)];
+        return State.VALUES[get(MetadataDef.PufferFish.PUFF_STATE)];
     }
 
     public void setState(State state) {
-        metadata.set(MetadataDef.PufferFish.PUFF_STATE, state.ordinal());
+        set(MetadataDef.PufferFish.PUFF_STATE, state.ordinal());
         updateBoundingBox(state);
     }
 

@@ -6,19 +6,19 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.Nullable;
 
-public class ArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
-    private Entity shooter;
+public final class ArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
+    private @Nullable Entity shooter;
 
     public ArrowMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getColor() {
-        return metadata.get(MetadataDef.Arrow.COLOR);
+        return get(MetadataDef.Arrow.COLOR);
     }
 
     public void setColor(int value) {
-        metadata.set(MetadataDef.Arrow.COLOR, value);
+        set(MetadataDef.Arrow.COLOR, value);
     }
 
     @Override

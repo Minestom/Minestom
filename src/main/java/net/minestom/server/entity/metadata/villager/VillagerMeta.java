@@ -7,17 +7,17 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.Nullable;
 
-public class VillagerMeta extends AbstractVillagerMeta {
+public sealed class VillagerMeta extends AbstractVillagerMeta permits WanderingTraderMeta {
     public VillagerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public VillagerData getVillagerData() {
-        return metadata.get(MetadataDef.Villager.VARIANT);
+        return get(MetadataDef.Villager.VARIANT);
     }
 
     public void setVillagerData(VillagerData data) {
-        metadata.set(MetadataDef.Villager.VARIANT, data);
+        set(MetadataDef.Villager.VARIANT, data);
     }
 
     @Override

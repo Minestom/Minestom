@@ -4,17 +4,17 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class WitchMeta extends RaiderMeta {
+public final class WitchMeta extends RaiderMeta {
     public WitchMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isDrinkingPotion() {
-        return metadata.get(MetadataDef.Witch.IS_DRINKING_POTION);
+        return get(MetadataDef.Witch.IS_DRINKING_POTION);
     }
 
     public void setDrinkingPotion(boolean value) {
-        super.metadata.set(MetadataDef.Witch.IS_DRINKING_POTION, value);
+        super.set(MetadataDef.Witch.IS_DRINKING_POTION, value);
     }
 
 }

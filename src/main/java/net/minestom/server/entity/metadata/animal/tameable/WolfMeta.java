@@ -9,17 +9,17 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
-public class WolfMeta extends TameableAnimalMeta {
+public final class WolfMeta extends TameableAnimalMeta {
     public WolfMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isBegging() {
-        return metadata.get(MetadataDef.Wolf.IS_BEGGING);
+        return get(MetadataDef.Wolf.IS_BEGGING);
     }
 
     public void setBegging(boolean value) {
-        metadata.set(MetadataDef.Wolf.IS_BEGGING, value);
+        set(MetadataDef.Wolf.IS_BEGGING, value);
     }
 
     /**
@@ -27,7 +27,7 @@ public class WolfMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public DyeColor getCollarColor() {
-        return DyeColor.values()[metadata.get(MetadataDef.Wolf.COLLAR_COLOR)];
+        return DyeColor.values()[get(MetadataDef.Wolf.COLLAR_COLOR)];
     }
 
     /**
@@ -35,15 +35,15 @@ public class WolfMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public void setCollarColor(DyeColor value) {
-        metadata.set(MetadataDef.Wolf.COLLAR_COLOR, value.ordinal());
+        set(MetadataDef.Wolf.COLLAR_COLOR, value.ordinal());
     }
 
     public long getAngerTime() {
-        return metadata.get(MetadataDef.Wolf.ANGER_TIME);
+        return get(MetadataDef.Wolf.ANGER_TIME);
     }
 
     public void setAngerTime(long value) {
-        metadata.set(MetadataDef.Wolf.ANGER_TIME, value);
+        set(MetadataDef.Wolf.ANGER_TIME, value);
     }
 
     /**
@@ -51,7 +51,7 @@ public class WolfMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public RegistryKey<WolfVariant> getVariant() {
-        return metadata.get(MetadataDef.Wolf.VARIANT);
+        return get(MetadataDef.Wolf.VARIANT);
     }
 
     /**
@@ -59,7 +59,7 @@ public class WolfMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public void setVariant(RegistryKey<WolfVariant> value) {
-        metadata.set(MetadataDef.Wolf.VARIANT, value);
+        set(MetadataDef.Wolf.VARIANT, value);
     }
 
     /**
@@ -67,7 +67,7 @@ public class WolfMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public RegistryKey<WolfSoundVariant> getSoundVariant() {
-        return metadata.get(MetadataDef.Wolf.SOUND_VARIANT);
+        return get(MetadataDef.Wolf.SOUND_VARIANT);
     }
 
     /**
@@ -75,7 +75,7 @@ public class WolfMeta extends TameableAnimalMeta {
      */
     @Deprecated
     public void setSoundVariant(RegistryKey<WolfSoundVariant> value) {
-        metadata.set(MetadataDef.Wolf.SOUND_VARIANT, value);
+        set(MetadataDef.Wolf.SOUND_VARIANT, value);
     }
 
     @Override

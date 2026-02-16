@@ -4,49 +4,49 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class AbstractHorseMeta extends AnimalMeta {
+public sealed abstract class AbstractHorseMeta extends AnimalMeta permits CamelMeta, ChestedHorseMeta, HorseMeta, SkeletonHorseMeta, ZombieHorseMeta {
     protected AbstractHorseMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isTamed() {
-        return metadata.get(MetadataDef.AbstractHorse.IS_TAME);
+        return get(MetadataDef.AbstractHorse.IS_TAME);
     }
 
     public void setTamed(boolean value) {
-        metadata.set(MetadataDef.AbstractHorse.IS_TAME, value);
+        set(MetadataDef.AbstractHorse.IS_TAME, value);
     }
 
     public boolean isHasBred() {
-        return metadata.get(MetadataDef.AbstractHorse.HAS_BRED);
+        return get(MetadataDef.AbstractHorse.HAS_BRED);
     }
 
     public void setHasBred(boolean value) {
-        metadata.set(MetadataDef.AbstractHorse.HAS_BRED, value);
+        set(MetadataDef.AbstractHorse.HAS_BRED, value);
     }
 
     public boolean isEating() {
-        return metadata.get(MetadataDef.AbstractHorse.IS_EATING);
+        return get(MetadataDef.AbstractHorse.IS_EATING);
     }
 
     public void setEating(boolean value) {
-        metadata.set(MetadataDef.AbstractHorse.IS_EATING, value);
+        set(MetadataDef.AbstractHorse.IS_EATING, value);
     }
 
     public boolean isRearing() {
-        return metadata.get(MetadataDef.AbstractHorse.IS_REARING);
+        return get(MetadataDef.AbstractHorse.IS_REARING);
     }
 
     public void setRearing(boolean value) {
-        metadata.set(MetadataDef.AbstractHorse.IS_REARING, value);
+        set(MetadataDef.AbstractHorse.IS_REARING, value);
     }
 
     public boolean isMouthOpen() {
-        return metadata.get(MetadataDef.AbstractHorse.IS_MOUTH_OPEN);
+        return get(MetadataDef.AbstractHorse.IS_MOUTH_OPEN);
     }
 
     public void setMouthOpen(boolean value) {
-        metadata.set(MetadataDef.AbstractHorse.IS_MOUTH_OPEN, value);
+        set(MetadataDef.AbstractHorse.IS_MOUTH_OPEN, value);
     }
 
 }

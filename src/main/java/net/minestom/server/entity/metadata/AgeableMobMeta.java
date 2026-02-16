@@ -4,14 +4,17 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.entity.metadata.animal.AnimalMeta;
+import net.minestom.server.entity.metadata.villager.AbstractVillagerMeta;
+import net.minestom.server.entity.metadata.water.AgeableWaterAnimalMeta;
 
-public class AgeableMobMeta extends PathfinderMobMeta {
+public sealed abstract class AgeableMobMeta extends PathfinderMobMeta permits AnimalMeta, AbstractVillagerMeta, AgeableWaterAnimalMeta {
     protected AgeableMobMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isBaby() {
-        return metadata.get(MetadataDef.AgeableMob.IS_BABY);
+        return get(MetadataDef.AgeableMob.IS_BABY);
     }
 
     public void setBaby(boolean value) {
@@ -28,7 +31,7 @@ public class AgeableMobMeta extends PathfinderMobMeta {
                 entity.setBoundingBox(width, bb.height() * 2, width);
             }
         });
-        metadata.set(MetadataDef.AgeableMob.IS_BABY, value);
+        set(MetadataDef.AgeableMob.IS_BABY, value);
     }
 
 }

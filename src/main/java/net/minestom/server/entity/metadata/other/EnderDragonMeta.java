@@ -5,17 +5,17 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.MobMeta;
 
-public class EnderDragonMeta extends MobMeta {
+public final class EnderDragonMeta extends MobMeta {
     public EnderDragonMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public Phase getPhase() {
-        return Phase.VALUES[metadata.get(MetadataDef.EnderDragon.DRAGON_PHASE)];
+        return Phase.VALUES[get(MetadataDef.EnderDragon.DRAGON_PHASE)];
     }
 
     public void setPhase(Phase value) {
-        metadata.set(MetadataDef.EnderDragon.DRAGON_PHASE, value.ordinal());
+        set(MetadataDef.EnderDragon.DRAGON_PHASE, value.ordinal());
     }
 
     public enum Phase {

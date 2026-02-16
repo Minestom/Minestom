@@ -10,7 +10,7 @@ import net.minestom.server.entity.metadata.animal.AnimalMeta;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class AxolotlMeta extends AnimalMeta {
+public final class AxolotlMeta extends AnimalMeta {
     public AxolotlMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
@@ -20,7 +20,7 @@ public class AxolotlMeta extends AnimalMeta {
      */
     @Deprecated
     public Variant getVariant() {
-        return Variant.VALUES[metadata.get(MetadataDef.Axolotl.VARIANT)];
+        return Variant.VALUES[get(MetadataDef.Axolotl.VARIANT)];
     }
 
     /**
@@ -28,23 +28,23 @@ public class AxolotlMeta extends AnimalMeta {
      */
     @Deprecated
     public void setVariant(Variant variant) {
-        metadata.set(MetadataDef.Axolotl.VARIANT, variant.ordinal());
+        set(MetadataDef.Axolotl.VARIANT, variant.ordinal());
     }
 
     public boolean isPlayingDead() {
-        return metadata.get(MetadataDef.Axolotl.IS_PLAYING_DEAD);
+        return get(MetadataDef.Axolotl.IS_PLAYING_DEAD);
     }
 
     public void setPlayingDead(boolean playingDead) {
-        metadata.set(MetadataDef.Axolotl.IS_PLAYING_DEAD, playingDead);
+        set(MetadataDef.Axolotl.IS_PLAYING_DEAD, playingDead);
     }
 
     public boolean isFromBucket() {
-        return metadata.get(MetadataDef.Axolotl.IS_FROM_BUCKET);
+        return get(MetadataDef.Axolotl.IS_FROM_BUCKET);
     }
 
     public void setFromBucket(boolean fromBucket) {
-        metadata.set(MetadataDef.Axolotl.IS_FROM_BUCKET, fromBucket);
+        set(MetadataDef.Axolotl.IS_FROM_BUCKET, fromBucket);
     }
 
     @Override

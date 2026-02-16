@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SalmonMeta extends AbstractFishMeta {
+public final class SalmonMeta extends AbstractFishMeta {
     public SalmonMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
@@ -23,7 +23,7 @@ public class SalmonMeta extends AbstractFishMeta {
      */
     @Deprecated
     public SalmonMeta.Size getSize() {
-        return Size.VALUES[metadata.get(MetadataDef.Salmon.SIZE)];
+        return Size.VALUES[get(MetadataDef.Salmon.SIZE)];
     }
 
     /**
@@ -31,7 +31,7 @@ public class SalmonMeta extends AbstractFishMeta {
      */
     @Deprecated
     public void setSize(SalmonMeta.Size size) {
-        metadata.set(MetadataDef.Salmon.SIZE, size.ordinal());
+        set(MetadataDef.Salmon.SIZE, size.ordinal());
     }
 
     @Override

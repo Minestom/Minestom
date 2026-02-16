@@ -6,33 +6,33 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 
-public class EndermanMeta extends MonsterMeta {
+public final class EndermanMeta extends MonsterMeta {
     public EndermanMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public @Nullable Block getCarriedBlock() {
-        return metadata.get(MetadataDef.Enderman.CARRIED_BLOCK);
+        return get(MetadataDef.Enderman.CARRIED_BLOCK);
     }
 
     public void setCarriedBlock(@Nullable Block value) {
-        metadata.set(MetadataDef.Enderman.CARRIED_BLOCK, value);
+        set(MetadataDef.Enderman.CARRIED_BLOCK, value);
     }
 
     public boolean isScreaming() {
-        return metadata.get(MetadataDef.Enderman.IS_SCREAMING);
+        return get(MetadataDef.Enderman.IS_SCREAMING);
     }
 
     public void setScreaming(boolean value) {
-        metadata.set(MetadataDef.Enderman.IS_SCREAMING, value);
+        set(MetadataDef.Enderman.IS_SCREAMING, value);
     }
 
     public boolean isStaring() {
-        return metadata.get(MetadataDef.Enderman.IS_STARING);
+        return get(MetadataDef.Enderman.IS_STARING);
     }
 
     public void setStaring(boolean value) {
-        metadata.set(MetadataDef.Enderman.IS_STARING, value);
+        set(MetadataDef.Enderman.IS_STARING, value);
     }
 
 }

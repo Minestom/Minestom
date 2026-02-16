@@ -10,7 +10,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class TropicalFishMeta extends AbstractFishMeta {
+public final class TropicalFishMeta extends AbstractFishMeta {
     public TropicalFishMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
@@ -20,7 +20,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
      */
     @Deprecated
     public Variant getVariant() {
-        return Variant.fromPackedId(metadata.get(MetadataDef.TropicalFish.VARIANT));
+        return Variant.fromPackedId(get(MetadataDef.TropicalFish.VARIANT));
     }
 
     /**
@@ -28,7 +28,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
      */
     @Deprecated
     public void setVariant(Variant variant) {
-        metadata.set(MetadataDef.TropicalFish.VARIANT, variant.packedId());
+        set(MetadataDef.TropicalFish.VARIANT, variant.packedId());
     }
 
     @Override

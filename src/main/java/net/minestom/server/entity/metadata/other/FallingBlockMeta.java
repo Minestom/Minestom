@@ -8,7 +8,7 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.instance.block.Block;
 
-public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
+public final class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
     private Block block = Block.STONE;
 
     public FallingBlockMeta(Entity entity, MetadataHolder metadata) {
@@ -16,11 +16,11 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     public Point getSpawnPosition() {
-        return metadata.get(MetadataDef.FallingBlock.SPAWN_POSITION);
+        return get(MetadataDef.FallingBlock.SPAWN_POSITION);
     }
 
     public void setSpawnPosition(Point value) {
-        metadata.set(MetadataDef.FallingBlock.SPAWN_POSITION, value);
+        set(MetadataDef.FallingBlock.SPAWN_POSITION, value);
     }
 
     public Block getBlock() {

@@ -6,8 +6,8 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.Nullable;
 
-public class DragonFireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    private Entity shooter;
+public final class DragonFireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
+    private @Nullable Entity shooter;
 
     public DragonFireballMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);

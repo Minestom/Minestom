@@ -5,89 +5,89 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class TextDisplayMeta extends AbstractDisplayMeta {
+public final class TextDisplayMeta extends AbstractDisplayMeta {
     public TextDisplayMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public Component getText() {
-        return metadata.get(MetadataDef.TextDisplay.TEXT);
+        return get(MetadataDef.TextDisplay.TEXT);
     }
 
     public void setText(Component value) {
-        metadata.set(MetadataDef.TextDisplay.TEXT, value);
+        set(MetadataDef.TextDisplay.TEXT, value);
     }
 
     public int getLineWidth() {
-        return metadata.get(MetadataDef.TextDisplay.LINE_WIDTH);
+        return get(MetadataDef.TextDisplay.LINE_WIDTH);
     }
 
     public void setLineWidth(int value) {
-        metadata.set(MetadataDef.TextDisplay.LINE_WIDTH, value);
+        set(MetadataDef.TextDisplay.LINE_WIDTH, value);
     }
 
     public int getBackgroundColor() {
-        return metadata.get(MetadataDef.TextDisplay.BACKGROUND_COLOR);
+        return get(MetadataDef.TextDisplay.BACKGROUND_COLOR);
     }
 
     public void setBackgroundColor(int value) {
-        metadata.set(MetadataDef.TextDisplay.BACKGROUND_COLOR, value);
+        set(MetadataDef.TextDisplay.BACKGROUND_COLOR, value);
     }
 
     public byte getTextOpacity() {
-        return metadata.get(MetadataDef.TextDisplay.TEXT_OPACITY);
+        return get(MetadataDef.TextDisplay.TEXT_OPACITY);
     }
 
     public void setTextOpacity(byte value) {
-        metadata.set(MetadataDef.TextDisplay.TEXT_OPACITY, value);
+        set(MetadataDef.TextDisplay.TEXT_OPACITY, value);
     }
 
     public boolean isShadow() {
-        return metadata.get(MetadataDef.TextDisplay.HAS_SHADOW);
+        return get(MetadataDef.TextDisplay.HAS_SHADOW);
     }
 
     public void setShadow(boolean value) {
-        metadata.set(MetadataDef.TextDisplay.HAS_SHADOW, value);
+        set(MetadataDef.TextDisplay.HAS_SHADOW, value);
     }
 
     public boolean isSeeThrough() {
-        return metadata.get(MetadataDef.TextDisplay.IS_SEE_THROUGH);
+        return get(MetadataDef.TextDisplay.IS_SEE_THROUGH);
     }
 
     public void setSeeThrough(boolean value) {
-        metadata.set(MetadataDef.TextDisplay.IS_SEE_THROUGH, value);
+        set(MetadataDef.TextDisplay.IS_SEE_THROUGH, value);
     }
 
     public boolean isUseDefaultBackground() {
-        return metadata.get(MetadataDef.TextDisplay.USE_DEFAULT_BACKGROUND_COLOR);
+        return get(MetadataDef.TextDisplay.USE_DEFAULT_BACKGROUND_COLOR);
     }
 
     public void setUseDefaultBackground(boolean value) {
-        metadata.set(MetadataDef.TextDisplay.USE_DEFAULT_BACKGROUND_COLOR, value);
+        set(MetadataDef.TextDisplay.USE_DEFAULT_BACKGROUND_COLOR, value);
     }
 
     public boolean isAlignLeft() {
-        return metadata.get(MetadataDef.TextDisplay.ALIGN_LEFT);
+        return get(MetadataDef.TextDisplay.ALIGN_LEFT);
     }
 
     public void setAlignLeft(boolean value) {
-        metadata.set(MetadataDef.TextDisplay.ALIGN_LEFT, value);
+        set(MetadataDef.TextDisplay.ALIGN_LEFT, value);
     }
 
     public boolean isAlignRight() {
-        return metadata.get(MetadataDef.TextDisplay.ALIGN_RIGHT);
+        return get(MetadataDef.TextDisplay.ALIGN_RIGHT);
     }
 
     public void setAlignRight(boolean value) {
-        metadata.set(MetadataDef.TextDisplay.ALIGN_RIGHT, value);
+        set(MetadataDef.TextDisplay.ALIGN_RIGHT, value);
     }
 
     public Alignment getAlignment() {
-        return Alignment.fromId(metadata.get(MetadataDef.TextDisplay.ALIGNMENT));
+        return Alignment.fromId(get(MetadataDef.TextDisplay.ALIGNMENT));
     }
 
     public void setAlignment(Alignment value) {
-        metadata.set(MetadataDef.TextDisplay.ALIGNMENT, (byte) value.ordinal());
+        set(MetadataDef.TextDisplay.ALIGNMENT, (byte) value.ordinal());
     }
 
     public enum Alignment {

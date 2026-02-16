@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class RabbitMeta extends AnimalMeta {
+public final class RabbitMeta extends AnimalMeta {
     public RabbitMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
@@ -20,7 +20,7 @@ public class RabbitMeta extends AnimalMeta {
     @Deprecated
     public void setVariant(RabbitMeta.Variant variant) {
         int id = variant == Variant.KILLER_BUNNY ? 99 : variant.ordinal();
-        metadata.set(MetadataDef.Rabbit.TYPE, id);
+        set(MetadataDef.Rabbit.TYPE, id);
     }
 
     /**
@@ -28,7 +28,7 @@ public class RabbitMeta extends AnimalMeta {
      */
     @Deprecated
     public RabbitMeta.Variant getVariant() {
-        int id = metadata.get(MetadataDef.Rabbit.TYPE);
+        int id = get(MetadataDef.Rabbit.TYPE);
         if (id == 99) {
             return Variant.KILLER_BUNNY;
         }

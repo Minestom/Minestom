@@ -8,7 +8,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
-public class ChickenMeta extends AnimalMeta {
+public final class ChickenMeta extends AnimalMeta {
     public ChickenMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
@@ -19,7 +19,7 @@ public class ChickenMeta extends AnimalMeta {
      */
     @Deprecated
     public RegistryKey<ChickenVariant> getVariant() {
-        return metadata.get(MetadataDef.Chicken.VARIANT);
+        return get(MetadataDef.Chicken.VARIANT);
     }
 
     /**
@@ -27,7 +27,7 @@ public class ChickenMeta extends AnimalMeta {
      */
     @Deprecated
     public void setVariant(RegistryKey<ChickenVariant> variant) {
-        metadata.set(MetadataDef.Chicken.VARIANT, variant);
+        set(MetadataDef.Chicken.VARIANT, variant);
     }
 
     @Override

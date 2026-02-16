@@ -7,83 +7,83 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 
-public class AbstractDisplayMeta extends EntityMeta {
+public sealed abstract class AbstractDisplayMeta extends EntityMeta permits BlockDisplayMeta, ItemDisplayMeta, TextDisplayMeta {
     protected AbstractDisplayMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getTransformationInterpolationStartDelta() {
-        return metadata.get(MetadataDef.Display.INTERPOLATION_DELAY);
+        return get(MetadataDef.Display.INTERPOLATION_DELAY);
     }
 
     public void setTransformationInterpolationStartDelta(int value) {
-        metadata.set(MetadataDef.Display.INTERPOLATION_DELAY, value);
+        set(MetadataDef.Display.INTERPOLATION_DELAY, value);
     }
 
     public int getTransformationInterpolationDuration() {
-        return metadata.get(MetadataDef.Display.TRANSFORMATION_INTERPOLATION_DURATION);
+        return get(MetadataDef.Display.TRANSFORMATION_INTERPOLATION_DURATION);
     }
 
     public void setTransformationInterpolationDuration(int value) {
-        metadata.set(MetadataDef.Display.TRANSFORMATION_INTERPOLATION_DURATION, value);
+        set(MetadataDef.Display.TRANSFORMATION_INTERPOLATION_DURATION, value);
     }
 
     public int getPosRotInterpolationDuration() {
-        return metadata.get(MetadataDef.Display.POSITION_ROTATION_INTERPOLATION_DURATION);
+        return get(MetadataDef.Display.POSITION_ROTATION_INTERPOLATION_DURATION);
     }
 
     public void setPosRotInterpolationDuration(int value) {
-        metadata.set(MetadataDef.Display.POSITION_ROTATION_INTERPOLATION_DURATION, value);
+        set(MetadataDef.Display.POSITION_ROTATION_INTERPOLATION_DURATION, value);
     }
 
     public Point getTranslation() {
-        return metadata.get(MetadataDef.Display.TRANSLATION);
+        return get(MetadataDef.Display.TRANSLATION);
     }
 
     public void setTranslation(Point value) {
-        metadata.set(MetadataDef.Display.TRANSLATION, value);
+        set(MetadataDef.Display.TRANSLATION, value);
     }
 
     public Vec getScale() {
-        return metadata.get(MetadataDef.Display.SCALE).asVec();
+        return get(MetadataDef.Display.SCALE).asVec();
     }
 
     public void setScale(Vec value) {
-        metadata.set(MetadataDef.Display.SCALE, value);
+        set(MetadataDef.Display.SCALE, value);
     }
 
     public float [] getLeftRotation() {
         //todo replace with actual quaternion type
-        return metadata.get(MetadataDef.Display.ROTATION_LEFT);
+        return get(MetadataDef.Display.ROTATION_LEFT);
     }
 
     public void setLeftRotation(float [] value) {
-        metadata.set(MetadataDef.Display.ROTATION_LEFT, value);
+        set(MetadataDef.Display.ROTATION_LEFT, value);
     }
 
     public float [] getRightRotation() {
         //todo replace with actual quaternion type
-        return metadata.get(MetadataDef.Display.ROTATION_RIGHT);
+        return get(MetadataDef.Display.ROTATION_RIGHT);
     }
 
     public void setRightRotation(float [] value) {
-        metadata.set(MetadataDef.Display.ROTATION_RIGHT, value);
+        set(MetadataDef.Display.ROTATION_RIGHT, value);
     }
 
     public BillboardConstraints getBillboardRenderConstraints() {
-        return BillboardConstraints.VALUES[metadata.get(MetadataDef.Display.BILLBOARD_CONSTRAINTS)];
+        return BillboardConstraints.VALUES[get(MetadataDef.Display.BILLBOARD_CONSTRAINTS)];
     }
 
     public void setBillboardRenderConstraints(BillboardConstraints value) {
-        metadata.set(MetadataDef.Display.BILLBOARD_CONSTRAINTS, (byte) value.ordinal());
+        set(MetadataDef.Display.BILLBOARD_CONSTRAINTS, (byte) value.ordinal());
     }
 
     public int getBrightnessOverride() {
-        return metadata.get(MetadataDef.Display.BRIGHTNESS_OVERRIDE);
+        return get(MetadataDef.Display.BRIGHTNESS_OVERRIDE);
     }
 
     public void setBrightnessOverride(int value) {
-        metadata.set(MetadataDef.Display.BRIGHTNESS_OVERRIDE, value);
+        set(MetadataDef.Display.BRIGHTNESS_OVERRIDE, value);
     }
 
     public void setBrightness(int blockLight, int skyLight) {
@@ -107,51 +107,51 @@ public class AbstractDisplayMeta extends EntityMeta {
     }
 
     public float getViewRange() {
-        return metadata.get(MetadataDef.Display.VIEW_RANGE);
+        return get(MetadataDef.Display.VIEW_RANGE);
     }
 
     public void setViewRange(float value) {
-        metadata.set(MetadataDef.Display.VIEW_RANGE, value);
+        set(MetadataDef.Display.VIEW_RANGE, value);
     }
 
     public float getShadowRadius() {
-        return metadata.get(MetadataDef.Display.SHADOW_RADIUS);
+        return get(MetadataDef.Display.SHADOW_RADIUS);
     }
 
     public void setShadowRadius(float value) {
-        metadata.set(MetadataDef.Display.SHADOW_RADIUS, value);
+        set(MetadataDef.Display.SHADOW_RADIUS, value);
     }
 
     public float getShadowStrength() {
-        return metadata.get(MetadataDef.Display.SHADOW_STRENGTH);
+        return get(MetadataDef.Display.SHADOW_STRENGTH);
     }
 
     public void setShadowStrength(float value) {
-        metadata.set(MetadataDef.Display.SHADOW_STRENGTH, value);
+        set(MetadataDef.Display.SHADOW_STRENGTH, value);
     }
 
     public float getWidth() {
-        return metadata.get(MetadataDef.Display.WIDTH);
+        return get(MetadataDef.Display.WIDTH);
     }
 
     public void setWidth(float value) {
-        metadata.set(MetadataDef.Display.WIDTH, value);
+        set(MetadataDef.Display.WIDTH, value);
     }
 
     public float getHeight() {
-        return metadata.get(MetadataDef.Display.HEIGHT);
+        return get(MetadataDef.Display.HEIGHT);
     }
 
     public void setHeight(float value) {
-        metadata.set(MetadataDef.Display.HEIGHT, value);
+        set(MetadataDef.Display.HEIGHT, value);
     }
 
     public int getGlowColorOverride() {
-        return metadata.get(MetadataDef.Display.GLOW_COLOR_OVERRIDE);
+        return get(MetadataDef.Display.GLOW_COLOR_OVERRIDE);
     }
 
     public void setGlowColorOverride(int value) {
-        metadata.set(MetadataDef.Display.GLOW_COLOR_OVERRIDE, value);
+        set(MetadataDef.Display.GLOW_COLOR_OVERRIDE, value);
     }
 
     public enum BillboardConstraints {

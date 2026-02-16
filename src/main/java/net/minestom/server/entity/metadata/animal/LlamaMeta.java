@@ -9,25 +9,25 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class LlamaMeta extends ChestedHorseMeta {
+public final class LlamaMeta extends ChestedHorseMeta {
     public LlamaMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getStrength() {
-        return metadata.get(MetadataDef.Llama.STRENGTH);
+        return get(MetadataDef.Llama.STRENGTH);
     }
 
     public void setStrength(int value) {
-        metadata.set(MetadataDef.Llama.STRENGTH, value);
+        set(MetadataDef.Llama.STRENGTH, value);
     }
 
     public int getCarpetColor() {
-        return metadata.get(MetadataDef.Llama.CARPET_COLOR);
+        return get(MetadataDef.Llama.CARPET_COLOR);
     }
 
     public void setCarpetColor(int value) {
-        metadata.set(MetadataDef.Llama.CARPET_COLOR, value);
+        set(MetadataDef.Llama.CARPET_COLOR, value);
     }
 
     /**
@@ -35,7 +35,7 @@ public class LlamaMeta extends ChestedHorseMeta {
      */
     @Deprecated
     public Variant getVariant() {
-        return Variant.VALUES[metadata.get(MetadataDef.Llama.VARIANT)];
+        return Variant.VALUES[get(MetadataDef.Llama.VARIANT)];
     }
 
     /**
@@ -43,7 +43,7 @@ public class LlamaMeta extends ChestedHorseMeta {
      */
     @Deprecated
     public void setVariant(Variant value) {
-        metadata.set(MetadataDef.Llama.VARIANT, value.ordinal());
+        set(MetadataDef.Llama.VARIANT, value.ordinal());
     }
 
     @Override
