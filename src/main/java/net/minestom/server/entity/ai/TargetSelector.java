@@ -17,6 +17,27 @@ public abstract class TargetSelector {
     }
 
     /**
+     * Whether this {@link TargetSelector} can currently be used.
+     *
+     * @return true to use
+     */
+    public boolean canUse() {
+        return true;
+    }
+
+    /**
+     * Whether the target determined by this {@link TargetSelector} should be lost.
+     * <p>
+     * Returning true will guarantee to lose the target, but returning false will not guarantee
+     * the target is kept, since other target selectors with higher priority might take over.
+     *
+     * @return true to lose the target, false to keep it
+     */
+    public boolean shouldLoseTarget() {
+        return false;
+    }
+
+    /**
      * Finds the target.
      * <p>
      * Returning null means that this target selector didn't find any entity,
@@ -24,8 +45,7 @@ public abstract class TargetSelector {
      *
      * @return the target, null if not any
      */
-    @Nullable
-    public abstract Entity findTarget();
+    public @Nullable abstract Entity findTarget();
 
     /**
      * Gets the entity linked to this target selector.

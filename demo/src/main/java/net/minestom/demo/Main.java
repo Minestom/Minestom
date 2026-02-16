@@ -92,6 +92,7 @@ public class Main {
         commandManager.register(new AttributeCommand());
         commandManager.register(new PrimedTNTCommand());
         commandManager.register(new SleepCommand());
+        commandManager.register(new ChickenCommand());
         commandManager.register(new MinecartCommand());
         commandManager.register(new BelowNameCommand());
 

@@ -1,51 +1,135 @@
 package net.minestom.server.entity.ai;
 
-import java.util.Collection;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityCreature;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
- * Represents an entity which can contain
- * {@link GoalSelector goal selectors} and {@link TargetSelector target selectors}.
+ * Container for all entity AI from {@link EntityCreature}.
  * <p>
- * Both types of selectors are being stored in {@link EntityAIGroup AI groups}.
- * For every group there could be only a single {@link GoalSelector goal selector} running at a time,
- * but multiple groups are independent of each other, so each of them can have own goal selector running.
+ * It contains a {@link GoalSelector} which determines the active AI goals,
+ * and it tracks the entity target with a list of {@link TargetSelector}.
+ *
+ * @see EntityAI#addGoal(GoalSelector.Slot, Goal)
+ * @see EntityAI#addTargetSelector(TargetSelector)
  */
-public interface EntityAI {
+public class EntityAI {
+    private final GoalSelector goalSelector = new GoalSelector();
+    private final List<TargetSelector> targetSelectors = new ArrayList<>();
 
-    /**
-     * Gets the AI groups of this entity.
-     *
-     * @return a modifiable collection of AI groups of this entity.
-     */
-    Collection<EntityAIGroup> getAIGroups();
+    private @Nullable Entity target;
+    private @Nullable TargetSelector usedTargetSelector;
 
-    /**
-     * Adds new AI group to this entity.
-     *
-     * @param group a group to be added.
-     */
-    default void addAIGroup(EntityAIGroup group) {
-        getAIGroups().add(group);
+    private final Random random = new Random();
+
+    public void tick(long time) {
+        goalSelector.tick(time);
+
+        evaluateTarget();
+    }
+
+    private void evaluateTarget() {
+        if (usedTargetSelector != null && usedTargetSelector.shouldLoseTarget()) {
+            target = null;
+            usedTargetSelector = null;
+        }
+
+        for (TargetSelector targetSelector : getTargetSelectors()) {
+            if (!targetSelector.canUse()) continue;
+            final Entity entity = targetSelector.findTarget();
+            if (entity != null) {
+                this.target = entity;
+                this.usedTargetSelector = targetSelector;
+                break;
+            }
+        }
     }
 
     /**
-     * Adds new AI group to this entity, consisting of the given
-     * {@link GoalSelector goal selectors} and {@link TargetSelector target selectors}.
-     * Their order is also a priority: the lower element index is, the higher priority is.
+     * Gets the goal selector of this entity. This can be used to add AI goals.
      *
-     * @param goalSelectors   goal selectors of the group.
-     * @param targetSelectors target selectors of the group.
+     * @return the goal selector
      */
-    default void addAIGroup(List<GoalSelector> goalSelectors, List<TargetSelector> targetSelectors) {
-        EntityAIGroup group = new EntityAIGroup();
-        group.getGoalSelectors().addAll(goalSelectors);
-        group.getTargetSelectors().addAll(targetSelectors);
-        addAIGroup(group);
+    public GoalSelector getGoalSelector() {
+        return goalSelector;
     }
 
-    default void aiTick(long time) {
-        getAIGroups().forEach(group -> group.tick(time));
+    /**
+     * Adds a goal to the goal selector. The later the goal is added, the lower its priority.
+     *
+     * @param slot the slot that the goal will occupy
+     * @param goal  the goal to add
+     * @return this
+     */
+    public EntityAI addGoal(GoalSelector.Slot slot, Goal goal) {
+        goalSelector.addGoal(goal, slot);
+        return this;
     }
 
+    /**
+     * Adds a goal to the goal selector. The later the goal is added, the lower its priority.
+     *
+     * @param slot1 one of the slots that the goal will occupy
+     * @param slot2 one of the slots that the goal will occupy
+     * @param goal  the goal to add
+     * @return this
+     */
+    public EntityAI addGoal(GoalSelector.Slot slot1, GoalSelector.Slot slot2, Goal goal) {
+        goalSelector.addGoal(goal, slot1, slot2);
+        return this;
+    }
+
+    /**
+     * Returns a modifiable list of target selectors for this entity.
+     * <p>
+     * The order of this list determines priority (with the first selector being higher priority than the next, and so on).
+     *
+     * @return a modifiable list of target selectors
+     */
+    public List<TargetSelector> getTargetSelectors() {
+        return targetSelectors;
+    }
+
+    /**
+     * Adds a target selector. The later the target selector is added, the lower its priority.
+     *
+     * @param targetSelector the target selector to add
+     * @return this
+     */
+    public EntityAI addTargetSelector(TargetSelector targetSelector) {
+        targetSelectors.add(targetSelector);
+        return this;
+    }
+
+    /**
+     * Gets the entity target.
+     *
+     * @return the entity target, can be null if not any
+     */
+    @Nullable
+    public Entity getTarget() {
+        return target;
+    }
+
+    /**
+     * Changes the entity target.
+     *
+     * @param target the new entity target, null to remove
+     */
+    public void setTarget(@Nullable Entity target) {
+        this.target = target;
+    }
+
+    /**
+     * Gets a random source which can be used in goals.
+     *
+     * @return the random source
+     */
+    public Random getRandom() {
+        return random;
+    }
 }
