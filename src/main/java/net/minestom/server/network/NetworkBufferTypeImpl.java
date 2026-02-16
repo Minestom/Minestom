@@ -12,8 +12,6 @@ import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.network.template.PrimitiveType;
-import net.minestom.server.network.template.TransformingType;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.ArrayUtils;
@@ -39,17 +37,91 @@ final class NetworkBufferTypeImpl {
     static final int SEGMENT_BITS = 0x7F;
     static final int CONTINUE_BIT = 0x80;
 
-    static final BooleanType BOOLEAN = (BooleanType) NetworkBuffer.BOOLEAN;
-    static final ByteType BYTE = (ByteType) NetworkBuffer.BYTE;
-    static final UnsignedByteType UNSIGNED_BYTE = (UnsignedByteType) NetworkBuffer.UNSIGNED_BYTE;
-    static final UnsignedShortType UNSIGNED_SHORT = (UnsignedShortType) NetworkBuffer.UNSIGNED_SHORT;
-    static final IntType INT = (IntType) NetworkBuffer.INT;
-    static final UnsignedIntType UNSIGNED_INT = (UnsignedIntType) NetworkBuffer.UNSIGNED_INT;
-    static final FloatType FLOAT = (FloatType) NetworkBuffer.FLOAT;
-    static final DoubleType DOUBLE = (DoubleType) NetworkBuffer.DOUBLE;
-    static final VarIntType VAR_INT = (VarIntType) NetworkBuffer.VAR_INT;
-    static final LongType LONG = (LongType) NetworkBuffer.LONG;
-    static final VarLongType VAR_LONG = (VarLongType) NetworkBuffer.VAR_LONG;
+    static final BooleanType BOOLEAN = new BooleanType();
+    static final ByteType BYTE = new ByteType();
+    static final UnsignedByteType UNSIGNED_BYTE = new UnsignedByteType();
+    static final ShortType SHORT = new ShortType();
+    static final UnsignedShortType UNSIGNED_SHORT = new UnsignedShortType();
+    static final IntType INT = new IntType();
+    static final UnsignedIntType UNSIGNED_INT = new UnsignedIntType();
+    static final FloatType FLOAT = new FloatType();
+    static final DoubleType DOUBLE = new DoubleType();
+    static final VarIntType VAR_INT = new VarIntType();
+    static final VarInt3Type VAR_INT_3 = new VarInt3Type();
+    static final LongType LONG = new LongType();
+    static final VarLongType VAR_LONG = new VarLongType();
+
+    /// Currently used for writing the unboxed types, Will be used in templating and require to be moved to a more public location.
+    sealed interface PrimitiveType<T> extends NetworkBuffer.Type<T> {
+        /// The primitive type the class represents.
+        Class<T> primitiveClass();
+
+        sealed interface Unsigned {}
+
+        default void writeBoolean(NetworkBuffer buffer, boolean value) {
+            throw new UnsupportedOperationException();
+        }
+
+        default void writeByte(NetworkBuffer buffer, byte value) {
+            throw new UnsupportedOperationException();
+        }
+
+        default void writeShort(NetworkBuffer buffer, short value) {
+            throw new UnsupportedOperationException();
+        }
+
+        default void writeChar(NetworkBuffer buffer, char value) {
+            throw new UnsupportedOperationException();
+        }
+
+        default void writeInt(NetworkBuffer buffer, int value) {
+            throw new UnsupportedOperationException();
+        }
+
+        default void writeLong(NetworkBuffer buffer, long value) {
+            throw new UnsupportedOperationException();
+        }
+
+        default void writeFloat(NetworkBuffer buffer, float value) {
+            throw new UnsupportedOperationException();
+        }
+
+        default void writeDouble(NetworkBuffer buffer, double value) {
+            throw new UnsupportedOperationException();
+        }
+
+        default boolean readBoolean(NetworkBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+
+        default byte readByte(NetworkBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+
+        default short readShort(NetworkBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+
+        default char readChar(NetworkBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+
+        default int readInt(NetworkBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+
+        default long readLong(NetworkBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+
+        default float readFloat(NetworkBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+
+        default double readDouble(NetworkBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+    }
 
     record BooleanType() implements PrimitiveType<Boolean> {
         @Override
@@ -530,6 +602,8 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public int readInt(NetworkBuffer buffer) {
+            // Ensure that the buffer can read other var-int sizes
+            // The optimization is mostly relevant for writing
             return VAR_INT.readInt(buffer);
         }
     }
@@ -1272,7 +1346,7 @@ final class NetworkBufferTypeImpl {
 
     record TransformType<T, S>(Type<T> parent,
                                Function<? super T, ? extends S> to,
-                               Function<? super S, ? extends T> from) implements TransformingType<T, S> {
+                               Function<? super S, ? extends T> from) implements Type<S> {
         public TransformType {
             Objects.requireNonNull(parent, "parent");
             Objects.requireNonNull(to, "to");

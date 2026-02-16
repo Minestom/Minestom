@@ -5,9 +5,6 @@
       "serializable": true
     },
     {
-      "type": "int[]"
-    },
-    {
       "type": "java.io.File",
       "serializable": true
     },
@@ -22,9 +19,6 @@
           ]
         }
       ]
-    },
-    {
-      "type": "java.lang.Byte"
     },
     {
       "type": "java.lang.Class"
@@ -42,23 +36,8 @@
       "serializable": true
     },
     {
-      "type": "java.lang.Enum[]"
-    },
-    {
       "type": "java.lang.Exception",
       "serializable": true
-    },
-    {
-      "type": "java.lang.Float"
-    },
-    {
-      "type": "java.lang.Integer"
-    },
-    {
-      "type": "java.lang.Long"
-    },
-    {
-      "type": "java.lang.Object"
     },
     {
       "type": "java.lang.Object[]",
@@ -123,20 +102,11 @@
       "type": "java.lang.reflect.RecordComponent"
     },
     {
-      "type": "java.security.PublicKey"
-    },
-    {
       "type": "java.sql.Date"
-    },
-    {
-      "type": "java.time.Instant"
     },
     {
       "type": "java.util.ArrayList",
       "serializable": true
-    },
-    {
-      "type": "java.util.BitSet"
     },
     {
       "type": "java.util.Collections$EmptyList",
@@ -149,21 +119,6 @@
     {
       "type": "java.util.LinkedHashSet",
       "serializable": true
-    },
-    {
-      "type": "java.util.List"
-    },
-    {
-      "type": "java.util.Locale"
-    },
-    {
-      "type": "java.util.Map"
-    },
-    {
-      "type": "java.util.Set"
-    },
-    {
-      "type": "java.util.UUID"
     },
     {
       "type": "java.util.concurrent.ArrayBlockingQueue",
@@ -197,39 +152,6 @@
       "type": "jdk.internal.misc.Unsafe"
     },
     {
-      "type": "long[]"
-    },
-    {
-      "type": "net.kyori.adventure.bossbar.BossBar$Color"
-    },
-    {
-      "type": "net.kyori.adventure.bossbar.BossBar$Overlay"
-    },
-    {
-      "type": "net.kyori.adventure.key.Key"
-    },
-    {
-      "type": "net.kyori.adventure.nbt.BinaryTag"
-    },
-    {
-      "type": "net.kyori.adventure.nbt.CompoundBinaryTag"
-    },
-    {
-      "type": "net.kyori.adventure.resource.ResourcePackStatus"
-    },
-    {
-      "type": "net.kyori.adventure.sound.Sound$Source"
-    },
-    {
-      "type": "net.kyori.adventure.text.Component"
-    },
-    {
-      "type": "net.kyori.adventure.text.format.NamedTextColor"
-    },
-    {
-      "type": "net.kyori.adventure.util.RGBLike"
-    },
-    {
       "type": "net.minestom.server.adventure.provider.MinestomAnsiComponentSerializerProvider"
     },
     {
@@ -237,21 +159,6 @@
     },
     {
       "type": "net.minestom.server.adventure.provider.MinestomGsonComponentSerializerProvider"
-    },
-    {
-      "type": "net.minestom.server.collision.BlockBoundingBox"
-    },
-    {
-      "type": "net.minestom.server.color.DyeColor"
-    },
-    {
-      "type": "net.minestom.server.component.DataComponentMap"
-    },
-    {
-      "type": "net.minestom.server.coordinate.Point"
-    },
-    {
-      "type": "net.minestom.server.coordinate.Pos"
     },
     {
       "type": "net.minestom.server.coordinate.Vec",
@@ -279,49 +186,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.crypto.ArgumentSignatures"
-    },
-    {
-      "type": "net.minestom.server.crypto.ChatSession"
-    },
-    {
-      "type": "net.minestom.server.crypto.FilterMask"
-    },
-    {
-      "type": "net.minestom.server.crypto.LastSeenMessages$Packed"
-    },
-    {
-      "type": "net.minestom.server.crypto.LastSeenMessages$Update"
-    },
-    {
-      "type": "net.minestom.server.crypto.MessageSignature"
-    },
-    {
-      "type": "net.minestom.server.crypto.PlayerPublicKey"
-    },
-    {
-      "type": "net.minestom.server.crypto.SignedMessageBody$Packed"
-    },
-    {
-      "type": "net.minestom.server.dialog.Dialog"
-    },
-    {
-      "type": "net.minestom.server.entity.EntityType"
-    },
-    {
       "type": "net.minestom.server.entity.EntityView$Option"
-    },
-    {
-      "type": "net.minestom.server.entity.EquipmentSlot"
-    },
-    {
-      "type": "net.minestom.server.entity.EquipmentSlotGroup"
-    },
-    {
-      "type": "net.minestom.server.entity.GameMode"
-    },
-    {
-      "type": "net.minestom.server.entity.MainHand"
     },
     {
       "type": "net.minestom.server.entity.MetadataDef"
@@ -362,165 +227,12 @@
       ]
     },
     {
-      "type": "net.minestom.server.entity.PlayerHand"
-    },
-    {
-      "type": "net.minestom.server.entity.PlayerSkin$Patch"
-    },
-    {
-      "type": "net.minestom.server.entity.VillagerProfession"
-    },
-    {
-      "type": "net.minestom.server.entity.VillagerType"
-    },
-    {
-      "type": "net.minestom.server.entity.attribute.Attribute"
-    },
-    {
-      "type": "net.minestom.server.entity.attribute.AttributeModifier"
-    },
-    {
-      "type": "net.minestom.server.entity.attribute.AttributeOperation"
-    },
-    {
-      "type": "net.minestom.server.entity.metadata.villager.VillagerMeta$Level"
-    },
-    {
       "type": "net.minestom.server.event.EventNodeLazyImpl",
       "fields": [
         {
           "name": "mapped"
         }
       ]
-    },
-    {
-      "type": "net.minestom.server.game.GameEvent"
-    },
-    {
-      "type": "net.minestom.server.instance.block.Block"
-    },
-    {
-      "type": "net.minestom.server.instance.block.BlockEntityType"
-    },
-    {
-      "type": "net.minestom.server.instance.block.BlockFace"
-    },
-    {
-      "type": "net.minestom.server.instance.block.banner.BannerPattern"
-    },
-    {
-      "type": "net.minestom.server.instance.block.jukebox.JukeboxSong"
-    },
-    {
-      "type": "net.minestom.server.instance.block.predicate.DataComponentPredicates"
-    },
-    {
-      "type": "net.minestom.server.instance.block.predicate.PropertiesPredicate"
-    },
-    {
-      "type": "net.minestom.server.item.ItemAnimation"
-    },
-    {
-      "type": "net.minestom.server.item.ItemStack"
-    },
-    {
-      "type": "net.minestom.server.item.ItemStack$Hash"
-    },
-    {
-      "type": "net.minestom.server.item.Material"
-    },
-    {
-      "type": "net.minestom.server.item.armor.TrimMaterial"
-    },
-    {
-      "type": "net.minestom.server.item.armor.TrimPattern"
-    },
-    {
-      "type": "net.minestom.server.item.book.FilteredText"
-    },
-    {
-      "type": "net.minestom.server.item.component.AttributeList$Display"
-    },
-    {
-      "type": "net.minestom.server.item.component.BlocksAttacks$ItemDamageFunction"
-    },
-    {
-      "type": "net.minestom.server.item.component.CustomData"
-    },
-    {
-      "type": "net.minestom.server.item.component.FireworkExplosion$Shape"
-    },
-    {
-      "type": "net.minestom.server.item.component.KineticWeapon$Condition"
-    },
-    {
-      "type": "net.minestom.server.item.component.SwingAnimation$Type"
-    },
-    {
-      "type": "net.minestom.server.message.ChatMessageType"
-    },
-    {
-      "type": "net.minestom.server.network.debug.DebugSubscription$Event"
-    },
-    {
-      "type": "net.minestom.server.network.debug.DebugSubscription$Update"
-    },
-    {
-      "type": "net.minestom.server.network.debug.info.DebugPathInfo$Data"
-    },
-    {
-      "type": "net.minestom.server.network.debug.info.DebugPathInfo$NodeType"
-    },
-    {
-      "type": "net.minestom.server.network.debug.info.DebugPathInfo$Path"
-    },
-    {
-      "type": "net.minestom.server.network.debug.info.DebugPoiInfo$Type"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.handshake.ClientHandshakePacket$Intent"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientClickWindowPacket$ClickType"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientEntityActionPacket$Action"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientInteractEntityPacket$Type"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientPlayerActionPacket$Status"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientSetRecipeBookStatePacket$BookType"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientSetTestBlockPacket$TestBlockMode"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientStatusPacket$Action"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientTestInstanceBlockActionPacket$Action"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientTestInstanceBlockActionPacket$Data"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientTestInstanceBlockActionPacket$Status"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientUpdateCommandBlockPacket$Mode"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientUpdateStructureBlockPacket$Action"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientUpdateStructureBlockPacket$Mirror"
-    },
-    {
-      "type": "net.minestom.server.network.packet.client.play.ClientUpdateStructureBlockPacket$Mode"
     },
     {
       "type": "net.minestom.server.network.packet.server.CachedPacket",
@@ -539,165 +251,12 @@
       ]
     },
     {
-      "type": "net.minestom.server.network.packet.server.common.ShowDialogPacket"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.AdvancementsPacket$Advancement"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.AdvancementsPacket$AdvancementProgress"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.AdvancementsPacket$CriterionProgress"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.AdvancementsPacket$DisplayData"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.BossBarPacket$Action"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.ChangeGameStatePacket$Reason"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.ChunkBiomesPacket$ChunkBiomeData"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.CustomChatCompletionPacket$Action"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.DebugSamplePacket$Type"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.EntityAnimationPacket$Animation"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.FacePlayerPacket$EntityData"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.FacePlayerPacket$FacePosition"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket$Mode"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket$Type"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.StopSoundPacket$Action"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.TeamsPacket$Action"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.TeamsPacket$CollisionRule"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.TeamsPacket$NameTagVisibility"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.TrackedWaypointPacket$Icon"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.TrackedWaypointPacket$Operation"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.TrackedWaypointPacket$Target"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.TrackedWaypointPacket$Waypoint"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.TradeListPacket$ItemCost"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.UnloadChunkPacket"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.data.ChunkData"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.data.LightData"
-    },
-    {
-      "type": "net.minestom.server.network.packet.server.play.data.WorldPos"
-    },
-    {
-      "type": "net.minestom.server.network.player.ClientSettings"
-    },
-    {
-      "type": "net.minestom.server.network.player.ClientSettings$ParticleSetting"
-    },
-    {
-      "type": "net.minestom.server.network.player.GameProfile"
-    },
-    {
-      "type": "net.minestom.server.particle.Particle"
-    },
-    {
-      "type": "net.minestom.server.potion.CustomPotionEffect$Settings"
-    },
-    {
-      "type": "net.minestom.server.potion.Potion"
-    },
-    {
-      "type": "net.minestom.server.potion.PotionEffect"
-    },
-    {
-      "type": "net.minestom.server.potion.PotionType"
-    },
-    {
-      "type": "net.minestom.server.recipe.Ingredient"
-    },
-    {
-      "type": "net.minestom.server.recipe.RecipeBookCategory"
-    },
-    {
-      "type": "net.minestom.server.recipe.display.RecipeDisplay"
-    },
-    {
-      "type": "net.minestom.server.recipe.display.SlotDisplay"
-    },
-    {
-      "type": "net.minestom.server.registry.Holder"
-    },
-    {
-      "type": "net.minestom.server.registry.RegistryKey"
-    },
-    {
-      "type": "net.minestom.server.registry.RegistryTag"
-    },
-    {
-      "type": "net.minestom.server.registry.TagKey"
-    },
-    {
-      "type": "net.minestom.server.scoreboard.Sidebar$NumberFormat"
-    },
-    {
-      "type": "net.minestom.server.sound.SoundEvent"
-    },
-    {
-      "type": "net.minestom.server.statistic.StatisticCategory"
-    },
-    {
       "type": "net.minestom.server.timer.TaskImpl",
       "fields": [
         {
           "name": "parked"
         }
       ]
-    },
-    {
-      "type": "net.minestom.server.utils.Either"
-    },
-    {
-      "type": "net.minestom.server.utils.Rotation"
-    },
-    {
-      "type": "net.minestom.server.utils.WeightedList"
-    },
-    {
-      "type": "net.minestom.server.world.Difficulty"
     },
     {
       "type": "org.jctools.queues.atomic.BaseMpscLinkedAtomicArrayQueueColdProducerFields"

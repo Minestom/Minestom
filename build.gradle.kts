@@ -76,19 +76,17 @@ tasks.register<Test>("testWithAgent") {
         metadataOutputDir.mkdirs()
 
         filterFile.parentFile.mkdirs()
-        filterFile.writeText($$"""
+        filterFile.writeText("""
 {
   "rules": [
     {"excludeClasses": "org.junit.**"},
     {"excludeClasses": "org.opentest4j.**"},
     {"excludeClasses": "org.gradle.**"},
     {"excludeClasses": "org.graalvm.**"},
-    {"excludeClasses": "net.minestom.testing.**"},
-    {"excludeClasses": "net.minestom.server.network.template.**"}
+    {"excludeClasses": "net.minestom.testing.**"}
   ],
   "regexRules": [
-     {"excludeClasses": "net\\.minestom\\.server\\..*Test(\\$.*)?"},
-     {"excludeClasses": "net\\.minestom\\.server\\..*\\$TType\\/.*"}
+     {"excludeClasses": "net\\.minestom\\.server\\..*Test(\\$.*)?"}
   ]
 }""")
         println("Created filter file: ${filterFile.absolutePath}")
