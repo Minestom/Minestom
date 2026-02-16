@@ -298,7 +298,7 @@ public class AnvilLoader implements ChunkLoader {
 
             // Place block
             final Block finalBlock = !trimmedTag.isEmpty() ? block.withNbt(trimmedTag) : block;
-            loadedChunk.setBlock(x, y, z, finalBlock);
+            section.cacheBlock(localX, localY, localZ, finalBlock);
         }
     }
 
@@ -413,7 +413,7 @@ public class AnvilLoader implements ChunkLoader {
                     blockPaletteEntries.add(blockState);
                 } else {
                     section.blockPalette().getAll((x, y, z, value) -> {
-                        Block block = chunk.getBlock(x, globalSectionY + y, z, Block.Getter.Condition.CACHED);
+                        Block block = section.entries().get(sectionBlockIndex(x, y, z));
                         if (block == null) block = Block.fromStateId(value);
                         assert block != null;
                         final CompoundBinaryTag blockState = blockStateNbt(block);

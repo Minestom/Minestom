@@ -275,7 +275,7 @@ public final class GeneratorImpl {
                 for (int x = 0; x < 16; x++) {
                     for (int y = 0; y < 16; y++) {
                         for (int z = 0; z < 16; z++) {
-                            this.genSection.specials.put(chunkBlockIndex(x, y, z), block);
+                            this.genSection.specials.put(sectionBlockIndex(x, y, z), block);
                         }
                     }
                 }
@@ -303,9 +303,9 @@ public final class GeneratorImpl {
 
         private void handleCache(int x, int y, int z, Block block) {
             if (requireCache(block)) {
-                this.genSection.specials.put(chunkBlockIndex(x, y, z), block);
+                this.genSection.specials.put(sectionBlockIndex(x, y, z), block);
             } else if (!genSection.specials.isEmpty()) {
-                this.genSection.specials.remove(chunkBlockIndex(x, y, z));
+                this.genSection.specials.remove(sectionBlockIndex(x, y, z));
             }
         }
 

@@ -78,24 +78,23 @@ public final class SnapshotImpl {
 
     public record Chunk(int minSection, int chunkX, int chunkZ,
                         Section[] sections,
-                        Int2ObjectOpenHashMap<Block> blockEntries,
                         int[] entitiesIds,
                         AtomicReference<InstanceSnapshot> instanceRef,
                         TagReadable tagReadable) implements ChunkSnapshot {
         @Override
         public @UnknownNullability Block getBlock(int x, int y, int z, Condition condition) {
+            final Section section = sections[globalToChunk(y) - minSection];
+            final int localX = globalToSectionRelative(x), localY = globalToSectionRelative(y), localZ = globalToSectionRelative(z);
             // Verify if the block object is present
             if (condition != Condition.TYPE) {
-                final Block entry = !blockEntries.isEmpty() ?
-                        blockEntries.get(chunkBlockIndex(x, y, z)) : null;
+                var entries = section.entries();
+                final Block entry = !entries.isEmpty() ? entries.get(sectionBlockIndex(localX, localY, localZ)) : null;
                 if (entry != null || condition == Condition.CACHED) {
                     return entry;
                 }
             }
             // Retrieve the block from state id
-            final Section section = sections[globalToChunk(y) - minSection];
-            final int blockStateId = section.blockPalette()
-                    .get(globalToSectionRelative(x), globalToSectionRelative(y), globalToSectionRelative(z));
+            final int blockStateId = section.blockPalette().get(localX, localY, localZ);
             return Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR);
         }
 
