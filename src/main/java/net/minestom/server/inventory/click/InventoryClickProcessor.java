@@ -1,5 +1,7 @@
 package net.minestom.server.inventory.click;
 
+import net.minestom.server.component.DataComponents;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -9,6 +11,8 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.Equippable;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -96,16 +100,19 @@ public final class InventoryClickProcessor {
 
         // Handle armor and off-hand equippables
         if (inventory instanceof PlayerInventory && targetInventory instanceof PlayerInventory) {
-            final Material material = clicked.material();
-            final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
-            if (equipmentSlot != null
-                    && (equipmentSlot.isArmor() || equipmentSlot == EquipmentSlot.OFF_HAND)
-                    && !craftingGridClick) {
-                // Shift-click equip
-                final ItemStack currentItem = player.getEquipment(equipmentSlot);
-                if (currentItem.isAir()) {
-                    player.setEquipment(equipmentSlot, clicked);
-                    return new InventoryClickResult(ItemStack.AIR, cursor);
+            Equippable equippableComponent = clicked.get(DataComponents.EQUIPPABLE);
+            if (equippableComponent != null) {
+                final EquipmentSlot equipmentSlot = equippableComponent.slot();
+                RegistryTag<EntityType> allowed = equippableComponent.allowedEntities();
+                if ((allowed == null || allowed.contains(EntityType.PLAYER))
+                        && (equipmentSlot.isArmor() || equipmentSlot == EquipmentSlot.OFF_HAND)
+                        && !craftingGridClick) {
+                    // Shift-click equip
+                    final ItemStack currentItem = player.getEquipment(equipmentSlot);
+                    if (currentItem.isAir()) {
+                        player.setEquipment(equipmentSlot, clicked);
+                        return new InventoryClickResult(ItemStack.AIR, cursor);
+                    }
                 }
             }
         }
