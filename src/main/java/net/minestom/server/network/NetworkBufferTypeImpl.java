@@ -22,6 +22,7 @@ import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -36,475 +37,265 @@ import static net.minestom.server.network.NetworkBuffer.*;
 final class NetworkBufferTypeImpl {
     static final int SEGMENT_BITS = 0x7F;
     static final int CONTINUE_BIT = 0x80;
+    static final int SHIFT = 0x07;
 
-    static final BooleanType BOOLEAN = new BooleanType();
-    static final ByteType BYTE = new ByteType();
-    static final UnsignedByteType UNSIGNED_BYTE = new UnsignedByteType();
-    static final ShortType SHORT = new ShortType();
-    static final UnsignedShortType UNSIGNED_SHORT = new UnsignedShortType();
-    static final IntType INT = new IntType();
-    static final UnsignedIntType UNSIGNED_INT = new UnsignedIntType();
-    static final FloatType FLOAT = new FloatType();
-    static final DoubleType DOUBLE = new DoubleType();
-    static final VarIntType VAR_INT = new VarIntType();
-    static final VarInt3Type VAR_INT_3 = new VarInt3Type();
-    static final LongType LONG = new LongType();
-    static final VarLongType VAR_LONG = new VarLongType();
-
-    /// Currently used for writing the unboxed types, Will be used in templating and require to be moved to a more public location.
-    sealed interface PrimitiveType<T> extends NetworkBuffer.Type<T> {
-        /// The primitive type the class represents.
-        Class<T> primitiveClass();
-
-        sealed interface Unsigned {}
-
-        default void writeBoolean(NetworkBuffer buffer, boolean value) {
-            throw new UnsupportedOperationException();
-        }
-
-        default void writeByte(NetworkBuffer buffer, byte value) {
-            throw new UnsupportedOperationException();
-        }
-
-        default void writeShort(NetworkBuffer buffer, short value) {
-            throw new UnsupportedOperationException();
-        }
-
-        default void writeChar(NetworkBuffer buffer, char value) {
-            throw new UnsupportedOperationException();
-        }
-
-        default void writeInt(NetworkBuffer buffer, int value) {
-            throw new UnsupportedOperationException();
-        }
-
-        default void writeLong(NetworkBuffer buffer, long value) {
-            throw new UnsupportedOperationException();
-        }
-
-        default void writeFloat(NetworkBuffer buffer, float value) {
-            throw new UnsupportedOperationException();
-        }
-
-        default void writeDouble(NetworkBuffer buffer, double value) {
-            throw new UnsupportedOperationException();
-        }
-
-        default boolean readBoolean(NetworkBuffer buffer) {
-            throw new UnsupportedOperationException();
-        }
-
-        default byte readByte(NetworkBuffer buffer) {
-            throw new UnsupportedOperationException();
-        }
-
-        default short readShort(NetworkBuffer buffer) {
-            throw new UnsupportedOperationException();
-        }
-
-        default char readChar(NetworkBuffer buffer) {
-            throw new UnsupportedOperationException();
-        }
-
-        default int readInt(NetworkBuffer buffer) {
-            throw new UnsupportedOperationException();
-        }
-
-        default long readLong(NetworkBuffer buffer) {
-            throw new UnsupportedOperationException();
-        }
-
-        default float readFloat(NetworkBuffer buffer) {
-            throw new UnsupportedOperationException();
-        }
-
-        default double readDouble(NetworkBuffer buffer) {
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    record BooleanType() implements PrimitiveType<Boolean> {
+    record BooleanType() implements Type<Boolean> {
         @Override
         public void write(NetworkBuffer buffer, Boolean value) {
-            writeBoolean(buffer, value);
-        }
-
-        @Override
-        public Boolean read(NetworkBuffer buffer) {
-            return readBoolean(buffer);
-        }
-
-        @Override
-        public long sizeOf(Boolean value, @Nullable Registries registries) {
-            return Byte.BYTES;
-        }
-
-        @Override
-        public Class<Boolean> primitiveClass() {
-            return boolean.class;
-        }
-
-        @Override
-        public void writeBoolean(NetworkBuffer buffer, boolean value) {
             buffer.ensureWritable(Byte.BYTES);
             buffer.direct().putByte(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
             buffer.advanceWrite(Byte.BYTES);
         }
 
         @Override
-        public boolean readBoolean(NetworkBuffer buffer) {
+        public Boolean read(NetworkBuffer buffer) {
             buffer.ensureReadable(Byte.BYTES);
             final byte value = buffer.direct().getByte(buffer.readIndex());
             buffer.advanceRead(Byte.BYTES);
             return value == 1;
         }
-    }
-
-    record ByteType() implements PrimitiveType<Byte> {
-        @Override
-        public void write(NetworkBuffer buffer, Byte value) {
-            writeByte(buffer, value);
-        }
 
         @Override
-        public Byte read(NetworkBuffer buffer) {
-            return readByte(buffer);
-        }
-
-        @Override
-        public long sizeOf(Byte value, @Nullable Registries registries) {
+        public long sizeOf(Boolean value, @Nullable Registries registries) {
             return Byte.BYTES;
         }
+    }
 
+    record ByteType() implements Type<Byte> {
         @Override
-        public Class<Byte> primitiveClass() {
-            return byte.class;
-        }
-
-        @Override
-        public void writeByte(NetworkBuffer buffer, byte value) {
+        public void write(NetworkBuffer buffer, Byte value) {
             buffer.ensureWritable(Byte.BYTES);
             buffer.direct().putByte(buffer.writeIndex(), value);
             buffer.advanceWrite(Byte.BYTES);
         }
 
         @Override
-        public byte readByte(NetworkBuffer buffer) {
+        public Byte read(NetworkBuffer buffer) {
             buffer.ensureReadable(Byte.BYTES);
             final byte value = buffer.direct().getByte(buffer.readIndex());
             buffer.advanceRead(Byte.BYTES);
             return value;
         }
-    }
-
-    record UnsignedByteType() implements PrimitiveType<Short>, PrimitiveType.Unsigned {
-        @Override
-        public void write(NetworkBuffer buffer, Short value) {
-            writeShort(buffer, value);
-        }
 
         @Override
-        public Short read(NetworkBuffer buffer) {
-            return readShort(buffer);
-        }
-
-        @Override
-        public long sizeOf(Short value, @Nullable Registries registries) {
+        public long sizeOf(Byte value, @Nullable Registries registries) {
             return Byte.BYTES;
         }
+    }
 
+    record UnsignedByteType() implements Type<Short> {
         @Override
-        public Class<Short> primitiveClass() {
-            return short.class;
-        }
-
-        @Override
-        public void writeShort(NetworkBuffer buffer, short value) {
+        public void write(NetworkBuffer buffer, Short value) {
             buffer.ensureWritable(Byte.BYTES);
             buffer.direct().putByte(buffer.writeIndex(), (byte) (value & 0xFF));
             buffer.advanceWrite(Byte.BYTES);
         }
 
         @Override
-        public short readShort(NetworkBuffer buffer) {
+        public Short read(NetworkBuffer buffer) {
             buffer.ensureReadable(Byte.BYTES);
             final byte value = buffer.direct().getByte(buffer.readIndex());
             buffer.advanceRead(Byte.BYTES);
             return (short) (value & 0xFF);
         }
-    }
-
-    record ShortType() implements PrimitiveType<Short> {
-        @Override
-        public void write(NetworkBuffer buffer, Short value) {
-            writeShort(buffer, value);
-        }
-
-        @Override
-        public Short read(NetworkBuffer buffer) {
-            return readShort(buffer);
-        }
 
         @Override
         public long sizeOf(Short value, @Nullable Registries registries) {
-            return Short.BYTES;
+            return Byte.BYTES;
         }
+    }
 
+    record ShortType() implements Type<Short> {
         @Override
-        public Class<Short> primitiveClass() {
-            return short.class;
-        }
-
-        @Override
-        public void writeShort(NetworkBuffer buffer, short value) {
+        public void write(NetworkBuffer buffer, Short value) {
             buffer.ensureWritable(Short.BYTES);
             buffer.direct().putShort(buffer.writeIndex(), value);
             buffer.advanceWrite(Short.BYTES);
         }
 
         @Override
-        public short readShort(NetworkBuffer buffer) {
+        public Short read(NetworkBuffer buffer) {
             buffer.ensureReadable(Short.BYTES);
             final short value = buffer.direct().getShort(buffer.readIndex());
             buffer.advanceRead(Short.BYTES);
             return value;
         }
-    }
-
-    record UnsignedShortType() implements PrimitiveType<Integer>, PrimitiveType.Unsigned {
-        @Override
-        public void write(NetworkBuffer buffer, Integer value) {
-            writeInt(buffer, value);
-        }
 
         @Override
-        public Integer read(NetworkBuffer buffer) {
-            return readInt(buffer);
-        }
-
-        @Override
-        public long sizeOf(Integer value, @Nullable Registries registries) {
+        public long sizeOf(Short value, @Nullable Registries registries) {
             return Short.BYTES;
         }
+    }
 
+    record UnsignedShortType() implements Type<Integer> {
         @Override
-        public Class<Integer> primitiveClass() {
-            return int.class;
-        }
-
-        @Override
-        public void writeInt(NetworkBuffer buffer, int value) {
+        public void write(NetworkBuffer buffer, Integer value) {
             buffer.ensureWritable(Short.BYTES);
             buffer.direct().putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
             buffer.advanceWrite(Short.BYTES);
         }
 
         @Override
-        public int readInt(NetworkBuffer buffer) {
+        public Integer read(NetworkBuffer buffer) {
             buffer.ensureReadable(Short.BYTES);
             final short value = buffer.direct().getShort(buffer.readIndex());
             buffer.advanceRead(Short.BYTES);
             return value & 0xFFFF;
         }
-    }
-
-    record IntType() implements PrimitiveType<Integer> {
-        @Override
-        public void write(NetworkBuffer buffer, Integer value) {
-            writeInt(buffer, value);
-        }
-
-        @Override
-        public Integer read(NetworkBuffer buffer) {
-            return readInt(buffer);
-        }
 
         @Override
         public long sizeOf(Integer value, @Nullable Registries registries) {
-            return Integer.BYTES;
+            return Short.BYTES;
         }
+    }
 
+    record IntType() implements Type<Integer> {
         @Override
-        public Class<Integer> primitiveClass() {
-            return int.class;
-        }
-
-        @Override
-        public void writeInt(NetworkBuffer buffer, int value) {
+        public void write(NetworkBuffer buffer, Integer value) {
             buffer.ensureWritable(Integer.BYTES);
             buffer.direct().putInt(buffer.writeIndex(), value);
             buffer.advanceWrite(Integer.BYTES);
         }
 
         @Override
-        public int readInt(NetworkBuffer buffer) {
+        public Integer read(NetworkBuffer buffer) {
             buffer.ensureReadable(Integer.BYTES);
             final int value = buffer.direct().getInt(buffer.readIndex());
             buffer.advanceRead(Integer.BYTES);
             return value;
         }
-    }
-
-    record UnsignedIntType() implements PrimitiveType<Long>, PrimitiveType.Unsigned {
-        @Override
-        public void write(NetworkBuffer buffer, Long value) {
-            writeLong(buffer, value);
-        }
 
         @Override
-        public Long read(NetworkBuffer buffer) {
-            return readLong(buffer);
-        }
-
-        @Override
-        public long sizeOf(Long value, @Nullable Registries registries) {
+        public long sizeOf(Integer value, @Nullable Registries registries) {
             return Integer.BYTES;
         }
+    }
 
+    record UnsignedIntType() implements Type<Long> {
         @Override
-        public Class<Long> primitiveClass() {
-            return long.class;
-        }
-
-        @Override
-        public void writeLong(NetworkBuffer buffer, long value) {
+        public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(Integer.BYTES);
             buffer.direct().putInt(buffer.writeIndex(), (int) (value & 0xFFFFFFFFL));
             buffer.advanceWrite(Integer.BYTES);
         }
 
         @Override
-        public long readLong(NetworkBuffer buffer) {
+        public Long read(NetworkBuffer buffer) {
             buffer.ensureReadable(Integer.BYTES);
             final int value = buffer.direct().getInt(buffer.readIndex());
             buffer.advanceRead(Integer.BYTES);
             return value & 0xFFFFFFFFL;
         }
-    }
-
-    record LongType() implements PrimitiveType<Long> {
-        @Override
-        public void write(NetworkBuffer buffer, Long value) {
-            writeLong(buffer, value);
-        }
-
-        @Override
-        public Long read(NetworkBuffer buffer) {
-            return readLong(buffer);
-        }
 
         @Override
         public long sizeOf(Long value, @Nullable Registries registries) {
-            return Long.BYTES;
+            return Integer.BYTES;
         }
+    }
 
+    record LongType() implements Type<Long> {
         @Override
-        public Class<Long> primitiveClass() {
-            return long.class;
-        }
-
-        @Override
-        public void writeLong(NetworkBuffer buffer, long value) {
+        public void write(NetworkBuffer buffer, Long value) {
             buffer.ensureWritable(Long.BYTES);
             buffer.direct().putLong(buffer.writeIndex(), value);
             buffer.advanceWrite(Long.BYTES);
         }
 
         @Override
-        public long readLong(NetworkBuffer buffer) {
+        public Long read(NetworkBuffer buffer) {
             buffer.ensureReadable(Long.BYTES);
             final long value = buffer.direct().getLong(buffer.readIndex());
             buffer.advanceRead(Long.BYTES);
             return value;
         }
+
+        @Override
+        public long sizeOf(Long value, @Nullable Registries registries) {
+            return Long.BYTES;
+        }
     }
 
-    record FloatType() implements PrimitiveType<Float> {
+    record FloatType() implements Type<Float> {
         @Override
         public void write(NetworkBuffer buffer, Float value) {
-            writeFloat(buffer, value);
-        }
-
-        @Override
-        public Float read(NetworkBuffer buffer) {
-            return readFloat(buffer);
-        }
-
-        @Override
-        public long sizeOf(Float value, @Nullable Registries registries) {
-            return Float.BYTES;
-        }
-
-        @Override
-        public Class<Float> primitiveClass() {
-            return float.class;
-        }
-
-        @Override
-        public void writeFloat(NetworkBuffer buffer, float value) {
             buffer.ensureWritable(Float.BYTES);
             buffer.direct().putFloat(buffer.writeIndex(), value);
             buffer.advanceWrite(Float.BYTES);
         }
 
         @Override
-        public float readFloat(NetworkBuffer buffer) {
+        public Float read(NetworkBuffer buffer) {
             buffer.ensureReadable(Float.BYTES);
             final float value = buffer.direct().getFloat(buffer.readIndex());
             buffer.advanceRead(Float.BYTES);
             return value;
         }
+
+        @Override
+        public long sizeOf(Float value, @Nullable Registries registries) {
+            return Float.BYTES;
+        }
     }
 
-    record DoubleType() implements PrimitiveType<Double> {
+    record DoubleType() implements Type<Double> {
         @Override
         public void write(NetworkBuffer buffer, Double value) {
-            writeDouble(buffer, value);
-        }
-
-        @Override
-        public Double read(NetworkBuffer buffer) {
-            return readDouble(buffer);
-        }
-
-        @Override
-        public long sizeOf(Double value, @Nullable Registries registries) {
-            return Double.BYTES;
-        }
-
-        @Override
-        public Class<Double> primitiveClass() {
-            return double.class;
-        }
-
-        @Override
-        public void writeDouble(NetworkBuffer buffer, double value) {
             buffer.ensureWritable(Double.BYTES);
             buffer.direct().putDouble(buffer.writeIndex(), value);
             buffer.advanceWrite(Double.BYTES);
         }
 
         @Override
-        public double readDouble(NetworkBuffer buffer) {
+        public Double read(NetworkBuffer buffer) {
             buffer.ensureReadable(Double.BYTES);
             final double value = buffer.direct().getDouble(buffer.readIndex());
             buffer.advanceRead(Double.BYTES);
             return value;
         }
+
+        @Override
+        public long sizeOf(Double value, @Nullable Registries registries) {
+            return Double.BYTES;
+        }
     }
 
-    record VarIntType() implements PrimitiveType<Integer> {
+    record VarIntType() implements Type<Integer> {
+        static final long MAX_BYTES = 5;
+
         @Override
         public void write(NetworkBuffer buffer, Integer boxed) {
-            writeInt(buffer, boxed);
+            int value = boxed;
+            if (buffer.writableBytes() < MAX_BYTES) {
+                buffer.ensureWritable(sizeOf(value));
+            }
+            long index = buffer.writeIndex();
+            var nio = buffer.direct();
+            for (long i = 0; i < (MAX_BYTES - 1); i++) { // Using a counted loop allows easier unrolling.
+                if ((value & ~SEGMENT_BITS) == 0) {
+                    break;
+                }
+                nio.putByte(index++, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
+                // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
+                value >>>= SHIFT;
+            }
+            nio.putByte(index++, (byte) value);
+            buffer.advanceWrite(index - buffer.writeIndex());
         }
 
         @Override
         public Integer read(NetworkBuffer buffer) {
-            return readInt(buffer);
+            int result = 0;
+            for (int i = 0; i < MAX_BYTES; i++) {
+                byte b = BYTE.read(buffer);
+                result |= (b & SEGMENT_BITS) << (i * SHIFT);
+                if (b >= 0) {
+                    return result;
+                }
+            }
+            throw new IllegalStateException("VarInt is too big");
         }
 
-        int sizeOf(int value) {
+        long sizeOf(int value) {
             int normal = value | -(value >>> 31) | 1;
             int bits = 32 - Integer.numberOfLeadingZeros(normal);
             return (bits + 6) / 7;
@@ -512,56 +303,19 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public long sizeOf(Integer value, @Nullable Registries registries) {
-            return sizeOf(value.intValue());
-        }
-
-        @Override
-        public Class<Integer> primitiveClass() {
-            return int.class;
-        }
-
-        @Override
-        public void writeInt(NetworkBuffer buffer, int value) {
-            if (buffer.writableBytes() < 5) {
-                buffer.ensureWritable(sizeOf(value));
-            }
-            long index = buffer.writeIndex();
-            var nio = buffer.direct();
-            for (long i = 0; i < 4; i++) { // Using a counted loop allows easier unrolling.
-                if ((value & ~SEGMENT_BITS) == 0) {
-                    break;
-                }
-                nio.putByte(index++, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
-                // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
-                value >>>= 7;
-            }
-            nio.putByte(index++, (byte) value);
-            buffer.advanceWrite(index - buffer.writeIndex());
-        }
-
-        @Override
-        public int readInt(NetworkBuffer buffer) {
-            int result = 0;
-            for (int i = 0; i < 5; i++) {
-                byte b = BYTE.readByte(buffer);
-                result |= (b & SEGMENT_BITS) << (i * 7);
-                if (b >= 0) {
-                    return result;
-                }
-            }
-            throw new IllegalStateException("VarInt is too big");
+            return sizeOf(value);
         }
     }
 
     record OptionalVarIntType() implements Type<@Nullable Integer> {
         @Override
         public void write(NetworkBuffer buffer, @Nullable Integer value) {
-            VAR_INT.writeInt(buffer, value == null ? 0 : value + 1);
+            buffer.write(VAR_INT, value == null ? 0 : value + 1);
         }
 
         @Override
         public @Nullable Integer read(NetworkBuffer buffer) {
-            final int value = VAR_INT.readInt(buffer);
+            final int value = buffer.read(VAR_INT);
             return value == 0 ? null : value - 1;
         }
 
@@ -571,55 +325,74 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record VarInt3Type() implements Type<Integer>, PrimitiveType<Integer> {
+    record VarInt3Type() implements Type<Integer> {
+        static final long SIZE = 3;
+
         @Override
         public void write(NetworkBuffer buffer, Integer boxed) {
-            writeInt(buffer, boxed);
+            final int value = boxed;
+            // Value must be between 0 and 2^21
+            Check.argCondition(value < 0 || value >= (1 << 21), "VarInt3 out of bounds: {0}", value);
+            buffer.ensureWritable(SIZE);
+            final long startIndex = buffer.writeIndex();
+            var impl = buffer.direct();
+            impl.putByte(startIndex, (byte) ((value & SEGMENT_BITS) | CONTINUE_BIT));
+            impl.putByte(startIndex + 1, (byte) (((value >>> SHIFT) & SEGMENT_BITS) | CONTINUE_BIT));
+            impl.putByte(startIndex + 2, (byte) (value >>> (SHIFT * 2)));
+            buffer.advanceWrite(SIZE);
         }
 
         @Override
         public Integer read(NetworkBuffer buffer) {
-            return readInt(buffer);
-        }
-
-        @Override
-        public Class<Integer> primitiveClass() {
-            return int.class;
-        }
-
-        @Override
-        public void writeInt(NetworkBuffer buffer, int value) {
-            // Value must be between 0 and 2^21
-            Check.argCondition(value < 0 || value >= (1 << 21), "VarInt3 out of bounds: {0}", value);
-            buffer.ensureWritable(3);
-            final long startIndex = buffer.writeIndex();
-            var impl = buffer.direct();
-            impl.putByte(startIndex, (byte) ((value & SEGMENT_BITS) | CONTINUE_BIT));
-            impl.putByte(startIndex + 1, (byte) (((value >>> 7) & SEGMENT_BITS) | CONTINUE_BIT));
-            impl.putByte(startIndex + 2, (byte) (value >>> 14));
-            buffer.advanceWrite(3);
-        }
-
-        @Override
-        public int readInt(NetworkBuffer buffer) {
             // Ensure that the buffer can read other var-int sizes
             // The optimization is mostly relevant for writing
-            return VAR_INT.readInt(buffer);
+            return buffer.read(VAR_INT);
+        }
+
+        @Override
+        public long sizeOf(Integer value, @Nullable Registries registries) {
+            return SIZE;
         }
     }
 
-    record VarLongType() implements PrimitiveType<Long> {
+    record VarLongType() implements Type<Long> {
+        static final long MAX_BYTES = 10;
+
         @Override
-        public void write(NetworkBuffer buffer, Long value) {
-            writeLong(buffer, value);
+        public void write(NetworkBuffer buffer, Long boxed) {
+            long value = boxed;
+            if (buffer.writableBytes() < MAX_BYTES) {
+                buffer.ensureWritable(sizeOf(value));
+            }
+            var nio = buffer.direct();
+            long index = buffer.writeIndex();
+            int size = 0;
+            for (int i = 0; i < (MAX_BYTES - 1); i++) {
+                if ((value & ~SEGMENT_BITS) == 0) {
+                    break;
+                }
+                nio.putByte(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
+                // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
+                value >>>= SHIFT;
+            }
+            nio.putByte(index++, (byte) value);
+            buffer.advanceWrite(index - buffer.writeIndex());
         }
 
         @Override
         public Long read(NetworkBuffer buffer) {
-            return readLong(buffer);
+            long result = 0;
+            for (int i = 0; i < MAX_BYTES; i++) {
+                byte b = BYTE.read(buffer);
+                result |= (long) (b & SEGMENT_BITS) << (i * SHIFT);
+                if (b >= 0) {
+                    return result;
+                }
+            }
+            throw new IllegalStateException("VarLong is too big");
         }
 
-        public long sizeOf(long value) {
+        long sizeOf(long value) {
             long normal = value | -(value >>> 63) | 1;
             int bits = 64 - Long.numberOfLeadingZeros(normal);
             return (bits + 6) / 7;
@@ -627,47 +400,7 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public long sizeOf(Long value, @Nullable Registries registries) {
-            return sizeOf(value.longValue());
-        }
-
-        @Override
-        public Class<Long> primitiveClass() {
-            return long.class;
-        }
-
-        @Override
-        public void writeLong(NetworkBuffer buffer, long value) {
-            buffer.ensureWritable(10);
-            int size = 0;
-            while (true) {
-                if ((value & ~((long) SEGMENT_BITS)) == 0) {
-                    buffer.direct().putByte(buffer.writeIndex() + size, (byte) value);
-                    buffer.advanceWrite(size + 1);
-                    return;
-                }
-                buffer.direct().putByte(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
-                size++;
-                // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
-                value >>>= 7;
-            }
-        }
-
-        @Override
-        public long readLong(NetworkBuffer buffer) {
-            int length = 0;
-            long value = 0;
-            int position = 0;
-            byte currentByte;
-            while (true) {
-                currentByte = buffer.direct().getByte(buffer.readIndex() + length);
-                length++;
-                value |= (long) (currentByte & SEGMENT_BITS) << position;
-                if ((currentByte & CONTINUE_BIT) == 0) break;
-                position += 7;
-                if (position >= 64) throw new IllegalStateException("VarLong is too big");
-            }
-            buffer.advanceRead(length);
-            return value;
+            return sizeOf(value);
         }
     }
 
@@ -712,12 +445,12 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, String value) {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
-            BYTE_ARRAY.write(buffer, bytes);
+            buffer.write(BYTE_ARRAY, bytes);
         }
 
         @Override
         public String read(NetworkBuffer buffer) {
-            final int length = VAR_INT.readInt(buffer);
+            final int length = buffer.read(VAR_INT);
             buffer.ensureReadable(length);
             String string = buffer.direct().getString(buffer.readIndex(), length);
             buffer.advanceRead(length);
@@ -741,7 +474,7 @@ final class NetworkBufferTypeImpl {
         public String read(NetworkBuffer buffer) {
             ByteArrayList bytes = new ByteArrayList();
             byte b;
-            while ((b = BYTE.readByte(buffer)) != 0) {
+            while ((b = buffer.read(BYTE)) != 0) {
                 bytes.add(b);
             }
             return new String(bytes.toByteArray(), StandardCharsets.UTF_8);
@@ -791,7 +524,7 @@ final class NetworkBufferTypeImpl {
                 NbtType.TYPE.write(buffer, value);
             } else {
                 // TAG_END
-                BYTE.writeByte(buffer, (byte) 0x00);
+                buffer.write(BYTE, (byte) 0x00);
             }
         }
 
@@ -813,12 +546,12 @@ final class NetworkBufferTypeImpl {
             final long longPos = (((long) blockX & 0x3FFFFFF) << 38) |
                     (((long) blockZ & 0x3FFFFFF) << 12) |
                     ((long) blockY & 0xFFF);
-            LONG.writeLong(buffer, longPos);
+            buffer.write(LONG, longPos);
         }
 
         @Override
         public Point read(NetworkBuffer buffer) {
-            final long value = LONG.readLong(buffer);
+            final long value = buffer.read(LONG);
             final int x = (int) (value >> 38);
             final int y = (int) (value << 52 >> 52);
             final int z = (int) (value << 26 >> 38);
@@ -834,7 +567,7 @@ final class NetworkBufferTypeImpl {
                     ? new RegistryTranscoder<>(Transcoder.JSON, registries)
                     : Transcoder.JSON;
             final String json = JsonUtil.toJson(Codec.COMPONENT.encode(coder, value).orElseThrow());
-            STRING.write(buffer, json);
+            buffer.write(STRING, json);
         }
 
         @Override
@@ -843,7 +576,7 @@ final class NetworkBufferTypeImpl {
             final Transcoder<JsonElement> coder = registries != null
                     ? new RegistryTranscoder<>(Transcoder.JSON, registries)
                     : Transcoder.JSON;
-            final JsonElement json = JsonUtil.fromJson(STRING.read(buffer));
+            final JsonElement json = JsonUtil.fromJson(buffer.read(STRING));
             return Codec.COMPONENT.decode(coder, json).orElseThrow();
         }
     }
@@ -851,14 +584,14 @@ final class NetworkBufferTypeImpl {
     record UUIDType() implements Type<UUID> {
         @Override
         public void write(NetworkBuffer buffer, java.util.UUID value) {
-            LONG.writeLong(buffer, value.getMostSignificantBits());
-            LONG.writeLong(buffer, value.getLeastSignificantBits());
+            buffer.write(LONG, value.getMostSignificantBits());
+            buffer.write(LONG, value.getLeastSignificantBits());
         }
 
         @Override
         public java.util.UUID read(NetworkBuffer buffer) {
-            final long mostSignificantBits = LONG.readLong(buffer);
-            final long leastSignificantBits = LONG.readLong(buffer);
+            final long mostSignificantBits = buffer.read(LONG);
+            final long leastSignificantBits = buffer.read(LONG);
             return new UUID(mostSignificantBits, leastSignificantBits);
         }
     }
@@ -866,20 +599,20 @@ final class NetworkBufferTypeImpl {
     record PosType() implements Type<Pos> {
         @Override
         public void write(NetworkBuffer buffer, Pos value) {
-            DOUBLE.writeDouble(buffer, value.x());
-            DOUBLE.writeDouble(buffer, value.y());
-            DOUBLE.writeDouble(buffer, value.z());
-            FLOAT.writeFloat(buffer, value.yaw());
-            FLOAT.writeFloat(buffer, value.pitch());
+            buffer.write(DOUBLE, value.x());
+            buffer.write(DOUBLE, value.y());
+            buffer.write(DOUBLE, value.z());
+            buffer.write(FLOAT, value.yaw());
+            buffer.write(FLOAT, value.pitch());
         }
 
         @Override
         public Pos read(NetworkBuffer buffer) {
-            final double x = DOUBLE.readDouble(buffer);
-            final double y = DOUBLE.readDouble(buffer);
-            final double z = DOUBLE.readDouble(buffer);
-            final float yaw = FLOAT.readFloat(buffer);
-            final float pitch = FLOAT.readFloat(buffer);
+            final double x = buffer.read(DOUBLE);
+            final double y = buffer.read(DOUBLE);
+            final double z = buffer.read(DOUBLE);
+            final float yaw = buffer.read(FLOAT);
+            final float pitch = buffer.read(FLOAT);
             return new Pos(x, y, z, yaw, pitch);
         }
     }
@@ -887,13 +620,13 @@ final class NetworkBufferTypeImpl {
     record ByteArrayType() implements Type<byte[]> {
         @Override
         public void write(NetworkBuffer buffer, byte[] value) {
-            VAR_INT.writeInt(buffer, value.length);
-            RAW_BYTES.write(buffer, value);
+            buffer.write(VAR_INT, value.length);
+            buffer.write(RAW_BYTES, value);
         }
 
         @Override
         public byte[] read(NetworkBuffer buffer) {
-            final int length = VAR_INT.readInt(buffer);
+            final int length = buffer.read(VAR_INT);
             if (length == 0) return new byte[0];
             final long remaining = buffer.readableBytes();
             Check.argCondition(length > remaining, "String is too long (length: {0}, readable: {1})", length, remaining);
@@ -904,15 +637,15 @@ final class NetworkBufferTypeImpl {
     record LongArrayType() implements Type<long[]> {
         @Override
         public void write(NetworkBuffer buffer, long[] value) {
-            VAR_INT.writeInt(buffer, value.length);
-            for (long l : value) LONG.writeLong(buffer, l);
+            buffer.write(VAR_INT, value.length);
+            for (long l : value) buffer.write(LONG, l);
         }
 
         @Override
         public long[] read(NetworkBuffer buffer) {
-            final int length = VAR_INT.readInt(buffer);
+            final int length = buffer.read(VAR_INT);
             final long[] longs = new long[length];
-            for (int i = 0; i < length; i++) longs[i] = LONG.readLong(buffer);
+            for (int i = 0; i < length; i++) longs[i] = buffer.read(LONG);
             return longs;
         }
     }
@@ -920,15 +653,15 @@ final class NetworkBufferTypeImpl {
     record VarIntArrayType() implements Type<int[]> {
         @Override
         public void write(NetworkBuffer buffer, int[] value) {
-            VAR_INT.write(buffer, value.length);
-            for (int i : value) VAR_INT.write(buffer, i);
+            buffer.write(VAR_INT, value.length);
+            for (int i : value) buffer.write(VAR_INT, i);
         }
 
         @Override
         public int[] read(NetworkBuffer buffer) {
-            final int length = VAR_INT.readInt(buffer);
+            final int length = buffer.read(VAR_INT);
             final int[] ints = new int[length];
-            for (int i = 0; i < length; i++) ints[i] = VAR_INT.readInt(buffer);
+            for (int i = 0; i < length; i++) ints[i] = buffer.read(VAR_INT);
             return ints;
         }
     }
@@ -936,15 +669,15 @@ final class NetworkBufferTypeImpl {
     record VarLongArrayType() implements Type<long[]> {
         @Override
         public void write(NetworkBuffer buffer, long[] value) {
-            VAR_INT.writeInt(buffer, value.length);
-            for (long l : value) VAR_LONG.writeLong(buffer, l);
+            buffer.write(VAR_INT, value.length);
+            for (long l : value) buffer.write(VAR_LONG, l);
         }
 
         @Override
         public long[] read(NetworkBuffer buffer) {
-            final int length = VAR_INT.readInt(buffer);
+            final int length = buffer.read(VAR_INT);
             final long[] longs = new long[length];
-            for (int i = 0; i < length; i++) longs[i] = VAR_LONG.readLong(buffer);
+            for (int i = 0; i < length; i++) longs[i] = buffer.read(VAR_LONG);
             return longs;
         }
     }
@@ -952,16 +685,16 @@ final class NetworkBufferTypeImpl {
     record Vector3Type() implements Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
-            FLOAT.writeFloat(buffer, (float) value.x());
-            FLOAT.writeFloat(buffer, (float) value.y());
-            FLOAT.writeFloat(buffer, (float) value.z());
+            buffer.write(FLOAT, (float) value.x());
+            buffer.write(FLOAT, (float) value.y());
+            buffer.write(FLOAT, (float) value.z());
         }
 
         @Override
         public Point read(NetworkBuffer buffer) {
-            final float x = FLOAT.readFloat(buffer);
-            final float y = FLOAT.readFloat(buffer);
-            final float z = FLOAT.readFloat(buffer);
+            final float x = buffer.read(FLOAT);
+            final float y = buffer.read(FLOAT);
+            final float z = buffer.read(FLOAT);
             return new Vec(x, y, z);
         }
     }
@@ -969,16 +702,16 @@ final class NetworkBufferTypeImpl {
     record Vector3DType() implements Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
-            DOUBLE.writeDouble(buffer, value.x());
-            DOUBLE.writeDouble(buffer, value.y());
-            DOUBLE.writeDouble(buffer, value.z());
+            buffer.write(DOUBLE, value.x());
+            buffer.write(DOUBLE, value.y());
+            buffer.write(DOUBLE, value.z());
         }
 
         @Override
         public Point read(NetworkBuffer buffer) {
-            final double x = DOUBLE.readDouble(buffer);
-            final double y = DOUBLE.readDouble(buffer);
-            final double z = DOUBLE.readDouble(buffer);
+            final double x = buffer.read(DOUBLE);
+            final double y = buffer.read(DOUBLE);
+            final double z = buffer.read(DOUBLE);
             return new Vec(x, y, z);
         }
     }
@@ -986,16 +719,16 @@ final class NetworkBufferTypeImpl {
     record Vector3IType() implements Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
-            VAR_INT.writeInt(buffer, (int) value.x());
-            VAR_INT.writeInt(buffer, (int) value.y());
-            VAR_INT.writeInt(buffer, (int) value.z());
+            buffer.write(VAR_INT, (int) value.x());
+            buffer.write(VAR_INT, (int) value.y());
+            buffer.write(VAR_INT, (int) value.z());
         }
 
         @Override
         public Point read(NetworkBuffer buffer) {
-            final int x = VAR_INT.readInt(buffer);
-            final int y = VAR_INT.readInt(buffer);
-            final int z = VAR_INT.readInt(buffer);
+            final int x = buffer.read(VAR_INT);
+            final int y = buffer.read(VAR_INT);
+            final int z = buffer.read(VAR_INT);
             return new BlockVec(x, y, z);
         }
     }
@@ -1003,16 +736,16 @@ final class NetworkBufferTypeImpl {
     record Vector3BType() implements Type<Point> {
         @Override
         public void write(NetworkBuffer buffer, Point value) {
-            BYTE.writeByte(buffer, (byte) value.x());
-            BYTE.writeByte(buffer, (byte) value.y());
-            BYTE.writeByte(buffer, (byte) value.z());
+            buffer.write(BYTE, (byte) value.x());
+            buffer.write(BYTE, (byte) value.y());
+            buffer.write(BYTE, (byte) value.z());
         }
 
         @Override
         public Point read(NetworkBuffer buffer) {
-            final byte x = BYTE.readByte(buffer);
-            final byte y = BYTE.readByte(buffer);
-            final byte z = BYTE.readByte(buffer);
+            final byte x = buffer.read(BYTE);
+            final byte y = buffer.read(BYTE);
+            final byte z = buffer.read(BYTE);
             return new BlockVec(x, y, z);
         }
     }
@@ -1033,7 +766,7 @@ final class NetworkBufferTypeImpl {
             double x = sanitize(value.x()), y = sanitize(value.y()), z = sanitize(value.z());
             double max = MathUtils.absMax(x, MathUtils.absMax(y, z));
             if (max < ABS_MIN_VALUE) {
-                BYTE.writeByte(buffer, (byte) 0);
+                buffer.write(BYTE, (byte) 0);
             } else {
                 long i = MathUtils.ceilLong(max);
                 boolean hasContinuation = (i & SCALE_BITS_MASK) != i;
@@ -1042,26 +775,26 @@ final class NetworkBufferTypeImpl {
                 long py = pack(y / i) << Y_OFFSET;
                 long pz = pack(z / i) << Z_OFFSET;
                 long packed = flags | px | py | pz;
-                BYTE.writeByte(buffer, (byte) packed);
-                BYTE.writeByte(buffer, (byte) (packed >> 8));
-                INT.writeInt(buffer, (int) (packed >> 16));
+                buffer.write(BYTE, (byte) packed);
+                buffer.write(BYTE, (byte) (packed >> 8));
+                buffer.write(INT, (int) (packed >> 16));
                 if (hasContinuation)
-                    VAR_INT.writeInt(buffer, (int) (i >> 2));
+                    buffer.write(VAR_INT, (int) (i >> 2));
             }
         }
 
         @Override
         public Vec read(NetworkBuffer buffer) {
-            short flags = UNSIGNED_BYTE.readShort(buffer);
+            int flags = buffer.read(UNSIGNED_BYTE);
             if (flags == 0) {
                 return Vec.ZERO;
             } else {
-                short p2 = UNSIGNED_BYTE.readShort(buffer);
-                long p3 = UNSIGNED_INT.readLong(buffer);
+                int p2 = buffer.read(UNSIGNED_BYTE);
+                long p3 = buffer.read(UNSIGNED_INT);
                 long value = p3 << 16 | p2 << 8 | flags;
                 long scale = flags & SCALE_BITS_MASK;
                 if ((flags & CONTINUATION_FLAG) == CONTINUATION_FLAG)
-                    scale |= (VAR_INT.readInt(buffer) & 0xFFFFFFFFL) << 2;
+                    scale |= (buffer.read(VAR_INT) & 0xFFFFFFFFL) << 2;
                 return new Vec(
                         unpack(value >> X_OFFSET) * scale,
                         unpack(value >> Y_OFFSET) * scale,
@@ -1086,18 +819,18 @@ final class NetworkBufferTypeImpl {
     record QuaternionType() implements Type<float[]> {
         @Override
         public void write(NetworkBuffer buffer, float[] value) {
-            FLOAT.writeFloat(buffer, value[0]);
-            FLOAT.writeFloat(buffer, value[1]);
-            FLOAT.writeFloat(buffer, value[2]);
-            FLOAT.writeFloat(buffer, value[3]);
+            buffer.write(FLOAT, value[0]);
+            buffer.write(FLOAT, value[1]);
+            buffer.write(FLOAT, value[2]);
+            buffer.write(FLOAT, value[3]);
         }
 
         @Override
         public float[] read(NetworkBuffer buffer) {
-            final float x = FLOAT.readFloat(buffer);
-            final float y = FLOAT.readFloat(buffer);
-            final float z = FLOAT.readFloat(buffer);
-            final float w = FLOAT.readFloat(buffer);
+            final float x = buffer.read(FLOAT);
+            final float y = buffer.read(FLOAT);
+            final float z = buffer.read(FLOAT);
+            final float w = buffer.read(FLOAT);
             return new float[]{x, y, z, w};
         }
     }
@@ -1165,26 +898,21 @@ final class NetworkBufferTypeImpl {
             Objects.requireNonNull(parent, "parent");
         }
 
-        // We flip the normal way to promote inlining.
         @Override
         public void write(NetworkBuffer buffer, @Nullable T value) {
-            if (value == null) {
-                BOOLEAN.writeBoolean(buffer, false);
-                return;
-            }
-            BOOLEAN.writeBoolean(buffer, true);
-            parent.write(buffer, value);
+            buffer.write(BOOLEAN, value != null);
+            if (value != null) buffer.write(parent, value);
         }
 
         @Override
         public @Nullable T read(NetworkBuffer buffer) {
-            return BOOLEAN.readBoolean(buffer) ? parent.read(buffer) : null;
+            return buffer.read(BOOLEAN) ? buffer.read(parent) : null;
         }
 
         @Override
         public long sizeOf(T value, @Nullable Registries registries) {
-            if (value == null) return BOOLEAN.sizeOf(false, registries);
-            return BOOLEAN.sizeOf(true, registries) + parent.sizeOf(value, registries);
+            if (value == null) return BOOLEAN.sizeOf(false);
+            return BOOLEAN.sizeOf(true) + parent.sizeOf(value, registries);
         }
     }
 
@@ -1198,12 +926,12 @@ final class NetworkBufferTypeImpl {
         public void write(NetworkBuffer buffer, T value) {
             // Write to another buffer and copy (kinda inefficient, but currently unused serverside so its ok for now)
             final byte[] componentData = NetworkBuffer.makeArray(parent, value, buffer.registries());
-            BYTE_ARRAY.write(buffer, componentData);
+            buffer.write(NetworkBuffer.BYTE_ARRAY, componentData);
         }
 
         @Override
         public T read(NetworkBuffer buffer) {
-            final int length = VAR_INT.readInt(buffer);
+            final int length = buffer.read(VAR_INT);
             Check.argCondition(length > maxLength, "Value is too long (length: {0}, max: {1})", length, maxLength);
 
             final long availableBytes = buffer.readableBytes();
@@ -1286,7 +1014,7 @@ final class NetworkBufferTypeImpl {
             Check.stateCondition(registries == null, "Buffer does not have registries");
             final Result<BinaryTag> result = nbtType.encode(new RegistryTranscoder<>(Transcoder.NBT, registries), value);
             switch (result) {
-                case Result.Ok(BinaryTag tag) -> NBT.write(buffer, tag);
+                case Result.Ok(BinaryTag tag) -> buffer.write(NBT, tag);
                 case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
             }
         }
@@ -1295,7 +1023,7 @@ final class NetworkBufferTypeImpl {
         public T read(NetworkBuffer buffer) {
             final Registries registries = buffer.registries();
             Check.stateCondition(registries == null, "Buffer does not have registries");
-            final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), NBT.read(buffer));
+            final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), buffer.read(NBT));
             return switch (result) {
                 case Result.Ok(T value) -> value;
                 case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
@@ -1316,21 +1044,21 @@ final class NetworkBufferTypeImpl {
         public void write(NetworkBuffer buffer, Either<L, R> value) {
             switch (value) {
                 case Either.Left(L leftValue) -> {
-                    BOOLEAN.writeBoolean(buffer, true);
-                    left.write(buffer, leftValue);
+                    buffer.write(BOOLEAN, true);
+                    buffer.write(left, leftValue);
                 }
                 case Either.Right(R rightValue) -> {
-                    BOOLEAN.writeBoolean(buffer, false);
-                    right.write(buffer, rightValue);
+                    buffer.write(BOOLEAN, false);
+                    buffer.write(right, rightValue);
                 }
             }
         }
 
         @Override
         public Either<L, R> read(NetworkBuffer buffer) {
-            if (BOOLEAN.readBoolean(buffer))
-                return Either.left(left.read(buffer));
-            return Either.right(right.read(buffer));
+            if (buffer.read(BOOLEAN))
+                return Either.left(buffer.read(left));
+            return Either.right(buffer.read(right));
         }
 
         @Override
@@ -1344,8 +1072,7 @@ final class NetworkBufferTypeImpl {
         }
     }
 
-    record TransformType<T, S>(Type<T> parent,
-                               Function<? super T, ? extends S> to,
+    record TransformType<T, S>(Type<T> parent, Function<? super T, ? extends S> to,
                                Function<? super S, ? extends T> from) implements Type<S> {
         public TransformType {
             Objects.requireNonNull(parent, "parent");
@@ -1365,7 +1092,7 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public long sizeOf(S value) {
-            return parent.sizeOf(from.apply(value));
+            return parent().sizeOf(from.apply(value));
         }
     }
 
@@ -1379,23 +1106,23 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public void write(NetworkBuffer buffer, Map<K, V> map) {
-            VAR_INT.writeInt(buffer, map.size());
+            buffer.write(VAR_INT, map.size());
             for (Map.Entry<K, V> entry : map.entrySet()) {
-                parent.write(buffer, entry.getKey());
-                valueType.write(buffer, entry.getValue());
+                buffer.write(parent, entry.getKey());
+                buffer.write(valueType, entry.getValue());
             }
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public Map<K, V> read(NetworkBuffer buffer) {
-            final int size = VAR_INT.readInt(buffer);
+            final int size = buffer.read(VAR_INT);
             Check.argCondition(size > maxSize, "Map size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
             K[] keys = (K[]) new Object[size];
             V[] values = (V[]) new Object[size];
             for (int i = 0; i < size; i++) {
-                keys[i] = parent.read(buffer);
-                values[i] = valueType.read(buffer);
+                keys[i] = buffer.read(parent);
+                values[i] = buffer.read(valueType);
             }
             return ArrayUtils.toMap(keys, values, size);
         }
@@ -1410,20 +1137,20 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, @Nullable List<T> values) {
             if (values == null) {
-                BYTE.writeByte(buffer, (byte) 0);
+                buffer.write(BYTE, (byte) 0);
                 return;
             }
-            VAR_INT.writeInt(buffer, values.size());
-            for (T value : values) parent.write(buffer, value);
+            buffer.write(VAR_INT, values.size());
+            for (T value : values) buffer.write(parent, value);
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public List<T> read(NetworkBuffer buffer) {
-            final int size = VAR_INT.readInt(buffer);
+            final int size = buffer.read(VAR_INT);
             Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
             T[] values = (T[]) new Object[size];
-            for (int i = 0; i < size; i++) values[i] = parent.read(buffer);
+            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
             return List.of(values);
         }
     }
@@ -1437,20 +1164,20 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, @Nullable Set<T> values) {
             if (values == null) {
-                BYTE.writeByte(buffer, (byte) 0);
+                buffer.write(BYTE, (byte) 0);
                 return;
             }
-            VAR_INT.writeInt(buffer, values.size());
-            for (T value : values) parent.write(buffer, value);
+            buffer.write(VAR_INT, values.size());
+            for (T value : values) buffer.write(parent, value);
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public Set<T> read(NetworkBuffer buffer) {
-            final int size = VAR_INT.readInt(buffer);
+            final int size = buffer.read(VAR_INT);
             Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
             T[] values = (T[]) new Object[size];
-            for (int i = 0; i < size; i++) values[i] = parent.read(buffer);
+            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
             return Set.of(values);
         }
     }
@@ -1469,7 +1196,7 @@ final class NetworkBufferTypeImpl {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             final K key = keyFunc.apply(value);
-            keyType.write(buffer, key);
+            buffer.write(keyType, key);
             var serializer = serializers.apply(key);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
@@ -1478,7 +1205,7 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public T read(NetworkBuffer buffer) {
-            final K key = keyType.read(buffer);
+            final K key = buffer.read(keyType);
             var serializer = serializers.apply(key);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
@@ -1511,7 +1238,7 @@ final class NetworkBufferTypeImpl {
             if (utflen > 65535 || /* overflow */ utflen < strlen)
                 throw new RuntimeException("UTF-8 string too long");
 
-            UNSIGNED_SHORT.writeInt(buffer, utflen);
+            buffer.write(UNSIGNED_SHORT, utflen);
             buffer.ensureWritable(utflen); // throw early if possible
             var impl = buffer.direct();
             long offset = buffer.writeIndex();

@@ -88,20 +88,20 @@ import java.util.zip.DataFormatException;
  */
 public interface NetworkBuffer {
     Type<Unit> UNIT = NetworkBufferTemplate.template(Unit.INSTANCE);
-    Type<Boolean> BOOLEAN = NetworkBufferTypeImpl.BOOLEAN;
-    Type<Byte> BYTE = NetworkBufferTypeImpl.BYTE;
-    Type<Short> UNSIGNED_BYTE = NetworkBufferTypeImpl.UNSIGNED_BYTE;
-    Type<Short> SHORT = NetworkBufferTypeImpl.SHORT;
-    Type<Integer> UNSIGNED_SHORT = NetworkBufferTypeImpl.UNSIGNED_SHORT;
-    Type<Integer> INT = NetworkBufferTypeImpl.INT;
-    Type<Long> UNSIGNED_INT = NetworkBufferTypeImpl.UNSIGNED_INT;
-    Type<Long> LONG = NetworkBufferTypeImpl.LONG;
-    Type<Float> FLOAT = NetworkBufferTypeImpl.FLOAT;
-    Type<Double> DOUBLE = NetworkBufferTypeImpl.DOUBLE;
-    Type<Integer> VAR_INT = NetworkBufferTypeImpl.VAR_INT;
+    Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
+    Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
+    Type<Short> UNSIGNED_BYTE = new NetworkBufferTypeImpl.UnsignedByteType();
+    Type<Short> SHORT = new NetworkBufferTypeImpl.ShortType();
+    Type<Integer> UNSIGNED_SHORT = new NetworkBufferTypeImpl.UnsignedShortType();
+    Type<Integer> INT = new NetworkBufferTypeImpl.IntType();
+    Type<Long> UNSIGNED_INT = new NetworkBufferTypeImpl.UnsignedIntType();
+    Type<Long> LONG = new NetworkBufferTypeImpl.LongType();
+    Type<Float> FLOAT = new NetworkBufferTypeImpl.FloatType();
+    Type<Double> DOUBLE = new NetworkBufferTypeImpl.DoubleType();
+    Type<Integer> VAR_INT = new NetworkBufferTypeImpl.VarIntType();
     Type<@Nullable Integer> OPTIONAL_VAR_INT = new NetworkBufferTypeImpl.OptionalVarIntType();
-    Type<Integer> VAR_INT_3 = NetworkBufferTypeImpl.VAR_INT_3;
-    Type<Long> VAR_LONG = NetworkBufferTypeImpl.VAR_LONG;
+    Type<Integer> VAR_INT_3 = new NetworkBufferTypeImpl.VarInt3Type();
+    Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
     Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(NetworkBufferTypeImpl.RawBytesType.ALL);
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     Type<Key> KEY = STRING.transform(Key::key, Key::asString);
@@ -306,7 +306,7 @@ public interface NetworkBuffer {
      * @return the new buffer
      */
     @Contract("_ -> new")
-    static NetworkBuffer resizableBuffer(int initialSize) {
+    static NetworkBuffer resizableBuffer(long initialSize) {
         return NetworkBufferFactory.resizeableFactory().allocate(initialSize);
     }
 
@@ -783,7 +783,7 @@ public interface NetworkBuffer {
      */
     @Contract(mutates = "this")
     default long advanceWrite(@Range(from = 0, to = Long.MAX_VALUE) long length) {
-        if (length < 0) throw new IllegalArgumentException("Length cannot be negative");
+        assert length < 0: "Length cannot be negative found %d".formatted(length);
         final long oldWriteIndex = writeIndex();
         writeIndex(oldWriteIndex + length);
         return oldWriteIndex;
@@ -798,7 +798,7 @@ public interface NetworkBuffer {
      */
     @Contract(mutates = "this")
     default long advanceRead(@Range(from = 0, to = Long.MAX_VALUE) long length) {
-        if (length < 0) throw new IllegalArgumentException("Length cannot be negative");
+        assert length < 0: "Length cannot be negative found %d".formatted(length);
         final long oldReadIndex = readIndex();
         readIndex(oldReadIndex + length);
         return oldReadIndex;
@@ -889,7 +889,7 @@ public interface NetworkBuffer {
      */
     @Contract(mutates = "this")
     default void ensureWritable(@Range(from = 0, to = Long.MAX_VALUE) long length) throws IndexOutOfBoundsException {
-        if (length < 0) throw new IllegalArgumentException("Length cannot be negative found %d".formatted(length));
+        assert length < 0: "Length cannot be negative found %d".formatted(length);
         if (writableBytes() < length && !requestCapacity(writeIndex() + length))
             throw new IndexOutOfBoundsException("%d is too long to be writeable: %d".formatted(length, writableBytes()));
     }
@@ -913,7 +913,7 @@ public interface NetworkBuffer {
      */
     @Contract(pure = true)
     default void ensureReadable(@Range(from = 0, to = Long.MAX_VALUE) long length) throws IndexOutOfBoundsException {
-        if (length < 0) throw new IllegalArgumentException("Length cannot be negative found %d".formatted(length));
+        assert length < 0: "Length cannot be negative found %d".formatted(length);
         if (readableBytes() < length)
             throw new IndexOutOfBoundsException("%d is too long to be readable: %s".formatted(length, readableBytes()));
     }
@@ -1244,22 +1244,6 @@ public interface NetworkBuffer {
         @Contract(pure = true, value = "_, _ -> new")
         default <S extends @UnknownNullability Object> Type<S> transform(Function<? super T, ? extends S> to, Function<? super S, ? extends T> from) {
             return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
-        }
-
-        /**
-         * Transform the current type {@link T} to {@link S} and {@link S} to {@link T}.
-         * <br>
-         * This call site is more optimized as we can look at the underlying implementation, please use this for templates.
-         *
-         * @param to   the function to call when reading your value
-         * @param from the function to call when writing your value
-         * @param <S>  type to
-         * @return the new type that transforms {@link T}
-         */
-        @Contract(pure = true, value = "_, _ -> new")
-        default <S extends @UnknownNullability Object> Type<S> transform(Functions.SF1<? super T, ? extends S> to, Functions.SF1<? super S, ? extends T> from) {
-            // Delegate back, we just want them to use the SF1 if possible.
-            return transform((Function<? super T, ? extends S>) to, from);
         }
 
         /**
