@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -188,7 +189,7 @@ public interface StructCodec<R> extends Codec<R> {
      */
     static <R, P1 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            F1<P1, R> ctor
+            Function<P1, R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -230,7 +231,7 @@ public interface StructCodec<R> extends Codec<R> {
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object> StructCodec<R> struct(
             String name1, Codec<P1> codec1, Function<R, P1> getter1,
             String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            F2<P1, P2, R> ctor
+            BiFunction<P1, P2, R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
