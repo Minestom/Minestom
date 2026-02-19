@@ -268,18 +268,14 @@ final class NetworkBufferTypeImpl {
             if (buffer.writableBytes() < MAX_BYTES) {
                 buffer.ensureWritable(sizeOf(value));
             }
-            long index = buffer.writeIndex();
-            var nio = buffer.direct();
-            for (long i = 0; i < (MAX_BYTES - 1); i++) { // Using a counted loop allows easier unrolling.
-                if ((value & ~SEGMENT_BITS) == 0) {
-                    break;
-                }
-                nio.putByte(index++, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
-                // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
-                value >>>= SHIFT;
+            NetworkBuffer.Direct direct = buffer.direct();
+            long writeIndex = buffer.writeIndex();
+            while ((value & 0xFFFFFF80) != 0L) {
+                direct.putByte(writeIndex++, (byte) ((value & 0x7F) | 0x80));
+                value >>>= 7;
             }
-            nio.putByte(index++, (byte) value);
-            buffer.advanceWrite(index - buffer.writeIndex());
+            direct.putByte(writeIndex++, (byte) value);
+            buffer.writeIndex(writeIndex);
         }
 
         @Override
@@ -293,17 +289,6 @@ final class NetworkBufferTypeImpl {
                 }
             }
             throw new IllegalStateException("VarInt is too big");
-        }
-
-        long sizeOf(int value) {
-            int normal = value | -(value >>> 31) | 1;
-            int bits = 32 - Integer.numberOfLeadingZeros(normal);
-            return (bits + 6) / 7;
-        }
-
-        @Override
-        public long sizeOf(Integer value, @Nullable Registries registries) {
-            return sizeOf((int) value);
         }
     }
 
@@ -364,18 +349,14 @@ final class NetworkBufferTypeImpl {
             if (buffer.writableBytes() < MAX_BYTES) {
                 buffer.ensureWritable(sizeOf(value));
             }
-            var nio = buffer.direct();
-            long index = buffer.writeIndex();
-            for (int i = 0; i < (MAX_BYTES - 1); i++) {
-                if ((value & ~SEGMENT_BITS) == 0) {
-                    break;
-                }
-                nio.putByte(index++, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
-                // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
-                value >>>= SHIFT;
+            NetworkBuffer.Direct direct = buffer.direct();
+            long writeIndex = buffer.writeIndex();
+            while ((value & 0xFFFFFFFFFFFFFF80L) != 0L) {
+                direct.putByte(writeIndex++, (byte) ((value & 0x7F) | 0x80));
+                value >>>= 7;
             }
-            nio.putByte(index++, (byte) value);
-            buffer.advanceWrite(index - buffer.writeIndex());
+            direct.putByte(writeIndex++, (byte) value);
+            buffer.writeIndex(writeIndex);
         }
 
         @Override
@@ -389,17 +370,6 @@ final class NetworkBufferTypeImpl {
                 }
             }
             throw new IllegalStateException("VarLong is too big");
-        }
-
-        long sizeOf(long value) {
-            long normal = value | -(value >>> 63) | 1;
-            int bits = 64 - Long.numberOfLeadingZeros(normal);
-            return (bits + 6) / 7;
-        }
-
-        @Override
-        public long sizeOf(Long value, @Nullable Registries registries) {
-            return sizeOf((long) value);
         }
     }
 
