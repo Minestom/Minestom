@@ -8,6 +8,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.utils.IntProvider;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.attribute.EnvironmentAttribute;
 import net.minestom.server.world.attribute.EnvironmentAttributeMap;
 import net.minestom.server.world.timeline.Timeline;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 /**
- * https://minecraft.wiki/w/Custom_dimension
+ * https://minecraft.wiki/w/Dimension_type
  */
 public sealed interface DimensionType extends DimensionTypes permits DimensionTypeImpl {
     int VANILLA_MIN_Y = -64;
@@ -162,30 +163,37 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
 
         @Contract(value = "_ -> this")
         public Builder coordinateScale(double coordinateScale) {
+            Check.argCondition(coordinateScale < 0.00001 || coordinateScale > 30000000.0, "coordinateScale must be between 0.00001 and 30000000.0");
             this.coordinateScale = coordinateScale;
             return this;
         }
 
         @Contract(value = "_ -> this")
         public Builder minY(int minY) {
+            Check.argCondition(minY % 16 != 0, "minY must be a multiple of 16");
+            Check.argCondition(minY < -2032 || minY > 2031, "minY must be between -2032 and 2031");
             this.minY = minY;
             return this;
         }
 
         @Contract(value = "_ -> this")
         public Builder height(int height) {
+            Check.argCondition(height % 16 != 0, "height must be a multiple of 16");
+            Check.argCondition(height < 16 || height > 4064, "height must be between 16 and 4064");
             this.height = height;
             return this;
         }
 
         @Contract(value = "_ -> this")
         public Builder logicalHeight(int logicalHeight) {
+            Check.argCondition(logicalHeight < 0, "logicalHeight must be 0 or greater");
             this.logicalHeight = logicalHeight;
             return this;
         }
 
         @Contract(value = "_ -> this")
         public Builder infiniburn(String infiniburn) {
+            Check.argCondition(!infiniburn.startsWith("#"), "blockTag has to start with #");
             this.infiniburn = infiniburn;
             return this;
         }
@@ -204,6 +212,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
 
         @Contract(value = "_ -> this")
         public Builder monsterSpawnBlockLightLimit(int monsterSpawnBlockLightLimit) {
+            Check.argCondition(monsterSpawnBlockLightLimit < 0 || monsterSpawnBlockLightLimit > 15, "monsterSpawnBlockLightLimit must be between 0 and 15");
             this.monsterSpawnBlockLightLimit = monsterSpawnBlockLightLimit;
             return this;
         }
@@ -240,6 +249,9 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
 
         @Contract(pure = true)
         public DimensionType build() {
+            Check.argCondition(height < logicalHeight, "logicalHeight must be less than or equals height");
+            Check.argCondition(minY + height - 1 > 2031, "the maximum building height (minY + height -1) must be less than 3032");
+
             return DimensionType.create(hasFixedTime, hasSkylight, hasCeiling, coordinateScale,
                     minY, height, logicalHeight, infiniburn, ambientLight, monsterSpawnLightLevel,
                     monsterSpawnBlockLightLimit, skybox, cardinalLight, attributes.build(), timelines);
