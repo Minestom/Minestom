@@ -152,7 +152,7 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
 
     @Override
     public final long advanceWrite(long length) {
-        assert length < 0: "Length cannot be negative found %d".formatted(length);
+        assert length >= 0: "Length cannot be negative found %d".formatted(length);
         final long oldWriteIndex = writeIndex;
         writeIndex = oldWriteIndex + length;
         return oldWriteIndex;
@@ -160,7 +160,7 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
 
     @Override
     public final long advanceRead(long length) {
-        assert length < 0: "Length cannot be negative found %d".formatted(length);
+        assert length >= 0: "Length cannot be negative found %d".formatted(length);
         final long oldReadIndex = readIndex;
         readIndex = oldReadIndex + length;
         return oldReadIndex;

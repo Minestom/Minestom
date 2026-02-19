@@ -783,7 +783,7 @@ public interface NetworkBuffer {
      */
     @Contract(mutates = "this")
     default long advanceWrite(@Range(from = 0, to = Long.MAX_VALUE) long length) {
-        assert length < 0: "Length cannot be negative found %d".formatted(length);
+        assert length >= 0: "Length cannot be negative found %d".formatted(length);
         final long oldWriteIndex = writeIndex();
         writeIndex(oldWriteIndex + length);
         return oldWriteIndex;
@@ -798,7 +798,7 @@ public interface NetworkBuffer {
      */
     @Contract(mutates = "this")
     default long advanceRead(@Range(from = 0, to = Long.MAX_VALUE) long length) {
-        assert length < 0: "Length cannot be negative found %d".formatted(length);
+        assert length >= 0: "Length cannot be negative found %d".formatted(length);
         final long oldReadIndex = readIndex();
         readIndex(oldReadIndex + length);
         return oldReadIndex;
@@ -889,7 +889,7 @@ public interface NetworkBuffer {
      */
     @Contract(mutates = "this")
     default void ensureWritable(@Range(from = 0, to = Long.MAX_VALUE) long length) throws IndexOutOfBoundsException {
-        assert length < 0: "Length cannot be negative found %d".formatted(length);
+        assert length >= 0: "Length cannot be negative found %d".formatted(length);
         if (writableBytes() < length && !requestCapacity(writeIndex() + length))
             throw new IndexOutOfBoundsException("%d is too long to be writeable: %d".formatted(length, writableBytes()));
     }
@@ -913,7 +913,7 @@ public interface NetworkBuffer {
      */
     @Contract(pure = true)
     default void ensureReadable(@Range(from = 0, to = Long.MAX_VALUE) long length) throws IndexOutOfBoundsException {
-        assert length < 0: "Length cannot be negative found %d".formatted(length);
+        assert length >= 0: "Length cannot be negative found %d".formatted(length);
         if (readableBytes() < length)
             throw new IndexOutOfBoundsException("%d is too long to be readable: %s".formatted(length, readableBytes()));
     }

@@ -303,7 +303,7 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public long sizeOf(Integer value, @Nullable Registries registries) {
-            return sizeOf(value);
+            return sizeOf((int) value);
         }
     }
 
@@ -366,12 +366,11 @@ final class NetworkBufferTypeImpl {
             }
             var nio = buffer.direct();
             long index = buffer.writeIndex();
-            int size = 0;
             for (int i = 0; i < (MAX_BYTES - 1); i++) {
                 if ((value & ~SEGMENT_BITS) == 0) {
                     break;
                 }
-                nio.putByte(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
+                nio.putByte(index++, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
                 // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
                 value >>>= SHIFT;
             }
@@ -400,7 +399,7 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public long sizeOf(Long value, @Nullable Registries registries) {
-            return sizeOf(value);
+            return sizeOf((long) value);
         }
     }
 
