@@ -22,7 +22,6 @@ import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -270,8 +269,8 @@ final class NetworkBufferTypeImpl {
             }
             NetworkBuffer.Direct direct = buffer.direct();
             long writeIndex = buffer.writeIndex();
-            while ((value & 0xFFFFFF80) != 0L) {
-                direct.putByte(writeIndex++, (byte) ((value & 0x7F) | 0x80));
+            while ((value & ~SEGMENT_BITS) != 0L) {
+                direct.putByte(writeIndex++, (byte) ((value & SEGMENT_BITS) | CONTINUE_BIT));
                 value >>>= 7;
             }
             direct.putByte(writeIndex++, (byte) value);
@@ -351,8 +350,8 @@ final class NetworkBufferTypeImpl {
             }
             NetworkBuffer.Direct direct = buffer.direct();
             long writeIndex = buffer.writeIndex();
-            while ((value & 0xFFFFFFFFFFFFFF80L) != 0L) {
-                direct.putByte(writeIndex++, (byte) ((value & 0x7F) | 0x80));
+            while ((value & ~(long) SEGMENT_BITS) != 0L) {
+                direct.putByte(writeIndex++, (byte) ((value & SEGMENT_BITS) | CONTINUE_BIT));
                 value >>>= 7;
             }
             direct.putByte(writeIndex++, (byte) value);
@@ -401,12 +400,6 @@ final class NetworkBufferTypeImpl {
             buffer.direct().getBytes(buffer.readIndex(), bytes);
             buffer.advanceRead(arrayLength);
             return bytes;
-        }
-
-        @Override
-        public long sizeOf(byte[] value, @Nullable Registries registries) {
-            if (length == ALL) return value.length;
-            return length;
         }
     }
 
@@ -877,12 +870,6 @@ final class NetworkBufferTypeImpl {
         public @Nullable T read(NetworkBuffer buffer) {
             return buffer.read(BOOLEAN) ? buffer.read(parent) : null;
         }
-
-        @Override
-        public long sizeOf(T value, @Nullable Registries registries) {
-            if (value == null) return BOOLEAN.sizeOf(false);
-            return BOOLEAN.sizeOf(true) + parent.sizeOf(value, registries);
-        }
     }
 
     record LengthPrefixedType<T>(Type<T> parent, int maxLength) implements Type<T> {
@@ -1028,16 +1015,6 @@ final class NetworkBufferTypeImpl {
             if (buffer.read(BOOLEAN))
                 return Either.left(buffer.read(left));
             return Either.right(buffer.read(right));
-        }
-
-        @Override
-        public long sizeOf(Either<L, R> value, @Nullable Registries registries) {
-            return switch (value) {
-                case Either.Left(L leftValue) ->
-                        BOOLEAN.sizeOf(true, registries) + left().sizeOf(leftValue, registries);
-                case Either.Right(R rightValue) ->
-                        BOOLEAN.sizeOf(false, registries) + right().sizeOf(rightValue, registries);
-            };
         }
     }
 
