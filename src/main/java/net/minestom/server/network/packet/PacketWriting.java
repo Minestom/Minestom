@@ -36,7 +36,8 @@ public final class PacketWriting {
                                              ConnectionState state,
                                              T packet,
                                              int compressionThreshold) throws IndexOutOfBoundsException {
-        final PacketRegistry<T> registry = parser.stateRegistry(state);
+        @SuppressWarnings("unchecked") // We assume that T's registry is tied to the state.
+        final PacketRegistry<T> registry = (PacketRegistry<T>) parser.stateRegistry(state);
         writeFramedPacket(buffer, registry, packet, compressionThreshold);
     }
 
@@ -131,22 +132,21 @@ public final class PacketWriting {
             ConnectionState state,
             T packet,
             int compressionThreshold) {
-        NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
-        try {
-            return allocateTrimmedPacket(buffer, parser, state, packet, compressionThreshold);
-        } finally {
-            PacketVanilla.PACKET_POOL.add(buffer);
-        }
+        @SuppressWarnings("unchecked") // We assume that T's registry is tied to the state.
+        final PacketRegistry<T> registry = (PacketRegistry<T>) parser.stateRegistry(state);
+        return allocateTrimmedPacket(registry, packet, compressionThreshold);
     }
 
     public static <T> NetworkBuffer allocateTrimmedPacket(
-            NetworkBuffer tmpBuffer,
-            PacketParser<T> parser,
-            ConnectionState state,
+            PacketRegistry<T> registry,
             T packet,
             int compressionThreshold) {
-        final PacketRegistry<T> registry = parser.stateRegistry(state);
-        return allocateTrimmedPacket(tmpBuffer, registry, packet, compressionThreshold);
+        NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
+        try {
+            return allocateTrimmedPacket(buffer, registry, packet, compressionThreshold);
+        } finally {
+            PacketVanilla.PACKET_POOL.add(buffer);
+        }
     }
 
     public static <T> NetworkBuffer allocateTrimmedPacket(
@@ -159,7 +159,7 @@ public final class PacketWriting {
         final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
         try {
             writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
-            return tmpBuffer.copy(0, tmpBuffer.writeIndex());
+            return tmpBuffer.trimmed();
         } catch (IndexOutOfBoundsException e) {
             final long sizeOf = serializer.sizeOf(packet, tmpBuffer.registries());
             if (sizeOf > ServerFlag.MAX_PACKET_SIZE) {
@@ -170,12 +170,12 @@ public final class PacketWriting {
             tmpBuffer.resize(sizeOf + 15);
             tmpBuffer.writeIndex(0);
             writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
-            return tmpBuffer.copy(0, tmpBuffer.writeIndex());
+            return tmpBuffer.trimmed();
         }
     }
 
     public static <T> void writeQueue(NetworkBuffer buffer, MessagePassingQueue<T> queue, int minWrite,
-                                      BiPredicate<NetworkBuffer, T> writer) {
+                                      BiPredicate<? super NetworkBuffer, ? super T> writer) {
         // The goal of this method is to write at the very least `minWrite` packets if the queue permits it.
         // The buffer is resized if it cannot hold this minimum.
         final int size = queue.size();

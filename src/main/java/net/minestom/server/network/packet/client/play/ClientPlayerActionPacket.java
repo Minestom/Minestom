@@ -6,16 +6,17 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientPlayerActionPacket(
         Status status, Point blockPosition,
         BlockFace blockFace, int sequence
-) implements ClientPacket {
+) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPlayerActionPacket> SERIALIZER = NetworkBufferTemplate.template(
-            NetworkBuffer.Enum(Status.class), ClientPlayerActionPacket::status,
+            Status.NETWORK_TYPE, ClientPlayerActionPacket::status,
             BLOCK_POSITION, ClientPlayerActionPacket::blockPosition,
-            BYTE.transform(aByte -> BlockFace.values()[aByte], blockFace1 -> (byte) blockFace1.ordinal()), ClientPlayerActionPacket::blockFace,
+            NetworkBuffer.Enum(BlockFace.class), ClientPlayerActionPacket::blockFace,
             VAR_INT, ClientPlayerActionPacket::sequence,
             ClientPlayerActionPacket::new);
 
@@ -27,6 +28,8 @@ public record ClientPlayerActionPacket(
         DROP_ITEM,
         UPDATE_ITEM_STATE,
         SWAP_ITEM_HAND,
-        STAB,
+        STAB;
+
+        public static final NetworkBuffer.Type<Status> NETWORK_TYPE = NetworkBuffer.Enum(Status.class);
     }
 }

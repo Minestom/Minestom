@@ -11,6 +11,7 @@ dependencies {
 }
 
 application {
+    mainModule.set("net.minestom.demo")
     mainClass.set("net.minestom.demo.Main")
 }
 

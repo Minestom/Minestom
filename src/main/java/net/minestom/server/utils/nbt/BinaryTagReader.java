@@ -10,16 +10,10 @@ import java.util.Map;
 
 // Based on net.kyori.adventure.nbt.BinaryTagReaderImpl licensed under the MIT license.
 // https://github.com/KyoriPowered/adventure/blob/main/4/nbt/src/main/java/net/kyori/adventure/nbt/BinaryTagReaderImpl.java
-public class BinaryTagReader {
+public record BinaryTagReader(DataInput input) {
 
     static {
         BinaryTagTypes.COMPOUND.id(); // Force initialization
-    }
-
-    private final DataInput input;
-
-    public BinaryTagReader(DataInput input) {
-        this.input = input;
     }
 
     public BinaryTag readNameless() throws IOException {

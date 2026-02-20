@@ -12,9 +12,8 @@ public record ClientUpdateSignPacket(
         Point blockPosition,
         boolean isFrontText,
         List<String> lines
-) implements ClientPacket {
+) implements ClientPacket.Play {
     public ClientUpdateSignPacket {
-        lines = List.copyOf(lines);
         if (lines.size() != 4) {
             throw new IllegalArgumentException("Signs must have 4 lines!");
         }
@@ -23,6 +22,7 @@ public record ClientUpdateSignPacket(
                 throw new IllegalArgumentException("Signs must have a maximum of 384 characters per line!");
             }
         }
+        lines = List.copyOf(lines);
     }
 
     public static final NetworkBuffer.Type<ClientUpdateSignPacket> SERIALIZER = new NetworkBuffer.Type<>() {

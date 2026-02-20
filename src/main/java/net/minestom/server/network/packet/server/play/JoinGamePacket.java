@@ -15,7 +15,7 @@ public record JoinGamePacket(
         int entityId, boolean isHardcore, List<String> worlds, int maxPlayers,
         int viewDistance, int simulationDistance, boolean reducedDebugInfo, boolean enableRespawnScreen,
         boolean doLimitedCrafting, int dimensionType,
-        String world, long hashedSeed, GameMode gameMode, GameMode previousGameMode,
+        String world, long hashedSeed, GameMode gameMode, @Nullable GameMode previousGameMode,
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation, int portalCooldown,
         int seaLevel, boolean enforcesSecureChat
 ) implements ServerPacket.Play {

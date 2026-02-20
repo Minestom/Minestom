@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.FilterMask;
+import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.crypto.SignedMessageBody;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -19,7 +20,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 /**
  * Represents an outgoing chat message packet.
  */
-public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, byte @Nullable [] signature,
+public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, @Nullable MessageSignature signature,
                                       SignedMessageBody.Packed messageBody,
                                       @Nullable Component unsignedContent, FilterMask filterMask,
                                       int msgTypeId, Component msgTypeName,
@@ -29,13 +30,13 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, b
             VAR_INT, PlayerChatMessagePacket::globalIndex,
             UUID, PlayerChatMessagePacket::sender,
             VAR_INT, PlayerChatMessagePacket::index,
-            RAW_BYTES.optional(), PlayerChatMessagePacket::signature,
+            MessageSignature.SERIALIZER.optional(), PlayerChatMessagePacket::signature,
             SignedMessageBody.Packed.SERIALIZER, PlayerChatMessagePacket::messageBody,
             COMPONENT.optional(), PlayerChatMessagePacket::unsignedContent,
             FilterMask.SERIALIZER, PlayerChatMessagePacket::filterMask,
             VAR_INT, PlayerChatMessagePacket::msgTypeId,
             COMPONENT, PlayerChatMessagePacket::msgTypeName,
-            COMPONENT, PlayerChatMessagePacket::msgTypeTarget,
+            COMPONENT.optional(), PlayerChatMessagePacket::msgTypeTarget,
             PlayerChatMessagePacket::new
     );
 
@@ -51,7 +52,7 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, b
     @Override
     public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         return new PlayerChatMessagePacket(globalIndex, sender, index, signature,
-                messageBody, operator.apply(unsignedContent), filterMask,
-                msgTypeId, operator.apply(msgTypeName), operator.apply(msgTypeTarget));
+                messageBody, unsignedContent != null ? operator.apply(unsignedContent) : null, filterMask,
+                msgTypeId, operator.apply(msgTypeName), msgTypeTarget != null ? operator.apply(msgTypeTarget) : null);
     }
 }

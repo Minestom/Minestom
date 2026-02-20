@@ -2,15 +2,17 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.foreign.Arena;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -20,6 +22,7 @@ import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
 import static net.minestom.server.network.NetworkBuffer.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@EnvTest // itemstack
 public class NetworkBufferTest {
 
     @Test
@@ -75,7 +78,7 @@ public class NetworkBufferTest {
         assertEquals(10, copy.writeIndex());
         assertEquals(10, copy.capacity());
 
-        assertTrue(NetworkBuffer.equals(buffer, copy));
+        assertTrue(NetworkBuffer.contentEquals(buffer, copy));
     }
 
     @Test
@@ -88,8 +91,10 @@ public class NetworkBufferTest {
         assertEquals(10, buffer1.capacity());
 
         var buffer2 = NetworkBuffer.staticBuffer(10);
-        NetworkBuffer.copy(buffer1, 0, buffer2, 0, 10);
         assertEquals(10, buffer2.capacity());
+        NetworkBuffer.copy(buffer1, 0, buffer2, 0, 10);
+        buffer2.advanceWrite(10);
+        assertEquals(10, buffer2.writeIndex());
 
         assertEquals(6, buffer2.read(INT));
         assertEquals((short) 2, buffer2.read(SHORT));
@@ -106,8 +111,10 @@ public class NetworkBufferTest {
         assertEquals(10, buffer1.capacity());
 
         var buffer2 = NetworkBuffer.staticBuffer(4);
-        NetworkBuffer.copy(buffer1, 6, buffer2, 0, 4);
         assertEquals(4, buffer2.capacity());
+        NetworkBuffer.copy(buffer1, 6, buffer2, 0, 4);
+        buffer2.advanceWrite(4);
+        assertEquals(4, buffer2.writeIndex());
 
         assertEquals(3.5f, buffer2.read(FLOAT));
     }
@@ -122,9 +129,11 @@ public class NetworkBufferTest {
         assertEquals(10, buffer1.capacity());
 
         var buffer2 = NetworkBuffer.staticBuffer(8);
+        assertEquals(8, buffer2.capacity());
         buffer2.write(INT, 5);
         NetworkBuffer.copy(buffer1, 6, buffer2, 4, 4);
-        assertEquals(8, buffer2.capacity());
+        buffer2.advanceWrite(4);
+        assertEquals(8, buffer2.writeIndex());
 
         assertEquals(5, buffer2.read(INT));
         assertEquals(3.5f, buffer2.read(FLOAT));
@@ -181,7 +190,7 @@ public class NetworkBufferTest {
         assertEquals(1, buffer.writeIndex());
         assertEquals(0, buffer.readIndex());
 
-        var array = buffer.extractBytes(extractor -> extractor.read(BYTE));
+        var array = buffer.extractReadBytes(BYTE);
         assertArrayEquals(new byte[]{25}, array, "Unequal array: " + Arrays.toString(array));
         assertEquals(1, buffer.writeIndex());
         assertEquals(1, buffer.readIndex());
@@ -191,7 +200,7 @@ public class NetworkBufferTest {
         assertEquals(10, buffer.writeIndex());
         assertEquals(1, buffer.readIndex());
 
-        array = buffer.extractBytes(extractor -> {
+        array = buffer.extractReadBytes(extractor -> {
             extractor.read(BYTE);
             extractor.read(LONG);
         });
@@ -414,14 +423,92 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void fixedRawBytes() {
+        var array = new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64};
+        NetworkBuffer buffer = NetworkBuffer.wrap(array, 0, array.length);
+        var outBytes = buffer.read(FixedRawBytes(10));
+        assertEquals(10, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+        assertArrayEquals(Arrays.copyOf(array, 10), outBytes);
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(FixedRawBytes(10)));
+        assertArrayEquals(Arrays.copyOfRange(array, 10, 12), buffer.read(RAW_BYTES));
+    }
+
+    @Test
+    public void enumVarInt() {
+        enum Enums {
+            ONE,
+            TWO,
+            THREE,
+            FOUR,
+            FIVE,
+            SIX,
+            SEVEN,
+            EIGHT
+        }
+        var type = EnumSet(Enums.class);
+        assertBufferType(type, EnumSet.of(Enums.ONE, Enums.TWO), new byte[]{0x03});
+        assertBufferType(type, EnumSet.of(Enums.THREE), new byte[]{0x04});
+        assertBufferType(type, EnumSet.of(Enums.FOUR), new byte[]{0x08});
+        assertBufferType(type, EnumSet.of(Enums.FIVE), new byte[]{0x10});
+        assertBufferType(type, EnumSet.of(Enums.SIX), new byte[]{0x20});
+    }
+
+    @Test
+    public void fixedBitSet() {
+        var bitSet = new BitSet();
+        bitSet.set(0, true);
+        bitSet.set(1, false);
+        bitSet.set(2, true);
+        assertBufferType(FixedBitSet(3), bitSet, new byte[]{0x05});
+        bitSet.set(4, true);
+        assertBufferType(FixedBitSet(5), bitSet, new byte[]{0x15});
+    }
+
+    @Test
     public void string() {
-        assertBufferType(STRING, "Hello World", new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
+        assertBufferType(STRING, "", new byte[]{0x00});
+        assertBufferType(STRING, "h", new byte[]{0x01, 0x68});
+        assertBufferType(STRING, "H", new byte[]{0x01, 0x48});
+        assertBufferType(STRING, "Hello World", new byte[]{0x0B, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64});
+        assertBufferType(STRING, "€", new byte[]{0x03, (byte) 0xE2, (byte) 0x82, (byte) 0xAC});
+        assertBufferType(STRING, "😀", new byte[]{0x04, (byte) 0xF0, (byte) 0x9F, (byte) 0x98, (byte) 0x80});
+    }
+
+    @Test
+    public void stringTerminated() {
+        assertBufferType(STRING_TERMINATED, "", new byte[]{0x00});
+        assertBufferType(STRING_TERMINATED, "h", new byte[]{0x68, 0x00});
+        assertBufferType(STRING_TERMINATED, "H", new byte[]{0x48, 0x00});
+        assertBufferType(STRING_TERMINATED, "Hello World", new byte[]{0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64, 0x00});
+        assertBufferType(STRING_TERMINATED, "€", new byte[]{(byte) 0xE2, (byte) 0x82, (byte) 0xAC, 0x00});
+        assertBufferType(STRING_TERMINATED, "😀", new byte[]{(byte) 0xF0, (byte) 0x9F, (byte) 0x98, (byte) 0x80, 0x00});
+    }
+
+    @Test
+    public void stringIOUtf() {
+        assertBufferType(STRING_IO_UTF8, "", new byte[]{0x00, 0x00});
+        assertBufferType(STRING_IO_UTF8, "h", new byte[]{0x00, 0x01, 0x68});
+        assertBufferType(STRING_IO_UTF8, "H", new byte[]{0x00, 0x01, 0x48});
+        assertBufferType(STRING_IO_UTF8, "Hello World", new byte[]{0x00, 0x0B, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64});
+        assertBufferType(STRING_IO_UTF8, "€", new byte[]{0x00, 0x03, (byte) 0xE2, (byte) 0x82, (byte) 0xAC});
+        assertBufferType(STRING_IO_UTF8, "😀", new byte[]{0x00, 0x06, (byte) 0xED, (byte) 0xA0, (byte) 0xBD, (byte) 0xED, (byte) 0xB8, (byte) 0x80});
     }
 
     @Test
     public void nbt() {
         assertBufferType(NetworkBuffer.NBT, intBinaryTag(5));
         assertBufferType(NetworkBuffer.NBT, CompoundBinaryTag.from(Map.of("key", intBinaryTag(5))));
+    }
+
+    @Test
+    public void optNBT() {
+        assertBufferType(OPTIONAL_NBT, intBinaryTag(5));
+        assertBufferType(OPTIONAL_NBT, CompoundBinaryTag.from(Map.of("key", intBinaryTag(5))));
+
+        // Ensure its End Tag
+        assertBufferType(OPTIONAL_NBT, null, new byte[] {0x00});
+        assertBufferType(OPTIONAL_NBT_COMPOUND, null, new byte[] {0x00});
     }
 
     @Test
@@ -436,22 +523,22 @@ public class NetworkBufferTest {
     }
 
     @Test
-    public void item() {
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.AIR);
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.of(Material.STONE, 1));
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.of(Material.DIAMOND_AXE, 1).with(DataComponents.DAMAGE, 1));
+    public void item(Env env) {
+        assertBufferType(env, ItemStack.NETWORK_TYPE, ItemStack.AIR);
+        assertBufferType(env, ItemStack.NETWORK_TYPE, ItemStack.of(Material.STONE, 1));
+        assertBufferType(env, ItemStack.NETWORK_TYPE, ItemStack.of(Material.DIAMOND_AXE, 1).with(DataComponents.DAMAGE, 1));
     }
 
     @Test
     public void optional() {
-        assertBufferTypeOptional(BOOLEAN, null, new byte[]{0});
-        assertBufferTypeOptional(BOOLEAN, true, new byte[]{1, 1});
+        assertBufferType(BOOLEAN.optional(), null, new byte[]{0});
+        assertBufferType(BOOLEAN.optional(), true, new byte[]{1, 1});
     }
 
     @Test
     public void collection() {
-        assertBufferTypeCollection(BOOLEAN, List.of(), new byte[]{0});
-        assertBufferTypeCollection(BOOLEAN, List.of(true), new byte[]{0x01, 0x01});
+        assertBufferType(BOOLEAN.list(), List.of(), new byte[]{0});
+        assertBufferType(BOOLEAN.list(), List.of(true), new byte[]{0x01, 0x01});
     }
 
     @Test
@@ -471,7 +558,7 @@ public class NetworkBufferTest {
         buffer.write(VAR_INT, Integer.MAX_VALUE); // String length
         buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8)); // String data
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING)); // oom
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(STRING)); // oom
     }
 
     @Test
@@ -480,7 +567,7 @@ public class NetworkBufferTest {
         buffer.write(UNSIGNED_SHORT, 65535); // String length
         buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8)); // String data
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING)); // oom
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(STRING)); // oom
     }
 
     @Test
@@ -492,6 +579,87 @@ public class NetworkBufferTest {
         assertBufferType(STRING_IO_UTF8, "Hello", stream.toByteArray());
     }
 
+    @Test
+    public void testConfinedArena() {
+        final NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            buffer = NetworkBufferFactory.staticFactory().arena(arena).allocate(256);
+            buffer.write(VAR_INT, Integer.MAX_VALUE);
+            buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
+            assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
+        }
+        assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
+    }
+
+    @Test
+    public void testConfinedArenaCopy() {
+        final NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            var settings = NetworkBufferFactory.staticFactory().arena(arena);
+            var confinedBuffer = settings.allocate(256);
+            confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
+            confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
+            assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
+            buffer = confinedBuffer.copy(settings, confinedBuffer.readIndex(), confinedBuffer.readableBytes(),0, confinedBuffer.readableBytes());
+        }
+        assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
+    }
+
+    @Test
+    public void testConfinedArenaGlobalCopy() {
+        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
+        final NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            var confinedBuffer = NetworkBufferFactory.staticFactory().arena(arena).allocate(256);
+            confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
+            confinedBuffer.write(RAW_BYTES, stringBytes);
+            assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
+            buffer = confinedBuffer.copy(confinedBuffer.readIndex(), confinedBuffer.readableBytes(), 0, confinedBuffer.readableBytes());
+        }
+        var bytes = buffer.read(RAW_BYTES);
+        assertArrayEquals(stringBytes, bytes);
+    }
+
+    @Test
+    public void testFill() {
+        var buffer = NetworkBuffer.staticBuffer(256);
+        buffer.write(VAR_INT, Integer.MAX_VALUE);
+        buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
+        buffer.fill(buffer.readIndex(), buffer.readableBytes(), (byte) 0x00);
+        assertEquals(0, buffer.readIndex());
+        assertEquals(buffer.readableBytes(), buffer.writeIndex());
+        for (int i = 0; i < buffer.writeIndex(); i++) {
+            assertEquals((byte) 0x00, buffer.read(BYTE));
+        }
+    }
+
+    @Test
+    public void testTrim() {
+        var buffer = NetworkBuffer.resizableBuffer(256);
+        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
+        buffer.write(VAR_INT, Integer.MAX_VALUE);
+        buffer.write(RAW_BYTES, stringBytes);
+        buffer.trim();
+        assertEquals(10, buffer.capacity());
+        assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
+        assertArrayEquals(stringBytes, buffer.read(RAW_BYTES));
+        buffer.trim();
+        assertEquals(0, buffer.capacity());
+    }
+
+    @Test
+    public void testTrimmed() {
+        var buffer = NetworkBuffer.staticBuffer(256);
+        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
+        buffer.write(VAR_INT, Integer.MAX_VALUE);
+        buffer.write(RAW_BYTES, stringBytes);
+        buffer = buffer.trimmed();
+        assertEquals(10, buffer.capacity());
+        assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
+        assertArrayEquals(stringBytes, buffer.read(RAW_BYTES));
+        buffer = buffer.trimmed();
+        assertEquals(0, buffer.capacity());
+    }
 
     @Test
     public void testStringUtf8ModifiedRead() throws IOException {
@@ -509,7 +677,7 @@ public class NetworkBufferTest {
         // Write the raw bytes that are invalid
         buffer.write(RAW_BYTES, new byte[]{(byte) 0xC0, (byte) 0x80}); // Invalid UTF-8
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
         buffer.clear();
 
         var stream = new java.io.ByteArrayOutputStream();
@@ -521,17 +689,17 @@ public class NetworkBufferTest {
         byteArray[0] = (byte) 0x00;
         byteArray[1] = (byte) 0x00;
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
 
         buffer.clear();
         buffer.write(UNSIGNED_SHORT, 5);
         buffer.write(RAW_BYTES, new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF}); // Invalid utf8
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
+        assertThrows(IllegalStateException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
     }
 
-    static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte[] expected, Action<T> action) {
-        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
+    static <T> void assertBufferType(@Nullable Env env, NetworkBuffer.Type<T> type, @UnknownNullability T value, byte @Nullable [] expected, Action<T> action) {
+        var buffer = networkBuffer(env);
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
@@ -546,6 +714,8 @@ public class NetworkBufferTest {
             var bytes = new byte[expected.length];
             buffer.copyTo(0, bytes, 0, bytes.length);
             assertArrayEquals(expected, bytes, "Invalid bytes: " + Arrays.toString(expected) + " != " + Arrays.toString(bytes));
+            var sizeOf = type.sizeOf(value);
+            assertEquals(expected.length, sizeOf, "Mismatch in sizeOf and expected length");
         }
 
         // Ensure resize support
@@ -563,8 +733,12 @@ public class NetworkBufferTest {
         }
     }
 
-    static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value, byte @Nullable [] expected) {
-        assertBufferType(type, value, expected, new Action<>() {
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte @Nullable [] expected, Action<T> action) {
+        assertBufferType(null, type, value, expected, action);
+    }
+
+    static <T> void assertBufferType(@Nullable Env env, NetworkBuffer.Type<T> type, T value, byte @Nullable [] expected) {
+        assertBufferType(env, type, value, expected, new Action<>() {
             @Override
             public void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value) {
                 buffer.write(type, value);
@@ -577,54 +751,25 @@ public class NetworkBufferTest {
         });
     }
 
+    static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value, byte @Nullable [] expected) {
+        assertBufferType(null, type, value, expected);
+    }
+
+    static <T> void assertBufferType(@Nullable Env env, NetworkBuffer.Type<T> type, T value) {
+        assertBufferType(env, type, value, null);
+    }
+
     static <T> void assertBufferType(NetworkBuffer.Type<T> type, T value) {
-        assertBufferType(type, value, null);
-    }
-
-    static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value, byte @Nullable [] expected) {
-        assertBufferType(type, value, expected, new Action<T>() {
-            @Override
-            public void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value) {
-                buffer.write(type.optional(), value);
-            }
-
-            @Override
-            public T read(NetworkBuffer buffer, NetworkBuffer.Type<T> type) {
-                return buffer.read(type.optional());
-            }
-        });
-    }
-
-    static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value) {
-        assertBufferTypeOptional(type, value, null);
-    }
-
-    static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> values, byte @Nullable [] expected) {
-        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
-        buffer.write(type.list(), values);
-        assertEquals(0, buffer.readIndex());
-        if (expected != null) assertEquals(expected.length, buffer.writeIndex());
-
-        var actual = buffer.read(type.list(Integer.MAX_VALUE));
-
-        assertEquals(values, actual);
-        if (expected != null) assertEquals(expected.length, buffer.readIndex());
-        if (expected != null) assertEquals(expected.length, buffer.writeIndex());
-
-        if (expected != null) {
-            var bytes = new byte[expected.length];
-            buffer.copyTo(0, bytes, 0, bytes.length);
-            assertArrayEquals(expected, bytes, "Invalid bytes: " + Arrays.toString(expected) + " != " + Arrays.toString(bytes));
-        }
-    }
-
-    static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> value) {
-        assertBufferTypeCollection(type, value, null);
+        assertBufferType(null, type, value, null);
     }
 
     interface Action<T> {
-        void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value);
+        void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, T value);
 
         T read(NetworkBuffer buffer, NetworkBuffer.Type<T> type);
+    }
+
+    static NetworkBuffer networkBuffer(@Nullable Env env) {
+        return env != null ? resizableBuffer(env.process()) : resizableBuffer();
     }
 }

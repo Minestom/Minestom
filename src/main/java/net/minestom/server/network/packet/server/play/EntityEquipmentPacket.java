@@ -28,7 +28,7 @@ public record EntityEquipmentPacket(int entityId,
             for (var entry : value.equipments.entrySet()) {
                 final boolean last = index++ == value.equipments.size() - 1;
                 byte slotEnum = (byte) entry.getKey().legacyProtocolId();
-                if (!last) slotEnum |= 0x80;
+                if (!last) slotEnum |= (byte) 0x80;
                 buffer.write(BYTE, slotEnum);
                 buffer.write(ItemStack.NETWORK_TYPE, entry.getValue());
             }

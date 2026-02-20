@@ -25,13 +25,14 @@ import net.minestom.server.network.packet.client.login.ClientEncryptionResponseP
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
-import net.minestom.server.network.packet.client.status.StatusRequestPacket;
+import net.minestom.server.network.packet.client.status.ClientStatusRequestPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.Cipher;
@@ -54,11 +55,11 @@ import java.util.zip.DataFormatException;
  * It is the implementation used for all network client.
  */
 @ApiStatus.Internal
-public class PlayerSocketConnection extends PlayerConnection {
+public final class PlayerSocketConnection extends PlayerConnection {
     private static final Set<Class<? extends ClientPacket>> IMMEDIATE_PROCESS_PACKETS = Set.of(
             ClientHandshakePacket.class, // First received packet
             ClientCookieResponsePacket.class,
-            StatusRequestPacket.class,
+            ClientStatusRequestPacket.class,
             ClientPingRequestPacket.class,
             ClientKeepAlivePacket.class, // Used to calculate latency
             ClientLoginStartPacket.class,
@@ -69,17 +70,19 @@ public class PlayerSocketConnection extends PlayerConnection {
             ClientFinishConfigurationPacket.class // Enter play state
     );
 
+    private static final ListenerHandle<PlayerPacketOutEvent> OUTGOING_HANDLE = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
+
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
 
     //Could be null. Only used for Mojang Auth
-    private volatile EncryptionContext encryptionContext;
+    private volatile @Nullable EncryptionContext encryptionContext;
     private byte[] nonce = new byte[4];
 
     // Data from client packets
-    private String loginUsername;
-    private GameProfile gameProfile;
-    private String serverAddress;
+    private @Nullable String loginUsername;
+    private @Nullable GameProfile gameProfile;
+    private @Nullable String serverAddress;
     private int serverPort;
     private int protocolVersion;
 
@@ -88,6 +91,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private final Thread readThread, writeThread;
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
+    private @Nullable NetworkBuffer writeLeftover = null;
     // Index where compression starts, linked to `sentPacketCounter`
     // Used instead of a simple boolean so we can get proper timing for serialization
     private volatile long compressionStart = Long.MAX_VALUE;
@@ -95,8 +99,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     // Write lock as the default behavior of the writing thread is to park itself
     // Requires ServerFlag.FASTER_SOCKET_WRITES to be enabled
     private final AtomicBoolean writeSignaled = new AtomicBoolean(false);
-
-    private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
     public PlayerSocketConnection(SocketChannel channel, SocketAddress remoteAddress, Thread readThread, Thread writeThread) {
         super();
@@ -106,6 +108,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.readThread = readThread;
     }
 
+    @Blocking
     public void read(PacketParser<ClientPacket> packetParser) throws IOException {
         NetworkBuffer readBuffer = this.readBuffer;
         final long writeIndex = readBuffer.writeIndex();
@@ -133,9 +136,16 @@ public class PlayerSocketConnection extends PlayerConnection {
                     startingState, PacketVanilla::nextClientState,
                     compression()
             );
-        } catch (DataFormatException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            disconnect();
+        } catch (DataFormatException | RuntimeException e) {
+            // Pass any errors to the exception manager
+            // Except ones that were generated in the starting state of X (Likely garbage)
+            // Should cutdown on random packets sent to the server from scanners causing stack traces.
+            // Note: if the last packet is the one that errors in a different state, this can't account for that.
+            if (startingState.ordinal() > ServerFlag.SUPPRESS_PACKET_ERROR_LEVEL)
+                MinecraftServer.getExceptionManager().handleException(e);
+            // If anything is thrown, all packets in the queue will be lost here.
+            // So it's highly recommended to disconnect to avoid more invalid state.
+            if (ServerFlag.REJECT_MALFORMED_PACKET) disconnect();
             return;
         }
         switch (result) {
@@ -155,13 +165,16 @@ public class PlayerSocketConnection extends PlayerConnection {
                             player.addPacketToQueue(packet);
                         }
                     } catch (Exception e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+                        if (startingState.ordinal() > ServerFlag.SUPPRESS_PACKET_ERROR_LEVEL)
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        // Note this does not affect packets in the queue.
+                        if (ServerFlag.REJECT_MISUSED_PACKET) disconnect();
                     }
                 }
                 // Compact in case of incomplete read
                 readBuffer.compact();
             }
-            case PacketReading.Result.Empty<ClientPacket> ignored -> {
+            case PacketReading.Result.Empty<ClientPacket> _ -> {
                 // Empty
             }
             case PacketReading.Result.Failure<ClientPacket> failure -> {
@@ -201,21 +214,27 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void sendPacket(SendablePacket packet) {
         this.packetQueue.relaxedOffer(packet);
-        unlockWriteThread();
+        tryUnlockWriteThread();
     }
 
     @Override
-    public void sendPackets(Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<? extends SendablePacket> packets) {
         for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(packet);
-        unlockWriteThread();
+        tryUnlockWriteThread();
     }
 
     // Requires ServerFlag.FASTER_SOCKET_WRITES
-    private void unlockWriteThread() {
+    public void tryUnlockWriteThread() {
         if (!ServerFlag.FASTER_SOCKET_WRITES) return;
-        if (!this.writeSignaled.compareAndExchange(false, true)) {
-            LockSupport.unpark(writeThread);
+        if (this.writeSignaled.compareAndSet(false, true)) {
+            unlockWriteThread();
         }
+    }
+
+    @ApiStatus.Internal
+    public void unlockWriteThread() {
+        if (!ServerFlag.FASTER_SOCKET_WRITES) return;
+        LockSupport.unpark(writeThread);
     }
 
     @Override
@@ -230,7 +249,6 @@ public class PlayerSocketConnection extends PlayerConnection {
      *
      * @param remoteAddress the new connection remote address
      */
-    @ApiStatus.Internal
     public void setRemoteAddress(SocketAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
@@ -291,6 +309,12 @@ public class PlayerSocketConnection extends PlayerConnection {
         return serverPort;
     }
 
+    @Override
+    public void disconnect() {
+        super.disconnect();
+        unlockWriteThread();
+    }
+
     /**
      * Gets the protocol version of a client.
      *
@@ -322,9 +346,9 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.nonce = nonce;
     }
 
-    private boolean writeSendable(NetworkBuffer buffer, SendablePacket sendable, boolean compressed) {
+    private boolean writeSendable(NetworkBuffer buffer, PacketParser<ServerPacket> writer, SendablePacket sendable, boolean compressed) {
         final long start = buffer.writeIndex();
-        final boolean result = writePacketSync(buffer, sendable, compressed);
+        final boolean result = writePacketSync(buffer, writer, sendable, compressed);
         if (!result) return false;
         // Encrypt data
         final long length = buffer.writeIndex() - start;
@@ -335,21 +359,21 @@ public class PlayerSocketConnection extends PlayerConnection {
         return true;
     }
 
-    private boolean writePacketSync(NetworkBuffer buffer, SendablePacket packet, boolean compressed) {
+    private boolean writePacketSync(NetworkBuffer buffer, PacketParser<ServerPacket> writer, SendablePacket packet, boolean compressed) {
         final Player player = getPlayer();
         final ConnectionState state = getServerState();
         if (player != null) {
             // Outgoing event
-            if (outgoing.hasListener()) {
-                final ServerPacket serverPacket = SendablePacket.extractServerPacket(state, packet);
+            if (OUTGOING_HANDLE.hasListener()) {
+                final ServerPacket serverPacket = SendablePacket.extractServerPacket(packet, state, writer);
                 if (serverPacket != null) { // Events are not called for buffered packets
                     PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
-                    outgoing.call(event);
+                    OUTGOING_HANDLE.call(event);
                     if (event.isCancelled()) return true;
                 }
             }
             // Translation
-            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding) {
+            if (ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding) {
                 packet = ((ServerPacket.ComponentHolding) packet).copyWithOperator(component ->
                         MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
@@ -363,7 +387,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                     var nextState = PacketVanilla.nextServerState(serverPacket, state);
                     if (nextState != state) setServerState(nextState);
 
-                    PacketWriting.writeFramedPacket(buffer, state, serverPacket, compressionThreshold);
+                    PacketWriting.writeFramedPacket(buffer, writer, state, serverPacket, compressionThreshold);
                     yield true;
                 }
                 case FramedPacket framedPacket -> {
@@ -371,16 +395,16 @@ public class PlayerSocketConnection extends PlayerConnection {
                     yield writeBuffer(buffer, body, 0, body.capacity());
                 }
                 case CachedPacket cachedPacket -> {
-                    final NetworkBuffer body = cachedPacket.body(state);
+                    final NetworkBuffer body = cachedPacket.body(state, writer);
                     if (body != null) {
                         yield writeBuffer(buffer, body, 0, body.capacity());
                     } else {
-                        PacketWriting.writeFramedPacket(buffer, state, cachedPacket.packet(state), compressionThreshold);
+                        PacketWriting.writeFramedPacket(buffer, writer, state, cachedPacket.packet(state, writer), compressionThreshold);
                         yield true;
                     }
                 }
                 case LazyPacket lazyPacket -> {
-                    PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
+                    PacketWriting.writeFramedPacket(buffer, writer, state, lazyPacket.packet(), compressionThreshold);
                     yield true;
                 }
                 case BufferedPacket bufferedPacket -> {
@@ -406,11 +430,32 @@ public class PlayerSocketConnection extends PlayerConnection {
         return true;
     }
 
-    private NetworkBuffer writeLeftover = null;
+    @Blocking
+    public void awaitFlush() throws InterruptedException {
+        // Consume queued packets
+        final var packetQueue = this.packetQueue;
+        if (!packetQueue.isEmpty()) return;
+        if (ServerFlag.FASTER_SOCKET_WRITES) {
+            assert this.writeThread == Thread.currentThread() : "writeThread should be the current thread";
+            this.writeSignaled.set(false);
+            // We cant sleep forever if writeLeftover still exists, we fall back to a fixed parkNanos, which is also spirituous
+            final NetworkBuffer writeLeftover = this.writeLeftover;
+            if (writeLeftover != null) {
+                LockSupport.parkNanos(writeLeftover, 1_000_000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
+            } else {
+                LockSupport.park(this);
+            }
+        } else {
+            Thread.sleep(1000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
+        }
+    }
 
-    public void flushSync() throws IOException {
+    @Blocking
+    public void flushSync(PacketParser<ServerPacket> writer) throws IOException {
+        final var channel = this.channel;
+        if (!channel.isConnected()) throw new EOFException("Channel is closed");
         // Write leftover if any
-        NetworkBuffer leftover = this.writeLeftover;
+        final NetworkBuffer leftover = this.writeLeftover;
         if (leftover != null) {
             final boolean success = leftover.writeChannel(channel);
             if (success) {
@@ -421,30 +466,14 @@ public class PlayerSocketConnection extends PlayerConnection {
                 return;
             }
         }
-        // Consume queued packets
-        var packetQueue = this.packetQueue;
-        if (packetQueue.isEmpty()) {
-            if (!ServerFlag.FASTER_SOCKET_WRITES) {
-                try {
-                    // Can probably be improved by waking up at the end of the tick
-                    // But this work well enough and without additional state.
-                    Thread.sleep(1000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                assert this.writeThread == Thread.currentThread(): "writeThread should be the current thread";
-                this.writeSignaled.set(false);
-                LockSupport.park(this);
-                assert this.packetQueue.peek() != null : "packet queue should not be empty";
-            }
-        }
-        if (!channel.isConnected()) throw new EOFException("Channel is closed");
-        NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
+        final MessagePassingQueue<SendablePacket> packetQueue = this.packetQueue;
+        if (packetQueue.isEmpty()) return; // Nothing to write, no need to access the pool
+        final NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         // Write to buffer
         PacketWriting.writeQueue(buffer, packetQueue, 1, (b, packet) -> {
+            final AtomicLong sentPacketCounter = this.sentPacketCounter;
             final boolean compressed = sentPacketCounter.get() > compressionStart;
-            final boolean success = writeSendable(b, packet, compressed);
+            final boolean success = writeSendable(b, writer, packet, compressed);
             if (success) sentPacketCounter.getAndIncrement();
             return success;
         });

@@ -7,7 +7,6 @@ import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
@@ -71,10 +70,6 @@ public class WindowListener {
         ItemStack cursorItem = player.getInventory().getCursorItem();
         if (!ItemStack.Hash.of(cursorItem).equals(packet.clickedItem()))
             player.sendPacket(new SetCursorItemPacket(cursorItem));
-    }
-
-    public static void pong(ClientPongPacket packet, Player player) {
-        // Empty
     }
 
     public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {

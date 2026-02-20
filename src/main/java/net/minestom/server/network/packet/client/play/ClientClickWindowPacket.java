@@ -12,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record ClientClickWindowPacket(int windowId, int stateId,
                                       short slot, byte button, ClickType clickType,
                                       Map<Short, ItemStack.Hash> changedSlots,
-                                      ItemStack.Hash clickedItem) implements ClientPacket {
+                                      ItemStack.Hash clickedItem) implements ClientPacket.Play {
     public static final int MAX_CHANGED_SLOTS = 128;
 
     public static final NetworkBuffer.Type<ClientClickWindowPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -20,7 +20,7 @@ public record ClientClickWindowPacket(int windowId, int stateId,
             VAR_INT, ClientClickWindowPacket::stateId,
             SHORT, ClientClickWindowPacket::slot,
             BYTE, ClientClickWindowPacket::button,
-            Enum(ClickType.class), ClientClickWindowPacket::clickType,
+            ClickType.NETWORK_TYPE, ClientClickWindowPacket::clickType,
             SHORT.mapValue(ItemStack.Hash.NETWORK_TYPE, MAX_CHANGED_SLOTS), ClientClickWindowPacket::changedSlots,
             ItemStack.Hash.NETWORK_TYPE, ClientClickWindowPacket::clickedItem,
             ClientClickWindowPacket::new);
@@ -36,6 +36,8 @@ public record ClientClickWindowPacket(int windowId, int stateId,
         CLONE,
         THROW,
         QUICK_CRAFT,
-        PICKUP_ALL
+        PICKUP_ALL;
+
+        public static final NetworkBuffer.Type<ClickType> NETWORK_TYPE = NetworkBuffer.Enum(ClickType.class);
     }
 }

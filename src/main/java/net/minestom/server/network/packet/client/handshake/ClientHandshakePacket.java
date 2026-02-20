@@ -9,7 +9,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientHandshakePacket(int protocolVersion, String serverAddress,
-                                    int serverPort, Intent intent) implements ClientPacket {
+                                    int serverPort, Intent intent) implements ClientPacket.Handshake {
 
     public ClientHandshakePacket {
         if (serverAddress.length() > maxHandshakeLength()) {
@@ -39,7 +39,7 @@ public record ClientHandshakePacket(int protocolVersion, String serverAddress,
                 case 1 -> STATUS;
                 case 2 -> LOGIN;
                 case 3 -> TRANSFER;
-                default -> throw new IllegalArgumentException("Unknown connection intent: " + id);
+                default -> throw new IllegalArgumentException("Unknown connection intent id: " + id);
             };
         }
 

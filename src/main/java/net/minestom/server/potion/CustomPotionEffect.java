@@ -54,29 +54,16 @@ public record CustomPotionEffect(PotionEffect id, Settings settings) {
             boolean isAmbient, boolean showParticles, boolean showIcon,
             @Nullable Settings hiddenEffect
     ) {
-        public static final NetworkBuffer.Type<Settings> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, Settings value) {
-                buffer.write(VAR_INT, value.amplifier);
-                buffer.write(VAR_INT, value.duration);
-                buffer.write(BOOLEAN, value.isAmbient);
-                buffer.write(BOOLEAN, value.showParticles);
-                buffer.write(BOOLEAN, value.showIcon);
-                buffer.write(NETWORK_TYPE.optional(), value.hiddenEffect);
-            }
+        public static final NetworkBuffer.Type<Settings> NETWORK_TYPE = NetworkBuffer.Recursive(self -> NetworkBufferTemplate.template(
+                VAR_INT, Settings::amplifier,
+                VAR_INT, Settings::duration,
+                BOOLEAN, Settings::isAmbient,
+                BOOLEAN, Settings::showParticles,
+                BOOLEAN, Settings::showIcon,
+                self.optional(), Settings::hiddenEffect,
+                Settings::new
+        ));
 
-            @Override
-            public Settings read(NetworkBuffer buffer) {
-                return new Settings(
-                        buffer.read(VAR_INT),
-                        buffer.read(VAR_INT),
-                        buffer.read(BOOLEAN),
-                        buffer.read(BOOLEAN),
-                        buffer.read(BOOLEAN),
-                        buffer.read(NETWORK_TYPE.optional())
-                );
-            }
-        };
         public static final Codec<Settings> CODEC = Codec.Recursive(self -> StructCodec.struct(
                 "amplifier", Codec.BYTE.optional((byte) 0), s -> (byte) s.amplifier,
                 "duration", Codec.INT.optional(0), Settings::duration,

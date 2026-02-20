@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
@@ -21,17 +22,11 @@ public record SpawnEntityPacket(
             buffer.write(VAR_INT, value.entityId);
             buffer.write(UUID, value.uuid);
             buffer.write(EntityType.NETWORK_TYPE, value.type);
-
-            buffer.write(DOUBLE, value.position.x());
-            buffer.write(DOUBLE, value.position.y());
-            buffer.write(DOUBLE, value.position.z());
-
+            buffer.write(VECTOR3D, value.position);
             buffer.write(LP_VECTOR3, value.velocity);
-
-            buffer.write(BYTE, (byte) (value.position.pitch() * 256 / 360));
-            buffer.write(BYTE, (byte) (value.position.yaw() * 256 / 360));
-            buffer.write(BYTE, (byte) (value.headRot * 256 / 360));
-
+            buffer.write(LP_ANGLE, value.position.pitch());
+            buffer.write(LP_ANGLE, value.position.yaw());
+            buffer.write(LP_ANGLE, value.headRot);
             buffer.write(VAR_INT, value.data);
         }
 
@@ -40,15 +35,15 @@ public record SpawnEntityPacket(
             int entityId = buffer.read(VAR_INT);
             UUID uuid = buffer.read(UUID);
             EntityType type = buffer.read(EntityType.NETWORK_TYPE);
-            double x = buffer.read(DOUBLE), y = buffer.read(DOUBLE), z = buffer.read(DOUBLE);
+            Point xyz = buffer.read(VECTOR3D);
             Vec velocity = buffer.read(LP_VECTOR3);
-            float pitch = buffer.read(BYTE) * 360f / 256f;
-            float yaw = buffer.read(BYTE) * 360f / 256f;
-            float headRot = buffer.read(BYTE) * 360f / 256f;
+            float pitch = buffer.read(LP_ANGLE);
+            float yaw = buffer.read(LP_ANGLE);
+            float headRot = buffer.read(LP_ANGLE);
             int data = buffer.read(VAR_INT);
             return new SpawnEntityPacket(
                     entityId, uuid, type,
-                    new Pos(x, y, z, yaw, pitch),
+                    new Pos(xyz, yaw, pitch),
                     headRot, data, velocity
             );
         }

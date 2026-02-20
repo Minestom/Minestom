@@ -8,6 +8,7 @@ import net.kyori.adventure.util.TriState;
 import net.minestom.server.codec.Transcoder.ListBuilder;
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.gamedata.DataPack;
@@ -530,16 +531,16 @@ final class CodecImpl {
                 return intArrayResult.cast();
             if (intArray.length != 3)
                 return new Result.Error<>("Invalid length for Point, expected 3 but got " + intArray.length);
-            return new Result.Ok<>(new Vec(intArray[0], intArray[1], intArray[2]));
+            return new Result.Ok<>(new BlockVec(intArray[0], intArray[1], intArray[2]));
         }
 
         @Override
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable Point value) {
             if (value == null) return new Result.Error<>("null");
             return new Result.Ok<>(coder.createIntArray(new int[]{
-                    (int) value.x(),
-                    (int) value.y(),
-                    (int) value.z()
+                    value.blockX(),
+                    value.blockY(),
+                    value.blockZ()
             }));
         }
     }

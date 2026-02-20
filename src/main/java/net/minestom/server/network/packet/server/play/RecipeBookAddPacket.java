@@ -20,6 +20,10 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
     public static final byte FLAG_NOTIFICATION = 1;
     public static final byte FLAG_HIGHLIGHT = 1 << 1;
 
+    public RecipeBookAddPacket {
+        entries = List.copyOf(entries);
+    }
+
     public static final NetworkBuffer.Type<RecipeBookAddPacket> SERIALIZER = NetworkBufferTemplate.template(
             Entry.SERIALIZER.list(), RecipeBookAddPacket::entries,
             BOOLEAN, RecipeBookAddPacket::replace,
@@ -39,6 +43,10 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
                 Ingredient.NETWORK_TYPE.list().optional(), Entry::craftingRequirements,
                 NetworkBuffer.BYTE, Entry::flags,
                 Entry::new);
+
+        public Entry {
+            craftingRequirements = craftingRequirements != null ? List.copyOf(craftingRequirements) : null;
+        }
 
         public Entry(int displayId, RecipeDisplay display,
                      @Nullable Integer group, RecipeBookCategory category,
@@ -62,7 +70,7 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
         final var components = new ArrayList<Component>();
         for (Entry entry : entries)
             components.addAll(entry.display.components());
-        return components;
+        return List.copyOf(components);
     }
 
     @Override

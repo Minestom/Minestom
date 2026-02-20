@@ -13,7 +13,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
-import net.minestom.server.utils.ObjectPool;
+import net.minestom.server.utils.collection.ObjectPool;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -21,8 +21,8 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @ApiStatus.Internal
 public final class PacketVanilla {
-    public static final PacketParser<ClientPacket> CLIENT_PACKET_PARSER = new PacketParser.Client();
-    public static final PacketParser<ServerPacket> SERVER_PACKET_PARSER = new PacketParser.Server();
+    public static final PacketParser.Client CLIENT_PACKET_PARSER = new PacketParser.Client();
+    public static final PacketParser.Server SERVER_PACKET_PARSER = new PacketParser.Server();
 
     /**
      * Pool containing a buffer able to hold the largest packet.
@@ -30,7 +30,8 @@ public final class PacketVanilla {
      * Size starts with {@link ServerFlag#POOLED_BUFFER_SIZE} and doubles until {@link ServerFlag#MAX_PACKET_SIZE}.
      */
     public static final ObjectPool<NetworkBuffer> PACKET_POOL = ObjectPool.pool(
-            () -> NetworkBuffer.staticBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
+            ServerFlag.PACKET_POOL_SIZE,
+            () -> NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
             NetworkBuffer::clear);
 
     public static ConnectionState nextClientState(ClientPacket packet, ConnectionState currentState) {
@@ -39,9 +40,8 @@ public final class PacketVanilla {
                 case STATUS -> ConnectionState.STATUS;
                 case LOGIN, TRANSFER -> ConnectionState.LOGIN;
             };
-            case ClientLoginAcknowledgedPacket ignored -> ConnectionState.CONFIGURATION;
-            case ClientConfigurationAckPacket ignored -> ConnectionState.CONFIGURATION;
-            case ClientFinishConfigurationPacket ignored -> ConnectionState.PLAY;
+            case ClientLoginAcknowledgedPacket _, ClientConfigurationAckPacket _ -> ConnectionState.CONFIGURATION;
+            case ClientFinishConfigurationPacket _ -> ConnectionState.PLAY;
             default -> currentState;
         };
     }
@@ -51,9 +51,8 @@ public final class PacketVanilla {
         if (currentState == ConnectionState.HANDSHAKE)
             throw new IllegalStateException("No server Handshake packet exists");
         return switch (packet) {
-            case LoginSuccessPacket ignored -> ConnectionState.CONFIGURATION;
-            case StartConfigurationPacket ignored -> ConnectionState.CONFIGURATION;
-            case FinishConfigurationPacket ignored -> ConnectionState.PLAY;
+            case LoginSuccessPacket _, StartConfigurationPacket _ -> ConnectionState.CONFIGURATION;
+            case FinishConfigurationPacket _ -> ConnectionState.PLAY;
             default -> currentState;
         };
     }

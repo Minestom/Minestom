@@ -28,6 +28,10 @@ public record LastSeenMessages(List<MessageSignature> entries) {
                 MessageSignature.Packed.SERIALIZER.list(MAX_ENTRIES), Packed::entries,
                 Packed::new
         );
+
+        public Packed {
+            entries = List.copyOf(entries);
+        }
     }
 
     public record Update(int offset, BitSet acknowledged) {
@@ -36,5 +40,9 @@ public record LastSeenMessages(List<MessageSignature> entries) {
                 FixedBitSet(20), Update::acknowledged,
                 Update::new
         );
+
+        public Update {
+            acknowledged = (BitSet) acknowledged.clone();
+        }
     }
 }

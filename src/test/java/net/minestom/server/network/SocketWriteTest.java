@@ -3,6 +3,8 @@ package net.minestom.server.network;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -12,6 +14,7 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+@EnvTest // PacketPool
 public class SocketWriteTest {
 
     record IntPacket(int value) implements ServerPacket.Play {
@@ -27,7 +30,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeSingleUncompressed() {
+    public void writeSingleUncompressed(Env ignored) {
         var packet = new IntPacket(5);
 
         var buffer = PacketVanilla.PACKET_POOL.get();
@@ -39,7 +42,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeMultiUncompressed() {
+    public void writeMultiUncompressed(Env ignored) {
         var packet = new IntPacket(5);
 
         var buffer = PacketVanilla.PACKET_POOL.get();
@@ -52,7 +55,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeSingleCompressed() {
+    public void writeSingleCompressed(Env ignored) {
         var string = "Hello world!".repeat(200);
         var stringLength = string.getBytes(StandardCharsets.UTF_8).length;
         var lengthLength = getVarIntSize(stringLength);
@@ -68,7 +71,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeSingleCompressedSmall() {
+    public void writeSingleCompressedSmall(Env ignored) {
         var packet = new IntPacket(5);
 
         var buffer = PacketVanilla.PACKET_POOL.get();
@@ -80,7 +83,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeMultiCompressedSmall() {
+    public void writeMultiCompressedSmall(Env ignored) {
         var packet = new IntPacket(5);
 
         var buffer = PacketVanilla.PACKET_POOL.get();

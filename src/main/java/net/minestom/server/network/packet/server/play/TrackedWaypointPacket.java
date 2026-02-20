@@ -39,6 +39,14 @@ public record TrackedWaypointPacket(
                 Icon.NETWORK_TYPE, Waypoint::icon,
                 Target.NETWORK_TYPE, Waypoint::target,
                 Waypoint::new);
+
+        public Waypoint(UUID id, Icon icon, Target target) {
+            this(Either.left(id), icon, target);
+        }
+
+        public Waypoint(String id, Icon icon, Target target) {
+            this(Either.right(id), icon, target);
+        }
     }
 
     public record Icon(
@@ -64,7 +72,8 @@ public record TrackedWaypointPacket(
                 .unionType(Target::dataSerializer, Target::targetToType);
 
         record Empty() implements Target {
-            public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBufferTemplate.template(new Empty());
+            public static final Empty INSTANCE = new Empty();
+            public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
         }
 
         record Vec3i(Point point) implements Target {
@@ -87,7 +96,10 @@ public record TrackedWaypointPacket(
         }
 
         enum Type {
-            EMPTY, VEC3I, CHUNK, AZIMUTH;
+            EMPTY,
+            VEC3I,
+            CHUNK,
+            AZIMUTH;
 
             public static final NetworkBuffer.Type<Type> NETWORK_TYPE = NetworkBuffer.Enum(Type.class);
         }
@@ -103,10 +115,10 @@ public record TrackedWaypointPacket(
 
         private static Type targetToType(Target target) {
             return switch (target) {
-                case Empty ignored -> Type.EMPTY;
-                case Vec3i ignored -> Type.VEC3I;
-                case Chunk ignored -> Type.CHUNK;
-                case Azimuth ignored -> Type.AZIMUTH;
+                case Empty _ -> Type.EMPTY;
+                case Vec3i _ -> Type.VEC3I;
+                case Chunk _ -> Type.CHUNK;
+                case Azimuth _ -> Type.AZIMUTH;
             };
         }
     }

@@ -338,9 +338,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
             if (entityDamageEvent.shouldAnimate()) {
                 sendPacketToViewersAndSelf(new DamageEventPacket(
-                        getEntityId(), damage.getTypeId(),
-                        damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1,
-                        damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1,
+                        getEntityId(), damage.getType(),
+                        damage.getAttacker() == null ? null : damage.getAttacker().getEntityId(),
+                        damage.getSource() == null ? null : damage.getSource().getEntityId(),
                         damage.getSourcePosition()
                 ));
             }

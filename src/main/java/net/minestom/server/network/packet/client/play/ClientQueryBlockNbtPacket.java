@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientQueryBlockNbtPacket(int transactionId, Point blockPosition) implements ClientPacket {
+public record ClientQueryBlockNbtPacket(int transactionId, Point blockPosition) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientQueryBlockNbtPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientQueryBlockNbtPacket::transactionId,
             BLOCK_POSITION, ClientQueryBlockNbtPacket::blockPosition,

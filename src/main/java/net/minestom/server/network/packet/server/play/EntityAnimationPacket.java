@@ -1,24 +1,17 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record EntityAnimationPacket(int entityId, Animation animation) implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<EntityAnimationPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, EntityAnimationPacket value) {
-            buffer.write(VAR_INT, value.entityId);
-            buffer.write(BYTE, (byte) value.animation.ordinal());
-        }
-
-        @Override
-        public EntityAnimationPacket read(NetworkBuffer buffer) {
-            return new EntityAnimationPacket(buffer.read(VAR_INT), Animation.values()[buffer.read(BYTE)]);
-        }
-    };
+    public static final NetworkBuffer.Type<EntityAnimationPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, EntityAnimationPacket::entityId,
+            Animation.NETWORK_TYPE, EntityAnimationPacket::animation,
+            EntityAnimationPacket::new
+    );
 
     public enum Animation {
         SWING_MAIN_ARM,
@@ -26,6 +19,8 @@ public record EntityAnimationPacket(int entityId, Animation animation) implement
         LEAVE_BED,
         SWING_OFF_HAND,
         CRITICAL_EFFECT,
-        MAGICAL_CRITICAL_EFFECT
+        MAGICAL_CRITICAL_EFFECT;
+
+        public static final NetworkBuffer.Type<Animation> NETWORK_TYPE = NetworkBuffer.Enum(Animation.class);
     }
 }

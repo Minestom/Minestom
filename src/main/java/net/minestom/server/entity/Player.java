@@ -786,7 +786,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         chunkQueueLock.lock();
         try {
             int batchSize = 0;
-            sendPacket(new ChunkBatchStartPacket());
+            sendPacket(ChunkBatchStartPacket.INSTANCE);
             while (!chunkQueue.isEmpty() && pendingChunkCount >= 1f) {
                 long chunkIndex = chunkQueue.dequeueLong();
                 int chunkX = CoordConversion.chunkIndexGetX(chunkIndex), chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
@@ -1388,13 +1388,22 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private void facePosition(FacePoint facePoint, Point targetPosition,
                               @Nullable Entity entity, @Nullable FacePoint targetPoint) {
-        final int entityId = entity != null ? entity.getEntityId() : 0;
-        sendPacket(new FacePlayerPacket(
-                facePoint == FacePoint.EYE ?
-                        FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET, targetPosition,
-                entityId,
-                targetPoint == FacePoint.EYE ?
-                        FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET));
+        if (entity != null && targetPoint != null) {
+            sendPacket(new FacePlayerPacket(
+                    FacePlayerPacket.FacePosition.fromFacePoint(facePoint),
+                    targetPosition,
+                    new FacePlayerPacket.EntityData(
+                            entity.getEntityId(),
+                            FacePlayerPacket.FacePosition.fromFacePoint(targetPoint)
+                    )
+            ));
+        } else {
+            sendPacket(new FacePlayerPacket(
+                    FacePlayerPacket.FacePosition.fromFacePoint(facePoint),
+                    targetPosition,
+                    null
+            ));
+        }
     }
 
     /**
@@ -1533,7 +1542,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.playerConnection.sendPackets(packets);
     }
 
-    public void sendPackets(Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<? extends SendablePacket> packets) {
         this.playerConnection.sendPackets(packets);
     }
 
@@ -1890,7 +1899,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public void lookAt(Point point) {
         // Let the player's client provide updated position values
-        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, point, 0, null));
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, point, null));
     }
 
     /**
@@ -1904,7 +1913,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public void lookAt(Entity entity) {
         // Let the player's client provide updated position values
-        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, entity.getPosition(), entity.getEntityId(), FacePlayerPacket.FacePosition.EYES));
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, entity.getPosition(), new FacePlayerPacket.EntityData(entity.getEntityId(), FacePlayerPacket.FacePosition.EYES)));
     }
 
     /**
@@ -2263,8 +2272,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private PlayerInfoUpdatePacket.Entry infoEntry() {
         final PlayerSkin skin = this.skin;
-        List<PlayerInfoUpdatePacket.Property> prop = skin != null ?
-                List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())) :
+        List<GameProfile.Property> prop = skin != null ?
+                List.of(new GameProfile.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
         byte hatIndex = ((MetadataDef.Entry.BitMask) MetadataDef.Player.IS_HAT_ENABLED).bitMask();
         return new PlayerInfoUpdatePacket.Entry(getUuid(), getUsername(), prop,

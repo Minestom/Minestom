@@ -87,4 +87,17 @@ public final class WeightedList<T> implements Iterable<T> {
                     Entry::new);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof WeightedList<?> that)) return false;
+        return totalWeight == that.totalWeight && entries.equals(that.entries);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entries.hashCode();
+        result = 31 * result + totalWeight;
+        return result;
+    }
 }

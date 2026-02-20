@@ -17,7 +17,7 @@ public record TestInstanceBlockStatus(
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<TestInstanceBlockStatus> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.COMPONENT, TestInstanceBlockStatus::status,
-            NetworkBuffer.VECTOR3I, TestInstanceBlockStatus::size,
+            NetworkBuffer.VECTOR3I.optional(), TestInstanceBlockStatus::size,
             TestInstanceBlockStatus::new);
 
     @Override
