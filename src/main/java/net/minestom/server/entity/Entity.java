@@ -830,21 +830,23 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Changes the entity instance, i.e. spawns it.
      *
      * @param instance      the new instance of the entity
-     * @param spawnPosition the spawn position for the entity.
+     * @param defaultSpawnPosition the default spawn position for the entity.
      * @return a {@link CompletableFuture} called once the entity's instance has been set,
      * this is due to chunks needing to load
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
-    public CompletableFuture<Void> setInstance(Instance instance, Pos spawnPosition) {
+    public CompletableFuture<Void> setInstance(Instance instance, Pos defaultSpawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
         final Instance previousInstance = this.instance;
         if (Objects.equals(previousInstance, instance)) {
-            return teleport(spawnPosition); // Already in the instance, teleport to spawn point
+            return teleport(defaultSpawnPosition); // Already in the instance, teleport to spawn point
         }
-        AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
+        AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this, defaultSpawnPosition);
         EventDispatcher.call(event);
         if (event.isCancelled()) return null; // TODO what to return?
+
+        final Pos spawnPosition = event.getSpawnPosition();
 
         if (previousInstance != null) removeFromInstance(previousInstance);
         if (this instanceof Player player) instance.bossBars().forEach(player::showBossBar);
