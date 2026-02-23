@@ -9,6 +9,8 @@ import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
+import net.minestom.server.instance.block.property.Property;
+import net.minestom.server.instance.block.property.PropertyEnum;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
@@ -50,6 +52,35 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      */
     @Contract(pure = true)
     Block withProperty(String property, String value);
+
+    /**
+     * Creates a new block with the property {@code property} set to {@code value}.
+     *
+     * @param property the property
+     * @param value    the typed property value
+     * @return a new block with its property changed
+     * @throws IllegalArgumentException if the property or value are invalid
+     */
+    default <V, P extends Property<V>> Block withProperty(P property, V value) {
+        return withProperty(property.key(), property.untypedValueOf(value));
+    }
+
+    /**
+     * Creates a new block with the property associated with the {@code value}
+     *
+     * @param value the typed property value with exactly one associated property
+     * @return a new block with its property changed
+     * @throws IllegalArgumentException if the value is associated with multiple properties,
+     * the property is invalid, or the value is invalid
+     */
+    default <V extends PropertyEnum> Block withProperty(V value) {
+        final String property = value.property();
+        if (property == null) {
+            throw new IllegalArgumentException("property enum '" +
+                    value.getClass().getSimpleName() + "' has multiple properties associated with it");
+        }
+        return withProperty(property, value.untypedValue());
+    }
 
     /**
      * Changes multiple properties at once.
@@ -165,6 +196,22 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      */
     @Contract(pure = true)
     @Nullable String getProperty(String property);
+
+    /**
+     * Returns a typed property value from {@link #properties()}.
+     *
+     * @param property the property
+     * @return the typed property value, null if not present (due to an invalid property, or value)
+     * @throws IllegalArgumentException if the property or the value are invalid.
+     */
+    @Contract(pure = true)
+    default <V, P extends Property<V>> V getProperty(P property) {
+        final String stringValue = getProperty(property.key());
+        if (stringValue == null) {
+            throw new IllegalArgumentException("block " + this + " does not have property '" + property.key() + "'");
+        }
+        return property.typedValueOf(stringValue);
+    }
 
     @Contract(pure = true)
     Collection<Block> possibleStates();
