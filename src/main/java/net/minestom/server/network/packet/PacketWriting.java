@@ -45,7 +45,7 @@ public final class PacketWriting {
                                              PacketRegistry<? super T> registry,
                                              T packet,
                                              int compressionThreshold) throws IndexOutOfBoundsException {
-        final var packetInfo = registry.packetInfo(packet);
+        final PacketRegistry.PacketInfo<? super T> packetInfo = registry.packetInfo(packet);
         writeFramedPacket(
                 buffer,
                 packetInfo, packet,
@@ -156,7 +156,7 @@ public final class PacketWriting {
             PacketRegistry<? super T> registry,
             T packet,
             int compressionThreshold) {
-        final var packetInfo = registry.packetInfo(packet);
+        final PacketRegistry.PacketInfo<? super T> packetInfo = registry.packetInfo(packet);
         final int id = packetInfo.id();
         final NetworkBuffer.Type<? super T> serializer = packetInfo.serializer();
         try {
