@@ -369,7 +369,7 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
             }
             if (suffixWordSorted.isEmpty()) return;
             // Don't make a bazillion enums/property constants.
-            if (suffixWordSorted.size() > 4) {
+            if (suffixWordSorted.size() > 2) {
                 suffixWordSorted.values().stream()
                         .flatMap(propertyValues -> propertyValues.properties.values().stream())
                         .forEach(property -> property.blocks.forEach(
@@ -465,7 +465,7 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         @Nullable
         Map<String, List<Identifier>> trySplit() {
             if (commonPart().words.length > 0) return null;
-            if (suffixWordSorted.size() <= 1 || suffixWordSorted.size() > 4) return null;
+            if (suffixWordSorted.size() <= 1 || suffixWordSorted.size() >= 4) return null;
 
             for (final var entry : suffixWordSorted.entrySet()) {
                 final int groupSizeRatio = blocks.size() / (blocks.size() - entry.getValue().size());
