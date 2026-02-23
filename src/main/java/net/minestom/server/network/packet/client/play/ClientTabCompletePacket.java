@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientTabCompletePacket(int transactionId, String text) implements ClientPacket {
+public record ClientTabCompletePacket(int transactionId, String text) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientTabCompletePacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientTabCompletePacket::transactionId,
             STRING, ClientTabCompletePacket::text,

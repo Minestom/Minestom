@@ -8,7 +8,7 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket.FLAG_HORIZONTAL_COLLISION;
 import static net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket.FLAG_ON_GROUND;
 
-public record ClientPlayerPositionStatusPacket(byte flags) implements ClientPacket {
+public record ClientPlayerPositionStatusPacket(byte flags) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPlayerPositionStatusPacket> SERIALIZER = NetworkBufferTemplate.template(
             BYTE, ClientPlayerPositionStatusPacket::flags,
             ClientPlayerPositionStatusPacket::new);

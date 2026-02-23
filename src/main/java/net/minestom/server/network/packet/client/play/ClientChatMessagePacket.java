@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientChatMessagePacket(String message, long timestamp,
                                       long salt, byte @Nullable [] signature,
-                                      int ackOffset, BitSet ackList, byte checksum) implements ClientPacket {
+                                      int ackOffset, BitSet ackList, byte checksum) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientChatMessagePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientChatMessagePacket::message,
             LONG, ClientChatMessagePacket::timestamp,

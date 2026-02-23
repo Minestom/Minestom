@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 
-public record ClientInputPacket(byte flags) implements ClientPacket {
+public record ClientInputPacket(byte flags) implements ClientPacket.Play {
     private static final byte FLAG_FORWARD = 1;
     private static final byte FLAG_BACKWARD = 1 << 1;
     private static final byte FLAG_LEFT = 1 << 2;
