@@ -3,6 +3,7 @@ package net.minestom.server.entity.pathfinding.generators;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.pathfinding.PathType;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.block.Block;
 
@@ -10,9 +11,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.OptionalDouble;
 import java.util.Set;
+import java.util.function.Function;
 
 public class FlyingNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
+    private Function<PathType, Float> malusProvider = PathType::getMalus;
+    private double maxStepHeight = 1.0;
+    private boolean canFloat;
 
     @Override
     public Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited, PNode current, Point goal, BoundingBox boundingBox) {
@@ -27,44 +32,42 @@ public class FlyingNodeGenerator implements NodeGenerator {
                 if (x == 0 && z == 0) continue;
                 double cost = Math.sqrt(x * x + z * z) * 0.98;
 
-                double currentLevelPointX = current.blockX() + 0.5 + x;
-                double currentLevelPointY = current.blockY() + 0.5;
-                double currentLevelPointZ = current.blockZ() + 0.5 + z;
+                double levelX = current.blockX() + 0.5 + x;
+                double levelY = current.blockY() + 0.5;
+                double levelZ = current.blockZ() + 0.5 + z;
 
-                double upPointX = current.blockX() + 0.5 + x;
-                double upPointY = current.blockY() + 1 + 0.5;
-                double upPointZ = current.blockZ() + 0.5 + z;
+                double upX = current.blockX() + 0.5 + x;
+                double upY = current.blockY() + 1 + 0.5;
+                double upZ = current.blockZ() + 0.5 + z;
 
-                double downPointX = current.blockX() + 0.5 + x;
-                double downPointY = current.blockY() - 1 + 0.5;
-                double downPointZ = current.blockZ() + 0.5 + z;
+                double downX = current.blockX() + 0.5 + x;
+                double downY = current.blockY() - 1 + 0.5;
+                double downZ = current.blockZ() + 0.5 + z;
 
-                var nodeWalk = createFly(getter, new Vec(currentLevelPointX, currentLevelPointY, currentLevelPointZ), boundingBox, cost, current, goal, visited);
-                if (nodeWalk != null && !visited.contains(nodeWalk)) nearby.add(nodeWalk);
+                var nodeLevel = createFly(getter, new Vec(levelX, levelY, levelZ), boundingBox, cost, current, goal, visited);
+                if (nodeLevel != null && !visited.contains(nodeLevel)) nearby.add(nodeLevel);
 
-                var nodeJump = createFly(getter, new Vec(upPointX, upPointY, upPointZ), boundingBox, cost, current, goal, visited);
-                if (nodeJump != null && !visited.contains(nodeJump)) nearby.add(nodeJump);
+                var nodeUp = createFly(getter, new Vec(upX, upY, upZ), boundingBox, cost, current, goal, visited);
+                if (nodeUp != null && !visited.contains(nodeUp)) nearby.add(nodeUp);
 
-                var nodeFall = createFly(getter, new Vec(downPointX, downPointY, downPointZ), boundingBox, cost, current, goal, visited);
-                if (nodeFall != null && !visited.contains(nodeFall)) nearby.add(nodeFall);
+                var nodeDown = createFly(getter, new Vec(downX, downY, downZ), boundingBox, cost, current, goal, visited);
+                if (nodeDown != null && !visited.contains(nodeDown)) nearby.add(nodeDown);
             }
         }
 
-        // Straight up
-        double upPointX = current.x();
-        double upPointY = current.blockY() + 1 + 0.5;
-        double upPointZ = current.z();
+        double upX = current.x();
+        double upY = current.blockY() + 1 + 0.5;
+        double upZ = current.z();
 
-        var nodeJump = createFly(getter, new Vec(upPointX, upPointY, upPointZ), boundingBox, 2, current, goal, visited);
-        if (nodeJump != null && !visited.contains(nodeJump)) nearby.add(nodeJump);
+        var nodeUp = createFly(getter, new Vec(upX, upY, upZ), boundingBox, 2, current, goal, visited);
+        if (nodeUp != null && !visited.contains(nodeUp)) nearby.add(nodeUp);
 
-        // Straight down
-        double downPointX = current.x();
-        double downPointY = current.blockY() - 1 + 0.5;
-        double downPointZ = current.z();
+        double downX = current.x();
+        double downY = current.blockY() - 1 + 0.5;
+        double downZ = current.z();
 
-        var nodeFall = createFly(getter, new Vec(downPointX, downPointY, downPointZ), boundingBox, 2, current, goal, visited);
-        if (nodeFall != null && !visited.contains(nodeFall)) nearby.add(nodeFall);
+        var nodeDown = createFly(getter, new Vec(downX, downY, downZ), boundingBox, 2, current, goal, visited);
+        if (nodeDown != null && !visited.contains(nodeDown)) nearby.add(nodeDown);
 
         return nearby;
     }
@@ -75,15 +78,19 @@ public class FlyingNodeGenerator implements NodeGenerator {
     }
 
     private PNode createFly(Block.Getter getter, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
-        var n = newNode(start, cost, point, goal);
-        if (closed.contains(n)) return null;
+        var n = newNode(getter, start, cost, point, goal);
+        if (n == null || closed.contains(n)) return null;
         if (!canMoveTowards(getter, new Vec(start.x(), start.y(), start.z()), point, boundingBox)) return null;
         n.setType(PNode.Type.FLY);
         return n;
     }
 
-    private PNode newNode(PNode current, double cost, Point point, Point goal) {
-        tempNode.setG(current.g() + cost);
+    private PNode newNode(Block.Getter getter, PNode current, double cost, Point point, Point goal) {
+        PathType pathType = resolvePathType(getter, point);
+        float malus = malusProvider.apply(pathType);
+        if (malus < 0) return null;
+
+        tempNode.setG(current.g() + cost + malus);
         tempNode.setH(heuristic(point, goal));
         tempNode.setPoint(point.x(), point.y(), point.z());
 
@@ -96,5 +103,35 @@ public class FlyingNodeGenerator implements NodeGenerator {
     @Override
     public OptionalDouble gravitySnap(Block.Getter getter, double pointX, double pointY, double pointZ, BoundingBox boundingBox, double maxFall) {
         return OptionalDouble.of(pointY);
+    }
+
+    @Override
+    public void setPathMalusProvider(Function<PathType, Float> provider) {
+        this.malusProvider = provider;
+    }
+
+    @Override
+    public float pathMalus(PathType type) {
+        return malusProvider.apply(type);
+    }
+
+    @Override
+    public void setMaxUpStep(double stepHeight) {
+        this.maxStepHeight = Math.max(0.0, stepHeight);
+    }
+
+    @Override
+    public double maxUpStep() {
+        return maxStepHeight;
+    }
+
+    @Override
+    public void setCanFloat(boolean canFloat) {
+        this.canFloat = canFloat;
+    }
+
+    @Override
+    public boolean canFloatFlag() {
+        return canFloat;
     }
 }

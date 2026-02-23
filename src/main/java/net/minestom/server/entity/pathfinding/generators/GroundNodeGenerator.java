@@ -3,6 +3,7 @@ package net.minestom.server.entity.pathfinding.generators;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.pathfinding.PathType;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.block.Block;
 
@@ -10,11 +11,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.OptionalDouble;
 import java.util.Set;
+import java.util.function.Function;
 
 public class GroundNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
     private final BoundingBox.PointIterator pointIterator = new BoundingBox.PointIterator();
-    private final static int MAX_FALL_DISTANCE = 5;
+    private static final int MAX_FALL_DISTANCE = 5;
+    private Function<PathType, Float> malusProvider = PathType::getMalus;
+    private double maxStepHeight = 1.0;
+    private boolean canFloat;
 
     @Override
     public Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited, PNode current, Point goal, BoundingBox boundingBox) {
@@ -42,7 +47,8 @@ public class GroundNodeGenerator implements NodeGenerator {
                 var nodeWalk = createWalk(getter, floorPoint, boundingBox, cost, current, goal, visited);
                 if (nodeWalk != null && !visited.contains(nodeWalk)) nearby.add(nodeWalk);
 
-                for (int i = 1; i <= 1; ++i) {
+                final int maxJumpHeight = (int) Math.ceil(Math.max(1.0, maxStepHeight));
+                for (int i = 1; i <= maxJumpHeight; ++i) {
                     Point jumpPoint = new Vec(current.blockX() + 0.5 + x, current.blockY() + i, current.blockZ() + 0.5 + z);
                     OptionalDouble jumpPointY = gravitySnap(getter, jumpPoint.x(), jumpPoint.y(), jumpPoint.z(), boundingBox, MAX_FALL_DISTANCE);
                     if (jumpPointY.isEmpty()) continue;
@@ -60,8 +66,10 @@ public class GroundNodeGenerator implements NodeGenerator {
     }
 
     private PNode createWalk(Block.Getter getter, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
-        var n = newNode(start, cost, point, goal);
-        if (closed.contains(n)) return null;
+        var n = newNode(getter, start, cost, point, goal);
+        if (n == null || closed.contains(n)) return null;
+
+        if (point.y() - start.y() > maxStepHeight + Vec.EPSILON) return null;
 
         if (Math.abs(point.y() - start.y()) > Vec.EPSILON && point.y() < start.y()) {
             if (start.y() - point.y() > MAX_FALL_DISTANCE) return null;
@@ -76,11 +84,11 @@ public class GroundNodeGenerator implements NodeGenerator {
 
     private PNode createJump(Block.Getter getter, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
         if (Math.abs(point.y() - start.y()) < Vec.EPSILON) return null;
-        if (point.y() - start.y() > 2) return null;
+        if (point.y() - start.y() > maxStepHeight + 0.5) return null;
         if (point.blockX() != start.blockX() && point.blockZ() != start.blockZ()) return null;
 
-        var n = newNode(start, cost, point, goal);
-        if (closed.contains(n)) return null;
+        var n = newNode(getter, start, cost, point, goal);
+        if (n == null || closed.contains(n)) return null;
 
         if (pointInvalid(getter, point, boundingBox)) return null;
         if (pointInvalid(getter, new Vec(start.x(), start.y() + 1, start.z()), boundingBox)) return null;
@@ -89,8 +97,11 @@ public class GroundNodeGenerator implements NodeGenerator {
         return n;
     }
 
-    private PNode newNode(PNode current, double cost, Point point, Point goal) {
-        tempNode.setG(current.g() + cost);
+    private PNode newNode(Block.Getter getter, PNode current, double cost, Point point, Point goal) {
+        PathType pathType = resolvePathType(getter, point);
+        if (pathType.getMalus() < 0) return null;
+
+        tempNode.setG(current.g() + cost + malusProvider.apply(pathType));
         tempNode.setH(heuristic(point, goal));
         tempNode.setPoint(point.x(), point.y(), point.z());
 
@@ -111,19 +122,47 @@ public class GroundNodeGenerator implements NodeGenerator {
         final double pointY = (int) Math.floor(pointOrgY);
         final double pointZ = (int) Math.floor(pointOrgZ) + 0.5;
 
-        //Chunk c = instance.getChunkAt(pointX, pointZ);
-        //if (c == null) return OptionalDouble.of(pointY);
-
         for (int axis = 1; axis <= maxFall; ++axis) {
             pointIterator.reset(boundingBox, pointX, pointY, pointZ, BoundingBox.AxisMask.Y, -axis);
 
             while (pointIterator.hasNext()) {
                 var block = pointIterator.next();
-                if (getter.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).isSolid()) {
+                Block b = getter.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE);
+                if (b.isSolid() || !b.registry().collisionShape().relativeEnd().isZero()) {
                     return OptionalDouble.of(block.blockY() + 1);
                 }
             }
         }
         return OptionalDouble.empty();
+    }
+
+    @Override
+    public void setPathMalusProvider(Function<PathType, Float> provider) {
+        this.malusProvider = provider;
+    }
+
+    @Override
+    public float pathMalus(PathType type) {
+        return malusProvider.apply(type);
+    }
+
+    @Override
+    public void setMaxUpStep(double stepHeight) {
+        this.maxStepHeight = Math.max(0.0, stepHeight);
+    }
+
+    @Override
+    public double maxUpStep() {
+        return maxStepHeight;
+    }
+
+    @Override
+    public void setCanFloat(boolean canFloat) {
+        this.canFloat = canFloat;
+    }
+
+    @Override
+    public boolean canFloatFlag() {
+        return canFloat;
     }
 }
