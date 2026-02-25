@@ -1,13 +1,13 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 public class ArgumentCommand extends Argument<CommandResult> {
 
@@ -16,13 +16,12 @@ public class ArgumentCommand extends Argument<CommandResult> {
     private boolean onlyCorrect;
     private String shortcut = "";
 
-    public ArgumentCommand(@NotNull String id) {
+    public ArgumentCommand(String id) {
         super(id, true, true);
     }
 
-    @NotNull
     @Override
-    public CommandResult parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public CommandResult parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         final String commandString = !shortcut.isEmpty() ?
                 shortcut + StringUtils.SPACE + input
                 : input;
@@ -36,7 +35,7 @@ public class ArgumentCommand extends Argument<CommandResult> {
     }
 
     @Override
-    public String parser() {
+    public ArgumentParserType parser() {
         return null;
     }
 
@@ -49,13 +48,12 @@ public class ArgumentCommand extends Argument<CommandResult> {
         return this;
     }
 
-    @NotNull
     public String getShortcut() {
         return shortcut;
     }
 
     @ApiStatus.Experimental
-    public ArgumentCommand setShortcut(@NotNull String shortcut) {
+    public ArgumentCommand setShortcut(String shortcut) {
         this.shortcut = shortcut;
         return this;
     }

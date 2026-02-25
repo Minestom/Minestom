@@ -1,22 +1,61 @@
 package net.minestom.server.world;
 
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.utils.IntProvider;
+import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.attribute.EnvironmentAttribute;
+import net.minestom.server.world.attribute.EnvironmentAttributeMap;
+import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * https://minecraft.wiki/w/Custom_dimension
+ * https://minecraft.wiki/w/Dimension_type
  */
-public sealed interface DimensionType extends ProtocolObject, DimensionTypes permits DimensionTypeImpl {
-
+public sealed interface DimensionType extends DimensionTypes permits DimensionTypeImpl {
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
 
-    static @NotNull Builder builder() {
+    Codec<DimensionType> REGISTRY_CODEC = StructCodec.struct(
+            "has_fixed_time", Codec.BOOLEAN.optional(false), DimensionType::hasFixedTime,
+            "has_skylight", Codec.BOOLEAN, DimensionType::hasSkylight,
+            "has_ceiling", Codec.BOOLEAN, DimensionType::hasCeiling,
+            "coordinate_scale", Codec.DOUBLE, DimensionType::coordinateScale,
+            "min_y", Codec.INT, DimensionType::minY,
+            "height", Codec.INT, DimensionType::height,
+            "logical_height", Codec.INT, DimensionType::logicalHeight,
+            "infiniburn", Codec.STRING, DimensionType::infiniburn,
+            "ambient_light", Codec.FLOAT, DimensionType::ambientLight,
+            "monster_spawn_light_level", IntProvider.CODEC, DimensionType::monsterSpawnLightLevel,
+            "monster_spawn_block_light_limit", Codec.INT, DimensionType::monsterSpawnBlockLightLimit,
+            "skybox", Skybox.CODEC.optional(Skybox.OVERWORLD), DimensionType::skybox,
+            "cardinal_light", CardinalLight.CODEC.optional(CardinalLight.DEFAULT), DimensionType::cardinalLight,
+            "attributes", EnvironmentAttributeMap.CODEC.optional(EnvironmentAttributeMap.EMPTY), DimensionType::attributes,
+            "timelines", RegistryTag.codec(Registries::timeline).optional(RegistryTag.empty()), DimensionType::timelines,
+            DimensionType::create);
+
+    static DimensionType create(
+            boolean hasFixedTime, boolean hasSkyLight, boolean hasCeiling,
+            double coordinateScale, int minY, int height, int logicalHeight,
+            String infiniburn, float ambientLight,
+            IntProvider monsterSpawnLightLevel, int monsterSpawnBlockLightLimit,
+            Skybox skybox, CardinalLight cardinalLight,
+            EnvironmentAttributeMap attributes, RegistryTag<Timeline> timelines
+    ) {
+        return new DimensionTypeImpl(hasFixedTime, hasSkyLight, hasCeiling,
+                coordinateScale, minY, height, logicalHeight, infiniburn,
+                ambientLight, monsterSpawnLightLevel, monsterSpawnBlockLightLimit,
+                skybox, cardinalLight, attributes, timelines
+        );
+    }
+
+    static Builder builder() {
         return new Builder();
     }
 
@@ -26,36 +65,18 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DIMENSION_TYPES,
-                (namespace, props) -> new DimensionTypeImpl(Registry.dimensionType(namespace, props))
-        );
+    static DynamicRegistry<DimensionType> createDefaultRegistry(Registries registries) {
+        return DynamicRegistry.create(Key.key("dimension_type"),
+                REGISTRY_CODEC, registries, RegistryData.Resource.DIMENSION_TYPES);
     }
 
-    boolean ultrawarm();
-
-    boolean natural();
-
-    double coordinateScale();
+    boolean hasFixedTime();
 
     boolean hasSkylight();
 
     boolean hasCeiling();
 
-    float ambientLight();
-
-    @Nullable Long fixedTime();
-
-    boolean piglinSafe();
-
-    boolean bedWorks();
-
-    boolean respawnAnchorWorks();
-
-    boolean hasRaids();
-
-    int logicalHeight();
+    double coordinateScale();
 
     int minY();
 
@@ -65,139 +86,175 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
 
     int height();
 
-    @NotNull String infiniburn();
+    int logicalHeight();
 
-    @NotNull String effects();
+    String infiniburn();
+
+    float ambientLight();
+
+    IntProvider monsterSpawnLightLevel();
+
+    int monsterSpawnBlockLightLimit();
+
+    Skybox skybox();
+
+    CardinalLight cardinalLight();
+
+    EnvironmentAttributeMap attributes();
+
+    RegistryTag<Timeline> timelines();
 
     default int totalHeight() {
         return minY() + height();
     }
 
+    enum Skybox {
+        NONE,
+        OVERWORLD,
+        END;
+
+        public static final Codec<Skybox> CODEC = Codec.Enum(Skybox.class);
+    }
+
+    enum CardinalLight {
+        DEFAULT,
+        NETHER;
+
+        public static final Codec<CardinalLight> CODEC = Codec.Enum(CardinalLight.class);
+    }
+
     final class Builder {
-        // Defaults match the vanilla overworld
-        private boolean ultrawarm = false;
-        private boolean natural = true;
-        private double coordinateScale = 1.0;
+        private boolean hasFixedTime = false;
         private boolean hasSkylight = true;
         private boolean hasCeiling = false;
-        private float ambientLight = 0f;
-        private Long fixedTime = null;
-        private boolean piglinSafe = false;
-        private boolean bedWorks = true;
-        private boolean respawnAnchorWorks = false;
-        private boolean hasRaids = true;
-        private int logicalHeight = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
+        private double coordinateScale = 1;
         private int minY = VANILLA_MIN_Y;
         private int height = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
+        private int logicalHeight = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
         private String infiniburn = "#minecraft:infiniburn_overworld";
-        private String effects = "minecraft:overworld";
+        private float ambientLight = 0f;
+        private IntProvider monsterSpawnLightLevel = new IntProvider.Uniform(0, 7);
+        private int monsterSpawnBlockLightLimit = 0;
+        private Skybox skybox = Skybox.OVERWORLD;
+        private CardinalLight cardinalLight = CardinalLight.DEFAULT;
+        private EnvironmentAttributeMap.Builder attributes = EnvironmentAttributeMap.builder();
+        private RegistryTag<Timeline> timelines = RegistryTag.empty();
 
         private Builder() {
         }
 
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder ultrawarm(boolean ultrawarm) {
-            this.ultrawarm = ultrawarm;
+        @Contract(value = "_ -> this")
+        public Builder fixedTime(boolean hasFixedTime) {
+            this.hasFixedTime = hasFixedTime;
             return this;
         }
 
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder natural(boolean natural) {
-            this.natural = natural;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder coordinateScale(double coordinateScale) {
-            this.coordinateScale = coordinateScale;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder hasSkylight(boolean hasSkylight) {
+        @Contract(value = "_ -> this")
+        public Builder skylight(boolean hasSkylight) {
             this.hasSkylight = hasSkylight;
             return this;
         }
 
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder hasCeiling(boolean hasCeiling) {
+        @Contract(value = "_ -> this")
+        public Builder ceiling(boolean hasCeiling) {
             this.hasCeiling = hasCeiling;
             return this;
         }
 
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder ambientLight(float ambientLight) {
-            this.ambientLight = ambientLight;
+        @Contract(value = "_ -> this")
+        public Builder coordinateScale(double coordinateScale) {
+            Check.argCondition(coordinateScale < 0.00001 || coordinateScale > 30000000.0, "coordinateScale must be between 0.00001 and 30000000.0");
+            this.coordinateScale = coordinateScale;
             return this;
         }
 
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder fixedTime(@Nullable Long fixedTime) {
-            this.fixedTime = fixedTime;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder piglinSafe(boolean piglinSafe) {
-            this.piglinSafe = piglinSafe;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder bedWorks(boolean bedWorks) {
-            this.bedWorks = bedWorks;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder respawnAnchorWorks(boolean respawnAnchorWorks) {
-            this.respawnAnchorWorks = respawnAnchorWorks;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder hasRaids(boolean hasRaids) {
-            this.hasRaids = hasRaids;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder logicalHeight(int logicalHeight) {
-            this.logicalHeight = logicalHeight;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder minY(int minY) {
+        @Contract(value = "_ -> this")
+        public Builder minY(int minY) {
+            Check.argCondition(minY % 16 != 0, "minY must be a multiple of 16");
+            Check.argCondition(minY < -2032 || minY > 2031, "minY must be between -2032 and 2031");
             this.minY = minY;
             return this;
         }
 
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder height(int height) {
+        @Contract(value = "_ -> this")
+        public Builder height(int height) {
+            Check.argCondition(height % 16 != 0, "height must be a multiple of 16");
+            Check.argCondition(height < 16 || height > 4064, "height must be between 16 and 4064");
             this.height = height;
             return this;
         }
 
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder infiniburn(@NotNull String infiniburn) {
+        @Contract(value = "_ -> this")
+        public Builder logicalHeight(int logicalHeight) {
+            Check.argCondition(logicalHeight < 0, "logicalHeight must be 0 or greater");
+            this.logicalHeight = logicalHeight;
+            return this;
+        }
+
+        @Contract(value = "_ -> this")
+        public Builder infiniburn(String infiniburn) {
+            Check.argCondition(!infiniburn.startsWith("#"), "blockTag has to start with #");
             this.infiniburn = infiniburn;
             return this;
         }
 
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder effects(@NotNull String effects) {
-            this.effects = effects;
+        @Contract(value = "_ -> this")
+        public Builder ambientLight(float ambientLight) {
+            this.ambientLight = ambientLight;
+            return this;
+        }
+
+        @Contract(value = "_ -> this")
+        public Builder monsterSpawnLightLevel(IntProvider monsterSpawnLightLevel) {
+            this.monsterSpawnLightLevel = monsterSpawnLightLevel;
+            return this;
+        }
+
+        @Contract(value = "_ -> this")
+        public Builder monsterSpawnBlockLightLimit(int monsterSpawnBlockLightLimit) {
+            Check.argCondition(monsterSpawnBlockLightLimit < 0 || monsterSpawnBlockLightLimit > 15, "monsterSpawnBlockLightLimit must be between 0 and 15");
+            this.monsterSpawnBlockLightLimit = monsterSpawnBlockLightLimit;
+            return this;
+        }
+
+        @Contract(value = "_ -> this")
+        public Builder skybox(Skybox skybox) {
+            this.skybox = skybox;
+            return this;
+        }
+
+        @Contract(value = "_ -> this")
+        public Builder cardinalLight(CardinalLight cardinalLight) {
+            this.cardinalLight = cardinalLight;
+            return this;
+        }
+
+        @Contract(value = "_, _ -> this")
+        public <T> Builder setAttribute(EnvironmentAttribute<T> attribute, T value) {
+            attributes.set(attribute, value);
+            return this;
+        }
+
+        @Contract(value = "_, _, _ -> this")
+        public <T, Arg> Builder modifyAttribute(EnvironmentAttribute<T> attribute, EnvironmentAttribute.Modifier<T, Arg> modifier, Arg argument) {
+            attributes.modify(attribute, modifier, argument);
+            return this;
+        }
+
+        @Contract(value = "_ -> this")
+        public Builder timelines(RegistryTag<Timeline> timelines) {
+            this.timelines = timelines;
             return this;
         }
 
         @Contract(pure = true)
-        public @NotNull DimensionType build() {
-            return new DimensionTypeImpl(
-                    ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
-                    fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
-                    infiniburn, effects, null
-            );
+        public DimensionType build() {
+            Check.argCondition(height < logicalHeight, "logicalHeight must be less than or equals height");
+            Check.argCondition(minY + height - 1 > 2031, "the maximum building height (minY + height -1) must be less than 3032");
+
+            return DimensionType.create(hasFixedTime, hasSkylight, hasCeiling, coordinateScale,
+                    minY, height, logicalHeight, infiniburn, ambientLight, monsterSpawnLightLevel,
+                    monsterSpawnBlockLightLimit, skybox, cardinalLight, attributes.build(), timelines);
         }
     }
 }

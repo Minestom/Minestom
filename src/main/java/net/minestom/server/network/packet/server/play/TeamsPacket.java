@@ -5,11 +5,9 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,31 +21,42 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record TeamsPacket(String teamName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_MEMBERS = 16384;
 
-    public TeamsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(STRING), switch (reader.read(BYTE)) {
-            case 0 -> new CreateTeamAction(reader);
-            case 1 -> new RemoveTeamAction();
-            case 2 -> new UpdateTeamAction(reader);
-            case 3 -> new AddEntitiesToTeamAction(reader);
-            case 4 -> new RemoveEntitiesToTeamAction(reader);
-            default -> throw new RuntimeException("Unknown action id");
-        });
-    }
+    public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(NetworkBuffer buffer, TeamsPacket value) {
+            buffer.write(STRING, value.teamName);
+            buffer.write(BYTE, (byte) value.action.id());
+            @SuppressWarnings("unchecked") final Type<Action> type = (Type<Action>) actionSerializer(value.action.id());
+            buffer.write(type, value.action);
+        }
+
+        @Override
+        public TeamsPacket read(NetworkBuffer buffer) {
+            final String teamName = buffer.read(STRING);
+            final byte actionId = buffer.read(BYTE);
+            final var type = actionSerializer(actionId);
+            return new TeamsPacket(teamName, type.read(buffer));
+        }
+    };
 
     @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(STRING, teamName);
-        writer.write(BYTE, (byte) action.id());
-        writer.write(action);
-    }
-
-    @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         return this.action instanceof ComponentHolder<?> holder ? holder.components() : List.of();
     }
 
+    private static Type<? extends Action> actionSerializer(int id) {
+        return switch (id) {
+            case 0 -> CreateTeamAction.SERIALIZER;
+            case 1 -> RemoveTeamAction.SERIALIZER;
+            case 2 -> UpdateTeamAction.SERIALIZER;
+            case 3 -> AddEntitiesToTeamAction.SERIALIZER;
+            case 4 -> RemoveEntitiesToTeamAction.SERIALIZER;
+            default -> throw new RuntimeException("Unknown action id");
+        };
+    }
+
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         return new TeamsPacket(
                 this.teamName,
                 this.action instanceof ComponentHolder<?> holder
@@ -56,37 +65,39 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
     }
 
-    public sealed interface Action extends NetworkBuffer.Writer
-            permits CreateTeamAction, RemoveTeamAction, UpdateTeamAction, AddEntitiesToTeamAction, RemoveEntitiesToTeamAction {
+    public sealed interface Action permits CreateTeamAction, RemoveTeamAction, UpdateTeamAction, AddEntitiesToTeamAction, RemoveEntitiesToTeamAction {
         int id();
     }
 
     public record CreateTeamAction(Component displayName, byte friendlyFlags,
                                    NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
                                    NamedTextColor teamColor, Component teamPrefix, Component teamSuffix,
-                                   Collection<String> entities) implements Action, ComponentHolder<CreateTeamAction> {
+                                   List<String> entities) implements Action, ComponentHolder<CreateTeamAction> {
         public CreateTeamAction {
             entities = List.copyOf(entities);
         }
 
-        public CreateTeamAction(@NotNull NetworkBuffer reader) {
-            this(reader.read(COMPONENT), reader.read(BYTE),
-                    NameTagVisibility.fromIdentifier(reader.read(STRING)), CollisionRule.fromIdentifier(reader.read(STRING)),
-                    NamedTextColor.namedColor(reader.read(VAR_INT)), reader.read(COMPONENT), reader.read(COMPONENT),
-                    reader.readCollection(STRING, MAX_MEMBERS));
-        }
+        public static final NetworkBuffer.Type<CreateTeamAction> SERIALIZER = new Type<>() {
+            @Override
+            public void write(NetworkBuffer buffer, CreateTeamAction value) {
+                buffer.write(COMPONENT, value.displayName);
+                buffer.write(BYTE, value.friendlyFlags);
+                buffer.write(NameTagVisibility.NETWORK_TYPE, value.nameTagVisibility);
+                buffer.write(CollisionRule.NETWORK_TYPE, value.collisionRule);
+                buffer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(value.teamColor));
+                buffer.write(COMPONENT, value.teamPrefix);
+                buffer.write(COMPONENT, value.teamSuffix);
+                buffer.write(STRING.list(), value.entities);
+            }
 
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(COMPONENT, displayName);
-            writer.write(BYTE, friendlyFlags);
-            writer.write(STRING, nameTagVisibility.getIdentifier());
-            writer.write(STRING, collisionRule.getIdentifier());
-            writer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(teamColor));
-            writer.write(COMPONENT, teamPrefix);
-            writer.write(COMPONENT, teamSuffix);
-            writer.writeCollection(STRING, entities);
-        }
+            @Override
+            public CreateTeamAction read(NetworkBuffer buffer) {
+                return new CreateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
+                        buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
+                        NamedTextColor.namedColor(buffer.read(VAR_INT)), buffer.read(COMPONENT), buffer.read(COMPONENT),
+                        buffer.read(STRING.list(MAX_MEMBERS)));
+            }
+        };
 
         @Override
         public int id() {
@@ -94,12 +105,12 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
         }
 
         @Override
-        public @NotNull CreateTeamAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public CreateTeamAction copyWithOperator(UnaryOperator<Component> operator) {
             return new CreateTeamAction(
                     operator.apply(this.displayName),
                     this.friendlyFlags,
@@ -114,9 +125,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     }
 
     public record RemoveTeamAction() implements Action {
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-        }
+        public static final NetworkBuffer.Type<RemoveTeamAction> SERIALIZER = NetworkBufferTemplate.template(new RemoveTeamAction());
 
         @Override
         public int id() {
@@ -130,23 +139,26 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
                                    Component teamPrefix,
                                    Component teamSuffix) implements Action, ComponentHolder<UpdateTeamAction> {
 
-        public UpdateTeamAction(@NotNull NetworkBuffer reader) {
-            this(reader.read(COMPONENT), reader.read(BYTE),
-                    NameTagVisibility.fromIdentifier(reader.read(STRING)), CollisionRule.fromIdentifier(reader.read(STRING)),
-                    NamedTextColor.namedColor(reader.read(VAR_INT)),
-                    reader.read(COMPONENT), reader.read(COMPONENT));
-        }
+        public static final NetworkBuffer.Type<UpdateTeamAction> SERIALIZER = new Type<>() {
+            @Override
+            public void write(NetworkBuffer buffer, UpdateTeamAction value) {
+                buffer.write(COMPONENT, value.displayName);
+                buffer.write(BYTE, value.friendlyFlags);
+                buffer.write(NameTagVisibility.NETWORK_TYPE, value.nameTagVisibility);
+                buffer.write(CollisionRule.NETWORK_TYPE, value.collisionRule);
+                buffer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(value.teamColor));
+                buffer.write(COMPONENT, value.teamPrefix);
+                buffer.write(COMPONENT, value.teamSuffix);
+            }
 
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(COMPONENT, displayName);
-            writer.write(BYTE, friendlyFlags);
-            writer.write(STRING, nameTagVisibility.getIdentifier());
-            writer.write(STRING, collisionRule.getIdentifier());
-            writer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(teamColor));
-            writer.write(COMPONENT, teamPrefix);
-            writer.write(COMPONENT, teamSuffix);
-        }
+            @Override
+            public UpdateTeamAction read(NetworkBuffer buffer) {
+                return new UpdateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
+                        buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
+                        NamedTextColor.namedColor(buffer.read(VAR_INT)),
+                        buffer.read(COMPONENT), buffer.read(COMPONENT));
+            }
+        };
 
         @Override
         public int id() {
@@ -154,12 +166,12 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
         }
 
         @Override
-        public @NotNull UpdateTeamAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public UpdateTeamAction copyWithOperator(UnaryOperator<Component> operator) {
             return new UpdateTeamAction(
                     operator.apply(this.displayName),
                     this.friendlyFlags,
@@ -172,19 +184,19 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record AddEntitiesToTeamAction(@NotNull Collection<@NotNull String> entities) implements Action {
+    public record AddEntitiesToTeamAction(List<String> entities) implements Action {
         public AddEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }
 
-        public AddEntitiesToTeamAction(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(STRING, MAX_MEMBERS));
+        public AddEntitiesToTeamAction(Collection<String> entities) {
+            this(List.copyOf(entities));
         }
 
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.writeCollection(STRING, entities);
-        }
+        public static final NetworkBuffer.Type<AddEntitiesToTeamAction> SERIALIZER = NetworkBufferTemplate.template(
+                STRING.list(MAX_MEMBERS), AddEntitiesToTeamAction::entities,
+                AddEntitiesToTeamAction::new
+        );
 
         @Override
         public int id() {
@@ -192,34 +204,24 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record RemoveEntitiesToTeamAction(@NotNull Collection<@NotNull String> entities) implements Action {
+    public record RemoveEntitiesToTeamAction(List<String> entities) implements Action {
         public RemoveEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }
 
-        public RemoveEntitiesToTeamAction(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(STRING, MAX_MEMBERS));
+        public RemoveEntitiesToTeamAction(Collection<String> entities) {
+            this(List.copyOf(entities));
         }
 
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.writeCollection(STRING, entities);
-        }
+        public static final NetworkBuffer.Type<RemoveEntitiesToTeamAction> SERIALIZER = NetworkBufferTemplate.template(
+                STRING.list(MAX_MEMBERS), RemoveEntitiesToTeamAction::entities,
+                RemoveEntitiesToTeamAction::new
+        );
 
         @Override
         public int id() {
             return 4;
         }
-    }
-
-    /**
-     * Gets the identifier of the packet
-     *
-     * @return the identifier
-     */
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.TEAMS;
     }
 
     /**
@@ -231,17 +233,19 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          */
         ALWAYS("always"),
         /**
+         * The name tag is invisible
+         */
+        NEVER("never"),
+        /**
          * Hides the name tag for other teams
          */
         HIDE_FOR_OTHER_TEAMS("hideForOtherTeams"),
         /**
          * Hides the name tag for the own team
          */
-        HIDE_FOR_OWN_TEAM("hideForOwnTeam"),
-        /**
-         * The name tag is invisible
-         */
-        NEVER("never");
+        HIDE_FOR_OWN_TEAM("hideForOwnTeam");
+
+        public static final NetworkBuffer.Type<NameTagVisibility> NETWORK_TYPE = NetworkBuffer.Enum(NameTagVisibility.class);
 
         /**
          * The identifier for the client
@@ -257,8 +261,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             this.identifier = identifier;
         }
 
-        @NotNull
-        public static NameTagVisibility fromIdentifier(String identifier) {
+            public static NameTagVisibility fromIdentifier(String identifier) {
             for (NameTagVisibility v : values()) {
                 if (v.getIdentifier().equals(identifier))
                     return v;
@@ -272,8 +275,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          *
          * @return the identifier
          */
-        @NotNull
-        public String getIdentifier() {
+            public String getIdentifier() {
             return identifier;
         }
     }
@@ -287,17 +289,19 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          */
         ALWAYS("always"),
         /**
+         * Cannot push an object, but neither can they be pushed
+         */
+        NEVER("never"),
+        /**
          * Can push objects of other teams, but teammates cannot
          */
         PUSH_OTHER_TEAMS("pushOtherTeams"),
         /**
          * Can only push objects of the same team
          */
-        PUSH_OWN_TEAM("pushOwnTeam"),
-        /**
-         * Cannot push an object, but neither can they be pushed
-         */
-        NEVER("never");
+        PUSH_OWN_TEAM("pushOwnTeam");
+
+        public static final NetworkBuffer.Type<CollisionRule> NETWORK_TYPE = NetworkBuffer.Enum(CollisionRule.class);
 
         /**
          * The identifier for the client
@@ -313,7 +317,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             this.identifier = identifier;
         }
 
-        public static @NotNull CollisionRule fromIdentifier(String identifier) {
+        public static CollisionRule fromIdentifier(String identifier) {
             for (CollisionRule v : values()) {
                 if (v.getIdentifier().equals(identifier))
                     return v;
@@ -327,7 +331,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          *
          * @return the identifier
          */
-        public @NotNull String getIdentifier() {
+        public String getIdentifier() {
             return identifier;
         }
     }

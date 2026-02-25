@@ -1,188 +1,104 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.StringBinaryTag;
+import net.minestom.server.color.DyeColor;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
-import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public class WolfMeta extends TameableAnimalMeta {
-    public static final byte OFFSET = TameableAnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 4;
-
-    public WolfMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public WolfMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    //todo variant
-
     public boolean isBegging() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.Wolf.IS_BEGGING);
     }
 
     public void setBegging(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Wolf.IS_BEGGING, value);
     }
 
-    public int getCollarColor() {
-        return super.metadata.getIndex(OFFSET + 1, 14);
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_COLLAR} instead.
+     */
+    @Deprecated
+    public DyeColor getCollarColor() {
+        return DyeColor.values()[metadata.get(MetadataDef.Wolf.COLLAR_COLOR)];
     }
 
-    public void setCollarColor(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_COLLAR} instead.
+     */
+    @Deprecated
+    public void setCollarColor(DyeColor value) {
+        metadata.set(MetadataDef.Wolf.COLLAR_COLOR, value.ordinal());
     }
 
-    public int getAngerTime() {
-        return super.metadata.getIndex(OFFSET + 2, 0);
+    public long getAngerTime() {
+        return metadata.get(MetadataDef.Wolf.ANGER_TIME);
     }
 
-    public void setAngerTime(int value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
+    public void setAngerTime(long value) {
+        metadata.set(MetadataDef.Wolf.ANGER_TIME, value);
     }
 
-    public @NotNull DynamicRegistry.Key<Variant> getVariant() {
-        return super.metadata.getIndex(OFFSET + 3, Variant.PALE);
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_VARIANT} instead.
+     */
+    @Deprecated
+    public RegistryKey<WolfVariant> getVariant() {
+        return metadata.get(MetadataDef.Wolf.VARIANT);
     }
 
-    public void setVariant(@NotNull DynamicRegistry.Key<Variant> value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.WolfVariant(value));
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_VARIANT} instead.
+     */
+    @Deprecated
+    public void setVariant(RegistryKey<WolfVariant> value) {
+        metadata.set(MetadataDef.Wolf.VARIANT, value);
     }
 
-    public sealed interface Variant extends ProtocolObject, WolfVariants permits VariantImpl {
-        @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Variant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfVariant);
-        @NotNull BinaryTagSerializer<DynamicRegistry.Key<Variant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::wolfVariant);
-
-        static @NotNull Variant create(
-                @NotNull NamespaceID wildTexture,
-                @NotNull NamespaceID tameTexture,
-                @NotNull NamespaceID angryTexture,
-                @NotNull String biome
-        ) {
-            return new VariantImpl(wildTexture, tameTexture, angryTexture, List.of(biome), null);
-        }
-
-        static @NotNull Builder builder() {
-            return new Builder();
-        }
-
-        /**
-         * <p>Creates a new registry for wolf variants, loading the vanilla wolf variants.</p>
-         *
-         * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
-         */
-        @ApiStatus.Internal
-        static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
-            return DynamicRegistry.create(
-                    "minecraft:wolf_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.WOLF_VARIANTS,
-                    (namespace, props) -> new WolfMeta.VariantImpl(Registry.wolfVariant(namespace, props))
-            );
-        }
-
-        @NotNull NamespaceID wildTexture();
-
-        @NotNull NamespaceID tameTexture();
-
-        @NotNull NamespaceID angryTexture();
-
-        @NotNull List<String> biomes();
-
-        @Override
-        @Nullable Registry.WolfVariantEntry registry();
-
-        final class Builder {
-            private NamespaceID wildTexture;
-            private NamespaceID tameTexture;
-            private NamespaceID angryTexture;
-            private List<String> biomes;
-
-            private Builder() {
-            }
-
-            public @NotNull Builder wildTexture(@NotNull NamespaceID wildTexture) {
-                this.wildTexture = wildTexture;
-                return this;
-            }
-
-            public @NotNull Builder tameTexture(@NotNull NamespaceID tameTexture) {
-                this.tameTexture = tameTexture;
-                return this;
-            }
-
-            public @NotNull Builder angryTexture(@NotNull NamespaceID angryTexture) {
-                this.angryTexture = angryTexture;
-                return this;
-            }
-
-            public @NotNull Builder biome(@NotNull String biome) {
-                this.biomes = List.of(biome);
-                return this;
-            }
-
-            public @NotNull Builder biomes(@NotNull List<String> biomes) {
-                this.biomes = biomes;
-                return this;
-            }
-
-            public @NotNull Variant build() {
-                return new VariantImpl(wildTexture, tameTexture, angryTexture, biomes, null);
-            }
-        }
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_SOUND_VARIANT} instead.
+     */
+    @Deprecated
+    public RegistryKey<WolfSoundVariant> getSoundVariant() {
+        return metadata.get(MetadataDef.Wolf.SOUND_VARIANT);
     }
 
-    record VariantImpl(
-            @NotNull NamespaceID wildTexture,
-            @NotNull NamespaceID tameTexture,
-            @NotNull NamespaceID angryTexture,
-            @NotNull List<String> biomes,
-            @Nullable Registry.WolfVariantEntry registry
-    ) implements Variant {
-
-        private static final BinaryTagSerializer<List<String>> BIOMES_NBT_TYPE = BinaryTagSerializer.STRING.list();
-        static final BinaryTagSerializer<Variant> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-                tag -> {
-                    throw new UnsupportedOperationException("WolfVariant is read-only");
-                },
-                wolfVariant -> {
-                    BinaryTag biomes;
-                    if (wolfVariant.biomes().size() == 1) {
-                        biomes = StringBinaryTag.stringBinaryTag(wolfVariant.biomes().getFirst());
-                    } else {
-                        biomes = BIOMES_NBT_TYPE.write(wolfVariant.biomes());
-                    }
-                    return CompoundBinaryTag.builder()
-                            .putString("wild_texture", wolfVariant.wildTexture().asString())
-                            .putString("tame_texture", wolfVariant.tameTexture().asString())
-                            .putString("angry_texture", wolfVariant.angryTexture().asString())
-                            .put("biomes", biomes)
-                            .build();
-                }
-        );
-
-        VariantImpl {
-            // The builder can violate the nullability constraints
-            Check.notNull(wildTexture, "missing wild texture");
-            Check.notNull(tameTexture, "missing tame texture");
-            Check.notNull(angryTexture, "missing angry texture");
-            Check.notNull(biomes, "missing biomes");
-        }
-
-        VariantImpl(@NotNull Registry.WolfVariantEntry registry) {
-            this(registry.wildTexture(), registry.tameTexture(),
-                    registry.angryTexture(), registry.biomes(), registry);
-        }
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_SOUND_VARIANT} instead.
+     */
+    @Deprecated
+    public void setSoundVariant(RegistryKey<WolfSoundVariant> value) {
+        metadata.set(MetadataDef.Wolf.SOUND_VARIANT, value);
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(DataComponent<T> component) {
+        if (component == DataComponents.WOLF_VARIANT)
+            return (T) getVariant();
+        if (component == DataComponents.WOLF_SOUND_VARIANT)
+            return (T) getSoundVariant();
+        if (component == DataComponents.WOLF_COLLAR)
+            return (T) getCollarColor();
+        return super.get(component);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> void set(DataComponent<T> component, T value) {
+        if (component == DataComponents.WOLF_VARIANT)
+            setVariant((RegistryKey<WolfVariant>) value);
+        else if (component == DataComponents.WOLF_SOUND_VARIANT)
+            setSoundVariant((RegistryKey<WolfSoundVariant>) value);
+        else if (component == DataComponents.WOLF_COLLAR)
+            setCollarColor((DyeColor) value);
+        else super.set(component, value);
+    }
 }

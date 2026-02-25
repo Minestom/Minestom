@@ -1,11 +1,12 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.kyori.adventure.key.InvalidKeyException;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.block.BlockUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class ArgumentBlockState extends Argument<Block> {
 
@@ -14,32 +15,37 @@ public class ArgumentBlockState extends Argument<Block> {
     public static final int INVALID_PROPERTY = 3;
     public static final int INVALID_PROPERTY_VALUE = 4;
 
-    public ArgumentBlockState(@NotNull String id) {
+    public ArgumentBlockState(String id) {
         super(id, true, false);
     }
 
     @Override
-    public @NotNull Block parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public Block parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         return staticParse(input);
     }
 
     @Override
-    public String parser() {
-        return "minecraft:block_state";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.BLOCK_STATE;
     }
 
     /**
      * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @Deprecated
-    public static Block staticParse(@NotNull String input) throws ArgumentSyntaxException {
+    public static Block staticParse(String input) throws ArgumentSyntaxException {
         final int nbtIndex = input.indexOf("[");
         if (nbtIndex == 0)
             throw new ArgumentSyntaxException("No block type", input, NO_BLOCK);
 
         if (nbtIndex == -1) {
             // Only block name
-            final Block block = Block.fromNamespaceId(input);
+            Block block;
+            try {
+                block = Block.fromKey(input);
+            } catch (InvalidKeyException ignored) {
+                block = null;
+            }
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
             return block;
@@ -48,7 +54,7 @@ public class ArgumentBlockState extends Argument<Block> {
                 throw new ArgumentSyntaxException("Property list need to end with ]", input, INVALID_PROPERTY);
             // Block state
             final String blockName = input.substring(0, nbtIndex);
-            Block block = Block.fromNamespaceId(blockName);
+            Block block = Block.fromKey(blockName);
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
 

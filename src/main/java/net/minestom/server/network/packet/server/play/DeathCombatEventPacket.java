@@ -2,40 +2,30 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record DeathCombatEventPacket(int playerId, @NotNull Component message) implements ServerPacket.Play, ServerPacket.ComponentHolding {
-    public DeathCombatEventPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(COMPONENT));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, playerId);
-        writer.write(COMPONENT, message);
-    }
+public record DeathCombatEventPacket(int playerId,
+                                     Component message) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+    public static final NetworkBuffer.Type<DeathCombatEventPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, DeathCombatEventPacket::playerId,
+            COMPONENT, DeathCombatEventPacket::message,
+            DeathCombatEventPacket::new);
 
     @Override
-    public int playId() {
-        return ServerPacketIdentifier.DEATH_COMBAT_EVENT;
-    }
-
-    @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         return List.of(this.message);
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         return new DeathCombatEventPacket(this.playerId, operator.apply(this.message));
     }
 }

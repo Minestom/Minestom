@@ -1,27 +1,28 @@
 package net.minestom.server.statistic;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface StatisticType extends StaticProtocolObject, StatisticTypes permits StatisticTypeImpl {
+public sealed interface StatisticType extends StaticProtocolObject<StatisticType>, StatisticTypes permits StatisticTypeImpl {
 
-    static @NotNull Collection<@NotNull StatisticType> values() {
-        return StatisticTypeImpl.values();
+    static Collection<StatisticType> values() {
+        return StatisticTypeImpl.REGISTRY.values();
     }
 
-    static @Nullable StatisticType fromNamespaceId(@NotNull String namespaceID) {
-        return StatisticTypeImpl.getSafe(namespaceID);
+    static @Nullable StatisticType fromKey(@KeyPattern String key) {
+        return fromKey(Key.key(key));
     }
 
-    static @Nullable StatisticType fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable StatisticType fromKey(Key key) {
+        return StatisticTypeImpl.REGISTRY.get(key);
     }
 
     static @Nullable StatisticType fromId(int id) {
-        return StatisticTypeImpl.getId(id);
+        return StatisticTypeImpl.REGISTRY.get(id);
     }
+
 }

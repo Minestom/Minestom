@@ -1,19 +1,15 @@
 package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class AbstractWindChargeMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
     private Entity shooter;
 
-    public AbstractWindChargeMeta(@Nullable Entity entity, @NotNull Metadata metadata) {
+    public AbstractWindChargeMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

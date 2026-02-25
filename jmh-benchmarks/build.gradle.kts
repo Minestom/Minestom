@@ -1,9 +1,10 @@
 plugins {
-    id("me.champeau.jmh") version ("0.6.6")
-    id("minestom.common-conventions")
+    id("minestom.java-library")
+    alias(libs.plugins.jmh.plugin)
 }
 
 dependencies {
+    implementation(libs.fastutil)
     jmhImplementation(rootProject)
     jmh(libs.jmh.core)
     jmhAnnotationProcessor(libs.jmh.annotationprocessor)

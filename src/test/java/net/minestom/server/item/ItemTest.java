@@ -1,16 +1,21 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.TagStringIO;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +36,7 @@ public class ItemTest {
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
-        for (DataComponent<?> component : ItemComponent.values()) {
+        for (DataComponent<?> component : DataComponent.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
                 assertFalse(item.has(component), "Item should not have component " + component);
@@ -41,7 +46,7 @@ public class ItemTest {
         }
 
         ItemStack finalItem = item;
-        assertThrows(UnsupportedOperationException.class, () -> finalItem.get(ItemComponent.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
+        assertThrows(UnsupportedOperationException.class, () -> finalItem.get(DataComponents.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
 
         item = item.withAmount(5);
         assertEquals(item.amount(), 5, "Items with different amount should not be equals");
@@ -56,7 +61,7 @@ public class ItemTest {
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
-        for (DataComponent<?> component : ItemComponent.values()) {
+        for (DataComponent<?> component : DataComponent.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
                 assertFalse(item.has(component), "Item should not have component " + component);
@@ -66,7 +71,7 @@ public class ItemTest {
         }
 
         ItemStack finalItem = item;
-        assertThrows(UnsupportedOperationException.class, () -> finalItem.get(ItemComponent.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
+        assertThrows(UnsupportedOperationException.class, () -> finalItem.get(DataComponents.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
 
         item = item.withAmount(5);
         assertEquals(item.amount(), 5, "Items with different amount should not be equals");
@@ -82,7 +87,24 @@ public class ItemTest {
 
         assertTrue(item1.isSimilar(item2));
         assertTrue(item1.withAmount(5).isSimilar(item2.withAmount(2)));
-        assertFalse(item1.isSimilar(item2.with(ItemComponent.CUSTOM_NAME, Component.text("Hey!"))));
+        assertFalse(item1.isSimilar(item2.with(DataComponents.CUSTOM_NAME, Component.text("Hey!"))));
+    }
+
+    @Test
+    public void testEqualityComponents(Env env) {
+        var item1 = ItemStack.of(Material.MUSIC_DISC_STAL);
+        var item2 = ItemStack.of(Material.MUSIC_DISC_STAL).with(DataComponents.JUKEBOX_PLAYABLE, JukeboxSong.STAL);
+        assertTrue(item1.isSimilar(item2));
+    }
+
+    @Test
+    public void testFromNbtLoreSpace(Env env) throws IOException {
+        var itemStack = ItemStack.of(Material.LAPIS_BLOCK)
+                .withLore(Component.text("Hey!", NamedTextColor.RED), Component.empty(), Component.text("hello"))
+                .with(DataComponents.ITEM_MODEL, "unknown");
+        var tagOut = MinestomAdventure.tagStringIO().asString(itemStack.toItemNBT());
+        var tagIn = MinestomAdventure.tagStringIO().asCompound(tagOut);
+        assertEquals(itemStack, ItemStack.fromItemNBT(tagIn));
     }
 
     @Test
@@ -97,16 +119,16 @@ public class ItemTest {
     public void testBuilderReuse() {
         var builder = ItemStack.builder(Material.DIAMOND);
         var item1 = builder.build();
-        var item2 = builder.set(ItemComponent.CUSTOM_NAME, Component.text("Name")).build();
-        assertNull(item1.get(ItemComponent.CUSTOM_NAME));
-        assertNotNull(item2.get(ItemComponent.CUSTOM_NAME));
+        var item2 = builder.set(DataComponents.CUSTOM_NAME, Component.text("Name")).build();
+        assertNull(item1.get(DataComponents.CUSTOM_NAME));
+        assertNotNull(item2.get(DataComponents.CUSTOM_NAME));
         assertNotEquals(item1, item2, "Item builder should be reusable");
     }
 
     @Test
     public void materialUpdate() {
         var item1 = ItemStack.builder(Material.DIAMOND)
-                .amount(5).set(ItemComponent.CUSTOM_NAME, Component.text("Name"))
+                .amount(5).set(DataComponents.CUSTOM_NAME, Component.text("Name"))
                 .build();
         var item2 = item1.withMaterial(Material.GOLD_INGOT);
 
@@ -137,11 +159,21 @@ public class ItemTest {
         assertEquals(EntityType.CAMEL, item2.material().registry().spawnEntityType());
     }
 
+    @Test
+    public void testModifyMaterialAmountNonzero() {
+        var airItem = ItemStack.of(Material.AIR, 0);
+        assertEquals(0, airItem.amount());
+        var nonAirItem = airItem.withMaterial(Material.DIAMOND);
+        assertEquals(1, nonAirItem.amount());
+        var airAgainItem = nonAirItem.withMaterial(Material.AIR);
+        assertEquals(0, airAgainItem.amount());
+    }
+
     static ItemStack createItem() {
         return ItemStack.builder(Material.STONE)
-                .set(ItemComponent.CUSTOM_NAME, Component.text("Display name!", NamedTextColor.GREEN))
-                .set(ItemComponent.LORE, List.of(Component.text("Line 1"), Component.text("Line 2")))
-                .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(Enchantment.EFFICIENCY, 10), false))
+                .set(DataComponents.CUSTOM_NAME, Component.text("Display name!", NamedTextColor.GREEN))
+                .set(DataComponents.LORE, List.of(Component.text("Line 1"), Component.text("Line 2")))
+                .set(DataComponents.ENCHANTMENTS, new EnchantmentList(Map.of(Enchantment.EFFICIENCY, 10)))
                 .build();
     }
 }

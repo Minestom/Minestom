@@ -2,11 +2,11 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Used when a player is clicking on a block with an item (but is not a block in item form).
@@ -14,19 +14,21 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent {
 
     private final Player player;
-    private final Player.Hand hand;
+    private final PlayerHand hand;
     private final ItemStack itemStack;
     private final Point position;
+    private final Point cursorPosition;
     private final BlockFace blockFace;
 
-    public PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull Player.Hand hand,
-                                     @NotNull ItemStack itemStack,
-                                     @NotNull Point position, @NotNull Point cursorPosition,
-                                     @NotNull BlockFace blockFace) {
+    public PlayerUseItemOnBlockEvent(Player player, PlayerHand hand,
+                                     ItemStack itemStack,
+                                     Point position, Point cursorPosition,
+                                     BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
         this.position = position;
+        this.cursorPosition = cursorPosition;
         this.blockFace = blockFace;
     }
 
@@ -35,16 +37,23 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      *
      * @return the block position
      */
-    public @NotNull Point getPosition() {
+    public Point getPosition() {
         return position;
     }
+
+    /**
+     * Gets the cursor position of the interacted block
+     *
+     * @return the cursor position of the interaction
+     */
+    public Point getCursorPosition() { return cursorPosition; }
 
     /**
      * Gets which face the player has interacted with.
      *
      * @return the block face
      */
-    public @NotNull BlockFace getBlockFace() {
+    public BlockFace getBlockFace() {
         return blockFace;
     }
 
@@ -53,7 +62,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      *
      * @return the hand
      */
-    public @NotNull Player.Hand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
@@ -63,12 +72,12 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      * @return the item
      */
     @Override
-    public @NotNull ItemStack getItemStack() {
+    public ItemStack getItemStack() {
         return itemStack;
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

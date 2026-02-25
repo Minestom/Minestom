@@ -4,10 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.FilterMask;
 import net.minestom.server.crypto.SignedMessageBody;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -21,39 +19,28 @@ import static net.minestom.server.network.NetworkBuffer.*;
 /**
  * Represents an outgoing chat message packet.
  */
-public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] signature,
-                                      SignedMessageBody.@NotNull Packed messageBody,
+public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, byte @Nullable [] signature,
+                                      SignedMessageBody.Packed messageBody,
                                       @Nullable Component unsignedContent, FilterMask filterMask,
                                       int msgTypeId, Component msgTypeName,
                                       @Nullable Component msgTypeTarget) implements ServerPacket.Play, ServerPacket.ComponentHolding {
-    public PlayerChatMessagePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(UUID), reader.read(VAR_INT), reader.readOptional(r -> r.readBytes(256)),
-                new SignedMessageBody.Packed(reader),
-                reader.readOptional(COMPONENT), new FilterMask(reader),
-                reader.read(VAR_INT), reader.read(COMPONENT),
-                reader.readOptional(COMPONENT));
-    }
+
+    public static final NetworkBuffer.Type<PlayerChatMessagePacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, PlayerChatMessagePacket::globalIndex,
+            UUID, PlayerChatMessagePacket::sender,
+            VAR_INT, PlayerChatMessagePacket::index,
+            RAW_BYTES.optional(), PlayerChatMessagePacket::signature,
+            SignedMessageBody.Packed.SERIALIZER, PlayerChatMessagePacket::messageBody,
+            COMPONENT.optional(), PlayerChatMessagePacket::unsignedContent,
+            FilterMask.SERIALIZER, PlayerChatMessagePacket::filterMask,
+            VAR_INT, PlayerChatMessagePacket::msgTypeId,
+            COMPONENT, PlayerChatMessagePacket::msgTypeName,
+            COMPONENT, PlayerChatMessagePacket::msgTypeTarget,
+            PlayerChatMessagePacket::new
+    );
 
     @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(UUID, sender);
-        writer.write(VAR_INT, index);
-        writer.writeOptional(RAW_BYTES, signature);
-        writer.write(messageBody);
-        writer.writeOptional(COMPONENT, unsignedContent);
-        writer.write(filterMask);
-        writer.write(VAR_INT, msgTypeId);
-        writer.write(COMPONENT, msgTypeName);
-        writer.writeOptional(COMPONENT, msgTypeTarget);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.PLAYER_CHAT;
-    }
-
-    @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         final ArrayList<Component> list = new ArrayList<>();
         list.add(msgTypeName);
         if (unsignedContent != null) list.add(unsignedContent);
@@ -62,11 +49,9 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new PlayerChatMessagePacket(sender, index, signature,
-                messageBody,
-                operator.apply(unsignedContent), filterMask,
-                msgTypeId, operator.apply(msgTypeName),
-                operator.apply(msgTypeTarget));
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
+        return new PlayerChatMessagePacket(globalIndex, sender, index, signature,
+                messageBody, operator.apply(unsignedContent), filterMask,
+                msgTypeId, operator.apply(msgTypeName), operator.apply(msgTypeTarget));
     }
 }

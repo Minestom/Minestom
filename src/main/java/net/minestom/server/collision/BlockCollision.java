@@ -4,14 +4,10 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.block.BlockIterator;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 final class BlockCollision {
@@ -21,15 +17,15 @@ final class BlockCollision {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      */
-    static PhysicsResult handlePhysics(@NotNull BoundingBox boundingBox,
-                                       @NotNull Vec velocity, @NotNull Pos entityPosition,
-                                       @NotNull Block.Getter getter,
+    static PhysicsResult handlePhysics(BoundingBox boundingBox,
+                                       Vec velocity, Pos entityPosition,
+                                       Block.Getter getter,
                                        @Nullable PhysicsResult lastPhysicsResult,
                                        boolean singleCollision) {
         if (velocity.isZero()) {
             // TODO should return a constant
             return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false,
-                    velocity, new Point[3], new Shape[3], false, SweepResult.NO_COLLISION);
+                    velocity, new Point[3], new Shape[3], new Point[3], false, SweepResult.NO_COLLISION);
         }
         // Fast-exit using cache
         final PhysicsResult cachedResult = cachedPhysics(velocity, entityPosition, getter, lastPhysicsResult);
@@ -42,18 +38,11 @@ final class BlockCollision {
 
     static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
-            final EntityType type = entity.getEntityType();
-            if (!entity.hasCollision() || type == EntityType.ITEM || type == EntityType.ARROW)
-                continue;
-            // Marker Armor Stands should not prevent block placement
-            if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta && armorStandMeta.isMarker())
+            if (!entity.preventBlockPlacement())
                 continue;
 
             final boolean intersects;
             if (entity instanceof Player) {
-                // Ignore spectators
-                if (((Player) entity).getGameMode() == GameMode.SPECTATOR)
-                    continue;
                 // Need to move player slightly away from block we're placing.
                 // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
                 // For this reason we subtract a small amount from the player position
@@ -70,32 +59,42 @@ final class BlockCollision {
     private static PhysicsResult cachedPhysics(Vec velocity, Pos entityPosition,
                                                Block.Getter getter, PhysicsResult lastPhysicsResult) {
         if (lastPhysicsResult != null && lastPhysicsResult.collisionShapes()[1] instanceof ShapeImpl shape) {
-            Block collisionBlockY = shape.block();
+            var currentBlock = getter.getBlock(lastPhysicsResult.collisionShapePositions()[1], Block.Getter.Condition.TYPE);
+            var lastBlockBoxes = shape.boundingBoxes();
+            var currentBlockBoxes = ((ShapeImpl) currentBlock.registry().collisionShape()).boundingBoxes();
 
             // Fast exit if entity hasn't moved
             if (lastPhysicsResult.collisionY()
                     && velocity.y() == lastPhysicsResult.originalDelta().y()
                     // Check block below to fast exit gravity
-                    && getter.getBlock(lastPhysicsResult.collisionPoints()[1].sub(0, Vec.EPSILON, 0), Block.Getter.Condition.TYPE) == collisionBlockY
+                    && currentBlockBoxes.equals(lastBlockBoxes)
                     && velocity.x() == 0 && velocity.z() == 0
                     && entityPosition.samePoint(lastPhysicsResult.newPosition())
-                    && collisionBlockY != Block.AIR) {
-                return lastPhysicsResult;
+                    && !lastBlockBoxes.isEmpty()) {
+                if (lastPhysicsResult.cached()) {
+                    return lastPhysicsResult;
+                } else {
+                    return new PhysicsResult(lastPhysicsResult.newPosition(), lastPhysicsResult.newVelocity(),
+                            lastPhysicsResult.isOnGround(), lastPhysicsResult.collisionX(), lastPhysicsResult.collisionY(),
+                            lastPhysicsResult.collisionZ(), lastPhysicsResult.originalDelta(), lastPhysicsResult.collisionPoints(),
+                            lastPhysicsResult.collisionShapes(), lastPhysicsResult.collisionShapePositions(), lastPhysicsResult.hasCollision(), lastPhysicsResult.res(), true);
+                }
             }
         }
         return null;
     }
 
-    private static PhysicsResult stepPhysics(@NotNull BoundingBox boundingBox,
-                                             @NotNull Vec velocity, @NotNull Pos entityPosition,
-                                             @NotNull Block.Getter getter, boolean singleCollision) {
+    private static PhysicsResult stepPhysics(BoundingBox boundingBox,
+                                             Vec velocity, Pos entityPosition,
+                                             Block.Getter getter, boolean singleCollision) {
         // Allocate once and update values
-        SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0);
+        SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
 
         Point[] collidedPoints = new Point[3];
         Shape[] collisionShapes = new Shape[3];
+        Point[] collisionShapePositions = new Point[3];
 
         boolean hasCollided = false;
 
@@ -114,18 +113,21 @@ final class BlockCollision {
             if (result.collisionX()) {
                 foundCollisionX = true;
                 collisionShapes[0] = finalResult.collidedShape;
+                collisionShapePositions[0] = new Vec(finalResult.collidedShapeX, finalResult.collidedShapeY, finalResult.collidedShapeZ);
                 collidedPoints[0] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
                 hasCollided = true;
                 if (singleCollision) break;
             } else if (result.collisionZ()) {
                 foundCollisionZ = true;
                 collisionShapes[2] = finalResult.collidedShape;
+                collisionShapePositions[2] = new Vec(finalResult.collidedShapeX, finalResult.collidedShapeY, finalResult.collidedShapeZ);
                 collidedPoints[2] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
                 hasCollided = true;
                 if (singleCollision) break;
             } else if (result.collisionY()) {
                 foundCollisionY = true;
                 collisionShapes[1] = finalResult.collidedShape;
+                collisionShapePositions[1] = new Vec(finalResult.collidedShapeX, finalResult.collidedShapeY, finalResult.collidedShapeZ);
                 collidedPoints[1] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
                 hasCollided = true;
                 if (singleCollision) break;
@@ -148,14 +150,14 @@ final class BlockCollision {
 
         return new PhysicsResult(result.newPosition(), new Vec(newDeltaX, newDeltaY, newDeltaZ),
                 newDeltaY == 0 && velocity.y() < 0,
-                foundCollisionX, foundCollisionY, foundCollisionZ, velocity, collidedPoints, collisionShapes, hasCollided, finalResult);
+                foundCollisionX, foundCollisionY, foundCollisionZ, velocity, collidedPoints, collisionShapes, collisionShapePositions, hasCollided, finalResult);
     }
 
-    private static PhysicsResult computePhysics(@NotNull BoundingBox boundingBox,
-                                                @NotNull Vec velocity, Pos entityPosition,
-                                                @NotNull Block.Getter getter,
-                                                @NotNull Vec[] allFaces,
-                                                @NotNull SweepResult finalResult) {
+    private static PhysicsResult computePhysics(BoundingBox boundingBox,
+                                                Vec velocity, Pos entityPosition,
+                                                Block.Getter getter,
+                                                Vec[] allFaces,
+                                                SweepResult finalResult) {
         // If the movement is small we don't need to run the expensive ray casting.
         // Positions of move less than one can have hardcoded blocks to check for every direction
         // Diagonals are a special case which will work with fast physics
@@ -185,22 +187,22 @@ final class BlockCollision {
 
         return new PhysicsResult(finalPos, new Vec(remainingX, remainingY, remainingZ),
                 collisionY, collisionX, collisionY, collisionZ,
-                Vec.ZERO, null, null, false, finalResult);
+                Vec.ZERO, null, null, null, false, finalResult);
     }
 
     private static boolean isDiagonal(Vec velocity) {
         return Math.abs(velocity.x()) == 1 && Math.abs(velocity.z()) == 1;
     }
 
-    private static void slowPhysics(@NotNull BoundingBox boundingBox,
-                                    @NotNull Vec velocity, Pos entityPosition,
-                                    @NotNull Block.Getter getter,
-                                    @NotNull Vec[] allFaces,
-                                    @NotNull SweepResult finalResult) {
+    private static void slowPhysics(BoundingBox boundingBox,
+                                    Vec velocity, Pos entityPosition,
+                                    Block.Getter getter,
+                                    Vec[] allFaces,
+                                    SweepResult finalResult) {
         BlockIterator iterator = new BlockIterator();
         // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
         for (Vec point : allFaces) {
-            iterator.reset(Vec.fromPoint(point.add(entityPosition)), velocity, 0, velocity.length(), false);
+            iterator.reset(point.add(entityPosition), velocity, 0, velocity.length(), false);
             int timer = -1;
 
             while (iterator.hasNext() && timer != 0) {
@@ -215,11 +217,11 @@ final class BlockCollision {
         }
     }
 
-    private static void fastPhysics(@NotNull BoundingBox boundingBox,
-                                    @NotNull Vec velocity, Pos entityPosition,
-                                    @NotNull Block.Getter getter,
-                                    @NotNull Vec[] allFaces,
-                                    @NotNull SweepResult finalResult) {
+    private static void fastPhysics(BoundingBox boundingBox,
+                                    Vec velocity, Pos entityPosition,
+                                    Block.Getter getter,
+                                    Vec[] allFaces,
+                                    SweepResult finalResult) {
         for (Vec point : allFaces) {
             final Vec pointBefore = point.add(entityPosition);
             final Vec pointAfter = point.add(entityPosition).add(velocity);

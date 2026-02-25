@@ -3,81 +3,74 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.inventory.InventoryCloseEvent;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
-import net.minestom.server.network.packet.server.common.PingPacket;
-import net.minestom.server.network.packet.server.play.SetSlotPacket;
+import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
+import org.jetbrains.annotations.Nullable;
 
 public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
         final int windowId = packet.windowId();
-        final AbstractInventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
-        if (inventory == null) {
-            // Invalid packet
-            return;
-        }
+        final boolean playerInventory = windowId == 0;
+        final AbstractInventory inventory = playerInventory ? player.getInventory() : player.getOpenInventory();
 
-        final short slot = packet.slot();
-        final byte button = packet.button();
-        final ClientClickWindowPacket.ClickType clickType = packet.clickType();
+        // Prevent some invalid packets
+        if (inventory == null || packet.slot() == -1) return;
 
-        boolean successful = false;
+        // Process the click
+        @Nullable Integer size = playerInventory ? null : inventory.getSize();
+        Click click = player.getClickPreprocessor().processClick(packet, size);
 
-        // prevent click in a non-interactive slot (why does it exist?)
-        if (slot == -1) {
-            return;
-        }
-        if (clickType == ClientClickWindowPacket.ClickType.PICKUP) {
-            if (button == 0) {
-                if (slot != -999) {
-                    successful = inventory.leftClick(player, slot);
-                } else {
-                    successful = inventory.drop(player, true, slot, button);
-                }
-            } else if (button == 1) {
-                if (slot != -999) {
-                    successful = inventory.rightClick(player, slot);
-                } else {
-                    successful = inventory.drop(player, false, slot, button);
-                }
+        boolean successful = true;
+        check: if (click != null) {
+            // Disallow creative clicks when not in creative
+            boolean isNotCreative = player.getGameMode() != GameMode.CREATIVE;
+            if (isNotCreative && player.getClickPreprocessor().isCreativeClick(click, !player.getInventory().getCursorItem().isAir())) {
+                successful = false;
+                break check;
             }
-        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_MOVE) {
-            successful = inventory.shiftClick(player, slot);
-        } else if (clickType == ClientClickWindowPacket.ClickType.SWAP) {
-            successful = inventory.changeHeld(player, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
-            successful = player.getGameMode() == GameMode.CREATIVE;
-            if (successful) {
-                setCursor(player, inventory, packet.clickedItem());
+
+            // Reset the didCloseInventory field
+            // Wait for events to possibly close the inventory
+            player.UNSAFE_changeDidCloseInventory(false);
+
+            Click.Window window = Click.toWindow(click, size);
+            // Call InventoryPreClickEvent
+            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(window.inOpened() ? inventory : player.getInventory(), player, window.click());
+            EventDispatcher.call(inventoryPreClickEvent);
+
+            click = Click.fromWindow(new Click.Window(window.inOpened(), inventoryPreClickEvent.getClick()), size);
+
+            if (player.didCloseInventory()) {
+                // Cancel the click if the inventory has been closed by Player#closeInventory
+                player.UNSAFE_changeDidCloseInventory(false);
+                successful = false;
+            } else if (inventoryPreClickEvent.isCancelled()) {
+                // Cancel it if the event is cancelled and we haven't already done that
+                successful = false;
+            } else {
+                successful = inventory.handleClick(player, click);
             }
-        } else if (clickType == ClientClickWindowPacket.ClickType.THROW) {
-            successful = inventory.drop(player, false, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_CRAFT) {
-            successful = inventory.dragging(player, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.PICKUP_ALL) {
-            successful = inventory.doubleClick(player, slot);
         }
 
         // Prevent ghost item when the click is cancelled
         if (!successful) {
-            player.getInventory().update();
-            if (inventory instanceof Inventory) {
-                ((Inventory) inventory).update(player);
+            player.getInventory().update(player);
+            if (!playerInventory) {
+                inventory.update(player);
             }
         }
 
-        // Prevent the player from picking a ghost item in cursor
-        refreshCursorItem(player, inventory);
-
-        // (Why is the ping packet necessary?)
-        player.sendPacket(new PingPacket((1 << 30) | (windowId << 16)));
+        // Resync in case the client sent item does not match what we think it should be.
+        ItemStack cursorItem = player.getInventory().getCursorItem();
+        if (!ItemStack.Hash.of(cursorItem).equals(packet.clickedItem()))
+            player.sendPacket(new SetCursorItemPacket(cursorItem));
     }
 
     public static void pong(ClientPongPacket packet, Player player) {
@@ -85,41 +78,7 @@ public class WindowListener {
     }
 
     public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
-        // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
-        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
-        EventDispatcher.call(inventoryCloseEvent);
-
-        player.closeInventory(true);
-
-        Inventory newInventory = inventoryCloseEvent.getNewInventory();
-        if (newInventory != null)
-            player.openInventory(newInventory);
+        player.closeInventory(true, (byte) packet.windowId());
     }
 
-    /**
-     * @param player    the player to refresh the cursor item
-     * @param inventory the player open inventory, null if not any (could be player inventory)
-     */
-    private static void refreshCursorItem(Player player, AbstractInventory inventory) {
-        ItemStack cursorItem;
-        if (inventory instanceof PlayerInventory playerInventory) {
-            cursorItem = playerInventory.getCursorItem();
-        } else if (inventory instanceof Inventory standardInventory) {
-            cursorItem = standardInventory.getCursorItem(player);
-        } else {
-            throw new RuntimeException("Invalid inventory: " + inventory.getClass());
-        }
-        final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-        player.sendPacket(setSlotPacket);
-    }
-
-    private static void setCursor(Player player, AbstractInventory inventory, ItemStack itemStack) {
-        if (inventory instanceof PlayerInventory playerInventory) {
-            playerInventory.setCursorItem(itemStack);
-        } else if (inventory instanceof Inventory standardInventory) {
-            standardInventory.setCursorItem(player, itemStack);
-        } else {
-            throw new RuntimeException("Invalid inventory: " + inventory.getClass());
-        }
-    }
 }

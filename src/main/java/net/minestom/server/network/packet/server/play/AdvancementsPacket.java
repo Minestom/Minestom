@@ -5,9 +5,8 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -16,12 +15,23 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
-
-public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping> advancementMappings,
-                                 @NotNull List<String> identifiersToRemove,
-                                 @NotNull List<ProgressMapping> progressMappings) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public record AdvancementsPacket(
+        boolean reset,
+        List<AdvancementMapping> advancementMappings,
+        List<String> identifiersToRemove,
+        List<ProgressMapping> progressMappings,
+        boolean showAdvancements
+) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ADVANCEMENTS = Short.MAX_VALUE;
+
+    public static final NetworkBuffer.Type<AdvancementsPacket> SERIALIZER = NetworkBufferTemplate.template(
+            NetworkBuffer.BOOLEAN, AdvancementsPacket::reset,
+            AdvancementMapping.SERIALIZER.list(MAX_ADVANCEMENTS), AdvancementsPacket::advancementMappings,
+            NetworkBuffer.STRING.list(MAX_ADVANCEMENTS), AdvancementsPacket::identifiersToRemove,
+            ProgressMapping.SERIALIZER.list(MAX_ADVANCEMENTS), AdvancementsPacket::progressMappings,
+            NetworkBuffer.BOOLEAN, AdvancementsPacket::showAdvancements,
+            AdvancementsPacket::new
+    );
 
     public AdvancementsPacket {
         advancementMappings = List.copyOf(advancementMappings);
@@ -29,28 +39,9 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         progressMappings = List.copyOf(progressMappings);
     }
 
-    public AdvancementsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BOOLEAN), reader.readCollection(AdvancementMapping::new, MAX_ADVANCEMENTS),
-                reader.readCollection(STRING, MAX_ADVANCEMENTS),
-                reader.readCollection(ProgressMapping::new, MAX_ADVANCEMENTS));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BOOLEAN, reset);
-        writer.writeCollection(advancementMappings);
-        writer.writeCollection(STRING, identifiersToRemove);
-        writer.writeCollection(progressMappings);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ADVANCEMENTS;
-    }
-
     // TODO is the display-item needed to be updated?
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         final var displayData = this.advancementMappings.stream().map(AdvancementMapping::value).map(Advancement::displayData).filter(Objects::nonNull).toList();
         final var titles = displayData.stream().map(DisplayData::title).toList();
         final var descriptions = displayData.stream().map(DisplayData::description).toList();
@@ -64,192 +55,155 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(final @NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(final UnaryOperator<Component> operator) {
         return new AdvancementsPacket(
                 this.reset,
                 this.advancementMappings.stream().map(mapping -> mapping.copyWithOperator(operator)).toList(),
                 this.identifiersToRemove,
-                this.progressMappings
+                this.progressMappings,
+                this.showAdvancements
         );
     }
 
     /**
      * AdvancementMapping maps the namespaced ID to the Advancement.
      */
-    public record AdvancementMapping(@NotNull String key,
-                                     @NotNull Advancement value) implements NetworkBuffer.Writer, ComponentHolder<AdvancementMapping> {
-        public AdvancementMapping(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), new Advancement(reader));
-        }
+    public record AdvancementMapping(String key,
+                                     Advancement value) implements ComponentHolder<AdvancementMapping> {
+        public static final NetworkBuffer.Type<AdvancementMapping> SERIALIZER = NetworkBufferTemplate.template(
+                NetworkBuffer.STRING, AdvancementMapping::key,
+                Advancement.SERIALIZER, AdvancementMapping::value,
+                AdvancementMapping::new
+        );
 
         @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(STRING, key);
-            writer.write(value);
-        }
-
-        @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return this.value.components();
         }
 
         @Override
-        public @NotNull AdvancementMapping copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public AdvancementMapping copyWithOperator(UnaryOperator<Component> operator) {
             return this.value.displayData == null ? this : new AdvancementMapping(this.key, this.value.copyWithOperator(operator));
         }
     }
 
     public record Advancement(@Nullable String parentIdentifier, @Nullable DisplayData displayData,
-                              @NotNull List<Requirement> requirements,
-                              boolean sendTelemetryData) implements NetworkBuffer.Writer, ComponentHolder<Advancement> {
+                              List<Requirement> requirements,
+                              boolean sendTelemetryData) implements ComponentHolder<Advancement> {
         public Advancement {
             requirements = List.copyOf(requirements);
         }
 
-        public Advancement(@NotNull NetworkBuffer reader) {
-            this(reader.readOptional(STRING), reader.readOptional(DisplayData::new),
-                    reader.readCollection(Requirement::new, MAX_ADVANCEMENTS), reader.read(BOOLEAN));
-        }
+        public static final NetworkBuffer.Type<Advancement> SERIALIZER = NetworkBufferTemplate.template(
+                NetworkBuffer.STRING.optional(), Advancement::parentIdentifier,
+                DisplayData.SERIALIZER.optional(), Advancement::displayData,
+                Requirement.SERIALIZER.list(MAX_ADVANCEMENTS), Advancement::requirements,
+                NetworkBuffer.BOOLEAN, Advancement::sendTelemetryData,
+                Advancement::new
+        );
 
         @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.writeOptional(STRING, parentIdentifier);
-            writer.writeOptional(displayData);
-            writer.writeCollection(requirements);
-            writer.write(BOOLEAN, sendTelemetryData);
-        }
-
-        @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return this.displayData != null ? this.displayData.components() : List.of();
         }
 
         @Override
-        public @NotNull Advancement copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public Advancement copyWithOperator(UnaryOperator<Component> operator) {
             return this.displayData == null ? this : new Advancement(this.parentIdentifier, this.displayData.copyWithOperator(operator), this.requirements, this.sendTelemetryData);
         }
     }
 
-    public record Requirement(@NotNull List<String> requirements) implements NetworkBuffer.Writer {
+    public record Requirement(List<String> requirements) {
+        public static final NetworkBuffer.Type<Requirement> SERIALIZER = NetworkBufferTemplate.template(
+                NetworkBuffer.STRING.list(MAX_ADVANCEMENTS), Requirement::requirements,
+                Requirement::new
+        );
+
         public Requirement {
             requirements = List.copyOf(requirements);
         }
-
-        public Requirement(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(STRING, MAX_ADVANCEMENTS));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.writeCollection(STRING, requirements);
-        }
     }
 
-    public record DisplayData(@NotNull Component title, @NotNull Component description,
-                              @NotNull ItemStack icon, @NotNull FrameType frameType,
+    public record DisplayData(Component title, Component description,
+                              ItemStack icon, FrameType frameType,
                               int flags, @Nullable String backgroundTexture,
-                              float x, float y) implements NetworkBuffer.Writer, ComponentHolder<DisplayData> {
-        public DisplayData(@NotNull NetworkBuffer reader) {
-            this(read(reader));
-        }
+                              float x, float y) implements ComponentHolder<DisplayData> {
 
-        private DisplayData(DisplayData displayData) {
-            this(displayData.title, displayData.description,
-                    displayData.icon, displayData.frameType,
-                    displayData.flags, displayData.backgroundTexture,
-                    displayData.x, displayData.y);
-        }
-
-        private static DisplayData read(@NotNull NetworkBuffer reader) {
-            var title = reader.read(COMPONENT);
-            var description = reader.read(COMPONENT);
-            var icon = reader.read(ItemStack.NETWORK_TYPE);
-            var frameType = FrameType.values()[reader.read(VAR_INT)];
-            var flags = reader.read(INT);
-            var backgroundTexture = (flags & 0x1) != 0 ? reader.read(STRING) : null;
-            var x = reader.read(FLOAT);
-            var y = reader.read(FLOAT);
-            return new DisplayData(title, description,
-                    icon, frameType,
-                    flags, backgroundTexture,
-                    x, y);
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(COMPONENT, title);
-            writer.write(COMPONENT, description);
-            writer.write(ItemStack.NETWORK_TYPE, icon);
-            writer.writeEnum(FrameType.class, frameType);
-            writer.write(INT, flags);
-            if ((flags & 0x1) != 0) {
-                assert backgroundTexture != null;
-                writer.write(STRING, backgroundTexture);
+        public static final NetworkBuffer.Type<DisplayData> SERIALIZER = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(NetworkBuffer buffer, DisplayData value) {
+                buffer.write(NetworkBuffer.COMPONENT, value.title);
+                buffer.write(NetworkBuffer.COMPONENT, value.description);
+                buffer.write(ItemStack.NETWORK_TYPE, value.icon);
+                buffer.write(NetworkBuffer.Enum(FrameType.class), value.frameType);
+                buffer.write(NetworkBuffer.INT, value.flags);
+                if ((value.flags & 0x1) != 0) {
+                    assert value.backgroundTexture != null;
+                    buffer.write(NetworkBuffer.STRING, value.backgroundTexture);
+                }
+                buffer.write(NetworkBuffer.FLOAT, value.x);
+                buffer.write(NetworkBuffer.FLOAT, value.y);
             }
-            writer.write(FLOAT, x);
-            writer.write(FLOAT, y);
-        }
+
+            @Override
+            public DisplayData read(NetworkBuffer buffer) {
+                var title = buffer.read(NetworkBuffer.COMPONENT);
+                var description = buffer.read(NetworkBuffer.COMPONENT);
+                var icon = buffer.read(ItemStack.NETWORK_TYPE);
+                var frameType = FrameType.values()[buffer.read(NetworkBuffer.VAR_INT)];
+                var flags = buffer.read(NetworkBuffer.INT);
+                var backgroundTexture = (flags & 0x1) != 0 ? buffer.read(NetworkBuffer.STRING) : null;
+                var x = buffer.read(NetworkBuffer.FLOAT);
+                var y = buffer.read(NetworkBuffer.FLOAT);
+                return new DisplayData(title, description,
+                        icon, frameType,
+                        flags, backgroundTexture,
+                        x, y);
+            }
+        };
 
         @Override
-        public @NotNull Collection<Component> components() {
+        public Collection<Component> components() {
             return List.of(this.title, this.description);
         }
 
         @Override
-        public @NotNull DisplayData copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        public DisplayData copyWithOperator(UnaryOperator<Component> operator) {
             return new DisplayData(operator.apply(this.title), operator.apply(this.description), this.icon, this.frameType, this.flags, this.backgroundTexture, this.x, this.y);
         }
     }
 
-    public record ProgressMapping(@NotNull String key,
-                                  @NotNull AdvancementProgress progress) implements NetworkBuffer.Writer {
-        public ProgressMapping(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), new AdvancementProgress(reader));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(STRING, key);
-            writer.write(progress);
-        }
+    public record ProgressMapping(String key, AdvancementProgress progress) {
+        public static final NetworkBuffer.Type<ProgressMapping> SERIALIZER = NetworkBufferTemplate.template(
+                NetworkBuffer.STRING, ProgressMapping::key,
+                AdvancementProgress.SERIALIZER, ProgressMapping::progress,
+                ProgressMapping::new
+        );
     }
 
-    public record AdvancementProgress(@NotNull List<Criteria> criteria) implements NetworkBuffer.Writer {
+    public record AdvancementProgress(List<Criteria> criteria) {
+        public static final NetworkBuffer.Type<AdvancementProgress> SERIALIZER = NetworkBufferTemplate.template(
+                Criteria.SERIALIZER.list(MAX_ADVANCEMENTS), AdvancementProgress::criteria,
+                AdvancementProgress::new
+        );
+
         public AdvancementProgress {
             criteria = List.copyOf(criteria);
         }
-
-        public AdvancementProgress(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(Criteria::new, MAX_ADVANCEMENTS));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.writeCollection(criteria);
-        }
     }
 
-    public record Criteria(@NotNull String criterionIdentifier,
-                           @NotNull CriterionProgress criterionProgress) implements NetworkBuffer.Writer {
-        public Criteria(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), new CriterionProgress(reader));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(STRING, criterionIdentifier);
-            writer.write(criterionProgress);
-        }
+    public record Criteria(String criterionIdentifier, CriterionProgress criterionProgress) {
+        public static final NetworkBuffer.Type<Criteria> SERIALIZER = NetworkBufferTemplate.template(
+                NetworkBuffer.STRING, Criteria::criterionIdentifier,
+                CriterionProgress.SERIALIZER, Criteria::criterionProgress,
+                Criteria::new
+        );
     }
 
-    public record CriterionProgress(@Nullable Long dateOfAchieving) implements NetworkBuffer.Writer {
-        public CriterionProgress(@NotNull NetworkBuffer reader) {
-            this(reader.readOptional(LONG));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.writeOptional(LONG, dateOfAchieving);
-        }
+    public record CriterionProgress(@Nullable Long dateOfAchieving) {
+        public static final NetworkBuffer.Type<CriterionProgress> SERIALIZER = NetworkBufferTemplate.template(
+                NetworkBuffer.LONG.optional(), CriterionProgress::dateOfAchieving,
+                CriterionProgress::new
+        );
     }
 }

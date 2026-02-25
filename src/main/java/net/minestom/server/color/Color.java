@@ -1,43 +1,68 @@
 package net.minestom.server.color;
 
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * A general purpose class for representing colors.
  * <p>
  * Colors must be in the range of 0-255.
  */
-public record Color(int red, int green, int blue) implements RGBLike {
+public class Color implements RGBLike {
     private static final int BIT_MASK = 0xff;
 
-    public static final NetworkBuffer.Type<RGBLike> NETWORK_TYPE = new NetworkBuffer.Type<RGBLike>() {
+    public static final NetworkBuffer.Type<RGBLike> NETWORK_TYPE = NetworkBuffer.INT.transform(
+            Color::new,
+            color -> Color.fromRGBLike(color).asRGB()
+    );
+
+    public static final NetworkBuffer.Type<RGBLike> RGB_BYTE_NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, RGBLike value) {
-            buffer.write(NetworkBuffer.INT, Color.fromRGBLike(value).asRGB());
+        public void write(NetworkBuffer buffer, RGBLike value) {
+            buffer.write(NetworkBuffer.BYTE, (byte) value.red());
+            buffer.write(NetworkBuffer.BYTE, (byte) value.green());
+            buffer.write(NetworkBuffer.BYTE, (byte) value.blue());
         }
 
         @Override
-        public RGBLike read(@NotNull NetworkBuffer buffer) {
-            return new Color(buffer.read(NetworkBuffer.INT));
+        public RGBLike read(NetworkBuffer buffer) {
+            final int red = buffer.read(NetworkBuffer.BYTE);
+            final int green = buffer.read(NetworkBuffer.BYTE);
+            final int blue = buffer.read(NetworkBuffer.BYTE);
+            return new Color(red, green, blue);
         }
     };
-    public static final BinaryTagSerializer<RGBLike> NBT_TYPE = BinaryTagSerializer.INT
-            .map(Color::new, color -> Color.fromRGBLike(color).asRGB());
 
-    public static @NotNull Color fromRGBLike(@NotNull RGBLike rgbLike) {
-        if (rgbLike instanceof Color color) return color;
-        return new Color(rgbLike.red(), rgbLike.green(), rgbLike.blue());
+    public static final Codec<RGBLike> CODEC = Codec.INT.<RGBLike>transform(Color::new, color -> Color.fromRGBLike(color).asRGB())
+            .orElse(Codec.VECTOR3D, vector -> new Color((float) vector.x(), (float) vector.y(), (float) vector.z()));
+    public static final Codec<RGBLike> STRING_CODEC = Codec.STRING.transform(
+            hex -> (RGBLike) Objects.requireNonNull(TextColor.fromHexString(hex)),
+            color -> TextColor.color(color).asHexString()).orElse(CODEC);
+
+    public static final RGBLike WHITE = new Color(255, 255, 255);
+    public static final RGBLike BLACK = new Color(0, 0, 0);
+
+    private final int red;
+    private final int green;
+    private final int blue;
+
+    public Color(float red, float green, float blue) {
+        this((int) (red * 255), (int) (green * 255), (int) (blue * 255));
     }
 
-    public Color {
+    public Color(int red, int green, int blue) {
         Check.argCondition(!MathUtils.isBetween(red, 0, 255), "Red is not between 0-255: {0}", red);
         Check.argCondition(!MathUtils.isBetween(green, 0, 255), "Green is not between 0-255: {0}", green);
         Check.argCondition(!MathUtils.isBetween(blue, 0, 255), "Blue is not between 0-255: {0}", blue);
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
 
     /**
@@ -56,20 +81,29 @@ public record Color(int red, int green, int blue) implements RGBLike {
      *
      * @param rgbLike the color
      */
-    public Color(@NotNull RGBLike rgbLike) {
+    public Color(RGBLike rgbLike) {
         this(rgbLike.red(), rgbLike.green(), rgbLike.blue());
     }
 
-    public @NotNull Color withRed(int red) {
+    public static Color fromRGBLike(RGBLike rgbLike) {
+        if (rgbLike instanceof Color color) return color;
+        return new Color(rgbLike.red(), rgbLike.green(), rgbLike.blue());
+    }
+
+    public Color withRed(int red) {
         return new Color(red, green, blue);
     }
 
-    public @NotNull Color withGreen(int green) {
+    public Color withGreen(int green) {
         return new Color(red, green, blue);
     }
 
-    public @NotNull Color withBlue(int blue) {
+    public Color withBlue(int blue) {
         return new Color(red, green, blue);
+    }
+
+    public AlphaColor withAlpha(int alpha) {
+        return new AlphaColor(alpha, red, green, blue);
     }
 
     /**
@@ -92,7 +126,7 @@ public record Color(int red, int green, int blue) implements RGBLike {
      *
      * @param colors the colors
      */
-    public @NotNull Color mixWith(@NotNull RGBLike... colors) {
+    public Color mixWith(RGBLike... colors) {
         int r = red, g = green, b = blue;
 
         // store the current highest component
@@ -137,5 +171,43 @@ public record Color(int red, int green, int blue) implements RGBLike {
     @Deprecated
     public int getBlue() {
         return this.blue;
+    }
+
+    @Override
+    public int red() {
+        return red;
+    }
+
+    @Override
+    public int green() {
+        return green;
+    }
+
+    @Override
+    public int blue() {
+        return blue;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (Color) obj;
+        return this.red == that.red &&
+                this.green == that.green &&
+                this.blue == that.blue;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(red, green, blue);
+    }
+
+    @Override
+    public String toString() {
+        return "Color[" +
+                "red=" + red + ", " +
+                "green=" + green + ", " +
+                "blue=" + blue + ']';
     }
 }

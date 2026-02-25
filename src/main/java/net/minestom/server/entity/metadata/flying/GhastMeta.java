@@ -1,23 +1,20 @@
 package net.minestom.server.entity.metadata.flying;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
 
 public class GhastMeta extends FlyingMeta {
-    public static final byte OFFSET = FlyingMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
-    public GhastMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public GhastMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isAttacking() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.Ghast.IS_ATTACKING);
     }
 
     public void setAttacking(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Ghast.IS_ATTACKING, value);
     }
 
 }

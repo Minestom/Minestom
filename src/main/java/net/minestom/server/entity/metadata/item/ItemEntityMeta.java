@@ -1,17 +1,23 @@
 package net.minestom.server.entity.metadata.item;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.item.ItemStack;
 
-public class ItemEntityMeta extends ItemContainingMeta implements ObjectDataProvider {
-    public static final byte OFFSET = ItemContainingMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+public class ItemEntityMeta extends EntityMeta implements ObjectDataProvider {
+    public ItemEntityMeta(Entity entity, MetadataHolder metadata) {
+        super(entity, metadata);
+    }
 
-    public ItemEntityMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
-        super(entity, metadata, Material.AIR);
+    public ItemStack getItem() {
+        return metadata.get(MetadataDef.ItemEntity.ITEM);
+    }
+
+    public void setItem(ItemStack value) {
+        metadata.set(MetadataDef.ItemEntity.ITEM, value);
     }
 
     @Override

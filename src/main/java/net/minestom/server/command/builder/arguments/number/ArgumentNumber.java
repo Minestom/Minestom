@@ -1,15 +1,14 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.utils.binary.BinaryWriter;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -23,25 +22,25 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     protected boolean hasMin, hasMax;
     protected T min, max;
 
-    protected final String parserName;
+    protected final ArgumentParserType parserName;
     protected final BiFunction<String, Integer, T> radixParser;
     protected final Function<String, T> parser;
-    protected final BiConsumer<BinaryWriter, T> propertiesWriter;
+    protected final NetworkBuffer.Type<T> networkType;
     protected final Comparator<T> comparator;
 
-    ArgumentNumber(@NotNull String id, String parserName, Function<String, T> parser,
-                   BiFunction<String, Integer, T> radixParser, BiConsumer<BinaryWriter, T> propertiesWriter,
+    ArgumentNumber(String id, ArgumentParserType parserName, Function<String, T> parser,
+                   BiFunction<String, Integer, T> radixParser, NetworkBuffer.Type<T> networkType,
                    Comparator<T> comparator) {
         super(id);
         this.parserName = parserName;
         this.radixParser = radixParser;
         this.parser = parser;
-        this.propertiesWriter = propertiesWriter;
+        this.networkType = networkType;
         this.comparator = comparator;
     }
 
     @Override
-    public @NotNull T parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public T parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
             final T value;
             final int radix = getRadix(input);
@@ -66,38 +65,35 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Override
-    public String parser() {
+    public ArgumentParserType parser() {
         return parserName;
     }
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
-            packetWriter.writeByte(getNumberProperties());
+        return NetworkBuffer.makeArray(buffer -> {
+            buffer.write(NetworkBuffer.BYTE, getNumberProperties());
             if (this.hasMin())
-                propertiesWriter.accept(packetWriter, getMin());
+                networkType.write(buffer, getMin());
             if (this.hasMax())
-                propertiesWriter.accept(packetWriter, getMax());
+                networkType.write(buffer, getMax());
         });
     }
 
-    @NotNull
-    public ArgumentNumber<T> min(@NotNull T value) {
+    public ArgumentNumber<T> min(T value) {
         this.min = value;
         this.hasMin = true;
         return this;
     }
 
-    @NotNull
-    public ArgumentNumber<T> max(@NotNull T value) {
+    public ArgumentNumber<T> max(T value) {
         this.max = value;
         this.hasMax = true;
 
         return this;
     }
 
-    @NotNull
-    public ArgumentNumber<T> between(@NotNull T min, @NotNull T max) {
+    public ArgumentNumber<T> between(T min, T max) {
         this.min = min;
         this.max = max;
         this.hasMin = true;
@@ -133,7 +129,6 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
      *
      * @return the minimum of this argument
      */
-    @NotNull
     public T getMin() {
         return min;
     }
@@ -152,13 +147,11 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
      *
      * @return the maximum of this argument
      */
-    @NotNull
     public T getMax() {
         return max;
     }
 
-    @NotNull
-    protected String parseValue(@NotNull String value) {
+    protected String parseValue(String value) {
         if (value.startsWith("0b")) {
             value = value.replaceFirst(Pattern.quote("0b"), "");
         } else if (value.startsWith("0x")) {
@@ -170,7 +163,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
         return value;
     }
 
-    protected int getRadix(@NotNull String value) {
+    protected int getRadix(String value) {
         if (value.startsWith("0b")) {
             return 2;
         } else if (value.startsWith("0x")) {
@@ -180,7 +173,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Nullable
-    protected String removeScientificNotation(@NotNull String value) {
+    protected String removeScientificNotation(String value) {
         try {
             return new BigDecimal(value).toPlainString();
         } catch (NumberFormatException e) {

@@ -1,12 +1,11 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
+import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -23,24 +22,18 @@ public class ArgumentNbtCompoundTag extends Argument<CompoundBinaryTag> {
         super(id, true);
     }
 
-    @NotNull
     @Override
-    public CompoundBinaryTag parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public CompoundBinaryTag parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
-            BinaryTag nbt = TagStringIO.get().asCompound(input);
-
-            if (!(nbt instanceof CompoundBinaryTag compound))
-                throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
-
-            return compound;
+            return MinestomAdventure.tagStringIO().asCompound(input);
         } catch (IOException e) {
             throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
         }
     }
 
     @Override
-    public String parser() {
-        return "minecraft:nbt_compound_tag";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.NBT_COMPOUND_TAG;
     }
 
     @Override

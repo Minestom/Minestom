@@ -3,7 +3,7 @@ package net.minestom.server.inventory;
 /**
  * List of inventory property and their ID
  * <p>
- * See https://wiki.vg/Protocol#Set_Container_Property for more information
+ * See <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Set_Container_Property">the Minecraft wiki</a> for more information
  */
 public enum InventoryProperty {
 

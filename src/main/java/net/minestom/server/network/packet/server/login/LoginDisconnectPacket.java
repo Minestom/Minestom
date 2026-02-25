@@ -2,9 +2,8 @@ package net.minestom.server.network.packet.server.login;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,29 +11,19 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.JSON_COMPONENT;
 
-public record LoginDisconnectPacket(@NotNull Component kickMessage) implements ServerPacket.Login,
+public record LoginDisconnectPacket(Component kickMessage) implements ServerPacket.Login,
         ServerPacket.ComponentHolding {
-    public LoginDisconnectPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(JSON_COMPONENT));
-    }
+    public static final NetworkBuffer.Type<LoginDisconnectPacket> SERIALIZER = NetworkBufferTemplate.template(
+            JSON_COMPONENT, LoginDisconnectPacket::kickMessage,
+            LoginDisconnectPacket::new);
 
     @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(JSON_COMPONENT, kickMessage);
-    }
-
-    @Override
-    public int loginId() {
-        return ServerPacketIdentifier.LOGIN_DISCONNECT;
-    }
-
-    @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         return List.of(this.kickMessage);
     }
 
     @Override
-    public @NotNull LoginDisconnectPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public LoginDisconnectPacket copyWithOperator(UnaryOperator<Component> operator) {
         return new LoginDisconnectPacket(operator.apply(this.kickMessage));
     }
 }

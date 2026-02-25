@@ -3,53 +3,51 @@ package net.minestom.server.coordinate;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static net.minestom.server.utils.chunk.ChunkUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CoordinateTest {
 
     @Test
     public void chunkIndex() {
-        var index = getChunkIndex(2, 5);
-        assertEquals(2, getChunkCoordX(index));
-        assertEquals(5, getChunkCoordZ(index));
+        var index = CoordConversion.chunkIndex(2, 5);
+        assertEquals(2, CoordConversion.chunkIndexGetX(index));
+        assertEquals(5, CoordConversion.chunkIndexGetZ(index));
 
-        index = getChunkIndex(-5, 25);
-        assertEquals(-5, getChunkCoordX(index));
-        assertEquals(25, getChunkCoordZ(index));
+        index = CoordConversion.chunkIndex(-5, 25);
+        assertEquals(-5, CoordConversion.chunkIndexGetX(index));
+        assertEquals(25, CoordConversion.chunkIndexGetZ(index));
 
-        index = getChunkIndex(Integer.MAX_VALUE, Integer.MIN_VALUE);
-        assertEquals(Integer.MAX_VALUE, getChunkCoordX(index));
-        assertEquals(Integer.MIN_VALUE, getChunkCoordZ(index));
+        index = CoordConversion.chunkIndex(Integer.MAX_VALUE, Integer.MIN_VALUE);
+        assertEquals(Integer.MAX_VALUE, CoordConversion.chunkIndexGetX(index));
+        assertEquals(Integer.MIN_VALUE, CoordConversion.chunkIndexGetZ(index));
     }
 
     @Test
     public void chunkCoordinate() {
-        assertEquals(0, getChunkCoordinate(15));
-        assertEquals(1, getChunkCoordinate(16));
-        assertEquals(-1, getChunkCoordinate(-16));
-        assertEquals(3, getChunkCoordinate(48));
+        assertEquals(0, CoordConversion.globalToChunk(15));
+        assertEquals(1, CoordConversion.globalToChunk(16));
+        assertEquals(-1, CoordConversion.globalToChunk(-16));
+        assertEquals(3, CoordConversion.globalToChunk(48));
 
-        assertEquals(4, getChunkCoordinate(65));
-        assertEquals(4, getChunkCoordinate(64));
-        assertEquals(3, getChunkCoordinate(63));
-        assertEquals(-2, getChunkCoordinate(-25));
-        assertEquals(23, getChunkCoordinate(380));
+        assertEquals(4, CoordConversion.globalToChunk(65));
+        assertEquals(4, CoordConversion.globalToChunk(64));
+        assertEquals(3, CoordConversion.globalToChunk(63));
+        assertEquals(-2, CoordConversion.globalToChunk(-25));
+        assertEquals(23, CoordConversion.globalToChunk(380));
     }
 
     @Test
     public void chunkCount() {
-        assertEquals(289, getChunkCount(8));
-        assertEquals(169, getChunkCount(6));
-        assertEquals(121, getChunkCount(5));
-        assertEquals(9, getChunkCount(1));
-        assertEquals(1, getChunkCount(0));
-        assertThrows(IllegalArgumentException.class, () -> getChunkCount(-1));
+        assertEquals(289, ChunkRange.chunksCount(8));
+        assertEquals(169, ChunkRange.chunksCount(6));
+        assertEquals(121, ChunkRange.chunksCount(5));
+        assertEquals(9, ChunkRange.chunksCount(1));
+        assertEquals(1, ChunkRange.chunksCount(0));
+        assertThrows(IllegalArgumentException.class, () -> ChunkRange.chunksCount(-1));
     }
 
     @Test
@@ -94,16 +92,73 @@ public class CoordinateTest {
     }
 
     @Test
+    public void vecNegCompare() {
+        assertFalse(Vec.ZERO.samePoint(Vec.ONE.neg()));
+        assertTrue(Vec.ZERO.samePoint(Vec.ZERO.neg()));
+        assertTrue(Vec.ZERO.samePoint(new Vec(-0, 0, 0)));
+        assertTrue(Vec.ZERO.samePoint(new Vec(-0, -0, -0)));
+    }
+
+    @Test
+    public void vecNanCompare() {
+        Vec nanX = new Vec(Double.NaN, 0, 0);
+        Vec nanY = new Vec(0, Double.NaN, 0);
+        Vec nanZ = new Vec(0, 0, Double.NaN);
+        Vec nanAll = new Vec(Double.NaN, Double.NaN, Double.NaN);
+        Vec normal = Vec.ZERO;
+
+        // NaN is not equal to itself
+        assertFalse(nanX.samePoint(nanX));
+        assertFalse(nanY.samePoint(nanY));
+        assertFalse(nanZ.samePoint(nanZ));
+        assertFalse(nanAll.samePoint(nanAll));
+
+        // NaN vectors are not equal to normal vectors
+        assertFalse(nanX.samePoint(normal));
+        assertFalse(nanY.samePoint(normal));
+        assertFalse(nanZ.samePoint(normal));
+        assertFalse(nanAll.samePoint(normal));
+
+        // Different NaN vectors are not equal to each other
+        assertFalse(nanX.samePoint(nanY));
+        assertFalse(nanX.samePoint(nanZ));
+        assertFalse(nanY.samePoint(nanZ));
+        assertFalse(nanX.samePoint(nanAll));
+    }
+
+    @Test
+    public void vecSameEpsilon() {
+        final double TEST_EPSILON = 0.000000999999; // Less than 1e-6
+        Vec v1 = new Vec(TEST_EPSILON, 0, 0);
+        Vec v2 = new Vec(0, 0, 0);
+        Vec v3 = new Vec(TEST_EPSILON, -TEST_EPSILON, TEST_EPSILON);
+        Vec v4 = new Vec(0.001, 0, 0);
+        Vec v5 = v1.add(TEST_EPSILON);
+
+        // Vectors with small differences should be considered the same under epsilon
+        assertTrue(v1.samePoint(v2, Vec.EPSILON));
+        assertTrue(v2.samePoint(v3, Vec.EPSILON));
+        assertTrue(v1.samePoint(v3, Vec.EPSILON));
+        assertTrue(v5.samePoint(v1, Vec.EPSILON));
+
+        // Vectors with larger differences should not be considered the same
+        assertFalse(v1.samePoint(v4, Vec.EPSILON));
+
+        // 0 epsilon should throw an exception
+        assertThrows(IllegalArgumentException.class, () -> v5.samePoint(v5, 0));
+    }
+
+    @Test
     public void toSectionRelativeCoordinate() {
-        assertEquals(8, ChunkUtils.toSectionRelativeCoordinate(-40));
-        assertEquals(12, ChunkUtils.toSectionRelativeCoordinate(-20));
-        assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(0));
-        assertEquals(5, ChunkUtils.toSectionRelativeCoordinate(5));
-        assertEquals(15, ChunkUtils.toSectionRelativeCoordinate(15));
-        assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(16));
-        assertEquals(4, ChunkUtils.toSectionRelativeCoordinate(20));
-        assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(32));
-        assertEquals(1, ChunkUtils.toSectionRelativeCoordinate(33));
+        assertEquals(8, CoordConversion.globalToSectionRelative(-40));
+        assertEquals(12, CoordConversion.globalToSectionRelative(-20));
+        assertEquals(0, CoordConversion.globalToSectionRelative(0));
+        assertEquals(5, CoordConversion.globalToSectionRelative(5));
+        assertEquals(15, CoordConversion.globalToSectionRelative(15));
+        assertEquals(0, CoordConversion.globalToSectionRelative(16));
+        assertEquals(4, CoordConversion.globalToSectionRelative(20));
+        assertEquals(0, CoordConversion.globalToSectionRelative(32));
+        assertEquals(1, CoordConversion.globalToSectionRelative(33));
     }
 
     @Test
@@ -130,7 +185,7 @@ public class CoordinateTest {
         );
 
         for (Vec vec : tempEquals) {
-            assertEquals(getBlockPosition(getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
+            assertEquals(CoordConversion.chunkBlockIndexGetGlobal(CoordConversion.chunkBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
                     vec.chunkX(), vec.chunkZ()), vec);
         }
 
@@ -145,7 +200,7 @@ public class CoordinateTest {
         );
 
         for (Vec vec : tempNotEquals) {
-            assertNotEquals(getBlockPosition(getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
+            assertNotEquals(CoordConversion.chunkBlockIndexGetGlobal(CoordConversion.chunkBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
                     vec.chunkX(), vec.chunkZ()), vec);
         }
     }
@@ -158,15 +213,20 @@ public class CoordinateTest {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                 for (int y = -64; y < 364; y++) {
                     var vec = new Vec(x, y, z);
-                    var index = getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
+                    var index = CoordConversion.chunkBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
                     assertTrue(temp.add(index), "Duplicate block index found: " + index + " " + vec);
-                    assertEquals(getBlockPosition(index, vec.chunkX(), vec.chunkZ()), vec);
+                    assertEquals(CoordConversion.chunkBlockIndexGetGlobal(index, vec.chunkX(), vec.chunkZ()), vec);
 
-                    assertEquals(blockIndexToChunkPositionX(index), x);
-                    assertEquals(blockIndexToChunkPositionY(index), y);
-                    assertEquals(blockIndexToChunkPositionZ(index), z);
+                    assertEquals(CoordConversion.chunkBlockIndexGetX(index), x);
+                    assertEquals(CoordConversion.chunkBlockIndexGetY(index), y);
+                    assertEquals(CoordConversion.chunkBlockIndexGetZ(index), z);
                 }
             }
         }
+    }
+
+    @Test
+    public void blockIndexZero() {
+        assertEquals(0, CoordConversion.chunkBlockIndex(0, 0, 0), "Bad default index for zero case! Bad sign bit?");
     }
 }

@@ -1,21 +1,16 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientUpdateCommandBlockMinecartPacket(int entityId, @NotNull String command,
+public record ClientUpdateCommandBlockMinecartPacket(int entityId, String command,
                                                      boolean trackOutput) implements ClientPacket {
-    public ClientUpdateCommandBlockMinecartPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(STRING), reader.read(BOOLEAN));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, entityId);
-        writer.write(STRING, command);
-        writer.write(BOOLEAN, trackOutput);
-    }
+    public static final NetworkBuffer.Type<ClientUpdateCommandBlockMinecartPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, ClientUpdateCommandBlockMinecartPacket::entityId,
+            STRING, ClientUpdateCommandBlockMinecartPacket::command,
+            BOOLEAN, ClientUpdateCommandBlockMinecartPacket::trackOutput,
+            ClientUpdateCommandBlockMinecartPacket::new);
 }

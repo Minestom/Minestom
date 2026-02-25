@@ -3,55 +3,74 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
-import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record SoundEffectPacket(
-        @NotNull SoundEvent soundEvent,
-        @NotNull Source source,
-        int x,
-        int y,
-        int z,
+        SoundEvent soundEvent,
+        Source source,
+        Point origin,
         float volume,
         float pitch,
         long seed
 ) implements ServerPacket.Play {
+    public static final NetworkBuffer.Type<SoundEffectPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(NetworkBuffer buffer, SoundEffectPacket value) {
+            buffer.write(SoundEvent.NETWORK_TYPE, value.soundEvent());
+            buffer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source()));
+            buffer.write(INT, (int)(value.origin.x() * 8));
+            buffer.write(INT, (int)(value.origin.y() * 8));
+            buffer.write(INT, (int)(value.origin.z() * 8));
+            buffer.write(FLOAT, value.volume());
+            buffer.write(FLOAT, value.pitch());
+            buffer.write(LONG, value.seed());
+        }
 
-    public SoundEffectPacket(@NotNull SoundEvent soundEvent, @NotNull Source source, @NotNull Point position, float volume, float pitch, long seed) {
-        this(soundEvent, source, position.blockX(), position.blockY(), position.blockZ(), volume, pitch, seed);
+        @Override
+        public SoundEffectPacket read(NetworkBuffer buffer) {
+            return new SoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
+                    buffer.read(NetworkBuffer.Enum(Source.class)),
+                    new Vec(buffer.read(INT) / 8.0, buffer.read(INT) / 8.0, buffer.read(INT) / 8.0),
+                    buffer.read(FLOAT),
+                    buffer.read(FLOAT),
+                    buffer.read(LONG));
+        }
+    };
+
+    /**
+     * @deprecated Use {@link #SoundEffectPacket(SoundEvent, Source, Point, float, float, long)}
+     */
+    @Deprecated(forRemoval = true)
+    public SoundEffectPacket(SoundEvent soundEvent, Source source, int x, int y, int z, float volume, float pitch, long seed) {
+        this(soundEvent, source, new Vec(x, y, z), volume, pitch, seed);
     }
 
-    public SoundEffectPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(SoundEvent.NETWORK_TYPE),
-                reader.readEnum(Source.class),
-                reader.read(INT) * 8,
-                reader.read(INT) * 8,
-                reader.read(INT) * 8,
-                reader.read(FLOAT),
-                reader.read(FLOAT),
-                reader.read(LONG));
+    /**
+     * @deprecated Use {@link #origin()} with {@link Point#blockX()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public int x() {
+        return origin.blockX();
     }
 
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(SoundEvent.NETWORK_TYPE, soundEvent);
-        writer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(source));
-        writer.write(INT, x * 8);
-        writer.write(INT, y * 8);
-        writer.write(INT, z * 8);
-        writer.write(FLOAT, volume);
-        writer.write(FLOAT, pitch);
-        writer.write(LONG, seed);
+    /**
+     * @deprecated Use {@link #origin()} with {@link Point#blockY()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public int y() {
+        return origin.blockY();
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SOUND_EFFECT;
+    /**
+     * @deprecated Use {@link #origin()} with {@link Point#blockZ()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public int z() {
+        return origin.blockZ();
     }
 }

@@ -1,19 +1,33 @@
 package net.minestom.server.component;
 
-import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 record DataComponentImpl<T>(
         int id,
-        @NotNull NamespaceID namespace,
+        Key key,
         @Nullable NetworkBuffer.Type<T> network,
-        @Nullable BinaryTagSerializer<T> nbt
+        @Nullable Codec<T> codec
 ) implements DataComponent<T> {
+    static final Map<Key, DataComponent<?>> NAMESPACES = new HashMap<>(32);
+    static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
+
+    static <T> DataComponent<T> register(@KeyPattern String name, @Nullable NetworkBuffer.Type<T> network, @Nullable Codec<T> nbt) {
+        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), network, nbt);
+        NAMESPACES.put(impl.key(), impl);
+        IDS.set(impl.id(), impl);
+        return impl;
+    }
 
     @Override
     public boolean isSynced() {
@@ -22,29 +36,29 @@ record DataComponentImpl<T>(
 
     @Override
     public boolean isSerialized() {
-        return nbt != null;
+        return codec != null;
     }
 
     @Override
-    public @NotNull T read(@NotNull BinaryTagSerializer.Context context, @NotNull BinaryTag tag) {
-        Check.notNull(nbt, "{0} cannot be deserialized from NBT", this);
-        return nbt.read(context, tag);
+    public <D> Result<T> decode(Transcoder<D> coder, D value) {
+        Check.notNull(codec, "{0} cannot be deserialized from Codec", this);
+        return this.codec.decode(coder, value);
     }
 
     @Override
-    public @NotNull BinaryTag write(@NotNull BinaryTagSerializer.Context context, @NotNull T value) {
-        Check.notNull(nbt, "{0} cannot be serialized to NBT", this);
-        return nbt.write(context, value);
+    public <D> Result<D> encode(Transcoder<D> coder, @Nullable T value) {
+        Check.notNull(codec, "{0} cannot be deserialized from Codec", this);
+        return this.codec.encode(coder, value);
     }
 
     @Override
-    public @NotNull T read(@NotNull NetworkBuffer reader) {
+    public T read(NetworkBuffer reader) {
         Check.notNull(network, "{0} cannot be deserialized from network", this);
         return network.read(reader);
     }
 
     @Override
-    public void write(@NotNull NetworkBuffer writer, @NotNull T value) {
+    public void write(NetworkBuffer writer, T value) {
         Check.notNull(network, "{0} cannot be serialized to network", this);
         network.write(writer, value);
     }
@@ -53,5 +67,4 @@ record DataComponentImpl<T>(
     public String toString() {
         return name();
     }
-
 }

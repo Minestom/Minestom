@@ -1,9 +1,9 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.binary.BinaryWriter;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
@@ -19,22 +19,19 @@ public class ArgumentStringArray extends Argument<String[]> {
         super(id, true, true);
     }
 
-    @NotNull
     @Override
-    public String[] parse(@NotNull CommandSender sender, @NotNull String input) {
+    public String[] parse(CommandSender sender, String input) {
         return input.split(Pattern.quote(StringUtils.SPACE));
     }
 
     @Override
-    public String parser() {
-        return "brigadier:string";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.STRING;
     }
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
-            packetWriter.writeVarInt(2); // Greedy phrase
-        });
+        return NetworkBuffer.makeArray(NetworkBuffer.VAR_INT, 2); // Greedy phrase
     }
 
     @Override

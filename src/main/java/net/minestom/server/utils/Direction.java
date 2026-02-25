@@ -1,6 +1,6 @@
 package net.minestom.server.utils;
 
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.coordinate.Vec;
 
 public enum Direction {
     DOWN(0, -1, 0),
@@ -15,11 +15,13 @@ public enum Direction {
     private final int normalX;
     private final int normalY;
     private final int normalZ;
+    private final Vec normalVec;
 
     Direction(int normalX, int normalY, int normalZ) {
         this.normalX = normalX;
         this.normalY = normalY;
         this.normalZ = normalZ;
+        this.normalVec = new Vec(normalX, normalY, normalZ);
     }
 
     public int normalX() {
@@ -34,7 +36,31 @@ public enum Direction {
         return normalZ;
     }
 
-    public @NotNull Direction opposite() {
+    public Vec vec() {
+        return normalVec;
+    }
+
+    public Vec mul(double mult) {
+        return normalVec.mul(mult);
+    }
+
+    public boolean positive() {
+        return normalX > 0 || normalY > 0 || normalZ > 0;
+    }
+
+    public boolean negative() {
+        return !positive();
+    }
+
+    public boolean vertical() {
+        return this == UP || this == DOWN;
+    }
+
+    public boolean horizontal() {
+        return !vertical();
+    }
+
+    public Direction opposite() {
         return switch (this) {
             case UP -> DOWN;
             case DOWN -> UP;

@@ -6,7 +6,6 @@ import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +35,7 @@ public record Weather(float rainLevel, float thunderLevel) {
     }
 
     @Contract(pure = true)
-    public @NotNull Weather withRainLevel(float rainLevel) {
+    public Weather withRainLevel(float rainLevel) {
         return new Weather(rainLevel, thunderLevel);
     }
 
@@ -48,17 +47,17 @@ public record Weather(float rainLevel, float thunderLevel) {
     }
 
     @Contract(pure = true)
-    public @NotNull Weather withRainLevel(@NotNull FloatUnaryOperator operator) {
+    public Weather withRainLevel(FloatUnaryOperator operator) {
         return withRainLevel(operator.apply(rainLevel));
     }
 
     @Contract(pure = true)
-    public @NotNull Weather withThunderLevel(float thunderLevel) {
+    public Weather withThunderLevel(float thunderLevel) {
         return new Weather(rainLevel, thunderLevel);
     }
 
     @Contract(pure = true)
-    public @NotNull Weather withThunderLevel(@NotNull FloatUnaryOperator operator) {
+    public Weather withThunderLevel(FloatUnaryOperator operator) {
         return withRainLevel(operator.apply(thunderLevel));
     }
 
@@ -74,7 +73,7 @@ public record Weather(float rainLevel, float thunderLevel) {
         return new ChangeGameStatePacket(ChangeGameStatePacket.Reason.THUNDER_LEVEL_CHANGE, thunderLevel);
     }
 
-    public @NotNull Collection<SendablePacket> createWeatherPackets() {
+    public Collection<SendablePacket> createWeatherPackets() {
         return List.of(createIsRainingPacket(), createRainLevelPacket(), createThunderLevelPacket());
     }
 }

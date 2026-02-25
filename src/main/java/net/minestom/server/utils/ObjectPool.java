@@ -1,17 +1,13 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.ServerFlag;
-import net.minestom.server.network.socket.Server;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.Cleaner;
 import java.lang.ref.SoftReference;
-import java.nio.ByteBuffer;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -21,21 +17,27 @@ import java.util.function.UnaryOperator;
 @ApiStatus.Experimental
 public final class ObjectPool<T> {
     private static final int QUEUE_SIZE = 32_768;
+    private static final Cleaner CLEANER = Cleaner.create();
 
-    public static final ObjectPool<BinaryBuffer> BUFFER_POOL = new ObjectPool<>(() -> BinaryBuffer.ofSize(ServerFlag.POOLED_BUFFER_SIZE), BinaryBuffer::clear);
-    public static final ObjectPool<ByteBuffer> PACKET_POOL = new ObjectPool<>(() -> ByteBuffer.allocateDirect(ServerFlag.MAX_PACKET_SIZE), ByteBuffer::clear);
-
-    private final Cleaner cleaner = Cleaner.create();
-    private final MessagePassingQueue<SoftReference<T>> pool = new MpmcUnboundedXaddArrayQueue<>(QUEUE_SIZE);
+    private final MessagePassingQueue<SoftReference<T>> pool;
     private final Supplier<T> supplier;
     private final UnaryOperator<T> sanitizer;
 
-    ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+    public static <T> ObjectPool<T> pool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+        return new ObjectPool<>(supplier, sanitizer);
+    }
+
+    public static <T> ObjectPool<T> pool(Supplier<T> supplier) {
+        return new ObjectPool<>(supplier, UnaryOperator.identity());
+    }
+
+    private ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+        this.pool = ConcurrentMessageQueues.mpmcSpecialUnboundedArrayQueue(QUEUE_SIZE);
         this.supplier = supplier;
         this.sanitizer = sanitizer;
     }
 
-    public @NotNull T get() {
+    public T get() {
         T result;
         SoftReference<T> ref;
         while ((ref = pool.poll()) != null) {
@@ -44,13 +46,13 @@ public final class ObjectPool<T> {
         return supplier.get();
     }
 
-    public @NotNull T getAndRegister(@NotNull Object ref) {
+    public T getAndRegister(Object ref) {
         T result = get();
         register(ref, result);
         return result;
     }
 
-    public void add(@NotNull T object) {
+    public void add(T object) {
         object = sanitizer.apply(object);
         this.pool.offer(new SoftReference<>(object));
     }
@@ -63,23 +65,23 @@ public final class ObjectPool<T> {
         return pool.size();
     }
 
-    public void register(@NotNull Object ref, @NotNull AtomicReference<T> objectRef) {
-        this.cleaner.register(ref, new BufferRefCleaner<>(this, objectRef));
+    public void register(Object ref, AtomicReference<T> objectRef) {
+        CLEANER.register(ref, new BufferRefCleaner<>(this, objectRef));
     }
 
-    public void register(@NotNull Object ref, @NotNull T object) {
-        this.cleaner.register(ref, new BufferCleaner<>(this, object));
+    public void register(Object ref, T object) {
+        CLEANER.register(ref, new BufferCleaner<>(this, object));
     }
 
-    public void register(@NotNull Object ref, @NotNull Collection<T> objects) {
-        this.cleaner.register(ref, new BuffersCleaner<>(this, objects));
+    public void register(Object ref, Collection<T> objects) {
+        CLEANER.register(ref, new BuffersCleaner<>(this, objects));
     }
 
-    public @NotNull Holder hold() {
+    public Holder hold() {
         return new Holder(get());
     }
 
-    public <R> R use(@NotNull Function<@NotNull T, R> function) {
+    public <R> R use(Function<T, R> function) {
         T object = get();
         try {
             return function.apply(object);
@@ -113,21 +115,20 @@ public final class ObjectPool<T> {
 
     public final class Holder implements AutoCloseable {
         private final T object;
-        private boolean closed;
+        private final AtomicBoolean closed = new AtomicBoolean(false);
 
         Holder(T object) {
             this.object = object;
         }
 
-        public @NotNull T get() {
-            if (closed) throw new IllegalStateException("Holder is closed");
+        public T get() {
+            if (closed.get()) throw new IllegalStateException("Holder is closed");
             return object;
         }
 
         @Override
         public void close() {
-            if (!closed) {
-                closed = true;
+            if (closed.compareAndSet(false, true)) {
                 add(object);
             }
         }

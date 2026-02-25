@@ -1,9 +1,8 @@
 package net.minestom.server.gamedata;
 
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
+import net.kyori.adventure.key.Key;
 
-record DataPackImpl(@NotNull NamespaceID namespaceId, boolean isSynced) implements DataPack {
+record DataPackImpl(Key key, boolean isSynced) implements DataPack {
 
     @Override
     public boolean isSynced() {

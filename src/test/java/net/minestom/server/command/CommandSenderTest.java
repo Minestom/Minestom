@@ -2,39 +2,16 @@ package net.minestom.server.command;
 
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.TagHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class CommandSenderTest {
-
-    @Test
-    public void testSenderPermissions() {
-
-        CommandSender sender = new SenderTest();
-
-        Permission permission = new Permission("permission.test", CompoundBinaryTag.empty());
-
-        assertEquals(sender.getAllPermissions(), Set.of());
-
-        sender.addPermission(permission);
-        assertEquals(sender.getPermission(permission.getPermissionName()), permission);
-        assertEquals(sender.getAllPermissions(), Set.of(permission));
-
-        sender.removePermission(permission.getPermissionName());
-        assertEquals(sender.getAllPermissions(), Set.of());
-    }
 
     @Test
     public void testMessageSending() {
@@ -54,23 +31,17 @@ public class CommandSenderTest {
 
     private static final class SenderTest implements CommandSender {
 
-        private final Set<Permission> permissions = new HashSet<>();
         private final TagHandler handler = TagHandler.newHandler();
 
         private Component mostRecentMessage = null;
 
         @Override
-        public @NotNull Set<Permission> getAllPermissions() {
-            return permissions;
-        }
-
-        @Override
-        public @NotNull TagHandler tagHandler() {
+        public TagHandler tagHandler() {
             return handler;
         }
 
         @Override
-        public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
+        public void sendMessage(Identity source, Component message, MessageType type) {
             mostRecentMessage = message;
         }
 
@@ -79,7 +50,7 @@ public class CommandSenderTest {
         }
 
         @Override
-        public @NotNull Identity identity() {
+        public Identity identity() {
             return Identity.nil();
         }
     }

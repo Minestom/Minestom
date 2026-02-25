@@ -1,30 +1,23 @@
 package net.minestom.server.entity.metadata;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.entity.EntityPose;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
 public class EntityMeta {
-    public static final byte OFFSET = 0;
-    public static final byte MAX_OFFSET = OFFSET + 8;
-
-    private final static byte ON_FIRE_BIT = 0x01;
-    private final static byte CROUCHING_BIT = 0x02;
-    private final static byte SPRINTING_BIT = 0x08;
-    private final static byte SWIMMING_BIT = 0x10;
-    private final static byte INVISIBLE_BIT = 0x20;
-    private final static byte HAS_GLOWING_EFFECT_BIT = 0x40;
-    private final static byte FLYING_WITH_ELYTRA_BIT = (byte) 0x80;
-
     private final WeakReference<Entity> entityRef;
-    protected final Metadata metadata;
+    protected final MetadataHolder metadata;
 
-    public EntityMeta(@Nullable Entity entity, @NotNull Metadata metadata) {
+    public EntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
         this.entityRef = new WeakReference<>(entity);
         this.metadata = metadata;
     }
@@ -47,141 +40,123 @@ public class EntityMeta {
     }
 
     public boolean isOnFire() {
-        return getMaskBit(OFFSET, ON_FIRE_BIT);
+        return metadata.get(MetadataDef.IS_ON_FIRE);
     }
 
     public void setOnFire(boolean value) {
-        setMaskBit(OFFSET, ON_FIRE_BIT, value);
+        metadata.set(MetadataDef.IS_ON_FIRE, value);
     }
 
     public boolean isSneaking() {
-        return getMaskBit(OFFSET, CROUCHING_BIT);
+        return metadata.get(MetadataDef.IS_CROUCHING);
     }
 
     public void setSneaking(boolean value) {
-        setMaskBit(OFFSET, CROUCHING_BIT, value);
+        metadata.set(MetadataDef.IS_CROUCHING, value);
     }
 
     public boolean isSprinting() {
-        return getMaskBit(OFFSET, SPRINTING_BIT);
+        return metadata.get(MetadataDef.IS_SPRINTING);
     }
 
     public void setSprinting(boolean value) {
-        setMaskBit(OFFSET, SPRINTING_BIT, value);
+        metadata.set(MetadataDef.IS_SPRINTING, value);
     }
 
     public boolean isSwimming() {
-        return getMaskBit(OFFSET, SWIMMING_BIT);
+        return metadata.get(MetadataDef.IS_SWIMMING);
     }
 
     public void setSwimming(boolean value) {
-        setMaskBit(OFFSET, SWIMMING_BIT, value);
+        metadata.set(MetadataDef.IS_SWIMMING, value);
     }
 
     public boolean isInvisible() {
-        return getMaskBit(OFFSET, INVISIBLE_BIT);
+        return metadata.get(MetadataDef.IS_INVISIBLE);
     }
 
     public void setInvisible(boolean value) {
-        setMaskBit(OFFSET, INVISIBLE_BIT, value);
+        metadata.set(MetadataDef.IS_INVISIBLE, value);
     }
 
     public boolean isHasGlowingEffect() {
-        return getMaskBit(OFFSET, HAS_GLOWING_EFFECT_BIT);
+        return metadata.get(MetadataDef.HAS_GLOWING_EFFECT);
     }
 
     public void setHasGlowingEffect(boolean value) {
-        setMaskBit(OFFSET, HAS_GLOWING_EFFECT_BIT, value);
+        metadata.set(MetadataDef.HAS_GLOWING_EFFECT, value);
     }
 
     public boolean isFlyingWithElytra() {
-        return getMaskBit(OFFSET, FLYING_WITH_ELYTRA_BIT);
+        return metadata.get(MetadataDef.IS_FLYING_WITH_ELYTRA);
     }
 
     public void setFlyingWithElytra(boolean value) {
-        setMaskBit(OFFSET, FLYING_WITH_ELYTRA_BIT, value);
+        metadata.set(MetadataDef.IS_FLYING_WITH_ELYTRA, value);
     }
 
     public int getAirTicks() {
-        return this.metadata.getIndex(OFFSET + 1, 300);
+        return metadata.get(MetadataDef.AIR_TICKS);
     }
 
     public void setAirTicks(int value) {
-        this.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.AIR_TICKS, value);
     }
 
-    public Component getCustomName() {
-        return this.metadata.getIndex(OFFSET + 2, null);
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
+     */
+    @Deprecated
+    public @Nullable Component getCustomName() {
+        return metadata.get(MetadataDef.CUSTOM_NAME);
     }
 
-    public void setCustomName(Component value) {
-        this.metadata.setIndex(OFFSET + 2, Metadata.OptChat(value));
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
+     */
+    @Deprecated
+    public void setCustomName(@Nullable Component value) {
+        metadata.set(MetadataDef.CUSTOM_NAME, value);
     }
 
     public boolean isCustomNameVisible() {
-        return this.metadata.getIndex(OFFSET + 3, false);
+        return metadata.get(MetadataDef.CUSTOM_NAME_VISIBLE);
     }
 
     public void setCustomNameVisible(boolean value) {
-        this.metadata.setIndex(OFFSET + 3, Metadata.Boolean(value));
+        metadata.set(MetadataDef.CUSTOM_NAME_VISIBLE, value);
     }
 
     public boolean isSilent() {
-        return this.metadata.getIndex(OFFSET + 4, false);
+        return metadata.get(MetadataDef.IS_SILENT);
     }
 
     public void setSilent(boolean value) {
-        this.metadata.setIndex(OFFSET + 4, Metadata.Boolean(value));
+        metadata.set(MetadataDef.IS_SILENT, value);
     }
 
     public boolean isHasNoGravity() {
-        return this.metadata.getIndex(OFFSET + 5, false);
+        return metadata.get(MetadataDef.HAS_NO_GRAVITY);
     }
 
     public void setHasNoGravity(boolean value) {
-        this.metadata.setIndex(OFFSET + 5, Metadata.Boolean(value));
+        metadata.set(MetadataDef.HAS_NO_GRAVITY, value);
     }
 
-    public Entity.Pose getPose() {
-        return this.metadata.getIndex(OFFSET + 6, Entity.Pose.STANDING);
+    public EntityPose getPose() {
+        return metadata.get(MetadataDef.POSE);
     }
 
-    public void setPose(Entity.Pose value) {
-        this.metadata.setIndex(OFFSET + 6, Metadata.Pose(value));
+    public void setPose(EntityPose value) {
+        metadata.set(MetadataDef.POSE, value);
     }
 
     public int getTickFrozen() {
-        return this.metadata.getIndex(OFFSET + 7, 0);
+        return metadata.get(MetadataDef.TICKS_FROZEN);
     }
 
     public void setTickFrozen(int tickFrozen) {
-        this.metadata.setIndex(OFFSET + 7, Metadata.VarInt(tickFrozen));
-    }
-
-    protected byte getMask(int index) {
-        return this.metadata.getIndex(index, (byte) 0);
-    }
-
-    protected void setMask(int index, byte mask) {
-        this.metadata.setIndex(index, Metadata.Byte(mask));
-    }
-
-    protected boolean getMaskBit(int index, byte bit) {
-        return (getMask(index) & bit) == bit;
-    }
-
-    protected void setMaskBit(int index, byte bit, boolean value) {
-        byte mask = getMask(index);
-        boolean currentValue = (mask & bit) == bit;
-        if (currentValue == value) {
-            return;
-        }
-        if (value) {
-            mask |= bit;
-        } else {
-            mask &= ~bit;
-        }
-        setMask(index, mask);
+        metadata.set(MetadataDef.TICKS_FROZEN, tickFrozen);
     }
 
     protected void consumeEntity(Consumer<Entity> consumer) {
@@ -191,4 +166,63 @@ public class EntityMeta {
         }
     }
 
+    /**
+     * Exists to hide the component set implementation on meta to direct people to use the method on Entity.
+     *
+     * <p>Planned to only exist while we have both metadata and components separately/all metadata is not represented by components.</p>
+     *
+     * @see Entity#set(DataComponent, Object)
+     */
+    @ApiStatus.Internal
+    public static <T> @Nullable T getComponent(EntityMeta meta, DataComponent<T> component) {
+        return meta.get(component);
+    }
+
+    /**
+     * Exists to hide the component set implementation on meta to direct people to use the method on Entity.
+     *
+     * <p>Planned to only exist while we have both metadata and components separately/all metadata is not represented by components.</p>
+     *
+     * @see Entity#set(DataComponent, Object)
+     */
+    @ApiStatus.Internal
+    public static <T> void setComponent(EntityMeta meta, DataComponent<T> component, T value) {
+        meta.set(component, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(DataComponent<T> component) {
+        if (component == DataComponents.CUSTOM_NAME)
+            return (T) metadata.get(MetadataDef.CUSTOM_NAME);
+        return null;
+    }
+
+    protected <T> void set(DataComponent<T> component, T value) {
+        if (component == DataComponents.CUSTOM_NAME)
+            metadata.set(MetadataDef.CUSTOM_NAME, (Component) value);
+    }
+
+    /**
+     * Retrieves the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to retrieve the value from.
+     * @param <T>   The type of the metadata value.
+     * @return The value associated with the specified metadata entry.
+     */
+    @ApiStatus.Experimental
+    public <T> T get(MetadataDef.Entry<T> entry) {
+        return metadata.get(entry);
+    }
+
+    /**
+     * Sets the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to be updated.
+     * @param value The value to assign to the specified metadata entry.
+     * @param <T>   The type of the metadata value.
+     */
+    @ApiStatus.Experimental
+    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+        metadata.set(entry, value);
+    }
 }

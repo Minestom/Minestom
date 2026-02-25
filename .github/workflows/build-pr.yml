@@ -1,0 +1,51 @@
+name: Build PR
+on: [ pull_request ]
+jobs:
+  build_pr:
+    name: Build & Test PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          # Allow caching for all branches in our repo;
+          # this is so we don't get evicted, see Cache Optimization in action docs for more info
+          cache-read-only: ${{ github.repository_owner != github.event.pull_request.head.repo.owner.login }}
+      - name: Build
+        run: ./gradlew test javadoc
+  publish:
+    name: Publish PR
+    if: contains(github.event.pull_request.labels.*.name, 'Publish Pull Request') && github.repository_owner == 'Minestom'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          # Allow caching for all branches in our repo;
+          # this is so we don't get evicted, see Cache Optimization in action docs for more info
+          cache-read-only: false
+
+      - name: Publish Artifacts
+        env:
+          MINESTOM_VERSION: ${{ github.head_ref }}-SNAPSHOT
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
+        run: |
+          ./gradlew nmcpPublishAggregationToCentralPortalSnapshots
+          echo "Version: ${MINESTOM_VERSION}" >> $GITHUB_STEP_SUMMARY

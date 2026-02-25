@@ -1,40 +1,57 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.color.DyeColor;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class SheepMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
+    private static final DyeColor[] DYE_VALUES = DyeColor.values();
 
-    private final static byte COLOR_BITS = 0x0F;
-    private final static byte SHEARED_BIT = 0x10;
-
-    public SheepMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public SheepMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public int getColor() {
-        return getMask(OFFSET) & COLOR_BITS;
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#SHEEP_COLOR} instead.
+     */
+    @Deprecated
+    public DyeColor getColor() {
+        return DYE_VALUES[metadata.get(MetadataDef.Sheep.COLOR_ID)];
     }
 
-    public void setColor(byte color) {
-        byte before = getMask(OFFSET);
-        byte mask = before;
-        mask &= ~COLOR_BITS;
-        mask |= (color & COLOR_BITS);
-        if (mask != before) {
-            setMask(OFFSET, mask);
-        }
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#SHEEP_COLOR} instead.
+     */
+    @Deprecated
+    public void setColor(DyeColor color) {
+        metadata.set(MetadataDef.Sheep.COLOR_ID, (byte) color.ordinal());
     }
 
     public boolean isSheared() {
-        return getMaskBit(OFFSET, SHEARED_BIT);
+        return metadata.get(MetadataDef.Sheep.IS_SHEARED);
     }
 
     public void setSheared(boolean value) {
-        setMaskBit(OFFSET, SHEARED_BIT, value);
+        metadata.set(MetadataDef.Sheep.IS_SHEARED, value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(DataComponent<T> component) {
+        if (component == DataComponents.SHEEP_COLOR)
+            return (T) getColor();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(DataComponent<T> component, T value) {
+        if (component == DataComponents.SHEEP_COLOR)
+            setColor((DyeColor) value);
+        else super.set(component, value);
     }
 
 }

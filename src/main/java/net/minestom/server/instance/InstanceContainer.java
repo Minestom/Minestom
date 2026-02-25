@@ -1,39 +1,45 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.instance.InstanceBlockUpdateEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
+import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
-import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.worldevent.WorldEvent;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,12 +49,12 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static net.minestom.server.utils.chunk.ChunkUtils.*;
+import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
@@ -66,17 +72,17 @@ public class InstanceContainer extends Instance {
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
     // the chunk generator used, can be null
-    private volatile Generator generator;
+    private volatile @Nullable Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
 
     private final Lock changingBlockLock = new ReentrantLock();
-    private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
+    private final Map<BlockVec, Block> currentlyChangingBlocks = new HashMap<>();
 
     // the chunk loader, used when trying to load/save a chunk from another source
-    private IChunkLoader chunkLoader;
+    private ChunkLoader chunkLoader;
 
     // used to automatically enable the chunk loading or not
     private boolean autoChunkLoad = true;
@@ -88,42 +94,44 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
-        this(uniqueId, dimensionType, null, dimensionType.namespace());
+    public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType) {
+        this(uuid, dimensionType, null, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
-        this(uniqueId, dimensionType, null, dimensionName);
+    public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
+        this(uuid, dimensionType, null, dimensionName);
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
-        this(uniqueId, dimensionType, loader, dimensionType.namespace());
+    public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader) {
+        this(uuid, dimensionType, loader, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
-        this(MinecraftServer.getDimensionTypeRegistry(), uniqueId, dimensionType, loader, dimensionName);
+    public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader, Key dimensionName) {
+        this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, loader, dimensionName);
     }
 
     public InstanceContainer(
-            @NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry,
-            @NotNull UUID uniqueId,
-            @NotNull DynamicRegistry.Key<DimensionType> dimensionType,
-            @Nullable IChunkLoader loader,
-            @NotNull NamespaceID dimensionName
+            DynamicRegistry<DimensionType> dimensionTypeRegistry,
+            UUID uuid,
+            RegistryKey<DimensionType> dimensionType,
+            @Nullable ChunkLoader loader,
+            Key dimensionName
     ) {
-        super(dimensionTypeRegistry, uniqueId, dimensionType, dimensionName);
+        super(dimensionTypeRegistry, uuid, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
+        // last block change starts at instance creation time
+        refreshLastBlockChangeTime();
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates) {
+    public void setBlock(int x, int y, int z, Block block, boolean doBlockUpdates) {
         Chunk chunk = getChunkAt(x, z);
         if (chunk == null) {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
-            chunk = loadChunk(getChunkCoordinate(x), getChunkCoordinate(z)).join();
+            chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
         if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, doBlockUpdates, 0);
     }
@@ -139,7 +147,7 @@ public class InstanceContainer extends Instance {
      * @param z     the block Z
      * @param block the block to place
      */
-    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
+    private synchronized void UNSAFE_setBlock(Chunk chunk, int x, int y, int z, Block block,
                                               @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
                                               boolean doBlockUpdates, int updateDistance) {
         if (chunk.isReadOnly()) return;
@@ -151,8 +159,8 @@ public class InstanceContainer extends Instance {
 
         synchronized (chunk) {
             // Refresh the last block change time
-            this.lastBlockChangeTime = System.currentTimeMillis();
-            final Vec blockPosition = new Vec(x, y, z);
+            this.lastBlockChangeTime = System.nanoTime();
+            final BlockVec blockPosition = new BlockVec(x, y, z);
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
@@ -195,17 +203,18 @@ public class InstanceContainer extends Instance {
             // Refresh player chunk block
             {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-                var registry = block.registry();
-                if (registry.isBlockEntity()) {
+                BlockEntityType blockEntityType = block.registry().blockEntityType();
+                if (blockEntityType != null) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
-                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
+                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
                 }
             }
+            EventDispatcher.call(new InstanceBlockUpdateEvent(this, blockPosition, block));
         }
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
+    public boolean placeBlock(BlockHandler.Placement placement, boolean doBlockUpdates) {
         final Point blockPosition = placement.getBlockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
         if (!isLoaded(chunk)) return false;
@@ -215,7 +224,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
+    public boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates) {
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
@@ -237,10 +246,10 @@ public class InstanceContainer extends Instance {
             // Break or change the broken block based on event result
             final Block resultBlock = blockBreakEvent.getResultBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
-                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
+                    new BlockHandler.PlayerDestroy(block, resultBlock, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
-            PacketUtils.sendGroupedPacket(chunk.getViewers(),
-                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),
+            PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
+                    new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), blockPosition, block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }
@@ -248,17 +257,17 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @NotNull CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
         return loadOrRetrieve(chunkX, chunkZ, () -> retrieveChunk(chunkX, chunkZ));
     }
 
     @Override
-    public @NotNull CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         return loadOrRetrieve(chunkX, chunkZ, () -> hasEnabledAutoChunkLoad() ? retrieveChunk(chunkX, chunkZ) : AsyncUtils.empty());
     }
 
     @Override
-    public synchronized void unloadChunk(@NotNull Chunk chunk) {
+    public synchronized void unloadChunk(Chunk chunk) {
         if (!isLoaded(chunk)) return;
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();
@@ -267,141 +276,180 @@ public class InstanceContainer extends Instance {
         // Remove all entities in chunk
         getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES).forEach(Entity::remove);
         // Clear cache
-        this.chunks.remove(getChunkIndex(chunkX, chunkZ));
+        this.chunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ));
         chunk.unload();
-        if (chunkLoader != null) {
-            chunkLoader.unloadChunk(chunk);
-        }
+        chunkLoader.unloadChunk(chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.deletePartition(chunk);
     }
 
     @Override
-    public Chunk getChunk(int chunkX, int chunkZ) {
-        return chunks.get(getChunkIndex(chunkX, chunkZ));
+    public @Nullable Chunk getChunk(int chunkX, int chunkZ) {
+        return chunks.get(CoordConversion.chunkIndex(chunkX, chunkZ));
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveInstance() {
-        return chunkLoader.saveInstance(this);
+    public CompletableFuture<Void> saveInstance() {
+        final ChunkLoader chunkLoader = this.chunkLoader;
+        return optionalAsync(chunkLoader.supportsParallelSaving(), () -> chunkLoader.saveInstance(this));
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
-        return chunkLoader.saveChunk(chunk);
+    public CompletableFuture<Void> saveChunkToStorage(Chunk chunk) {
+        final ChunkLoader chunkLoader = this.chunkLoader;
+        return optionalAsync(chunkLoader.supportsParallelSaving(), () -> chunkLoader.saveChunk(chunk));
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunksToStorage() {
-        return chunkLoader.saveChunks(getChunks());
+    public CompletableFuture<Void> saveChunksToStorage() {
+        final ChunkLoader chunkLoader = this.chunkLoader;
+        return optionalAsync(chunkLoader.supportsParallelSaving(), () -> chunkLoader.saveChunks(getChunks()));
     }
 
-    protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
+    private CompletableFuture<Void> optionalAsync(boolean async, Runnable runnable) {
+        if (!async) {
+            runnable.run();
+            return CompletableFuture.completedFuture(null);
+        }
+        final CompletableFuture<Void> future = new CompletableFuture<>();
+        Thread.startVirtualThread(() -> {
+            try {
+                runnable.run();
+                future.complete(null);
+            } catch (Throwable e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+        });
+        return future;
+    }
+
+    protected CompletableFuture<Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
-        final long index = getChunkIndex(chunkX, chunkZ);
+        final long index = CoordConversion.chunkIndex(chunkX, chunkZ);
         final CompletableFuture<Chunk> prev = loadingChunks.putIfAbsent(index, completableFuture);
         if (prev != null) return prev;
-        final IChunkLoader loader = chunkLoader;
-        final Runnable retriever = () -> loader.loadChunk(this, chunkX, chunkZ)
-                .thenCompose(chunk -> {
-                    if (chunk != null) {
-                        // Chunk has been loaded from storage
-                        return CompletableFuture.completedFuture(chunk);
-                    } else {
-                        // Loader couldn't load the chunk, generate it
-                        return createChunk(chunkX, chunkZ).whenComplete((c, a) -> c.onGenerate());
-                    }
-                })
-                // cache the retrieved chunk
-                .thenAccept(chunk -> {
-                    // TODO run in the instance thread?
-                    cacheChunk(chunk);
-                    chunk.onLoad();
+        final ChunkLoader loader = chunkLoader;
+        final Consumer<Chunk> generate = chunk -> {
+            if (chunk == null) {
+                // Loader couldn't load the chunk, generate it
+                var chunkGeneration = EventsJFR.newChunkGeneration(getUuid(), chunkX, chunkZ);
+                chunkGeneration.begin();
+                chunk = createChunk(chunkX, chunkZ);
+                chunk.onGenerate();
+                chunkGeneration.commit();
+            }
 
-                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
-                    final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
-                    assert future == completableFuture : "Invalid future: " + future;
-                    completableFuture.complete(chunk);
-                })
-                .exceptionally(throwable -> {
-                    MinecraftServer.getExceptionManager().handleException(throwable);
-                    return null;
-                });
+            // TODO run in the instance thread?
+            cacheChunk(chunk);
+            chunk.onLoad();
+
+            EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
+            final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
+            assert future == completableFuture : "Invalid future: " + future;
+            completableFuture.complete(chunk);
+        };
+        Supplier<Chunk> loaderSupplier = () -> {
+            var chunkLoading = EventsJFR.newChunkLoading(getUuid(), loader.getClass(), chunkX, chunkZ);
+            chunkLoading.begin();
+            final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+            chunkLoading.end();
+            if (chunk != null) chunkLoading.commit();
+            return chunk;
+        };
         if (loader.supportsParallelLoading()) {
-            CompletableFuture.runAsync(retriever);
+            Thread.startVirtualThread(() -> {
+                try {
+                    final Chunk chunk = loaderSupplier.get();
+                    generate.accept(chunk);
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            });
         } else {
-            retriever.run();
+            final Chunk chunk = loaderSupplier.get();
+            Thread.startVirtualThread(() -> {
+                try {
+                    generate.accept(chunk);
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            });
         }
         return completableFuture;
     }
 
     Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
 
-    protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
+    protected Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         Generator generator = generator();
-        if (generator != null && chunk.shouldGenerate()) {
-            CompletableFuture<Chunk> resultFuture = new CompletableFuture<>();
-            // TODO: virtual thread once Loom is available
-            ForkJoinPool.commonPool().submit(() -> {
-                var chunkUnit = GeneratorImpl.chunk(chunk);
-                try {
-                    // Generate block/biome palette
-                    generator.generate(chunkUnit);
-                    // Apply nbt/handler
-                    if (chunkUnit.modifier() instanceof GeneratorImpl.AreaModifierImpl chunkModifier) {
-                        for (var section : chunkModifier.sections()) {
-                            if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
-                                applyGenerationData(chunk, sectionModifier);
-                            }
-                        }
-                    }
-                    // Register forks or apply locally
-                    for (var fork : chunkUnit.forks()) {
-                        var sections = ((GeneratorImpl.AreaModifierImpl) fork.modifier()).sections();
-                        for (var section : sections) {
-                            if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
-                                if (sectionModifier.blockPalette().count() == 0)
-                                    continue;
-                                final Point start = section.absoluteStart();
-                                final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
-                                if (forkChunk != null) {
-                                    applyFork(forkChunk, sectionModifier);
-                                    // Update players
-                                    forkChunk.invalidate();
-                                    forkChunk.sendChunk();
-                                } else {
-                                    final long index = ChunkUtils.getChunkIndex(start);
-                                    this.generationForks.compute(index, (i, sectionModifiers) -> {
-                                        if (sectionModifiers == null) sectionModifiers = new ArrayList<>();
-                                        sectionModifiers.add(sectionModifier);
-                                        return sectionModifiers;
-                                    });
-                                }
-                            }
-                        }
-                    }
-                    // Apply awaiting forks
-                    processFork(chunk);
-                } catch (Throwable e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                } finally {
-                    // End generation
-                    refreshLastBlockChangeTime();
-                    resultFuture.complete(chunk);
-                }
-            });
-            return resultFuture;
-        } else {
+        if (generator == null || !chunk.shouldGenerate()) {
             // No chunk generator, execute the callback with the empty chunk
             processFork(chunk);
-            return CompletableFuture.completedFuture(chunk);
+            return chunk;
+        }
+        generateChunk(chunk, generator);
+        return chunk;
+    }
+
+    protected void generateChunk(Chunk chunk, Generator generator) {
+        final int chunkX = chunk.getChunkX(), chunkZ = chunk.getChunkZ();
+        GeneratorImpl.GenSection[] genSections = new GeneratorImpl.GenSection[chunk.getSections().size()];
+        Arrays.setAll(genSections, i -> {
+            Section section = chunk.getSections().get(i);
+            return new GeneratorImpl.GenSection(section.blockPalette(), section.biomePalette());
+        });
+        var chunkUnit = GeneratorImpl.chunk(MinecraftServer.getBiomeRegistry(), genSections,
+                chunk.getChunkX(), chunk.minSection, chunk.getChunkZ());
+        try {
+            // Generate block/biome palette
+            generator.generate(chunkUnit);
+            // Apply nbt/handler
+            if (chunkUnit.modifier() instanceof GeneratorImpl.AreaModifierImpl chunkModifier) {
+                for (var section : chunkModifier.sections()) {
+                    if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
+                        applyGenerationData(chunk, sectionModifier);
+                    }
+                }
+            }
+            // Register forks or apply locally
+            for (var fork : chunkUnit.forks()) {
+                var sections = ((GeneratorImpl.AreaModifierImpl) fork.modifier()).sections();
+                for (var section : sections) {
+                    if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
+                        if (sectionModifier.genSection().blocks().count() == 0)
+                            continue;
+                        final Point start = section.absoluteStart();
+                        final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
+                        if (forkChunk != null) {
+                            applyFork(forkChunk, sectionModifier);
+                            // Update players
+                            forkChunk.invalidate();
+                            forkChunk.sendChunk();
+                        } else {
+                            final long index = CoordConversion.chunkIndex(start);
+                            this.generationForks.compute(index, (i, sectionModifiers) -> {
+                                if (sectionModifiers == null) sectionModifiers = new ArrayList<>();
+                                sectionModifiers.add(sectionModifier);
+                                return sectionModifiers;
+                            });
+                        }
+                    }
+                }
+            }
+            // Apply awaiting forks
+            processFork(chunk);
+        } catch (Throwable e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+        } finally {
+            // End generation
+            refreshLastBlockChangeTime();
         }
     }
 
     private void processFork(Chunk chunk) {
-        this.generationForks.compute(ChunkUtils.getChunkIndex(chunk), (aLong, sectionModifiers) -> {
+        this.generationForks.compute(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), (aLong, sectionModifiers) -> {
             if (sectionModifiers != null) {
                 for (var sectionModifier : sectionModifiers) {
                     applyFork(chunk, sectionModifier);
@@ -416,22 +464,22 @@ public class InstanceContainer extends Instance {
             Section section = chunk.getSectionAt(sectionModifier.start().blockY());
             Palette currentBlocks = section.blockPalette();
             // -1 is necessary because forked units handle explicit changes by changing AIR 0 to 1
-            sectionModifier.blockPalette().getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
+            sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
             applyGenerationData(chunk, sectionModifier);
         }
     }
 
     private void applyGenerationData(Chunk chunk, GeneratorImpl.SectionModifierImpl section) {
-        var cache = section.cache();
+        var cache = section.genSection().specials();
         if (cache.isEmpty()) return;
         final int height = section.start().blockY();
         synchronized (chunk) {
             Int2ObjectMaps.fastForEach(cache, blockEntry -> {
                 final int index = blockEntry.getIntKey();
                 final Block block = blockEntry.getValue();
-                final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-                final int y = ChunkUtils.blockIndexToChunkPositionY(index) + height;
-                final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+                final int x = CoordConversion.chunkBlockIndexGetX(index);
+                final int y = CoordConversion.chunkBlockIndexGetY(index) + height;
+                final int z = CoordConversion.chunkBlockIndexGetZ(index);
                 chunk.setBlock(x, y, z, block);
             });
         }
@@ -448,7 +496,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean isInVoid(@NotNull Point point) {
+    public boolean isInVoid(Point point) {
         // TODO: more customizable
         return point.y() < getCachedDimensionType().minY() - 64;
     }
@@ -459,14 +507,14 @@ public class InstanceContainer extends Instance {
      * Uses {@link DynamicChunk} by default.
      * <p>
      * WARNING: if you need to save this instance's chunks later,
-     * the code needs to be predictable for {@link IChunkLoader#loadChunk(Instance, int, int)}
+     * the code needs to be predictable for {@link ChunkLoader#loadChunk(Instance, int, int)}
      * to create the correct type of {@link Chunk}. tl;dr: Need chunk save = no random type.
      *
      * @param chunkSupplier the new {@link ChunkSupplier} of this instance, chunks need to be non-null
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
     @Override
-    public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
+    public void setChunkSupplier(ChunkSupplier chunkSupplier) {
         this.chunkSupplier = chunkSupplier;
     }
 
@@ -548,7 +596,7 @@ public class InstanceContainer extends Instance {
     /**
      * Gets the last time at which a block changed.
      *
-     * @return the time at which the last block changed in milliseconds, 0 if never
+     * @return the time at which the last block changed in nanoseconds. Only use this to calculate delta times
      */
     public long getLastBlockChangeTime() {
         return lastBlockChangeTime;
@@ -560,7 +608,7 @@ public class InstanceContainer extends Instance {
      * Useful if you change blocks values directly using a {@link Chunk} object.
      */
     public void refreshLastBlockChangeTime() {
-        this.lastBlockChangeTime = System.currentTimeMillis();
+        this.lastBlockChangeTime = System.nanoTime();
     }
 
     @Override
@@ -573,32 +621,50 @@ public class InstanceContainer extends Instance {
         this.generator = generator;
     }
 
+    @ApiStatus.Experimental
+    @Override
+    public CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        Thread.startVirtualThread(() -> {
+            Chunk chunk = loadChunk(chunkX, chunkZ).join();
+            synchronized (chunk) {
+                generateChunk(chunk, generator);
+                chunk.invalidate();
+            }
+            chunk.sendChunk();
+            future.complete(null);
+        });
+        return future;
+    }
+
     /**
      * Gets all the instance chunks.
      *
      * @return the chunks of this instance
      */
     @Override
-    public @NotNull Collection<@NotNull Chunk> getChunks() {
+    public Collection<Chunk> getChunks() {
         return chunks.values();
     }
 
     /**
-     * Gets the {@link IChunkLoader} of this instance.
+     * Gets the {@link ChunkLoader} of this instance.
      *
-     * @return the {@link IChunkLoader} of this instance
+     * @return the {@link ChunkLoader} of this instance
      */
-    public IChunkLoader getChunkLoader() {
+    public ChunkLoader getChunkLoader() {
         return chunkLoader;
     }
 
     /**
-     * Changes the {@link IChunkLoader} of this instance (to change how chunks are retrieved when not already loaded).
+     * Changes the {@link ChunkLoader} of this instance (to change how chunks are retrieved when not already loaded).
      *
-     * @param chunkLoader the new {@link IChunkLoader}
+     * <p>{@link ChunkLoader#noop()} can be used to do nothing.</p>
+     *
+     * @param chunkLoader the new {@link ChunkLoader}
      */
-    public void setChunkLoader(IChunkLoader chunkLoader) {
-        this.chunkLoader = chunkLoader;
+    public void setChunkLoader(ChunkLoader chunkLoader) {
+        this.chunkLoader = Objects.requireNonNull(chunkLoader, "Chunk loader cannot be null");
     }
 
     @Override
@@ -620,7 +686,7 @@ public class InstanceContainer extends Instance {
      * @param block         the block
      * @return true if the block changed since the last update
      */
-    private boolean isAlreadyChanged(@NotNull Point blockPosition, @NotNull Block block) {
+    private boolean isAlreadyChanged(BlockVec blockPosition, Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         return Objects.equals(changedBlock, block);
     }
@@ -632,7 +698,7 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, int updateDistance) {
+    private void executeNeighboursBlockPlacementRule(Point blockPosition, int updateDistance) {
         ChunkCache cache = new ChunkCache(this, null, null);
         for (var updateFace : BLOCK_UPDATE_FACES) {
             var direction = updateFace.toDirection();
@@ -641,11 +707,12 @@ public class InstanceContainer extends Instance {
             final int neighborZ = blockPosition.blockZ() + direction.normalZ();
             if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
                 continue;
-            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.TYPE);
-            if (neighborBlock == null)
+            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
+            if (neighborBlock == null || neighborBlock.isAir())
                 continue;
             final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance()) continue;
+            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance())
+                continue;
 
             final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
             final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(
@@ -672,8 +739,8 @@ public class InstanceContainer extends Instance {
         return supplier.get();
     }
 
-    private void cacheChunk(@NotNull Chunk chunk) {
-        this.chunks.put(getChunkIndex(chunk), chunk);
+    private void cacheChunk(Chunk chunk) {
+        this.chunks.put(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.createPartition(chunk);
     }

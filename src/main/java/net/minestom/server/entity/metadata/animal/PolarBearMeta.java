@@ -1,23 +1,20 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
 
 public class PolarBearMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
-    public PolarBearMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public PolarBearMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isStandingUp() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.PolarBear.IS_STANDING_UP);
     }
 
     public void setStandingUp(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.PolarBear.IS_STANDING_UP, value);
     }
 
 }

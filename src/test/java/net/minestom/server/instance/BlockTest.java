@@ -4,13 +4,16 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.tag.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BlockTest {
 
@@ -52,6 +55,15 @@ public class BlockTest {
     }
 
     @Test
+    public void testState() {
+        assertEquals("minecraft:dirt", Block.DIRT.state());
+        assertEquals(Block.DIRT, Block.fromState("minecraft:dirt"));
+        assertEquals(Block.CHEST, Block.fromState("minecraft:chest"));
+        assertEquals(Block.CHEST, Block.fromState("minecraft:chest[]"));
+        assertEquals(Block.CHEST.withProperty("facing", "north"), Block.fromState("minecraft:chest[facing=north]"));
+    }
+
+    @Test
     public void invalidProperties() {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.withProperty("random", "randomKey"));
@@ -83,5 +95,30 @@ public class BlockTest {
 
         assertEquals(start, new Vec(0.3125, 0, 0.3125));
         assertEquals(end, new Vec(0.6875, 0.5625, 0.6875));
+    }
+
+    @Test
+    public void testDuplicateProperties() {
+        HashSet<Integer> assignedStates = new HashSet<>();
+        for (Block block : Block.values()) {
+            for (Block blockWithState : block.possibleStates()) {
+                assertTrue(assignedStates.add(blockWithState.stateId()));
+            }
+        }
+    }
+
+    @Test
+    public void testStateIdConversion() {
+        for (Block block : Block.values()) {
+            for (Block blockWithState : block.possibleStates()) {
+                assertEquals(blockWithState, Block.fromStateId(blockWithState.stateId()));
+            }
+        }
+    }
+
+    @Test
+    void testBlockEntityRegistryLoading() {
+        // Sanity to ensure we correctly load block entity types
+        assertEquals(BlockEntityType.SIGN, Block.OAK_SIGN.registry().blockEntityType());
     }
 }

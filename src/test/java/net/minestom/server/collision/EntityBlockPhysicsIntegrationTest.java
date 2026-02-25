@@ -428,7 +428,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         BoundingBox bb = new Entity(EntityType.ZOMBIE).getBoundingBox();
 
-        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null, 0, 0, 0);
+        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
         bb.intersectBoxSwept(z1, movement, z2, bb, sweepResultFinal);
         bb.intersectBoxSwept(z1, movement, z3, bb, sweepResultFinal);
@@ -1114,5 +1114,32 @@ public class EntityBlockPhysicsIntegrationTest {
 
         var newPos = physicsResult.newPosition();
         assertEquals(43, newPos.blockY());
+    }
+
+    @Test
+    public void entityPhysicsCacheTest(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 43.5, 0));
+
+        var deltaPos = new Vec(0.0, -10, 0.0);
+        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
+
+        var newPos = physicsResult.newPosition();
+        assertEquals(43, newPos.blockY());
+        assertEqualsPoint(new Vec(0, 0, 0), physicsResult.newVelocity());
+        assertEqualsPoint(deltaPos, physicsResult.originalDelta());
+
+        // Create a new instance of the physics result to simulate gravity or we will never cache because velocity would be zero.
+        var velocityFixedResult = new PhysicsResult(physicsResult.newPosition(), physicsResult.newVelocity().add(deltaPos), physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(), physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res(), false);
+
+        var physicsResult2 = CollisionUtils.handlePhysics(instance, entity.getChunk(),
+                entity.getBoundingBox(),
+                physicsResult.newPosition(), deltaPos,
+                velocityFixedResult, false);
+
+        assertTrue(physicsResult2.cached());
     }
 }

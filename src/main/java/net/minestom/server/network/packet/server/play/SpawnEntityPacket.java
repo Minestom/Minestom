@@ -1,48 +1,56 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
-                                @NotNull Pos position, float headRot, int data,
-                                short velocityX, short velocityY, short velocityZ) implements ServerPacket.Play {
-    public SpawnEntityPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(UUID), reader.read(VAR_INT),
-                new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
-                        reader.read(BYTE) * 360f / 256f, reader.read(BYTE) * 360f / 256f), reader.read(BYTE) * 360f / 256f,
-                reader.read(VAR_INT), reader.read(SHORT), reader.read(SHORT), reader.read(SHORT));
-    }
+public record SpawnEntityPacket(
+        int entityId, UUID uuid, EntityType type,
+        Pos position, float headRot, int data,
+        Vec velocity
+) implements ServerPacket.Play {
+    public static final NetworkBuffer.Type<SpawnEntityPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(NetworkBuffer buffer, SpawnEntityPacket value) {
+            buffer.write(VAR_INT, value.entityId);
+            buffer.write(UUID, value.uuid);
+            buffer.write(EntityType.NETWORK_TYPE, value.type);
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, entityId);
-        writer.write(UUID, uuid);
-        writer.write(VAR_INT, type);
+            buffer.write(DOUBLE, value.position.x());
+            buffer.write(DOUBLE, value.position.y());
+            buffer.write(DOUBLE, value.position.z());
 
-        writer.write(DOUBLE, position.x());
-        writer.write(DOUBLE, position.y());
-        writer.write(DOUBLE, position.z());
+            buffer.write(LP_VECTOR3, value.velocity);
 
-        writer.write(BYTE, (byte) (position.pitch() * 256 / 360));
-        writer.write(BYTE, (byte) (position.yaw() * 256 / 360));
-        writer.write(BYTE, (byte) (headRot * 256 / 360));
+            buffer.write(BYTE, (byte) (value.position.pitch() * 256 / 360));
+            buffer.write(BYTE, (byte) (value.position.yaw() * 256 / 360));
+            buffer.write(BYTE, (byte) (value.headRot * 256 / 360));
 
-        writer.write(VAR_INT, data);
+            buffer.write(VAR_INT, value.data);
+        }
 
-        writer.write(SHORT, velocityX);
-        writer.write(SHORT, velocityY);
-        writer.write(SHORT, velocityZ);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SPAWN_ENTITY;
-    }
+        @Override
+        public SpawnEntityPacket read(NetworkBuffer buffer) {
+            int entityId = buffer.read(VAR_INT);
+            UUID uuid = buffer.read(UUID);
+            EntityType type = buffer.read(EntityType.NETWORK_TYPE);
+            double x = buffer.read(DOUBLE), y = buffer.read(DOUBLE), z = buffer.read(DOUBLE);
+            Vec velocity = buffer.read(LP_VECTOR3);
+            float pitch = buffer.read(BYTE) * 360f / 256f;
+            float yaw = buffer.read(BYTE) * 360f / 256f;
+            float headRot = buffer.read(BYTE) * 360f / 256f;
+            int data = buffer.read(VAR_INT);
+            return new SpawnEntityPacket(
+                    entityId, uuid, type,
+                    new Pos(x, y, z, yaw, pitch),
+                    headRot, data, velocity
+            );
+        }
+    };
 }

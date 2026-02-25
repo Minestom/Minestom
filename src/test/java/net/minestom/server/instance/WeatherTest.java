@@ -29,7 +29,7 @@ public class WeatherTest {
         // Weather sent on instance join
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(ChangeGameStatePacket.class);
-        connection.connect(instance, new Pos(0, 0, 0)).join();
+        connection.connect(instance, new Pos(0, 0, 0));
         tracker.assertCount(4);
         List<ChangeGameStatePacket> packets = tracker.collect();
         var state = packets.get(0);
@@ -47,7 +47,7 @@ public class WeatherTest {
         var tracker2 = connection.trackIncoming(ChangeGameStatePacket.class);
         instance.setWeather(new Weather(0, 0), 2);
         instance.tick(0);
-        state = tracker2.collect().get(0);
+        state = tracker2.collect().getFirst();
         assertEquals(ChangeGameStatePacket.Reason.RAIN_LEVEL_CHANGE, state.reason());
         assertEquals(0.5f, state.value());
     }

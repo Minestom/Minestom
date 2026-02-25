@@ -1,22 +1,28 @@
 package net.minestom.server.message;
 
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatTypeImpl {
+public sealed interface ChatType extends Holder.Direct<ChatType>, ChatTypes permits ChatTypeImpl {
 
-    static @NotNull ChatType create(
-            @NotNull ChatTypeDecoration chat,
-            @NotNull ChatTypeDecoration narration
+    Codec<ChatType> REGISTRY_CODEC = StructCodec.struct(
+            "chat", ChatTypeDecoration.CODEC, ChatType::chat,
+            "narration", ChatTypeDecoration.CODEC, ChatType::narration,
+            ChatType::create);
+
+    static ChatType create(
+            ChatTypeDecoration chat,
+            ChatTypeDecoration narration
     ) {
-        return new ChatTypeImpl(chat, narration, null);
+        return new ChatTypeImpl(chat, narration);
     }
 
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
@@ -27,19 +33,13 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.CHAT_TYPES,
-                (namespace, props) -> new ChatTypeImpl(Registry.chatType(namespace, props))
-        );
+    static DynamicRegistry<ChatType> createDefaultRegistry() {
+        return DynamicRegistry.create(Key.key("chat_type"), REGISTRY_CODEC, RegistryData.Resource.CHAT_TYPES);
     }
 
-    @NotNull ChatTypeDecoration chat();
+    ChatTypeDecoration chat();
 
-    @NotNull ChatTypeDecoration narration();
-
-    @Override
-    @Nullable Registry.ChatTypeEntry registry();
+    ChatTypeDecoration narration();
 
     final class Builder {
         private ChatTypeDecoration chat;
@@ -48,18 +48,18 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
         private Builder() {
         }
 
-        public Builder chat(@NotNull ChatTypeDecoration chat) {
+        public Builder chat(ChatTypeDecoration chat) {
             this.chat = chat;
             return this;
         }
 
-        public Builder narration(@NotNull ChatTypeDecoration narration) {
+        public Builder narration(ChatTypeDecoration narration) {
             this.narration = narration;
             return this;
         }
 
-        public @NotNull ChatType build() {
-            return new ChatTypeImpl(chat, narration, null);
+        public ChatType build() {
+            return new ChatTypeImpl(chat, narration);
         }
     }
 }

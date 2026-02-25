@@ -1,7 +1,10 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.key.Key;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
@@ -9,11 +12,9 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.light.Light;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.chunk.ChunkUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -24,12 +25,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static net.minestom.server.instance.light.LightCompute.emptyContent;
+import static net.minestom.server.instance.light.LightCompute.EMPTY_CONTENT;
 
 /**
  * A chunk which supports lighting computation.
  * <p>
- *     This chunk is used to compute the light data for each block.
+ * This chunk is used to compute the light data for each block.
  * <p>
  */
 public class LightingChunk extends DynamicChunk {
@@ -60,30 +61,30 @@ public class LightingChunk extends DynamicChunk {
         EXTERNAL
     }
 
-    private static final Set<NamespaceID> DIFFUSE_SKY_LIGHT = Set.of(
-            Block.COBWEB.namespace(),
-            Block.ICE.namespace(),
-            Block.HONEY_BLOCK.namespace(),
-            Block.SLIME_BLOCK.namespace(),
-            Block.WATER.namespace(),
-            Block.ACACIA_LEAVES.namespace(),
-            Block.AZALEA_LEAVES.namespace(),
-            Block.BIRCH_LEAVES.namespace(),
-            Block.DARK_OAK_LEAVES.namespace(),
-            Block.FLOWERING_AZALEA_LEAVES.namespace(),
-            Block.JUNGLE_LEAVES.namespace(),
-            Block.CHERRY_LEAVES.namespace(),
-            Block.OAK_LEAVES.namespace(),
-            Block.SPRUCE_LEAVES.namespace(),
-            Block.SPAWNER.namespace(),
-            Block.BEACON.namespace(),
-            Block.END_GATEWAY.namespace(),
-            Block.CHORUS_PLANT.namespace(),
-            Block.CHORUS_FLOWER.namespace(),
-            Block.FROSTED_ICE.namespace(),
-            Block.SEAGRASS.namespace(),
-            Block.TALL_SEAGRASS.namespace(),
-            Block.LAVA.namespace()
+    private static final Set<Key> DIFFUSE_SKY_LIGHT = Set.of(
+            Block.COBWEB.key(),
+            Block.ICE.key(),
+            Block.HONEY_BLOCK.key(),
+            Block.SLIME_BLOCK.key(),
+            Block.WATER.key(),
+            Block.ACACIA_LEAVES.key(),
+            Block.AZALEA_LEAVES.key(),
+            Block.BIRCH_LEAVES.key(),
+            Block.DARK_OAK_LEAVES.key(),
+            Block.FLOWERING_AZALEA_LEAVES.key(),
+            Block.JUNGLE_LEAVES.key(),
+            Block.CHERRY_LEAVES.key(),
+            Block.OAK_LEAVES.key(),
+            Block.SPRUCE_LEAVES.key(),
+            Block.SPAWNER.key(),
+            Block.BEACON.key(),
+            Block.END_GATEWAY.key(),
+            Block.CHORUS_PLANT.key(),
+            Block.CHORUS_FLOWER.key(),
+            Block.FROSTED_ICE.key(),
+            Block.SEAGRASS.key(),
+            Block.TALL_SEAGRASS.key(),
+            Block.LAVA.key()
     );
 
     public void invalidate() {
@@ -93,17 +94,21 @@ public class LightingChunk extends DynamicChunk {
         this.fullLightData = null;
     }
 
-    public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public LightingChunk(Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ);
+    }
+
+    protected LightingChunk(Instance instance, int chunkX, int chunkZ, List<Section> sections) {
+        super(instance, chunkX, chunkZ, sections);
     }
 
     private boolean checkSkyOcclusion(Block block) {
         if (block == Block.AIR) return false;
-        if (DIFFUSE_SKY_LIGHT.contains(block.namespace())) return true;
+        if (DIFFUSE_SKY_LIGHT.contains(block.key())) return true;
 
-        Shape shape = block.registry().collisionShape();
-        boolean occludesTop = Block.AIR.registry().collisionShape().isOccluded(shape, BlockFace.TOP);
-        boolean occludesBottom = Block.AIR.registry().collisionShape().isOccluded(shape, BlockFace.BOTTOM);
+        Shape shape = block.registry().occlusionShape();
+        boolean occludesTop = Block.AIR.registry().occlusionShape().isOccluded(shape, BlockFace.TOP);
+        boolean occludesBottom = Block.AIR.registry().occlusionShape().isOccluded(shape, BlockFace.BOTTOM);
 
         return occludesBottom || occludesTop;
     }
@@ -127,7 +132,8 @@ public class LightingChunk extends DynamicChunk {
                 }
 
                 for (int k = -1; k <= 1; k++) {
-                    if (k + coordinate < neighborChunk.getMinSection() || k + coordinate >= neighborChunk.getMaxSection()) continue;
+                    if (k + coordinate < neighborChunk.getMinSection() || k + coordinate >= neighborChunk.getMaxSection())
+                        continue;
                     neighborChunk.getSection(k + coordinate).blockLight().invalidate();
                     neighborChunk.getSection(k + coordinate).skyLight().invalidate();
                 }
@@ -151,14 +157,14 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
+    public void setBlock(int x, int y, int z, Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
         super.setBlock(x, y, z, block, placement, destroy);
         this.occlusionMap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change
-        int coordinate = ChunkUtils.getChunkCoordinate(y);
+        int coordinate = CoordConversion.globalToChunk(y);
         if (doneInit && !freezeInvalidation) {
             invalidateNeighborsSection(coordinate);
             invalidateResendDelay();
@@ -239,97 +245,98 @@ public class LightingChunk extends DynamicChunk {
     @Override
     protected LightData createLightData(boolean requiredFullChunk) {
         packetGenerationLock.lock();
-        if (requiredFullChunk) {
-            if (fullLightData != null) {
-                packetGenerationLock.unlock();
-                return fullLightData;
-            }
-        } else {
-            if (partialLightData != null) {
-                packetGenerationLock.unlock();
-                return partialLightData;
-            }
-        }
-
-        BitSet skyMask = new BitSet();
-        BitSet blockMask = new BitSet();
-        BitSet emptySkyMask = new BitSet();
-        BitSet emptyBlockMask = new BitSet();
-        List<byte[]> skyLights = new ArrayList<>();
-        List<byte[]> blockLights = new ArrayList<>();
-
-        int chunkMin = instance.getCachedDimensionType().minY();
-        int highestNeighborBlock = instance.getCachedDimensionType().minY();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
-                if (neighborChunk == null) continue;
-
-                if (neighborChunk instanceof LightingChunk light) {
-                    light.getOcclusionMap();
-                    highestNeighborBlock = Math.max(highestNeighborBlock, light.highestBlock);
+        try {
+            if (requiredFullChunk) {
+                if (fullLightData != null) {
+                    return fullLightData;
                 }
-            }
-        }
-
-        int index = 0;
-        for (Section section : sections) {
-            boolean wasUpdatedBlock = false;
-            boolean wasUpdatedSky = false;
-
-            if (section.blockLight().requiresUpdate()) {
-                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
-                wasUpdatedBlock = true;
-            } else if (requiredFullChunk || section.blockLight().requiresSend()) {
-                wasUpdatedBlock = true;
-            }
-
-            if (section.skyLight().requiresUpdate()) {
-                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
-                wasUpdatedSky = true;
-            } else if (requiredFullChunk || section.skyLight().requiresSend()) {
-                wasUpdatedSky = true;
-            }
-
-            final int sectionMinY = index * 16 + chunkMin;
-            index++;
-
-            if ((wasUpdatedSky) && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= (highestNeighborBlock + 16)) {
-                final byte[] skyLight = section.skyLight().array();
-
-                if (skyLight.length != 0 && skyLight != emptyContent) {
-                    skyLights.add(skyLight);
-                    skyMask.set(index);
-                } else {
-                    emptySkyMask.set(index);
+            } else {
+                if (partialLightData != null) {
+                    return partialLightData;
                 }
             }
 
-            if (wasUpdatedBlock) {
-                final byte[] blockLight = section.blockLight().array();
+            BitSet skyMask = new BitSet();
+            BitSet blockMask = new BitSet();
+            BitSet emptySkyMask = new BitSet();
+            BitSet emptyBlockMask = new BitSet();
+            List<byte[]> skyLights = new ArrayList<>();
+            List<byte[]> blockLights = new ArrayList<>();
 
-                if (blockLight.length != 0 && blockLight != emptyContent) {
-                    blockLights.add(blockLight);
-                    blockMask.set(index);
-                } else {
-                    emptyBlockMask.set(index);
+            int chunkMin = instance.getCachedDimensionType().minY();
+            int highestNeighborBlock = instance.getCachedDimensionType().minY();
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                    if (neighborChunk == null) continue;
+
+                    if (neighborChunk instanceof LightingChunk light) {
+                        light.getOcclusionMap();
+                        highestNeighborBlock = Math.max(highestNeighborBlock, light.highestBlock);
+                    }
                 }
             }
+
+            int index = 0;
+            for (Section section : sections) {
+                boolean wasUpdatedBlock = false;
+                boolean wasUpdatedSky = false;
+
+                if (section.blockLight().requiresUpdate()) {
+                    relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
+                    wasUpdatedBlock = true;
+                } else if (requiredFullChunk || section.blockLight().requiresSend()) {
+                    wasUpdatedBlock = true;
+                }
+
+                if (section.skyLight().requiresUpdate()) {
+                    relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
+                    wasUpdatedSky = true;
+                } else if (requiredFullChunk || section.skyLight().requiresSend()) {
+                    wasUpdatedSky = true;
+                }
+
+                final int sectionMinY = index * 16 + chunkMin;
+                index++;
+
+                if ((wasUpdatedSky) && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= (highestNeighborBlock + 16)) {
+                    final byte[] skyLight = section.skyLight().array();
+
+                    if (skyLight.length != 0 && skyLight != EMPTY_CONTENT) {
+                        skyLights.add(skyLight);
+                        skyMask.set(index);
+                    } else {
+                        emptySkyMask.set(index);
+                    }
+                }
+
+                if (wasUpdatedBlock) {
+                    final byte[] blockLight = section.blockLight().array();
+
+                    if (blockLight.length != 0 && blockLight != EMPTY_CONTENT) {
+                        blockLights.add(blockLight);
+                        blockMask.set(index);
+                    } else {
+                        emptyBlockMask.set(index);
+                    }
+                }
+            }
+
+            LightData lightData = new LightData(skyMask, blockMask,
+                    emptySkyMask, emptyBlockMask,
+                    skyLights, blockLights);
+
+            if (requiredFullChunk) {
+                this.fullLightData = lightData;
+            } else {
+                this.partialLightData = lightData;
+            }
+
+
+            return lightData;
+        } finally {
+            packetGenerationLock.unlock();
         }
-
-        LightData lightData = new LightData(skyMask, blockMask,
-                emptySkyMask, emptyBlockMask,
-                skyLights, blockLights);
-
-        if (requiredFullChunk) {
-            this.fullLightData = lightData;
-        } else {
-            this.partialLightData = lightData;
-        }
-
-        packetGenerationLock.unlock();
-
-        return lightData;
     }
 
     @Override
@@ -350,28 +357,58 @@ public class LightingChunk extends DynamicChunk {
         Set<Chunk> responseChunks = ConcurrentHashMap.newKeySet();
         List<CompletableFuture<Void>> tasks = new ArrayList<>();
 
+        Light.LightLookup lightLookup = (x, y, z) -> {
+            Chunk chunk = instance.getChunk(x, z);
+            if (chunk == null) return null;
+            if (!(chunk instanceof LightingChunk lighting)) return null;
+            if (y - lighting.getMinSection() < 0 || y - lighting.getMaxSection() >= 0) return null;
+            final Section section = lighting.getSection(y);
+            return switch (type) {
+                case BLOCK -> section.blockLight();
+                case SKY -> section.skyLight();
+            };
+        };
+
+        Light.PaletteLookup paletteLookup = (x, y, z) -> {
+            Chunk chunk = instance.getChunk(x, z);
+            if (chunk == null) return null;
+            if (!(chunk instanceof LightingChunk lighting)) return null;
+            if (y - lighting.getMinSection() < 0 || y - lighting.getMaxSection() >= 0) return null;
+            return chunk.getSection(y).blockPalette();
+        };
+
         for (Point point : queue) {
             Chunk chunk = instance.getChunk(point.blockX(), point.blockZ());
-            if (chunk == null) continue;
+            if (!(chunk instanceof LightingChunk lightingChunk)) continue;
 
-            var section = chunk.getSection(point.blockY());
+            Section section = chunk.getSection(point.blockY());
             responseChunks.add(chunk);
 
-            Light light = switch(type) {
+            Light light = switch (type) {
                 case BLOCK -> section.blockLight();
                 case SKY -> section.skyLight();
             };
 
+            final Palette blockPalette = section.blockPalette();
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
-                switch (queueType) {
-                    case INTERNAL -> light.calculateInternal(instance, chunk.getChunkX(), point.blockY(), chunk.getChunkZ());
-                    case EXTERNAL -> light.calculateExternal(instance, chunk, point.blockY());
+                try {
+                    final Set<Point> toAdd = switch (queueType) {
+                        case INTERNAL -> light.calculateInternal(blockPalette,
+                                chunk.getChunkX(), point.blockY(), chunk.getChunkZ(),
+                                lightingChunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
+                                lightLookup);
+                        case EXTERNAL -> light.calculateExternal(blockPalette,
+                                Light.getNeighbors(chunk, point.blockY()),
+                                lightLookup, paletteLookup);
+                    };
+
+                    sections.add(light);
+
+                    light.flip();
+                    newQueue.addAll(toAdd);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
-
-                sections.add(light);
-
-                var toAdd = light.flip();
-                if (toAdd != null) newQueue.addAll(toAdd);
             }, pool);
 
             tasks.add(task);
@@ -403,17 +440,14 @@ public class LightingChunk extends DynamicChunk {
 
         synchronized (instance) {
             for (Chunk chunk : chunks) {
-                if (chunk == null) continue;
-                if (chunk instanceof LightingChunk lighting) {
-                    for (int section = chunk.minSection; section < chunk.maxSection; section++) {
-                        chunk.getSection(section).blockLight().invalidate();
-                        chunk.getSection(section).skyLight().invalidate();
-
-                        sections.add(new Vec(chunk.getChunkX(), section, chunk.getChunkZ()));
-                    }
-
-                    lighting.invalidate();
+                if (!(chunk instanceof LightingChunk lighting)) continue;
+                for (int sectionIndex = chunk.minSection; sectionIndex < chunk.maxSection; sectionIndex++) {
+                    Section section = chunk.getSection(sectionIndex);
+                    section.blockLight().invalidate();
+                    section.skyLight().invalidate();
+                    sections.add(new Vec(chunk.getChunkX(), sectionIndex, chunk.getChunkZ()));
                 }
+                lighting.invalidate();
             }
 
             // Expand the sections to include nearby sections
@@ -529,9 +563,9 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
-        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ);
-        lightingChunk.sections = sections.stream().map(Section::clone).toList();
+    public Chunk copy(Instance instance, int chunkX, int chunkZ) {
+        var sections = this.sections.stream().map(Section::clone).toList();
+        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
         lightingChunk.entries.putAll(entries);
         return lightingChunk;
     }

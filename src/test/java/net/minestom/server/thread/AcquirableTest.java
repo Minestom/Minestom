@@ -18,24 +18,25 @@ public class AcquirableTest {
             @Override
             public void tick(long time) {
                 super.tick(time);
-                tickThread.set(getAcquirable().assignedThread());
+                tickThread.set(acquirable().assignedThread());
             }
         };
         Object first = new Object();
         Object second = new Object();
 
-        ThreadDispatcher<Object> dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), 2);
+        ThreadDispatcher<Object, Entity> dispatcher = ThreadDispatcher.dispatcher(ThreadProvider.counter(), 2);
+        dispatcher.start();
         dispatcher.createPartition(first);
         dispatcher.createPartition(second);
 
         dispatcher.updateElement(entity, first);
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         TickThread firstThread = tickThread.get();
         assertNotNull(firstThread);
 
         tickThread.set(null);
         dispatcher.updateElement(entity, second);
-        dispatcher.updateAndAwait(System.currentTimeMillis());
+        dispatcher.updateAndAwait(System.nanoTime());
         TickThread secondThread = tickThread.get();
         assertNotNull(secondThread);
 

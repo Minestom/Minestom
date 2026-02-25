@@ -2,7 +2,6 @@ package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -15,25 +14,11 @@ public final class ArrayUtils {
     private ArrayUtils() {
     }
 
-    public static boolean isEmpty(@Nullable Object @NotNull [] array) {
+    public static boolean isEmpty(@Nullable Object [] array) {
         for (Object object : array) {
             if (object != null) return false;
         }
         return true;
-    }
-
-    public static int[] concatenateIntArrays(int @NotNull []... arrays) {
-        int totalLength = 0;
-        for (int[] array : arrays) {
-            totalLength += array.length;
-        }
-        int[] result = new int[totalLength];
-        int startingPos = 0;
-        for (int[] array : arrays) {
-            System.arraycopy(array, 0, result, startingPos, array.length);
-            startingPos += array.length;
-        }
-        return result;
     }
 
     public static <T> int[] mapToIntArray(Collection<T> collection, ToIntFunction<T> function) {
@@ -49,7 +34,7 @@ public final class ArrayUtils {
         return result;
     }
 
-    public static <K, V> Map<K, V> toMap(@NotNull K[] keys, @NotNull V[] values, int length) {
+    public static <K, V> Map<K, V> toMap(K[] keys, V[] values, int length) {
         assert keys.length >= length && keys.length == values.length;
         return switch (length) {
             case 0 -> Map.of();
@@ -75,38 +60,5 @@ public final class ArrayUtils {
                     keys[7], values[7], keys[8], values[8], keys[9], values[9]);
             default -> Map.copyOf(new Object2ObjectArrayMap<>(keys, values, length));
         };
-    }
-
-    public static long[] pack(int[] ints, int bitsPerEntry) {
-        int intsPerLong = (int) Math.floor(64d / bitsPerEntry);
-        long[] longs = new long[(int) Math.ceil(ints.length / (double) intsPerLong)];
-
-        long mask = (1L << bitsPerEntry) - 1L;
-        for (int i = 0; i < longs.length; i++) {
-            for (int intIndex = 0; intIndex < intsPerLong; intIndex++) {
-                int bitIndex = intIndex * bitsPerEntry;
-                int intActualIndex = intIndex + i * intsPerLong;
-                if (intActualIndex < ints.length) {
-                    longs[i] |= (ints[intActualIndex] & mask) << bitIndex;
-                }
-            }
-        }
-
-        return longs;
-    }
-
-    public static void unpack(int[] out, long[] in, int bitsPerEntry) {
-        assert in.length != 0: "unpack input array is zero";
-
-        var intsPerLong = Math.floor(64d / bitsPerEntry);
-        var intsPerLongCeil = (int) Math.ceil(intsPerLong);
-
-        long mask = (1L << bitsPerEntry) - 1L;
-        for (int i = 0; i < out.length; i++) {
-            int longIndex = i / intsPerLongCeil;
-            int subIndex = i % intsPerLongCeil;
-
-            out[i] = (int) ((in[longIndex] >>> (bitsPerEntry * subIndex)) & mask);
-        }
     }
 }

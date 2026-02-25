@@ -1,20 +1,15 @@
 package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DragonFireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
     private Entity shooter;
 
-    public DragonFireballMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public DragonFireballMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

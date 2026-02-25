@@ -1,10 +1,9 @@
 package net.minestom.server.network.packet.server.configuration;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -13,38 +12,19 @@ import static net.minestom.server.network.NetworkBuffer.NBT;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record RegistryDataPacket(
-        @NotNull String registryId,
-        @NotNull List<Entry> entries
+        String registryId,
+        List<Entry> entries
 ) implements ServerPacket.Configuration {
-
-    public RegistryDataPacket(@NotNull NetworkBuffer buffer) {
-        this(buffer.read(STRING), buffer.readCollection(Entry::new, Integer.MAX_VALUE));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(STRING, registryId);
-        writer.writeCollection(entries);
-    }
-
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_REGISTRY_DATA;
-    }
+    public static final NetworkBuffer.Type<RegistryDataPacket> SERIALIZER = NetworkBufferTemplate.template(
+            STRING, RegistryDataPacket::registryId,
+            Entry.SERIALIZER.list(Integer.MAX_VALUE), RegistryDataPacket::entries,
+            RegistryDataPacket::new);
 
     public record Entry(
-            @NotNull String id,
-            @Nullable CompoundBinaryTag data
-    ) implements NetworkBuffer.Writer {
-
-        public Entry(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), (CompoundBinaryTag) reader.readOptional(NBT));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(STRING, id);
-            writer.writeOptional(NBT, data);
-        }
+            String id,
+            @Nullable BinaryTag data
+    ) {
+        public static final NetworkBuffer.Type<Entry> SERIALIZER = NetworkBufferTemplate.template(
+                STRING, Entry::id, NBT.optional(), Entry::data, Entry::new);
     }
 }

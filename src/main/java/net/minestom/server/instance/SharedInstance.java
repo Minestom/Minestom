@@ -7,7 +7,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -21,38 +21,38 @@ import java.util.concurrent.CompletableFuture;
 public class SharedInstance extends Instance {
     private final InstanceContainer instanceContainer;
 
-    public SharedInstance(@NotNull UUID uniqueId, @NotNull InstanceContainer instanceContainer) {
-        super(uniqueId, instanceContainer.getDimensionType());
+    public SharedInstance(UUID uuid, InstanceContainer instanceContainer) {
+        super(uuid, instanceContainer.getDimensionType());
         this.instanceContainer = instanceContainer;
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates) {
+    public void setBlock(int x, int y, int z, Block block, boolean doBlockUpdates) {
         this.instanceContainer.setBlock(x, y, z, block, doBlockUpdates);
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
+    public boolean placeBlock(BlockHandler.Placement placement, boolean doBlockUpdates) {
         return instanceContainer.placeBlock(placement, doBlockUpdates);
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
+    public boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates) {
         return instanceContainer.breakBlock(player, blockPosition, blockFace, doBlockUpdates);
     }
 
     @Override
-    public @NotNull CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadChunk(chunkX, chunkZ);
     }
 
     @Override
-    public @NotNull CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadOptionalChunk(chunkX, chunkZ);
     }
 
     @Override
-    public void unloadChunk(@NotNull Chunk chunk) {
+    public void unloadChunk(Chunk chunk) {
         instanceContainer.unloadChunk(chunk);
     }
 
@@ -62,22 +62,22 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveInstance() {
+    public CompletableFuture<Void> saveInstance() {
         return instanceContainer.saveInstance();
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
+    public CompletableFuture<Void> saveChunkToStorage(Chunk chunk) {
         return instanceContainer.saveChunkToStorage(chunk);
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunksToStorage() {
+    public CompletableFuture<Void> saveChunksToStorage() {
         return instanceContainer.saveChunksToStorage();
     }
 
     @Override
-    public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
+    public void setChunkSupplier(ChunkSupplier chunkSupplier) {
         instanceContainer.setChunkSupplier(chunkSupplier);
     }
 
@@ -96,7 +96,12 @@ public class SharedInstance extends Instance {
         instanceContainer.setGenerator(generator);
     }
 
-    @NotNull
+    @ApiStatus.Experimental
+    @Override
+    public CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator) {
+        return instanceContainer.generateChunk(chunkX, chunkZ, generator);
+    }
+
     @Override
     public Collection<Chunk> getChunks() {
         return instanceContainer.getChunks();
@@ -113,7 +118,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean isInVoid(@NotNull Point point) {
+    public boolean isInVoid(Point point) {
         return instanceContainer.isInVoid(point);
     }
 
@@ -122,7 +127,39 @@ public class SharedInstance extends Instance {
      *
      * @return the associated {@link InstanceContainer}
      */
-    public @NotNull InstanceContainer getInstanceContainer() {
+    public InstanceContainer getInstanceContainer() {
         return instanceContainer;
+    }
+
+    /**
+     * Gets if two instances share the same chunks.
+     *
+     * @param instance1 the first instance
+     * @param instance2 the second instance
+     * @return true if the two instances share the same chunks
+     */
+    public static boolean areLinked(Instance instance1, Instance instance2) {
+        // SharedInstance check
+        if (instance1 instanceof InstanceContainer && instance2 instanceof SharedInstance) {
+            return ((SharedInstance) instance2).getInstanceContainer().equals(instance1);
+        } else if (instance2 instanceof InstanceContainer && instance1 instanceof SharedInstance) {
+            return ((SharedInstance) instance1).getInstanceContainer().equals(instance2);
+        } else if (instance1 instanceof SharedInstance && instance2 instanceof SharedInstance) {
+            final InstanceContainer container1 = ((SharedInstance) instance1).getInstanceContainer();
+            final InstanceContainer container2 = ((SharedInstance) instance2).getInstanceContainer();
+            return container1.equals(container2);
+        }
+
+        // InstanceContainer check (copied from)
+        if (instance1 instanceof InstanceContainer container1 && instance2 instanceof InstanceContainer container2) {
+            if (container1.getSrcInstance() != null) {
+                return container1.getSrcInstance().equals(container2)
+                        && container1.getLastBlockChangeTime() == container2.getLastBlockChangeTime();
+            } else if (container2.getSrcInstance() != null) {
+                return container2.getSrcInstance().equals(container1)
+                        && container2.getLastBlockChangeTime() == container1.getLastBlockChangeTime();
+            }
+        }
+        return false;
     }
 }

@@ -8,8 +8,9 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.time.TimeUnit;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
@@ -32,12 +33,12 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
      */
-    public EntityCreature(@NotNull EntityType entityType, @NotNull UUID uuid) {
+    public EntityCreature(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
         heal();
     }
 
-    public EntityCreature(@NotNull EntityType entityType) {
+    public EntityCreature(EntityType entityType) {
         this(entityType, UUID.randomUUID());
     }
 
@@ -54,7 +55,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     }
 
     @Override
-    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    public CompletableFuture<Void> setInstance(Instance instance, Pos spawnPosition) {
         this.navigator.reset();
         return super.setInstance(instance, spawnPosition);
     }
@@ -116,7 +117,6 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         this.target = target;
     }
 
-    @NotNull
     @Override
     public Navigator getNavigator() {
         return navigator;
@@ -128,7 +128,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
      * @param target    the entity target
      * @param swingHand true to swing the entity main hand, false otherwise
      */
-    public void attack(@NotNull Entity target, boolean swingHand) {
+    public void attack(Entity target, boolean swingHand) {
         if (swingHand)
             swingMainHand();
         EntityAttackEvent attackEvent = new EntityAttackEvent(this, target);
@@ -142,8 +142,14 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
      *
      * @param target the entity target
      */
-    public void attack(@NotNull Entity target) {
+    public void attack(Entity target) {
         attack(target, false);
     }
 
+    @SuppressWarnings("unchecked")
+    @ApiStatus.Experimental
+    @Override
+    public Acquirable<? extends EntityCreature> acquirable() {
+        return (Acquirable<? extends EntityCreature>) super.acquirable();
+    }
 }

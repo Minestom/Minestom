@@ -2,7 +2,6 @@ package net.minestom.server.collision;
 
 import it.unimi.dsi.fastutil.doubles.DoubleUnaryOperator;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the aerodynamic properties of an entity
@@ -15,37 +14,37 @@ import org.jetbrains.annotations.NotNull;
  */
 public record Aerodynamics(double gravity, double horizontalAirResistance, double verticalAirResistance) {
     @Contract(pure = true)
-    public @NotNull Aerodynamics withGravity(double gravity) {
+    public Aerodynamics withGravity(double gravity) {
         return new Aerodynamics(gravity, horizontalAirResistance, verticalAirResistance);
     }
 
     @Contract(pure = true)
-    public @NotNull Aerodynamics withGravity(@NotNull DoubleUnaryOperator operator) {
+    public Aerodynamics withGravity(DoubleUnaryOperator operator) {
         return withGravity(operator.apply(gravity));
     }
 
     @Contract(pure = true)
-    public @NotNull Aerodynamics withHorizontalAirResistance(double horizontalAirResistance) {
+    public Aerodynamics withHorizontalAirResistance(double horizontalAirResistance) {
         return new Aerodynamics(gravity, horizontalAirResistance, verticalAirResistance);
     }
 
     @Contract(pure = true)
-    public @NotNull Aerodynamics withHorizontalAirResistance(@NotNull DoubleUnaryOperator operator) {
+    public Aerodynamics withHorizontalAirResistance(DoubleUnaryOperator operator) {
         return withHorizontalAirResistance(operator.apply(horizontalAirResistance));
     }
 
     @Contract(pure = true)
-    public @NotNull Aerodynamics withVerticalAirResistance(double verticalAirResistance) {
+    public Aerodynamics withVerticalAirResistance(double verticalAirResistance) {
         return new Aerodynamics(gravity, horizontalAirResistance, verticalAirResistance);
     }
 
     @Contract(pure = true)
-    public @NotNull Aerodynamics withVerticalAirResistance(@NotNull DoubleUnaryOperator operator) {
+    public Aerodynamics withVerticalAirResistance(DoubleUnaryOperator operator) {
         return withVerticalAirResistance(operator.apply(verticalAirResistance));
     }
 
     @Contract(pure = true)
-    public @NotNull Aerodynamics withAirResistance(double horizontalAirResistance, double verticalAirResistance) {
+    public Aerodynamics withAirResistance(double horizontalAirResistance, double verticalAirResistance) {
         return new Aerodynamics(gravity, horizontalAirResistance, verticalAirResistance);
     }
 }

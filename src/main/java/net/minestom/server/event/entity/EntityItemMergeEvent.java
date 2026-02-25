@@ -5,7 +5,6 @@ import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when two {@link ItemEntity} are merging their {@link ItemStack} together to form a sole entity.
@@ -18,7 +17,7 @@ public class EntityItemMergeEvent implements EntityInstanceEvent, CancellableEve
 
     private boolean cancelled;
 
-    public EntityItemMergeEvent(@NotNull ItemEntity source, @NotNull ItemEntity merged, @NotNull ItemStack result) {
+    public EntityItemMergeEvent(ItemEntity source, ItemEntity merged, ItemStack result) {
         this.entity = source;
         this.merged = merged;
         this.result = result;
@@ -32,7 +31,7 @@ public class EntityItemMergeEvent implements EntityInstanceEvent, CancellableEve
      * @return the source ItemEntity
      */
     @Override
-    public @NotNull ItemEntity getEntity() {
+    public ItemEntity getEntity() {
         return (ItemEntity) entity;
     }
 
@@ -43,7 +42,7 @@ public class EntityItemMergeEvent implements EntityInstanceEvent, CancellableEve
      *
      * @return the merged ItemEntity
      */
-    public @NotNull ItemEntity getMerged() {
+    public ItemEntity getMerged() {
         return merged;
     }
 
@@ -52,7 +51,7 @@ public class EntityItemMergeEvent implements EntityInstanceEvent, CancellableEve
      *
      * @return the item stack
      */
-    public @NotNull ItemStack getResult() {
+    public ItemStack getResult() {
         return result;
     }
 
@@ -61,7 +60,7 @@ public class EntityItemMergeEvent implements EntityInstanceEvent, CancellableEve
      *
      * @param result the new item stack
      */
-    public void setResult(@NotNull ItemStack result) {
+    public void setResult(ItemStack result) {
         this.result = result;
     }
 

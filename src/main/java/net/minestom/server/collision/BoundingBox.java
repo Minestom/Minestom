@@ -3,33 +3,25 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityPose;
 import net.minestom.server.instance.block.BlockFace;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
 /**
- * See https://wiki.vg/Entity_metadata#Mobs_2
+ * See <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Entity_metadata#Entities">the entity bounding box list</a>.
  */
-public final class BoundingBox implements Shape {
-    private static final BoundingBox sleepingBoundingBox = new BoundingBox(0.2, 0.2, 0.2);
-    private static final BoundingBox sneakingBoundingBox = new BoundingBox(0.6, 1.5, 0.6);
-    private static final BoundingBox smallBoundingBox = new BoundingBox(0.6, 0.6, 0.6);
+public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
+    private static final BoundingBox SLEEPING = new BoundingBox(0.2, 0.2, 0.2);
+    private static final BoundingBox SNEAKING = new BoundingBox(0.6, 1.5, 0.6);
+    private static final BoundingBox SMALL = new BoundingBox(0.6, 0.6, 0.6);
 
-    final static BoundingBox ZERO = new BoundingBox(0, 0, 0);
-
-    private final double width, height, depth;
-    private final Point offset;
-    private Point relativeEnd;
+    final static BoundingBox ZERO = new BoundingBox(Vec.ZERO, Vec.ZERO);
 
     public BoundingBox(double width, double height, double depth, Point offset) {
-        this.width = width;
-        this.height = height;
-        this.depth = depth;
-        this.offset = offset;
+        this(offset.asVec(), new Vec(width, height, depth).add(offset));
     }
 
     public BoundingBox(double width, double height, double depth) {
@@ -37,25 +29,26 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    public boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face) {
+    public boolean isOccluded(Shape shape, BlockFace face) {
         return false;
     }
 
     @Override
-    @ApiStatus.Experimental
-    public boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox) {
+    public boolean intersectBox(Point positionRelative, BoundingBox boundingBox) {
         return (minX() + positionRelative.x() <= boundingBox.maxX() - Vec.EPSILON / 2 && maxX() + positionRelative.x() >= boundingBox.minX() + Vec.EPSILON / 2) &&
                 (minY() + positionRelative.y() <= boundingBox.maxY() - Vec.EPSILON / 2 && maxY() + positionRelative.y() >= boundingBox.minY() + Vec.EPSILON / 2) &&
                 (minZ() + positionRelative.z() <= boundingBox.maxZ() - Vec.EPSILON / 2 && maxZ() + positionRelative.z() >= boundingBox.minZ() + Vec.EPSILON / 2);
     }
 
     @Override
-    @ApiStatus.Experimental
-    public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
-        if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult) ) {
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point shapePos, BoundingBox moving, SweepResult finalResult) {
+        if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult)) {
             finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
             finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
             finalResult.collidedPositionZ = rayStart.z() + rayDirection.z() * finalResult.res;
+            finalResult.collidedShapeX = shapePos.x();
+            finalResult.collidedShapeY = shapePos.y();
+            finalResult.collidedShapeZ = shapePos.z();
             finalResult.collidedShape = this;
             return true;
         }
@@ -63,33 +56,8 @@ public final class BoundingBox implements Shape {
         return false;
     }
 
-    @ApiStatus.Experimental
     public boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
         return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
-    }
-
-    @Override
-    public @NotNull Point relativeStart() {
-        return offset;
-    }
-
-    @Override
-    public @NotNull Point relativeEnd() {
-        Point relativeEnd = this.relativeEnd;
-        if (relativeEnd == null) this.relativeEnd = relativeEnd = offset.add(width, height, depth);
-        return relativeEnd;
-    }
-
-    @Override
-    public String toString() {
-        String result = "BoundingBox";
-        result += "\n";
-        result += "[" + minX() + " : " + maxX() + "]";
-        result += "\n";
-        result += "[" + minY() + " : " + maxY() + "]";
-        result += "\n";
-        result += "[" + minZ() + " : " + maxZ() + "]";
-        return result;
     }
 
     /**
@@ -100,8 +68,8 @@ public final class BoundingBox implements Shape {
      * @param z the Z offset
      * @return a new {@link BoundingBox} expanded
      */
-    public @NotNull BoundingBox expand(double x, double y, double z) {
-        return new BoundingBox(this.width + x, this.height + y, this.depth + z);
+    public BoundingBox expand(double x, double y, double z) {
+        return new BoundingBox(width() + x, height() + y, depth() + z);
     }
 
     /**
@@ -112,8 +80,8 @@ public final class BoundingBox implements Shape {
      * @param z the Z offset
      * @return a new bounding box contracted
      */
-    public @NotNull BoundingBox contract(double x, double y, double z) {
-        return new BoundingBox(this.width - x, this.height - y, this.depth - z);
+    public BoundingBox contract(double x, double y, double z) {
+        return new BoundingBox(width() - x, height() - y, depth() - z);
     }
 
     /**
@@ -122,44 +90,79 @@ public final class BoundingBox implements Shape {
      * @param offset the offset
      * @return a new bounding box with an offset.
      */
-    public @NotNull BoundingBox withOffset(Point offset) {
-        return new BoundingBox(this.width, this.height, this.depth, offset);
+    public BoundingBox withOffset(Point offset) {
+        return new BoundingBox(width(), height(), depth(), offset);
+    }
+
+    /**
+     * Creates a new {@link BoundingBox} with an expanded size from its center in every plane.
+     * <p>
+     * Equivalent to an expansion and an offset where the point is the three-axis offset.
+     * Particularly useful when you already use centered and aligned minY=0 position.
+     *
+     * @param x the X offset, this will be applied on both sides
+     * @param y the Y offset, this will be applied on both sides
+     * @param z the Z offset, this will be applied on both sides
+     * @return a new {@link BoundingBox} expanded and centered from the original minY
+     */
+    @Contract(pure = true)
+    public BoundingBox grow(double x, double y, double z) {
+        final double newWidth = width() + x, newDepth = depth() + z;
+        final Vec centerOffset = new Vec(-newWidth / 2, minY() - y / 2, -newDepth / 2);
+        return new BoundingBox(newWidth, height() + y, newDepth, centerOffset);
+    }
+
+    /**
+     * Creates a new {@link BoundingBox} with an expanded size from its center in every plane.
+     * <p>
+     * Equivalent to a double expansion and an offset where the point is the three-axis offset.
+     * Particularly useful when you already use centered and aligned minY=0 position.
+     *
+     * @param x the X offset, this will be applied on both sides
+     * @param y the Y offset, this will be applied on both sides
+     * @param z the Z offset, this will be applied on both sides
+     * @return a new {@link BoundingBox} expanded and centered from the original minY
+     */
+    @Contract(pure = true)
+    public BoundingBox growSymmetrically(double x, double y, double z) {
+        // Double all amounts to make it symmetric conformance to xyz
+        return grow(x * 2, y * 2, z * 2);
     }
 
     public double width() {
-        return width;
+        return relativeEnd.x() - relativeStart.x();
     }
 
     public double height() {
-        return height;
+        return relativeEnd.y() - relativeStart.y();
     }
 
     public double depth() {
-        return depth;
+        return relativeEnd.z() - relativeStart.z();
     }
 
     public double minX() {
-        return relativeStart().x();
+        return relativeStart.x();
     }
 
     public double maxX() {
-        return relativeEnd().x();
+        return relativeEnd.x();
     }
 
     public double minY() {
-        return relativeStart().y();
+        return relativeStart.y();
     }
 
     public double maxY() {
-        return relativeEnd().y();
+        return relativeEnd.y();
     }
 
     public double minZ() {
-        return relativeStart().z();
+        return relativeStart.z();
     }
 
     public double maxZ() {
-        return relativeEnd().z();
+        return relativeEnd.z();
     }
 
     public enum AxisMask {
@@ -217,7 +220,9 @@ public final class BoundingBox implements Shape {
         private double minX, minY, minZ, maxX, maxY, maxZ;
         private final MutablePoint point = new MutablePoint();
 
-        public PointIterator() {}
+        public PointIterator() {
+        }
+
         public PointIterator(BoundingBox boundingBox, Point p, AxisMask axisMask, double axis) {
             reset(boundingBox, p, axisMask, axis);
         }
@@ -283,28 +288,17 @@ public final class BoundingBox implements Shape {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BoundingBox that = (BoundingBox) o;
-        if (Double.compare(that.width, width) != 0) return false;
-        if (Double.compare(that.height, height) != 0) return false;
-        if (Double.compare(that.depth, depth) != 0) return false;
-        return offset.equals(that.offset);
-    }
-
-    public static @Nullable BoundingBox fromPose(@NotNull Entity.Pose pose) {
+    public static @Nullable BoundingBox fromPose(EntityPose pose) {
         return switch (pose) {
-            case FALL_FLYING, SWIMMING, SPIN_ATTACK -> smallBoundingBox;
-            case SLEEPING, DYING -> sleepingBoundingBox;
-            case SNEAKING -> sneakingBoundingBox;
+            case FALL_FLYING, SWIMMING, SPIN_ATTACK -> SMALL;
+            case SLEEPING, DYING -> SLEEPING;
+            case SNEAKING -> SNEAKING;
             default -> null;
         };
     }
 
-    public static @NotNull BoundingBox fromPoints(@NotNull Point a, @NotNull Point b) {
-        Vec aVec = Vec.fromPoint(a);
+    public static BoundingBox fromPoints(Point a, Point b) {
+        Vec aVec = a.asVec();
         Vec min = aVec.min(b);
         Vec max = aVec.max(b);
         Vec dimensions = max.sub(min);

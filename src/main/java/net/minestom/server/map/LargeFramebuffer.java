@@ -33,8 +33,8 @@ public interface LargeFramebuffer {
         byte[] colors = new byte[Framebuffer.WIDTH * Framebuffer.WIDTH];
         final int width = Math.min(width(), left + Framebuffer.WIDTH) - left;
         final int height = Math.min(height(), top + Framebuffer.HEIGHT) - top;
-        for (int y = top; y < height; y++) {
-            for (int x = left; x < width; x++) {
+        for (int y = top; y < top+height; y++) {
+            for (int x = left; x < left+width; x++) {
                 final byte color = getMapColor(x, y);
                 colors[Framebuffer.index(x - left, y - top)] = color;
             }
