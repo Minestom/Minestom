@@ -47,7 +47,7 @@ public final class Messenger {
      * @param position the position
      * @param uuid     the UUID of the sender, if any
      */
-    public static void sendMessage(Collection<Player> players, Component message,
+    public static void sendMessage(Collection<? extends Player> players, Component message,
                                    ChatPosition position, @Nullable UUID uuid) {
         PacketSendingUtils.sendGroupedPacket(players, new SystemChatPacket(message, false),
                 player -> getChatMessageType(player).accepts(position));

@@ -9,6 +9,7 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -39,7 +40,7 @@ public sealed interface DialogAction {
                 OpenUrl::new);
 
         @Override
-        public StructCodec<? extends DialogAction> codec() {
+        public StructCodec<OpenUrl> codec() {
             return CODEC;
         }
     }
@@ -50,7 +51,7 @@ public sealed interface DialogAction {
                 RunCommand::new);
 
         @Override
-        public StructCodec<? extends DialogAction> codec() {
+        public StructCodec<RunCommand> codec() {
             return CODEC;
         }
     }
@@ -61,7 +62,7 @@ public sealed interface DialogAction {
                 SuggestCommand::new);
 
         @Override
-        public StructCodec<? extends DialogAction> codec() {
+        public StructCodec<SuggestCommand> codec() {
             return CODEC;
         }
     }
@@ -72,7 +73,7 @@ public sealed interface DialogAction {
                 ShowDialog::new);
 
         @Override
-        public StructCodec<? extends DialogAction> codec() {
+        public StructCodec<ShowDialog> codec() {
             return CODEC;
         }
     }
@@ -83,7 +84,7 @@ public sealed interface DialogAction {
                 ChangePage::new);
 
         @Override
-        public StructCodec<? extends DialogAction> codec() {
+        public StructCodec<ChangePage> codec() {
             return CODEC;
         }
     }
@@ -94,7 +95,7 @@ public sealed interface DialogAction {
                 CopyToClipboard::new);
 
         @Override
-        public StructCodec<? extends DialogAction> codec() {
+        public StructCodec<CopyToClipboard> codec() {
             return CODEC;
         }
     }
@@ -106,7 +107,7 @@ public sealed interface DialogAction {
                 Custom::new);
 
         @Override
-        public StructCodec<? extends DialogAction> codec() {
+        public StructCodec<Custom> codec() {
             return CODEC;
         }
     }
@@ -117,7 +118,7 @@ public sealed interface DialogAction {
                 DynamicRunCommand::new);
 
         @Override
-        public StructCodec<? extends DialogAction> codec() {
+        public StructCodec<DynamicRunCommand> codec() {
             return CODEC;
         }
     }
@@ -129,10 +130,11 @@ public sealed interface DialogAction {
                 DynamicCustom::new);
 
         @Override
-        public StructCodec<? extends DialogAction> codec() {
+        public StructCodec<DynamicCustom> codec() {
             return CODEC;
         }
     }
 
+    @ApiStatus.OverrideOnly
     StructCodec<? extends DialogAction> codec();
 }
