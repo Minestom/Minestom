@@ -6,7 +6,6 @@ import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -22,6 +21,7 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
@@ -29,7 +29,7 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ import static net.minestom.server.network.NetworkBuffer.SHORT;
 public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
-    protected List<Section> sections;
+    protected final List<Section> sections;
 
     private boolean needsCompleteHeightmapRefresh = true;
 
@@ -58,19 +58,24 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
-    private long lastChange;
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
-    public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public DynamicChunk(Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
+        // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
         Arrays.setAll(sectionsTemp, value -> new Section());
         this.sections = List.of(sectionsTemp);
     }
 
+    protected DynamicChunk(Instance instance, int chunkX, int chunkZ, List<Section> sections) {
+        super(instance, chunkX, chunkZ, true);
+        this.sections = List.copyOf(sections);
+    }
+
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
+    public void setBlock(int x, int y, int z, Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
         final DimensionType instanceDim = instance.getCachedDimensionType();
@@ -81,7 +86,6 @@ public class DynamicChunk extends Chunk {
         }
         assertLock();
 
-        this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
 
         Section section = getSectionAt(y);
@@ -113,19 +117,17 @@ public class DynamicChunk extends Chunk {
         }
 
         // Update block handlers
-        var blockPosition = new Vec(x, y, z);
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
+                    () -> new BlockHandler.Destroy(lastCachedBlock, block, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
         }
         if (handler != null) {
             // New placement
-
-            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
             final Block finalBlock = block;
+            final Point placePoint = CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ);
             handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, absoluteBlockPosition)));
+                    () -> new BlockHandler.Placement(finalBlock, Objects.requireNonNullElseGet(lastCachedBlock, () -> this.getBlock(placePoint, Condition.TYPE)), instance, placePoint)));
         }
 
         // UpdateHeightMaps
@@ -135,13 +137,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
+    public void setBiome(int x, int y, int z, RegistryKey<Biome> biome) {
         assertLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
 
-        var id = BIOME_REGISTRY.getId(biome.namespace());
-        if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
+        var id = BIOME_REGISTRY.getId(biome);
+        if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.key());
 
         section.biomePalette().set(
                 globalToSectionRelative(x) / 4,
@@ -150,32 +152,32 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull List<Section> getSections() {
+    public List<Section> getSections() {
         return sections;
     }
 
     @Override
-    public @NotNull Section getSection(int section) {
+    public Section getSection(int section) {
         return sections.get(section - minSection);
     }
 
     @Override
-    public @NotNull Heightmap motionBlockingHeightmap() {
+    public Heightmap motionBlockingHeightmap() {
         return motionBlocking;
     }
 
     @Override
-    public @NotNull Heightmap worldSurfaceHeightmap() {
+    public Heightmap worldSurfaceHeightmap() {
         return worldSurface;
     }
 
     @Override
     public void loadHeightmapsFromNBT(CompoundBinaryTag heightmapsNBT) {
-        if (heightmapsNBT.get(motionBlockingHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
+        if (heightmapsNBT.get(motionBlockingHeightmap().type().name()) instanceof LongArrayBinaryTag array) {
             motionBlockingHeightmap().loadFrom(array.value());
         }
 
-        if (heightmapsNBT.get(worldSurfaceHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
+        if (heightmapsNBT.get(worldSurfaceHeightmap().type().name()) instanceof LongArrayBinaryTag array) {
             worldSurfaceHeightmap().loadFrom(array.value());
         }
     }
@@ -194,7 +196,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+    public @Nullable Block getBlock(int x, int y, int z, Condition condition) {
         assertLock();
         if (y < minSection * CHUNK_SECTION_SIZE || y >= maxSection * CHUNK_SECTION_SIZE)
             return Block.AIR; // Out of bounds
@@ -215,31 +217,26 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
+    public RegistryKey<Biome> getBiome(int x, int y, int z) {
         assertLock();
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
                 .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
 
-        DynamicRegistry.Key<Biome> biome = BIOME_REGISTRY.getKey(id);
+        RegistryKey<Biome> biome = BIOME_REGISTRY.getKey(id);
         Check.notNull(biome, "Biome with id {0} is not registered", id);
         return biome;
     }
 
     @Override
-    public long getLastChangeTime() {
-        return lastChange;
-    }
-
-    @Override
-    public @NotNull SendablePacket getFullDataPacket() {
+    public SendablePacket getFullDataPacket() {
         return chunkCache;
     }
 
     @Override
-    public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
-        DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ);
-        dynamicChunk.sections = sections.stream().map(Section::clone).toList();
+    public Chunk copy(Instance instance, int chunkX, int chunkZ) {
+        var sections = this.sections.stream().map(Section::clone).toList();
+        DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ, sections);
         dynamicChunk.entries.putAll(entries);
         return dynamicChunk;
     }
@@ -252,31 +249,33 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void invalidate() {
+        this.needsCompleteHeightmapRefresh = true;
         this.chunkCache.invalidate();
     }
 
-    private @NotNull ChunkDataPacket createChunkPacket() {
+    private ChunkDataPacket createChunkPacket() {
         final byte[] data;
-        final CompoundBinaryTag heightmapsNBT;
+        final Map<Heightmap.Type, long[]> heightmaps;
         synchronized (this) {
-            heightmapsNBT = getHeightmapNBT();
+            heightmaps = getHeightmaps();
 
+            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
             data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
                     networkBuffer.write(SHORT, (short) section.blockPalette().count());
                     networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blockPalette());
-                    networkBuffer.write(Palette.BIOME_SERIALIZER, section.biomePalette());
+                    networkBuffer.write(biomeSerializer, section.biomePalette());
                 }
             });
         }
 
         return new ChunkDataPacket(chunkX, chunkZ,
-                new ChunkData(heightmapsNBT, data, entries),
+                new ChunkData(heightmaps, data, entries),
                 createLightData(true)
         );
     }
 
-    @NotNull UpdateLightPacket createLightPacket() {
+    UpdateLightPacket createLightPacket() {
         return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
     }
 
@@ -313,25 +312,23 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    protected CompoundBinaryTag getHeightmapNBT() {
+    protected Map<Heightmap.Type, long[]> getHeightmaps() {
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
-        return CompoundBinaryTag.builder()
-                .putLongArray(motionBlocking.NBTName(), motionBlocking.getNBT())
-                .putLongArray(worldSurface.NBTName(), worldSurface.getNBT())
-                .build();
+        return Map.of(
+                motionBlocking.type(), motionBlocking.getNBT(),
+                worldSurface.type(), worldSurface.getNBT()
+        );
     }
 
     private void calculateFullHeightmap() {
-        int startY = Heightmap.getHighestBlockSection(this);
-
-        motionBlocking.refresh(startY);
-        worldSurface.refresh(startY);
-
-        needsCompleteHeightmapRefresh = false;
+        final int startY = Heightmap.getHighestBlockSection(this);
+        this.motionBlocking.refresh(startY);
+        this.worldSurface.refresh(startY);
+        this.needsCompleteHeightmapRefresh = false;
     }
 
     @Override
-    public @NotNull ChunkSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+    public ChunkSnapshot updateSnapshot(SnapshotUpdater updater) {
         Section[] clonedSections = new Section[sections.size()];
         for (int i = 0; i < clonedSections.length; i++)
             clonedSections[i] = sections.get(i).clone();
@@ -342,7 +339,8 @@ public class DynamicChunk extends Chunk {
                 tagHandler().readableCopy());
     }
 
-    private void assertLock() {
+    @ApiStatus.Internal
+    void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
     }
 }

@@ -1,0 +1,85 @@
+plugins {
+    `java-library`
+}
+
+val javaVersion = System.getenv("JAVA_VERSION") ?: "25"
+
+group = "net.minestom"
+version = System.getenv("MINESTOM_VERSION") ?: "dev"
+
+configurations.all {
+    // We only use Jetbrains Annotations
+    exclude("org.checkerframework", "checker-qual")
+}
+
+val adventureVersion = libs.adventure.api.get().version ?: ""
+
+repositories {
+    val dataVersion = libs.minestomData.get().version ?: ""
+    if (dataVersion.endsWith("-dev"))
+        mavenLocal()
+    if (adventureVersion.endsWith("-SNAPSHOT"))
+        maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
+
+    mavenCentral()
+}
+
+dependencies {
+    // Core dependencies
+    api(libs.jetbrainsAnnotations)
+
+    // Testing
+    testImplementation(libs.bundles.junit)
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+    modularity.inferModulePath = true
+
+    withSourcesJar()
+    withJavadocJar()
+}
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Javadoc> {
+    (options as? StandardJavadocDocletOptions)?.apply {
+        encoding = "UTF-8"
+
+        // Custom options
+        addBooleanOption("html5", true)
+        addStringOption("-release", javaVersion)
+        // Links to external javadocs
+        links("https://docs.oracle.com/en/java/javase/$javaVersion/docs/api/")
+        if (!adventureVersion.endsWith("-SNAPSHOT")) {
+            links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/nbt/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/key/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-ansi/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-gson/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-legacy/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/text-serializer-plain/${libs.versions.adventure.get()}/")
+        }
+        links("https://javadoc.io/doc/com.google.code.gson/gson/${libs.versions.gson.get()}/")
+        links("https://javadoc.io/doc/org.jetbrains/annotations/${libs.versions.jetbrainsAnnotations.get()}/")
+
+        tags("apiNote:a:API Note:", "implSpec:a:Implementation Requirements:", "implNote:a:Implementation Note:")
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+
+    // Viewable packets make tracking harder. Could be re-enabled later.
+    jvmArgs("-Dminestom.viewable-packet=false")
+    jvmArgs("-Dminestom.inside-test=true")
+    jvmArgs("-Dminestom.acquirable-strict=true")
+    minHeapSize = "512m"
+    maxHeapSize = "1024m"
+}
+
+tasks.withType<Zip> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

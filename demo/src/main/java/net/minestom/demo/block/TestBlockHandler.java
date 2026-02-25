@@ -1,24 +1,23 @@
 package net.minestom.demo.block;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 
 public class TestBlockHandler implements BlockHandler {
     public static final BlockHandler INSTANCE = new TestBlockHandler();
 
     @Override
-    public @NotNull NamespaceID getNamespaceId() {
-        return NamespaceID.from("minestom", "test");
+    public Key getKey() {
+        return Key.key("minestom", "test");
     }
 
     @Override
-    public void onPlace(@NotNull Placement placement) {
+    public void onPlace(Placement placement) {
         System.out.println(placement);
     }
 
     @Override
-    public void onDestroy(@NotNull Destroy destroy) {
+    public void onDestroy(Destroy destroy) {
         System.out.println(destroy);
     }
 }

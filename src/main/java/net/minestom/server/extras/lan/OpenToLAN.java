@@ -5,7 +5,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.time.Cooldown;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +55,7 @@ public class OpenToLAN {
      * @param config the configuration
      * @return {@code true} if it was opened successfully, {@code false} otherwise
      */
-    public static boolean open(@NotNull OpenToLANConfig config) {
+    public static boolean open(OpenToLANConfig config) {
         Objects.requireNonNull(config, "config");
         if (socket != null) return false;
 
@@ -102,21 +101,26 @@ public class OpenToLAN {
      * Performs the ping.
      */
     private static void ping() {
-        if (!MinecraftServer.getServer().isOpen()) return;
-        if (packet == null || eventCooldown.isReady(System.currentTimeMillis())) {
-            final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
-            EventDispatcher.call(event);
+        Thread.startVirtualThread(() -> {
+            try {
+                if (!MinecraftServer.getServer().isOpen()) return;
+                if (packet == null || eventCooldown.isReady(System.nanoTime())) {
+                    final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
+                    EventDispatcher.call(event);
 
-            final byte[] data = OPEN_TO_LAN.getPingResponse(event.getResponseData()).getBytes(StandardCharsets.UTF_8);
-            packet = new DatagramPacket(data, data.length, PING_ADDRESS);
+                    final byte[] data = OPEN_TO_LAN.getPingResponse(event.getStatus()).getBytes(StandardCharsets.UTF_8);
+                    packet = new DatagramPacket(data, data.length, PING_ADDRESS);
+                    eventCooldown.refreshLastUpdate(System.nanoTime());
+                }
 
-            eventCooldown.refreshLastUpdate(System.currentTimeMillis());
-        }
-
-        try {
-            socket.send(packet);
-        } catch (IOException e) {
-            LOGGER.warn("Could not send Open to LAN packet!", e);
-        }
+                try {
+                    socket.send(packet);
+                } catch (IOException e) {
+                    LOGGER.warn("Could not send Open to LAN packet!", e);
+                }
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+        });
     }
 }

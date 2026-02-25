@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.tag.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -51,6 +52,15 @@ public class BlockTest {
 
         assertEquals(block.withProperty("facing", "north").getProperty("facing"), "north");
         assertNotEquals(block.withProperty("facing", "north"), block.withProperty("facing", "south"));
+    }
+
+    @Test
+    public void testState() {
+        assertEquals("minecraft:dirt", Block.DIRT.state());
+        assertEquals(Block.DIRT, Block.fromState("minecraft:dirt"));
+        assertEquals(Block.CHEST, Block.fromState("minecraft:chest"));
+        assertEquals(Block.CHEST, Block.fromState("minecraft:chest[]"));
+        assertEquals(Block.CHEST.withProperty("facing", "north"), Block.fromState("minecraft:chest[facing=north]"));
     }
 
     @Test
@@ -104,5 +114,11 @@ public class BlockTest {
                 assertEquals(blockWithState, Block.fromStateId(blockWithState.stateId()));
             }
         }
+    }
+
+    @Test
+    void testBlockEntityRegistryLoading() {
+        // Sanity to ensure we correctly load block entity types
+        assertEquals(BlockEntityType.SIGN, Block.OAK_SIGN.registry().blockEntityType());
     }
 }

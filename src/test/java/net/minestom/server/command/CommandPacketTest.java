@@ -7,8 +7,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandPacketTest {
     static {
@@ -34,6 +33,7 @@ public class CommandPacketTest {
         final DeclareCommandsPacket.Node arg = packet.nodes().get(cmd.children[0]);
         assertNotNull(arg);
         assertNodeType(DeclareCommandsPacket.NodeType.ARGUMENT, arg.flags);
+        assertExecutable(arg.flags);
         assertEquals(0, arg.children.length);
         assertEquals("bar", arg.name);
     }
@@ -245,6 +245,10 @@ public class CommandPacketTest {
 
     private static void assertNodeType(DeclareCommandsPacket.NodeType expected, byte flags) {
         assertEquals(expected, DeclareCommandsPacket.NodeType.values()[flags & 0x03]);
+    }
+
+    private static void assertExecutable(byte flags) {
+        assertTrue((flags & DeclareCommandsPacket.IS_EXECUTABLE) != 0);
     }
 
     private static void dummyExecutor(CommandSender sender, CommandContext context) {

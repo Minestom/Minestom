@@ -1,13 +1,14 @@
 package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Unit;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -19,53 +20,59 @@ import java.util.function.IntFunction;
  */
 @ApiStatus.Experimental
 public sealed interface DataComponentMap extends DataComponent.Holder permits DataComponentMapImpl {
-    @NotNull DataComponentMap EMPTY = new DataComponentMapImpl(new Int2ObjectArrayMap<>(0));
+    DataComponentMap EMPTY = new DataComponentMapImpl(Int2ObjectMaps.emptyMap());
 
-    static @NotNull DataComponentMap.Builder builder() {
+    static DataComponentMap.Builder builder() {
         return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>());
     }
 
-    static @NotNull DataComponentMap.PatchBuilder patchBuilder() {
+    static DataComponentMap.PatchBuilder patchBuilder() {
         return new DataComponentMapImpl.PatchBuilderImpl(new Int2ObjectArrayMap<>());
     }
 
+    @ApiStatus.Internal
+    static NetworkBuffer.Type<DataComponentMap> networkType(
+            IntFunction<DataComponent<?>> idToType) {
+        return new DataComponentMapImpl.NetworkTypeImpl(idToType, false, true);
+    }
+
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
-    static @NotNull BinaryTagSerializer<DataComponentMap> nbtType(
-            @NotNull IntFunction<DataComponent<?>> idToType,
-            @NotNull Function<String, DataComponent<?>> nameToType
+    static Codec<DataComponentMap> codec(
+            IntFunction<DataComponent<?>> idToType,
+            Function<String, DataComponent<?>> nameToType
     ) {
-        return new DataComponentMapImpl.NbtType(idToType, nameToType, false);
+        return new DataComponentMapImpl.CodecImpl(idToType, nameToType, false);
     }
 
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
-    static @NotNull NetworkBuffer.Type<DataComponentMap> patchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType) {
-        return new DataComponentMapImpl.PatchNetworkType(idToType);
+    static NetworkBuffer.Type<DataComponentMap> patchNetworkType(IntFunction<DataComponent<?>> idToType, boolean trusted) {
+        return new DataComponentMapImpl.NetworkTypeImpl(idToType, true, trusted);
     }
 
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
-    static @NotNull BinaryTagSerializer<DataComponentMap> patchNbtType(
-            @NotNull IntFunction<DataComponent<?>> idToType,
-            @NotNull Function<String, DataComponent<?>> nameToType
+    static Codec<DataComponentMap> patchCodec(
+            IntFunction<DataComponent<?>> idToType,
+            Function<String, DataComponent<?>> nameToType
     ) {
-        return new DataComponentMapImpl.NbtType(idToType, nameToType, true);
+        return new DataComponentMapImpl.CodecImpl(idToType, nameToType, true);
     }
 
-    static @NotNull DataComponentMap diff(@NotNull DataComponentMap prototype, @NotNull DataComponentMap patch) {
+    static DataComponentMap diff(DataComponentMap prototype, DataComponentMap patch) {
         final DataComponentMapImpl patchImpl = (DataComponentMapImpl) patch;
         if (patchImpl.components().isEmpty()) return EMPTY;
 
         final DataComponentMapImpl protoImpl = (DataComponentMapImpl) prototype;
 
-        final Int2ObjectArrayMap<Object> diff = new Int2ObjectArrayMap<>(patchImpl.components());
+        final Int2ObjectArrayMap<@Nullable Object> diff = new Int2ObjectArrayMap<>(patchImpl.components());
         var iter = diff.int2ObjectEntrySet().fastIterator();
         while (iter.hasNext()) {
             final var entry = iter.next(); // Entry in patch
@@ -84,6 +91,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         return new DataComponentMapImpl(diff);
     }
 
+    boolean isEmpty();
+
     /**
      * Does a 'patch'ed has against the given prototype. That is, this map is treated as the primary source, but if
      * unspecified, the given prototype is used as a fallback.
@@ -92,7 +101,7 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * @param component The component to check
      * @return True if the component is present (taking into account the prototype).
      */
-    boolean has(@NotNull DataComponentMap prototype, @NotNull DataComponent<?> component);
+    boolean has(DataComponentMap prototype, DataComponent<?> component);
 
     /**
      * Does a 'patch'ed get against the given prototype. That is, this map is treated as the primary source, but if
@@ -103,16 +112,16 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * @return The value of the component, or null if not present (taking into account the prototype).
      * @param <T> The type of the component
      */
-    <T> @Nullable T get(@NotNull DataComponentMap prototype, @NotNull DataComponent<T> component);
+    <T> @Nullable T get(DataComponentMap prototype, DataComponent<T> component);
 
     /**
      * Adds the component, overwriting any prior value if present.
      *
      * @return A new map with the component set to the value
      */
-    <T> @NotNull DataComponentMap set(@NotNull DataComponent<T> component, @NotNull T value);
+    <T> DataComponentMap set(DataComponent<T> component, T value);
 
-    default @NotNull DataComponentMap set(@NotNull DataComponent<Unit> component) {
+    default DataComponentMap set(DataComponent<Unit> component) {
         return set(component, Unit.INSTANCE);
     }
 
@@ -122,36 +131,36 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * @param component The component to remove
      * @return A new map with the component removed
      */
-    @NotNull DataComponentMap remove(@NotNull DataComponent<?> component);
+    DataComponentMap remove(DataComponent<?> component);
 
-    @NotNull Builder toBuilder();
+    Collection<DataComponent.Value> entrySet();
 
-    @NotNull PatchBuilder toPatchBuilder();
+    Builder toBuilder();
+
+    PatchBuilder toPatchBuilder();
 
     sealed interface Builder extends DataComponent.Holder permits DataComponentMapImpl.BuilderImpl {
 
-        <T> @NotNull Builder set(@NotNull DataComponent<T> component, @NotNull T value);
+        <T> Builder set(DataComponent<T> component, T value);
 
-        default @NotNull Builder set(@NotNull DataComponent<Unit> component) {
+        default Builder set(DataComponent<Unit> component) {
             return set(component, Unit.INSTANCE);
         }
 
-        @NotNull DataComponentMap build();
-
+        DataComponentMap build();
     }
 
     sealed interface PatchBuilder extends DataComponent.Holder permits DataComponentMapImpl.PatchBuilderImpl {
 
-        <T> @NotNull PatchBuilder set(@NotNull DataComponent<T> component, @NotNull T value);
+        <T> PatchBuilder set(DataComponent<T> component, T value);
 
-        default @NotNull PatchBuilder set(@NotNull DataComponent<Unit> component) {
+        default PatchBuilder set(DataComponent<Unit> component) {
             return set(component, Unit.INSTANCE);
         }
 
-        @NotNull PatchBuilder remove(@NotNull DataComponent<?> component);
+        PatchBuilder remove(DataComponent<?> component);
 
-        @NotNull DataComponentMap build();
-
+        DataComponentMap build();
     }
 
 }

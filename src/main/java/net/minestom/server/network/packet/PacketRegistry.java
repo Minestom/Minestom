@@ -1,8 +1,10 @@
 package net.minestom.server.network.packet;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
+import net.minestom.server.network.packet.client.configuration.ClientAcceptCodeOfConductPacket;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
@@ -18,28 +20,35 @@ import net.minestom.server.network.packet.server.configuration.*;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 public interface PacketRegistry<T> {
     @UnknownNullability
-    T create(int packetId, @NotNull NetworkBuffer reader);
+    T create(int packetId, NetworkBuffer reader);
 
-    PacketInfo<T> packetInfo(@NotNull Class<?> packetClass);
+    PacketInfo<T> packetInfo(Class<?> packetClass);
 
-    default PacketInfo<T> packetInfo(@NotNull T packet) {
+    default PacketInfo<T> packetInfo(T packet) {
         return packetInfo(packet.getClass());
     }
 
     PacketInfo<T> packetInfo(int packetId);
 
+    ConnectionState state();
+
+    ConnectionSide side();
+
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
 
-    sealed class Client extends PacketRegistryTemplate<ClientPacket> {
-        @SafeVarargs
-        Client(Entry<? extends ClientPacket>... suppliers) {
+    abstract sealed class Client extends PacketRegistryTemplate<ClientPacket> {
+        @SafeVarargs Client(Entry<? extends ClientPacket>... suppliers) {
             super(suppliers);
+        }
+
+        @Override
+        public ConnectionSide side() {
+            return ConnectionSide.CLIENT;
         }
     }
 
@@ -49,6 +58,11 @@ public interface PacketRegistry<T> {
                     entry(ClientHandshakePacket.class, ClientHandshakePacket.SERIALIZER)
             );
         }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.HANDSHAKE;
+        }
     }
 
     final class ClientStatus extends Client {
@@ -57,6 +71,11 @@ public interface PacketRegistry<T> {
                     entry(StatusRequestPacket.class, StatusRequestPacket.SERIALIZER),
                     entry(ClientPingRequestPacket.class, ClientPingRequestPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.STATUS;
         }
     }
 
@@ -70,6 +89,11 @@ public interface PacketRegistry<T> {
                     entry(ClientCookieResponsePacket.class, ClientCookieResponsePacket.SERIALIZER)
             );
         }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.LOGIN;
+        }
     }
 
     final class ClientConfiguration extends Client {
@@ -82,8 +106,15 @@ public interface PacketRegistry<T> {
                     entry(ClientKeepAlivePacket.class, ClientKeepAlivePacket.SERIALIZER),
                     entry(ClientPongPacket.class, ClientPongPacket.SERIALIZER),
                     entry(ClientResourcePackStatusPacket.class, ClientResourcePackStatusPacket.SERIALIZER),
-                    entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER)
+                    entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER),
+                    entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER),
+                    entry(ClientAcceptCodeOfConductPacket.class, ClientAcceptCodeOfConductPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.CONFIGURATION;
         }
     }
 
@@ -94,6 +125,7 @@ public interface PacketRegistry<T> {
                     entry(ClientQueryBlockNbtPacket.class, ClientQueryBlockNbtPacket.SERIALIZER),
                     entry(ClientSelectBundleItemPacket.class, ClientSelectBundleItemPacket.SERIALIZER),
                     entry(ClientChangeDifficultyPacket.class, ClientChangeDifficultyPacket.SERIALIZER),
+                    entry(ClientChangeGameModePacket.class, ClientChangeGameModePacket.SERIALIZER),
                     entry(ClientChatAckPacket.class, ClientChatAckPacket.SERIALIZER),
                     entry(ClientCommandChatPacket.class, ClientCommandChatPacket.SERIALIZER),
                     entry(ClientSignedCommandChatPacket.class, ClientSignedCommandChatPacket.SERIALIZER),
@@ -111,7 +143,7 @@ public interface PacketRegistry<T> {
                     entry(ClientWindowSlotStatePacket.class, ClientWindowSlotStatePacket.SERIALIZER),
                     entry(ClientCookieResponsePacket.class, ClientCookieResponsePacket.SERIALIZER),
                     entry(ClientPluginMessagePacket.class, ClientPluginMessagePacket.SERIALIZER),
-                    entry(ClientDebugSampleSubscriptionPacket.class, ClientDebugSampleSubscriptionPacket.SERIALIZER),
+                    entry(ClientDebugSubscriptionRequestPacket.class, ClientDebugSubscriptionRequestPacket.SERIALIZER),
                     entry(ClientEditBookPacket.class, ClientEditBookPacket.SERIALIZER),
                     entry(ClientQueryEntityNbtPacket.class, ClientQueryEntityNbtPacket.SERIALIZER),
                     entry(ClientInteractEntityPacket.class, ClientInteractEntityPacket.SERIALIZER),
@@ -124,13 +156,15 @@ public interface PacketRegistry<T> {
                     entry(ClientPlayerPositionStatusPacket.class, ClientPlayerPositionStatusPacket.SERIALIZER),
                     entry(ClientVehicleMovePacket.class, ClientVehicleMovePacket.SERIALIZER),
                     entry(ClientSteerBoatPacket.class, ClientSteerBoatPacket.SERIALIZER),
-                    entry(ClientPickItemPacket.class, ClientPickItemPacket.SERIALIZER),
+                    entry(ClientPickItemFromBlockPacket.class, ClientPickItemFromBlockPacket.SERIALIZER),
+                    entry(ClientPickItemFromEntityPacket.class, ClientPickItemFromEntityPacket.SERIALIZER),
                     entry(ClientPingRequestPacket.class, ClientPingRequestPacket.SERIALIZER),
                     entry(ClientPlaceRecipePacket.class, ClientPlaceRecipePacket.SERIALIZER),
                     entry(ClientPlayerAbilitiesPacket.class, ClientPlayerAbilitiesPacket.SERIALIZER),
-                    entry(ClientPlayerDiggingPacket.class, ClientPlayerDiggingPacket.SERIALIZER),
+                    entry(ClientPlayerActionPacket.class, ClientPlayerActionPacket.SERIALIZER),
                     entry(ClientEntityActionPacket.class, ClientEntityActionPacket.SERIALIZER),
                     entry(ClientInputPacket.class, ClientInputPacket.SERIALIZER),
+                    entry(ClientPlayerLoadedPacket.class, ClientPlayerLoadedPacket.SERIALIZER),
                     entry(ClientPongPacket.class, ClientPongPacket.SERIALIZER),
                     entry(ClientSetRecipeBookStatePacket.class, ClientSetRecipeBookStatePacket.SERIALIZER),
                     entry(ClientRecipeBookSeenRecipePacket.class, ClientRecipeBookSeenRecipePacket.SERIALIZER),
@@ -145,19 +179,31 @@ public interface PacketRegistry<T> {
                     entry(ClientCreativeInventoryActionPacket.class, ClientCreativeInventoryActionPacket.SERIALIZER),
                     entry(ClientUpdateJigsawBlockPacket.class, ClientUpdateJigsawBlockPacket.SERIALIZER),
                     entry(ClientUpdateStructureBlockPacket.class, ClientUpdateStructureBlockPacket.SERIALIZER),
+                    entry(ClientSetTestBlockPacket.class, ClientSetTestBlockPacket.SERIALIZER),
                     entry(ClientUpdateSignPacket.class, ClientUpdateSignPacket.SERIALIZER),
                     entry(ClientAnimationPacket.class, ClientAnimationPacket.SERIALIZER),
                     entry(ClientSpectatePacket.class, ClientSpectatePacket.SERIALIZER),
+                    entry(ClientTestInstanceBlockActionPacket.class, ClientTestInstanceBlockActionPacket.SERIALIZER),
                     entry(ClientPlayerBlockPlacementPacket.class, ClientPlayerBlockPlacementPacket.SERIALIZER),
-                    entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER)
+                    entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER),
+                    entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.PLAY;
         }
     }
 
-    sealed class Server extends PacketRegistryTemplate<ServerPacket> {
-        @SafeVarargs
-        Server(Entry<? extends ServerPacket>... suppliers) {
+    abstract sealed class Server extends PacketRegistryTemplate<ServerPacket> {
+        @SafeVarargs Server(Entry<? extends ServerPacket>... suppliers) {
             super(suppliers);
+        }
+
+        @Override
+        public ConnectionSide side() {
+            return ConnectionSide.SERVER;
         }
     }
 
@@ -167,6 +213,11 @@ public interface PacketRegistry<T> {
                     // Empty
             );
         }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.HANDSHAKE;
+        }
     }
 
     final class ServerStatus extends Server {
@@ -175,6 +226,11 @@ public interface PacketRegistry<T> {
                     entry(ResponsePacket.class, ResponsePacket.SERIALIZER),
                     entry(PingResponsePacket.class, PingResponsePacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.STATUS;
         }
     }
 
@@ -188,6 +244,11 @@ public interface PacketRegistry<T> {
                     entry(LoginPluginRequestPacket.class, LoginPluginRequestPacket.SERIALIZER),
                     entry(CookieRequestPacket.class, CookieRequestPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.LOGIN;
         }
     }
 
@@ -210,8 +271,16 @@ public interface PacketRegistry<T> {
                     entry(TagsPacket.class, TagsPacket.SERIALIZER),
                     entry(SelectKnownPacksPacket.class, SelectKnownPacksPacket.SERIALIZER),
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
-                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
+                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
+                    entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
+                    entry(ShowDialogPacket.class, ShowDialogPacket.INLINE_SERIALIZER),
+                    entry(CodeOfConductPacket.class, CodeOfConductPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.CONFIGURATION;
         }
     }
 
@@ -220,7 +289,6 @@ public interface PacketRegistry<T> {
             super(
                     entry(BundlePacket.class, BundlePacket.SERIALIZER),
                     entry(SpawnEntityPacket.class, SpawnEntityPacket.SERIALIZER),
-                    entry(SpawnExperienceOrbPacket.class, SpawnExperienceOrbPacket.SERIALIZER),
                     entry(EntityAnimationPacket.class, EntityAnimationPacket.SERIALIZER),
                     entry(StatisticsPacket.class, StatisticsPacket.SERIALIZER),
                     entry(AcknowledgeBlockChangePacket.class, AcknowledgeBlockChangePacket.SERIALIZER),
@@ -245,6 +313,10 @@ public interface PacketRegistry<T> {
                     entry(CustomChatCompletionPacket.class, CustomChatCompletionPacket.SERIALIZER),
                     entry(PluginMessagePacket.class, PluginMessagePacket.SERIALIZER),
                     entry(DamageEventPacket.class, DamageEventPacket.SERIALIZER),
+                    entry(DebugBlockValuePacket.class, DebugBlockValuePacket.SERIALIZER),
+                    entry(DebugChunkValuePacket.class, DebugChunkValuePacket.SERIALIZER),
+                    entry(DebugEntityValuePacket.class, DebugEntityValuePacket.SERIALIZER),
+                    entry(DebugEventPacket.class, DebugEventPacket.SERIALIZER),
                     entry(DebugSamplePacket.class, DebugSamplePacket.SERIALIZER),
                     entry(DeleteChatPacket.class, DeleteChatPacket.SERIALIZER),
                     entry(DisconnectPacket.class, DisconnectPacket.SERIALIZER),
@@ -254,12 +326,13 @@ public interface PacketRegistry<T> {
                     entry(ExplosionPacket.class, ExplosionPacket.SERIALIZER),
                     entry(UnloadChunkPacket.class, UnloadChunkPacket.SERIALIZER),
                     entry(ChangeGameStatePacket.class, ChangeGameStatePacket.SERIALIZER),
+                    entry(GameTestHighlightPosPacket.class, GameTestHighlightPosPacket.SERIALIZER),
                     entry(OpenHorseWindowPacket.class, OpenHorseWindowPacket.SERIALIZER),
                     entry(HitAnimationPacket.class, HitAnimationPacket.SERIALIZER),
                     entry(InitializeWorldBorderPacket.class, InitializeWorldBorderPacket.SERIALIZER),
                     entry(KeepAlivePacket.class, KeepAlivePacket.SERIALIZER),
                     entry(ChunkDataPacket.class, ChunkDataPacket.SERIALIZER),
-                    entry(EffectPacket.class, EffectPacket.SERIALIZER),
+                    entry(WorldEventPacket.class, WorldEventPacket.SERIALIZER),
                     entry(ParticlePacket.class, ParticlePacket.SERIALIZER),
                     entry(UpdateLightPacket.class, UpdateLightPacket.SERIALIZER),
                     entry(JoinGamePacket.class, JoinGamePacket.SERIALIZER),
@@ -338,6 +411,7 @@ public interface PacketRegistry<T> {
                     entry(NbtQueryResponsePacket.class, NbtQueryResponsePacket.SERIALIZER),
                     entry(CollectItemPacket.class, CollectItemPacket.SERIALIZER),
                     entry(EntityTeleportPacket.class, EntityTeleportPacket.SERIALIZER),
+                    entry(TestInstanceBlockStatus.class, TestInstanceBlockStatus.SERIALIZER),
                     entry(SetTickStatePacket.class, SetTickStatePacket.SERIALIZER),
                     entry(TickStepPacket.class, TickStepPacket.SERIALIZER),
                     entry(TransferPacket.class, TransferPacket.SERIALIZER),
@@ -348,28 +422,35 @@ public interface PacketRegistry<T> {
                     entry(TagsPacket.class, TagsPacket.SERIALIZER),
                     entry(ProjectilePowerPacket.class, ProjectilePowerPacket.SERIALIZER),
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
-                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
+                    entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
+                    entry(TrackedWaypointPacket.class, TrackedWaypointPacket.SERIALIZER),
+                    entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
+                    entry(ShowDialogPacket.class, ShowDialogPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public ConnectionState state() {
+            return ConnectionState.PLAY;
         }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
+    abstract sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
         private final PacketInfo<? extends T>[] suppliers;
         private final ClassValue<PacketInfo<T>> packetIds = new ClassValue<>() {
             @Override
-            protected PacketInfo<T> computeValue(@NotNull Class<?> type) {
+            protected PacketInfo<T> computeValue(Class<?> type) {
                 for (PacketInfo<? extends T> info : suppliers) {
                     if (info != null && info.packetClass == type) {
                         return (PacketInfo<T>) info;
                     }
                 }
-                throw new IllegalStateException("Packet type " + type + " isn't registered!");
+                throw new IllegalStateException("Packet type " + type + " cannot be sent in state " + side().name() + "_" + state().name() + "!");
             }
         };
 
-        @SafeVarargs
-        PacketRegistryTemplate(Entry<? extends T>... suppliers) {
+        @SafeVarargs PacketRegistryTemplate(Entry<? extends T>... suppliers) {
             PacketInfo<? extends T>[] packetInfos = new PacketInfo[suppliers.length];
             for (int i = 0; i < suppliers.length; i++) {
                 final Entry<? extends T> entry = suppliers[i];
@@ -379,7 +460,7 @@ public interface PacketRegistry<T> {
             this.suppliers = packetInfos;
         }
 
-        public @UnknownNullability T create(int packetId, @NotNull NetworkBuffer reader) {
+        public @UnknownNullability T create(int packetId, NetworkBuffer reader) {
             final PacketInfo<T> info = packetInfo(packetId);
             final NetworkBuffer.Type<T> supplier = info.serializer;
             final T packet = supplier.read(reader);
@@ -390,7 +471,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public PacketInfo<T> packetInfo(@NotNull Class<?> packetClass) {
+        public PacketInfo<T> packetInfo(Class<?> packetClass) {
             return packetIds.get(packetClass);
         }
 
@@ -403,6 +484,7 @@ public interface PacketRegistry<T> {
             return info;
         }
 
+
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
         }
 
@@ -410,5 +492,10 @@ public interface PacketRegistry<T> {
         static <T> Entry<T> entry(Class<T> type, NetworkBuffer.Type<T> reader) {
             return new Entry<>((Class) type, reader);
         }
+    }
+
+    enum ConnectionSide {
+        CLIENT,
+        SERVER
     }
 }

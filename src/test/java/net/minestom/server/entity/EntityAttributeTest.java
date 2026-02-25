@@ -1,14 +1,14 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.component.DataComponents;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.attribute.AttributeOperation;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.AttributeList;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -32,9 +32,9 @@ public class EntityAttributeTest {
         double baseAmount = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
         assertEquals(0, Double.compare(baseAmount, baseHealth)); // Avoid floating-point rounding issues
 
-        ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(ItemComponent.ATTRIBUTE_MODIFIERS,
+        ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(DataComponents.ATTRIBUTE_MODIFIERS,
                 new AttributeList(new AttributeList.Modifier(Attribute.MAX_HEALTH,
-                        new AttributeModifier(NamespaceID.from("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.HEAD))).build();
+                        new AttributeModifier(Key.key("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.HEAD))).build();
 
         entity.setBoots(itemStack);
         assertEquals(0, Double.compare(entity.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth)); // No change since we are in the wrong slot
@@ -56,9 +56,9 @@ public class EntityAttributeTest {
         double baseAmount = player.getAttribute(Attribute.MAX_HEALTH).getValue();
         assertEquals(0, Double.compare(baseAmount, baseHealth)); // Avoid floating-point rounding issues
 
-        ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(ItemComponent.ATTRIBUTE_MODIFIERS,
+        ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(DataComponents.ATTRIBUTE_MODIFIERS,
                 new AttributeList(new AttributeList.Modifier(Attribute.MAX_HEALTH,
-                        new AttributeModifier(NamespaceID.from("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))).build();
+                        new AttributeModifier(Key.key("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))).build();
 
         player.setBoots(itemStack);
         assertEquals(0, Double.compare(player.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth)); // No change since we are in the wrong slot
@@ -82,9 +82,9 @@ public class EntityAttributeTest {
         double addition = 10;
         // Don't compare against base health first (that will initialize the attribute, and we want to make sure we don't error when we add an item with attribute modifiers)
 
-        ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(ItemComponent.ATTRIBUTE_MODIFIERS,
+        ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(DataComponents.ATTRIBUTE_MODIFIERS,
                 new AttributeList(new AttributeList.Modifier(Attribute.MAX_HEALTH,
-                        new AttributeModifier(NamespaceID.from("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))).build();
+                        new AttributeModifier(Key.key("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))).build();
 
         player.setItemInMainHand(itemStack);
         assertEquals(0, Double.compare(player.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth + addition));

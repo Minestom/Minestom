@@ -3,7 +3,6 @@ package net.minestom.server.network;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Used when you want to provide your own player object instead of using the default one.
@@ -22,5 +21,5 @@ public interface PlayerProvider {
      * @param gameProfile the player game profile
      * @return a newly create {@link Player} object
      */
-    @NotNull Player createPlayer(@NotNull PlayerConnection connection, @NotNull GameProfile gameProfile);
+    Player createPlayer(PlayerConnection connection, GameProfile gameProfile);
 }

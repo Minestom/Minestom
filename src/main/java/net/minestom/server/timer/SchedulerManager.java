@@ -1,14 +1,13 @@
 package net.minestom.server.timer;
 
-import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
+import org.jctools.queues.MessagePassingQueue;
 
 import java.util.function.Supplier;
 
 public final class SchedulerManager implements Scheduler {
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final MpmcUnboundedXaddArrayQueue<Runnable> shutdownTasks = new MpmcUnboundedXaddArrayQueue<>(1024);
-
+    private final MessagePassingQueue<Runnable> shutdownTasks = ConcurrentMessageQueues.mpscUnboundedArrayQueue(1024);
     @Override
     public void process() {
         this.scheduler.process();
@@ -25,8 +24,8 @@ public final class SchedulerManager implements Scheduler {
     }
 
     @Override
-    public @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task,
-                                    @NotNull ExecutionType executionType) {
+    public Task submitTask(Supplier<TaskSchedule> task,
+                                    ExecutionType executionType) {
         return scheduler.submitTask(task, executionType);
     }
 
@@ -34,7 +33,7 @@ public final class SchedulerManager implements Scheduler {
         this.shutdownTasks.drain(Runnable::run);
     }
 
-    public void buildShutdownTask(@NotNull Runnable runnable) {
+    public void buildShutdownTask(Runnable runnable) {
         this.shutdownTasks.relaxedOffer(runnable);
     }
 }

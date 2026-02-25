@@ -1,31 +1,26 @@
 package net.minestom.server.sound;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.key.Keyed;
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.sound.Sound;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-import static net.kyori.adventure.nbt.StringBinaryTag.stringBinaryTag;
-
 /**
  * Can represent a builtin/vanilla sound or a custom sound.
  */
-public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
+public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
-    @NotNull NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+    NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, SoundEvent value) {
+        public void write(NetworkBuffer buffer, SoundEvent value) {
             switch (value) {
                 case BuiltinSoundEvent soundEvent -> buffer.write(NetworkBuffer.VAR_INT, soundEvent.id() + 1);
                 case CustomSoundEvent soundEvent -> {
@@ -37,66 +32,65 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
         }
 
         @Override
-        public SoundEvent read(@NotNull NetworkBuffer buffer) {
+        public SoundEvent read(NetworkBuffer buffer) {
             int id = buffer.read(NetworkBuffer.VAR_INT) - 1;
-            if (id != -1) return BuiltinSoundEvent.getId(id);
+            if (id != -1) return BuiltinSoundEvent.REGISTRY.get(id);
 
-            NamespaceID namespace = NamespaceID.from(buffer.read(NetworkBuffer.STRING));
-            return new CustomSoundEvent(namespace, buffer.read(NetworkBuffer.FLOAT.optional()));
+            return new CustomSoundEvent(buffer.read(NetworkBuffer.KEY),
+                    buffer.read(NetworkBuffer.FLOAT.optional()));
         }
     };
-    @NotNull BinaryTagSerializer<SoundEvent> NBT_TYPE = new BinaryTagSerializer<>() {
+    Codec<SoundEvent> CODEC = new Codec<>() {
         @Override
-        public @NotNull BinaryTag write(@NotNull Context context, @NotNull SoundEvent value) {
-            return switch (value) {
-                case BuiltinSoundEvent soundEvent -> stringBinaryTag(soundEvent.name());
-                case CustomSoundEvent soundEvent -> {
-                    final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
-                            .putString("sound_id", soundEvent.name());
-                    if (soundEvent.range() != null) {
-                        builder.putFloat("range", soundEvent.range());
-                    }
-                    yield builder.build();
-                }
-            };
+        public <D> Result<SoundEvent> decode(Transcoder<D> coder, D value) {
+            final Result<String> stringResult = coder.getString(value);
+            if (stringResult instanceof Result.Ok(String string)) {
+                final SoundEvent soundEvent = BuiltinSoundEvent.get(string);
+                if (soundEvent == null) return new Result.Error<>("Unknown sound event: " + string);
+                return new Result.Ok<>(soundEvent);
+            }
+
+            final Result<CustomSoundEvent> customResult = CustomSoundEvent.CODEC.decode(coder, value);
+            if (customResult instanceof Result.Ok(CustomSoundEvent customSoundEvent))
+                return new Result.Ok<>(customSoundEvent);
+            return customResult.cast();
         }
 
         @Override
-        public @NotNull SoundEvent read(@NotNull Context context, @NotNull BinaryTag tag) {
-            if (tag instanceof CompoundBinaryTag compound) {
-                final String soundId = compound.getString("sound_id");
-                final Float range = compound.getFloat("range");
-                return new CustomSoundEvent(NamespaceID.from(soundId), range);
-            }
-            return BuiltinSoundEvent.getSafe(((StringBinaryTag) tag).value());
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable SoundEvent value) {
+            if (value == null) return new Result.Error<>("null");
+            return switch (value) {
+                case BuiltinSoundEvent soundEvent -> new Result.Ok<>(coder.createString(soundEvent.name()));
+                case CustomSoundEvent soundEvent -> CustomSoundEvent.CODEC.encode(coder, soundEvent);
+            };
         }
     };
 
     /**
      * Get all the builtin sound events. Resource pack sounds will never be returned from this method.
      */
-    static @NotNull Collection<? extends SoundEvent> values() {
-        return BuiltinSoundEvent.values();
+    static Collection<? extends SoundEvent> values() {
+        return BuiltinSoundEvent.REGISTRY.values();
     }
 
     /**
      * Get a builtin sound event by its namespace ID. Will never return a custom/resource pack sound.
      *
-     * @param namespaceID the namespace ID of the sound event
+     * @param key the key of the sound event
      * @return the sound event, or null if not found
      */
-    static @Nullable SoundEvent fromNamespaceId(@NotNull String namespaceID) {
-        return BuiltinSoundEvent.getSafe(namespaceID);
+    static @Nullable SoundEvent fromKey(@KeyPattern String key) {
+        return fromKey(Key.key(key));
     }
 
     /**
-     * Get a builtin sound event by its namespace ID. Will never return a custom/resource pack sound.
+     * Get a builtin sound event by its key. Will never return a custom/resource pack sound.
      *
-     * @param namespaceID the namespace ID of the sound event
+     * @param key the key of the sound event
      * @return the sound event, or null if not found
      */
-    static @Nullable SoundEvent fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable SoundEvent fromKey(Key key) {
+        return BuiltinSoundEvent.REGISTRY.get(key);
     }
 
     /**
@@ -106,43 +100,38 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * @return the sound event, or null if not found
      */
     static @Nullable SoundEvent fromId(int id) {
-        return BuiltinSoundEvent.getId(id);
+        return BuiltinSoundEvent.REGISTRY.get(id);
     }
 
     /**
      * Create a custom sound event. The namespace should match a sound provided in the resource pack.
      *
-     * @param namespaceID the namespace ID of the custom sound event
-     * @param range       the range of the sound event, or null for (legacy) dynamic range
+     * @param key   the key of the custom sound event
+     * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
-    static @NotNull SoundEvent of(@NotNull String namespaceID, @Nullable Float range) {
-        return new CustomSoundEvent(NamespaceID.from(namespaceID), range);
+    static SoundEvent of(String key, @Nullable Float range) {
+        return new CustomSoundEvent(Key.key(key), range);
     }
 
     /**
-     * Create a custom sound event. The {@link NamespaceID} should match a sound provided in the resource pack.
+     * Create a custom sound event. The {@link Key} should match a sound provided in the resource pack.
      *
-     * @param namespaceID the namespace ID of the custom sound event
-     * @param range       the range of the sound event, or null for (legacy) dynamic range
+     * @param key   the key of the custom sound event
+     * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
-    static @NotNull SoundEvent of(@NotNull NamespaceID namespaceID, @Nullable Float range) {
-        return new CustomSoundEvent(namespaceID, range);
+    static SoundEvent of(Key key, @Nullable Float range) {
+        return new CustomSoundEvent(key, range);
     }
 
     @Contract(pure = true)
-    @NotNull NamespaceID namespace();
-
-    @Contract(pure = true)
-    default @NotNull String name() {
-        return namespace().asString();
+    default String name() {
+        return key().asString();
     }
 
     @Override
     @Contract(pure = true)
-    default @NotNull Key key() {
-        return namespace();
-    }
+    Key key();
 
 }

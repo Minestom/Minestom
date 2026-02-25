@@ -4,14 +4,12 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
-import java.io.EOFException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.ref.Cleaner;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -37,8 +35,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
     private long readIndex, writeIndex;
     boolean readOnly;
 
-    BinaryTagWriter nbtWriter;
-    BinaryTagReader nbtReader;
+    private BinaryTagWriter nbtWriter;
+    private BinaryTagReader nbtReader;
 
     final @Nullable AutoResize autoResize;
     final @Nullable Registries registries;
@@ -68,19 +66,19 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public <T> void write(@NotNull Type<T> type, @UnknownNullability T value) {
+    public <T> void write(Type<T> type, @UnknownNullability T value) {
         assertReadOnly();
         type.write(this, value);
     }
 
     @Override
-    public <T> @UnknownNullability T read(@NotNull Type<T> type) {
+    public <T> @UnknownNullability T read(Type<T> type) {
         assertDummy();
         return type.read(this);
     }
 
     @Override
-    public <T> void writeAt(long index, @NotNull Type<T> type, @UnknownNullability T value) {
+    public <T> void writeAt(long index, Type<T> type, @UnknownNullability T value) {
         assertReadOnly();
         final long oldWriteIndex = writeIndex;
         writeIndex = index;
@@ -92,7 +90,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public <T> @UnknownNullability T readAt(long index, @NotNull Type<T> type) {
+    public <T> @UnknownNullability T readAt(long index, Type<T> type) {
         assertDummy();
         final long oldReadIndex = readIndex;
         readIndex = index;
@@ -104,7 +102,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public void copyTo(long srcOffset, byte @NotNull [] dest, long destOffset, long length) {
+    public void copyTo(long srcOffset, byte [] dest, long destOffset, long length) {
         assertDummy();
         assertOverflow(srcOffset + length);
         assertOverflow(destOffset + length);
@@ -115,7 +113,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         UNSAFE.copyMemory(null, address + srcOffset, dest, BYTE_ARRAY_OFFSET + destOffset, length);
     }
 
-    public byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor) {
+    public byte [] extractBytes(Consumer<NetworkBuffer> extractor) {
         assertDummy();
         final long startingPosition = readIndex();
         extractor.accept(this);
@@ -127,7 +125,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return output;
     }
 
-    public @NotNull NetworkBuffer clear() {
+    public NetworkBuffer clear() {
         return index(0, 0);
     }
 
@@ -139,18 +137,18 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return readIndex;
     }
 
-    public @NotNull NetworkBuffer writeIndex(long writeIndex) {
+    public NetworkBuffer writeIndex(long writeIndex) {
         this.writeIndex = writeIndex;
         return this;
     }
 
-    public @NotNull NetworkBuffer readIndex(long readIndex) {
+    public NetworkBuffer readIndex(long readIndex) {
         this.readIndex = readIndex;
         return this;
     }
 
     @Override
-    public @NotNull NetworkBuffer index(long readIndex, long writeIndex) {
+    public NetworkBuffer index(long readIndex, long writeIndex) {
         this.readIndex = readIndex;
         this.writeIndex = writeIndex;
         return this;
@@ -289,8 +287,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
     }
 
-    private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
-    private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
+    // Use the JVM lazy loading to ignore these until compression is required.
+    static class CompressionHolder {
+        private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
+        private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
+    }
 
     @Override
     public long compress(long start, long length, NetworkBuffer output) {
@@ -301,7 +302,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         ByteBuffer input = bufferSlice((int) start, (int) length);
         ByteBuffer outputBuffer = impl(output).bufferSlice((int) output.writeIndex(), (int) output.writableBytes());
 
-        Deflater deflater = DEFLATER_POOL.get();
+        Deflater deflater = CompressionHolder.DEFLATER_POOL.get();
         try {
             deflater.setInput(input);
             deflater.finish();
@@ -310,7 +311,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
             output.advanceWrite(bytes);
             return bytes;
         } finally {
-            DEFLATER_POOL.add(deflater);
+            CompressionHolder.DEFLATER_POOL.add(deflater);
         }
     }
 
@@ -323,7 +324,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         ByteBuffer input = bufferSlice((int) start, (int) length);
         ByteBuffer outputBuffer = impl(output).bufferSlice((int) output.writeIndex(), (int) output.writableBytes());
 
-        Inflater inflater = INFLATER_POOL.get();
+        Inflater inflater = CompressionHolder.INFLATER_POOL.get();
         try {
             inflater.setInput(input);
             final int bytes = inflater.inflate(outputBuffer);
@@ -331,7 +332,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
             output.advanceWrite(bytes);
             return bytes;
         } finally {
-            INFLATER_POOL.add(inflater);
+            CompressionHolder.INFLATER_POOL.add(inflater);
         }
     }
 
@@ -469,7 +470,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return Double.longBitsToDouble(longValue);
     }
 
-    static NetworkBuffer wrap(byte @NotNull [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(byte [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
         var buffer = new Builder(bytes.length).registry(registries).build();
         buffer.writeAt(0, NetworkBuffer.RAW_BYTES, bytes);
         buffer.index(readIndex, writeIndex);
@@ -521,19 +522,19 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
 
         @Override
-        public NetworkBuffer.@NotNull Builder autoResize(@Nullable AutoResize autoResize) {
+        public NetworkBuffer.Builder autoResize(@Nullable AutoResize autoResize) {
             this.autoResize = autoResize;
             return this;
         }
 
         @Override
-        public NetworkBuffer.@NotNull Builder registry(Registries registries) {
+        public NetworkBuffer.Builder registry(Registries registries) {
             this.registries = registries;
             return this;
         }
 
         @Override
-        public @NotNull NetworkBuffer build() {
+        public NetworkBuffer build() {
             final long address = UNSAFE.allocateMemory(initialSize);
             return new NetworkBufferImpl(
                     address, initialSize,
@@ -553,6 +554,35 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     static NetworkBufferImpl impl(NetworkBuffer buffer) {
         return (NetworkBufferImpl) buffer;
+    }
+
+    BinaryTagWriter nbtWriter() {
+        if (this.nbtWriter == null) {
+            this.nbtWriter = new BinaryTagWriter(new DataOutputStream(new OutputStream() {
+                @Override
+                public void write(int b) {
+                    NetworkBufferImpl.this.write(BYTE, (byte) b);
+                }
+            }));
+        }
+        return this.nbtWriter;
+    }
+
+    BinaryTagReader nbtReader() {
+        if (nbtReader == null) {
+            this.nbtReader = new BinaryTagReader(new DataInputStream(new InputStream() {
+                @Override
+                public int read() {
+                    return NetworkBufferImpl.this.read(BYTE) & 0xFF;
+                }
+
+                @Override
+                public int available() {
+                    return (int) NetworkBufferImpl.this.readableBytes();
+                }
+            }));
+        }
+        return nbtReader;
     }
 
     private static void assertOverflow(long value) {

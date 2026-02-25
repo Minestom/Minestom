@@ -10,7 +10,6 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.net.SocketAddress;
@@ -33,12 +32,12 @@ public class EntityTrackerIntegrationTest {
         final AtomicInteger viewersCount = new AtomicInteger();
         final Entity entity = new Entity(EntityType.ZOMBIE) {
             @Override
-            public void updateNewViewer(@NotNull Player player) {
+            public void updateNewViewer(Player player) {
                 viewersCount.incrementAndGet();
             }
 
             @Override
-            public void updateOldViewer(@NotNull Player player) {
+            public void updateOldViewer(Player player) {
                 viewersCount.decrementAndGet();
             }
         };
@@ -63,12 +62,12 @@ public class EntityTrackerIntegrationTest {
         final AtomicInteger viewersCount = new AtomicInteger();
         final Entity entity = new Entity(EntityType.ZOMBIE) {
             @Override
-            public void updateNewViewer(@NotNull Player player) {
+            public void updateNewViewer(Player player) {
                 viewersCount.incrementAndGet();
             }
 
             @Override
-            public void updateOldViewer(@NotNull Player player) {
+            public void updateOldViewer(Player player) {
                 viewersCount.decrementAndGet();
             }
         };

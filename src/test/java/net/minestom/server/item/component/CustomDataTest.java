@@ -1,32 +1,38 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.component.DataComponents;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.tag.Tag;
+import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.entry;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CustomDataTest extends AbstractItemComponentTest<CustomData> {
     // This is not a test, but it creates a compile error if the component type is changed away,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<CustomData>> SHARED_COMPONENTS = List.of(
-            ItemComponent.CUSTOM_DATA,
-            ItemComponent.ENTITY_DATA,
-            ItemComponent.BUCKET_ENTITY_DATA,
-            ItemComponent.BLOCK_ENTITY_DATA
+            DataComponents.CUSTOM_DATA,
+            DataComponents.BUCKET_ENTITY_DATA
     );
 
     @Override
-    protected @NotNull DataComponent<CustomData> component() {
+    protected DataComponent<CustomData> component() {
         return SHARED_COMPONENTS.getFirst();
     }
 
     @Override
-    protected @NotNull List<Map.Entry<String, CustomData>> directReadWriteEntries() {
+    protected List<Map.Entry<String, CustomData>> directReadWriteEntries() {
         return List.of(
                 entry("simple", new CustomData(CompoundBinaryTag.builder()
                         .putString("hello", "world")
@@ -35,5 +41,22 @@ public class CustomDataTest extends AbstractItemComponentTest<CustomData> {
                                 .build())
                         .build()))
         );
+    }
+
+    @Test
+    void customDataTagPath() throws IOException {
+        final ItemStack item = ItemStack.builder(Material.STICK)
+                .set(Tag.Integer("num").path("test"), 5)
+                .build();
+        final String snbt = MinestomAdventure.tagStringIO().asString(item.get(DataComponents.CUSTOM_DATA).nbt());
+        assertEquals("{test:{num:5}}", snbt);
+    }
+
+    @Test
+    void typedCustomDataWrite() throws IOException {
+        var component = new TypedCustomData<>(EntityType.COD, CompoundBinaryTag.builder().putFloat("Health", 1.5f).build());
+        var nbt = TypedCustomData.codec(EntityType.CODEC).encode(Transcoder.NBT, component).orElseThrow();
+        final String snbt = MinestomAdventure.tagStringIO().asString(nbt);
+        assertEquals("{Health:1.5f,id:\"minecraft:cod\"}", snbt);
     }
 }

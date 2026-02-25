@@ -9,6 +9,7 @@ import net.minestom.server.listener.preplay.HandshakeListener;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.listener.preplay.StatusListener;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
@@ -21,7 +22,6 @@ import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +58,7 @@ public final class PacketListenerManager {
         setConfigurationListener(ClientSelectKnownPacksPacket.class, LoginListener::selectKnownPacks);
         setConfigurationListener(ClientFinishConfigurationPacket.class, LoginListener::finishConfigListener);
         setListener(ConnectionState.CONFIGURATION, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
+        setConfigurationListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
 
         setPlayListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
         setPlayListener(ClientCommandChatPacket.class, ChatMessageListener::commandChatListener);
@@ -70,6 +71,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientHeldItemChangePacket.class, PlayerHeldListener::heldListener);
         setPlayListener(ClientPlayerBlockPlacementPacket.class, BlockPlacementListener::listener);
         setPlayListener(ClientInputPacket.class, PlayerInputListener::listener);
+        setPlayListener(ClientChangeGameModePacket.class, PlayerGameModeChangeListener::listener);
         setPlayListener(ClientVehicleMovePacket.class, PlayerVehicleListener::vehicleMoveListener);
         setPlayListener(ClientSteerBoatPacket.class, PlayerVehicleListener::boatSteerListener);
         setPlayListener(ClientPlayerPositionStatusPacket.class, PlayerPositionListener::playerPacketListener);
@@ -77,10 +79,12 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerPositionPacket.class, PlayerPositionListener::playerPositionListener);
         setPlayListener(ClientPlayerPositionAndRotationPacket.class, PlayerPositionListener::playerPositionAndLookListener);
         setPlayListener(ClientTeleportConfirmPacket.class, PlayerPositionListener::teleportConfirmListener);
-        setPlayListener(ClientPlayerDiggingPacket.class, PlayerDiggingListener::playerDiggingListener);
+        setPlayListener(ClientPlayerActionPacket.class, PlayerActionListener::playerActionListener);
         setPlayListener(ClientAnimationPacket.class, AnimationListener::animationListener);
         setPlayListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
         setPlayListener(ClientUseItemPacket.class, UseItemListener::useItemListener);
+        setPlayListener(ClientPickItemFromBlockPacket.class, PlayerPickListener::playerPickBlockListener);
+        setPlayListener(ClientPickItemFromEntityPacket.class, PlayerPickListener::playerPickEntityListener);
         setPlayListener(ClientStatusPacket.class, PlayStatusListener::listener);
         setPlayListener(ClientSettingsPacket.class, SettingsListener::listener);
         setPlayListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
@@ -99,6 +103,12 @@ public final class PacketListenerManager {
         setListener(ConnectionState.PLAY, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
         setPlayListener(ClientNameItemPacket.class, AnvilListener::nameItemListener);
         setPlayListener(ClientTickEndPacket.class, PlayerTickListener::listener);
+        setPlayListener(ClientPlayerLoadedPacket.class, PlayerLoadedListener::listener);
+        setPlayListener(ClientSelectBundleItemPacket.class, (packet, player) -> {/* noop for now */});
+        setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
+        setPlayListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
+        setPlayListener(ClientUpdateSignPacket.class, EditSignListener::listener);
+        setPlayListener(ClientDebugSubscriptionRequestPacket.class, DebugSubscriptionListener::requestListener);
     }
 
     /**
@@ -108,18 +118,24 @@ public final class PacketListenerManager {
      * @param connection the connection of the player who sent the packet
      * @param <T>        the packet type
      */
-    public <T extends ClientPacket> void processClientPacket(@NotNull T packet, @NotNull PlayerConnection connection, @NotNull ConnectionState state) {
+    public <T extends ClientPacket> void processClientPacket(T packet, PlayerConnection connection) {
+        // Update connection state 'as we receive' the packet, aka before we send any responses
+        // from processing. This is important for sending packets in response which are state-dependent.
+        final ConnectionState currState = connection.getClientState();
+        final ConnectionState nextState = PacketVanilla.nextClientState(packet, currState);
+        if (nextState != currState) connection.setClientState(nextState);
+
         final Class clazz = packet.getClass();
-        PacketPrePlayListenerConsumer<T> packetListenerConsumer = listeners[state.ordinal()].get(clazz);
+        PacketPrePlayListenerConsumer<T> packetListenerConsumer = listeners[currState.ordinal()].get(clazz);
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
-            LOGGER.warn("Packet {}:{} does not have any default listener! (The issue likely comes from Minestom)", clazz, state);
+            LOGGER.warn("Packet {}:{} does not have any default listener! (The issue likely comes from Minestom)", clazz, currState);
             return;
         }
 
         // Event
-        if (state == ConnectionState.PLAY) {
+        if (currState == ConnectionState.PLAY) {
             PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(connection.getPlayer(), packet);
             EventDispatcher.call(playerPacketEvent);
             if (playerPacketEvent.isCancelled()) {
@@ -146,7 +162,7 @@ public final class PacketListenerManager {
      * @param consumer    the new packet's listener
      * @param <T>         the type of the packet
      */
-    public <T extends ClientPacket> void setListener(@NotNull ConnectionState state, @NotNull Class<T> packetClass, @NotNull PacketPrePlayListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setListener(ConnectionState state, Class<T> packetClass, PacketPrePlayListenerConsumer<T> consumer) {
         this.listeners[state.ordinal()].put(packetClass, consumer);
     }
 
@@ -159,11 +175,11 @@ public final class PacketListenerManager {
      * @param consumer    the new packet's listener
      * @param <T>         the type of the packet
      */
-    public <T extends ClientPacket> void setPlayListener(@NotNull Class<T> packetClass, @NotNull PacketPlayListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setPlayListener(Class<T> packetClass, PacketPlayListenerConsumer<T> consumer) {
         setListener(ConnectionState.PLAY, packetClass, (packet, playerConnection) -> consumer.accept(packet, playerConnection.getPlayer()));
     }
 
-    public <T extends ClientPacket> void setConfigurationListener(@NotNull Class<T> packetClass, @NotNull PacketPlayListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setConfigurationListener(Class<T> packetClass, PacketPlayListenerConsumer<T> consumer) {
         setListener(ConnectionState.CONFIGURATION, packetClass, (packet, playerConnection) -> consumer.accept(packet, playerConnection.getPlayer()));
     }
 
@@ -177,7 +193,7 @@ public final class PacketListenerManager {
      * @param <T>         the type of the packet
      */
     @Deprecated
-    public <T extends ClientPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketPlayListenerConsumer<T> consumer) {
+    public <T extends ClientPacket> void setListener(Class<T> packetClass, PacketPlayListenerConsumer<T> consumer) {
         setPlayListener(packetClass, consumer);
     }
 

@@ -3,10 +3,9 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
 
 public class BeeMeta extends AnimalMeta {
-    public BeeMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public BeeMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -34,11 +33,11 @@ public class BeeMeta extends AnimalMeta {
         metadata.set(MetadataDef.Bee.HAS_NECTAR, value);
     }
 
-    public int getAngerTicks() {
+    public long getAngerTicks() {
         return metadata.get(MetadataDef.Bee.ANGER_TIME_TICKS);
     }
 
-    public void setAngerTicks(int value) {
+    public void setAngerTicks(long value) {
         metadata.set(MetadataDef.Bee.ANGER_TIME_TICKS, value);
     }
 

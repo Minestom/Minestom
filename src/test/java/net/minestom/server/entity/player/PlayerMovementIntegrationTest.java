@@ -4,6 +4,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.MainHand;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Chunk;
@@ -17,7 +18,6 @@ import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.player.ClientSettings;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -70,7 +70,7 @@ public class PlayerMovementIntegrationTest {
     @Test
     public void chunkUpdateDebounceTest(Env env) {
         final Instance flatInstance = env.createFlatInstance();
-        final int viewDiameter = ServerFlag.CHUNK_VIEW_DISTANCE * 2 + 1;
+        final int viewDiameter = (ServerFlag.CHUNK_VIEW_DISTANCE + 1) * 2 + 1;
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
         ChunkRange.chunksInRange(0, 0, viewDiameter + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
@@ -79,7 +79,7 @@ public class PlayerMovementIntegrationTest {
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         final Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
         // Initial join
-        chunkDataPacketCollector.assertCount(MathUtils.square(viewDiameter));
+        chunkDataPacketCollector.assertCount(ChunkRange.chunksCount(player.effectiveViewDistance()));
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
 
         // Move to next chunk
@@ -128,23 +128,23 @@ public class PlayerMovementIntegrationTest {
         Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkRange.chunksInRange(10, 10, viewDistance + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        ChunkRange.chunksInRange(10, 10, viewDistance + 3, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         player.refreshSettings(new ClientSettings(
                 Locale.US, (byte) viewDistance,
                 ChatMessageType.FULL, true,
-                (byte) 0, ClientSettings.MainHand.RIGHT,
+                (byte) 0, MainHand.RIGHT,
                 false, true,
                 ClientSettings.ParticleSetting.ALL
         ));
 
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
-        player.teleport(new Pos(160, 40, 160));
+        player.teleport(new Pos(176, 40, 176));
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
-        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(160.5, 40, 160.5), true, false));
+        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(176.5, 40, 176.5), true, false));
         player.interpretPacketQueue();
-        chunkDataPacketCollector.assertCount(MathUtils.square(viewDistance * 2 + 1));
+        chunkDataPacketCollector.assertCount(ChunkRange.chunksCount(player.effectiveViewDistance()));
     }
 
     @Test
@@ -160,18 +160,18 @@ public class PlayerMovementIntegrationTest {
         int chunkDifference = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(startingViewDistance);
 
         // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
-        ChunkRange.chunksInRange(0, 0, endViewDistance, instance::loadChunk);
+        ChunkRange.chunksInRange(0, 0, endViewDistance, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
 
         var tracker = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,
-                ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT,
+                ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
         tracker.assertCount(chunkDifference);
 
         var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, finalViewDistance,
-                ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT,
+                ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
 
@@ -195,7 +195,7 @@ public class PlayerMovementIntegrationTest {
         assertEquals(new Pos(0, 40, 0), p1.getPosition());
         collector.assertSingle(packet -> {
             assertEquals(0, packet.flags());
-            assertEquals(new Vec(0, 40, 0), Vec.fromPoint(packet.position()));
+            assertEquals(new Vec(0, 40, 0), packet.position().asVec());
             // Must reset velocity or the player will keep moving and create a loop of teleport cancel teleport.
             assertEquals(Vec.ZERO, packet.delta());
         });

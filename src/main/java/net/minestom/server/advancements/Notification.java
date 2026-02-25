@@ -4,24 +4,22 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
-
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a toast which can be sent to the player using {@link net.minestom.server.entity.Player#sendNotification(Notification)}.
  */
-public record Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull ItemStack icon) {
+public record Notification(Component title, FrameType frameType, ItemStack icon) {
     private static final String IDENTIFIER = "minestom:notification";
 
-    public Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull Material icon) {
+    public Notification(Component title, FrameType frameType, Material icon) {
         this(title, frameType, ItemStack.of(icon));
     }
 
     @ApiStatus.Internal
-    public @NotNull AdvancementsPacket buildAddPacket() {
+    public AdvancementsPacket buildAddPacket() {
         // For an advancement to be shown, it must have all of its criteria achieved (progress 100%)
         // Create a criteria that we can set to 100% achieved.
         final var displayData = new AdvancementsPacket.DisplayData(
@@ -44,15 +42,17 @@ public record Notification(@NotNull Component title, @NotNull FrameType frameTyp
                 false,
                 List.of(mapping),
                 List.of(),
-                List.of(progressMapping));
+                List.of(progressMapping),
+                true);
     }
 
     @ApiStatus.Internal
-    public @NotNull AdvancementsPacket buildRemovePacket() {
+    public AdvancementsPacket buildRemovePacket() {
         return new AdvancementsPacket(
                 false,
                 List.of(),
                 List.of(IDENTIFIER),
-                List.of());
+                List.of(),
+                true);
     }
 }

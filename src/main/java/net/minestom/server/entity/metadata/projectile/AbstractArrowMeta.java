@@ -4,10 +4,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
-import org.jetbrains.annotations.NotNull;
 
 public class AbstractArrowMeta extends EntityMeta {
-    protected AbstractArrowMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    protected AbstractArrowMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -33,6 +32,14 @@ public class AbstractArrowMeta extends EntityMeta {
 
     public void setPiercingLevel(byte value) {
         metadata.set(MetadataDef.AbstractArrow.PIERCING_LEVEL, value);
+    }
+
+    public boolean isInGround() {
+        return metadata.get(MetadataDef.AbstractArrow.IN_GROUND);
+    }
+
+    public void setInGround(boolean value) {
+        metadata.set(MetadataDef.AbstractArrow.IN_GROUND, value);
     }
 
 }

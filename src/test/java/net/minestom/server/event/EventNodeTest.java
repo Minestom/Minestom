@@ -7,7 +7,6 @@ import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
@@ -44,14 +43,14 @@ public class EventNodeTest {
 
     record ItemTestEvent(ItemStack item) implements ItemEvent {
         @Override
-        public @NotNull ItemStack getItemStack() {
+        public ItemStack getItemStack() {
             return item;
         }
     }
 
     record EntityTestEvent(Entity entity) implements EntityEvent {
         @Override
-        public @NotNull Entity getEntity() {
+        public Entity getEntity() {
             return entity;
         }
     }
@@ -151,24 +150,23 @@ public class EventNodeTest {
         assertTrue(called2.get());
     }
 
-    // FIXME: nodes are currently unable to retrieve sub handles
-    //@Test
-    //public void recursiveSuper() {
-    //    var node = EventNode.all("main");
-    //    AtomicBoolean result2 = new AtomicBoolean(false);
-    //    var listener2 = EventListener.of(Recursive2.class, event -> result2.set(true));
-    //    node.addListener(listener2);
-    //    node.call(new Recursive2());
-    //    assertTrue(result2.get(), "The event should be called after the call");
-    //
-    //    AtomicBoolean result1 = new AtomicBoolean(false);
-    //    var listener1 = EventListener.of(Recursive1.class, event -> result1.set(true));
-    //    node.addListener(listener1);
-    //    result2.set(false);
-    //    node.call(new Recursive2());
-    //    assertTrue(result2.get(), "Recursive2 should have been called directly");
-    //    assertTrue(result1.get(), "Recursive1 should be called due to the RecursiveEvent interface");
-    //}
+    @Test
+    public void recursiveSuper() {
+        var node = EventNode.all("main");
+        AtomicBoolean result2 = new AtomicBoolean(false);
+        var listener2 = EventListener.of(Recursive2.class, event -> result2.set(true));
+        node.addListener(listener2);
+        node.call(new Recursive2());
+        assertTrue(result2.get(), "The event should be called after the call");
+
+        AtomicBoolean result1 = new AtomicBoolean(false);
+        var listener1 = EventListener.of(Recursive1.class, event -> result1.set(true));
+        node.addListener(listener1);
+        result2.set(false);
+        node.call(new Recursive2());
+        assertTrue(result2.get(), "Recursive2 should have been called directly");
+        assertTrue(result1.get(), "Recursive1 should be called due to the RecursiveEvent interface");
+    }
 
     @Test
     public void testChildren() {

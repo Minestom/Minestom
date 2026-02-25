@@ -4,7 +4,7 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventListener;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.network.player.GameProfile;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -20,30 +20,33 @@ final class EnvImpl implements Env {
     public EnvImpl(ServerProcess process) {
         this.process = process;
 
+        // Start the dispatcher threads if not already started.
+        process().dispatcher().start();
+
         // Use player provider to disable queued chunk sending.
         // Set here to allow an individual test to override if they want.
         process.connection().setPlayerProvider(TestConnectionImpl.TestPlayerImpl::new);
     }
 
     @Override
-    public @NotNull ServerProcess process() {
+    public ServerProcess process() {
         return process;
     }
 
     @Override
-    public @NotNull TestConnection createConnection() {
-        return new TestConnectionImpl(this);
+    public TestConnection createConnection(GameProfile gameProfile) {
+        return new TestConnectionImpl(this, gameProfile);
     }
 
     @Override
-    public @NotNull <E extends Event, H> Collector<E> trackEvent(@NotNull Class<E> eventType, @NotNull EventFilter<? super E, H> filter, @NotNull H actor) {
+    public <E extends Event, H> Collector<E> trackEvent(Class<E> eventType, EventFilter<? super E, H> filter, H actor) {
         var tracker = new EventCollector<E>(actor);
         this.process.eventHandler().map(actor, filter).addListener(eventType, tracker.events::add);
         return tracker;
     }
 
     @Override
-    public @NotNull <E extends Event> FlexibleListener<E> listen(@NotNull Class<E> eventType) {
+    public <E extends Event> FlexibleListener<E> listen(Class<E> eventType) {
         var handler = process.eventHandler();
         var flexible = new FlexibleListenerImpl<>(eventType);
         var listener = EventListener.of(eventType, e -> flexible.handler.accept(e));
@@ -66,7 +69,7 @@ final class EnvImpl implements Env {
         }
 
         @Override
-        public @NotNull List<E> collect() {
+        public List<E> collect() {
             process.eventHandler().unmap(handler);
             return List.copyOf(events);
         }
@@ -84,7 +87,7 @@ final class EnvImpl implements Env {
         }
 
         @Override
-        public void followup(@NotNull Consumer<E> handler) {
+        public void followup(Consumer<E> handler) {
             updateHandler(handler);
         }
 
@@ -93,7 +96,7 @@ final class EnvImpl implements Env {
             updateHandler(e -> fail("Event " + e.getClass().getSimpleName() + " was not expected"));
         }
 
-        void updateHandler(@NotNull Consumer<E> handler) {
+        void updateHandler(Consumer<E> handler) {
             check();
             this.initialized = true;
             this.called = false;

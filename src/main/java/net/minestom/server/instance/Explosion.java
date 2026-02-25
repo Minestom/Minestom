@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.play.ExplosionPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.PacketSendingUtils;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.utils.WeightedList;
 
 import java.util.List;
 
@@ -58,15 +58,16 @@ public abstract class Explosion {
      *
      * @param instance instance to perform this explosion in
      */
-    public void apply(@NotNull Instance instance) {
+    public void apply(Instance instance) {
         List<Point> blocks = prepare(instance);
         for (final Point pos : blocks) {
             instance.setBlock(pos, Block.AIR);
         }
 
         ExplosionPacket packet = new ExplosionPacket(
-                new Vec(centerX, centerY, centerZ), Vec.ZERO,
-                Particle.EXPLOSION, SoundEvent.ENTITY_GENERIC_EXPLODE);
+                // TODO(1.21.9): explosion update
+                new Vec(centerX, centerY, centerZ), 0, 0, Vec.ZERO,
+                Particle.EXPLOSION, SoundEvent.ENTITY_GENERIC_EXPLODE, WeightedList.of());
         postExplosion(instance, blocks, packet);
         PacketSendingUtils.sendGroupedPacket(instance.getPlayers(), packet);
 

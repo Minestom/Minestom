@@ -7,7 +7,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -88,7 +87,7 @@ public class BlockUtils {
         return new Object2ObjectArrayMap<>(keys, values, entryCount);
     }
 
-    public static @Nullable CompoundBinaryTag extractClientNbt(@NotNull Block block) {
+    public static @Nullable CompoundBinaryTag extractClientNbt(Block block) {
         if (!block.registry().isBlockEntity()) return null;
         // Append handler tags
         final BlockHandler handler = block.handler();
@@ -108,22 +107,5 @@ public class BlockUtils {
         // Complete nbt shall be sent if the block has no handler
         // Necessary to support all vanilla blocks
         return blockNbt;
-    }
-
-    public static @NotNull String toString(@NotNull Block block) {
-        if (block.properties().isEmpty())
-            return block.name();
-
-        var builder = new StringBuilder(block.name());
-        builder.append('[');
-        for (var entry : block.properties().entrySet()) {
-            builder.append(entry.getKey())
-                    .append('=')
-                    .append(entry.getValue())
-                    .append(',');
-        }
-        builder.deleteCharAt(builder.length() - 1);
-        builder.append(']');
-        return builder.toString();
     }
 }

@@ -1,12 +1,11 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -25,11 +24,10 @@ public class ArgumentNbtTag extends Argument<BinaryTag> {
         super(id, true);
     }
 
-    @NotNull
     @Override
-    public BinaryTag parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public BinaryTag parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
-            return TagStringIOExt.readTag(input);
+            return MinestomAdventure.tagStringIO().asTag(input);
         } catch (IOException e) {
             throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
         }

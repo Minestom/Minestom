@@ -2,30 +2,16 @@ package net.minestom.server.sound;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.Collection;
+public record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject<BuiltinSoundEvent>, SoundEvent {
+    static final Registry<BuiltinSoundEvent> REGISTRY = RegistryData.createStaticRegistry(Key.key("sound_event"),
+            (namespace, properties) -> new BuiltinSoundEvent(Key.key(namespace), properties.getInt("id")));
 
-record BuiltinSoundEvent(NamespaceID namespace, int id) implements StaticProtocolObject, SoundEvent {
-    private static final Registry.Container<BuiltinSoundEvent> CONTAINER = Registry.createStaticContainer(Registry.Resource.SOUNDS,
-            (namespace, properties) -> new BuiltinSoundEvent(NamespaceID.from(namespace), properties.getInt("id")));
-
-    static SoundEvent get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static SoundEvent getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static SoundEvent getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<? extends SoundEvent> values() {
-        return CONTAINER.values();
+    static @UnknownNullability SoundEvent get(String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override
@@ -34,12 +20,7 @@ record BuiltinSoundEvent(NamespaceID namespace, int id) implements StaticProtoco
     }
 
     @Override
-    public @NotNull String name() {
+    public String name() {
         return StaticProtocolObject.super.name();
-    }
-
-    @Override
-    public @NotNull Key key() {
-        return StaticProtocolObject.super.key();
     }
 }

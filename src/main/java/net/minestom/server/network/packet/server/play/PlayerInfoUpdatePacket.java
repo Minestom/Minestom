@@ -7,7 +7,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.GameProfile;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -16,12 +15,12 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record PlayerInfoUpdatePacket(
-        @NotNull EnumSet<@NotNull Action> actions,
-        @NotNull List<@NotNull Entry> entries
+        EnumSet<Action> actions,
+        List<Entry> entries
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ENTRIES = 1024;
 
-    public PlayerInfoUpdatePacket(@NotNull Action action, @NotNull Entry entry) {
+    public PlayerInfoUpdatePacket(Action action, Entry entry) {
         this(EnumSet.of(action), List.of(entry));
     }
 
@@ -32,13 +31,13 @@ public record PlayerInfoUpdatePacket(
 
     public static final NetworkBuffer.Type<PlayerInfoUpdatePacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, PlayerInfoUpdatePacket value) {
+        public void write(NetworkBuffer writer, PlayerInfoUpdatePacket value) {
             writer.write(EnumSet(Action.class), value.actions);
             writer.write(Entry.serializer(value.actions).list(MAX_ENTRIES), value.entries);
         }
 
         @Override
-        public PlayerInfoUpdatePacket read(@NotNull NetworkBuffer reader) {
+        public PlayerInfoUpdatePacket read(NetworkBuffer reader) {
             var actions = reader.read(EnumSet(Action.class));
             var entries = reader.read(Entry.serializer(actions).list(MAX_ENTRIES));
             return new PlayerInfoUpdatePacket(actions, entries);
@@ -46,7 +45,7 @@ public record PlayerInfoUpdatePacket(
     };
 
     @Override
-    public @NotNull Collection<Component> components() {
+    public Collection<Component> components() {
         final List<Component> components = new ArrayList<>();
         for (final Entry entry : entries) {
             if (entry.displayName() == null) continue;
@@ -56,7 +55,7 @@ public record PlayerInfoUpdatePacket(
     }
 
     @Override
-    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+    public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
         final List<Entry> newEntries = new ArrayList<>();
         for (final Entry entry : entries) {
             final Component displayName = entry.displayName();
@@ -64,7 +63,7 @@ public record PlayerInfoUpdatePacket(
                 newEntries.add(new Entry(entry.uuid, entry.username,
                         entry.properties, entry.listed, entry.latency,
                         entry.gameMode, operator.apply(displayName),
-                        entry.chatSession, entry.listOrder));
+                        entry.chatSession, entry.listOrder, entry.displayHat));
             } else {
                 newEntries.add(entry);
             }
@@ -75,7 +74,7 @@ public record PlayerInfoUpdatePacket(
     public record Entry(UUID uuid, String username, List<Property> properties,
                         boolean listed, int latency, GameMode gameMode,
                         @Nullable Component displayName, @Nullable ChatSession chatSession,
-                        int listOrder) {
+                        int listOrder, boolean displayHat) {
         public Entry {
             properties = List.copyOf(properties);
         }
@@ -83,13 +82,13 @@ public record PlayerInfoUpdatePacket(
         public static NetworkBuffer.Type<Entry> serializer(EnumSet<Action> actions) {
             return new Type<>() {
                 @Override
-                public void write(@NotNull NetworkBuffer buffer, Entry value) {
+                public void write(NetworkBuffer buffer, Entry value) {
                     buffer.write(NetworkBuffer.UUID, value.uuid);
                     for (Action action : actions) action.writer.write(buffer, value);
                 }
 
                 @Override
-                public Entry read(@NotNull NetworkBuffer buffer) {
+                public Entry read(NetworkBuffer buffer) {
                     UUID uuid = buffer.read(NetworkBuffer.UUID);
                     String username = "";
                     List<Property> properties = List.of();
@@ -99,28 +98,30 @@ public record PlayerInfoUpdatePacket(
                     Component displayName = null;
                     ChatSession chatSession = null;
                     int listOrder = 0;
+                    boolean displayHat = true;
                     for (Action action : actions) {
                         switch (action) {
                             case ADD_PLAYER -> {
                                 username = buffer.read(STRING);
                                 properties = buffer.read(Property.SERIALIZER.list(GameProfile.MAX_PROPERTIES));
                             }
-                            case INITIALIZE_CHAT -> chatSession = ChatSession.SERIALIZER.read(buffer);
+                            case INITIALIZE_CHAT -> chatSession = ChatSession.SERIALIZER.optional().read(buffer);
                             case UPDATE_GAME_MODE -> gameMode = buffer.read(NetworkBuffer.Enum(GameMode.class));
                             case UPDATE_LISTED -> listed = buffer.read(BOOLEAN);
                             case UPDATE_LATENCY -> latency = buffer.read(VAR_INT);
                             case UPDATE_DISPLAY_NAME -> displayName = buffer.read(COMPONENT.optional());
                             case UPDATE_LIST_ORDER -> listOrder = buffer.read(VAR_INT);
+                            case UPDATE_HAT -> displayHat = buffer.read(BOOLEAN);
                         }
                     }
-                    return new Entry(uuid, username, properties, listed, latency, gameMode, displayName, chatSession, listOrder);
+                    return new Entry(uuid, username, properties, listed, latency, gameMode, displayName, chatSession, listOrder, displayHat);
                 }
             };
         }
     }
 
-    public record Property(@NotNull String name, @NotNull String value, @Nullable String signature) {
-        public Property(@NotNull String name, @NotNull String value) {
+    public record Property(String name, String value, @Nullable String signature) {
+        public Property(String name, String value) {
             this(name, value, null);
         }
 
@@ -141,7 +142,8 @@ public record PlayerInfoUpdatePacket(
         UPDATE_LISTED((writer, entry) -> writer.write(BOOLEAN, entry.listed)),
         UPDATE_LATENCY((writer, entry) -> writer.write(VAR_INT, entry.latency)),
         UPDATE_DISPLAY_NAME((writer, entry) -> writer.write(COMPONENT.optional(), entry.displayName)),
-        UPDATE_LIST_ORDER((writer, entry) -> writer.write(VAR_INT, entry.listOrder));
+        UPDATE_LIST_ORDER((writer, entry) -> writer.write(VAR_INT, entry.listOrder)),
+        UPDATE_HAT((writer, entry) -> writer.write(BOOLEAN, entry.displayHat));
 
         final Writer writer;
 

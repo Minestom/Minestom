@@ -144,6 +144,7 @@ public class EntityLineOfSightIntegrationTest {
         assertFalse(entity.hasLineOfSight(entity2, true));
         assertTrue(entity.hasLineOfSight(entity2, false));
     }
+
     @Test
     public void entityPhysicsCheckLineOfSightLargeBoundingBox(Env env) {
         var instance = env.createFlatInstance();
@@ -165,5 +166,28 @@ public class EntityLineOfSightIntegrationTest {
         assertEquals(entity2, entity.getLineOfSightEntity(20, (e) -> true));
         assertTrue(entity.hasLineOfSight(entity2, true));
         assertTrue(entity.hasLineOfSight(entity2, false));
+    }
+
+    @Test
+    public void entityPhysicsCheckLineOfSightDifferentTypes(Env env) {
+        var instance = env.createFlatInstance();
+
+        var entity = new Entity(EntityTypes.CHICKEN);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        entity.setView(-90, 0);
+
+        var entity2 = new Entity(EntityTypes.ZOMBIE);
+        entity2.setInstance(instance, new Pos(10, 42, 0)).join();
+
+        assertEquals(entity2, entity.getLineOfSightEntity(20, (e) -> true));
+        assertTrue(entity.hasLineOfSight(entity2, true));
+
+        entity.teleport(new Pos(10, 42, 0)).join();
+        entity2.teleport(new Pos(0, 42, 0)).join();
+        entity2.setView(-90, 0);
+
+        assertNull(entity2.getLineOfSightEntity(20, (e) -> true));
+        assertFalse(entity2.hasLineOfSight(entity, true));
+        assertTrue(entity2.hasLineOfSight(entity, false));
     }
 }

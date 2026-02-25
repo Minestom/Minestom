@@ -1,19 +1,20 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface EntityType extends StaticProtocolObject, EntityTypes permits EntityTypeImpl {
+public sealed interface EntityType extends StaticProtocolObject<EntityType>, EntityTypes permits EntityTypeImpl {
     NetworkBuffer.Type<EntityType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(EntityType::fromId, EntityType::id);
-    BinaryTagSerializer<EntityType> NBT_TYPE = BinaryTagSerializer.INT.map(EntityType::fromId, EntityType::id);
+    Codec<EntityType> CODEC = Codec.KEY.transform(EntityType::fromKey, EntityType::key);
 
     /**
      * Returns the entity registry.
@@ -21,11 +22,11 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
      * @return the entity registry
      */
     @Contract(pure = true)
-    @NotNull Registry.EntityEntry registry();
+    RegistryData.EntityEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default Key key() {
+        return registry().key();
     }
 
     @Override
@@ -41,19 +42,23 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
         return registry().height();
     }
 
-    static @NotNull Collection<@NotNull EntityType> values() {
-        return EntityTypeImpl.values();
+    static Collection<EntityType> values() {
+        return EntityTypeImpl.REGISTRY.values();
     }
 
-    static EntityType fromNamespaceId(@NotNull String namespaceID) {
-        return EntityTypeImpl.getSafe(namespaceID);
+    static @Nullable EntityType fromKey(@KeyPattern String key) {
+        return fromKey(Key.key(key));
     }
 
-    static EntityType fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable EntityType fromKey(Key key) {
+        return EntityTypeImpl.REGISTRY.get(key);
     }
 
     static @Nullable EntityType fromId(int id) {
-        return EntityTypeImpl.getId(id);
+        return EntityTypeImpl.REGISTRY.get(id);
+    }
+
+    static Registry<EntityType> staticRegistry() {
+        return EntityTypeImpl.REGISTRY;
     }
 }

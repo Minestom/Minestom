@@ -1,33 +1,35 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
 
-public sealed interface Material extends StaticProtocolObject, Materials permits MaterialImpl {
+public sealed interface Material extends StaticProtocolObject<Material>, Materials permits MaterialImpl {
 
-    NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(MaterialImpl::getId, Material::id);
-    BinaryTagSerializer<Material> NBT_TYPE = BinaryTagSerializer.STRING.map(MaterialImpl::getSafe, Material::name);
+    NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Material::fromId, Material::id);
+    Codec<Material> CODEC = Codec.KEY.transform(Material::fromKey, Material::key);
 
     /**
      * Returns the raw registry data for the material.
      */
     @Contract(pure = true)
-    @NotNull Registry.MaterialEntry registry();
+    RegistryData.MaterialEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default Key key() {
+        return registry().key();
     }
 
     @Override
@@ -43,7 +45,7 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
         return registry().block();
     }
 
-    default @NotNull DataComponentMap prototype() {
+    default DataComponentMap prototype() {
         return registry().prototype();
     }
 
@@ -52,22 +54,26 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
     }
 
     default int maxStackSize() {
-        return prototype().get(ItemComponent.MAX_STACK_SIZE, 64);
+        return prototype().get(DataComponents.MAX_STACK_SIZE, 64);
     }
 
-    static @NotNull Collection<@NotNull Material> values() {
-        return MaterialImpl.values();
+    static Collection<Material> values() {
+        return MaterialImpl.REGISTRY.values();
     }
 
-    static @Nullable Material fromNamespaceId(@NotNull String namespaceID) {
-        return MaterialImpl.getSafe(namespaceID);
+    static @Nullable Material fromKey(@KeyPattern String key) {
+        return fromKey(Key.key(key));
     }
 
-    static @Nullable Material fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Material fromKey(Key key) {
+        return MaterialImpl.REGISTRY.get(key);
     }
 
     static @Nullable Material fromId(int id) {
-        return MaterialImpl.getId(id);
+        return MaterialImpl.REGISTRY.get(id);
+    }
+
+    static Registry<Material> staticRegistry() {
+        return MaterialImpl.REGISTRY;
     }
 }

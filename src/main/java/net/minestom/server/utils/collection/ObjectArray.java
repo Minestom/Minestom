@@ -1,9 +1,8 @@
 package net.minestom.server.utils.collection;
 
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.*;
+
+import java.util.List;
 
 /**
  * Represents an array which will be resized to the highest required index.
@@ -13,19 +12,19 @@ import org.jetbrains.annotations.UnknownNullability;
 @ApiStatus.Internal
 public sealed interface ObjectArray<T>
         permits ObjectArrayImpl.SingleThread, ObjectArrayImpl.Concurrent {
-    static <T> @NotNull ObjectArray<T> singleThread(int initialSize) {
+    static <T> ObjectArray<T> singleThread(int initialSize) {
         return new ObjectArrayImpl.SingleThread<>(initialSize);
     }
 
-    static <T> @NotNull ObjectArray<T> singleThread() {
+    static <T> ObjectArray<T> singleThread() {
         return singleThread(0);
     }
 
-    static <T> @NotNull ObjectArray<T> concurrent(int initialSize) {
+    static <T> ObjectArray<T> concurrent(int initialSize) {
         return new ObjectArrayImpl.Concurrent<>(initialSize);
     }
 
-    static <T> @NotNull ObjectArray<T> concurrent() {
+    static <T> ObjectArray<T> concurrent() {
         return concurrent(0);
     }
 
@@ -39,5 +38,15 @@ public sealed interface ObjectArray<T>
 
     void trim();
 
-    @UnknownNullability T @NotNull [] arrayCopy(@NotNull Class<T> type);
+    @Contract(pure = true)
+    @UnknownNullability T [] arrayCopy(Class<T> type);
+
+    /**
+     * Copies the array into a list.
+     * Requires all elements to be present and indexed from 0.
+     *
+     * @return List of the array elements
+     */
+    @Contract(pure = true)
+    @Unmodifiable List<T> toList();
 }

@@ -10,7 +10,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Range;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.entity.EntityFinder;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -32,9 +31,9 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{1,16}");
     private static final String SELECTOR_PREFIX = "@";
-    private static final List<String> SELECTOR_VARIABLES = Arrays.asList("@p", "@r", "@a", "@e", "@s");
+    private static final List<String> SELECTOR_VARIABLES = Arrays.asList("@p", "@r", "@a", "@e", "@s", "@n");
     private static final List<String> PLAYERS_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@a", "@s");
-    private static final List<String> SINGLE_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@s");
+    private static final List<String> SINGLE_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@s", "@n");
     // List with all the valid arguments
     private static final List<String> VALID_ARGUMENTS = Arrays.asList(
             "x", "y", "z",
@@ -66,9 +65,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         return this;
     }
 
-    @NotNull
     @Override
-    public EntityFinder parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public EntityFinder parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         return staticParse(sender, input, onlySingleEntity, onlyPlayers);
     }
 
@@ -95,8 +93,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
      * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @Deprecated
-    @NotNull
-    public static EntityFinder staticParse(@NotNull CommandSender sender, @NotNull String input,
+    public static EntityFinder staticParse(CommandSender sender, String input,
                                            boolean onlySingleEntity, boolean onlyPlayers) throws ArgumentSyntaxException {
         // Check for raw player name or UUID
         if (!input.contains(SELECTOR_PREFIX) && !input.contains(StringUtils.SPACE)) {
@@ -153,11 +150,10 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         return parseStructure(sender, input, entityFinder, structure);
     }
 
-    @NotNull
-    private static EntityFinder parseStructure(@NotNull CommandSender sender,
-                                               @NotNull String input,
-                                               @NotNull EntityFinder entityFinder,
-                                               @NotNull String structure) throws ArgumentSyntaxException {
+    private static EntityFinder parseStructure(CommandSender sender,
+                                               String input,
+                                               EntityFinder entityFinder,
+                                               String structure) throws ArgumentSyntaxException {
         // The structure isn't opened or closed properly
         if (!structure.startsWith("[") || !structure.endsWith("]"))
             throw new ArgumentSyntaxException("Target selector needs to start and end with brackets", input, INVALID_SYNTAX);
@@ -187,11 +183,11 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         return entityFinder;
     }
 
-    private static int parseArgument(@NotNull CommandSender sender,
-                                     @NotNull EntityFinder entityFinder,
-                                     @NotNull String argumentName,
-                                     @NotNull String input,
-                                     @NotNull String structureData, int beginIndex) throws ArgumentSyntaxException {
+    private static int parseArgument(CommandSender sender,
+                                     EntityFinder entityFinder,
+                                     String argumentName,
+                                     String input,
+                                     String structureData, int beginIndex) throws ArgumentSyntaxException {
         final char comma = ',';
         final boolean isSimple = SIMPLE_ARGUMENTS.contains(argumentName);
 
@@ -214,7 +210,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             case "type": {
                 final boolean include = !value.startsWith("!");
                 final String entityName = include ? value : value.substring(1);
-                final EntityType entityType = EntityType.fromNamespaceId(entityName);
+                final EntityType entityType = EntityType.fromKey(entityName);
                 if (entityType == null)
                     throw new ArgumentSyntaxException("Invalid entity name", input, INVALID_ARGUMENT_VALUE);
                 entityFinder.setEntity(entityType, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
@@ -294,9 +290,11 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         return String.format("Entities<%s>", getId());
     }
 
-    private static EntityFinder.TargetSelector toTargetSelector(@NotNull String selectorVariable) {
+    private static EntityFinder.TargetSelector toTargetSelector(String selectorVariable) {
         if (selectorVariable.equals("@p"))
             return EntityFinder.TargetSelector.NEAREST_PLAYER;
+        if (selectorVariable.equals("@n"))
+            return EntityFinder.TargetSelector.NEAREST_ENTITY;
         if (selectorVariable.equals("@r"))
             return EntityFinder.TargetSelector.RANDOM_PLAYER;
         if (selectorVariable.equals("@a"))

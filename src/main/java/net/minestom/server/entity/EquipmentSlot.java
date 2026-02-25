@@ -1,8 +1,7 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +17,8 @@ public enum EquipmentSlot {
     LEGGINGS(2, 3, "legs", true, LEGGINGS_SLOT),
     CHESTPLATE(3, 4, "chest", true, CHESTPLATE_SLOT),
     HELMET(4, 5, "head", true, HELMET_SLOT),
-    BODY(6, 6, "body", false, -1);
+    BODY(6, 6, "body", false, -1),
+    SADDLE(7, 7, "saddle", false, -1);
 
     private static final List<EquipmentSlot> ARMORS = List.of(BOOTS, LEGGINGS, CHESTPLATE, HELMET);
     private static final Map<String, EquipmentSlot> BY_NBT_NAME = Arrays.stream(values())
@@ -26,19 +26,19 @@ public enum EquipmentSlot {
     private static final Map<Integer, EquipmentSlot> BY_PROTOCOL_ID = Arrays.stream(values())
             .collect(Collectors.toMap(EquipmentSlot::protocolId, slot -> slot));
     private static final Map<Integer, EquipmentSlot> BY_LEGACY_PROTOCOL_ID = Arrays.stream(values())
-            .collect(Collectors.toMap(EquipmentSlot::protocolId, slot -> slot));
+            .collect(Collectors.toMap(EquipmentSlot::legacyProtocolId, slot -> slot));
 
-    public static final NetworkBuffer.Type<EquipmentSlot> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(
-            BY_PROTOCOL_ID::get, EquipmentSlot::protocolId);
-    public static final BinaryTagSerializer<EquipmentSlot> NBT_TYPE = BinaryTagSerializer.STRING.map(
-            BY_NBT_NAME::get, EquipmentSlot::nbtName);
+    public static final NetworkBuffer.Type<EquipmentSlot> NETWORK_TYPE = NetworkBuffer.VAR_INT
+            .transform(BY_PROTOCOL_ID::get, EquipmentSlot::protocolId);
+    public static final Codec<EquipmentSlot> CODEC = Codec.STRING
+            .transform(BY_NBT_NAME::get, EquipmentSlot::nbtName);
 
-    public static @NotNull List<@NotNull EquipmentSlot> armors() {
+    public static List<EquipmentSlot> armors() {
         return ARMORS;
     }
 
     @Deprecated
-    public static @NotNull EquipmentSlot fromLegacyProtocolId(int legacyProtocolId) {
+    public static EquipmentSlot fromLegacyProtocolId(int legacyProtocolId) {
         final EquipmentSlot slot = BY_LEGACY_PROTOCOL_ID.get(legacyProtocolId);
         if (slot != null) return slot;
 
@@ -51,7 +51,7 @@ public enum EquipmentSlot {
     private final boolean armor;
     private final int armorSlot;
 
-    EquipmentSlot(int protocolId, int legacyProtocolId, @NotNull String nbtName, boolean armor, int armorSlot) {
+    EquipmentSlot(int protocolId, int legacyProtocolId, String nbtName, boolean armor, int armorSlot) {
         this.protocolId = protocolId;
         this.legacyProtocolId = legacyProtocolId;
         this.nbtName = nbtName;
@@ -76,7 +76,7 @@ public enum EquipmentSlot {
         return legacyProtocolId;
     }
 
-    public @NotNull String nbtName() {
+    public String nbtName() {
         return nbtName;
     }
 

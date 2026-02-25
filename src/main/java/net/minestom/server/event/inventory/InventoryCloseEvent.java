@@ -5,7 +5,6 @@ import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,11 +14,13 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
 
     private final AbstractInventory inventory;
     private final Player player;
+    private final boolean fromClient;
     private Inventory newInventory;
 
-    public InventoryCloseEvent(@NotNull AbstractInventory inventory, @NotNull Player player) {
+    public InventoryCloseEvent(AbstractInventory inventory, Player player, boolean fromClient) {
         this.inventory = inventory;
         this.player = player;
+        this.fromClient = fromClient;
     }
 
     /**
@@ -27,9 +28,17 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @return the player who closed the inventory
      */
-    @NotNull
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * Gets whether the client closed the inventory or the server did.
+     *
+     * @return true if the client closed the inventory, false if the server closed the inventory
+     */
+    public boolean isFromClient() {
+        return fromClient;
     }
 
     /**
@@ -52,7 +61,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
     }
 
     @Override
-    public @NotNull AbstractInventory getInventory() {
+    public AbstractInventory getInventory() {
         return inventory;
     }
 }

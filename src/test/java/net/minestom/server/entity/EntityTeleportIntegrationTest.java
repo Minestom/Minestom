@@ -95,14 +95,13 @@ public class EntityTeleportIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 0, 0));
 
         player.teleport(new Pos(10, 10, 10, 90, 0)).join();
-        assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));
+        assertEquals(new Pos(10, 10, 10, 90, 0), player.getPosition());
 
         player.teleport(new Pos(0, 0, 0, 0, 0), null, RelativeFlags.ALL).join();
-        assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));
+        assertEquals(new Pos(10, 10, 10, 90, 0), player.getPosition());
 
-        var tracker = connection.trackIncoming(PlayerPositionAndLookPacket.class);
         player.teleport(new Pos(5, 10, 2, 5, 5), null, RelativeFlags.VIEW).join();
-        assertEquals(player.getPosition(), new Pos(5, 10, 2, 95, 5));
+        assertEquals(new Pos(5, 10, 2, 95, 5), player.getPosition());
     }
 
     @Test
@@ -114,11 +113,11 @@ public class EntityTeleportIntegrationTest {
         assertEquals(new Pos(0, 42, 0), entity.getPosition());
 
         entity.teleport(new Pos(Double.POSITIVE_INFINITY, 42, 52)).join();
-        CompletableFuture.runAsync(() -> entity.tick(System.currentTimeMillis()))
+        CompletableFuture.runAsync(() -> entity.tick(0 /* 0 is fine here, it's just a delta*/))
                 .get(10, TimeUnit.SECONDS);
         // This should not hang forever
 
         // The position should have been capped at 2 billion.
-        assertEquals(new Pos(2_000_000_000, 42, 52), entity.getPosition());
+        assertEquals(new Pos(Entity.MAX_COORDINATE, 42, 52), entity.getPosition());
     }
 }

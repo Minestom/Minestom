@@ -3,19 +3,19 @@ package net.minestom.server.entity.metadata.monster;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 public class EndermanMeta extends MonsterMeta {
-    public EndermanMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
+    public EndermanMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public Integer getCarriedBlockID() {
+    public @Nullable Block getCarriedBlock() {
         return metadata.get(MetadataDef.Enderman.CARRIED_BLOCK);
     }
 
-    public void setCarriedBlockID(@Nullable Integer value) {
+    public void setCarriedBlock(@Nullable Block value) {
         metadata.set(MetadataDef.Enderman.CARRIED_BLOCK, value);
     }
 

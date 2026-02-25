@@ -2,14 +2,17 @@ package net.minestom.server;
 
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.animal.ZombieNautilusVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -17,6 +20,7 @@ import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
@@ -32,13 +36,12 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketSendingUtils;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.net.InetSocketAddress;
@@ -67,22 +70,31 @@ public final class MinecraftServer implements MinecraftConstants {
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
 
     // In-Game Manager
-    private static volatile ServerProcess serverProcess;
+    private static volatile @UnknownNullability ServerProcess serverProcess;
 
     private static int compressionThreshold = 256;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
-    public static MinecraftServer init() {
-        updateProcess();
+    public static MinecraftServer init(Auth auth) {
+        updateProcess(auth);
         return new MinecraftServer();
+    }
+
+    public static MinecraftServer init() {
+        return init(new Auth.Offline());
+    }
+
+    @ApiStatus.Internal
+    public static ServerProcess updateProcess(Auth auth) {
+        ServerProcess process = new ServerProcessImpl(auth);
+        serverProcess = process;
+        return process;
     }
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
-        ServerProcess process = new ServerProcessImpl();
-        serverProcess = process;
-        return process;
+        return updateProcess(new Auth.Offline());
     }
 
     /**
@@ -90,7 +102,6 @@ public final class MinecraftServer implements MinecraftConstants {
      *
      * @return the server brand name
      */
-    @NotNull
     public static String getBrandName() {
         return brandName;
     }
@@ -101,7 +112,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * @param brandName the server brand name
      * @throws NullPointerException if {@code brandName} is null
      */
-    public static void setBrandName(@NotNull String brandName) {
+    public static void setBrandName(String brandName) {
         MinecraftServer.brandName = brandName;
         PacketSendingUtils.broadcastPlayPacket(PluginMessagePacket.brandPacket(brandName));
     }
@@ -111,7 +122,6 @@ public final class MinecraftServer implements MinecraftConstants {
      *
      * @return the server difficulty
      */
-    @NotNull
     public static Difficulty getDifficulty() {
         return difficulty;
     }
@@ -121,7 +131,7 @@ public final class MinecraftServer implements MinecraftConstants {
      *
      * @param difficulty the new server difficulty
      */
-    public static void setDifficulty(@NotNull Difficulty difficulty) {
+    public static void setDifficulty(Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
         PacketSendingUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
     }
@@ -130,35 +140,35 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess;
     }
 
-    public static @NotNull GlobalEventHandler getGlobalEventHandler() {
+    public static GlobalEventHandler getGlobalEventHandler() {
         return serverProcess.eventHandler();
     }
 
-    public static @NotNull PacketListenerManager getPacketListenerManager() {
+    public static PacketListenerManager getPacketListenerManager() {
         return serverProcess.packetListener();
     }
 
-    public static @NotNull InstanceManager getInstanceManager() {
+    public static InstanceManager getInstanceManager() {
         return serverProcess.instance();
     }
 
-    public static @NotNull BlockManager getBlockManager() {
+    public static BlockManager getBlockManager() {
         return serverProcess.block();
     }
 
-    public static @NotNull CommandManager getCommandManager() {
+    public static CommandManager getCommandManager() {
         return serverProcess.command();
     }
 
-    public static @NotNull RecipeManager getRecipeManager() {
+    public static RecipeManager getRecipeManager() {
         return serverProcess.recipe();
     }
 
-    public static @NotNull TeamManager getTeamManager() {
+    public static TeamManager getTeamManager() {
         return serverProcess.team();
     }
 
-    public static @NotNull SchedulerManager getSchedulerManager() {
+    public static SchedulerManager getSchedulerManager() {
         return serverProcess.scheduler();
     }
 
@@ -167,23 +177,23 @@ public final class MinecraftServer implements MinecraftConstants {
      *
      * @return the benchmark manager
      */
-    public static @NotNull BenchmarkManager getBenchmarkManager() {
+    public static BenchmarkManager getBenchmarkManager() {
         return serverProcess.benchmark();
     }
 
-    public static @NotNull ExceptionManager getExceptionManager() {
+    public static ExceptionManager getExceptionManager() {
         return serverProcess.exception();
     }
 
-    public static @NotNull ConnectionManager getConnectionManager() {
+    public static ConnectionManager getConnectionManager() {
         return serverProcess.connection();
     }
 
-    public static @NotNull BossBarManager getBossBarManager() {
+    public static BossBarManager getBossBarManager() {
         return serverProcess.bossBar();
     }
 
-    public static @NotNull PacketParser<ClientPacket> getPacketParser() {
+    public static PacketParser<ClientPacket> getPacketParser() {
         return serverProcess.packetParser();
     }
 
@@ -245,67 +255,83 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.advancement();
     }
 
-    public static TagManager getTagManager() {
-        return serverProcess.tag();
+    public static ClickCallbackManager getClickCallbackManager() {
+        return serverProcess.clickCallbackManager();
     }
 
-    public static @NotNull DynamicRegistry<ChatType> getChatTypeRegistry() {
+    public static DynamicRegistry<ChatType> getChatTypeRegistry() {
         return serverProcess.chatType();
     }
 
-    public static @NotNull DynamicRegistry<DimensionType> getDimensionTypeRegistry() {
+    public static DynamicRegistry<Dialog> getDialogRegistry() {
+        return serverProcess.dialog();
+    }
+
+    public static DynamicRegistry<DimensionType> getDimensionTypeRegistry() {
         return serverProcess.dimensionType();
     }
 
-    public static @NotNull DynamicRegistry<Biome> getBiomeRegistry() {
+    public static DynamicRegistry<Biome> getBiomeRegistry() {
         return serverProcess.biome();
     }
 
-    public static @NotNull DynamicRegistry<DamageType> getDamageTypeRegistry() {
+    public static DynamicRegistry<DamageType> getDamageTypeRegistry() {
         return serverProcess.damageType();
     }
 
-    public static @NotNull DynamicRegistry<TrimMaterial> getTrimMaterialRegistry() {
+    public static DynamicRegistry<TrimMaterial> getTrimMaterialRegistry() {
         return serverProcess.trimMaterial();
     }
 
-    public static @NotNull DynamicRegistry<TrimPattern> getTrimPatternRegistry() {
+    public static DynamicRegistry<TrimPattern> getTrimPatternRegistry() {
         return serverProcess.trimPattern();
     }
 
-    public static @NotNull DynamicRegistry<BannerPattern> getBannerPatternRegistry() {
+    public static DynamicRegistry<BannerPattern> getBannerPatternRegistry() {
         return serverProcess.bannerPattern();
     }
 
-    public static @NotNull DynamicRegistry<WolfMeta.Variant> getWolfVariantRegistry() {
+    public static DynamicRegistry<WolfVariant> getWolfVariantRegistry() {
         return serverProcess.wolfVariant();
     }
 
-    public static @NotNull DynamicRegistry<Enchantment> getEnchantmentRegistry() {
+    public static DynamicRegistry<ZombieNautilusVariant> getZombieNautilusVariantRegistry() {
+        return process().zombieNautilusVariant();
+    }
+
+    public static DynamicRegistry<Enchantment> getEnchantmentRegistry() {
         return serverProcess.enchantment();
     }
 
-    public static @NotNull DynamicRegistry<PaintingMeta.Variant> getPaintingVariantRegistry() {
+    public static DynamicRegistry<PaintingVariant> getPaintingVariantRegistry() {
         return serverProcess.paintingVariant();
     }
 
-    public static @NotNull DynamicRegistry<JukeboxSong> getJukeboxSongRegistry() {
+    public static DynamicRegistry<JukeboxSong> getJukeboxSongRegistry() {
         return serverProcess.jukeboxSong();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public static DynamicRegistry<Instrument> getInstrumentRegistry() {
+        return serverProcess.instrument();
+    }
+
+    public static DynamicRegistry<Timeline> getTimelineRegistry() {
+        return serverProcess.timeline();
+    }
+
+    public static DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return process().enchantmentLevelBasedValues();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects() {
+    public static DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return process().enchantmentValueEffects();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects() {
+    public static DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
         return process().enchantmentEntityEffects();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
+    public static DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return process().enchantmentLocationEffects();
     }
 
@@ -321,12 +347,13 @@ public final class MinecraftServer implements MinecraftConstants {
      * @param address the server address
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
-    public void start(@NotNull SocketAddress address) {
+    public void start(SocketAddress address) {
         serverProcess.start(address);
+        serverProcess.dispatcher().start();
         new TickSchedulerThread(serverProcess).start();
     }
 
-    public void start(@NotNull String address, int port) {
+    public void start(String address, int port) {
         start(new InetSocketAddress(address, port));
     }
 

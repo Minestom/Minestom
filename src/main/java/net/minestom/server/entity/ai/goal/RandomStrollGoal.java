@@ -3,15 +3,15 @@ package net.minestom.server.entity.ai.goal;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class RandomStrollGoal extends GoalSelector {
 
-    private static final long DELAY = 2500;
+    private static final long DELAY = TimeUnit.MILLISECONDS.toNanos(2500);
 
     private final int radius;
     private final List<Vec> closePositions;
@@ -19,7 +19,7 @@ public class RandomStrollGoal extends GoalSelector {
 
     private long lastStroll;
 
-    public RandomStrollGoal(@NotNull EntityCreature entityCreature, int radius) {
+    public RandomStrollGoal(EntityCreature entityCreature, int radius) {
         super(entityCreature);
         this.radius = radius;
         this.closePositions = getNearbyBlocks(radius);
@@ -27,7 +27,7 @@ public class RandomStrollGoal extends GoalSelector {
 
     @Override
     public boolean shouldStart() {
-        return System.currentTimeMillis() - lastStroll >= DELAY;
+        return System.nanoTime() - lastStroll >= DELAY;
     }
 
     @Override
@@ -56,14 +56,14 @@ public class RandomStrollGoal extends GoalSelector {
 
     @Override
     public void end() {
-        this.lastStroll = System.currentTimeMillis();
+        this.lastStroll = System.nanoTime();
     }
 
     public int getRadius() {
         return radius;
     }
 
-    private static @NotNull List<Vec> getNearbyBlocks(int radius) {
+    private static List<Vec> getNearbyBlocks(int radius) {
         List<Vec> blocks = new ArrayList<>();
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {

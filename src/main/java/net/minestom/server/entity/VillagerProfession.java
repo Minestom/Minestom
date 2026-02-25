@@ -1,25 +1,24 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public sealed interface VillagerProfession extends StaticProtocolObject, VillagerProfessions permits VillagerProfessionImpl {
+import java.util.Collection;
+
+public sealed interface VillagerProfession extends StaticProtocolObject<VillagerProfession>, VillagerProfessions permits VillagerProfessionImpl {
 
     NetworkBuffer.Type<VillagerProfession> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(VillagerProfession::fromId, VillagerProfession::id);
-    BinaryTagSerializer<VillagerProfession> NBT_TYPE = BinaryTagSerializer.STRING.map(VillagerProfessionImpl::getSafe, VillagerProfession::name);
-
-    @Contract(pure = true)
-    @NotNull Registry.VillagerProfessionEntry registry();
+    Codec<VillagerProfession> NBT_TYPE = Codec.STRING.transform(VillagerProfession::fromKey, VillagerProfession::name);
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default Key key() {
+        return registry().key();
     }
 
     @Override
@@ -27,8 +26,23 @@ public sealed interface VillagerProfession extends StaticProtocolObject, Village
         return registry().id();
     }
 
+    @Contract(pure = true)
+    RegistryData.VillagerProfessionEntry registry();
+
+    static Collection<VillagerProfession> values() {
+        return VillagerProfessionImpl.REGISTRY.values();
+    }
+
+    static @Nullable VillagerProfession fromKey(@KeyPattern String key) {
+        return fromKey(Key.key(key));
+    }
+
+    static @Nullable VillagerProfession fromKey(Key key) {
+        return VillagerProfessionImpl.REGISTRY.get(key);
+    }
 
     static @Nullable VillagerProfession fromId(int id) {
-        return VillagerProfessionImpl.getId(id);
+        return VillagerProfessionImpl.REGISTRY.get(id);
     }
+
 }

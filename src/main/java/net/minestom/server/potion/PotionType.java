@@ -1,30 +1,32 @@
 package net.minestom.server.potion;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface PotionType extends StaticProtocolObject, PotionTypes permits PotionTypeImpl {
+public sealed interface PotionType extends StaticProtocolObject<PotionType>, PotionTypes permits PotionTypeImpl {
 
-    NetworkBuffer.Type<PotionType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionTypeImpl::getId, PotionType::id);
+    NetworkBuffer.Type<PotionType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionType::fromId, PotionType::id);
+    Codec<PotionType> CODEC = Codec.KEY.transform(PotionType::fromKey, PotionType::key);
 
-    static @NotNull Collection<@NotNull PotionType> values() {
-        return PotionTypeImpl.values();
+    static Collection<PotionType> values() {
+        return PotionTypeImpl.REGISTRY.values();
     }
 
-    static @Nullable PotionType fromNamespaceId(@NotNull String namespaceID) {
-        return PotionTypeImpl.getSafe(namespaceID);
+    static @Nullable PotionType fromKey(@KeyPattern String key) {
+        return fromKey(Key.key(key));
     }
 
-    static @Nullable PotionType fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable PotionType fromKey(Key key) {
+        return PotionTypeImpl.REGISTRY.get(key);
     }
 
     static @Nullable PotionType fromId(int id) {
-        return PotionTypeImpl.getId(id);
+        return PotionTypeImpl.REGISTRY.get(id);
     }
 }

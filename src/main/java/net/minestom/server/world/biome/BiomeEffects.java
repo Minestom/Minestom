@@ -1,182 +1,85 @@
 package net.minestom.server.world.biome;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
+import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.color.Color;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Locale;
+public record BiomeEffects(
+        RGBLike waterColor,
+        @Nullable RGBLike foliageColor,
+        @Nullable RGBLike dryFoliageColor,
+        @Nullable RGBLike grassColor,
+        GrassColorModifier grassColorModifier
+) {
+    public static final BiomeEffects DEFAULT = new BiomeEffects(new Color(0x3f76e4), null, null, null, GrassColorModifier.NONE);
 
-public record BiomeEffects(int fogColor, int skyColor, int waterColor, int waterFogColor, int foliageColor,
-                           int grassColor,
-                           GrassColorModifier grassColorModifier, BiomeParticle biomeParticle,
-                           AmbientSound ambientSound, MoodSound moodSound, AdditionsSound additionsSound,
-                           Music music) {
+    public static final Codec<BiomeEffects> CODEC = StructCodec.struct(
+            "water_color", Color.STRING_CODEC, BiomeEffects::waterColor,
+            "foliage_color", Color.STRING_CODEC.optional(), BiomeEffects::foliageColor,
+            "dry_foliage_color", Color.STRING_CODEC.optional(), BiomeEffects::dryFoliageColor,
+            "grass_color", Color.STRING_CODEC.optional(), BiomeEffects::grassColor,
+            "grass_color_modifier", GrassColorModifier.CODEC.optional(GrassColorModifier.NONE), BiomeEffects::grassColorModifier,
+            BiomeEffects::new);
 
     public static Builder builder() {
         return new Builder();
     }
 
-    public CompoundBinaryTag toNbt() {
-        var builder = CompoundBinaryTag.builder();
-        builder.putInt("fog_color", fogColor);
-        if (foliageColor != -1)
-            builder.putInt("foliage_color", foliageColor);
-        if (grassColor != -1)
-            builder.putInt("grass_color", grassColor);
-        builder.putInt("sky_color", skyColor);
-        builder.putInt("water_color", waterColor);
-        builder.putInt("water_fog_color", waterFogColor);
-        if (grassColorModifier != null)
-            builder.putString("grass_color_modifier", grassColorModifier.name().toLowerCase(Locale.ROOT));
-        if (biomeParticle != null)
-            builder.put("particle", biomeParticle.toNbt());
-        if (ambientSound != null)
-            builder.put("ambient_sound", ambientSound.toNbt());
-        if (moodSound != null)
-            builder.put("mood_sound", moodSound.toNbt());
-        if (additionsSound != null)
-            builder.put("additions_sound", additionsSound.toNbt());
-        if (music != null)
-            builder.put("music", music.toNbt());
-        return builder.build();
-    }
-
     public enum GrassColorModifier {
         NONE, DARK_FOREST, SWAMP;
-    }
 
-    public record MoodSound(NamespaceID sound, int tickDelay, int blockSearchExtent, double offset) {
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .put("sound", CompoundBinaryTag.builder()
-                            .putString("sound_id", sound.toString())
-                            .build())
-                    .putInt("tick_delay", tickDelay)
-                    .putInt("block_search_extent", blockSearchExtent)
-                    .putDouble("offset", offset)
-                    .build();
-        }
-    }
-
-    public record AdditionsSound(NamespaceID sound, double tickChance) {
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .put("sound", CompoundBinaryTag.builder()
-                            .putString("sound_id", sound.toString())
-                            .build())
-                    .putDouble("tick_chance", tickChance)
-                    .build();
-        }
-    }
-
-    public record AmbientSound(NamespaceID sound, Float range) {
-        public AmbientSound(NamespaceID sound) {
-            this(sound, null);
-        }
-
-        public @NotNull CompoundBinaryTag toNbt() {
-            var builder = CompoundBinaryTag.builder()
-                    .putString("sound_id", sound.toString());
-
-            if (range != null) builder.putFloat("range", range);
-            return builder.build();
-        }
-    }
-
-    public record Music(NamespaceID sound, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .put("sound", CompoundBinaryTag.builder()
-                            .putString("sound_id", sound.toString())
-                            .build())
-                    .putInt("min_delay", minDelay)
-                    .putInt("max_delay", maxDelay)
-                    .putBoolean("replace_current_music", replaceCurrentMusic)
-                    .build();
-        }
+        public static final Codec<GrassColorModifier> CODEC = Codec.Enum(GrassColorModifier.class);
     }
 
     public static final class Builder {
-        private int fogColor;
-        private int skyColor;
-        private int waterColor;
-        private int waterFogColor;
-        private int foliageColor = -1;
-        private int grassColor = -1;
-        private GrassColorModifier grassColorModifier;
-        private BiomeParticle biomeParticle;
-        private AmbientSound ambientSound;
-        private MoodSound moodSound;
-        private AdditionsSound additionsSound;
-        private Music music;
+        private RGBLike waterColor = new Color(0x3f76e4);
+        private @Nullable RGBLike foliageColor;
+        private @Nullable RGBLike dryFoliageColor;
+        private @Nullable RGBLike grassColor;
+        private GrassColorModifier grassColorModifier = GrassColorModifier.NONE;
 
         Builder() {
         }
 
-        public Builder fogColor(int fogColor) {
-            this.fogColor = fogColor;
-            return this;
-        }
-
-        public Builder skyColor(int skyColor) {
-            this.skyColor = skyColor;
-            return this;
-        }
-
-        public Builder waterColor(int waterColor) {
+        @Contract(value = "_ -> this")
+        public Builder waterColor(RGBLike waterColor) {
             this.waterColor = waterColor;
             return this;
         }
 
-        public Builder waterFogColor(int waterFogColor) {
-            this.waterFogColor = waterFogColor;
-            return this;
-        }
-
-        public Builder foliageColor(int foliageColor) {
+        @Contract(value = "_ -> this")
+        public Builder foliageColor(@Nullable RGBLike foliageColor) {
             this.foliageColor = foliageColor;
             return this;
         }
 
-        public Builder grassColor(int grassColor) {
+        @Contract(value = "_ -> this")
+        public Builder dryFoliageColor(@Nullable RGBLike dryFoliageColor) {
+            this.dryFoliageColor = dryFoliageColor;
+            return this;
+        }
+
+        @Contract(value = "_ -> this")
+        public Builder grassColor(@Nullable RGBLike grassColor) {
             this.grassColor = grassColor;
             return this;
         }
 
+        @Contract(value = "_ -> this")
         public Builder grassColorModifier(GrassColorModifier grassColorModifier) {
             this.grassColorModifier = grassColorModifier;
             return this;
         }
 
-        public Builder biomeParticle(BiomeParticle biomeParticle) {
-            this.biomeParticle = biomeParticle;
-            return this;
-        }
-
-        public Builder ambientSound(AmbientSound ambientSound) {
-            this.ambientSound = ambientSound;
-            return this;
-        }
-
-        public Builder moodSound(MoodSound moodSound) {
-            this.moodSound = moodSound;
-            return this;
-        }
-
-        public Builder additionsSound(AdditionsSound additionsSound) {
-            this.additionsSound = additionsSound;
-            return this;
-        }
-
-        public Builder music(Music music) {
-            this.music = music;
-            return this;
-        }
-
+        @Contract(pure = true, value = "-> new")
         public BiomeEffects build() {
-            return new BiomeEffects(fogColor, skyColor, waterColor, waterFogColor, foliageColor,
-                    grassColor, grassColorModifier, biomeParticle,
-                    ambientSound, moodSound, additionsSound, music);
+            Check.argCondition(waterColor == null, "waterColor is required");
+
+            return new BiomeEffects(waterColor, foliageColor, dryFoliageColor, grassColor, grassColorModifier);
         }
     }
 }

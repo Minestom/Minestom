@@ -1,11 +1,11 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.player.PlayerUseItemEvent;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Equippable;
@@ -74,7 +74,7 @@ public class TestUseItemListenerIntegration {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 41, 0));
 
-        var badBoots = ItemStack.of(Material.GOLDEN_BOOTS).without(ItemComponent.EQUIPPABLE);
+        var badBoots = ItemStack.of(Material.GOLDEN_BOOTS).without(DataComponents.EQUIPPABLE);
         player.setItemInMainHand(badBoots);
         UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f), player);
 
@@ -90,12 +90,23 @@ public class TestUseItemListenerIntegration {
         var oldBoots = ItemStack.of(Material.GOLDEN_BOOTS);
         player.setEquipment(EquipmentSlot.BOOTS, oldBoots);
 
-        var boots = ItemStack.of(Material.DIAMOND_BOOTS).with(ItemComponent.EQUIPPABLE,
+        var boots = ItemStack.of(Material.DIAMOND_BOOTS).with(DataComponents.EQUIPPABLE,
                 (UnaryOperator<Equippable>) (eq) -> eq.withSwappable(false));
         player.setItemInMainHand(boots);
         UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f), player);
 
         assertEquals(boots, player.getItemInMainHand());
         assertEquals(oldBoots, player.getEquipment(EquipmentSlot.BOOTS));
+    }
+
+    @Test
+    void testRotation(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 41, 0));
+        player.refreshReceivedTeleportId(player.getLastSentTeleportId());
+
+        assertEquals(new Pos(0, 41, 0), player.getPosition());
+        UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 5f, 10f), player);
+        assertEquals(new Pos(0, 41, 0, 5f, 10f), player.getPosition());
     }
 }

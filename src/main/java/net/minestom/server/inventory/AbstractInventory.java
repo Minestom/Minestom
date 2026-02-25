@@ -1,11 +1,16 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventHandler;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
+import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
-import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.CloseWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
@@ -14,19 +19,17 @@ import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.UnaryOperator;
 
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable, Viewable
+public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable, Viewable, EventHandler<InventoryEvent>
         permits Inventory, PlayerInventory {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
@@ -34,8 +37,6 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     private final int size;
     protected final ItemStack[] itemStacks;
 
-    // list of conditions/callbacks assigned to this inventory
-    protected final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
     // the click processor which process all the clicks in the inventory
     protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
@@ -45,10 +46,21 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
     protected final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
+    // the local event node filtered to this inventory
+    private final EventNode<InventoryEvent> eventNode;
+
     protected AbstractInventory(int size) {
         this.size = size;
         this.itemStacks = new ItemStack[getSize()];
         Arrays.fill(itemStacks, ItemStack.AIR);
+        // Setup event node
+        final ServerProcess process = MinecraftServer.process();
+        if (process != null) {
+            this.eventNode = process.eventHandler().map(this, EventFilter.INVENTORY);
+        } else {
+            // Local nodes require a server process
+            this.eventNode = null;
+        }
     }
 
     /**
@@ -61,12 +73,12 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     public abstract byte getWindowId();
 
     @Override
-    public @NotNull Set<Player> getViewers() {
+    public Set<Player> getViewers() {
         return unmodifiableViewers;
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
+    public boolean addViewer(Player player) {
         if (!this.viewers.add(player)) return false;
 
         update(player);
@@ -74,7 +86,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     @Override
-    public boolean removeViewer(@NotNull Player player) {
+    public boolean removeViewer(Player player) {
         if (!this.viewers.remove(player)) return false;
 
         // Drop cursor item when closing inventory
@@ -100,7 +112,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param slot      the slot to set the item
      * @param itemStack the item to set
      */
-    public void setItemStack(int slot, @NotNull ItemStack itemStack) {
+    public void setItemStack(int slot, ItemStack itemStack) {
         setItemStack(slot, itemStack, true);
     }
 
@@ -111,7 +123,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param itemStack the item to set
      * @param sendPacket whether or not to send packets
      */
-    public void setItemStack(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
+    public void setItemStack(int slot, ItemStack itemStack, boolean sendPacket) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize() - 1), // Subtract 1 because MathUtils is <= max, instead of strictly less than
                 "Inventory does not have the slot " + slot);
 
@@ -124,24 +136,24 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         EventDispatcher.call(new InventoryItemChangeEvent(this, slot, previous, itemStack));
     }
 
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack item, @NotNull ItemStack previous, boolean sendPacket) {
+    protected void UNSAFE_itemInsert(int slot, ItemStack item, ItemStack previous, boolean sendPacket) {
         itemStacks[slot] = item;
-        if (sendPacket) sendSlotRefresh(slot, item, previous);
+        if (sendPacket) sendSlotRefresh(slot, item);
     }
 
-    public void sendSlotRefresh(int slot, @NotNull ItemStack item, @NotNull ItemStack previous) {
+    public void sendSlotRefresh(int slot, ItemStack item) {
         sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, item));
     }
 
-    public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
-                                                        @NotNull TransactionType type,
-                                                        @NotNull TransactionOption<T> option) {
+    public synchronized <T> T processItemStack(ItemStack itemStack,
+                                                        TransactionType type,
+                                                        TransactionOption<T> option) {
         return option.fill(type, this, itemStack);
     }
 
-    public synchronized <T> @NotNull List<@NotNull T> processItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
-                                                                        @NotNull TransactionType type,
-                                                                        @NotNull TransactionOption<T> option) {
+    public synchronized <T> List<T> processItemStacks(List<ItemStack> itemStacks,
+                                                                        TransactionType type,
+                                                                        TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
         itemStacks.forEach(itemStack -> {
             T transactionResult = processItemStack(itemStack, type, option);
@@ -157,11 +169,11 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param option    the transaction option
      * @return true if the item has been successfully added, false otherwise
      */
-    public <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
+    public <T> T addItemStack(ItemStack itemStack, TransactionOption<T> option) {
         return processItemStack(itemStack, TransactionType.ADD, option);
     }
 
-    public boolean addItemStack(@NotNull ItemStack itemStack) {
+    public boolean addItemStack(ItemStack itemStack) {
         return addItemStack(itemStack, TransactionOption.ALL_OR_NOTHING);
     }
 
@@ -172,8 +184,8 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param option     the transaction option
      * @return the operation results
      */
-    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
-                                                       @NotNull TransactionOption<T> option) {
+    public <T> List<T> addItemStacks(List<ItemStack> itemStacks,
+                                                       TransactionOption<T> option) {
         return processItemStacks(itemStacks, TransactionType.ADD, option);
     }
 
@@ -183,7 +195,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param itemStack the item to take
      * @return true if the item has been successfully fully taken, false otherwise
      */
-    public <T> @NotNull T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
+    public <T> T takeItemStack(ItemStack itemStack, TransactionOption<T> option) {
         return processItemStack(itemStack, TransactionType.TAKE, option);
     }
 
@@ -193,12 +205,12 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param itemStacks items to take
      * @return the operation results
      */
-    public <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
-                                                        @NotNull TransactionOption<T> option) {
+    public <T> List<T> takeItemStacks(List<ItemStack> itemStacks,
+                                                        TransactionOption<T> option) {
         return processItemStacks(itemStacks, TransactionType.TAKE, option);
     }
 
-    public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
+    public synchronized void replaceItemStack(int slot, UnaryOperator<ItemStack> operator) {
         var currentItem = getItemStack(slot);
         setItemStack(slot, operator.apply(currentItem));
     }
@@ -227,7 +239,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      *
      * @param player the player to update the inventory for
      */
-    public void update(@NotNull Player player) {
+    public void update(Player player) {
         player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), player.getInventory().getCursorItem()));
     }
 
@@ -237,7 +249,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param slot the slot to check
      * @return the item in the slot {@code slot}
      */
-    public @NotNull ItemStack getItemStack(int slot) {
+    public ItemStack getItemStack(int slot) {
         return (ItemStack) ITEM_UPDATER.getVolatile(itemStacks, slot);
     }
 
@@ -249,7 +261,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      *
      * @return an array containing all the inventory's items
      */
-    public @NotNull ItemStack[] getItemStacks() {
+    public ItemStack[] getItemStacks() {
         return itemStacks.clone();
     }
 
@@ -272,31 +284,13 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     /**
-     * Gets all the {@link InventoryCondition} of this inventory.
-     *
-     * @return a modifiable {@link List} containing all the inventory conditions
-     */
-    public @NotNull List<@NotNull InventoryCondition> getInventoryConditions() {
-        return inventoryConditions;
-    }
-
-    /**
-     * Adds a new {@link InventoryCondition} to this inventory.
-     *
-     * @param inventoryCondition the inventory condition to add
-     */
-    public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
-        this.inventoryConditions.add(inventoryCondition);
-    }
-
-    /**
      * Places all the items of {@code itemStacks} into the internal array.
      *
      * @param itemStacks the array to copy the content from
      * @throws IllegalArgumentException if the size of the array is not equal to {@link #getSize()}
      * @throws NullPointerException     if {@code itemStacks} contains one null element or more
      */
-    public void copyContents(@NotNull ItemStack[] itemStacks) {
+    public void copyContents(ItemStack[] itemStacks) {
         Check.argCondition(itemStacks.length != getSize(),
                 "The size of the array has to be of the same size as the inventory: " + getSize());
 
@@ -308,7 +302,12 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     @Override
-    public @NotNull TagHandler tagHandler() {
+    public TagHandler tagHandler() {
         return tagHandler;
+    }
+
+    @Override
+    public EventNode<InventoryEvent> eventNode() {
+        return eventNode;
     }
 }

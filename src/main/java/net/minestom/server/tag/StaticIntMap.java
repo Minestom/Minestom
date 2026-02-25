@@ -1,18 +1,19 @@
 package net.minestom.server.tag;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-sealed interface StaticIntMap<T> permits StaticIntMap.Array {
+sealed interface StaticIntMap<T extends @UnknownNullability Object> permits StaticIntMap.Array {
 
     T get(@Range(from = 0, to = Integer.MAX_VALUE) int key);
 
-    void forValues(@NotNull Consumer<T> consumer);
+    void forValues(Consumer<T> consumer);
 
-    @NotNull StaticIntMap<T> copy();
+    StaticIntMap<T> copy();
 
     // Methods potentially causing re-hashing
 
@@ -20,9 +21,9 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
 
     void remove(@Range(from = 0, to = Integer.MAX_VALUE) int key);
 
-    void updateContent(@NotNull StaticIntMap<T> content);
+    void updateContent(StaticIntMap<T> content);
 
-    final class Array<T> implements StaticIntMap<T> {
+    final class Array<T extends @UnknownNullability Object> implements StaticIntMap<T> {
         private static final Object[] EMPTY_ARRAY = new Object[0];
 
         private T[] array;
@@ -37,13 +38,13 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
         }
 
         @Override
-        public T get(int key) {
+        public @Nullable T get(int key) {
             final T[] array = this.array;
             return key < array.length ? array[key] : null;
         }
 
         @Override
-        public void forValues(@NotNull Consumer<T> consumer) {
+        public void forValues(Consumer<T> consumer) {
             final T[] array = this.array;
             for (T value : array) {
                 if (value != null) consumer.accept(value);
@@ -51,7 +52,7 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
         }
 
         @Override
-        public @NotNull StaticIntMap<T> copy() {
+        public StaticIntMap<T> copy() {
             return new Array<>(array.clone());
         }
 
@@ -65,7 +66,7 @@ sealed interface StaticIntMap<T> permits StaticIntMap.Array {
         }
 
         @Override
-        public void updateContent(@NotNull StaticIntMap<T> content) {
+        public void updateContent(StaticIntMap<T> content) {
             if (content instanceof StaticIntMap.Array<T> arrayMap) {
                 updateArray(arrayMap.array.clone());
             } else {

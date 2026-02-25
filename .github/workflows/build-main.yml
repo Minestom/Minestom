@@ -1,0 +1,25 @@
+name: Build PR
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    name: Build & Test Main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          # Allow caching for all branches in our repo;
+          # this is so we don't get evicted, see Cache Optimization in action docs for more info
+          cache-read-only: false
+      - name: Build
+        run: ./gradlew test javadoc

@@ -3,8 +3,6 @@ package net.minestom.server.recipe;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -22,33 +20,29 @@ public enum RecipeProperty implements Keyed {
     SMOKER_INPUT("smoker_input"),
     CAMPFIRE_INPUT("campfire_input");
 
-    private static final Map<NamespaceID, RecipeProperty> BY_NAMESPACE = Arrays.stream(values())
-            .collect(Collectors.toMap(RecipeProperty::namespace, Function.identity()));
+    private static final Map<Key, RecipeProperty> BY_KEY = Arrays.stream(values())
+            .collect(Collectors.toMap(RecipeProperty::key, Function.identity()));
 
     public static final NetworkBuffer.Type<RecipeProperty> NETWORK_TYPE = NetworkBuffer.STRING.transform(
-            namespaceId -> Objects.requireNonNull(fromNamespaceId(namespaceId)),
-            recipeProperty -> recipeProperty.namespace().asMinimalString());
+            key -> Objects.requireNonNull(fromKey(key)),
+            recipeProperty -> recipeProperty.key().asMinimalString());
 
-    public static @Nullable RecipeProperty fromNamespaceId(@NotNull String namespaceId) {
-        return fromNamespaceId(net.minestom.server.utils.NamespaceID.from(namespaceId));
+    public static @Nullable RecipeProperty fromKey(String key) {
+        return fromKey(Key.key(key));
     }
 
-    public static @Nullable RecipeProperty fromNamespaceId(@NotNull NamespaceID namespaceId) {
-        return BY_NAMESPACE.get(namespaceId);
+    public static @Nullable RecipeProperty fromKey(Key key) {
+        return BY_KEY.get(key);
     }
 
-    private final NamespaceID namespace;
+    private final Key key;
 
-    RecipeProperty(@NotNull String id) {
-        this.namespace = NamespaceID.from("minecraft", id);
-    }
-
-    public @NotNull NamespaceID namespace() {
-        return namespace;
+    RecipeProperty(String id) {
+        this.key = Key.key("minecraft", id);
     }
 
     @Override
-    public @NotNull Key key() {
-        return namespace;
+    public Key key() {
+        return key;
     }
 }

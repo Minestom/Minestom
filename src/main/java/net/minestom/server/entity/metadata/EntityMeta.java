@@ -1,11 +1,13 @@
 package net.minestom.server.entity.metadata;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
@@ -15,7 +17,7 @@ public class EntityMeta {
     private final WeakReference<Entity> entityRef;
     protected final MetadataHolder metadata;
 
-    public EntityMeta(@Nullable Entity entity, @NotNull MetadataHolder metadata) {
+    public EntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
         this.entityRef = new WeakReference<>(entity);
         this.metadata = metadata;
     }
@@ -101,11 +103,18 @@ public class EntityMeta {
         metadata.set(MetadataDef.AIR_TICKS, value);
     }
 
-    @Nullable
-    public Component getCustomName() {
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
+     */
+    @Deprecated
+    public @Nullable Component getCustomName() {
         return metadata.get(MetadataDef.CUSTOM_NAME);
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
+     */
+    @Deprecated
     public void setCustomName(@Nullable Component value) {
         metadata.set(MetadataDef.CUSTOM_NAME, value);
     }
@@ -134,12 +143,11 @@ public class EntityMeta {
         metadata.set(MetadataDef.HAS_NO_GRAVITY, value);
     }
 
-    @NotNull
     public EntityPose getPose() {
         return metadata.get(MetadataDef.POSE);
     }
 
-    public void setPose(@NotNull EntityPose value) {
+    public void setPose(EntityPose value) {
         metadata.set(MetadataDef.POSE, value);
     }
 
@@ -158,4 +166,63 @@ public class EntityMeta {
         }
     }
 
+    /**
+     * Exists to hide the component set implementation on meta to direct people to use the method on Entity.
+     *
+     * <p>Planned to only exist while we have both metadata and components separately/all metadata is not represented by components.</p>
+     *
+     * @see Entity#set(DataComponent, Object)
+     */
+    @ApiStatus.Internal
+    public static <T> @Nullable T getComponent(EntityMeta meta, DataComponent<T> component) {
+        return meta.get(component);
+    }
+
+    /**
+     * Exists to hide the component set implementation on meta to direct people to use the method on Entity.
+     *
+     * <p>Planned to only exist while we have both metadata and components separately/all metadata is not represented by components.</p>
+     *
+     * @see Entity#set(DataComponent, Object)
+     */
+    @ApiStatus.Internal
+    public static <T> void setComponent(EntityMeta meta, DataComponent<T> component, T value) {
+        meta.set(component, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(DataComponent<T> component) {
+        if (component == DataComponents.CUSTOM_NAME)
+            return (T) metadata.get(MetadataDef.CUSTOM_NAME);
+        return null;
+    }
+
+    protected <T> void set(DataComponent<T> component, T value) {
+        if (component == DataComponents.CUSTOM_NAME)
+            metadata.set(MetadataDef.CUSTOM_NAME, (Component) value);
+    }
+
+    /**
+     * Retrieves the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to retrieve the value from.
+     * @param <T>   The type of the metadata value.
+     * @return The value associated with the specified metadata entry.
+     */
+    @ApiStatus.Experimental
+    public <T> T get(MetadataDef.Entry<T> entry) {
+        return metadata.get(entry);
+    }
+
+    /**
+     * Sets the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to be updated.
+     * @param value The value to assign to the specified metadata entry.
+     * @param <T>   The type of the metadata value.
+     */
+    @ApiStatus.Experimental
+    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+        metadata.set(entry, value);
+    }
 }

@@ -10,7 +10,6 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
@@ -38,10 +37,12 @@ public class ItemEntity extends Entity {
     private float mergeRange = 1;
     private boolean previousOnGround = false;
 
+    // Spawn time in System#nanoTime
     private long spawnTime;
+    // pickup delay in nanos
     private long pickupDelay;
 
-    public ItemEntity(@NotNull ItemStack itemStack) {
+    public ItemEntity(ItemStack itemStack) {
         super(EntityType.ITEM);
         setItemStack(itemStack);
         setBoundingBox(0.25f, 0.25f, 0.25f);
@@ -77,7 +78,6 @@ public class ItemEntity extends Entity {
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (itemEntity == this) return;
                         if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;
-                        if (getDistanceSquared(itemEntity) > mergeRange * mergeRange) return;
 
                         final ItemStack itemStackEntity = itemEntity.getItemStack();
                         final boolean canStack = itemStack.isSimilar(itemStackEntity);
@@ -109,11 +109,11 @@ public class ItemEntity extends Entity {
 
     @Override
     public void spawn() {
-        this.spawnTime = System.currentTimeMillis();
+        this.spawnTime = System.nanoTime();
     }
 
     @Override
-    public @NotNull ItemEntityMeta getEntityMeta() {
+    public ItemEntityMeta getEntityMeta() {
         return (ItemEntityMeta) super.getEntityMeta();
     }
 
@@ -122,7 +122,6 @@ public class ItemEntity extends Entity {
      *
      * @return the item stack
      */
-    @NotNull
     public ItemStack getItemStack() {
         return itemStack;
     }
@@ -132,7 +131,7 @@ public class ItemEntity extends Entity {
      *
      * @param itemStack the item stack
      */
-    public void setItemStack(@NotNull ItemStack itemStack) {
+    public void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack;
         getEntityMeta().setItem(itemStack);
     }
@@ -146,7 +145,7 @@ public class ItemEntity extends Entity {
      * @return true if the item is pickable, false otherwise
      */
     public boolean isPickable() {
-        return pickable && (System.currentTimeMillis() - getSpawnTime() >= pickupDelay);
+        return pickable && getTimeSinceSpawn() >= pickupDelay;
     }
 
     /**
@@ -210,7 +209,7 @@ public class ItemEntity extends Entity {
      * @param delay        the pickup delay
      * @param temporalUnit the unit of the delay
      */
-    public void setPickupDelay(long delay, @NotNull TemporalUnit temporalUnit) {
+    public void setPickupDelay(long delay, TemporalUnit temporalUnit) {
         setPickupDelay(Duration.of(delay, temporalUnit));
     }
 
@@ -222,20 +221,20 @@ public class ItemEntity extends Entity {
     public void setPickupDelay(Duration delay) {
         this.pickupDelay = delay.toMillis();
     }
-
+    
     /**
-     * Used to know if the ItemEntity can be pickup.
+     * Used to know if the ItemEntity can be picked up.
      *
-     * @return the time in milliseconds since this entity has spawn
+     * @return the elapsed time in milliseconds since this entity has spawned
      */
-    public long getSpawnTime() {
-        return spawnTime;
+    public long getTimeSinceSpawn() {
+        return java.util.concurrent.TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - spawnTime);
     }
 
     @ApiStatus.Experimental
     @SuppressWarnings("unchecked")
     @Override
-    public @NotNull Acquirable<? extends ItemEntity> acquirable() {
+    public Acquirable<? extends ItemEntity> acquirable() {
         return (Acquirable<? extends ItemEntity>) super.acquirable();
     }
 }

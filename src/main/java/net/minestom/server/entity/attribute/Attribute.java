@@ -1,26 +1,26 @@
 package net.minestom.server.entity.attribute;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface Attribute extends StaticProtocolObject, Attributes permits AttributeImpl {
-    @NotNull NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(AttributeImpl::getId, Attribute::id);
-    @NotNull BinaryTagSerializer<Attribute> NBT_TYPE =  BinaryTagSerializer.STRING.map(AttributeImpl::get, Attribute::name);
+public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attributes permits AttributeImpl {
+    NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Attribute::fromId, Attribute::id);
+    Codec<Attribute> CODEC = Codec.STRING.transform(AttributeImpl::get, Attribute::name);
 
     @Contract(pure = true)
-    @NotNull Registry.AttributeEntry registry();
+    RegistryData.AttributeEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default Key key() {
+        return registry().key();
     }
 
     @Override
@@ -44,20 +44,20 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
         return registry().clientSync();
     }
 
-    static @NotNull Collection<@NotNull Attribute> values() {
-        return AttributeImpl.values();
+    static Collection<Attribute> values() {
+        return AttributeImpl.REGISTRY.values();
     }
 
-    static @Nullable Attribute fromNamespaceId(@NotNull String namespaceID) {
-        return AttributeImpl.getSafe(namespaceID);
+    static @Nullable Attribute fromKey(@KeyPattern String key) {
+        return fromKey(Key.key(key));
     }
 
-    static @Nullable Attribute fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Attribute fromKey(Key key) {
+        return AttributeImpl.REGISTRY.get(key);
     }
 
     static @Nullable Attribute fromId(int id) {
-        return AttributeImpl.getId(id);
+        return AttributeImpl.REGISTRY.get(id);
     }
 
 }

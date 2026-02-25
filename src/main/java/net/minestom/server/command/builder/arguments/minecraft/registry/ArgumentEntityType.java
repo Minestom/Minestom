@@ -3,7 +3,6 @@ package net.minestom.server.command.builder.arguments.minecraft.registry;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.entity.EntityType;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an argument giving an {@link EntityType}.
@@ -21,8 +20,8 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
     }
 
     @Override
-    public EntityType getRegistry(@NotNull String value) {
-        return EntityType.fromNamespaceId(value);
+    public EntityType getRegistry(String value) {
+        return EntityType.fromKey(value);
     }
 
     @Override

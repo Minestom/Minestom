@@ -1,5 +1,6 @@
 package net.minestom.demo.block;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.BinaryTagTypes;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
@@ -11,8 +12,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagSerializer;
 import net.minestom.server.tag.TagWritable;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class CampfireHandler implements BlockHandler {
         private final Tag<BinaryTag> internal = Tag.NBT("Items");
 
         @Override
-        public @Nullable List<ItemStack> read(@NotNull TagReadable reader) {
+        public @Nullable List<ItemStack> read(TagReadable reader) {
             ListBinaryTag item = (ListBinaryTag) reader.getTag(internal);
             if (item == null)
                 return null;
@@ -34,14 +33,14 @@ public class CampfireHandler implements BlockHandler {
                 CompoundBinaryTag nbtCompound = (CompoundBinaryTag) childTag;
                 int amount = nbtCompound.getByte("Count");
                 String id = nbtCompound.getString("id");
-                Material material = Material.fromNamespaceId(id);
+                Material material = Material.fromKey(id);
                 result.add(ItemStack.of(material, amount));
             });
             return result;
         }
 
         @Override
-        public void write(@NotNull TagWritable writer, @Nullable List<ItemStack> value) {
+        public void write(TagWritable writer, @Nullable List<ItemStack> value) {
             if (value == null) {
                 writer.removeTag(internal);
                 return;
@@ -60,12 +59,12 @@ public class CampfireHandler implements BlockHandler {
     });
 
     @Override
-    public @NotNull Collection<Tag<?>> getBlockEntityTags() {
+    public Collection<Tag<?>> getBlockEntityTags() {
         return List.of(ITEMS);
     }
 
     @Override
-    public @NotNull NamespaceID getNamespaceId() {
-        return NamespaceID.from("minestom:test");
+    public Key getKey() {
+        return Key.key("minestom:test");
     }
 }

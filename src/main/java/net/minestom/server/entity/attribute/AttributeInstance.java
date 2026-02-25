@@ -1,9 +1,8 @@
 package net.minestom.server.entity.attribute;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -19,32 +18,32 @@ import java.util.function.Consumer;
 public final class AttributeInstance {
     public static final NetworkBuffer.Type<AttributeInstance> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, AttributeInstance value) {
+        public void write(NetworkBuffer buffer, AttributeInstance value) {
             buffer.write(Attribute.NETWORK_TYPE, value.attribute());
             buffer.write(NetworkBuffer.DOUBLE, value.getBaseValue());
             buffer.write(AttributeModifier.NETWORK_TYPE.list(Short.MAX_VALUE), List.copyOf(value.modifiers()));
         }
 
         @Override
-        public AttributeInstance read(@NotNull NetworkBuffer buffer) {
+        public AttributeInstance read(NetworkBuffer buffer) {
             return new AttributeInstance(buffer.read(Attribute.NETWORK_TYPE), buffer.read(NetworkBuffer.DOUBLE),
                     buffer.read(AttributeModifier.NETWORK_TYPE.list(Short.MAX_VALUE)), null);
         }
     };
 
     private final Attribute attribute;
-    private final Map<NamespaceID, AttributeModifier> modifiers;
+    private final Map<Key, AttributeModifier> modifiers;
     private final Collection<AttributeModifier> unmodifiableModifiers;
     private final AtomicLong baseValueBits;
 
     private final Consumer<AttributeInstance> propertyChangeListener;
     private volatile double cachedValue = 0.0D;
 
-    public AttributeInstance(@NotNull Attribute attribute, @Nullable Consumer<AttributeInstance> listener) {
+    public AttributeInstance(Attribute attribute, @Nullable Consumer<AttributeInstance> listener) {
         this(attribute, attribute.defaultValue(), new ArrayList<>(), listener);
     }
 
-    public AttributeInstance(@NotNull Attribute attribute, double baseValue, @NotNull Collection<AttributeModifier> modifiers, @Nullable Consumer<AttributeInstance> listener) {
+    public AttributeInstance(Attribute attribute, double baseValue, Collection<AttributeModifier> modifiers, @Nullable Consumer<AttributeInstance> listener) {
         this.attribute = attribute;
         this.modifiers = new ConcurrentHashMap<>();
         for (var modifier : modifiers) this.modifiers.put(modifier.id(), modifier);
@@ -60,7 +59,7 @@ public final class AttributeInstance {
      *
      * @return the associated attribute
      */
-    public @NotNull Attribute attribute() {
+    public Attribute attribute() {
         return attribute;
     }
 
@@ -93,7 +92,6 @@ public final class AttributeInstance {
      *
      * @return an immutable collection of the modifiers applied to this attribute.
      */
-    @NotNull
     @UnmodifiableView
     public Collection<AttributeModifier> modifiers() {
         return unmodifiableModifiers;
@@ -105,7 +103,7 @@ public final class AttributeInstance {
      * @param modifier the modifier to add
      * @return the old modifier, or null if none
      */
-    public AttributeModifier addModifier(@NotNull AttributeModifier modifier) {
+    public @Nullable AttributeModifier addModifier(AttributeModifier modifier) {
         final AttributeModifier previousModifier = modifiers.put(modifier.id(), modifier);
         if (!modifier.equals(previousModifier)) refreshCachedValue(getBaseValue());
         return previousModifier;
@@ -117,7 +115,7 @@ public final class AttributeInstance {
      * @param modifier the modifier to remove
      * @return the modifier that was removed, or null if none
      */
-    public AttributeModifier removeModifier(@NotNull AttributeModifier modifier) {
+    public @Nullable AttributeModifier removeModifier(AttributeModifier modifier) {
         return removeModifier(modifier.id());
     }
 
@@ -136,7 +134,7 @@ public final class AttributeInstance {
      * @param id The namespace id of the modifier to remove
      * @return the modifier that was removed, or null if none
      */
-    public AttributeModifier removeModifier(@NotNull NamespaceID id) {
+    public @Nullable AttributeModifier removeModifier(Key id) {
         final AttributeModifier removed = modifiers.remove(id);
         if (removed != null) {
             refreshCachedValue(getBaseValue());
@@ -174,10 +172,10 @@ public final class AttributeInstance {
 
         double result = base;
 
-        for (var modifier : modifiers.stream().filter(mod -> mod.operation() == AttributeOperation.MULTIPLY_BASE).toArray(AttributeModifier[]::new)) {
+        for (var modifier : modifiers.stream().filter(mod -> mod.operation() == AttributeOperation.ADD_MULTIPLIED_BASE).toArray(AttributeModifier[]::new)) {
             result += (base * modifier.amount());
         }
-        for (var modifier : modifiers.stream().filter(mod -> mod.operation() == AttributeOperation.MULTIPLY_TOTAL).toArray(AttributeModifier[]::new)) {
+        for (var modifier : modifiers.stream().filter(mod -> mod.operation() == AttributeOperation.ADD_MULTIPLIED_TOTAL).toArray(AttributeModifier[]::new)) {
             result *= (1.0f + modifier.amount());
         }
 
@@ -197,13 +195,12 @@ public final class AttributeInstance {
     }
 
     @Deprecated
-    @NotNull
     public Collection<AttributeModifier> getModifiers() {
         return modifiers();
     }
 
     @Deprecated
-    public @NotNull Attribute getAttribute() {
+    public Attribute getAttribute() {
         return attribute;
     }
 }

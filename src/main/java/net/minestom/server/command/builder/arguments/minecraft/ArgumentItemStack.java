@@ -1,22 +1,23 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.registry.RegistryTranscoder;
 
 import java.io.IOException;
 
@@ -38,9 +39,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
         super(id, true);
     }
 
-    @NotNull
     @Override
-    public ItemStack parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public ItemStack parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         return staticParse(input);
     }
 
@@ -52,11 +52,11 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     /**
      * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
-    @Deprecated
-    public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
+    @SuppressWarnings("unchecked") @Deprecated
+    public static ItemStack staticParse(String input) throws ArgumentSyntaxException {
         var reader = new StringReader(input);
 
-        final Material material = Material.fromNamespaceId(reader.readNamespaceId());
+        final Material material = Material.fromKey(reader.readKey());
         if (material == null)
             throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
         if (!reader.hasMore()) {
@@ -68,18 +68,17 @@ public class ArgumentItemStack extends Argument<ItemStack> {
         // Parse the declared components
         if (reader.peek() == '[') {
             reader.consume('[');
+            final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
             do {
-                final NamespaceID componentId = reader.readNamespaceId();
-                final DataComponent<?> component = ItemComponent.fromNamespaceId(componentId);
+                final Key componentId = reader.readKey();
+                final DataComponent<?> component = DataComponent.fromKey(componentId);
                 if (component == null)
                     throw new ArgumentSyntaxException("Unknown item component", input, INVALID_COMPONENT);
 
                 reader.consume('=');
 
-                final BinaryTag nbt = reader.readTag();
-                BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
-                //noinspection unchecked
-                components.set((DataComponent<Object>) component, component.read(context, nbt));
+                final Result<Object> componentValueResult = (Result<Object>) component.decode(coder, reader.readTag());
+                components.set((DataComponent<Object>) component, componentValueResult.orElseThrow());
 
                 if (reader.peek() != ']')
                     reader.consume(',');
@@ -94,10 +93,10 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 throw new ArgumentSyntaxException("Item NBT must be compound", input, INVALID_NBT);
 
             final CompoundBinaryTag customData = CompoundBinaryTag.builder()
-                    .put(components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).nbt())
+                    .put(components.get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).nbt())
                     .put(compound)
                     .build();
-            components.set(ItemComponent.CUSTOM_DATA, new CustomData(customData));
+            components.set(DataComponents.CUSTOM_DATA, new CustomData(customData));
         }
 
         if (reader.hasMore())
@@ -115,7 +114,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
         private String input;
         private int index = 0;
 
-        public StringReader(@NotNull String input) {
+        public StringReader(String input) {
             this.input = input;
         }
 
@@ -139,22 +138,23 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             index++;
         }
 
-        public @NotNull NamespaceID readNamespaceId() {
+        public Key readKey() {
             char c;
             int start = index;
             while (hasMore() && (c = peek()) != '{' && c != '[' && c != '=') {
                 index++;
             }
-            return NamespaceID.from(input.substring(start, index));
+            return Key.key(input.substring(start, index));
         }
 
-        public @NotNull BinaryTag readTag() {
+        public BinaryTag readTag() {
             try {
-                var result = TagStringIOExt.readTagEmbedded(input.substring(index));
-                this.input = result.getValue();
+                StringBuilder remainder = new StringBuilder();
+                final BinaryTag result = MinestomAdventure.tagStringIO().asTag(input.substring(index), remainder);
+                this.input = remainder.toString();
                 this.index = 0;
 
-                return result.getKey();
+                return result;
             } catch (IOException e) {
                 throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
             }
