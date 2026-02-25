@@ -542,6 +542,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      */
     public void setTimeRate(int timeRate) {
         Check.stateCondition(timeRate < 0, "The time rate cannot be lower than 0");
+        if (timeRate == 0) setTimeUpdate(null);
         this.timeRate = timeRate;
     }
 
