@@ -5,7 +5,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 /**
  * A property enum, associated with one or more properties in {@link Property}.
- * Only subsets of values are valid for some blocks.
+ * Only subsets of values may be valid for some blocks.
  * <p>
  * Implementations are expected to be {@link Enum}s
  */

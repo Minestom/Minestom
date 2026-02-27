@@ -201,14 +201,14 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * Returns a typed property value from {@link #properties()}.
      *
      * @param property the property
-     * @return the typed property value, null if not present (due to an invalid property, or value)
+     * @return the typed property value
      * @throws IllegalArgumentException if the property or the value are invalid.
      */
     @Contract(pure = true)
     default <V, P extends Property<V>> V getProperty(P property) {
         final String stringValue = getProperty(property.key());
         if (stringValue == null) {
-            throw new IllegalArgumentException("block " + this + " does not have property '" + property.key() + "'");
+            throw new IllegalArgumentException("block " + this.state() + " does not have property '" + property.key() + "'");
         }
         return property.typedValueOf(stringValue);
     }

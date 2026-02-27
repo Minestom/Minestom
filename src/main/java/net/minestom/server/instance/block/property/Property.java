@@ -24,7 +24,7 @@ public sealed interface Property<T> extends Properties permits BooleanProperty, 
     T typedValueOf(String value);
 
     /**
-     * Gets the untyped string value associated with the typed value
+     * Gets the untyped string value associated with the typed value.
      *
      * @param value the typed value
      * @return the untyped value equivalent of the typed value
