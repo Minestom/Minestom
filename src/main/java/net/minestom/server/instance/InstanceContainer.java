@@ -571,9 +571,9 @@ public class InstanceContainer extends Instance {
         InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType());
         copiedInstance.srcInstance = this;
         copiedInstance.tagHandler = this.tagHandler.copy();
-        copiedInstance.setGenerator(generator);
-        copiedInstance.setChunkLoader(chunkLoader);
-        copiedInstance.setChunkSupplier(chunkSupplier);
+        copiedInstance.generator = generator;
+        copiedInstance.chunkLoader = chunkLoader;
+        copiedInstance.chunkSupplier =chunkSupplier;
         copiedInstance.lastBlockChangeTime = this.lastBlockChangeTime;
         for (Chunk chunk : chunks.values()) {
             final int chunkX = chunk.getChunkX();
