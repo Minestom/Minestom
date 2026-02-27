@@ -5,6 +5,10 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
+import net.minestom.server.instance.block.property.Property;
+import net.minestom.server.instance.block.property.enums.BedPart;
+import net.minestom.server.instance.block.property.enums.Facing;
+import net.minestom.server.instance.block.property.enums.RedstoneWireSide;
 import net.minestom.server.tag.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -120,5 +124,47 @@ public class BlockTest {
     void testBlockEntityRegistryLoading() {
         // Sanity to ensure we correctly load block entity types
         assertEquals(BlockEntityType.SIGN, Block.OAK_SIGN.registry().blockEntityType());
+    }
+
+    @Test
+    public void testTypedBooleanProperty() {
+        final Block block = Block.OAK_FENCE;
+        assertEquals("false", block.getProperty("south"));
+        assertFalse(block.getProperty(Property.SOUTH));
+
+        final Block withSouth = block.withProperty(Property.SOUTH, true);
+        assertEquals("true", withSouth.getProperty("south"));
+        assertTrue(withSouth.getProperty(Property.SOUTH));
+    }
+
+    @Test
+    public void testTypedIntegerProperty() {
+        final Block block = Block.WHEAT;
+        assertEquals("0", block.getProperty("age"));
+        assertEquals(0, block.getProperty(Property.AGE));
+
+        final Block withAge = block.withProperty(Property.AGE, 5);
+        assertEquals("5", withAge.getProperty("age"));
+        assertEquals(5, withAge.getProperty(Property.AGE));
+    }
+
+    @Test
+    public void testTypedEnumProperty() {
+        final Block block = Block.RED_BED;
+        assertEquals("foot", block.getProperty("part"));
+        assertEquals(BedPart.FOOT, block.getProperty(Property.BED_PART));
+        assertEquals("north", block.getProperty("facing")); // property "facing" has subsets, test it as well.
+        assertEquals(Facing.NORTH, block.getProperty(Property.FACING));
+
+        final Block withPart = block.withProperty(BedPart.HEAD);
+        assertEquals("head", withPart.getProperty("part"));
+        assertEquals(BedPart.HEAD, withPart.getProperty(Property.BED_PART));
+
+        final Block withFacing = block.withProperty(Property.FACING, Facing.EAST);
+        assertEquals("east", withFacing.getProperty("facing"));
+        assertEquals(Facing.EAST, withFacing.getProperty(Property.FACING));
+
+        // `RedstoneWireSide` is associated with multiple properties
+        assertThrows(IllegalArgumentException.class, () -> Block.REDSTONE_WIRE.withProperty(RedstoneWireSide.UP));
     }
 }
