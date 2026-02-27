@@ -573,6 +573,7 @@ public class InstanceContainer extends Instance {
         copiedInstance.tagHandler = this.tagHandler.copy();
         copiedInstance.setGenerator(generator);
         copiedInstance.setChunkLoader(chunkLoader);
+        copiedInstance.setChunkSupplier(chunkSupplier);
         copiedInstance.lastBlockChangeTime = this.lastBlockChangeTime;
         for (Chunk chunk : chunks.values()) {
             final int chunkX = chunk.getChunkX();
