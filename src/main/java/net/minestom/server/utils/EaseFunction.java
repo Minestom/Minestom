@@ -44,38 +44,38 @@ public interface EaseFunction {
     EaseFunction IN_ELASTIC = Ease::inElastic;
 
     // Only contains the named functions
-    Map<Key, EaseFunction> NAMED_BY_KEY = Map.ofEntries(
-            Map.entry(Key.key("constant"), CONSTANT),
-            Map.entry(Key.key("linear"), LINEAR),
-            Map.entry(Key.key("in_quad"), IN_QUAD),
-            Map.entry(Key.key("out_quad"), OUT_QUAD),
-            Map.entry(Key.key("in_out_quad"), IN_OUT_QUAD),
-            Map.entry(Key.key("in_cubic"), IN_CUBIC),
-            Map.entry(Key.key("out_cubic"), OUT_CUBIC),
-            Map.entry(Key.key("in_out_cubic"), IN_OUT_CUBIC),
-            Map.entry(Key.key("in_quart"), IN_QUART),
-            Map.entry(Key.key("out_quart"), OUT_QUART),
-            Map.entry(Key.key("in_out_quart"), IN_OUT_QUART),
-            Map.entry(Key.key("in_quint"), IN_QUINT),
-            Map.entry(Key.key("out_quint"), OUT_QUINT),
-            Map.entry(Key.key("in_out_quint"), IN_OUT_QUINT),
-            Map.entry(Key.key("in_sine"), IN_SINE),
-            Map.entry(Key.key("out_sine"), OUT_SINE),
-            Map.entry(Key.key("in_out_sine"), IN_OUT_SINE),
-            Map.entry(Key.key("in_expo"), IN_EXPO),
-            Map.entry(Key.key("out_expo"), OUT_EXPO),
-            Map.entry(Key.key("in_out_expo"), IN_OUT_EXPO),
-            Map.entry(Key.key("in_circ"), IN_CIRC),
-            Map.entry(Key.key("out_circ"), OUT_CIRC),
-            Map.entry(Key.key("in_out_circ"), IN_OUT_CIRC),
-            Map.entry(Key.key("in_back"), IN_BACK),
-            Map.entry(Key.key("out_back"), OUT_BACK),
-            Map.entry(Key.key("in_out_back"), IN_OUT_BACK),
-            Map.entry(Key.key("in_elastic"), IN_ELASTIC)
+    Map<String, EaseFunction> NAMED_BY_KEY = Map.ofEntries(
+            Map.entry("constant", CONSTANT),
+            Map.entry("linear", LINEAR),
+            Map.entry("in_quad", IN_QUAD),
+            Map.entry("out_quad", OUT_QUAD),
+            Map.entry("in_out_quad", IN_OUT_QUAD),
+            Map.entry("in_cubic", IN_CUBIC),
+            Map.entry("out_cubic", OUT_CUBIC),
+            Map.entry("in_out_cubic", IN_OUT_CUBIC),
+            Map.entry("in_quart", IN_QUART),
+            Map.entry("out_quart", OUT_QUART),
+            Map.entry("in_out_quart", IN_OUT_QUART),
+            Map.entry("in_quint", IN_QUINT),
+            Map.entry("out_quint", OUT_QUINT),
+            Map.entry("in_out_quint", IN_OUT_QUINT),
+            Map.entry("in_sine", IN_SINE),
+            Map.entry("out_sine", OUT_SINE),
+            Map.entry("in_out_sine", IN_OUT_SINE),
+            Map.entry("in_expo", IN_EXPO),
+            Map.entry("out_expo", OUT_EXPO),
+            Map.entry("in_out_expo", IN_OUT_EXPO),
+            Map.entry("in_circ", IN_CIRC),
+            Map.entry("out_circ", OUT_CIRC),
+            Map.entry("in_out_circ", IN_OUT_CIRC),
+            Map.entry("in_back", IN_BACK),
+            Map.entry("out_back", OUT_BACK),
+            Map.entry("in_out_back", IN_OUT_BACK),
+            Map.entry("in_elastic", IN_ELASTIC)
     );
-    Map<EaseFunction, Key> NAMED_BY_VALUE = NAMED_BY_KEY.entrySet().stream()
+    Map<EaseFunction, String> NAMED_BY_VALUE = NAMED_BY_KEY.entrySet().stream()
             .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
-    Codec<EaseFunction> CODEC = Codec.Either(Codec.KEY.transform(NAMED_BY_KEY::get, NAMED_BY_VALUE::get), CubicBezier.CODEC)
+    Codec<EaseFunction> CODEC = Codec.Either(Codec.STRING.transform(NAMED_BY_KEY::get, NAMED_BY_VALUE::get), CubicBezier.CODEC)
             .transform(either -> either.unify(f -> f, f -> f),
                     f -> f instanceof CubicBezier bezier ? Either.right(bezier) : Either.left(f));
 
