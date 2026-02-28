@@ -45,7 +45,7 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
         public <D> Result<SoundEvent> decode(Transcoder<D> coder, D value) {
             final Result<String> stringResult = coder.getString(value);
             if (stringResult instanceof Result.Ok(String string)) {
-                final SoundEvent soundEvent = BuiltinSoundEvent.get(string);
+                final SoundEvent soundEvent = SoundEvent.fromKey(string);
                 if (soundEvent == null) return new Result.Error<>("Unknown sound event: " + string);
                 return new Result.Ok<>(soundEvent);
             }

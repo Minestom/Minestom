@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
@@ -29,7 +30,7 @@ public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<CatVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("cat_variant"), REGISTRY_CODEC, RegistryData.Resource.CAT_VARIANTS);
+        return DynamicRegistry.create(BuiltinRegistries.CAT_VARIANT, REGISTRY_CODEC, RegistryData.Resource.CAT_VARIANTS);
     }
 
     Key assetId();

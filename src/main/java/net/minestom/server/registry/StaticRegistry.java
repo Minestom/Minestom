@@ -7,7 +7,12 @@ import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -15,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @ApiStatus.Internal
 final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registry<T> {
-    private final Key key;
+    private final RegistryKey<Registry<T>> registryKey;
     private final Map<Key, T> keyToValue;
     private final Map<T, RegistryKey<T>> valueToKey;
     private final List<T> idToValue;
@@ -23,12 +28,12 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags;
 
     StaticRegistry(
-            Key key,
+            RegistryKey<Registry<T>> registryKey,
             Map<Key, T> namespaces,
             ObjectArray<T> ids,
             Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags
     ) {
-        this.key = key;
+        this.registryKey = registryKey;
         this.keyToValue = Map.copyOf(namespaces);
         var valueToKey = new HashMap<T, RegistryKey<T>>(namespaces.size());
         for (var entry : namespaces.entrySet())
@@ -40,7 +45,12 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
 
     @Override
     public Key key() {
-        return this.key;
+        return this.registryKey.key();
+    }
+
+    @Override
+    public RegistryKey<Registry<T>> registryKey() {
+        return this.registryKey;
     }
 
     @Override
@@ -51,6 +61,15 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     @Override
     public @Nullable T get(Key key) {
         return this.keyToValue.get(key);
+    }
+
+    @Override
+    public T get(RegistryKey<T> key) {
+        @Nullable T value = this.keyToValue.get(key.key());
+        // We know these values should exist on the registry regardless the of annotation.
+        if (value == null)
+            throw new NullPointerException("%s is missing its entry for %s".formatted(key.key().asString(), this.registryKey.name()));
+        return value;
     }
 
     @Override
