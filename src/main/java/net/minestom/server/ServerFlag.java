@@ -66,6 +66,7 @@ public final class ServerFlag {
 
     // Entities
     public static final boolean ENFORCE_INTERACTION_LIMIT = booleanProperty("minestom.enforce-entity-interaction-range", true);
+    public static final boolean DO_NOT_ECHO_PLAYER_INPUT = booleanProperty("minestom.dont-echo-player-input", false); // If true, skip re-sending (echo) certain client inputs to them, resulting in a minor stutter as the client refreshes its state
 
     // Experimental/Unstable
     public static final boolean REGISTRY_UNSAFE_OPS = booleanProperty("minestom.registry.unsafe-ops");

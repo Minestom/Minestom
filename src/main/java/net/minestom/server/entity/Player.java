@@ -226,6 +226,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private final Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
 
     private final PlayerInputs inputs = new PlayerInputs();
+    // Flag set for certain client inputs to avoid re-sending client metadata back to itself
+    private boolean shouldFilterClientInput;
 
     // Resource packs
     record PendingResourcePack(boolean required, ResourcePackCallback callback) {
@@ -600,8 +602,52 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     @Override
     public void sendPacketToViewersAndSelf(SendablePacket packet) {
-        sendPacket(packet);
+        if (ServerFlag.DO_NOT_ECHO_PLAYER_INPUT && shouldFilterClientInput) {
+            // Check to see if we need to modify the packet
+            if (packet instanceof EntityMetaDataPacket(int entityId, Map<Integer, Metadata.Entry<?>> entries)
+                    && entityId == this.getEntityId()) {
+                // Filter if needed
+                var newEntries = filterMetadataEntries(entries);
+                sendPacket(new EntityMetaDataPacket(entityId, newEntries));
+            } else if (!(packet instanceof EntityAttributesPacket attr
+                    && attr.entityId() == getEntityId())) {
+                // Don't send sprint attribute to self. Any other packet is fine
+                sendPacket(packet);
+            }
+        } else {
+            // Normal send
+            sendPacket(packet);
+        }
         super.sendPacketToViewersAndSelf(packet);
+    }
+
+    private Map<Integer, Metadata.Entry<?>> filterMetadataEntries(Map<Integer, Metadata.Entry<?>> entries) {
+        boolean didFilter = false;
+        Map<Integer, Metadata.Entry<?>> modifiedEntries = new HashMap<>();
+        for (var entry : entries.entrySet()) {
+            // Index filter
+            if (entry.getKey() == MetadataDef.POSE.index() || entry.getKey() == MetadataDef.LivingEntity.LIVING_ENTITY_FLAGS.index()) {
+                // Mark as modified and don't add it to the entries
+                didFilter = true;
+            } else if (entry.getKey() == MetadataDef.ENTITY_FLAGS.index()) {
+                byte filterMask = (byte) (((MetadataDef.Entry.BitMask) MetadataDef.IS_CROUCHING).bitMask() | ((MetadataDef.Entry.BitMask) MetadataDef.IS_SPRINTING).bitMask());
+                if (entry.getValue().value() instanceof Byte flags) {
+                    byte result = (byte) (flags & ~filterMask);
+                    if (result != filterMask) {
+                        // We changed something, update
+                        didFilter = true;
+                    }
+                    modifiedEntries.put(MetadataDef.ENTITY_FLAGS.index(), Metadata.Byte(result));
+                }
+            } else {
+                modifiedEntries.put(entry.getKey(), entry.getValue());
+            }
+        }
+        if (!didFilter) {
+            return entries;
+        } else {
+            return modifiedEntries;
+        }
     }
 
     /**
@@ -2174,6 +2220,17 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     public void refreshAnswerKeepAlive(boolean answerKeepAlive) {
         this.answerKeepAlive = answerKeepAlive;
+    }
+
+    /**
+     * Sets an internal flag to disregard broadcasting some self metadata to this player if both this flag is true and {@link ServerFlag#DO_NOT_ECHO_PLAYER_INPUT} is false.
+     * <p></p>
+     * Not intended for use outside internal Minestom workings.
+     * @param shouldFilterClientInput Whether to filter some metadata about the player if other conditions are met.
+     */
+    @ApiStatus.Internal
+    public void setShouldFilterClientInput(boolean shouldFilterClientInput) {
+        this.shouldFilterClientInput = shouldFilterClientInput;
     }
 
     /**

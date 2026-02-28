@@ -23,7 +23,9 @@ import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.suite.api.BeforeSuite;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -376,5 +378,34 @@ public class PlayerIntegrationTest {
             assertFalse(event.isHoldingSprintKey());
         });
     }
+
+    @Test
+    public void testReceiveSelfMetadataPacket(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        Pos startingPlayerPos = new Pos(0, 42, 0);
+        var player = connection.connect(instance, startingPlayerPos);
+
+        var tracker = connection.trackIncoming(EntityMetaDataPacket.class);
+        player.addPacketToQueue(new ClientInputPacket(true, false, false, false, false, true, false));
+        player.interpretPacketQueue();
+        tracker.assertCount(2); // 1 for metadata ENTITY_FLAGS, 1 for pose update
+        EntityMetaDataPacket firstPacket = tracker.collect().getFirst();
+        assertTrue(player.isSneaking());
+        assertEquals(player.getEntityId(), firstPacket.entityId());
+        // The packet we get back has the crouching bit flag set
+        Byte firstValue = (Byte) firstPacket.entries().get(MetadataDef.ENTITY_FLAGS.index()).value();
+        assertEquals(firstValue, ((MetadataDef.Entry.BitMask) MetadataDef.IS_CROUCHING).bitMask());
+        tracker = connection.trackIncoming(EntityMetaDataPacket.class);
+        player.getEntityMeta().setOnFire(true);
+        // Check to see if we have both of the bits
+        tracker.assertSingle(secondPacket -> {
+            assertEquals(player.getEntityId(), secondPacket.entityId());
+            Byte secondValue = (Byte) secondPacket.entries().get(MetadataDef.ENTITY_FLAGS.index()).value();
+            Byte expected = (byte) (((MetadataDef.Entry.BitMask) MetadataDef.IS_CROUCHING).bitMask() | ((MetadataDef.Entry.BitMask) MetadataDef.IS_ON_FIRE).bitMask());
+            assertEquals(expected, secondValue);
+        });
+    }
+
 
 }
