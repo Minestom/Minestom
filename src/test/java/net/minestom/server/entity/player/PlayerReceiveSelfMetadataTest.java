@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-//@Disabled // Need to run only this set of tests manually due to the server flag being required to execute properly
+@Disabled // Need to run only this set of tests manually due to the server flag being required to execute properly
 public class PlayerReceiveSelfMetadataTest {
 
     @BeforeAll
