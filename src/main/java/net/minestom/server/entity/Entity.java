@@ -755,6 +755,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return uuid;
     }
 
+    public boolean hasPhysics() {
+        return hasPhysics;
+    }
+
+    /**
+     * Changes whether this entity has physics calculations running.
+     *
+     * @param hasPhysics whether the entity will have physics calculations running
+     */
+    public void setHasPhysics(boolean hasPhysics) {
+        this.hasPhysics = hasPhysics;
+    }
+
     /**
      * Returns false just after instantiation, set to true after calling {@link #setInstance(Instance)}.
      *
