@@ -12,7 +12,7 @@ public record ClientUpdateSignPacket(
         Point blockPosition,
         boolean isFrontText,
         List<String> lines
-) implements ClientPacket {
+) implements ClientPacket.Play {
     public ClientUpdateSignPacket {
         lines = List.copyOf(lines);
         if (lines.size() != 4) {

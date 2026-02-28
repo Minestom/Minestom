@@ -22,14 +22,14 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class Server {
     private volatile boolean stop;
 
-    private final PacketParser<ClientPacket> packetParser;
+    private final PacketParser.Client packetParser;
 
     private ServerSocketChannel serverSocket;
     private SocketAddress socketAddress;
     private String address;
     private int port;
 
-    public Server(PacketParser<ClientPacket> packetParser) {
+    public Server(PacketParser.Client packetParser) {
         this.packetParser = packetParser;
     }
 
@@ -171,7 +171,7 @@ public final class Server {
     }
 
     @ApiStatus.Internal
-    public PacketParser<ClientPacket> packetParser() {
+    public PacketParser.Client packetParser() {
         return packetParser;
     }
 
