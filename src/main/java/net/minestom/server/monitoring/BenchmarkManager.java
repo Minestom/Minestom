@@ -7,6 +7,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Stats;
 import net.minestom.server.utils.validate.Check;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,10 @@ import static net.minestom.server.MinecraftServer.THREAD_NAME_TICK;
 import static net.minestom.server.MinecraftServer.THREAD_NAME_TICK_SCHEDULER;
 
 /**
- * Small monitoring tools that can be used to check the current memory usage and Minestom threads CPU usage.
+ * Small monitoring tools that can be used to check Minestom thread CPU usage.
  * <p>
- * Needs to be enabled with {@link #enable(Duration)}. Memory can then be accessed with {@link #getUsedMemory()}
- * and the CPUs usage with {@link #getResultMap()} or {@link #getCpuMonitoringMessage()}.
+ * Needs to be enabled with {@link #enable(Duration)}.
+ * CPU usage can then be accessed with {@link #getResultMap()} or {@link #getCpuMonitoringMessage()}.
  * <p>
  * Be aware that this is not the most accurate method, you should use a proper java profiler depending on your needs.
  */
@@ -95,9 +96,11 @@ public final class BenchmarkManager {
      * Gets the heap memory used by the server in bytes.
      *
      * @return the memory used by the server
+     * @deprecated Use {@link Stats#getUsedMemory()} instead
      */
-    public long getUsedMemory() {
-        return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+    @Deprecated(forRemoval = true)
+    public static long getUsedMemory() {
+        return Stats.getUsedMemory();
     }
 
     public Map<String, ThreadResult> getResultMap() {
