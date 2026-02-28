@@ -165,8 +165,10 @@ public final class PlayerActionListener {
 
         // Reset server state
         final boolean isOffHand = hand == PlayerHand.OFF;
+        player.setShouldFilterClientInput(true);
         player.refreshActiveHand(false, isOffHand, cancelUseEvent.isRiptideSpinAttack());
         player.clearItemUse();
+        player.setShouldFilterClientInput(false);
     }
 
     private static void swapItemHand(Player player) {

@@ -28,6 +28,7 @@ import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
+import net.minestom.server.statistic.StatisticType;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.io.IOException;
@@ -161,6 +162,8 @@ public class Main {
                         .set(DataComponents.CUSTOM_NAME, Component.text("abc"))
                         .build()
         ));
+
+        System.out.println(StatisticType.SLEEP_IN_BED);
 
         new PlayerInit().init();
 
