@@ -38,7 +38,7 @@ class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Au
     }
 
     @Override
-    public Iterable<? extends Audience> players(Predicate<Player> filter) {
+    public Iterable<? extends Audience> players(Predicate<? super Player> filter) {
         return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).toList();
     }
 
@@ -66,17 +66,17 @@ class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Au
     }
 
     @Override
-    public Iterable<? extends Audience> custom(Key key, Predicate<Audience> filter) {
+    public Iterable<? extends Audience> custom(Key key, Predicate<? super Audience> filter) {
         return StreamSupport.stream(this.registry.of(key).spliterator(), false).filter(filter).toList();
     }
 
     @Override
-    public Iterable<? extends Audience> customs(Predicate<Audience> filter) {
+    public Iterable<? extends Audience> customs(Predicate<? super Audience> filter) {
         return this.registry.of(filter);
     }
 
     @Override
-    public Iterable<? extends Audience> all(Predicate<Audience> filter) {
+    public Iterable<? extends Audience> all(Predicate<? super Audience> filter) {
         return StreamSupport.stream(this.all().spliterator(), false).filter(filter).toList();
     }
 

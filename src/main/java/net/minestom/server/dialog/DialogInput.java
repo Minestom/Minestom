@@ -7,6 +7,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
@@ -51,7 +52,7 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public StructCodec<? extends DialogInput> codec() {
+        public StructCodec<Boolean> codec() {
             return CODEC;
         }
     }
@@ -81,7 +82,7 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public StructCodec<? extends DialogInput> codec() {
+        public StructCodec<NumberRange> codec() {
             return CODEC;
         }
     }
@@ -111,7 +112,7 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public StructCodec<? extends DialogInput> codec() {
+        public StructCodec<SingleOption> codec() {
             return CODEC;
         }
 
@@ -147,7 +148,7 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public StructCodec<? extends DialogInput> codec() {
+        public StructCodec<Text> codec() {
             return CODEC;
         }
 
@@ -159,6 +160,7 @@ public sealed interface DialogInput {
         }
     }
 
+    @ApiStatus.OverrideOnly
     StructCodec<? extends DialogInput> codec();
 
 }
