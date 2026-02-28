@@ -2344,7 +2344,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             final Vec old = chunksLoadedByClient;
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
             ChunkRange.chunksInRangeDiffering(newX, newZ, (int) old.x(), (int) old.z(),
-                    this.effectiveViewDistance(), chunkAdder, chunkRemover);
+                    this.effectiveViewDistance(), this.effectiveViewDistance(), chunkAdder, chunkRemover);
             this.chunksLoadedByClient = new Vec(newX, newZ);
         }
     }
@@ -2401,7 +2401,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public int effectiveViewDistance() {
         Instance instance = this.instance;
-        int maxViewDistance = instance != null ? instance.viewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
+        int maxViewDistance = instance != null ? instance.getChunkViewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
         return Math.min(settings.viewDistance(), maxViewDistance) + 1;
     }
 
