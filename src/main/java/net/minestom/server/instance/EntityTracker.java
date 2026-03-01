@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.Viewable;
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ExperienceOrb;
@@ -78,6 +79,11 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
      */
     <T extends Entity> void nearbyEntities(Point point, double range,
                                            Target<T> target, Consumer<T> query);
+
+    /**
+     * Gets the entities within an area.
+     */
+    <T extends Entity> void areaEntities(Area.Cuboid area, Target<T> target, Consumer<T> query);
 
     /**
      * Gets all the entities tracked by this class.
