@@ -61,8 +61,8 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return a new block with its property changed
      * @throws IllegalArgumentException if the property or value are invalid
      */
-    default <V, P extends Property<V>> Block withProperty(P property, V value) {
-        return withProperty(property.key(), property.untypedValueOf(value));
+    default <V, P extends Property<? super V>> Block withProperty(P property, V value) {
+        return withProperty(property.key(), property.valueOf(value));
     }
 
     /**
@@ -73,13 +73,13 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @throws IllegalArgumentException if the value is associated with multiple properties,
      * the property is invalid, or the value is invalid
      */
-    default <V extends PropertyEnum> Block withProperty(V value) {
-        final String property = value.property();
+    default Block withProperty(PropertyEnum value) {
+        final String property = value.key();
         if (property == null) {
             throw new IllegalArgumentException("property enum '" +
                     value.getClass().getSimpleName() + "' has multiple properties associated with it");
         }
-        return withProperty(property, value.untypedValue());
+        return withProperty(property, value.value());
     }
 
     /**
@@ -201,16 +201,14 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * Returns a typed property value from {@link #properties()}.
      *
      * @param property the property
-     * @return the typed property value
-     * @throws IllegalArgumentException if the property or the value are invalid.
+     * @return the typed property value, or null if the property or value is invalid.
      */
     @Contract(pure = true)
-    default <V, P extends Property<V>> V getProperty(P property) {
+    @UnknownNullability
+    default <V, P extends Property<? extends V>> V getProperty(P property) {
         final String stringValue = getProperty(property.key());
-        if (stringValue == null) {
-            throw new IllegalArgumentException("block " + this.state() + " does not have property '" + property.key() + "'");
-        }
-        return property.typedValueOf(stringValue);
+        if (stringValue == null) return null;
+        return property.parse(stringValue);
     }
 
     @Contract(pure = true)

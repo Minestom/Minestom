@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -18,13 +17,12 @@ public enum RedstoneWireSide implements PropertyEnum {
 
     @Override
     @Nullable
-    public String property() {
+    public String key() {
         return null;
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case UP -> "up";
             case SIDE -> "side";
@@ -33,7 +31,7 @@ public enum RedstoneWireSide implements PropertyEnum {
     }
 
     @Nullable
-    public static RedstoneWireSide typedValueOf(String value) {
+    public static RedstoneWireSide parse(String value) {
         return switch (value) {
             case "up" -> UP;
             case "side" -> SIDE;

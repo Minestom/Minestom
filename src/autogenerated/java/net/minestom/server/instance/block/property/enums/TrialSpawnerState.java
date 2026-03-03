@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,14 +22,12 @@ public enum TrialSpawnerState implements PropertyEnum {
     COOLDOWN;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "trial_spawner_state";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case INACTIVE -> "inactive";
             case WAITING_FOR_PLAYERS -> "waiting_for_players";
@@ -42,7 +39,7 @@ public enum TrialSpawnerState implements PropertyEnum {
     }
 
     @Nullable
-    public static TrialSpawnerState typedValueOf(String value) {
+    public static TrialSpawnerState parse(String value) {
         return switch (value) {
             case "inactive" -> INACTIVE;
             case "waiting_for_players" -> WAITING_FOR_PLAYERS;

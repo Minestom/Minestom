@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -21,14 +20,12 @@ public enum StairsShape implements PropertyEnum {
     OUTER_RIGHT;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "shape";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case STRAIGHT -> "straight";
             case INNER_LEFT -> "inner_left";
@@ -39,7 +36,7 @@ public enum StairsShape implements PropertyEnum {
     }
 
     @Nullable
-    public static StairsShape typedValueOf(String value) {
+    public static StairsShape parse(String value) {
         return switch (value) {
             case "straight" -> STRAIGHT;
             case "inner_left" -> INNER_LEFT;

@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,14 +18,12 @@ public enum BigDripleafTilt implements PropertyEnum {
     FULL;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "tilt";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case NONE -> "none";
             case UNSTABLE -> "unstable";
@@ -36,7 +33,7 @@ public enum BigDripleafTilt implements PropertyEnum {
     }
 
     @Nullable
-    public static BigDripleafTilt typedValueOf(String value) {
+    public static BigDripleafTilt parse(String value) {
         return switch (value) {
             case "none" -> NONE;
             case "unstable" -> UNSTABLE;

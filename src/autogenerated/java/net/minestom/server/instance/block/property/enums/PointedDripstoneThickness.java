@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -21,14 +20,12 @@ public enum PointedDripstoneThickness implements PropertyEnum {
     BASE;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "thickness";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case TIP_MERGE -> "tip_merge";
             case TIP -> "tip";
@@ -39,7 +36,7 @@ public enum PointedDripstoneThickness implements PropertyEnum {
     }
 
     @Nullable
-    public static PointedDripstoneThickness typedValueOf(String value) {
+    public static PointedDripstoneThickness parse(String value) {
         return switch (value) {
             case "tip_merge" -> TIP_MERGE;
             case "tip" -> TIP;

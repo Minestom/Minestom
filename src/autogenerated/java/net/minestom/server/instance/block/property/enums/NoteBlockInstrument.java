@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -57,14 +56,12 @@ public enum NoteBlockInstrument implements PropertyEnum {
     CUSTOM_HEAD;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "instrument";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case HARP -> "harp";
             case BASEDRUM -> "basedrum";
@@ -93,7 +90,7 @@ public enum NoteBlockInstrument implements PropertyEnum {
     }
 
     @Nullable
-    public static NoteBlockInstrument typedValueOf(String value) {
+    public static NoteBlockInstrument parse(String value) {
         return switch (value) {
             case "harp" -> HARP;
             case "basedrum" -> BASEDRUM;

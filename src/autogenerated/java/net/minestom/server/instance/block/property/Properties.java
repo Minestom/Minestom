@@ -182,87 +182,87 @@ sealed interface Properties permits Property {
 
     Property<Integer> HONEY_LEVEL = new IntegerProperty("honey_level");
 
-    Property<Axis> AXIS = new EnumProperty<>("axis", Axis::typedValueOf);
+    Property<Axis> AXIS = new EnumProperty<>("axis", Axis::parse);
 
-    Property<Facing> FACING = new EnumProperty<>("facing", Facing::typedValueOf);
+    Property<Facing> FACING = new EnumProperty<>("facing", Facing::parse);
 
-    Property<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT = new EnumProperty<>("instrument", NoteBlockInstrument::typedValueOf);
+    Property<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT = new EnumProperty<>("instrument", NoteBlockInstrument::parse);
 
-    Property<BedPart> BED_PART = new EnumProperty<>("part", BedPart::typedValueOf);
+    Property<BedPart> BED_PART = new EnumProperty<>("part", BedPart::parse);
 
-    Property<PistonType> PISTON_TYPE = new EnumProperty<>("type", PistonType::typedValueOf);
+    Property<PistonType> PISTON_TYPE = new EnumProperty<>("type", PistonType::parse);
 
-    Property<ShelfSideChain> SHELF_SIDE_CHAIN = new EnumProperty<>("side_chain", ShelfSideChain::typedValueOf);
+    Property<ShelfSideChain> SHELF_SIDE_CHAIN = new EnumProperty<>("side_chain", ShelfSideChain::parse);
 
-    Property<CreakingHeartState> CREAKING_HEART_STATE = new EnumProperty<>("creaking_heart_state", CreakingHeartState::typedValueOf);
+    Property<CreakingHeartState> CREAKING_HEART_STATE = new EnumProperty<>("creaking_heart_state", CreakingHeartState::parse);
 
-    Property<TopBottomHalf> TOP_BOTTOM_HALF = new EnumProperty<>("half", TopBottomHalf::typedValueOf);
+    Property<TopBottomHalf> TOP_BOTTOM_HALF = new EnumProperty<>("half", TopBottomHalf::parse);
 
-    Property<UpperLowerHalf> UPPER_LOWER_HALF = new EnumProperty<>("half", UpperLowerHalf::typedValueOf);
+    Property<UpperLowerHalf> UPPER_LOWER_HALF = new EnumProperty<>("half", UpperLowerHalf::parse);
 
-    Property<StairsShape> STAIRS_SHAPE = new EnumProperty<>("shape", StairsShape::typedValueOf);
+    Property<StairsShape> STAIRS_SHAPE = new EnumProperty<>("shape", StairsShape::parse);
 
-    Property<ChestType> CHEST_TYPE = new EnumProperty<>("type", ChestType::typedValueOf);
+    Property<ChestType> CHEST_TYPE = new EnumProperty<>("type", ChestType::parse);
 
-    Property<RedstoneWireSide> REDSTONE_WIRE_EAST = new EnumProperty<>("east", RedstoneWireSide::typedValueOf);
+    Property<RedstoneWireSide> REDSTONE_WIRE_EAST = new EnumProperty<>("east", RedstoneWireSide::parse);
 
-    Property<RedstoneWireSide> REDSTONE_WIRE_NORTH = new EnumProperty<>("north", RedstoneWireSide::typedValueOf);
+    Property<RedstoneWireSide> REDSTONE_WIRE_NORTH = new EnumProperty<>("north", RedstoneWireSide::parse);
 
-    Property<RedstoneWireSide> REDSTONE_WIRE_SOUTH = new EnumProperty<>("south", RedstoneWireSide::typedValueOf);
+    Property<RedstoneWireSide> REDSTONE_WIRE_SOUTH = new EnumProperty<>("south", RedstoneWireSide::parse);
 
-    Property<RedstoneWireSide> REDSTONE_WIRE_WEST = new EnumProperty<>("west", RedstoneWireSide::typedValueOf);
+    Property<RedstoneWireSide> REDSTONE_WIRE_WEST = new EnumProperty<>("west", RedstoneWireSide::parse);
 
-    Property<DoorHinge> DOOR_HINGE = new EnumProperty<>("hinge", DoorHinge::typedValueOf);
+    Property<DoorHinge> DOOR_HINGE = new EnumProperty<>("hinge", DoorHinge::parse);
 
-    Property<RailShape> RAIL_SHAPE = new EnumProperty<>("shape", RailShape::typedValueOf);
+    Property<RailShape> RAIL_SHAPE = new EnumProperty<>("shape", RailShape::parse);
 
-    Property<ButtonFace> BUTTON_FACE = new EnumProperty<>("face", ButtonFace::typedValueOf);
+    Property<ButtonFace> BUTTON_FACE = new EnumProperty<>("face", ButtonFace::parse);
 
-    Property<LeverFace> LEVER_FACE = new EnumProperty<>("face", LeverFace::typedValueOf);
+    Property<LeverFace> LEVER_FACE = new EnumProperty<>("face", LeverFace::parse);
 
-    Property<GrindstoneFace> GRINDSTONE_FACE = new EnumProperty<>("face", GrindstoneFace::typedValueOf);
+    Property<GrindstoneFace> GRINDSTONE_FACE = new EnumProperty<>("face", GrindstoneFace::parse);
 
-    Property<SlabType> SLAB_TYPE = new EnumProperty<>("type", SlabType::typedValueOf);
+    Property<SlabType> SLAB_TYPE = new EnumProperty<>("type", SlabType::parse);
 
-    Property<WallSide> WALL_EAST = new EnumProperty<>("east", WallSide::typedValueOf);
+    Property<WallSide> WALL_EAST = new EnumProperty<>("east", WallSide::parse);
 
-    Property<WallSide> WALL_NORTH = new EnumProperty<>("north", WallSide::typedValueOf);
+    Property<WallSide> WALL_NORTH = new EnumProperty<>("north", WallSide::parse);
 
-    Property<WallSide> WALL_SOUTH = new EnumProperty<>("south", WallSide::typedValueOf);
+    Property<WallSide> WALL_SOUTH = new EnumProperty<>("south", WallSide::parse);
 
-    Property<WallSide> WALL_WEST = new EnumProperty<>("west", WallSide::typedValueOf);
+    Property<WallSide> WALL_WEST = new EnumProperty<>("west", WallSide::parse);
 
-    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_EAST = new EnumProperty<>("east", PaleMossCarpetSide::typedValueOf);
+    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_EAST = new EnumProperty<>("east", PaleMossCarpetSide::parse);
 
-    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_NORTH = new EnumProperty<>("north", PaleMossCarpetSide::typedValueOf);
+    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_NORTH = new EnumProperty<>("north", PaleMossCarpetSide::parse);
 
-    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_SOUTH = new EnumProperty<>("south", PaleMossCarpetSide::typedValueOf);
+    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_SOUTH = new EnumProperty<>("south", PaleMossCarpetSide::parse);
 
-    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_WEST = new EnumProperty<>("west", PaleMossCarpetSide::typedValueOf);
+    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_WEST = new EnumProperty<>("west", PaleMossCarpetSide::parse);
 
-    Property<ComparatorMode> COMPARATOR_MODE = new EnumProperty<>("mode", ComparatorMode::typedValueOf);
+    Property<ComparatorMode> COMPARATOR_MODE = new EnumProperty<>("mode", ComparatorMode::parse);
 
-    Property<BambooLeaves> BAMBOO_LEAVES = new EnumProperty<>("leaves", BambooLeaves::typedValueOf);
+    Property<BambooLeaves> BAMBOO_LEAVES = new EnumProperty<>("leaves", BambooLeaves::parse);
 
-    Property<BellAttachment> BELL_ATTACHMENT = new EnumProperty<>("attachment", BellAttachment::typedValueOf);
+    Property<BellAttachment> BELL_ATTACHMENT = new EnumProperty<>("attachment", BellAttachment::parse);
 
-    Property<StructureBlockMode> STRUCTURE_BLOCK_MODE = new EnumProperty<>("mode", StructureBlockMode::typedValueOf);
+    Property<StructureBlockMode> STRUCTURE_BLOCK_MODE = new EnumProperty<>("mode", StructureBlockMode::parse);
 
-    Property<Orientation> ORIENTATION = new EnumProperty<>("orientation", Orientation::typedValueOf);
+    Property<Orientation> ORIENTATION = new EnumProperty<>("orientation", Orientation::parse);
 
-    Property<TestBlockMode> TEST_BLOCK_MODE = new EnumProperty<>("mode", TestBlockMode::typedValueOf);
+    Property<TestBlockMode> TEST_BLOCK_MODE = new EnumProperty<>("mode", TestBlockMode::parse);
 
-    Property<SculkSensorPhase> SCULK_SENSOR_PHASE = new EnumProperty<>("sculk_sensor_phase", SculkSensorPhase::typedValueOf);
+    Property<SculkSensorPhase> SCULK_SENSOR_PHASE = new EnumProperty<>("sculk_sensor_phase", SculkSensorPhase::parse);
 
-    Property<CopperGolemPose> COPPER_GOLEM_POSE = new EnumProperty<>("copper_golem_pose", CopperGolemPose::typedValueOf);
+    Property<CopperGolemPose> COPPER_GOLEM_POSE = new EnumProperty<>("copper_golem_pose", CopperGolemPose::parse);
 
-    Property<PointedDripstoneThickness> POINTED_DRIPSTONE_THICKNESS = new EnumProperty<>("thickness", PointedDripstoneThickness::typedValueOf);
+    Property<PointedDripstoneThickness> POINTED_DRIPSTONE_THICKNESS = new EnumProperty<>("thickness", PointedDripstoneThickness::parse);
 
-    Property<PointedDripstoneVerticalDirection> POINTED_DRIPSTONE_VERTICAL_DIRECTION = new EnumProperty<>("vertical_direction", PointedDripstoneVerticalDirection::typedValueOf);
+    Property<PointedDripstoneVerticalDirection> POINTED_DRIPSTONE_VERTICAL_DIRECTION = new EnumProperty<>("vertical_direction", PointedDripstoneVerticalDirection::parse);
 
-    Property<BigDripleafTilt> BIG_DRIPLEAF_TILT = new EnumProperty<>("tilt", BigDripleafTilt::typedValueOf);
+    Property<BigDripleafTilt> BIG_DRIPLEAF_TILT = new EnumProperty<>("tilt", BigDripleafTilt::parse);
 
-    Property<TrialSpawnerState> TRIAL_SPAWNER_STATE = new EnumProperty<>("trial_spawner_state", TrialSpawnerState::typedValueOf);
+    Property<TrialSpawnerState> TRIAL_SPAWNER_STATE = new EnumProperty<>("trial_spawner_state", TrialSpawnerState::parse);
 
-    Property<VaultState> VAULT_STATE = new EnumProperty<>("vault_state", VaultState::typedValueOf);
+    Property<VaultState> VAULT_STATE = new EnumProperty<>("vault_state", VaultState::parse);
 }

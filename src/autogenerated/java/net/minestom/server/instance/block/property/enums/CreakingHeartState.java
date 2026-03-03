@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -17,14 +16,12 @@ public enum CreakingHeartState implements PropertyEnum {
     AWAKE;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "creaking_heart_state";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case UPROOTED -> "uprooted";
             case DORMANT -> "dormant";
@@ -33,7 +30,7 @@ public enum CreakingHeartState implements PropertyEnum {
     }
 
     @Nullable
-    public static CreakingHeartState typedValueOf(String value) {
+    public static CreakingHeartState parse(String value) {
         return switch (value) {
             case "uprooted" -> UPROOTED;
             case "dormant" -> DORMANT;

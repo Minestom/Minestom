@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,14 +14,12 @@ public enum DoorHinge implements PropertyEnum {
     RIGHT;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "hinge";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case LEFT -> "left";
             case RIGHT -> "right";
@@ -30,7 +27,7 @@ public enum DoorHinge implements PropertyEnum {
     }
 
     @Nullable
-    public static DoorHinge typedValueOf(String value) {
+    public static DoorHinge parse(String value) {
         return switch (value) {
             case "left" -> LEFT;
             case "right" -> RIGHT;

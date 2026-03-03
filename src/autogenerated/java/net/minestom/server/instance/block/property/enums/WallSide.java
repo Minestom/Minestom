@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -18,13 +17,12 @@ public enum WallSide implements PropertyEnum {
 
     @Override
     @Nullable
-    public String property() {
+    public String key() {
         return null;
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case NONE -> "none";
             case LOW -> "low";
@@ -33,7 +31,7 @@ public enum WallSide implements PropertyEnum {
     }
 
     @Nullable
-    public static WallSide typedValueOf(String value) {
+    public static WallSide parse(String value) {
         return switch (value) {
             case "none" -> NONE;
             case "low" -> LOW;

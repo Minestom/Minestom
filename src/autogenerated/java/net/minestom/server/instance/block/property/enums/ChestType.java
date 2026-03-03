@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -17,14 +16,12 @@ public enum ChestType implements PropertyEnum {
     RIGHT;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "type";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case SINGLE -> "single";
             case LEFT -> "left";
@@ -33,7 +30,7 @@ public enum ChestType implements PropertyEnum {
     }
 
     @Nullable
-    public static ChestType typedValueOf(String value) {
+    public static ChestType parse(String value) {
         return switch (value) {
             case "single" -> SINGLE;
             case "left" -> LEFT;

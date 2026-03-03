@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,14 +18,12 @@ public enum ShelfSideChain implements PropertyEnum {
     LEFT;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "side_chain";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case UNCONNECTED -> "unconnected";
             case RIGHT -> "right";
@@ -36,7 +33,7 @@ public enum ShelfSideChain implements PropertyEnum {
     }
 
     @Nullable
-    public static ShelfSideChain typedValueOf(String value) {
+    public static ShelfSideChain parse(String value) {
         return switch (value) {
             case "unconnected" -> UNCONNECTED;
             case "right" -> RIGHT;

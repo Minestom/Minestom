@@ -15,11 +15,11 @@ public interface PropertyEnum {
      */
     @Contract(pure = true)
     @UnknownNullability
-    String property();
+    String key();
 
     /**
      * @return the string value associated with this enum constant.
      */
     @Contract(pure = true)
-    String untypedValue();
+    String value();
 }

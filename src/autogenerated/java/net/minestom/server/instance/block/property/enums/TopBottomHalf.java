@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,14 +14,12 @@ public enum TopBottomHalf implements PropertyEnum {
     BOTTOM;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "half";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case TOP -> "top";
             case BOTTOM -> "bottom";
@@ -30,7 +27,7 @@ public enum TopBottomHalf implements PropertyEnum {
     }
 
     @Nullable
-    public static TopBottomHalf typedValueOf(String value) {
+    public static TopBottomHalf parse(String value) {
         return switch (value) {
             case "top" -> TOP;
             case "bottom" -> BOTTOM;

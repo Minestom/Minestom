@@ -1,21 +1,20 @@
 package net.minestom.server.instance.block.property;
 
-import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
-@ApiStatus.Internal
-public record IntegerProperty(String key) implements Property<Integer> {
+record IntegerProperty(String key) implements Property<Integer> {
     @Override
-    public Integer typedValueOf(String value) {
+    @Nullable
+    public Integer parse(String value) {
         try {
             return Integer.valueOf(value);
         } catch (NumberFormatException _) {
-            throw new IllegalArgumentException(
-                    "'" + value + "' is not a valid integer value for property '" + key + "'");
+            return null;
         }
     }
 
     @Override
-    public String untypedValueOf(Integer value) {
+    public String valueOf(Integer value) {
         return value.toString();
     }
 }

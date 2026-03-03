@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,14 +18,12 @@ public enum StructureBlockMode implements PropertyEnum {
     DATA;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "mode";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case SAVE -> "save";
             case LOAD -> "load";
@@ -36,7 +33,7 @@ public enum StructureBlockMode implements PropertyEnum {
     }
 
     @Nullable
-    public static StructureBlockMode typedValueOf(String value) {
+    public static StructureBlockMode parse(String value) {
         return switch (value) {
             case "save" -> SAVE;
             case "load" -> LOAD;

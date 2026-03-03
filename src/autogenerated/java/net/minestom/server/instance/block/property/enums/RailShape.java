@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -31,14 +30,12 @@ public enum RailShape implements PropertyEnum {
     NORTH_EAST;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "shape";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case NORTH_SOUTH -> "north_south";
             case EAST_WEST -> "east_west";
@@ -54,7 +51,7 @@ public enum RailShape implements PropertyEnum {
     }
 
     @Nullable
-    public static RailShape typedValueOf(String value) {
+    public static RailShape parse(String value) {
         return switch (value) {
             case "north_south" -> NORTH_SOUTH;
             case "east_west" -> EAST_WEST;

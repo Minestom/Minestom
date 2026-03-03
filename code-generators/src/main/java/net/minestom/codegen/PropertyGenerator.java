@@ -3,7 +3,6 @@ package net.minestom.codegen;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
@@ -66,7 +65,7 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         final ParameterizedTypeName integerProperty = ParameterizedTypeName.get(implCN, TypeName.get(Integer.class));
         final Map<String, Property> integerProperties = new LinkedHashMap<>();
         properties.properties.entrySet().removeIf(entry -> {
-            if (entry.getValue().type() != 1) return false; // not integer property
+            if (entry.getValue().type() != PropertyValuesType.INTEGER) return false; // not integer property
             entry.getValue().properties.forEach((name, property) ->
                     integerProperties.computeIfAbsent(name, Property::new).registerBlocks(property.blocks));
             return true;
@@ -74,7 +73,7 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         integerProperties.forEach((name, property) -> {
             Identifier fieldIdentifier = property.getIdentifier();
             if (!usedIdentifiers.add(fieldIdentifier)) {
-                fieldIdentifier = fieldIdentifier.withPrefix(new String[]{"int"});
+                fieldIdentifier = fieldIdentifier.withPrefix(List.of("int"));
                 if (!usedIdentifiers.add(fieldIdentifier)) {
                     throw new RuntimeException("name collision for '" + name + "'");
                 }
@@ -128,7 +127,7 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
                 .builder(ParameterizedTypeName.get(implCN, currentEnum), identifier.constantName())
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer(
-                        "new $T<>($S, $T::typedValueOf)",
+                        "new $T<>($S, $T::parse)",
                         enumPropertyImpl, namedProperty.property.name, currentEnum)
                 .build()).build();
         });
@@ -155,22 +154,21 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         }
         fromPropStringSwitch.add("default -> null;\n");
 
-        final MethodSpec.Builder typedValueOf = MethodSpec.methodBuilder("typedValueOf")
+        final MethodSpec.Builder typedValueOf = MethodSpec.methodBuilder("parse")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addAnnotation(Nullable.class)
                 .addParameter(ParameterSpec.builder(String.class, "value").build())
                 .returns(enumCN).addCode(fromPropStringSwitch.unindent().add("};").build());
-        final MethodSpec.Builder untypedValue = MethodSpec.methodBuilder("untypedValue")
+        final MethodSpec.Builder untypedValue = MethodSpec.methodBuilder("value")
                 .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Override.class).addAnnotation(NotNull.class)
+                .addAnnotation(Override.class)
                 .returns(String.class).addCode(toPropStringSwitch.unindent().add("};").build());
-        final MethodSpec.Builder property = MethodSpec.methodBuilder("property")
+        final MethodSpec.Builder property = MethodSpec.methodBuilder("key")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .returns(String.class);
         if (propertyValues.properties.size() == 1) {
-            property.addCode("return $S;", propertyValues.properties.keySet().iterator().next())
-                    .addAnnotation(NotNull.class);
+            property.addCode("return $S;", propertyValues.properties.keySet().iterator().next());
         } else {
             property.addCode("return null;")
                     .addAnnotation(Nullable.class);
@@ -201,7 +199,7 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         private interface Prefixable<T extends Prefixable<T>> {
             boolean canPrefix();
 
-            String[] prefix();
+            List<String> prefix();
 
             T prefixedValue();
         }
@@ -218,7 +216,7 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         }
 
         @Override
-        public String[] prefix() {
+        public List<String> prefix() {
             return values.prefix();
         }
 
@@ -228,19 +226,19 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         }
     }
 
-    private record Identifier(String[] words) {
+    private record Identifier(List<String> words) {
         Identifier(String blockIdentifier) {
-            this(blockIdentifier.split("_"));
+            this(List.of(blockIdentifier.split("_")));
         }
 
         String constantName() {
-            return Arrays.stream(words)
+            return words.stream()
                     .map((word) -> word.toUpperCase(Locale.US))
                     .collect(Collectors.joining("_"));
         }
 
         String enumName() {
-            return Arrays.stream(words).map((word) -> {
+            return words.stream().map((word) -> {
                 if (word.length() <= 1) return word.toUpperCase(Locale.US);
                 final char[] letters = word.toCharArray();
                 letters[0] = Character.toUpperCase(letters[0]);
@@ -248,30 +246,29 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
             }).collect(Collectors.joining());
         }
 
-        Identifier withPrefix(String[] words) {
-            final String[] newWords = new String[this.words.length + words.length];
-            System.arraycopy(words, 0, newWords, 0, words.length);
-            System.arraycopy(this.words, 0, newWords, words.length, this.words.length);
+        Identifier withPrefix(List<String> words) {
+            final List<String> newWords = new ArrayList<>(words);
+            newWords.addAll(this.words);
             return new Identifier(newWords);
         }
 
         int indexOf(String word) {
-            for (int i = 0; i < words.length; i++) {
-                if (words[i].equals(word)) return i;
+            for (int i = 0; i < words.size(); i++) {
+                if (words.get(i).equals(word)) return i;
             }
             return -1;
         }
 
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof Identifier(String[] otherWords))) return false;
+            if (!(o instanceof Identifier(List<String> otherWords))) return false;
 
-            return Arrays.equals(words, otherWords);
+            return words.equals(otherWords);
         }
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(words);
+            return words.hashCode();
         }
     }
 
@@ -307,6 +304,12 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         }
     }
 
+    private enum PropertyValuesType {
+        BOOLEAN,
+        INTEGER,
+        ENUM
+    }
+
     private static class PropertyValues implements NameAllocator.Prefixable<PropertyValues> {
         final List<String> values;
         final Map<String, Property> properties = new LinkedHashMap<>();
@@ -314,8 +317,8 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         @Nullable List<PropertyValues> split = null;
 
         // -1: unknown, 0: boolean, 1: integer, 2: enum
-        private int type = -1;
-        private String @Nullable [] prefix = null;
+        private @Nullable PropertyValuesType type = null;
+        private @Nullable List<String> prefix = null;
 
         private PropertyValues(List<String> values) {
             this.values = values;
@@ -325,14 +328,14 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
             properties.computeIfAbsent(property, Property::new).registerBlock(block);
         }
 
-        int type() {
-            if (type >= 0) return type;
+        PropertyValuesType type() {
+            if (type != null) return type;
             if (values.getFirst().equals("true")) {
                 if (!values.get(1).equals("false")) {
                     throw new RuntimeException("Partial boolean found! properties: " +
                             properties.keySet().stream().toList());
                 }
-                type = 0; // boolean property
+                type = PropertyValuesType.BOOLEAN; // boolean property
             } else if (values.stream().anyMatch(value -> value.charAt(0) >= '0' && value.charAt(0) <= '9')) {
                 // java doesn't allow identifiers to start with numbers
                 try {
@@ -348,9 +351,9 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
                     throw new RuntimeException("Partial integer found! properties: " +
                             properties.keySet().stream().toList());
                 }
-                type = 1; // integer property
+                type = PropertyValuesType.INTEGER; // integer property
             } else {
-                type = 2; // enum property
+                type = PropertyValuesType.ENUM; // enum property
             }
 
             return type;
@@ -414,18 +417,18 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
             return !prefixIdentifier;
         }
 
-        public String[] prefix() {
+        public List<String> prefix() {
             if (prefix != null) return prefix;
             return prefix = switch (type()) {
-                case 0 -> new String[]{"boolean"};
-                case 1 -> new String[]{"int"};
-                default -> {
+                case BOOLEAN -> List.of("boolean");
+                case INTEGER -> List.of("int");
+                case ENUM -> {
                     if (values.size() > 2 || values.stream().anyMatch(value -> value.contains("_"))) {
                         yield values.stream()
                                 .map((word) -> String.valueOf(word.charAt(0)))
-                                .toList().toArray(new String[0]);
+                                .toList();
                     } else {
-                        yield values.toArray(new String[0]);
+                        yield values;
                     }
                 }
             };
@@ -454,7 +457,7 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
         void registerBlock(Identifier block) {
             blocks.add(block);
             commonPart = null;
-            suffixWordSorted.computeIfAbsent(block.words[block.words.length - 1],
+            suffixWordSorted.computeIfAbsent(block.words.getLast(),
                     (_) -> new ArrayList<>()).add(block);
         }
 
@@ -464,7 +467,7 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
 
         @Nullable
         Map<String, List<Identifier>> trySplit() {
-            if (commonPart().words.length > 0) return null;
+            if (!commonPart().words.isEmpty()) return null;
             if (suffixWordSorted.size() <= 1 || suffixWordSorted.size() >= 4) return null;
 
             for (final var entry : suffixWordSorted.entrySet()) {
@@ -497,9 +500,9 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
     }
 
     private static Identifier removeMatchingPart(Identifier commonPart, String property) {
-        if (commonPart.words.length == 0) return new Identifier(property);
+        if (commonPart.words.isEmpty()) return new Identifier(property);
 
-        final String[] propertyWords = property.split("_");
+        final List<String> propertyWords = List.of(property.split("_"));
         for (final String commonWord : commonPart.words) {
             for (final String propertyWord : propertyWords) {
                 if (commonWord.equals(propertyWord)) {
@@ -511,12 +514,12 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
     }
 
     private static Identifier getCommonPart(List<Identifier> blocks) {
-        if (blocks.isEmpty()) return new Identifier(new String[0]);
-        Identifier result = new Identifier(new String[0]);
+        if (blocks.isEmpty()) return new Identifier(List.of());
+        Identifier result = new Identifier(List.of());
         final Identifier first = blocks.getFirst();
-        for (int i = 0; i < first.words.length; i++) {
-            final String startWord = first.words[i];
-            int maxLength = first.words.length - i;
+        for (int i = 0; i < first.words.size(); i++) {
+            final String startWord = first.words.get(i);
+            int maxLength = first.words.size() - i;
             for (int j = 1; j < blocks.size(); j++) {
                 final Identifier other = blocks.get(j);
                 final int wordIdx = other.indexOf(startWord);
@@ -525,18 +528,18 @@ public record PropertyGenerator(InputStream blocksFile, Path outputFolder) imple
                     break;
                 }
                 for (int k = 1; k < maxLength; k++) {
-                    if (wordIdx + k >= other.words.length) {
+                    if (wordIdx + k >= other.words.size()) {
                         maxLength = k;
                         break;
                     }
-                    if (!other.words[wordIdx + k].equals(first.words[i + k])) {
+                    if (!other.words.get(wordIdx + k).equals(first.words.get(i + k))) {
                         maxLength = k;
                         break;
                     }
                 }
             }
-            if (result.words.length > maxLength || maxLength == 0) continue;
-            result = new Identifier(Arrays.copyOfRange(first.words, i, i + maxLength));
+            if (result.words.size() > maxLength || maxLength == 0) continue;
+            result = new Identifier(first.words.subList(i, i + maxLength));
         }
         return result;
     }

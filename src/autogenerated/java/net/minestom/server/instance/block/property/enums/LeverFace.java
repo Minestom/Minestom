@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -17,14 +16,12 @@ public enum LeverFace implements PropertyEnum {
     CEILING;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "face";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case FLOOR -> "floor";
             case WALL -> "wall";
@@ -33,7 +30,7 @@ public enum LeverFace implements PropertyEnum {
     }
 
     @Nullable
-    public static LeverFace typedValueOf(String value) {
+    public static LeverFace parse(String value) {
         return switch (value) {
             case "floor" -> FLOOR;
             case "wall" -> WALL;

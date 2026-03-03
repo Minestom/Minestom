@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,14 +18,12 @@ public enum VaultState implements PropertyEnum {
     EJECTING;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "vault_state";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case INACTIVE -> "inactive";
             case ACTIVE -> "active";
@@ -36,7 +33,7 @@ public enum VaultState implements PropertyEnum {
     }
 
     @Nullable
-    public static VaultState typedValueOf(String value) {
+    public static VaultState parse(String value) {
         return switch (value) {
             case "inactive" -> INACTIVE;
             case "active" -> ACTIVE;

@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -17,14 +16,12 @@ public enum Axis implements PropertyEnum {
     Z;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "axis";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case X -> "x";
             case Y -> "y";
@@ -33,7 +30,7 @@ public enum Axis implements PropertyEnum {
     }
 
     @Nullable
-    public static Axis typedValueOf(String value) {
+    public static Axis parse(String value) {
         return switch (value) {
             case "x" -> X;
             case "y" -> Y;

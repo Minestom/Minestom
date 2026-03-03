@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.property.enums;
 import java.lang.Override;
 import java.lang.String;
 import net.minestom.server.instance.block.property.PropertyEnum;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,14 +14,12 @@ public enum BedPart implements PropertyEnum {
     FOOT;
 
     @Override
-    @NotNull
-    public String property() {
+    public String key() {
         return "part";
     }
 
     @Override
-    @NotNull
-    public String untypedValue() {
+    public String value() {
         return switch (this) {
             case HEAD -> "head";
             case FOOT -> "foot";
@@ -30,7 +27,7 @@ public enum BedPart implements PropertyEnum {
     }
 
     @Nullable
-    public static BedPart typedValueOf(String value) {
+    public static BedPart parse(String value) {
         return switch (value) {
             case "head" -> HEAD;
             case "foot" -> FOOT;
