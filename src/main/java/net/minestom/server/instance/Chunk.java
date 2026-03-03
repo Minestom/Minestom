@@ -344,46 +344,6 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         lock.readLock().unlock();
     }
 
-    @ApiStatus.Experimental
-    public final void withWriteLock(Runnable runnable) {
-        lock.writeLock().lock();
-        try {
-            runnable.run();
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    @ApiStatus.Experimental
-    public final void withReadLock(Runnable runnable) {
-        lock.readLock().lock();
-        try {
-            runnable.run();
-        } finally {
-            lock.readLock().unlock();
-        }
-    }
-
-    @ApiStatus.Experimental
-    public final <T> T supplyWithWriteLock(Supplier<T> runnable) {
-        lock.writeLock().lock();
-        try {
-            return runnable.get();
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    @ApiStatus.Experimental
-    public final <T> T supplyWithReadLock(Supplier<T> supplier) {
-        lock.readLock().lock();
-        try {
-            return supplier.get();
-        } finally {
-            lock.readLock().unlock();
-        }
-    }
-
     /**
      * @return whether the calling thread holds the chunk write-lock
      */

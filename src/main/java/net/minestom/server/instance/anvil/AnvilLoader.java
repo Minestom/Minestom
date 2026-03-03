@@ -105,7 +105,8 @@ public class AnvilLoader implements ChunkLoader {
 
         // Load the chunk data (assuming it is fully generated)
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
-        chunk.withWriteLock(() -> {
+        chunk.lockWriteLock();
+        try {
             final String status = chunkData.getString("status");
             // TODO: Should we handle other statuses?
             if (status.isEmpty() || "minecraft:full".equals(status)) {
@@ -125,7 +126,9 @@ public class AnvilLoader implements ChunkLoader {
                     .remove("block_entities")
                     .build();
             chunk.tagHandler().updateContent(handlerData);
-        });
+        } finally {
+            chunk.unlockWriteLock();
+        }
 
         // Cache the index of the loaded chunk
         perRegionLoadedChunksLock.lock();
@@ -391,7 +394,8 @@ public class AnvilLoader implements ChunkLoader {
         IntList blockPaletteIndices = new IntArrayList(); // Map block indices by state id to avoid doing a deep comparison on every block tag
         int[] blockIndices = new int[SECTION_BLOCK_COUNT];
 
-        chunk.withWriteLock(() -> {
+        chunk.lockWriteLock();
+        try {
             for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
                 final Section section = chunk.getSection(sectionY);
 
@@ -488,7 +492,9 @@ public class AnvilLoader implements ChunkLoader {
 
                 sections.add(sectionData.build());
             }
-        });
+        } finally {
+            chunk.unlockWriteLock();
+        }
 
         chunkData.put("sections", sections.build());
         chunkData.put("block_entities", blockEntities.build());

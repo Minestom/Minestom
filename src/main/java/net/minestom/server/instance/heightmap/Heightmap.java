@@ -48,14 +48,17 @@ public abstract class Heightmap {
 
     public void refresh(int startY) {
         if (!needsRefresh) return;
-        chunk.withReadLock(() -> {
+        chunk.lockReadLock();
+        try {
             for (int x = 0; x < CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < CHUNK_SIZE_Z; z++) {
                     refresh(x, z, startY);
                 }
             }
             needsRefresh = false;
-        });
+        } finally {
+            chunk.unlockReadLock();
+        }
     }
 
     public void refresh(int x, int z, int startY) {
