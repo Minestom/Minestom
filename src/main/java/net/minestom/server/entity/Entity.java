@@ -755,6 +755,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return uuid;
     }
 
+    /**
+     * Returns whether this entity will run physics calculations.
+     *
+     * @return whether the entity will have physics calculations running
+     */
     public boolean hasPhysics() {
         return hasPhysics;
     }
