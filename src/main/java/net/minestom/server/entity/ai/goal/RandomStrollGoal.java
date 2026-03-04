@@ -44,14 +44,12 @@ public class RandomStrollGoal extends GoalSelector {
             final var targetChunkXPosition = target.chunkX();
             final var targetChunkZPosition = target.chunkZ();
 
-            boolean result = false;
-            if (!entityWorld.isChunkLoaded(targetChunkXPosition, targetChunkZPosition)) {
-                result = entityCreature.getNavigator().setPathTo(target);
+            final boolean isChunkLoaded = entityWorld.isChunkLoaded(targetChunkXPosition, targetChunkZPosition);
+
+            if (isChunkLoaded && entityCreature.getNavigator().setPathTo(target)) {
+                    break;
             }
 
-            if (result) {
-                break;
-            }
         }
     }
 
