@@ -1,11 +1,18 @@
 package net.minestom.server.instance.block.property;
 
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * A property associated with some type {@code T}.
  * Some valid values for {@code T} may not be valid for certain blocks.
+ * <p>
+ * Used to set a property with {@link Block#withProperty(Property, Object)}
+ * or retrieve a property with {@link Block#getProperty(Property)}.
+ * <p>
+ * For property enums associated with exactly one property {@link Block#withProperty(PropertyEnum)} is also available,
+ * intended for hard coded property values.
  */
 public sealed interface Property<T> extends Properties permits BooleanProperty, EnumProperty, IntegerProperty {
     /**
