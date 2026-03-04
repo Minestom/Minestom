@@ -39,6 +39,7 @@ public class RandomStrollGoal extends GoalSelector {
 
             final var target = entityCreature.getPosition().add(position);
 
+            // This code is added because we always want to prevent before we cure (French expression translated with GTranslate)
             final var entityWorld = entityCreature.getInstance();
 
             final var targetChunkXPosition = target.chunkX();
