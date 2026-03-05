@@ -73,13 +73,8 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @throws IllegalArgumentException if the value is associated with multiple properties,
      * the property is invalid, or the value is invalid
      */
-    default Block withProperty(PropertyEnum value) {
-        final String property = value.key();
-        if (property == null) {
-            throw new IllegalArgumentException("property enum '" +
-                    value.getClass().getSimpleName() + "' has multiple properties associated with it");
-        }
-        return withProperty(property, value.value());
+    default Block withProperty(PropertyEnum.Keyed value) {
+        return withProperty(value.key(), value.value());
     }
 
     /**

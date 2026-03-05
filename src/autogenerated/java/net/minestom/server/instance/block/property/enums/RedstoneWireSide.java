@@ -16,12 +16,6 @@ public enum RedstoneWireSide implements PropertyEnum {
     NONE;
 
     @Override
-    @Nullable
-    public String key() {
-        return null;
-    }
-
-    @Override
     public String value() {
         return switch (this) {
             case UP -> "up";

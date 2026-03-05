@@ -16,12 +16,6 @@ public enum WallSide implements PropertyEnum {
     TALL;
 
     @Override
-    @Nullable
-    public String key() {
-        return null;
-    }
-
-    @Override
     public String value() {
         return switch (this) {
             case NONE -> "none";
