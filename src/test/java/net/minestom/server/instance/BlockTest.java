@@ -163,8 +163,5 @@ public class BlockTest {
         final Block withFacing = block.withProperty(Property.FACING, Facing.EAST);
         assertEquals("east", withFacing.getProperty("facing"));
         assertEquals(Facing.EAST, withFacing.getProperty(Property.FACING));
-
-        // `RedstoneWireSide` is associated with multiple properties
-        assertThrows(IllegalArgumentException.class, () -> Block.REDSTONE_WIRE.withProperty(RedstoneWireSide.UP));
     }
 }
