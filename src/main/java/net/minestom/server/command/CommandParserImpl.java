@@ -86,7 +86,7 @@ final class CommandParserImpl implements CommandParser {
             int depth = 0;
 
             for (NodeResult node : this.nodeResults) {
-                ++depth;
+                depth++;
                 // If this node isn't a success, we're going to stop counting the depth and stop here
                 if (!(node.argumentResult() instanceof ArgumentResult.Success<?>)) {
                     depth--;
@@ -94,7 +94,6 @@ final class CommandParserImpl implements CommandParser {
                 }
             }
 
-            // The chain will always contain a empty node at the start, we don't care about it so we'll remove one
             return depth;
         }
 
