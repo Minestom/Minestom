@@ -1,25 +1,27 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.suggestion.Suggestion;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.listener.TabCompleteListener;
 import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
 import net.minestom.server.network.packet.server.play.TabCompletePacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class CommandSuggestionIntegrationTest {
 
     @Test
-    public void suggestion(Env env) {
+    public void suggestionWithPackets(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0));
@@ -64,13 +66,7 @@ public class CommandSuggestionIntegrationTest {
         command.addSyntax((sender,context)->{}, suggestArg, defaultArg);
         env.process().command().register(command);
 
-        var listener = connection.trackIncoming(TabCompletePacket.class);
-        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo 1"));
-        player.interpretPacketQueue();
-
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestion", null)), tabCompletePacket.matches());
-        });
+        assertSameEntries("foo 1", List.of(new SuggestionEntry("suggestion")), player);
     }
 
     @Test
@@ -98,13 +94,7 @@ public class CommandSuggestionIntegrationTest {
 
         env.process().command().register(command);
 
-        var listener = connection.trackIncoming(TabCompletePacket.class);
-        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo bar "));
-        player.interpretPacketQueue();
-
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestionA", null)), tabCompletePacket.matches());
-        });
+        assertSameEntries("foo bar ", List.of(new SuggestionEntry("suggestionA")), player);
     }
 
     @Test
@@ -128,12 +118,63 @@ public class CommandSuggestionIntegrationTest {
 
         env.process().command().register(command);
 
-        var listener = connection.trackIncoming(TabCompletePacket.class);
-        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo literal2 "));
-        player.interpretPacketQueue();
+        assertSameEntries("foo literal2 ", List.of(new SuggestionEntry("suggestionB")), player);
+    }
 
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestionB", null)), tabCompletePacket.matches());
-        });
+    @Test
+    public void suggestionFromSingleSpaceSyntaxError(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var command = new Command("foo");
+
+        command.addSyntax((sender, context) -> {
+        }, Integer("num").setSuggestionCallback((sender, context, suggestion) -> {
+            suggestion.addEntry(new SuggestionEntry("123456789"));
+        }));
+
+        env.process().command().register(command);
+
+        assertSameEntries("foo ", List.of(new SuggestionEntry("123456789")), player);
+    }
+
+    @Test
+    public void noSuggestionFromSyntaxError(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var command = new Command("foo");
+
+        command.addSyntax((sender, context) -> {
+        }, Integer("num").setSuggestionCallback((sender, context, suggestion) -> {
+            suggestion.addEntry(new SuggestionEntry("123456789"));
+        }));
+
+        env.process().command().register(command);
+
+        var entries = List.of(new SuggestionEntry("123456789"));
+
+        assertNotSameEntries("foo  ", entries, player);
+        assertNotSameEntries("foo bar", entries, player);
+        assertNotSameEntries("foo 3ar", entries, player);
+        assertNotSameEntries("foo 3ar ", entries, player);
+        assertNotSameEntries("foo 3ar 2", entries, player);
+        assertNotSameEntries("foo 3ar 2 ", entries, player);
+    }
+
+    private static void assertSameEntries(@NotNull String input, @NotNull List<SuggestionEntry> desired, @NotNull CommandSender sender) {
+        Suggestion result = TabCompleteListener.getSuggestion(sender, input);
+        assertNotNull(result, "Suggestion is null");
+        assertEquals(desired, result.getEntries());
+    }
+
+    private static void assertNotSameEntries(@NotNull String input, @NotNull List<SuggestionEntry> undesired, @NotNull CommandSender sender) {
+        Suggestion result = TabCompleteListener.getSuggestion(sender, input);
+        if (result == null) {
+            return;
+        }
+        assertNotEquals(result.getEntries(), undesired);
     }
 }

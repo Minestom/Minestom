@@ -23,8 +23,8 @@ public class CommandParseTest {
         final AtomicBoolean b = new AtomicBoolean();
         var foo = Graph.merge(Graph.builder(Literal("foo"), createExecutor(b)).build());
 
-        // even though we add extra, it's still /foo so we'll call the default executor
-        assertValid(foo, "foo bar baz", b);
+        assertValid(foo, "foo", b);
+        assertSyntaxError(foo, "foo bar baz");
         assertUnknown(foo, "bar");
     }
 
@@ -67,9 +67,9 @@ public class CommandParseTest {
         assertSyntaxError(foo, "foo inc");
         assertSyntaxError(foo, "foo inc asd");
 
-        // A valid command is provided, even if we have extra data we'll still accept it
-        assertValid(foo, "foo inc 15 dec", action);
-        assertValid(foo, "foo inc 15 20", action);
+        // Trailing data syntax errors.
+        assertSyntaxError(foo, "foo inc 15 dec");
+        assertSyntaxError(foo, "foo inc 15 20");
 
         // None of these are registered commands, make sure the correct command valuation is provided back
         assertUnknown(foo, "bar");
@@ -85,7 +85,7 @@ public class CommandParseTest {
                         x -> x.append(Word("b").setDefaultValue("B"),
                                 x1 -> x1.append(Word("c").setDefaultValue("C"),
                                         x2 -> x2.append(Word("d").setDefaultValue("D"),
-                                                new GraphImpl.ExecutionImpl(null, null, null,
+                                                new GraphImpl.ExecutionImpl(null, null,
                                                         (sender, context) -> {
                                                             b.set(true);
                                                             assertEquals(expectedFirstArg.get(), context.get("a"));
@@ -109,7 +109,7 @@ public class CommandParseTest {
                 .build());
         assertValid(foo, "foo a", argExecutor);
         assertValid(foo, "foo b", argExecutor);
-        assertValid(foo, "foo c", rootExecutor);
+        assertSyntaxError(foo, "foo c");
         assertValid(foo, "foo", rootExecutor);
     }
 
@@ -156,6 +156,6 @@ public class CommandParseTest {
     }
 
     private static Graph.Execution createExecutor(AtomicBoolean atomicBoolean) {
-        return new GraphImpl.ExecutionImpl(null, null, null, (sender, context) -> atomicBoolean.set(true), null);
+        return new GraphImpl.ExecutionImpl(null, null, (sender, context) -> atomicBoolean.set(true), null);
     }
 }
