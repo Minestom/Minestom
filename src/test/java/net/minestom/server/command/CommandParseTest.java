@@ -67,7 +67,7 @@ public class CommandParseTest {
         assertSyntaxError(foo, "foo inc");
         assertSyntaxError(foo, "foo inc asd");
 
-        // Trailing data syntax errors.
+        // Fails due to trailing data syntax errors.
         assertSyntaxError(foo, "foo inc 15 dec");
         assertSyntaxError(foo, "foo inc 15 20");
 
