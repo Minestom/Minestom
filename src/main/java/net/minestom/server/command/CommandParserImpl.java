@@ -62,7 +62,7 @@ final class CommandParserImpl implements CommandParser {
 
         Map<String, ArgumentResult<Object>> collectArguments() {
             return nodeResults.stream()
-                    .skip(1) // skip root node and command
+                    .skip(1) // skip command node
                     .collect(Collectors.toUnmodifiableMap(NodeResult::name, NodeResult::argumentResult));
         }
 
@@ -161,6 +161,8 @@ final class CommandParserImpl implements CommandParser {
                 // This allows arguments that don't allow spaces to give
                 // suggestions when putting an initial space in an empty
                 // argument.
+                // Anything else removes the suggestions since the argument
+                // was invalid.
                 if (reader.cursor() - start > 1 || reader.hasRemaining()) {
                     childChain.suggestionCallback = null;
                 }
@@ -185,7 +187,7 @@ final class CommandParserImpl implements CommandParser {
             }
 
             // If there's nothing left and this child can be executed, return it.
-            // Otherwise continue parsing for nodes with a default value.
+            // Otherwise, continue parsing for nodes with a default value and an executor.
             if (!reader.hasRemaining() && child.execution() != null && child.execution().executor() != null) {
                 return childResult;
             }
