@@ -18,6 +18,7 @@ module net.minestom.server {
     requires jdk.jfr;
     requires java.desktop;
     requires java.management;
+    requires net.minestom.data;
 
     // EXPORTS
     exports net.minestom.server;
