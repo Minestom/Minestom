@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     id("minestom.java-binary")
 }
@@ -12,9 +10,7 @@ dependencies {
 
 application {
     mainClass.set("net.minestom.demo.Main")
-    applicationDefaultJvmArgs += "-ea"
-}
+    mainModule.set("net.minestom.demo")
 
-tasks.withType<ShadowJar> {
-    archiveFileName.set("minestom-demo.jar")
+    applicationDefaultJvmArgs += "-ea"
 }
