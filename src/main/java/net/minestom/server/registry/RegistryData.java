@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.key.Key;
+import net.minestom.data.MinestomData;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
@@ -105,8 +106,8 @@ public final class RegistryData {
      * @param path The path without a leading slash, e.g. "blocks.json"
      */
     public static @Nullable InputStream loadRegistryFile(String path) throws IOException {
-        // 1. Try to load from jar resources
-        InputStream resourceStream = RegistryData.class.getClassLoader().getResourceAsStream(path);
+        // 1. Try to load from data resources
+        InputStream resourceStream = MinestomData.resource(path);
 
         // 2. Try to load from working directory
         final Path filesystemPath = Path.of(path);

@@ -3,7 +3,7 @@ metadata.format.version = "1.1"
 [versions]
 
 # Important dependencies
-data = "1.21.11-rv2"
+data = "26.1-snapshot-11-dev"
 adventure = "4.26.1"
 jetbrainsAnnotations = "26.0.2-1"
 slf4j = "2.0.17"
@@ -27,7 +27,6 @@ javaPoet = "0.7.0"
 logback = "1.5.19"
 
 # Gradle plugins
-shadow = "9.2.2"
 blossom = "2.1.0"
 nmcp = "1.2.0"
 jmh-plugin = "0.7.3"
@@ -82,7 +81,6 @@ junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-
 logback = ["logback-core", "logback-classic"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
 jmh-plugin = { id = "me.champeau.jmh", version.ref = "jmh-plugin" }
 jcstress-plugin = { id = "io.github.reyerizo.gradle.jcstress", version.ref = "jcstress-plugin" }

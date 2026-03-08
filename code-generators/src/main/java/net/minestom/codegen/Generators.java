@@ -1,5 +1,7 @@
 package net.minestom.codegen;
 
+import net.minestom.data.MinestomData;
+
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -77,6 +79,6 @@ public final class Generators {
     }
 
     private static InputStream resource(String name) {
-        return Objects.requireNonNull(Generators.class.getResourceAsStream("/" + name), "Cannot find resource: %s".formatted(name));
+        return Objects.requireNonNull(MinestomData.resource(name), "Cannot find resource: %s".formatted(name));
     }
 }
