@@ -20,6 +20,14 @@ public class VillagerMeta extends AbstractVillagerMeta {
         metadata.set(MetadataDef.Villager.VARIANT, data);
     }
 
+    public boolean isFinalized() {
+        return metadata.get(MetadataDef.Villager.IS_FINALIZED);
+    }
+
+    public void setFinalized(boolean value) {
+        metadata.set(MetadataDef.Villager.IS_FINALIZED, value);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected <T> @Nullable T get(DataComponent<T> component) {

@@ -31,4 +31,11 @@ public class AgeableMobMeta extends PathfinderMobMeta {
         metadata.set(MetadataDef.AgeableMob.IS_BABY, value);
     }
 
+    public boolean isAgeLocked() {
+        return metadata.get(MetadataDef.AgeableMob.AGE_LOCKED);
+    }
+
+    public void setAgeLocked(boolean value) {
+        metadata.set(MetadataDef.AgeableMob.AGE_LOCKED, value);
+    }
 }
