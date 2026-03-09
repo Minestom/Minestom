@@ -53,7 +53,7 @@ import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.WorldClock;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;

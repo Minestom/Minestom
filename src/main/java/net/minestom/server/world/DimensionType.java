@@ -8,6 +8,7 @@ import net.minestom.server.utils.IntProvider;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.attribute.EnvironmentAttribute;
 import net.minestom.server.world.attribute.EnvironmentAttributeMap;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;

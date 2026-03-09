@@ -52,7 +52,7 @@ import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.time.Tick;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.WorldClock;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.timeline.Timeline;
 import org.slf4j.Logger;
@@ -163,8 +163,8 @@ final class ServerProcessImpl implements ServerProcess {
         this.pigVariant = PigVariant.createDefaultRegistry();
         this.pigSoundVariant = PigSoundVariant.createDefaultRegistry();
         this.zombieNautilusVariant = ZombieNautilusVariant.createDefaultRegistry();
-        this.timeline = Timeline.createDefaultRegistry();
         this.worldClock = WorldClock.createDefaultRegistry();
+        this.timeline = Timeline.createDefaultRegistry(this); // depends on world clocks
         this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines & world clocks
 
         this.connection = new ConnectionManager();

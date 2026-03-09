@@ -78,7 +78,8 @@ public final class Generators {
         generator.generateKeys(resource("zombie_nautilus_variant.json"), "net.minestom.server.entity.metadata.animal", "ZombieNautilusVariant");
         generator.generateKeys(resource("worldgen/biome.json"), "net.minestom.server.world.biome", "Biome");
         generator.generateKeys(resource("timeline.json"), "net.minestom.server.world.timeline", "Timeline");
-        generator.generateKeys(resource("world_clock.json"), "net.minestom.server.world", "WorldClock");
+        generator.generateKeys(resource("world_clock.json"), "net.minestom.server.world.clock", "WorldClock");
+        generator.generateKeys(resource("clock_time_marker.json"), "net.minestom.server.world.clock", "ClockTimeMarker");
 
         System.out.println("Finished generating code");
     }

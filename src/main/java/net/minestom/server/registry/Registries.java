@@ -23,7 +23,7 @@ import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.WorldClock;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.timeline.Timeline;
 

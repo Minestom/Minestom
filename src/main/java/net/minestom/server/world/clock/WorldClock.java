@@ -1,4 +1,4 @@
-package net.minestom.server.world;
+package net.minestom.server.world.clock;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
