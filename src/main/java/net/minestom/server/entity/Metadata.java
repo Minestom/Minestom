@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.metadata.animal.*;
+import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -135,8 +136,16 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatVariant.NETWORK_TYPE);
     }
 
+    public static Entry<RegistryKey<CatSoundVariant>> CatSoundVariant(RegistryKey<CatSoundVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_CAT_SOUND_VARIANT, value, CatSoundVariant.NETWORK_TYPE);
+    }
+
     public static Entry<RegistryKey<CowVariant>> CowVariant(RegistryKey<CowVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_COW_VARIANT, value, CowVariant.NETWORK_TYPE);
+    }
+
+    public static Entry<RegistryKey<CowSoundVariant>> CowSoundVariant(RegistryKey<CowSoundVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_COW_SOUND_VARIANT, value, CowSoundVariant.NETWORK_TYPE);
     }
 
     public static Entry<RegistryKey<WolfVariant>> WolfVariant(RegistryKey<WolfVariant> value) {
@@ -155,8 +164,16 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_PIG_VARIANT, value, PigVariant.NETWORK_TYPE);
     }
 
+    public static Entry<RegistryKey<PigSoundVariant>> PigSoundVariant(RegistryKey<PigSoundVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PIG_SOUND_VARIANT, value, PigSoundVariant.NETWORK_TYPE);
+    }
+
     public static Entry<RegistryKey<ChickenVariant>> ChickenVariant(RegistryKey<ChickenVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_CHICKEN_VARIANT, value, ChickenVariant.NETWORK_TYPE);
+    }
+
+    public static Entry<RegistryKey<ChickenSoundVariant>> ChickenSoundVariant(RegistryKey<ChickenSoundVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_CHICKEN_SOUND_VARIANT, value, ChickenSoundVariant.NETWORK_TYPE);
     }
 
     public static Entry<RegistryKey<ZombieNautilusVariant>> ZombieNautilusVariant(RegistryKey<ZombieNautilusVariant> value) {
@@ -223,12 +240,16 @@ public final class Metadata {
     public static final byte TYPE_OPT_VARINT = nextId();
     public static final byte TYPE_POSE = nextId();
     public static final byte TYPE_CAT_VARIANT = nextId();
+    public static final byte TYPE_CAT_SOUND_VARIANT = nextId();
     public static final byte TYPE_COW_VARIANT = nextId();
+    public static final byte TYPE_COW_SOUND_VARIANT = nextId();
     public static final byte TYPE_WOLF_VARIANT = nextId();
     public static final byte TYPE_WOLF_SOUND_VARIANT = nextId();
     public static final byte TYPE_FROG_VARIANT = nextId();
     public static final byte TYPE_PIG_VARIANT = nextId();
+    public static final byte TYPE_PIG_SOUND_VARIANT = nextId();
     public static final byte TYPE_CHICKEN_VARIANT = nextId();
+    public static final byte TYPE_CHICKEN_SOUND_VARIANT = nextId();
     public static final byte TYPE_ZOMBIE_NAUTILUS_VARIANT = nextId();
     public static final byte TYPE_OPT_GLOBAL_POSITION = nextId(); // Unused by protocol it seems
     public static final byte TYPE_PAINTING_VARIANT = nextId();
