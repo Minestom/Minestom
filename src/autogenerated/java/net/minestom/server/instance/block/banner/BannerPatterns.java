@@ -25,9 +25,9 @@ sealed interface BannerPatterns permits BannerPattern {
 
     RegistryKey<BannerPattern> GLOBE = RegistryKey.unsafeOf("globe");
 
-    RegistryKey<BannerPattern> MOJANG = RegistryKey.unsafeOf("mojang");
-
     RegistryKey<BannerPattern> STRIPE_BOTTOM = RegistryKey.unsafeOf("stripe_bottom");
+
+    RegistryKey<BannerPattern> MOJANG = RegistryKey.unsafeOf("mojang");
 
     RegistryKey<BannerPattern> STRIPE_MIDDLE = RegistryKey.unsafeOf("stripe_middle");
 
@@ -71,9 +71,9 @@ sealed interface BannerPatterns permits BannerPattern {
 
     RegistryKey<BannerPattern> DIAGONAL_LEFT = RegistryKey.unsafeOf("diagonal_left");
 
-    RegistryKey<BannerPattern> SKULL = RegistryKey.unsafeOf("skull");
-
     RegistryKey<BannerPattern> STRIPE_DOWNLEFT = RegistryKey.unsafeOf("stripe_downleft");
+
+    RegistryKey<BannerPattern> SKULL = RegistryKey.unsafeOf("skull");
 
     RegistryKey<BannerPattern> DIAGONAL_UP_LEFT = RegistryKey.unsafeOf("diagonal_up_left");
 
@@ -81,11 +81,11 @@ sealed interface BannerPatterns permits BannerPattern {
 
     RegistryKey<BannerPattern> TRIANGLE_TOP = RegistryKey.unsafeOf("triangle_top");
 
-    RegistryKey<BannerPattern> HALF_HORIZONTAL_BOTTOM = RegistryKey.unsafeOf("half_horizontal_bottom");
-
     RegistryKey<BannerPattern> SQUARE_TOP_LEFT = RegistryKey.unsafeOf("square_top_left");
 
     RegistryKey<BannerPattern> STRIPE_TOP = RegistryKey.unsafeOf("stripe_top");
+
+    RegistryKey<BannerPattern> HALF_HORIZONTAL_BOTTOM = RegistryKey.unsafeOf("half_horizontal_bottom");
 
     RegistryKey<BannerPattern> CREEPER = RegistryKey.unsafeOf("creeper");
 
