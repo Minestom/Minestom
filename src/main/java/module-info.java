@@ -184,5 +184,6 @@ module net.minestom.server {
     exports net.minestom.server.world.attribute;
     exports net.minestom.server.world.biome;
     exports net.minestom.server.world.timeline;
+    exports net.minestom.server.world.clock;
 
 }
