@@ -197,9 +197,12 @@ public final class RegistryData {
         BANNER_PATTERNS("banner_pattern.json"),
         BIOMES("biome.json"),
         CAT_VARIANTS("cat_variant.json"),
+        CAT_SOUND_VARIANTS("cat_sound_variant.json"),
         CHAT_TYPES("chat_type.json"),
         CHICKEN_VARIANTS("chicken_variant.json"),
+        CHICKEN_SOUND_VARIANTS("chicken_sound_variant.json"),
         COW_VARIANTS("cow_variant.json"),
+        COW_SOUND_VARIANTS("cow_sound_variant.json"),
         DAMAGE_TYPES("damage_type.json"),
         DIALOGS("dialog.json"),
         DIMENSION_TYPES("dimension_type.json"),
@@ -209,12 +212,14 @@ public final class RegistryData {
         INSTRUMENTS("instrument.json"),
         PAINTING_VARIANTS("painting_variant.json"),
         PIG_VARIANTS("pig_variant.json"),
+        PIG_SOUND_VARIANTS("pig_sound_variant.json"),
         TRIM_MATERIALS("trim_material.json"),
         TRIM_PATTERNS("trim_pattern.json"),
         WOLF_VARIANTS("wolf_variant.json"),
         WOLF_SOUND_VARIANTS("wolf_sound_variant.json"),
         ZOMBIE_NAUTILUS_VARIANTS("zombie_nautilus_variant.json"),
-        TIMELINES("timeline.json");
+        TIMELINES("timeline.json"),
+        WORLD_CLOCKS("world_clock.json");
 
         private final String name;
 
