@@ -276,12 +276,17 @@ public final class ConnectionManager {
             player.sendPacket(registries.wolfVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.wolfSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.catVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.catSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.chickenVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.chickenSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.cowVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.cowSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.frogVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.pigVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.pigSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.zombieNautilusVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.timeline().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.worldClock().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.dimensionType().registryDataPacket(registries, excludeVanilla));
             // MUST BE IN SYNC WITH #createTagsPacket
             // TODO: TEST_ENVIRONMENT, TEST_INSTANCE

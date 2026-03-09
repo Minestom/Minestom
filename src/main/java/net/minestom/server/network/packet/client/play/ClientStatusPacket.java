@@ -11,6 +11,7 @@ public record ClientStatusPacket(Action action) implements ClientPacket.Play {
 
     public enum Action {
         PERFORM_RESPAWN,
-        REQUEST_STATS
+        REQUEST_STATS,
+        REQUEST_GAMERULE_VALUES
     }
 }
