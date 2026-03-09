@@ -202,4 +202,27 @@ public class EntityMeta {
             metadata.set(MetadataDef.CUSTOM_NAME, (Component) value);
     }
 
+    /**
+     * Retrieves the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to retrieve the value from.
+     * @param <T>   The type of the metadata value.
+     * @return The value associated with the specified metadata entry.
+     */
+    @ApiStatus.Experimental
+    public <T> T get(MetadataDef.Entry<T> entry) {
+        return metadata.get(entry);
+    }
+
+    /**
+     * Sets the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to be updated.
+     * @param value The value to assign to the specified metadata entry.
+     * @param <T>   The type of the metadata value.
+     */
+    @ApiStatus.Experimental
+    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+        metadata.set(entry, value);
+    }
 }

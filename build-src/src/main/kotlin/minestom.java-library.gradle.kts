@@ -64,6 +64,8 @@ tasks.withType<Javadoc> {
         }
         links("https://javadoc.io/doc/com.google.code.gson/gson/${libs.versions.gson.get()}/")
         links("https://javadoc.io/doc/org.jetbrains/annotations/${libs.versions.jetbrainsAnnotations.get()}/")
+
+        tags("apiNote:a:API Note:", "implSpec:a:Implementation Requirements:", "implNote:a:Implementation Note:")
     }
 }
 
