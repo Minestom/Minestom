@@ -8,6 +8,8 @@ module net.minestom.server {
     requires transitive net.kyori.adventure.nbt;
     requires transitive net.kyori.adventure.key;
     requires transitive net.kyori.examination.api;
+    requires net.kyori.examination.string;
+    requires net.kyori.option;
     requires net.kyori.adventure.text.logger.slf4j;
     requires net.kyori.adventure.text.serializer.legacy;
     requires net.kyori.adventure.text.serializer.gson;
