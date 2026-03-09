@@ -5,6 +5,7 @@ import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.*;
+import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -24,6 +25,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.WorldClock;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.timeline.Timeline;
 
@@ -105,19 +107,29 @@ public interface Registries {
 
     DynamicRegistry<CatVariant> catVariant();
 
+    DynamicRegistry<CatSoundVariant> catSoundVariant();
+
     DynamicRegistry<ChickenVariant> chickenVariant();
 
+    DynamicRegistry<ChickenSoundVariant> chickenSoundVariant();
+
     DynamicRegistry<CowVariant> cowVariant();
+
+    DynamicRegistry<CowSoundVariant> cowSoundVariant();
 
     DynamicRegistry<FrogVariant> frogVariant();
 
     DynamicRegistry<PigVariant> pigVariant();
+
+    DynamicRegistry<PigSoundVariant> pigSoundVariant();
 
     DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant();
 
     DynamicRegistry<Dialog> dialog();
 
     DynamicRegistry<Timeline> timeline();
+
+    DynamicRegistry<WorldClock> worldClock();
 
     // The following are _not_ sent to the client.
 
@@ -239,13 +251,28 @@ public interface Registries {
         }
 
         @Override
+        default DynamicRegistry<CatSoundVariant> catSoundVariant() {
+            return delegate.catSoundVariant();
+        }
+
+        @Override
         default DynamicRegistry<ChickenVariant> chickenVariant() {
             return registries().chickenVariant();
         }
 
         @Override
+        default DynamicRegistry<ChickenSoundVariant> chickenSoundVariant() {
+            return delegate.chickenSoundVariant();
+        }
+
+        @Override
         default DynamicRegistry<CowVariant> cowVariant() {
             return registries().cowVariant();
+        }
+
+        @Override
+        default DynamicRegistry<CowSoundVariant> cowSoundVariant() {
+            return delegate.cowSoundVariant();
         }
 
         @Override
@@ -256,6 +283,11 @@ public interface Registries {
         @Override
         default DynamicRegistry<PigVariant> pigVariant() {
             return registries().pigVariant();
+        }
+
+        @Override
+        default DynamicRegistry<PigSoundVariant> pigSoundVariant() {
+            return delegate.pigSoundVariant();
         }
 
         @Override
@@ -271,6 +303,11 @@ public interface Registries {
         @Override
         default DynamicRegistry<Timeline> timeline() {
             return registries().timeline();
+        }
+
+        @Override
+        default DynamicRegistry<WorldClock> worldClock() {
+            return delegate.worldClock();
         }
 
         @Override
