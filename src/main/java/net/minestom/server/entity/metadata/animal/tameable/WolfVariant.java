@@ -14,20 +14,23 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.Objects;
 
 public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl {
+    //TODO(26.1) Direct codec
     Codec<WolfVariant> REGISTRY_CODEC = StructCodec.struct(
             "assets", Assets.CODEC, WolfVariant::assets,
+            "baby_assets", Assets.CODEC, WolfVariant::babyAssets,
             WolfVariantImpl::new);
 
     NetworkBuffer.Type<RegistryKey<WolfVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::wolfVariant);
     Codec<RegistryKey<WolfVariant>> CODEC = RegistryKey.codec(Registries::wolfVariant);
 
-    static WolfVariant create(Assets assets) {
-        return new WolfVariantImpl(assets);
+    static WolfVariant create(Assets assets, Assets babyAssets) {
+        return new WolfVariantImpl(assets, babyAssets);
     }
 
-    static WolfVariant create(Key wild, Key tame, Key angry) {
-        return new WolfVariantImpl(new Assets(wild, tame, angry));
-    }
+    //TODO(26.1) baby
+//    static WolfVariant create(Key wild, Key tame, Key angry) {
+//        return new WolfVariantImpl(new Assets(wild, tame, angry));
+//    }
 
     static Builder builder() {
         return new Builder();
@@ -44,6 +47,8 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
     }
 
     Assets assets();
+
+    Assets babyAssets();
 
     record Assets(Key wild, Key tame, Key angry) {
         public static final Codec<Assets> CODEC = StructCodec.struct(
@@ -62,6 +67,7 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
 
     final class Builder {
         private Assets assets;
+        private Assets babyAssets; // TODO(26.1) baby builder
         private Key wildAsset;
         private Key tameAsset;
         private Key angryAsset;
@@ -89,9 +95,14 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
             return this;
         }
 
+        public Builder babyAssets(Assets babyAssets) {
+            this.babyAssets = babyAssets;
+            return this;
+        }
+
         public WolfVariant build() {
             final Assets assets = Objects.requireNonNullElseGet(this.assets, () -> new Assets(wildAsset, tameAsset, angryAsset));
-            return new WolfVariantImpl(assets);
+            return new WolfVariantImpl(assets, babyAssets);
         }
     }
 }

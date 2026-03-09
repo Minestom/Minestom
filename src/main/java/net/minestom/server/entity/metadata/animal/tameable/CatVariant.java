@@ -13,13 +13,14 @@ import org.jetbrains.annotations.ApiStatus;
 public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
     Codec<CatVariant> REGISTRY_CODEC = StructCodec.struct(
             "asset_id", Codec.KEY, CatVariant::assetId,
-            CatVariantImpl::new);
+            "baby_asset_id", Codec.KEY, CatVariant::babyAssetId,
+            CatVariant::create);
 
     NetworkBuffer.Type<RegistryKey<CatVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::catVariant);
     Codec<RegistryKey<CatVariant>> NBT_TYPE = RegistryKey.codec(Registries::catVariant);
 
-    static CatVariant create(Key assetId) {
-        return new CatVariantImpl(assetId);
+    static CatVariant create(Key assetId, Key babyAssetId) {
+        return new CatVariantImpl(assetId, babyAssetId);
     }
 
     /**
@@ -34,4 +35,5 @@ public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
 
     Key assetId();
 
+    Key babyAssetId();
 }
