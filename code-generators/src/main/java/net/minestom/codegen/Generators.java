@@ -67,13 +67,18 @@ public final class Generators {
         generator.generateKeys(resource("wolf_variant.json"), "net.minestom.server.entity.metadata.animal.tameable", "WolfVariant");
         generator.generateKeys(resource("wolf_sound_variant.json"), "net.minestom.server.entity.metadata.animal.tameable", "WolfSoundVariant");
         generator.generateKeys(resource("cat_variant.json"), "net.minestom.server.entity.metadata.animal.tameable", "CatVariant");
+        generator.generateKeys(resource("cat_sound_variant.json"), "net.minestom.server.entity.metadata.animal.tameable", "CatSoundVariant");
         generator.generateKeys(resource("chicken_variant.json"), "net.minestom.server.entity.metadata.animal", "ChickenVariant");
+        generator.generateKeys(resource("chicken_sound_variant.json"), "net.minestom.server.entity.metadata.animal", "ChickenSoundVariant");
         generator.generateKeys(resource("cow_variant.json"), "net.minestom.server.entity.metadata.animal", "CowVariant");
+        generator.generateKeys(resource("cow_sound_variant.json"), "net.minestom.server.entity.metadata.animal", "CowSoundVariant");
         generator.generateKeys(resource("frog_variant.json"), "net.minestom.server.entity.metadata.animal", "FrogVariant");
         generator.generateKeys(resource("pig_variant.json"), "net.minestom.server.entity.metadata.animal", "PigVariant");
+        generator.generateKeys(resource("pig_sound_variant.json"), "net.minestom.server.entity.metadata.animal", "PigSoundVariant");
         generator.generateKeys(resource("zombie_nautilus_variant.json"), "net.minestom.server.entity.metadata.animal", "ZombieNautilusVariant");
         generator.generateKeys(resource("worldgen/biome.json"), "net.minestom.server.world.biome", "Biome");
         generator.generateKeys(resource("timeline.json"), "net.minestom.server.world.timeline", "Timeline");
+        generator.generateKeys(resource("world_clock.json"), "net.minestom.server.world", "WorldClock");
 
         System.out.println("Finished generating code");
     }
