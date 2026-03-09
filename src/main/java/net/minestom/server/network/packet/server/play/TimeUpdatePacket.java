@@ -4,7 +4,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.world.WorldClock;
+import net.minestom.server.world.clock.WorldClock;
 
 import java.util.Map;
 
