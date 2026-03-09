@@ -3,14 +3,28 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.world.WorldClock;
 
-import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
-import static net.minestom.server.network.NetworkBuffer.LONG;
+import java.util.Map;
 
-public record TimeUpdatePacket(long worldAge, long timeOfDay, boolean tickDayTime) implements ServerPacket.Play {
+import static net.minestom.server.network.NetworkBuffer.*;
+
+public record TimeUpdatePacket(long gameTime,
+                               Map<RegistryKey<WorldClock>, ClockState> clocks) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<TimeUpdatePacket> SERIALIZER = NetworkBufferTemplate.template(
-            LONG, TimeUpdatePacket::worldAge,
-            LONG, TimeUpdatePacket::timeOfDay,
-            BOOLEAN, TimeUpdatePacket::tickDayTime,
+            LONG, TimeUpdatePacket::gameTime,
+            WorldClock.NETWORK_TYPE.mapValue(ClockState.NETWORK_TYPE), TimeUpdatePacket::clocks,
             TimeUpdatePacket::new);
+
+    public TimeUpdatePacket {
+        clocks = Map.copyOf(clocks);
+    }
+
+    public record ClockState(long totalTicks, boolean paused) {
+        public static final NetworkBuffer.Type<ClockState> NETWORK_TYPE = NetworkBufferTemplate.template(
+                VAR_LONG, ClockState::totalTicks,
+                BOOLEAN, ClockState::paused,
+                ClockState::new);
+    }
 }

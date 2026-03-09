@@ -53,6 +53,7 @@ import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.WorldClock;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -574,7 +575,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      */
     @ApiStatus.Internal
     public TimeUpdatePacket createTimePacket() {
-        return new TimeUpdatePacket(worldAge, time, timeRate != 0);
+        //TODO(26.1) Need proper clock updater, the client can tick it now, should be only used during full synchronize irc.
+        return new TimeUpdatePacket(worldAge, Map.of(WorldClock.OVERWORLD, new TimeUpdatePacket.ClockState(time, timeRate != 0)));
     }
 
     /**

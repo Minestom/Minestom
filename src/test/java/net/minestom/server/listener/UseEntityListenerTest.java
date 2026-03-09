@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
@@ -14,7 +15,8 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class UseEntityListenerTest {
@@ -46,7 +48,8 @@ public class UseEntityListenerTest {
     public void testInteractionWithinRange() {
         ClientInteractEntityPacket packet = new ClientInteractEntityPacket(
                 targetEntity.getEntityId(),
-                new ClientInteractEntityPacket.InteractAt(0, 0, 0, PlayerHand.MAIN),
+                PlayerHand.MAIN,
+                Vec.ZERO,
                 false
         );
 
@@ -61,7 +64,8 @@ public class UseEntityListenerTest {
         targetEntity.teleport(new Pos(10, 0, 10)).join();
         ClientInteractEntityPacket packet = new ClientInteractEntityPacket(
                 targetEntity.getEntityId(),
-                new ClientInteractEntityPacket.InteractAt(0, 0, 0, PlayerHand.MAIN),
+                PlayerHand.MAIN,
+                Vec.ZERO,
                 false
         );
 
@@ -78,7 +82,8 @@ public class UseEntityListenerTest {
 
         ClientInteractEntityPacket packet = new ClientInteractEntityPacket(
                 targetEntity.getEntityId(),
-                new ClientInteractEntityPacket.InteractAt(0, 0, 0, PlayerHand.MAIN),
+                PlayerHand.MAIN,
+                Vec.ZERO,
                 false
         );
 
@@ -95,7 +100,8 @@ public class UseEntityListenerTest {
 
         ClientInteractEntityPacket packet = new ClientInteractEntityPacket(
                 targetEntity.getEntityId(),
-                new ClientInteractEntityPacket.InteractAt(0, 0, 0, PlayerHand.MAIN),
+                PlayerHand.MAIN,
+                Vec.ZERO,
                 false
         );
 

@@ -263,6 +263,7 @@ public class DynamicChunk extends Chunk {
             data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
                     networkBuffer.write(SHORT, (short) section.blockPalette().count());
+                    networkBuffer.write(SHORT, (short) 0); //TODO(26.1) fluid count
                     networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blockPalette());
                     networkBuffer.write(biomeSerializer, section.biomePalette());
                 }
