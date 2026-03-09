@@ -3,10 +3,7 @@ package net.minestom.server.world;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
-import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.*;
 import net.minestom.server.utils.IntProvider;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.attribute.EnvironmentAttribute;
@@ -26,6 +23,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
             "has_fixed_time", Codec.BOOLEAN.optional(false), DimensionType::hasFixedTime,
             "has_skylight", Codec.BOOLEAN, DimensionType::hasSkylight,
             "has_ceiling", Codec.BOOLEAN, DimensionType::hasCeiling,
+            "has_ender_dragon_fight", Codec.BOOLEAN, DimensionType::hasEnderDragonFight,
             "coordinate_scale", Codec.DOUBLE, DimensionType::coordinateScale,
             "min_y", Codec.INT, DimensionType::minY,
             "height", Codec.INT, DimensionType::height,
@@ -38,20 +36,21 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
             "cardinal_light", CardinalLight.CODEC.optional(CardinalLight.DEFAULT), DimensionType::cardinalLight,
             "attributes", EnvironmentAttributeMap.CODEC.optional(EnvironmentAttributeMap.EMPTY), DimensionType::attributes,
             "timelines", RegistryTag.codec(Registries::timeline).optional(RegistryTag.empty()), DimensionType::timelines,
+            "default_clock", WorldClock.CODEC.optional(), DimensionType::defaultClock,
             DimensionType::create);
 
     static DimensionType create(
-            boolean hasFixedTime, boolean hasSkyLight, boolean hasCeiling,
+            boolean hasFixedTime, boolean hasSkyLight, boolean hasCeiling, boolean hasEnderDragonFight,
             double coordinateScale, int minY, int height, int logicalHeight,
             String infiniburn, float ambientLight,
             IntProvider monsterSpawnLightLevel, int monsterSpawnBlockLightLimit,
             Skybox skybox, CardinalLight cardinalLight,
-            EnvironmentAttributeMap attributes, RegistryTag<Timeline> timelines
+            EnvironmentAttributeMap attributes, RegistryTag<Timeline> timelines, RegistryKey<WorldClock> defaultClock
     ) {
-        return new DimensionTypeImpl(hasFixedTime, hasSkyLight, hasCeiling,
+        return new DimensionTypeImpl(hasFixedTime, hasSkyLight, hasCeiling, hasEnderDragonFight,
                 coordinateScale, minY, height, logicalHeight, infiniburn,
                 ambientLight, monsterSpawnLightLevel, monsterSpawnBlockLightLimit,
-                skybox, cardinalLight, attributes, timelines
+                skybox, cardinalLight, attributes, timelines, defaultClock
         );
     }
 
@@ -75,6 +74,8 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
     boolean hasSkylight();
 
     boolean hasCeiling();
+
+    boolean hasEnderDragonFight();
 
     double coordinateScale();
 
@@ -104,6 +105,8 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
 
     RegistryTag<Timeline> timelines();
 
+    RegistryKey<WorldClock> defaultClock();
+
     default int totalHeight() {
         return minY() + height();
     }
@@ -127,6 +130,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         private boolean hasFixedTime = false;
         private boolean hasSkylight = true;
         private boolean hasCeiling = false;
+        private boolean hasEnderDragonFight = false;
         private double coordinateScale = 1;
         private int minY = VANILLA_MIN_Y;
         private int height = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
@@ -139,6 +143,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         private CardinalLight cardinalLight = CardinalLight.DEFAULT;
         private EnvironmentAttributeMap.Builder attributes = EnvironmentAttributeMap.builder();
         private RegistryTag<Timeline> timelines = RegistryTag.empty();
+        private RegistryKey<WorldClock> defaultClock = null;
 
         private Builder() {
         }
@@ -158,6 +163,12 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         @Contract(value = "_ -> this")
         public Builder ceiling(boolean hasCeiling) {
             this.hasCeiling = hasCeiling;
+            return this;
+        }
+
+        @Contract
+        public Builder enderDragonFight(boolean hasEnderDragonFight) {
+            this.hasEnderDragonFight = hasEnderDragonFight;
             return this;
         }
 
@@ -247,14 +258,20 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
             return this;
         }
 
+        @Contract(value = "_ -> this")
+        public Builder defaultClock(RegistryKey<WorldClock> defaultClock) {
+            this.defaultClock = defaultClock;
+            return this;
+        }
+
         @Contract(pure = true)
         public DimensionType build() {
             Check.argCondition(height < logicalHeight, "logicalHeight must be less than or equals height");
             Check.argCondition(minY + height - 1 > 2031, "the maximum building height (minY + height -1) must be less than 3032");
 
-            return DimensionType.create(hasFixedTime, hasSkylight, hasCeiling, coordinateScale,
+            return DimensionType.create(hasFixedTime, hasSkylight, hasCeiling, hasEnderDragonFight, coordinateScale,
                     minY, height, logicalHeight, infiniburn, ambientLight, monsterSpawnLightLevel,
-                    monsterSpawnBlockLightLimit, skybox, cardinalLight, attributes.build(), timelines);
+                    monsterSpawnBlockLightLimit, skybox, cardinalLight, attributes.build(), timelines, defaultClock);
         }
     }
 }
