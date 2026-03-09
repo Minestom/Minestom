@@ -17,9 +17,9 @@ sealed interface TrimMaterials permits TrimMaterial {
 
     RegistryKey<TrimMaterial> AMETHYST = RegistryKey.unsafeOf("amethyst");
 
-    RegistryKey<TrimMaterial> COPPER = RegistryKey.unsafeOf("copper");
-
     RegistryKey<TrimMaterial> QUARTZ = RegistryKey.unsafeOf("quartz");
+
+    RegistryKey<TrimMaterial> COPPER = RegistryKey.unsafeOf("copper");
 
     RegistryKey<TrimMaterial> EMERALD = RegistryKey.unsafeOf("emerald");
 

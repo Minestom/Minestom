@@ -45,9 +45,9 @@ sealed interface Biomes permits Biome {
 
     RegistryKey<Biome> WARPED_FOREST = RegistryKey.unsafeOf("warped_forest");
 
-    RegistryKey<Biome> WINDSWEPT_GRAVELLY_HILLS = RegistryKey.unsafeOf("windswept_gravelly_hills");
-
     RegistryKey<Biome> WINDSWEPT_HILLS = RegistryKey.unsafeOf("windswept_hills");
+
+    RegistryKey<Biome> WINDSWEPT_GRAVELLY_HILLS = RegistryKey.unsafeOf("windswept_gravelly_hills");
 
     RegistryKey<Biome> DARK_FOREST = RegistryKey.unsafeOf("dark_forest");
 
@@ -89,9 +89,9 @@ sealed interface Biomes permits Biome {
 
     RegistryKey<Biome> DEEP_OCEAN = RegistryKey.unsafeOf("deep_ocean");
 
-    RegistryKey<Biome> MEADOW = RegistryKey.unsafeOf("meadow");
-
     RegistryKey<Biome> SMALL_END_ISLANDS = RegistryKey.unsafeOf("small_end_islands");
+
+    RegistryKey<Biome> MEADOW = RegistryKey.unsafeOf("meadow");
 
     RegistryKey<Biome> SWAMP = RegistryKey.unsafeOf("swamp");
 

@@ -65,9 +65,9 @@ sealed interface Enchantments permits Enchantment {
 
     RegistryKey<Enchantment> BREACH = RegistryKey.unsafeOf("breach");
 
-    RegistryKey<Enchantment> LUNGE = RegistryKey.unsafeOf("lunge");
-
     RegistryKey<Enchantment> PIERCING = RegistryKey.unsafeOf("piercing");
+
+    RegistryKey<Enchantment> LUNGE = RegistryKey.unsafeOf("lunge");
 
     RegistryKey<Enchantment> MENDING = RegistryKey.unsafeOf("mending");
 

@@ -323,6 +323,8 @@ sealed interface Blocks permits Block {
 
     Block DANDELION = BlockImpl.get("dandelion");
 
+    Block GOLDEN_DANDELION = BlockImpl.get("golden_dandelion");
+
     Block TORCHFLOWER = BlockImpl.get("torchflower");
 
     Block POPPY = BlockImpl.get("poppy");
@@ -852,6 +854,8 @@ sealed interface Blocks permits Block {
     Block POTTED_FERN = BlockImpl.get("potted_fern");
 
     Block POTTED_DANDELION = BlockImpl.get("potted_dandelion");
+
+    Block POTTED_GOLDEN_DANDELION = BlockImpl.get("potted_golden_dandelion");
 
     Block POTTED_POPPY = BlockImpl.get("potted_poppy");
 
