@@ -42,6 +42,8 @@ public class PigMeta extends AnimalMeta {
     protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.PIG_VARIANT)
             return (T) getVariant();
+        if (component == DataComponents.PIG_SOUND_VARIANT)
+            return (T) metadata.get(MetadataDef.Pig.SOUND_VARIANT);
         return super.get(component);
     }
 
@@ -50,6 +52,8 @@ public class PigMeta extends AnimalMeta {
     protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.PIG_VARIANT)
             setVariant((RegistryKey<PigVariant>) value);
+        else if (component == DataComponents.PIG_SOUND_VARIANT)
+            metadata.set(MetadataDef.Pig.SOUND_VARIANT, (RegistryKey<PigSoundVariant>) value);
         else super.set(component, value);
     }
 
