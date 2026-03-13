@@ -266,7 +266,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
                 if (v.getIdentifier().equals(identifier))
                     return v;
             }
-            Check.fail("Identifier for NameTagVisibility is invalid: " + identifier);
+            Check.fail("Identifier for NameTagVisibility is invalid: {0}", identifier);
             return null;
         }
 
@@ -322,7 +322,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
                 if (v.getIdentifier().equals(identifier))
                     return v;
             }
-            Check.fail("Identifier for CollisionRule is invalid: " + identifier);
+            Check.fail("Identifier for CollisionRule is invalid: {0}", identifier);
             return null;
         }
 
