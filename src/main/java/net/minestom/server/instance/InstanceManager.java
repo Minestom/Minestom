@@ -11,10 +11,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -84,7 +81,7 @@ public final class InstanceManager {
      */
     public SharedInstance registerSharedInstance(SharedInstance sharedInstance) {
         final InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();
-        Check.notNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
+        Objects.requireNonNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
 
         instanceContainer.addSharedInstance(sharedInstance);
         UNSAFE_registerInstance(sharedInstance);
@@ -99,7 +96,7 @@ public final class InstanceManager {
      * @throws IllegalStateException if {@code instanceContainer} is not registered
      */
     public SharedInstance createSharedInstance(InstanceContainer instanceContainer) {
-        Check.notNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
+        Objects.requireNonNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
         Check.stateCondition(!instanceContainer.isRegistered(), "The container needs to be register in the InstanceManager");
 
         final SharedInstance sharedInstance = new SharedInstance(UUID.randomUUID(), instanceContainer);

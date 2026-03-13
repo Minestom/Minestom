@@ -28,7 +28,6 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.collection.ConcurrentMessageQueues;
-import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -243,7 +242,7 @@ public final class ConnectionManager {
         player.sendPacket(new UpdateEnabledFeaturesPacket(event.getFeatureFlags().stream().map(StaticProtocolObject::name).toList()));
 
         final Instance spawningInstance = event.getSpawningInstance();
-        Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
+        Objects.requireNonNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
 
         if (event.willClearChat()) player.sendPacket(new ResetChatPacket());
 

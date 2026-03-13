@@ -9,7 +9,6 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryTranscoder;
-import net.minestom.server.utils.validate.Check;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.Map.entry;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
@@ -46,7 +46,7 @@ public class ItemComponentReadWriteTest {
     public void testReadWrite() throws IOException {
         var componentEntries = new ArrayList<>(EXTRA_CASES.entrySet());
         try (InputStream is = MinestomData.resource("item.json")) {
-            Check.notNull(is, "item.json not found");
+            Objects.requireNonNull(is, "item.json not found");
 
             var object = GSON.fromJson(new InputStreamReader(is), JsonObject.class);
             for (var itemEntry : object.entrySet()) {

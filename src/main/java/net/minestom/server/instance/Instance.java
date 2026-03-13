@@ -938,7 +938,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      */
     @Override
     public void showBossBar(BossBar bar) {
-        Check.notNull(bar, "Boss bar cannot be null");
+        Objects.requireNonNull(bar, "Boss bar cannot be null");
         if (!bossBars.add(bar)) return;
         PacketGroupingAudience.super.showBossBar(bar);
     }
@@ -950,7 +950,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      */
     @Override
     public void hideBossBar(BossBar bar) {
-        Check.notNull(bar, "Boss bar cannot be null");
+        Objects.requireNonNull(bar, "Boss bar cannot be null");
         if (!bossBars.remove(bar)) return;
         PacketGroupingAudience.super.hideBossBar(bar);
     }
