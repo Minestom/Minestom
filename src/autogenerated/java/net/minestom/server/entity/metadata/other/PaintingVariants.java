@@ -25,9 +25,9 @@ sealed interface PaintingVariants permits PaintingVariant {
 
     RegistryKey<PaintingVariant> BAROQUE = RegistryKey.unsafeOf("baroque");
 
-    RegistryKey<PaintingVariant> ENDBOSS = RegistryKey.unsafeOf("endboss");
-
     RegistryKey<PaintingVariant> ORB = RegistryKey.unsafeOf("orb");
+
+    RegistryKey<PaintingVariant> ENDBOSS = RegistryKey.unsafeOf("endboss");
 
     RegistryKey<PaintingVariant> AZTEC2 = RegistryKey.unsafeOf("aztec2");
 
@@ -45,9 +45,9 @@ sealed interface PaintingVariants permits PaintingVariant {
 
     RegistryKey<PaintingVariant> PIGSCENE = RegistryKey.unsafeOf("pigscene");
 
-    RegistryKey<PaintingVariant> BURNING_SKULL = RegistryKey.unsafeOf("burning_skull");
-
     RegistryKey<PaintingVariant> FIRE = RegistryKey.unsafeOf("fire");
+
+    RegistryKey<PaintingVariant> BURNING_SKULL = RegistryKey.unsafeOf("burning_skull");
 
     RegistryKey<PaintingVariant> SEA = RegistryKey.unsafeOf("sea");
 
@@ -61,9 +61,9 @@ sealed interface PaintingVariants permits PaintingVariant {
 
     RegistryKey<PaintingVariant> PRAIRIE_RIDE = RegistryKey.unsafeOf("prairie_ride");
 
-    RegistryKey<PaintingVariant> FERN = RegistryKey.unsafeOf("fern");
-
     RegistryKey<PaintingVariant> PASSAGE = RegistryKey.unsafeOf("passage");
+
+    RegistryKey<PaintingVariant> FERN = RegistryKey.unsafeOf("fern");
 
     RegistryKey<PaintingVariant> LOWMIST = RegistryKey.unsafeOf("lowmist");
 

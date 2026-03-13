@@ -39,9 +39,9 @@ sealed interface JukeboxSongs permits JukeboxSong {
 
     RegistryKey<JukeboxSong> CHIRP = RegistryKey.unsafeOf("chirp");
 
-    RegistryKey<JukeboxSong> PIGSTEP = RegistryKey.unsafeOf("pigstep");
-
     RegistryKey<JukeboxSong> CREATOR = RegistryKey.unsafeOf("creator");
+
+    RegistryKey<JukeboxSong> PIGSTEP = RegistryKey.unsafeOf("pigstep");
 
     RegistryKey<JukeboxSong> WARD = RegistryKey.unsafeOf("ward");
 
