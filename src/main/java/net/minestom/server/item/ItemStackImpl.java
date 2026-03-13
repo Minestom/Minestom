@@ -12,10 +12,10 @@ import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -60,7 +60,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     public ItemStackImpl {
-        Check.notNull(material, "Material cannot be null");
+        Objects.requireNonNull(material, "Material cannot be null");
 
         // It is relevant to create the minimal diff of the prototype so that #isSimilar returns consistent
         // results for ItemStacks which would resolve to the same thing. For example, consider two items

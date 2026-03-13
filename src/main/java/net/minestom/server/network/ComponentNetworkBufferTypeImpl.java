@@ -15,13 +15,9 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
-import net.minestom.server.utils.validate.Check;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 import static net.minestom.server.network.NetworkBufferImpl.impl;
@@ -30,7 +26,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
     @Override
     public void write(NetworkBuffer buffer, Component value) {
-        Check.notNull(value, "Component cannot be null");
+        Objects.requireNonNull(value, "Component cannot be null");
 
         buffer.write(BYTE, TAG_COMPOUND);
         writeInnerComponent(buffer, value);
