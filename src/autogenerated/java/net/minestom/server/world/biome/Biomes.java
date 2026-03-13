@@ -35,9 +35,9 @@ sealed interface Biomes permits Biome {
 
     RegistryKey<Biome> DRIPSTONE_CAVES = RegistryKey.unsafeOf("dripstone_caves");
 
-    RegistryKey<Biome> CHERRY_GROVE = RegistryKey.unsafeOf("cherry_grove");
-
     RegistryKey<Biome> FLOWER_FOREST = RegistryKey.unsafeOf("flower_forest");
+
+    RegistryKey<Biome> CHERRY_GROVE = RegistryKey.unsafeOf("cherry_grove");
 
     RegistryKey<Biome> WINDSWEPT_FOREST = RegistryKey.unsafeOf("windswept_forest");
 
@@ -49,11 +49,11 @@ sealed interface Biomes permits Biome {
 
     RegistryKey<Biome> WINDSWEPT_GRAVELLY_HILLS = RegistryKey.unsafeOf("windswept_gravelly_hills");
 
-    RegistryKey<Biome> DARK_FOREST = RegistryKey.unsafeOf("dark_forest");
-
     RegistryKey<Biome> RIVER = RegistryKey.unsafeOf("river");
 
     RegistryKey<Biome> SAVANNA = RegistryKey.unsafeOf("savanna");
+
+    RegistryKey<Biome> DARK_FOREST = RegistryKey.unsafeOf("dark_forest");
 
     RegistryKey<Biome> FROZEN_PEAKS = RegistryKey.unsafeOf("frozen_peaks");
 
@@ -89,9 +89,9 @@ sealed interface Biomes permits Biome {
 
     RegistryKey<Biome> DEEP_OCEAN = RegistryKey.unsafeOf("deep_ocean");
 
-    RegistryKey<Biome> SMALL_END_ISLANDS = RegistryKey.unsafeOf("small_end_islands");
-
     RegistryKey<Biome> MEADOW = RegistryKey.unsafeOf("meadow");
+
+    RegistryKey<Biome> SMALL_END_ISLANDS = RegistryKey.unsafeOf("small_end_islands");
 
     RegistryKey<Biome> SWAMP = RegistryKey.unsafeOf("swamp");
 
@@ -129,9 +129,9 @@ sealed interface Biomes permits Biome {
 
     RegistryKey<Biome> MUSHROOM_FIELDS = RegistryKey.unsafeOf("mushroom_fields");
 
-    RegistryKey<Biome> FOREST = RegistryKey.unsafeOf("forest");
-
     RegistryKey<Biome> FROZEN_OCEAN = RegistryKey.unsafeOf("frozen_ocean");
+
+    RegistryKey<Biome> FOREST = RegistryKey.unsafeOf("forest");
 
     RegistryKey<Biome> OLD_GROWTH_SPRUCE_TAIGA = RegistryKey.unsafeOf("old_growth_spruce_taiga");
 
