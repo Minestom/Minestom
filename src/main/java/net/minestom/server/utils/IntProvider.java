@@ -5,6 +5,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 import java.util.Random;
@@ -90,7 +91,7 @@ public sealed interface IntProvider {
 
     record Clamped(IntProvider source, int minInclusive, int maxInclusive) implements IntProvider {
         public static final StructCodec<Clamped> CODEC = StructCodec.struct(
-                "source", IntProvider.CODEC, Clamped::source,
+                "source", Codec.ForwardRef(() -> IntProvider.CODEC), Clamped::source,
                 "min_inclusive", Codec.INT, Clamped::minInclusive,
                 "max_inclusive", Codec.INT, Clamped::maxInclusive,
                 Clamped::new);
@@ -108,7 +109,7 @@ public sealed interface IntProvider {
 
     record Weighted(WeightedList<IntProvider> distribution) implements IntProvider {
         public static final StructCodec<Weighted> CODEC = StructCodec.struct(
-                "distribution", WeightedList.codec(IntProvider.CODEC), Weighted::distribution,
+                "distribution", WeightedList.codec(Codec.ForwardRef(() -> IntProvider.CODEC)), Weighted::distribution,
                 Weighted::new);
 
         @Override
