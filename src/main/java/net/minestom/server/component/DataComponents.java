@@ -31,6 +31,7 @@ import java.util.List;
 
 import static net.minestom.server.component.DataComponentImpl.register;
 
+//TODO(26.1) Check each component for differences
 public class DataComponents {
 
     public static final DataComponent<CustomData> CUSTOM_DATA = register("custom_data", CustomData.NETWORK_TYPE, CustomData.CODEC);
