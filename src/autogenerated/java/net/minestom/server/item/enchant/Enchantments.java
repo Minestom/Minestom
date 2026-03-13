@@ -43,9 +43,9 @@ sealed interface Enchantments permits Enchantment {
 
     RegistryKey<Enchantment> FIRE_PROTECTION = RegistryKey.unsafeOf("fire_protection");
 
-    RegistryKey<Enchantment> QUICK_CHARGE = RegistryKey.unsafeOf("quick_charge");
-
     RegistryKey<Enchantment> RESPIRATION = RegistryKey.unsafeOf("respiration");
+
+    RegistryKey<Enchantment> QUICK_CHARGE = RegistryKey.unsafeOf("quick_charge");
 
     RegistryKey<Enchantment> LUCK_OF_THE_SEA = RegistryKey.unsafeOf("luck_of_the_sea");
 
@@ -65,9 +65,9 @@ sealed interface Enchantments permits Enchantment {
 
     RegistryKey<Enchantment> BREACH = RegistryKey.unsafeOf("breach");
 
-    RegistryKey<Enchantment> PIERCING = RegistryKey.unsafeOf("piercing");
-
     RegistryKey<Enchantment> LUNGE = RegistryKey.unsafeOf("lunge");
+
+    RegistryKey<Enchantment> PIERCING = RegistryKey.unsafeOf("piercing");
 
     RegistryKey<Enchantment> MENDING = RegistryKey.unsafeOf("mending");
 
