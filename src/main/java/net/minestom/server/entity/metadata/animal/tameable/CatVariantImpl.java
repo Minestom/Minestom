@@ -1,12 +1,13 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.utils.validate.Check;
+
+import java.util.Objects;
 
 record CatVariantImpl(Key assetId, Key babyAssetId) implements CatVariant {
 
     public CatVariantImpl {
-        Check.notNull(assetId, "assetId");
-        Check.notNull(babyAssetId, "babyAssetId");
+        Objects.requireNonNull(assetId, "assetId");
+        Objects.requireNonNull(babyAssetId, "babyAssetId");
     }
 }

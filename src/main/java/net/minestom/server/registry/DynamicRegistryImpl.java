@@ -128,9 +128,9 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Override
     public RegistryKey<T> register(Key key, T object, DataPack pack) {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
-        Check.notNull(key, "Key cannot be null");
-        Check.notNull(object, "Object cannot be null");
-        Check.notNull(pack, "Pack cannot be null");
+        Objects.requireNonNull(key, "Key cannot be null");
+        Objects.requireNonNull(object, "Object cannot be null");
+        Objects.requireNonNull(pack, "Pack cannot be null");
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
@@ -157,7 +157,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Override
     public boolean remove(Key key) throws UnsupportedOperationException {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
-        Check.notNull(key, "Key cannot be null");
+        Objects.requireNonNull(key, "Key cannot be null");
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
@@ -260,7 +260,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     private RegistryDataPacket createRegistryDataPacket(Registries registries, boolean excludeVanilla) {
-        Check.notNull(codec, "Cannot create registry data packet for server-only registry");
+        Objects.requireNonNull(codec, "Cannot create registry data packet for server-only registry");
         Transcoder<BinaryTag> transcoder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         // Copy to avoid concurrent modification issues while iterating, as we are not synchronized on the registry
         final List<T> idToValue;

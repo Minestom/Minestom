@@ -15,6 +15,7 @@ public final class Check {
 
     }
 
+    @Deprecated(forRemoval = true) // Use Objects.requireNonNull instead. (Has much better IDE support)
     @Contract("null, _ -> fail")
     public static void notNull(@Nullable Object object, String reason) {
         if (Objects.isNull(object)) {

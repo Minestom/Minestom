@@ -30,7 +30,6 @@ public record Ingredient(List<Material> items) {
                 @Override
                 public List<Material> read(NetworkBuffer buffer) {
                     int size = buffer.read(VAR_INT) - 1;
-                    Check.notNull(size > Short.MAX_VALUE, "too many ingredients");
                     if (size == -1) {
                         throw new UnsupportedOperationException("cannot read ingredient tags yet");
                     }

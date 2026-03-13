@@ -6,7 +6,6 @@ import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.EOFException;
@@ -17,6 +16,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class Server {
@@ -102,7 +102,7 @@ public final class Server {
     }
 
     private void playerReadLoop(PlayerSocketConnection connection) {
-        Check.notNull(connection, "connection cannot be null");
+        Objects.requireNonNull(connection, "connection cannot be null");
         while (!stop) {
             try {
                 // Read & process packets
@@ -122,7 +122,7 @@ public final class Server {
     }
 
     private void playerWriteLoop(PlayerSocketConnection connection) {
-        Check.notNull(connection, "connection cannot be null");
+        Objects.requireNonNull(connection, "connection cannot be null");
         while (!stop) {
             try {
                 connection.flushSync();
