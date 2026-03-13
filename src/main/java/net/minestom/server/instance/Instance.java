@@ -573,10 +573,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      *
      * @return the {@link TimeUpdatePacket} with this instance data
      */
-    @ApiStatus.Internal
     public TimeUpdatePacket createTimePacket() {
         //TODO(26.1) Need proper clock updater, the client can tick it now, should be only used during full synchronize irc.
-        return new TimeUpdatePacket(worldAge, Map.of(WorldClock.OVERWORLD, new TimeUpdatePacket.ClockState(time, timeRate != 0)));
+        return new TimeUpdatePacket(worldAge, Map.of(WorldClock.OVERWORLD, new TimeUpdatePacket.ClockState(time, 0, timeRate)));
     }
 
     /**
