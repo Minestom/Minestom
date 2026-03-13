@@ -428,11 +428,16 @@ public final class ConnectionManager {
         entries.add(registries.wolfVariant().tagRegistry());
         entries.add(registries.wolfSoundVariant().tagRegistry());
         entries.add(registries.catVariant().tagRegistry());
+        entries.add(registries.catSoundVariant().tagRegistry());
         entries.add(registries.chickenVariant().tagRegistry());
+        entries.add(registries.chickenSoundVariant().tagRegistry());
         entries.add(registries.cowVariant().tagRegistry());
+        entries.add(registries.cowSoundVariant().tagRegistry());
         entries.add(registries.frogVariant().tagRegistry());
         entries.add(registries.pigVariant().tagRegistry());
+        entries.add(registries.pigSoundVariant().tagRegistry());
         entries.add(registries.zombieNautilusVariant().tagRegistry());
+        entries.add(registries.worldClock().tagRegistry());
         entries.add(registries.timeline().tagRegistry());
         entries.add(registries.dimensionType().tagRegistry());
         // MUST BE IN SYNC WITH #doConfiguration
