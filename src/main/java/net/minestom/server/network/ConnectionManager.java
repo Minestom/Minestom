@@ -284,8 +284,8 @@ public final class ConnectionManager {
             player.sendPacket(registries.pigVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.pigSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.zombieNautilusVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.timeline().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.worldClock().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.timeline().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.dimensionType().registryDataPacket(registries, excludeVanilla));
             // MUST BE IN SYNC WITH #createTagsPacket
             // TODO: TEST_ENVIRONMENT, TEST_INSTANCE

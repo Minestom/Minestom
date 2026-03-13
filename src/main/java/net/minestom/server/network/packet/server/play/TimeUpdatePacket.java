@@ -21,10 +21,18 @@ public record TimeUpdatePacket(long gameTime,
         clocks = Map.copyOf(clocks);
     }
 
-    public record ClockState(long totalTicks, boolean paused) {
+    /**
+     * Represents a clock state update for time.
+     *
+     * @param totalTicks the number of ticks since this clock was ticking
+     * @param partialTick the partial tick of the clock (based on rate), wiped on full update
+     * @param rate the rate of the clock in ticks, 1 for normal
+     */
+    public record ClockState(long totalTicks, float partialTick, float rate) {
         public static final NetworkBuffer.Type<ClockState> NETWORK_TYPE = NetworkBufferTemplate.template(
                 VAR_LONG, ClockState::totalTicks,
-                BOOLEAN, ClockState::paused,
+                FLOAT, ClockState::partialTick,
+                FLOAT, ClockState::rate,
                 ClockState::new);
     }
 }
