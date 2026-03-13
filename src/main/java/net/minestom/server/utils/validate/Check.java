@@ -44,6 +44,7 @@ public final class Check {
         }
     }
 
+    @Deprecated(forRemoval = true) // Just throw instead, as javac control flow is opaque to calling this function.
     @Contract("_ -> fail")
     public static void fail(String reason) {
         throw new IllegalArgumentException(reason);
