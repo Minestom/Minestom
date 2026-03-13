@@ -575,7 +575,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      */
     public TimeUpdatePacket createTimePacket() {
         //TODO(26.1) Need proper clock updater, the client can tick it now, should be only used during full synchronize irc.
-        return new TimeUpdatePacket(worldAge, Map.of(WorldClock.OVERWORLD, new TimeUpdatePacket.ClockState(time, 0, timeRate)));
+        return new TimeUpdatePacket(worldAge, Map.of(getCachedDimensionType().defaultClock(), new TimeUpdatePacket.ClockState(time, 0, timeRate)));
     }
 
     /**
