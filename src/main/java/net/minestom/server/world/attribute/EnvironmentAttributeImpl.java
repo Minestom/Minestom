@@ -32,4 +32,9 @@ record EnvironmentAttributeImpl<T>(
     public Codec<T> valueCodec() {
         return type.codec();
     }
+
+    @Override
+    public T defaultValue() {
+        return defaultValue;
+    }
 }
