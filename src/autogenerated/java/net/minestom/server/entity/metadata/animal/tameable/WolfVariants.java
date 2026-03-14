@@ -17,9 +17,9 @@ sealed interface WolfVariants permits WolfVariant {
 
     RegistryKey<WolfVariant> STRIPED = RegistryKey.unsafeOf("striped");
 
-    RegistryKey<WolfVariant> SPOTTED = RegistryKey.unsafeOf("spotted");
-
     RegistryKey<WolfVariant> ASHEN = RegistryKey.unsafeOf("ashen");
+
+    RegistryKey<WolfVariant> SPOTTED = RegistryKey.unsafeOf("spotted");
 
     RegistryKey<WolfVariant> RUSTY = RegistryKey.unsafeOf("rusty");
 
