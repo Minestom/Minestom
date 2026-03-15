@@ -2,6 +2,7 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 
 import java.util.Collections;
@@ -10,8 +11,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Represents a scoreboard which rendered a tag below the name.
+ * @deprecated Use a Scoreboard instead
  */
-public class BelowNameTag implements Scoreboard {
+@Deprecated
+public class BelowNameTag {
 
     /**
      * <b>WARNING:</b> You shouldn't create scoreboards with the same prefix as those
@@ -47,12 +50,10 @@ public class BelowNameTag implements Scoreboard {
         this.scoreboardObjectivePacket = this.getCreationObjectivePacket(value, ScoreboardObjectivePacket.Type.INTEGER);
     }
 
-    @Override
     public String getObjectiveName() {
         return this.objectiveName;
     }
 
-    @Override
     public boolean addViewer(Player player) {
         final boolean result = this.viewers.add(player);
         if (result) {
@@ -63,7 +64,6 @@ public class BelowNameTag implements Scoreboard {
         return result;
     }
 
-    @Override
     public boolean removeViewer(Player player) {
         final boolean result = this.viewers.remove(player);
         if (result) {
@@ -73,8 +73,37 @@ public class BelowNameTag implements Scoreboard {
         return result;
     }
 
-    @Override
     public Set<Player> getViewers() {
         return unmodifiableViewers;
+    }
+
+    /**
+     * Creates a creation objective packet.
+     *
+     * @param value The value for the objective
+     * @param type  The type for the objective
+     * @return the creation objective packet
+     */
+    public ScoreboardObjectivePacket getCreationObjectivePacket(Component value, ScoreboardObjectivePacket.Type type) {
+        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 0, value, type, null);
+    }
+
+    /**
+     * Creates the destruction objective packet.
+     *
+     * @return the destruction objective packet
+     */
+    public ScoreboardObjectivePacket getDestructionObjectivePacket() {
+        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 1, null, null, null);
+    }
+
+    /**
+     * Creates the {@link DisplayScoreboardPacket}.
+     *
+     * @param position The position of the scoreboard
+     * @return the created display scoreboard packet
+     */
+    public DisplayScoreboardPacket getDisplayScoreboardPacket(byte position) {
+        return new DisplayScoreboardPacket(position, getObjectiveName());
     }
 }
