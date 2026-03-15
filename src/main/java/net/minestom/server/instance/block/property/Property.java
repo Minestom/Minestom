@@ -10,9 +10,6 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Used to set a property with {@link Block#withProperty(Property, Object)}
  * or retrieve a property with {@link Block#getProperty(Property)}.
- * <p>
- * For property enums associated with exactly one property {@link Block#withProperty(PropertyEnum.Keyed)} is also available,
- * intended for hard coded property values.
  */
 public sealed interface Property<T> extends Properties permits BooleanProperty, EnumProperty, IntegerProperty {
     /**

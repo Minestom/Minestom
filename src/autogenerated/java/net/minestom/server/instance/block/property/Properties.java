@@ -182,87 +182,87 @@ sealed interface Properties permits Property {
 
     Property<Integer> HONEY_LEVEL = new IntegerProperty("honey_level");
 
-    Property<Axis> AXIS = new EnumProperty<>("axis", Axis::parse);
+    Property<Axis> AXIS = new EnumProperty<>("axis", Axis::value, Axis::parse);
 
-    Property<Facing> FACING = new EnumProperty<>("facing", Facing::parse);
+    Property<Facing> FACING = new EnumProperty<>("facing", Facing::value, Facing::parse);
 
-    Property<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT = new EnumProperty<>("instrument", NoteBlockInstrument::parse);
+    Property<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT = new EnumProperty<>("instrument", NoteBlockInstrument::value, NoteBlockInstrument::parse);
 
-    Property<BedPart> BED_PART = new EnumProperty<>("part", BedPart::parse);
+    Property<BedPart> BED_PART = new EnumProperty<>("part", BedPart::value, BedPart::parse);
 
-    Property<PistonType> PISTON_TYPE = new EnumProperty<>("type", PistonType::parse);
+    Property<PistonType> PISTON_TYPE = new EnumProperty<>("type", PistonType::value, PistonType::parse);
 
-    Property<ShelfSideChain> SHELF_SIDE_CHAIN = new EnumProperty<>("side_chain", ShelfSideChain::parse);
+    Property<ShelfSideChain> SHELF_SIDE_CHAIN = new EnumProperty<>("side_chain", ShelfSideChain::value, ShelfSideChain::parse);
 
-    Property<CreakingHeartState> CREAKING_HEART_STATE = new EnumProperty<>("creaking_heart_state", CreakingHeartState::parse);
+    Property<CreakingHeartState> CREAKING_HEART_STATE = new EnumProperty<>("creaking_heart_state", CreakingHeartState::value, CreakingHeartState::parse);
 
-    Property<TopBottomHalf> TOP_BOTTOM_HALF = new EnumProperty<>("half", TopBottomHalf::parse);
+    Property<TopBottomHalf> TOP_BOTTOM_HALF = new EnumProperty<>("half", TopBottomHalf::value, TopBottomHalf::parse);
 
-    Property<UpperLowerHalf> UPPER_LOWER_HALF = new EnumProperty<>("half", UpperLowerHalf::parse);
+    Property<UpperLowerHalf> UPPER_LOWER_HALF = new EnumProperty<>("half", UpperLowerHalf::value, UpperLowerHalf::parse);
 
-    Property<StairsShape> STAIRS_SHAPE = new EnumProperty<>("shape", StairsShape::parse);
+    Property<StairsShape> STAIRS_SHAPE = new EnumProperty<>("shape", StairsShape::value, StairsShape::parse);
 
-    Property<ChestType> CHEST_TYPE = new EnumProperty<>("type", ChestType::parse);
+    Property<ChestType> CHEST_TYPE = new EnumProperty<>("type", ChestType::value, ChestType::parse);
 
-    Property<RedstoneWireSide> REDSTONE_WIRE_EAST = new EnumProperty<>("east", RedstoneWireSide::parse);
+    Property<RedstoneWireSide> REDSTONE_WIRE_EAST = new EnumProperty<>("east", RedstoneWireSide::value, RedstoneWireSide::parse);
 
-    Property<RedstoneWireSide> REDSTONE_WIRE_NORTH = new EnumProperty<>("north", RedstoneWireSide::parse);
+    Property<RedstoneWireSide> REDSTONE_WIRE_NORTH = new EnumProperty<>("north", RedstoneWireSide::value, RedstoneWireSide::parse);
 
-    Property<RedstoneWireSide> REDSTONE_WIRE_SOUTH = new EnumProperty<>("south", RedstoneWireSide::parse);
+    Property<RedstoneWireSide> REDSTONE_WIRE_SOUTH = new EnumProperty<>("south", RedstoneWireSide::value, RedstoneWireSide::parse);
 
-    Property<RedstoneWireSide> REDSTONE_WIRE_WEST = new EnumProperty<>("west", RedstoneWireSide::parse);
+    Property<RedstoneWireSide> REDSTONE_WIRE_WEST = new EnumProperty<>("west", RedstoneWireSide::value, RedstoneWireSide::parse);
 
-    Property<DoorHinge> DOOR_HINGE = new EnumProperty<>("hinge", DoorHinge::parse);
+    Property<DoorHinge> DOOR_HINGE = new EnumProperty<>("hinge", DoorHinge::value, DoorHinge::parse);
 
-    Property<RailShape> RAIL_SHAPE = new EnumProperty<>("shape", RailShape::parse);
+    Property<RailShape> RAIL_SHAPE = new EnumProperty<>("shape", RailShape::value, RailShape::parse);
 
-    Property<ButtonFace> BUTTON_FACE = new EnumProperty<>("face", ButtonFace::parse);
+    Property<ButtonFace> BUTTON_FACE = new EnumProperty<>("face", ButtonFace::value, ButtonFace::parse);
 
-    Property<LeverFace> LEVER_FACE = new EnumProperty<>("face", LeverFace::parse);
+    Property<LeverFace> LEVER_FACE = new EnumProperty<>("face", LeverFace::value, LeverFace::parse);
 
-    Property<GrindstoneFace> GRINDSTONE_FACE = new EnumProperty<>("face", GrindstoneFace::parse);
+    Property<GrindstoneFace> GRINDSTONE_FACE = new EnumProperty<>("face", GrindstoneFace::value, GrindstoneFace::parse);
 
-    Property<SlabType> SLAB_TYPE = new EnumProperty<>("type", SlabType::parse);
+    Property<SlabType> SLAB_TYPE = new EnumProperty<>("type", SlabType::value, SlabType::parse);
 
-    Property<WallSide> WALL_EAST = new EnumProperty<>("east", WallSide::parse);
+    Property<WallSide> WALL_EAST = new EnumProperty<>("east", WallSide::value, WallSide::parse);
 
-    Property<WallSide> WALL_NORTH = new EnumProperty<>("north", WallSide::parse);
+    Property<WallSide> WALL_NORTH = new EnumProperty<>("north", WallSide::value, WallSide::parse);
 
-    Property<WallSide> WALL_SOUTH = new EnumProperty<>("south", WallSide::parse);
+    Property<WallSide> WALL_SOUTH = new EnumProperty<>("south", WallSide::value, WallSide::parse);
 
-    Property<WallSide> WALL_WEST = new EnumProperty<>("west", WallSide::parse);
+    Property<WallSide> WALL_WEST = new EnumProperty<>("west", WallSide::value, WallSide::parse);
 
-    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_EAST = new EnumProperty<>("east", PaleMossCarpetSide::parse);
+    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_EAST = new EnumProperty<>("east", PaleMossCarpetSide::value, PaleMossCarpetSide::parse);
 
-    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_NORTH = new EnumProperty<>("north", PaleMossCarpetSide::parse);
+    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_NORTH = new EnumProperty<>("north", PaleMossCarpetSide::value, PaleMossCarpetSide::parse);
 
-    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_SOUTH = new EnumProperty<>("south", PaleMossCarpetSide::parse);
+    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_SOUTH = new EnumProperty<>("south", PaleMossCarpetSide::value, PaleMossCarpetSide::parse);
 
-    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_WEST = new EnumProperty<>("west", PaleMossCarpetSide::parse);
+    Property<PaleMossCarpetSide> PALE_MOSS_CARPET_WEST = new EnumProperty<>("west", PaleMossCarpetSide::value, PaleMossCarpetSide::parse);
 
-    Property<ComparatorMode> COMPARATOR_MODE = new EnumProperty<>("mode", ComparatorMode::parse);
+    Property<ComparatorMode> COMPARATOR_MODE = new EnumProperty<>("mode", ComparatorMode::value, ComparatorMode::parse);
 
-    Property<BambooLeaves> BAMBOO_LEAVES = new EnumProperty<>("leaves", BambooLeaves::parse);
+    Property<BambooLeaves> BAMBOO_LEAVES = new EnumProperty<>("leaves", BambooLeaves::value, BambooLeaves::parse);
 
-    Property<BellAttachment> BELL_ATTACHMENT = new EnumProperty<>("attachment", BellAttachment::parse);
+    Property<BellAttachment> BELL_ATTACHMENT = new EnumProperty<>("attachment", BellAttachment::value, BellAttachment::parse);
 
-    Property<StructureBlockMode> STRUCTURE_BLOCK_MODE = new EnumProperty<>("mode", StructureBlockMode::parse);
+    Property<StructureBlockMode> STRUCTURE_BLOCK_MODE = new EnumProperty<>("mode", StructureBlockMode::value, StructureBlockMode::parse);
 
-    Property<Orientation> ORIENTATION = new EnumProperty<>("orientation", Orientation::parse);
+    Property<Orientation> ORIENTATION = new EnumProperty<>("orientation", Orientation::value, Orientation::parse);
 
-    Property<TestBlockMode> TEST_BLOCK_MODE = new EnumProperty<>("mode", TestBlockMode::parse);
+    Property<TestBlockMode> TEST_BLOCK_MODE = new EnumProperty<>("mode", TestBlockMode::value, TestBlockMode::parse);
 
-    Property<SculkSensorPhase> SCULK_SENSOR_PHASE = new EnumProperty<>("sculk_sensor_phase", SculkSensorPhase::parse);
+    Property<SculkSensorPhase> SCULK_SENSOR_PHASE = new EnumProperty<>("sculk_sensor_phase", SculkSensorPhase::value, SculkSensorPhase::parse);
 
-    Property<CopperGolemPose> COPPER_GOLEM_POSE = new EnumProperty<>("copper_golem_pose", CopperGolemPose::parse);
+    Property<CopperGolemPose> COPPER_GOLEM_POSE = new EnumProperty<>("copper_golem_pose", CopperGolemPose::value, CopperGolemPose::parse);
 
-    Property<PointedDripstoneThickness> POINTED_DRIPSTONE_THICKNESS = new EnumProperty<>("thickness", PointedDripstoneThickness::parse);
+    Property<PointedDripstoneThickness> POINTED_DRIPSTONE_THICKNESS = new EnumProperty<>("thickness", PointedDripstoneThickness::value, PointedDripstoneThickness::parse);
 
-    Property<PointedDripstoneVerticalDirection> POINTED_DRIPSTONE_VERTICAL_DIRECTION = new EnumProperty<>("vertical_direction", PointedDripstoneVerticalDirection::parse);
+    Property<PointedDripstoneVerticalDirection> POINTED_DRIPSTONE_VERTICAL_DIRECTION = new EnumProperty<>("vertical_direction", PointedDripstoneVerticalDirection::value, PointedDripstoneVerticalDirection::parse);
 
-    Property<BigDripleafTilt> BIG_DRIPLEAF_TILT = new EnumProperty<>("tilt", BigDripleafTilt::parse);
+    Property<BigDripleafTilt> BIG_DRIPLEAF_TILT = new EnumProperty<>("tilt", BigDripleafTilt::value, BigDripleafTilt::parse);
 
-    Property<TrialSpawnerState> TRIAL_SPAWNER_STATE = new EnumProperty<>("trial_spawner_state", TrialSpawnerState::parse);
+    Property<TrialSpawnerState> TRIAL_SPAWNER_STATE = new EnumProperty<>("trial_spawner_state", TrialSpawnerState::value, TrialSpawnerState::parse);
 
-    Property<VaultState> VAULT_STATE = new EnumProperty<>("vault_state", VaultState::parse);
+    Property<VaultState> VAULT_STATE = new EnumProperty<>("vault_state", VaultState::value, VaultState::parse);
 }

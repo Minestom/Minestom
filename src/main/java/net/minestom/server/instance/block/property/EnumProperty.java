@@ -4,17 +4,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-record EnumProperty<T extends PropertyEnum>(
+record EnumProperty<T>(
         String key,
-        Function<String, @Nullable T> enumTypedValueOf) implements Property<T> {
+        Function<T, String> valueFunction,
+        Function<String, @Nullable T> parseFunction) implements Property<T> {
     @Override
     @Nullable
     public T parse(String value) {
-        return enumTypedValueOf.apply(value);
+        return parseFunction.apply(value);
     }
 
     @Override
     public String valueOf(T value) {
-        return value.value();
+        return valueFunction.apply(value);
     }
 }

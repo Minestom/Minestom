@@ -10,7 +10,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.instance.block.property.Property;
-import net.minestom.server.instance.block.property.PropertyEnum;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
@@ -63,18 +62,6 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      */
     default <V, P extends Property<? super V>> Block withProperty(P property, V value) {
         return withProperty(property.key(), property.valueOf(value));
-    }
-
-    /**
-     * Creates a new block with the property associated with the {@code value}
-     *
-     * @param value the typed property value with exactly one associated property
-     * @return a new block with its property changed
-     * @throws IllegalArgumentException if the value is associated with multiple properties,
-     * the property is invalid, or the value is invalid
-     */
-    default Block withProperty(PropertyEnum.Keyed value) {
-        return withProperty(value.key(), value.value());
     }
 
     /**

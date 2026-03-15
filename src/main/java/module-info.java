@@ -102,6 +102,7 @@ module net.minestom.server {
     exports net.minestom.server.instance.block.jukebox;
     exports net.minestom.server.instance.block.predicate;
     exports net.minestom.server.instance.block.property;
+    exports net.minestom.server.instance.block.property.enums;
     exports net.minestom.server.instance.block.rule;
     exports net.minestom.server.instance.fluid;
     exports net.minestom.server.instance.generator;

@@ -156,10 +156,6 @@ public class BlockTest {
         assertEquals("north", block.getProperty("facing")); // property "facing" has subsets, test it as well.
         assertEquals(Facing.NORTH, block.getProperty(Property.FACING));
 
-        final Block withPart = block.withProperty(BedPart.HEAD);
-        assertEquals("head", withPart.getProperty("part"));
-        assertEquals(BedPart.HEAD, withPart.getProperty(Property.BED_PART));
-
         final Block withFacing = block.withProperty(Property.FACING, Facing.EAST);
         assertEquals("east", withFacing.getProperty("facing"));
         assertEquals(Facing.EAST, withFacing.getProperty(Property.FACING));
