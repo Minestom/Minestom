@@ -56,6 +56,10 @@ class BaseScoreboard implements Scoreboard {
         return new ScoreboardObjectivePacket(objectiveName, (byte) 0, displayName, displayType, defaultNumberFormat);
     }
 
+    public ScoreboardObjectivePacket getUpdateObjectivePacket() {
+        return new ScoreboardObjectivePacket(objectiveName, (byte) 2, displayName, displayType, defaultNumberFormat);
+    }
+
     public ScoreboardObjectivePacket getDestructionObjectivePacket() {
         return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 1, null, null, null);
     }
@@ -77,6 +81,7 @@ class BaseScoreboard implements Scoreboard {
     @Override
     public void setDisplayName(Component displayName) {
         this.displayName = displayName;
+        sendObjectiveUpdate();
     }
 
     @Override
@@ -98,6 +103,7 @@ class BaseScoreboard implements Scoreboard {
     @Override
     public void setDisplayType(ScoreboardObjectivePacket.Type displayType) {
         this.displayType = displayType;
+        sendObjectiveUpdate();
     }
 
     @Override
@@ -108,6 +114,7 @@ class BaseScoreboard implements Scoreboard {
     @Override
     public void setDefaultNumberFormat(@Nullable NumberFormat defaultNumberFormat) {
         this.defaultNumberFormat = defaultNumberFormat;
+        sendObjectiveUpdate();
     }
 
     @Override
@@ -131,6 +138,10 @@ class BaseScoreboard implements Scoreboard {
 
     public void sendUpdate(String entity, int score, @Nullable NumberFormat numberFormat) {
         sendPacketToViewers(new UpdateScorePacket(entity, objectiveName, score, displayName, numberFormat));
+    }
+
+    public void sendObjectiveUpdate() {
+        sendPacketToViewers(getUpdateObjectivePacket());
     }
 
     @Override
