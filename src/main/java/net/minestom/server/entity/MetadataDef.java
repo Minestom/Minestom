@@ -349,10 +349,10 @@ public sealed class MetadataDef {
 
     public static final class Bee extends AgeableMob {
         public static final Entry<Byte> BEE_FLAGS = index(0, Metadata::Byte, (byte) 0);
-        public static final Entry<Boolean> IS_ANGRY = bitMask(0, (byte) 0x02, false);
+        public static final Entry<Boolean> IS_ROLLING = bitMask(0, (byte) 0x02, false);
         public static final Entry<Boolean> HAS_STUNG = bitMask(0, (byte) 0x04, false);
         public static final Entry<Boolean> HAS_NECTAR = bitMask(0, (byte) 0x08, false);
-        public static final Entry<Long> ANGER_TIME_TICKS = index(1, Metadata::VarLong, -1L);
+        public static final Entry<Long> ANGER_END_TIME = index(1, Metadata::VarLong, -1L);
     }
 
     public static final class GlowSquid extends AgeableMob {
