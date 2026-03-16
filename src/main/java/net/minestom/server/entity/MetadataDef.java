@@ -337,8 +337,7 @@ public sealed class MetadataDef {
 
     public static final class Llama extends ChestedHorse {
         public static final Entry<Integer> STRENGTH = index(0, Metadata::VarInt, 0);
-        public static final Entry<Integer> CARPET_COLOR = index(0, Metadata::VarInt, -1);
-        public static final Entry<Integer> VARIANT = index(0, Metadata::VarInt, 0);
+        public static final Entry<Integer> VARIANT = index(1, Metadata::VarInt, 0);
     }
 
     public static final class Axolotl extends AgeableMob {
