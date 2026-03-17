@@ -745,9 +745,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         for (var entry : defaultAttributes.entrySet()) {
             Attribute attribute = entry.getKey();
             double value = entry.getValue();
+            AttributeInstance attributeInstance = getAttribute(attribute);
 
             if (value != attribute.defaultValue()) {
-                getAttribute(attribute).setBaseValue(value);
+                attributeInstance.setBaseValue(value);
             }
         }
     }
