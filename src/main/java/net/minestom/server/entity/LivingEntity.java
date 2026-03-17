@@ -68,7 +68,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>();
     private final Collection<AttributeInstance> unmodifiableModifiers =
             Collections.unmodifiableCollection(attributeModifiers.values());
-    private boolean applyingDefaultAttributes;
 
     // Abilities
     protected boolean invulnerable;
@@ -464,8 +463,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     protected void onAttributeChanged(AttributeInstance attributeInstance) {
         if (!shouldSendAttributes()) return;
-        // batch packets when applying default attributes
-        if (applyingDefaultAttributes) return;
 
         boolean self = false;
         if (this instanceof Player player) {
@@ -744,12 +741,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void applyDefaultAttributeValues() {
         var defaultAttributes = entityType.registry().defaultAttributes();
         if (defaultAttributes.isEmpty()) return;
-        applyingDefaultAttributes = true;
 
         for (var entry : defaultAttributes.entrySet()) {
-            getAttribute(entry.getKey()).setBaseValue(entry.getValue());
-        }
+            Attribute attribute = entry.getKey();
+            double value = entry.getValue();
 
-        applyingDefaultAttributes = false;
+            if (value != attribute.defaultValue()) {
+                getAttribute(attribute).setBaseValue(value);
+            }
+        }
     }
 }
