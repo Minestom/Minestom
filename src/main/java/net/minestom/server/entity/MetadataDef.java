@@ -599,12 +599,13 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_BABY = index(0, Metadata::Boolean, false);
     }
 
-    public static final class Zombie extends Mob {
+    public static sealed class Zombie extends Mob {
         public static final Entry<Boolean> IS_BABY = index(0, Metadata::Boolean, false);
+        public static final Entry<Integer> UNUSED = index(1, Metadata::VarInt, 0);
         public static final Entry<Boolean> IS_BECOMING_DROWNED = index(2, Metadata::Boolean, false);
     }
 
-    public static final class ZombieVillager extends Mob {
+    public static final class ZombieVillager extends Zombie {
         public static final Entry<Boolean> IS_CONVERTING = index(0, Metadata::Boolean, false);
         public static final Entry<VillagerMeta.VillagerData> VILLAGER_DATA = index(1, Metadata::VillagerData,
                                                                                    VillagerMeta.VillagerData.DEFAULT);
