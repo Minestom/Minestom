@@ -64,7 +64,7 @@ public class DataComponents {
     public static final DataComponent<Consumable> CONSUMABLE = register("consumable", Consumable.NETWORK_TYPE, Consumable.CODEC);
     public static final DataComponent<ItemStack> USE_REMAINDER = register("use_remainder", ItemStackTemplate.NETWORK_TYPE, ItemStackTemplate.CODEC);
     public static final DataComponent<UseCooldown> USE_COOLDOWN = register("use_cooldown", UseCooldown.NETWORK_TYPE, UseCooldown.CODEC);
-    public static final DataComponent<RegistryTag<DamageType>> DAMAGE_RESISTANT = register("damage_resistant", RegistryTag.networkType(Registries::damageType), RegistryTag.codec(Registries::damageType));
+    public static final DataComponent<DamageResistant> DAMAGE_RESISTANT = register("damage_resistant", DamageResistant.NETWORK_TYPE, DamageResistant.CODEC);
     public static final DataComponent<Tool> TOOL = register("tool", Tool.NETWORK_TYPE, Tool.CODEC);
     public static final DataComponent<Weapon> WEAPON = register("weapon", Weapon.NETWORK_TYPE, Weapon.CODEC);
     public static final DataComponent<AttackRange> ATTACK_RANGE = register("attack_range", AttackRange.NETWORK_TYPE, AttackRange.CODEC);
