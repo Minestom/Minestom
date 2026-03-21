@@ -183,7 +183,7 @@ public interface PacketRegistry<T> {
                     entry(ClientUpdateStructureBlockPacket.class, ClientUpdateStructureBlockPacket.SERIALIZER),
                     entry(ClientSetTestBlockPacket.class, ClientSetTestBlockPacket.SERIALIZER),
                     entry(ClientUpdateSignPacket.class, ClientUpdateSignPacket.SERIALIZER),
-                    entry(ClientSpectatePacket.class, ClientSpectatePacket.SERIALIZER),
+                    entry(ClientSpectateEntityPacket.class, ClientSpectateEntityPacket.SERIALIZER),
                     entry(ClientAnimationPacket.class, ClientAnimationPacket.SERIALIZER),
                     entry(ClientTeleportToEntityPacket.class, ClientTeleportToEntityPacket.SERIALIZER),
                     entry(ClientTestInstanceBlockActionPacket.class, ClientTestInstanceBlockActionPacket.SERIALIZER),
