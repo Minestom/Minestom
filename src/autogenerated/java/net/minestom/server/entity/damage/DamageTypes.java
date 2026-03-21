@@ -67,11 +67,11 @@ sealed interface DamageTypes permits DamageType {
 
     RegistryKey<DamageType> ENDER_PEARL = RegistryKey.unsafeOf("ender_pearl");
 
-    RegistryKey<DamageType> FALL = RegistryKey.unsafeOf("fall");
+    RegistryKey<DamageType> MOB_PROJECTILE = RegistryKey.unsafeOf("mob_projectile");
 
     RegistryKey<DamageType> MOB_ATTACK = RegistryKey.unsafeOf("mob_attack");
 
-    RegistryKey<DamageType> MOB_PROJECTILE = RegistryKey.unsafeOf("mob_projectile");
+    RegistryKey<DamageType> FALL = RegistryKey.unsafeOf("fall");
 
     RegistryKey<DamageType> THROWN = RegistryKey.unsafeOf("thrown");
 
@@ -99,9 +99,9 @@ sealed interface DamageTypes permits DamageType {
 
     RegistryKey<DamageType> EXPLOSION = RegistryKey.unsafeOf("explosion");
 
-    RegistryKey<DamageType> BAD_RESPAWN_POINT = RegistryKey.unsafeOf("bad_respawn_point");
-
     RegistryKey<DamageType> THORNS = RegistryKey.unsafeOf("thorns");
+
+    RegistryKey<DamageType> BAD_RESPAWN_POINT = RegistryKey.unsafeOf("bad_respawn_point");
 
     RegistryKey<DamageType> INDIRECT_MAGIC = RegistryKey.unsafeOf("indirect_magic");
 

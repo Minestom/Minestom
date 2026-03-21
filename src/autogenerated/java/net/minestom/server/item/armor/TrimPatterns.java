@@ -15,11 +15,11 @@ sealed interface TrimPatterns permits TrimPattern {
 
     RegistryKey<TrimPattern> BOLT = RegistryKey.unsafeOf("bolt");
 
-    RegistryKey<TrimPattern> HOST = RegistryKey.unsafeOf("host");
+    RegistryKey<TrimPattern> WILD = RegistryKey.unsafeOf("wild");
 
     RegistryKey<TrimPattern> SILENCE = RegistryKey.unsafeOf("silence");
 
-    RegistryKey<TrimPattern> WILD = RegistryKey.unsafeOf("wild");
+    RegistryKey<TrimPattern> HOST = RegistryKey.unsafeOf("host");
 
     RegistryKey<TrimPattern> WAYFINDER = RegistryKey.unsafeOf("wayfinder");
 
