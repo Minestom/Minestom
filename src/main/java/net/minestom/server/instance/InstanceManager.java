@@ -48,7 +48,7 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     public InstanceContainer createInstanceContainer(RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader) {
-        final InstanceContainer instanceContainer = new InstanceContainer(registries.dimensionType(), UUID.randomUUID(), dimensionType, loader, dimensionType.key());
+        final InstanceContainer instanceContainer = new InstanceContainer(registries, UUID.randomUUID(), dimensionType, loader, dimensionType.key());
         registerInstance(instanceContainer);
         return instanceContainer;
     }
