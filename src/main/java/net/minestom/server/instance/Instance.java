@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
@@ -38,8 +39,8 @@ import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
-import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.network.packet.server.play.SetTimePacket;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.TagHandler;
@@ -53,8 +54,8 @@ import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.clock.WorldClock;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -97,13 +98,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     private double targetBorderDiameter;
     private long remainingWorldBorderTransitionTicks;
 
-    // Tick since the creation of the instance
+    // Time
     private long worldAge;
-
-    // The time of the instance
-    private long time;
-    private int timeRate = 1;
-    private int timeSynchronizationTicks = ServerFlag.SERVER_TICKS_PER_SECOND;
+    private final Map<RegistryKey<WorldClock>, ClockInstance> clocks;
 
     // Weather of the instance
     private Weather weather = Weather.CLEAR;
@@ -151,7 +148,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
-        this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, dimensionName);
+        this(MinecraftServer.process(), uuid, dimensionType, dimensionName);
     }
 
     /**
@@ -160,12 +157,16 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(DynamicRegistry<DimensionType> dimensionTypeRegistry, UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
+    public Instance(Registries registries, UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
         this.uuid = uuid;
         this.dimensionType = dimensionType;
-        this.cachedDimensionType = dimensionTypeRegistry.get(dimensionType);
+        this.cachedDimensionType = registries.dimensionType().get(dimensionType);
         Check.argCondition(cachedDimensionType == null, "The dimension " + dimensionType + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
         this.dimensionName = dimensionName.asString();
+
+        this.clocks = new Object2ObjectArrayMap<>();
+        for (var worldClock : registries.worldClock().keys())
+            this.clocks.put(worldClock, new ClockInstance(worldClock));
 
         this.worldBorder = WorldBorder.DEFAULT_BORDER;
         targetBorderDiameter = this.worldBorder.diameter();
@@ -474,108 +475,70 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         return dimensionName;
     }
 
-    /**
-     * Gets the age of this instance in tick.
-     *
-     * @return the age of this instance in tick
-     */
+    /// Returns the current world age (aka game time) of this Instance.
     public long getWorldAge() {
         return worldAge;
     }
 
-    /**
-     * Sets the age of this instance in tick. It will send the age to all players.
-     * Will send new age to all players in the instance, unaffected by {@link #getTimeSynchronizationTicks()}
-     *
-     * @param worldAge the age of this instance in tick
-     */
+    /// Sets the current world age (aka game time) of this Instance.
     public void setWorldAge(long worldAge) {
         this.worldAge = worldAge;
-        PacketSendingUtils.sendGroupedPacket(getPlayers(), createTimePacket());
+        refreshTime();
     }
 
-    /**
-     * Gets the current time in the instance (sun/moon).
-     *
-     * @return the time in the instance
-     */
+    /// Returns the current time (in ticks) of the default clock, or -1 if there is no default clock
     public long getTime() {
-        return time;
+        var clock = defaultClock();
+        return clock != null ? clock.time() : -1;
     }
 
-    /**
-     * Changes the current time in the instance, from 0 to 24000.
-     * <p>
-     * If the time is negative, the vanilla client will not move the sun.
-     * <p>
-     * 0 = sunrise
-     * 6000 = noon
-     * 12000 = sunset
-     * 18000 = midnight
-     * <p>
-     * This method is unaffected by {@link #getTimeRate()}
-     * <p>
-     * It does send the new time to all players in the instance, unaffected by {@link #getTimeSynchronizationTicks()}
-     *
-     * @param time the new time of the instance
-     */
+    /// Returns the current time (in ticks) of the given clock.
+    ///
+    /// @throws IllegalArgumentException if the clock was not registered when the instance was created.
+    public long getTime(RegistryKey<WorldClock> clock) {
+        return clock(clock).time();
+    }
+
+    /// Sets the current time (in ticks) of the default clock, or -1 if there is no default clock
     public void setTime(long time) {
-        this.time = time;
+        var clock = defaultClock();
+        if (clock != null) clock.time(time);
+    }
+
+    /// @throws IllegalArgumentException if the clock was not registered when the instance was created.
+    public void setTime(RegistryKey<WorldClock> clock, long time) {
+        clock(clock).time(time);
+    }
+
+    public @Nullable Clock defaultClock() {
+        return clocks.get(getCachedDimensionType().defaultClock());
+    }
+
+    public Clock clock(RegistryKey<WorldClock> clock) {
+        var clockInstance = clocks.get(clock);
+        Check.argCondition(clockInstance == null, "Clock {0} is not registered in this instance", clock);
+        return clockInstance;
+    }
+
+    /**
+     * Creates a {@link SetTimePacket} with the current age and time of this instance
+     *
+     * @return the {@link SetTimePacket} with this instance data
+     */
+    public SetTimePacket createTimePacket() {
+        var entries = new HashMap<RegistryKey<WorldClock>, SetTimePacket.ClockState>();
+        for (var clockInstance : this.clocks.values()) {
+            entries.put(clockInstance.clock(), new SetTimePacket.ClockState(
+                clockInstance.time(),
+                clockInstance.partialTick(),
+                clockInstance.effectiveRate()
+            ));
+        }
+        return new SetTimePacket(worldAge, entries);
+    }
+
+    public void refreshTime() {
         PacketSendingUtils.sendGroupedPacket(getPlayers(), createTimePacket());
-    }
-
-    /**
-     * Gets the rate of the time passing, it is 1 by default
-     *
-     * @return the time rate of the instance
-     */
-    public int getTimeRate() {
-        return timeRate;
-    }
-
-    /**
-     * Changes the time rate of the instance
-     * <p>
-     * 1 is the default value and can be set to 0 to be completely disabled (constant time)
-     *
-     * @param timeRate the new time rate of the instance
-     * @throws IllegalStateException if {@code timeRate} is lower than 0
-     */
-    public void setTimeRate(int timeRate) {
-        Check.stateCondition(timeRate < 0, "The time rate cannot be lower than 0");
-        this.timeRate = timeRate;
-    }
-
-    /**
-     * Gets the rate at which the client is updated with the current instance time
-     *
-     * @return the client update rate for time related packet
-     */
-    public int getTimeSynchronizationTicks() {
-        return timeSynchronizationTicks;
-    }
-
-    /**
-     * Changes the natural client time packet synchronization period, defaults to {@link ServerFlag#SERVER_TICKS_PER_SECOND}.
-     * <p>
-     * Supplying 0 means that the client will never be synchronized with the current natural instance time
-     * (time will still change server-side)
-     *
-     * @param timeSynchronizationTicks the rate to update time in ticks
-     */
-    public void setTimeSynchronizationTicks(int timeSynchronizationTicks) {
-        Check.stateCondition(timeSynchronizationTicks < 0, "The time Synchronization ticks cannot be lower than 0");
-        this.timeSynchronizationTicks = timeSynchronizationTicks;
-    }
-
-    /**
-     * Creates a {@link TimeUpdatePacket} with the current age and time of this instance
-     *
-     * @return the {@link TimeUpdatePacket} with this instance data
-     */
-    public TimeUpdatePacket createTimePacket() {
-        //TODO(26.1) Need proper clock updater, the client can tick it now, should be only used during full synchronize irc.
-        return new TimeUpdatePacket(worldAge, Map.of(getCachedDimensionType().defaultClock(), new TimeUpdatePacket.ClockState(time, 0, timeRate)));
     }
 
     /**
@@ -824,12 +787,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         // Time
         {
             this.worldAge++;
-            this.time += timeRate;
-            // time needs to be sent to players
-            if (timeSynchronizationTicks > 0 && this.worldAge % timeSynchronizationTicks == 0) {
-                PacketSendingUtils.sendGroupedPacket(getPlayers(), createTimePacket());
-            }
-
+            for (var clock : clocks.values()) clock.tick();
         }
         // Weather
         if (remainingRainTransitionTicks > 0 || remainingThunderTransitionTicks > 0) {
@@ -1100,5 +1058,81 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         if (light.requiresUpdate())
             LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);
+    }
+
+    final class ClockInstance implements Clock {
+        private final RegistryKey<WorldClock> clock;
+        private boolean paused = false;
+        private float rate = 1f;
+        private float partialTick = 0f;
+        private long time;
+
+        private ClockInstance(RegistryKey<WorldClock> clock) {
+            this.clock = clock;
+        }
+
+        @Override
+        public RegistryKey<WorldClock> clock() {
+            return this.clock;
+        }
+
+        @Override
+        public float rate() {
+            return this.rate;
+        }
+
+        @Override
+        public void rate(float rate) {
+            Check.argCondition(rate < 0, "rate cannot be negative");
+            this.rate = rate;
+            refreshTime();
+        }
+
+        @Override
+        public long time() {
+            return this.time;
+        }
+
+        @Override
+        public void time(long newTime) {
+            this.time = newTime;
+            refreshTime();
+        }
+
+        @Override
+        public boolean paused() {
+            return this.paused;
+        }
+
+        @Override
+        public void pause() {
+            if (this.paused) return;
+            this.paused = true;
+            refreshTime();
+        }
+
+        @Override
+        public void resume() {
+            if (!this.paused) return;
+            this.paused = false;
+            refreshTime();
+        }
+
+        float partialTick() {
+            return this.partialTick;
+        }
+
+        float effectiveRate() {
+            return paused ? 0f : rate;
+        }
+
+        void tick() {
+            if (paused) return;
+
+            this.partialTick += rate;
+            int ticks = (int) this.partialTick;
+            this.partialTick -= ticks;
+            this.time += ticks;
+        }
     }
 }

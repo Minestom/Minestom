@@ -403,7 +403,7 @@ public interface PacketRegistry<T> {
                     entry(UpdateScorePacket.class, UpdateScorePacket.SERIALIZER),
                     entry(UpdateSimulationDistancePacket.class, UpdateSimulationDistancePacket.SERIALIZER),
                     entry(SetTitleSubTitlePacket.class, SetTitleSubTitlePacket.SERIALIZER),
-                    entry(TimeUpdatePacket.class, TimeUpdatePacket.SERIALIZER),
+                    entry(SetTimePacket.class, SetTimePacket.SERIALIZER),
                     entry(SetTitleTextPacket.class, SetTitleTextPacket.SERIALIZER),
                     entry(SetTitleTimePacket.class, SetTitleTimePacket.SERIALIZER),
                     entry(EntitySoundEffectPacket.class, EntitySoundEffectPacket.SERIALIZER),

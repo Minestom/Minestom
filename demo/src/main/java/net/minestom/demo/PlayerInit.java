@@ -423,8 +423,9 @@ public class PlayerInit {
             }
         });
         instanceContainer.setChunkSupplier(LightingChunk::new);
-        instanceContainer.setTimeRate(0);
-        instanceContainer.setTime(12000);
+
+        var defaultClock = instanceContainer.defaultClock();
+        defaultClock.rate(4f);
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
