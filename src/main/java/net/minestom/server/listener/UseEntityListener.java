@@ -31,7 +31,7 @@ public class UseEntityListener {
         EventDispatcher.call(new EntityAttackEvent(player, entity));
     }
 
-    private static boolean invalidUse(Player player, Entity entity) {
+    static boolean invalidUse(Player player, Entity entity) {
         if (!entity.isViewer(player))
             return true;
 
