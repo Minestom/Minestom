@@ -25,6 +25,10 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
 
     record OcclusionData(byte blockOcclusion, byte airOcclusion, byte lightEmission) {}
 
+    public ShapeImpl withLightEmission(byte lightEmission) {
+        return new ShapeImpl(this.shapeData, new OcclusionData(this.occlusionData.blockOcclusion(), this.occlusionData.airOcclusion, lightEmission));
+    }
+
     /**
      * Computes the occlusion for a given face.
      *
