@@ -15,6 +15,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.instance.fluid.Fluid;
+import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
@@ -60,6 +61,10 @@ public interface Registries {
 
     default Registry<GameEvent> gameEvent() {
         return GameEvent.staticRegistry();
+    }
+
+    default Registry<GameRule<?>> gameRule() {
+        return GameRule.staticRegistry();
     }
 
     // Dynamic registries
