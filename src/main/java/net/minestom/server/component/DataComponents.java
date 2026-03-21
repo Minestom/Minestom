@@ -19,8 +19,11 @@ import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.ItemStackTemplate;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.component.*;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.registry.*;
@@ -59,9 +62,9 @@ public class DataComponents {
     public static final DataComponent<Unit> INTANGIBLE_PROJECTILE = register("intangible_projectile", null, Codec.UNIT);
     public static final DataComponent<Food> FOOD = register("food", Food.NETWORK_TYPE, Food.CODEC);
     public static final DataComponent<Consumable> CONSUMABLE = register("consumable", Consumable.NETWORK_TYPE, Consumable.CODEC);
-    public static final DataComponent<ItemStack> USE_REMAINDER = register("use_remainder", ItemStack.NETWORK_TYPE, ItemStack.CODEC);
+    public static final DataComponent<ItemStack> USE_REMAINDER = register("use_remainder", ItemStackTemplate.NETWORK_TYPE, ItemStackTemplate.CODEC);
     public static final DataComponent<UseCooldown> USE_COOLDOWN = register("use_cooldown", UseCooldown.NETWORK_TYPE, UseCooldown.CODEC);
-    public static final DataComponent<DamageResistant> DAMAGE_RESISTANT = register("damage_resistant", DamageResistant.NETWORK_TYPE, DamageResistant.CODEC);
+    public static final DataComponent<RegistryTag<DamageType>> DAMAGE_RESISTANT = register("damage_resistant", RegistryTag.networkType(Registries::damageType), RegistryTag.codec(Registries::damageType));
     public static final DataComponent<Tool> TOOL = register("tool", Tool.NETWORK_TYPE, Tool.CODEC);
     public static final DataComponent<Weapon> WEAPON = register("weapon", Weapon.NETWORK_TYPE, Weapon.CODEC);
     public static final DataComponent<AttackRange> ATTACK_RANGE = register("attack_range", AttackRange.NETWORK_TYPE, AttackRange.CODEC);
@@ -83,8 +86,8 @@ public class DataComponents {
     public static final DataComponent<Integer> MAP_ID = register("map_id", NetworkBuffer.VAR_INT, Codec.INT);
     public static final DataComponent<MapDecorations> MAP_DECORATIONS = register("map_decorations", null, MapDecorations.CODEC);
     public static final DataComponent<MapPostProcessing> MAP_POST_PROCESSING = register("map_post_processing", MapPostProcessing.NETWORK_TYPE, null);
-    public static final DataComponent<List<ItemStack>> CHARGED_PROJECTILES = register("charged_projectiles", ItemStack.NETWORK_TYPE.list(Short.MAX_VALUE), ItemStack.CODEC.list(Short.MAX_VALUE), List::copyOf);
-    public static final DataComponent<List<ItemStack>> BUNDLE_CONTENTS = register("bundle_contents", ItemStack.NETWORK_TYPE.list(Short.MAX_VALUE), ItemStack.CODEC.list(Short.MAX_VALUE), List::copyOf);
+    public static final DataComponent<List<ItemStack>> CHARGED_PROJECTILES = register("charged_projectiles", ItemStackTemplate.NETWORK_TYPE.list(Short.MAX_VALUE), ItemStackTemplate.CODEC.list(Short.MAX_VALUE), List::copyOf);
+    public static final DataComponent<List<ItemStack>> BUNDLE_CONTENTS = register("bundle_contents", ItemStackTemplate.NETWORK_TYPE.list(Short.MAX_VALUE), ItemStackTemplate.CODEC.list(Short.MAX_VALUE), List::copyOf);
     public static final DataComponent<PotionContents> POTION_CONTENTS = register("potion_contents", PotionContents.NETWORK_TYPE, PotionContents.CODEC);
     public static final DataComponent<Float> POTION_DURATION_SCALE = register("potion_duration_scale", NetworkBuffer.FLOAT, Codec.FLOAT);
     public static final DataComponent<SuspiciousStewEffects> SUSPICIOUS_STEW_EFFECTS = register("suspicious_stew_effects", SuspiciousStewEffects.NETWORK_TYPE, SuspiciousStewEffects.CODEC);
@@ -95,8 +98,8 @@ public class DataComponents {
     public static final DataComponent<TypedCustomData<EntityType>> ENTITY_DATA = register("entity_data", TypedCustomData.networkType(EntityType.NETWORK_TYPE), TypedCustomData.codec(EntityType.CODEC));
     public static final DataComponent<CustomData> BUCKET_ENTITY_DATA = register("bucket_entity_data", CustomData.NETWORK_TYPE, CustomData.CODEC);
     public static final DataComponent<TypedCustomData<BlockEntityType>> BLOCK_ENTITY_DATA = register("block_entity_data", TypedCustomData.networkType(BlockEntityType.NETWORK_TYPE), TypedCustomData.codec(BlockEntityType.CODEC));
-    public static final DataComponent<InstrumentComponent> INSTRUMENT = register("instrument", InstrumentComponent.NETWORK_TYPE, InstrumentComponent.CODEC);
-    public static final DataComponent<ProvidesTrimMaterial> PROVIDES_TRIM_MATERIAL = register("provides_trim_material", ProvidesTrimMaterial.NETWORK_TYPE, ProvidesTrimMaterial.CODEC);
+    public static final DataComponent<Holder<Instrument>> INSTRUMENT = register("instrument", Holder.networkType(Registries::instrument, Instrument.REGISTRY_NETWORK_TYPE), Holder.codec(Registries::instrument, Instrument.REGISTRY_CODEC));
+    public static final DataComponent<Holder<TrimMaterial>> PROVIDES_TRIM_MATERIAL = register("provides_trim_material", Holder.networkType(Registries::trimMaterial, TrimMaterial.REGISTRY_NETWORK_TYPE), Holder.codec(Registries::trimMaterial, TrimMaterial.REGISTRY_CODEC));
     public static final DataComponent<Integer> OMINOUS_BOTTLE_AMPLIFIER = register("ominous_bottle_amplifier", NetworkBuffer.VAR_INT, Codec.INT);
     public static final DataComponent<RegistryKey<JukeboxSong>> JUKEBOX_PLAYABLE = register("jukebox_playable", JukeboxSong.JUKEBOX_PLAYABLE_NETWORK_TYPE, JukeboxSong.CODEC);
     public static final DataComponent<TagKey<BannerPattern>> PROVIDES_BANNER_PATTERNS = register("provides_banner_patterns", TagKey.networkType(Registries::bannerPattern), TagKey.hashCodec(Registries::bannerPattern));
@@ -109,7 +112,7 @@ public class DataComponents {
     public static final DataComponent<BannerPatterns> BANNER_PATTERNS = register("banner_patterns", BannerPatterns.NETWORK_TYPE, BannerPatterns.CODEC);
     public static final DataComponent<DyeColor> BASE_COLOR = register("base_color", DyeColor.NETWORK_TYPE, DyeColor.CODEC);
     public static final DataComponent<PotDecorations> POT_DECORATIONS = register("pot_decorations", PotDecorations.NETWORK_TYPE, PotDecorations.NBT_TYPE);
-    public static final DataComponent<List<ItemStack>> CONTAINER = register("container", ItemStack.NETWORK_TYPE.list(256), ItemStack.CODEC.list(256), List::copyOf);
+    public static final DataComponent<List<ItemStack>> CONTAINER = register("container", ItemStackTemplate.NETWORK_TYPE.list(256), ItemStackTemplate.CODEC.list(256), List::copyOf);
     public static final DataComponent<ItemBlockState> BLOCK_STATE = register("block_state", ItemBlockState.NETWORK_TYPE, ItemBlockState.CODEC);
     public static final DataComponent<List<Bee>> BEES = register("bees", Bee.NETWORK_TYPE.list(Short.MAX_VALUE), Bee.CODEC.list(), List::copyOf);
     // Lock is an item predicate which we do not support, but can be user-represented as a compound tag (an empty tag would match everything).
