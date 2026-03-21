@@ -106,6 +106,7 @@ module net.minestom.server {
     exports net.minestom.server.instance.block.predicate;
     exports net.minestom.server.instance.block.rule;
     exports net.minestom.server.instance.fluid;
+    exports net.minestom.server.instance.gamerule;
     exports net.minestom.server.instance.generator;
     exports net.minestom.server.instance.heightmap;
     exports net.minestom.server.instance.light;

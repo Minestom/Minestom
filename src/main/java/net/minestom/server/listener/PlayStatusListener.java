@@ -26,6 +26,7 @@ public class PlayStatusListener {
                 StatisticsPacket statisticsPacket = new StatisticsPacket(statisticList);
                 player.sendPacket(statisticsPacket);
             }
+            case REQUEST_GAMERULE_VALUES -> PlayerSettingsMenuListener.requestGameRules(packet, player);
         }
     }
 }

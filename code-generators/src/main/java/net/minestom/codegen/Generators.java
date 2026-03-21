@@ -20,6 +20,7 @@ public final class Generators {
         new ParticleGenerator(resource("particle.json"), outputFolder).generate();
         new ConstantsGenerator(resource("constants.json"), outputFolder).generate();
         new RecipeTypeGenerator(resource("recipe_types.json"), outputFolder).generate();
+        new GameRuleGenerator(resource("game_rule.json"), outputFolder).generate();
         new GenericEnumGenerator("net.minestom.server.recipe.display", "RecipeDisplayType",
                 resource("recipe_display_types.json"), outputFolder).generate();
         new GenericEnumGenerator("net.minestom.server.recipe.display", "SlotDisplayType",
