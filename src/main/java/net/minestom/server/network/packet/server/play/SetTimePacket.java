@@ -10,14 +10,14 @@ import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record TimeUpdatePacket(long gameTime,
-                               Map<RegistryKey<WorldClock>, ClockState> clocks) implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<TimeUpdatePacket> SERIALIZER = NetworkBufferTemplate.template(
-            LONG, TimeUpdatePacket::gameTime,
-            WorldClock.NETWORK_TYPE.mapValue(ClockState.NETWORK_TYPE), TimeUpdatePacket::clocks,
-            TimeUpdatePacket::new);
+public record SetTimePacket(long gameTime,
+                            Map<RegistryKey<WorldClock>, ClockState> clocks) implements ServerPacket.Play {
+    public static final NetworkBuffer.Type<SetTimePacket> SERIALIZER = NetworkBufferTemplate.template(
+            LONG, SetTimePacket::gameTime,
+            WorldClock.NETWORK_TYPE.mapValue(ClockState.NETWORK_TYPE), SetTimePacket::clocks,
+            SetTimePacket::new);
 
-    public TimeUpdatePacket {
+    public SetTimePacket {
         clocks = Map.copyOf(clocks);
     }
 
