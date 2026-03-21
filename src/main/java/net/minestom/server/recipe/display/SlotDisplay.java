@@ -3,6 +3,7 @@ package net.minestom.server.recipe.display;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.component.DataComponent;
+import net.minestom.server.item.ItemStackTemplate;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -57,7 +58,7 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
 
     record ItemStack(net.minestom.server.item.ItemStack itemStack) implements SlotDisplay {
         public static final NetworkBuffer.Type<ItemStack> NETWORK_TYPE = NetworkBufferTemplate.template(
-                net.minestom.server.item.ItemStack.STRICT_NETWORK_TYPE, ItemStack::itemStack,
+                ItemStackTemplate.NETWORK_TYPE, ItemStack::itemStack,
                 ItemStack::new);
 
         @Override
