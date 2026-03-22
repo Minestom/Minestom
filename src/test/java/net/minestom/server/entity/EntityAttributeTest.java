@@ -109,7 +109,7 @@ public class EntityAttributeTest {
     }
 
     @Test
-    public void testEntitySpawnsWithCorrectHealth() {
+    public void testEntitySpawnsWithCorrectHealth(Env ignored) {
         var ironGolem = new EntityCreature(EntityType.IRON_GOLEM);
         assertEquals(100.0f, ironGolem.getHealth(), 0.001f);
     }
