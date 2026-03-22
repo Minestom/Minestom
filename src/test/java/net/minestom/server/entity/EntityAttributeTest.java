@@ -93,7 +93,7 @@ public class EntityAttributeTest {
     }
 
     @Test
-    public void testEntityDefaultAttributes() {
+    public void testEntityDefaultAttributes(Env ignored) {
         var ironGolem = new EntityCreature(EntityType.IRON_GOLEM);
         var zombie = new EntityCreature(EntityType.ZOMBIE);
 
