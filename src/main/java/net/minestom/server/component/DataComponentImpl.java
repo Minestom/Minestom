@@ -47,6 +47,16 @@ record DataComponentImpl<T>(
     }
 
     @Override
+    public NetworkBuffer.Type<T> networkType() {
+        return network;
+    }
+
+    @Override
+    public Codec<T> codec() {
+        return codec;
+    }
+
+    @Override
     public <D> Result<T> decode(Transcoder<D> coder, D value) {
         Check.notNull(codec, "{0} cannot be deserialized from Codec", this);
         return this.codec.decode(coder, value);
