@@ -210,7 +210,7 @@ public final class MinecraftServer implements MinecraftConstants {
         return process().bossBar();
     }
 
-    public static PacketParser<ClientPacket> getPacketParser() {
+    public static PacketParser.Client getPacketParser() {
         return process().packetParser();
     }
 

@@ -23,7 +23,7 @@ public record DebugBrainDump(
         Set<Point> pois,
         Set<Point> potentialPois
 ) {
-    public static NetworkBuffer.Type<DebugBrainDump> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<DebugBrainDump> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, DebugBrainDump::name,
             NetworkBuffer.STRING, DebugBrainDump::profession,
             NetworkBuffer.INT, DebugBrainDump::xp,

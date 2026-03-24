@@ -29,4 +29,25 @@ public class EntityPhysicsIntegrationTest
             assertTrue(entity.onGround, "entity needs to be grounded on tick: " + entity.getAliveTicks());
         }
     }
+
+    @Test
+    public void onGroundWithoutPhysics(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 40, 1, Block.STONE);
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setHasPhysics(false);
+        entity.setInstance(instance, new Pos(1, 41, 1)).join();
+
+        for (int i = 0; i < 10; i++) {
+            env.tick();
+            assertFalse(entity.onGround, "entity shouldn't be grounded on tick: " + entity.getAliveTicks() + " due to lack of physics");
+        }
+
+        entity.setHasPhysics(true);
+        for (int i = 0; i < 10; i++) {
+            env.tick();
+            assertTrue(entity.onGround, "entity should be grounded on tick: " + entity.getAliveTicks());
+        }
+    }
 }
