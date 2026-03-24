@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientTeleportConfirmPacket(int teleportId) implements ClientPacket {
+public record ClientTeleportConfirmPacket(int teleportId) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientTeleportConfirmPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientTeleportConfirmPacket::teleportId,
             ClientTeleportConfirmPacket::new);
