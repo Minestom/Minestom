@@ -307,10 +307,10 @@ final class NetworkBufferImpl implements NetworkBuffer {
             deflater.setInput(input);
             deflater.finish();
             final int bytes = deflater.deflate(outputBuffer);
-            deflater.reset();
             output.advanceWrite(bytes);
             return bytes;
         } finally {
+            deflater.reset();
             CompressionHolder.DEFLATER_POOL.add(deflater);
         }
     }
@@ -328,10 +328,10 @@ final class NetworkBufferImpl implements NetworkBuffer {
         try {
             inflater.setInput(input);
             final int bytes = inflater.inflate(outputBuffer);
-            inflater.reset();
             output.advanceWrite(bytes);
             return bytes;
         } finally {
+            inflater.reset();
             CompressionHolder.INFLATER_POOL.add(inflater);
         }
     }
