@@ -5,30 +5,29 @@ metadata.format.version = "1.1"
 # Important dependencies
 data = "26.1-rc-2-dev"
 adventure = "4.26.1"
-jetbrainsAnnotations = "26.0.2-1"
+jetbrainsAnnotations = "26.1.0"
 slf4j = "2.0.17"
 
 # Performance / Data Structures
 fastutil = "8.5.18"
 flare = "2.0.1"
 gson = "2.13.2"
-jcTools = "4.0.5"
+jcTools = "4.0.6"
 
 # Quality
-junit-jupiter = "6.0.0"
-junit-platform = "6.0.0"
+junit = "6.0.3"
 jmh = "1.37"
 jcstress = "0.16"
 
 # Code Generation
-javaPoet = "0.7.0"
+javaPoet = "0.12.0"
 
-# Log impl (for demo & codegen)
+# Log impl (for demo)
 logback = "1.5.19"
 
 # Gradle plugins
 blossom = "2.1.0"
-nmcp = "1.2.0"
+nmcp = "1.4.4"
 jmh-plugin = "0.7.3"
 jcstress-plugin = "0.9.0"
 
@@ -54,14 +53,14 @@ fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil"
 flare = { group = "space.vectrix.flare", name = "flare", version.ref = "flare" }
 flare-fastutil = { group = "space.vectrix.flare", name = "flare-fastutil", version.ref = "flare" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools" }
+jcTools = { group = "org.jctools", name = "jctools-core-jdk11", version.ref = "jcTools" }
 
 # Code quality
-junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
-junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter" }
-junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit-jupiter" }
-junit-suite-api = { group = "org.junit.platform", name = "junit-platform-suite-api", version.ref = "junit-platform" }
-junit-suite-engine = { group = "org.junit.platform", name = "junit-platform-suite-engine", version.ref = "junit-platform" }
+junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junit-suite-api = { group = "org.junit.platform", name = "junit-platform-suite-api", version.ref = "junit" }
+junit-suite-engine = { group = "org.junit.platform", name = "junit-platform-suite-engine", version.ref = "junit" }
 jmh-core = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmh" }
 jmh-annotationprocessor = { group = "org.openjdk.jmh", name = "jmh-generator-annprocess", version.ref = "jmh" }
 jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", version.ref = "jcstress" }
@@ -69,7 +68,7 @@ jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", versio
 # Code Generation
 javaPoet = { group = "com.palantir.javapoet", name = "javapoet", version.ref = "javaPoet" }
 
-# Log impl (for demo & codegen)
+# Log impl (for demo)
 logback-core = { group = "ch.qos.logback", name = "logback-core", version.ref = "logback" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 
