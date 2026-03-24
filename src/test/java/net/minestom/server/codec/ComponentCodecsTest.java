@@ -1,14 +1,17 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.IntBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.adventure.MinestomAdventure;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -53,4 +56,27 @@ class ComponentCodecsTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void readShowEntityWithoutName() {
+        UUID uuid = UUID.randomUUID();
+
+        var input = CompoundBinaryTag.builder()
+                .putString("text", "hover")
+                .put("hover_event", CompoundBinaryTag.builder()
+                        .putString("action", "show_entity")
+                        .putString("id", "minecraft:player")
+                        .putString("uuid", uuid.toString())
+                        .build())
+                .build();
+
+        var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
+        var expected = Component.text("hover")
+                .hoverEvent(HoverEvent.showEntity(
+                        Key.key("minecraft:player"),
+                        uuid,
+                        null
+                ));
+
+        assertEquals(expected, actual);
+    }
 }
