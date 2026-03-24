@@ -262,7 +262,7 @@ public final class ComponentCodecs {
             return contents.mapResult(Component::object);
         }
 
-            @Override
+        @Override
         public <D> Result<D> encodeToMap(Transcoder<D> coder, ObjectComponent value, MapBuilder<D> map) {
             return switch (value.contents()) {
                 case SpriteObjectContents sprite -> SPRITE_CONTENT.encodeToMap(coder, sprite, map);
