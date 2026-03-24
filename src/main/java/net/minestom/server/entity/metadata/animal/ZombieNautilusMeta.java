@@ -31,18 +31,17 @@ public class ZombieNautilusMeta extends AbstractNautilusMeta {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> @Nullable T get(DataComponent<T> component) {
-        if (component == DataComponents.ZOMBIE_NAUTILUS_VARIANT) {
-            return (T) getVariant();
-        }
-        return super.get(component);
+    protected <T> void set(DataComponent<T> component, T value) {
+        if (DataComponents.ZOMBIE_NAUTILUS_VARIANT == component) {
+            setVariant((RegistryKey<ZombieNautilusVariant>) value);
+        } else super.set(component, value);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> void set(DataComponent<T> component, T value) {
-        if (component == DataComponents.ZOMBIE_NAUTILUS_VARIANT) {
-            setVariant((RegistryKey<ZombieNautilusVariant>) value);
-        } else super.set(component, value);
+    protected @Nullable <T> T get(DataComponent<T> component) {
+        if (DataComponents.ZOMBIE_NAUTILUS_VARIANT == component) {
+            return (T) getVariant();
+        } else return super.get(component);
     }
 }
