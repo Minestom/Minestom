@@ -337,8 +337,7 @@ public sealed class MetadataDef {
 
     public static final class Llama extends ChestedHorse {
         public static final Entry<Integer> STRENGTH = index(0, Metadata::VarInt, 0);
-        public static final Entry<Integer> CARPET_COLOR = index(0, Metadata::VarInt, -1);
-        public static final Entry<Integer> VARIANT = index(0, Metadata::VarInt, 0);
+        public static final Entry<Integer> VARIANT = index(1, Metadata::VarInt, 0);
     }
 
     public static final class Axolotl extends AgeableMob {
@@ -349,10 +348,10 @@ public sealed class MetadataDef {
 
     public static final class Bee extends AgeableMob {
         public static final Entry<Byte> BEE_FLAGS = index(0, Metadata::Byte, (byte) 0);
-        public static final Entry<Boolean> IS_ANGRY = bitMask(0, (byte) 0x02, false);
+        public static final Entry<Boolean> IS_ROLLING = bitMask(0, (byte) 0x02, false);
         public static final Entry<Boolean> HAS_STUNG = bitMask(0, (byte) 0x04, false);
         public static final Entry<Boolean> HAS_NECTAR = bitMask(0, (byte) 0x08, false);
-        public static final Entry<Long> ANGER_TIME_TICKS = index(1, Metadata::VarLong, -1L);
+        public static final Entry<Long> ANGER_END_TIME = index(1, Metadata::VarLong, -1L);
     }
 
     public static final class GlowSquid extends AgeableMob {
@@ -600,12 +599,13 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_BABY = index(0, Metadata::Boolean, false);
     }
 
-    public static final class Zombie extends Mob {
+    public static sealed class Zombie extends Mob {
         public static final Entry<Boolean> IS_BABY = index(0, Metadata::Boolean, false);
+        public static final Entry<Integer> UNUSED = index(1, Metadata::VarInt, 0);
         public static final Entry<Boolean> IS_BECOMING_DROWNED = index(2, Metadata::Boolean, false);
     }
 
-    public static final class ZombieVillager extends Mob {
+    public static final class ZombieVillager extends Zombie {
         public static final Entry<Boolean> IS_CONVERTING = index(0, Metadata::Boolean, false);
         public static final Entry<VillagerMeta.VillagerData> VILLAGER_DATA = index(1, Metadata::VillagerData,
                                                                                    VillagerMeta.VillagerData.DEFAULT);
