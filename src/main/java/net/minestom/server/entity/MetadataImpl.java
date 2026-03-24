@@ -10,6 +10,11 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
+import net.minestom.server.entity.metadata.animal.ChickenVariant;
+import net.minestom.server.entity.metadata.animal.CowVariant;
+import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.ZombieNautilusVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
@@ -50,8 +55,13 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_OPT_VARINT, OptVarInt(null));
         EMPTY_VALUES.set(TYPE_POSE, Pose(EntityPose.STANDING));
         EMPTY_VALUES.set(TYPE_CAT_VARIANT, CatVariant(CatVariant.TABBY));
+        EMPTY_VALUES.set(TYPE_COW_VARIANT, new EntryImpl<>(TYPE_COW_VARIANT, null, CowVariant.NETWORK_TYPE));
         EMPTY_VALUES.set(TYPE_WOLF_VARIANT, WolfVariant(WolfVariant.PALE));
+        EMPTY_VALUES.set(TYPE_WOLF_SOUND_VARIANT, new EntryImpl<>(TYPE_WOLF_SOUND_VARIANT, null, WolfSoundVariant.NETWORK_TYPE));
         EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogVariant.TEMPERATE));
+        EMPTY_VALUES.set(TYPE_PIG_VARIANT, new EntryImpl<>(TYPE_PIG_VARIANT, null, PigVariant.NETWORK_TYPE));
+        EMPTY_VALUES.set(TYPE_CHICKEN_VARIANT, new EntryImpl<>(TYPE_CHICKEN_VARIANT, null, ChickenVariant.NETWORK_TYPE));
+        EMPTY_VALUES.set(TYPE_ZOMBIE_NAUTILUS_VARIANT, new EntryImpl<>(TYPE_ZOMBIE_NAUTILUS_VARIANT, null, ZombieNautilusVariant.NETWORK_TYPE));
         // OptGlobalPos
         EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(PaintingVariant.KEBAB));
         EMPTY_VALUES.set(TYPE_SNIFFER_STATE, SnifferState(SnifferMeta.State.IDLING));
@@ -61,6 +71,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_VECTOR3, Vector3(Vec.ZERO));
         EMPTY_VALUES.set(TYPE_QUATERNION, Quaternion(new float[]{0, 0, 0, 0}));
         EMPTY_VALUES.set(TYPE_RESOLVABLE_PROFILE, ResolvableProfile(ResolvableProfile.EMPTY));
+        EMPTY_VALUES.set(TYPE_MAIN_HAND, new EntryImpl<>(TYPE_MAIN_HAND, MainHand.RIGHT, MainHand.NETWORK_TYPE));
         EMPTY_VALUES.trim();
     }
 
