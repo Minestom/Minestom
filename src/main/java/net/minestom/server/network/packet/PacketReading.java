@@ -172,7 +172,7 @@ public final class PacketReading {
         final long readerEnd = readerStart + packetLength;
         final long writerEnd = buffer.writeIndex();
         buffer.writeIndex(readerEnd);
-        final PacketRegistry<T> registry = parser.stateRegistry(state);
+        final PacketRegistry<? extends T> registry = parser.stateRegistry(state);
         final T packet = readFramedPacket(buffer, registry, compressed);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
         buffer.index(readerEnd, writerEnd);

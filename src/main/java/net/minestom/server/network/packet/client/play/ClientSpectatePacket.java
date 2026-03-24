@@ -11,7 +11,7 @@ import java.util.UUID;
  * Contrary to its name, it is actually used to teleport the player to the entity they are switching to,
  * rather than spectating them.
  */
-public record ClientSpectatePacket(UUID target) implements ClientPacket {
+public record ClientSpectatePacket(UUID target) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientSpectatePacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, ClientSpectatePacket::target,
             ClientSpectatePacket::new);

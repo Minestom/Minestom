@@ -55,7 +55,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
-    private final PacketParser<ClientPacket> packetParser;
+    private final PacketParser.Client packetParser;
     private final InstanceManager instance;
     private final BlockManager block;
     private final CommandManager command;
@@ -178,7 +178,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
     }
 
     @Override
-    public PacketParser<ClientPacket> packetParser() {
+    public PacketParser.Client packetParser() {
         return packetParser;
     }
 

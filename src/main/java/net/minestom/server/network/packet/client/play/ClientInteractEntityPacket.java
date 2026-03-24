@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaking) implements ClientPacket {
+public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaking) implements ClientPacket.Play {
 
     private static final NetworkBuffer.Type<Type> TYPE_NETWORK_TYPE = Tagged(
             VAR_INT, Type::id,
