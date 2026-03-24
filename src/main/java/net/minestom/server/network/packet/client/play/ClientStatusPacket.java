@@ -4,7 +4,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
-public record ClientStatusPacket(Action action) implements ClientPacket {
+public record ClientStatusPacket(Action action) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientStatusPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.Enum(Action.class), ClientStatusPacket::action,
             ClientStatusPacket::new);
