@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientUpdateCommandBlockPacket(Point blockPosition, String command,
-                                             Mode mode, byte flags) implements ClientPacket {
+                                             Mode mode, byte flags) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientUpdateCommandBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, ClientUpdateCommandBlockPacket::blockPosition,
             STRING, ClientUpdateCommandBlockPacket::command,

@@ -18,7 +18,7 @@ public class PlayerPickListener {
         final Block block = instance.getBlock(packet.pos());
         final boolean includeData = packet.includeData();
 
-        PlayerPickBlockEvent playerPickBlockEvent = new PlayerPickBlockEvent(player, block, packet.pos().asBlockVec(), includeData);
+        PlayerPickBlockEvent playerPickBlockEvent = new PlayerPickBlockEvent(player, instance, block, packet.pos().asBlockVec(), includeData);
         EventDispatcher.call(playerPickBlockEvent);
     }
 
