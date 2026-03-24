@@ -14,13 +14,11 @@ public class DeclareCommandsPacketTest {
 
     @Test
     void testWriteGameProfileArg() {
-        var root = new DeclareCommandsPacket.Node();
-        root.flags = getFlag(DeclareCommandsPacket.NodeType.ARGUMENT, false, false, false);
-        root.parser = ArgumentParserType.GAME_PROFILE;
+        var root = new DeclareCommandsPacket.Node(getFlag(DeclareCommandsPacket.NodeType.ARGUMENT, false, false, false, false), new int[0], 0, "", ArgumentParserType.GAME_PROFILE, null, null);
         var packet = new DeclareCommandsPacket(List.of(root), 0);
 
         var array = NetworkBuffer.makeArray(DeclareCommandsPacket.SERIALIZER, packet);
         var readPacket = NetworkBuffer.wrap(array, 0, array.length).read(DeclareCommandsPacket.SERIALIZER);
-        assertEquals(ArgumentParserType.GAME_PROFILE, readPacket.nodes().getFirst().parser);
+        assertEquals(ArgumentParserType.GAME_PROFILE, readPacket.nodes().getFirst().parser());
     }
 }

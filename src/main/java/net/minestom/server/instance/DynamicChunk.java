@@ -256,6 +256,7 @@ public class DynamicChunk extends Chunk {
     private ChunkDataPacket createChunkPacket() {
         final byte[] data;
         final Map<Heightmap.Type, long[]> heightmaps;
+        final List<ChunkData.BlockEntityInfo> entries;
         synchronized (this) {
             heightmaps = getHeightmaps();
 
@@ -267,6 +268,14 @@ public class DynamicChunk extends Chunk {
                     networkBuffer.write(biomeSerializer, section.biomePalette());
                 }
             });
+
+            entries = new ArrayList<>(this.entries.size());
+            for (var entry : this.entries.int2ObjectEntrySet()) {
+                final int index = entry.getIntKey();
+                final Block block = entry.getValue();
+                if (!block.registry().isBlockEntity()) continue;
+                entries.add(new ChunkData.BlockEntityInfo(index, block));
+            }
         }
 
         return new ChunkDataPacket(chunkX, chunkZ,

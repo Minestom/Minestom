@@ -13,23 +13,23 @@ import net.minestom.server.network.packet.server.ServerPacket;
  */
 public sealed interface PacketParser<T> {
 
-    PacketRegistry<T> handshake();
+    PacketRegistry<? extends T> handshake();
 
-    PacketRegistry<T> status();
+    PacketRegistry<? extends T> status();
 
-    PacketRegistry<T> login();
+    PacketRegistry<? extends T> login();
 
-    PacketRegistry<T> configuration();
+    PacketRegistry<? extends T> configuration();
 
-    PacketRegistry<T> play();
+    PacketRegistry<? extends T> play();
 
     default T parse(ConnectionState connectionState,
                              int packetId, NetworkBuffer buffer) {
-        final PacketRegistry<T> registry = stateRegistry(connectionState);
+        final PacketRegistry<? extends T> registry = stateRegistry(connectionState);
         return registry.create(packetId, buffer);
     }
 
-    default PacketRegistry<T> stateRegistry(ConnectionState connectionState) {
+    default PacketRegistry<? extends T> stateRegistry(ConnectionState connectionState) {
         return switch (connectionState) {
             case HANDSHAKE -> handshake();
             case STATUS -> status();
@@ -40,11 +40,11 @@ public sealed interface PacketParser<T> {
     }
 
     record Client(
-            PacketRegistry<ClientPacket> handshake,
-            PacketRegistry<ClientPacket> status,
-            PacketRegistry<ClientPacket> login,
-            PacketRegistry<ClientPacket> configuration,
-            PacketRegistry<ClientPacket> play
+            PacketRegistry<ClientPacket.Handshake> handshake,
+            PacketRegistry<ClientPacket.Status> status,
+            PacketRegistry<ClientPacket.Login> login,
+            PacketRegistry<ClientPacket.Configuration> configuration,
+            PacketRegistry<ClientPacket.Play> play
     ) implements PacketParser<ClientPacket> {
         public Client() {
             this(
@@ -58,11 +58,11 @@ public sealed interface PacketParser<T> {
     }
 
     record Server(
-            PacketRegistry<ServerPacket> handshake,
-            PacketRegistry<ServerPacket> status,
-            PacketRegistry<ServerPacket> login,
-            PacketRegistry<ServerPacket> configuration,
-            PacketRegistry<ServerPacket> play
+            PacketRegistry<ServerPacket.Handshake> handshake,
+            PacketRegistry<ServerPacket.Status> status,
+            PacketRegistry<ServerPacket.Login> login,
+            PacketRegistry<ServerPacket.Configuration> configuration,
+            PacketRegistry<ServerPacket.Play> play
     ) implements PacketParser<ServerPacket> {
         public Server() {
             this(

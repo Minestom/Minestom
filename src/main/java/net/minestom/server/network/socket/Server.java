@@ -5,17 +5,16 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
-import java.nio.channels.AsynchronousCloseException;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -23,18 +22,20 @@ public final class Server {
     private volatile boolean stop;
 
     private final PacketParser<ClientPacket> packetParser;
+    private final PacketParser<ServerPacket> packetWriter;
 
-    private ServerSocketChannel serverSocket;
-    private SocketAddress socketAddress;
-    private String address;
+    private @UnknownNullability ServerSocketChannel serverSocket;
+    private @UnknownNullability SocketAddress socketAddress;
+    private @UnknownNullability String address;
     private int port;
 
-    public Server(PacketParser<ClientPacket> packetParser) {
+    public Server(PacketParser<ClientPacket> packetParser, PacketParser<ServerPacket> packetWriter) {
         this.packetParser = packetParser;
+        this.packetWriter = packetWriter;
     }
 
     public Server() {
-        this(PacketVanilla.CLIENT_PACKET_PARSER);
+        this(PacketVanilla.CLIENT_PACKET_PARSER, PacketVanilla.SERVER_PACKET_PARSER);
     }
 
     @ApiStatus.Internal
@@ -70,25 +71,62 @@ public final class Server {
         // Use named thread builders for logging
         var readBuilder = Thread.ofVirtual().name("Ms-Socket-Reader-", 0);
         var writeBuilder = Thread.ofVirtual().name("Ms-Socket-Writer-", 0);
-        Thread.ofVirtual().name("Ms-Socket-Server").start(() -> {
-            while (!stop) {
-                try {
-                    final SocketChannel client = serverSocket.accept();
-                    configureSocket(client);
-                    AtomicReference<PlayerSocketConnection> reference = new AtomicReference<>(null);
-                    Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
-                    Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
-                    PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
-                    reference.set(connection);
-                    readThread.start();
-                    writeThread.start();
-                } catch (AsynchronousCloseException ignored) {
-                    // We are exiting, bye bye!
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+        Thread.ofVirtual().name("Ms-Socket-Server").start(() -> serverAcceptLoop(serverSocket, readBuilder, writeBuilder));
+    }
+
+    private void serverAcceptLoop(ServerSocketChannel serverSocket, Thread.Builder readBuilder, Thread.Builder writeBuilder) {
+        Check.notNull(serverSocket, "serverSocket cannot be null");
+        while (!stop) {
+            // Handle server IO exceptions.
+            final SocketChannel client;
+            try {
+                client = serverSocket.accept();
+            } catch (ClosedChannelException _) {
+                // We are exiting, bye bye!
+                break;
+            } catch (NotYetBoundException ex) {
+                throw new IllegalStateException("Server socket is not bound yet", ex);
+            } catch (IOException e) {
+                // Client bound failed.
+                if (!ServerFlag.SUPPRESS_CONNECTION_ACCEPT_ERRORS)
+                    MinecraftServer.getExceptionManager().handleException(e);
+                continue;
             }
-        });
+            // Handle client IO exceptions.
+            final SocketAddress remoteAddress;
+            try {
+                configureSocket(client);
+                remoteAddress = client.getRemoteAddress();
+            } catch (IOException e) {
+                try {
+                    client.close();
+                } catch (IOException _) {}
+                // Client rejects changing settings here, could've closed.
+                if (!ServerFlag.SUPPRESS_CONNECTION_ACCEPT_ERRORS)
+                    MinecraftServer.getExceptionManager().handleException(e);
+                continue;
+            }
+            // Start accepting the player by starting the read and write threads.
+            AtomicReference<@UnknownNullability PlayerSocketConnection> reference = new AtomicReference<>(null);
+            try {
+                Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
+                Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
+                PlayerSocketConnection connection = new PlayerSocketConnection(client, remoteAddress, readThread, writeThread);
+                reference.set(connection);
+                readThread.start();
+                writeThread.start();
+            } catch (Throwable e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+                try {
+                    client.close();
+                } catch (IOException _) {
+                }
+                // Mark for disconnection in the read/write loops.
+                // Should ensure that isOnline also returns false.
+                PlayerSocketConnection connection = reference.get();
+                if (connection != null) connection.disconnect();
+            }
+        }
     }
 
     private void configureSocket(SocketChannel channel) throws IOException {
@@ -103,44 +141,58 @@ public final class Server {
 
     private void playerReadLoop(PlayerSocketConnection connection) {
         Check.notNull(connection, "connection cannot be null");
+        final PacketParser<ClientPacket> packetParser = this.packetParser;
         while (!stop) {
             try {
                 // Read & process packets
                 connection.read(packetParser);
-            } catch (ClosedChannelException ignored) {
+            } catch (ClosedChannelException _) {
                 break; // We closed the socket during read, just exit.
-            } catch (EOFException e) {
+            } catch (EOFException _) {
                 connection.disconnect();
                 break;
-            } catch (Throwable e) {
-                boolean isExpected = e instanceof SocketException && e.getMessage().equals("Connection reset");
+            } catch (SocketException e) {
+                boolean isExpected = e.getMessage().equals("Connection reset");
                 if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
+            } catch (Throwable e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+                connection.disconnect();
+                break;
             }
+            // Connection was disconnected
+            if (!connection.isOnline()) break;
         }
+        // Ensure the write thread gets unlocked once the read thread stops.
+        connection.unlockWriteThread();
     }
 
     private void playerWriteLoop(PlayerSocketConnection connection) {
         Check.notNull(connection, "connection cannot be null");
+        final PacketParser<ServerPacket> packetWriter = this.packetWriter;
         while (!stop) {
             try {
-                connection.flushSync();
-            } catch (ClosedChannelException ignored) {
+                connection.awaitFlush();
+                connection.flushSync(packetWriter);
+            } catch (ClosedChannelException _) {
                 break; // We closed the socket during write, just exit.
-            } catch (EOFException e) {
+            } catch (EOFException _) {
+                connection.disconnect();
+                break;
+            } catch (IOException e) {
+                boolean isExpected = e.getMessage().equals("Broken pipe") || e.getMessage().equals("Connection reset by peer");
+                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
             } catch (Throwable e) {
-                boolean isExpected = e instanceof IOException && e.getMessage().equals("Broken pipe");
-                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
-
+                MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
             }
             if (!connection.isOnline()) {
                 try {
-                    connection.flushSync();
+                    connection.flushSync(packetWriter);
                     connection.getChannel().close();
                     break;
                 } catch (IOException e) {
@@ -173,6 +225,11 @@ public final class Server {
     @ApiStatus.Internal
     public PacketParser<ClientPacket> packetParser() {
         return packetParser;
+    }
+
+    @ApiStatus.Internal
+    public PacketParser<ServerPacket> packetWriter() {
+        return packetWriter;
     }
 
     public SocketAddress socketAddress() {

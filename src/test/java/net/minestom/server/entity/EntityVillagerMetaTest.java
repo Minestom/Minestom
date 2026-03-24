@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class EntityVillagerMetaTest {
     @Test
     void levelNetworkSerialization() {
-        NetworkBuffer buffer = NetworkBuffer.builder(5).build();
+        NetworkBuffer buffer = NetworkBuffer.staticBuffer(5);
         VillagerMeta.Level.NETWORK_TYPE.write(buffer, VillagerMeta.Level.NOVICE);
 
         int expected = VillagerMeta.Level.NOVICE.ordinal() + 1;  // Network representation is ordinal + 1
@@ -20,7 +20,7 @@ public class EntityVillagerMetaTest {
     @Test
     void levelNetworkDeserialization() {
         int networkValue = VillagerMeta.Level.NOVICE.ordinal() + 1;  // Simulate network value for NOVICE
-        NetworkBuffer buffer = NetworkBuffer.builder(5).build();
+        NetworkBuffer buffer = NetworkBuffer.staticBuffer(5);
         buffer.write(NetworkBuffer.VAR_INT, networkValue);
 
         VillagerMeta.Level level = VillagerMeta.Level.NETWORK_TYPE.read(buffer);

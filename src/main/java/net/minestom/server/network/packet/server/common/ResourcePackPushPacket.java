@@ -35,11 +35,13 @@ public record ResourcePackPushPacket(
 
     @Override
     public Collection<Component> components() {
+        if (this.prompt == null) return List.of();
         return List.of(this.prompt);
     }
 
     @Override
     public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
+        if (this.prompt == null) return this;
         return new ResourcePackPushPacket(this.id, this.url, this.hash, this.forced, operator.apply(this.prompt));
     }
 }

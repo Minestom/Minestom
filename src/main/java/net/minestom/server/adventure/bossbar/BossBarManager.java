@@ -70,9 +70,9 @@ public class BossBarManager {
      * @param players the players
      * @param bar     the boss bar
      */
-    public void addBossBar(Collection<Player> players, BossBar bar) {
+    public void addBossBar(Collection<? extends Player> players, BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
-        Collection<Player> addedPlayers = players.stream().filter(holder::addViewer).toList();
+        Collection<? extends Player> addedPlayers = players.stream().filter(holder::addViewer).toList();
         if (!addedPlayers.isEmpty()) {
             PacketSendingUtils.sendGroupedPacket(addedPlayers, holder.createAddPacket());
         }
@@ -84,10 +84,10 @@ public class BossBarManager {
      * @param players the intended viewers
      * @param bar     the boss bar to hide
      */
-    public void removeBossBar(Collection<Player> players, BossBar bar) {
+    public void removeBossBar(Collection<? extends Player> players, BossBar bar) {
         BossBarHolder holder = this.bars.get(bar);
         if (holder != null) {
-            Collection<Player> removedPlayers = players.stream().filter(holder::removeViewer).toList();
+            Collection<? extends Player> removedPlayers = players.stream().filter(holder::removeViewer).toList();
             if (!removedPlayers.isEmpty()) {
                 PacketSendingUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
             }
