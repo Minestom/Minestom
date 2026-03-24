@@ -20,6 +20,5 @@ public record TimelineImpl(
         Objects.requireNonNull(clock, "clock");
         tracks = Map.copyOf(tracks);
         timeMarkers = Map.copyOf(timeMarkers);
-        //TODO(26.1) validate Timelines
     }
 }

@@ -15,7 +15,6 @@ import java.util.List;
 
 import static net.minestom.server.world.attribute.EnvironmentAttributeImpl.register;
 
-//TODO(26.1) Any other changes to these?
 sealed interface EnvironmentAttributes permits EnvironmentAttribute {
     EnvironmentAttribute<RGBLike> FOG_COLOR = register("visual/fog_color", Type.RGB_COLOR, Color.BLACK);
     EnvironmentAttribute<Float> FOG_START_DISTANCE = register("visual/fog_start_distance", Type.FLOAT, 0f);
@@ -54,7 +53,7 @@ sealed interface EnvironmentAttributes permits EnvironmentAttribute {
     EnvironmentAttribute<Boolean> FAST_LAVA = register("gameplay/fast_lava", Type.BOOLEAN, false);
     EnvironmentAttribute<Boolean> INCREASED_FIRE_BURNOUT = register("gameplay/increased_fire_burnout", Type.BOOLEAN, false);
     EnvironmentAttribute<TriState> EYEBLOSSOM_OPEN = register("gameplay/eyeblossom_open", Type.TRI_STATE, TriState.NOT_SET);
-    EnvironmentAttribute<Float> TURTLE_EGG_HATCH_CHANCE = register("gameplay/turtle_egg_hatch_chance", Type.FLOAT, 0f);
+    EnvironmentAttribute<Float> TURTLE_EGG_HATCH_CHANCE = register("gameplay/turtle_egg_hatch_chance", Type.FLOAT, 0.02f);
     EnvironmentAttribute<Boolean> PIGLINS_ZOMBIFY = register("gameplay/piglins_zombify", Type.BOOLEAN, true);
     EnvironmentAttribute<Boolean> SNOW_GOLEM_MELTS = register("gameplay/snow_golem_melts", Type.BOOLEAN, false);
     EnvironmentAttribute<Boolean> CREAKING_ACTIVE = register("gameplay/creaking_active", Type.BOOLEAN, false);
