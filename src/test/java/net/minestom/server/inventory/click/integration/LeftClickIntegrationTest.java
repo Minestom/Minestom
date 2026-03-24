@@ -1,6 +1,8 @@
 package net.minestom.server.inventory.click.integration;
 
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
@@ -9,6 +11,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.Equippable;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
@@ -31,6 +34,9 @@ public class LeftClickIntegrationTest {
         inventory.setItemStack(1, ItemStack.of(Material.DIAMOND));
         inventory.setItemStack(2, ItemStack.of(Material.DIAMOND_HELMET));
         inventory.setItemStack(3, ItemStack.of(Material.SHIELD));
+        inventory.setItemStack(4, ItemStack.builder(Material.COOKED_BEEF).set(DataComponents.EQUIPPABLE,
+                new Equippable(EquipmentSlot.LEGGINGS, Equippable.DEFAULT_EQUIP_SOUND, null, null, null,
+                        true, true, true, true, true, Equippable.DEFAULT_SHEARING_SOUND)).build());
         // Empty click
         {
             listener.followup(event -> {
@@ -73,6 +79,18 @@ public class LeftClickIntegrationTest {
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
             assertEquals(ItemStack.AIR, player.getInventory().getItemStack(2));
             assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getHelmet());
+        }
+        // Shift click non armor material but equippable item into the armor slot
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(4), event.getClick());
+                assertEquals(Material.COOKED_BEEF, player.getInventory().getItemStack(4).material());
+            });
+            shiftClick(player, 4);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(4));
+            assertEquals(Material.COOKED_BEEF, player.getLeggings().material());
         }
         // Shift click an armor slot item back into the inventory
         {
