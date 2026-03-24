@@ -14,7 +14,6 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.Objects;
 
 public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl {
-    //TODO(26.1) Direct codec
     Codec<WolfVariant> REGISTRY_CODEC = StructCodec.struct(
             "assets", Assets.CODEC, WolfVariant::assets,
             "baby_assets", Assets.CODEC, WolfVariant::babyAssets,

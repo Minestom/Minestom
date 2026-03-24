@@ -14,8 +14,10 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Objects;
 
-//TODO(26.1) Hopefully this changes in later snapshots to include baby sounds separation like the others
-// Its why the API is currently so weird.
+/**
+ * Sounds used by the cow, set with {@link net.minestom.server.component.DataComponents#COW_SOUND_VARIANT}
+ * currently {@link #adultSounds()} are shared between baby and adult. This is expected to change in a future release.
+ */
 public sealed interface CowSoundVariant extends CowSoundVariants permits CowSoundVariantImpl {
     NetworkBuffer.Type<RegistryKey<CowSoundVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::cowSoundVariant);
     Codec<RegistryKey<CowSoundVariant>> CODEC = RegistryKey.codec(Registries::cowSoundVariant);
@@ -36,18 +38,13 @@ public sealed interface CowSoundVariant extends CowSoundVariants permits CowSoun
 
     static CowSoundVariant create(
             CowSoundSet adultSounds
-//            CowSoundSet babySounds
     ) {
         return new CowSoundVariantImpl(
                 adultSounds
-//                babySounds
         );
     }
 
-    //TODO(26.1) See above, if not applicable anymore rename to sounds()
     CowSoundSet adultSounds();
-
-//    CowSoundSet babySounds();
 
     sealed interface CowSoundSet permits CowSoundVariantImpl.CowSoundSetImpl {
         Codec<CowSoundSet> CODEC = StructCodec.struct(
@@ -126,22 +123,15 @@ public sealed interface CowSoundVariant extends CowSoundVariants permits CowSoun
 
     final class Builder {
         private @UnknownNullability CowSoundSet adultSounds;
-//        private @UnknownNullability CowSoundSet babySounds;
 
         public Builder adultSounds(CowSoundSet adultSounds) {
             this.adultSounds = Objects.requireNonNull(adultSounds, "adultSounds");
             return this;
         }
 
-//        public Builder babySounds(CowSoundSet babySounds) {
-//            this.babySounds = Objects.requireNonNull(babySounds, "babySounds");
-//            return this;
-//        }
-
         public CowSoundVariant build() {
             return new CowSoundVariantImpl(
                     adultSounds
-//                    babySounds
             );
         }
     }
