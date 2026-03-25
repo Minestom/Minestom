@@ -38,33 +38,8 @@ public class Sidebar implements Viewable {
      * @param title The title of the sidebar
      */
     public Sidebar(Component title) {
-        scoreboard = new SidebarBoard();
+        scoreboard = Scoreboard.create(SCOREBOARD_PREFIX + COUNTER.incrementAndGet(), Scoreboard.Position.SIDEBAR);
         scoreboard.setDisplayName(title);
-    }
-
-    class SidebarBoard extends BaseScoreboard {
-        SidebarBoard() {
-            super(SCOREBOARD_PREFIX + COUNTER.incrementAndGet(), Position.SIDEBAR);
-        }
-
-        @Override
-        public boolean addViewer(Player player) {
-            boolean added = super.addViewer(player);
-            if (!added) return false;
-            lines.forEach((_, data) -> player.sendPackets(
-                    new UpdateScorePacket(data.entity(), objectiveName, 0, displayName, data.content().numberFormat()),
-                    data.createPacket())
-            );
-            return true;
-        }
-
-        @Override
-        public boolean removeViewer(Player player) {
-            boolean removed = super.removeViewer(player);
-            if (!removed) return false;
-            lines.forEach((_, data) -> player.sendPacket(data.destroyPacket()));
-            return true;
-        }
     }
 
     /**
@@ -97,7 +72,7 @@ public class Sidebar implements Viewable {
         assert entity != null;
         LineData data = new LineData("§" + entity, content, TEAM_PREFIX + entity);
         lines.put(id, data);
-        scoreboard.updateScore(data.entity, 0, data.content.numberFormat);
+        scoreboard.updateScore(data.entity, 0);
         scoreboard.sendPacketToViewers(data.createPacket());
     }
 
@@ -109,7 +84,7 @@ public class Sidebar implements Viewable {
     public void setLineContent(LineIdentifier id, LineContent content) {
         lines.compute(id, (_, v) -> {
             if (v == null || v.content.equals(content)) return null;
-            scoreboard.updateScore(v.entity, 0, v.content.numberFormat);
+            scoreboard.updateScore(v.entity, 0);
             LineData updated = v.withContent(content);
             scoreboard.sendPacketToViewers(updated.updatePacket());
             return updated;
@@ -125,12 +100,21 @@ public class Sidebar implements Viewable {
 
     @Override
     public boolean addViewer(Player player) {
-        return scoreboard.addViewer(player);
+        if (scoreboard.getViewers().contains(player)) return false;
+        player.showScoreboard(scoreboard);
+        lines.forEach((_, data) -> player.sendPackets(
+                new UpdateScorePacket(data.entity(), scoreboard.getObjectiveName(), 0, null, data.content().numberFormat()),
+                data.createPacket()
+        ));
+        return true;
     }
 
     @Override
     public boolean removeViewer(Player player) {
-        return scoreboard.addViewer(player);
+        if (!scoreboard.getViewers().contains(player)) return false;
+        player.hideScoreboard(scoreboard);
+        lines.forEach((_, data) -> player.sendPacket(data.destroyPacket()));
+        return true;
     }
 
     @Override
