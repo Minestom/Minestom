@@ -6,10 +6,10 @@ import net.minestom.server.Viewable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * This interface represents all scoreboards in Minecraft.
@@ -17,8 +17,29 @@ import java.util.Collection;
  */
 public interface Scoreboard extends Viewable, PacketGroupingAudience {
 
+    /**
+     * Creates a new scoreboard that stores a map of strings to line entries.
+     * A line entry contains an integer score and optional overrides for display name and number format.
+     * @param objectiveName the objective name
+     * @param position the initial position of the scoreboard
+     * @return the scoreboard
+     */
     static Scoreboard create(String objectiveName, Position position) {
         return new ScoreboardImpl(objectiveName, position);
+    }
+
+    /**
+     * Creates a new scoreboard that stores a map of strings to line entries.
+     * A line entry contains an integer score and optional overrides for display name and number format.
+     * @param objectiveName the objective name
+     * @param displayName the scoreboard display name
+     * @param position the initial position of the scoreboard
+     * @return the scoreboard
+     */
+    static Scoreboard create(String objectiveName, Component displayName, Position position) {
+        ScoreboardImpl scoreboard = new ScoreboardImpl(objectiveName, position);
+        scoreboard.setDisplayName(displayName);
+        return scoreboard;
     }
 
     /**
@@ -57,13 +78,13 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * Gets the display format of this scoreboard when in the player list.
      * @return the display type
      */
-    ScoreboardObjectivePacket.Type getDisplayType();
+    DisplayType getDisplayType();
 
     /**
      * Sets the {@link Scoreboard#getDisplayType() display type} of this scoreboard.
      * @param displayType the new display type
      */
-    void setDisplayType(ScoreboardObjectivePacket.Type displayType);
+    void setDisplayType(DisplayType displayType);
 
     /**
      * Gets the default number format.
@@ -76,6 +97,19 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param numberFormat the new number format, or null to remove formatting
      */
     void setDefaultNumberFormat(@Nullable NumberFormat numberFormat);
+
+    /**
+     * Gets the score entry for the specified entry.
+     * @param entity the entry name
+     * @return the entry, or null if this scoreboard has no entry with that name
+     */
+    @Nullable ScoreEntry getEntry(String entity);
+
+    /**
+     * Gets all score entries stored in this scoreboard.
+     * @return an unmodifiable view of all score entries
+     */
+    Map<String, ScoreEntry> getEntries();
 
     /**
      * Updates or creates the score for an entity.
@@ -151,7 +185,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
     enum Position {
         /**
          * Scores are placed to the right of a player's name in the player list.
-         * Can use {@link net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type}
+         * Can use {@link DisplayType}
          * to display hearts instead of a number.
          */
         PLAYER_LIST,
@@ -181,6 +215,11 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
         TEAM_COLOR_14,
         TEAM_COLOR_15;
 
+        /**
+         * Returns the Position used for the sidebar when a player is on a team with a color.
+         * @param color the team color
+         * @return the corresponding Position
+         */
         public static Position forTeamColor(NamedTextColor color) {
             return values()[TEAM_COLOR_0.ordinal() + AdventurePacketConvertor.getNamedTextColorValue(color)];
         }
@@ -188,5 +227,13 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
         public byte asByte() {
             return (byte) ordinal();
         }
+    }
+
+    /**
+     * The score display type when shown in the player list (integer or hearts)
+     */
+    enum DisplayType {
+        INTEGER,
+        HEARTS
     }
 }

@@ -5,7 +5,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ResetScorePacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
-import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,32 +20,14 @@ public class ScoreboardImpl implements Scoreboard {
     protected final String objectiveName;
     protected @Nullable Component displayName;
     protected Position position;
-    protected ScoreboardObjectivePacket.Type displayType = ScoreboardObjectivePacket.Type.INTEGER;
+    protected DisplayType displayType = DisplayType.INTEGER;
     protected @Nullable NumberFormat defaultNumberFormat;
 
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
-    private final Map<String, Entry> entries = new ConcurrentHashMap<>();
+    private final Map<String, ScoreEntry> entries = new ConcurrentHashMap<>();
+    private final Map<String, ScoreEntry> unmodifiableEntries = Collections.unmodifiableMap(entries);
 
-    public record Entry(int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat) {
-        public static final Entry DEFAULT = new Entry(0, null, null);
-
-        public UpdateScorePacket getUpdateScorePacket(String entity, String objective) {
-            return new UpdateScorePacket(entity, objective, score, displayName, numberFormat);
-        }
-
-        public Entry withScore(int score) {
-            return new Entry(score, displayName, numberFormat);
-        }
-
-        public Entry withDisplayName(@Nullable Component displayName) {
-            return new Entry(score, displayName, numberFormat);
-        }
-
-        public Entry withNumberFormat(@Nullable NumberFormat numberFormat) {
-            return new Entry(score, displayName, numberFormat);
-        }
-    }
 
     ScoreboardImpl(String objectiveName, Position position) {
         this.objectiveName = objectiveName;
@@ -133,12 +114,12 @@ public class ScoreboardImpl implements Scoreboard {
     }
 
     @Override
-    public ScoreboardObjectivePacket.Type getDisplayType() {
+    public DisplayType getDisplayType() {
         return displayType;
     }
 
     @Override
-    public void setDisplayType(ScoreboardObjectivePacket.Type displayType) {
+    public void setDisplayType(DisplayType displayType) {
         this.displayType = displayType;
         sendObjectiveUpdate();
     }
@@ -155,32 +136,42 @@ public class ScoreboardImpl implements Scoreboard {
     }
 
     @Override
+    public @Nullable ScoreEntry getEntry(String entity) {
+        return entries.get(entity);
+    }
+
+    @Override
+    public Map<String, ScoreEntry> getEntries() {
+        return unmodifiableEntries;
+    }
+
+    @Override
     public void updateScore(String entity, int score) {
-        Entry entry = entries.compute(entity, (_, current) ->
-            (current != null ? current : Entry.DEFAULT).withScore(score)
+        ScoreEntry entry = entries.compute(entity, (_, current) ->
+            (current != null ? current : ScoreEntry.DEFAULT).withScore(score)
         );
         sendUpdate(entity, entry);
     }
 
     @Override
     public void updateDisplayName(String entity, @Nullable Component displayName) {
-        Entry entry = entries.compute(entity, (_, current) ->
-                (current != null ? current : Entry.DEFAULT).withDisplayName(displayName)
+        ScoreEntry entry = entries.compute(entity, (_, current) ->
+                (current != null ? current : ScoreEntry.DEFAULT).withDisplayName(displayName)
         );
         sendUpdate(entity, entry);
     }
 
     @Override
     public void updateNumberFormat(String entity, @Nullable NumberFormat numberFormat) {
-        Entry entry = entries.compute(entity, (_, current) ->
-                (current != null ? current : Entry.DEFAULT).withNumberFormat(numberFormat)
+        ScoreEntry entry = entries.compute(entity, (_, current) ->
+                (current != null ? current : ScoreEntry.DEFAULT).withNumberFormat(numberFormat)
         );
         sendUpdate(entity, entry);
     }
 
     @Override
     public void updateEntry(String entity, int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat) {
-        Entry entry = new Entry(score, displayName, numberFormat);
+        ScoreEntry entry = new ScoreEntry(score, displayName, numberFormat);
         entries.put(entity, entry);
         sendUpdate(entity, entry);
     }
@@ -190,7 +181,7 @@ public class ScoreboardImpl implements Scoreboard {
         sendPacketToViewers(new ResetScorePacket(entity, objectiveName));
     }
 
-    public void sendUpdate(String entity, Entry entry) {
+    public void sendUpdate(String entity, ScoreEntry entry) {
         sendPacketToViewers(entry.getUpdateScorePacket(entity, objectiveName));
     }
 

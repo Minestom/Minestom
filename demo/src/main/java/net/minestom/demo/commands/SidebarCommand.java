@@ -10,11 +10,15 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.NumberFormat;
-import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
 
 public class SidebarCommand extends Command {
-    private final Sidebar sidebar = new Sidebar(Component.text("DEMO").decorate(TextDecoration.BOLD));
+    private final Scoreboard sidebar = Scoreboard.create(
+            "demo-sidebar",
+            Component.text("DEMO").decorate(TextDecoration.BOLD),
+            Scoreboard.Position.SIDEBAR
+    );
     private int currentLine = 0;
 
     public SidebarCommand() {
@@ -28,7 +32,7 @@ public class SidebarCommand extends Command {
         setDefaultExecutor((source, args) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
         setCondition(Conditions::playerOnly);
 
-        var option = ArgumentType.Word("option").from("add-line", "remove-line", "set-title", "toggle", "update-content", "update-score");
+        var option = ArgumentType.Word("option").from("add-line", "remove-line", "set-title", "toggle", "update-content");
         var content = ArgumentType.String("content").setDefaultValue("");
         var targetLine = ArgumentType.Integer("target line").setDefaultValue(-1);
 
@@ -44,7 +48,7 @@ public class SidebarCommand extends Command {
         String content = context.get("content");
         int targetLine = context.get("target line");
         if (targetLine == -1) targetLine = currentLine;
-        Sidebar.LineIdentifier id = new Sidebar.LineIdentifier(String.valueOf(targetLine));
+        String id = String.valueOf(targetLine);
         switch (option) {
             case "add-line":
                 addLine(content, null);
@@ -61,54 +65,38 @@ public class SidebarCommand extends Command {
             case "update-content":
                 updateLineContent(content, id);
                 break;
-            case "update-score":
-                updateLineScore(Integer.parseInt(content), id);
-                break;
         }
     }
 
     private void addLine(String content, @Nullable NumberFormat numberFormat) {
         if (currentLine < 16) {
-            sidebar.addLine(new Sidebar.LineIdentifier(String.valueOf(currentLine)), new Sidebar.LineContent(
+            sidebar.updateEntry(
+                    String.valueOf(currentLine),
+                    16 - currentLine,
                     Component.text(content).color(NamedTextColor.WHITE),
-                    numberFormat,
-                    16 - currentLine
-            ));
+                    numberFormat
+            );
             currentLine++;
         }
     }
 
     private void removeLine() {
         if (currentLine > 0) {
-            sidebar.removeLine(new Sidebar.LineIdentifier(String.valueOf(currentLine)));
+            sidebar.removeScore(String.valueOf(currentLine));
             currentLine--;
         }
     }
 
     private void setTitle(String title) {
-        sidebar.setTitle(Component.text(title).decorate(TextDecoration.BOLD));
+        sidebar.setDisplayName(Component.text(title).decorate(TextDecoration.BOLD));
     }
 
     private void toggleSidebar(Player player) {
-        if (sidebar.getViewers().contains(player)) sidebar.removeViewer(player);
-        else sidebar.addViewer(player);
+        if (sidebar.getViewers().contains(player)) player.hideScoreboard(sidebar);
+        else player.showScoreboard(sidebar);
     }
 
-    private void updateLineContent(String content, Sidebar.LineIdentifier id) {
-        Sidebar.LineContent current = sidebar.getLineContent(id);
-        sidebar.setLineContent(id, new Sidebar.LineContent(
-                Component.text(content).color(NamedTextColor.WHITE),
-                current.numberFormat(),
-                current.score()
-        ));
-    }
-
-    private void updateLineScore(int score, Sidebar.LineIdentifier id) {
-        Sidebar.LineContent current = sidebar.getLineContent(id);
-        sidebar.setLineContent(id, new Sidebar.LineContent(
-                current.content(),
-                current.numberFormat(),
-                score
-        ));
+    private void updateLineContent(String content, String id) {
+        sidebar.updateDisplayName(id, Component.text(content).color(NamedTextColor.WHITE));
     }
 }
