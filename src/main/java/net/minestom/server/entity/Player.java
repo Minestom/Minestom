@@ -1041,21 +1041,46 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacket(new ClearDialogPacket());
     }
 
+    /**
+     * Gets the scoreboard being shown in a position.
+     * @param position the position to check
+     * @return the scoreboard, or null if this player does not have one
+     */
+    public @Nullable Scoreboard getScoreboard(Scoreboard.Position position) {
+        return scoreboards.get(position);
+    }
+
+    /**
+     * Shows a scoreboard. If the player already has a scoreboard in the same position, the previous one is hidden.
+     * @param scoreboard the scoreboard to show
+     */
     public void showScoreboard(Scoreboard scoreboard) {
         Scoreboard previous = scoreboards.put(scoreboard.getPosition(), scoreboard);
         if (previous != null) previous.removeViewer(this);
         scoreboard.addViewer(this);
     }
 
+    /**
+     * Hides a scoreboard.
+     * @param scoreboard the scoreboard to hide
+     */
     public void hideScoreboard(Scoreboard scoreboard) {
         if (scoreboard.removeViewer(this)) scoreboards.remove(scoreboard.getPosition());
     }
 
+    /**
+     * Hides a scoreboard in a position.
+     * @param position the position
+     */
     public void hideScoreboard(Scoreboard.Position position) {
         Scoreboard previous = scoreboards.remove(position);
-        if (previous != null) previous.removeViewer(this);
+        // Position check ensures viewers are not removed when moving a scoreboard.
+        if (previous != null && position == previous.getPosition()) previous.removeViewer(this);
     }
 
+    /**
+     * Hides any scoreboards being shown to this player.
+     */
     public void clearScoreboards() {
         scoreboards.forEach((_, scoreboard) -> scoreboard.removeViewer(this));
     }

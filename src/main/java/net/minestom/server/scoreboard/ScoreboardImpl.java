@@ -109,8 +109,13 @@ public class ScoreboardImpl implements Scoreboard {
 
     @Override
     public void setPosition(Position position) {
+        Position previous = this.position;
         this.position = position;
         sendPacketToViewers(new DisplayScoreboardPacket(position.asByte(), objectiveName));
+        viewers.forEach(v -> {
+            v.showScoreboard(this);
+            v.hideScoreboard(previous);
+        });
     }
 
     @Override
