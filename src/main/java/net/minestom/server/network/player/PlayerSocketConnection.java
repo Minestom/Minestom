@@ -435,8 +435,9 @@ public class PlayerSocketConnection extends PlayerConnection {
             } else {
                 assert this.writeThread == Thread.currentThread(): "writeThread should be the current thread";
                 this.writeSignaled.set(false);
+                if (!isOnline()) return; // already offline, don't park
                 LockSupport.park(this);
-                assert this.packetQueue.peek() != null : "packet queue should not be empty";
+                if (packetQueue.isEmpty()) return; // woken by disconnect signal, not by packets
             }
         }
         if (!channel.isConnected()) throw new EOFException("Channel is closed");
@@ -453,6 +454,12 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Keep the buffer if not fully written
         if (success) PacketVanilla.PACKET_POOL.add(buffer);
         else this.writeLeftover = buffer;
+    }
+
+    @Override
+    public void disconnect() {
+        super.disconnect();
+        LockSupport.unpark(writeThread);
     }
 
     public Thread readThread() {

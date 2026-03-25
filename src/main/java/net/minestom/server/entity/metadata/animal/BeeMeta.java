@@ -9,12 +9,12 @@ public class BeeMeta extends AnimalMeta {
         super(entity, metadata);
     }
 
-    public boolean isAngry() {
-        return metadata.get(MetadataDef.Bee.IS_ANGRY);
+    public boolean isRolling() {
+        return metadata.get(MetadataDef.Bee.IS_ROLLING);
     }
 
-    public void setAngry(boolean value) {
-        metadata.set(MetadataDef.Bee.IS_ANGRY, value);
+    public void setRolling(boolean value) {
+        metadata.set(MetadataDef.Bee.IS_ROLLING, value);
     }
 
     public boolean isHasStung() {
@@ -33,12 +33,12 @@ public class BeeMeta extends AnimalMeta {
         metadata.set(MetadataDef.Bee.HAS_NECTAR, value);
     }
 
-    public long getAngerTicks() {
-        return metadata.get(MetadataDef.Bee.ANGER_TIME_TICKS);
+    public long getAngerEndTime() {
+        return metadata.get(MetadataDef.Bee.ANGER_END_TIME);
     }
 
-    public void setAngerTicks(long value) {
-        metadata.set(MetadataDef.Bee.ANGER_TIME_TICKS, value);
+    public void setAngerEndTime(long value) {
+        metadata.set(MetadataDef.Bee.ANGER_END_TIME, value);
     }
 
 }
