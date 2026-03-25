@@ -46,7 +46,6 @@ record DataComponentImpl<T>(
         return codec != null;
     }
 
-    @Override
     public NetworkBuffer.@Nullable Type<T> networkType() {
         return networkType;
     }
