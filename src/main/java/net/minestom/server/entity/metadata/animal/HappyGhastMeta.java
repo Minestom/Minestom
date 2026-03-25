@@ -4,25 +4,25 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class HappyGhastMeta extends AnimalMeta {
+public final class HappyGhastMeta extends AnimalMeta {
 
     public HappyGhastMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isLeashHolder() {
-        return metadata.get(MetadataDef.HappyGhast.IS_LEASH_HOLDER);
+        return get(MetadataDef.HappyGhast.IS_LEASH_HOLDER);
     }
 
     public void setLeashHolder(boolean value) {
-        metadata.set(MetadataDef.HappyGhast.IS_LEASH_HOLDER, value);
+        set(MetadataDef.HappyGhast.IS_LEASH_HOLDER, value);
     }
 
     public boolean isStaysStill() {
-        return metadata.get(MetadataDef.HappyGhast.STAYS_STILL);
+        return get(MetadataDef.HappyGhast.STAYS_STILL);
     }
 
     public void setStaysStill(boolean value) {
-        metadata.set(MetadataDef.HappyGhast.STAYS_STILL, value);
+        set(MetadataDef.HappyGhast.STAYS_STILL, value);
     }
 }

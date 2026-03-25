@@ -8,17 +8,17 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
-public class PigMeta extends AnimalMeta {
+public final class PigMeta extends AnimalMeta {
     public PigMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getTimeToBoost() {
-        return metadata.get(MetadataDef.Pig.BOOST_TIME);
+        return get(MetadataDef.Pig.BOOST_TIME);
     }
 
     public void setTimeToBoost(int value) {
-        metadata.set(MetadataDef.Pig.BOOST_TIME, value);
+        set(MetadataDef.Pig.BOOST_TIME, value);
     }
 
     /**
@@ -26,7 +26,7 @@ public class PigMeta extends AnimalMeta {
      */
     @Deprecated
     public RegistryKey<PigVariant> getVariant() {
-        return metadata.get(MetadataDef.Pig.VARIANT);
+        return get(MetadataDef.Pig.VARIANT);
     }
 
     /**
@@ -34,7 +34,7 @@ public class PigMeta extends AnimalMeta {
      */
     @Deprecated
     public void setVariant(RegistryKey<PigVariant> value) {
-        metadata.set(MetadataDef.Pig.VARIANT, value);
+        set(MetadataDef.Pig.VARIANT, value);
     }
 
     @Override

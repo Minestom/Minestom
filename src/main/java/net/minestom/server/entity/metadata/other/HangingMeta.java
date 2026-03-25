@@ -8,18 +8,18 @@ import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class HangingMeta extends EntityMeta implements ObjectDataProvider {
+public sealed abstract class HangingMeta extends EntityMeta implements ObjectDataProvider permits ItemFrameMeta, PaintingMeta {
 
     protected HangingMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public Direction getDirection() {
-        return metadata.get(MetadataDef.Hanging.DIRECTION);
+        return get(MetadataDef.Hanging.DIRECTION);
     }
 
     public void setDirection(Direction direction) {
-        metadata.set(MetadataDef.Hanging.DIRECTION, direction);
+        set(MetadataDef.Hanging.DIRECTION, direction);
     }
 
     @Override

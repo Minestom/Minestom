@@ -7,19 +7,25 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
+import net.minestom.server.entity.metadata.item.*;
+import net.minestom.server.entity.metadata.other.*;
+import net.minestom.server.entity.metadata.projectile.*;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
-public class EntityMeta {
-    private final WeakReference<Entity> entityRef;
-    protected final MetadataHolder metadata;
+public sealed abstract class EntityMeta permits AbstractVehicleMeta, LivingEntityMeta, AbstractDisplayMeta, EyeOfEnderMeta, FireballMeta, ItemEntityMeta, SmallFireballMeta, ThrownItemProjectileMeta, AreaEffectCloudMeta, EndCrystalMeta, EvokerFangsMeta, ExperienceOrbMeta, FallingBlockMeta, FishingHookMeta, HangingMeta, InteractionMeta, LeashKnotMeta, LightningBoltMeta, LlamaSpitMeta, MarkerMeta, OminousItemSpawnerMeta, PrimedTntMeta, ShulkerBulletMeta, TraderLlamaMeta, AbstractArrowMeta, AbstractWindChargeMeta, DragonFireballMeta, FireworkRocketMeta, WitherSkullMeta {
+    private final WeakReference<? extends Entity> entityRef;
+    private final MetadataHolder metadata;
 
-    public EntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    protected EntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
         this.entityRef = new WeakReference<>(entity);
         this.metadata = metadata;
+        super();
     }
 
     /**
@@ -35,72 +41,72 @@ public class EntityMeta {
      *
      * @param notifyAboutChanges if to notify entity viewers about this meta changes.
      */
-    public void setNotifyAboutChanges(boolean notifyAboutChanges) {
+    public final void setNotifyAboutChanges(boolean notifyAboutChanges) {
         this.metadata.setNotifyAboutChanges(notifyAboutChanges);
     }
 
     public boolean isOnFire() {
-        return metadata.get(MetadataDef.IS_ON_FIRE);
+        return get(MetadataDef.IS_ON_FIRE);
     }
 
     public void setOnFire(boolean value) {
-        metadata.set(MetadataDef.IS_ON_FIRE, value);
+        set(MetadataDef.IS_ON_FIRE, value);
     }
 
     public boolean isSneaking() {
-        return metadata.get(MetadataDef.IS_CROUCHING);
+        return get(MetadataDef.IS_CROUCHING);
     }
 
     public void setSneaking(boolean value) {
-        metadata.set(MetadataDef.IS_CROUCHING, value);
+        set(MetadataDef.IS_CROUCHING, value);
     }
 
     public boolean isSprinting() {
-        return metadata.get(MetadataDef.IS_SPRINTING);
+        return get(MetadataDef.IS_SPRINTING);
     }
 
     public void setSprinting(boolean value) {
-        metadata.set(MetadataDef.IS_SPRINTING, value);
+        set(MetadataDef.IS_SPRINTING, value);
     }
 
     public boolean isSwimming() {
-        return metadata.get(MetadataDef.IS_SWIMMING);
+        return get(MetadataDef.IS_SWIMMING);
     }
 
     public void setSwimming(boolean value) {
-        metadata.set(MetadataDef.IS_SWIMMING, value);
+        set(MetadataDef.IS_SWIMMING, value);
     }
 
     public boolean isInvisible() {
-        return metadata.get(MetadataDef.IS_INVISIBLE);
+        return get(MetadataDef.IS_INVISIBLE);
     }
 
     public void setInvisible(boolean value) {
-        metadata.set(MetadataDef.IS_INVISIBLE, value);
+        set(MetadataDef.IS_INVISIBLE, value);
     }
 
     public boolean isHasGlowingEffect() {
-        return metadata.get(MetadataDef.HAS_GLOWING_EFFECT);
+        return get(MetadataDef.HAS_GLOWING_EFFECT);
     }
 
     public void setHasGlowingEffect(boolean value) {
-        metadata.set(MetadataDef.HAS_GLOWING_EFFECT, value);
+        set(MetadataDef.HAS_GLOWING_EFFECT, value);
     }
 
     public boolean isFlyingWithElytra() {
-        return metadata.get(MetadataDef.IS_FLYING_WITH_ELYTRA);
+        return get(MetadataDef.IS_FLYING_WITH_ELYTRA);
     }
 
     public void setFlyingWithElytra(boolean value) {
-        metadata.set(MetadataDef.IS_FLYING_WITH_ELYTRA, value);
+        set(MetadataDef.IS_FLYING_WITH_ELYTRA, value);
     }
 
     public int getAirTicks() {
-        return metadata.get(MetadataDef.AIR_TICKS);
+        return get(MetadataDef.AIR_TICKS);
     }
 
     public void setAirTicks(int value) {
-        metadata.set(MetadataDef.AIR_TICKS, value);
+        set(MetadataDef.AIR_TICKS, value);
     }
 
     /**
@@ -108,7 +114,7 @@ public class EntityMeta {
      */
     @Deprecated
     public @Nullable Component getCustomName() {
-        return metadata.get(MetadataDef.CUSTOM_NAME);
+        return get(MetadataDef.CUSTOM_NAME);
     }
 
     /**
@@ -116,50 +122,50 @@ public class EntityMeta {
      */
     @Deprecated
     public void setCustomName(@Nullable Component value) {
-        metadata.set(MetadataDef.CUSTOM_NAME, value);
+        set(MetadataDef.CUSTOM_NAME, value);
     }
 
     public boolean isCustomNameVisible() {
-        return metadata.get(MetadataDef.CUSTOM_NAME_VISIBLE);
+        return get(MetadataDef.CUSTOM_NAME_VISIBLE);
     }
 
     public void setCustomNameVisible(boolean value) {
-        metadata.set(MetadataDef.CUSTOM_NAME_VISIBLE, value);
+        set(MetadataDef.CUSTOM_NAME_VISIBLE, value);
     }
 
     public boolean isSilent() {
-        return metadata.get(MetadataDef.IS_SILENT);
+        return get(MetadataDef.IS_SILENT);
     }
 
     public void setSilent(boolean value) {
-        metadata.set(MetadataDef.IS_SILENT, value);
+        set(MetadataDef.IS_SILENT, value);
     }
 
     public boolean isHasNoGravity() {
-        return metadata.get(MetadataDef.HAS_NO_GRAVITY);
+        return get(MetadataDef.HAS_NO_GRAVITY);
     }
 
     public void setHasNoGravity(boolean value) {
-        metadata.set(MetadataDef.HAS_NO_GRAVITY, value);
+        set(MetadataDef.HAS_NO_GRAVITY, value);
     }
 
     public EntityPose getPose() {
-        return metadata.get(MetadataDef.POSE);
+        return get(MetadataDef.POSE);
     }
 
     public void setPose(EntityPose value) {
-        metadata.set(MetadataDef.POSE, value);
+        set(MetadataDef.POSE, value);
     }
 
     public int getTickFrozen() {
-        return metadata.get(MetadataDef.TICKS_FROZEN);
+        return get(MetadataDef.TICKS_FROZEN);
     }
 
     public void setTickFrozen(int tickFrozen) {
-        metadata.set(MetadataDef.TICKS_FROZEN, tickFrozen);
+        set(MetadataDef.TICKS_FROZEN, tickFrozen);
     }
 
-    protected void consumeEntity(Consumer<Entity> consumer) {
+    protected final void consumeEntity(Consumer<? super Entity> consumer) {
         Entity entity = this.entityRef.get();
         if (entity != null) {
             consumer.accept(entity);
@@ -193,13 +199,13 @@ public class EntityMeta {
     @SuppressWarnings("unchecked")
     protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.CUSTOM_NAME)
-            return (T) metadata.get(MetadataDef.CUSTOM_NAME);
+            return (T) get(MetadataDef.CUSTOM_NAME);
         return null;
     }
 
     protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.CUSTOM_NAME)
-            metadata.set(MetadataDef.CUSTOM_NAME, (Component) value);
+            set(MetadataDef.CUSTOM_NAME, (Component) value);
     }
 
     /**
@@ -210,7 +216,7 @@ public class EntityMeta {
      * @return The value associated with the specified metadata entry.
      */
     @ApiStatus.Experimental
-    public <T> T get(MetadataDef.Entry<T> entry) {
+    public final <T extends @UnknownNullability Object> T get(MetadataDef.Entry<T> entry) {
         return metadata.get(entry);
     }
 
@@ -222,7 +228,7 @@ public class EntityMeta {
      * @param <T>   The type of the metadata value.
      */
     @ApiStatus.Experimental
-    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+    public final <T extends @UnknownNullability Object> void set(MetadataDef.Entry<T> entry, T value) {
         metadata.set(entry, value);
     }
 }

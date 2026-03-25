@@ -9,7 +9,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-public class HorseMeta extends AbstractHorseMeta {
+public final class HorseMeta extends AbstractHorseMeta {
     public HorseMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
@@ -19,7 +19,7 @@ public class HorseMeta extends AbstractHorseMeta {
      */
     @Deprecated
     public Variant getVariant() {
-        return getVariantFromID(metadata.get(MetadataDef.Horse.VARIANT));
+        return getVariantFromID(get(MetadataDef.Horse.VARIANT));
     }
 
     /**
@@ -27,7 +27,7 @@ public class HorseMeta extends AbstractHorseMeta {
      */
     @Deprecated
     public void setVariant(Variant variant) {
-        metadata.set(MetadataDef.Horse.VARIANT, getVariantID(variant.marking, variant.color));
+        set(MetadataDef.Horse.VARIANT, getVariantID(variant.marking, variant.color));
     }
 
     public static int getVariantID(Marking marking, Color color) {

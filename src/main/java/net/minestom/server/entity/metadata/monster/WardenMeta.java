@@ -4,17 +4,17 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class WardenMeta extends MonsterMeta {
+public final class WardenMeta extends MonsterMeta {
     public WardenMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getAngerLevel() {
-        return metadata.get(MetadataDef.Warden.ANGER_LEVEL);
+        return get(MetadataDef.Warden.ANGER_LEVEL);
     }
 
     public void setAngerLevel(int value) {
-        metadata.set(MetadataDef.Warden.ANGER_LEVEL, value);
+        set(MetadataDef.Warden.ANGER_LEVEL, value);
     }
 
 }

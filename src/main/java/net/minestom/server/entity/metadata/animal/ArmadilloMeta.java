@@ -5,17 +5,17 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 
-public class ArmadilloMeta extends AnimalMeta {
+public final class ArmadilloMeta extends AnimalMeta {
     public ArmadilloMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public State getState() {
-        return metadata.get(MetadataDef.Armadillo.STATE);
+        return get(MetadataDef.Armadillo.STATE);
     }
 
     public void setState(State value) {
-        metadata.set(MetadataDef.Armadillo.STATE, value);
+        set(MetadataDef.Armadillo.STATE, value);
     }
 
     public enum State {

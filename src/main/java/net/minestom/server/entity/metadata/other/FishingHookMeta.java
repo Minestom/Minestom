@@ -8,21 +8,21 @@ import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
-    private Entity hooked;
-    private Entity owner;
+public final class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
+    private @Nullable Entity hooked;
+    private @Nullable Entity owner;
 
     public FishingHookMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getHookedEntityId() {
-        return metadata.get(MetadataDef.FishingHook.HOOKED);
+        return get(MetadataDef.FishingHook.HOOKED);
     }
 
     @ApiStatus.Internal
     public void setHookedEntityId(int value) {
-        metadata.set(MetadataDef.FishingHook.HOOKED, value);
+        set(MetadataDef.FishingHook.HOOKED, value);
     }
 
     @Nullable
@@ -37,11 +37,11 @@ public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     public boolean isCatchable() {
-        return metadata.get(MetadataDef.FishingHook.IS_CATCHABLE);
+        return get(MetadataDef.FishingHook.IS_CATCHABLE);
     }
 
     public void setCatchable(boolean value) {
-        metadata.set(MetadataDef.FishingHook.IS_CATCHABLE, value);
+        set(MetadataDef.FishingHook.IS_CATCHABLE, value);
     }
 
     @Nullable

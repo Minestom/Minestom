@@ -4,25 +4,25 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 
-public class StriderMeta extends AnimalMeta {
+public final class StriderMeta extends AnimalMeta {
     public StriderMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getTimeToBoost() {
-        return metadata.get(MetadataDef.Strider.FUNGUS_BOOST);
+        return get(MetadataDef.Strider.FUNGUS_BOOST);
     }
 
     public void setTimeToBoost(int value) {
-        metadata.set(MetadataDef.Strider.FUNGUS_BOOST, value);
+        set(MetadataDef.Strider.FUNGUS_BOOST, value);
     }
 
     public boolean isShaking() {
-        return metadata.get(MetadataDef.Strider.IS_SHAKING);
+        return get(MetadataDef.Strider.IS_SHAKING);
     }
 
     public void setShaking(boolean value) {
-        metadata.set(MetadataDef.Strider.IS_SHAKING, value);
+        set(MetadataDef.Strider.IS_SHAKING, value);
     }
 
 }

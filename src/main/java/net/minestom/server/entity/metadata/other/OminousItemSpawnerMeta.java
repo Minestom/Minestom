@@ -6,17 +6,17 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.item.ItemStack;
 
-public class OminousItemSpawnerMeta extends EntityMeta {
+public final class OminousItemSpawnerMeta extends EntityMeta {
     public OminousItemSpawnerMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public ItemStack getItem() {
-        return metadata.get(MetadataDef.OminousItemSpawner.ITEM);
+        return get(MetadataDef.OminousItemSpawner.ITEM);
     }
 
     public void setItem(ItemStack value) {
-        metadata.set(MetadataDef.OminousItemSpawner.ITEM, value);
+        set(MetadataDef.OminousItemSpawner.ITEM, value);
     }
 
 }
