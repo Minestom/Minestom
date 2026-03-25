@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import java.util.Objects;
 import java.util.UUID;
 
-public record ClientTeleportToEntityPacket(UUID target) implements ClientPacket {
+public record ClientTeleportToEntityPacket(UUID target) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientTeleportToEntityPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, ClientTeleportToEntityPacket::target,
             ClientTeleportToEntityPacket::new

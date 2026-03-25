@@ -10,7 +10,7 @@ import net.minestom.server.registry.RegistryKey;
 import java.util.List;
 import java.util.Objects;
 
-public record ClientSetGameRulesPacket(List<Entry> entries) implements ClientPacket {
+public record ClientSetGameRulesPacket(List<Entry> entries) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientSetGameRulesPacket> SERIALIZER = NetworkBufferTemplate.template(
             Entry.NETWORK_TYPE.list(GameRule.staticRegistry().size()), ClientSetGameRulesPacket::entries,
             ClientSetGameRulesPacket::new
