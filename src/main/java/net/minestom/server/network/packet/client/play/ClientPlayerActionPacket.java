@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record ClientPlayerActionPacket(
         Status status, Point blockPosition,
         BlockFace blockFace, int sequence
-) implements ClientPacket {
+) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPlayerActionPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.Enum(Status.class), ClientPlayerActionPacket::status,
             BLOCK_POSITION, ClientPlayerActionPacket::blockPosition,

@@ -77,7 +77,7 @@ public final class PlayerActionListener {
         final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
         final boolean instantBreak = breakTicks == 0;
         if (!instantBreak) {
-            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
+            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, instance, block, new BlockVec(blockPosition), blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
@@ -88,7 +88,7 @@ public final class PlayerActionListener {
     private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
 
-        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
+        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, instance, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
     }
@@ -104,14 +104,14 @@ public final class PlayerActionListener {
         // Realistically shouldn't happen, but a hacked client can send any packet, also illegal ones
         // If the block is unbreakable, prevent a hacked client from breaking it!
         if (breakTicks == BlockBreakCalculation.UNBREAKABLE) {
-            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
+            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, instance, block, new BlockVec(blockPosition));
             EventDispatcher.call(playerCancelDiggingEvent);
             return new DiggingResult(block, false);
         }
         // TODO maybe add a check if the player has spent enough time mining the block.
         //   a hacked client could send START_DIGGING and FINISH_DIGGING to instamine any block
 
-        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition));
+        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, instance, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerFinishDiggingEvent);
 
         return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);

@@ -15,7 +15,7 @@ public record ClientUpdateStructureBlockPacket(
         Mirror mirror, Rotation rotation,
         String metadata, float integrity,
         long seed, byte flags
-) implements ClientPacket {
+) implements ClientPacket.Play {
 
     public static final NetworkBuffer.Type<ClientUpdateStructureBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, ClientUpdateStructureBlockPacket::location,

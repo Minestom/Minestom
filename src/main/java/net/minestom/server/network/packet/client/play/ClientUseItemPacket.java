@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientUseItemPacket(PlayerHand hand, int sequence, float yaw,
-                                  float pitch) implements ClientPacket {
+                                  float pitch) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientUseItemPacket> SERIALIZER = NetworkBufferTemplate.template(
             Enum(PlayerHand.class), ClientUseItemPacket::hand,
             VAR_INT, ClientUseItemPacket::sequence,
