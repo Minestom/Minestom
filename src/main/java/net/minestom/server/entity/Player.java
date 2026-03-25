@@ -75,7 +75,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.scoreboard.BelowNameTag;
+import net.minestom.server.scoreboard.Scoreboard;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.PlayerSnapshot;
@@ -209,7 +209,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
 
-    private BelowNameTag belowNameTag;
+    private final Map<Scoreboard.Position, Scoreboard> scoreboards = Collections.synchronizedMap(new EnumMap<>(Scoreboard.Position.class));
 
     private int permissionLevel;
 
@@ -573,6 +573,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (currentInventory != null) currentInventory.removeViewer(this);
 
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
+        clearScoreboards();
+
         // Advancement tabs cache
         {
             Set<AdvancementTab> advancementTabs = AdvancementTab.getTabs(this);
@@ -1037,6 +1039,25 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     // TODO(1.21.6): Implementation for pending adventure method in 4.24.0.
     public void closeDialog() {
         sendPacket(new ClearDialogPacket());
+    }
+
+    public void showScoreboard(Scoreboard scoreboard) {
+        Scoreboard previous = scoreboards.put(scoreboard.getPosition(), scoreboard);
+        if (previous != null) previous.removeViewer(this);
+        scoreboard.addViewer(this);
+    }
+
+    public void hideScoreboard(Scoreboard scoreboard) {
+        if (scoreboard.removeViewer(this)) scoreboards.remove(scoreboard.getPosition());
+    }
+
+    public void hideScoreboard(Scoreboard.Position position) {
+        Scoreboard previous = scoreboards.remove(position);
+        if (previous != null) previous.removeViewer(this);
+    }
+
+    public void clearScoreboards() {
+        scoreboards.forEach((_, scoreboard) -> scoreboard.removeViewer(this));
     }
 
     @Override
@@ -1724,21 +1745,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public byte getHeldSlot() {
         return heldSlot;
-    }
-
-    /**
-     * Changes the tag below the name.
-     *
-     * @param belowNameTag The new below name tag
-     */
-    public void setBelowNameTag(BelowNameTag belowNameTag) {
-        if (this.belowNameTag == belowNameTag) return;
-
-        if (this.belowNameTag != null) {
-            this.belowNameTag.removeViewer(this);
-        }
-
-        this.belowNameTag = belowNameTag;
     }
 
     public ClickPreprocessor getClickPreprocessor() {
