@@ -13,15 +13,12 @@ import java.util.Collection;
 
 /**
  * This interface represents all scoreboards in Minecraft.
+ * Construct a scoreboard using {@link Scoreboard#create(String, Position)}.
  */
 public interface Scoreboard extends Viewable, PacketGroupingAudience {
 
     static Scoreboard create(String objectiveName, Position position) {
         return new ScoreboardImpl(objectiveName, position);
-    }
-
-    static Scoreboard createTransient(String objectiveName, Position position) {
-        return new BaseScoreboard(objectiveName, position);
     }
 
     /**
@@ -81,67 +78,58 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
     void setDefaultNumberFormat(@Nullable NumberFormat numberFormat);
 
     /**
-     * Updates the score for an entity.
+     * Updates or creates the score for an entity.
      * Any name can be used for the entity, and will be displayed on a sidebar.
-     * The vanilla client uses players' usernames or entities' UUIDs.
-     * @param entity the entity name
+     * The vanilla server uses players' usernames or entities' UUIDs.
+     * @param entity the entry name
      * @param score the new score
      */
     void updateScore(String entity, int score);
 
     /**
-     * Updates the score for an entity.
+     * Updates or creates the score for an entity.
      * Any name can be used for the entity, and will be displayed on a sidebar.
-     * The vanilla client uses players' usernames or entities' UUIDs.
-     * @param entity the entity name
-     * @param score the new score
-     * @param numberFormat the new number format, or null to reset to default
+     * The vanilla server uses players' usernames or entities' UUIDs.
+     * @param entity the entry name
+     * @param displayName the name to display for the entity, or null to use the entry
      */
-    void updateScore(String entity, int score, @Nullable NumberFormat numberFormat);
+    void updateDisplayName(String entity, @Nullable Component displayName);
 
     /**
-     * Updates the number format for an entity.
+     * Updates or creates the score for an entity.
      * Any name can be used for the entity, and will be displayed on a sidebar.
-     * The vanilla client uses players' usernames or entities' UUIDs.
-     * @param entity the entity name
+     * The vanilla server uses players' usernames or entities' UUIDs.
+     * @param entity the entry name
      * @param numberFormat the new number format, or null to reset to default
      */
-    void updateNumberFormat(String entity, NumberFormat numberFormat);
+    void updateNumberFormat(String entity, @Nullable NumberFormat numberFormat);
+
+    /**
+     * Updates or creates the score for an entity.
+     * Any name can be used for the entity, and will be displayed on a sidebar.
+     * The vanilla server uses players' usernames or entities' UUIDs.
+     * @param entity the entry name
+     * @param score the new score
+     * @param displayName the name to display for the entity, or null to use the entry
+     * @param numberFormat the new number format, or null to reset to default
+     */
+    void updateEntry(String entity, int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat);
 
     /**
      * Removes an entity from the scoreboard.
-     * Any name can be used for the entity, and will be displayed on a sidebar.
-     * The vanilla client uses players' usernames or entities' UUIDs.
-     * @param entity the entity name
+     * @param entity the entry name
      */
     void removeScore(String entity);
 
     /**
-     * Updates the score of a {@link Player}.
-     * @param player the player
-     * @param score the new score
-     */
-    default void updateScore(Player player, int score) {
-        updateScore(player.getUsername(), score);
-    }
-
-    /**
-     * Updates the score of a {@link Player}.
+     * Updates or creates the score of a {@link Player}.
+     * The player's username and display name are used for this.
      * @param player the player
      * @param score the new score
      * @param numberFormat the new number format, or null to reset to default
      */
-    default void updateScore(Player player, int score, NumberFormat numberFormat) {
-        updateScore(player.getUsername(), score, numberFormat);
-    }
-
-    /**
-     * Updates the number format for a {@link Player}.
-     * @param player the player
-     * @param numberFormat the new number format, or null to reset to default
-     */
-    default void updateNumberFormat(Player player, NumberFormat numberFormat) {
-        updateNumberFormat(player.getUsername(), numberFormat);
+    default void updateEntry(Player player, int score, @Nullable NumberFormat numberFormat) {
+        updateEntry(player.getUsername(), score, player.getDisplayName(), numberFormat);
     }
 
     /**

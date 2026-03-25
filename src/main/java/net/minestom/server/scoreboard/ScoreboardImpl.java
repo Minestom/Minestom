@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.ResetScorePacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
 
@@ -21,6 +22,7 @@ class ScoreboardImpl extends BaseScoreboard {
     }
 
     @Override
+    @ApiStatus.Internal
     public boolean addViewer(Player player) {
         boolean added = super.addViewer(player);
         if (!added) return false;
@@ -34,14 +36,7 @@ class ScoreboardImpl extends BaseScoreboard {
     @Override
     public void updateScore(String entity, int score) {
         scores.put(entity, score);
-        sendUpdate(entity, score, numberFormats.get(entity));
-    }
-
-    @Override
-    public void updateNumberFormat(String entity, NumberFormat numberFormat) {
-        int score = scores.putIfAbsent(entity, 0);
-        numberFormats.put(entity, numberFormat);
-        sendUpdate(entity, score, numberFormat);
+        sendUpdate(entity, score, null, numberFormats.get(entity));
     }
 
     @Override

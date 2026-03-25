@@ -6,15 +6,17 @@ import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ResetScorePacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * A scoreboard that can be viewed but does not store score data.
  */
-class BaseScoreboard implements Scoreboard {
+public class BaseScoreboard implements Scoreboard {
 
     protected final String objectiveName;
     protected @Nullable Component displayName;
@@ -24,22 +26,57 @@ class BaseScoreboard implements Scoreboard {
 
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    private final Map<String, Entry> entries = new ConcurrentHashMap<>();
 
+    public record Entry(int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat) {
+        public static final Entry DEFAULT = new Entry(0, null, null);
+
+        public UpdateScorePacket getUpdateScorePacket(String entity, String objective) {
+            return new UpdateScorePacket(entity, objective, score, displayName, numberFormat);
+        }
+
+        public Entry withScore(int score) {
+            return new Entry(score, displayName, numberFormat);
+        }
+
+        public Entry withDisplayName(@Nullable Component displayName) {
+            return new Entry(score, displayName, numberFormat);
+        }
+
+        public Entry withNumberFormat(@Nullable NumberFormat numberFormat) {
+            return new Entry(score, displayName, numberFormat);
+        }
+    }
 
     BaseScoreboard(String objectiveName, Position position) {
         this.objectiveName = objectiveName;
         this.position = position;
     }
 
+    /**
+     * Adds a viewer to the scoreboard. Use {@link Player#showScoreboard(Scoreboard)} instead.
+     * @param player the viewer to add
+     * @return true if the player has been added, false otherwise
+     */
     @Override
+    @ApiStatus.Internal
     public boolean addViewer(Player player) {
         boolean added = viewers.add(player);
         if (!added) return false;
         player.sendPackets(getCreationObjectivePacket(), getDisplayScoreboardPacket(position.asByte()));
+        entries.forEach((entity, entry) ->
+                player.sendPacket(entry.getUpdateScorePacket(entity, objectiveName))
+        );
         return true;
     }
 
+    /**
+     * Removes a viewer from the scoreboard. Use {@link Player#hideScoreboard(Scoreboard)} instead.
+     * @param player the viewer to remove
+     * @return true if the player has been removed, false otherwise
+     */
     @Override
+    @ApiStatus.Internal
     public boolean removeViewer(Player player) {
         boolean removed = viewers.remove(player);
         if (!removed) return false;
@@ -119,25 +156,46 @@ class BaseScoreboard implements Scoreboard {
 
     @Override
     public void updateScore(String entity, int score) {
-        sendUpdate(entity, score, null);
+        Entry entry = entries.compute(entity, (_, current) ->
+            (current != null ? current : Entry.DEFAULT).withScore(score)
+        );
+        sendUpdate(entity, entry);
     }
 
     @Override
-    public void updateScore(String entity, int score, @Nullable NumberFormat numberFormat) {
-        sendUpdate(entity, score, numberFormat);
+    public void updateDisplayName(String entity, @Nullable Component displayName) {
+        Entry entry = entries.compute(entity, (_, current) ->
+                (current != null ? current : Entry.DEFAULT).withDisplayName(displayName)
+        );
+        sendUpdate(entity, entry);
     }
 
     @Override
-    public void updateNumberFormat(String entity, NumberFormat numberFormat) {
-        sendUpdate(entity, 0, numberFormat);
+    public void updateNumberFormat(String entity, @Nullable NumberFormat numberFormat) {
+        Entry entry = entries.compute(entity, (_, current) ->
+                (current != null ? current : Entry.DEFAULT).withNumberFormat(numberFormat)
+        );
+        sendUpdate(entity, entry);
+    }
+
+    @Override
+    public void updateEntry(String entity, int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat) {
+        Entry entry = new Entry(score, displayName, numberFormat);
+        entries.put(entity, entry);
+        sendUpdate(entity, entry);
     }
 
     public void removeScore(String entity) {
+        if (entries.remove(entity) == null) return;
         sendPacketToViewers(new ResetScorePacket(entity, objectiveName));
     }
 
-    public void sendUpdate(String entity, int score, @Nullable NumberFormat numberFormat) {
+    public void sendUpdate(String entity, int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat) {
         sendPacketToViewers(new UpdateScorePacket(entity, objectiveName, score, displayName, numberFormat));
+    }
+
+    public void sendUpdate(String entity, Entry entry) {
+        sendPacketToViewers(entry.getUpdateScorePacket(entity, objectiveName));
     }
 
     public void sendObjectiveUpdate() {
