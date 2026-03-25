@@ -36,16 +36,23 @@ public class ShulkerMeta extends AbstractGolemMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#SHULKER_COLOR} instead.
      */
     @Deprecated
-    public DyeColor getColor() {
-        return DYE_VALUES[metadata.get(MetadataDef.Shulker.COLOR)];
+    public @Nullable DyeColor getColor() {
+        byte index = metadata.get(MetadataDef.Shulker.COLOR);
+        if (index < 0) {
+            return DyeColor.WHITE;
+        } else if (index < 16) {
+            return DYE_VALUES[index];
+        }
+        return null;
     }
 
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#SHULKER_COLOR} instead.
      */
     @Deprecated
-    public void setColor(DyeColor value) {
-        metadata.set(MetadataDef.Shulker.COLOR, (byte) value.ordinal());
+    public void setColor(@Nullable DyeColor value) {
+        byte index = value == null ? (byte) 16 : (byte) value.ordinal();
+        metadata.set(MetadataDef.Shulker.COLOR, index);
     }
 
     @Override

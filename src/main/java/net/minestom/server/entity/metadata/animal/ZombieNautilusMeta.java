@@ -6,7 +6,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class ZombieNautilusMeta extends AbstractNautilusMeta {
     public ZombieNautilusMeta(Entity entity, MetadataHolder metadata) {
@@ -31,17 +31,18 @@ public class ZombieNautilusMeta extends AbstractNautilusMeta {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected <T> void set(DataComponent<T> component, T value) {
-        if (DataComponents.ZOMBIE_NAUTILUS_VARIANT == component) {
-            setVariant((RegistryKey<ZombieNautilusVariant>) value);
-        } else super.set(component, value);
+    protected <T> @Nullable T get(DataComponent<T> component) {
+        if (component == DataComponents.ZOMBIE_NAUTILUS_VARIANT) {
+            return (T) getVariant();
+        }
+        return super.get(component);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected @Nullable <T> T get(DataComponent<T> component) {
-        if (DataComponents.ZOMBIE_NAUTILUS_VARIANT == component) {
-            return (T) getVariant();
-        } else return super.get(component);
+    protected <T> void set(DataComponent<T> component, T value) {
+        if (component == DataComponents.ZOMBIE_NAUTILUS_VARIANT) {
+            setVariant((RegistryKey<ZombieNautilusVariant>) value);
+        } else super.set(component, value);
     }
 }

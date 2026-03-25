@@ -12,6 +12,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
+import net.minestom.server.collision.ShapeImpl;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
@@ -307,17 +308,21 @@ public final class RegistryData {
                     String shape = properties.getString(string);
                     return CollisionUtils.parseCollisionShape(internCache, shape);
                 }, null);
-                this.occlusionShape = fromParent(parent, BlockEntry::occlusionShape, main, "occlusionShape", (properties, string) -> {
+                Shape occludeShape = fromParent(parent, BlockEntry::occlusionShape, main, "occlusionShape", (properties, string) -> {
                     String shape = properties.getString(string);
                     if (parent == null || parentProperties == null) // No parent, so we can just parse the shape
                         return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
-                    // TODO make this condition just change the condition; like adding lightData if emission just changes.
-                    if (shape != null || occludes != parent.occludes() || this.lightEmission != parent.lightEmission) {
+                    if (shape != null || occludes != parent.occludes()) {
                         if (shape == null) shape = parentProperties.getString(string);
                         return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
                     }
                     return parent.occlusionShape();
                 }, null);
+                // Apply possible lightEmission override, since that isn't specified in occlusionShape
+                if (parent != null && this.lightEmission != parent.lightEmission && occludeShape instanceof ShapeImpl shapeImpl) {
+                    occludeShape = shapeImpl.withLightEmission(this.lightEmission);
+                }
+                this.occlusionShape = occludeShape;
             }
             var redstoneConductor = fromParent(parent, BlockEntry::isRedstoneConductor, main, "redstoneConductor", Properties::getBoolean, null);
             var signalSource = fromParent(parent, BlockEntry::isSignalSource, main, "signalSource", Properties::getBoolean, false);

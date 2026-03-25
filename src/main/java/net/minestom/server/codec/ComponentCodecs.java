@@ -174,7 +174,7 @@ public final class ComponentCodecs {
     private static final StructCodec<HoverEvent<HoverEvent.ShowEntity>> SHOW_ENTITY = StructCodec.struct(
             "id", Codec.KEY, hoverEvent -> hoverEvent.value().type(),
             "uuid", Codec.UUID_COERCED, hoverEvent -> hoverEvent.value().id(),
-            "name", COMPONENT_FORWARD, hoverEvent -> hoverEvent.value().name(),
+            "name", COMPONENT_FORWARD.optional(), hoverEvent -> hoverEvent.value().name(),
             HoverEvent::showEntity);
 
     private static StructCodec<? extends HoverEvent<?>> hoverEventCodec(HoverEvent.Action<?> action) {

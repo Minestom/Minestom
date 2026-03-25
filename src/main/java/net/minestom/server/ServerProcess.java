@@ -101,7 +101,7 @@ public interface ServerProcess extends Registries, Snapshotable {
      * <p>
      * Can be used if you want to convert a buffer to a client packet object.
      */
-    PacketParser<ClientPacket> packetParser();
+    PacketParser.Client packetParser();
 
     /**
      * Exposed socket server.
