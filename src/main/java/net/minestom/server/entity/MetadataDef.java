@@ -310,7 +310,7 @@ public sealed class MetadataDef {
 
     public static sealed class AgeableMob extends Mob {
         public static final Entry<Boolean> IS_BABY = index(0, Metadata::Boolean, false);
-        public static final Entry<Boolean> AGE_LOCKED = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> AGE_LOCKED = index(1, Metadata::Boolean, false);
     }
 
     public static final class Sniffer extends AgeableMob {
