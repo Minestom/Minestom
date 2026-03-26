@@ -1,79 +1,10 @@
 package net.minestom.server.scoreboard;
 
-import net.kyori.adventure.text.Component;
-import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
 /**
- * Represents the {@link Player} tab list as a {@link Scoreboard}.
+ * Represents the player tab list as a {@link Scoreboard}.
+ * @deprecated Use a {@link Scoreboard} instead with {@link Scoreboard.Position#PLAYER_LIST}.
  */
-public class TabList implements Scoreboard {
+@Deprecated(forRemoval = true)
+public class TabList {
 
-    /**
-     * <b>WARNING:</b> You shouldn't create scoreboards with the same prefix as those
-     */
-    private static final String TAB_LIST_PREFIX = "tl-";
-
-    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
-    private final String objectiveName;
-
-    private ScoreboardObjectivePacket.Type type;
-
-    public TabList(String name, ScoreboardObjectivePacket.Type type) {
-        this.objectiveName = TAB_LIST_PREFIX + name;
-
-        this.type = type;
-    }
-
-    /**
-     * Gets the scoreboard objective type
-     *
-     * @return the scoreboard objective type
-     */
-    public ScoreboardObjectivePacket.Type getType() {
-        return type;
-    }
-
-    /**
-     * Changes the scoreboard objective type
-     *
-     * @param type The new type for the objective
-     */
-    public void setType(ScoreboardObjectivePacket.Type type) {
-        this.type = type;
-    }
-
-    @Override
-    public boolean addViewer(Player player) {
-        final boolean result = this.viewers.add(player);
-        if (result) {
-            player.sendPacket(this.getCreationObjectivePacket(Component.empty(), this.type));
-            player.sendPacket(this.getDisplayScoreboardPacket((byte) 0));
-        }
-        return result;
-    }
-
-    @Override
-    public boolean removeViewer(Player player) {
-        final boolean result = this.viewers.remove(player);
-        if (result) {
-            player.sendPacket(this.getDestructionObjectivePacket());
-        }
-        return result;
-    }
-
-    @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
-    }
-
-    @Override
-    public String getObjectiveName() {
-        return this.objectiveName;
-    }
 }

@@ -9,25 +9,30 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.entity.Player;
-import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.scoreboard.NumberFormat;
+import net.minestom.server.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
 
 public class SidebarCommand extends Command {
-    private final Sidebar sidebar = new Sidebar(Component.text("DEMO").decorate(TextDecoration.BOLD));
+    private final Scoreboard sidebar = Scoreboard.create(
+            "demo-sidebar",
+            Component.text("DEMO").decorate(TextDecoration.BOLD),
+            Scoreboard.Position.SIDEBAR
+    );
     private int currentLine = 0;
 
     public SidebarCommand() {
         super("sidebar");
 
-        addLine("BLANK ", Sidebar.NumberFormat.blank());
-        addLine("STYLE ", Sidebar.NumberFormat.styled(Component.empty().decorate(TextDecoration.STRIKETHROUGH).color(NamedTextColor.GRAY)));
-        addLine("FIXED ", Sidebar.NumberFormat.fixed(Component.text("FIXED").color(NamedTextColor.GRAY)));
+        addLine("BLANK ", NumberFormat.blank());
+        addLine("STYLE ", NumberFormat.styled(Component.empty().decorate(TextDecoration.STRIKETHROUGH).color(NamedTextColor.GRAY)));
+        addLine("FIXED ", NumberFormat.fixed(Component.text("FIXED").color(NamedTextColor.GRAY)));
         addLine("NULL ", null);
 
         setDefaultExecutor((source, args) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
         setCondition(Conditions::playerOnly);
 
-        var option = ArgumentType.Word("option").from("add-line", "remove-line", "set-title", "toggle", "update-content", "update-score");
+        var option = ArgumentType.Word("option").from("add-line", "remove-line", "set-title", "toggle", "update-content");
         var content = ArgumentType.String("content").setDefaultValue("");
         var targetLine = ArgumentType.Integer("target line").setDefaultValue(-1);
 
@@ -43,6 +48,7 @@ public class SidebarCommand extends Command {
         String content = context.get("content");
         int targetLine = context.get("target line");
         if (targetLine == -1) targetLine = currentLine;
+        String id = String.valueOf(targetLine);
         switch (option) {
             case "add-line":
                 addLine(content, null);
@@ -57,42 +63,40 @@ public class SidebarCommand extends Command {
                 toggleSidebar(player);
                 break;
             case "update-content":
-                updateLineContent(content, String.valueOf(targetLine));
-                break;
-            case "update-score":
-                updateLineScore(Integer.parseInt(content), String.valueOf(targetLine));
+                updateLineContent(content, id);
                 break;
         }
     }
 
-    private void addLine(String content, @Nullable Sidebar.NumberFormat numberFormat) {
+    private void addLine(String content, @Nullable NumberFormat numberFormat) {
         if (currentLine < 16) {
-            sidebar.createLine(new Sidebar.ScoreboardLine(String.valueOf(currentLine), Component.text(content).color(NamedTextColor.WHITE), currentLine, numberFormat));
+            sidebar.updateEntry(
+                    String.valueOf(currentLine),
+                    16 - currentLine,
+                    Component.text(content).color(NamedTextColor.WHITE),
+                    numberFormat
+            );
             currentLine++;
         }
     }
 
     private void removeLine() {
         if (currentLine > 0) {
-            sidebar.removeLine(String.valueOf(currentLine));
+            sidebar.removeScore(String.valueOf(currentLine));
             currentLine--;
         }
     }
 
     private void setTitle(String title) {
-        sidebar.setTitle(Component.text(title).decorate(TextDecoration.BOLD));
+        sidebar.setDisplayName(Component.text(title).decorate(TextDecoration.BOLD));
     }
 
     private void toggleSidebar(Player player) {
-        if (sidebar.getViewers().contains(player)) sidebar.removeViewer(player);
-        else sidebar.addViewer(player);
+        if (sidebar.getViewers().contains(player)) player.hideScoreboard(sidebar);
+        else player.showScoreboard(sidebar);
     }
 
-    private void updateLineContent(String content, String lineId) {
-        sidebar.updateLineContent(lineId, Component.text(content).color(NamedTextColor.WHITE));
-    }
-
-    private void updateLineScore(int score, String lineId) {
-        sidebar.updateLineScore(lineId, score);
+    private void updateLineContent(String content, String id) {
+        sidebar.updateDisplayName(id, Component.text(content).color(NamedTextColor.WHITE));
     }
 }

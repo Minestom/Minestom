@@ -3,7 +3,8 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.scoreboard.NumberFormat;
+import net.minestom.server.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -14,8 +15,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ScoreboardObjectivePacket(String objectiveName, byte mode,
                                         @Nullable Component objectiveValue,
-                                        @Nullable Type type,
-                                        @Nullable Sidebar.NumberFormat numberFormat) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+                                        @Nullable Scoreboard.DisplayType type,
+                                        @Nullable NumberFormat numberFormat) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<ScoreboardObjectivePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, ScoreboardObjectivePacket value) {
@@ -26,7 +27,7 @@ public record ScoreboardObjectivePacket(String objectiveName, byte mode,
                 buffer.write(COMPONENT, value.objectiveValue);
                 assert value.type != null;
                 buffer.write(VAR_INT, value.type.ordinal());
-                buffer.write(Sidebar.NumberFormat.SERIALIZER.optional(), value.numberFormat);
+                buffer.write(NumberFormat.SERIALIZER.optional(), value.numberFormat);
             }
         }
 
@@ -35,12 +36,12 @@ public record ScoreboardObjectivePacket(String objectiveName, byte mode,
             String objectiveName = buffer.read(STRING);
             byte mode = buffer.read(BYTE);
             Component objectiveValue = null;
-            Type type = null;
-            Sidebar.NumberFormat numberFormat = null;
+            Scoreboard.DisplayType type = null;
+            NumberFormat numberFormat = null;
             if (mode == 0 || mode == 2) {
                 objectiveValue = buffer.read(COMPONENT);
-                type = Type.values()[buffer.read(VAR_INT)];
-                numberFormat = buffer.read(Sidebar.NumberFormat.SERIALIZER.optional());
+                type = Scoreboard.DisplayType.values()[buffer.read(VAR_INT)];
+                numberFormat = buffer.read(NumberFormat.SERIALIZER.optional());
             }
             return new ScoreboardObjectivePacket(objectiveName, mode, objectiveValue, type, numberFormat);
         }
@@ -58,11 +59,4 @@ public record ScoreboardObjectivePacket(String objectiveName, byte mode,
                 operator.apply(objectiveValue), type, numberFormat) : this;
     }
 
-    /**
-     * This enumeration represents all available types for the scoreboard objective
-     */
-    public enum Type {
-        INTEGER,
-        HEARTS
-    }
 }

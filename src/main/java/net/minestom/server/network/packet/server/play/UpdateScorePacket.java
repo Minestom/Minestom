@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.scoreboard.NumberFormat;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -19,14 +19,14 @@ public record UpdateScorePacket(
         String objectiveName,
         int score,
         @Nullable Component displayName,
-        @Nullable Sidebar.NumberFormat numberFormat
+        @Nullable NumberFormat numberFormat
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<UpdateScorePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, UpdateScorePacket::entityName,
             STRING, UpdateScorePacket::objectiveName,
             VAR_INT, UpdateScorePacket::score,
             COMPONENT.optional(), UpdateScorePacket::displayName,
-            Sidebar.NumberFormat.SERIALIZER.optional(), UpdateScorePacket::numberFormat,
+            NumberFormat.SERIALIZER.optional(), UpdateScorePacket::numberFormat,
             UpdateScorePacket::new
     );
 
@@ -54,7 +54,7 @@ public record UpdateScorePacket(
             name = operator.apply(displayName);
         }
 
-        Sidebar.NumberFormat format = numberFormat;
+        NumberFormat format = numberFormat;
         if (numberFormat != null) {
             format = numberFormat.copyWithOperator(operator);
         }
