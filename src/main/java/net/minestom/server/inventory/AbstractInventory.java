@@ -73,7 +73,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     public abstract byte getWindowId();
 
     @Override
-    public Set<Player> getViewers() {
+    public Set<? extends Player> getViewers() {
         return unmodifiableViewers;
     }
 

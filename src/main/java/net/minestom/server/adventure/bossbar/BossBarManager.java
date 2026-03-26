@@ -143,7 +143,7 @@ public class BossBarManager {
      * @param bossBar the boss bar
      * @return the players
      */
-    public Collection<Player> getBossBarViewers(BossBar bossBar) {
+    public Collection<? extends Player> getBossBarViewers(BossBar bossBar) {
         BossBarHolder holder = this.bars.get(bossBar);
         return holder != null ?
                 Collections.unmodifiableCollection(holder.players) : List.of();
