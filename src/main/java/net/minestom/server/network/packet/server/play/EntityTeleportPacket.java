@@ -23,6 +23,6 @@ public record EntityTeleportPacket(
             INT, EntityTeleportPacket::flags,
             BOOLEAN, EntityTeleportPacket::onGround,
             (entityId, absPosition, deltaMovement, yaw, pitch, flags, onGround) ->
-                    new EntityTeleportPacket(entityId, new Pos(absPosition, yaw, pitch), deltaMovement, flags, onGround)
+                    new EntityTeleportPacket(entityId, absPosition.asPos().withView(yaw, pitch), deltaMovement, flags, onGround)
     );
 }
