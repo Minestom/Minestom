@@ -175,7 +175,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     @Nullable Registries registries();
 
-    interface Type<T> {
+    interface Type<T extends @UnknownNullability Object> {
         void write(NetworkBuffer buffer, T value);
 
         T read(NetworkBuffer buffer);

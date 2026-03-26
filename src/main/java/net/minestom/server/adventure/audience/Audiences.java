@@ -58,7 +58,7 @@ public class Audiences {
      * @param filter the predicate
      * @return all players matching the predicate
      */
-    public static Audience players(Predicate<Player> filter) {
+    public static Audience players(Predicate<? super Player> filter) {
         return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).toList());
     }
 
@@ -117,7 +117,7 @@ public class Audiences {
      * @param filter the predicate
      * @return all custom audience members stored using the key
      */
-    public static Audience custom(Keyed keyed, Predicate<Audience> filter) {
+    public static Audience custom(Keyed keyed, Predicate<? super Audience> filter) {
         return custom(keyed.key(), filter);
     }
 
@@ -129,7 +129,7 @@ public class Audiences {
      * @param filter the predicate
      * @return all custom audience members stored using the key
      */
-    public static Audience custom(Key key, Predicate<Audience> filter) {
+    public static Audience custom(Key key, Predicate<? super Audience> filter) {
         return Audience.audience(audience.iterable().custom(key, filter));
     }
 
@@ -139,7 +139,7 @@ public class Audiences {
      * @param filter the predicate
      * @return all matching custom audience members
      */
-    public static Audience customs(Predicate<Audience> filter) {
+    public static Audience customs(Predicate<? super Audience> filter) {
         return Audience.audience(audience.iterable().customs(filter));
     }
 
@@ -149,7 +149,7 @@ public class Audiences {
      * @param filter the predicate
      * @return all matching audience members
      */
-    public static Audience all(Predicate<Audience> filter) {
+    public static Audience all(Predicate<? super Audience> filter) {
         return Audience.audience(audience.iterable().all(filter));
     }
 

@@ -76,7 +76,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
     String getObjectiveName();
 
     @Override
-    default Collection<Player> getPlayers() {
+    default Collection<? extends Player> getPlayers() {
         return this.getViewers();
     }
 }

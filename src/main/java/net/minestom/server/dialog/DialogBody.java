@@ -7,6 +7,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -35,7 +36,7 @@ public sealed interface DialogBody {
                 Item::new);
 
         @Override
-        public StructCodec<? extends DialogBody> codec() {
+        public StructCodec<Item> codec() {
             return CODEC;
         }
     }
@@ -52,11 +53,12 @@ public sealed interface DialogBody {
                 PlainMessage::new).orElseStruct(COMPONENT_CODEC);
 
         @Override
-        public StructCodec<? extends DialogBody> codec() {
+        public StructCodec<PlainMessage> codec() {
             return CODEC;
         }
     }
 
+    @ApiStatus.OverrideOnly
     StructCodec<? extends DialogBody> codec();
 
 }

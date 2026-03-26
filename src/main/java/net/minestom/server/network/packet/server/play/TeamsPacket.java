@@ -40,7 +40,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     };
 
     @Override
-    public Collection<Component> components() {
+    public Collection<? extends Component> components() {
         return this.action instanceof ComponentHolder<?> holder ? holder.components() : List.of();
     }
 

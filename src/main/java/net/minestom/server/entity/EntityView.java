@@ -28,7 +28,7 @@ final class EntityView {
     final Set<Player> set = new SetImpl();
     private final Object mutex = this;
 
-    private volatile TrackedLocation trackedLocation;
+    private volatile @Nullable TrackedLocation trackedLocation;
 
     public EntityView(Entity entity) {
         this.entity = entity;
@@ -134,7 +134,7 @@ final class EntityView {
         }
     }
 
-    public void forManuals(Consumer<Player> consumer) {
+    public void forManuals(Consumer<? super Player> consumer) {
         synchronized (mutex) {
             Set<Player> manualViewersCopy = Set.copyOf(this.manualViewers);
             manualViewersCopy.forEach(consumer);
@@ -156,7 +156,7 @@ final class EntityView {
         handleAutoView(entity, viewerOption.removal, viewableOption.removal);
     }
 
-    private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
+    private void handleAutoView(Entity entity, @Nullable Consumer<Entity> viewer, @Nullable Consumer<Player> viewable) {
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
             if (viewer != null) viewer.accept(entity); // Send packet to this player
         }
@@ -180,7 +180,7 @@ final class EntityView {
         private volatile int auto = 1;
         // The custom rule used to determine if an entity is viewable.
         // null if auto-viewable
-        private Predicate<T> predicate = null;
+        private @Nullable Predicate<? super T> predicate = null;
 
         public Option(EntityTracker.Target<T> target, Predicate<T> loopPredicate,
                       Consumer<T> addition, Consumer<T> removal) {
@@ -195,7 +195,7 @@ final class EntityView {
         }
 
         public boolean predicate(T entity) {
-            final Predicate<T> predicate = this.predicate;
+            final Predicate<? super T> predicate = this.predicate;
             return predicate == null || predicate.test(entity);
         }
 
@@ -222,7 +222,7 @@ final class EntityView {
             }
         }
 
-        public void updateRule(Predicate<T> predicate) {
+        public void updateRule(@Nullable Predicate<? super T> predicate) {
             synchronized (mutex) {
                 this.predicate = predicate;
                 updateRule0(predicate);
@@ -235,7 +235,7 @@ final class EntityView {
             }
         }
 
-        void updateRule0(Predicate<T> predicate) {
+        void updateRule0(@Nullable Predicate<? super T> predicate) {
             if (predicate == null) {
                 update(loopPredicate, entity -> {
                     if (!isRegistered(entity)) addition.accept(entity);
@@ -251,7 +251,7 @@ final class EntityView {
             }
         }
 
-        private void update(Predicate<T> visibilityPredicate,
+        private void update(Predicate<? super T> visibilityPredicate,
                             Consumer<T> action) {
             references().forEach(entity -> {
                 if (entity == EntityView.this.entity || !visibilityPredicate.test(entity)) return;
