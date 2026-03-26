@@ -9,6 +9,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -90,11 +91,17 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
         }
     }
 
+    @Override
+    @Contract(pure = true)
+    public Set<Long> getAffectedChunks() {
+        return new HashSet<>(chunkBatchesMap.keySet());
+    }
+
     /**
      * Applies this batch to the given instance.
      *
      * @param instance The instance in which the batch should be applied
-     * @param callback The callback to be executed when the batch is applied
+     * @param callback The callback to be executed when the batch is applied, even if the batch is empty
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Override
@@ -107,7 +114,7 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * blocks have been applied, in an unknown thread.
      *
      * @param instance The instance in which the batch should be applied
-     * @param callback The callback to be executed when the batch is applied
+     * @param callback The callback to be executed when the batch is applied, even if the batch is empty
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public @UnknownNullability AbsoluteBlockBatch unsafeApply(Instance instance, @Nullable Consumer<@UnknownNullability AbsoluteBlockBatch> callback) {
@@ -118,7 +125,7 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
      * Applies this batch to the given instance, and execute the callback depending on safeCallback.
      *
      * @param instance     The instance in which the batch should be applied
-     * @param callback     The callback to be executed when the batch is applied
+     * @param callback     The callback to be executed when the batch is applied, even if the batch is empty
      * @param safeCallback If true, the callback will be executed in the next instance update.
      *                     Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
@@ -130,6 +137,18 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
         synchronized (chunkBatchesMap) {
             AtomicInteger counter = new AtomicInteger();
             Set<Chunk> updated = ConcurrentHashMap.newKeySet();
+
+            if (chunkBatchesMap.isEmpty()) {
+                if (inverse != null) inverse.readyLatch.countDown();
+                if (callback != null) {
+                    if (safeCallback) {
+                        instance.scheduleNextTick(inst -> callback.accept(inverse));
+                    } else {
+                        callback.accept(inverse);
+                    }
+                }
+                return inverse;
+            }
 
             for (var entry : Long2ObjectMaps.fastIterable(chunkBatchesMap)) {
                 final long chunkIndex = entry.getLongKey();
