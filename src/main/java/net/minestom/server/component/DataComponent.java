@@ -59,6 +59,7 @@ public sealed interface DataComponent<T> extends StaticProtocolObject<DataCompon
     boolean isSynced();
     boolean isSerialized();
     @Nullable NetworkBuffer.Type<T> networkType();
+    @Nullable Codec<T> codec();
 
     T read(NetworkBuffer reader);
     void write(NetworkBuffer writer, T value);
