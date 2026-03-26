@@ -342,32 +342,6 @@ public class VecTest {
     }
 
     @Test
-    public void testLerpWithEasing() {
-        Vec start = new Vec(0, 0, 0);
-        Vec end = new Vec(10, 10, 10);
-
-        // Test with LINEAR easing
-        Vec linear = start.lerp(end, 0.5, Point.Easing.LINEAR);
-        assertEquals(5, linear.x(), EPSILON);
-
-        // Test with SMOOTH easing
-        Vec smooth = start.lerp(end, 0.5, Point.Easing.SMOOTH);
-        assertNotNull(smooth);
-
-        // Test with SQUARED_IN easing
-        Vec squareIn = start.lerp(end, 0.5, Point.Easing.SQUARED_IN);
-        assertNotNull(squareIn);
-
-        // Test with SQUARED_OUT easing
-        Vec squareOut = start.lerp(end, 0.5, Point.Easing.SQUARED_OUT);
-        assertNotNull(squareOut);
-
-        // Test with SINE easing
-        Vec sine = start.lerp(end, 0.5, Point.Easing.SINE);
-        assertNotNull(sine);
-    }
-
-    @Test
     public void testApply() {
         Vec vec = new Vec(1, 2, 3);
 

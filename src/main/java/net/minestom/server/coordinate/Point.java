@@ -740,20 +740,6 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     Point lerp(Point point, double alpha);
 
     /**
-     * Calculates a linear interpolation between this point with another
-     * point (x/y/z) using an easing function.
-     *
-     * @param point  the other point
-     * @param alpha  The alpha value, must be between 0.0 and 1.0
-     * @param easing the easing function to use
-     * @return Linear interpolated point
-     */
-    @Contract(pure = true, value = "_, _, _ -> new")
-    default Point lerp(Point point, double alpha, Easing easing) {
-        return lerp(point, easing.apply(alpha));
-    }
-
-    /**
      * Converts this point to a {@link Pos}.
      *
      * @return the converted position or this if already a {@link Pos}
@@ -784,25 +770,5 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     default BlockVec asBlockVec() {
         assert !(this instanceof BlockVec) : "Should be overridden";
         return new BlockVec(blockX(), blockY(), blockZ());
-    }
-
-    /**
-     * Represents different easing functions to use with {@link #lerp(Point, double, Easing)}.
-     */
-    @FunctionalInterface
-    interface Easing {
-        Easing LINEAR = a -> a;
-        Easing SMOOTH = a -> a * a * (3 - 2 * a);
-        Easing SQUARED_IN = a -> a * a;
-        Easing SQUARED_OUT = a -> a * (2 - a);
-        Easing SINE = a -> 0.5 * (1 - Math.cos(a * Math.PI));
-
-        /**
-         * Performs the easing function specified.
-         *
-         * @param alpha the alpha between [0.0, 1.0] (unchecked)
-         * @return the new alpha after applying the easing function
-         */
-        double apply(double alpha);
     }
 }

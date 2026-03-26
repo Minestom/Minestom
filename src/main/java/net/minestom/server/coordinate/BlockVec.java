@@ -25,7 +25,6 @@ import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
  * @param blockY the block Y coordinate
  * @param blockZ the block Z coordinate
  */
-
 public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     public static final BlockVec ZERO = new BlockVec(0);
     public static final BlockVec ONE = new BlockVec(1);
@@ -562,12 +561,6 @@ public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
         return new Vec(blockX + (alpha * (point.x() - blockX)),
                 blockY + (alpha * (point.y() - blockY)),
                 blockZ + (alpha * (point.z() - blockZ)));
-    }
-
-    @Override
-    @Contract(pure = true, value = "_, _, _ -> new")
-    public Vec lerp(Point point, double alpha, Easing easing) {
-        return (Vec) Point.super.lerp(point, alpha, easing);
     }
 
     /**

@@ -260,7 +260,7 @@ public class PosTest {
         Pos end = new Pos(0, 0, 0, 90f, 45f);
 
         // Halfway
-        Pos mid = start.lerpView(end, 0.5);
+        Pos mid = start.lerpView(end, 0.5f);
         assertEquals(0, mid.x());
         assertEquals(0, mid.y());
         assertEquals(0, mid.z());

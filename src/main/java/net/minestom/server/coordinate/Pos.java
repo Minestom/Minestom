@@ -505,12 +505,6 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
                 yaw, pitch);
     }
 
-    @Override
-    @Contract(pure = true, value = "_, _, _ -> new")
-    public Pos lerp(Point point, double alpha, Easing easing) {
-        return (Pos) Point.super.lerp(point, alpha, easing);
-    }
-
     /**
      * Calculates a linear interpolation between this position's view and another position's view (yaw/pitch).
      * The coordinates (x/y/z) remain unchanged.
@@ -520,10 +514,10 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @return a new position with interpolated view
      */
     @Contract(pure = true, value = "_, _ -> new")
-    public Pos lerpView(Pos pos, double alpha) {
+    public Pos lerpView(Pos pos, float alpha) {
         return new Pos(x, y, z,
-                yaw + (float) (alpha * (pos.yaw() - yaw)),
-                pitch + (float) (alpha * (pos.pitch() - pitch)));
+                yaw + (alpha * (pos.yaw() - yaw)),
+                pitch + (alpha * (pos.pitch() - pitch)));
     }
 
     @Override

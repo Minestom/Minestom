@@ -338,7 +338,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @param pitchDegrees the pitch in degrees
      * @return a new, rotated vector
      */
-    @Contract(pure = true, value = "_ _, _ -> new")
+    @Contract(pure = true, value = "_, _ -> new")
     public Vec rotateFromView(float yawDegrees, float pitchDegrees) {
         final double yaw = Math.toRadians(-1 * (yawDegrees + 90));
         final double pitch = Math.toRadians(-pitchDegrees);
@@ -448,12 +448,6 @@ public record Vec(double x, double y, double z) implements Point {
                 z + (alpha * (point.z() - z)));
     }
 
-    @Override
-    @Contract(pure = true, value = "_, _, _ -> new")
-    public Vec lerp(Point point, double alpha, Easing easing) {
-        return (Vec) Point.super.lerp(point, alpha, easing);
-    }
-
     /**
      * Calculates an interpolation between this vector and a target vector.
      *
@@ -461,7 +455,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @param alpha         the alpha value, must be between 0.0 and 1.0
      * @param interpolation the interpolation function to use
      * @return the interpolated vector
-     * @deprecated use {@link #lerp(Point, double, Easing)} instead
+     * @deprecated use {@link Point#lerp(Point, double)} with a {@link net.minestom.server.utils.EaseFunction} instead
      */
     @Deprecated(forRemoval = true)
     @Contract(pure = true)
@@ -516,11 +510,11 @@ public record Vec(double x, double y, double z) implements Point {
     }
 
     /**
-     * @deprecated use {@link Easing} instead
+     * @deprecated use {@link net.minestom.server.utils.EaseFunction} instead with {@link #lerp(Point, double)}
      */
     @Deprecated(forRemoval = true)
     @FunctionalInterface
-    public interface Interpolation extends Easing {
+    public interface Interpolation {
         Interpolation LINEAR = a -> a;
         Interpolation SMOOTH = a -> a * a * (3 - 2 * a);
 
