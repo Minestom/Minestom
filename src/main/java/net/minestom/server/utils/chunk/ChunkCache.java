@@ -22,7 +22,7 @@ public final class ChunkCache implements Block.Getter {
         this.defaultBlock = defaultBlock;
     }
 
-    public ChunkCache(Instance instance, Chunk chunk) {
+    public ChunkCache(Instance instance, @Nullable Chunk chunk) {
         this(instance, chunk, Block.AIR);
     }
 
