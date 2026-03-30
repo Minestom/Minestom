@@ -42,7 +42,6 @@ public class LightingChunk extends DynamicChunk {
     private @Nullable LightData partialLightData;
     private @Nullable LightData fullLightData;
 
-    private int highestBlock;
     private boolean freezeInvalidation = false;
 
     private final ReentrantLock packetGenerationLock = new ReentrantLock();
