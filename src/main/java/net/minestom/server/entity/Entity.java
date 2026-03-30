@@ -229,7 +229,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this(entityType, UUID.randomUUID());
     }
 
-    protected void setPositionInternal(Pos newPosition, float headRotation) {
+    /// Clamps position to {@link Entity#MAX_COORDINATE}
+    protected Pos clampPosition(Pos newPosition) {
         if (newPosition.x() >= MAX_COORDINATE || newPosition.x() <= -MAX_COORDINATE ||
                 newPosition.y() >= MAX_COORDINATE || newPosition.y() <= -MAX_COORDINATE ||
                 newPosition.z() >= MAX_COORDINATE || newPosition.z() <= -MAX_COORDINATE) {
@@ -239,7 +240,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     MathUtils.clamp(newPosition.z(), -MAX_COORDINATE, MAX_COORDINATE)
             );
         }
-        this.position = newPosition;
+        return newPosition;
+    }
+
+    protected void setPositionInternal(Pos newPosition, float headRotation) {
+        this.position = clampPosition(newPosition);
         this.headRotation = headRotation;
     }
 
@@ -376,7 +381,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EntityTeleportEvent event = new EntityTeleportEvent(this, position, flags);
         EventDispatcher.call(event);
 
-        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
+        final Pos globalPosition = clampPosition(PositionUtils.getPositionWithRelativeFlags(this.position, position, flags));
         final Vec globalVelocity = PositionUtils.getVelocityWithRelativeFlags(this.velocity, velocity, flags);
 
         final Runnable endCallback = () -> {
@@ -393,6 +398,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Chunks need to be loaded before the teleportation can happen
             return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
         }
+        // Assumes globalPosition is already clamped
         final Pos currentPosition = this.position;
         if (!currentPosition.sameChunk(globalPosition)) {
             // Ensure that the chunk is loaded
@@ -868,6 +874,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (this instanceof Player player) instance.bossBars().forEach(player::showBossBar);
         EventsJFR.newInstanceJoin(getUuid(), instance.getUuid()).commit();
 
+        spawnPosition = clampPosition(spawnPosition); // Cap spawnPositon to Entity max distance.
+
         this.isActive = true;
         setPositionInternal(spawnPosition, spawnPosition.yaw());
         this.previousPosition = spawnPosition;
@@ -883,7 +891,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     player.sendPacket(instance.createTimePacket());
                     player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
-                instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
+                instance.getEntityTracker().register(this, position, trackingTarget, trackingUpdate);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
             } catch (Exception e) {
@@ -1325,7 +1333,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     public void refreshPosition(final Pos newPosition, boolean ignoreView, boolean sendPackets) {
         final var previousPosition = this.position;
-        final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
+        final Pos position = clampPosition(ignoreView ? previousPosition.withCoord(newPosition) : newPosition);
         if (position.equals(lastSyncedPosition)) return;
         setPositionInternal(position, ignoreView ? headRotation : position.yaw());
         this.previousPosition = previousPosition;
@@ -1385,9 +1393,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     private void updatePassengerPosition(Point newPosition, Entity passenger) {
         final Pos oldPassengerPos = passenger.position;
-        final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
+        final Pos newPassengerPos = passenger.clampPosition(oldPassengerPos.withCoord(newPosition.x(),
                 newPosition.y() + EntityUtils.getPassengerHeightOffset(this, passenger),
-                newPosition.z());
+                newPosition.z()));
         passenger.setPositionInternal(newPassengerPos, newPassengerPos.yaw());
         passenger.previousPosition = oldPassengerPos;
         passenger.refreshCoordinate(newPassengerPos);
