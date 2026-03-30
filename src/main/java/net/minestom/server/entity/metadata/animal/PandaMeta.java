@@ -83,12 +83,12 @@ public class PandaMeta extends AnimalMeta {
 
     public enum Gene {
         NORMAL,
-        AGGRESSIVE,
         LAZY,
         WORRIED,
         PLAYFUL,
+        BROWN,
         WEAK,
-        BROWN;
+        AGGRESSIVE;
 
         private final static Gene[] VALUES = values();
     }
