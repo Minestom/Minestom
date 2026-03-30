@@ -196,8 +196,11 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     public void setBiome(int x, int y, int z, RegistryKey<Biome> biome) {
         Chunk chunk = getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
         if (chunk == null) return;
-        synchronized (chunk) {
+        chunk.lockWriteLock();
+        try {
             chunk.setBiome(x, y, z, biome);
+        } finally {
+            chunk.unlockWriteLock();
         }
     }
 
@@ -755,8 +758,11 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     public RegistryKey<Biome> getBiome(int x, int y, int z) {
         Chunk chunk = getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
         Objects.requireNonNull(chunk);
-        synchronized (chunk) {
+        chunk.lockReadLock();
+        try {
             return chunk.getBiome(x, y, z);
+        } finally {
+            chunk.unlockReadLock();
         }
     }
 

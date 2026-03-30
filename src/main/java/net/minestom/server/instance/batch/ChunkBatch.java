@@ -181,7 +181,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             }
 
             final IntSet sections = new IntArraySet();
-            synchronized (chunk) {
+            chunk.lockWriteLock();
+            try {
                 synchronized (blocks) {
                     for (var entry : blocks.int2ObjectEntrySet()) {
                         final int position = entry.getIntKey();
@@ -190,6 +191,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                         sections.add(section);
                     }
                 }
+            } finally {
+                chunk.unlockWriteLock();
             }
 
             if (inverse != null) inverse.readyLatch.countDown();
