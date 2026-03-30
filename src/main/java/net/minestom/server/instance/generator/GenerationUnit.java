@@ -1,7 +1,7 @@
 package net.minestom.server.instance.generator;
 
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 
 import java.util.List;
@@ -28,21 +28,21 @@ public interface GenerationUnit {
      *
      * @return the size of this unit
      */
-    Point size();
+    BlockVec size();
 
     /**
      * The absolute start (min x, y, z) of this unit.
      *
      * @return the absolute start
      */
-    Point absoluteStart();
+    BlockVec absoluteStart();
 
     /**
      * The absolute end (max x, y, z) of this unit.
      *
      * @return the absolute end
      */
-    Point absoluteEnd();
+    BlockVec absoluteEnd();
 
     /**
      * Creates a fork of this unit, which will be applied to the instance whenever possible.
@@ -74,17 +74,17 @@ public interface GenerationUnit {
      *
      * @return the contained sections
      */
-    default Set<Vec> sections() {
+    default Set<BlockVec> sections() {
         final Point start = absoluteStart(), end = absoluteEnd();
         final int minX = start.sectionX(), minY = start.sectionY(), minZ = start.sectionZ();
         final int maxX = end.sectionX(), maxY = end.sectionY(), maxZ = end.sectionZ();
         final int count = (maxX - minX) * (maxY - minY) * (maxZ - minZ);
-        Vec[] sections = new Vec[count];
+        BlockVec[] sections = new BlockVec[count];
         int index = 0;
         for (int sectionX = minX; sectionX < maxX; sectionX++) {
             for (int sectionY = minY; sectionY < maxY; sectionY++) {
                 for (int sectionZ = minZ; sectionZ < maxZ; sectionZ++) {
-                    sections[index++] = new Vec(sectionX, sectionY, sectionZ);
+                    sections[index++] = new BlockVec(sectionX, sectionY, sectionZ);
                 }
             }
         }
