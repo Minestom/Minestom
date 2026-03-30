@@ -1,5 +1,6 @@
 package net.minestom.server.instance.generator;
 
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -24,12 +25,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GeneratorTest {
     @Test
     public void unitSize() {
-        assertDoesNotThrow(() -> dummyUnit(Vec.ZERO, Vec.SECTION));
-        assertDoesNotThrow(() -> dummyUnit(Vec.SECTION, new Vec(32)));
-        assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), Vec.ZERO));
-        assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), new Vec(32)));
-        assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), new Vec(31)));
-        assertThrows(IllegalArgumentException.class, () -> dummyUnit(Vec.ZERO, new Vec(15)));
+        assertDoesNotThrow(() -> dummyUnit(BlockVec.ZERO, BlockVec.SECTION));
+        assertDoesNotThrow(() -> dummyUnit(BlockVec.SECTION, new BlockVec(32)));
+        assertThrows(IllegalArgumentException.class, () -> dummyUnit(new BlockVec(15), BlockVec.ZERO));
+        assertThrows(IllegalArgumentException.class, () -> dummyUnit(new BlockVec(15), new BlockVec(32)));
+        assertThrows(IllegalArgumentException.class, () -> dummyUnit(new BlockVec(15), new BlockVec(31)));
+        assertThrows(IllegalArgumentException.class, () -> dummyUnit(BlockVec.ZERO, new BlockVec(15)));
     }
 
     @ParameterizedTest
@@ -80,9 +81,9 @@ public class GeneratorTest {
         GenSection[] sections = new GenSection[sectionCount];
         Arrays.setAll(sections, i -> new GenSection());
         GenerationUnit chunk = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
-        assertEquals(new Vec(16, sectionCount * 16, 16), chunk.size());
-        assertEquals(new Vec(chunkX * 16, minSection * 16, chunkZ * 16), chunk.absoluteStart());
-        assertEquals(new Vec(chunkX * 16 + 16, maxSection * 16, chunkZ * 16 + 16), chunk.absoluteEnd());
+        assertEquals(new BlockVec(16, sectionCount * 16, 16), chunk.size());
+        assertEquals(new BlockVec(chunkX * 16, minSection * 16, chunkZ * 16), chunk.absoluteStart());
+        assertEquals(new BlockVec(chunkX * 16 + 16, maxSection * 16, chunkZ * 16 + 16), chunk.absoluteEnd());
     }
 
     @Test
@@ -95,9 +96,9 @@ public class GeneratorTest {
         GenSection[] sections = new GenSection[sectionCount];
         Arrays.setAll(sections, i -> new GenSection());
         GenerationUnit chunk = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
-        assertEquals(new Vec(16, sectionCount * 16, 16), chunk.size());
-        assertEquals(new Vec(chunkX * 16, minSection * 16, chunkZ * 16), chunk.absoluteStart());
-        assertEquals(new Vec(chunkX * 16 + 16, maxSection * 16, chunkZ * 16 + 16), chunk.absoluteEnd());
+        assertEquals(new BlockVec(16, sectionCount * 16, 16), chunk.size());
+        assertEquals(new BlockVec(chunkX * 16, minSection * 16, chunkZ * 16), chunk.absoluteStart());
+        assertEquals(new BlockVec(chunkX * 16 + 16, maxSection * 16, chunkZ * 16 + 16), chunk.absoluteEnd());
     }
 
     @Test
@@ -106,9 +107,9 @@ public class GeneratorTest {
         final int sectionY = -5;
         final int sectionZ = -2;
         GenerationUnit section = GeneratorImpl.section(null, new GenSection(), sectionX, sectionY, sectionZ);
-        assertEquals(Vec.SECTION, section.size());
-        assertEquals(new Vec(sectionX * 16, sectionY * 16, sectionZ * 16), section.absoluteStart());
-        assertEquals(new Vec(sectionX * 16 + 16, sectionY * 16 + 16, sectionZ * 16 + 16), section.absoluteEnd());
+        assertEquals(BlockVec.SECTION, section.size());
+        assertEquals(new BlockVec(sectionX * 16, sectionY * 16, sectionZ * 16), section.absoluteStart());
+        assertEquals(new BlockVec(sectionX * 16 + 16, sectionY * 16 + 16, sectionZ * 16 + 16), section.absoluteEnd());
     }
 
     @Test
@@ -125,8 +126,8 @@ public class GeneratorTest {
         assertEquals(sectionCount, subUnits.size());
         for (int i = 0; i < sectionCount; i++) {
             var subUnit = subUnits.get(i);
-            assertEquals(Vec.SECTION, subUnit.size());
-            assertEquals(new Vec(chunkX * 16, (i + minSection) * 16, chunkZ * 16), subUnit.absoluteStart());
+            assertEquals(BlockVec.SECTION, subUnit.size());
+            assertEquals(new BlockVec(chunkX * 16, (i + minSection) * 16, chunkZ * 16), subUnit.absoluteStart());
             assertEquals(subUnit.absoluteStart().add(16), subUnit.absoluteEnd());
         }
     }
@@ -166,7 +167,7 @@ public class GeneratorTest {
             var modifier = chunk.modifier();
             Set<Point> points = new HashSet<>();
             modifier.setAll((x, y, z) -> {
-                assertTrue(points.add(new Vec(x, y, z)), "Duplicate point: " + x + ", " + y + ", " + z);
+                assertTrue(points.add(new BlockVec(x, y, z)), "Duplicate point: " + x + ", " + y + ", " + z);
                 assertEquals(chunkX, CoordConversion.globalToChunk(x));
                 assertEquals(chunkZ, CoordConversion.globalToChunk(z));
                 return Block.STONE;
@@ -224,7 +225,7 @@ public class GeneratorTest {
                 assertTrue(MathUtils.isBetween(x, 0, 16), "x out of bounds: " + x);
                 assertTrue(MathUtils.isBetween(y, 0, sectionCount * 16), "y out of bounds: " + y);
                 assertTrue(MathUtils.isBetween(z, 0, 16), "z out of bounds: " + z);
-                assertTrue(points.add(new Vec(x, y, z)), "Duplicate point: " + x + ", " + y + ", " + z);
+                assertTrue(points.add(new BlockVec(x, y, z)), "Duplicate point: " + x + ", " + y + ", " + z);
                 return Block.STONE;
             });
             assertEquals(SECTION_BLOCK_COUNT * sectionCount, points.size());
@@ -345,22 +346,22 @@ public class GeneratorTest {
         }
 
         var expectedStones = Set.of(
-                new Vec(-2, -2, 8),
-                new Vec(-2, -1, 8),
-                new Vec(-2, 0, 8),
-                new Vec(-2, 1, 8),
-                new Vec(-1, -2, 8),
-                new Vec(-1, -1, 8),
-                new Vec(-1, 0, 8),
-                new Vec(-1, 1, 8),
-                new Vec(0, -2, 8),
-                new Vec(0, -1, 8),
-                new Vec(0, 0, 8),
-                new Vec(0, 1, 8),
-                new Vec(1, -2, 8),
-                new Vec(1, -1, 8),
-                new Vec(1, 0, 8),
-                new Vec(1, 1, 8)
+                new BlockVec(-2, -2, 8),
+                new BlockVec(-2, -1, 8),
+                new BlockVec(-2, 0, 8),
+                new BlockVec(-2, 1, 8),
+                new BlockVec(-1, -2, 8),
+                new BlockVec(-1, -1, 8),
+                new BlockVec(-1, 0, 8),
+                new BlockVec(-1, 1, 8),
+                new BlockVec(0, -2, 8),
+                new BlockVec(0, -1, 8),
+                new BlockVec(0, 0, 8),
+                new BlockVec(0, 1, 8),
+                new BlockVec(1, -2, 8),
+                new BlockVec(1, -1, 8),
+                new BlockVec(1, 0, 8),
+                new BlockVec(1, 1, 8)
         );
 
         assertEquals(expectedStones.size(), stones.size());
@@ -370,26 +371,26 @@ public class GeneratorTest {
     @Test
     public void sectionsSingleSection() {
         // Test a unit that covers exactly one section
-        var unit = dummyUnit(new Vec(0, 0, 0), new Vec(16, 16, 16));
+        var unit = dummyUnit(new BlockVec(0, 0, 0), new BlockVec(16, 16, 16));
         var sections = unit.sections();
 
         assertEquals(1, sections.size());
-        assertTrue(sections.contains(new Vec(0, 0, 0)));
+        assertTrue(sections.contains(new BlockVec(0, 0, 0)));
     }
 
     @Test
     public void sectionsMultipleSections() {
         // Test a unit that covers multiple sections (2x2x2 = 8 sections)
-        var unit = dummyUnit(new Vec(0, 0, 0), new Vec(32, 32, 32));
+        var unit = dummyUnit(new BlockVec(0, 0, 0), new BlockVec(32, 32, 32));
         var sections = unit.sections();
 
         assertEquals(8, sections.size());
         // Check all expected sections are present
         Set<Point> expectedSections = Set.of(
-                new Vec(0, 0, 0), new Vec(0, 0, 1),
-                new Vec(0, 1, 0), new Vec(0, 1, 1),
-                new Vec(1, 0, 0), new Vec(1, 0, 1),
-                new Vec(1, 1, 0), new Vec(1, 1, 1)
+                new BlockVec(0, 0, 0), new BlockVec(0, 0, 1),
+                new BlockVec(0, 1, 0), new BlockVec(0, 1, 1),
+                new BlockVec(1, 0, 0), new BlockVec(1, 0, 1),
+                new BlockVec(1, 1, 0), new BlockVec(1, 1, 1)
         );
         assertEquals(expectedSections, sections);
     }
@@ -397,25 +398,25 @@ public class GeneratorTest {
     @Test
     public void sectionsNegativeCoordinates() {
         // Test a unit with negative coordinates
-        var unit = dummyUnit(new Vec(-32, -16, -48), new Vec(-16, 0, -32));
+        var unit = dummyUnit(new BlockVec(-32, -16, -48), new BlockVec(-16, 0, -32));
         var sections = unit.sections();
 
         assertEquals(1, sections.size());
-        assertTrue(sections.contains(new Vec(-2, -1, -3)));
+        assertTrue(sections.contains(new BlockVec(-2, -1, -3)));
     }
 
     @Test
     public void sectionsAsymmetricUnit() {
         // Test a unit that is not square (different dimensions)
-        var unit = dummyUnit(new Vec(16, 0, 0), new Vec(64, 16, 32));
+        var unit = dummyUnit(new BlockVec(16, 0, 0), new BlockVec(64, 16, 32));
         var sections = unit.sections();
 
         // 3 sections wide (x), 1 section high (y), 2 sections deep (z) = 6 sections
         assertEquals(6, sections.size());
         Set<Point> expectedSections = Set.of(
-                new Vec(1, 0, 0), new Vec(1, 0, 1),
-                new Vec(2, 0, 0), new Vec(2, 0, 1),
-                new Vec(3, 0, 0), new Vec(3, 0, 1)
+                new BlockVec(1, 0, 0), new BlockVec(1, 0, 1),
+                new BlockVec(2, 0, 0), new BlockVec(2, 0, 1),
+                new BlockVec(3, 0, 0), new BlockVec(3, 0, 1)
         );
         assertEquals(expectedSections, sections);
     }
@@ -423,7 +424,7 @@ public class GeneratorTest {
     @Test
     public void sectionsLargeUnit() {
         // Test a larger unit to verify the algorithm scales
-        var unit = dummyUnit(new Vec(0, 0, 0), new Vec(48, 64, 32));
+        var unit = dummyUnit(new BlockVec(0, 0, 0), new BlockVec(48, 64, 32));
         var sections = unit.sections();
 
         // 3 sections wide (x), 4 sections high (y), 2 sections deep (z) = 24 sections
@@ -440,16 +441,16 @@ public class GeneratorTest {
     @Test
     public void sectionsOffsetCoordinates() {
         // Test a unit that doesn't start at section boundaries but is aligned to sections
-        var unit = dummyUnit(new Vec(32, 48, 16), new Vec(64, 80, 48));
+        var unit = dummyUnit(new BlockVec(32, 48, 16), new BlockVec(64, 80, 48));
         var sections = unit.sections();
 
         // 2 sections wide (x), 2 sections high (y), 2 sections deep (z) = 8 sections
         assertEquals(8, sections.size());
         Set<Point> expectedSections = Set.of(
-                new Vec(2, 3, 1), new Vec(2, 3, 2),
-                new Vec(2, 4, 1), new Vec(2, 4, 2),
-                new Vec(3, 3, 1), new Vec(3, 3, 2),
-                new Vec(3, 4, 1), new Vec(3, 4, 2)
+                new BlockVec(2, 3, 1), new BlockVec(2, 3, 2),
+                new BlockVec(2, 4, 1), new BlockVec(2, 4, 2),
+                new BlockVec(3, 3, 1), new BlockVec(3, 3, 2),
+                new BlockVec(3, 4, 1), new BlockVec(3, 4, 2)
         );
         assertEquals(expectedSections, sections);
     }
@@ -488,13 +489,13 @@ public class GeneratorTest {
 
         var sections = sectionUnit.sections();
         assertEquals(1, sections.size());
-        assertTrue(sections.contains(new Vec(sectionX, sectionY, sectionZ)));
+        assertTrue(sections.contains(new BlockVec(sectionX, sectionY, sectionZ)));
     }
 
     @Test
     public void sectionsReturnType() {
         // Test that sections() returns an immutable set
-        var unit = dummyUnit(new Vec(0, 0, 0), new Vec(32, 16, 16));
+        var unit = dummyUnit(new BlockVec(0, 0, 0), new BlockVec(32, 16, 16));
         var sections = unit.sections();
 
         // Verify it's a Set and contains the expected number of elements
@@ -503,14 +504,14 @@ public class GeneratorTest {
 
         // Verify immutability by attempting to modify (should throw exception)
         assertThrows(UnsupportedOperationException.class, () -> {
-            sections.add(new Vec(99, 99, 99));
+            sections.add(new BlockVec(99, 99, 99));
         });
     }
 
     @Test
     public void sectionsCoordinateConsistency() {
         // Test that section coordinates are consistent with the unit's absolute coordinates
-        var unit = dummyUnit(new Vec(48, 64, 32), new Vec(80, 96, 64));
+        var unit = dummyUnit(new BlockVec(48, 64, 32), new BlockVec(80, 96, 64));
         var sections = unit.sections();
 
         Point start = unit.absoluteStart();
@@ -539,7 +540,7 @@ public class GeneratorTest {
         assertEquals(expectedCount, sections.size());
     }
 
-    static GenerationUnit dummyUnit(Vec start, Vec end) {
+    static GenerationUnit dummyUnit(BlockVec start, BlockVec end) {
         return unit(null, null, start, end, null);
     }
 }

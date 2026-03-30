@@ -10,8 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class GeneratorForkConsumerIntegrationTest {
@@ -40,15 +39,14 @@ public class GeneratorForkConsumerIntegrationTest {
         instance.setGenerator(unit -> {
             unit.fork(setter -> {
                 var dynamic = (GeneratorImpl.DynamicFork) setter;
-                assertNull(dynamic.minSection);
-                assertEquals(0, dynamic.width);
-                assertEquals(0, dynamic.height);
-                assertEquals(0, dynamic.depth);
+                assertNull(dynamic.fork);
                 setter.setBlock(unit.absoluteStart(), Block.STONE);
-                assertEquals(unit.absoluteStart(), dynamic.minSection);
-                assertEquals(1, dynamic.width);
-                assertEquals(1, dynamic.height);
-                assertEquals(1, dynamic.depth);
+                final var fork = dynamic.fork;
+                assertNotNull(fork);
+                assertEquals(unit.absoluteStart(), fork.minSection());
+                assertEquals(1, fork.width());
+                assertEquals(1, fork.height());
+                assertEquals(1, fork.depth());
             });
         });
         instance.loadChunk(0, 0).join();
@@ -77,16 +75,15 @@ public class GeneratorForkConsumerIntegrationTest {
         instance.setGenerator(unit -> {
             unit.fork(setter -> {
                 var dynamic = (GeneratorImpl.DynamicFork) setter;
-                assertNull(dynamic.minSection);
-                assertEquals(0, dynamic.width);
-                assertEquals(0, dynamic.height);
-                assertEquals(0, dynamic.depth);
+                assertNull(dynamic.fork);
                 setter.setBlock(unit.absoluteStart(), Block.STONE);
                 setter.setBlock(unit.absoluteStart().add(0, 0, 16), Block.GRASS_BLOCK);
-                assertEquals(unit.absoluteStart(), dynamic.minSection);
-                assertEquals(1, dynamic.width);
-                assertEquals(1, dynamic.height);
-                assertEquals(2, dynamic.depth);
+                final var fork = dynamic.fork;
+                assertNotNull(fork);
+                assertEquals(unit.absoluteStart(), fork.minSection());
+                assertEquals(1, fork.width());
+                assertEquals(1, fork.height());
+                assertEquals(2, fork.depth());
             });
         });
         instance.loadChunk(0, 0).join();
@@ -103,16 +100,15 @@ public class GeneratorForkConsumerIntegrationTest {
         instance.setGenerator(unit -> {
             unit.fork(setter -> {
                 var dynamic = (GeneratorImpl.DynamicFork) setter;
-                assertNull(dynamic.minSection);
-                assertEquals(0, dynamic.width);
-                assertEquals(0, dynamic.height);
-                assertEquals(0, dynamic.depth);
+                assertNull(dynamic.fork);
                 setter.setBlock(unit.absoluteStart(), Block.STONE);
                 setter.setBlock(unit.absoluteStart().add(16, 0, 0), Block.GRASS_BLOCK);
-                assertEquals(unit.absoluteStart(), dynamic.minSection);
-                assertEquals(2, dynamic.width);
-                assertEquals(1, dynamic.height);
-                assertEquals(1, dynamic.depth);
+                final var fork = dynamic.fork;
+                assertNotNull(fork);
+                assertEquals(unit.absoluteStart(), fork.minSection());
+                assertEquals(2, fork.width());
+                assertEquals(1, fork.height());
+                assertEquals(1, fork.depth());
             });
         });
         instance.loadChunk(0, 0).join();
@@ -129,16 +125,15 @@ public class GeneratorForkConsumerIntegrationTest {
         instance.setGenerator(unit -> {
             unit.fork(setter -> {
                 var dynamic = (GeneratorImpl.DynamicFork) setter;
-                assertNull(dynamic.minSection);
-                assertEquals(0, dynamic.width);
-                assertEquals(0, dynamic.height);
-                assertEquals(0, dynamic.depth);
+                assertNull(dynamic.fork);
                 setter.setBlock(unit.absoluteStart(), Block.STONE);
                 setter.setBlock(unit.absoluteStart().add(0, 16, 0), Block.GRASS_BLOCK);
-                assertEquals(unit.absoluteStart(), dynamic.minSection);
-                assertEquals(1, dynamic.width);
-                assertEquals(2, dynamic.height);
-                assertEquals(1, dynamic.depth);
+                var fork = dynamic.fork;
+                assertNotNull(fork);
+                assertEquals(unit.absoluteStart(), fork.minSection());
+                assertEquals(1, fork.width());
+                assertEquals(2, fork.height());
+                assertEquals(1, fork.depth());
             });
         });
         instance.loadChunk(0, 0).join();
@@ -166,9 +161,11 @@ public class GeneratorForkConsumerIntegrationTest {
                     points.add(start.add(0, i, 0));
                     points.add(start.add(0, -i, 0));
                 }
-                assertEquals(2, dynamic.width);
-                assertEquals(2, dynamic.height);
-                assertEquals(1, dynamic.depth);
+                var fork = dynamic.fork;
+                assertNotNull(fork);
+                assertEquals(2, fork.width());
+                assertEquals(2, fork.height());
+                assertEquals(1, fork.depth());
             });
         });
         instance.loadChunk(0, 0).join();
