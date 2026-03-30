@@ -37,10 +37,10 @@ public class LightingChunk extends DynamicChunk {
 
     private static final ExecutorService pool = Executors.newWorkStealingPool();
 
-    private int[] occlusionMap;
+    private int @Nullable [] occlusionMap;
     final CachedPacket partialLightCache = new CachedPacket(this::createLightPacket);
-    private LightData partialLightData;
-    private LightData fullLightData;
+    private @Nullable LightData partialLightData;
+    private @Nullable LightData fullLightData;
 
     private int highestBlock;
     private boolean freezeInvalidation = false;

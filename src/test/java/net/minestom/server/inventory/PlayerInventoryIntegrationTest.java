@@ -107,7 +107,7 @@ public class PlayerInventoryIntegrationTest {
 
         // Make sure EntityEquipmentPacket is empty
         equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(7, entityEquipmentPacket.equipments().size());
+            assertEquals(EquipmentSlot.values().length, entityEquipmentPacket.equipments().size());
             for (Map.Entry<EquipmentSlot, ItemStack> entry : entityEquipmentPacket.equipments().entrySet()) {
                 assertEquals(ItemStack.AIR, entry.getValue());
             }
