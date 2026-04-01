@@ -30,6 +30,14 @@ public class ZombieVillagerMeta extends ZombieMeta {
         metadata.set(MetadataDef.ZombieVillager.VILLAGER_DATA, data);
     }
 
+    public boolean isFinalized() {
+        return metadata.get(MetadataDef.ZombieVillager.IS_FINALIZED);
+    }
+
+    public void setFinalized(boolean value) {
+        metadata.set(MetadataDef.ZombieVillager.IS_FINALIZED, value);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected <T> @Nullable T get(DataComponent<T> component) {

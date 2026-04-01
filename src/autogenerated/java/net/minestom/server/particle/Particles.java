@@ -106,6 +106,10 @@ sealed interface Particles permits Particle {
 
     Particle.Trail TRAIL = (Particle.Trail) ParticleImpl.get("minecraft:trail");
 
+    Particle PAUSE_MOB_GROWTH = ParticleImpl.get("minecraft:pause_mob_growth");
+
+    Particle RESET_MOB_GROWTH = ParticleImpl.get("minecraft:reset_mob_growth");
+
     Particle ITEM_SLIME = ParticleImpl.get("minecraft:item_slime");
 
     Particle ITEM_COBWEB = ParticleImpl.get("minecraft:item_cobweb");

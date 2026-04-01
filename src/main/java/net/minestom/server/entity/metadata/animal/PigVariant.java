@@ -14,7 +14,8 @@ public sealed interface PigVariant extends PigVariants permits PigVariantImpl {
     Codec<PigVariant> REGISTRY_CODEC = StructCodec.struct(
             "model", Model.CODEC.optional(Model.NORMAL), PigVariant::model,
             "asset_id", Codec.KEY, PigVariant::assetId,
-            PigVariantImpl::new);
+            "baby_asset_id", Codec.KEY, PigVariant::babyAssetId,
+            PigVariant::create);
 
     NetworkBuffer.Type<RegistryKey<PigVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::pigVariant);
     Codec<RegistryKey<PigVariant>> CODEC = RegistryKey.codec(Registries::pigVariant);
@@ -29,13 +30,15 @@ public sealed interface PigVariant extends PigVariants permits PigVariantImpl {
         return DynamicRegistry.create(Key.key("pig_variant"), REGISTRY_CODEC, RegistryData.Resource.PIG_VARIANTS);
     }
 
-    static PigVariant create(Model model, Key assetId) {
-        return new PigVariantImpl(model, assetId);
+    static PigVariant create(Model model, Key assetId, Key babyAssetId) {
+        return new PigVariantImpl(model, assetId, babyAssetId);
     }
 
     Model model();
 
     Key assetId();
+
+    Key babyAssetId();
 
     enum Model {
         NORMAL,

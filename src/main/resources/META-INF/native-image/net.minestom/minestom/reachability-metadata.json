@@ -370,223 +370,259 @@
       "glob": "META-INF/services/org.slf4j.spi.SLF4JServiceProvider"
     },
     {
-      "glob": "attribute.json"
-    },
-    {
-      "glob": "banner_pattern.json"
-    },
-    {
-      "glob": "block.json"
-    },
-    {
-      "glob": "block_entity_types.json"
-    },
-    {
-      "glob": "block_sound_type.json"
-    },
-    {
-      "glob": "cat_variant.json"
-    },
-    {
-      "glob": "chat_type.json"
-    },
-    {
-      "glob": "chicken_variant.json"
-    },
-    {
-      "glob": "cow_variant.json"
-    },
-    {
-      "glob": "damage_type.json"
-    },
-    {
-      "glob": "dialog.json"
-    },
-    {
-      "glob": "dimension_type.json"
-    },
-    {
-      "glob": "enchantment.json"
-    },
-    {
-      "glob": "entity_type.json"
-    },
-    {
-      "glob": "feature_flag.json"
-    },
-    {
-      "glob": "fluid.json"
-    },
-    {
-      "glob": "frog_variant.json"
-    },
-    {
-      "glob": "game_event.json"
-    },
-    {
-      "glob": "instrument.json"
-    },
-    {
-      "glob": "item.json"
-    },
-    {
-      "glob": "jukebox_song.json"
-    },
-    {
       "glob": "junit-platform.properties"
+    },
+    {
+      "glob": "net/minestom/data/attribute.json"
+    },
+    {
+      "glob": "net/minestom/data/banner_pattern.json"
+    },
+    {
+      "glob": "net/minestom/data/block.json"
+    },
+    {
+      "glob": "net/minestom/data/block_entity_types.json"
+    },
+    {
+      "glob": "net/minestom/data/block_sound_type.json"
+    },
+    {
+      "glob": "net/minestom/data/cat_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/cat_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/chat_type.json"
+    },
+    {
+      "glob": "net/minestom/data/chicken_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/chicken_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/cow_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/cow_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/damage_type.json"
+    },
+    {
+      "glob": "net/minestom/data/dialog.json"
+    },
+    {
+      "glob": "net/minestom/data/dimension_type.json"
+    },
+    {
+      "glob": "net/minestom/data/enchantment.json"
+    },
+    {
+      "glob": "net/minestom/data/entity_type.json"
+    },
+    {
+      "glob": "net/minestom/data/feature_flag.json"
+    },
+    {
+      "glob": "net/minestom/data/fluid.json"
+    },
+    {
+      "glob": "net/minestom/data/frog_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/game_event.json"
+    },
+    {
+      "glob": "net/minestom/data/game_rule.json"
+    },
+    {
+      "glob": "net/minestom/data/instrument.json"
+    },
+    {
+      "glob": "net/minestom/data/item.json"
+    },
+    {
+      "glob": "net/minestom/data/jukebox_song.json"
+    },
+    {
+      "glob": "net/minestom/data/painting_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/particle.json"
+    },
+    {
+      "glob": "net/minestom/data/pig_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/pig_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/potion_effect.json"
+    },
+    {
+      "glob": "net/minestom/data/potion_type.json"
+    },
+    {
+      "glob": "net/minestom/data/sound_event.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/attribute.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/banner_pattern.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/block.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/block_entity_types.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/block_sound_type.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/cat_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/cat_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/chat_type.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/chicken_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/chicken_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/cow_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/cow_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/damage_type.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/dialog.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/dimension_type.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/enchantment.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/entity_type.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/feature_flag.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/fluid.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/frog_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/game_event.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/game_rule.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/instrument.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/item.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/jukebox_song.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/painting_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/particle.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/pig_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/pig_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/potion_effect.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/potion_type.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/sound_event.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/timeline.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/trim_material.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/trim_pattern.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/villager_profession.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/wolf_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/wolf_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/world_clock.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/worldgen/biome.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/zombie_nautilus_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/timeline.json"
+    },
+    {
+      "glob": "net/minestom/data/trim_material.json"
+    },
+    {
+      "glob": "net/minestom/data/trim_pattern.json"
+    },
+    {
+      "glob": "net/minestom/data/villager_profession.json"
+    },
+    {
+      "glob": "net/minestom/data/wolf_sound_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/wolf_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/world_clock.json"
+    },
+    {
+      "glob": "net/minestom/data/worldgen/biome.json"
+    },
+    {
+      "glob": "net/minestom/data/zombie_nautilus_variant.json"
     },
     {
       "glob": "net/minestom/server/instance/lighting/region/r.0.0.mca"
     },
     {
       "glob": "org/slf4j/impl/StaticLoggerBinder.class"
-    },
-    {
-      "glob": "painting_variant.json"
-    },
-    {
-      "glob": "particle.json"
-    },
-    {
-      "glob": "pig_variant.json"
-    },
-    {
-      "glob": "potion_effect.json"
-    },
-    {
-      "glob": "potion_type.json"
-    },
-    {
-      "glob": "sound_event.json"
-    },
-    {
-      "glob": "tags/attribute.json"
-    },
-    {
-      "glob": "tags/banner_pattern.json"
-    },
-    {
-      "glob": "tags/block.json"
-    },
-    {
-      "glob": "tags/block_entity_types.json"
-    },
-    {
-      "glob": "tags/block_sound_type.json"
-    },
-    {
-      "glob": "tags/cat_variant.json"
-    },
-    {
-      "glob": "tags/chat_type.json"
-    },
-    {
-      "glob": "tags/chicken_variant.json"
-    },
-    {
-      "glob": "tags/cow_variant.json"
-    },
-    {
-      "glob": "tags/damage_type.json"
-    },
-    {
-      "glob": "tags/dialog.json"
-    },
-    {
-      "glob": "tags/dimension_type.json"
-    },
-    {
-      "glob": "tags/enchantment.json"
-    },
-    {
-      "glob": "tags/entity_type.json"
-    },
-    {
-      "glob": "tags/feature_flag.json"
-    },
-    {
-      "glob": "tags/fluid.json"
-    },
-    {
-      "glob": "tags/frog_variant.json"
-    },
-    {
-      "glob": "tags/game_event.json"
-    },
-    {
-      "glob": "tags/instrument.json"
-    },
-    {
-      "glob": "tags/item.json"
-    },
-    {
-      "glob": "tags/jukebox_song.json"
-    },
-    {
-      "glob": "tags/painting_variant.json"
-    },
-    {
-      "glob": "tags/particle.json"
-    },
-    {
-      "glob": "tags/pig_variant.json"
-    },
-    {
-      "glob": "tags/potion_effect.json"
-    },
-    {
-      "glob": "tags/potion_type.json"
-    },
-    {
-      "glob": "tags/sound_event.json"
-    },
-    {
-      "glob": "tags/timeline.json"
-    },
-    {
-      "glob": "tags/trim_material.json"
-    },
-    {
-      "glob": "tags/trim_pattern.json"
-    },
-    {
-      "glob": "tags/villager_profession.json"
-    },
-    {
-      "glob": "tags/wolf_sound_variant.json"
-    },
-    {
-      "glob": "tags/wolf_variant.json"
-    },
-    {
-      "glob": "tags/worldgen/biome.json"
-    },
-    {
-      "glob": "tags/zombie_nautilus_variant.json"
-    },
-    {
-      "glob": "timeline.json"
-    },
-    {
-      "glob": "trim_material.json"
-    },
-    {
-      "glob": "trim_pattern.json"
-    },
-    {
-      "glob": "villager_profession.json"
-    },
-    {
-      "glob": "wolf_sound_variant.json"
-    },
-    {
-      "glob": "wolf_variant.json"
-    },
-    {
-      "glob": "worldgen/biome.json"
-    },
-    {
-      "glob": "zombie_nautilus_variant.json"
     },
     {
       "module": "jdk.jfr",

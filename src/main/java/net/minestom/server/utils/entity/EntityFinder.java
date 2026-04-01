@@ -14,7 +14,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Range;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -128,12 +127,12 @@ public class EntityFinder {
      */
     public List<Entity> find(@Nullable Instance instance, @Nullable Entity self) {
         if (targetSelector == TargetSelector.MINESTOM_USERNAME) {
-            Check.notNull(constantName, "The player name should not be null when searching for it");
+            Objects.requireNonNull(constantName, "The player name should not be null when searching for it");
             final Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(constantName);
             return player != null ? List.of(player) : List.of();
         } else if (targetSelector == TargetSelector.MINESTOM_UUID) {
-            Check.notNull(constantUuid, "The UUID should not be null when searching for it");
-            Check.notNull(instance, "The instance should not be null when searching by UUID");
+            Objects.requireNonNull(constantUuid, "The UUID should not be null when searching for it");
+            Objects.requireNonNull(instance, "The instance should not be null when searching by UUID");
             final Entity entity = instance.getEntityByUuid(constantUuid);
             return entity != null ? List.of(entity) : List.of();
         }

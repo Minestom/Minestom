@@ -233,7 +233,7 @@ public final class ComponentCodecs {
     private static final StructCodec<KeybindComponent> KEYBIND_CONTENT = StructCodec.struct(
             "keybind", Codec.STRING, component -> component.keybind(),
             Component::keybind);
-    private static final StructCodec<ObjectComponent> OBJECT_CONTENT = new StructCodec<>() {
+    private static final StructCodec<ObjectComponent> OBJECT_CONTENT = new StructCodec<>() { //TODO(26.1) fallback
         private static final StructCodec<SpriteObjectContents> SPRITE_CONTENT = StructCodec.struct(
                 "atlas", Codec.KEY.optional(SpriteObjectContents.DEFAULT_ATLAS), SpriteObjectContents::atlas,
                 "sprite", Codec.KEY, SpriteObjectContents::sprite,

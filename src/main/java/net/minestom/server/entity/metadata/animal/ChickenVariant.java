@@ -14,13 +14,14 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
     Codec<ChickenVariant> REGISTRY_CODEC = StructCodec.struct(
             "model", Model.CODEC.optional(Model.NORMAL), ChickenVariant::model,
             "asset_id", Codec.KEY, ChickenVariant::assetId,
+            "baby_asset_id", Codec.KEY, ChickenVariant::babyAssetId,
             ChickenVariantImpl::new);
 
     NetworkBuffer.Type<RegistryKey<ChickenVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::chickenVariant);
     Codec<RegistryKey<ChickenVariant>> CODEC = RegistryKey.codec(Registries::chickenVariant);
 
-    static ChickenVariant create(Model model, Key assetId) {
-        return new ChickenVariantImpl(model, assetId);
+    static ChickenVariant create(Model model, Key assetId, Key babyAssetId) {
+        return new ChickenVariantImpl(model, assetId, babyAssetId);
     }
 
     /**
@@ -36,6 +37,8 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
     Model model();
 
     Key assetId();
+
+    Key babyAssetId();
 
     enum Model {
         NORMAL,

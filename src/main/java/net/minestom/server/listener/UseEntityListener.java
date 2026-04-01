@@ -2,9 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.BoundingBox;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
@@ -12,34 +10,39 @@ import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
+import net.minestom.server.network.packet.client.play.ClientAttackPacket;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
 
 public class UseEntityListener {
 
     public static void useEntityListener(ClientInteractEntityPacket packet, Player player) {
         final Entity entity = player.getInstance().getEntityById(packet.targetId());
-        if (entity == null || !entity.isViewer(player))
+        if (entity == null || invalidUse(player, entity))
             return;
+        EventDispatcher.call(new PlayerEntityInteractEvent(player, entity, packet.hand(), packet.location()));
+    }
+
+    public static void attackEntityListener(ClientAttackPacket packet, Player player) {
+        final Entity entity = player.getInstance().getEntityById(packet.targetId());
+        if (entity == null || invalidUse(player, entity))
+            return;
+        if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) // Can't attack dead entities
+            return;
+        EventDispatcher.call(new EntityAttackEvent(player, entity));
+    }
+
+    static boolean invalidUse(Player player, Entity entity) {
+        if (!entity.isViewer(player))
+            return true;
 
         if (ServerFlag.ENFORCE_INTERACTION_LIMIT) {
             final double maxDistanceSquared = Math.pow(player.getAttributeValue(Attribute.ENTITY_INTERACTION_RANGE) + 1, 2);
 
             final double distSquared = getDistSquared(player, entity);
 
-            if (distSquared > maxDistanceSquared) {
-                return;
-            }
+            return distSquared >= maxDistanceSquared;
         }
-
-        ClientInteractEntityPacket.Type type = packet.type();
-        if (type instanceof ClientInteractEntityPacket.Attack) {
-            if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) // Can't attack dead entities
-                return;
-            EventDispatcher.call(new EntityAttackEvent(player, entity));
-        } else if (type instanceof ClientInteractEntityPacket.InteractAt interactAt) {
-            Point interactPosition = new Vec(interactAt.targetX(), interactAt.targetY(), interactAt.targetZ());
-            EventDispatcher.call(new PlayerEntityInteractEvent(player, entity, interactAt.hand(), interactPosition));
-        }
+        return false;
     }
 
     private static double getDistSquared(Player player, Entity entity) {

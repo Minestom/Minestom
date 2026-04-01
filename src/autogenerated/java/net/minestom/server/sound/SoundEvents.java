@@ -561,23 +561,59 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent BLOCK_CANDLE_STEP = BuiltinSoundEvent.get("block.candle.step");
 
+    SoundEvent ENTITY_BABY_CAT_AMBIENT = BuiltinSoundEvent.get("entity.baby_cat.ambient");
+
+    SoundEvent ENTITY_BABY_CAT_STRAY_AMBIENT = BuiltinSoundEvent.get("entity.baby_cat.stray_ambient");
+
+    SoundEvent ENTITY_BABY_CAT_DEATH = BuiltinSoundEvent.get("entity.baby_cat.death");
+
+    SoundEvent ENTITY_BABY_CAT_EAT = BuiltinSoundEvent.get("entity.baby_cat.eat");
+
+    SoundEvent ENTITY_BABY_CAT_HISS = BuiltinSoundEvent.get("entity.baby_cat.hiss");
+
+    SoundEvent ENTITY_BABY_CAT_BEG_FOR_FOOD = BuiltinSoundEvent.get("entity.baby_cat.beg_for_food");
+
+    SoundEvent ENTITY_BABY_CAT_HURT = BuiltinSoundEvent.get("entity.baby_cat.hurt");
+
+    SoundEvent ENTITY_BABY_CAT_PURR = BuiltinSoundEvent.get("entity.baby_cat.purr");
+
+    SoundEvent ENTITY_BABY_CAT_PURREOW = BuiltinSoundEvent.get("entity.baby_cat.purreow");
+
     SoundEvent ENTITY_CAT_AMBIENT = BuiltinSoundEvent.get("entity.cat.ambient");
 
     SoundEvent ENTITY_CAT_STRAY_AMBIENT = BuiltinSoundEvent.get("entity.cat.stray_ambient");
+
+    SoundEvent ENTITY_CAT_HISS = BuiltinSoundEvent.get("entity.cat.hiss");
+
+    SoundEvent ENTITY_CAT_HURT = BuiltinSoundEvent.get("entity.cat.hurt");
 
     SoundEvent ENTITY_CAT_DEATH = BuiltinSoundEvent.get("entity.cat.death");
 
     SoundEvent ENTITY_CAT_EAT = BuiltinSoundEvent.get("entity.cat.eat");
 
-    SoundEvent ENTITY_CAT_HISS = BuiltinSoundEvent.get("entity.cat.hiss");
-
     SoundEvent ENTITY_CAT_BEG_FOR_FOOD = BuiltinSoundEvent.get("entity.cat.beg_for_food");
-
-    SoundEvent ENTITY_CAT_HURT = BuiltinSoundEvent.get("entity.cat.hurt");
 
     SoundEvent ENTITY_CAT_PURR = BuiltinSoundEvent.get("entity.cat.purr");
 
     SoundEvent ENTITY_CAT_PURREOW = BuiltinSoundEvent.get("entity.cat.purreow");
+
+    SoundEvent ENTITY_CAT_ROYAL_AMBIENT = BuiltinSoundEvent.get("entity.cat_royal.ambient");
+
+    SoundEvent ENTITY_CAT_ROYAL_STRAY_AMBIENT = BuiltinSoundEvent.get("entity.cat_royal.stray_ambient");
+
+    SoundEvent ENTITY_CAT_ROYAL_HISS = BuiltinSoundEvent.get("entity.cat_royal.hiss");
+
+    SoundEvent ENTITY_CAT_ROYAL_HURT = BuiltinSoundEvent.get("entity.cat_royal.hurt");
+
+    SoundEvent ENTITY_CAT_ROYAL_DEATH = BuiltinSoundEvent.get("entity.cat_royal.death");
+
+    SoundEvent ENTITY_CAT_ROYAL_EAT = BuiltinSoundEvent.get("entity.cat_royal.eat");
+
+    SoundEvent ENTITY_CAT_ROYAL_BEG_FOR_FOOD = BuiltinSoundEvent.get("entity.cat_royal.beg_for_food");
+
+    SoundEvent ENTITY_CAT_ROYAL_PURR = BuiltinSoundEvent.get("entity.cat_royal.purr");
+
+    SoundEvent ENTITY_CAT_ROYAL_PURREOW = BuiltinSoundEvent.get("entity.cat_royal.purreow");
 
     SoundEvent BLOCK_CAVE_VINES_BREAK = BuiltinSoundEvent.get("block.cave_vines.break");
 
@@ -667,15 +703,29 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent BLOCK_CHEST_OPEN = BuiltinSoundEvent.get("block.chest.open");
 
-    SoundEvent ENTITY_CHICKEN_AMBIENT = BuiltinSoundEvent.get("entity.chicken.ambient");
+    SoundEvent ENTITY_BABY_CHICKEN_AMBIENT = BuiltinSoundEvent.get("entity.baby_chicken.ambient");
 
-    SoundEvent ENTITY_CHICKEN_DEATH = BuiltinSoundEvent.get("entity.chicken.death");
+    SoundEvent ENTITY_BABY_CHICKEN_DEATH = BuiltinSoundEvent.get("entity.baby_chicken.death");
 
     SoundEvent ENTITY_CHICKEN_EGG = BuiltinSoundEvent.get("entity.chicken.egg");
 
-    SoundEvent ENTITY_CHICKEN_HURT = BuiltinSoundEvent.get("entity.chicken.hurt");
+    SoundEvent ENTITY_BABY_CHICKEN_HURT = BuiltinSoundEvent.get("entity.baby_chicken.hurt");
 
     SoundEvent ENTITY_CHICKEN_STEP = BuiltinSoundEvent.get("entity.chicken.step");
+
+    SoundEvent ENTITY_BABY_CHICKEN_STEP = BuiltinSoundEvent.get("entity.baby_chicken.step");
+
+    SoundEvent ENTITY_CHICKEN_AMBIENT = BuiltinSoundEvent.get("entity.chicken.ambient");
+
+    SoundEvent ENTITY_CHICKEN_HURT = BuiltinSoundEvent.get("entity.chicken.hurt");
+
+    SoundEvent ENTITY_CHICKEN_DEATH = BuiltinSoundEvent.get("entity.chicken.death");
+
+    SoundEvent ENTITY_CHICKEN_PICKY_AMBIENT = BuiltinSoundEvent.get("entity.chicken_picky.ambient");
+
+    SoundEvent ENTITY_CHICKEN_PICKY_HURT = BuiltinSoundEvent.get("entity.chicken_picky.hurt");
+
+    SoundEvent ENTITY_CHICKEN_PICKY_DEATH = BuiltinSoundEvent.get("entity.chicken_picky.death");
 
     SoundEvent BLOCK_CHISELED_BOOKSHELF_BREAK = BuiltinSoundEvent.get("block.chiseled_bookshelf.break");
 
@@ -851,15 +901,23 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent BLOCK_CORAL_BLOCK_STEP = BuiltinSoundEvent.get("block.coral_block.step");
 
-    SoundEvent ENTITY_COW_AMBIENT = BuiltinSoundEvent.get("entity.cow.ambient");
+    SoundEvent ENTITY_COW_MILK = BuiltinSoundEvent.get("entity.cow.milk");
 
-    SoundEvent ENTITY_COW_DEATH = BuiltinSoundEvent.get("entity.cow.death");
+    SoundEvent ENTITY_COW_AMBIENT = BuiltinSoundEvent.get("entity.cow.ambient");
 
     SoundEvent ENTITY_COW_HURT = BuiltinSoundEvent.get("entity.cow.hurt");
 
-    SoundEvent ENTITY_COW_MILK = BuiltinSoundEvent.get("entity.cow.milk");
+    SoundEvent ENTITY_COW_DEATH = BuiltinSoundEvent.get("entity.cow.death");
 
     SoundEvent ENTITY_COW_STEP = BuiltinSoundEvent.get("entity.cow.step");
+
+    SoundEvent ENTITY_COW_MOODY_AMBIENT = BuiltinSoundEvent.get("entity.cow_moody.ambient");
+
+    SoundEvent ENTITY_COW_MOODY_HURT = BuiltinSoundEvent.get("entity.cow_moody.hurt");
+
+    SoundEvent ENTITY_COW_MOODY_DEATH = BuiltinSoundEvent.get("entity.cow_moody.death");
+
+    SoundEvent ENTITY_COW_MOODY_STEP = BuiltinSoundEvent.get("entity.cow_moody.step");
 
     SoundEvent BLOCK_CRAFTER_CRAFT = BuiltinSoundEvent.get("block.crafter.craft");
 
@@ -1451,6 +1509,10 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ENTITY_GOAT_STEP = BuiltinSoundEvent.get("entity.goat.step");
 
+    SoundEvent ITEM_GOLDEN_DANDELION_USE = BuiltinSoundEvent.get("item.golden_dandelion.use");
+
+    SoundEvent ITEM_GOLDEN_DANDELION_UNUSE = BuiltinSoundEvent.get("item.golden_dandelion.unuse");
+
     SoundEvent BLOCK_GRASS_BREAK = BuiltinSoundEvent.get("block.grass.break");
 
     SoundEvent BLOCK_GRASS_FALL = BuiltinSoundEvent.get("block.grass.fall");
@@ -1641,7 +1703,11 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ENTITY_HORSE_AMBIENT = BuiltinSoundEvent.get("entity.horse.ambient");
 
+    SoundEvent ENTITY_BABY_HORSE_AMBIENT = BuiltinSoundEvent.get("entity.baby_horse.ambient");
+
     SoundEvent ENTITY_HORSE_ANGRY = BuiltinSoundEvent.get("entity.horse.angry");
+
+    SoundEvent ENTITY_BABY_HORSE_ANGRY = BuiltinSoundEvent.get("entity.baby_horse.angry");
 
     SoundEvent ENTITY_HORSE_ARMOR = BuiltinSoundEvent.get("entity.horse.armor");
 
@@ -1649,21 +1715,33 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ENTITY_HORSE_BREATHE = BuiltinSoundEvent.get("entity.horse.breathe");
 
+    SoundEvent ENTITY_BABY_HORSE_BREATHE = BuiltinSoundEvent.get("entity.baby_horse.breathe");
+
     SoundEvent ENTITY_HORSE_DEATH = BuiltinSoundEvent.get("entity.horse.death");
 
+    SoundEvent ENTITY_BABY_HORSE_DEATH = BuiltinSoundEvent.get("entity.baby_horse.death");
+
     SoundEvent ENTITY_HORSE_EAT = BuiltinSoundEvent.get("entity.horse.eat");
+
+    SoundEvent ENTITY_BABY_HORSE_EAT = BuiltinSoundEvent.get("entity.baby_horse.eat");
 
     SoundEvent ENTITY_HORSE_GALLOP = BuiltinSoundEvent.get("entity.horse.gallop");
 
     SoundEvent ENTITY_HORSE_HURT = BuiltinSoundEvent.get("entity.horse.hurt");
 
+    SoundEvent ENTITY_BABY_HORSE_HURT = BuiltinSoundEvent.get("entity.baby_horse.hurt");
+
     SoundEvent ENTITY_HORSE_JUMP = BuiltinSoundEvent.get("entity.horse.jump");
 
     SoundEvent ENTITY_HORSE_LAND = BuiltinSoundEvent.get("entity.horse.land");
 
+    SoundEvent ENTITY_BABY_HORSE_LAND = BuiltinSoundEvent.get("entity.baby_horse.land");
+
     SoundEvent ENTITY_HORSE_SADDLE = BuiltinSoundEvent.get("entity.horse.saddle");
 
     SoundEvent ENTITY_HORSE_STEP = BuiltinSoundEvent.get("entity.horse.step");
+
+    SoundEvent ENTITY_BABY_HORSE_STEP = BuiltinSoundEvent.get("entity.baby_horse.step");
 
     SoundEvent ENTITY_HORSE_STEP_WOOD = BuiltinSoundEvent.get("entity.horse.step_wood");
 
@@ -2263,6 +2341,14 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent BLOCK_NOTE_BLOCK_SNARE = BuiltinSoundEvent.get("block.note_block.snare");
 
+    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET = BuiltinSoundEvent.get("block.note_block.trumpet");
+
+    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET_EXPOSED = BuiltinSoundEvent.get("block.note_block.trumpet_exposed");
+
+    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET_OXIDIZED = BuiltinSoundEvent.get("block.note_block.trumpet_oxidized");
+
+    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET_WEATHERED = BuiltinSoundEvent.get("block.note_block.trumpet_weathered");
+
     SoundEvent BLOCK_NOTE_BLOCK_XYLOPHONE = BuiltinSoundEvent.get("block.note_block.xylophone");
 
     SoundEvent BLOCK_NOTE_BLOCK_IRON_XYLOPHONE = BuiltinSoundEvent.get("block.note_block.iron_xylophone");
@@ -2435,15 +2521,43 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ENTITY_PHANTOM_SWOOP = BuiltinSoundEvent.get("entity.phantom.swoop");
 
-    SoundEvent ENTITY_PIG_AMBIENT = BuiltinSoundEvent.get("entity.pig.ambient");
-
-    SoundEvent ENTITY_PIG_DEATH = BuiltinSoundEvent.get("entity.pig.death");
-
-    SoundEvent ENTITY_PIG_HURT = BuiltinSoundEvent.get("entity.pig.hurt");
-
     SoundEvent ENTITY_PIG_SADDLE = BuiltinSoundEvent.get("entity.pig.saddle");
 
     SoundEvent ENTITY_PIG_STEP = BuiltinSoundEvent.get("entity.pig.step");
+
+    SoundEvent ENTITY_BABY_PIG_STEP = BuiltinSoundEvent.get("entity.baby_pig.step");
+
+    SoundEvent ENTITY_BABY_PIG_AMBIENT = BuiltinSoundEvent.get("entity.baby_pig.ambient");
+
+    SoundEvent ENTITY_BABY_PIG_EAT = BuiltinSoundEvent.get("entity.baby_pig.eat");
+
+    SoundEvent ENTITY_BABY_PIG_HURT = BuiltinSoundEvent.get("entity.baby_pig.hurt");
+
+    SoundEvent ENTITY_BABY_PIG_DEATH = BuiltinSoundEvent.get("entity.baby_pig.death");
+
+    SoundEvent ENTITY_PIG_AMBIENT = BuiltinSoundEvent.get("entity.pig.ambient");
+
+    SoundEvent ENTITY_PIG_HURT = BuiltinSoundEvent.get("entity.pig.hurt");
+
+    SoundEvent ENTITY_PIG_DEATH = BuiltinSoundEvent.get("entity.pig.death");
+
+    SoundEvent ENTITY_PIG_EAT = BuiltinSoundEvent.get("entity.pig.eat");
+
+    SoundEvent ENTITY_PIG_MINI_AMBIENT = BuiltinSoundEvent.get("entity.pig_mini.ambient");
+
+    SoundEvent ENTITY_PIG_MINI_HURT = BuiltinSoundEvent.get("entity.pig_mini.hurt");
+
+    SoundEvent ENTITY_PIG_MINI_DEATH = BuiltinSoundEvent.get("entity.pig_mini.death");
+
+    SoundEvent ENTITY_PIG_MINI_EAT = BuiltinSoundEvent.get("entity.pig_mini.eat");
+
+    SoundEvent ENTITY_PIG_BIG_AMBIENT = BuiltinSoundEvent.get("entity.pig_big.ambient");
+
+    SoundEvent ENTITY_PIG_BIG_HURT = BuiltinSoundEvent.get("entity.pig_big.hurt");
+
+    SoundEvent ENTITY_PIG_BIG_DEATH = BuiltinSoundEvent.get("entity.pig_big.death");
+
+    SoundEvent ENTITY_PIG_BIG_EAT = BuiltinSoundEvent.get("entity.pig_big.eat");
 
     SoundEvent ENTITY_PIGLIN_ADMIRING_ITEM = BuiltinSoundEvent.get("entity.piglin.admiring_item");
 
@@ -3455,15 +3569,29 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ITEM_WOLF_ARMOR_BREAK = BuiltinSoundEvent.get("item.wolf_armor.break");
 
+    SoundEvent ENTITY_BABY_WOLF_AMBIENT = BuiltinSoundEvent.get("entity.baby_wolf.ambient");
+
     SoundEvent ITEM_WOLF_ARMOR_CRACK = BuiltinSoundEvent.get("item.wolf_armor.crack");
 
     SoundEvent ITEM_WOLF_ARMOR_DAMAGE = BuiltinSoundEvent.get("item.wolf_armor.damage");
 
     SoundEvent ITEM_WOLF_ARMOR_REPAIR = BuiltinSoundEvent.get("item.wolf_armor.repair");
 
+    SoundEvent ENTITY_BABY_WOLF_DEATH = BuiltinSoundEvent.get("entity.baby_wolf.death");
+
+    SoundEvent ENTITY_BABY_WOLF_GROWL = BuiltinSoundEvent.get("entity.baby_wolf.growl");
+
+    SoundEvent ENTITY_BABY_WOLF_HURT = BuiltinSoundEvent.get("entity.baby_wolf.hurt");
+
+    SoundEvent ENTITY_BABY_WOLF_PANT = BuiltinSoundEvent.get("entity.baby_wolf.pant");
+
     SoundEvent ENTITY_WOLF_SHAKE = BuiltinSoundEvent.get("entity.wolf.shake");
 
     SoundEvent ENTITY_WOLF_STEP = BuiltinSoundEvent.get("entity.wolf.step");
+
+    SoundEvent ENTITY_BABY_WOLF_STEP = BuiltinSoundEvent.get("entity.baby_wolf.step");
+
+    SoundEvent ENTITY_BABY_WOLF_WHINE = BuiltinSoundEvent.get("entity.baby_wolf.whine");
 
     SoundEvent ENTITY_WOLF_AMBIENT = BuiltinSoundEvent.get("entity.wolf.ambient");
 

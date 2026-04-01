@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.key.Key;
+import net.minestom.data.MinestomData;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
@@ -106,8 +107,8 @@ public final class RegistryData {
      * @param path The path without a leading slash, e.g. "blocks.json"
      */
     public static @Nullable InputStream loadRegistryFile(String path) throws IOException {
-        // 1. Try to load from jar resources
-        InputStream resourceStream = RegistryData.class.getClassLoader().getResourceAsStream(path);
+        // 1. Try to load from data resources
+        InputStream resourceStream = MinestomData.resource(path);
 
         // 2. Try to load from working directory
         final Path filesystemPath = Path.of(path);
@@ -197,9 +198,12 @@ public final class RegistryData {
         BANNER_PATTERNS("banner_pattern.json"),
         BIOMES("biome.json"),
         CAT_VARIANTS("cat_variant.json"),
+        CAT_SOUND_VARIANTS("cat_sound_variant.json"),
         CHAT_TYPES("chat_type.json"),
         CHICKEN_VARIANTS("chicken_variant.json"),
+        CHICKEN_SOUND_VARIANTS("chicken_sound_variant.json"),
         COW_VARIANTS("cow_variant.json"),
+        COW_SOUND_VARIANTS("cow_sound_variant.json"),
         DAMAGE_TYPES("damage_type.json"),
         DIALOGS("dialog.json"),
         DIMENSION_TYPES("dimension_type.json"),
@@ -209,12 +213,14 @@ public final class RegistryData {
         INSTRUMENTS("instrument.json"),
         PAINTING_VARIANTS("painting_variant.json"),
         PIG_VARIANTS("pig_variant.json"),
+        PIG_SOUND_VARIANTS("pig_sound_variant.json"),
         TRIM_MATERIALS("trim_material.json"),
         TRIM_PATTERNS("trim_pattern.json"),
         WOLF_VARIANTS("wolf_variant.json"),
         WOLF_SOUND_VARIANTS("wolf_sound_variant.json"),
         ZOMBIE_NAUTILUS_VARIANTS("zombie_nautilus_variant.json"),
-        TIMELINES("timeline.json");
+        TIMELINES("timeline.json"),
+        WORLD_CLOCKS("world_clock.json");
 
         private final String name;
 

@@ -69,6 +69,8 @@ public class CatMeta extends TameableAnimalMeta {
     protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.CAT_VARIANT)
             return (T) getVariant();
+        if (component == DataComponents.CAT_SOUND_VARIANT)
+            return (T) metadata.get(MetadataDef.Cat.SOUND_VARIANT);
         if (component == DataComponents.CAT_COLLAR)
             return (T) getCollarColor();
         return super.get(component);
@@ -78,7 +80,9 @@ public class CatMeta extends TameableAnimalMeta {
     protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.CAT_VARIANT)
             setVariant((RegistryKey<CatVariant>) value);
-        else if (component == DataComponents.CAT_COLLAR)
+        else if (component == DataComponents.CAT_SOUND_VARIANT) {
+            metadata.set(MetadataDef.Cat.SOUND_VARIANT, (RegistryKey<CatSoundVariant>) value);
+        } else if (component == DataComponents.CAT_COLLAR)
             setCollarColor((DyeColor) value);
         else super.set(component, value);
     }

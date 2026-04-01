@@ -469,9 +469,12 @@ final class CodecImpl {
             this.delegateFunc = Objects.requireNonNull(delegateFunc, "delegateFunc");
         }
 
+        // Racing should produce the same result (bogon data race, excluding identity)
         private Codec<T> delegate() {
-            if (delegate == null) delegate = delegateFunc.get();
-            return Objects.requireNonNull(delegate, "Delegate cannot be null after supplier call.");
+            Codec<T> delegate = this.delegate;
+            if (delegate == null)
+                delegate = this.delegate = Objects.requireNonNull(delegateFunc.get(), "delegate");
+            return delegate;
         }
 
         @Override

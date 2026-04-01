@@ -82,6 +82,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerActionPacket.class, PlayerActionListener::playerActionListener);
         setPlayListener(ClientAnimationPacket.class, AnimationListener::animationListener);
         setPlayListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
+        setPlayListener(ClientAttackPacket.class, UseEntityListener::attackEntityListener);
         setPlayListener(ClientUseItemPacket.class, UseItemListener::useItemListener);
         setPlayListener(ClientPickItemFromBlockPacket.class, PlayerPickListener::playerPickBlockListener);
         setPlayListener(ClientPickItemFromEntityPacket.class, PlayerPickListener::playerPickEntityListener);
@@ -95,7 +96,8 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
         setPlayListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setPlayListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
-        setPlayListener(ClientSpectatePacket.class, SpectateListener::listener);
+        setPlayListener(ClientSpectateEntityPacket.class, PlayerSpectatorListener::listener);
+        setPlayListener(ClientTeleportToEntityPacket.class, PlayerSpectatorListener::listener);
         setPlayListener(ClientEditBookPacket.class, BookListener::listener);
         setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});
         setPlayListener(ClientChunkBatchReceivedPacket.class, ChunkBatchListener::batchReceivedListener);
@@ -109,6 +111,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
         setPlayListener(ClientUpdateSignPacket.class, EditSignListener::listener);
         setPlayListener(ClientDebugSubscriptionRequestPacket.class, DebugSubscriptionListener::requestListener);
+        setPlayListener(ClientSetGameRulesPacket.class, PlayerSettingsMenuListener::setGameRules);
     }
 
     /**

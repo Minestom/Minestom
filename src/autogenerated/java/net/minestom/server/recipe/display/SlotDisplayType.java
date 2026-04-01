@@ -17,11 +17,17 @@ public enum SlotDisplayType implements StaticProtocolObject<SlotDisplayType> {
 
     ANY_FUEL("any_fuel"),
 
+    WITH_ANY_POTION("with_any_potion"),
+
+    ONLY_WITH_COMPONENT("only_with_component"),
+
     ITEM("item"),
 
     ITEM_STACK("item_stack"),
 
     TAG("tag"),
+
+    DYED("dyed"),
 
     SMITHING_TRIM("smithing_trim"),
 

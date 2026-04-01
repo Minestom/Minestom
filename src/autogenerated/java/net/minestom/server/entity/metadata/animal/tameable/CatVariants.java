@@ -27,7 +27,7 @@ sealed interface CatVariants permits CatVariant {
 
     RegistryKey<CatVariant> BRITISH_SHORTHAIR = RegistryKey.unsafeOf("british_shorthair");
 
-    RegistryKey<CatVariant> RED = RegistryKey.unsafeOf("red");
-
     RegistryKey<CatVariant> WHITE = RegistryKey.unsafeOf("white");
+
+    RegistryKey<CatVariant> RED = RegistryKey.unsafeOf("red");
 }

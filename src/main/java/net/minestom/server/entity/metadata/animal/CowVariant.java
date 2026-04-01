@@ -14,13 +14,14 @@ public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
     Codec<CowVariant> REGISTRY_CODEC = StructCodec.struct(
             "model", Model.CODEC.optional(Model.NORMAL), CowVariant::model,
             "asset_id", Codec.KEY, CowVariant::assetId,
-            CowVariantImpl::new);
+            "baby_asset_id", Codec.KEY, CowVariant::babyAssetId,
+            CowVariant::create);
 
     NetworkBuffer.Type<RegistryKey<CowVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::cowVariant);
     Codec<RegistryKey<CowVariant>> CODEC = RegistryKey.codec(Registries::cowVariant);
 
-    static CowVariant create(Model model, Key assetId) {
-        return new CowVariantImpl(model, assetId);
+    static CowVariant create(Model model, Key assetId, Key babyAssetId) {
+        return new CowVariantImpl(model, assetId, babyAssetId);
     }
 
     /**
@@ -36,6 +37,8 @@ public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
     Model model();
 
     Key assetId();
+
+    Key babyAssetId();
 
     enum Model {
         NORMAL,

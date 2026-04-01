@@ -28,7 +28,6 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.collection.ConcurrentMessageQueues;
-import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -243,7 +242,7 @@ public final class ConnectionManager {
         player.sendPacket(new UpdateEnabledFeaturesPacket(event.getFeatureFlags().stream().map(StaticProtocolObject::name).toList()));
 
         final Instance spawningInstance = event.getSpawningInstance();
-        Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
+        Objects.requireNonNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
 
         if (event.willClearChat()) player.sendPacket(new ResetChatPacket());
 
@@ -276,11 +275,16 @@ public final class ConnectionManager {
             player.sendPacket(registries.wolfVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.wolfSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.catVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.catSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.chickenVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.chickenSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.cowVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.cowSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.frogVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.pigVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.pigSoundVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.zombieNautilusVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.worldClock().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.timeline().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.dimensionType().registryDataPacket(registries, excludeVanilla));
             // MUST BE IN SYNC WITH #createTagsPacket
@@ -424,11 +428,16 @@ public final class ConnectionManager {
         entries.add(registries.wolfVariant().tagRegistry());
         entries.add(registries.wolfSoundVariant().tagRegistry());
         entries.add(registries.catVariant().tagRegistry());
+        entries.add(registries.catSoundVariant().tagRegistry());
         entries.add(registries.chickenVariant().tagRegistry());
+        entries.add(registries.chickenSoundVariant().tagRegistry());
         entries.add(registries.cowVariant().tagRegistry());
+        entries.add(registries.cowSoundVariant().tagRegistry());
         entries.add(registries.frogVariant().tagRegistry());
         entries.add(registries.pigVariant().tagRegistry());
+        entries.add(registries.pigSoundVariant().tagRegistry());
         entries.add(registries.zombieNautilusVariant().tagRegistry());
+        entries.add(registries.worldClock().tagRegistry());
         entries.add(registries.timeline().tagRegistry());
         entries.add(registries.dimensionType().tagRegistry());
         // MUST BE IN SYNC WITH #doConfiguration

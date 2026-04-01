@@ -28,7 +28,7 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.packet.server.play.WorldEventPacket;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -106,17 +106,17 @@ public class InstanceContainer extends Instance {
     }
 
     public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader, Key dimensionName) {
-        this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, loader, dimensionName);
+        this(MinecraftServer.process(), uuid, dimensionType, loader, dimensionName);
     }
 
     public InstanceContainer(
-            DynamicRegistry<DimensionType> dimensionTypeRegistry,
+            Registries registries,
             UUID uuid,
             RegistryKey<DimensionType> dimensionType,
             @Nullable ChunkLoader loader,
             Key dimensionName
     ) {
-        super(dimensionTypeRegistry, uuid, dimensionType, dimensionName);
+        super(registries, uuid, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
@@ -225,7 +225,7 @@ public class InstanceContainer extends Instance {
     @Override
     public boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates) {
         final Chunk chunk = getChunkAt(blockPosition);
-        Check.notNull(chunk, "You cannot break blocks in a null chunk!");
+        Objects.requireNonNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
         if (!isLoaded(chunk)) return false;
 
@@ -381,7 +381,7 @@ public class InstanceContainer extends Instance {
 
     protected Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
-        Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
+        Objects.requireNonNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         Generator generator = generator();
         if (generator == null || !chunk.shouldGenerate()) {
             // No chunk generator, execute the callback with the empty chunk

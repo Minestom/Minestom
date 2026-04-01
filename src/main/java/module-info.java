@@ -8,6 +8,8 @@ module net.minestom.server {
     requires transitive net.kyori.adventure.nbt;
     requires transitive net.kyori.adventure.key;
     requires transitive net.kyori.examination.api;
+    requires net.kyori.examination.string;
+    requires net.kyori.option;
     requires net.kyori.adventure.text.logger.slf4j;
     requires net.kyori.adventure.text.serializer.legacy;
     requires net.kyori.adventure.text.serializer.gson;
@@ -19,6 +21,7 @@ module net.minestom.server {
     requires jdk.jfr;
     requires java.desktop;
     requires java.management;
+    requires net.minestom.data;
 
     // EXPORTS
     exports net.minestom.server;
@@ -103,6 +106,7 @@ module net.minestom.server {
     exports net.minestom.server.instance.block.predicate;
     exports net.minestom.server.instance.block.rule;
     exports net.minestom.server.instance.fluid;
+    exports net.minestom.server.instance.gamerule;
     exports net.minestom.server.instance.generator;
     exports net.minestom.server.instance.heightmap;
     exports net.minestom.server.instance.light;
@@ -178,8 +182,10 @@ module net.minestom.server {
     exports net.minestom.server.utils.url;
     exports net.minestom.server.utils.validate;
     exports net.minestom.server.world;
+    exports net.minestom.server.worldevent;
     exports net.minestom.server.world.attribute;
     exports net.minestom.server.world.biome;
     exports net.minestom.server.world.timeline;
+    exports net.minestom.server.world.clock;
 
 }

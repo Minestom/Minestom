@@ -1,10 +1,21 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
-import net.minestom.server.utils.validate.Check;
+import net.kyori.adventure.key.Key;
 
-record WolfVariantImpl(Assets assets) implements WolfVariant {
+import java.util.Objects;
+
+record WolfVariantImpl(Assets assets, Assets babyAssets) implements WolfVariant {
     WolfVariantImpl {
         // The builder can violate the nullability constraints
-        Check.notNull(assets, "missing assets Asset");
+        Objects.requireNonNull(assets, "assets");
+        Objects.requireNonNull(babyAssets, "babyAssets");
+    }
+
+    record AssetsImpl(Key wild, Key tame, Key angry) implements WolfVariant.Assets {
+        public AssetsImpl {
+            Objects.requireNonNull(wild, "wild");
+            Objects.requireNonNull(tame, "tame");
+            Objects.requireNonNull(angry, "angry");
+        }
     }
 }

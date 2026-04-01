@@ -467,6 +467,8 @@ sealed interface Materials permits Material {
 
     Material DANDELION = MaterialImpl.get("dandelion");
 
+    Material GOLDEN_DANDELION = MaterialImpl.get("golden_dandelion");
+
     Material OPEN_EYEBLOSSOM = MaterialImpl.get("open_eyeblossom");
 
     Material CLOSED_EYEBLOSSOM = MaterialImpl.get("closed_eyeblossom");
