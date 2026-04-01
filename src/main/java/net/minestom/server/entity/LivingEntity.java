@@ -450,7 +450,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public AttributeInstance getAttribute(Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
-                s -> new AttributeInstance(attribute, this::onAttributeChanged));
+                s -> {
+                    double defaultValue = entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
+                    return new AttributeInstance(attribute, defaultValue, new ArrayList<>(), this::onAttributeChanged);
+                });
     }
 
     /**
@@ -497,7 +500,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public double getAttributeValue(Attribute attribute) {
         AttributeInstance instance = attributeModifiers.get(attribute.name());
-        return (instance != null) ? instance.getValue() : attribute.defaultValue();
+        if (instance != null) return instance.getValue();
+        return entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
     }
 
     /**
