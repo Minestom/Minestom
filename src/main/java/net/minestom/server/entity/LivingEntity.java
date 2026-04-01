@@ -98,7 +98,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
-        applyDefaultAttributeValues();
     }
 
     public LivingEntity(EntityType entityType) {
@@ -444,7 +443,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public AttributeInstance getAttribute(Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
-                s -> new AttributeInstance(attribute, this::onAttributeChanged));
+                s -> {
+                    double defaultValue = entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
+                    return new AttributeInstance(attribute, defaultValue, new ArrayList<>(), this::onAttributeChanged);
+                });
     }
 
     /**
@@ -491,7 +493,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public double getAttributeValue(Attribute attribute) {
         AttributeInstance instance = attributeModifiers.get(attribute.name());
-        return (instance != null) ? instance.getValue() : attribute.defaultValue();
+        if (instance != null) return instance.getValue();
+        return entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
     }
 
     /**
@@ -735,21 +738,4 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         return (Acquirable<? extends LivingEntity>) super.acquirable();
     }
 
-    /**
-     * Sets the attributes of this entity to their default vanilla values.
-     */
-    public void applyDefaultAttributeValues() {
-        var defaultAttributes = entityType.registry().defaultAttributes();
-        if (defaultAttributes.isEmpty()) return;
-
-        for (var entry : defaultAttributes.entrySet()) {
-            Attribute attribute = entry.getKey();
-            double value = entry.getValue();
-            AttributeInstance attributeInstance = getAttribute(attribute);
-
-            if (value != attribute.defaultValue()) {
-                attributeInstance.setBaseValue(value);
-            }
-        }
-    }
 }
