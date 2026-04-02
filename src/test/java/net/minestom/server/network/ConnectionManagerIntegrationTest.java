@@ -1,6 +1,5 @@
 package net.minestom.server.network;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
@@ -37,7 +36,7 @@ public class ConnectionManagerIntegrationTest {
         assertEquals(minestomPlayer, connectionManager.findOnlinePlayer("Mine"));
         assertNull(connectionManager.findOnlinePlayer("No"));
 
-        Player notchPlayer = env.createConnection(profiles[1]).connect(instance, Pos.ZERO);;
+        Player notchPlayer = env.createConnection(profiles[1]).connect(instance, Pos.ZERO);
 
         assertEquals(minestomPlayer, connectionManager.findOnlinePlayer("Mine"));
         assertEquals(notchPlayer, connectionManager.findOnlinePlayer("No"));
