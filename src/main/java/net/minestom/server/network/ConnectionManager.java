@@ -157,7 +157,7 @@ public final class ConnectionManager {
             return StringUtils.jaroWinklerScore(username1, username2);
         };
         return getOnlinePlayers().stream()
-                .min(Comparator.comparingDouble(distanceFunction::apply))
+                .max(Comparator.comparingDouble(distanceFunction::apply))
                 .filter(player -> distanceFunction.apply(player) > 0)
                 .orElse(null);
     }
