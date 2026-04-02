@@ -18,14 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @EnvTest
 public class ConnectionManagerIntegrationTest {
 
-    static {
-        MinecraftServer.init();
-    }
 
     private GameProfile[] profiles;
 
     @BeforeEach
-    public void setup() {
+    public void setup(Env env) {
         profiles = new GameProfile[]{
                 new GameProfile(UUID.randomUUID(), "Minestom"),
                 new GameProfile(UUID.randomUUID(), "Notch")};
