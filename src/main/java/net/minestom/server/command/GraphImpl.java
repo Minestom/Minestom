@@ -102,7 +102,6 @@ record GraphImpl(NodeImpl root) implements Graph {
 
     record ExecutionImpl(
             @UnknownNullability Predicate<CommandSender> predicate,
-            @UnknownNullability CommandExecutor defaultExecutor,
             @Nullable CommandExecutor globalListener,
             @Nullable CommandExecutor executor,
             @Nullable CommandCondition condition
@@ -136,14 +135,14 @@ record GraphImpl(NodeImpl root) implements Graph {
 
             return new ExecutionImpl(
                     commandSender -> defaultCondition == null || defaultCondition.canUse(commandSender, null),
-                    defaultExecutor, globalListener, executor, condition);
+                    globalListener, executor, condition);
         }
 
         static ExecutionImpl fromSyntax(CommandSyntax syntax) {
             final CommandExecutor executor = syntax.getExecutor();
             final CommandCondition condition = syntax.getCommandCondition();
             return new ExecutionImpl(commandSender -> condition == null || condition.canUse(commandSender, null),
-                                     null, null, executor, condition);
+                    null, executor, condition);
         }
     }
 

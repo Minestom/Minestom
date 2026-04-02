@@ -11,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 public class ArgumentCommand extends Argument<CommandResult> {
 
+    public static final int INVALID_ID_ERROR = -1;
     public static final int INVALID_COMMAND_ERROR = 1;
 
     private boolean onlyCorrect;
@@ -22,13 +23,20 @@ public class ArgumentCommand extends Argument<CommandResult> {
 
     @Override
     public CommandResult parse(CommandSender sender, String input) throws ArgumentSyntaxException {
-        final String commandString = !shortcut.isEmpty() ?
-                shortcut + StringUtils.SPACE + input
-                : input;
-        CommandDispatcher dispatcher = MinecraftServer.getCommandManager().getDispatcher();
-        CommandResult result = dispatcher.parse(sender, commandString);
+        String command = input;
+        if (command.startsWith(getId())) {
+            command = command.substring(getId().length()).stripLeading();
+        } else {
+            throw new ArgumentSyntaxException("Invalid literal value", input, INVALID_ID_ERROR);
+        }
+        if (!shortcut.isEmpty()) {
+            command = shortcut + StringUtils.SPACE + command;
+        }
 
-        if (onlyCorrect && result.getType() != CommandResult.Type.SUCCESS)
+        CommandDispatcher dispatcher = MinecraftServer.getCommandManager().getDispatcher();
+        CommandResult result = dispatcher.parse(sender, command);
+
+        if (result.getType() == CommandResult.Type.UNKNOWN || (onlyCorrect && result.getType() != CommandResult.Type.SUCCESS))
             throw new ArgumentSyntaxException("Invalid command", input, INVALID_COMMAND_ERROR);
 
         return result;

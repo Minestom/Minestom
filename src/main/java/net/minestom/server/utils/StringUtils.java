@@ -22,6 +22,32 @@ public class StringUtils {
     }
 
     /**
+     * Gets the index of the last duplicate char
+     * starting from first char encountered.
+     * <br>
+     * A char is considered duplicate if its predecessor
+     * is the exact same character.
+     *
+     * @param str The source string to read.
+     * @param ch The character to find.
+     * @param fromIndex The index to start at.
+     * @return The index of the end of the first chars duplicate chain.
+     */
+    public static int indexOfLastDuplicate(String str, char ch, int fromIndex) {
+        var charArr = str.toCharArray();
+        int length = charArr.length;
+        int pos = str.indexOf(ch, fromIndex);
+        if (pos == -1) return -1;
+        while (pos + 1 < length) {
+            if (charArr[++pos] != ch) {
+                --pos;
+                break;
+            }
+        }
+        return pos == fromIndex ? -1 : pos;
+    }
+
+    /**
      * Applies the Jaro-Winkler distance algorithm to the given strings, providing information about the
      * similarity of them.
      *
