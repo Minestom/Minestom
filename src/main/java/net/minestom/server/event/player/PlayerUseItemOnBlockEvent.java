@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.BlockFace;
@@ -11,7 +12,7 @@ import net.minestom.server.item.ItemStack;
 /**
  * Used when a player is clicking on a block with an item (but is not a block in item form).
  */
-public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent {
+public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent, CancellableEvent {
 
     private final Player player;
     private final PlayerHand hand;
@@ -19,6 +20,8 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
     private final Point position;
     private final Point cursorPosition;
     private final BlockFace blockFace;
+
+    private boolean cancelled;
 
     public PlayerUseItemOnBlockEvent(Player player, PlayerHand hand,
                                      ItemStack itemStack,
@@ -79,5 +82,13 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
     @Override
     public Player getPlayer() {
         return player;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }
