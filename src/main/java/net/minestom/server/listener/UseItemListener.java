@@ -83,8 +83,10 @@ public class UseItemListener {
             EventDispatcher.callCancellable(beginUseEvent, () -> {
                 if (beginUseEvent.getItemUseDuration() <= 0) return;
 
+                player.setShouldFilterClientInput(true);
                 player.refreshItemUse(hand, beginUseEvent.getItemUseDuration());
                 player.refreshActiveHand(true, hand == PlayerHand.OFF, false);
+                player.setShouldFilterClientInput(false);
             });
 
             return; // Do not also swap after use

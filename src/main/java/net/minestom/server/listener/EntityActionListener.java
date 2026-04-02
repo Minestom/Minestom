@@ -24,7 +24,9 @@ public class EntityActionListener {
     private static void setSprinting(Player player, boolean sprinting) {
         boolean oldState = player.isSprinting();
 
+        player.setShouldFilterClientInput(true);
         player.setSprinting(sprinting);
+        player.setShouldFilterClientInput(false);
 
         if (oldState != sprinting) {
             if (sprinting) {
@@ -36,7 +38,9 @@ public class EntityActionListener {
     }
 
     private static void startFlyingElytra(Player player) {
+        player.setShouldFilterClientInput(true);
         player.setFlyingWithElytra(true);
+        player.setShouldFilterClientInput(false);
         EventDispatcher.call(new PlayerStartFlyingWithElytraEvent(player));
     }
 
