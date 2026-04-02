@@ -1,16 +1,19 @@
 package net.minestom.server.component;
 
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
-import net.minestom.server.codec.Codec;
-import net.minestom.server.item.enchant.EffectComponent;
-import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.StaticProtocolObject;
+import java.util.Collection;
+import java.util.function.UnaryOperator;
+
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.function.UnaryOperator;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Decoder;
+import net.minestom.server.codec.Encoder;
+import net.minestom.server.item.enchant.EffectComponent;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.StaticProtocolObject;
 
 /**
  * A common type to represent all forms of component in the game. Each group of component types has its own declaration
@@ -20,7 +23,7 @@ import java.util.function.UnaryOperator;
  * @see net.minestom.server.component.DataComponent
  * @see EffectComponent
  */
-public sealed interface DataComponent<T> extends StaticProtocolObject<DataComponent<T>>, Codec<T> permits DataComponentImpl {
+public sealed interface DataComponent<T> extends StaticProtocolObject<DataComponent<T>>, Encoder<T>, Decoder<T> permits DataComponentImpl {
 
     NetworkBuffer.Type<DataComponent<?>> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(DataComponent::fromId, DataComponent::id);
     Codec<DataComponent<?>> CODEC = Codec.STRING.transform(DataComponent::fromKey, DataComponent::name);
@@ -55,6 +58,8 @@ public sealed interface DataComponent<T> extends StaticProtocolObject<DataCompon
 
     boolean isSynced();
     boolean isSerialized();
+    @Nullable NetworkBuffer.Type<T> networkType();
+    @Nullable Codec<T> codec();
 
     T read(NetworkBuffer reader);
     void write(NetworkBuffer writer, T value);
