@@ -17,7 +17,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.registry.DynamicRegistry;
@@ -31,6 +30,7 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,14 +58,14 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
-    final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
+    protected final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
     public DynamicChunk(Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> new Section());
+        Arrays.setAll(sectionsTemp, _ -> new Section());
         this.sections = List.of(sectionsTemp);
     }
 
@@ -183,7 +183,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void tick(long time) {
+    public void tick0(long time) {
         if (tickableMap.isEmpty()) return;
         tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
             final int index = entry.getIntKey();
@@ -273,10 +273,6 @@ public class DynamicChunk extends Chunk {
                 new ChunkData(heightmaps, data, entries),
                 createLightData(true)
         );
-    }
-
-    UpdateLightPacket createLightPacket() {
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
     }
 
     protected LightData createLightData(boolean requiredFullChunk) {

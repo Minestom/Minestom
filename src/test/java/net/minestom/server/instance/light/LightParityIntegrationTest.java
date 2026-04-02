@@ -69,8 +69,8 @@ public class LightParityIntegrationTest {
 
                 Section section = chunk.getSection(sectionIndex);
 
-                Light sectionLight = section.blockLight();
-                Light sectionSkyLight = section.skyLight();
+                OldLight sectionLight = section.blockLight();
+                OldLight sectionSkyLight = section.skyLight();
                 SectionEntry sectionEntry = sections.get(new Vec(chunk.getChunkX(), sectionIndex, chunk.getChunkZ()));
                 if (sectionEntry == null) {
                     continue;

@@ -1,15 +1,15 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.instance.light.Light;
+import net.minestom.server.instance.light.OldLight;
 import net.minestom.server.instance.palette.Palette;
 
 public final class Section {
     private final Palette blockPalette;
     private final Palette biomePalette;
-    private final Light skyLight;
-    private final Light blockLight;
+    private final OldLight skyLight;
+    private final OldLight blockLight;
 
-    private Section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
+    private Section(Palette blockPalette, Palette biomePalette, OldLight skyLight, OldLight blockLight) {
         this.blockPalette = blockPalette;
         this.biomePalette = biomePalette;
         this.skyLight = skyLight;
@@ -17,7 +17,7 @@ public final class Section {
     }
 
     private Section(Palette blockPalette, Palette biomePalette) {
-        this(blockPalette, biomePalette, Light.sky(), Light.block());
+        this(blockPalette, biomePalette, OldLight.sky(), OldLight.block());
     }
 
     public Section() {
@@ -39,8 +39,8 @@ public final class Section {
 
     @Override
     public Section clone() {
-        final Light skyLight = Light.sky();
-        final Light blockLight = Light.block();
+        final OldLight skyLight = OldLight.sky();
+        final OldLight blockLight = OldLight.block();
 
         skyLight.set(this.skyLight.array());
         blockLight.set(this.blockLight.array());
@@ -56,11 +56,11 @@ public final class Section {
         this.blockLight.set(copyArray);
     }
 
-    public Light skyLight() {
+    public OldLight skyLight() {
         return skyLight;
     }
 
-    public Light blockLight() {
+    public OldLight blockLight() {
         return blockLight;
     }
 }

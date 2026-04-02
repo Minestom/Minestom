@@ -2,11 +2,12 @@ package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.collision.Shape;
-import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.SectionVec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -28,23 +29,28 @@ public final class LightCompute {
     }
 
     static byte[] lazyArray(byte[] content) {
+        assert content != null;
         if (content == null || content.length == 0) return EMPTY_CONTENT;
         else if (Arrays.equals(content, EMPTY_CONTENT)) return EMPTY_CONTENT;
         else if (Arrays.equals(content, CONTENT_FULLY_LIT)) return CONTENT_FULLY_LIT;
         else return content.clone();
     }
 
+    /**
+     * Calculate the light that comes in from neighbouring chunks.
+     * This does not modify any neighbouring chunks.
+     */
     static ShortArrayFIFOQueue buildExternalQueue(Palette blockPalette,
-                                                  Point[] neighbors, byte[] content,
-                                                  Light.LightLookup lightLookup,
-                                                  Light.PaletteLookup paletteLookup) {
+                                                  @Nullable SectionVec[] neighbors, byte @Nullable [] content,
+                                                  OldLight.LightLookup lightLookup,
+                                                  OldLight.PaletteLookup paletteLookup) {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
         for (int i = 0; i < neighbors.length; i++) {
-            Point neighborSection = neighbors[i];
+            SectionVec neighborSection = neighbors[i];
             if (neighborSection == null) continue;
-            Palette otherPalette = paletteLookup.palette(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
+            Palette otherPalette = paletteLookup.palette(neighborSection.sectionX(), neighborSection.sectionY(), neighborSection.sectionZ());
             if (otherPalette == null) continue;
-            Light otherLight = lightLookup.light(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
+            OldLight otherLight = lightLookup.light(neighborSection.sectionX(), neighborSection.sectionY(), neighborSection.sectionZ());
             if (otherLight == null) continue;
 
             final BlockFace face = FACES[i];
@@ -112,7 +118,7 @@ public final class LightCompute {
      * @param lightPre     shorts queue in format: [4bit light level][4bit y][4bit z][4bit x]
      * @return lighting wrapped in Result
      */
-    static byte [] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
+    static byte[] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
         if (lightPre.isEmpty()) return EMPTY_CONTENT;
 
         final byte[] lightArray = new byte[LIGHT_LENGTH];
@@ -139,7 +145,6 @@ public final class LightCompute {
             final int z = (index >> 4) & 15;
             final int y = (index >> 8) & 15;
             final int lightLevel = (index >> 12) & 15;
-            final byte newLightLevel = (byte) (lightLevel - 1);
 
             for (Direction direction : DIRECTIONS) {
                 final int xO = x + direction.normalX();
@@ -153,6 +158,9 @@ public final class LightCompute {
 
                 // Section
                 final int newIndex = xO | (zO << 4) | (yO << 8);
+                final Block targetBlock = Objects.requireNonNullElse(getBlock(blockPalette, xO, yO, zO), Block.AIR);
+                final int opacity = targetBlock.registry().lightBlocked();
+                final byte newLightLevel = (byte) Math.max(lightLevel - Math.max(opacity, 1), 0);
 
                 if (getLight(lightArray, newIndex) < newLightLevel) {
                     final Block currentBlock = Objects.requireNonNullElse(getBlock(blockPalette, x, y, z), Block.AIR);
@@ -189,11 +197,11 @@ public final class LightCompute {
         return ((value >>> ((index & 1) << 2)) & 0xF);
     }
 
-    public static Block getBlock(Palette palette, int x, int y, int z) {
+    public static @Nullable Block getBlock(Palette palette, int x, int y, int z) {
         return Block.fromStateId(palette.get(x, y, z));
     }
 
-    public static byte[] bake(byte[] content1, byte[] content2) {
+    public static byte[] bake(byte @Nullable [] content1, byte @Nullable [] content2) {
         if (content1 == null && content2 == null) return EMPTY_CONTENT;
         if (content1 == EMPTY_CONTENT && content2 == EMPTY_CONTENT) return EMPTY_CONTENT;
 
@@ -231,7 +239,29 @@ public final class LightCompute {
         return lightMax;
     }
 
-    public static boolean compareBorders(byte[] content, byte[] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {
+    public static boolean hasBorderChanged(byte[] oldLight, byte[] newLight, BlockFace face) {
+        final int k = switch (face) {
+            case WEST, BOTTOM, NORTH -> 0;
+            case EAST, TOP, SOUTH -> 15;
+        };
+        for (int bx = 0; bx < SECTION_SIZE; bx++) {
+            for (int by = 0; by < SECTION_SIZE; by++) {
+                final int posFrom = switch (face) {
+                    case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
+                    case WEST, EAST -> k | (by << 4) | (bx << 8);
+                    default -> bx | (by << 4) | (k << 8);
+                };
+
+                final int valueFrom = getLight(oldLight, posFrom);
+                final int valueTo = getLight(newLight, posFrom);
+                if (valueFrom != valueTo) return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean compareBorders(byte @Nullable [] content, byte @Nullable [] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {
+        assert contentPropagationTemp != null;
         if (content == null && contentPropagation == null && contentPropagationTemp == null) return true;
 
         final int k = switch (face) {

@@ -138,6 +138,8 @@ final class TestConnectionImpl implements TestConnection {
         public void sendChunk(Chunk chunk) {
             // Send immediately
             sendPacket(chunk.getFullDataPacket());
+            // required for movement listener not to deny movement during tests
+            getChunkQueue().addVisible(chunk.getChunkX(), chunk.getChunkZ());
         }
     }
 }
