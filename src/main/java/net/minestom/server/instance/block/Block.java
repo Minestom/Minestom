@@ -9,6 +9,7 @@ import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
+import net.minestom.server.instance.block.property.Property;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
@@ -50,6 +51,18 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      */
     @Contract(pure = true)
     Block withProperty(String property, String value);
+
+    /**
+     * Creates a new block with the property {@code property} set to {@code value}.
+     *
+     * @param property the property
+     * @param value    the typed property value
+     * @return a new block with its property changed
+     * @throws IllegalArgumentException if the property or value are invalid
+     */
+    default <V, P extends Property<? super V>> Block withProperty(P property, V value) {
+        return withProperty(property.key(), property.valueOf(value));
+    }
 
     /**
      * Changes multiple properties at once.
@@ -165,6 +178,20 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      */
     @Contract(pure = true)
     @Nullable String getProperty(String property);
+
+    /**
+     * Returns a typed property value from {@link #properties()}.
+     *
+     * @param property the property
+     * @return the typed property value, or null if the property or value is invalid.
+     */
+    @Contract(pure = true)
+    @UnknownNullability
+    default <V, P extends Property<? extends V>> V getProperty(P property) {
+        final String stringValue = getProperty(property.key());
+        if (stringValue == null) return null;
+        return property.parse(stringValue);
+    }
 
     @Contract(pure = true)
     Collection<Block> possibleStates();
