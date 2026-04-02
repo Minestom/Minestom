@@ -1852,6 +1852,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @Override
+    public boolean contains(Point point) {
+        return boundingBox.contains(point);
+    }
+
+    @Override
     public Point relativeStart() {
         return boundingBox.relativeStart();
     }

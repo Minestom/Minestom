@@ -17,6 +17,7 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -741,6 +742,18 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     public Collection<Entity> getNearbyEntities(Point point, double range) {
         List<Entity> result = new ArrayList<>();
         this.entityTracker.nearbyEntities(point, range, EntityTracker.Target.ENTITIES, result::add);
+        return result;
+    }
+
+    /**
+     * Gets entities located in the area.
+     *
+     * @param area the area
+     * @return entities located in the area.
+     */
+    public Collection<Entity> getAreaEntities(Area.Cuboid area) {
+        List<Entity> result = new ArrayList<>();
+        this.entityTracker.areaEntities(area, EntityTracker.Target.ENTITIES, result::add);
         return result;
     }
 
