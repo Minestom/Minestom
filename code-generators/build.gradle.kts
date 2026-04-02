@@ -8,7 +8,6 @@ dependencies {
 
     // Common
     implementation(libs.jetbrainsAnnotations)
-    implementation(libs.bundles.adventure)
 
     // Parsing and generation
     implementation(libs.gson)

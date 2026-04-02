@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
@@ -30,7 +31,7 @@ public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<CowVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("cow_variant"), REGISTRY_CODEC, RegistryData.Resource.COW_VARIANTS);
+        return DynamicRegistry.create(BuiltinRegistries.COW_VARIANT, REGISTRY_CODEC, RegistryData.Resource.COW_VARIANTS);
     }
 
     Model model();

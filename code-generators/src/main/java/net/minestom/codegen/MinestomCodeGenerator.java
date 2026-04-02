@@ -2,13 +2,14 @@ package net.minestom.codegen;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.palantir.javapoet.AnnotationSpec;
 import com.palantir.javapoet.ClassName;
 import com.palantir.javapoet.CodeBlock;
 import com.palantir.javapoet.JavaFile;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.lang.model.SourceVersion;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Objects;
@@ -16,10 +17,18 @@ import java.util.Objects;
 public interface MinestomCodeGenerator {
     Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
+
+    AnnotationSpec SUPPRESS_ANNOTATION = AnnotationSpec.builder(SuppressWarnings.class)
+            .addMember("value", "$S", "all") // unused, SpellCheckingInspection, NullableProblems
+            .build();
+
+    AnnotationSpec NONEXTENDABLE_ANNOTATION = AnnotationSpec.builder(ApiStatus.NonExtendable.class).build();
+
     default String toConstant(String namespace) {
         String constant = namespaceShort(namespace)
                 .replaceFirst("brigadier:", "") // Not implicit, do not put into namespaceShort
                 .replace(".", "_")
+                .replace("/", "_")
                 .toUpperCase(Locale.ROOT);
         if (!SourceVersion.isName(constant)) {
             constant = "_" + constant;
@@ -31,19 +40,8 @@ public interface MinestomCodeGenerator {
         return namespace.replaceFirst("minecraft:", "");
     }
 
-    default void ensureDirectory(Path directory) throws IllegalStateException {
-        Objects.requireNonNull(directory, "Directory is null");
-        if (Files.isDirectory(directory)) return;
-        try {
-            Files.createDirectories(directory);
-        } catch (IOException e) {
-            throw new IllegalStateException("Failed to create folder for %s".formatted(directory), e);
-        }
-    }
-
-    default void writeFiles(JavaFile... files) {
+    default void writeFiles(Path to, JavaFile... files) {
         Objects.requireNonNull(files, "File list cannot be null");
-        final Path to = outputFolder();
         Objects.requireNonNull(to, "Output folder cannot be null");
         for (JavaFile javaFile : files) {
             try {
@@ -62,9 +60,5 @@ public interface MinestomCodeGenerator {
                 .build();
     }
 
-    Path outputFolder();
-
-    default void generate() {
-        throw new UnsupportedOperationException("This generator `%s` does not implement the generate method".formatted(getClass().getSimpleName()));
-    }
+    void generate(Path outputFolder, CodegenRegistry registry, CodegenValue value);
 }
