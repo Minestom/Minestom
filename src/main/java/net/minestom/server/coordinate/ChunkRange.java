@@ -19,10 +19,10 @@ public final class ChunkRange {
 
     public static void chunksInRangeDiffering(int newChunkX, int newChunkZ,
                                               int oldChunkX, int oldChunkZ,
-                                              int range, ChunkConsumer callback) {
-        for (int x = newChunkX - range; x <= newChunkX + range; x++) {
-            for (int z = newChunkZ - range; z <= newChunkZ + range; z++) {
-                if (Math.abs(x - oldChunkX) > range || Math.abs(z - oldChunkZ) > range) {
+                                              int newRange, int oldRange, ChunkConsumer callback) {
+        for (int x = newChunkX - newRange; x <= newChunkX + newRange; x++) {
+            for (int z = newChunkZ - newRange; z <= newChunkZ + newRange; z++) {
+                if (Math.abs(x - oldChunkX) > oldRange || Math.abs(z - oldChunkZ) > oldRange) {
                     callback.accept(x, z);
                 }
             }
@@ -31,12 +31,12 @@ public final class ChunkRange {
 
     public static void chunksInRangeDiffering(int newChunkX, int newChunkZ,
                                               int oldChunkX, int oldChunkZ,
-                                              int range,
+                                              int newRange, int oldRange,
                                               ChunkConsumer newCallback, ChunkConsumer oldCallback) {
         // Find the new chunks
-        chunksInRangeDiffering(newChunkX, newChunkZ, oldChunkX, oldChunkZ, range, newCallback);
+        chunksInRangeDiffering(newChunkX, newChunkZ, oldChunkX, oldChunkZ, newRange, oldRange, newCallback);
         // Find the old chunks
-        chunksInRangeDiffering(oldChunkX, oldChunkZ, newChunkX, newChunkZ, range, oldCallback);
+        chunksInRangeDiffering(oldChunkX, oldChunkZ, newChunkX, newChunkZ, oldRange, newRange, oldCallback);
     }
 
     /**
