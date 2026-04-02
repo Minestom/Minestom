@@ -7,6 +7,8 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.codec.StructCodec;
 import org.jetbrains.annotations.Nullable;
 
 public class HorseMeta extends AbstractHorseMeta {
@@ -45,20 +47,31 @@ public class HorseMeta extends AbstractHorseMeta {
     @SuppressWarnings("unchecked")
     protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.HORSE_VARIANT)
-            return (T) getVariant().getMarking();
+            return (T) getVariant();
         return super.get(component);
     }
 
     @Override
     protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.HORSE_VARIANT) {
-            var variant = getVariant();
-            variant.setMarking((Marking) value);
-            setVariant(variant);
-        } else super.set(component, value);
+            setVariant((Variant) value);
+        } else {
+            super.set(component, value);
+        }
     }
 
     public static class Variant {
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBufferTemplate.template(
+                Marking.NETWORK_TYPE, Variant::getMarking,
+                Color.NETWORK_TYPE, Variant::getColor,
+                Variant::new
+        );
+
+        public static final Codec<Variant> CODEC = StructCodec.struct(
+                "marking", Marking.CODEC, Variant::getMarking,
+                "color", Color.CODEC, Variant::getColor,
+                Variant::new
+        );
 
         private Marking marking;
         private Color color;
@@ -68,7 +81,7 @@ public class HorseMeta extends AbstractHorseMeta {
             this.color = color;
         }
 
-            public Marking getMarking() {
+        public Marking getMarking() {
             return this.marking;
         }
 
@@ -76,7 +89,7 @@ public class HorseMeta extends AbstractHorseMeta {
             this.marking = marking;
         }
 
-            public Color getColor() {
+        public Color getColor() {
             return this.color;
         }
 
@@ -93,6 +106,9 @@ public class HorseMeta extends AbstractHorseMeta {
         WHITE_DOTS,
         BLACK_DOTS;
 
+        public static final NetworkBuffer.Type<Marking> NETWORK_TYPE = NetworkBuffer.Enum(Marking.class);
+        public static final Codec<Marking> CODEC = Codec.Enum(Marking.class);
+
         private final static Marking[] VALUES = values();
     }
 
@@ -106,7 +122,7 @@ public class HorseMeta extends AbstractHorseMeta {
         DARK_BROWN;
 
         public static final NetworkBuffer.Type<Color> NETWORK_TYPE = NetworkBuffer.Enum(Color.class);
-        public static final Codec<Color> NBT_TYPE = Codec.Enum(Color.class);
+        public static final Codec<Color> CODEC = Codec.Enum(Color.class);
 
         private final static Color[] VALUES = values();
     }

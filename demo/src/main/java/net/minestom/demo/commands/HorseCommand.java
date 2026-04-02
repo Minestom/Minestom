@@ -4,9 +4,12 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
@@ -23,8 +26,8 @@ public class HorseCommand extends Command {
         setCondition(Conditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
         var babyArg = ArgumentType.Boolean("baby");
-        var markingArg = ArgumentType.Enum("marking", HorseMeta.Marking.class);
-        var colorArg = ArgumentType.Enum("color", HorseMeta.Color.class);
+        var markingArg = ArgumentType.Enum("marking", HorseMeta.Marking.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
+        var colorArg = ArgumentType.Enum("color", HorseMeta.Color.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
         setArgumentCallback(this::onBabyError, babyArg);
         setArgumentCallback(this::onMarkingError, markingArg);
         setArgumentCallback(this::onColorError, colorArg);
@@ -62,7 +65,7 @@ public class HorseCommand extends Command {
         var horse = new EntityCreature(EntityType.HORSE);
         var meta = (HorseMeta) horse.getEntityMeta();
         meta.setBaby(baby);
-        meta.setVariant(new HorseMeta.Variant(marking, color));
+        horse.set(DataComponents.HORSE_VARIANT, new HorseMeta.Variant(marking, color));
         //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
         horse.setInstance(player.getInstance(), player.getPosition());
     }
