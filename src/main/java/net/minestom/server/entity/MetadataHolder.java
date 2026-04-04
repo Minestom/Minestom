@@ -115,7 +115,6 @@ public final class MetadataHolder {
                 }
             } else {
                 entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(id, result)));
-                new Exception("metadata set stack trace, result=" + result).printStackTrace();
             }
         }
     }
