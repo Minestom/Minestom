@@ -88,7 +88,7 @@ public final class MetadataHolder {
         final int id = entry.index();
 
         T current = get(entry);
-        if (current.equals(value)) return;
+        if (current != null && current.equals(value)) return;
 
         Metadata.Entry<?> result = switch (entry) {
             case MetadataDef.Entry.Index<T> v -> v.function().apply(value);
