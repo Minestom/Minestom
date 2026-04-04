@@ -87,6 +87,9 @@ public final class MetadataHolder {
     public <T> void set(MetadataDef.Entry<T> entry, T value) {
         final int id = entry.index();
 
+        T current = get(entry);
+        if (current.equals(value)) return;
+
         Metadata.Entry<?> result = switch (entry) {
             case MetadataDef.Entry.Index<T> v -> v.function().apply(value);
             case MetadataDef.Entry.BitMask bitMask -> {
@@ -112,6 +115,7 @@ public final class MetadataHolder {
                 }
             } else {
                 entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(id, result)));
+                new Exception("metadata set stack trace, result=" + result).printStackTrace();
             }
         }
     }
