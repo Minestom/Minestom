@@ -42,6 +42,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 public final class MetadataHolder {
@@ -86,6 +87,9 @@ public final class MetadataHolder {
 
     public <T> void set(MetadataDef.Entry<T> entry, T value) {
         final int id = entry.index();
+
+        T current = get(entry);
+        if (Objects.equals(current, value)) return;
 
         Metadata.Entry<?> result = switch (entry) {
             case MetadataDef.Entry.Index<T> v -> v.function().apply(value);
