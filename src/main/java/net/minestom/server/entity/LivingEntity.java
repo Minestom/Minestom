@@ -341,11 +341,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             float remainingDamage = entityDamageEvent.getDamage().getAmount();
 
             if (entityDamageEvent.shouldAnimate()) {
+                Damage eventDamage = entityDamageEvent.getDamage();
+
                 sendPacketToViewersAndSelf(new DamageEventPacket(
-                        getEntityId(), damage.getTypeId(),
-                        damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1,
-                        damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1,
-                        damage.getSourcePosition()
+                        getEntityId(), eventDamage.getTypeId(),
+                        eventDamage.getAttacker() == null ? 0 : eventDamage.getAttacker().getEntityId() + 1,
+                        eventDamage.getSource() == null ? 0 : eventDamage.getSource().getEntityId() + 1,
+                        eventDamage.getSourcePosition()
                 ));
             }
 
