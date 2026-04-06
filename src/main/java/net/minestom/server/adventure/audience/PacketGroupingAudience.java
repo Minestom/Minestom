@@ -36,7 +36,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * @param players the players
      * @return the audience
      */
-    static PacketGroupingAudience of(Collection<Player> players) {
+    static PacketGroupingAudience of(Collection<? extends Player> players) {
         return () -> players;
     }
 
@@ -45,7 +45,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      *
      * @return the connections
      */
-    Collection<Player> getPlayers();
+    Collection<? extends Player> getPlayers();
 
     /**
      * Broadcast a ServerPacket to all players of this audience
