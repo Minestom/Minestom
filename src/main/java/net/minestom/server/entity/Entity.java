@@ -248,7 +248,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param callback the task to execute during the next entity tick
      */
-    public void scheduleNextTick(Consumer<Entity> callback) {
+    public void scheduleNextTick(Consumer<? super Entity> callback) {
         this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
@@ -476,7 +476,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.viewEngine.viewableOption.updateAuto(autoViewable);
     }
 
-    public void updateViewableRule(@Nullable Predicate<Player> predicate) {
+    public void updateViewableRule(@Nullable Predicate<? super Player> predicate) {
         this.viewEngine.viewableOption.updateRule(predicate);
     }
 
@@ -503,7 +503,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.viewEngine.viewerOption.updateAuto(autoViewer);
     }
 
-    public void updateViewerRule(@Nullable Predicate<Entity> predicate) {
+    public void updateViewerRule(@Nullable Predicate<? super Entity> predicate) {
         this.viewEngine.viewerOption.updateRule(predicate);
     }
 
@@ -565,7 +565,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @Override
-    public Set<Player> getViewers() {
+    public Set<? extends Player> getViewers() {
         return viewers;
     }
 
@@ -1815,7 +1815,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param predicate optional predicate
      * @return resulting entity whether there're any, null otherwise.
      */
-    public @Nullable Entity getLineOfSightEntity(double range, Predicate<Entity> predicate) {
+    public @Nullable Entity getLineOfSightEntity(double range, Predicate<? super Entity> predicate) {
         Instance instance = getInstance();
         if (instance == null) {
             return null;
