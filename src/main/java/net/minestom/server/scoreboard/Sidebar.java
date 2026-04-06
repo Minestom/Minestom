@@ -256,7 +256,7 @@ public class Sidebar implements Scoreboard {
     }
 
     @Override
-    public Set<Player> getViewers() {
+    public Set<? extends Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
     }
 

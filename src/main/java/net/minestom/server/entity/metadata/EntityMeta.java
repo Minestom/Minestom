@@ -159,7 +159,7 @@ public class EntityMeta {
         metadata.set(MetadataDef.TICKS_FROZEN, tickFrozen);
     }
 
-    protected void consumeEntity(Consumer<Entity> consumer) {
+    protected void consumeEntity(Consumer<? super Entity> consumer) {
         Entity entity = this.entityRef.get();
         if (entity != null) {
             consumer.accept(entity);

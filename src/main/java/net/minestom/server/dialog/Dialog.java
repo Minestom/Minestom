@@ -21,7 +21,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
             Map.entry(Key.key("dialog_list"), DialogList.CODEC),
             Map.entry(Key.key("multi_action"), MultiAction.CODEC),
             Map.entry(Key.key("confirmation"), Confirmation.CODEC));
-    Codec<Dialog> REGISTRY_CODEC = Codec.RegistryTaggedUnion(REGISTRY, Dialog::codec);
+    StructCodec<Dialog> REGISTRY_CODEC = Codec.RegistryTaggedUnion(REGISTRY, Dialog::codec);
     NetworkBuffer.Type<Dialog> REGISTRY_NETWORK_TYPE = NetworkBuffer.TypedNBT(REGISTRY_CODEC);
 
     NetworkBuffer.Type<Holder<Dialog>> NETWORK_TYPE = Holder.networkType(Registries::dialog, REGISTRY_NETWORK_TYPE);
@@ -77,7 +77,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 Notice::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<Notice> codec() {
             return CODEC;
         }
     }
@@ -95,7 +95,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 ServerLinks::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<ServerLinks> codec() {
             return CODEC;
         }
     }
@@ -115,7 +115,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 DialogList::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<DialogList> codec() {
             return CODEC;
         }
     }
@@ -134,7 +134,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 MultiAction::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<MultiAction> codec() {
             return CODEC;
         }
     }
@@ -151,13 +151,14 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 Confirmation::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<Confirmation> codec() {
             return CODEC;
         }
     }
 
     DialogMetadata metadata();
 
+    @ApiStatus.OverrideOnly
     StructCodec<? extends Dialog> codec();
 
 }
