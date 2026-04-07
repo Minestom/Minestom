@@ -49,8 +49,10 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
+import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
 import net.minestom.server.network.player.ResolvableProfile;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
@@ -325,17 +327,44 @@ public class PlayerInit {
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
                 if (event.getHand() != PlayerHand.MAIN) return;
 
-                var itemStack = event.getItemStack();
-                var block = event.getInstance().getBlock(event.getPosition());
+                var instance = event.getInstance();
+                var pos = event.getBlockPosition();
+                var block = event.getBlock();
+                var item = event.getItemStack();
+                var material = event.getItemStack().material();
 
-                if ("false".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
-                    block = block.withProperty("waterlogged", "true");
-                } else if ("true".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.BUCKET)) {
-                    block = block.withProperty("waterlogged", "false");
-                } else return;
+                // --- WATERLOGGING LOGIC ---
+                if (material.equals(Material.WATER_BUCKET) || material.equals(Material.BUCKET)) {
+                    String waterlogged = block.getProperty("waterlogged");
 
-                event.getInstance().setBlock(event.getPosition(), block);
+                    if (waterlogged != null) {
+                        if (material.equals(Material.WATER_BUCKET) && "false".equals(waterlogged)) {
+                            block = block.withProperty("waterlogged", "true");
+                        } else if (material.equals(Material.BUCKET) && "true".equals(waterlogged)) {
+                            block = block.withProperty("waterlogged", "false");
+                        } else return;
 
+                        instance.setBlock(pos, block);
+                        return;
+                    }
+                }
+
+                // --- BONE MEAL ON STONE LOGIC ---
+                if (material.equals(Material.BONE_MEAL) && block.compare(Block.STONE)) {
+
+                    var abovePos = pos.add(0, 1, 0);
+                    var aboveBlock = instance.getBlock(abovePos);
+
+                    // Only place if air above
+                    if (!aboveBlock.isAir()) return;
+
+                    // Place block
+                    instance.setBlock(abovePos, Block.DEAD_TUBE_CORAL.withProperty("waterlogged", "false"));
+
+                    // Spawn particles
+                    event.getPlayer().sendPacket(new ParticlePacket(Particle.HAPPY_VILLAGER, new Pos(abovePos).add(0.5), new Pos(0.3, 0.3, 0.3), 0, 10));
+                    return;
+                }
             })
             .addListener(PlayerBeginItemUseEvent.class, event -> {
                 final Player player = event.getPlayer();
