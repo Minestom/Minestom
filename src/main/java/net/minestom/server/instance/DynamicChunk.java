@@ -272,8 +272,9 @@ public class DynamicChunk extends Chunk {
             NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
             final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
-                    networkBuffer.write(SHORT, (short) section.blockPalette().count());
-                    networkBuffer.write(SHORT, (short) 0); //TODO(26.1) fluid count
+                    final int fillCount = section.blockPalette().count();
+                    networkBuffer.write(SHORT, (short) fillCount);
+                    networkBuffer.write(SHORT, (short) (fillCount > 0 ? 1 : 0)); //TODO(26.1) proper fluid count
                     networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blockPalette());
                     networkBuffer.write(biomeSerializer, section.biomePalette());
                 }
