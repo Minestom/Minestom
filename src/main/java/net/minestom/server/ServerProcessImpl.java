@@ -42,6 +42,8 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.VanillaRegistries;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.thread.Acquirable;
@@ -62,6 +64,7 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -129,43 +132,45 @@ final class ServerProcessImpl implements ServerProcess {
     private final AtomicBoolean stopped = new AtomicBoolean();
 
     public ServerProcessImpl(Auth auth) {
+        var registries = VanillaRegistries.load(Runnable::run);
+        this(auth, registries);
+    }
+
+    private ServerProcessImpl(Auth auth, Registries registries) {
         this.auth = auth;
         this.exception = new ExceptionManager();
 
-        // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
-        var ignoredForInit = DataComponents.ITEM_NAME;
+        this.enchantmentLevelBasedValues = registries.enchantmentLevelBasedValues();
+        this.enchantmentValueEffects = registries.enchantmentValueEffects();
+        this.enchantmentEntityEffects = registries.enchantmentEntityEffects();
+        this.enchantmentLocationEffects = registries.enchantmentLocationEffects();
 
-        this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
-        this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
-        this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
-        this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
-
-        this.chatType = ChatType.createDefaultRegistry();
-        this.dialog = Dialog.createDefaultRegistry(this);
-        this.biome = Biome.createDefaultRegistry();
-        this.damageType = DamageType.createDefaultRegistry();
-        this.trimMaterial = TrimMaterial.createDefaultRegistry();
-        this.trimPattern = TrimPattern.createDefaultRegistry();
-        this.bannerPattern = BannerPattern.createDefaultRegistry();
-        this.enchantment = Enchantment.createDefaultRegistry(this);
-        this.paintingVariant = PaintingVariant.createDefaultRegistry();
-        this.jukeboxSong = JukeboxSong.createDefaultRegistry();
-        this.instrument = Instrument.createDefaultRegistry();
-        this.wolfVariant = WolfVariant.createDefaultRegistry();
-        this.wolfSoundVariant = WolfSoundVariant.createDefaultRegistry();
-        this.catVariant = CatVariant.createDefaultRegistry();
-        this.catSoundVariant = CatSoundVariant.createDefaultRegistry();
-        this.chickenVariant = ChickenVariant.createDefaultRegistry();
-        this.chickenSoundVariant = ChickenSoundVariant.createDefaultRegistry();
-        this.cowVariant = CowVariant.createDefaultRegistry();
-        this.cowSoundVariant = CowSoundVariant.createDefaultRegistry();
-        this.frogVariant = FrogVariant.createDefaultRegistry();
-        this.pigVariant = PigVariant.createDefaultRegistry();
-        this.pigSoundVariant = PigSoundVariant.createDefaultRegistry();
-        this.zombieNautilusVariant = ZombieNautilusVariant.createDefaultRegistry();
-        this.worldClock = WorldClock.createDefaultRegistry();
-        this.timeline = Timeline.createDefaultRegistry(this); // depends on world clocks
-        this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines & world clocks
+        this.chatType = registries.chatType();
+        this.dialog = registries.dialog();
+        this.biome = registries.biome();
+        this.damageType = registries.damageType();
+        this.trimMaterial = registries.trimMaterial();
+        this.trimPattern = registries.trimPattern();
+        this.bannerPattern = registries.bannerPattern();
+        this.enchantment = registries.enchantment();
+        this.paintingVariant = registries.paintingVariant();
+        this.jukeboxSong = registries.jukeboxSong();
+        this.instrument = registries.instrument();
+        this.wolfVariant = registries.wolfVariant();
+        this.wolfSoundVariant = registries.wolfSoundVariant();
+        this.catVariant = registries.catVariant();
+        this.catSoundVariant = registries.catSoundVariant();
+        this.chickenVariant = registries.chickenVariant();
+        this.chickenSoundVariant = registries.chickenSoundVariant();
+        this.cowVariant = registries.cowVariant();
+        this.cowSoundVariant = registries.cowSoundVariant();
+        this.frogVariant = registries.frogVariant();
+        this.pigVariant = registries.pigVariant();
+        this.pigSoundVariant = registries.pigSoundVariant();
+        this.zombieNautilusVariant = registries.zombieNautilusVariant();
+        this.worldClock = registries.worldClock();
+        this.timeline = registries.timeline();
+        this.dimensionType = registries.dimensionType();
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
