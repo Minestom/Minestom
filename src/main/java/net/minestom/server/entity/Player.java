@@ -1083,6 +1083,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public void clearScoreboards() {
         scoreboards.forEach((_, scoreboard) -> scoreboard.removeViewer(this));
+        scoreboards.clear();
     }
 
     @Override

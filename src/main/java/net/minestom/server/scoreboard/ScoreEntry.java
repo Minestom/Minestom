@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * @param numberFormat the number format for this entry
  */
 public record ScoreEntry(int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat) {
-    // An entry with 0 score and no overrides.
+    /// An entry with 0 score and no display overrides.
     public static final ScoreEntry DEFAULT = new ScoreEntry(0, null, null);
 
     public UpdateScorePacket getUpdateScorePacket(String entity, String objective) {

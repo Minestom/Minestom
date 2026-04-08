@@ -82,7 +82,7 @@ public class SidebarCommand extends Command {
 
     private void removeLine() {
         if (currentLine > 0) {
-            sidebar.removeScore(String.valueOf(currentLine));
+            sidebar.removeEntry(String.valueOf(currentLine));
             currentLine--;
         }
     }

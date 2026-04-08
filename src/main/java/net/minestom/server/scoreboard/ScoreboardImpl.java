@@ -18,9 +18,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class ScoreboardImpl implements Scoreboard {
 
     protected final String objectiveName;
-    protected @Nullable Component displayName;
+    protected Component displayName;
     protected Position position;
-    protected DisplayType displayType = DisplayType.INTEGER;
+    protected RenderType renderType = RenderType.INTEGER;
     protected @Nullable NumberFormat defaultNumberFormat;
 
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
@@ -28,9 +28,9 @@ public class ScoreboardImpl implements Scoreboard {
     private final Map<String, ScoreEntry> entries = new ConcurrentHashMap<>();
     private final Map<String, ScoreEntry> unmodifiableEntries = Collections.unmodifiableMap(entries);
 
-
     ScoreboardImpl(String objectiveName, Position position) {
         this.objectiveName = objectiveName;
+        this.displayName = Component.text(objectiveName);
         this.position = position;
     }
 
@@ -71,11 +71,11 @@ public class ScoreboardImpl implements Scoreboard {
     }
 
     public ScoreboardObjectivePacket getCreationObjectivePacket() {
-        return new ScoreboardObjectivePacket(objectiveName, (byte) 0, displayName, displayType, defaultNumberFormat);
+        return new ScoreboardObjectivePacket(objectiveName, (byte) 0, displayName, renderType, defaultNumberFormat);
     }
 
     public ScoreboardObjectivePacket getUpdateObjectivePacket() {
-        return new ScoreboardObjectivePacket(objectiveName, (byte) 2, displayName, displayType, defaultNumberFormat);
+        return new ScoreboardObjectivePacket(objectiveName, (byte) 2, displayName, renderType, defaultNumberFormat);
     }
 
     public ScoreboardObjectivePacket getDestructionObjectivePacket() {
@@ -92,7 +92,7 @@ public class ScoreboardImpl implements Scoreboard {
     }
 
     @Override
-    public @Nullable Component getDisplayName() {
+    public Component getDisplayName() {
         return displayName;
     }
 
@@ -119,13 +119,13 @@ public class ScoreboardImpl implements Scoreboard {
     }
 
     @Override
-    public DisplayType getDisplayType() {
-        return displayType;
+    public RenderType getRenderType() {
+        return renderType;
     }
 
     @Override
-    public void setDisplayType(DisplayType displayType) {
-        this.displayType = displayType;
+    public void setRenderType(RenderType renderType) {
+        this.renderType = renderType;
         sendObjectiveUpdate();
     }
 
@@ -175,13 +175,13 @@ public class ScoreboardImpl implements Scoreboard {
     }
 
     @Override
-    public void updateEntry(String entity, int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat) {
-        ScoreEntry entry = new ScoreEntry(score, displayName, numberFormat);
+    public void updateEntry(String entity, ScoreEntry entry) {
         entries.put(entity, entry);
         sendUpdate(entity, entry);
     }
 
-    public void removeScore(String entity) {
+    @Override
+    public void removeEntry(String entity) {
         if (entries.remove(entity) == null) return;
         sendPacketToViewers(new ResetScorePacket(entity, objectiveName));
     }

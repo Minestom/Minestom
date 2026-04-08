@@ -5,11 +5,14 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.Viewable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+import net.minestom.server.component.DataComponents;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 /**
  * This interface represents all scoreboards in Minecraft.
@@ -53,7 +56,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * Gets the display name of the scoreboard, which is displayed on the sidebar.
      * @return the component name
      */
-    @Nullable Component getDisplayName();
+    Component getDisplayName();
 
     /**
      * Sets the {@link Scoreboard#getDisplayName() display name} of the scoreboard.
@@ -75,16 +78,16 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
     void setPosition(Position position);
 
     /**
-     * Gets the display format of this scoreboard when in the player list.
-     * @return the display type
+     * Gets the {@link RenderType} of this scoreboard when in the player list.
+     * @return the render type
      */
-    DisplayType getDisplayType();
+    RenderType getRenderType();
 
     /**
-     * Sets the {@link Scoreboard#getDisplayType() display type} of this scoreboard.
-     * @param displayType the new display type
+     * Sets the {@link RenderType} of this scoreboard.
+     * @param renderType the new render type
      */
-    void setDisplayType(DisplayType displayType);
+    void setRenderType(RenderType renderType);
 
     /**
      * Gets the default number format.
@@ -139,6 +142,15 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
     void updateNumberFormat(String entity, @Nullable NumberFormat numberFormat);
 
     /**
+     * Updates or creates the score and associated properties for an entity.
+     * Any name can be used for the entity, and will be displayed on a sidebar.
+     * The vanilla server uses players' usernames or entities' UUIDs.
+     * @param entity the entry name
+     * @param entry the new entry
+     */
+    void updateEntry(String entity, ScoreEntry entry);
+
+    /**
      * Updates or creates the score for an entity.
      * Any name can be used for the entity, and will be displayed on a sidebar.
      * The vanilla server uses players' usernames or entities' UUIDs.
@@ -147,31 +159,42 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param displayName the name to display for the entity, or null to use the entry
      * @param numberFormat the new number format, or null to reset to default
      */
-    void updateEntry(String entity, int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat);
-
-    /**
-     * Removes an entity from the scoreboard.
-     * @param entity the entry name
-     */
-    void removeScore(String entity);
-
-    /**
-     * Updates or creates the score of a {@link Player}.
-     * The player's username and display name are used for this.
-     * @param player the player
-     * @param score the new score
-     * @param numberFormat the new number format, or null to reset to default
-     */
-    default void updateEntry(Player player, int score, @Nullable NumberFormat numberFormat) {
-        updateEntry(player.getUsername(), score, player.getDisplayName(), numberFormat);
+    default void updateEntry(String entity, int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat) {
+        updateEntry(entity, new ScoreEntry(score, displayName, numberFormat));
     }
 
     /**
-     * Removes a {@link Player} from the scoreboard.
-     * @param player the player
+     * Removes an entity's entry from the scoreboard.
+     * @param entity the entry name
      */
-    default void removeScore(Player player) {
-        removeScore(player.getUsername());
+    void removeEntry(String entity);
+
+    /**
+     * Updates or creates the score of an {@link Entity}.
+     * If a player is used, their username and display name are used.
+     * Otherwise, the entity's UUID and custom name are used.
+     * @param entity the entity
+     * @param score the new score
+     * @param numberFormat the new number format, or null to reset to default
+     */
+    default void updateEntry(Entity entity, int score, @Nullable NumberFormat numberFormat) {
+        if (entity instanceof Player player) {
+            updateEntry(player.getUsername(), score, player.getDisplayName(), numberFormat);
+        } else {
+            updateEntry(entity.getUuid().toString(), score, entity.get(DataComponents.CUSTOM_NAME), numberFormat);
+        }
+    }
+
+    /**
+     * Removes an {@link Entity} from the scoreboard.
+     * @param entity the entity
+     */
+    default void removeEntry(Entity entity) {
+        if (entity instanceof Player player) {
+            removeEntry(player.getUsername());
+        } else {
+            removeEntry(entity.getUuid().toString());
+        }
     }
 
     @Override
@@ -185,7 +208,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
     enum Position {
         /**
          * Scores are placed to the right of a player's name in the player list.
-         * Can use {@link DisplayType}
+         * Can use {@link RenderType}
          * to display hearts instead of a number.
          */
         PLAYER_LIST,
@@ -230,9 +253,9 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
     }
 
     /**
-     * The score display type when shown in the player list (integer or hearts)
+     * The score render type when shown in the player list (integer or hearts)
      */
-    enum DisplayType {
+    enum RenderType {
         INTEGER,
         HEARTS
     }

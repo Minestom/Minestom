@@ -15,7 +15,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ScoreboardObjectivePacket(String objectiveName, byte mode,
                                         @Nullable Component objectiveValue,
-                                        @Nullable Scoreboard.DisplayType type,
+                                        @Nullable Scoreboard.RenderType type,
                                         @Nullable NumberFormat numberFormat) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<ScoreboardObjectivePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
@@ -36,11 +36,11 @@ public record ScoreboardObjectivePacket(String objectiveName, byte mode,
             String objectiveName = buffer.read(STRING);
             byte mode = buffer.read(BYTE);
             Component objectiveValue = null;
-            Scoreboard.DisplayType type = null;
+            Scoreboard.RenderType type = null;
             NumberFormat numberFormat = null;
             if (mode == 0 || mode == 2) {
                 objectiveValue = buffer.read(COMPONENT);
-                type = Scoreboard.DisplayType.values()[buffer.read(VAR_INT)];
+                type = Scoreboard.RenderType.values()[buffer.read(VAR_INT)];
                 numberFormat = buffer.read(NumberFormat.SERIALIZER.optional());
             }
             return new ScoreboardObjectivePacket(objectiveName, mode, objectiveValue, type, numberFormat);
