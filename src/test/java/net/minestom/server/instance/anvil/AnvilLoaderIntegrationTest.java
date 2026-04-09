@@ -207,7 +207,7 @@ public class AnvilLoaderIntegrationTest {
             Section originalSection = originalChunk.getSection(section);
             Section reloadedSection = reloadedChunk.getSection(section);
 
-            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
+            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer();
             // easiest equality check to write is a memory compare on written output
             var original = NetworkBuffer.makeArray(buffer -> {
                 buffer.write(SHORT, (short) originalSection.blockPalette().count());
