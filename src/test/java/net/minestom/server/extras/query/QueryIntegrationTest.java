@@ -85,6 +85,7 @@ public class QueryIntegrationTest {
             }
         }
         fail("Unable to start query listener after " + attempts + " attempts");
+        return -1;
     }
 
     private static int findFreeUdpPort() throws Exception {
