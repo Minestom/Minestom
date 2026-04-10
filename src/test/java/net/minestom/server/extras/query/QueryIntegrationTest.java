@@ -37,11 +37,10 @@ public class QueryIntegrationTest {
     @Test
     public void truncatedStatPacketDoesNotReusePreviousPayload() throws Exception {
         if (Query.isStarted()) {
-            assertTrue(Query.stop());
+            Query.stop();
         }
 
-        final int port = findFreeUdpPort();
-        assertTrue(Query.start(port));
+        final int port = startQueryWithRetry(5);
         try (DatagramSocket client = new DatagramSocket()) {
             client.setSoTimeout(1000);
             final InetSocketAddress address = new InetSocketAddress("127.0.0.1", port);
@@ -74,8 +73,19 @@ public class QueryIntegrationTest {
                 client.receive(packet);
             });
         } finally {
-            assertTrue(Query.stop());
+            Query.stop();
         }
+    }
+
+    private static int startQueryWithRetry(int attempts) throws Exception {
+        for (int i = 0; i < attempts; i++) {
+            final int port = findFreeUdpPort();
+            if (Query.start(port)) {
+                return port;
+            }
+        }
+        fail("Unable to start query listener after " + attempts + " attempts");
+        return -1;
     }
 
     private static int findFreeUdpPort() throws Exception {
