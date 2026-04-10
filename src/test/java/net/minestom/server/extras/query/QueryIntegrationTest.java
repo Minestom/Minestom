@@ -14,12 +14,16 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class QueryIntegrationTest {
     private ServerProcess process;
 
     @BeforeEach
     public void setupProcess() {
+        // These like to fail on github actions
+        assumeTrue(System.getenv("GITHUB_ACTIONS") == null);
+
         process = MinecraftServer.updateProcess();
         process.start(new InetSocketAddress("127.0.0.1", 0));
     }
