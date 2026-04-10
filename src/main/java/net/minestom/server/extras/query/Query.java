@@ -140,8 +140,13 @@ public class Query {
                 }
             }
 
-            // get the contents
-            ByteBuffer data = ByteBuffer.wrap(packet.getData());
+            // Parse only the bytes received for this datagram.
+            final int offset = packet.getOffset();
+            final int length = packet.getLength();
+            if (length < 3) {
+                continue;
+            }
+            ByteBuffer data = ByteBuffer.wrap(packet.getData(), offset, length);
 
             // check the magic field
             if ((data.getShort() & 0xFFFF) != 0xFEFD) {
@@ -152,6 +157,9 @@ public class Query {
             byte type = data.get();
 
             if (type == 9) { // handshake
+                if (data.remaining() < Integer.BYTES) {
+                    continue;
+                }
                 int sessionID = data.getInt();
                 int challengeToken = RANDOM.nextInt();
 
@@ -174,6 +182,9 @@ public class Query {
                     }
                 }
             } else if (type == 0) { // stat
+                if (data.remaining() < Integer.BYTES * 2) {
+                    continue;
+                }
                 int sessionID = data.getInt();
                 int challengeToken = data.getInt();
                 SocketAddress sender = packet.getSocketAddress();
