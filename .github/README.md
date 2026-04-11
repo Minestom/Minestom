@@ -1,7 +1,7 @@
+# Minestom
+
 ![banner](banner_dark.png#gh-dark-mode-only)
 ![banner](banner_light.png#gh-light-mode-only)
-
-# Minestom
 
 [![license](https://img.shields.io/github/license/Minestom/Minestom?style=for-the-badge&color=b2204c)](../LICENSE)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=for-the-badge)](https://github.com/RichardLitt/standard-readme)  
@@ -17,11 +17,20 @@ However, we have a complete API which is designed to allow you to make anything 
 This is a developer API not meant to be used by end-users. Replacing Bukkit/Forge/Sponge with this **will not work** since we do not implement any of their APIs.
 
 # Table of contents
+- [Minestom](#minestom)
+- [Table of contents](#table-of-contents)
 - [Install](#install)
 - [Usage](#usage)
 - [Why Minestom?](#why-minestom)
-- [Advantages & Disadvantages](#advantages-and-disadvantages)
+- [Advantages and Disadvantages](#advantages-and-disadvantages)
+  - [Advantages](#advantages)
+  - [Disadvantages](#disadvantages)
 - [API](#api)
+  - [Instances](#instances)
+  - [Blocks](#blocks)
+  - [Entities](#entities)
+  - [Inventories](#inventories)
+  - [Commands](#commands)
 - [Credits](#credits)
 - [Contributing](#contributing)
 - [License](#license)
