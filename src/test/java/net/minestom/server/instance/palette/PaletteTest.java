@@ -596,6 +596,23 @@ public class PaletteTest {
     }
 
     @Test
+    public void serializationBlockLinearMutation() {
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.blocks();
+        palette.set(0, 0, 0, 1);
+        palette.set(1, 0, 0, 2);
+
+        buffer.write(Palette.BLOCK_SERIALIZER, palette);
+        Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
+
+        deserialized.set(2, 0, 0, 3);
+
+        assertEquals(1, deserialized.get(0, 0, 0));
+        assertEquals(2, deserialized.get(1, 0, 0));
+        assertEquals(3, deserialized.get(2, 0, 0));
+    }
+
+    @Test
     public void serializationBlockDirect() {
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
         Random random = new Random(12345);
