@@ -234,6 +234,21 @@ public final class RegistryData {
     }
 
     public static final class BlockEntry implements Entry {
+        public enum OffsetType {
+            NONE,
+            XZ,
+            XYZ;
+
+            static OffsetType parse(@Nullable String value) {
+                if (value == null) return NONE;
+                return switch (value.toLowerCase(Locale.ROOT)) {
+                    case "xz" -> XZ;
+                    case "xyz" -> XYZ;
+                    default -> NONE;
+                };
+            }
+        }
+
         private static final byte AIR_OFFSET = 1 << 0;
         private static final byte LIQUID_OFFSET = 1 << 1;
         private static final byte SOLID_OFFSET = 1 << 2;
@@ -260,6 +275,9 @@ public final class RegistryData {
         private final @Nullable BlockSoundType blockSoundType;
         private final Shape collisionShape;
         private final Shape occlusionShape;
+        private final OffsetType offsetType;
+        private final float maxHorizontalOffset;
+        private final float maxVerticalOffset;
 
         private BlockEntry(String namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
             assert parent == null || !main.asMap().isEmpty() : "BlockEntry cannot be empty if it has a parent";
@@ -318,6 +336,31 @@ public final class RegistryData {
                 }
                 this.occlusionShape = occludeShape;
             }
+
+            OffsetType offsetType = parent != null ? parent.offsetType() : OffsetType.NONE;
+            float maxHorizontalOffset = parent != null ? parent.maxHorizontalOffset() : 0.0f;
+            float maxVerticalOffset = parent != null ? parent.maxVerticalOffset() : 0.0f;
+
+            final Properties offsetData = main.section("offsetData") != null ? main.section("offsetData") : main.section("offset_data");
+            if (offsetData != null) {
+                final String parsedOffsetType = offsetData.containsKey("offsetType") ?
+                        offsetData.getString("offsetType") : offsetData.getString("offset_type");
+                offsetType = OffsetType.parse(parsedOffsetType);
+                if (offsetData.containsKey("maxHorizontalOffset")) {
+                    maxHorizontalOffset = offsetData.getFloat("maxHorizontalOffset");
+                } else if (offsetData.containsKey("max_horizontal_offset")) {
+                    maxHorizontalOffset = offsetData.getFloat("max_horizontal_offset");
+                }
+                if (offsetData.containsKey("maxVerticalOffset")) {
+                    maxVerticalOffset = offsetData.getFloat("maxVerticalOffset");
+                } else if (offsetData.containsKey("max_vertical_offset")) {
+                    maxVerticalOffset = offsetData.getFloat("max_vertical_offset");
+                }
+            }
+            this.offsetType = offsetType;
+            this.maxHorizontalOffset = maxHorizontalOffset;
+            this.maxVerticalOffset = maxVerticalOffset;
+
             var redstoneConductor = fromParent(parent, BlockEntry::isRedstoneConductor, main, "redstoneConductor", Properties::getBoolean, null);
             var signalSource = fromParent(parent, BlockEntry::isSignalSource, main, "signalSource", Properties::getBoolean, false);
             this.packedFlags = (byte) (
@@ -465,6 +508,18 @@ public final class RegistryData {
 
         public @Nullable BlockSoundType getBlockSoundType() {
             return this.blockSoundType;
+        }
+
+        public OffsetType offsetType() {
+            return offsetType;
+        }
+
+        public float maxHorizontalOffset() {
+            return maxHorizontalOffset;
+        }
+
+        public float maxVerticalOffset() {
+            return maxVerticalOffset;
         }
     }
 

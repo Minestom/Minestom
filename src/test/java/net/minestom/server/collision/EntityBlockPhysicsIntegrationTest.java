@@ -11,6 +11,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.other.SlimeMeta;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assumptions;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -1141,5 +1142,34 @@ public class EntityBlockPhysicsIntegrationTest {
                 velocityFixedResult, false);
 
         assertTrue(physicsResult2.cached());
+    }
+
+    @Test
+    public void bambooCollisionUsesOffsetShapePosition(Env env) {
+        Block offsetBlock = Block.values().stream()
+            .filter(block -> block.registry().offsetType() != net.minestom.server.registry.RegistryData.BlockEntry.OffsetType.NONE)
+            .filter(block -> block.registry().maxHorizontalOffset() > 0)
+            .findFirst()
+            .orElse(null);
+        Assumptions.assumeTrue(offsetBlock != null, "No block with collision offset metadata available in this registry snapshot");
+
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 1, offsetBlock);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+
+        PhysicsResult offsetResult = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
+        Point offsetCollisionPos = offsetResult.collisionShapePositions()[2];
+        assertNotNull(offsetCollisionPos);
+        assertNotEquals(1.0, offsetCollisionPos.z());
+
+        instance.setBlock(0, 42, 1, Block.STONE);
+        entity.teleport(new Pos(0, 42, 0));
+
+        PhysicsResult stoneResult = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
+        Point stoneCollisionPos = stoneResult.collisionShapePositions()[2];
+        assertNotNull(stoneCollisionPos);
+        assertEquals(1.0, stoneCollisionPos.z(), 1e-9);
     }
 }

@@ -7,6 +7,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.utils.block.BlockIterator;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,6 +38,7 @@ final class BlockCollision {
     }
 
     static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+        final Vec shapePos = shapePosition(b, blockPos.blockX(), blockPos.blockY(), blockPos.blockZ());
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
             if (!entity.preventBlockPlacement())
                 continue;
@@ -47,9 +49,9 @@ final class BlockCollision {
                 // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
                 // For this reason we subtract a small amount from the player position
                 Point playerPos = entity.getPosition().add(entity.getPosition().sub(blockPos).mul(0.0000001));
-                intersects = b.registry().collisionShape().intersectBox(playerPos.sub(blockPos), entity.getBoundingBox());
+                intersects = b.registry().collisionShape().intersectBox(playerPos.sub(shapePos), entity.getBoundingBox());
             } else {
-                intersects = b.registry().collisionShape().intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
+                intersects = b.registry().collisionShape().intersectBox(entity.getPosition().sub(shapePos), entity.getBoundingBox());
             }
             if (intersects) return entity;
         }
@@ -291,6 +293,7 @@ final class BlockCollision {
         // Don't step if chunk isn't loaded yet
         final Block currentBlock = getter.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
         final Shape currentShape = currentBlock.registry().collisionShape();
+        final Vec currentPos = shapePosition(currentBlock, blockX, blockY, blockZ);
 
         final boolean currentCollidable = !currentShape.relativeEnd().isZero();
         final boolean currentShort = currentShape.relativeEnd().y() < 0.5;
@@ -301,34 +304,56 @@ final class BlockCollision {
             final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
             final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
             final Shape belowShape = belowBlock.registry().collisionShape();
+            final Vec belowShapePos = shapePosition(belowBlock, blockX, blockY - 1, blockZ);
 
-            final Vec currentPos = new Vec(blockX, blockY, blockZ);
             // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
             // collision check against the current shape since the below shape isn't tall
             if (belowShape.relativeEnd().y() > 1) {
                 // we should always check both shapes, so no short-circuit here, to handle properties where the bounding box
                 // hits the current solid but misses the tall solid
-                return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult) |
+                return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowShapePos, boundingBox, finalResult) |
                         (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult));
             } else {
                 return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult);
             }
         }
 
-        if (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
-                new Vec(blockX, blockY, blockZ), boundingBox, finalResult)) {
+        if (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult)) {
             // if the current collision is sufficiently short, we might need to collide against the block below too
             if (currentShort) {
                 final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
                 final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
                 final Shape belowShape = belowBlock.registry().collisionShape();
+                final Vec belowShapePos = shapePosition(belowBlock, blockX, blockY - 1, blockZ);
                 // only do sweep if the below block is big enough to possibly hit
                 if (belowShape.relativeEnd().y() > 1)
-                    belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult);
+                    belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowShapePos, boundingBox, finalResult);
             }
             return true;
         }
         return false;
+    }
+
+    private static Vec shapePosition(Block block, int blockX, int blockY, int blockZ) {
+        final RegistryData.BlockEntry registry = block.registry();
+        final RegistryData.BlockEntry.OffsetType offsetType = registry.offsetType();
+        if (offsetType == RegistryData.BlockEntry.OffsetType.NONE) {
+            return new Vec(blockX, blockY, blockZ);
+        }
+
+        final long seed = xzOffsetSeed(blockX, blockZ);
+        final double horizontalRange = registry.maxHorizontalOffset() * 2.0D;
+        final double offsetX = (((seed & 15L) / 15.0D) - 0.5D) * horizontalRange;
+        final double offsetZ = ((((seed >> 8) & 15L) / 15.0D) - 0.5D) * horizontalRange;
+        final double offsetY = offsetType == RegistryData.BlockEntry.OffsetType.XYZ ?
+                (((seed >> 4) & 15L) / 15.0D - 1.0D) * registry.maxVerticalOffset() : 0.0D;
+        return new Vec(blockX + offsetX, blockY + offsetY, blockZ + offsetZ);
+    }
+
+    private static long xzOffsetSeed(int x, int z) {
+        long seed = (long) x * 3129871L ^ (long) z * 116129781L;
+        seed = seed * seed * 42317861L + seed * 11L;
+        return seed >> 16;
     }
 
     private static boolean shouldCheckLower(Vec entityVelocity, Pos entityPosition, int blockX, int blockY, int blockZ) {
