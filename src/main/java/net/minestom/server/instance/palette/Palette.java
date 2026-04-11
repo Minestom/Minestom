@@ -264,6 +264,7 @@ public sealed interface Palette permits PaletteImpl {
                     final int[] palette = buffer.read(VAR_INT_ARRAY);
                     result.paletteToValueList = new IntArrayList(palette);
                     result.valueToPaletteMap = new Int2IntOpenHashMap(palette.length);
+                    result.valueToPaletteMap.defaultReturnValue(-1);
                     for (int i = 0; i < palette.length; i++) {
                         result.valueToPaletteMap.put(palette[i], i);
                     }
