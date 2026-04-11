@@ -1146,12 +1146,13 @@ public class EntityBlockPhysicsIntegrationTest {
 
     @Test
     public void bambooCollisionUsesOffsetShapePosition(Env env) {
-        Block offsetBlock = Block.values().stream()
-            .filter(block -> block.registry().offsetType() != net.minestom.server.registry.RegistryData.BlockEntry.OffsetType.NONE)
-            .filter(block -> block.registry().maxHorizontalOffset() > 0)
-            .findFirst()
-            .orElse(null);
-        Assumptions.assumeTrue(offsetBlock != null, "No block with collision offset metadata available in this registry snapshot");
+        Block offsetBlock = Block.BAMBOO;
+        Assumptions.assumeTrue(
+            offsetBlock.registry().offsetType() != net.minestom.server.registry.RegistryData.BlockEntry.OffsetType.NONE,
+            "Bamboo does not use collision offset metadata in this registry snapshot");
+        Assumptions.assumeTrue(
+            offsetBlock.registry().maxHorizontalOffset() > 0,
+            "Bamboo does not expose horizontal collision offset metadata in this registry snapshot");
 
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 1, offsetBlock);
