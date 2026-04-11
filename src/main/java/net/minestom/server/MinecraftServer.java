@@ -8,7 +8,13 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.animal.ChickenVariant;
+import net.minestom.server.entity.metadata.animal.CowVariant;
+import net.minestom.server.entity.metadata.animal.FrogVariant;
+import net.minestom.server.entity.metadata.animal.PigVariant;
 import net.minestom.server.entity.metadata.animal.ZombieNautilusVariant;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
@@ -295,8 +301,32 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.wolfVariant();
     }
 
+    public static DynamicRegistry<WolfSoundVariant> getWolfSoundVariantRegistry() {
+        return serverProcess.wolfSoundVariant();
+    }
+
+    public static DynamicRegistry<CatVariant> getCatVariantRegistry() {
+        return serverProcess.catVariant();
+    }
+
+    public static DynamicRegistry<ChickenVariant> getChickenVariantRegistry() {
+        return serverProcess.chickenVariant();
+    }
+
+    public static DynamicRegistry<CowVariant> getCowVariantRegistry() {
+        return serverProcess.cowVariant();
+    }
+
+    public static DynamicRegistry<FrogVariant> getFrogVariantRegistry() {
+        return serverProcess.frogVariant();
+    }
+
+    public static DynamicRegistry<PigVariant> getPigVariantRegistry() {
+        return serverProcess.pigVariant();
+    }
+
     public static DynamicRegistry<ZombieNautilusVariant> getZombieNautilusVariantRegistry() {
-        return process().zombieNautilusVariant();
+        return serverProcess.zombieNautilusVariant();
     }
 
     public static DynamicRegistry<Enchantment> getEnchantmentRegistry() {
@@ -320,19 +350,19 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public static DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
-        return process().enchantmentLevelBasedValues();
+        return serverProcess.enchantmentLevelBasedValues();
     }
 
     public static DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
-        return process().enchantmentValueEffects();
+        return serverProcess.enchantmentValueEffects();
     }
 
     public static DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
-        return process().enchantmentEntityEffects();
+        return serverProcess.enchantmentEntityEffects();
     }
 
     public static DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
-        return process().enchantmentLocationEffects();
+        return serverProcess.enchantmentLocationEffects();
     }
 
     public static Server getServer() {
