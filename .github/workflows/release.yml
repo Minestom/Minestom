@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with: # We have to fetch full history because we need old tags
           fetch-depth: 0
       - name: Setup Java
@@ -17,7 +17,7 @@ jobs:
           distribution: graalvm
           java-version: 25
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Gradle pre-run
         run: ./gradlew determineMinecraftVersion --no-configuration-cache
