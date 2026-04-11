@@ -5,31 +5,31 @@ metadata.format.version = "1.1"
 # Important dependencies
 data = "1.21.11-rv2"
 adventure = "4.26.1"
-jetbrainsAnnotations = "26.0.2-1"
+jetbrainsAnnotations = "26.1.0"
 slf4j = "2.0.17"
 
 # Performance / Data Structures
 fastutil = "8.5.18"
 flare = "2.0.1"
 gson = "2.13.2"
-jcTools = "4.0.5"
+jcTools = "4.0.6"
 
 # Quality
-junit-jupiter = "6.0.0"
-junit-platform = "6.0.0"
+junit-jupiter = "6.0.3"
+junit-platform = "6.0.3"
 jmh = "1.37"
 jcstress = "0.16"
 
 # Code Generation
-javaPoet = "0.7.0"
+javaPoet = "0.14.0"
 
 # Log impl (for demo & codegen)
-logback = "1.5.19"
+logback = "1.5.32"
 
 # Gradle plugins
-shadow = "9.2.2"
-blossom = "2.1.0"
-nmcp = "1.2.0"
+shadow = "9.4.1"
+blossom = "2.2.0"
+nmcp = "1.4.4"
 jmh-plugin = "0.7.3"
 jcstress-plugin = "0.9.0"
 
