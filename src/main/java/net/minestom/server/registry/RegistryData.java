@@ -341,7 +341,8 @@ public final class RegistryData {
             float maxHorizontalOffset = parent != null ? parent.maxHorizontalOffset() : 0.0f;
             float maxVerticalOffset = parent != null ? parent.maxVerticalOffset() : 0.0f;
 
-            final Properties offsetData = main.section("offsetData") != null ? main.section("offsetData") : main.section("offset_data");
+            final Properties camelCaseOffsetData = main.section("offsetData");
+            final Properties offsetData = camelCaseOffsetData != null ? camelCaseOffsetData : main.section("offset_data");
             if (offsetData != null) {
                 final String parsedOffsetType = offsetData.containsKey("offsetType") ?
                         offsetData.getString("offsetType") : offsetData.getString("offset_type");
