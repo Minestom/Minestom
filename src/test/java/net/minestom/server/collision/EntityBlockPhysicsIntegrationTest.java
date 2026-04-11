@@ -1172,4 +1172,38 @@ public class EntityBlockPhysicsIntegrationTest {
         assertNotNull(stoneCollisionPos);
         assertEquals(1.0, stoneCollisionPos.z(), 1e-9);
     }
+
+    @Test
+    public void entityPhysicsCacheUsesNearestBlockForOffsetShapePosition(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 43, 0)).join();
+
+        Point[] collisionPoints = new Point[3];
+        Shape[] collisionShapes = new Shape[3];
+        Point[] collisionShapePositions = new Point[3];
+        collisionShapes[1] = Block.STONE.registry().collisionShape();
+        collisionShapePositions[1] = new Vec(-0.2, 42.0, 0.0);
+
+        var cachedSeed = new PhysicsResult(
+            entity.getPosition(),
+                Vec.ZERO,
+                true,
+                false,
+                true,
+                false,
+                new Vec(0.0, -1.0, 0.0),
+                collisionPoints,
+                collisionShapes,
+                collisionShapePositions,
+                true,
+                SweepResult.NO_COLLISION,
+                false
+        );
+
+        PhysicsResult physicsResult = CollisionUtils.handlePhysics(entity, new Vec(0.0, -1.0, 0.0), cachedSeed);
+        assertTrue(physicsResult.cached());
+    }
 }

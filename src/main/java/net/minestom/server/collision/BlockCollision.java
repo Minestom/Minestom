@@ -61,7 +61,11 @@ final class BlockCollision {
     private static PhysicsResult cachedPhysics(Vec velocity, Pos entityPosition,
                                                Block.Getter getter, PhysicsResult lastPhysicsResult) {
         if (lastPhysicsResult != null && lastPhysicsResult.collisionShapes()[1] instanceof ShapeImpl shape) {
-            var currentBlock = getter.getBlock(lastPhysicsResult.collisionShapePositions()[1], Block.Getter.Condition.TYPE);
+            final Point cachedShapePosition = lastPhysicsResult.collisionShapePositions()[1];
+            final int cachedBlockX = nearestBlockCoord(cachedShapePosition.x());
+            final int cachedBlockY = nearestBlockCoord(cachedShapePosition.y());
+            final int cachedBlockZ = nearestBlockCoord(cachedShapePosition.z());
+            var currentBlock = getter.getBlock(cachedBlockX, cachedBlockY, cachedBlockZ, Block.Getter.Condition.TYPE);
             var lastBlockBoxes = shape.boundingBoxes();
             var currentBlockBoxes = ((ShapeImpl) currentBlock.registry().collisionShape()).boundingBoxes();
 
@@ -84,6 +88,10 @@ final class BlockCollision {
             }
         }
         return null;
+    }
+
+    private static int nearestBlockCoord(double coordinate) {
+        return (int) Math.floor(coordinate + 0.5D);
     }
 
     private static PhysicsResult stepPhysics(BoundingBox boundingBox,
