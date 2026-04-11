@@ -18,19 +18,6 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-  # For the next branch, we include major updates
-  - package-ecosystem: "gradle"
-    directory: "/"
-    target-branch: "next"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "chore"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-minor"
-          - "version-update:semver-patch"
   # GH actions are often non breaking, just keep them up to date.
   - package-ecosystem: "github-actions"
     directory: "/"
