@@ -76,17 +76,18 @@ final class MetadataImpl {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    record EntryImpl<T>(int type, @UnknownNullability T value,
+    record EntryImpl<T extends @UnknownNullability Object>(int type, T value,
                         NetworkBuffer.Type<T> serializer) implements Metadata.Entry<T> {
-        static final NetworkBuffer.Type<EntryImpl<?>> SERIALIZER = new NetworkBuffer.Type<>() {
+        static final NetworkBuffer.Type<Entry<?>> SERIALIZER = new NetworkBuffer.Type<>() {
             @Override
-            public void write(NetworkBuffer buffer, EntryImpl value) {
-                buffer.write(VAR_INT, value.type);
-                buffer.write(value.serializer, value.value);
+            public void write(NetworkBuffer buffer, Entry value) {
+                final EntryImpl impl = (EntryImpl) value;
+                buffer.write(VAR_INT, impl.type);
+                buffer.write(impl.serializer, impl.value);
             }
 
             @Override
-            public EntryImpl read(NetworkBuffer buffer) {
+            public Entry read(NetworkBuffer buffer) {
                 final int type = buffer.read(VAR_INT);
                 final EntryImpl<?> value = (EntryImpl<?>) EMPTY_VALUES.get(type);
                 if (value == null) throw new UnsupportedOperationException("Unknown value type: " + type);

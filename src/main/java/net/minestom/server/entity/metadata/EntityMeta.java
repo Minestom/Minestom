@@ -9,12 +9,13 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
 public class EntityMeta {
-    private final WeakReference<Entity> entityRef;
+    private final WeakReference<@Nullable Entity> entityRef;
     protected final MetadataHolder metadata;
 
     public EntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
@@ -210,7 +211,7 @@ public class EntityMeta {
      * @return The value associated with the specified metadata entry.
      */
     @ApiStatus.Experimental
-    public <T> T get(MetadataDef.Entry<T> entry) {
+    public <T extends @UnknownNullability Object> T get(MetadataDef.Entry<T> entry) {
         return metadata.get(entry);
     }
 
@@ -222,7 +223,7 @@ public class EntityMeta {
      * @param <T>   The type of the metadata value.
      */
     @ApiStatus.Experimental
-    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+    public <T extends @UnknownNullability Object> void set(MetadataDef.Entry<T> entry, T value) {
         metadata.set(entry, value);
     }
 }
