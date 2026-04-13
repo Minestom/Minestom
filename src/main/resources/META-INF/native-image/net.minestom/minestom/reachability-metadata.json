@@ -176,6 +176,9 @@
       "type": "net.minestom.server.entity.MetadataDef$Avatar"
     },
     {
+      "type": "net.minestom.server.entity.MetadataDef$Display"
+    },
+    {
       "type": "net.minestom.server.entity.MetadataDef$Frog"
     },
     {
@@ -183,6 +186,9 @@
     },
     {
       "type": "net.minestom.server.entity.MetadataDef$LivingEntity"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$Mannequin"
     },
     {
       "type": "net.minestom.server.entity.MetadataDef$Mob"
