@@ -37,11 +37,13 @@ import net.minestom.server.entity.metadata.water.fish.*;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 public final class MetadataHolder {
@@ -55,7 +57,7 @@ public final class MetadataHolder {
         }
     }
 
-    private final Entity entity;
+    private final @Nullable Entity entity;
     private final Int2ObjectMap<Metadata.Entry<?>> entries = new Int2ObjectOpenHashMap<>();
 
     @SuppressWarnings("FieldMayBeFinal")
@@ -66,13 +68,14 @@ public final class MetadataHolder {
         this.entity = entity;
     }
 
-    public <T> T get(MetadataDef.Entry<T> entry) {
+    @SuppressWarnings("unchecked")
+    public <T extends @UnknownNullability Object> T get(MetadataDef.Entry<T> entry) {
         final int id = entry.index();
 
         final Metadata.Entry<?> value = this.entries.get(id);
         if (value == null) return entry.defaultValue();
         return switch (entry) {
-            case MetadataDef.Entry.Index<T> v -> (T) value.value();
+            case MetadataDef.Entry.Index<T> _ -> (T) value.value();
             case MetadataDef.Entry.BitMask bitMask -> {
                 final byte maskValue = (byte) value.value();
                 yield (T) ((Boolean) getMaskBit(maskValue, bitMask.bitMask()));
@@ -84,8 +87,18 @@ public final class MetadataHolder {
         };
     }
 
-    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+    public <T extends @UnknownNullability Object> void set(MetadataDef.Entry<T> entry, T value) {
         final int id = entry.index();
+
+        T current = get(entry);
+
+        // If a metadata value is unchanged we should not send it. In particular we need to be careful with
+        //  sending bitmasks which will overwrite client-predicted values. See PR 3089 for more info.
+        // However, interpolation delay is expected to be sent regularly with the same value to begin
+        //  interpolation so we always send it for now.
+        if (Objects.equals(current, value) && entry != MetadataDef.Display.INTERPOLATION_DELAY) {
+            return;
+        }
 
         Metadata.Entry<?> result = switch (entry) {
             case MetadataDef.Entry.Index<T> v -> v.function().apply(value);
@@ -155,7 +168,7 @@ public final class MetadataHolder {
         return Map.copyOf(this.entries);
     }
 
-    static final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
+    static final Map<String, BiFunction<@Nullable Entity, MetadataHolder, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
 
     @ApiStatus.Internal
     public static EntityMeta createMeta(
@@ -166,7 +179,7 @@ public final class MetadataHolder {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
     }
 
-    private static Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> createMetaMap() {
+    private static Map<String, BiFunction<@Nullable Entity, MetadataHolder, EntityMeta>> createMetaMap() {
         final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> map = new HashMap<>();
         map.put("minecraft:acacia_boat", BoatMeta::new);
         map.put("minecraft:acacia_chest_boat", BoatMeta::new);

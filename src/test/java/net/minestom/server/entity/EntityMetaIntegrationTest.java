@@ -2,6 +2,8 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.metadata.avatar.MannequinMeta;
+import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -134,6 +136,61 @@ public class EntityMetaIntegrationTest {
         validMetaDataPackets(packets, entity.getEntityId(), entry -> {
             if (entry.type() != Metadata.TYPE_OPT_CHAT) return;
             assertEquals(Component.text("Custom Name 2"), entry.value());
+        });
+    }
+
+    @Test
+    public void displayInterpolationDurationAlwaysSend(Env env) {
+        // ensure that display entity interpolation start delta is always sent even if we send the same value repeatedly.
+
+        var connection = env.createConnection();
+        var instance = env.createFlatInstance();
+        var startPos = new Pos(0, 42, 1);
+
+        connection.connect(instance, startPos);
+        var incomingPackets = connection.trackIncoming(EntityMetaDataPacket.class);
+
+        var entity = new Entity(EntityType.ITEM_DISPLAY);
+        entity.setInstance(instance, startPos);
+        var meta = (ItemDisplayMeta) entity.getEntityMeta();
+
+        meta.setTransformationInterpolationStartDelta(1);
+        meta.setTransformationInterpolationStartDelta(2); // same tick
+
+        env.tick();
+        env.tick();
+
+        meta.setTransformationInterpolationStartDelta(3);
+
+        var packets = incomingPackets.collect();
+        assertEquals(4, packets.size()); // the 3 we sent, and 1 more for the spawn
+        assertEquals(1, packets.get(1).entries().get(MetadataDef.Display.INTERPOLATION_DELAY.index()).value());
+        assertEquals(2, packets.get(2).entries().get(MetadataDef.Display.INTERPOLATION_DELAY.index()).value());
+        assertEquals(3, packets.get(3).entries().get(MetadataDef.Display.INTERPOLATION_DELAY.index()).value());
+    }
+
+    @Test
+    public void testMannequin(Env env) {
+        // Ensure that mannequins have all skin layers by default, and that they can be changed by setting the metadata.
+        var connection = env.createConnection();
+        var instance = env.createFlatInstance();
+        var startPos = new Pos(0, 42, 1);
+
+        connection.connect(instance, startPos);
+        var incomingPackets = connection.trackIncoming(EntityMetaDataPacket.class);
+
+        var entity = new Entity(EntityType.MANNEQUIN);
+        var meta = (MannequinMeta) entity.getEntityMeta();
+        Assertions.assertTrue(meta.isCapeEnabled());
+        Assertions.assertEquals(0x7F, meta.getDisplayedSkinParts()); // all enabled
+        meta.setDisplayedSkinParts((byte) 0); // disable all
+        entity.setInstance(instance, startPos).join();
+
+        incomingPackets.assertSingle(packet -> {
+            assertEquals(packet.entityId(), entity.getEntityId());
+            var entry = packet.entries().get(MetadataDef.Mannequin.DISPLAYED_MODEL_PARTS_FLAGS.index());
+            assertEquals(Metadata.TYPE_BYTE, entry.type());
+            assertEquals((byte) 0, entry.value());
         });
     }
 }

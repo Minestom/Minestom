@@ -19,6 +19,7 @@ import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +31,10 @@ import static net.minestom.server.entity.MetadataDefImpl.*;
  * List of all entity metadata.
  * <p>
  * Classes must be used (and not interfaces) to enforce loading order.
+ * <p>
+ * When using this class directly, ensure that you are using fields on the most inner class,
+ * for example {@link Player#ENTITY_FLAGS} and not {@link MetadataDef#ENTITY_FLAGS}.
+ * You need do this as some classes have different default values.
  */
 @SuppressWarnings({"unused", "SpellCheckingInspection"})
 public sealed class MetadataDef {
@@ -240,6 +245,15 @@ public sealed class MetadataDef {
     }
 
     public static final class Mannequin extends Avatar {
+        // Maniquens have their model flags with all flags enabled compared to Avatar.
+        public static final Entry<Byte> DISPLAYED_MODEL_PARTS_FLAGS = index(-1, Metadata::Byte, (byte) 0x7F);
+        public static final Entry<Boolean> IS_CAPE_ENABLED = bitMask(-1, (byte) 0x01, true);
+        public static final Entry<Boolean> IS_JACKET_ENABLED = bitMask(-1, (byte) 0x02, true);
+        public static final Entry<Boolean> IS_LEFT_SLEEVE_ENABLED = bitMask(-1, (byte) 0x04, true);
+        public static final Entry<Boolean> IS_RIGHT_SLEEVE_ENABLED = bitMask(-1, (byte) 0x08, true);
+        public static final Entry<Boolean> IS_LEFT_PANTS_LEG_ENABLED = bitMask(-1, (byte) 0x10, true);
+        public static final Entry<Boolean> IS_RIGHT_PANTS_LEG_ENABLED = bitMask(-1, (byte) 0x20, true);
+        public static final Entry<Boolean> IS_HAT_ENABLED = bitMask(-1, (byte) 0x40, true);
         public static final Entry<ResolvableProfile> PROFILE = index(0, Metadata::ResolvableProfile, ResolvableProfile.EMPTY);
         public static final Entry<Boolean> IMMOVABLE = index(1, Metadata::Boolean, false);
         public static final Entry<@Nullable Component> DESCRIPTION = index(2, Metadata::OptComponent, Component.translatable("entity.minecraft.mannequin.label"));
@@ -651,12 +665,12 @@ public sealed class MetadataDef {
         return MetadataDefImpl.count(clazz);
     }
 
-    public sealed interface Entry<T> {
+    public sealed interface Entry<T extends @UnknownNullability Object> {
         int index();
 
         T defaultValue();
 
-        record Index<T>(int index, Function<T, Metadata.Entry<T>> function, T defaultValue) implements Entry<T> {
+        record Index<T extends @UnknownNullability Object>(int index, Function<T, Metadata.Entry<T>> function, T defaultValue) implements Entry<T> {
         }
 
         record BitMask(int index, byte bitMask, Boolean defaultValue) implements Entry<Boolean> {
