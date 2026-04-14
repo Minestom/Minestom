@@ -5,6 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.Rotation;
+import org.intellij.lang.annotations.MagicConstant;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -14,7 +15,7 @@ public record ClientUpdateStructureBlockPacket(
         Point offset, Point size,
         Mirror mirror, Rotation rotation,
         String metadata, float integrity,
-        long seed, byte flags
+        long seed, @MagicConstant(flagsFromClass = ClientUpdateStructureBlockPacket.class) byte flags
 ) implements ClientPacket.Play {
 
     public static final NetworkBuffer.Type<ClientUpdateStructureBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -25,7 +26,7 @@ public record ClientUpdateStructureBlockPacket(
             VECTOR3B, ClientUpdateStructureBlockPacket::offset,
             VECTOR3B, ClientUpdateStructureBlockPacket::size,
             Mirror.NETWORK_TYPE, ClientUpdateStructureBlockPacket::mirror,
-            VAR_INT.transform(ClientUpdateStructureBlockPacket::fromRestrictedRotation, ClientUpdateStructureBlockPacket::toRestrictedRotation), ClientUpdateStructureBlockPacket::rotation,
+            BYTE.transform(ClientUpdateStructureBlockPacket::fromRestrictedRotation, ClientUpdateStructureBlockPacket::toRestrictedRotation), ClientUpdateStructureBlockPacket::rotation,
             STRING, ClientUpdateStructureBlockPacket::metadata,
             FLOAT, ClientUpdateStructureBlockPacket::integrity,
             LONG, ClientUpdateStructureBlockPacket::seed,
@@ -71,7 +72,7 @@ public record ClientUpdateStructureBlockPacket(
         public static final NetworkBuffer.Type<Mirror> NETWORK_TYPE = NetworkBuffer.Enum(Mirror.class);
     }
 
-    private static int toRestrictedRotation(Rotation rotation) {
+    private static byte toRestrictedRotation(Rotation rotation) {
         return switch (rotation) {
             case NONE -> 0;
             case CLOCKWISE -> 1;

@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.UUID;
-import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
 
 public record ClientResourcePackStatusPacket(
         UUID id,
@@ -16,7 +16,7 @@ public record ClientResourcePackStatusPacket(
 ) implements ClientPacket.Configuration, ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientResourcePackStatusPacket> SERIALIZER = NetworkBufferTemplate.template(
             UUID, ClientResourcePackStatusPacket::id,
-            VAR_INT.transform(ClientResourcePackStatusPacket::readStatus, ClientResourcePackStatusPacket::statusId), ClientResourcePackStatusPacket::status,
+            BYTE.transform(ClientResourcePackStatusPacket::readStatus, ClientResourcePackStatusPacket::statusId), ClientResourcePackStatusPacket::status,
             ClientResourcePackStatusPacket::new
     );
 
@@ -34,7 +34,7 @@ public record ClientResourcePackStatusPacket(
         };
     }
 
-    private static int statusId(ResourcePackStatus status) {
+    private static byte statusId(ResourcePackStatus status) {
         return switch (status) {
             case SUCCESSFULLY_LOADED -> 0;
             case DECLINED -> 1;

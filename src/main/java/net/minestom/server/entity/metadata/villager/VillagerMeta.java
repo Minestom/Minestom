@@ -78,15 +78,15 @@ public class VillagerMeta extends AbstractVillagerMeta {
 
         private static final Level[] VALUES = values();
 
-        private int toProtocolId() {
-            return this.ordinal() + 1;  // Villager levels are 1-indexed
+        private byte toProtocolId() {
+            return (byte) (this.ordinal() + 1);  // Villager levels are 1-indexed
         }
 
-        private static Level fromProtocolId(int value) {
+        private static Level fromProtocolId(byte value) {
             return VALUES[value - 1];
         }
 
-        public static final NetworkBuffer.Type<Level> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Level::fromProtocolId, Level::toProtocolId);
+        public static final NetworkBuffer.Type<Level> NETWORK_TYPE = NetworkBuffer.BYTE.transform(Level::fromProtocolId, Level::toProtocolId);
     }
 
 }

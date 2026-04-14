@@ -21,7 +21,7 @@ public record ClientHandshakePacket(int protocolVersion, String serverAddress,
             VAR_INT, ClientHandshakePacket::protocolVersion,
             STRING, ClientHandshakePacket::serverAddress,
             UNSIGNED_SHORT, ClientHandshakePacket::serverPort,
-            VAR_INT.transform(Intent::fromId, Intent::id), ClientHandshakePacket::intent,
+    /*VarInt*/BYTE.transform(Intent::fromId, Intent::id), ClientHandshakePacket::intent,
             ClientHandshakePacket::new);
 
     private static int maxHandshakeLength() {
@@ -43,8 +43,8 @@ public record ClientHandshakePacket(int protocolVersion, String serverAddress,
             };
         }
 
-        public int id() {
-            return ordinal() + 1;
+        public byte id() {
+            return (byte) (ordinal() + 1);
         }
     }
 }
