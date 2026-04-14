@@ -2,7 +2,7 @@ package net.minestom.server.network.foreign;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.NetworkBufferFactory;
+import net.minestom.server.network.NetworkBufferAllocator;
 import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -16,33 +16,33 @@ import java.util.function.Consumer;
 /**
  * The provider used as the implementation of {@link NetworkBuffer} for {@link MemorySegment}
  * <br>
- * This uses {@link MemorySegment} as the backing with {@link NetworkBufferSegmentAllocator} for faster malloc implementations if available.
+ * This uses {@link MemorySegment} as the backing with {@link NetworkBufferNativeSegmentAllocator} for faster malloc implementations if available.
  * <br>
  * The implementation assumes all preconditions are valid as checked in {@link NetworkBuffer}
  */
 public final class NetworkBufferSegmentProvider {
     public static final NetworkBufferSegmentProvider INSTANCE = new NetworkBufferSegmentProvider();
-    private static final NetworkBufferFactory STATIC_FACTORY = new NetworkBufferFactoryImpl(Arena::ofAuto, null, null);
-    private static final NetworkBufferFactory RESIZEABLE_FACTORY = STATIC_FACTORY.autoResize(NetworkBuffer.AutoResize.DOUBLE);
+    private static final NetworkBufferAllocator STATIC_ALLOCATOR = new NetworkBufferAllocatorImpl(Arena::ofAuto, null, null);
+    private static final NetworkBufferAllocator RESIZEABLE_ALLOCATOR = STATIC_ALLOCATOR.autoResize(NetworkBuffer.AutoResize.DOUBLE);
 
     /**
-     * Creates the static factory instance used in {@link NetworkBuffer#staticBuffer(long)}
+     * Creates the static allocator instance used in {@link NetworkBuffer#staticBuffer(long)}
      * <br>
      * Note: this should not have a resize strategy.
      *
-     * @return the new static factory
+     * @return the new static allocator
      */
-    public NetworkBufferFactory createStaticFactory() {
-        return STATIC_FACTORY;
+    public NetworkBufferAllocator staticAllocator() {
+        return STATIC_ALLOCATOR;
     }
 
     /**
-     * Creates the resizable factory instance used in {@link NetworkBuffer#resizableBuffer()}
+     * Creates the resizable allocator instance used in {@link NetworkBuffer#resizableBuffer()}
      *
-     * @return the new resizable factory
+     * @return the new resizable allocator
      */
-    public NetworkBufferFactory createResizeableFactory() {
-        return RESIZEABLE_FACTORY;
+    public NetworkBufferAllocator resizeableAllocator() {
+        return RESIZEABLE_ALLOCATOR;
     }
 
     /**
@@ -89,9 +89,9 @@ public final class NetworkBufferSegmentProvider {
     @Contract("_, _ -> new")
     public byte[] makeArray(Consumer<? super NetworkBuffer> writing, @Nullable Registries registries) {
         try (Arena arena = Arena.ofConfined()) {
-            NetworkBufferFactory factory = NetworkBufferFactory.resizeableFactory().arena(arena);
-            factory = registries != null ? factory.registry(registries) : factory;
-            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            NetworkBufferAllocator allocator = NetworkBufferAllocator.resizeableAllocator().arena(arena);
+            allocator = registries != null ? allocator.registry(registries) : allocator;
+            final NetworkBuffer buffer = allocator.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
             return buffer.extractWrittenBytes(writing);
         }
     }
@@ -111,9 +111,9 @@ public final class NetworkBufferSegmentProvider {
     @Contract("_ ,_, _ -> new")
     public <T extends @UnknownNullability Object> byte[] makeArray(NetworkBuffer.Type<T> type, T value, @Nullable Registries registries) {
         try (Arena arena = Arena.ofConfined()) {
-            NetworkBufferFactory factory = NetworkBufferFactory.resizeableFactory().arena(arena);
-            factory = registries != null ? factory.registry(registries) : factory;
-            final NetworkBuffer buffer = factory.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
+            NetworkBufferAllocator allocator = NetworkBufferAllocator.resizeableAllocator().arena(arena);
+            allocator = registries != null ? allocator.registry(registries) : allocator;
+            final NetworkBuffer buffer = allocator.allocate(ServerFlag.DEFAULT_RESIZEABLE_SIZE);
             return buffer.extractWrittenBytes(type, value);
         }
     }

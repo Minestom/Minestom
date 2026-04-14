@@ -1,7 +1,7 @@
 package net.minestom.server.network.foreign;
 
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.NetworkBufferFactory;
+import net.minestom.server.network.NetworkBufferAllocator;
 import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,48 +11,48 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- * Immutable Factory for {@link NetworkBuffer} instances.
+ * Immutable allocator for {@link NetworkBuffer} instances.
  *
  * @param arenaSupplier the supplier of the {@link Arena} to use for allocations
  * @param autoResize the auto-resize strategy to use, or {@code null} for no auto-resize
  * @param registries the registries to use, or {@code null} for no registries
  */
-record NetworkBufferFactoryImpl(Supplier<? extends Arena> arenaSupplier, @Nullable NetworkBuffer.AutoResize autoResize,
-                                @Nullable Registries registries) implements NetworkBufferFactory {
+record NetworkBufferAllocatorImpl(Supplier<? extends Arena> arenaSupplier, @Nullable NetworkBuffer.AutoResize autoResize,
+                                  @Nullable Registries registries) implements NetworkBufferAllocator {
 
-    public NetworkBufferFactoryImpl {
+    public NetworkBufferAllocatorImpl {
         Objects.requireNonNull(arenaSupplier, "arenaSupplier");
     }
 
     @Override
-    public NetworkBufferFactoryImpl arena(Arena arena) {
+    public NetworkBufferAllocatorImpl arena(Arena arena) {
         Objects.requireNonNull(arena, "arena");
         final Supplier<Arena> arenaSupplier = () -> arena; // stable value/lazy constant
-        return new NetworkBufferFactoryImpl(arenaSupplier, autoResize, registries);
+        return new NetworkBufferAllocatorImpl(arenaSupplier, autoResize, registries);
     }
 
     @Override
-    public NetworkBufferFactoryImpl arena(Supplier<? extends Arena> arenaSupplier) {
+    public NetworkBufferAllocatorImpl arena(Supplier<? extends Arena> arenaSupplier) {
         Objects.requireNonNull(arenaSupplier, "arenaSupplier");
-        return new NetworkBufferFactoryImpl(arenaSupplier, autoResize, registries);
+        return new NetworkBufferAllocatorImpl(arenaSupplier, autoResize, registries);
     }
 
     @Override
-    public NetworkBufferFactoryImpl autoResize(NetworkBuffer.AutoResize autoResize) {
+    public NetworkBufferAllocatorImpl autoResize(NetworkBuffer.AutoResize autoResize) {
         Objects.requireNonNull(autoResize, "autoResize");
-        return new NetworkBufferFactoryImpl(arenaSupplier, autoResize, registries);
+        return new NetworkBufferAllocatorImpl(arenaSupplier, autoResize, registries);
     }
 
     @Override
-    public NetworkBufferFactoryImpl registry(Registries registries) {
+    public NetworkBufferAllocatorImpl registry(Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return new NetworkBufferFactoryImpl(arenaSupplier, autoResize, registries);
+        return new NetworkBufferAllocatorImpl(arenaSupplier, autoResize, registries);
     }
 
     @Override
     public NetworkBuffer allocate(long length) {
         final Arena arena = Objects.requireNonNull(arenaSupplier.get(), "arena");
-        final MemorySegment segment = NetworkBufferSegmentAllocator.allocate(arena, length);
+        final MemorySegment segment = NetworkBufferNativeSegmentAllocator.allocate(arena, length);
         if (autoResize != null) {
             return new NetworkBufferResizeableSegmentImpl(arena, segment, 0, 0, autoResize, arenaSupplier, registries);
         } else {

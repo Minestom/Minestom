@@ -9,8 +9,8 @@ import java.lang.foreign.Arena;
 import java.util.function.Supplier;
 
 /**
- * Factory for creating a {@link NetworkBuffer} through {@link NetworkBufferFactory#staticFactory()}
- * or {@link NetworkBufferFactory#resizeableFactory()}.
+ * Factory like object for creating a {@link NetworkBuffer} through {@link NetworkBufferAllocator#staticAllocator()}
+ * or {@link NetworkBufferAllocator#resizeableAllocator()}.
  * <br>
  * Useful for creating buffers with specific configuration like arenas, auto resizing, and registries.
  * <br>
@@ -20,31 +20,31 @@ import java.util.function.Supplier;
  * For example, using a confined arena for a manged lifetime.
  * <pre>{@code
  * try (Arena arena = Arena.ofConfined()) {
- *      var factory = NetworkBuffer.Factory.staticFactory().arena(arena);
- *      NetworkBuffer buffer = factory.allocate(1024);
+ *      var allocator = NetworkBufferAllocator.staticAllocator().arena(arena);
+ *      NetworkBuffer buffer = allocator.allocate(1024);
  *      // Do things with the buffer
  * }}</pre>
  */
-public interface NetworkBufferFactory {
+public interface NetworkBufferAllocator {
     /**
-     * Gets the static factory where {@link #arena(Supplier)} is set.
+     * Gets the static allocator where {@link #arena(Supplier)} is set.
      *
-     * @return the static factory.
+     * @return the static allocator.
      */
     @Contract(pure = true)
-    static NetworkBufferFactory staticFactory() {
-        return NetworkBufferSegmentProvider.INSTANCE.createStaticFactory();
+    static NetworkBufferAllocator staticAllocator() {
+        return NetworkBufferSegmentProvider.INSTANCE.staticAllocator();
     }
 
     /**
-     * Gets the resizeable factory where {@link #autoResize(NetworkBuffer.AutoResize)} is set and built off {@link #staticFactory()}
+     * Gets the resizeable allocator where {@link #autoResize(NetworkBuffer.AutoResize)} is set and built off {@link #staticAllocator()}
      * using the {@link #autoResize(NetworkBuffer.AutoResize)} of {@link NetworkBuffer.AutoResize#DOUBLE}.
      *
-     * @return the resizeable factory.
+     * @return the resizeable allocator.
      */
     @Contract(pure = true)
-    static NetworkBufferFactory resizeableFactory() {
-        return NetworkBufferSegmentProvider.INSTANCE.createResizeableFactory();
+    static NetworkBufferAllocator resizeableAllocator() {
+        return NetworkBufferSegmentProvider.INSTANCE.resizeableAllocator();
     }
 
     /**
@@ -53,11 +53,11 @@ public interface NetworkBufferFactory {
      * Otherwise, if left unset, the default arena will be used.
      *
      * @param arena the arena
-     * @return the new factory
+     * @return the new allocator
      */
     @ApiStatus.Experimental
     @Contract(pure = true, value = "_ -> new")
-    NetworkBufferFactory arena(Arena arena);
+    NetworkBufferAllocator arena(Arena arena);
 
     /**
      * Sets the new arena strategy.
@@ -68,35 +68,35 @@ public interface NetworkBufferFactory {
      * Otherwise, if left unset, the default arena will be used.
      *
      * @param arenaSupplier the supplier
-     * @return the new factory
+     * @return the new allocator
      */
     @ApiStatus.Experimental
     @Contract(pure = true, value = "_ -> new")
-    NetworkBufferFactory arena(Supplier<? extends Arena> arenaSupplier);
+    NetworkBufferAllocator arena(Supplier<? extends Arena> arenaSupplier);
 
     /**
      * Sets the auto-resizing strategy.
      * <br>
      * Otherwise, if left unset, the buffer will never be resized and is considered a static buffer
-     * unless it's a {@link #resizeableFactory()}.
+     * unless it's a {@link #resizeableAllocator()}.
      *
      * @param autoResize the {@link NetworkBuffer.AutoResize} strategy
-     * @return the new factory
+     * @return the new allocator
      */
     @Contract(pure = true, value = "_ -> new")
-    NetworkBufferFactory autoResize(NetworkBuffer.AutoResize autoResize);
+    NetworkBufferAllocator autoResize(NetworkBuffer.AutoResize autoResize);
 
     /**
      * Sets a registry for buffers to use.
      *
      * @param registries the registry
-     * @return the new factory
+     * @return the new allocator
      */
     @Contract(pure = true, value = "_ -> new")
-    NetworkBufferFactory registry(Registries registries);
+    NetworkBufferAllocator registry(Registries registries);
 
     /**
-     * Builds a new network buffer from this factory with {@code length} allocated.
+     * Builds a new network buffer from this allocator with {@code length} allocated.
      *
      * @param length the size of the buffer, or initial size if {@link NetworkBuffer.AutoResize} is set.
      * @return the new network buffer

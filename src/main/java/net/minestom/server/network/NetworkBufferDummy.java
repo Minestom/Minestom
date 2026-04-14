@@ -122,12 +122,12 @@ final class NetworkBufferDummy implements NetworkBuffer, NetworkBuffer.Direct {
     }
 
     @Override
-    public NetworkBuffer trimmed(NetworkBufferFactory factory) {
+    public NetworkBuffer trimmed(NetworkBufferAllocator factory) {
         return this;
     }
 
     @Override
-    public NetworkBuffer copy(NetworkBufferFactory factory, long index, long length, long readIndex, long writeIndex) {
+    public NetworkBuffer copy(NetworkBufferAllocator factory, long index, long length, long readIndex, long writeIndex) {
         assertDummy();
         return null;
     }
@@ -261,12 +261,12 @@ final class NetworkBufferDummy implements NetworkBuffer, NetworkBuffer.Direct {
     }
 
     @Override
-    public void putString(long index, String value) {
+    public void putTerminatedString(long index, String value) {
         // noop
     }
 
     @Override
-    public String getString(long index) {
+    public String getTerminatedString(long index) {
         assertDummy();
         return null;
     }

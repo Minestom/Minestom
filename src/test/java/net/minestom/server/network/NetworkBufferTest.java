@@ -583,7 +583,7 @@ public class NetworkBufferTest {
     public void testConfinedArena() {
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            buffer = NetworkBufferFactory.staticFactory().arena(arena).allocate(256);
+            buffer = NetworkBufferAllocator.staticAllocator().arena(arena).allocate(256);
             buffer.write(VAR_INT, Integer.MAX_VALUE);
             buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
             assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
@@ -595,7 +595,7 @@ public class NetworkBufferTest {
     public void testConfinedArenaCopy() {
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            var settings = NetworkBufferFactory.staticFactory().arena(arena);
+            var settings = NetworkBufferAllocator.staticAllocator().arena(arena);
             var confinedBuffer = settings.allocate(256);
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
@@ -610,7 +610,7 @@ public class NetworkBufferTest {
         var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
         final NetworkBuffer buffer;
         try (var arena = Arena.ofConfined()) {
-            var confinedBuffer = NetworkBufferFactory.staticFactory().arena(arena).allocate(256);
+            var confinedBuffer = NetworkBufferAllocator.staticAllocator().arena(arena).allocate(256);
             confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
             confinedBuffer.write(RAW_BYTES, stringBytes);
             assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));

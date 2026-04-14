@@ -2,7 +2,7 @@ package net.minestom.server.network.foreign;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.NetworkBufferFactory;
+import net.minestom.server.network.NetworkBufferAllocator;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.collection.ObjectPool;
 import org.jetbrains.annotations.Contract;
@@ -198,7 +198,7 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
     }
 
     @Override
-    public final NetworkBuffer copy(NetworkBufferFactory factory, long index, long length, long readIndex, long writeIndex) {
+    public final NetworkBuffer copy(NetworkBufferAllocator factory, long index, long length, long readIndex, long writeIndex) {
         final NetworkBufferSegmentImpl newBuffer = (NetworkBufferSegmentImpl) factory.allocate(length);
         MemorySegment.copy(this.segment(), index, newBuffer.segment(), 0, length);
         return newBuffer.index(readIndex, writeIndex);
@@ -379,13 +379,13 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
 
     // Warning this is writing a null terminated string
     @Override
-    public final void putString(long index, String value) {
+    public final void putTerminatedString(long index, String value) {
         segment().setString(index, value);
     }
 
     // Warning this is reading a null terminated string
     @Override
-    public final String getString(long index) {
+    public final String getTerminatedString(long index) {
         return segment().getString(index);
     }
 

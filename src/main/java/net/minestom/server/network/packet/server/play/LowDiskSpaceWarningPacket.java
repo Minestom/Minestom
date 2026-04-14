@@ -5,5 +5,6 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
 public record LowDiskSpaceWarningPacket() implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<LowDiskSpaceWarningPacket> SERIALIZER = NetworkBufferTemplate.template(new LowDiskSpaceWarningPacket());
+    public static final LowDiskSpaceWarningPacket INSTANCE = new LowDiskSpaceWarningPacket();
+    public static final NetworkBuffer.Type<LowDiskSpaceWarningPacket> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
 }

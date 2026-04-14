@@ -31,11 +31,11 @@ import java.util.function.Consumer;
  * ({@link ServerFlag#FORCE_NATIVE_ALLOCATION}).</li>
  * </ul>
  */
-public final class NetworkBufferSegmentAllocator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkBufferSegmentAllocator.class);
+public final class NetworkBufferNativeSegmentAllocator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkBufferNativeSegmentAllocator.class);
     // true if we use system malloc and free.
     public static final boolean ENABLE_NATIVE = ServerFlag.FORCE_NATIVE_ALLOCATION
-            || (ServerFlag.ATTEMPT_NATIVE_ALLOCATION && NetworkBufferSegmentAllocator.class.getModule().isNativeAccessEnabled());
+            || (ServerFlag.ATTEMPT_NATIVE_ALLOCATION && NetworkBufferNativeSegmentAllocator.class.getModule().isNativeAccessEnabled());
 
     // malloc(size_t size) -> void*
     private static final @UnknownNullability MethodHandle MALLOC_HANDLE;
@@ -54,7 +54,7 @@ public final class NetworkBufferSegmentAllocator {
                     Linker.nativeLinker().defaultLookup().find("free").orElseThrow(),
                     FunctionDescriptor.ofVoid(ValueLayout.ADDRESS)
             );
-            SEGMENT_CLEANER = NetworkBufferSegmentAllocator::free;
+            SEGMENT_CLEANER = NetworkBufferNativeSegmentAllocator::free;
             LOGGER.info("Using native malloc/free implementation for NetworkBuffer allocations.");
         } else {
             MALLOC_HANDLE = null;
@@ -94,7 +94,7 @@ public final class NetworkBufferSegmentAllocator {
                 throw new IllegalStateException("Failed to reinterpret native memory: %d:%d".formatted(segment.address(), byteSize), e);
             } finally {
                 // Attempt to free could cause another exception.
-                NetworkBufferSegmentAllocator.free(segment);
+                NetworkBufferNativeSegmentAllocator.free(segment);
             }
         }
     }

@@ -59,7 +59,7 @@ final class NetworkBufferResizeableSegmentImpl extends NetworkBufferSegmentImpl 
         if (length < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (length == capacity) throw new IllegalArgumentException("New size is the same as the current size");
         final Arena arena = arenaSupplier.get(); // We need to use a new arena to allow the old one to deallocate.
-        final MemorySegment newSegment = NetworkBufferSegmentAllocator.allocate(arena, length);
+        final MemorySegment newSegment = NetworkBufferNativeSegmentAllocator.allocate(arena, length);
         MemorySegment.copy(this.segment, 0, newSegment, 0, capacity);
         this.segment = newSegment;
         this.arena = arena;
@@ -84,7 +84,7 @@ final class NetworkBufferResizeableSegmentImpl extends NetworkBufferSegmentImpl 
         if (readableBytes == capacity()) return;
         final Arena arena = this.arenaSupplier.get();
         final MemorySegment oldSegment = this.segment;
-        final MemorySegment segment = NetworkBufferSegmentAllocator.allocate(arena, readableBytes);
+        final MemorySegment segment = NetworkBufferNativeSegmentAllocator.allocate(arena, readableBytes);
         MemorySegment.copy(oldSegment, readIndex(), segment, 0, readableBytes);
         this.segment = segment;
         this.arena = arena;

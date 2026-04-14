@@ -10,12 +10,11 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityPose;
-import net.minestom.server.network.foreign.NetworkBufferSegmentAllocator;
+import net.minestom.server.network.foreign.NetworkBufferNativeSegmentAllocator;
 import net.minestom.server.network.foreign.NetworkBufferSegmentProvider;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
-import net.minestom.server.utils.Functions;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
 import net.minestom.server.utils.validate.Check;
@@ -79,11 +78,11 @@ import java.util.zip.DataFormatException;
  * <br>
  *
  * <b>Note:</b> These are not thread safe, because of their index tracking,
- * also buffers will attempt to use native allocation through {@link NetworkBufferSegmentAllocator} if available.
+ * also buffers will attempt to use native allocation through {@link NetworkBufferNativeSegmentAllocator} if available.
  *
  * @see Type for custom types
  * @see NetworkBufferTemplate for templating
- * @see NetworkBufferFactory to create custom allocators
+ * @see NetworkBufferAllocator to create custom allocators
  * @see IOView to interface with existing code
  */
 public interface NetworkBuffer {
@@ -261,53 +260,53 @@ public interface NetworkBuffer {
     }
 
     /**
-     * Creates a new static buffer using {@link NetworkBufferFactory#staticFactory()}.
+     * Creates a new static buffer using {@link NetworkBufferAllocator#staticAllocator()}.
      *
-     * @param size       the size to use for {@link NetworkBufferFactory#allocate(long)}
+     * @param size       the size to use for {@link NetworkBufferAllocator#allocate(long)}
      * @param registries the registries to use
      * @return the new network buffer
      */
     @Contract("_, _ -> new")
     static NetworkBuffer staticBuffer(long size, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return NetworkBufferFactory.staticFactory().registry(registries).allocate(size);
+        return NetworkBufferAllocator.staticAllocator().registry(registries).allocate(size);
     }
 
     /**
-     * Creates a new static buffer using {@link NetworkBufferFactory#staticFactory()}.
+     * Creates a new static buffer using {@link NetworkBufferAllocator#staticAllocator()}.
      *
-     * @param size the size to use for {@link NetworkBufferFactory#allocate(long)}
+     * @param size the size to use for {@link NetworkBufferAllocator#allocate(long)}
      * @return the new network buffer
      */
     @Contract("_ -> new")
     static NetworkBuffer staticBuffer(long size) {
-        return NetworkBufferFactory.staticFactory().allocate(size);
+        return NetworkBufferAllocator.staticAllocator().allocate(size);
     }
 
     /**
-     * Creates a resizeable buffer using {@link NetworkBufferFactory#resizeableFactory()}
+     * Creates a resizeable buffer using {@link NetworkBufferAllocator#resizeableAllocator()}
      *
-     * @param initialSize the initial size to use for {@link NetworkBufferFactory#allocate(long)}
+     * @param initialSize the initial size to use for {@link NetworkBufferAllocator#allocate(long)}
      * @param registries  the registries to use
      * @return the new buffer
      */
     @Contract("_, _ -> new")
     static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         Objects.requireNonNull(registries, "registries");
-        return NetworkBufferFactory.resizeableFactory()
+        return NetworkBufferAllocator.resizeableAllocator()
                 .registry(registries)
                 .allocate(initialSize);
     }
 
     /**
-     * Creates a resizeable buffer using {@link NetworkBufferFactory#resizeableFactory()}
+     * Creates a resizeable buffer using {@link NetworkBufferAllocator#resizeableAllocator()}
      *
-     * @param initialSize the initial size to use for {@link NetworkBufferFactory#allocate(long)}
+     * @param initialSize the initial size to use for {@link NetworkBufferAllocator#allocate(long)}
      * @return the new buffer
      */
     @Contract("_ -> new")
     static NetworkBuffer resizableBuffer(long initialSize) {
-        return NetworkBufferFactory.resizeableFactory().allocate(initialSize);
+        return NetworkBufferAllocator.resizeableAllocator().allocate(initialSize);
     }
 
     /**
@@ -867,7 +866,7 @@ public interface NetworkBuffer {
      * Resize the buffer to {@code length} the new {@link #capacity()}.
      * <br>
      * Note: This throws away the existing arena so it can be freed.
-     * You can set a fixed arena by {@link NetworkBufferFactory#arena(Arena)}
+     * You can set a fixed arena by {@link NetworkBufferAllocator#arena(Arena)}
      *
      * @param length the new size
      * @throws IllegalArgumentException      if {@code length < 0}
@@ -946,7 +945,7 @@ public interface NetworkBuffer {
     }
 
     /**
-     * Creates a copy of the buffer trimmed using the factory to {@link NetworkBufferFactory#staticFactory()}.
+     * Creates a copy of the buffer trimmed using the allocator to {@link NetworkBufferAllocator#staticAllocator()}.
      * <br>
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
      *
@@ -955,26 +954,26 @@ public interface NetworkBuffer {
      */
     @Contract("-> new")
     default NetworkBuffer trimmed() {
-        return trimmed(NetworkBufferFactory.staticFactory());
+        return trimmed(NetworkBufferAllocator.staticAllocator());
     }
 
     /**
-     * Creates a copy of the buffer trimmed using the factory to {@link NetworkBufferFactory#allocate(long)}.
+     * Creates a copy of the buffer trimmed using the allocator to {@link NetworkBufferAllocator#allocate(long)}.
      * <br>
      * A trimmed buffer is one that's from its {@link #readIndex()} to its {@link #readableBytes()} is the only occupied data.
      *
-     * @param factory the factory to allocate from
+     * @param allocator the allocator to allocate from
      * @return the trimmed buffer
      * @see #trim()
      */
     @Contract("_, -> new")
-    default NetworkBuffer trimmed(NetworkBufferFactory factory) {
+    default NetworkBuffer trimmed(NetworkBufferAllocator allocator) {
         final long readableBytes = readableBytes();
-        return copy(factory, readIndex(), readableBytes, 0, readableBytes);
+        return copy(allocator, readIndex(), readableBytes, 0, readableBytes);
     }
 
     /**
-     * Copies the current buffer using the factory specified {@link NetworkBufferFactory#staticFactory()}
+     * Copies the current buffer using the allocator specified {@link NetworkBufferAllocator#staticAllocator()}
      * with the index to the length using {@link #readIndex()} and {@link #writeIndex()}.
      *
      * @param index  the starting index
@@ -987,21 +986,21 @@ public interface NetworkBuffer {
     }
 
     /**
-     * Copies the current buffer using the {@link NetworkBufferFactory} with the index to the length with
+     * Copies the current buffer using the {@link NetworkBufferAllocator} with the index to the length with
      * the using {@link #readIndex()} and {@link #writeIndex()}.
      *
-     * @param factory the {@link NetworkBufferFactory} which {@link NetworkBufferFactory#allocate(long)} will be used for the new buffer.
+     * @param allocator the {@link NetworkBufferAllocator} which {@link NetworkBufferAllocator#allocate(long)} will be used for the new buffer.
      * @param index   the index
      * @param length  the length
      * @return the copy of the current buffer into a new buffer
      */
     @Contract("_, _, _ -> new")
-    default NetworkBuffer copy(NetworkBufferFactory factory, long index, long length) {
-        return copy(factory, index, length, readIndex(), writeIndex());
+    default NetworkBuffer copy(NetworkBufferAllocator allocator, long index, long length) {
+        return copy(allocator, index, length, readIndex(), writeIndex());
     }
 
     /**
-     * Copies the current buffer using the factory specified {@link NetworkBufferFactory#staticFactory()}
+     * Copies the current buffer using the allocator specified {@link NetworkBufferAllocator#staticAllocator()}
      * with the index to the length with the new specified read and write indexes.
      *
      * @param index      the starting index
@@ -1012,13 +1011,13 @@ public interface NetworkBuffer {
      */
     @Contract("_, _, _, _ -> new")
     default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
-        return copy(NetworkBufferFactory.staticFactory(), index, length, readIndex, writeIndex);
+        return copy(NetworkBufferAllocator.staticAllocator(), index, length, readIndex, writeIndex);
     }
 
     /**
-     * Copies the current buffer using the {@link NetworkBufferFactory} with the index to the length with the new specified read and write indexes.
+     * Copies the current buffer using the {@link NetworkBufferAllocator} with the index to the length with the new specified read and write indexes.
      *
-     * @param factory    the {@link NetworkBufferFactory} which {@link NetworkBufferFactory#allocate(long)} will be used for the new buffer.
+     * @param allocator    the {@link NetworkBufferAllocator} which {@link NetworkBufferAllocator#allocate(long)} will be used for the new buffer.
      * @param index      the starting index
      * @param length     the length
      * @param readIndex  the new read index
@@ -1026,7 +1025,7 @@ public interface NetworkBuffer {
      * @return the copy of the current buffer into a new buffer
      */
     @Contract("_, _, _, _, _ -> new")
-    NetworkBuffer copy(NetworkBufferFactory factory, long index, long length, long readIndex, long writeIndex);
+    NetworkBuffer copy(NetworkBufferAllocator allocator, long index, long length, long readIndex, long writeIndex);
 
     /**
      * Creates a slice from the starting index to the length passing the read index and write index supplied
@@ -1109,7 +1108,7 @@ public interface NetworkBuffer {
     long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
     /**
-     * The registries used when creating with {@link NetworkBufferFactory#registry(Registries)}
+     * The registries used when creating with {@link NetworkBufferAllocator#registry(Registries)}
      *
      * @return the registries
      */
@@ -1580,6 +1579,8 @@ public interface NetworkBuffer {
 
     /**
      * Used in a {@link NetworkBuffer} implementation to allow {@link #BYTE} to write to the backing buffer.
+     * <br>
+     * Never rely on the identity of this class as its value-based.
      */
     @ApiStatus.OverrideOnly
     interface Direct {
@@ -1612,10 +1613,10 @@ public interface NetworkBuffer {
         double getDouble(long index);
 
         // Warning this is writing a null terminated string
-        void putString(long index, String value);
+        void putTerminatedString(long index, String value);
 
         // Warning this is reading a null terminated string
-        String getString(long index);
+        String getTerminatedString(long index);
 
         // Non prefixed variant
         String getString(long index, long byteLength);
