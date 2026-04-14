@@ -12,9 +12,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-/**
- * A scoreboard that stores score and line format per entry.
- */
+/// A scoreboard that stores score and line format per entry.
 public class ScoreboardImpl implements Scoreboard {
 
     protected final String objectiveName;
@@ -29,16 +27,18 @@ public class ScoreboardImpl implements Scoreboard {
     private final Map<String, ScoreEntry> unmodifiableEntries = Collections.unmodifiableMap(entries);
 
     ScoreboardImpl(String objectiveName, Position position) {
+        this(objectiveName, Component.text(objectiveName), position);
+    }
+
+    ScoreboardImpl(String objectiveName, Component displayName, Position position) {
         this.objectiveName = objectiveName;
-        this.displayName = Component.text(objectiveName);
+        this.displayName = displayName;
         this.position = position;
     }
 
-    /**
-     * Adds a viewer to the scoreboard. Use {@link Player#showScoreboard(Scoreboard)} instead.
-     * @param player the viewer to add
-     * @return true if the player has been added, false otherwise
-     */
+    /// Adds a viewer to the scoreboard. Use [Player#showScoreboard(Scoreboard)] instead.
+    /// @param player the viewer to add
+    /// @return true if the player has been added, false otherwise
     @Override
     @ApiStatus.Internal
     public boolean addViewer(Player player) {
@@ -51,11 +51,9 @@ public class ScoreboardImpl implements Scoreboard {
         return true;
     }
 
-    /**
-     * Removes a viewer from the scoreboard. Use {@link Player#hideScoreboard(Scoreboard)} instead.
-     * @param player the viewer to remove
-     * @return true if the player has been removed, false otherwise
-     */
+    /// Removes a viewer from the scoreboard. Use [Player#hideScoreboard(Scoreboard)] instead.
+    /// @param player the viewer to remove
+    /// @return true if the player has been removed, false otherwise
     @Override
     @ApiStatus.Internal
     public boolean removeViewer(Player player) {

@@ -12,171 +12,126 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.function.UnaryOperator;
 
-/**
- * This interface represents all scoreboards in Minecraft.
- * Construct a scoreboard using {@link Scoreboard#create(String, Position)}.
- */
+/// This interface represents all scoreboards in Minecraft.
+/// Construct a scoreboard using [Scoreboard#create(String, Position)].
 public interface Scoreboard extends Viewable, PacketGroupingAudience {
 
-    /**
-     * Creates a new scoreboard that stores a map of strings to line entries.
-     * A line entry contains an integer score and optional overrides for display name and number format.
-     * @param objectiveName the objective name
-     * @param position the initial position of the scoreboard
-     * @return the scoreboard
-     */
+    /// Creates a new scoreboard that stores a map of strings to line entries.
+    /// A line entry contains an integer score and optional overrides for display name and number format.
+    /// @param objectiveName the objective name
+    /// @param position the initial position of the scoreboard
+    /// @return the scoreboard
     static Scoreboard create(String objectiveName, Position position) {
         return new ScoreboardImpl(objectiveName, position);
     }
 
-    /**
-     * Creates a new scoreboard that stores a map of strings to line entries.
-     * A line entry contains an integer score and optional overrides for display name and number format.
-     * @param objectiveName the objective name
-     * @param displayName the scoreboard display name
-     * @param position the initial position of the scoreboard
-     * @return the scoreboard
-     */
+    /// Creates a new scoreboard that stores a map of strings to line entries.
+    /// A line entry contains an integer score and optional overrides for display name and number format.
+    /// @param objectiveName the objective name
+    /// @param displayName the scoreboard display name
+    /// @param position the initial position of the scoreboard
+    /// @return the scoreboard
     static Scoreboard create(String objectiveName, Component displayName, Position position) {
-        ScoreboardImpl scoreboard = new ScoreboardImpl(objectiveName, position);
-        scoreboard.setDisplayName(displayName);
-        return scoreboard;
+        return new ScoreboardImpl(objectiveName, displayName, position);
     }
 
-    /**
-     * Gets the objective name of the scoreboard.
-     *
-     * @return the objective name
-     */
+    /// Gets the objective name of the scoreboard.
+    ///
+    /// @return the objective name
     String getObjectiveName();
 
-    /**
-     * Gets the display name of the scoreboard, which is displayed on the sidebar.
-     * @return the component name
-     */
+    /// Gets the display name of the scoreboard, which is displayed on the sidebar.
+    /// @return the component name
     Component getDisplayName();
 
-    /**
-     * Sets the {@link Scoreboard#getDisplayName() display name} of the scoreboard.
-     * @param displayName the new display name.
-     */
+    /// Sets the [`display name`][Scoreboard#getDisplayName()] of the scoreboard.
+    /// @param displayName the new display name.
     void setDisplayName(Component displayName);
 
-    /**
-     * Gets the position where this scoreboard is shown.
-     * @return the position
-     */
+    /// Gets the position where this scoreboard is shown.
+    /// @return the position
     Position getPosition();
 
-    /**
-     * Sets the position where this scoreboard is shown.
-     * Viewers who are already viewing another scoreboard in that position will be removed from its viewers.
-     * @param position the new position
-     */
+    /// Sets the position where this scoreboard is shown.
+    /// Viewers who are already viewing another scoreboard in that position will be removed from its viewers.
+    /// @param position the new position
     void setPosition(Position position);
 
-    /**
-     * Gets the {@link RenderType} of this scoreboard when in the player list.
-     * @return the render type
-     */
+    /// Gets the [RenderType] of this scoreboard when in the player list.
+    /// @return the render type
     RenderType getRenderType();
 
-    /**
-     * Sets the {@link RenderType} of this scoreboard.
-     * @param renderType the new render type
-     */
+    /// Sets the [RenderType] of this scoreboard.
+    /// @param renderType the new render type
     void setRenderType(RenderType renderType);
 
-    /**
-     * Gets the default number format.
-     * @return number format, or null if none specified
-     */
+    /// Gets the default number format.
+    /// @return number format, or null if none specified
     @Nullable NumberFormat getDefaultNumberFormat();
 
-    /**
-     * Sets the default number format.
-     * @param numberFormat the new number format, or null to remove formatting
-     */
+    /// Sets the default number format.
+    /// @param numberFormat the new number format, or null to remove formatting
     void setDefaultNumberFormat(@Nullable NumberFormat numberFormat);
 
-    /**
-     * Gets the score entry for the specified entry.
-     * @param entity the entry name
-     * @return the entry, or null if this scoreboard has no entry with that name
-     */
+    /// Gets the score entry for the specified entry.
+    /// @param entity the entry name
+    /// @return the entry, or null if this scoreboard has no entry with that name
     @Nullable ScoreEntry getEntry(String entity);
 
-    /**
-     * Gets all score entries stored in this scoreboard.
-     * @return an unmodifiable view of all score entries
-     */
+    /// Gets all score entries stored in this scoreboard.
+    /// @return an unmodifiable view of all score entries
     Map<String, ScoreEntry> getEntries();
 
-    /**
-     * Updates or creates the score for an entity.
-     * Any name can be used for the entity, and will be displayed on a sidebar.
-     * The vanilla server uses players' usernames or entities' UUIDs.
-     * @param entity the entry name
-     * @param score the new score
-     */
+    /// Updates or creates the score for an entity.
+    /// Any name can be used for the entity, and will be displayed on a sidebar.
+    /// The vanilla server uses players' usernames or entities' UUIDs.
+    /// @param entity the entry name
+    /// @param score the new score
     void updateScore(String entity, int score);
 
-    /**
-     * Updates or creates the score for an entity.
-     * Any name can be used for the entity, and will be displayed on a sidebar.
-     * The vanilla server uses players' usernames or entities' UUIDs.
-     * @param entity the entry name
-     * @param displayName the name to display for the entity, or null to use the entry
-     */
+    /// Updates or creates the score for an entity.
+    /// Any name can be used for the entity, and will be displayed on a sidebar.
+    /// The vanilla server uses players' usernames or entities' UUIDs.
+    /// @param entity the entry name
+    /// @param displayName the name to display for the entity, or null to use the entry
     void updateDisplayName(String entity, @Nullable Component displayName);
 
-    /**
-     * Updates or creates the score for an entity.
-     * Any name can be used for the entity, and will be displayed on a sidebar.
-     * The vanilla server uses players' usernames or entities' UUIDs.
-     * @param entity the entry name
-     * @param numberFormat the new number format, or null to reset to default
-     */
+    /// Updates or creates the score for an entity.
+    /// Any name can be used for the entity, and will be displayed on a sidebar.
+    /// The vanilla server uses players' usernames or entities' UUIDs.
+    /// @param entity the entry name
+    /// @param numberFormat the new number format, or null to reset to default
     void updateNumberFormat(String entity, @Nullable NumberFormat numberFormat);
 
-    /**
-     * Updates or creates the score and associated properties for an entity.
-     * Any name can be used for the entity, and will be displayed on a sidebar.
-     * The vanilla server uses players' usernames or entities' UUIDs.
-     * @param entity the entry name
-     * @param entry the new entry
-     */
+    /// Updates or creates the score and associated properties for an entity.
+    /// Any name can be used for the entity, and will be displayed on a sidebar.
+    /// The vanilla server uses players' usernames or entities' UUIDs.
+    /// @param entity the entry name
+    /// @param entry the new entry
     void updateEntry(String entity, ScoreEntry entry);
 
-    /**
-     * Updates or creates the score for an entity.
-     * Any name can be used for the entity, and will be displayed on a sidebar.
-     * The vanilla server uses players' usernames or entities' UUIDs.
-     * @param entity the entry name
-     * @param score the new score
-     * @param displayName the name to display for the entity, or null to use the entry
-     * @param numberFormat the new number format, or null to reset to default
-     */
+    /// Updates or creates the score for an entity.
+    /// Any name can be used for the entity, and will be displayed on a sidebar.
+    /// The vanilla server uses players' usernames or entities' UUIDs.
+    /// @param entity the entry name
+    /// @param score the new score
+    /// @param displayName the name to display for the entity, or null to use the entry
+    /// @param numberFormat the new number format, or null to reset to default
     default void updateEntry(String entity, int score, @Nullable Component displayName, @Nullable NumberFormat numberFormat) {
         updateEntry(entity, new ScoreEntry(score, displayName, numberFormat));
     }
 
-    /**
-     * Removes an entity's entry from the scoreboard.
-     * @param entity the entry name
-     */
+    /// Removes an entity's entry from the scoreboard.
+    /// @param entity the entry name
     void removeEntry(String entity);
 
-    /**
-     * Updates or creates the score of an {@link Entity}.
-     * If a player is used, their username and display name are used.
-     * Otherwise, the entity's UUID and custom name are used.
-     * @param entity the entity
-     * @param score the new score
-     * @param numberFormat the new number format, or null to reset to default
-     */
+    /// Updates or creates the score of an [Entity].
+    /// If a player is used, their username and display name are used.
+    /// Otherwise, the entity's UUID and custom name are used.
+    /// @param entity the entity
+    /// @param score the new score
+    /// @param numberFormat the new number format, or null to reset to default
     default void updateEntry(Entity entity, int score, @Nullable NumberFormat numberFormat) {
         if (entity instanceof Player player) {
             updateEntry(player.getUsername(), score, player.getDisplayName(), numberFormat);
@@ -185,10 +140,8 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
         }
     }
 
-    /**
-     * Removes an {@link Entity} from the scoreboard.
-     * @param entity the entity
-     */
+    /// Removes an [Entity] from the scoreboard.
+    /// @param entity the entity
     default void removeEntry(Entity entity) {
         if (entity instanceof Player player) {
             removeEntry(player.getUsername());
@@ -202,24 +155,16 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
         return this.getViewers();
     }
 
-    /**
-     * A position in which a client can render a scoreboard.
-     */
+    ///A position in which a client can render a scoreboard.
     enum Position {
-        /**
-         * Scores are placed to the right of a player's name in the player list.
-         * Can use {@link RenderType}
-         * to display hearts instead of a number.
-         */
+        /// Scores are placed to the right of a player's name in the player list.
+        /// Can use [RenderType]
+        /// to display hearts instead of a number.
         PLAYER_LIST,
-        /**
-         * Up to 15 scores are placed on the right side of the screen in descending order.
-         * The display name is shown.
-         */
+        /// Up to 15 scores are placed on the right side of the screen in descending order.
+        /// The display name is shown.
         SIDEBAR,
-        /**
-         * Scores are placed as a line below players' name tags, along with the display name.
-         */
+        /// Scores are placed as a line below players' name tags, along with the display name.
         BELOW_NAME,
         TEAM_COLOR_0,
         TEAM_COLOR_1,
@@ -238,11 +183,9 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
         TEAM_COLOR_14,
         TEAM_COLOR_15;
 
-        /**
-         * Returns the Position used for the sidebar when a player is on a team with a color.
-         * @param color the team color
-         * @return the corresponding Position
-         */
+        /// Returns the Position used for the sidebar when a player is on a team with a color.
+        /// @param color the team color
+        /// @return the corresponding Position
         public static Position forTeamColor(NamedTextColor color) {
             return values()[TEAM_COLOR_0.ordinal() + AdventurePacketConvertor.getNamedTextColorValue(color)];
         }
@@ -252,9 +195,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
         }
     }
 
-    /**
-     * The score render type when shown in the player list (integer or hearts)
-     */
+    /// The score render type when shown in the player list (integer or hearts)
     enum RenderType {
         INTEGER,
         HEARTS
