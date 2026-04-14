@@ -1617,8 +1617,5 @@ public interface NetworkBuffer {
 
         // Warning this is reading a null terminated string
         String getTerminatedString(long index);
-
-        // Non prefixed variant
-        String getString(long index, long byteLength);
     }
 }

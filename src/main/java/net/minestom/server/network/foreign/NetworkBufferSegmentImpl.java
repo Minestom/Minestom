@@ -389,22 +389,6 @@ sealed abstract class NetworkBufferSegmentImpl implements NetworkBuffer, Network
         return segment().getString(index);
     }
 
-    public final String getString(long index, int byteLength) {
-        byte[] bytes = new byte[byteLength];
-        getBytes(index, bytes);
-        return new String(bytes, StandardCharsets.UTF_8);
-    }
-
-    @Override
-    public final String getString(long index, long byteLength) {
-        if (NetworkBufferSegmentMethods.STRING_SUPPORTED) {
-            // We can use the better no String copy method!
-            return NetworkBufferSegmentMethods.getString(segment(), index, StandardCharsets.UTF_8, byteLength);
-        }
-        // Only supports int for small.
-        return getString(index, Math.toIntExact(byteLength));
-    }
-
     final void assertReadOnly() { // These are already handled; but we can do these sooner before going into the types.
         if (isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
     }

@@ -272,12 +272,6 @@ final class NetworkBufferDummy implements NetworkBuffer, NetworkBuffer.Direct {
     }
 
     @Override
-    public String getString(long index, long byteLength) {
-        assertDummy();
-        return null;
-    }
-
-    @Override
     public String toString() {
         return String.format("NetworkBufferDummy{w%d, registries=%b}", writeIndex(), registries() != null);
     }

@@ -412,11 +412,8 @@ final class NetworkBufferTypeImpl {
 
         @Override
         public String read(NetworkBuffer buffer) {
-            final int length = buffer.read(VAR_INT);
-            buffer.ensureReadable(length);
-            String string = buffer.direct().getString(buffer.readIndex(), length);
-            buffer.advanceRead(length);
-            return string;
+            final byte[] bytes = buffer.read(BYTE_ARRAY);
+            return new String(bytes, StandardCharsets.UTF_8);
         }
     }
 
