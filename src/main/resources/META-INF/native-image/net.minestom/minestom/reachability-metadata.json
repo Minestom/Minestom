@@ -53,15 +53,7 @@
     },
     {
       "type": "java.lang.String",
-      "serializable": true,
-      "methods": [
-        {
-          "name": "getBytesLength",
-          "parameterTypes": [
-            "java.nio.charset.Charset"
-          ]
-        }
-      ]
+      "serializable": true
     },
     {
       "type": "java.lang.String[]"
@@ -69,30 +61,6 @@
     {
       "type": "java.lang.Throwable",
       "serializable": true
-    },
-    {
-      "type": "java.lang.foreign.MemorySegment",
-      "methods": [
-        {
-          "name": "copy",
-          "parameterTypes": [
-            "java.lang.String",
-            "java.nio.charset.Charset",
-            "int",
-            "java.lang.foreign.MemorySegment",
-            "long",
-            "int"
-          ]
-        },
-        {
-          "name": "getString",
-          "parameterTypes": [
-            "long",
-            "java.nio.charset.Charset",
-            "long"
-          ]
-        }
-      ]
     },
     {
       "type": "java.lang.reflect.RecordComponent"
