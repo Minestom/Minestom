@@ -193,7 +193,7 @@ public class ScoreboardImpl implements Scoreboard {
     }
 
     @Override
-    public Collection<Player> getPlayers() {
+    public Collection<? extends Player> getPlayers() {
         return Scoreboard.super.getPlayers();
     }
 }
