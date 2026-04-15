@@ -56,7 +56,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default void sendMessage(Component message) {
-        Messenger.sendMessage(this.getPlayers(), message, ChatPosition.SYSTEM_MESSAGE, null);
+        Messenger.sendMessage(this.getPlayers(), message, ChatPosition.SYSTEM_MESSAGE);
     }
 
     @Override

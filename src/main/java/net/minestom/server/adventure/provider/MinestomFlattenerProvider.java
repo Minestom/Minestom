@@ -11,7 +11,7 @@ final class MinestomFlattenerProvider {
         final ComponentFlattener.Builder builder = ComponentFlattener.basic().toBuilder();
 
         // handle server-side translations if needed
-        builder.complexMapper(TranslatableComponent.class, ((component, consumer) -> {
+        builder.complexMapper(TranslatableComponent.class, (component, consumer) -> {
             if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) {
                 final Component translated = MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, MinestomAdventure.getDefaultLocale());
 
@@ -22,7 +22,7 @@ final class MinestomFlattenerProvider {
                     consumer.accept(translated);
                 }
             }
-        }));
+        });
 
         INSTANCE = builder.build();
     }

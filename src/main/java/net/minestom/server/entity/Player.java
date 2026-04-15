@@ -898,7 +898,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     @Override
     public void sendMessage(Component message) {
-        Messenger.sendMessage(this, message, ChatPosition.SYSTEM_MESSAGE, null);
+        Messenger.sendMessage(this, message, ChatPosition.SYSTEM_MESSAGE);
     }
 
     /**

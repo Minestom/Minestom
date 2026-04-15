@@ -4,22 +4,13 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.event.DataComponentValue;
 import org.jetbrains.annotations.Nullable;
 
-sealed class NbtDataComponentValueImpl implements NbtDataComponentValue permits NbtDataComponentValueImpl.Removed {
-    private final BinaryTag tag;
+record NbtDataComponentValueImpl(@Nullable BinaryTag value) implements NbtDataComponentValue {
+    record Removed() implements DataComponentValue.Removed, NbtDataComponentValue {
+        static final NbtDataComponentValueImpl.Removed INSTANCE = new NbtDataComponentValueImpl.Removed();
 
-    NbtDataComponentValueImpl(@Nullable BinaryTag tag) {
-        this.tag = tag;
-    }
-
-    @Override
-    public @Nullable BinaryTag value() {
-        return tag;
-    }
-
-    static final class Removed extends NbtDataComponentValueImpl implements DataComponentValue.Removed {
-        public Removed() {
-            super(null);
+        @Override
+        public @Nullable BinaryTag value() {
+            return null;
         }
     }
-
 }

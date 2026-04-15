@@ -89,7 +89,7 @@ public final class ClickCallbackManager implements Tickable {
      * @param options the options
      * @return the click event
      */
-    public ClickEvent createClickEvent(final ClickCallback<Audience> callback, final ClickCallback.Options options) {
+    public ClickEvent<ClickEvent.Payload.Custom> createClickEvent(final ClickCallback<Audience> callback, final ClickCallback.Options options) {
         Objects.requireNonNull(callback, "callback");
         Objects.requireNonNull(options, "options");
         final UUID uuid = UUID.randomUUID();
