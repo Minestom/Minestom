@@ -4,6 +4,7 @@ import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -37,13 +38,12 @@ public record DeclareCommandsPacket(List<Node> nodes,
      * @param properties      Only for argument
      * @param suggestionsType Only if flags 0x10
      */
-    public record Node(byte flags, int[] children, int redirectedNode, @Nullable String name,
+    public record Node(@MagicConstant(flagsFromClass = Node.class) byte flags, int[] children, int redirectedNode, @Nullable String name,
                        @Nullable ArgumentParserType parser, byte @Nullable [] properties,
                        @Nullable String suggestionsType) {
         public static final int IS_ROOT = 0x00;
         public static final int IS_LITERAL = 0x01;
         public static final int IS_ARGUMENT = 0x02;
-        public static final int NODE_TYPE = IS_ROOT | IS_LITERAL | IS_ARGUMENT;
         public static final int IS_EXECUTABLE = 0x04;
         public static final int HAS_REDIRECT = 0x08;
         public static final int HAS_SUGGESTION_TYPE = 0x10;

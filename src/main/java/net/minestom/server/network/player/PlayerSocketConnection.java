@@ -55,7 +55,7 @@ import java.util.zip.DataFormatException;
  * It is the implementation used for all network client.
  */
 @ApiStatus.Internal
-public final class PlayerSocketConnection extends PlayerConnection {
+public class PlayerSocketConnection extends PlayerConnection {
     private static final Set<Class<? extends ClientPacket>> IMMEDIATE_PROCESS_PACKETS = Set.of(
             ClientHandshakePacket.class, // First received packet
             ClientCookieResponsePacket.class,
@@ -70,6 +70,7 @@ public final class PlayerSocketConnection extends PlayerConnection {
             ClientFinishConfigurationPacket.class // Enter play state
     );
 
+    // This class shouldn't get initialized during tests currently.
     private static final ListenerHandle<PlayerPacketOutEvent> OUTGOING_HANDLE = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
     private final SocketChannel channel;

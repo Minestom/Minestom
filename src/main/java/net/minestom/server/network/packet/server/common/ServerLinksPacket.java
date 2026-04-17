@@ -55,8 +55,8 @@ public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Con
 
         @Override
         public Collection<Component> components() {
-            if (payload instanceof Either.Right(Component value)) return List.of(value);
-            return List.of();
+            if (!(payload instanceof Either.Right(Component value))) return List.of();
+            return List.of(value);
         }
 
         @Override

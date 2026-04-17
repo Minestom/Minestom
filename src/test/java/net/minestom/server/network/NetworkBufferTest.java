@@ -558,7 +558,7 @@ public class NetworkBufferTest {
         buffer.write(VAR_INT, Integer.MAX_VALUE); // String length
         buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8)); // String data
 
-        assertThrows(RuntimeException.class, () -> buffer.read(STRING)); // oom
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(STRING)); // oom
     }
 
     @Test
@@ -567,7 +567,7 @@ public class NetworkBufferTest {
         buffer.write(UNSIGNED_SHORT, 65535); // String length
         buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8)); // String data
 
-        assertThrows(RuntimeException.class, () -> buffer.read(STRING)); // oom
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(STRING)); // oom
     }
 
     @Test

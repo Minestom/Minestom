@@ -17,38 +17,38 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ScoreboardObjectivePacket(String objectiveName, Mode mode) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public record ScoreboardObjectivePacket(String objectiveName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<ScoreboardObjectivePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ScoreboardObjectivePacket::objectiveName,
-            BYTE.unionType(Mode::typeFromId, Mode::id), ScoreboardObjectivePacket::mode,
+            BYTE.unionType(Action::typeFromId, Action::id), ScoreboardObjectivePacket::action,
             ScoreboardObjectivePacket::new
     );
 
     public ScoreboardObjectivePacket {
         Objects.requireNonNull(objectiveName, "objectiveName");
-        Objects.requireNonNull(mode, "mode");
+        Objects.requireNonNull(action, "action");
     }
 
     @Override
     public Collection<? extends Component> components() {
-        if (mode instanceof ComponentHolder<?> componentHolder) return componentHolder.components();
+        if (action instanceof ComponentHolder<?> componentHolder) return componentHolder.components();
         return List.of();
     }
 
     @Override
     public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
-        if (!(mode instanceof ComponentHolder<?> componentHolder)) return this;
-        return new ScoreboardObjectivePacket(objectiveName, (Mode) componentHolder.copyWithOperator(operator));
+        if (!(action instanceof ComponentHolder<?> componentHolder)) return this;
+        return new ScoreboardObjectivePacket(objectiveName, (Action) componentHolder.copyWithOperator(operator));
     }
 
     /**
-     * Represents a mode in the protocol.
+     * Represents an action in the protocol.
      */
-    public sealed interface Mode {
+    public sealed interface Action {
         @ApiStatus.OverrideOnly
         byte id();
 
-        private static NetworkBuffer.Type<? extends Mode> typeFromId(byte id) {
+        private static NetworkBuffer.Type<? extends Action> typeFromId(byte id) {
             return switch (id) {
                 case 0 -> Create.SERIALIZER;
                 case 1 -> Destroy.SERIALIZER;
@@ -58,7 +58,7 @@ public record ScoreboardObjectivePacket(String objectiveName, Mode mode) impleme
         }
     }
 
-    public record Create(Component objectiveValue, Type type, @Nullable Sidebar.NumberFormat numberFormat) implements Mode, ComponentHolder<Create> {
+    public record Create(Component objectiveValue, Type type, @Nullable Sidebar.NumberFormat numberFormat) implements Action, ComponentHolder<Create> {
         public static final NetworkBuffer.Type<Create> SERIALIZER = NetworkBufferTemplate.template(
                 COMPONENT, Create::objectiveValue,
                 Type.NETWORK_TYPE, Create::type,
@@ -91,7 +91,7 @@ public record ScoreboardObjectivePacket(String objectiveName, Mode mode) impleme
         }
     }
 
-    public record Destroy() implements Mode {
+    public record Destroy() implements Action {
         public static final NetworkBuffer.Type<Destroy> SERIALIZER = NetworkBufferTemplate.template(new Destroy());
 
         @Override
@@ -100,7 +100,7 @@ public record ScoreboardObjectivePacket(String objectiveName, Mode mode) impleme
         }
     }
 
-    public record Update(Component objectiveValue, Type type, @Nullable Sidebar.NumberFormat numberFormat) implements Mode, ComponentHolder<Update> {
+    public record Update(Component objectiveValue, Type type, @Nullable Sidebar.NumberFormat numberFormat) implements Action, ComponentHolder<Update> {
         public static final NetworkBuffer.Type<Update> SERIALIZER = NetworkBufferTemplate.template(
                 COMPONENT, Update::objectiveValue,
                 Type.NETWORK_TYPE, Update::type,

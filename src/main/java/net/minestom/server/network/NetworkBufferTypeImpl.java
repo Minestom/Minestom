@@ -41,8 +41,9 @@ final class NetworkBufferTypeImpl {
     record BooleanType() implements Type<Boolean> {
         @Override
         public void write(NetworkBuffer buffer, Boolean value) {
+            final byte valueByte = value ? (byte) 1 : (byte) 0;
             buffer.ensureWritable(Byte.BYTES);
-            buffer.direct().putByte(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
+            buffer.direct().putByte(buffer.writeIndex(), valueByte);
             buffer.advanceWrite(Byte.BYTES);
         }
 
@@ -63,8 +64,9 @@ final class NetworkBufferTypeImpl {
     record ByteType() implements Type<Byte> {
         @Override
         public void write(NetworkBuffer buffer, Byte value) {
+            byte valueByte = value;
             buffer.ensureWritable(Byte.BYTES);
-            buffer.direct().putByte(buffer.writeIndex(), value);
+            buffer.direct().putByte(buffer.writeIndex(), valueByte);
             buffer.advanceWrite(Byte.BYTES);
         }
 
@@ -85,8 +87,9 @@ final class NetworkBufferTypeImpl {
     record UnsignedByteType() implements Type<Short> {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
+            byte valueByte = (byte) (value & 0xFF);
             buffer.ensureWritable(Byte.BYTES);
-            buffer.direct().putByte(buffer.writeIndex(), (byte) (value & 0xFF));
+            buffer.direct().putByte(buffer.writeIndex(), valueByte);
             buffer.advanceWrite(Byte.BYTES);
         }
 
@@ -107,8 +110,9 @@ final class NetworkBufferTypeImpl {
     record ShortType() implements Type<Short> {
         @Override
         public void write(NetworkBuffer buffer, Short value) {
+            short valueShort = value;
             buffer.ensureWritable(Short.BYTES);
-            buffer.direct().putShort(buffer.writeIndex(), value);
+            buffer.direct().putShort(buffer.writeIndex(), valueShort);
             buffer.advanceWrite(Short.BYTES);
         }
 
@@ -129,8 +133,9 @@ final class NetworkBufferTypeImpl {
     record UnsignedShortType() implements Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
+            short valueShort = (short) (value & 0xFFFF);
             buffer.ensureWritable(Short.BYTES);
-            buffer.direct().putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
+            buffer.direct().putShort(buffer.writeIndex(), valueShort);
             buffer.advanceWrite(Short.BYTES);
         }
 
@@ -151,8 +156,9 @@ final class NetworkBufferTypeImpl {
     record IntType() implements Type<Integer> {
         @Override
         public void write(NetworkBuffer buffer, Integer value) {
+            int valueInt = value;
             buffer.ensureWritable(Integer.BYTES);
-            buffer.direct().putInt(buffer.writeIndex(), value);
+            buffer.direct().putInt(buffer.writeIndex(), valueInt);
             buffer.advanceWrite(Integer.BYTES);
         }
 
@@ -173,8 +179,9 @@ final class NetworkBufferTypeImpl {
     record UnsignedIntType() implements Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
+            int valueInt = (int) (value & 0xFFFFFFFFL);
             buffer.ensureWritable(Integer.BYTES);
-            buffer.direct().putInt(buffer.writeIndex(), (int) (value & 0xFFFFFFFFL));
+            buffer.direct().putInt(buffer.writeIndex(), valueInt);
             buffer.advanceWrite(Integer.BYTES);
         }
 
@@ -195,8 +202,9 @@ final class NetworkBufferTypeImpl {
     record LongType() implements Type<Long> {
         @Override
         public void write(NetworkBuffer buffer, Long value) {
+            long valueLong = value;
             buffer.ensureWritable(Long.BYTES);
-            buffer.direct().putLong(buffer.writeIndex(), value);
+            buffer.direct().putLong(buffer.writeIndex(), valueLong);
             buffer.advanceWrite(Long.BYTES);
         }
 
@@ -217,8 +225,9 @@ final class NetworkBufferTypeImpl {
     record FloatType() implements Type<Float> {
         @Override
         public void write(NetworkBuffer buffer, Float value) {
+            float valueFloat = value;
             buffer.ensureWritable(Float.BYTES);
-            buffer.direct().putFloat(buffer.writeIndex(), value);
+            buffer.direct().putFloat(buffer.writeIndex(), valueFloat);
             buffer.advanceWrite(Float.BYTES);
         }
 
@@ -239,8 +248,9 @@ final class NetworkBufferTypeImpl {
     record DoubleType() implements Type<Double> {
         @Override
         public void write(NetworkBuffer buffer, Double value) {
+            double valueDouble = value;
             buffer.ensureWritable(Double.BYTES);
-            buffer.direct().putDouble(buffer.writeIndex(), value);
+            buffer.direct().putDouble(buffer.writeIndex(), valueDouble);
             buffer.advanceWrite(Double.BYTES);
         }
 
@@ -269,7 +279,7 @@ final class NetworkBufferTypeImpl {
             }
             NetworkBuffer.Direct direct = buffer.direct();
             long writeIndex = buffer.writeIndex();
-            while ((value & ~SEGMENT_BITS) != 0L) {
+            while ((value & ~SEGMENT_BITS) != 0) {
                 direct.putByte(writeIndex++, (byte) ((value & SEGMENT_BITS) | CONTINUE_BIT));
                 value >>>= 7;
             }
@@ -587,8 +597,7 @@ final class NetworkBufferTypeImpl {
         public byte[] read(NetworkBuffer buffer) {
             final int length = buffer.read(VAR_INT);
             if (length == 0) return new byte[0];
-            final long remaining = buffer.readableBytes();
-            Check.argCondition(length > remaining, "String is too long (length: {0}, readable: {1})", length, remaining);
+            buffer.ensureReadable(length);
             return buffer.read(FixedRawBytes(length));
         }
     }

@@ -3,6 +3,7 @@ package net.minestom.server.network.foreign;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferAllocator;
 import net.minestom.server.registry.Registries;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.foreign.Arena;
@@ -17,6 +18,7 @@ import java.util.function.Supplier;
  * @param autoResize the auto-resize strategy to use, or {@code null} for no auto-resize
  * @param registries the registries to use, or {@code null} for no registries
  */
+@ApiStatus.Internal
 record NetworkBufferAllocatorImpl(Supplier<? extends Arena> arenaSupplier, @Nullable NetworkBuffer.AutoResize autoResize,
                                   @Nullable Registries registries) implements NetworkBufferAllocator {
 
@@ -50,7 +52,7 @@ record NetworkBufferAllocatorImpl(Supplier<? extends Arena> arenaSupplier, @Null
     }
 
     @Override
-    public NetworkBuffer allocate(long length) {
+    public NetworkBufferSegmentImpl allocate(long length) {
         final Arena arena = Objects.requireNonNull(arenaSupplier.get(), "arena");
         final MemorySegment segment = NetworkBufferNativeSegmentAllocator.allocate(arena, length);
         if (autoResize != null) {

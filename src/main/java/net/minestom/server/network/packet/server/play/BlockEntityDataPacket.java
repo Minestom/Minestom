@@ -11,9 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
 import static net.minestom.server.network.NetworkBuffer.OPTIONAL_NBT_COMPOUND;
 
-public record BlockEntityDataPacket(Point blockPosition,
-                                    BlockEntityType type,
-                                    @Nullable CompoundBinaryTag data
+public record BlockEntityDataPacket(
+        Point blockPosition,
+        BlockEntityType type,
+        @Nullable CompoundBinaryTag data
 ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<BlockEntityDataPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, BlockEntityDataPacket::blockPosition,

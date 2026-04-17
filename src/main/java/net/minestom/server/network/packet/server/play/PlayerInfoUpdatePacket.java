@@ -84,8 +84,12 @@ public record PlayerInfoUpdatePacket(
                         @Nullable Component displayName, @Nullable ChatSession chatSession,
                         int listOrder, boolean displayHat) {
         public Entry {
+            Objects.requireNonNull(uuid, "uuid");
             properties = properties != null ? List.copyOf(properties) : null;
         }
+
+        private static final NetworkBuffer.Type<List<GameProfile.Property>> PROPERTY_LIST = GameProfile.Property.SERIALIZER.list(GameProfile.MAX_PROPERTIES);
+        private static final NetworkBuffer.Type<@Nullable ChatSession> OPT_CHAT_SESSION = ChatSession.SERIALIZER.optional();
 
         public static NetworkBuffer.Type<Entry> serializer(EnumSet<Action> actions) {
             return new NetworkBuffer.Type<>() {
@@ -111,9 +115,9 @@ public record PlayerInfoUpdatePacket(
                         switch (action) {
                             case ADD_PLAYER -> {
                                 username = buffer.read(STRING);
-                                properties = buffer.read(GameProfile.Property.SERIALIZER.list(GameProfile.MAX_PROPERTIES));
+                                properties = buffer.read(PROPERTY_LIST);
                             }
-                            case INITIALIZE_CHAT -> chatSession = ChatSession.SERIALIZER.optional().read(buffer);
+                            case INITIALIZE_CHAT -> chatSession = OPT_CHAT_SESSION.read(buffer);
                             case UPDATE_GAME_MODE -> gameMode = buffer.read(GameMode.NETWORK_TYPE);
                             case UPDATE_LISTED -> listed = buffer.read(BOOLEAN);
                             case UPDATE_LATENCY -> latency = buffer.read(VAR_INT);
@@ -131,9 +135,9 @@ public record PlayerInfoUpdatePacket(
     public enum Action {
         ADD_PLAYER((writer, entry) -> {
             writer.write(STRING, entry.username);
-            writer.write(GameProfile.Property.SERIALIZER.list(), entry.properties);
+            writer.write(Entry.PROPERTY_LIST, entry.properties);
         }),
-        INITIALIZE_CHAT((writer, entry) -> writer.write(ChatSession.SERIALIZER.optional(), entry.chatSession)),
+        INITIALIZE_CHAT((writer, entry) -> writer.write(Entry.OPT_CHAT_SESSION, entry.chatSession)),
         UPDATE_GAME_MODE((writer, entry) -> writer.write(GameMode.NETWORK_TYPE, entry.gameMode)),
         UPDATE_LISTED((writer, entry) -> writer.write(BOOLEAN, entry.listed)),
         UPDATE_LATENCY((writer, entry) -> writer.write(VAR_INT, entry.latency)),
