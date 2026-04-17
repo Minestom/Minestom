@@ -89,8 +89,7 @@ public record BossBarPacket(UUID uuid,
     }
 
     public record RemoveAction() implements Action {
-        public static final RemoveAction INSTANCE = new RemoveAction();
-        public static final NetworkBuffer.Type<RemoveAction> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
+        public static final NetworkBuffer.Type<RemoveAction> SERIALIZER = NetworkBufferTemplate.template(new RemoveAction());
 
         @Override
         public byte id() {

@@ -26,7 +26,7 @@ final class BossBarHolder implements Viewable {
     }
 
     BossBarPacket createRemovePacket() {
-        return new BossBarPacket(uuid, BossBarPacket.RemoveAction.INSTANCE);
+        return new BossBarPacket(uuid, new BossBarPacket.RemoveAction());
     }
 
     BossBarPacket createAddPacket() {

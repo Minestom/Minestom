@@ -785,7 +785,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         chunkQueueLock.lock();
         try {
             int batchSize = 0;
-            sendPacket(ChunkBatchStartPacket.INSTANCE);
+            sendPacket(new ChunkBatchStartPacket());
             while (!chunkQueue.isEmpty() && pendingChunkCount >= 1f) {
                 long chunkIndex = chunkQueue.dequeueLong();
                 int chunkX = CoordConversion.chunkIndexGetX(chunkIndex), chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
@@ -1371,7 +1371,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param targetPosition the target position to face
      */
     public void facePosition(FacePoint facePoint, Point targetPosition) {
-        facePosition(facePoint, targetPosition, null, null);
+        sendPacket(new FacePlayerPacket(facePoint.facePosition(), targetPosition, null));
     }
 
     /**
@@ -1382,27 +1382,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param targetPoint the point to aim at {@code entity} position
      */
     public void facePosition(FacePoint facePoint, Entity entity, FacePoint targetPoint) {
-        facePosition(facePoint, entity.getPosition(), entity, targetPoint);
-    }
-
-    private void facePosition(FacePoint facePoint, Point targetPosition,
-                              @Nullable Entity entity, @Nullable FacePoint targetPoint) {
-        if (entity != null && targetPoint != null) {
-            sendPacket(new FacePlayerPacket(
-                    FacePlayerPacket.FacePosition.fromFacePoint(facePoint),
-                    targetPosition,
-                    new FacePlayerPacket.EntityData(
-                            entity.getEntityId(),
-                            FacePlayerPacket.FacePosition.fromFacePoint(targetPoint)
-                    )
-            ));
-        } else {
-            sendPacket(new FacePlayerPacket(
-                    FacePlayerPacket.FacePosition.fromFacePoint(facePoint),
-                    targetPosition,
-                    null
-            ));
-        }
+        var entityData = new FacePlayerPacket.EntityData(entity.getEntityId(), targetPoint.facePosition());
+        sendPacket(new FacePlayerPacket(facePoint.facePosition(), entity.getPosition(), entityData));
     }
 
     /**
@@ -2388,7 +2369,14 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     public enum FacePoint {
         FEET,
-        EYE
+        EYE;
+
+        private FacePlayerPacket.FacePosition facePosition() {
+            return switch (this) {
+                case FEET -> FacePlayerPacket.FacePosition.FEET;
+                case EYE -> FacePlayerPacket.FacePosition.EYES;
+            };
+        }
     }
 
     // Settings enum

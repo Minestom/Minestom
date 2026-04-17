@@ -55,12 +55,5 @@ public record FacePlayerPacket(FacePosition facePosition,
         EYES;
 
         private static final NetworkBuffer.Type<FacePosition> SERIALIZER = NetworkBuffer.Enum(FacePosition.class);
-
-        public static FacePosition fromFacePoint(Player.FacePoint facePoint) {
-            return switch (facePoint) {
-                case FEET -> FEET;
-                case EYE -> EYES;
-            };
-        }
     }
 }

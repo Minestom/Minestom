@@ -5,6 +5,5 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
 public record ClientStatusRequestPacket() implements ClientPacket.Status {
-    public static final ClientStatusRequestPacket INSTANCE = new ClientStatusRequestPacket();
-    public static final NetworkBuffer.Type<ClientStatusRequestPacket> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
+    public static final NetworkBuffer.Type<ClientStatusRequestPacket> SERIALIZER = NetworkBufferTemplate.template(new ClientStatusRequestPacket());
 }

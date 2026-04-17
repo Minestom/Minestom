@@ -53,7 +53,6 @@ public final class AdventurePacketConvertor {
         ObjectArray<NamedTextColor> array = ObjectArray.singleThread(16);
         COLOR_ID_MAP.forEach((key, value) -> array.set(value, key));
 
-        // We are only using these to ensure they are never modified at runtime, and use constructs encapsulated by the JVM.
         NAMED_TEXT_COLOR_ID_MAP = Map.copyOf(COLOR_ID_MAP);
         ID_NAMED_TEXT_COLOR_MAP = array.toList();
     }
@@ -205,7 +204,7 @@ public final class AdventurePacketConvertor {
         } else if (sound != null) {
             return new StopSoundPacket(new StopSoundPacket.Sound(sound));
         } else {
-            return new StopSoundPacket(StopSoundPacket.All.INSTANCE);
+            return new StopSoundPacket(new StopSoundPacket.All());
         }
     }
 

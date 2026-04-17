@@ -245,7 +245,7 @@ public final class ConnectionManager {
         final Instance spawningInstance = event.getSpawningInstance();
         Objects.requireNonNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
 
-        if (event.willClearChat()) player.sendPacket(ResetChatPacket.INSTANCE);
+        if (event.willClearChat()) player.sendPacket(new ResetChatPacket());
 
         // Registry data (if it should be sent)
         if (event.willSendRegistryData()) {
@@ -302,7 +302,7 @@ public final class ConnectionManager {
 
         keepAlivePlayers.remove(player);
         player.setPendingOptions(spawningInstance, event.isHardcore());
-        player.sendPacket(FinishConfigurationPacket.INSTANCE);
+        player.sendPacket(new FinishConfigurationPacket());
     }
 
     @ApiStatus.Internal
@@ -364,7 +364,7 @@ public final class ConnectionManager {
 
             configurationPlayers.add(player);
             player.remove(false);
-            player.sendPacket(StartConfigurationPacket.INSTANCE);
+            player.sendPacket(new StartConfigurationPacket());
         });
         this.playWaitingPlayers.drain(player -> {
             if (!player.isOnline()) return; // Player disconnected while in queued to join

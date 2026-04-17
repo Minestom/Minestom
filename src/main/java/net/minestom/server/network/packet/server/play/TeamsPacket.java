@@ -105,8 +105,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     }
 
     public record RemoveTeamAction() implements Action {
-        public static final RemoveTeamAction INSTANCE = new RemoveTeamAction();
-        public static final NetworkBuffer.Type<RemoveTeamAction> SERIALIZER = NetworkBufferTemplate.template(INSTANCE);
+        public static final NetworkBuffer.Type<RemoveTeamAction> SERIALIZER = NetworkBufferTemplate.template(new RemoveTeamAction());
 
         @Override
         public byte id() {
