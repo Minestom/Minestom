@@ -7,7 +7,6 @@ module net.minestom.server {
     requires jdk.unsupported; // Unsafe
     requires transitive net.kyori.adventure.api;
     requires transitive net.kyori.adventure.nbt;
-    requires transitive net.kyori.adventure.key;
     requires net.kyori.adventure.text.logger.slf4j;
     requires net.kyori.adventure.text.serializer.legacy;
     requires net.kyori.adventure.text.serializer.gson;
