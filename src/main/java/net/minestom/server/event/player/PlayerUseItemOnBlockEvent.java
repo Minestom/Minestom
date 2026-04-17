@@ -100,4 +100,13 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
     public Point getCursorPosition() {
         return this.cursorPosition;
     }
+
+    /**
+     * Gets the position of the interacted block.
+     *
+     * @deprecated Use {@link #getBlockPosition()} instead.
+     * @return the block position
+     */
+    @Deprecated
+    public Point getPosition() { return this.blockPosition; }
 }

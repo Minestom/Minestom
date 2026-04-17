@@ -38,7 +38,7 @@ public class BlockPlacementListener {
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerHand hand = packet.hand();
         final BlockFace blockFace = packet.blockFace();
-        Point blockPosition = packet.blockPosition();
+        BlockVec blockPosition = packet.blockPosition().asBlockVec();
 
         final Instance instance = player.getInstance();
         if (instance == null)
@@ -57,7 +57,7 @@ public class BlockPlacementListener {
 
         // Interact at block
         // FIXME: onUseOnBlock
-        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, blockPosition.asBlockVec(), blockFace, cursorPosition);
+        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, blockPosition, blockFace, cursorPosition);
         EventDispatcher.call(playerBlockInteractEvent);
         boolean blockUse = playerBlockInteractEvent.isBlockingItemUse();
         if (!playerBlockInteractEvent.isCancelled()) {
@@ -76,7 +76,7 @@ public class BlockPlacementListener {
         final Material useMaterial = usedItem.material();
         if (!useMaterial.isBlock()) {
             // Player didn't try to place a block but interacted with one
-            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, interactedBlock, blockPosition.asBlockVec(), blockFace, cursorPosition);
+            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, interactedBlock, blockPosition, blockFace, cursorPosition);
             EventDispatcher.call(event);
             // Ack the block change. This is required to reset the client prediction to the server state.
             player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
