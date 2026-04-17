@@ -7,7 +7,6 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.ComponentHolder;
-import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
@@ -97,7 +96,7 @@ public final class PacketSendingUtils {
      * @see CachedPacket#body(ConnectionState)
      */
     static boolean shouldUseCachePacket(final ServerPacket packet) {
-        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
+        if (!ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
         if (!(packet instanceof ServerPacket.ComponentHolding holder)) return ServerFlag.GROUPED_PACKET;
         return !containsTranslatableComponents(holder);
     }
