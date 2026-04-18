@@ -14,13 +14,16 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Measurement(iterations = 10, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(3)
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.SampleTime)
 @State(Scope.Group)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class NetworkCachedPacketBenchmark {
     static {
         MinecraftServer.init();
     }
+
+    @Param({"1", "1000", "100000"})
+    private int packetTime;
 
     private Random random;
     private ServerPacket packet;
@@ -31,7 +34,7 @@ public class NetworkCachedPacketBenchmark {
         random = new Random(151243);
         packet = new KeepAlivePacket(0);
         cachedPacket = new CachedPacket(() -> {
-            Blackhole.consumeCPU(1000);
+            Blackhole.consumeCPU(packetTime);
             return packet;
         });
     }
