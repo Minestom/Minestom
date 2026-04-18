@@ -121,8 +121,9 @@ public final class PacketListenerManager {
      * @param packet     the received packet
      * @param connection the connection of the player who sent the packet
      * @param <T>        the packet type
+     * @throws Exception if an error occurs during the packet processing
      */
-    public <T extends ClientPacket> void processClientPacket(T packet, PlayerConnection connection) {
+    public <T extends ClientPacket> void processClientPacket(T packet, PlayerConnection connection) throws Exception {
         // Update connection state 'as we receive' the packet, aka before we send any responses
         // from processing. This is important for sending packets in response which are state-dependent.
         final ConnectionState currState = connection.getClientState();
@@ -148,12 +149,7 @@ public final class PacketListenerManager {
         }
 
         // Finally execute the listener
-        try {
-            packetListenerConsumer.accept(packet, connection);
-        } catch (Exception e) {
-            // Packet is likely invalid
-            MinecraftServer.getExceptionManager().handleException(e);
-        }
+        packetListenerConsumer.accept(packet, connection);
     }
 
     /**

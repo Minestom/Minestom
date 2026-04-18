@@ -10,5 +10,5 @@ import net.minestom.server.network.packet.client.ClientPacket;
  */
 @FunctionalInterface
 public interface PacketPlayListenerConsumer<T extends ClientPacket> {
-    void accept(T packet, Player player);
+    void accept(T packet, Player player) throws Exception;
 }
