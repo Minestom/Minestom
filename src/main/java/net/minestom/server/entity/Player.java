@@ -145,6 +145,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private volatile int latency;
     private Component displayName;
+    private boolean listed = true;
+    private int listPriority;
     private PlayerSkin skin;
 
     private Instance pendingInstance = null;
@@ -1187,6 +1189,50 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
         PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
+    }
+
+    /**
+     * Gets whether the player is listed in the tab-list
+     *
+     * @return true if the player is being displayed in the tab-list, false if they aren't
+     */
+    public boolean isListed() {
+        return listed;
+    }
+
+    /**
+     * Changes whether the player should be displayed in the tab-list.
+     *
+     * @param listed whether the player should be displayed in the tab-list
+     */
+    public void setListed(boolean listed) {
+        this.listed = listed;
+        PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LISTED, infoEntry()));
+    }
+
+    /**
+     * Gets the tab-list listing priority of the player.
+     * <p>
+     * See {@link Player#setListPriority(int)} for further documentation.
+     *
+     * @return the priority the player has for the tab-list
+     */
+    public int getListPriority() {
+        return listPriority;
+    }
+
+    /**
+     * Sets the tab-list listing priority of the player. This is also affected by other factors such as: whether the
+     * player is spectating, their team name, and their username.
+     * <p>
+     * More information can be found <a href="https://minecraft.wiki/w/Java_Edition_protocol/Packets#player-info:player-actions">here</a>.
+     *
+     * @param listPriority the priority in which the player should be displayed in the tab-list. A higher priority means
+     *                     the player will appear higher in the tab-list.
+     */
+    public void setListPriority(int listPriority) {
+        this.listPriority = listPriority;
+        PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_PRIORITY, infoEntry()));
     }
 
     /**
@@ -2268,7 +2314,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 List.of();
         byte hatIndex = ((MetadataDef.Entry.BitMask) MetadataDef.Player.IS_HAT_ENABLED).bitMask();
         return new PlayerInfoUpdatePacket.Entry(getUuid(), getUsername(), prop,
-                true, getLatency(), getGameMode(), displayName, null, 0, (settings.displayedSkinParts() & hatIndex) == hatIndex);
+                listed, getLatency(), getGameMode(), displayName, null, listPriority, (settings.displayedSkinParts() & hatIndex) == hatIndex);
     }
 
     /**
