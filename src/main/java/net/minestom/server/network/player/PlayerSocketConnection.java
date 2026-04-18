@@ -480,12 +480,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         else this.writeLeftover = buffer;
     }
 
-    @Override
-    public void disconnect() {
-        super.disconnect();
-        LockSupport.unpark(writeThread);
-    }
-
     public Thread readThread() {
         return readThread;
     }

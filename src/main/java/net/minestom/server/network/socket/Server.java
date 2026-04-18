@@ -147,6 +147,7 @@ public final class Server {
                 // Read & process packets
                 connection.read(packetParser);
             } catch (ClosedChannelException _) {
+                connection.disconnect();
                 break; // We closed the socket during read, just exit.
             } catch (EOFException _) {
                 connection.disconnect();
@@ -176,6 +177,7 @@ public final class Server {
                 connection.awaitFlush();
                 connection.flushSync(packetWriter);
             } catch (ClosedChannelException _) {
+                connection.disconnect();
                 break; // We closed the socket during write, just exit.
             } catch (EOFException _) {
                 connection.disconnect();
