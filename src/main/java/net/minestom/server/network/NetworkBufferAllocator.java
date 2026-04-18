@@ -68,7 +68,7 @@ public interface NetworkBufferAllocator {
      * <br>
      * Otherwise, if left unset, the default arena will be used.
      *
-     * @param arenaStrategy the supplier
+     * @param arenaStrategy the arena strategy
      * @return the new allocator
      */
     @ApiStatus.Experimental
@@ -106,7 +106,7 @@ public interface NetworkBufferAllocator {
     NetworkBuffer allocate(long length);
 
     /**
-     * A strategy for reallocating arenas.
+     * A strategy for allocating arenas.
      * <br>
      * Note: After releasing an arena, it can be recycled, but it's not gaurenteed to have no references to it.
      */
@@ -122,7 +122,7 @@ public interface NetworkBufferAllocator {
         /**
          * Releases an arena from the current context.
          * <br>
-         * No guarantee to be called during garbage collection. Consider tracking all acquired arenas.
+         * No guarantee to be called. Consider tracking all acquired arenas.
          *
          * @param arena the arena to release, gaurenteed the same as the one returned by {@link #acquire()}
          */
