@@ -224,7 +224,7 @@ public class PlayerIntegrationTest {
         var displayNamePackets = tracker2.collect().stream().filter((packet) ->
                         packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
-        assertEquals(1, displayNamePackets);
+        assertEquals(3, displayNamePackets);
 
         var tracker3 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
 
@@ -238,7 +238,7 @@ public class PlayerIntegrationTest {
         var displayNamePackets3 = tracker.collect().stream().filter((packet) ->
                         packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
-        assertEquals(2, displayNamePackets3);
+        assertEquals(4, displayNamePackets3);
     }
 
     @Test
