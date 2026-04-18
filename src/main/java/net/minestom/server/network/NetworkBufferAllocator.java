@@ -6,7 +6,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import java.lang.foreign.Arena;
-import java.util.function.Supplier;
 
 /**
  * Factory like object for creating a {@link NetworkBuffer} through {@link NetworkBufferAllocator#staticAllocator()}
@@ -27,7 +26,7 @@ import java.util.function.Supplier;
  */
 public interface NetworkBufferAllocator {
     /**
-     * Gets the static allocator where {@link #arena(Supplier)} is set.
+     * Gets the static allocator where {@link #arena(ArenaStrategy)} is set.
      *
      * @return the static allocator.
      */
@@ -51,6 +50,8 @@ public interface NetworkBufferAllocator {
      * Sets the arena used for allocations.
      * <br>
      * Otherwise, if left unset, the default arena will be used.
+     * <br>
+     * The callee is responsible for releasing the arena.
      *
      * @param arena the arena
      * @return the new allocator
@@ -60,19 +61,19 @@ public interface NetworkBufferAllocator {
     NetworkBufferAllocator arena(Arena arena);
 
     /**
-     * Sets the new arena strategy.
+     * Sets the arena strategy.
      * Called when we want to reallocate memory to a fresh arena, for example, during copy or initialization.
      * <br>
      * Note you should use {@link #arena(Arena)} if you use a singleton instance.
      * <br>
      * Otherwise, if left unset, the default arena will be used.
      *
-     * @param arenaSupplier the supplier
+     * @param arenaStrategy the supplier
      * @return the new allocator
      */
     @ApiStatus.Experimental
     @Contract(pure = true, value = "_ -> new")
-    NetworkBufferAllocator arena(Supplier<? extends Arena> arenaSupplier);
+    NetworkBufferAllocator arena(ArenaStrategy arenaStrategy);
 
     /**
      * Sets the auto-resizing strategy.
@@ -103,4 +104,30 @@ public interface NetworkBufferAllocator {
      */
     @Contract("_ -> new")
     NetworkBuffer allocate(long length);
+
+    /**
+     * A strategy for reallocating arenas.
+     * <br>
+     * Note: After releasing an arena, it can be recycled, but it's not gaurenteed to have no references to it.
+     */
+    @ApiStatus.Experimental
+    interface ArenaStrategy {
+        /**
+         * Acquires an arena, which can be released later.
+         *
+         * @return the possibly new arena from the strategy
+         */
+        Arena acquire();
+
+        /**
+         * Releases an arena from the current context.
+         * <br>
+         * No guarantee to be called during garbage collection. Consider tracking all acquired arenas.
+         *
+         * @param arena the arena to release, gaurenteed the same as the one returned by {@link #acquire()}
+         */
+        default void release(Arena arena) {
+            // Default implementation does nothing, for example, global or auto arenas.
+        }
+    }
 }

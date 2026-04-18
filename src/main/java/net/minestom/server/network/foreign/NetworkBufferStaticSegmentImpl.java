@@ -58,6 +58,6 @@ final class NetworkBufferStaticSegmentImpl extends NetworkBufferSegmentImpl {
 
     @Override
     public void trim() {
-        throw new UnsupportedOperationException("Static buffer cannot resized for trim");
+        throw new UnsupportedOperationException("Static buffer cannot be resized for trim");
     }
 }

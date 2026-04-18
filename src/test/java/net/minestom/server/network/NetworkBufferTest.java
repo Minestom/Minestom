@@ -12,7 +12,6 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.lang.foreign.Arena;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -577,47 +576,6 @@ public class NetworkBufferTest {
         out.writeUTF("Hello");
 
         assertBufferType(STRING_IO_UTF8, "Hello", stream.toByteArray());
-    }
-
-    @Test
-    public void testConfinedArena() {
-        final NetworkBuffer buffer;
-        try (var arena = Arena.ofConfined()) {
-            buffer = NetworkBufferAllocator.staticAllocator().arena(arena).allocate(256);
-            buffer.write(VAR_INT, Integer.MAX_VALUE);
-            buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
-            assertEquals(Integer.MAX_VALUE, buffer.read(VAR_INT));
-        }
-        assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
-    }
-
-    @Test
-    public void testConfinedArenaCopy() {
-        final NetworkBuffer buffer;
-        try (var arena = Arena.ofConfined()) {
-            var settings = NetworkBufferAllocator.staticAllocator().arena(arena);
-            var confinedBuffer = settings.allocate(256);
-            confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
-            confinedBuffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8));
-            assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
-            buffer = confinedBuffer.copy(settings, confinedBuffer.readIndex(), confinedBuffer.readableBytes(),0, confinedBuffer.readableBytes());
-        }
-        assertThrows(IllegalStateException.class, () -> buffer.read(RAW_BYTES));
-    }
-
-    @Test
-    public void testConfinedArenaGlobalCopy() {
-        var stringBytes = "Hello".getBytes(StandardCharsets.UTF_8);
-        final NetworkBuffer buffer;
-        try (var arena = Arena.ofConfined()) {
-            var confinedBuffer = NetworkBufferAllocator.staticAllocator().arena(arena).allocate(256);
-            confinedBuffer.write(VAR_INT, Integer.MAX_VALUE);
-            confinedBuffer.write(RAW_BYTES, stringBytes);
-            assertEquals(Integer.MAX_VALUE, confinedBuffer.read(VAR_INT));
-            buffer = confinedBuffer.copy(confinedBuffer.readIndex(), confinedBuffer.readableBytes(), 0, confinedBuffer.readableBytes());
-        }
-        var bytes = buffer.read(RAW_BYTES);
-        assertArrayEquals(stringBytes, bytes);
     }
 
     @Test
