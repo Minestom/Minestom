@@ -9,10 +9,8 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 public record AdvancementsPacket(
@@ -39,23 +37,18 @@ public record AdvancementsPacket(
         progressMappings = List.copyOf(progressMappings);
     }
 
-    // TODO is the display-item needed to be updated?
     @Override
     public Collection<Component> components() {
-        final var displayData = this.advancementMappings.stream().map(AdvancementMapping::value).map(Advancement::displayData).filter(Objects::nonNull).toList();
-        final var titles = displayData.stream().map(DisplayData::title).toList();
-        final var descriptions = displayData.stream().map(DisplayData::description).toList();
-
-        final var list = new ArrayList<Component>();
-
-        list.addAll(titles);
-        list.addAll(descriptions);
-
-        return List.copyOf(list);
+        if (this.advancementMappings.isEmpty()) return List.of();
+        return this.advancementMappings.stream()
+                .map(AdvancementMapping::components)
+                .flatMap(Collection::stream)
+                .toList();
     }
 
     @Override
     public ServerPacket copyWithOperator(final UnaryOperator<Component> operator) {
+        if (this.advancementMappings.isEmpty()) return this;
         return new AdvancementsPacket(
                 this.reset,
                 this.advancementMappings.stream().map(mapping -> mapping.copyWithOperator(operator)).toList(),
@@ -104,7 +97,7 @@ public record AdvancementsPacket(
 
         @Override
         public Collection<Component> components() {
-            return this.displayData != null ? this.displayData.components() : List.of();
+            return this.displayData == null ? List.of() : this.displayData.components();
         }
 
         @Override
@@ -151,10 +144,10 @@ public record AdvancementsPacket(
                 var description = buffer.read(NetworkBuffer.COMPONENT);
                 var icon = buffer.read(ItemStack.NETWORK_TYPE);
                 var frameType = FrameType.values()[buffer.read(NetworkBuffer.VAR_INT)];
-                var flags = buffer.read(NetworkBuffer.INT);
+                int flags = buffer.read(NetworkBuffer.INT);
                 var backgroundTexture = (flags & 0x1) != 0 ? buffer.read(NetworkBuffer.STRING) : null;
-                var x = buffer.read(NetworkBuffer.FLOAT);
-                var y = buffer.read(NetworkBuffer.FLOAT);
+                float x = buffer.read(NetworkBuffer.FLOAT);
+                float y = buffer.read(NetworkBuffer.FLOAT);
                 return new DisplayData(title, description,
                         icon, frameType,
                         flags, backgroundTexture,

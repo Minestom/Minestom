@@ -1,9 +1,12 @@
 package net.minestom.server.network;
 
 import net.minestom.server.network.NetworkBuffer.Type;
+import net.minestom.server.registry.Registries;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -19,7 +22,7 @@ import java.util.function.Supplier;
  *                 MyClass::new
  *         );
  *         // Compared to writing a custom serializer:
- *         public static final NetworkBuffer.Type<MyClass> SERIALIZER = new NetworkBufferTypeImpl<>() {
+ *         public static final NetworkBuffer.Type<MyClass> SERIALIZER = new NetworkBuffer.Type<>() {
  *             @Override
  *             public void write(NetworkBuffer buffer, MyClass value) {
  *                 buffer.write(NetworkBuffer.INT, value.id());
@@ -42,7 +45,6 @@ public final class NetworkBufferTemplate {
     public interface F1<P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> {
         R apply(P1 p1);
     }
-
     @FunctionalInterface
     public interface F2<P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, R extends @UnknownNullability Object> {
         R apply(P1 p1, P2 p2);
@@ -146,7 +148,7 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <R extends @UnknownNullability Object> Type<R> template(R value) {
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
             }
@@ -154,6 +156,11 @@ public final class NetworkBufferTemplate {
             @Override
             public R read(NetworkBuffer buffer) {
                 return value;
+            }
+
+            @Override
+            public long sizeOf(R value, @Nullable Registries registries) {
+                return 0;
             }
         };
     }
@@ -167,7 +174,7 @@ public final class NetworkBufferTemplate {
      */
     public static <R extends @UnknownNullability Object> Type<R> template(Supplier<? extends R> supplier) {
         Objects.requireNonNull(supplier, "supplier");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
             }
@@ -175,6 +182,11 @@ public final class NetworkBufferTemplate {
             @Override
             public R read(NetworkBuffer buffer) {
                 return supplier.get();
+            }
+
+            @Override
+            public long sizeOf(R value, @Nullable Registries registries) {
+                return 0;
             }
         };
     }
@@ -189,11 +201,13 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(Type<P1> p1, Function<? super R, ? extends P1> g1, Function<? super P1, ? extends R> ctor) {
+    public static <P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
+            Type<P1> p1, Function<? super R, ? extends P1> g1, Function<? super P1, ? extends R> ctor
+    ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -202,6 +216,11 @@ public final class NetworkBufferTemplate {
             @Override
             public R read(NetworkBuffer buffer) {
                 return ctor.apply(p1.read(buffer));
+            }
+
+            @Override
+            public long sizeOf(R value, @Nullable Registries registries) {
+                return p1.sizeOf(g1.apply(value), registries);
             }
         };
     }
@@ -221,14 +240,14 @@ public final class NetworkBufferTemplate {
      */
     public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
             Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            F2<? super P1, ? super P2, ? extends R> ctor
+            BiFunction<? super P1, ? super P2, ? extends R> ctor
     ) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
         Objects.requireNonNull(g2, "g2");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -269,7 +288,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p3, "p3");
         Objects.requireNonNull(g3, "g3");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -317,7 +336,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p4, "p4");
         Objects.requireNonNull(g4, "g4");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -374,7 +393,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p5, "p5");
         Objects.requireNonNull(g5, "g5");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -439,7 +458,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p6, "p6");
         Objects.requireNonNull(g6, "g6");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -510,7 +529,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p7, "p7");
         Objects.requireNonNull(g7, "g7");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -589,7 +608,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p8, "p8");
         Objects.requireNonNull(g8, "g8");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -674,7 +693,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p9, "p9");
         Objects.requireNonNull(g9, "g9");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -767,7 +786,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p10, "p10");
         Objects.requireNonNull(g10, "g10");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -866,7 +885,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p11, "p11");
         Objects.requireNonNull(g11, "g11");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -972,7 +991,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p12, "p12");
         Objects.requireNonNull(g12, "g12");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -1086,7 +1105,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p13, "p13");
         Objects.requireNonNull(g13, "g13");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -1207,7 +1226,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p14, "p14");
         Objects.requireNonNull(g14, "g14");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -1335,7 +1354,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p15, "p15");
         Objects.requireNonNull(g15, "g15");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -1470,7 +1489,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p16, "p16");
         Objects.requireNonNull(g16, "g16");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -1612,7 +1631,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p17, "p17");
         Objects.requireNonNull(g17, "g17");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -1761,7 +1780,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p18, "p18");
         Objects.requireNonNull(g18, "g18");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -1915,7 +1934,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p19, "p19");
         Objects.requireNonNull(g19, "g19");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));
@@ -2079,7 +2098,7 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(p20, "p20");
         Objects.requireNonNull(g20, "g20");
         Objects.requireNonNull(ctor, "ctor");
-        return new NetworkBufferTypeImpl<>() {
+        return new NetworkBuffer.Type<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
                 p1.write(buffer, g1.apply(value));

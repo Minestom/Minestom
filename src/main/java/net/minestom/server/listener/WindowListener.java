@@ -76,10 +76,6 @@ public class WindowListener {
             player.sendPacket(new SetCursorItemPacket(cursorItem));
     }
 
-    public static void pong(ClientPongPacket packet, Player player) {
-        // Empty
-    }
-
     public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
         player.closeInventory(true, (byte) packet.windowId());
     }

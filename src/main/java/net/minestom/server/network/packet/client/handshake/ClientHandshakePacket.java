@@ -21,7 +21,7 @@ public record ClientHandshakePacket(int protocolVersion, String serverAddress,
             VAR_INT, ClientHandshakePacket::protocolVersion,
             STRING, ClientHandshakePacket::serverAddress,
             UNSIGNED_SHORT, ClientHandshakePacket::serverPort,
-            VAR_INT.transform(Intent::fromId, Intent::id), ClientHandshakePacket::intent,
+    /*VarInt*/BYTE.transform(Intent::fromId, Intent::id), ClientHandshakePacket::intent,
             ClientHandshakePacket::new);
 
     private static int maxHandshakeLength() {
@@ -39,12 +39,12 @@ public record ClientHandshakePacket(int protocolVersion, String serverAddress,
                 case 1 -> STATUS;
                 case 2 -> LOGIN;
                 case 3 -> TRANSFER;
-                default -> throw new IllegalArgumentException("Unknown connection intent: " + id);
+                default -> throw new IllegalArgumentException("Unknown connection intent id: " + id);
             };
         }
 
-        public int id() {
-            return ordinal() + 1;
+        public byte id() {
+            return (byte) (ordinal() + 1);
         }
     }
 }

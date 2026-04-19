@@ -18,18 +18,23 @@ final class GraphConverter {
 
     @Contract("_, _ -> new")
     public static DeclareCommandsPacket createPacket(Graph graph, @Nullable Player player) {
-        List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
+        List<NodeT> nodesT = new ArrayList<>();
         List<BiConsumer<Graph, Integer>> redirects = new ArrayList<>();
         Map<Argument<?>, Integer> argToPacketId = new HashMap<>();
         final AtomicInteger idSource = new AtomicInteger(0);
-        final int rootId = append(graph.root(), nodes, redirects, idSource, null, player, argToPacketId)[0];
+        final int rootId = append(graph.root(), nodesT, redirects, idSource, null, player, argToPacketId)[0];
         for (var r : redirects) {
             r.accept(graph, rootId);
+        }
+        // TODO(future) remove this conversion.
+        List<DeclareCommandsPacket.Node> nodes = new ArrayList<>(nodesT.size());
+        for (NodeT node : nodesT) {
+            nodes.add(node.toNode());
         }
         return new DeclareCommandsPacket(nodes, rootId);
     }
 
-    private static int[] append(Graph.Node graphNode, List<DeclareCommandsPacket.Node> to,
+    private static int[] append(Graph.Node graphNode, List<NodeT> to,
                                 List<BiConsumer<Graph, Integer>> redirects, AtomicInteger id, @Nullable AtomicInteger redirect,
                                 @Nullable Player player, Map<Argument<?>, Integer> argToPacketId) {
         final Graph.Execution execution = graphNode.execution();
@@ -40,7 +45,7 @@ final class GraphConverter {
         final Argument<?> argument = graphNode.argument();
         final List<Graph.Node> children = graphNode.next();
 
-        final DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
+        final NodeT node = new NodeT();
         int[] packetNodeChildren = new int[children.size()];
         for (int i = 0, appendIndex = 0; i < children.size(); i++) {
             final int[] append = append(children.get(i), to, redirects, id, redirect, player, argToPacketId);
@@ -67,7 +72,7 @@ final class GraphConverter {
                 node.name = argument.getId();
                 if (redirect != null) {
                     node.flags |= 0x8;
-                    redirects.add((graph, root) -> node.redirectedNode = redirect.get());
+                    redirects.add((_, _) -> node.redirectedNode = redirect.get());
                 }
             }
             to.add(node);
@@ -78,9 +83,9 @@ final class GraphConverter {
                 node.name = argument.getId();
                 final String shortcut = argCmd.getShortcut();
                 if (shortcut.isEmpty()) {
-                    redirects.add((graph, root) -> node.redirectedNode = root);
+                    redirects.add((_, root) -> node.redirectedNode = root);
                 } else {
-                    redirects.add((graph, root) -> {
+                    redirects.add((graph, _) -> {
                         var sender = player == null ? MinecraftServer.getCommandManager().getConsoleSender() : player;
                         final List<Argument<?>> args = CommandParser.parser().parse(sender, graph, shortcut).args();
                         final Argument<?> last = args.get(args.size() - 1);
@@ -101,13 +106,13 @@ final class GraphConverter {
                 final int[] res = new int[entries.size()];
                 for (int i = 0; i < res.length; i++) {
                     String entry = entries.get(i);
-                    final DeclareCommandsPacket.Node subNode = new DeclareCommandsPacket.Node();
+                    final NodeT subNode = new NodeT();
                     subNode.children = node.children;
                     subNode.flags = literal(isExecutable, false);
                     subNode.name = entry;
                     if (redirect != null) {
                         subNode.flags |= 0x8;
-                        redirects.add((graph, root) -> subNode.redirectedNode = redirect.get());
+                        redirects.add((_, _) -> subNode.redirectedNode = redirect.get());
                     }
                     to.add(subNode);
                     res[i] = id.getAndIncrement();
@@ -145,7 +150,7 @@ final class GraphConverter {
                     }
                 }
                 throw new RuntimeException("Arg group must have child args.");
-            } else if (argument instanceof ArgumentLoop special) {
+            } else if (argument instanceof ArgumentLoop<?> special) {
                 AtomicInteger r = new AtomicInteger();
                 int[] res = new int[special.arguments().size()];
                 List<?> arguments = special.arguments();
@@ -171,7 +176,7 @@ final class GraphConverter {
                 node.properties = argument.nodeProperties();
                 if (redirect != null) {
                     node.flags |= 0x8;
-                    redirects.add((graph, root) -> node.redirectedNode = redirect.get());
+                    redirects.add((_, _) -> node.redirectedNode = redirect.get());
                 }
                 if (hasSuggestion) {
                     node.suggestionsType = argument.suggestionType().getIdentifier();
@@ -183,10 +188,25 @@ final class GraphConverter {
     }
 
     private static byte literal(boolean executable, boolean hasRedirect) {
-        return DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL, executable, hasRedirect, false);
+        return DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL, executable, hasRedirect, false, false);
     }
 
     private static byte arg(boolean executable, boolean hasSuggestion) {
-        return DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.ARGUMENT, executable, false, hasSuggestion);
+        return DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.ARGUMENT, executable, false, hasSuggestion, false);
+    }
+
+    //TODO(future) delete this, copied from DeclareCommandsPacket before immutable.
+    private static final class NodeT {
+        public byte flags;
+        public int[] children = new int[0];
+        public int redirectedNode; // Only if flags & 0x08
+        public @Nullable String name; // Only for literal and argument
+        public @Nullable ArgumentParserType parser; // Only for argument
+        public byte @Nullable [] properties; // Only for argument
+        public @Nullable String suggestionsType; // Only if flags 0x10
+
+        DeclareCommandsPacket.Node toNode() {
+            return new DeclareCommandsPacket.Node(flags, children, redirectedNode, name, parser, properties, suggestionsType);
+        }
     }
 }

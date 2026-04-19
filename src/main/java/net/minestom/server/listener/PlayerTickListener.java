@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.client.play.ClientTickEndPacket;
 
 public final class PlayerTickListener {
 
-    public static void listener(ClientTickEndPacket packet, Player player) {
+    public static void listener(ClientTickEndPacket ignored, Player player) {
         EventDispatcher.call(new PlayerTickEndEvent(player));
     }
 

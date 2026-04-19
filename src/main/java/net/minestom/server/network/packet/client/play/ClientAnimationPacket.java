@@ -7,6 +7,6 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 public record ClientAnimationPacket(PlayerHand hand) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientAnimationPacket> SERIALIZER = NetworkBufferTemplate.template(
-            NetworkBuffer.Enum(PlayerHand.class), ClientAnimationPacket::hand,
+            PlayerHand.NETWORK_TYPE, ClientAnimationPacket::hand,
             ClientAnimationPacket::new);
 }

@@ -70,5 +70,10 @@ final class ItemStackHashImpl {
                 DataComponent.NETWORK_TYPE.mapValue(NetworkBuffer.INT, MAX_COMPONENTS), Item::addedComponents,
                 DataComponent.NETWORK_TYPE.set(MAX_COMPONENTS), Item::removedComponents,
                 Item::new);
+
+        public Item {
+            addedComponents = Map.copyOf(addedComponents);
+            removedComponents = Set.copyOf(removedComponents);
+        }
     }
 }

@@ -1371,7 +1371,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param targetPosition the target position to face
      */
     public void facePosition(FacePoint facePoint, Point targetPosition) {
-        facePosition(facePoint, targetPosition, null, null);
+        sendPacket(new FacePlayerPacket(facePoint.facePosition(), targetPosition, null));
     }
 
     /**
@@ -1382,18 +1382,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param targetPoint the point to aim at {@code entity} position
      */
     public void facePosition(FacePoint facePoint, Entity entity, FacePoint targetPoint) {
-        facePosition(facePoint, entity.getPosition(), entity, targetPoint);
-    }
-
-    private void facePosition(FacePoint facePoint, Point targetPosition,
-                              @Nullable Entity entity, @Nullable FacePoint targetPoint) {
-        final int entityId = entity != null ? entity.getEntityId() : 0;
-        sendPacket(new FacePlayerPacket(
-                facePoint == FacePoint.EYE ?
-                        FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET, targetPosition,
-                entityId,
-                targetPoint == FacePoint.EYE ?
-                        FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET));
+        var entityData = new FacePlayerPacket.EntityData(entity.getEntityId(), targetPoint.facePosition());
+        sendPacket(new FacePlayerPacket(facePoint.facePosition(), entity.getPosition(), entityData));
     }
 
     /**
@@ -1532,7 +1522,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.playerConnection.sendPackets(packets);
     }
 
-    public void sendPackets(Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<? extends SendablePacket> packets) {
         this.playerConnection.sendPackets(packets);
     }
 
@@ -1889,7 +1879,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public void lookAt(Point point) {
         // Let the player's client provide updated position values
-        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, point, 0, null));
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, point, null));
     }
 
     /**
@@ -1903,7 +1893,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public void lookAt(Entity entity) {
         // Let the player's client provide updated position values
-        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, entity.getPosition(), entity.getEntityId(), FacePlayerPacket.FacePosition.EYES));
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, entity.getPosition(), new FacePlayerPacket.EntityData(entity.getEntityId(), FacePlayerPacket.FacePosition.EYES)));
     }
 
     /**
@@ -2132,7 +2122,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void interpretPacketQueue() {
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> manager.processClientPacket(packet, playerConnection), ServerFlag.PLAYER_PACKET_PER_TICK);
+        this.packets.drain(packet -> {
+            try {
+                manager.processClientPacket(packet, playerConnection);
+            } catch (Exception e) {
+                if (playerConnection.getClientState().ordinal() > ServerFlag.SUPPRESS_PACKET_ERROR_LEVEL)
+                    MinecraftServer.getExceptionManager().handleException(e);
+                if (ServerFlag.REJECT_MISUSED_PACKET)
+                    kick(Component.text("Misused Packet", NamedTextColor.RED));
+            }
+        }, ServerFlag.PLAYER_PACKET_PER_TICK);
     }
 
     /**
@@ -2262,8 +2261,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private PlayerInfoUpdatePacket.Entry infoEntry() {
         final PlayerSkin skin = this.skin;
-        List<PlayerInfoUpdatePacket.Property> prop = skin != null ?
-                List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())) :
+        List<GameProfile.Property> prop = skin != null ?
+                List.of(new GameProfile.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
         byte hatIndex = ((MetadataDef.Entry.BitMask) MetadataDef.Player.IS_HAT_ENABLED).bitMask();
         return new PlayerInfoUpdatePacket.Entry(getUuid(), getUsername(), prop,
@@ -2379,7 +2378,14 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     public enum FacePoint {
         FEET,
-        EYE
+        EYE;
+
+        private FacePlayerPacket.FacePosition facePosition() {
+            return switch (this) {
+                case FEET -> FacePlayerPacket.FacePosition.FEET;
+                case EYE -> FacePlayerPacket.FacePosition.EYES;
+            };
+        }
     }
 
     // Settings enum

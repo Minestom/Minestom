@@ -13,10 +13,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public record Status(
         Component description,
@@ -244,5 +241,23 @@ public record Status(
                     this.playerInfo,
                     this.enforcesSecureChat);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Status(
+                Component description1, byte[] favicon1, VersionInfo info, PlayerInfo playerInfo1, boolean secureChat
+        ))) return false;
+        return enforcesSecureChat() == secureChat && description().equals(description1) && Objects.equals(playerInfo(), playerInfo1) && versionInfo().equals(info) && Arrays.equals(favicon(), favicon1);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = description().hashCode();
+        result = 31 * result + Arrays.hashCode(favicon());
+        result = 31 * result + versionInfo().hashCode();
+        result = 31 * result + Objects.hashCode(playerInfo());
+        result = 31 * result + Boolean.hashCode(enforcesSecureChat());
+        return result;
     }
 }

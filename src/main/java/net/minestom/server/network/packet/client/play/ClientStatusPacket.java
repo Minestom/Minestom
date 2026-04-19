@@ -6,12 +6,14 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 public record ClientStatusPacket(Action action) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientStatusPacket> SERIALIZER = NetworkBufferTemplate.template(
-            NetworkBuffer.Enum(Action.class), ClientStatusPacket::action,
+            Action.NETWORK_TYPE, ClientStatusPacket::action,
             ClientStatusPacket::new);
 
     public enum Action {
         PERFORM_RESPAWN,
         REQUEST_STATS,
-        REQUEST_GAMERULE_VALUES
+        REQUEST_GAMERULE_VALUES;
+
+        public static final NetworkBuffer.Type<Action> NETWORK_TYPE = NetworkBuffer.Enum(Action.class);
     }
 }

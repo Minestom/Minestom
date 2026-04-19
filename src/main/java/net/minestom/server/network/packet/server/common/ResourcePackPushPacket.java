@@ -26,7 +26,7 @@ public record ResourcePackPushPacket(
             NetworkBuffer.STRING, ResourcePackPushPacket::url,
             NetworkBuffer.STRING, ResourcePackPushPacket::hash,
             NetworkBuffer.BOOLEAN, ResourcePackPushPacket::forced,
-            COMPONENT.optional(), ResourcePackPushPacket::prompt,
+            NetworkBuffer.OPT_CHAT, ResourcePackPushPacket::prompt,
             ResourcePackPushPacket::new);
 
     public ResourcePackPushPacket(ResourcePackInfo resourcePackInfo, boolean required, @Nullable Component prompt) {
@@ -35,11 +35,13 @@ public record ResourcePackPushPacket(
 
     @Override
     public Collection<Component> components() {
+        if (this.prompt == null) return List.of();
         return List.of(this.prompt);
     }
 
     @Override
     public ServerPacket copyWithOperator(UnaryOperator<Component> operator) {
+        if (this.prompt == null) return this;
         return new ResourcePackPushPacket(this.id, this.url, this.hash, this.forced, operator.apply(this.prompt));
     }
 }

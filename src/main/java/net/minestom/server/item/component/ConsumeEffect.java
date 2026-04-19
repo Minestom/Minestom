@@ -50,14 +50,11 @@ public sealed interface ConsumeEffect {
                 RemoveEffects::new);
     }
 
-    final class ClearAllEffects implements ConsumeEffect {
+    record ClearAllEffects() implements ConsumeEffect {
         public static final ClearAllEffects INSTANCE = new ClearAllEffects();
 
         public static final NetworkBuffer.Type<ClearAllEffects> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
         public static final StructCodec<ClearAllEffects> CODEC = StructCodec.struct(INSTANCE);
-
-        private ClearAllEffects() {
-        }
     }
 
     record TeleportRandomly(float diameter) implements ConsumeEffect {

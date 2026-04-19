@@ -33,7 +33,7 @@ public record ClientTestInstanceBlockActionPacket(
                 NetworkBuffer.VAR_INT, Data::rotation,
                 NetworkBuffer.BOOLEAN, Data::ignoreEntities,
                 Status.NETWORK_TYPE, Data::status,
-                NetworkBuffer.COMPONENT.optional(), Data::errorMessage,
+                NetworkBuffer.OPT_CHAT, Data::errorMessage,
                 Data::new);
     }
 

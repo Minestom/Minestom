@@ -5,6 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.Rotation;
+import org.intellij.lang.annotations.MagicConstant;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -14,18 +15,18 @@ public record ClientUpdateStructureBlockPacket(
         Point offset, Point size,
         Mirror mirror, Rotation rotation,
         String metadata, float integrity,
-        long seed, byte flags
+        long seed, @MagicConstant(flagsFromClass = ClientUpdateStructureBlockPacket.class) byte flags
 ) implements ClientPacket.Play {
 
     public static final NetworkBuffer.Type<ClientUpdateStructureBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, ClientUpdateStructureBlockPacket::location,
-            NetworkBuffer.Enum(Action.class), ClientUpdateStructureBlockPacket::action,
-            NetworkBuffer.Enum(Mode.class), ClientUpdateStructureBlockPacket::mode,
+            Action.NETWORK_TYPE, ClientUpdateStructureBlockPacket::action,
+            Mode.NETWORK_TYPE, ClientUpdateStructureBlockPacket::mode,
             STRING, ClientUpdateStructureBlockPacket::name,
             VECTOR3B, ClientUpdateStructureBlockPacket::offset,
             VECTOR3B, ClientUpdateStructureBlockPacket::size,
-            Enum(Mirror.class), ClientUpdateStructureBlockPacket::mirror,
-            VAR_INT.transform(ClientUpdateStructureBlockPacket::fromRestrictedRotation, ClientUpdateStructureBlockPacket::toRestrictedRotation), ClientUpdateStructureBlockPacket::rotation,
+            Mirror.NETWORK_TYPE, ClientUpdateStructureBlockPacket::mirror,
+            BYTE.transform(ClientUpdateStructureBlockPacket::fromRestrictedRotation, ClientUpdateStructureBlockPacket::toRestrictedRotation), ClientUpdateStructureBlockPacket::rotation,
             STRING, ClientUpdateStructureBlockPacket::metadata,
             FLOAT, ClientUpdateStructureBlockPacket::integrity,
             LONG, ClientUpdateStructureBlockPacket::seed,
@@ -46,18 +47,32 @@ public record ClientUpdateStructureBlockPacket(
      * Update action, <code>UPDATE_DATA</code> indicates nothing special.
      */
     public enum Action {
-        UPDATE_DATA, SAVE, LOAD, DETECT_SIZE
+        UPDATE_DATA,
+        SAVE,
+        LOAD,
+        DETECT_SIZE;
+
+        public static final NetworkBuffer.Type<Action> NETWORK_TYPE = NetworkBuffer.Enum(Action.class);
     }
 
     public enum Mode {
-        SAVE, LOAD, CORNER, DATA
+        SAVE,
+        LOAD,
+        CORNER,
+        DATA;
+
+        public static final NetworkBuffer.Type<Mode> NETWORK_TYPE = NetworkBuffer.Enum(Mode.class);
     }
 
     public enum Mirror {
-        NONE, LEFT_RIGHT, FRONT_BACK
+        NONE,
+        LEFT_RIGHT,
+        FRONT_BACK;
+
+        public static final NetworkBuffer.Type<Mirror> NETWORK_TYPE = NetworkBuffer.Enum(Mirror.class);
     }
 
-    private static int toRestrictedRotation(Rotation rotation) {
+    private static byte toRestrictedRotation(Rotation rotation) {
         return switch (rotation) {
             case NONE -> 0;
             case CLOCKWISE -> 1;

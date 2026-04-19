@@ -1,9 +1,10 @@
-package net.minestom.server.utils;
+package net.minestom.server.network;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
@@ -13,6 +14,7 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,6 +26,8 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @EnvTest
 public class TranslationIntegrationTest {
@@ -44,7 +48,7 @@ public class TranslationIntegrationTest {
         final var player = connection.connect(instance, new Pos(0, 40, 0));
         final var collector = connection.trackIncoming(SystemChatPacket.class);
 
-        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
+        assumeTrue(ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION, "Automatic component translation is required");
         final var message = Component.translatable("test.key");
         final var packet = new SystemChatPacket(message, false);
         PacketSendingUtils.sendGroupedPacket(List.of(player), packet);
@@ -63,7 +67,7 @@ public class TranslationIntegrationTest {
         final var player = connection.connect(instance, new Pos(0, 40, 0));
         final var collector = connection.trackIncoming(SystemChatPacket.class);
 
-        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = false;
+        assumeFalse(ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION, "Automatic component translation is disabled");
         final var message = Component.translatable("test.key");
         final var packet = new SystemChatPacket(message, false);
         PacketSendingUtils.sendGroupedPacket(List.of(player), packet);
@@ -80,7 +84,7 @@ public class TranslationIntegrationTest {
         final var player = connection.connect(instance, new Pos(0, 40, 0));
         final var collector = connection.trackIncoming(SetSlotPacket.class);
 
-        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
+        assumeTrue(ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION, "Automatic component translation is required");
         final var message = Component.translatable("test.key");
         final var itemStack = ItemStack.of(Material.STONE)
                 .with(DataComponents.ITEM_NAME, message)
@@ -101,7 +105,7 @@ public class TranslationIntegrationTest {
         final var player = connection.connect(instance, new Pos(0, 40, 0));
         final var collector = connection.trackIncoming(UpdateScorePacket.class);
 
-        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
+        assumeTrue(ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION, "Automatic component translation is required");
         final var message = Component.translatable("test.key");
         final var numberFormat = Sidebar.NumberFormat.fixed(message);
         final var packet = new UpdateScorePacket(

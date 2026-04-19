@@ -51,7 +51,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
     public record Match(String match, @Nullable Component tooltip) implements ComponentHolder<Match> {
         public static final NetworkBuffer.Type<Match> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, Match::match,
-                COMPONENT.optional(), Match::tooltip,
+                OPT_CHAT, Match::tooltip,
                 Match::new);
 
         @Override
