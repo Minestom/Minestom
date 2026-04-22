@@ -34,18 +34,17 @@ import net.minestom.server.entity.metadata.water.DolphinMeta;
 import net.minestom.server.entity.metadata.water.GlowSquidMeta;
 import net.minestom.server.entity.metadata.water.SquidMeta;
 import net.minestom.server.entity.metadata.water.fish.*;
-import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public final class MetadataHolder {
     private static final VarHandle NOTIFIED_CHANGES;
@@ -58,15 +57,15 @@ public final class MetadataHolder {
         }
     }
 
-    private final @Nullable Entity entity;
+    private final Consumer<Map<Integer, Metadata.Entry<?>>> changesListener;
     private final Int2ObjectMap<Metadata.Entry<?>> entries = new Int2ObjectOpenHashMap<>();
 
     @SuppressWarnings("FieldMayBeFinal")
     private volatile boolean notifyAboutChanges = true;
     private final Map<Integer, Metadata.Entry<?>> notNotifiedChanges = new HashMap<>();
 
-    public MetadataHolder(@Nullable Entity entity) {
-        this.entity = entity;
+    public MetadataHolder(Consumer<Map<Integer, Metadata.Entry<?>>> changesListener) {
+        this.changesListener = changesListener;
     }
 
     @SuppressWarnings("unchecked")
@@ -118,14 +117,13 @@ public final class MetadataHolder {
         };
 
         this.entries.put(id, result);
-        final Entity entity = this.entity;
 
         if (!this.notifyAboutChanges) {
             synchronized (this.notNotifiedChanges) {
                 this.notNotifiedChanges.put(id, result);
             }
-        } else if (entity != null && entity.isActive()) {
-            entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(id, result)));
+        } else {
+            this.changesListener.accept(Map.of(id, result));
         }
     }
 
@@ -145,20 +143,6 @@ public final class MetadataHolder {
         return (byte) ((data & ~byteMask) | ((newValue << offset) & byteMask));
     }
 
-    public Map<Integer, Metadata.Entry<?>> setNotifyAboutChangesAndGet() {
-        if (!NOTIFIED_CHANGES.compareAndSet(this, false, true))
-            return Collections.emptyMap();
-
-        Map<Integer, Metadata.Entry<?>> entries;
-        synchronized (this.notNotifiedChanges) {
-            Map<Integer, Metadata.Entry<?>> awaitingChanges = this.notNotifiedChanges;
-            if (awaitingChanges.isEmpty()) return Collections.emptyMap();
-            entries = Map.copyOf(awaitingChanges);
-            awaitingChanges.clear();
-        }
-        return entries;
-    }
-
     public void setNotifyAboutChanges(boolean notifyAboutChanges) {
         if (!NOTIFIED_CHANGES.compareAndSet(this, !notifyAboutChanges, notifyAboutChanges))
             return;
@@ -166,8 +150,6 @@ public final class MetadataHolder {
             // Ask future metadata changes to be cached
             return;
         }
-        final Entity entity = this.entity;
-        if (entity == null || !entity.isActive()) return;
         Map<Integer, Metadata.Entry<?>> entries;
         synchronized (this.notNotifiedChanges) {
             Map<Integer, Metadata.Entry<?>> awaitingChanges = this.notNotifiedChanges;
@@ -175,7 +157,7 @@ public final class MetadataHolder {
             entries = Map.copyOf(awaitingChanges);
             awaitingChanges.clear();
         }
-        entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
+        this.changesListener.accept(entries);
     }
 
     public Map<Integer, Metadata.Entry<?>> getEntries() {
