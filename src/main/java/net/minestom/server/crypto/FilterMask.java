@@ -10,7 +10,7 @@ public record FilterMask(Type type, BitSet mask) {
     public static final NetworkBuffer.Type<FilterMask> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, FilterMask value) {
-            buffer.write(Type.NETWORK_TYPE, value.type);
+            buffer.write(NetworkBuffer.Enum(Type.class), value.type);
             if (value.type == Type.PARTIALLY_FILTERED) {
                 buffer.write(BITSET, value.mask);
             }
@@ -18,7 +18,7 @@ public record FilterMask(Type type, BitSet mask) {
 
         @Override
         public FilterMask read(NetworkBuffer buffer) {
-            Type type = buffer.read(Type.NETWORK_TYPE);
+            Type type = buffer.read(NetworkBuffer.Enum(Type.class));
             BitSet mask = type == Type.PARTIALLY_FILTERED ? buffer.read(BITSET) : new BitSet();
             return new FilterMask(type, mask);
         }
@@ -31,8 +31,6 @@ public record FilterMask(Type type, BitSet mask) {
     public enum Type {
         PASS_THROUGH,
         FULLY_FILTERED,
-        PARTIALLY_FILTERED;
-
-        public static final NetworkBuffer.Type<Type> NETWORK_TYPE = NetworkBuffer.Enum(Type.class);
+        PARTIALLY_FILTERED
     }
 }
