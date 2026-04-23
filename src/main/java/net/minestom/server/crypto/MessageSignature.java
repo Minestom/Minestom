@@ -15,6 +15,7 @@ public record MessageSignature(byte[] signature) {
         if (signature.length != SIGNATURE_BYTE_LENGTH) {
             throw new IllegalArgumentException("Signature must be 256 bytes long");
         }
+        signature = signature.clone();
     }
 
     public static final NetworkBuffer.Type<MessageSignature> SERIALIZER = NetworkBufferTemplate.template(
