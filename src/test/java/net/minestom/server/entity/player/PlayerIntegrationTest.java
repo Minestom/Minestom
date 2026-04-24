@@ -242,6 +242,45 @@ public class PlayerIntegrationTest {
     }
 
     @Test
+    public void listedTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+
+        assertTrue(player.isListed());
+
+        player.setListed(false);
+
+        var listedPackets = tracker.collect().stream().filter((packet) ->
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LISTED))
+                .count();
+
+        assertEquals(2, listedPackets);
+        assertFalse(player.isListed());
+    }
+
+    @Test
+    public void listPriorityTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        assertEquals(0, player.getListPriority());
+
+        player.setListPriority(1);
+
+        var priorityPackets = tracker.collect().stream().filter((packet) ->
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LIST_PRIORITY))
+                .count();
+
+        assertEquals(1, priorityPackets);
+        assertEquals(1, player.getListPriority());
+    }
+
+    @Test
     public void setView(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
