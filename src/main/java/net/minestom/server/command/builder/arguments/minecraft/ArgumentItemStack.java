@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 /**
- * Argument which can be used to retrieve an {@link ItemStack} from its material and with NBT data.
+ * Argument which can be used to retrieve an {@link ItemStack} from its material and with component data.
  * <p>
  * It is the same type as the one used in the /give command.
  * <p>

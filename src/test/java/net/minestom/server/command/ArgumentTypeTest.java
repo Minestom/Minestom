@@ -23,7 +23,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.Range;
 import net.minestom.server.utils.location.RelativeVec;
 import net.minestom.server.utils.time.TimeUnit;
@@ -164,11 +163,12 @@ public class ArgumentTypeTest {
     public void testArgumentItemStack() {
         var arg = ArgumentType.ItemStack("item_stack");
         assertArg(arg, ItemStack.AIR, "air");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
+        assertInvalidArg(arg, "glass_pane{tag:value}");
+        assertArg(arg, ItemStack.of(Material.COOKED_BEEF).without(DataComponents.CONSUMABLE), "cooked_beef[!consumable]");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5), "glass_pane[repair_cost=5]");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).withTag(Tag.String("tag"), "value"), "glass_pane[repair_cost=5]{tag:value}");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).with(DataComponents.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
-                "glass_pane[repair_cost=5,minecraft:custom_data={hi:232}]{tag:value}");
+        assertInvalidArg(arg, "glass_pane[repair_cost=5]{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).with(DataComponents.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())),
+                "glass_pane[repair_cost=5,minecraft:custom_data={hi:232}]");
     }
 
     @Test
