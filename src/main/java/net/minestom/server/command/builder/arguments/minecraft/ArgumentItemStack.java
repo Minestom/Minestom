@@ -24,7 +24,7 @@ import java.io.IOException;
  * <p>
  * It is the same type as the one used in the /give command.
  * <p>
- * Example: diamond_sword[minecraft:custom_name={text:"Sword of Power"}]
+ * Example: diamond_sword{display:{Name:"{\"text\":\"Sword of Power\"}"}}
  */
 public class ArgumentItemStack extends Argument<ItemStack> {
 
@@ -38,19 +38,6 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
     @Override
     public ItemStack parse(CommandSender sender, String input) throws ArgumentSyntaxException {
-        return staticParse(input);
-    }
-
-    @Override
-    public ArgumentParserType parser() {
-        return ArgumentParserType.ITEM_STACK;
-    }
-
-    /**
-     * @deprecated use {@link Argument#parse(CommandSender, Argument)}
-     */
-    @SuppressWarnings("unchecked") @Deprecated
-    public static ItemStack staticParse(String input) throws ArgumentSyntaxException {
         var reader = new StringReader(input);
 
         Key materialKey = reader.readKey();
@@ -96,6 +83,11 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             throw new ArgumentSyntaxException("Unexpected remaining input", input, INVALID_NBT);
 
         return ItemStack.of(material, components.build());
+    }
+
+    @Override
+    public ArgumentParserType parser() {
+        return ArgumentParserType.ITEM_STACK;
     }
 
     @Override
