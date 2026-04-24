@@ -2,7 +2,6 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Result;
@@ -13,11 +12,10 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.component.CustomData;
 import net.minestom.server.registry.RegistryTranscoder;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -26,14 +24,13 @@ import java.io.IOException;
  * <p>
  * It is the same type as the one used in the /give command.
  * <p>
- * Example: diamond_sword{display:{Name:"{\"text\":\"Sword of Power\"}"}}
+ * Example: diamond_sword[minecraft:custom_name={text:"Sword of Power"}]
  */
 public class ArgumentItemStack extends Argument<ItemStack> {
 
-    public static final int NO_MATERIAL = 1;
-    public static final int INVALID_NBT = 2;
-    public static final int INVALID_MATERIAL = 3;
-    public static final int INVALID_COMPONENT = 4;
+    public static final int INVALID_NBT = 1;
+    public static final int INVALID_MATERIAL = 2;
+    public static final int INVALID_COMPONENT = 3;
 
     public ArgumentItemStack(String id) {
         super(id, true);
@@ -56,47 +53,43 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     public static ItemStack staticParse(String input) throws ArgumentSyntaxException {
         var reader = new StringReader(input);
 
-        final Material material = Material.fromKey(reader.readKey());
+        Key materialKey = reader.readKey();
+        final Material material = materialKey == null ? null : Material.fromKey(materialKey);
         if (material == null)
             throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
         if (!reader.hasMore()) {
             return ItemStack.of(material); // Nothing else, we have our item
         }
 
-        DataComponentMap.Builder components = DataComponentMap.builder();
+        DataComponentMap.PatchBuilder components = DataComponentMap.patchBuilder();
 
         // Parse the declared components
         if (reader.peek() == '[') {
             reader.consume('[');
             final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
             do {
+                final boolean remove = reader.peek() == '!';
+                if (remove)
+                    reader.consume('!');
                 final Key componentId = reader.readKey();
                 final DataComponent<?> component = DataComponent.fromKey(componentId);
                 if (component == null)
                     throw new ArgumentSyntaxException("Unknown item component", input, INVALID_COMPONENT);
+                if (components.has(component))
+                    throw new ArgumentSyntaxException("Repeated item component", input, INVALID_COMPONENT);
 
-                reader.consume('=');
-
-                final Result<Object> componentValueResult = (Result<Object>) component.decode(coder, reader.readTag());
-                components.set((DataComponent<Object>) component, componentValueResult.orElseThrow());
+                if (remove)
+                    components.remove(component);
+                else {
+                    reader.consume('=');
+                    final Result<Object> componentValueResult = (Result<Object>) component.decode(coder, reader.readTag());
+                    components.set((DataComponent<Object>) component, componentValueResult.orElseThrow());
+                }
 
                 if (reader.peek() != ']')
                     reader.consume(',');
             } while (reader.peek() != ']');
             reader.consume(']');
-        }
-
-        // Parse the NBT
-        if (reader.hasMore() && reader.peek() == '{') {
-            final BinaryTag nbt = reader.readTag();
-            if (!(nbt instanceof CompoundBinaryTag compound))
-                throw new ArgumentSyntaxException("Item NBT must be compound", input, INVALID_NBT);
-
-            final CompoundBinaryTag customData = CompoundBinaryTag.builder()
-                    .put(components.get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).nbt())
-                    .put(compound)
-                    .build();
-            components.set(DataComponents.CUSTOM_DATA, new CustomData(customData));
         }
 
         if (reader.hasMore())
@@ -138,13 +131,15 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             index++;
         }
 
-        public Key readKey() {
+        public @Nullable Key readKey() {
             char c;
             int start = index;
-            while (hasMore() && (c = peek()) != '{' && c != '[' && c != '=') {
+            while (hasMore() && (c = peek()) != '{' && c != '[' && c != '=' && c != ',' && c != ']') {
                 index++;
             }
-            return Key.key(input.substring(start, index));
+            String key = input.substring(start, index);
+            if (!Key.parseable(key)) return null;
+            return Key.key(key);
         }
 
         public BinaryTag readTag() {
