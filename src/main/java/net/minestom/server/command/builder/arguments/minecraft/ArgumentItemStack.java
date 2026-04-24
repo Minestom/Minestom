@@ -24,7 +24,7 @@ import java.io.IOException;
  * <p>
  * It is the same type as the one used in the /give command.
  * <p>
- * Example: diamond_sword{display:{Name:"{\"text\":\"Sword of Power\"}"}}
+ * Example: diamond_sword[custom_name={text:"Sword of Power"}]
  */
 public class ArgumentItemStack extends Argument<ItemStack> {
 
