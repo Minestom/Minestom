@@ -262,22 +262,22 @@ public class PlayerIntegrationTest {
     }
 
     @Test
-    public void listPriorityTest(Env env) {
+    public void listOrderTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
         var player = connection.connect(instance, new Pos(0, 42, 0));
 
-        assertEquals(0, player.getListPriority());
+        assertEquals(0, player.getListOrder());
 
-        player.setListPriority(1);
+        player.setListOrder(1);
 
-        var priorityPackets = tracker.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LIST_PRIORITY))
+        var orderPackets = tracker.collect().stream().filter((packet) ->
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER))
                 .count();
 
-        assertEquals(1, priorityPackets);
-        assertEquals(1, player.getListPriority());
+        assertEquals(1, orderPackets);
+        assertEquals(1, player.getListOrder());
     }
 
     @Test

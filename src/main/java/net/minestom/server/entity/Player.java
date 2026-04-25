@@ -146,7 +146,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private volatile int latency;
     private Component displayName;
     private boolean listed = true;
-    private int listPriority;
+    private int listOrder;
     private PlayerSkin skin;
 
     private Instance pendingInstance = null;
@@ -1211,14 +1211,14 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Gets the tab-list listing priority of the player.
+     * Gets the tab-list listing order of the player.
      * <p>
-     * See {@link Player#setListPriority(int)} for further documentation.
+     * See {@link Player#setListOrder(int)} for further documentation.
      *
-     * @return the priority the player has for the tab-list
+     * @return the order the player has for the tab-list
      */
-    public int getListPriority() {
-        return listPriority;
+    public int getListOrder() {
+        return listOrder;
     }
 
     /**
@@ -1227,12 +1227,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * <p>
      * More information can be found <a href="https://minecraft.wiki/w/Java_Edition_protocol/Packets#player-info:player-actions">here</a>.
      *
-     * @param listPriority the priority in which the player should be displayed in the tab-list. A higher priority means
+     * @param listOrder the order in which the player should be displayed in the tab-list. A higher number means
      *                     the player will appear higher in the tab-list.
      */
-    public void setListPriority(int listPriority) {
-        this.listPriority = listPriority;
-        PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_PRIORITY, infoEntry()));
+    public void setListOrder(int listOrder) {
+        this.listOrder = listOrder;
+        PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER, infoEntry()));
     }
 
     /**
@@ -2314,7 +2314,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 List.of();
         byte hatIndex = ((MetadataDef.Entry.BitMask) MetadataDef.Player.IS_HAT_ENABLED).bitMask();
         return new PlayerInfoUpdatePacket.Entry(getUuid(), getUsername(), prop,
-                listed, getLatency(), getGameMode(), displayName, null, listPriority, (settings.displayedSkinParts() & hatIndex) == hatIndex);
+                listed, getLatency(), getGameMode(), displayName, null, listOrder, (settings.displayedSkinParts() & hatIndex) == hatIndex);
     }
 
     /**
