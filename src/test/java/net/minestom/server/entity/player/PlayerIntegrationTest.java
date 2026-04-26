@@ -242,6 +242,46 @@ public class PlayerIntegrationTest {
     }
 
     @Test
+    public void gameModeTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var gameModeInfoPackets = tracker.collect().stream().filter((packet) ->
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE))
+                .count();
+        assertEquals(1, gameModeInfoPackets);
+
+        player.setSkin(new PlayerSkin("", ""));
+
+        var gameModeInfoPackets2 = tracker.collect().stream().filter((packet) ->
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE))
+                .count();
+        assertEquals(1, gameModeInfoPackets2);
+    }
+
+    @Test
+    public void latencyTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var latencyPackets = tracker.collect().stream().filter((packet) ->
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LATENCY))
+                .count();
+        assertEquals(1, latencyPackets);
+
+        player.setSkin(new PlayerSkin("", ""));
+
+        var latencyPackets2 = tracker.collect().stream().filter((packet) ->
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LATENCY))
+                .count();
+        assertEquals(1, latencyPackets2);
+    }
+
+    @Test
     public void setView(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
