@@ -63,8 +63,8 @@ public final class PacketSendingUtils {
      * @param packet    the packet to send to the players
      * @param predicate predicate to ignore specific players
      */
-    public static void sendGroupedPacket(Collection<Player> players, ServerPacket packet,
-                                         Predicate<Player> predicate) {
+    public static <T extends Player> void sendGroupedPacket(Collection<T> players, ServerPacket packet,
+                                         Predicate<? super T> predicate) {
         final SendablePacket sendablePacket = groupedPacket(packet);
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
@@ -77,7 +77,7 @@ public final class PacketSendingUtils {
      *
      * @see #sendGroupedPacket(Collection, ServerPacket, Predicate)
      */
-    public static void sendGroupedPacket(Collection<Player> players, ServerPacket packet) {
+    public static void sendGroupedPacket(Collection<? extends Player> players, ServerPacket packet) {
         final SendablePacket sendablePacket = groupedPacket(packet);
         players.forEach(player -> player.sendPacket(sendablePacket));
     }

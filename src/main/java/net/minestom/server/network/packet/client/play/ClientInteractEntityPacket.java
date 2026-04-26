@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaking) implements ClientPacket {
+public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaking) implements ClientPacket.Play {
 
     public static final NetworkBuffer.Type<ClientInteractEntityPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override

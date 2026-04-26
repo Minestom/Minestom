@@ -13,7 +13,7 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 public record ClientCookieResponsePacket(
         String key,
         byte @Nullable [] value
-) implements ClientPacket {
+) implements ClientPacket.Login, ClientPacket.Configuration, ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientCookieResponsePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientCookieResponsePacket::key,
             BYTE_ARRAY.optional(), ClientCookieResponsePacket::value,

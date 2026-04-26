@@ -68,7 +68,7 @@ final class BossBarHolder implements Viewable {
     }
 
     @Override
-    public Set<Player> getViewers() {
+    public Set<? extends Player> getViewers() {
         return Collections.unmodifiableSet(this.players);
     }
 }

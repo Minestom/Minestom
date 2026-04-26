@@ -9,7 +9,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientHandshakePacket(int protocolVersion, String serverAddress,
-                                    int serverPort, Intent intent) implements ClientPacket {
+                                    int serverPort, Intent intent) implements ClientPacket.Handshake {
 
     public ClientHandshakePacket {
         if (serverAddress.length() > maxHandshakeLength()) {
