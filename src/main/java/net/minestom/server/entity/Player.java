@@ -2249,7 +2249,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     protected PlayerInfoUpdatePacket getAddPlayerToList() {
         return new PlayerInfoUpdatePacket(EnumSet.of(PlayerInfoUpdatePacket.Action.ADD_PLAYER, PlayerInfoUpdatePacket.Action.UPDATE_LISTED,
-                PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME), List.of(infoEntry()));
+                PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE,
+                PlayerInfoUpdatePacket.Action.UPDATE_LATENCY), List.of(infoEntry()));
     }
 
     /**
