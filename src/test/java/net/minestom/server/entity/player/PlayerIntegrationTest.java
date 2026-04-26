@@ -276,7 +276,7 @@ public class PlayerIntegrationTest {
                         packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER))
                 .count();
 
-        assertEquals(1, orderPackets);
+        assertEquals(2, orderPackets);
         assertEquals(1, player.getListOrder());
     }
 
