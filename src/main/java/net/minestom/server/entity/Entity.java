@@ -637,9 +637,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             effectTick();
         }
         // Scheduled synchronization
-        if (vehicle == null && ticks >= nextSynchronizationTick) {
-            synchronizePosition();
-            sendPacketToViewers(getVelocityPacket());
+        if (ticks >= nextSynchronizationTick) {
+            if (vehicle == null) {
+                synchronizePosition();
+                sendPacketToViewers(getVelocityPacket());
+            } else synchronizeView();
         }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
