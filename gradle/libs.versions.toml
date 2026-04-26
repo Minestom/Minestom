@@ -11,7 +11,7 @@ slf4j = "2.0.17"
 # Performance / Data Structures
 fastutil = "8.5.18"
 flare = "2.0.1"
-gson = "2.13.2"
+gson = "2.14.0"
 jcTools = "4.0.6"
 
 # Quality
