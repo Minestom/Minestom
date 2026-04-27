@@ -9,6 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -200,6 +201,8 @@ public final class PacketReading {
             if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
             buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
             return readPayload(decompressed, registry);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         } finally {
             PacketVanilla.PACKET_POOL.add(decompressed);
         }
