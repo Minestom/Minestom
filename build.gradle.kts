@@ -6,6 +6,11 @@ plugins {
     alias(libs.plugins.nmcp.aggregation)
 }
 
+configurations.all {
+    exclude(group = "io.netty", module = "netty-codec-xml")
+    exclude(group = "io.netty", module = "netty-handler-ssl-ocsp")
+}
+
 sourceSets {
     main {
         java {
@@ -44,6 +49,8 @@ dependencies {
     // Performance/data structures
     implementation(libs.fastutil)
     implementation(libs.bundles.flare)
+
+    implementation(libs.netty.core)
     api(libs.gson)
     implementation(libs.jcTools)
 
@@ -98,7 +105,7 @@ tasks.register<Test>("testWithAgent") {
             from(metadataOutputDir)
             into(resourcesTargetDir)
         }
-        println("✅ GraalVM metadata generated and copied to: $resourcesTargetDir")
+        println("GraalVM metadata generated and copied to: $resourcesTargetDir")
     }
 }
 
