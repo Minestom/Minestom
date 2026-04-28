@@ -258,17 +258,14 @@ public class PlayerIntegrationTest {
         var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
         var player = connection.connect(instance, new Pos(0, 42, 0));
 
-        var gameModeInfoPackets = tracker.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE))
-                .count();
-        assertEquals(1, gameModeInfoPackets);
+        tracker.assertCount(1, packet ->
+                packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE));
+        var tracker2 = connection.trackIncoming(PlayerInfoUpdatePacket.class);
 
-        player.setSkin(new PlayerSkin("", ""));
+        player.setGameMode(GameMode.CREATIVE);
 
-        var gameModeInfoPackets2 = tracker.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE))
-                .count();
-        assertEquals(1, gameModeInfoPackets2);
+        tracker2.assertCount(1, packet ->
+                packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE));
     }
 
     @Test
@@ -278,17 +275,14 @@ public class PlayerIntegrationTest {
         var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
         var player = connection.connect(instance, new Pos(0, 42, 0));
 
-        var latencyPackets = tracker.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LATENCY))
-                .count();
-        assertEquals(1, latencyPackets);
+        tracker.assertCount(1, packet ->
+                packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY));
 
-        player.setSkin(new PlayerSkin("", ""));
+        var tracker2 = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        player.refreshLatency(100);
 
-        var latencyPackets2 = tracker.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LATENCY))
-                .count();
-        assertEquals(1, latencyPackets2);
+        tracker2.assertCount(1, packet ->
+                packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY));
     }
 
     @Test
