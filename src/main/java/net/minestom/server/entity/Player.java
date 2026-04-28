@@ -1207,7 +1207,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public void setListed(boolean listed) {
         this.listed = listed;
-        PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LISTED, infoEntry()));
+        if (isActive()) {
+            PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LISTED, infoEntry()));
+        }
     }
 
     /**
@@ -1232,7 +1234,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public void setListOrder(int listOrder) {
         this.listOrder = listOrder;
-        PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER, infoEntry()));
+        if (isActive()) {
+            PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER, infoEntry()));
+        }
     }
 
     /**
