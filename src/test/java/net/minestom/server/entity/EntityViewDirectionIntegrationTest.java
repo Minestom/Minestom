@@ -1,6 +1,11 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
+import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
+import net.minestom.server.network.packet.server.play.EntityRotationPacket;
+import net.minestom.server.network.packet.server.play.PlayerRotationPacket;
+import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -16,7 +21,8 @@ public class EntityViewDirectionIntegrationTest {
     public void viewYawAndPitch(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0, 40, 0)).join();
+        var spawnPos = new Pos(0, 40, 0);
+        entity.setInstance(instance, spawnPos).join();
         entity.setView(0, 0);
         assertEquals(0, entity.getPosition().yaw());
         assertEquals(0, entity.getPosition().pitch());
@@ -45,6 +51,29 @@ public class EntityViewDirectionIntegrationTest {
         entity.setView(Float.NaN, Float.NaN);
         assertTrue(Float.isNaN(entity.getPosition().yaw()));
         assertTrue(Float.isNaN(entity.getPosition().pitch()));
+
+        env.tick();
+
+        var connection = env.createConnection();
+        var player = connection.connect(instance, spawnPos);
+        var player2 = env.createPlayer(instance, spawnPos);
+
+        env.tick();
+
+        var vehicle = new Entity(EntityType.SHEEP);
+        vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
+        vehicle.addPassenger(player2);
+
+        var rotationTracker = connection.trackIncoming(EntityRotationPacket.class);
+        var headLookTracker = connection.trackIncoming(EntityHeadLookPacket.class);
+
+        player2.setSynchronizationTicks(1);
+        player2.setView(90, 45);
+
+        env.tick();
+
+        rotationTracker.assertCount(1);
+        headLookTracker.assertCount(1);
     }
 
     @Test
