@@ -27,8 +27,10 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -209,7 +211,25 @@ public class PlayerIntegrationTest {
     }
 
     @Test
+    public void fullInfoSync(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var _ = connection.connect(instance, new Pos(0, 42, 0));
+        tracker.assertSingle(
+                it -> assertEquals(EnumSet.allOf(PlayerInfoUpdatePacket.Action.class), it.actions(), "Not fully synced on join")
+        );
+
+        var connection2 = env.createConnection();
+        var tracker2 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
+        var _ = connection2.connect(instance, new Pos(5, 42, 0));
+        tracker2.assertCount(2, packet -> packet.actions().equals(EnumSet.allOf(PlayerInfoUpdatePacket.Action.class)));
+    }
+
+    @Test
     public void displayNameTest(Env env) {
+        Predicate<PlayerInfoUpdatePacket> predicate =
+                packet -> packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME);
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
@@ -221,24 +241,14 @@ public class PlayerIntegrationTest {
         var tracker2 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
         connection2.connect(instance, new Pos(0, 42, 0));
 
-        var displayNamePackets = tracker2.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
-                .count();
-        assertEquals(3, displayNamePackets);
+        tracker2.assertCount(2, predicate);
 
         var tracker3 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
 
         player.setDisplayName(Component.text("Other Name!"));
 
-        var displayNamePackets2 = tracker3.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
-                .count();
-        assertEquals(1, displayNamePackets2);
-
-        var displayNamePackets3 = tracker.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
-                .count();
-        assertEquals(4, displayNamePackets3);
+        tracker3.assertCount(1, predicate);
+        tracker.assertCount(4, predicate);
     }
 
     @Test
