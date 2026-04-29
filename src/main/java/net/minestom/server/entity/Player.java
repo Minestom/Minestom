@@ -131,7 +131,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     // This probably should be configurable (eg an instance field). However I(matt) am unclear
     // on what it actually does so am holding off on adding API for this until I understand.
-    private static final int DEFAULT_SEA_LEVEL = 63;
+    protected static final int DEFAULT_SEA_LEVEL = 63;
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -2306,7 +2306,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         return new PlayerInfoRemovePacket(getUuid());
     }
 
-    private PlayerInfoUpdatePacket.Entry infoEntry() {
+    protected PlayerInfoUpdatePacket.Entry infoEntry() {
         final PlayerSkin skin = this.skin;
         List<PlayerInfoUpdatePacket.Property> prop = skin != null ?
                 List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())) :
