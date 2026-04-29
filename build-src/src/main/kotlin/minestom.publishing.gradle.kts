@@ -58,11 +58,14 @@ publishing.publications.create<MavenPublication>("maven") {
 }
 
 signing {
-    isRequired = System.getenv("CI") != null
+    // Не требовать подпись, если билд идет на JitPack
+    val isJitPack = System.getenv("JITPACK") == "true"
+    isRequired = System.getenv("CI") != null && !isJitPack
 
-    val privateKey = System.getenv("GPG_PRIVATE_KEY")
-    val keyPassphrase = System.getenv()["GPG_PASSPHRASE"]
-    useInMemoryPgpKeys(privateKey, keyPassphrase)
-
-    sign(publishing.publications)
+    if (isRequired) {
+        val privateKey = System.getenv("GPG_PRIVATE_KEY")
+        val keyPassphrase = System.getenv("GPG_PASSPHRASE")
+        useInMemoryPgpKeys(privateKey, keyPassphrase)
+        sign(publishing.publications)
+    }
 }
