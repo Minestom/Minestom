@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public sealed interface Enchantment extends Enchantments permits EnchantmentImpl {
+public non-sealed interface Enchantment extends Enchantments {
     NetworkBuffer.Type<RegistryKey<Enchantment>> NETWORK_TYPE = RegistryKey.networkType(Registries::enchantment);
     Codec<RegistryKey<Enchantment>> CODEC = RegistryKey.codec(Registries::enchantment);
 
