@@ -30,30 +30,31 @@ public final class MinecraftVarintFrameDecoder extends ByteToMessageDecoder {
         if (!ctx.channel().isActive()) return;
 
         in.markReaderIndex();
-
-        // Try to read the varint length prefix
         int length = 0;
-        int shift  = 0;
-        for (int i = 0; i < 3; i++) {           // VarInt for length is at most 3 bytes
+        int shift = 0;
+
+        for (int i = 0; i < 5; i++) {
             if (!in.isReadable()) {
                 in.resetReaderIndex();
-                return;                          // wait for more data
-            }
-            final byte b = in.readByte();
-            length |= (b & 0x7F) << shift;
-            shift  += 7;
-            if ((b & 0x80) == 0) {              // MSB clear -> last byte of varint
-                if (in.readableBytes() < length) {
-                    in.resetReaderIndex();
-                    return;                      // full frame not yet available
-                }
-                out.add(in.readRetainedSlice(length));
                 return;
             }
-        }
+            byte b = in.readByte();
+            length |= (b & 0x7F) << shift;
+            if ((b & 0x80) == 0) {
+                if (length < 0) throw new RuntimeException("Negative Paketlänge");
 
-        // Varint longer than 3 bytes  invalid
-        ctx.channel().close();
-        throw new IllegalStateException("VarInt length prefix too wide");
+                if (in.readableBytes() < length) {
+                    in.resetReaderIndex();
+                    return;
+                }
+
+                int endIndex = in.readerIndex() + length;
+                in.resetReaderIndex();
+                out.add(in.readRetainedSlice(endIndex - in.readerIndex()));
+                return;
+            }
+            shift += 7;
+        }
+        throw new RuntimeException("VarInt zu lang (Corrupted Stream)");
     }
 }
