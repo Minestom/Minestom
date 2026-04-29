@@ -557,7 +557,8 @@ public class LightingChunk extends DynamicChunk {
         return found;
     }
 
-    static Set<Chunk> relightSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
+    @SuppressWarnings("UnusedReturnValue")
+    public static Set<Chunk> relightSection(Instance instance, int chunkX, int sectionY, int chunkZ) {
         var res = new HashSet<>(relightSection(instance, chunkX, sectionY, chunkZ, LightType.BLOCK));
         res.addAll(relightSection(instance, chunkX, sectionY, chunkZ, LightType.SKY));
         return res;
