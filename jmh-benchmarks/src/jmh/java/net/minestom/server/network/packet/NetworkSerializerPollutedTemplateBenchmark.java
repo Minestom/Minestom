@@ -38,7 +38,7 @@ public class NetworkSerializerPollutedTemplateBenchmark {
                 polluter(NetworkBufferTemplate.template(VAR_INT, VarIntPacket::value, VarIntPacket::new), new VarIntPacket(6)),
                 polluter(NetworkBufferTemplate.template(VAR_LONG, VarLongPacket::value, VarLongPacket::new), new VarLongPacket(7L)),
         };
-        keepAliveSerializer = NetworkBufferTemplate.template(LONG, KeepAlivePacket::id, KeepAlivePacket::new);
+        keepAliveSerializer = KeepAlivePacket.SERIALIZER;
     }
 
     @Setup(Level.Iteration)
@@ -58,13 +58,16 @@ public class NetworkSerializerPollutedTemplateBenchmark {
     @Benchmark
     public void writePacket(Blackhole blackhole) {
         var writeBuffer = this.writeBuffer;
-        writeBuffer.writeAt(0, keepAliveSerializer, packet);
+        writeBuffer.writeIndex(0);
+        keepAliveSerializer.write(writeBuffer, packet);
         blackhole.consume(writeBuffer);
     }
 
     @Benchmark
     public void readPacket(Blackhole blackhole) {
-        blackhole.consume(readBuffer.readAt(0, keepAliveSerializer));
+        var readBuffer = this.readBuffer;
+        readBuffer.readIndex(0);
+        blackhole.consume(keepAliveSerializer.read(readBuffer));
     }
 
     @TearDown
@@ -89,15 +92,17 @@ public class NetworkSerializerPollutedTemplateBenchmark {
             this.value = value;
             this.buffer = NetworkBuffer.staticBuffer(256);
             super();
-            buffer.write(type, value);
+            write();
         }
 
         private void write() {
-            buffer.writeAt(0, type, value);
+            buffer.writeIndex(0);
+            type.write(buffer, value);
         }
 
         private T read() {
-            return buffer.readAt(0, type);
+            buffer.readIndex(0);
+            return type.read(buffer);
         }
     }
 
