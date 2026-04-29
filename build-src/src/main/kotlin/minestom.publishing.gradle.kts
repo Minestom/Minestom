@@ -15,7 +15,7 @@ publishing.publications.create<MavenPublication>("maven") {
 
     from(project.components["java"])
 
-    artifact(tasks.named("sourcesJar"))
+    // artifact(tasks.named("sourcesJar"))
 
     pom {
         name.set(this@create.artifactId)
@@ -60,7 +60,6 @@ publishing.publications.create<MavenPublication>("maven") {
 }
 
 signing {
-    // Не требовать подпись, если билд идет на JitPack
     val isJitPack = System.getenv("JITPACK") == "true"
     isRequired = System.getenv("CI") != null && !isJitPack
 

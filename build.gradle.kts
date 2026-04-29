@@ -2,7 +2,6 @@ plugins {
     id("minestom.java-library")
     id("minestom.publishing")
     alias(libs.plugins.blossom)
-
     alias(libs.plugins.nmcp.aggregation)
 }
 
@@ -22,10 +21,6 @@ sourceSets {
             }
         }
     }
-}
-
-java {
-    withSourcesJar() // Это создаст задачу sourcesJar и наполнит её кодом
 }
 
 tasks.register<Task>("determineMinecraftVersion") {
