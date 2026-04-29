@@ -17,6 +17,9 @@ public final class URLUtils {
         HttpURLConnection connection = (HttpURLConnection) URI.create(url).toURL().openConnection();
         //add headers to the connection, or check the status if desired..
 
+        connection.setConnectTimeout(5_000);
+        connection.setReadTimeout(25_000);
+
         // handle error response code it occurs
         final int responseCode = connection.getResponseCode();
         final InputStream inputStream;
