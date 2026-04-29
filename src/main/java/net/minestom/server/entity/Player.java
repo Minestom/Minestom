@@ -2266,11 +2266,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         var event = new PlayerInputEvent(this, oldForward, oldBackward, oldLeft, oldRight, oldJump, oldShift, oldSprint);
         EventDispatcher.call(event);
 
-        if (event.hasPressedShiftKey()) {
-            EventDispatcher.call(new PlayerStartSneakingEvent(this));
-        } else if (event.hasReleasedShiftKey()) {
-            EventDispatcher.call(new PlayerStopSneakingEvent(this));
-        }
+        // Deprecated
+//        if (event.hasPressedShiftKey()) {
+//            EventDispatcher.call(new PlayerStartSneakingEvent(this));
+//        } else if (event.hasReleasedShiftKey()) {
+//            EventDispatcher.call(new PlayerStopSneakingEvent(this));
+//        }
     }
 
     /**
