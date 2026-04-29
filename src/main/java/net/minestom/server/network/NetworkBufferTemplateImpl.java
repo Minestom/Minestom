@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 
-final class NetworkTypeTemplater {
+final class NetworkBufferTemplateImpl {
     private static final String PACKAGE = "net.minestom.server.network";
     private static final ClassDesc CD_OBJECT = ConstantDescs.CD_Object;
     private static final ClassDesc CD_STRING = ConstantDescs.CD_String;
@@ -46,7 +46,7 @@ final class NetworkTypeTemplater {
     private static final String READ = "read";
     private static final String WRITE = "write";
 
-    private NetworkTypeTemplater() {}
+    private NetworkBufferTemplateImpl() {}
 
     // pairs of [Type<T>, Function (getter)] for N fields, up to 20
     // always odd because ends in ctor applicable to N.
