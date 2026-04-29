@@ -24,6 +24,10 @@ sourceSets {
     }
 }
 
+java {
+    withSourcesJar() // Это создаст задачу sourcesJar и наполнит её кодом
+}
+
 tasks.register<Task>("determineMinecraftVersion") {
     outputs.upToDateWhen { false } // Never cache
 

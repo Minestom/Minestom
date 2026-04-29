@@ -15,6 +15,8 @@ publishing.publications.create<MavenPublication>("maven") {
 
     from(project.components["java"])
 
+    artifact(tasks.named("sourcesJar"))
+
     pom {
         name.set(this@create.artifactId)
         description.set("$mcVersion Lightweight Minecraft server")
