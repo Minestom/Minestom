@@ -8,6 +8,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.io.IOException;
 import java.util.function.BiPredicate;
 
 /**
@@ -105,6 +106,8 @@ public final class PacketWriting {
                 NetworkBuffer.copy(buffer, contentStart, input, 0, packetSize);
                 buffer.writeIndex(contentStart);
                 input.compress(0, packetSize, buffer);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             } finally {
                 PacketVanilla.PACKET_POOL.add(input);
             }

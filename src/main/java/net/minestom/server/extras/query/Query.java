@@ -1,5 +1,12 @@
 package net.minestom.server.extras.query;
 
+import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.DatagramPacket;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -15,200 +22,198 @@ import net.minestom.server.utils.time.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.net.SocketException;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 /**
- * Utility class to manage responses to the GameSpy4 Query Protocol.
+ * GameSpy4 Query Protocol implementation backed by Netty UDP rather than
+ * {@code java.net.DatagramSocket}.
  *
- * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Query">the Minecraft wiki</a>
+ * <p>No {@code java.nio.channels.*} or {@code sun.misc.Unsafe} references;
+ * raw byte I/O is performed through Netty's {@link ByteBuf}.
+ *
+ * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Query">
+ *     Minecraft wiki – Query protocol</a>
  */
 public class Query {
+
     public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
-    private static final Logger LOGGER = LoggerFactory.getLogger(Query.class);
-    private static final Random RANDOM = new Random();
-    private static final Int2ObjectMap<SocketAddress> CHALLENGE_TOKENS = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
 
-    private static volatile boolean started;
-    private static volatile DatagramSocket socket;
-    private static volatile Thread thread;
-    private static volatile Task task;
+    private static final Logger LOGGER   = LoggerFactory.getLogger(Query.class);
+    private static final Random RANDOM   = new Random();
 
-    private Query() {
-    }
+    /** challenge-token -> sender address */
+    private static final Int2ObjectMap<SocketAddress> CHALLENGE_TOKENS =
+            Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
+
+    private static volatile boolean       started;
+    private static volatile Channel       udpChannel;
+    private static volatile EventLoopGroup eventLoopGroup;
+    private static volatile Task          task;
+
+    private Query() {}
 
     /**
-     * Starts the query system, responding to queries on a random port, logging if it could not be started.
+     * Starts the query system on an OS-assigned port.
      *
-     * @return the port
-     * @throws IllegalArgumentException if the system was already running
+     * @return the bound port
+     * @throws IllegalArgumentException if already running
      */
     public static int start() {
-        if (socket != null) {
-            throw new IllegalArgumentException("System is already running");
-        } else {
-            int port = 0;
-            start(port);
-            return port;
-        }
+        if (udpChannel != null) throw new IllegalArgumentException("System is already running");
+        start(0);
+        return ((InetSocketAddress) udpChannel.localAddress()).getPort();
     }
 
     /**
-     * Starts the query system, responding to queries on a given port, logging if it could not be started.
+     * Starts the query system on the given {@code port}.
      *
-     * @param port the port
-     * @return {@code true} if the query system started successfully, {@code false} otherwise
+     * @return {@code true} on success, {@code false} if already running or
+     *         if the port could not be bound
      */
     public static boolean start(int port) {
-        if (socket != null) {
+        if (udpChannel != null) return false;
+
+        final EventLoopGroup group = new NioEventLoopGroup(1);
+        final Bootstrap bootstrap = new Bootstrap()
+                .group(group)
+                .channel(NioDatagramChannel.class)
+                .handler(new QueryHandler());
+
+        try {
+            udpChannel      = bootstrap.bind(port).sync().channel();
+            eventLoopGroup  = group;
+            started         = true;
+        } catch (Exception e) {
+            LOGGER.warn("Could not open the query port!", e);
+            group.shutdownGracefully();
             return false;
-        } else {
-            try {
-                socket = new DatagramSocket(port);
-            } catch (SocketException e) {
-                LOGGER.warn("Could not open the query port!", e);
-                return false;
-            }
-
-            thread = new Thread(Query::run);
-            thread.start();
-            started = true;
-
-            task = MinecraftServer.getSchedulerManager()
-                    .buildTask(CHALLENGE_TOKENS::clear)
-                    .repeat(30, TimeUnit.SECOND)
-                    .schedule();
-
-            return true;
         }
+
+        task = MinecraftServer.getSchedulerManager()
+                .buildTask(CHALLENGE_TOKENS::clear)
+                .repeat(30, TimeUnit.SECOND)
+                .schedule();
+
+        return true;
     }
 
     /**
      * Stops the query system.
      *
-     * @return {@code true} if the query system was stopped, {@code false} if it was not running
+     * @return {@code true} if it was running, {@code false} otherwise
      */
     public static boolean stop() {
-        if (!started) {
-            return false;
-        } else {
-            started = false;
+        if (!started) return false;
 
-            thread = null;
-
-            socket.close();
-            socket = null;
-
-            task.cancel();
-            CHALLENGE_TOKENS.clear();
-
-            return true;
+        started = false;
+        if (udpChannel != null) {
+            udpChannel.close().awaitUninterruptibly(); udpChannel = null;
         }
+
+        if (eventLoopGroup != null) {
+            eventLoopGroup.shutdownGracefully();        eventLoopGroup = null;
+        }
+
+        if (task != null) {
+            task.cancel(); task = null;
+        }
+
+        CHALLENGE_TOKENS.clear();
+        return true;
     }
 
-    /**
-     * Checks if the query system has been started.
-     *
-     * @return {@code true} if it has been started, {@code false} otherwise
-     */
+    /** @return {@code true} if the query system is currently running */
     public static boolean isStarted() {
         return started;
     }
 
-    private static void run() {
-        final byte[] buffer = new byte[16];
+    /**
+     * Handles inbound UDP datagrams and replies inline on the same Netty
+     * event-loop thread — no extra thread needed.
+     */
+    @ChannelHandler.Sharable
+    private static final class QueryHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
-        while (started) {
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+        @Override
+        protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) {
+            final ByteBuf data   = msg.content();
+            final InetSocketAddress sender = msg.sender();
 
-            // try and receive the packet
-            try {
-                socket.receive(packet);
-            } catch (IOException e) {
-                if (!started) {
-                    LOGGER.error("An error occurred whilst receiving a query packet.", e);
-                    continue;
-                } else {
-                    return;
-                }
-            }
+            // Check magic 0xFEFD
+            if (data.readableBytes() < 3) return;
+            final int magic = data.readUnsignedShort();
+            if (magic != 0xFEFD) return;
 
-            // get the contents
-            ByteBuffer data = ByteBuffer.wrap(packet.getData());
-
-            // check the magic field
-            if ((data.getShort() & 0xFFFF) != 0xFEFD) {
-                continue;
-            }
-
-            // now check the query type
-            byte type = data.get();
+            final byte type = data.readByte();
 
             if (type == 9) { // handshake
-                int sessionID = data.getInt();
-                int challengeToken = RANDOM.nextInt();
+                if (data.readableBytes() < 4) return;
+                final int sessionID      = data.readInt();
+                final int challengeToken = RANDOM.nextInt();
+                CHALLENGE_TOKENS.put(challengeToken, sender);
 
-                CHALLENGE_TOKENS.put(challengeToken, packet.getSocketAddress());
-
-                // send the response
-                final byte[] responseData = NetworkBuffer.makeArray(response -> {
-                    response.write(NetworkBuffer.BYTE, (byte) 9);
-                    response.write(NetworkBuffer.INT, sessionID);
-                    response.write(NetworkBuffer.STRING_TERMINATED, String.valueOf(challengeToken));
+                final byte[] responseBytes = NetworkBuffer.makeArray(buf -> {
+                    buf.write(NetworkBuffer.BYTE, (byte) 9);
+                    buf.write(NetworkBuffer.INT, sessionID);
+                    buf.write(NetworkBuffer.STRING_TERMINATED, String.valueOf(challengeToken));
                 });
 
-                try {
-                    socket.send(new DatagramPacket(responseData, responseData.length, packet.getSocketAddress()));
-                } catch (IOException e) {
-                    if (!started) {
-                        LOGGER.error("An error occurred whilst sending a query handshake packet.", e);
-                    } else {
-                        return;
-                    }
-                }
+                send(ctx, sender, responseBytes);
+
             } else if (type == 0) { // stat
-                int sessionID = data.getInt();
-                int challengeToken = data.getInt();
-                SocketAddress sender = packet.getSocketAddress();
+                if (data.readableBytes() < 8) return;
+                final int sessionID      = data.readInt();
+                final int challengeToken = data.readInt();
+                final int remaining      = data.readableBytes();
 
-                if (CHALLENGE_TOKENS.containsKey(challengeToken) && CHALLENGE_TOKENS.get(challengeToken).equals(sender)) {
-                    int remaining = data.remaining();
+                if (!CHALLENGE_TOKENS.containsKey(challengeToken)
+                        || !CHALLENGE_TOKENS.get(challengeToken).equals(sender)) return;
 
-                    if (remaining == 0) { // basic
-                        BasicQueryEvent event = new BasicQueryEvent(sender, sessionID);
-                        EventDispatcher.callCancellable(event, () ->
-                                sendResponse(BasicQueryResponse.SERIALIZER, event.getQueryResponse(), sessionID, sender));
-                    } else if (remaining == 5) { // full
-                        FullQueryEvent event = new FullQueryEvent(sender, sessionID);
-                        EventDispatcher.callCancellable(event, () ->
-                                sendResponse(FullQueryResponse.SERIALIZER, event.getQueryResponse(), sessionID, sender));
-                    }
+                if (remaining == 0) { // basic query
+                    final BasicQueryEvent event = new BasicQueryEvent(sender, sessionID);
+                    EventDispatcher.callCancellable(event, () ->
+                            sendQueryResponse(ctx, BasicQueryResponse.SERIALIZER,
+                                    event.getQueryResponse(), sessionID, sender));
+                } else if (remaining == 5) { // full query
+                    final FullQueryEvent event = new FullQueryEvent(sender, sessionID);
+                    EventDispatcher.callCancellable(event, () ->
+                            sendQueryResponse(ctx, FullQueryResponse.SERIALIZER,
+                                    event.getQueryResponse(), sessionID, sender));
                 }
+            }
+        }
+
+        @Override
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+            if (started) {
+                LOGGER.error("Error in query handler", cause);
             }
         }
     }
 
-    private static <T> void sendResponse(NetworkBuffer.Type<T> type, T queryResponse, int sessionID, SocketAddress sender) {
-        final byte[] responseData = NetworkBuffer.makeArray(buffer -> {
-            // header
-            buffer.write(NetworkBuffer.BYTE, (byte) 0);
-            buffer.write(NetworkBuffer.INT, sessionID);
-            // payload
-            buffer.write(type, queryResponse);
+    private static <T> void sendQueryResponse(ChannelHandlerContext ctx,
+                                              NetworkBuffer.Type<T> type, T response,
+                                              int sessionID, InetSocketAddress sender) {
+        final byte[] payload = NetworkBuffer.makeArray(buf -> {
+            buf.write(NetworkBuffer.BYTE, (byte) 0);
+            buf.write(NetworkBuffer.INT, sessionID);
+            buf.write(type, response);
         });
-        try {
-            socket.send(new DatagramPacket(responseData, responseData.length, sender));
-        } catch (IOException e) {
-            if (!started) {
-                LOGGER.error("An error occurred whilst sending a query handshake packet.", e);
-            }
-        }
+        send(ctx, sender, payload);
+    }
+
+    private static void send(ChannelHandlerContext ctx,
+                             InetSocketAddress recipient, byte[] data) {
+        final ByteBuf buf = ctx.alloc().buffer(data.length).writeBytes(data);
+        ctx.writeAndFlush(new DatagramPacket(buf, recipient))
+                .addListener(f -> {
+                    if (!f.isSuccess() && started) {
+                        LOGGER.error("Failed to send query response to {}", recipient, f.cause());
+                    }
+                });
     }
 }

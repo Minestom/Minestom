@@ -19,6 +19,12 @@ module net.minestom.server {
     requires jdk.jfr;
     requires java.desktop;
     requires java.management;
+    requires io.netty.buffer;
+    requires io.netty.codec;
+    requires io.netty.transport;
+    requires io.netty.transport.unix.common;
+    requires io.netty.transport.classes.epoll;
+    requires io.netty.common;
 
     // EXPORTS
     exports net.minestom.server;

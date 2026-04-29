@@ -2,6 +2,9 @@ metadata.format.version = "1.1"
 
 [versions]
 
+# Netty
+netty = "4.1.132.Final"
+
 # Important dependencies
 data = "1.21.11-rv2"
 adventure = "4.26.1"
@@ -36,6 +39,14 @@ jcstress-plugin = "0.9.0"
 [libraries]
 
 # Important Dependencies
+
+# Netty
+netty-all = { group = "io.netty", name = "netty-all", version.ref = "netty" }
+netty-core = { group = "io.netty", name = "netty-all", version.ref = "netty" }
+netty-buffer = { group = "io.netty", name = "netty-buffer", version.ref = "netty" }
+netty-codec = { group = "io.netty", name = "netty-codec", version.ref = "netty" }
+netty-transport = { group = "io.netty", name = "netty-transport", version.ref = "netty" }
+
 # Adventure
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventure-nbt = { group = "net.kyori", name = "adventure-nbt", version.ref = "adventure" }
