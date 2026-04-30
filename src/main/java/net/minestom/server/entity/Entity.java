@@ -667,7 +667,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     }
 
-    private void touchTick() {
+    protected void touchTick() {
         if (!hasPhysics) return;
 
         // TODO do not call every tick (it is pretty expensive)
