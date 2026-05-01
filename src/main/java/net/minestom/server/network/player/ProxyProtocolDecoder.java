@@ -20,11 +20,18 @@ import java.util.Arrays;
  */
 final class ProxyProtocolDecoder {
 
+    private static final byte[] V1_SIG = "PROXY ".getBytes();
+    private static final NetworkBuffer.Type<byte[]> V1_SIG_BYTES = NetworkBuffer.FixedRawBytes(V1_SIG.length);
+
     private static final byte[] V2_SIG = new byte[]{
             0x0D, 0x0A, 0x0D, 0x0A,
             0x00, 0x0D, 0x0A, 0x51,
             0x55, 0x49, 0x54, 0x0A
     };
+    private static final NetworkBuffer.Type<byte[]> V2_SIG_BYTES = NetworkBuffer.FixedRawBytes(V2_SIG.length);
+
+    private static final NetworkBuffer.Type<byte[]> IPV4_BYTES = NetworkBuffer.FixedRawBytes(4);
+    private static final NetworkBuffer.Type<byte[]> IPV6_BYTES = NetworkBuffer.FixedRawBytes(16);
 
     public record ClientInfo(
         SocketAddress clientAddress,
@@ -50,28 +57,20 @@ final class ProxyProtocolDecoder {
 
     private static boolean looksLikeV1(NetworkBuffer buffer) {
         if (buffer.readableBytes() < 6) return false;
+        byte[] p = buffer.readAt(buffer.readIndex(), V1_SIG_BYTES);
 
-        final long current = buffer.readIndex();
-        byte[] p = buffer.read(NetworkBuffer.FixedRawBytes(6));
-        buffer.readIndex(current);
-
-        return Arrays.equals(p, "PROXY ".getBytes());
+        return Arrays.equals(p, V1_SIG);
     }
 
     private static boolean looksLikeV2(NetworkBuffer buffer) {
         if (buffer.readableBytes() < 12) return false;
-
-        final long current = buffer.readIndex();
-        byte[] sig = buffer.read(NetworkBuffer.FixedRawBytes(12));
-        buffer.readIndex(current);
+        byte[] sig = buffer.readAt(buffer.readIndex(), V2_SIG_BYTES);
 
         return Arrays.equals(sig, V2_SIG);
     }
 
     private static ClientInfo parseV1(NetworkBuffer buffer, SocketAddress fallback) {
-        final long current = buffer.readIndex();
-        byte[] bytes = buffer.read(NetworkBuffer.RAW_BYTES);
-        buffer.readIndex(current);
+        byte[] bytes = buffer.readAt(buffer.readIndex(), NetworkBuffer.RAW_BYTES);
 
         String s = new String(bytes);
         int end = s.indexOf("\r\n");
@@ -126,8 +125,8 @@ final class ProxyProtocolDecoder {
             if (len < 12 || buffer.readableBytes() < 12)
                 return new ClientInfo(fallback, false);
 
-            byte[] src = buffer.read(NetworkBuffer.FixedRawBytes(4));
-            buffer.read(NetworkBuffer.FixedRawBytes(4)); // dst ip
+            byte[] src = buffer.read(IPV4_BYTES);
+            buffer.read(IPV4_BYTES); // dst ip
 
             int srcPort = buffer.read(NetworkBuffer.UNSIGNED_SHORT);
             buffer.read(NetworkBuffer.UNSIGNED_SHORT); // dst port
@@ -143,8 +142,8 @@ final class ProxyProtocolDecoder {
             if (len < 36 || buffer.readableBytes() < 36)
                 return new ClientInfo(fallback, false);
 
-            byte[] src = buffer.read(NetworkBuffer.FixedRawBytes(16));
-            buffer.read(NetworkBuffer.FixedRawBytes(16)); // dst ip
+            byte[] src = buffer.read(IPV6_BYTES);
+            buffer.read(IPV6_BYTES); // dst ip
 
             int srcPort = buffer.read(NetworkBuffer.UNSIGNED_SHORT);
             buffer.read(NetworkBuffer.UNSIGNED_SHORT); // dst port
