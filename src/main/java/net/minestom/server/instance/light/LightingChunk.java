@@ -17,10 +17,8 @@ import net.minestom.server.network.packet.server.play.data.LightData;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /* TODO
@@ -39,14 +37,12 @@ public class LightingChunk extends DynamicChunk {
     private final List<LightSection> lightSections;
     private volatile boolean resendLight = false;
     // The following 4 WeakReferences are read-only
-    private @Nullable WeakReference<@Nullable LightingChunk> north;
-    private @Nullable WeakReference<@Nullable LightingChunk> east;
-    private @Nullable WeakReference<@Nullable LightingChunk> south;
-    private @Nullable WeakReference<@Nullable LightingChunk> west;
+    private final Map<Neighbors, WeakReference<@Nullable LightingChunk>> neighbors = new ConcurrentHashMap<>();
     private volatile boolean mayRequireSpecificSectionResend = false;
     private final AtomicInteger resendSpecificAfter = new AtomicInteger(); // TODO
     final LightEngine.WorkTypeTracker<Integer> trackerBlockLightExternal = new LightEngine.WorkTypeTracker.Hash<>();
     final LightEngine.WorkTypeTracker<Integer> trackerFullBlockRelight = new LightEngine.WorkTypeTracker.Hash<>();
+    final LightEngine.WorkTypeTracker<Integer> trackerFullSkyRelight = new LightEngine.WorkTypeTracker.Hash<>();
     private volatile boolean neighborUpdated = false;
 
     private static final Set<Key> DIFFUSE_SKY_LIGHT = Set.of(Block.COBWEB.key(), Block.ICE.key(), Block.HONEY_BLOCK.key(), Block.SLIME_BLOCK.key(), Block.WATER.key(), Block.ACACIA_LEAVES.key(), Block.AZALEA_LEAVES.key(), Block.BIRCH_LEAVES.key(), Block.DARK_OAK_LEAVES.key(), Block.FLOWERING_AZALEA_LEAVES.key(), Block.JUNGLE_LEAVES.key(), Block.CHERRY_LEAVES.key(), Block.OAK_LEAVES.key(), Block.SPRUCE_LEAVES.key(), Block.SPAWNER.key(), Block.BEACON.key(), Block.END_GATEWAY.key(), Block.CHORUS_PLANT.key(), Block.CHORUS_FLOWER.key(), Block.FROSTED_ICE.key(), Block.SEAGRASS.key(), Block.TALL_SEAGRASS.key(), Block.LAVA.key());
@@ -123,7 +119,16 @@ public class LightingChunk extends DynamicChunk {
     public NeighborSnapshot createNeighborSnapshot() {
         // It is important that we do not set the WeakReference fields to null if they do not hold a value anymore.
         // This is because of possible race conditions if another neighbor were to load, populating the field again.
-        return new NeighborSnapshot(north == null ? null : north.get(), east == null ? null : east.get(), south == null ? null : south.get(), west == null ? null : west.get());
+        if (neighbors.isEmpty()) return new NeighborSnapshot(Map.of());
+
+        var neighbors = new EnumMap<Neighbors, LightingChunk>(Neighbors.class);
+        for (var e : this.neighbors.entrySet()) {
+            var ref = e.getValue();
+            var chunk = ref.get();
+            if (chunk == null) continue;
+            neighbors.put(e.getKey(), chunk);
+        }
+        return new NeighborSnapshot(Map.copyOf(neighbors));
     }
 
     @Override
@@ -141,30 +146,28 @@ public class LightingChunk extends DynamicChunk {
         // We need to announce to our neighbors that we are loaded now.
         // This connects us with the neighbors and invalidates their external lighting for us.
         // This connection stays up until chunks are unloaded.
-        // onLoad is an ideal place because of its threading implications
-        announceNeighborLoad(BlockFace.NORTH);
-        announceNeighborLoad(BlockFace.EAST);
-        announceNeighborLoad(BlockFace.SOUTH);
-        announceNeighborLoad(BlockFace.WEST);
+        // onLoadManaged is an ideal place because of its threading implications,
+        // everything inside an instance will be sequential. For future development of the
+        // chunk management system, this might change and new solutions might be required.
+        announceNeighborLoad(Neighbors.NORTH);
+        announceNeighborLoad(Neighbors.EAST);
+        announceNeighborLoad(Neighbors.SOUTH);
+        announceNeighborLoad(Neighbors.WEST);
     }
 
-    public void announceNeighborLoad(BlockFace directionFace) {
-        var neighbor = this.instance.getChunkManager().getLoadedChunkManaged(chunkX + directionFace.toDirection().normalX(), chunkZ + directionFace.toDirection().normalZ());
+    private void announceNeighborLoad(Neighbors directionFace) {
+        // This is a synchronization point. See #onLoadManaged()
+        var neighbor = this.instance.getChunkManager().getLoadedChunkManaged(chunkX + directionFace.x(), chunkZ + directionFace.z());
         if (neighbor == null) return; // No neighbor
         if (neighbor instanceof LightingChunk lightingChunk) {
-            lightingChunk.receiveNeighborLoad(this, directionFace.getOppositeFace());
+            lightingChunk.receiveNeighborLoad(this, directionFace.opposite());
             receiveNeighborLoad(lightingChunk, directionFace);
         }
     }
 
-    private void receiveNeighborLoad(LightingChunk neighbor, BlockFace originDirection) {
-        switch (originDirection) {
-            case NORTH -> north = neighbor.selfReference;
-            case EAST -> east = neighbor.selfReference;
-            case SOUTH -> south = neighbor.selfReference;
-            case WEST -> west = neighbor.selfReference;
-            default -> throw new IllegalArgumentException();
-        }
+    private void receiveNeighborLoad(LightingChunk neighbor, Neighbors origin) {
+        // This is a synchronization point. See #onLoadManaged()
+        neighbors.put(origin, neighbor.selfReference);
         // Neighbor has updated. We now invalidate the external lighting
         // We want to keep work on chunk management thread to a minimum, so we delegate via flag
         neighborUpdated = true;
@@ -251,6 +254,7 @@ public class LightingChunk extends DynamicChunk {
         super.onGenerate();
         for (var lightSection : lightSections) {
             lightSection.generatorRelightBlockLightInternal();
+            lightSection.generatorRelightSkyLightInternal();
         }
         LightSection.generatorRelightBlockLightExternalAndBakeSync(lightSections);
     }
@@ -291,6 +295,7 @@ public class LightingChunk extends DynamicChunk {
             // TODO we may want to use the following, commented out code:
             //  LightSection.generatorRelightBlockLightExternalAndBakeSync(lightSections);
             lightingChunk.lightSections.get(i).bakeBlockLight();
+            lightingChunk.lightSections.get(i).bakeSkyLight();
         }
         return lightingChunk;
     }
@@ -339,7 +344,48 @@ public class LightingChunk extends DynamicChunk {
         return lightSections.get(sectionY - minLightSection);
     }
 
-    public record NeighborSnapshot(@Nullable LightingChunk north, @Nullable LightingChunk east,
-                                   @Nullable LightingChunk south, @Nullable LightingChunk west) {
+    public record NeighborSnapshot(Map<Neighbors, LightingChunk> neighbors) {
+        public @Nullable LightingChunk get(Neighbors neighbor) {
+            return neighbors.get(neighbor);
+        }
+    }
+
+    public enum Neighbors {
+        NORTH(0, -1),
+        EAST(1, 0),
+        SOUTH(0, 1),
+        WEST(-1, 0),
+        NORTH_EAST(1, -1),
+        NORTH_WEST(-1, -1),
+        SOUTH_EAST(1, 1),
+        SOUTH_WEST(-1, 1);
+
+        private final int x, z;
+
+        Neighbors(int x, int z) {
+            this.x = x;
+            this.z = z;
+        }
+
+        public int x() {
+            return x;
+        }
+
+        public int z() {
+            return z;
+        }
+
+        public Neighbors opposite() {
+            return switch (this) {
+                case NORTH -> SOUTH;
+                case EAST -> WEST;
+                case SOUTH -> NORTH;
+                case WEST -> EAST;
+                case NORTH_EAST -> SOUTH_WEST;
+                case NORTH_WEST -> SOUTH_EAST;
+                case SOUTH_EAST -> NORTH_WEST;
+                case SOUTH_WEST -> NORTH_EAST;
+            };
+        }
     }
 }

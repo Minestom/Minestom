@@ -3,6 +3,7 @@ package net.minestom.server.instance.light;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.light.LightEngine.WorkTypeTracker;
+import net.minestom.server.instance.light.LightingChunk.Neighbors;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -28,10 +29,14 @@ public class LightSection {
     private static final LightData<byte[]> INITIAL_BLOCK_EXTERNAL = new LightData<>(LightCompute.EMPTY_CONTENT, -1);
 
     private final AtomicReference<LightData<byte[]>> skyLight = new AtomicReference<>(INITIAL_SKY);
+    private final AtomicReference<LightData<byte[]>> skyLightInternal = new AtomicReference<>(INITIAL_SKY);
+    private final AtomicReference<LightData<byte[]>> skyLightExternal = new AtomicReference<>(INITIAL_SKY);
     private final AtomicReference<LightData<byte[]>> blockLight = new AtomicReference<>(INITIAL_BLOCK);
     private final AtomicReference<LightData<InternalBlockLight>> blockLightInternal = new AtomicReference<>(INITIAL_BLOCK_INTERNAL);
     private final AtomicReference<LightData<byte[]>> blockLightExternal = new AtomicReference<>(INITIAL_BLOCK_EXTERNAL);
     private final AtomicInteger skyLightVersion = new AtomicInteger();
+    private final AtomicInteger skyLightExternalVersion = new AtomicInteger();
+    private final AtomicInteger skyLightInternalVersion = new AtomicInteger();
     private final AtomicInteger blockLightVersion = new AtomicInteger();
     private final AtomicInteger blockLightInternalVersion = new AtomicInteger();
     private final AtomicInteger blockLightExternalVersion = new AtomicInteger();
@@ -43,6 +48,7 @@ public class LightSection {
     private final int sectionY;
     private final int sectionZ;
     private final BlockLightSection blockLightSection;
+    private final SkyLightSection skyLightSection;
     private final AtomicBoolean resendThisSectionBlockLight = new AtomicBoolean(false);
     private final AtomicBoolean resendThisSectionSkyLight = new AtomicBoolean(false);
 
@@ -54,6 +60,7 @@ public class LightSection {
         this.sectionX = chunk.getChunkX();
         this.sectionZ = chunk.getChunkZ();
         this.blockLightSection = new BlockLightSection(this);
+        this.skyLightSection = new SkyLightSection(this);
     }
 
     public AtomicBoolean resendThisSectionBlockLight() {
@@ -78,7 +85,6 @@ public class LightSection {
 
     public void resendBlockLight() {
         resendThisSectionBlockLight.set(true);
-        resendThisSectionSkyLight.set(true); // TODO remove this once skylight is implemented
         chunk.scheduleSpecificResend();
     }
 
@@ -99,6 +105,10 @@ public class LightSection {
         return blockLightInternal.get();
     }
 
+    public LightData<byte[]> getSkyLightInternal() {
+        return skyLightInternal.get();
+    }
+
     public LightData<byte[]> getSkyLight() {
         return skyLight.get();
     }
@@ -111,21 +121,30 @@ public class LightSection {
         return getNextVersion(blockLightExternalVersion);
     }
 
+    int getNextSkyLightExternalVersion() {
+        return getNextVersion(skyLightExternalVersion);
+    }
+
+    int getNextSkyLightInternalVersion() {
+        return getNextVersion(skyLightInternalVersion);
+    }
+
     private int getNextVersion(AtomicInteger version) {
         return version.getAndIncrement();
     }
 
     public void blockChanged() {
         runAsync(chunk.trackerFullBlockRelight, sectionY, this::fullBlockRelight);
+        runAsync(chunk.trackerFullSkyRelight, sectionY, this::fullSkyRelight);
     }
 
     private void bakeAfterRelightAndPropagate(int depth) {
-        var baked = bakeBlockLight();
-        var bakedLightChanged = baked.asBoolean();
+        var blockLightBaked = bakeBlockLight();
+        var bakedLightChanged = blockLightBaked.asBoolean();
         // TODO more efficient propagate, only in changed directions
         if (bakedLightChanged) {
             resendBlockLight();
-            var oldData = baked.oldData().data();
+            var oldData = blockLightBaked.oldData().data();
             var newData = blockLight.get().data();
             depth++;
             // We need to tell neighbors to recalculate
@@ -135,13 +154,18 @@ public class LightSection {
                 scheduleBlockRelight(down, depth);
             var neighborSnapshot = chunk.createNeighborSnapshot();
             if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.EAST))
-                scheduleNeighborBlockRelight(neighborSnapshot.east(), depth);
+                scheduleNeighborBlockRelight(neighborSnapshot.get(Neighbors.EAST), depth);
             if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.NORTH))
-                scheduleNeighborBlockRelight(neighborSnapshot.north(), depth);
+                scheduleNeighborBlockRelight(neighborSnapshot.get(Neighbors.NORTH), depth);
             if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.SOUTH))
-                scheduleNeighborBlockRelight(neighborSnapshot.south(), depth);
+                scheduleNeighborBlockRelight(neighborSnapshot.get(Neighbors.SOUTH), depth);
             if (LightCompute.hasBorderChanged(oldData, newData, BlockFace.WEST))
-                scheduleNeighborBlockRelight(neighborSnapshot.west(), depth);
+                scheduleNeighborBlockRelight(neighborSnapshot.get(Neighbors.WEST), depth);
+        }
+        var skyLightBaked = bakeSkyLight();
+        var skyLightChanged = skyLightBaked.asBoolean();
+        if (skyLightChanged) {
+            resendSkyLight();
         }
     }
 
@@ -152,6 +176,14 @@ public class LightSection {
     private void relightExternalBlockLight(int depth) {
         if (blockLightSection.relightBlockLightExternal().asBoolean()) {
             bakeAfterRelightAndPropagate(depth);
+        }
+    }
+
+    private void fullSkyRelight() {
+        var modifiedInternal = skyLightSection.relightSkyLightInternal().asBoolean();
+        var modifiedExternal = skyLightSection.relightSkyLightExternal().asBoolean();
+        if (modifiedInternal || modifiedExternal) {
+            bakeAfterRelightAndPropagate(0);
         }
     }
 
@@ -181,6 +213,16 @@ public class LightSection {
     public void generatorRelightBlockLightInternal() {
         // We do not care about the modified result here, we bake no matter what
         blockLightSection.relightBlockLightInternal();
+    }
+
+    /**
+     * Relights the internal skylight on the caller thread.
+     * <p>
+     * Used to ensure correct internal sky lighting immediately after chunk generation.
+     */
+    public void generatorRelightSkyLightInternal() {
+        // We do not care about the modified result here, we bake no matter what
+        skyLightSection.relightSkyLightInternal();
     }
 
     public static void generatorRelightBlockLightExternalAndBakeSync(List<LightSection> sections) {
@@ -225,10 +267,22 @@ public class LightSection {
     }
 
     LightUpdateResult<byte[]> bakeBlockLight() {
-        return bake(blockLightInternal, blockLightExternal, blockLight, blockLightVersion);
+        return bakeBlockLight(blockLightInternal, blockLightExternal, blockLight, blockLightVersion);
     }
 
-    private LightUpdateResult<byte[]> bake(AtomicReference<LightData<InternalBlockLight>> input1, AtomicReference<LightData<byte[]>> input2, AtomicReference<LightData<byte[]>> output, AtomicInteger version) {
+    LightUpdateResult<byte[]> updateSkyLightInternal(LightData<byte[]> newData) {
+        return updateLightData(skyLightInternal, newData, EqualityTester.BYTE_ARRAY);
+    }
+
+    LightUpdateResult<byte[]> updateSkyLightExternal(LightData<byte[]> newData) {
+        return updateLightData(skyLightExternal, newData, EqualityTester.BYTE_ARRAY);
+    }
+
+    LightUpdateResult<byte[]> bakeSkyLight() {
+        return bakeSkyLight(skyLightInternal, skyLightExternal, skyLight, skyLightVersion);
+    }
+
+    private LightUpdateResult<byte[]> bakeBlockLight(AtomicReference<LightData<InternalBlockLight>> input1, AtomicReference<LightData<byte[]>> input2, AtomicReference<LightData<byte[]>> output, AtomicInteger version) {
         var v = getNextVersion(version);
         var l1 = input1.get();
         var l2 = input2.get();
@@ -237,8 +291,18 @@ public class LightSection {
         return updateLightData(output, lightData, EqualityTester.BYTE_ARRAY);
     }
 
+    private LightUpdateResult<byte[]> bakeSkyLight(AtomicReference<LightData<byte[]>> input1, AtomicReference<LightData<byte[]>> input2, AtomicReference<LightData<byte[]>> output, AtomicInteger version) {
+        var v = getNextVersion(version);
+        var l1 = input1.get();
+        var l2 = input2.get();
+        var data = LightCompute.bake(l1.data(), l2.data());
+        var lightData = new LightData<>(data, v);
+        return updateLightData(output, lightData, EqualityTester.BYTE_ARRAY);
+    }
+
     void copyInternalLighting(LightSection other) {
         this.updateBlockLightInternal(other.getBlockLightInternal());
+        this.updateSkyLightInternal(other.getSkyLightInternal());
     }
 
     private interface EqualityTester<T> {

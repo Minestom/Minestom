@@ -214,10 +214,10 @@ class TaskSchedulerThread implements Runnable {
         }
     }
 
-    public void setChunkLoader(@Nullable ChunkLoader chunkLoader) {
+    public void setChunkLoader(ChunkLoader chunkLoader) {
         this.singleThreadedManagerLock.lock();
         try {
-            this.singleThreadedManager.chunkLoader = Objects.requireNonNullElse(chunkLoader, ChunkLoader.noop());
+            this.singleThreadedManager.chunkLoader = chunkLoader;
         } finally {
             this.singleThreadedManagerLock.unlock();
         }

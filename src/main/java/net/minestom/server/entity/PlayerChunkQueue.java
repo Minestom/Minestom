@@ -25,7 +25,7 @@ public class PlayerChunkQueue {
     // When we have to re-sort everything, because the player moved, this queue will be replaced
     // entirely. The other option is to remove all elements, change the comparator,
     // then add all elements again, which is arguably worse.
-    private Long2ObjectSortedMap<@UnknownNullability Chunk> chunkQueue = new Long2ObjectRBTreeMap<>(this.compareChunkDistance(0, 0));
+    private Long2ObjectSortedMap<Chunk> chunkQueue = new Long2ObjectRBTreeMap<>(this.compareChunkDistance(0, 0));
     private final LongSet visibleChunks = new LongOpenHashSet();
     private boolean needsChunkPositionSync;
     private float targetChunksPerTick;
@@ -92,6 +92,7 @@ public class PlayerChunkQueue {
     public boolean cancelSend(int chunkX, int chunkZ) {
         lock.lock();
         try {
+            //noinspection ConstantValue - intellij is wrong here
             var cancelled = chunkQueue.remove(CoordConversion.chunkIndex(chunkX, chunkZ)) != null;
             if (visibleChunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ))) {
                 EventDispatcher.call(new PlayerChunkUnloadEvent(player, chunkX, chunkZ));

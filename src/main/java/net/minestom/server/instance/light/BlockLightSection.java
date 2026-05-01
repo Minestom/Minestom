@@ -7,8 +7,11 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.light.LightSection.InternalBlockLight;
 import net.minestom.server.instance.light.LightSection.LightData;
 import net.minestom.server.instance.light.LightSection.LightUpdateResult;
+import net.minestom.server.instance.light.LightingChunk.Neighbors;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 
@@ -25,10 +28,10 @@ final class BlockLightSection {
         // We must always query all our data after acquiring the version ID.
         // This ensures all data is at least as recent as the acquired version.
         var neighborSnapshot = section.chunk.createNeighborSnapshot();
-        var posXC = neighborSnapshot.east();
-        var posZC = neighborSnapshot.south();
-        var negXC = neighborSnapshot.west();
-        var negZC = neighborSnapshot.north();
+        var posXC = neighborSnapshot.get(Neighbors.EAST);
+        var posZC = neighborSnapshot.get(Neighbors.SOUTH);
+        var negXC = neighborSnapshot.get(Neighbors.WEST);
+        var negZC = neighborSnapshot.get(Neighbors.NORTH);
         var posX = posXC == null ? null : posXC.getLightSection(section.sectionY());
         var negX = negXC == null ? null : negXC.getLightSection(section.sectionY());
         var posZ = posZC == null ? null : posZC.getLightSection(section.sectionY());
@@ -94,16 +97,8 @@ final class BlockLightSection {
                         default -> getBlock(otherPalette, bx, 15 - k, by);
                     };
 
-                    if (blockTo == null && blockFrom != null) {
-                        if (blockFrom.registry().occlusionShape().isOccluded(Block.AIR.registry().occlusionShape(), face.getOppositeFace()))
-                            continue;
-                    } else if (blockTo != null && blockFrom == null) {
-                        if (Block.AIR.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face))
-                            continue;
-                    } else if (blockTo != null && blockFrom != null) {
-                        if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
-                            continue;
-                    }
+                    if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
+                        continue;
 
                     final int index = posTo | (lightEmission << 12);
                     lightSources.enqueue((short) index);
@@ -129,9 +124,7 @@ final class BlockLightSection {
     }
 
     public static Block getBlock(Palette palette, int x, int y, int z) {
-        var block = Block.fromStateId(palette.get(x, y, z));
-        assert block != null;
-        return block;
+        return Block.fromStateId(palette.get(x, y, z));
     }
 
     private LightData<InternalBlockLight> prepareBlockLightInternal(int version) {
