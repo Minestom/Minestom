@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.pointer.PointersSupplier;
@@ -125,7 +126,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean onGround;
 
     protected BoundingBox boundingBox;
-    private @Nullable PhysicsResult previousPhysicsResult = null;
+    protected @Nullable PhysicsResult previousPhysicsResult = null;
 
     protected @Nullable Entity vehicle;
 
@@ -185,7 +186,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
     private long nextSynchronizationTick = synchronizationTicks;
 
-    protected MetadataHolder metadata = new MetadataHolder(this::notifyMetadataChanges);
+    protected MetadataHolder metadata = new MetadataHolder(this);
     protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
@@ -247,7 +248,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param callback the task to execute during the next entity tick
      */
-    public void scheduleNextTick(Consumer<? super Entity> callback) {
+    public void scheduleNextTick(Consumer<Entity> callback) {
         this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
@@ -310,7 +311,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.CUSTOM_DATA) {
             tagHandler.updateContent(((CustomData) value).nbt());
-        } else EntityMeta.setComponent(getEntityMeta(), component, value);
+        }
+        else EntityMeta.setComponent(getEntityMeta(), component, value);
     }
 
     /**
@@ -474,7 +476,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.viewEngine.viewableOption.updateAuto(autoViewable);
     }
 
-    public void updateViewableRule(@Nullable Predicate<? super Player> predicate) {
+    public void updateViewableRule(@Nullable Predicate<Player> predicate) {
         this.viewEngine.viewableOption.updateRule(predicate);
     }
 
@@ -501,7 +503,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.viewEngine.viewerOption.updateAuto(autoViewer);
     }
 
-    public void updateViewerRule(@Nullable Predicate<? super Entity> predicate) {
+    public void updateViewerRule(@Nullable Predicate<Entity> predicate) {
         this.viewEngine.viewerOption.updateRule(predicate);
     }
 
@@ -563,7 +565,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @Override
-    public Set<? extends Player> getViewers() {
+    public Set<Player> getViewers() {
         return viewers;
     }
 
@@ -587,7 +589,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public synchronized void switchEntityType(EntityType entityType) {
         this.entityType = entityType;
-        this.metadata = new MetadataHolder(this::notifyMetadataChanges);
+        this.metadata = new MetadataHolder(this);
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
         final RegistryData.EntityEntry registry = entityType.registry();
@@ -635,11 +637,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             effectTick();
         }
         // Scheduled synchronization
-        if (ticks >= nextSynchronizationTick) {
-            if (vehicle == null) {
-                synchronizePosition();
-                sendPacketToViewers(getVelocityPacket());
-            } else synchronizeView();
+        if (vehicle == null && ticks >= nextSynchronizationTick) {
+            synchronizePosition();
+            sendPacketToViewers(getVelocityPacket());
         }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
@@ -876,7 +876,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.instance = instance;
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             try {
-                Objects.requireNonNull(chunk, "Entity has been placed in an unloaded chunk!");
+                Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
                     player.sendPacket(instance.createInitializeWorldBorderPacket());
@@ -1658,12 +1658,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return new EntityMetaDataPacket(getEntityId(), metadata.getEntries());
     }
 
-    // Currently file-private so it can be used in MetadataHolder, planned to be private.
-    void notifyMetadataChanges(Map<Integer, Metadata.Entry<?>> changes) {
-        if (!isActive()) return;
-        sendPacketToViewersAndSelf(new EntityMetaDataPacket(getEntityId(), changes));
-    }
-
     /**
      * Used to synchronize entity position with viewers by sending a full
      * {@link EntityPositionSyncPacket} to viewers.
@@ -1821,7 +1815,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param predicate optional predicate
      * @return resulting entity whether there're any, null otherwise.
      */
-    public @Nullable Entity getLineOfSightEntity(double range, Predicate<? super Entity> predicate) {
+    public @Nullable Entity getLineOfSightEntity(double range, Predicate<Entity> predicate) {
         Instance instance = getInstance();
         if (instance == null) {
             return null;
