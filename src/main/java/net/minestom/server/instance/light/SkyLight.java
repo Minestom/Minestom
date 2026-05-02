@@ -1,7 +1,7 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
-import net.minestom.server.coordinate.SectionVec;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
@@ -91,7 +91,7 @@ final class SkyLight implements OldLight {
     }
 
     @Override
-    public Set<SectionVec> calculateInternal(Palette blockPalette, int chunkX, int chunkY, int chunkZ, int[] heightmap, int maxY, LightLookup lightLookup) {
+    public Set<BlockVec> calculateInternal(Palette blockPalette, int chunkX, int chunkY, int chunkZ, int[] heightmap, int maxY, LightLookup lightLookup) {
         this.isValidBorders = true;
 
         // Update single section with base lighting changes
@@ -110,7 +110,7 @@ final class SkyLight implements OldLight {
         }
 
         // Propagate changes to neighbors and self
-        Set<SectionVec> toUpdate = new HashSet<>();
+        Set<BlockVec> toUpdate = new HashSet<>();
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
@@ -120,17 +120,17 @@ final class SkyLight implements OldLight {
                     if (!(lightLookup.light(neighborX, neighborY, neighborZ) instanceof SkyLight skyLight))
                         continue;
                     skyLight.contentPropagation = null;
-                    toUpdate.add(new SectionVec(neighborX, neighborY, neighborZ));
+                    toUpdate.add(new BlockVec(neighborX, neighborY, neighborZ));
                 }
             }
         }
-        toUpdate.add(new SectionVec(chunkX, chunkY, chunkZ));
+        toUpdate.add(new BlockVec(chunkX, chunkY, chunkZ));
         return toUpdate;
     }
 
     @Override
-    public Set<SectionVec> calculateExternal(Palette blockPalette,
-                                             @Nullable SectionVec[] neighbors,
+    public Set<BlockVec> calculateExternal(Palette blockPalette,
+                                             @Nullable BlockVec[] neighbors,
                                              LightLookup lightLookup,
                                              PaletteLookup paletteLookup) {
         if (!isValidBorders) return Set.of();
@@ -143,9 +143,9 @@ final class SkyLight implements OldLight {
             this.contentPropagationSwap = null;
         }
         // Propagate changes to neighbors and self
-        Set<SectionVec> toUpdate = new HashSet<>();
+        Set<BlockVec> toUpdate = new HashSet<>();
         for (int i = 0; i < neighbors.length; i++) {
-            final SectionVec neighbor = neighbors[i];
+            final BlockVec neighbor = neighbors[i];
             if (neighbor == null) continue;
             final BlockFace face = FACES[i];
             if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {

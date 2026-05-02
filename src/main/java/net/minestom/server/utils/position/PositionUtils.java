@@ -2,6 +2,7 @@ package net.minestom.server.utils.position;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.RelativeFlags;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
@@ -41,5 +42,21 @@ public final class PositionUtils {
         double y = (flags & RelativeFlags.DELTA_Y) == 0 ? modifier.y() : start.y() + modifier.y();
         double z = (flags & RelativeFlags.DELTA_Z) == 0 ? modifier.z() : start.z() + modifier.z();
         return new Vec(x, y, z);
+    }
+
+    public static Pos clampWithinSensibleBounds(Pos pos) {
+        if (Math.abs(pos.x()) > Entity.MAX_COORDINATE || Math.abs(pos.y()) > Entity.MAX_COORDINATE || Math.abs(pos.z()) > Entity.MAX_COORDINATE) {
+            double x = pos.x();
+            double y = pos.y();
+            double z = pos.z();
+            if (Math.abs(x) > Entity.MAX_COORDINATE)
+                x = Math.signum(x) * Entity.MAX_COORDINATE;
+            if (Math.abs(y) > Entity.MAX_COORDINATE)
+                y = Math.signum(y) * Entity.MAX_COORDINATE;
+            if (Math.abs(z) > Entity.MAX_COORDINATE)
+                z = Math.signum(z) * Entity.MAX_COORDINATE;
+            return new Pos(x, y, z, pos.yaw(), pos.pitch());
+        }
+        return pos;
     }
 }

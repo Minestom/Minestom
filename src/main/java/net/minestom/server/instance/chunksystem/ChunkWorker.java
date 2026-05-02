@@ -165,6 +165,11 @@ public class ChunkWorker {
     }
 
     static void runOnSaveExecutor(Runnable runnable) {
+        if (!ServerFlag.ASYNC_CHUNK_SYSTEM) {
+            // Run everything sync when testing
+            runnable.run();
+            return;
+        }
         SAVE_EXECUTOR.execute(runnable);
     }
 

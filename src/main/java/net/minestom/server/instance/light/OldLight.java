@@ -1,6 +1,6 @@
 package net.minestom.server.instance.light;
 
-import net.minestom.server.coordinate.SectionVec;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
@@ -34,19 +34,19 @@ public interface OldLight {
     void set(byte[] copyArray);
 
     @ApiStatus.Internal
-    Set<SectionVec> calculateInternal(Palette blockPalette, int chunkX, int chunkY, int chunkZ, int[] heightmap, int maxY, LightLookup lightLookup);
+    Set<BlockVec> calculateInternal(Palette blockPalette, int chunkX, int chunkY, int chunkZ, int[] heightmap, int maxY, LightLookup lightLookup);
 
     @ApiStatus.Internal
-    Set<SectionVec> calculateExternal(Palette blockPalette,
-                                    @Nullable SectionVec[] neighbors,
+    Set<BlockVec> calculateExternal(Palette blockPalette,
+                                    @Nullable BlockVec[] neighbors,
                                     LightLookup lightLookup,
                                     PaletteLookup paletteLookup);
 
     @ApiStatus.Internal
-    static @Nullable SectionVec[] getNeighbors(LightGenerationData data, Chunk chunk, int sectionY) {
+    static @Nullable BlockVec[] getNeighbors(LightGenerationData data, Chunk chunk, int sectionY) {
         final int chunkX = chunk.getChunkX(), chunkZ = chunk.getChunkZ();
 
-        SectionVec[] links = new SectionVec[LightCompute.DIRECTIONS.length];
+        BlockVec[] links = new BlockVec[LightCompute.DIRECTIONS.length];
         for (Direction direction : LightCompute.DIRECTIONS) {
             final int x = chunkX + direction.normalX();
             final int z = chunkZ + direction.normalZ();
@@ -57,7 +57,7 @@ public interface OldLight {
             if (y - foundChunk.getMinSection() > foundChunk.getMaxSection() || y - foundChunk.getMinSection() < 0)
                 continue;
 
-            links[direction.ordinal()] = new SectionVec(foundChunk.getChunkX(), y, foundChunk.getChunkZ());
+            links[direction.ordinal()] = new BlockVec(foundChunk.getChunkX(), y, foundChunk.getChunkZ());
         }
         return links;
     }

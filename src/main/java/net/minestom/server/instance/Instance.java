@@ -289,11 +289,13 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     }
 
     /**
-     * Schedules the removal of a {@link Chunk}, this method does not promise when it will be done.
+     * Releases a chunk loaded by {@link #loadChunk(Point) loadChunk}. This does not "force unload"
+     * the chunk, instead removes claims to provide legacy behavior.
      * <p>
-     * WARNING: during unloading, all entities other than {@link Player} will be removed.
+     * For more control use {@link #getChunkManager()}
      *
      * @param chunk the chunk to unload
+     * @see #getChunkManager()
      */
     public abstract void unloadChunk(Chunk chunk);
 
@@ -302,12 +304,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
+     * @see #unloadChunk(Chunk)
      */
-    public void unloadChunk(int chunkX, int chunkZ) {
-        final Chunk chunk = getChunk(chunkX, chunkZ);
-        Check.notNull(chunk, "The chunk at {0}:{1} is already unloaded", chunkX, chunkZ);
-        unloadChunk(chunk);
-    }
+    public abstract void unloadChunk(int chunkX, int chunkZ);
 
     public void invalidateSection(int sectionX, int sectionY, int sectionZ) {
         final Chunk chunk = getChunk(sectionX, sectionZ);

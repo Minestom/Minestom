@@ -3,6 +3,8 @@ package net.minestom.server.instance.chunksystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -82,7 +84,7 @@ public class ChunkClaimTreeTest {
     void validateDuplicateEntries() {
         tree.insert(player1C);
         tree.insert(player1C);
-        var entries = tree.findEntries(10 + 17, -200 + 17);
+        var entries = new ArrayList<>(tree.findEntries(10 + 17, -200 + 17));
 
         assertEquals(6, entries.size());
         entries.remove(player1C);

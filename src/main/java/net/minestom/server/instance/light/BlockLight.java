@@ -1,7 +1,7 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
-import net.minestom.server.coordinate.SectionVec;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -104,10 +104,10 @@ final class BlockLight implements OldLight {
     }
 
     @Override
-    public Set<SectionVec> calculateInternal(Palette blockPalette,
-                                             int chunkX, int chunkY, int chunkZ,
-                                             int[] heightmap, int maxY,
-                                             LightLookup lightLookup) {
+    public Set<BlockVec> calculateInternal(Palette blockPalette,
+                                           int chunkX, int chunkY, int chunkZ,
+                                           int[] heightmap, int maxY,
+                                           LightLookup lightLookup) {
         this.isValidBorders = true;
         // Update a single section with base lighting changes
         ShortArrayFIFOQueue queue = buildInternalQueue(blockPalette);
@@ -125,12 +125,12 @@ final class BlockLight implements OldLight {
                 }
             }
         }
-        return Set.of(new SectionVec(chunkX, chunkY, chunkZ));
+        return Set.of(new BlockVec(chunkX, chunkY, chunkZ));
     }
 
     @Override
-    public Set<SectionVec> calculateExternal(Palette blockPalette,
-                                             @Nullable SectionVec[] neighbors,
+    public Set<BlockVec> calculateExternal(Palette blockPalette,
+                                             @Nullable BlockVec[] neighbors,
                                              LightLookup lightLookup,
                                              PaletteLookup paletteLookup) {
         if (!isValidBorders) return Set.of();
@@ -140,9 +140,9 @@ final class BlockLight implements OldLight {
         final byte[] contentPropagationTemp = LightCompute.compute(blockPalette, queue);
         this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
         // Propagate changes to neighbors and self
-        Set<SectionVec> toUpdate = new HashSet<>();
+        Set<BlockVec> toUpdate = new HashSet<>();
         for (int i = 0; i < neighbors.length; i++) {
-            final SectionVec neighbor = neighbors[i];
+            final BlockVec neighbor = neighbors[i];
             if (neighbor == null) continue;
             final BlockFace face = FACES[i];
             if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {

@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -164,10 +163,12 @@ public class PlayerMovementIntegrationTest {
         byte finalViewDistance = 7;
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
+        var initialTracker = connection.trackIncoming(ChunkDataPacket.class);
         Pos startingPlayerPos = new Pos(0, 42, 0);
         var player = connection.connect(instance, startingPlayerPos);
 
-        int chunkDifference = ChunkRange.chunksCount(startingViewDistance) - ChunkRange.chunksCount(endViewDistance);
+        // +1 because we always send 1 chunk extra, because the client doesn't render the outermost chunks.
+        int chunkDifference = ChunkRange.chunksCount(startingViewDistance + 1) - ChunkRange.chunksCount(endViewDistance + 1);
 
         var tracker = connection.trackIncoming(UnloadChunkPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,
@@ -182,7 +183,8 @@ public class PlayerMovementIntegrationTest {
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
 
-        int chunkDifference1 = ChunkRange.chunksCount(finalViewDistance) - ChunkRange.chunksCount(endViewDistance);
+        // +1 because we always send 1 chunk extra, because the client doesn't render the outermost chunks.
+        int chunkDifference1 = ChunkRange.chunksCount(finalViewDistance + 1) - ChunkRange.chunksCount(endViewDistance + 1);
         tracker1.assertCount(chunkDifference1);
     }
 

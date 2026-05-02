@@ -3,7 +3,7 @@ package net.minestom.server.instance.light;
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.collision.Shape;
-import net.minestom.server.coordinate.SectionVec;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -42,16 +42,19 @@ public final class LightCompute {
      * This does not modify any neighbouring chunks.
      */
     static ShortArrayFIFOQueue buildExternalQueue(Palette blockPalette,
-                                                  @Nullable SectionVec[] neighbors, byte @Nullable [] content,
+                                                  @Nullable BlockVec[] neighbors, byte @Nullable [] content,
                                                   OldLight.LightLookup lightLookup,
                                                   OldLight.PaletteLookup paletteLookup) {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
         for (int i = 0; i < neighbors.length; i++) {
-            SectionVec neighborSection = neighbors[i];
+            BlockVec neighborSection = neighbors[i];
             if (neighborSection == null) continue;
-            Palette otherPalette = paletteLookup.palette(neighborSection.sectionX(), neighborSection.sectionY(), neighborSection.sectionZ());
+            int sectionX = neighborSection.blockX();
+            int sectionY = neighborSection.blockY();
+            int sectionZ = neighborSection.blockZ();
+            Palette otherPalette = paletteLookup.palette(sectionX, sectionY, sectionZ);
             if (otherPalette == null) continue;
-            OldLight otherLight = lightLookup.light(neighborSection.sectionX(), neighborSection.sectionY(), neighborSection.sectionZ());
+            OldLight otherLight = lightLookup.light(sectionX, sectionY, sectionZ);
             if (otherLight == null) continue;
 
             final BlockFace face = FACES[i];

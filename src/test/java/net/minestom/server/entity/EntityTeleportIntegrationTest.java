@@ -106,7 +106,7 @@ public class EntityTeleportIntegrationTest {
     }
 
     @Test
-    public void entityTeleportToInfinity(Env env) throws ExecutionException, InterruptedException, TimeoutException {
+    public void entityTeleportToPositiveInfinity(Env env) throws ExecutionException, InterruptedException, TimeoutException {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -120,5 +120,22 @@ public class EntityTeleportIntegrationTest {
 
         // The position should have been capped at 2 billion.
         assertEquals(new Pos(Entity.MAX_COORDINATE, 42, 52), entity.getPosition());
+    }
+
+    @Test
+    public void entityTeleportToNegativeInfinity(Env env) throws ExecutionException, InterruptedException, TimeoutException {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+        assertEquals(new Pos(0, 42, 0), entity.getPosition());
+
+        entity.teleport(new Pos(Double.NEGATIVE_INFINITY, 42, 52)).join();
+        CompletableFuture.runAsync(() -> entity.tick(0 /* 0 is fine here, it's just a delta*/))
+                .get(10, TimeUnit.SECONDS);
+        // This should not hang forever
+
+        // The position should have been capped at 2 billion.
+        assertEquals(new Pos(-Entity.MAX_COORDINATE, 42, 52), entity.getPosition());
     }
 }

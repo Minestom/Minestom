@@ -14,6 +14,7 @@ public class EntityTeleportEvent implements EntityEvent {
 
     private final Entity entity;
     private final Pos teleportPosition;
+    @MagicConstant(flagsFromClass = RelativeFlags.class)
     private final int relativeFlags;
 
     public EntityTeleportEvent(Entity entity, Pos teleportPosition, @MagicConstant(flagsFromClass = RelativeFlags.class) int relativeFlags) {

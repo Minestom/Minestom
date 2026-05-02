@@ -8,6 +8,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,6 +40,8 @@ public class InstanceBlockIntegrationTest {
         assertEquals(Block.AIR, instance.getBlock(16, 50, 0));
     }
 
+    // TODO
+    @Disabled("new ChunkSystem allows reloading the chunk from memory. Should this test still exist?")
     @Test
     public void unloadCache(Env env) {
         var instance = env.createFlatInstance();

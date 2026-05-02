@@ -255,6 +255,7 @@ public class InstanceContainer extends Instance {
     private CompletableFuture<Chunk> retrieveChunk(int chunkX, int chunkZ) {
         var index = CoordConversion.chunkIndex(chunkX, chunkZ);
         var claim = chunks.get(index);
+        //noinspection ConstantValue - intellij is wrong here
         if (claim == null) {
             var newClaim = chunkManager.addClaim(chunkX, chunkZ);
             claim = chunks.putIfAbsent(index, newClaim);
@@ -267,10 +268,15 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void unloadChunk(Chunk chunk) {
-        if (!isLoaded(chunk)) return;
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();
+        unloadChunk(chunkX, chunkZ);
+    }
+
+    @Override
+    public void unloadChunk(int chunkX, int chunkZ) {
         var claim = chunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ));
+        //noinspection ConstantValue - intellij is wrong here
         if (claim == null) return;
         this.chunkManager.removeClaim(claim.claim());
     }
