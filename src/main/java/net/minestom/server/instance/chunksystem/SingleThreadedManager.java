@@ -466,12 +466,6 @@ class SingleThreadedManager {
             }
             this.taskSchedulerThread.complete(unloading.partitionDeleted, null);
             Thread.startVirtualThread(() -> {
-                try {
-                    // TODO remove this once testing is complete
-                    // Keep for 100 seconds
-                    Thread.sleep(100000);
-                } catch (InterruptedException _) {
-                }
                 this.taskSchedulerThread.addTask(new Task.FinishUnloadAfterPartition(unloading));
                 this.taskTracking.runningTickScheduledCount.decrementAndGet();
             });
