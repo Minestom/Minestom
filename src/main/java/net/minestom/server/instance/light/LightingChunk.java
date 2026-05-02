@@ -79,27 +79,27 @@ public class LightingChunk extends DynamicChunk {
 
     // Lazy compute occlusion map
     public int[] getOcclusionMap() {
-        assert Thread.holdsLock(this);
+        assert holdsReadLock();
         if (this.occlusionMap != null) return this.occlusionMap;
-        var occlusionMap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
 
         int minY = instance.getCachedDimensionType().minY();
         highestBlock = minY - 1;
 
-        synchronized (this) {
-            int startY = Heightmap.getHighestBlockSection(this);
+        // Only read-locked. We could race with other callers of getOcclusionMap,
+        // but that's not an issue since we are just updating a field. The field doesn't even need to be volatile
+        var occlusionMap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
+        int startY = Heightmap.getHighestBlockSection(this);
 
-            for (int x = 0; x < CHUNK_SIZE_X; x++) {
-                for (int z = 0; z < CHUNK_SIZE_Z; z++) {
-                    int height = startY;
-                    while (height >= minY) {
-                        Block block = getBlock(x, height, z, Condition.TYPE);
-                        if (block != Block.AIR) highestBlock = Math.max(highestBlock, height);
-                        if (checkSkyOcclusion(block)) break;
-                        height--;
-                    }
-                    occlusionMap[z << 4 | x] = (height + 1);
+        for (int x = 0; x < CHUNK_SIZE_X; x++) {
+            for (int z = 0; z < CHUNK_SIZE_Z; z++) {
+                int height = startY;
+                while (height >= minY) {
+                    Block block = getBlock(x, height, z, Condition.TYPE);
+                    if (block != Block.AIR) highestBlock = Math.max(highestBlock, height);
+                    if (checkSkyOcclusion(block)) break;
+                    height--;
                 }
+                occlusionMap[z << 4 | x] = (height + 1);
             }
         }
 

@@ -50,6 +50,7 @@ public class ChunkWorker {
     }
 
     void workerCopyFromMemory(Chunk unloading, int x, int z) {
+        unloading.lockReadLock();
         try {
             var copy = unloading.copy(unloading.getInstance(), x, z);
             assert copy.getClass() == unloading.getClass() : "The chunk class " + copy.getClass().getName()
@@ -60,6 +61,8 @@ public class ChunkWorker {
             this.workerFinishedGeneration(copy);
         } catch (Throwable throwable) {
             MinecraftServer.getExceptionManager().handleException(new ChunkSystemException("Exception while re-loading chunk", throwable));
+        } finally {
+            unloading.unlockReadLock();
         }
     }
 

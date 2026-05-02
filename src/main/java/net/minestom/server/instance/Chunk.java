@@ -127,10 +127,13 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     @Override
     public final void tick(long time) {
-        synchronized (this) {
+        lockWriteLock();
+        try {
             scheduler.processTick();
             tick0(time);
             scheduler.processTickEnd();
+        } finally {
+            unlockWriteLock();
         }
     }
 

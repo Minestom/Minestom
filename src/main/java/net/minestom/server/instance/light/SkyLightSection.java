@@ -28,9 +28,12 @@ public class SkyLightSection {
             return new LightSection.LightData<>(LightCompute.EMPTY_CONTENT, version);
         Palette blockPalette;
         int[] heightmap;
-        synchronized (section.chunk) {
+        section.chunk.lockReadLock();
+        try {
             blockPalette = section.chunkSection.blockPalette().clone();
             heightmap = section.chunk.getOcclusionMap().clone();
+        } finally {
+            section.chunk.unlockReadLock();
         }
         var maxY = section.chunk.getInstance().getCachedDimensionType().maxY();
         var sectionY = section.sectionY();

@@ -133,11 +133,14 @@ final class BlockLightSection {
             if (section.chunkSection == null)
                 return new LightData<>(new InternalBlockLight(LightCompute.EMPTY_CONTENT, Palette.blocks()), version);
             Palette blockPalette;
-            synchronized (section.chunk) {
+            section.chunk.lockReadLock();
+            try {
                 // We need to clone the palette, because palettes are not thread-safe
                 // We clone for a read-only copy, that is tread-safe.
                 // This assumes reading from a palette does no internal modification (which could be unsafe)
                 blockPalette = section.chunkSection.blockPalette().clone();
+            } finally {
+                section.chunk.unlockReadLock();
             }
             var internalLightSources = getBlockLightInternalSources(blockPalette);
             var array = LightCompute.compute(blockPalette, internalLightSources);
