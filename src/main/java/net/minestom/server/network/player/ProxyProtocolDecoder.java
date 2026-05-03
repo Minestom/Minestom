@@ -21,7 +21,12 @@ import java.util.Arrays;
 final class ProxyProtocolDecoder {
 
     private static final byte[] V1_SIG = "PROXY ".getBytes();
+    // Number pulled from https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt
+    // "So a 108-byte buffer is always enough to store all the line and a trailing zero
+    // for string processing."
+    private static final int V1_HEADER_MAX_LENGTH = 108;
     private static final NetworkBuffer.Type<byte[]> V1_SIG_BYTES = NetworkBuffer.FixedRawBytes(V1_SIG.length);
+    private static final NetworkBuffer.Type<byte[]> V1_FULL_HEADER = NetworkBuffer.FixedRawBytes(V1_HEADER_MAX_LENGTH);
 
     private static final byte[] V2_SIG = new byte[]{
             0x0D, 0x0A, 0x0D, 0x0A,
@@ -70,7 +75,7 @@ final class ProxyProtocolDecoder {
     }
 
     private static ClientInfo parseV1(NetworkBuffer buffer, SocketAddress fallback) {
-        byte[] bytes = buffer.readAt(buffer.readIndex(), NetworkBuffer.RAW_BYTES);
+        byte[] bytes = buffer.readAt(buffer.readIndex(), V1_FULL_HEADER);
 
         String s = new String(bytes);
         int end = s.indexOf("\r\n");
