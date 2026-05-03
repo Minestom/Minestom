@@ -96,7 +96,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     // World border of the instance
     private WorldBorder worldBorder;
     private double targetBorderDiameter;
-    private long remainingWorldBorderTransitionTicks;
+    protected long remainingWorldBorderTransitionTicks;
+    public long getRemainingWorldBorderTransitionTicks() {
+        return remainingWorldBorderTransitionTicks;
+    }
 
     // Time
     private long worldAge;
