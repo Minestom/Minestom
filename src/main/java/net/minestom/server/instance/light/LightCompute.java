@@ -3,7 +3,6 @@ package net.minestom.server.instance.light;
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.collision.Shape;
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -12,97 +11,21 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Function;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 
 public final class LightCompute {
-    static final Direction[] DIRECTIONS = Direction.values();
     static final BlockFace[] FACES = BlockFace.values();
+    static final Direction[] DIRECTIONS = Direction.values();
     static final int LIGHT_LENGTH = SECTION_BLOCK_COUNT / 2;
     static final int SECTION_SIZE = 16;
 
-    public static final byte[] UNSET_CONTENT = new byte[0];
     public static final byte[] EMPTY_CONTENT = new byte[LIGHT_LENGTH];
     public static final byte[] CONTENT_FULLY_LIT = new byte[LIGHT_LENGTH];
 
     static {
         Arrays.fill(CONTENT_FULLY_LIT, (byte) -1);
-    }
-
-    static byte[] lazyArray(byte[] content) {
-        assert content != null;
-        if (content.length == 0) return EMPTY_CONTENT;
-        else if (Arrays.equals(content, EMPTY_CONTENT)) return EMPTY_CONTENT;
-        else if (Arrays.equals(content, CONTENT_FULLY_LIT)) return CONTENT_FULLY_LIT;
-        else return content.clone();
-    }
-
-    /**
-     * Calculate the light that comes in from neighbouring chunks.
-     * This does not modify any neighbouring chunks.
-     */
-    static ShortArrayFIFOQueue buildExternalQueue(Palette blockPalette,
-                                                  @Nullable BlockVec[] neighbors, byte @Nullable [] content,
-                                                  OldLight.LightLookup lightLookup,
-                                                  OldLight.PaletteLookup paletteLookup) {
-        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
-        for (int i = 0; i < neighbors.length; i++) {
-            BlockVec neighborSection = neighbors[i];
-            if (neighborSection == null) continue;
-            int sectionX = neighborSection.blockX();
-            int sectionY = neighborSection.blockY();
-            int sectionZ = neighborSection.blockZ();
-            Palette otherPalette = paletteLookup.palette(sectionX, sectionY, sectionZ);
-            if (otherPalette == null) continue;
-            OldLight otherLight = lightLookup.light(sectionX, sectionY, sectionZ);
-            if (otherLight == null) continue;
-
-            final BlockFace face = FACES[i];
-            final int k = switch (face) {
-                case WEST, BOTTOM, NORTH -> 0;
-                case EAST, TOP, SOUTH -> 15;
-            };
-            for (int bx = 0; bx < 16; bx++) {
-                for (int by = 0; by < 16; by++) {
-                    final byte lightEmission = (byte) Math.max(switch (face) {
-                        case NORTH, SOUTH -> (byte) otherLight.getLevel(bx, by, 15 - k);
-                        case WEST, EAST -> (byte) otherLight.getLevel(15 - k, bx, by);
-                        default -> (byte) otherLight.getLevel(bx, 15 - k, by);
-                    } - 1, 0);
-                    if (lightEmission <= 0) continue;
-
-                    final int posTo = switch (face) {
-                        case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
-                        case WEST, EAST -> k | (by << 4) | (bx << 8);
-                        default -> bx | (by << 4) | (k << 8);
-                    };
-
-                    if (content != null) {
-                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
-                        if (lightEmission <= internalEmission) continue;
-                    }
-
-                    final Block blockTo = switch (face) {
-                        case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
-                        case WEST, EAST -> getBlock(blockPalette, k, bx, by);
-                        default -> getBlock(blockPalette, bx, k, by);
-                    };
-
-                    final Block blockFrom = switch (face) {
-                        case NORTH, SOUTH -> getBlock(otherPalette, bx, by, 15 - k);
-                        case WEST, EAST -> getBlock(otherPalette, 15 - k, bx, by);
-                        default -> getBlock(otherPalette, bx, 15 - k, by);
-                    };
-
-                    if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
-                        continue;
-
-                    final int index = posTo | (lightEmission << 12);
-                    lightSources.enqueue((short) index);
-                }
-            }
-        }
-        return lightSources;
     }
 
     private static final int SECTION_SIZE_3 = SECTION_SIZE * 3;
@@ -208,21 +131,21 @@ public final class LightCompute {
     static byte[] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
         if (lightPre.isEmpty()) return EMPTY_CONTENT;
 
-        if (true) {
-            var stone = Palette.empty(64, Palette.BLOCK_PALETTE_MIN_BITS, Palette.BLOCK_PALETTE_MAX_BITS, Palette.BLOCK_PALETTE_DIRECT_BITS);
-            stone.fill(Block.STONE.stateId());
-            var palettes = new Palette[27];
-            Arrays.fill(palettes, stone);
-            palettes[sectionIdx3x3(16, 16, 16)] = blockPalette;
-            var lightPreI = new IntArrayFIFOQueue();
-            final int sectionIdx = sectionIdx3x3(16, 16, 16);
-            while (!lightPre.isEmpty()) {
-                final int index = lightPre.dequeueShort() & 0xFFFF;
-                final int sectionPos = 0b010101;
-                lightPreI.enqueue((sectionPos << 21) | (sectionIdx << 16) | index);
-            }
-            return compute3x3(palettes, lightPreI);
-        }
+//        if (true) { // TODO
+//            var stone = Palette.empty(64, Palette.BLOCK_PALETTE_MIN_BITS, Palette.BLOCK_PALETTE_MAX_BITS, Palette.BLOCK_PALETTE_DIRECT_BITS);
+//            stone.fill(Block.STONE.stateId());
+//            var palettes = new Palette[27];
+//            Arrays.fill(palettes, stone);
+//            palettes[sectionIdx3x3(16, 16, 16)] = blockPalette;
+//            var lightPreI = new IntArrayFIFOQueue();
+//            final int sectionIdx = sectionIdx3x3(16, 16, 16);
+//            while (!lightPre.isEmpty()) {
+//                final int index = lightPre.dequeueShort() & 0xFFFF;
+//                final int sectionPos = 0b010101;
+//                lightPreI.enqueue((sectionPos << 21) | (sectionIdx << 16) | index);
+//            }
+//            return compute3x3(palettes, lightPreI);
+//        }
 
 
         final byte[] lightArray = new byte[LIGHT_LENGTH];
@@ -375,30 +298,87 @@ public final class LightCompute {
         return false;
     }
 
-    public static boolean compareBorders(byte @Nullable [] content, byte @Nullable [] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {
-
-        final int k = switch (face) {
-            case WEST, BOTTOM, NORTH -> 0;
-            case EAST, TOP, SOUTH -> 15;
+    public static byte[] computeExternal(LightSection section, Function<LightSection, byte[]> bakedLightProvider, Function<LightSection, byte[]> internalLightProvider) {
+        // We must always query all our data after acquiring the version ID.
+        // This ensures all data is at least as recent as the acquired version.
+        var neighborSnapshot = section.chunk.createNeighborSnapshot();
+        var posXC = neighborSnapshot.get(LightingChunk.Neighbors.EAST);
+        var posZC = neighborSnapshot.get(LightingChunk.Neighbors.SOUTH);
+        var negXC = neighborSnapshot.get(LightingChunk.Neighbors.WEST);
+        var negZC = neighborSnapshot.get(LightingChunk.Neighbors.NORTH);
+        var posX = posXC == null ? null : posXC.getLightSection(section.sectionY());
+        var negX = negXC == null ? null : negXC.getLightSection(section.sectionY());
+        var posZ = posZC == null ? null : posZC.getLightSection(section.sectionY());
+        var negZ = negZC == null ? null : negZC.getLightSection(section.sectionY());
+        var posY = section.up;
+        var negY = section.down;
+        var content = internalLightProvider.apply(section);
+        var blockPalette = section.getBlockData().data().blockPalette();
+        var neighbors = new @Nullable LightSection[]{
+                negY, posY, negZ, posZ, negX, posX // Order must be same as order in BlockFace enum
         };
-        for (int bx = 0; bx < SECTION_SIZE; bx++) {
-            for (int by = 0; by < SECTION_SIZE; by++) {
-                final int posFrom = switch (face) {
-                    case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
-                    case WEST, EAST -> k | (by << 4) | (bx << 8);
-                    default -> bx | (by << 4) | (k << 8);
-                };
+        var lightSources = new ShortArrayFIFOQueue(0);
+        for (var i = 0; i < neighbors.length; i++) {
+            var neighbor = neighbors[i];
+            if (neighbor == null) continue;
 
-                int valueFrom;
-                if (content == null && contentPropagation == null) valueFrom = 0;
-                else if (content != null && contentPropagation == null) valueFrom = getLight(content, posFrom);
-                else if (content == null) valueFrom = getLight(contentPropagation, posFrom);
-                else valueFrom = Math.max(getLight(content, posFrom), getLight(contentPropagation, posFrom));
+            // Light+palette can be out of sync, but that is okay.
+            var otherLight = bakedLightProvider.apply(neighbor);
+            var otherPalette = neighbor.getBlockData().data().blockPalette();
 
-                final int valueTo = getLight(contentPropagationTemp, posFrom);
-                if (valueFrom < valueTo) return false;
+            final BlockFace face = FACES[i];
+            final int k = switch (face) {
+                case WEST, BOTTOM, NORTH -> 0;
+                case EAST, TOP, SOUTH -> 15;
+            };
+            for (int bx = 0; bx < 16; bx++) {
+                for (int by = 0; by < 16; by++) {
+
+                    final byte neighborLight = switch (face) {
+                        case NORTH, SOUTH -> (byte) getLight(otherLight, bx, by, 15 - k);
+                        case WEST, EAST -> (byte) getLight(otherLight, 15 - k, bx, by);
+                        default -> (byte) getLight(otherLight, bx, 15 - k, by);
+                    };
+                    // Can't be brighter than this. For the actual brightness we need the opacity,
+                    // but we can first check with max values to optimize
+                    final byte maxSelfLight = (byte) Math.max(neighborLight - 1, 0);
+                    if (maxSelfLight == 0) continue;
+
+                    final int posTo = switch (face) {
+                        case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
+                        case WEST, EAST -> k | (by << 4) | (bx << 8);
+                        default -> bx | (by << 4) | (k << 8);
+                    };
+
+                    final Block blockTo = switch (face) {
+                        case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
+                        case WEST, EAST -> getBlock(blockPalette, k, bx, by);
+                        default -> getBlock(blockPalette, bx, k, by);
+                    };
+
+                    final int opacity = blockTo.registry().lightBlocked();
+                    final byte lightEmission = (byte) Math.max(neighborLight - Math.max(opacity, 1), 0);
+                    if (lightEmission == 0) continue;
+                    if (content != LightCompute.EMPTY_CONTENT) {
+                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
+                        if (lightEmission <= internalEmission) continue;
+                    }
+
+                    final Block blockFrom = switch (face) {
+                        case NORTH, SOUTH -> getBlock(otherPalette, bx, by, 15 - k);
+                        case WEST, EAST -> getBlock(otherPalette, 15 - k, bx, by);
+                        default -> getBlock(otherPalette, bx, 15 - k, by);
+                    };
+
+                    if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
+                        continue;
+
+                    final int index = posTo | (lightEmission << 12);
+                    lightSources.enqueue((short) index);
+                }
             }
         }
-        return true;
+
+        return LightCompute.compute(blockPalette, lightSources);
     }
 }

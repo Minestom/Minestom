@@ -5,21 +5,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 @ApiStatus.Experimental
 public interface LightEngine {
-    ExecutorService workerService();
-
-    CompletableFuture<@Nullable Void> scheduleFutureWork(BooleanSupplier precondition, Runnable work);
-
     <WorkKey> CompletableFuture<@Nullable Void> scheduleFutureWork(WorkTypeTracker<WorkKey> tracker, WorkKey workKey, BooleanSupplier precondition, Runnable work);
 
     static LightEngine getDefault() {
         return DefaultLightEngine.instance();
     }
+
+    /**
+     * Waits for all tasks running at the point of calling to finish.
+     */
+    void awaitRunning();
 
     record WorkEntry(BooleanSupplier precondition, Runnable work, CompletableFuture<@Nullable Void> future) {
     }
@@ -27,7 +28,7 @@ public interface LightEngine {
     sealed interface WorkTypeTracker<WorkKey> {
         @Nullable WorkEntry poll();
 
-        CompletableFuture<@Nullable Void> add(WorkKey workKey, BooleanSupplier precondition, Runnable work);
+        CompletableFuture<@Nullable Void> add(WorkKey workKey, BooleanSupplier precondition, Runnable work, Consumer<CompletableFuture<@Nullable Void>> onCancel);
 
         AtomicInteger pollers();
 
@@ -59,11 +60,12 @@ public interface LightEngine {
             }
 
             @Override
-            public CompletableFuture<@Nullable Void> add(WorkKey workKey, BooleanSupplier precondition, Runnable work) {
+            public CompletableFuture<@Nullable Void> add(WorkKey workKey, BooleanSupplier precondition, Runnable work, Consumer<CompletableFuture<@Nullable Void>> onCancel) {
                 var future = new CompletableFuture<@Nullable Void>();
                 var old = this.work.put(workKey, new WorkEntry(precondition, work, future));
                 if (old != null) {
                     old.future().completeExceptionally(CANCELLED);
+                    onCancel.accept(old.future());
                 } else {
                     size.incrementAndGet();
                 }

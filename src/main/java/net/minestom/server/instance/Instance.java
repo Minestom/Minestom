@@ -37,7 +37,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.chunksystem.ChunkClaim;
 import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.instance.generator.Generator;
-import net.minestom.server.instance.light.OldLight;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
@@ -308,11 +307,14 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      */
     public abstract void unloadChunk(int chunkX, int chunkZ);
 
+    /**
+     * @deprecated Currently only invalidates the chunk, which invalidates heightmaps and any cached packets. This should, in its current state, probably not be used.
+     */
+    @Deprecated
     public void invalidateSection(int sectionX, int sectionY, int sectionZ) {
         final Chunk chunk = getChunk(sectionX, sectionZ);
         if (chunk != null) {
-            Section section = chunk.getSection(sectionY);
-            section.invalidate();
+            // Invalidating a section has no meaning currently... Should this exist?
             chunk.invalidate();
             EventDispatcher.call(new InstanceSectionInvalidateEvent(this, sectionX, sectionY, sectionZ));
         }
@@ -1035,33 +1037,13 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     public int getBlockLight(int blockX, int blockY, int blockZ) {
         var chunk = getChunkAt(blockX, blockZ);
         if (chunk == null) return 0;
-        Section section = chunk.getSectionAt(blockY);
-        OldLight light = section.blockLight();
-        int sectionCoordinate = CoordConversion.globalToChunk(blockY);
-
-        int coordX = CoordConversion.globalToSectionRelative(blockX);
-        int coordY = CoordConversion.globalToSectionRelative(blockY);
-        int coordZ = CoordConversion.globalToSectionRelative(blockZ);
-
-        if (light.requiresUpdate() && chunk instanceof LightingChunk lighting)
-            lighting.relightSection(sectionCoordinate);
-        return light.getLevel(coordX, coordY, coordZ);
+        return chunk.getBlockLight(blockX, blockY, blockZ);
     }
 
     public int getSkyLight(int blockX, int blockY, int blockZ) {
         var chunk = getChunkAt(blockX, blockZ);
         if (chunk == null) return 0;
-        Section section = chunk.getSectionAt(blockY);
-        OldLight light = section.skyLight();
-        int sectionCoordinate = CoordConversion.globalToChunk(blockY);
-
-        int coordX = CoordConversion.globalToSectionRelative(blockX);
-        int coordY = CoordConversion.globalToSectionRelative(blockY);
-        int coordZ = CoordConversion.globalToSectionRelative(blockZ);
-
-        if (light.requiresUpdate() && chunk instanceof LightingChunk lighting)
-            lighting.relightSection(sectionCoordinate);
-        return light.getLevel(coordX, coordY, coordZ);
+        return chunk.getSkyLight(blockX, blockY, blockZ);
     }
 
     final class ClockInstance implements Clock {

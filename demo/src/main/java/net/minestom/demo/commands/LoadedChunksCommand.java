@@ -11,7 +11,6 @@ public class LoadedChunksCommand extends Command {
             for (var instance : MinecraftServer.getInstanceManager().getInstances()) {
                 sender.sendMessage(instance.getUuid() + ": " + instance.getChunks().size());
             }
-            sender.sendMessage("Light: " + DefaultLightEngine.WORKING_COUNT.get());
         });
     }
 }

@@ -1,9 +1,13 @@
 package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.light.LightSection.LightUpdateResult;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.Nullable;
+
+import static net.minestom.server.instance.light.LightCompute.*;
 
 public class SkyLightSection {
     private final LightSection section;
@@ -20,7 +24,9 @@ public class SkyLightSection {
 
     LightUpdateResult<byte[]> relightSkyLightExternal() {
         var version = section.getNextSkyLightExternalVersion();
-        return section.updateSkyLightExternal(new LightSection.LightData<>(LightCompute.EMPTY_CONTENT, version));
+        var externalLight = computeExternal(section, s -> s.getSkyLight().data(), s -> s.getSkyLightInternal().data());
+        var newData = new LightSection.LightData<>(externalLight, version);
+        return section.updateSkyLightExternal(newData);
     }
 
     private LightSection.LightData<byte[]> prepareSkyLightInternal(int version) {

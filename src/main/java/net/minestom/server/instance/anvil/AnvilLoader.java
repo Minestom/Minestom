@@ -61,6 +61,7 @@ public class AnvilLoader implements ChunkLoader {
      */
     private final Long2ObjectOpenHashMap<LongSet> perRegionLoadedChunks = new Long2ObjectOpenHashMap<>();
     private final ReentrantLock perRegionLoadedChunksLock = new ReentrantLock();
+    private final AnvilCallbacks callbacks;
 
     /**
      * Creates a new AnvilLoader for the given world path and dimension.
@@ -79,7 +80,12 @@ public class AnvilLoader implements ChunkLoader {
      */
     @Deprecated(forRemoval = true)
     public AnvilLoader(Path path) {
+        this(path, AnvilCallbacks.noop());
+    }
+
+    public AnvilLoader(Path path, AnvilCallbacks callbacks) {
         this.path = path;
+        this.callbacks = callbacks;
         this.levelPath = path.resolve("level.dat");
         this.regionPath = path.resolve("region");
     }
@@ -216,10 +222,10 @@ public class AnvilLoader implements ChunkLoader {
 
             // Lighting
             if (sectionData.get("SkyLight") instanceof ByteArrayBinaryTag skyLightTag && skyLightTag.size() == 2048) {
-                section.skyLight().set(skyLightTag.value());
+                callbacks.loadSkyLight(chunk, sectionY, skyLightTag.value());
             }
             if (sectionData.get("BlockLight") instanceof ByteArrayBinaryTag blockLightTag && blockLightTag.size() == 2048) {
-                section.blockLight().set(blockLightTag.value());
+                callbacks.loadBlockLight(chunk, sectionY, blockLightTag.value());
             }
 
             {   // Biomes
@@ -427,10 +433,12 @@ public class AnvilLoader implements ChunkLoader {
                 sectionData.putByte("Y", (byte) sectionY);
 
                 // Lighting
-                byte[] skyLight = section.skyLight().array();
-                if (skyLight != null && skyLight.length > 0 && skyLight != LightCompute.EMPTY_CONTENT) sectionData.putByteArray("SkyLight", skyLight);
-                byte[] blockLight = section.blockLight().array();
-                if (blockLight != null && blockLight.length > 0 && skyLight != LightCompute.EMPTY_CONTENT) sectionData.putByteArray("BlockLight", blockLight);
+                byte @Nullable [] skyLight = callbacks.getSkyLight(chunk, sectionY);
+                if (skyLight != null && skyLight.length > 0)
+                    sectionData.putByteArray("SkyLight", skyLight);
+                byte @Nullable [] blockLight = callbacks.getBlockLight(chunk, sectionY);
+                if (blockLight != null && blockLight.length > 0)
+                    sectionData.putByteArray("BlockLight", blockLight);
 
                 final int globalSectionY = sectionY * 16;
                 // Retrieve block data

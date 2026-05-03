@@ -18,7 +18,7 @@ public class BlockLightTest {
     @Test
     public void empty() {
         var palette = Palette.blocks();
-        var result = LightCompute.compute(palette, BlockLight.buildInternalQueue(palette));
+        var result = BlockLightSection.computeBlockLight(palette);
         for (byte light : result) {
             assertEquals(0, light);
         }
@@ -204,7 +204,7 @@ public class BlockLightTest {
     }
 
     void assertLight(Palette palette, Map<Vec, Integer> expectedLights) {
-        byte[] result = LightCompute.compute(palette, BlockLight.buildInternalQueue(palette));
+        byte[] result = BlockLightSection.computeBlockLight(palette);
         List<String> errors = new ArrayList<>();
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {

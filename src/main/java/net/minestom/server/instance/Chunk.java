@@ -403,6 +403,14 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     public abstract void invalidate();
 
+    public int getBlockLight(int blockX, int blockY, int blockZ) {
+        return 0;
+    }
+
+    public int getSkyLight(int blockX, int blockY, int blockZ) {
+        return 0;
+    }
+
     @ApiStatus.Internal
     protected final void assertWriteLock() {
         assert holdsWriteLock() : "Not holding write-lock for chunk " + chunkX + "," + chunkZ;

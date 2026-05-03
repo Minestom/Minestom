@@ -88,7 +88,6 @@ public class Main {
         commandManager.register(new ConfigCommand());
         commandManager.register(new SidebarCommand());
         commandManager.register(new SetEntityType());
-        commandManager.register(new RelightCommand());
         commandManager.register(new KillCommand());
         commandManager.register(new WeatherCommand());
         commandManager.register(new PotionCommand());

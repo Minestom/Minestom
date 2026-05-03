@@ -14,6 +14,7 @@ import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
@@ -40,7 +41,9 @@ public class LightingChunk extends DynamicChunk {
     private final Map<Neighbors, WeakReference<@Nullable LightingChunk>> neighbors = new ConcurrentHashMap<>();
     private volatile boolean mayRequireSpecificSectionResend = false;
     private final AtomicInteger resendSpecificAfter = new AtomicInteger(); // TODO
+    final LightEngine.WorkTypeTracker<Integer> trackerPalette = new LightEngine.WorkTypeTracker.Hash<>();
     final LightEngine.WorkTypeTracker<Integer> trackerBlockLightExternal = new LightEngine.WorkTypeTracker.Hash<>();
+    final LightEngine.WorkTypeTracker<Integer> trackerSkyLightExternal = new LightEngine.WorkTypeTracker.Hash<>();
     final LightEngine.WorkTypeTracker<Integer> trackerFullBlockRelight = new LightEngine.WorkTypeTracker.Hash<>();
     final LightEngine.WorkTypeTracker<Integer> trackerFullSkyRelight = new LightEngine.WorkTypeTracker.Hash<>();
     private volatile boolean neighborUpdated = false;
@@ -73,7 +76,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     public int getHighestBlock() {
-        assert Thread.holdsLock(this);
+        assert holdsReadLock();
         return highestBlock;
     }
 
@@ -133,7 +136,7 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     public void setBlock(int x, int y, int z, Block block, BlockHandler.@Nullable Placement placement, BlockHandler.@Nullable Destroy destroy) {
-        assert Thread.holdsLock(this);
+        assertWriteLock();
         super.setBlock(x, y, z, block, placement, destroy);
         occlusionMap = null;
         var sectionY = CoordConversion.globalToSection(y);
@@ -174,57 +177,40 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    protected LightData createLightData(boolean requiredFullChunk) {
-        BitSet skyMask = new BitSet();
-        BitSet blockMask = new BitSet();
-        BitSet emptySkyMask = new BitSet();
-        BitSet emptyBlockMask = new BitSet();
-        List<byte[]> skyLights = new ArrayList<>();
-        List<byte[]> blockLights = new ArrayList<>();
+    protected LightData createLightData() {
+        var builder = new LightDataBuilder(this);
 
-        for (var i = 0; i < lightSections.size(); i++) {
-            var section = lightSections.get(i);
-            // Add block and skylight to light data
-            addLight(blockMask, emptyBlockMask, blockLights, i, section.getBlockLight().data());
-            addLight(skyMask, emptySkyMask, skyLights, i, section.getSkyLight().data());
+        for (var section : lightSections) {
+            builder.beginSection();
+            builder.blockLight(section.getBlockLight().data());
+            builder.skyLight(section.getSkyLight().data());
+            builder.endSection();
         }
 
-        return new LightData(skyMask, blockMask, emptySkyMask, emptyBlockMask, skyLights, blockLights);
+        return builder.build();
     }
 
     protected LightData createPartialLightData(BitSet targetBlockSections, BitSet targetSkySections) {
-        BitSet skyMask = new BitSet();
-        BitSet blockMask = new BitSet();
-        BitSet emptySkyMask = new BitSet();
-        BitSet emptyBlockMask = new BitSet();
-        List<byte[]> skyLights = new ArrayList<>();
-        List<byte[]> blockLights = new ArrayList<>();
+        var builder = new LightDataBuilder(this);
 
         for (var i = 0; i < lightSections.size(); i++) {
             var section = lightSections.get(i);
+            builder.beginSection();
             if (targetBlockSections.get(i)) {
-                addLight(blockMask, emptyBlockMask, blockLights, i, section.getBlockLight().data());
+                builder.blockLight(section.getBlockLight().data());
             }
             if (targetSkySections.get(i)) {
-                addLight(skyMask, emptySkyMask, skyLights, i, section.getSkyLight().data());
+                builder.skyLight(section.getSkyLight().data());
             }
+            builder.endSection();
         }
 
-        return new LightData(skyMask, blockMask, emptySkyMask, emptyBlockMask, skyLights, blockLights);
-    }
-
-    private void addLight(BitSet mask, BitSet emptyMask, List<byte[]> list, int index, byte[] data) {
-        if (data == LightCompute.EMPTY_CONTENT) {
-            emptyMask.set(index);
-        } else {
-            mask.set(index);
-            list.add(data);
-        }
+        return builder.build();
     }
 
     @Override
     public void tick0(long time) {
-        assert Thread.holdsLock(this);
+        assertWriteLock();
         super.tick0(time);
 
         if (resendLight) {
@@ -253,6 +239,7 @@ public class LightingChunk extends DynamicChunk {
     public void onGenerate() {
         super.onGenerate();
         for (var lightSection : lightSections) {
+            lightSection.generatorPrepare();
             lightSection.generatorRelightBlockLightInternal();
             lightSection.generatorRelightSkyLightInternal();
         }
@@ -300,11 +287,22 @@ public class LightingChunk extends DynamicChunk {
         return lightingChunk;
     }
 
+    /**
+     * Sends a full light update to all viewers.
+     * <p>
+     * Threadsafe
+     */
     public void sendLight() {
         // CachedPacket here is an optimization to do the actual packet creation work on the network thread
-        sendPacketToViewers(new CachedPacket(() -> new UpdateLightPacket(chunkX, chunkZ, createLightData(true))));
+        sendPacketToViewers(new CachedPacket(() -> new UpdateLightPacket(chunkX, chunkZ, createLightData())));
     }
 
+    /**
+     * Sends a light update of all modified sections to all viewers.
+     * Also clears the section modification status.
+     * <p>
+     * Threadsafe
+     */
     public void sendPartialLight() {
         var targetBlockSections = new BitSet();
         var targetSkySections = new BitSet();
@@ -340,8 +338,35 @@ public class LightingChunk extends DynamicChunk {
         return List.of(sectionsTemp);
     }
 
+    @ApiStatus.Experimental
     public LightSection getLightSection(int sectionY) {
         return lightSections.get(sectionY - minLightSection);
+    }
+
+    public void awaitLight() {
+        LIGHT_ENGINE.awaitRunning();
+    }
+
+    @Override
+    public int getBlockLight(int blockX, int blockY, int blockZ) {
+        var sectionY = CoordConversion.globalToSection(blockY);
+        var relX = CoordConversion.globalToSectionRelative(blockX);
+        var relY = CoordConversion.globalToSectionRelative(blockY);
+        var relZ = CoordConversion.globalToSectionRelative(blockZ);
+        var section = getLightSection(sectionY);
+        awaitLight();
+        return section.getBlockLight(relX, relY, relZ);
+    }
+
+    @Override
+    public int getSkyLight(int blockX, int blockY, int blockZ) {
+        var sectionY = CoordConversion.globalToSection(blockY);
+        var relX = CoordConversion.globalToSectionRelative(blockX);
+        var relY = CoordConversion.globalToSectionRelative(blockY);
+        var relZ = CoordConversion.globalToSectionRelative(blockZ);
+        var section = getLightSection(sectionY);
+        awaitLight();
+        return section.getSkyLight(relX, relY, relZ);
     }
 
     public record NeighborSnapshot(Map<Neighbors, LightingChunk> neighbors) {
