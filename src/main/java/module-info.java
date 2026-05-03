@@ -105,6 +105,7 @@ module net.minestom.server {
     exports net.minestom.server.instance.generator;
     exports net.minestom.server.instance.heightmap;
     exports net.minestom.server.instance.light;
+    exports net.minestom.server.instance.light.parallel;
     exports net.minestom.server.instance.palette;
     exports net.minestom.server.inventory;
     exports net.minestom.server.inventory.click;

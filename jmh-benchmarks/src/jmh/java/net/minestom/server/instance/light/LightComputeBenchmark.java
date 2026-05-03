@@ -2,6 +2,7 @@ package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.light.parallel.BlockLightSection;
 import net.minestom.server.instance.palette.Palette;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;

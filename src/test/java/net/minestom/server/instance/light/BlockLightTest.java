@@ -2,6 +2,7 @@ package net.minestom.server.instance.light;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.light.parallel.BlockLightSection;
 import net.minestom.server.instance.palette.Palette;
 import org.junit.jupiter.api.Test;
 

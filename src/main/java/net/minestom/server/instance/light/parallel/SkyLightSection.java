@@ -1,18 +1,15 @@
-package net.minestom.server.instance.light;
+package net.minestom.server.instance.light.parallel;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.light.LightSection.LightUpdateResult;
+import net.minestom.server.instance.light.LightCompute;
+import net.minestom.server.instance.light.parallel.ParallelLightSection.LightUpdateResult;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.Nullable;
 
-import static net.minestom.server.instance.light.LightCompute.*;
-
 public class SkyLightSection {
-    private final LightSection section;
+    private final ParallelLightSection section;
 
-    public SkyLightSection(LightSection section) {
+    public SkyLightSection(ParallelLightSection section) {
         this.section = section;
     }
 
@@ -24,28 +21,28 @@ public class SkyLightSection {
 
     LightUpdateResult<byte[]> relightSkyLightExternal() {
         var version = section.getNextSkyLightExternalVersion();
-        var externalLight = computeExternal(section, s -> s.getSkyLight().data(), s -> s.getSkyLightInternal().data());
-        var newData = new LightSection.LightData<>(externalLight, version);
+        var externalLight = ParallelLightSection.computeExternal(section, ParallelLightSection::getSkyLight, s -> s.getSkyLightInternal().data());
+        var newData = new ParallelLightSection.LightData<>(externalLight, version);
         return section.updateSkyLightExternal(newData);
     }
 
-    private LightSection.LightData<byte[]> prepareSkyLightInternal(int version) {
+    private ParallelLightSection.LightData<byte[]> prepareSkyLightInternal(int version) {
         if (section.chunkSection == null)
-            return new LightSection.LightData<>(LightCompute.EMPTY_CONTENT, version);
+            return new ParallelLightSection.LightData<>(LightCompute.EMPTY_CONTENT, version);
         Palette blockPalette;
         int[] heightmap;
-        section.chunk.lockReadLock();
+        section.chunkData.chunk.lockReadLock();
         try {
             blockPalette = section.chunkSection.blockPalette().clone();
-            heightmap = section.chunk.getOcclusionMap().clone();
+            heightmap = section.chunkData.chunk.getOcclusionMap().clone();
         } finally {
-            section.chunk.unlockReadLock();
+            section.chunkData.chunk.unlockReadLock();
         }
-        var maxY = section.chunk.getInstance().getCachedDimensionType().maxY();
+        var maxY = section.chunkData.chunk.getInstance().getCachedDimensionType().maxY();
         var sectionY = section.sectionY();
         var queue = getSkyLightInternalSources(heightmap, maxY, sectionY);
         var content = queue == null ? LightCompute.CONTENT_FULLY_LIT : LightCompute.compute(blockPalette, queue);
-        return new LightSection.LightData<>(content, version);
+        return new ParallelLightSection.LightData<>(content, version);
     }
 
     private static @Nullable ShortArrayFIFOQueue getSkyLightInternalSources(int[] heightmap, int maxY, int sectionY) {

@@ -1,26 +1,27 @@
-package net.minestom.server.instance.light;
+package net.minestom.server.instance.light.parallel;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.light.LightSection.LightData;
-import net.minestom.server.instance.light.LightSection.LightUpdateResult;
+import net.minestom.server.instance.light.LightCompute;
+import net.minestom.server.instance.light.parallel.ParallelLightSection.LightData;
+import net.minestom.server.instance.light.parallel.ParallelLightSection.LightUpdateResult;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.VisibleForTesting;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
-import static net.minestom.server.instance.light.LightCompute.computeExternal;
+import static net.minestom.server.instance.light.parallel.ParallelLightSection.computeExternal;
 
 final class BlockLightSection {
-    private final LightSection section;
+    private final ParallelLightSection section;
 
-    public BlockLightSection(LightSection section) {
+    public BlockLightSection(ParallelLightSection section) {
         this.section = section;
     }
 
     LightUpdateResult<byte[]> relightBlockLightExternal() {
         var version = section.getNextBlockLightExternalVersion();
-        var externalLight = computeExternal(section, s -> s.getBlockLight().data(), s -> s.getBlockLightInternal().data());
+        var externalLight = computeExternal(section, ParallelLightSection::getBlockLight, s -> s.getBlockLightInternal().data());
         var newData = new LightData<>(externalLight, version);
         return section.updateBlockLightExternal(newData);
     }

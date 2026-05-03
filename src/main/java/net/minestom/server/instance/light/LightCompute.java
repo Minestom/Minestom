@@ -16,7 +16,6 @@ import java.util.function.Function;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 
 public final class LightCompute {
-    static final BlockFace[] FACES = BlockFace.values();
     static final Direction[] DIRECTIONS = Direction.values();
     static final int LIGHT_LENGTH = SECTION_BLOCK_COUNT / 2;
     static final int SECTION_SIZE = 16;
@@ -128,7 +127,7 @@ public final class LightCompute {
      * @param lightPre     shorts queue in format: [4bit light level][4bit y][4bit z][4bit x]
      * @return lighting wrapped in Result
      */
-    static byte[] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
+    public static byte[] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
         if (lightPre.isEmpty()) return EMPTY_CONTENT;
 
 //        if (true) { // TODO
@@ -214,7 +213,7 @@ public final class LightCompute {
         light[i] = (byte) ((light[i] & (0xF0 >>> shift)) | (value << shift));
     }
 
-    static int getLight(byte[] light, int x, int y, int z) {
+    public static int getLight(byte[] light, int x, int y, int z) {
         return getLight(light, x | (z << 4) | (y << 8));
     }
 
@@ -229,7 +228,7 @@ public final class LightCompute {
         return (x & 0xF) | ((z & 0xF) << 4) | ((y & 0xF) << 8);
     }
 
-    static int getLight(byte[] light, int index) {
+    public static int getLight(byte[] light, int index) {
         if (index >>> 1 >= light.length) return 0;
         final int value = light[index >>> 1];
         return ((value >>> ((index & 1) << 2)) & 0xF);
@@ -296,89 +295,5 @@ public final class LightCompute {
             }
         }
         return false;
-    }
-
-    public static byte[] computeExternal(LightSection section, Function<LightSection, byte[]> bakedLightProvider, Function<LightSection, byte[]> internalLightProvider) {
-        // We must always query all our data after acquiring the version ID.
-        // This ensures all data is at least as recent as the acquired version.
-        var neighborSnapshot = section.chunk.createNeighborSnapshot();
-        var posXC = neighborSnapshot.get(LightingChunk.Neighbors.EAST);
-        var posZC = neighborSnapshot.get(LightingChunk.Neighbors.SOUTH);
-        var negXC = neighborSnapshot.get(LightingChunk.Neighbors.WEST);
-        var negZC = neighborSnapshot.get(LightingChunk.Neighbors.NORTH);
-        var posX = posXC == null ? null : posXC.getLightSection(section.sectionY());
-        var negX = negXC == null ? null : negXC.getLightSection(section.sectionY());
-        var posZ = posZC == null ? null : posZC.getLightSection(section.sectionY());
-        var negZ = negZC == null ? null : negZC.getLightSection(section.sectionY());
-        var posY = section.up;
-        var negY = section.down;
-        var content = internalLightProvider.apply(section);
-        var blockPalette = section.getBlockData().data().blockPalette();
-        var neighbors = new @Nullable LightSection[]{
-                negY, posY, negZ, posZ, negX, posX // Order must be same as order in BlockFace enum
-        };
-        var lightSources = new ShortArrayFIFOQueue(0);
-        for (var i = 0; i < neighbors.length; i++) {
-            var neighbor = neighbors[i];
-            if (neighbor == null) continue;
-
-            // Light+palette can be out of sync, but that is okay.
-            var otherLight = bakedLightProvider.apply(neighbor);
-            var otherPalette = neighbor.getBlockData().data().blockPalette();
-
-            final BlockFace face = FACES[i];
-            final int k = switch (face) {
-                case WEST, BOTTOM, NORTH -> 0;
-                case EAST, TOP, SOUTH -> 15;
-            };
-            for (int bx = 0; bx < 16; bx++) {
-                for (int by = 0; by < 16; by++) {
-
-                    final byte neighborLight = switch (face) {
-                        case NORTH, SOUTH -> (byte) getLight(otherLight, bx, by, 15 - k);
-                        case WEST, EAST -> (byte) getLight(otherLight, 15 - k, bx, by);
-                        default -> (byte) getLight(otherLight, bx, 15 - k, by);
-                    };
-                    // Can't be brighter than this. For the actual brightness we need the opacity,
-                    // but we can first check with max values to optimize
-                    final byte maxSelfLight = (byte) Math.max(neighborLight - 1, 0);
-                    if (maxSelfLight == 0) continue;
-
-                    final int posTo = switch (face) {
-                        case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
-                        case WEST, EAST -> k | (by << 4) | (bx << 8);
-                        default -> bx | (by << 4) | (k << 8);
-                    };
-
-                    final Block blockTo = switch (face) {
-                        case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
-                        case WEST, EAST -> getBlock(blockPalette, k, bx, by);
-                        default -> getBlock(blockPalette, bx, k, by);
-                    };
-
-                    final int opacity = blockTo.registry().lightBlocked();
-                    final byte lightEmission = (byte) Math.max(neighborLight - Math.max(opacity, 1), 0);
-                    if (lightEmission == 0) continue;
-                    if (content != LightCompute.EMPTY_CONTENT) {
-                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
-                        if (lightEmission <= internalEmission) continue;
-                    }
-
-                    final Block blockFrom = switch (face) {
-                        case NORTH, SOUTH -> getBlock(otherPalette, bx, by, 15 - k);
-                        case WEST, EAST -> getBlock(otherPalette, 15 - k, bx, by);
-                        default -> getBlock(otherPalette, bx, 15 - k, by);
-                    };
-
-                    if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
-                        continue;
-
-                    final int index = posTo | (lightEmission << 12);
-                    lightSources.enqueue((short) index);
-                }
-            }
-        }
-
-        return LightCompute.compute(blockPalette, lightSources);
     }
 }

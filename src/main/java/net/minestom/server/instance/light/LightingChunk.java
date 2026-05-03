@@ -11,6 +11,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.instance.light.snapshot.SnapshotLightSectionType;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
@@ -21,6 +22,9 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+
+import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
 
 /* TODO
     send light data as part of a ChunkBatch to measure time elapsed as not to take up too much bandwidth.
@@ -35,17 +39,12 @@ public class LightingChunk extends DynamicChunk {
     private final int maxLightSection;
     private int highestBlock;
     private int @Nullable [] occlusionMap;
-    private final List<LightSection> lightSections;
     private volatile boolean resendLight = false;
     // The following 4 WeakReferences are read-only
     private final Map<Neighbors, WeakReference<@Nullable LightingChunk>> neighbors = new ConcurrentHashMap<>();
     private volatile boolean mayRequireSpecificSectionResend = false;
     private final AtomicInteger resendSpecificAfter = new AtomicInteger(); // TODO
-    final LightEngine.WorkTypeTracker<Integer> trackerPalette = new LightEngine.WorkTypeTracker.Hash<>();
-    final LightEngine.WorkTypeTracker<Integer> trackerBlockLightExternal = new LightEngine.WorkTypeTracker.Hash<>();
-    final LightEngine.WorkTypeTracker<Integer> trackerSkyLightExternal = new LightEngine.WorkTypeTracker.Hash<>();
-    final LightEngine.WorkTypeTracker<Integer> trackerFullBlockRelight = new LightEngine.WorkTypeTracker.Hash<>();
-    final LightEngine.WorkTypeTracker<Integer> trackerFullSkyRelight = new LightEngine.WorkTypeTracker.Hash<>();
+    private final Typed<?, ?, ?> typed;
     private volatile boolean neighborUpdated = false;
 
     private static final Set<Key> DIFFUSE_SKY_LIGHT = Set.of(Block.COBWEB.key(), Block.ICE.key(), Block.HONEY_BLOCK.key(), Block.SLIME_BLOCK.key(), Block.WATER.key(), Block.ACACIA_LEAVES.key(), Block.AZALEA_LEAVES.key(), Block.BIRCH_LEAVES.key(), Block.DARK_OAK_LEAVES.key(), Block.FLOWERING_AZALEA_LEAVES.key(), Block.JUNGLE_LEAVES.key(), Block.CHERRY_LEAVES.key(), Block.OAK_LEAVES.key(), Block.SPRUCE_LEAVES.key(), Block.SPAWNER.key(), Block.BEACON.key(), Block.END_GATEWAY.key(), Block.CHORUS_PLANT.key(), Block.CHORUS_FLOWER.key(), Block.FROSTED_ICE.key(), Block.SEAGRASS.key(), Block.TALL_SEAGRASS.key(), Block.LAVA.key());
@@ -61,18 +60,77 @@ public class LightingChunk extends DynamicChunk {
         return occludesBottom || occludesTop;
     }
 
-    protected LightingChunk(Instance instance, int chunkX, int chunkZ, List<Section> sections) {
+    private static class Typed<Type extends LightSectionType<LSection, ChunkData>, LSection extends LightSection<LSection, Type, ChunkData>, ChunkData> {
+        private final Type type;
+        private final ChunkData chunkData;
+        private final List<LSection> lightSections;
+
+        public Typed(LightingChunk chunk, Type type) {
+            this.type = type;
+            this.chunkData = type.newChunkData(chunk);
+            this.lightSections = initSections(chunk);
+        }
+
+        private void fullRelightSync() {
+            type.fullRelightSync(lightSections);
+        }
+
+        private List<LSection> initSections(LightingChunk chunk) {
+            var sectionsCount = chunk.maxLightSection - chunk.minLightSection;
+            var sectionsTemp = new ArrayList<LSection>(sectionsCount);
+            for (var i = 0; i < sectionsCount; i++) {
+                var first = i == 0;
+                var last = i == sectionsCount - 1;
+                var section = first | last ? null : chunk.getSection(i + chunk.minLightSection);
+                sectionsTemp.add(type.newSection(chunkData, section, i + chunk.minLightSection));
+            }
+            LSection below = null;
+            LSection self = null;
+            for (var i = 0; i < sectionsCount; i++) {
+                var above = sectionsTemp.get(i);
+
+                if (self != null) {
+                    self.initAboveBelow(above, below);
+                }
+
+                below = self;
+                self = above;
+            }
+            Objects.requireNonNull(self).initAboveBelow(null, below);
+            return List.copyOf(sectionsTemp);
+        }
+
+        private LightingChunk copy(LightingChunk origin, Instance instance, int chunkX, int chunkZ) {
+            var sections = origin.sections.stream().map(Section::clone).toList();
+            LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections, c -> {
+                var typed = new Typed<>(c, type);
+                for (int i = 0; i < typed.lightSections.size(); i++) {
+                    typed.lightSections.get(i).copyFrom(lightSections.get(i));
+                }
+                return typed;
+            });
+            lightingChunk.entries.putAll(origin.entries);
+            return lightingChunk;
+        }
+
+    }
+
+    private LightingChunk(Instance instance, int chunkX, int chunkZ, List<Section> sections, Function<LightingChunk, Typed<?, ?, ?>> typed) {
         super(instance, chunkX, chunkZ, sections);
         this.minLightSection = minSection - 1;
         this.maxLightSection = maxSection + 1;
-        this.lightSections = initSections();
+        this.typed = typed.apply(this);
     }
 
     public LightingChunk(Instance instance, int chunkX, int chunkZ) {
+        this(instance, chunkX, chunkZ, c -> new Typed<>(c, SnapshotLightSectionType.TYPE));
+    }
+
+    private LightingChunk(Instance instance, int chunkX, int chunkZ, Function<LightingChunk, Typed<?, ?, ?>> typed) {
         super(instance, chunkX, chunkZ);
         this.minLightSection = minSection - 1;
         this.maxLightSection = maxSection + 1;
-        this.lightSections = initSections();
+        this.typed = typed.apply(this);
     }
 
     public int getHighestBlock() {
@@ -140,8 +198,12 @@ public class LightingChunk extends DynamicChunk {
         super.setBlock(x, y, z, block, placement, destroy);
         occlusionMap = null;
         var sectionY = CoordConversion.globalToSection(y);
-        // TODO change this to a timer in case of many block changes
-        getLightSection(sectionY).blockChanged();
+
+        var section = getLightSection(sectionY);
+        var relativeX = globalToSectionRelative(x);
+        var relativeY = globalToSectionRelative(y);
+        var relativeZ = globalToSectionRelative(z);
+        section.blockChanged(relativeX, relativeY, relativeZ);
     }
 
     @Override
@@ -180,10 +242,10 @@ public class LightingChunk extends DynamicChunk {
     protected LightData createLightData() {
         var builder = new LightDataBuilder(this);
 
-        for (var section : lightSections) {
+        for (var section : typed.lightSections) {
             builder.beginSection();
-            builder.blockLight(section.getBlockLight().data());
-            builder.skyLight(section.getSkyLight().data());
+            builder.blockLight(section.getBlockLight());
+            builder.skyLight(section.getSkyLight());
             builder.endSection();
         }
 
@@ -193,14 +255,14 @@ public class LightingChunk extends DynamicChunk {
     protected LightData createPartialLightData(BitSet targetBlockSections, BitSet targetSkySections) {
         var builder = new LightDataBuilder(this);
 
-        for (var i = 0; i < lightSections.size(); i++) {
-            var section = lightSections.get(i);
+        for (var i = 0; i < typed.lightSections.size(); i++) {
+            var section = typed.lightSections.get(i);
             builder.beginSection();
             if (targetBlockSections.get(i)) {
-                builder.blockLight(section.getBlockLight().data());
+                builder.blockLight(section.getBlockLight());
             }
             if (targetSkySections.get(i)) {
-                builder.skyLight(section.getSkyLight().data());
+                builder.skyLight(section.getSkyLight());
             }
             builder.endSection();
         }
@@ -225,34 +287,29 @@ public class LightingChunk extends DynamicChunk {
         }
         if (neighborUpdated) {
             neighborUpdated = false;
-            updateExternalLighting();
+            neighborLoadUnloadDetected();
         }
     }
 
-    private void updateExternalLighting() {
-        for (var lightSection : lightSections) {
-            lightSection.relightExternalBlockLightAsync(0);
+    private void neighborLoadUnloadDetected() {
+        for (var lightSection : typed.lightSections) {
+            lightSection.neighborLoadUnloadDetected();
         }
     }
 
     @Override
     public void onGenerate() {
         super.onGenerate();
-        for (var lightSection : lightSections) {
-            lightSection.generatorPrepare();
-            lightSection.generatorRelightBlockLightInternal();
-            lightSection.generatorRelightSkyLightInternal();
-        }
-        LightSection.generatorRelightBlockLightExternalAndBakeSync(lightSections);
+        typed.fullRelightSync();
     }
 
     @Override
     public void onReloadFromMemoryCopy(Chunk oldInMemoryChunk) {
         super.onReloadFromMemoryCopy(oldInMemoryChunk);
-        // Internal light should already be valid because of #copy(...)
-        // Only external light missing. External in this case is still bound to the chunk.
-        // So only vertical sections pass to each other, no neighbor chunks are known yet.
-        LightSection.generatorRelightBlockLightExternalAndBakeSync(lightSections);
+        // TODO Internal light should already be valid because of #copy(...)
+        //  Only external light missing. External in this case is still bound to the chunk.
+        //  So only vertical sections pass to each other, no neighbor chunks are known yet.
+        typed.fullRelightSync();
     }
 
     @Override
@@ -262,8 +319,8 @@ public class LightingChunk extends DynamicChunk {
         //  for now we assume the loader supports light
     }
 
-    void scheduleSpecificResend() {
-        resendSpecificAfter.set(1); // Resend after 20 ticks
+    public void scheduleSpecificResend() {
+        resendSpecificAfter.set(1); // Resend after 1 ticks
         mayRequireSpecificSectionResend = true;
     }
 
@@ -273,18 +330,7 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     public Chunk copy(Instance instance, int chunkX, int chunkZ) {
-        var sections = this.sections.stream().map(Section::clone).toList();
-        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
-        lightingChunk.entries.putAll(entries);
-        for (int i = 0; i < lightingChunk.lightSections.size(); i++) {
-            lightingChunk.lightSections.get(i).copyInternalLighting(lightSections.get(i));
-            // No external lighting after copying. Still gotta bake the light
-            // TODO we may want to use the following, commented out code:
-            //  LightSection.generatorRelightBlockLightExternalAndBakeSync(lightSections);
-            lightingChunk.lightSections.get(i).bakeBlockLight();
-            lightingChunk.lightSections.get(i).bakeSkyLight();
-        }
-        return lightingChunk;
+        return typed.copy(this, instance, chunkX, chunkZ);
     }
 
     /**
@@ -309,12 +355,12 @@ public class LightingChunk extends DynamicChunk {
 
         // This must be done here, because the supplier in CachedPacket may be evaluated multiple times,
         // and the AtomicBooleans would not be true the second time.
-        for (var i = 0; i < lightSections.size(); i++) {
-            var section = lightSections.get(i);
-            if (section.resendThisSectionBlockLight().compareAndSet(true, false)) {
+        for (var i = 0; i < typed.lightSections.size(); i++) {
+            var section = typed.lightSections.get(i);
+            if (section.getAndResetResendBlockLight()) {
                 targetBlockSections.set(i);
             }
-            if (section.resendThisSectionSkyLight().compareAndSet(true, false)) {
+            if (section.getAndResetResendSkyLight()) {
                 targetSkySections.set(i);
             }
         }
@@ -323,36 +369,25 @@ public class LightingChunk extends DynamicChunk {
         sendPacketToViewers(new CachedPacket(() -> new UpdateLightPacket(chunkX, chunkZ, createPartialLightData(targetBlockSections, targetSkySections))));
     }
 
-    private List<LightSection> initSections() {
-        var sectionsTemp = new LightSection[maxLightSection - minLightSection];
-        for (var i = 0; i < sectionsTemp.length; i++) {
-            var first = i == 0;
-            var last = i == maxLightSection - minLightSection - 1;
-            var section = first || last ? null : getSection(i + minLightSection);
-            sectionsTemp[i] = new LightSection(LIGHT_ENGINE, this, section, i + minLightSection);
-            if (!first) {
-                sectionsTemp[i].down = sectionsTemp[i - 1];
-                sectionsTemp[i - 1].up = sectionsTemp[i];
-            }
-        }
-        return List.of(sectionsTemp);
-    }
-
     @ApiStatus.Experimental
-    public LightSection getLightSection(int sectionY) {
-        return lightSections.get(sectionY - minLightSection);
+    public LightSection<?, ?, ?> getLightSection(int sectionY) {
+        return typed.lightSections.get(sectionY - minLightSection);
     }
 
     public void awaitLight() {
         LIGHT_ENGINE.awaitRunning();
     }
 
+    public LightEngine engine() {
+        return LIGHT_ENGINE;
+    }
+
     @Override
     public int getBlockLight(int blockX, int blockY, int blockZ) {
         var sectionY = CoordConversion.globalToSection(blockY);
-        var relX = CoordConversion.globalToSectionRelative(blockX);
-        var relY = CoordConversion.globalToSectionRelative(blockY);
-        var relZ = CoordConversion.globalToSectionRelative(blockZ);
+        var relX = globalToSectionRelative(blockX);
+        var relY = globalToSectionRelative(blockY);
+        var relZ = globalToSectionRelative(blockZ);
         var section = getLightSection(sectionY);
         awaitLight();
         return section.getBlockLight(relX, relY, relZ);
@@ -361,56 +396,11 @@ public class LightingChunk extends DynamicChunk {
     @Override
     public int getSkyLight(int blockX, int blockY, int blockZ) {
         var sectionY = CoordConversion.globalToSection(blockY);
-        var relX = CoordConversion.globalToSectionRelative(blockX);
-        var relY = CoordConversion.globalToSectionRelative(blockY);
-        var relZ = CoordConversion.globalToSectionRelative(blockZ);
+        var relX = globalToSectionRelative(blockX);
+        var relY = globalToSectionRelative(blockY);
+        var relZ = globalToSectionRelative(blockZ);
         var section = getLightSection(sectionY);
         awaitLight();
         return section.getSkyLight(relX, relY, relZ);
-    }
-
-    public record NeighborSnapshot(Map<Neighbors, LightingChunk> neighbors) {
-        public @Nullable LightingChunk get(Neighbors neighbor) {
-            return neighbors.get(neighbor);
-        }
-    }
-
-    public enum Neighbors {
-        NORTH(0, -1),
-        EAST(1, 0),
-        SOUTH(0, 1),
-        WEST(-1, 0),
-        NORTH_EAST(1, -1),
-        NORTH_WEST(-1, -1),
-        SOUTH_EAST(1, 1),
-        SOUTH_WEST(-1, 1);
-
-        private final int x, z;
-
-        Neighbors(int x, int z) {
-            this.x = x;
-            this.z = z;
-        }
-
-        public int x() {
-            return x;
-        }
-
-        public int z() {
-            return z;
-        }
-
-        public Neighbors opposite() {
-            return switch (this) {
-                case NORTH -> SOUTH;
-                case EAST -> WEST;
-                case SOUTH -> NORTH;
-                case WEST -> EAST;
-                case NORTH_EAST -> SOUTH_WEST;
-                case NORTH_WEST -> SOUTH_EAST;
-                case SOUTH_EAST -> NORTH_WEST;
-                case SOUTH_WEST -> NORTH_EAST;
-            };
-        }
     }
 }
