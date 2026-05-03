@@ -36,6 +36,8 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
+import net.minestom.server.permission.BasePermissionService;
+import net.minestom.server.permission.PermissionService;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
@@ -81,6 +83,13 @@ public final class MinecraftServer implements MinecraftConstants {
     private static int compressionThreshold = 256;
     private static String brandName = "TerraStom";
     private static Difficulty difficulty = Difficulty.NORMAL;
+    private static PermissionService permissionService = new BasePermissionService();
+    public static PermissionService getPermissionService() {
+        return permissionService;
+    }
+    public static void setPermissionService(PermissionService permissionService) {
+        MinecraftServer.permissionService = permissionService;
+    }
 
     public static MinecraftServer init(Auth auth) {
         updateProcess(auth);

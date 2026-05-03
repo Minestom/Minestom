@@ -4,6 +4,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
+import net.minestom.server.permission.Permissible;
 import net.minestom.server.tag.Taggable;
 
 /**
@@ -11,7 +12,7 @@ import net.minestom.server.tag.Taggable;
  * <p>
  * Main implementations are {@link Player} and {@link ConsoleSender}.
  */
-public interface CommandSender extends Audience, Taggable, Identified {
+public interface CommandSender extends Permissible, Audience, Taggable, Identified {
 
     /**
      * Sends a raw string message.
