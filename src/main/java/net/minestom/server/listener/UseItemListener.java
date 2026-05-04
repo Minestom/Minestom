@@ -46,7 +46,7 @@ public class UseItemListener {
             useAnimation = ItemAnimation.BLOCK;
         } else if (material == Material.TRIDENT) {
             useItemTime = 72000;
-            useAnimation = ItemAnimation.SPEAR;
+            useAnimation = ItemAnimation.TRIDENT;
         } else if (material == Material.SPYGLASS) {
             useItemTime = 1200;
             useAnimation = ItemAnimation.SPYGLASS;
