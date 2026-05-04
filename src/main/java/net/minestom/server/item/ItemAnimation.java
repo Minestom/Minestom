@@ -14,7 +14,8 @@ public enum ItemAnimation {
     SPYGLASS,
     TOOT_HORN,
     BRUSH,
-    BUNDLE;
+    BUNDLE,
+    TRIDENT;
 
     public static final NetworkBuffer.Type<ItemAnimation> NETWORK_TYPE = NetworkBuffer.Enum(ItemAnimation.class);
     public static final Codec<ItemAnimation> CODEC = Codec.Enum(ItemAnimation.class);
