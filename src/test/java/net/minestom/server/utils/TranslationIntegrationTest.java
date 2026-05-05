@@ -12,7 +12,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
-import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.scoreboard.NumberFormat;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
@@ -103,7 +103,7 @@ public class TranslationIntegrationTest {
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
         final var message = Component.translatable("test.key");
-        final var numberFormat = Sidebar.NumberFormat.fixed(message);
+        final var numberFormat = NumberFormat.fixed(message);
         final var packet = new UpdateScorePacket(
                 "",
                 "",
