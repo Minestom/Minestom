@@ -6,7 +6,6 @@ import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,8 +45,6 @@ public class GeneratorForkIntegrationTest {
         assertEquals(Block.STONE, instance.getBlock(17, -64 + 17, 17));
     }
 
-    // TODO
-    @Disabled("is this test still valid?")
     @Test
     public void signal(Env env) {
         var manager = env.process().instance();
@@ -56,7 +53,7 @@ public class GeneratorForkIntegrationTest {
         instance.setGenerator(unit -> {
             var u = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
             assertEquals(unit.absoluteStart(), u.absoluteStart());
-            assertEquals(unit.absoluteEnd().add(16, 0, 16), u.absoluteEnd());
+            assertEquals(unit.absoluteEnd().add(16, 0, 16).asBlockVec(), u.absoluteEnd());
             u.modifier().setRelative(16, 0, 0, Block.STONE);
             u.modifier().setRelative(16, 33, 0, Block.STONE);
         });
