@@ -71,6 +71,8 @@ public final class PlayerActionListener {
 
         // Prevent spectators and check players in adventure mode
         if (shouldPreventBreaking(player, block)) {
+            var playerTryStartDiggingEvent = new PlayerTryStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
+            EventDispatcher.call(playerTryStartDiggingEvent);
             return new DiggingResult(block, false);
         }
 
