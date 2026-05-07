@@ -45,6 +45,7 @@ tasks.withType<JavaCompile> {
 }
 
 tasks.withType<Javadoc> {
+    enabled = false // временно, лучше убрать
     (options as? StandardJavadocDocletOptions)?.apply {
         encoding = "UTF-8"
 
