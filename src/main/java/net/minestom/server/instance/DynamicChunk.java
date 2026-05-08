@@ -1,11 +1,13 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -33,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
 
@@ -55,6 +58,16 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
+    // Кеш рандомного тика:
+    // Битсет - какие секции содержат хотя бы один randomTickable блок
+    private final BitSet randomTickableSections = new BitSet();
+    // Для каждой секции — section-relative индексы (localX | localY<<4 | localZ<<8) randomTickable блоков
+    private final IntOpenHashSet[] randomTickableIndices;
+
+    protected int getRandomTickSpeed() {
+        return 3;
+    }
+
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
@@ -64,11 +77,25 @@ public class DynamicChunk extends Chunk {
         var sectionsTemp = new Section[maxSection - minSection];
         Arrays.setAll(sectionsTemp, value -> new Section());
         this.sections = List.of(sectionsTemp);
+        this.randomTickableIndices = new IntOpenHashSet[sectionsTemp.length];
+        Arrays.setAll(this.randomTickableIndices, i -> new IntOpenHashSet());
     }
 
     protected DynamicChunk(Instance instance, int chunkX, int chunkZ, List<Section> sections) {
         super(instance, chunkX, chunkZ, true);
         this.sections = List.copyOf(sections);
+        this.randomTickableIndices = new IntOpenHashSet[sections.size()];
+        Arrays.setAll(this.randomTickableIndices, i -> new IntOpenHashSet());
+    }
+
+    // Вспомогательный метод: индекс секции по глобальному Y
+    private int sectionIndex(int y) {
+        return (y >> 4) - minSection;
+    }
+
+    // Вспомогательный метод: section-relative индекс блока (0..4095)
+    private static int sectionLocalIndex(int localX, int localY, int localZ) {
+        return localX | (localY << 4) | (localZ << 8);
     }
 
     @Override
@@ -87,12 +114,13 @@ public class DynamicChunk extends Chunk {
 
         Section section = getSectionAt(y);
 
-        int sectionRelativeX = globalToSectionRelative(x);
-        int sectionRelativeZ = globalToSectionRelative(z);
+        final int sectionRelativeX = globalToSectionRelative(x);
+        final int sectionRelativeY = globalToSectionRelative(y);
+        final int sectionRelativeZ = globalToSectionRelative(z);
 
         section.blockPalette().set(
                 sectionRelativeX,
-                globalToSectionRelative(y),
+                sectionRelativeY,
                 sectionRelativeZ,
                 block.stateId()
         );
@@ -111,6 +139,20 @@ public class DynamicChunk extends Chunk {
             this.tickableMap.put(index, block);
         } else {
             this.tickableMap.remove(index);
+        }
+
+        // Block random tick
+        final int secIdx = sectionIndex(y);
+        final int localIdx = sectionLocalIndex(sectionRelativeX, sectionRelativeY, sectionRelativeZ);
+        final IntOpenHashSet sectionSet = randomTickableIndices[secIdx];
+        if (handler != null && handler.isRandomTickable()) {
+            sectionSet.add(localIdx);
+            randomTickableSections.set(secIdx);
+        } else {
+            sectionSet.remove(localIdx);
+            if (sectionSet.isEmpty()) {
+                randomTickableSections.clear(secIdx);
+            }
         }
 
         // Update block handlers
@@ -182,15 +224,56 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void tick(long time) {
-        if (tickableMap.isEmpty()) return;
-        tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
-            final int index = entry.getIntKey();
-            final Block block = entry.getValue();
-            final BlockHandler handler = block.handler();
-            if (handler == null) return;
-            final Point blockPosition = CoordConversion.chunkBlockIndexGetGlobal(index, chunkX, chunkZ);
-            handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
-        });
+        if (!tickableMap.isEmpty()) {
+            tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
+                final int index = entry.getIntKey();
+                final Block block = entry.getValue();
+                final BlockHandler handler = block.handler();
+                if (handler == null) return;
+                final Point blockPosition = CoordConversion.chunkBlockIndexGetGlobal(index, chunkX, chunkZ);
+                handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
+            });
+        }
+
+
+        // Block random tick
+        if (randomTickableSections.isEmpty()) return;
+        processRandomTick();
+    }
+
+    protected void processRandomTick() {
+        final int randomTickSpeed = getRandomTickSpeed();
+        if (randomTickSpeed <= 0) return;
+
+        final ThreadLocalRandom random = ThreadLocalRandom.current();
+        final int minY = instance.getCachedDimensionType().minY();
+
+        for (int secIdx = randomTickableSections.nextSetBit(0);
+             secIdx >= 0;
+             secIdx = randomTickableSections.nextSetBit(secIdx + 1)
+        ) {
+            final IntOpenHashSet tickableSet = randomTickableIndices[secIdx];
+            final int sectionBaseY = minY + secIdx * CHUNK_SECTION_SIZE;
+
+            for (int i = 0; i < randomTickSpeed; i++) {
+                final int localX = random.nextInt(16);
+                final int localY = random.nextInt(16);
+                final int localZ = random.nextInt(16);
+
+                if (!tickableSet.contains(sectionLocalIndex(localX, localY, localZ))) continue;
+
+                final int globalX = chunkX * 16 + localX;
+                final int globalY = sectionBaseY + localY;
+                final int globalZ = chunkZ * 16 + localZ;
+
+                final Block block = entries.get(CoordConversion.chunkBlockIndex(globalX, globalY, globalZ));
+
+                final BlockHandler handler = block.handler();
+                if (handler == null) continue;
+
+                handler.randomTick(new BlockHandler.RandomTick(block, instance, new Vec(globalX, globalY, globalZ)));
+            }
+        }
     }
 
     @Override

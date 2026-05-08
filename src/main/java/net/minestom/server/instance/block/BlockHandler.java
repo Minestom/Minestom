@@ -56,11 +56,16 @@ public interface BlockHandler {
     default void onTouch(Touch touch) {
     }
 
+    default boolean isTickable() {
+        return false;
+    }
     default void tick(Tick tick) {
     }
 
-    default boolean isTickable() {
+    default boolean isRandomTickable() {
         return false;
+    }
+    default void randomTick(RandomTick tick) {
     }
 
     /**
@@ -312,6 +317,12 @@ public interface BlockHandler {
             return blockPosition;
         }
     }
+
+    record RandomTick(
+            Block block,
+            Instance instance,
+            Point blockPosition
+    ) {}
 
     /**
      * Handler used for loaded blocks with unknown namespace
