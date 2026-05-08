@@ -28,14 +28,15 @@ public class ItemDisplayMeta extends AbstractDisplayMeta {
 
     public enum DisplayContext {
         NONE,
-        THIRDPERSON_LEFT_HAND,
-        THIRDPERSON_RIGHT_HAND,
-        FIRSTPERSON_LEFT_HAND,
-        FIRSTPERSON_RIGHT_HAND,
+        THIRDPERSON_LEFTHAND,
+        THIRDPERSON_RIGHTHAND,
+        FIRSTPERSON_LEFTHAND,
+        FIRSTPERSON_RIGHTHAND,
         HEAD,
         GUI,
         GROUND,
-        FIXED;
+        FIXED,
+        ON_SHELF;
 
         private final static DisplayContext[] VALUES = values();
 
