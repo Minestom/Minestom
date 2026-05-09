@@ -245,7 +245,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         default Type<T> lengthPrefixed(int maxLength) {
             return new NetworkBufferTypeImpl.LengthPrefixedType<>(this, maxLength);
         }
-
     }
 
     static Builder builder(long size) {
