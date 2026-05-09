@@ -25,29 +25,20 @@ public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Con
     }
 
     public record Entry(@Nullable KnownLinkType knownType, @Nullable Component customType, String link) {
-        public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, Entry value) {
-                buffer.write(NetworkBuffer.BOOLEAN, value.knownType != null);
-                if (value.knownType != null) {
-                    buffer.write(KnownLinkType.NETWORK_TYPE, value.knownType);
-                } else {
-                    assert value.customType != null;
-                    buffer.write(NetworkBuffer.COMPONENT, value.customType);
-                }
-                buffer.write(NetworkBuffer.STRING, value.link);
-            }
-
-            @Override
-            public Entry read(NetworkBuffer buffer) {
-                boolean known = buffer.read(NetworkBuffer.BOOLEAN);
-                if (known) {
-                    return new Entry(buffer.read(KnownLinkType.NETWORK_TYPE), buffer.read(NetworkBuffer.STRING));
-                } else {
-                    return new Entry(buffer.read(NetworkBuffer.COMPONENT), buffer.read(NetworkBuffer.STRING));
-                }
-            }
-        };
+        private static final NetworkBuffer.Type<Entry> KNOWN_SERIALIZER = NetworkBufferTemplate.template(
+                KnownLinkType.NETWORK_TYPE, Entry::knownType,
+                NetworkBuffer.STRING, Entry::link,
+                Entry::new
+        );
+        private static final NetworkBuffer.Type<Entry> CUSTOM_SERIALIZER = NetworkBufferTemplate.template(
+                NetworkBuffer.COMPONENT, Entry::customType,
+                NetworkBuffer.STRING, Entry::link,
+                Entry::new
+        );
+        public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = NetworkBuffer.Type.tagged(
+                NetworkBuffer.BOOLEAN, entry -> entry.knownType != null,
+                isKnown -> isKnown ? KNOWN_SERIALIZER : CUSTOM_SERIALIZER
+        );
 
         public Entry {
             Check.argCondition(knownType == null && customType == null, "One of knownType and customType must be present");

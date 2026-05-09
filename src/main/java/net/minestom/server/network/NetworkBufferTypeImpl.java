@@ -802,6 +802,25 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    static final class RecursiveType<T> implements NetworkBufferTypeImpl<T> {
+        final Type<T> delegate;
+
+        public RecursiveType(Function<Type<T>, Type<T>> self) {
+            java.util.Objects.requireNonNull(self, "self");
+            this.delegate = java.util.Objects.requireNonNull(self.apply(this), "delegate");
+        }
+
+        @Override
+        public void write(NetworkBuffer buffer, T value) {
+            delegate.write(buffer, value);
+        }
+
+        @Override
+        public T read(NetworkBuffer buffer) {
+            return delegate.read(buffer);
+        }
+    }
+
     record TypedNbtType<T>(Codec<T> nbtType) implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {

@@ -21,23 +21,17 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record TeamsPacket(String teamName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_MEMBERS = 16384;
 
-    public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, TeamsPacket value) {
-            buffer.write(STRING, value.teamName);
-            buffer.write(BYTE, (byte) value.action.id());
-            @SuppressWarnings("unchecked") final Type<Action> type = (Type<Action>) actionSerializer(value.action.id());
-            buffer.write(type, value.action);
-        }
+    @SuppressWarnings("unchecked")
+    private static final NetworkBuffer.Type<Action> ACTION_NETWORK_TYPE = NetworkBuffer.Type.tagged(
+            NetworkBuffer.BYTE, action -> (byte) action.id(),
+            id -> (NetworkBuffer.Type<Action>) (NetworkBuffer.Type<?>) actionSerializer(Byte.toUnsignedInt(id))
+    );
 
-        @Override
-        public TeamsPacket read(NetworkBuffer buffer) {
-            final String teamName = buffer.read(STRING);
-            final byte actionId = buffer.read(BYTE);
-            final var type = actionSerializer(actionId);
-            return new TeamsPacket(teamName, type.read(buffer));
-        }
-    };
+    public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = NetworkBufferTemplate.template(
+            STRING, TeamsPacket::teamName,
+            ACTION_NETWORK_TYPE, TeamsPacket::action,
+            TeamsPacket::new
+    );
 
     @Override
     public Collection<Component> components() {
@@ -261,7 +255,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             this.identifier = identifier;
         }
 
-            public static NameTagVisibility fromIdentifier(String identifier) {
+        public static NameTagVisibility fromIdentifier(String identifier) {
             for (NameTagVisibility v : values()) {
                 if (v.getIdentifier().equals(identifier))
                     return v;
@@ -275,7 +269,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          *
          * @return the identifier
          */
-            public String getIdentifier() {
+        public String getIdentifier() {
             return identifier;
         }
     }

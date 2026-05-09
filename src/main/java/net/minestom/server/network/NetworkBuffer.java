@@ -227,6 +227,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         default Type<T> lengthPrefixed(int maxLength) {
             return new NetworkBufferTypeImpl.LengthPrefixedType<>(this, maxLength);
         }
+
+        static <T> Type<T> recursive(Function<Type<T>, Type<T>> func) {
+            return new NetworkBufferTypeImpl.RecursiveType<>(func).delegate;
+        }
+
+        @SuppressWarnings("unchecked")
+        static <T, D> Type<T> tagged(Type<D> discriminator, Function<T, D> discriminatorFromValue,
+                                     Function<D, Type<? extends T>> serializerFromDiscriminator) {
+            return discriminator.unionType(
+                    d -> (Type<T>) serializerFromDiscriminator.apply(d),
+                    discriminatorFromValue
+            );
+        }
     }
 
     static Builder builder(long size) {

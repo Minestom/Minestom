@@ -8,6 +8,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,28 +19,19 @@ import java.util.Collection;
  */
 public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
-    NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, SoundEvent value) {
-            switch (value) {
-                case BuiltinSoundEvent soundEvent -> buffer.write(NetworkBuffer.VAR_INT, soundEvent.id() + 1);
-                case CustomSoundEvent soundEvent -> {
-                    buffer.write(NetworkBuffer.VAR_INT, 0); // Custom sound
-                    buffer.write(NetworkBuffer.STRING, soundEvent.name());
-                    buffer.write(NetworkBuffer.FLOAT.optional(), soundEvent.range());
-                }
+    @SuppressWarnings("unchecked")
+    NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = NetworkBuffer.Type.tagged(
+            NetworkBuffer.VAR_INT, value -> value instanceof BuiltinSoundEvent builtin ? builtin.id() + 1 : 0,
+            rawId -> {
+                int id = rawId - 1;
+                if (id == -1)
+                    return (NetworkBuffer.Type<SoundEvent>) (NetworkBuffer.Type<?>) NetworkBufferTemplate.template(
+                            NetworkBuffer.KEY, SoundEvent::key,
+                            NetworkBuffer.FLOAT.optional(), CustomSoundEvent::range,
+                            CustomSoundEvent::new);
+                return (NetworkBuffer.Type<SoundEvent>) (NetworkBuffer.Type<?>) NetworkBufferTemplate.template(BuiltinSoundEvent.REGISTRY.get(id));
             }
-        }
-
-        @Override
-        public SoundEvent read(NetworkBuffer buffer) {
-            int id = buffer.read(NetworkBuffer.VAR_INT) - 1;
-            if (id != -1) return BuiltinSoundEvent.REGISTRY.get(id);
-
-            return new CustomSoundEvent(buffer.read(NetworkBuffer.KEY),
-                    buffer.read(NetworkBuffer.FLOAT.optional()));
-        }
-    };
+    );
     Codec<SoundEvent> CODEC = new Codec<>() {
         @Override
         public <D> Result<SoundEvent> decode(Transcoder<D> coder, D value) {
