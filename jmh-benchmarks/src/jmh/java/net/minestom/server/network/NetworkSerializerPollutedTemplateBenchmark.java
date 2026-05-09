@@ -1,8 +1,5 @@
-package net.minestom.server.network.packet;
+package net.minestom.server.network;
 
-import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
@@ -17,13 +14,15 @@ import static net.minestom.server.network.NetworkBuffer.*;
 @State(Scope.Thread)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class NetworkSerializerPollutedTemplateBenchmark {
-
-    private NetworkBuffer.Type<KeepAlivePacket> keepAliveSerializer;
-    private KeepAlivePacket packet;
+    private NetworkBuffer.Type<Packet> packetSerializer;
+    private Packet packet;
     private NetworkBuffer readBuffer;
     private NetworkBuffer writeBuffer;
-
     private Polluter<?>[] polluters;
+
+    private static <T> Polluter<T> polluter(NetworkBuffer.Type<T> type, T value) {
+        return new Polluter<>(type, value);
+    }
 
     @Setup(Level.Trial)
     public void setupTrial() {
@@ -38,14 +37,14 @@ public class NetworkSerializerPollutedTemplateBenchmark {
                 polluter(NetworkBufferTemplate.template(VAR_INT, VarIntPacket::value, VarIntPacket::new), new VarIntPacket(6)),
                 polluter(NetworkBufferTemplate.template(VAR_LONG, VarLongPacket::value, VarLongPacket::new), new VarLongPacket(7L)),
         };
-        keepAliveSerializer = KeepAlivePacket.SERIALIZER;
+        packetSerializer = NetworkBufferTemplate.template(NetworkBuffer.LONG, Packet::id, Packet::new);
     }
 
     @Setup(Level.Iteration)
     public void setupIteration() {
-        packet = new KeepAlivePacket(12451235L);
+        packet = new Packet(12451235L);
         readBuffer = NetworkBuffer.staticBuffer(256);
-        readBuffer.write(keepAliveSerializer, packet);
+        readBuffer.write(packetSerializer, packet);
         writeBuffer = NetworkBuffer.staticBuffer(256);
 
         for (int i = 0; i < 20_000; i++) {
@@ -59,7 +58,7 @@ public class NetworkSerializerPollutedTemplateBenchmark {
     public void writePacket(Blackhole blackhole) {
         var writeBuffer = this.writeBuffer;
         writeBuffer.writeIndex(0);
-        keepAliveSerializer.write(writeBuffer, packet);
+        packetSerializer.write(writeBuffer, packet);
         blackhole.consume(writeBuffer);
     }
 
@@ -67,7 +66,7 @@ public class NetworkSerializerPollutedTemplateBenchmark {
     public void readPacket(Blackhole blackhole) {
         var readBuffer = this.readBuffer;
         readBuffer.readIndex(0);
-        blackhole.consume(keepAliveSerializer.read(readBuffer));
+        blackhole.consume(packetSerializer.read(readBuffer));
     }
 
     @TearDown
@@ -78,8 +77,7 @@ public class NetworkSerializerPollutedTemplateBenchmark {
         blackhole.consume(polluters);
     }
 
-    private static <T> Polluter<T> polluter(NetworkBuffer.Type<T> type, T value) {
-        return new Polluter<>(type, value);
+    record Packet(long id) {
     }
 
     private static final class Polluter<T> {

@@ -1,7 +1,5 @@
-package net.minestom.server.network.packet;
+package net.minestom.server.network;
 
-import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.NetworkBufferTemplate;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
