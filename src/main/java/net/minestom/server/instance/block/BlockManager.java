@@ -63,6 +63,12 @@ public final class BlockManager {
         placementRuleMap.put(id, blockPlacementRule);
     }
 
+    public void registerBlockPlacementRules(final BlockPlacementRule... blockPlacementRules) {
+        for (final BlockPlacementRule blockPlacementRule : blockPlacementRules) {
+            registerBlockPlacementRule(blockPlacementRule);
+        }
+    }
+
     /**
      * Gets the {@link BlockPlacementRule} of the specific block.
      *
