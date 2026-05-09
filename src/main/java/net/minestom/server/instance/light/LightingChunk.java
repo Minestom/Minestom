@@ -218,6 +218,10 @@ public class LightingChunk extends DynamicChunk {
         announceNeighborLoad(Neighbors.EAST);
         announceNeighborLoad(Neighbors.SOUTH);
         announceNeighborLoad(Neighbors.WEST);
+        announceNeighborLoad(Neighbors.NORTH_WEST);
+        announceNeighborLoad(Neighbors.SOUTH_WEST);
+        announceNeighborLoad(Neighbors.NORTH_EAST);
+        announceNeighborLoad(Neighbors.SOUTH_EAST);
     }
 
     private void announceNeighborLoad(Neighbors directionFace) {
@@ -320,7 +324,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     public void scheduleSpecificResend() {
-        resendSpecificAfter.set(1); // Resend after 1 ticks
+        resendSpecificAfter.set(20); // Resend after 1 ticks
         mayRequireSpecificSectionResend = true;
     }
 

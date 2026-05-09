@@ -38,7 +38,7 @@ public final class LightCompute {
      * @param lightPre      ints queue in format: [5 bits 0][2 bit sectionY][2 bit sectionZ][2 bit sectionX][5 bit sectionIdx][4bit light level][4bit y][4bit z][4bit x]
      * @return lighting wrapped in Result
      */
-    static byte[] compute3x3(Palette[] blockPalettes, IntArrayFIFOQueue lightPre) {
+    public static byte[] compute3x3(Palette[] blockPalettes, IntArrayFIFOQueue lightPre) {
         if (lightPre.isEmpty()) return EMPTY_CONTENT;
 
         final byte[][] lightArrays = new byte[27][LIGHT_LENGTH];
@@ -98,9 +98,6 @@ public final class LightCompute {
 
                     final Shape currentShape = currentBlock.registry().occlusionShape();
                     final Shape propagatedShape = propagatedBlock.registry().occlusionShape();
-
-                    if (sectionIdxO != sectionIdx && sectionIdxO == sectionIdx3x3(16, 16, 16))
-                        System.out.println("Cross boundary");
 
                     final boolean airAir = currentBlock.isAir() && propagatedBlock.isAir();
                     if (!airAir && currentShape.isOccluded(propagatedShape, BlockFace.fromDirection(direction)))
@@ -217,7 +214,7 @@ public final class LightCompute {
         return getLight(light, x | (z << 4) | (y << 8));
     }
 
-    static int sectionIdx3x3(int x, int y, int z) {
+    public static int sectionIdx3x3(int x, int y, int z) {
         var sx = x >> 4;
         var sy = y >> 4;
         var sz = z >> 4;

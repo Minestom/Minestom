@@ -1,4 +1,4 @@
-package net.minestom.server.instance.light;
+package net.minestom.server.instance.light.parallel;
 
 import net.minestom.server.instance.palette.Palette;
 

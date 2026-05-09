@@ -12,7 +12,7 @@ import org.jetbrains.annotations.VisibleForTesting;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static net.minestom.server.instance.light.parallel.ParallelLightSection.computeExternal;
 
-final class BlockLightSection {
+public final class BlockLightSection {
     private final ParallelLightSection section;
 
     public BlockLightSection(ParallelLightSection section) {
