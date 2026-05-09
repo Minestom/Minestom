@@ -26,7 +26,7 @@ final class NetworkBufferTemplateImpl {
     private static final ClassDesc CD_METHOD_HANDLES_LOOKUP = ConstantDescs.CD_MethodHandles_Lookup;
     private static final ClassDesc CD_NETWORK_BUFFER = NetworkBuffer.class.describeConstable().orElseThrow();
     private static final ClassDesc CD_TYPE = NetworkBuffer.Type.class.describeConstable().orElseThrow();
-    private static final ClassDesc CD_IMPL_TYPE = NetworkBufferTypeImpl.class.describeConstable().orElseThrow();
+    private static final ClassDesc CD_TEMPLATE_TYPE = NetworkTemplate.class.describeConstable().orElseThrow();
     private static final ClassDesc CD_FUNCTION = Function.class.describeConstable().orElseThrow();
 
     private static final MethodTypeDesc MT_VOID = MethodTypeDesc.of(CD_VOID);
@@ -46,7 +46,8 @@ final class NetworkBufferTemplateImpl {
     private static final String READ = "read";
     private static final String WRITE = "write";
 
-    private NetworkBufferTemplateImpl() {}
+    private NetworkBufferTemplateImpl() {
+    }
 
     // pairs of [Type<T>, Function (getter)] for N fields, up to 20
     // always odd because ends in ctor applicable to N.
@@ -63,11 +64,11 @@ final class NetworkBufferTemplateImpl {
         }
         Objects.requireNonNull(values[values.length - 1], CTOR_NAME);
         try {
-            final ClassDesc classDesc = ClassDesc.of(PACKAGE, "NetworkTemplate");
+            final ClassDesc classDesc = ClassDesc.of(PACKAGE, "NetworkTemplateImpl");
             final byte[] bytes = ClassFile.of().build(classDesc, classBuilder -> {
                 classBuilder.withFlags(CLASS_FLAGS)
                         .withSuperclass(CD_OBJECT)
-                        .withInterfaceSymbols(CD_IMPL_TYPE);
+                        .withInterfaceSymbols(CD_TEMPLATE_TYPE);
 
                 for (int i = 0; i < fieldCount; i++) {
                     classBuilder.withField(typeName(i), CD_TYPE, FIELD_FLAGS);
@@ -90,7 +91,7 @@ final class NetworkBufferTemplateImpl {
             final MethodHandle constructor = lookup.findConstructor(lookup.lookupClass(), MethodType.methodType(void.class));
             return (NetworkBuffer.Type<T>) constructor.invoke();
         } catch (Throwable throwable) {
-            throw new IllegalStateException("Failed to generate network type template", throwable);
+            throw new IllegalStateException("Failed to generate network type template, if this continues to be an issue consider disabling compiled templates by setting the property `minestom.template-compiler` to `false`", throwable);
         }
     }
 
@@ -157,5 +158,8 @@ final class NetworkBufferTemplateImpl {
 
     private static String getterName(int index) {
         return GETTER_PREFIX + (index + 1);
+    }
+
+    public interface NetworkTemplate extends NetworkBuffer.Type<Object> {
     }
 }

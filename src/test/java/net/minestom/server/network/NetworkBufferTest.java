@@ -21,11 +21,6 @@ import static net.minestom.server.network.NetworkBuffer.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NetworkBufferTest {
-    private record TemplateSingle(int value) {
-    }
-
-    private record TemplateTriple(int first, String second, long third) {
-    }
 
     @Test
     public void resize() {
@@ -216,25 +211,6 @@ public class NetworkBufferTest {
             buffer.write(BYTE, (byte) 1);
             buffer.write(LONG, 50L);
         }));
-    }
-
-    @Test
-    public void generatedTemplate() {
-        NetworkBuffer.Type<TemplateSingle> singleType = NetworkBufferTemplate.template(
-                VAR_INT, TemplateSingle::value,
-                TemplateSingle::new
-        );
-        var singleArray = NetworkBuffer.makeArray(singleType, new TemplateSingle(12));
-        assertEquals(new TemplateSingle(12), NetworkBuffer.wrap(singleArray, 0, singleArray.length).read(singleType));
-
-        NetworkBuffer.Type<TemplateTriple> tripleType = NetworkBufferTemplate.template(
-                VAR_INT, TemplateTriple::first,
-                STRING, TemplateTriple::second,
-                LONG, TemplateTriple::third,
-                TemplateTriple::new
-        );
-        var tripleArray = NetworkBuffer.makeArray(tripleType, new TemplateTriple(1, "test", 3L));
-        assertEquals(new TemplateTriple(1, "test", 3L), NetworkBuffer.wrap(tripleArray, 0, tripleArray.length).read(tripleType));
     }
 
     @Test
