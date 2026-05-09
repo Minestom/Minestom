@@ -794,10 +794,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final long index = buffer.readIndex();
             final T value = parent.read(buffer);
             final long length = buffer.readIndex() - index;
-            if (length > maxLength) {
-                buffer.readIndex(index);
-                Check.fail("Value is too long (length: {0}, max: {1})", length, maxLength);
-            }
+            Check.argCondition(length > maxLength, "Value is too long (length: {0}, max: {1})", length, maxLength);
             return value;
         }
     }

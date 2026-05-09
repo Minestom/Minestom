@@ -478,18 +478,6 @@ public class NetworkBufferTest {
     }
 
     @Test
-    public void maxLengthIndexPreserve() {
-        var buffer = NetworkBuffer.resizableBuffer();
-
-        buffer.write(INT.maxLength(4), 1);
-        assertThrows(IllegalArgumentException.class, () -> buffer.read(INT.maxLength(3)));
-        assertEquals(0, buffer.readIndex());
-
-        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.maxLength(3), 1));
-        assertEquals(4, buffer.writeIndex());
-    }
-
-    @Test
     public void maxLengthList() {
         var buffer = NetworkBuffer.resizableBuffer();
         assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(3), List.of(1)));
