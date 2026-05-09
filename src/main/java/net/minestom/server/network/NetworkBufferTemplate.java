@@ -1910,6 +1910,30 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(g6, "g6");
         Objects.requireNonNull(p7, "p7");
         Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(p14, "p14");
+        Objects.requireNonNull(g14, "g14");
+        Objects.requireNonNull(p15, "p15");
+        Objects.requireNonNull(g15, "g15");
+        Objects.requireNonNull(p16, "p16");
+        Objects.requireNonNull(g16, "g16");
+        Objects.requireNonNull(p17, "p17");
+        Objects.requireNonNull(g17, "g17");
+        Objects.requireNonNull(p18, "p18");
+        Objects.requireNonNull(g18, "g18");
+        Objects.requireNonNull(p19, "p19");
+        Objects.requireNonNull(g19, "g19");
         Objects.requireNonNull(ctor, "ctor");
         return new NetworkBufferTypeImpl<>() {
             @Override
@@ -2048,6 +2072,32 @@ public final class NetworkBufferTemplate {
         Objects.requireNonNull(g6, "g6");
         Objects.requireNonNull(p7, "p7");
         Objects.requireNonNull(g7, "g7");
+        Objects.requireNonNull(p8, "p8");
+        Objects.requireNonNull(g8, "g8");
+        Objects.requireNonNull(p9, "p9");
+        Objects.requireNonNull(g9, "g9");
+        Objects.requireNonNull(p10, "p10");
+        Objects.requireNonNull(g10, "g10");
+        Objects.requireNonNull(p11, "p11");
+        Objects.requireNonNull(g11, "g11");
+        Objects.requireNonNull(p12, "p12");
+        Objects.requireNonNull(g12, "g12");
+        Objects.requireNonNull(p13, "p13");
+        Objects.requireNonNull(g13, "g13");
+        Objects.requireNonNull(p14, "p14");
+        Objects.requireNonNull(g14, "g14");
+        Objects.requireNonNull(p15, "p15");
+        Objects.requireNonNull(g15, "g15");
+        Objects.requireNonNull(p16, "p16");
+        Objects.requireNonNull(g16, "g16");
+        Objects.requireNonNull(p17, "p17");
+        Objects.requireNonNull(g17, "g17");
+        Objects.requireNonNull(p18, "p18");
+        Objects.requireNonNull(g18, "g18");
+        Objects.requireNonNull(p19, "p19");
+        Objects.requireNonNull(g19, "g19");
+        Objects.requireNonNull(p20, "p20");
+        Objects.requireNonNull(g20, "g20");
         Objects.requireNonNull(ctor, "ctor");
         return new NetworkBufferTypeImpl<>() {
             @Override
