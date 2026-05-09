@@ -4,21 +4,20 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.BitSet;
+import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.BITSET;
 
 public record FilterMask(Type type, BitSet mask) {
-    @SuppressWarnings("unchecked")
     public static final NetworkBuffer.Type<FilterMask> SERIALIZER = NetworkBuffer.Tagged(
             NetworkBuffer.Enum(Type.class), FilterMask::type,
-            type -> switch (type) {
-                case PASS_THROUGH -> NetworkBufferTemplate.template(new FilterMask(Type.PASS_THROUGH, new BitSet()));
-                case FULLY_FILTERED ->
-                        NetworkBufferTemplate.template(new FilterMask(Type.FULLY_FILTERED, new BitSet()));
-                case PARTIALLY_FILTERED -> (NetworkBuffer.Type<FilterMask>) NetworkBufferTemplate.template(
-                        BITSET, FilterMask::mask,
-                        mask -> new FilterMask(Type.PARTIALLY_FILTERED, mask));
-            }
+            Map.of(
+                    Type.PASS_THROUGH, NetworkBufferTemplate.template(new FilterMask(Type.PASS_THROUGH, new BitSet())),
+                    Type.FULLY_FILTERED, NetworkBufferTemplate.template(new FilterMask(Type.FULLY_FILTERED, new BitSet())),
+                    Type.PARTIALLY_FILTERED, NetworkBufferTemplate.template(
+                            BITSET, FilterMask::mask,
+                            mask -> new FilterMask(Type.PARTIALLY_FILTERED, mask))
+            )
     );
 
     public enum Type {

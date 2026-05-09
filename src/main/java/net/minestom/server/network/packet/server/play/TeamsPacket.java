@@ -11,6 +11,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -21,10 +22,15 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record TeamsPacket(String teamName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_MEMBERS = 16384;
 
-    @SuppressWarnings("unchecked")
     private static final NetworkBuffer.Type<Action> ACTION_NETWORK_TYPE = Tagged(
             NetworkBuffer.BYTE, action -> (byte) action.id(),
-            id -> (NetworkBuffer.Type<Action>) (NetworkBuffer.Type<?>) actionSerializer(Byte.toUnsignedInt(id))
+            Map.of(
+                    (byte) 0, CreateTeamAction.SERIALIZER,
+                    (byte) 1, RemoveTeamAction.SERIALIZER,
+                    (byte) 2, UpdateTeamAction.SERIALIZER,
+                    (byte) 3, AddEntitiesToTeamAction.SERIALIZER,
+                    (byte) 4, RemoveEntitiesToTeamAction.SERIALIZER
+            )
     );
 
     public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -36,17 +42,6 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     @Override
     public Collection<Component> components() {
         return this.action instanceof ComponentHolder<?> holder ? holder.components() : List.of();
-    }
-
-    private static Type<? extends Action> actionSerializer(int id) {
-        return switch (id) {
-            case 0 -> CreateTeamAction.SERIALIZER;
-            case 1 -> RemoveTeamAction.SERIALIZER;
-            case 2 -> UpdateTeamAction.SERIALIZER;
-            case 3 -> AddEntitiesToTeamAction.SERIALIZER;
-            case 4 -> RemoveEntitiesToTeamAction.SERIALIZER;
-            default -> throw new RuntimeException("Unknown action id");
-        };
     }
 
     @Override

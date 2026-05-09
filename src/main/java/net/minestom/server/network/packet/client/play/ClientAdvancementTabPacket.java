@@ -6,6 +6,8 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record ClientAdvancementTabPacket(AdvancementAction action,
@@ -13,11 +15,13 @@ public record ClientAdvancementTabPacket(AdvancementAction action,
     @SuppressWarnings("unchecked")
     public static final NetworkBuffer.Type<ClientAdvancementTabPacket> SERIALIZER = NetworkBuffer.Tagged(
             NetworkBuffer.Enum(AdvancementAction.class), ClientAdvancementTabPacket::action,
-            action -> action == AdvancementAction.OPENED_TAB
-                    ? (NetworkBuffer.Type<ClientAdvancementTabPacket>) (NetworkBuffer.Type<?>) NetworkBufferTemplate.template(
-                    STRING, ClientAdvancementTabPacket::tabIdentifier,
-                    tabIdentifier -> new ClientAdvancementTabPacket(AdvancementAction.OPENED_TAB, tabIdentifier))
-                    : NetworkBufferTemplate.template(new ClientAdvancementTabPacket(action, null))
+            Map.of(
+                    AdvancementAction.OPENED_TAB,
+                    (NetworkBuffer.Type<ClientAdvancementTabPacket>) (NetworkBuffer.Type<?>) NetworkBufferTemplate.template(
+                            STRING, ClientAdvancementTabPacket::tabIdentifier,
+                            tabIdentifier -> new ClientAdvancementTabPacket(AdvancementAction.OPENED_TAB, tabIdentifier))
+            ),
+            NetworkBufferTemplate.template(new ClientAdvancementTabPacket(AdvancementAction.CLOSED_SCREEN, null))
     );
 
     public ClientAdvancementTabPacket {

@@ -118,11 +118,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     @SuppressWarnings("unchecked")
     static <T, D> Type<T> Tagged(Type<D> discriminator, Function<T, D> discriminatorFromValue,
-                                 Function<D, Type<? extends T>> serializerFromDiscriminator) {
-        return discriminator.unionType(
-                d -> (Type<T>) serializerFromDiscriminator.apply(d),
-                discriminatorFromValue
-        );
+                                 Map<D, Type<? extends T>> serializerMap, @Nullable Type<? extends T> fallback) {
+        //noinspection rawtypes
+        Map<D, Type<T>> castedMap = (Map) serializerMap;
+        Type<T> castedFallback = (Type<T>) fallback;
+        return new NetworkBufferTypeImpl.TaggedType<>(discriminator, discriminatorFromValue, castedMap, castedFallback);
+    }
+
+    static <T, D> Type<T> Tagged(Type<D> discriminator, Function<T, D> discriminatorFromValue,
+                                 Map<D, Type<? extends T>> serializerMap) {
+        return Tagged(discriminator, discriminatorFromValue, serializerMap, null);
     }
 
     <T>

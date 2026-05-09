@@ -979,6 +979,30 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record TaggedType<T, D>(
+            Type<D> discriminatorType, Function<T, D> discriminatorFromValue,
+            Map<D, Type<T>> serializerMap, @Nullable Type<T> fallback
+    ) implements NetworkBufferTypeImpl<T> {
+
+        @Override
+        public void write(NetworkBuffer buffer, T value) {
+            final D key = discriminatorFromValue.apply(value);
+            buffer.write(discriminatorType, key);
+            var serializer = serializerMap.getOrDefault(key, fallback);
+            if (serializer == null)
+                throw new UnsupportedOperationException("Unrecognized type: " + key);
+            serializer.write(buffer, value);
+        }
+
+        @Override
+        public T read(NetworkBuffer buffer) {
+            final D key = buffer.read(discriminatorType);
+            var serializer = serializerMap.getOrDefault(key, fallback);
+            if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + key);
+            return serializer.read(buffer);
+        }
+    }
+
     /**
      * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)} & ${@link DataInputStream#readUTF()}. We need the data in the java
      * modified utf-8 format for Component, and I couldnt find a method without creating a new buffer for it.

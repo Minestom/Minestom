@@ -45,8 +45,10 @@ public record PropertiesPredicate(Map<String, ValuePredicate> properties) implem
         @SuppressWarnings("unchecked")
         NetworkBuffer.Type<ValuePredicate> NETWORK_TYPE = NetworkBuffer.Tagged(
                 NetworkBuffer.BOOLEAN, value -> value instanceof Exact,
-                isExact -> isExact ? (NetworkBuffer.Type<ValuePredicate>) (NetworkBuffer.Type<?>) Exact.NETWORK_TYPE
-                        : (NetworkBuffer.Type<ValuePredicate>) (NetworkBuffer.Type<?>) Range.NETWORK_TYPE
+                Map.of(
+                        true, (NetworkBuffer.Type<ValuePredicate>) (NetworkBuffer.Type<?>) Exact.NETWORK_TYPE,
+                        false, (NetworkBuffer.Type<ValuePredicate>) (NetworkBuffer.Type<?>) Range.NETWORK_TYPE
+                )
         );
         Codec<ValuePredicate> CODEC = new Codec<>() {
             @Override

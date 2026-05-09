@@ -20,8 +20,7 @@ import java.util.Collection;
 public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
     @SuppressWarnings("unchecked")
-    NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = NetworkBuffer.Tagged(
-            NetworkBuffer.VAR_INT, value -> value instanceof BuiltinSoundEvent builtin ? builtin.id() + 1 : 0,
+    NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = NetworkBuffer.VAR_INT.unionType(
             rawId -> {
                 int id = rawId - 1;
                 if (id == -1)
@@ -30,7 +29,8 @@ public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permit
                             NetworkBuffer.FLOAT.optional(), CustomSoundEvent::range,
                             CustomSoundEvent::new);
                 return (NetworkBuffer.Type<SoundEvent>) (NetworkBuffer.Type<?>) NetworkBufferTemplate.template(BuiltinSoundEvent.REGISTRY.get(id));
-            }
+            },
+            value -> value instanceof BuiltinSoundEvent builtin ? builtin.id() + 1 : 0
     );
     Codec<SoundEvent> CODEC = new Codec<>() {
         @Override

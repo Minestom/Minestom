@@ -8,6 +8,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Configuration, ServerPacket.Play {
     private static final int MAX_ENTRIES = 100;
@@ -37,7 +38,7 @@ public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Con
         );
         public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = NetworkBuffer.Tagged(
                 NetworkBuffer.BOOLEAN, entry -> entry.knownType != null,
-                isKnown -> isKnown ? KNOWN_SERIALIZER : CUSTOM_SERIALIZER
+                Map.of(true, KNOWN_SERIALIZER, false, CUSTOM_SERIALIZER)
         );
 
         public Entry {
