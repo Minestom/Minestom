@@ -66,9 +66,9 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
             final byte xz = reader.read(BYTE);
             final short y = reader.read(SHORT);
             final BlockEntityType blockEntity = reader.read(BlockEntityType.NETWORK_TYPE);
+            final CompoundBinaryTag nbt = reader.read(NBT_COMPOUND);
             final Block block = Block.fromKey(blockEntity.key());
             if (block == null) continue;
-            final CompoundBinaryTag nbt = reader.read(NBT_COMPOUND);
             final int index = CoordConversion.chunkBlockIndex(xz >> 4, y, xz & 15);
             blockEntities.put(index, block.withNbt(nbt));
         }
