@@ -781,7 +781,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record MaxLength<T>(Type<T> parent, int maxLength) implements NetworkBufferTypeImpl<T> {
+    record MaxLength<T>(Type<T> parent, long maxLength) implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             final long length = parent.sizeOf(value);
