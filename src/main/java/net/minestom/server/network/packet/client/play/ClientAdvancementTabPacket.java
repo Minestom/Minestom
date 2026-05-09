@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 public record ClientAdvancementTabPacket(AdvancementAction action,
                                          @Nullable String tabIdentifier) implements ClientPacket {
     @SuppressWarnings("unchecked")
-    public static final NetworkBuffer.Type<ClientAdvancementTabPacket> SERIALIZER = NetworkBuffer.Type.tagged(
+    public static final NetworkBuffer.Type<ClientAdvancementTabPacket> SERIALIZER = NetworkBuffer.Tagged(
             NetworkBuffer.Enum(AdvancementAction.class), ClientAdvancementTabPacket::action,
             action -> action == AdvancementAction.OPENED_TAB
                     ? (NetworkBuffer.Type<ClientAdvancementTabPacket>) (NetworkBuffer.Type<?>) NetworkBufferTemplate.template(

@@ -25,7 +25,7 @@ public record MessageSignature(byte[] signature) {
             this(packed.id, packed.fullSignature);
         }
 
-        public static final NetworkBuffer.Type<Packed> SERIALIZER = NetworkBuffer.Type.tagged(
+        public static final NetworkBuffer.Type<Packed> SERIALIZER = NetworkBuffer.Tagged(
                 VAR_INT, p -> p.id + 1,
                 rawId -> {
                     int id = rawId - 1;

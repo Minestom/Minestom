@@ -43,7 +43,7 @@ public record PropertiesPredicate(Map<String, ValuePredicate> properties) implem
 
     public sealed interface ValuePredicate extends Predicate<@Nullable String> permits ValuePredicate.Exact, ValuePredicate.Range {
         @SuppressWarnings("unchecked")
-        NetworkBuffer.Type<ValuePredicate> NETWORK_TYPE = NetworkBuffer.Type.tagged(
+        NetworkBuffer.Type<ValuePredicate> NETWORK_TYPE = NetworkBuffer.Tagged(
                 NetworkBuffer.BOOLEAN, value -> value instanceof Exact,
                 isExact -> isExact ? (NetworkBuffer.Type<ValuePredicate>) (NetworkBuffer.Type<?>) Exact.NETWORK_TYPE
                         : (NetworkBuffer.Type<ValuePredicate>) (NetworkBuffer.Type<?>) Range.NETWORK_TYPE

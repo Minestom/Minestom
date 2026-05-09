@@ -20,7 +20,7 @@ import java.util.Collection;
 public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
     @SuppressWarnings("unchecked")
-    NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = NetworkBuffer.Type.tagged(
+    NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = NetworkBuffer.Tagged(
             NetworkBuffer.VAR_INT, value -> value instanceof BuiltinSoundEvent builtin ? builtin.id() + 1 : 0,
             rawId -> {
                 int id = rawId - 1;

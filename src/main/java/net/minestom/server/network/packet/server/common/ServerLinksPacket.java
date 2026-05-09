@@ -35,7 +35,7 @@ public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Con
                 NetworkBuffer.STRING, Entry::link,
                 Entry::new
         );
-        public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = NetworkBuffer.Type.tagged(
+        public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = NetworkBuffer.Tagged(
                 NetworkBuffer.BOOLEAN, entry -> entry.knownType != null,
                 isKnown -> isKnown ? KNOWN_SERIALIZER : CUSTOM_SERIALIZER
         );

@@ -9,7 +9,7 @@ import static net.minestom.server.network.NetworkBuffer.BITSET;
 
 public record FilterMask(Type type, BitSet mask) {
     @SuppressWarnings("unchecked")
-    public static final NetworkBuffer.Type<FilterMask> SERIALIZER = NetworkBuffer.Type.tagged(
+    public static final NetworkBuffer.Type<FilterMask> SERIALIZER = NetworkBuffer.Tagged(
             NetworkBuffer.Enum(Type.class), FilterMask::type,
             type -> switch (type) {
                 case PASS_THROUGH -> NetworkBufferTemplate.template(new FilterMask(Type.PASS_THROUGH, new BitSet()));

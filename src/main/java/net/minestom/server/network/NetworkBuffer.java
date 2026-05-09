@@ -112,6 +112,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.EitherType<>(left, right);
     }
 
+    static <T> Type<T> Recursive(Function<Type<T>, Type<T>> func) {
+        return new NetworkBufferTypeImpl.RecursiveType<>(func).delegate;
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T, D> Type<T> Tagged(Type<D> discriminator, Function<T, D> discriminatorFromValue,
+                                 Function<D, Type<? extends T>> serializerFromDiscriminator) {
+        return discriminator.unionType(
+                d -> (Type<T>) serializerFromDiscriminator.apply(d),
+                discriminatorFromValue
+        );
+    }
+
     <T>
     void write(Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
 
@@ -121,9 +134,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
-    void copyTo(long srcOffset, byte [] dest, long destOffset, long length);
+    void copyTo(long srcOffset, byte[] dest, long destOffset, long length);
 
-    byte [] extractBytes(Consumer<NetworkBuffer> extractor);
+    byte[] extractBytes(Consumer<NetworkBuffer> extractor);
 
     NetworkBuffer clear();
 
@@ -228,18 +241,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
             return new NetworkBufferTypeImpl.LengthPrefixedType<>(this, maxLength);
         }
 
-        static <T> Type<T> recursive(Function<Type<T>, Type<T>> func) {
-            return new NetworkBufferTypeImpl.RecursiveType<>(func).delegate;
-        }
-
-        @SuppressWarnings("unchecked")
-        static <T, D> Type<T> tagged(Type<D> discriminator, Function<T, D> discriminatorFromValue,
-                                     Function<D, Type<? extends T>> serializerFromDiscriminator) {
-            return discriminator.unionType(
-                    d -> (Type<T>) serializerFromDiscriminator.apply(d),
-                    discriminatorFromValue
-            );
-        }
     }
 
     static Builder builder(long size) {
@@ -273,11 +274,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(null);
     }
 
-    static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
         return NetworkBufferImpl.wrap(bytes, readIndex, writeIndex, registries);
     }
 
-    static NetworkBuffer wrap(byte [] bytes, int readIndex, int writeIndex) {
+    static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
         return wrap(bytes, readIndex, writeIndex, null);
     }
 

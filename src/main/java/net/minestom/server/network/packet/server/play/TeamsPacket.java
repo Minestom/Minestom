@@ -22,7 +22,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public static final int MAX_MEMBERS = 16384;
 
     @SuppressWarnings("unchecked")
-    private static final NetworkBuffer.Type<Action> ACTION_NETWORK_TYPE = NetworkBuffer.Type.tagged(
+    private static final NetworkBuffer.Type<Action> ACTION_NETWORK_TYPE = Tagged(
             NetworkBuffer.BYTE, action -> (byte) action.id(),
             id -> (NetworkBuffer.Type<Action>) (NetworkBuffer.Type<?>) actionSerializer(Byte.toUnsignedInt(id))
     );

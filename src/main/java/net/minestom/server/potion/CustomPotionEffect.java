@@ -54,7 +54,7 @@ public record CustomPotionEffect(PotionEffect id, Settings settings) {
             boolean isAmbient, boolean showParticles, boolean showIcon,
             @Nullable Settings hiddenEffect
     ) {
-        public static final NetworkBuffer.Type<Settings> NETWORK_TYPE = NetworkBuffer.Type.recursive(self ->
+        public static final NetworkBuffer.Type<Settings> NETWORK_TYPE = NetworkBuffer.Recursive(self ->
                 NetworkBufferTemplate.template(
                         VAR_INT, Settings::amplifier,
                         VAR_INT, Settings::duration,
