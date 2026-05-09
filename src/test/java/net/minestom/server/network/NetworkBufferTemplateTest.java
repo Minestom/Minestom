@@ -82,8 +82,7 @@ public class NetworkBufferTemplateTest {
                 FLOAT, Mixed::f,
                 DOUBLE, Mixed::d,
                 STRING, Mixed::text,
-                STRING.optional(),
-                Mixed::optionalText,
+                STRING.optional(), Mixed::optionalText,
                 VAR_INT.list(16), Mixed::ints,
                 Mixed::new
         );
@@ -133,6 +132,7 @@ public class NetworkBufferTemplateTest {
         assertEquals("value-1", buffer.read(supplierType));
         assertEquals("value-2", buffer.read(supplierType));
         assertEquals(0, buffer.readIndex());
+        assertEquals(2, calls[0]);
     }
 
     @Test
