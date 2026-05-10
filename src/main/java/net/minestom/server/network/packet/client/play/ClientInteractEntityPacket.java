@@ -11,13 +11,12 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaking) implements ClientPacket {
 
-    @SuppressWarnings("unchecked")
     private static final NetworkBuffer.Type<Type> TYPE_NETWORK_TYPE = Tagged(
             VAR_INT, Type::id,
             Map.of(
-                    0, (NetworkBuffer.Type<Type>) (NetworkBuffer.Type<?>) Interact.SERIALIZER,
-                    1, (NetworkBuffer.Type<Type>) (NetworkBuffer.Type<?>) Attack.SERIALIZER,
-                    2, (NetworkBuffer.Type<Type>) (NetworkBuffer.Type<?>) InteractAt.SERIALIZER
+                    0, Interact.SERIALIZER,
+                    1, Attack.SERIALIZER,
+                    2, InteractAt.SERIALIZER
             )
     );
 

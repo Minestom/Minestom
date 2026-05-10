@@ -7,6 +7,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -42,14 +43,11 @@ public record PropertiesPredicate(Map<String, ValuePredicate> properties) implem
     }
 
     public sealed interface ValuePredicate extends Predicate<@Nullable String> permits ValuePredicate.Exact, ValuePredicate.Range {
-        @SuppressWarnings("unchecked")
-        NetworkBuffer.Type<ValuePredicate> NETWORK_TYPE = NetworkBuffer.Tagged(
-                NetworkBuffer.BOOLEAN, value -> value instanceof Exact,
-                Map.of(
-                        true, (NetworkBuffer.Type<ValuePredicate>) (NetworkBuffer.Type<?>) Exact.NETWORK_TYPE,
-                        false, (NetworkBuffer.Type<ValuePredicate>) (NetworkBuffer.Type<?>) Range.NETWORK_TYPE
-                )
-        );
+        NetworkBuffer.Type<ValuePredicate> NETWORK_TYPE = NetworkBuffer.Either(Exact.NETWORK_TYPE, Range.NETWORK_TYPE)
+                .transform(Either::identity, it -> switch (it) {
+                            case Exact exact -> Either.left(exact);
+                            case Range range -> Either.right(range);
+                });
         Codec<ValuePredicate> CODEC = new Codec<>() {
             @Override
             public <D> Result<ValuePredicate> decode(Transcoder<D> coder, D value) {

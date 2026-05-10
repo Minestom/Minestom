@@ -116,17 +116,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.RecursiveType<>(func).delegate;
     }
 
-    @SuppressWarnings("unchecked")
-    static <T, D> Type<T> Tagged(Type<D> discriminator, Function<T, D> discriminatorFromValue,
-                                 Map<D, Type<? extends T>> serializerMap, @Nullable Type<? extends T> fallback) {
-        //noinspection rawtypes
-        Map<D, Type<T>> castedMap = (Map) serializerMap;
-        Type<T> castedFallback = (Type<T>) fallback;
-        return new NetworkBufferTypeImpl.TaggedType<>(discriminator, discriminatorFromValue, castedMap, castedFallback);
+    static <T, D> Type<T> Tagged(Type<D> discriminator, Function<? super T, ? extends D> discriminatorFromValue,
+                                 Map<? super D, ? extends Type<? extends T>> serializerMap, @Nullable Type<? extends T> fallback) {
+        // Map.copyOf does some trickery with the generic bounds here.
+        return new NetworkBufferTypeImpl.TaggedType<>(discriminator, discriminatorFromValue, Map.copyOf(serializerMap), fallback);
     }
 
-    static <T, D> Type<T> Tagged(Type<D> discriminator, Function<T, D> discriminatorFromValue,
-                                 Map<D, Type<? extends T>> serializerMap) {
+    static <T, D> Type<T> Tagged(Type<D> discriminator, Function<? super T, ? extends D> discriminatorFromValue,
+                                 Map<? super D, ? extends Type<? extends T>> serializerMap) {
         return Tagged(discriminator, discriminatorFromValue, serializerMap, null);
     }
 

@@ -802,12 +802,12 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    static final class RecursiveType<T> implements NetworkBufferTypeImpl<T> {
+    final class RecursiveType<T> implements NetworkBufferTypeImpl<T> {
         final Type<T> delegate;
 
         public RecursiveType(Function<Type<T>, Type<T>> self) {
-            java.util.Objects.requireNonNull(self, "self");
-            this.delegate = java.util.Objects.requireNonNull(self.apply(this), "delegate");
+            Objects.requireNonNull(self, "self");
+            this.delegate = Objects.requireNonNull(self.apply(this), "delegate");
         }
 
         @Override
@@ -980,10 +980,16 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     }
 
     record TaggedType<T, D>(
-            Type<D> discriminatorType, Function<T, D> discriminatorFromValue,
-            Map<D, Type<T>> serializerMap, @Nullable Type<T> fallback
+            Type<D> discriminatorType, Function<? super T, ? extends D> discriminatorFromValue,
+            Map<? super D, Type<? extends T>> serializerMap, @Nullable Type<? extends T> fallback
     ) implements NetworkBufferTypeImpl<T> {
+        public TaggedType {
+            Objects.requireNonNull(discriminatorType, "discriminatorType");
+            Objects.requireNonNull(discriminatorFromValue, "discriminatorFromValue");
+            serializerMap = Map.copyOf(serializerMap);
+        }
 
+        @SuppressWarnings("unchecked") // Likely fine here
         @Override
         public void write(NetworkBuffer buffer, T value) {
             final D key = discriminatorFromValue.apply(value);
@@ -991,7 +997,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             var serializer = serializerMap.getOrDefault(key, fallback);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
-            serializer.write(buffer, value);
+            ((Type<T>) serializer).write(buffer, value);
         }
 
         @Override
