@@ -14,8 +14,8 @@ public record EntityPositionAndRotationPacket(int entityId, short deltaX, short 
             SHORT, EntityPositionAndRotationPacket::deltaX,
             SHORT, EntityPositionAndRotationPacket::deltaY,
             SHORT, EntityPositionAndRotationPacket::deltaZ,
-            BYTE, value -> (byte) (value.yaw * 256 / 360),
-            BYTE, value -> (byte) (value.pitch * 256 / 360),
+            BYTE, value -> (byte) (value.yaw * 256f / 360f),
+            BYTE, value -> (byte) (value.pitch * 256f / 360f),
             BOOLEAN, EntityPositionAndRotationPacket::onGround,
             (entityId, deltaX, deltaY, deltaZ, yaw, pitch, onGround) -> new EntityPositionAndRotationPacket(
                     entityId, deltaX, deltaY, deltaZ,

@@ -24,9 +24,9 @@ public record SpawnEntityPacket(
             DOUBLE, value -> value.position.y(),
             DOUBLE, value -> value.position.z(),
             LP_VECTOR3, SpawnEntityPacket::velocity,
-            BYTE, value -> (byte) (value.position.pitch() * 256 / 360),
-            BYTE, value -> (byte) (value.position.yaw() * 256 / 360),
-            BYTE, value -> (byte) (value.headRot * 256 / 360),
+            BYTE, value -> (byte) (value.position.pitch() * 256f / 360f),
+            BYTE, value -> (byte) (value.position.yaw() * 256f / 360f),
+            BYTE, value -> (byte) (value.headRot * 256f / 360f),
             VAR_INT, SpawnEntityPacket::data,
             (entityId, uuid, type, x, y, z, velocity, pitch, yaw, headRot, data) ->
                     new SpawnEntityPacket(entityId, uuid, type,
