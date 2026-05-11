@@ -252,7 +252,7 @@ public class PlayerIntegrationTest {
     }
 
     @Test
-    public void gameModeTest(Env env) {
+    public void gameModeInfoTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
