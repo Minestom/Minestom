@@ -49,7 +49,7 @@ public class BlockTest {
             assertEquals(possible, block.withProperties(possible.properties()));
         }
 
-        assertEquals(block.withProperty("facing", "north").getProperty("facing"), "north");
+        assertEquals("north", block.withProperty("facing", "north").getProperty("facing"));
         assertNotEquals(block.withProperty("facing", "north"), block.withProperty("facing", "south"));
     }
 

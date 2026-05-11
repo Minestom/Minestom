@@ -137,7 +137,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         private int monsterSpawnBlockLightLimit = 0;
         private Skybox skybox = Skybox.OVERWORLD;
         private CardinalLight cardinalLight = CardinalLight.DEFAULT;
-        private EnvironmentAttributeMap.Builder attributes = EnvironmentAttributeMap.builder();
+        private final EnvironmentAttributeMap.Builder attributes = EnvironmentAttributeMap.builder();
         private RegistryTag<Timeline> timelines = RegistryTag.empty();
 
         private Builder() {

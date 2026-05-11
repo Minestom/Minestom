@@ -163,7 +163,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     static final class Builder implements ItemStack.Builder {
         private Material material;
         private int amount;
-        private DataComponentMap.PatchBuilder components;
+        private final DataComponentMap.PatchBuilder components;
 
         Builder(Material material, int amount, DataComponentMap.PatchBuilder components) {
             this.material = material;
