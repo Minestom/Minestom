@@ -22,4 +22,8 @@ public record ClientChatMessagePacket(String message, long timestamp,
             BYTE, ClientChatMessagePacket::checksum,
             ClientChatMessagePacket::new
     );
+
+    public ClientChatMessagePacket {
+        ackList = (BitSet) ackList.clone();
+    }
 }

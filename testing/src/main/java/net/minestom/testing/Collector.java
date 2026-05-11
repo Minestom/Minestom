@@ -30,6 +30,12 @@ public interface Collector<T> {
         assertEquals(count, elements.size(), "Expected " + count + " element(s), got " + elements.size() + ": " + elements);
     }
 
+    default void assertCount(int count, Predicate<? super T> predicate) {
+        List<T> elements = collect();
+        long matchingCount = elements.stream().filter(predicate).count();
+        assertEquals(count, matchingCount, "Expected " + count + " element(s) matching the predicate, got " + matchingCount + ": " + elements);
+    }
+
     default void assertSingle() {
         assertCount(1);
     }

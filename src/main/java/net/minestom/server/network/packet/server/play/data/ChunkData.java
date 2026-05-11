@@ -15,10 +15,11 @@ import java.util.stream.Collectors;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte [] data,
+public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
                         Map<Integer, Block> blockEntities) {
     public ChunkData {
-        heightmaps = Map.copyOf(heightmaps);
+        heightmaps = Map.copyOf(heightmaps); // TODO deep copy?
+        data = data.clone();
         blockEntities = blockEntities.entrySet()
                 .stream()
                 .filter((entry) -> entry.getValue().registry().isBlockEntity())
@@ -55,20 +56,22 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte [] data,
 
         @Override
         public ChunkData read(NetworkBuffer buffer) {
-            return new ChunkData(buffer.read(HEIGHTMAPS), buffer.read(BYTE_ARRAY),
-                    readBlockEntities(buffer));
+            return new ChunkData(buffer.read(HEIGHTMAPS), buffer.read(BYTE_ARRAY), readBlockEntities(buffer));
         }
     };
 
     private static Map<Integer, Block> readBlockEntities(NetworkBuffer reader) {
-        final Map<Integer, Block> blockEntities = new HashMap<>();
         final int size = reader.read(VAR_INT);
+        final Map<Integer, Block> blockEntities = HashMap.newHashMap(size);
         for (int i = 0; i < size; i++) {
             final byte xz = reader.read(BYTE);
             final short y = reader.read(SHORT);
-            final BlockEntityType blockEntityType = reader.read(BlockEntityType.NETWORK_TYPE);
+            final BlockEntityType blockEntity = reader.read(BlockEntityType.NETWORK_TYPE);
             final CompoundBinaryTag nbt = reader.read(NBT_COMPOUND);
-            // TODO create block object
+            final Block block = Block.fromKey(blockEntity.key());
+            if (block == null) continue;
+            final int index = CoordConversion.chunkBlockIndex(xz >> 4, y, xz & 15);
+            blockEntities.put(index, block.withNbt(nbt));
         }
         return blockEntities;
     }

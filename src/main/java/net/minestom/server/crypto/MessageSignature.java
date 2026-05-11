@@ -4,6 +4,8 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.Arrays;
+
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record MessageSignature(byte[] signature) {
@@ -13,6 +15,7 @@ public record MessageSignature(byte[] signature) {
         if (signature.length != SIGNATURE_BYTE_LENGTH) {
             throw new IllegalArgumentException("Signature must be 256 bytes long");
         }
+        signature = signature.clone();
     }
 
     public static final NetworkBuffer.Type<MessageSignature> SERIALIZER = NetworkBufferTemplate.template(
@@ -35,5 +38,16 @@ public record MessageSignature(byte[] signature) {
                 },
                 p -> p.id + 1
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof MessageSignature(byte[] signature1))) return false;
+        return Arrays.equals(signature(), signature1);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(signature());
     }
 }

@@ -466,6 +466,34 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void maxLength() {
+        var buffer = NetworkBuffer.resizableBuffer();
+
+        buffer.write(BOOLEAN.maxLength(1), true);
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.maxLength(3), 1));
+        buffer.write(INT.maxLength(4), 1);
+
+        assertTrue(buffer.read(BOOLEAN.maxLength(1)));
+        assertEquals(1, buffer.read(INT.maxLength(4)));
+    }
+
+    @Test
+    public void maxLengthList() {
+        var buffer = NetworkBuffer.resizableBuffer();
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(3), List.of(1)));
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(4), List.of(1)));
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(8), List.of(1, 2)));
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(4), List.of(1, 2)));
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(5), List.of(1, 2)));
+
+        buffer.write(INT.list().maxLength(9), List.of(1));
+        buffer.write(INT.list().maxLength(14), List.of(1, 2));
+
+        assertEquals(List.of(1), buffer.read(INT.list().maxLength(9)));
+        assertEquals(List.of(1, 2), buffer.read(INT.list().maxLength(14)));
+    }
+
+    @Test
     public void oomStringRegression() {
         var buffer = NetworkBuffer.resizableBuffer(100);
         buffer.write(VAR_INT, Integer.MAX_VALUE); // String length

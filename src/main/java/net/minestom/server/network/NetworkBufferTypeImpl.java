@@ -781,6 +781,24 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record MaxLength<T>(Type<T> parent, long maxLength) implements NetworkBufferTypeImpl<T> {
+        @Override
+        public void write(NetworkBuffer buffer, T value) {
+            final long length = parent.sizeOf(value);
+            Check.argCondition(length > maxLength, "Value is too long (length: {0}, max: {1})", length, maxLength);
+            buffer.write(parent, value);
+        }
+
+        @Override
+        public T read(NetworkBuffer buffer) {
+            final long index = buffer.readIndex();
+            final T value = parent.read(buffer);
+            final long length = buffer.readIndex() - index;
+            Check.argCondition(length > maxLength, "Value is too long (length: {0}, max: {1})", length, maxLength);
+            return value;
+        }
+    }
+
     final class LazyType<T> implements NetworkBufferTypeImpl<T> {
         private final Supplier<NetworkBuffer.Type<T>> supplier;
         private Type<T> type;
@@ -959,7 +977,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             Function<K, NetworkBuffer.Type<TR>> serializers
     ) implements NetworkBufferTypeImpl<T> {
 
-        @SuppressWarnings("unchecked") // Much nicer than using the correct wildcard type for returns, pretty much ensuring T has subtypes already.
+        @SuppressWarnings("unchecked")
+        // Much nicer than using the correct wildcard type for returns, pretty much ensuring T has subtypes already.
         @Override
         public void write(NetworkBuffer buffer, T value) {
             final K key = keyFunc.apply(value);
