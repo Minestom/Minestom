@@ -105,7 +105,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @return the player linked to the connection
      */
-    public Player getPlayer(PlayerConnection connection) {
+    public @Nullable Player getPlayer(PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
     }
 
