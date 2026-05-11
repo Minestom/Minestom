@@ -194,12 +194,20 @@ final class PaletteImpl implements Palette {
             if (hasPalette()) {
                 final int index = valueToPaletteMap.get(oldValue);
                 if (index == -1) return; // Old value not present in palette
+                final int newIndex = valueToPaletteMap.get(newValue);
                 final boolean countUpdate = newValue == 0 || oldValue == 0;
-                final int count = countUpdate ? count(oldValue) : -1;
-                if (count == 0) return; // No blocks to replace
-                paletteToValueList.set(index, newValue);
-                valueToPaletteMap.remove(oldValue);
-                valueToPaletteMap.put(newValue, index);
+                final int count;
+                if (newIndex == -1) {
+                    count = countUpdate ? countPaletteIndex(index) : -1;
+                    if (count == 0) return; // No blocks to replace
+                    valueToPaletteMap.remove(oldValue);
+                    paletteToValueList.set(index, newValue);
+                    valueToPaletteMap.put(newValue, index);
+                } else {
+                    count = replacePaletteIndex(index, newIndex);
+                    if (count == 0) return; // No blocks to replace
+                    valueToPaletteMap.remove(oldValue);
+                }
                 // Update count
                 if (newValue == 0) {
                     this.count -= count; // Replacing with air
@@ -470,6 +478,28 @@ final class PaletteImpl implements Palette {
                 if (((int) (block & mask)) == paletteIndex) result++;
                 block >>>= bits;
             }
+        }
+        return result;
+    }
+
+    /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
+    int replacePaletteIndex(int oldPaletteIndex, int newPaletteIndex) {
+        final int size = maxSize();
+        final int bits = bitsPerEntry;
+        final int valuesPerLong = 64 / bits;
+        final long mask = (1L << bits) - 1L;
+        int result = 0;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            final int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                final int bitIndex = j * bits;
+                if (((int) (block >>> bitIndex & mask)) == oldPaletteIndex) {
+                    block = block & ~(mask << bitIndex) | ((long) newPaletteIndex << bitIndex);
+                    result++;
+                }
+            }
+            values[i] = block;
         }
         return result;
     }
