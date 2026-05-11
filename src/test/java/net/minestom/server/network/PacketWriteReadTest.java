@@ -123,6 +123,11 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new EntityAttributesPacket(5, List.of()));
         SERVER_PACKETS.add(new EntityRotationPacket(5, 45f, 45f, false));
 
+        //SERVER_PACKETS.add(new ChunkDataPacket(5, 5,
+        //        new ChunkData(Map.of(), new byte[0], Map.of(0, Block.CHEST)),
+        //        new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())
+        //));
+
         final PlayerSkin skin = new PlayerSkin("hh", "hh");
         List<PlayerInfoUpdatePacket.Property> prop = List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature()));
 
