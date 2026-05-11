@@ -331,9 +331,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         for (var player : connectionManager.getOnlinePlayers()) {
             if (player != this) {
                 sendPacket(player.getAddPlayerToList());
-                if (player.displayName != null) {
-                    sendPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, player.infoEntry()));
-                }
             }
         }
 
@@ -1188,7 +1185,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
+        if (isActive()) {
+            PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
+        }
     }
 
     /**
@@ -2293,17 +2292,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Gets the packet to add the player from the tab-list.
+     * Gets the packet to add the player.
      *
      * @return a {@link PlayerInfoUpdatePacket} to add the player
      */
     protected PlayerInfoUpdatePacket getAddPlayerToList() {
-        return new PlayerInfoUpdatePacket(EnumSet.of(PlayerInfoUpdatePacket.Action.ADD_PLAYER, PlayerInfoUpdatePacket.Action.UPDATE_LISTED,
-                PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER), List.of(infoEntry()));
+        return new PlayerInfoUpdatePacket(EnumSet.allOf(PlayerInfoUpdatePacket.Action.class), List.of(infoEntry()));
     }
 
     /**
-     * Gets the packet to remove the player from the tab-list.
+     * Gets the packet to remove the player.
      *
      * @return a {@link PlayerInfoRemovePacket} to remove the player
      */
