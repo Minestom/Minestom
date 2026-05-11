@@ -18,7 +18,6 @@ module net.minestom.server {
     requires org.jctools.core;
     requires jdk.jfr;
     requires java.desktop;
-    requires java.management;
 
     // EXPORTS
     exports net.minestom.server;

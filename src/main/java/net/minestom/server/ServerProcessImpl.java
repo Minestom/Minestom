@@ -31,7 +31,6 @@ import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
@@ -108,7 +107,6 @@ final class ServerProcessImpl implements ServerProcess {
     private final TeamManager team;
     private final GlobalEventHandler eventHandler;
     private final SchedulerManager scheduler;
-    private final BenchmarkManager benchmark;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
     private final ClickCallbackManager clickCallbackManager;
@@ -165,7 +163,6 @@ final class ServerProcessImpl implements ServerProcess {
         this.team = new TeamManager();
         this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
-        this.benchmark = new BenchmarkManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
         this.clickCallbackManager = new ClickCallbackManager();
@@ -337,11 +334,6 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public BenchmarkManager benchmark() {
-        return benchmark;
-    }
-
-    @Override
     public AdvancementManager advancement() {
         return advancement;
     }
@@ -444,7 +436,6 @@ final class ServerProcessImpl implements ServerProcess {
         connection.shutdown();
         server.stop();
         LOGGER.info("Shutting down all thread pools.");
-        benchmark.disable();
         dispatcher.shutdown();
         LOGGER.info("{} server stopped successfully.", brand);
     }
