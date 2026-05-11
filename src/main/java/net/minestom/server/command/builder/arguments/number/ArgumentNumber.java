@@ -102,7 +102,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     /**
-     * Creates the byteflag based on the number's min/max existance.
+     * Creates the byteflag based on the number's min/max existence.
      *
      * @return A byteflag for argument specification.
      */

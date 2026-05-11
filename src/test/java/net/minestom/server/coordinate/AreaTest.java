@@ -597,7 +597,7 @@ public class AreaTest {
                 Area.cuboid(new BlockVec(10, 10, 10), new BlockVec(12, 12, 12)),
                 Area.sphere(new BlockVec(0, 0, 0), 3),
                 Area.line(new BlockVec(14, 0, 0), new BlockVec(34, 0, 0)), // Multi-section line
-                Area.sphere(new BlockVec(8, 8, 8), 2), // Small multi-section sphere
+                Area.sphere(new BlockVec(8, 8, 8), 2), // Small multisection sphere
                 Area.cuboid(new BlockVec(-5, -5, -5), new BlockVec(5, 5, 5)) // Negative coordinates
         );
     }

@@ -119,9 +119,9 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     /**
      * Sets an {@link ItemStack} at the specified slot and send relevant update to the viewer(s).
      *
-     * @param slot      the slot to set the item
-     * @param itemStack the item to set
-     * @param sendPacket whether or not to send packets
+     * @param slot       the slot to set the item
+     * @param itemStack  the item to set
+     * @param sendPacket whether to send packets
      */
     public void setItemStack(int slot, ItemStack itemStack, boolean sendPacket) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize() - 1), // Subtract 1 because MathUtils is <= max, instead of strictly less than
@@ -146,14 +146,14 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     public synchronized <T> T processItemStack(ItemStack itemStack,
-                                                        TransactionType type,
-                                                        TransactionOption<T> option) {
+                                               TransactionType type,
+                                               TransactionOption<T> option) {
         return option.fill(type, this, itemStack);
     }
 
     public synchronized <T> List<T> processItemStacks(List<ItemStack> itemStacks,
-                                                                        TransactionType type,
-                                                                        TransactionOption<T> option) {
+                                                      TransactionType type,
+                                                      TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
         itemStacks.forEach(itemStack -> {
             T transactionResult = processItemStack(itemStack, type, option);
@@ -185,7 +185,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @return the operation results
      */
     public <T> List<T> addItemStacks(List<ItemStack> itemStacks,
-                                                       TransactionOption<T> option) {
+                                     TransactionOption<T> option) {
         return processItemStacks(itemStacks, TransactionType.ADD, option);
     }
 
@@ -206,7 +206,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @return the operation results
      */
     public <T> List<T> takeItemStacks(List<ItemStack> itemStacks,
-                                                        TransactionOption<T> option) {
+                                      TransactionOption<T> option) {
         return processItemStacks(itemStacks, TransactionType.TAKE, option);
     }
 
