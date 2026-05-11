@@ -45,7 +45,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Consumable;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
@@ -441,12 +440,11 @@ public class PlayerInit {
 
         eventHandler.addListener(ServerTickMonitorEvent.class, event -> LAST_TICK.set(event.getTickMonitor()));
 
-        BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             if (LAST_TICK.get() == null || MinecraftServer.getConnectionManager().getOnlinePlayerCount() == 0)
                 return;
 
-            long ramUsage = benchmarkManager.getUsedMemory();
+            long ramUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
             ramUsage /= 1e6; // bytes to MB
 
             TickMonitor tickMonitor = LAST_TICK.get();
@@ -455,8 +453,7 @@ public class PlayerInit {
                     .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms"))
                     .append(Component.newline())
                     .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
-            final Component footer = benchmarkManager.getCpuMonitoringMessage();
-            Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
+            Audiences.players().sendPlayerListHeader(header);
         }).repeat(10, TimeUnit.SERVER_TICK).schedule();
     }
 
