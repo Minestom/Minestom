@@ -27,6 +27,10 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 SlotDisplay.NETWORK_TYPE, CraftingShapeless::craftingStation,
                 CraftingShapeless::new);
 
+        public CraftingShapeless {
+            ingredients = List.copyOf(ingredients);
+        }
+
         @Override
         public Collection<Component> components() {
             final var components = new ArrayList<Component>();

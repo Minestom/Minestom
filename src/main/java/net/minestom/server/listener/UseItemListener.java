@@ -46,7 +46,7 @@ public class UseItemListener {
             useAnimation = ItemAnimation.BLOCK;
         } else if (material == Material.TRIDENT) {
             useItemTime = 72000;
-            useAnimation = ItemAnimation.SPEAR;
+            useAnimation = ItemAnimation.TRIDENT;
         } else if (material == Material.SPYGLASS) {
             useItemTime = 1200;
             useAnimation = ItemAnimation.SPYGLASS;
@@ -63,6 +63,9 @@ public class UseItemListener {
         } else if (consumable != null) {
             useItemTime = consumable.consumeTicks();
             useAnimation = consumable.animation();
+        } else if (itemStack.has(DataComponents.KINETIC_WEAPON)) {
+            useItemTime = 72000;
+            useAnimation = ItemAnimation.SPEAR;
         }
 
         boolean usingMainHand = player.getItemUseHand() == PlayerHand.MAIN && hand == PlayerHand.OFF;

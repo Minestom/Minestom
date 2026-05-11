@@ -304,8 +304,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         final Chunk chunk = getChunk(sectionX, sectionZ);
         if (chunk != null) {
             Section section = chunk.getSection(sectionY);
-            section.skyLight().invalidate();
-            section.blockLight().invalidate();
+            section.invalidate();
             chunk.invalidate();
             EventDispatcher.call(new InstanceSectionInvalidateEvent(this, sectionX, sectionY, sectionZ));
         }

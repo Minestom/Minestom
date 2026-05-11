@@ -20,8 +20,8 @@ public record LightData(
         blockMask = (BitSet) blockMask.clone();
         emptySkyMask = (BitSet) emptySkyMask.clone();
         emptyBlockMask = (BitSet) emptyBlockMask.clone();
-        skyLight = List.copyOf(skyLight);
-        blockLight = List.copyOf(blockLight);
+        skyLight = List.copyOf(skyLight); //TODO deep copy?
+        blockLight = List.copyOf(blockLight); //TODO deep copy?
     }
 
     public static final int MAX_SECTIONS = 4096 / 16;
