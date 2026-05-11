@@ -7,6 +7,7 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.dialog.Dialog;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -19,6 +20,7 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -215,6 +217,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * Gets the chunk view distance of the server.
      * <p>
      * Deprecated in favor of {@link ServerFlag#CHUNK_VIEW_DISTANCE}
+     * Each instance has its own chunk view distance that can be retrieved with {@link Instance#getChunkViewDistance()}.
      *
      * @return the chunk view distance
      */
@@ -227,6 +230,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * Gets the entity view distance of the server.
      * <p>
      * Deprecated in favor of {@link ServerFlag#ENTITY_VIEW_DISTANCE}
+     * Each entity has its own view distance that can be retrieved with {@link Entity#getViewDistance()}.
      *
      * @return the entity view distance
      */

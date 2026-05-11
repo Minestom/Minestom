@@ -1,19 +1,13 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import java.net.SocketAddress;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,7 +20,6 @@ public class EntityTrackerIntegrationTest {
     public void maxDistance(Env env) {
         final Instance instance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = ServerFlag.ENTITY_VIEW_DISTANCE;
 
         final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();
@@ -41,6 +34,8 @@ public class EntityTrackerIntegrationTest {
                 viewersCount.decrementAndGet();
             }
         };
+        final int viewDistanceInChunks = viewer.getViewDistance();
+
         entity.setInstance(instance, spawnPos).join();
         assertEquals(1, viewersCount.get());
         viewer.teleport(new Pos(viewDistanceInChunks * 16 + 15, 41, 0)).join(); // viewer at max chunk range
@@ -52,11 +47,9 @@ public class EntityTrackerIntegrationTest {
     }
 
     @Test
-    public void cornerInstanceSwap(Env env) {
+    public void customEntityDistance(Env env) {
         final Instance instance = env.createFlatInstance();
-        final Instance anotherInstance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = ServerFlag.ENTITY_VIEW_DISTANCE;
 
         final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();
@@ -71,6 +64,79 @@ public class EntityTrackerIntegrationTest {
                 viewersCount.decrementAndGet();
             }
         };
+        int viewDistanceInChunks = 4; // custom view distance
+        viewer.setViewDistance(viewDistanceInChunks);
+
+        entity.setInstance(instance, spawnPos).join();
+        assertEquals(1, viewersCount.get());
+        viewer.teleport(new Pos(viewDistanceInChunks * 16 + 15, 41, 0)).join(); // viewer at max chunk range
+        assertEquals(1, viewersCount.get());
+
+        viewDistanceInChunks--;
+        viewer.setViewDistance(viewDistanceInChunks); // viewer's view distance now no longer encompasses the target
+        assertEquals(0, viewersCount.get());
+
+        viewDistanceInChunks++;
+        viewer.setViewDistance(viewDistanceInChunks); // back to normal
+        assertEquals(1, viewersCount.get());
+    }
+
+    @Test
+    public void customInstanceDistance(Env env) {
+        final Instance instance = env.createFlatInstance();
+        final Pos spawnPos = new Pos(0, 41, 0);
+
+        final Player viewer = env.createPlayer(instance, spawnPos);
+        final AtomicInteger viewersCount = new AtomicInteger();
+        final Entity entity = new Entity(EntityType.ZOMBIE) {
+            @Override
+            public void updateNewViewer(Player player) {
+                viewersCount.incrementAndGet();
+            }
+
+            @Override
+            public void updateOldViewer(Player player) {
+                viewersCount.decrementAndGet();
+            }
+        };
+        int viewDistanceInChunks = 4; // custom instance view distance
+        instance.setEntityViewDistance(viewDistanceInChunks);
+
+        entity.setInstance(instance, spawnPos).join();
+        assertEquals(1, viewersCount.get());
+        viewer.teleport(new Pos(viewDistanceInChunks * 16 + 15, 41, 0)).join(); // viewer at max chunk range
+        assertEquals(1, viewersCount.get());
+
+        viewDistanceInChunks--;
+        instance.setEntityViewDistance(viewDistanceInChunks); // instance view distance now no longer encompasses the target
+        assertEquals(0, viewersCount.get());
+
+        viewDistanceInChunks++;
+        instance.setEntityViewDistance(viewDistanceInChunks); // back to normal
+        assertEquals(1, viewersCount.get());
+    }
+
+    @Test
+    public void cornerInstanceSwap(Env env) {
+        final Instance instance = env.createFlatInstance();
+        final Instance anotherInstance = env.createFlatInstance();
+        final Pos spawnPos = new Pos(0, 41, 0);
+
+        final Player viewer = env.createPlayer(instance, spawnPos);
+        final AtomicInteger viewersCount = new AtomicInteger();
+        final Entity entity = new Entity(EntityType.ZOMBIE) {
+            @Override
+            public void updateNewViewer(Player player) {
+                viewersCount.incrementAndGet();
+            }
+
+            @Override
+            public void updateOldViewer(Player player) {
+                viewersCount.decrementAndGet();
+            }
+        };
+        final int viewDistanceInChunks = viewer.getViewDistance();
+
         entity.setInstance(instance, spawnPos).join();
         assertEquals(1, viewersCount.get());
         viewer.teleport(new Pos(viewDistanceInChunks * 16 + 15, 41, 0)).join(); // viewer at max chunk range
