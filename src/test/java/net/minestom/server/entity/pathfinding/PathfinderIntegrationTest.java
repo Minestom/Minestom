@@ -29,7 +29,7 @@ public class PathfinderIntegrationTest {
      */
     private boolean validateNodes(List<PNode> nodes, Instance instance) {
         if (nodes == null) fail("Path is null");
-        if (nodes.size() == 0) fail("Path is empty");
+        if (nodes.isEmpty()) fail("Path is empty");
 
         nodes.forEach((node) -> {
             if (instance.getBlock(node.blockX(), node.blockY(), node.blockZ()).isSolid()) {

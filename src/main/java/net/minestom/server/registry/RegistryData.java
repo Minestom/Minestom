@@ -856,7 +856,7 @@ public final class RegistryData {
         @Override
         public String toString() {
             AtomicReference<String> string = new AtomicReference<>("{ ");
-            this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object.toString() + "\""));
+            this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object + "\""));
             return string.updateAndGet(s -> s.replaceFirst(" , ", "") + "}");
         }
 

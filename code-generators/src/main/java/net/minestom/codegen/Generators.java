@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public final class Generators {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Usage: <target folder>");
             return;

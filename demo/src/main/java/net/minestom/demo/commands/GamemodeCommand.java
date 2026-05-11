@@ -84,7 +84,7 @@ public class GamemodeCommand extends Command {
      * notifies them (and the sender) in the chat.
      */
     private void executeOthers(CommandSender sender, GameMode mode, List<Entity> entities) {
-        if (entities.size() == 0) {
+        if (entities.isEmpty()) {
             //If there are no players that could be modified, display an error message
             if (sender instanceof Player)
                 sender.sendMessage(Component.translatable("argument.entity.notfound.player", NamedTextColor.RED), MessageType.SYSTEM);

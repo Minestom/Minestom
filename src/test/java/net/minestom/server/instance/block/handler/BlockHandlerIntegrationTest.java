@@ -81,7 +81,7 @@ class BlockHandlerIntegrationTest {
         };
 
         instance.setBlock(blockPosition, Block.STONE.withHandler(handler));
-        var player = env.createPlayer(instance, blockPosition.asPosition());
+        var player = env.createPlayer(instance, blockPosition.asPos());
         player.addPacketToQueue(new ClientPlayerBlockPlacementPacket(PlayerHand.MAIN, blockPosition, BlockFace.TOP, 0, 0, 0, false, false, 1));
         player.interpretPacketQueue(); // Use packets
 

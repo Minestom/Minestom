@@ -239,7 +239,7 @@ public class AreaTest {
         List<Area.Cuboid> splits = sphere.split();
         // A sphere with radius 1 centered at origin will span multiple sections
         // since it includes blocks from (-1,-1,-1) to (1,1,1) range
-        assertTrue(splits.size() > 0);
+        assertTrue(!splits.isEmpty());
 
         // Verify that split covers exactly the sphere blocks
         Set<BlockVec> allSplitBlocks = new HashSet<>();

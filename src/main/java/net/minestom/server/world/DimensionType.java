@@ -16,7 +16,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 /**
- * https://minecraft.wiki/w/Dimension_type
+ * <a href="https://minecraft.wiki/w/Dimension_type">...</a>
  */
 public sealed interface DimensionType extends DimensionTypes permits DimensionTypeImpl {
     int VANILLA_MIN_Y = -64;
