@@ -59,12 +59,12 @@ public final class GeneratorImpl {
 
         final int sectionCount = areaSections.length;
         GenerationUnit[] sectionsArray = new GenerationUnit[sectionCount];
+        final int startSectionX = start.sectionX(), startSectionY = start.sectionY(), startSectionZ = start.sectionZ();
         for (int i = 0; i < sectionCount; i++) {
             GenSection section = areaSections[i];
-            final Vec point = to3D(i, width, height, depth);
-            final int sectionX = (int) point.x() + start.sectionX();
-            final int sectionY = (int) point.y() + start.sectionY();
-            final int sectionZ = (int) point.z() + start.sectionZ();
+            final int sectionX = indexToX(i, width) + startSectionX;
+            final int sectionY = indexToY(i, width, height) + startSectionY;
+            final int sectionZ = indexToZ(i, width, height) + startSectionZ;
             final GenerationUnit sectionUnit = section(biomeRegistry, section, sectionX, sectionY, sectionZ);
             sectionsArray[i] = sectionUnit;
         }
@@ -150,10 +150,9 @@ public final class GeneratorImpl {
                 final int startZ = newMin.sectionZ();
                 for (int i = 0; i < newSections.length; i++) {
                     if (newSections[i] == null) {
-                        final Vec coordinates = to3D(i, newWidth, newHeight, newDepth);
-                        final int newX = coordinates.blockX() + startX;
-                        final int newY = coordinates.blockY() + startY;
-                        final int newZ = coordinates.blockZ() + startZ;
+                        final int newX = indexToX(i, newWidth) + startX;
+                        final int newY = indexToY(i, newWidth, newHeight) + startY;
+                        final int newZ = indexToZ(i, newWidth, newHeight) + startZ;
                         final GenerationUnit unit = section(biomeRegistry, new GenSection(), newX, newY, newZ, true);
                         newSections[i] = unit;
                     }
@@ -173,13 +172,11 @@ public final class GeneratorImpl {
                            List<UnitImpl> forks) implements GenerationUnit {
         @Override
         public GenerationUnit fork(Point start, Point end) {
-            final int minSectionX = floorSection(start.blockX()) / 16;
-            final int minSectionY = floorSection(start.blockY()) / 16;
-            final int minSectionZ = floorSection(start.blockZ()) / 16;
+            final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
+            final int endX = end.blockX(), endY = end.blockY(), endZ = end.blockZ();
 
-            final int maxSectionX = ceilSection(end.blockX()) / 16;
-            final int maxSectionY = ceilSection(end.blockY()) / 16;
-            final int maxSectionZ = ceilSection(end.blockZ()) / 16;
+            final int minSectionX = floorSection(startX) / 16, minSectionY = floorSection(startY) / 16, minSectionZ = floorSection(startZ) / 16;
+            final int maxSectionX = ceilSection(endX) / 16, maxSectionY = ceilSection(endY) / 16, maxSectionZ = ceilSection(endZ) / 16;
 
             final int width = maxSectionX - minSectionX;
             final int height = maxSectionY - minSectionY;
@@ -271,6 +268,7 @@ public final class GeneratorImpl {
 
         @Override
         public void fill(Block block) {
+            this.genSection.specials.clear();
             if (requireCache(block)) {
                 for (int x = 0; x < 16; x++) {
                     for (int y = 0; y < 16; y++) {
@@ -281,6 +279,36 @@ public final class GeneratorImpl {
                 }
             }
             this.genSection.blocks.fill(retrieveBlockId(block));
+        }
+
+        @Override
+        public void fill(Point start, Point end, Block block) {
+            final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
+            final int endX = end.blockX(), endY = end.blockY(), endZ = end.blockZ();
+            final int sectionStartX = this.start.blockX(), sectionStartY = this.start.blockY(), sectionStartZ = this.start.blockZ();
+            final int sectionEndX = this.end.blockX(), sectionEndY = this.end.blockY(), sectionEndZ = this.end.blockZ();
+            if (startX >= sectionStartX && startY >= sectionStartY && startZ >= sectionStartZ &&
+                    endX <= sectionEndX && endY <= sectionEndY && endZ <= sectionEndZ) {
+                fillRelative(startX - sectionStartX, startY - sectionStartY, startZ - sectionStartZ,
+                        endX - sectionStartX, endY - sectionStartY, endZ - sectionStartZ, block);
+            } else {
+                for (int x = startX; x < endX; x++) {
+                    for (int y = startY; y < endY; y++) {
+                        for (int z = startZ; z < endZ; z++) {
+                            setBlock(x, y, z, block);
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void fillHeight(int minHeight, int maxHeight, Block block) {
+            final int sectionStartY = start.blockY(), sectionEndY = end.blockY();
+            final int localMinY = Math.max(minHeight, sectionStartY) - sectionStartY;
+            final int localMaxY = Math.min(maxHeight, sectionEndY) - sectionStartY;
+            if (localMinY >= localMaxY) return;
+            fillRelative(0, localMinY, 0, 16, localMaxY, 16, block);
         }
 
         @Override
@@ -311,6 +339,28 @@ public final class GeneratorImpl {
 
         private boolean requireCache(Block block) {
             return block.hasNbt() || block.handler() != null || block.registry().isBlockEntity();
+        }
+
+        private void fillRelative(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, Block block) {
+            if (minX == 0 && minY == 0 && minZ == 0 && maxX == 16 && maxY == 16 && maxZ == 16) {
+                fill(block);
+                return;
+            }
+            final int stateId = retrieveBlockId(block);
+            final boolean requireCache = requireCache(block);
+            final boolean clearCache = !requireCache && !genSection.specials.isEmpty();
+            for (int x = minX; x < maxX; x++) {
+                for (int y = minY; y < maxY; y++) {
+                    for (int z = minZ; z < maxZ; z++) {
+                        if (requireCache) {
+                            this.genSection.specials.put(chunkBlockIndex(x, y, z), block);
+                        } else if (clearCache) {
+                            this.genSection.specials.remove(chunkBlockIndex(x, y, z));
+                        }
+                        this.genSection.blocks.set(x, y, z, stateId);
+                    }
+                }
+            }
         }
     }
 
@@ -349,24 +399,19 @@ public final class GeneratorImpl {
         public void setAll(Supplier supplier) {
             for (GenerationUnit section : sections) {
                 final Point start = section.absoluteStart();
-                final int startX = start.blockX();
-                final int startY = start.blockY();
-                final int startZ = start.blockZ();
-                section.modifier().setAllRelative((x, y, z) ->
-                        supplier.get(x + startX, y + startY, z + startZ));
+                final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
+                section.modifier().setAllRelative((x, y, z) -> supplier.get(x + startX, y + startY, z + startZ));
             }
         }
 
         @Override
         public void setAllRelative(Supplier supplier) {
             final Point start = this.start;
+            final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
             for (GenerationUnit section : sections) {
                 final Point sectionStart = section.absoluteStart();
-                final int offsetX = sectionStart.blockX() - start.blockX();
-                final int offsetY = sectionStart.blockY() - start.blockY();
-                final int offsetZ = sectionStart.blockZ() - start.blockZ();
-                section.modifier().setAllRelative((x, y, z) ->
-                        supplier.get(x + offsetX, y + offsetY, z + offsetZ));
+                final int offsetX = sectionStart.blockX() - startX, offsetY = sectionStart.blockY() - startY, offsetZ = sectionStart.blockZ() - startZ;
+                section.modifier().setAllRelative((x, y, z) -> supplier.get(x + offsetX, y + offsetY, z + offsetZ));
             }
         }
 
@@ -387,8 +432,12 @@ public final class GeneratorImpl {
         @Override
         public void fillHeight(int minHeight, int maxHeight, Block block) {
             final Vec start = this.start;
+            final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
+            final int endY = end.blockY();
+            minHeight = Math.max(minHeight, startY);
+            maxHeight = Math.min(maxHeight, endY);
+            if (minHeight >= maxHeight) return;
             final int width = this.width, depth = this.depth;
-            final int startX = start.blockX(), startZ = start.blockZ();
             final int minMultiple = floorSection(minHeight);
             final int maxMultiple = ceilSection(maxHeight);
             final boolean startOffset = minMultiple != minHeight;
@@ -435,9 +484,9 @@ public final class GeneratorImpl {
         }
 
         private void checkBorder(int x, int y, int z) {
-            if (x < start.x() || x >= end.x() ||
-                    y < start.y() || y >= end.y() ||
-                    z < start.z() || z >= end.z()) {
+            final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
+            final int endX = end.blockX(), endY = end.blockY(), endZ = end.blockZ();
+            if (x < startX || x >= endX || y < startY || y >= endY || z < startZ || z >= endZ) {
                 final String format = String.format("Invalid coordinates: %d, %d, %d for area %s %s", x, y, z, start, end);
                 throw new IllegalArgumentException(format);
             }
@@ -455,12 +504,11 @@ public final class GeneratorImpl {
         @Override
         default void setAll(Supplier supplier) {
             final Vec start = start(), end = end();
-            final int endX = end.blockX();
-            final int endY = end.blockY();
-            final int endZ = end.blockZ();
-            for (int x = start.blockX(); x < endX; x++) {
-                for (int y = start.blockY(); y < endY; y++) {
-                    for (int z = start.blockZ(); z < endZ; z++) {
+            final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
+            final int endX = end.blockX(), endY = end.blockY(), endZ = end.blockZ();
+            for (int x = startX; x < endX; x++) {
+                for (int y = startY; y < endY; y++) {
+                    for (int z = startZ; z < endZ; z++) {
                         setBlock(x, y, z, supplier.get(x, y, z));
                     }
                 }
@@ -470,9 +518,7 @@ public final class GeneratorImpl {
         @Override
         default void setAllRelative(Supplier supplier) {
             final Vec size = size();
-            final int endX = size.blockX();
-            final int endY = size.blockY();
-            final int endZ = size.blockZ();
+            final int endX = size.blockX(), endY = size.blockY(), endZ = size.blockZ();
             for (int x = 0; x < endX; x++) {
                 for (int y = 0; y < endY; y++) {
                     for (int z = 0; z < endZ; z++) {
@@ -504,8 +550,7 @@ public final class GeneratorImpl {
         default void fillHeight(int minHeight, int maxHeight, Block block) {
             final Vec start = start();
             final Vec end = end();
-            final int startY = start.blockY();
-            final int endY = end.blockY();
+            final int startY = start.blockY(), endY = end.blockY();
             if (startY >= minHeight && endY <= maxHeight) {
                 // Fast path if the unit is fully contained in the height range
                 fill(start, end, block);
@@ -519,9 +564,8 @@ public final class GeneratorImpl {
     private static GenerationUnit findAbsolute(List<GenerationUnit> units, Vec start,
                                                int width, int height, int depth,
                                                int x, int y, int z) {
-        final int sectionX = globalToChunk(x - start.x());
-        final int sectionY = globalToChunk(y - start.y());
-        final int sectionZ = globalToChunk(z - start.z());
+        final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
+        final int sectionX = globalToChunk(x - startX), sectionY = globalToChunk(y - startY), sectionZ = globalToChunk(z - startZ);
         final int index = findIndex(width, height, depth, sectionX, sectionY, sectionZ);
         return units.get(index);
     }
@@ -532,11 +576,15 @@ public final class GeneratorImpl {
         return (z * width * height) + (y * width) + x;
     }
 
-    private static Vec to3D(int idx, int width, int height, int depth) {
-        final int z = idx / (width * height);
-        idx -= (z * width * height);
-        final int y = idx / width;
-        final int x = idx % width;
-        return new Vec(x, y, z);
+    private static int indexToX(int index, int width) {
+        return index % width;
+    }
+
+    private static int indexToY(int index, int width, int height) {
+        return (index / width) % height;
+    }
+
+    private static int indexToZ(int index, int width, int height) {
+        return index / (width * height);
     }
 }

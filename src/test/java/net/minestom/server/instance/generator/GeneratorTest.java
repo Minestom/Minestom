@@ -1,5 +1,6 @@
 package net.minestom.server.instance.generator;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -306,6 +307,34 @@ public class GeneratorTest {
         generator.generate(chunkUnit);
         section.blocks().getAll((x, y, z, value) ->
                 assertEquals(Block.STONE.stateId(), value));
+    }
+
+    @Test
+    public void sectionFillClearsSpecialCache() {
+        GenSection section = new GenSection();
+        var chunkUnit = GeneratorImpl.section(null, section, 0, 0, 0);
+        var special = Block.CHEST.withNbt(CompoundBinaryTag.builder().putString("key", "value").build());
+        chunkUnit.modifier().setRelative(0, 0, 0, special);
+        assertFalse(section.specials().isEmpty());
+
+        chunkUnit.modifier().fill(Block.STONE);
+
+        assertTrue(section.specials().isEmpty());
+        section.blocks().getAll((_, _, _, value) -> assertEquals(Block.STONE.stateId(), value));
+    }
+
+    @Test
+    public void sectionPartialFillClearsSpecialCache() {
+        GenSection section = new GenSection();
+        var chunkUnit = GeneratorImpl.section(null, section, 0, 0, 0);
+        var special = Block.CHEST.withNbt(CompoundBinaryTag.builder().putString("key", "value").build());
+        chunkUnit.modifier().setRelative(0, 1, 0, special);
+        assertFalse(section.specials().isEmpty());
+
+        chunkUnit.modifier().fillHeight(1, 2, Block.STONE);
+
+        assertTrue(section.specials().isEmpty());
+        assertEquals(Block.STONE.stateId(), section.blocks().get(0, 1, 0));
     }
 
     @Test
