@@ -50,8 +50,6 @@ sealed interface Graph permits GraphImpl {
     }
 
     sealed interface Execution extends Predicate<CommandSender> permits GraphImpl.ExecutionImpl {
-        @UnknownNullability CommandExecutor defaultExecutor();
-
         @UnknownNullability CommandExecutor globalListener();
 
         /**

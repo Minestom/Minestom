@@ -83,7 +83,9 @@ final class GraphConverter {
                     redirects.add((graph, root) -> {
                         var sender = player == null ? MinecraftServer.getCommandManager().getConsoleSender() : player;
                         final List<Argument<?>> args = CommandParser.parser().parse(sender, graph, shortcut).args();
-                        final Argument<?> last = args.get(args.size() - 1);
+                        // Shortcut may lead to command "foo" leading to one arg.
+                        // Or it could lead to "foo bar" with two args.
+                        final Argument<?> last = args.get(Math.max(0, args.size() - 2));
                         if (last.allowSpace()) {
                             node.redirectedNode = argToPacketId.get(args.get(args.size()-2));
                         } else {

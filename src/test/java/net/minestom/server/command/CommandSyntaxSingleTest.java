@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
@@ -20,14 +21,14 @@ public class CommandSyntaxSingleTest {
     public void singleInteger() {
         List<Argument<?>> args = List.of(Integer("number"));
         assertSyntax(args, "5", ExpectedExecution.SYNTAX, Map.of("number", 5));
-        assertSyntax(args, "5 5", ExpectedExecution.SYNTAX);
+        assertSyntax(args, "5 5", ExpectedExecution.INVALID);
         assertSyntax(args, "", ExpectedExecution.DEFAULT);
     }
 
     @Test
     public void singleIntegerInteger() {
         List<Argument<?>> args = List.of(Integer("number"), Integer("number2"));
-        assertSyntax(args, "5", ExpectedExecution.DEFAULT);
+        assertSyntax(args, "5", ExpectedExecution.INVALID);
         assertSyntax(args, "5 6", ExpectedExecution.SYNTAX, Map.of("number", 5, "number2", 6));
         assertSyntax(args, "", ExpectedExecution.DEFAULT);
     }
@@ -38,14 +39,17 @@ public class CommandSyntaxSingleTest {
         assertSyntax(args, """
                 "value"
                 """, ExpectedExecution.SYNTAX, Map.of("string", "value"));
-        assertSyntax(args, "5 5", ExpectedExecution.SYNTAX);
+        assertSyntax(args, "5 5", ExpectedExecution.INVALID);
+        assertSyntax(args, """
+                "5 5"
+                """, ExpectedExecution.SYNTAX);
         assertSyntax(args, "", ExpectedExecution.DEFAULT);
     }
 
     @Test
     public void singleStringString() {
         List<Argument<?>> args = List.of(String("string"), String("string2"));
-        assertSyntax(args, "test", ExpectedExecution.DEFAULT);
+        assertSyntax(args, "test", ExpectedExecution.INVALID);
         assertSyntax(args, """
                 "first" "second"
                 """, ExpectedExecution.SYNTAX, Map.of("string", "first", "string2", "second"));
@@ -66,8 +70,8 @@ public class CommandSyntaxSingleTest {
             context.setArg("second", 2, "2");
             assertSyntax(args, "1 2", ExpectedExecution.SYNTAX, Map.of("loop", context));
         }
-        // Incomplete group
-        assertSyntax(args, "1", ExpectedExecution.DEFAULT);
+        // Invalid group
+        assertSyntax(args, "1", ExpectedExecution.INVALID);
     }
 
     @Test
@@ -102,10 +106,11 @@ public class CommandSyntaxSingleTest {
 
             assertSyntax(groupLoop, "1 2 3 4", ExpectedExecution.SYNTAX, Map.of("loop", List.of(context1, context2)));
         }
-        // Incomplete loop
-        assertSyntax(groupLoop, "1", ExpectedExecution.DEFAULT);
-        assertSyntax(groupLoop, "1 2 3", ExpectedExecution.DEFAULT);
-        assertSyntax(groupLoop, "1 2 3 4 5", ExpectedExecution.DEFAULT);
+
+        // Invalid loop
+        assertSyntax(groupLoop, "1", ExpectedExecution.INVALID);
+        assertSyntax(groupLoop, "1 2 3", ExpectedExecution.INVALID);
+        assertSyntax(groupLoop, "1 2 3 4 5", ExpectedExecution.INVALID);
     }
 
     @Test
@@ -138,11 +143,11 @@ public class CommandSyntaxSingleTest {
             var input = context1.getInput() + " " + context2.getInput();
             assertSyntax(groupLoop, input, ExpectedExecution.SYNTAX, Map.of("loop", List.of(context1, context2)));
         }
-        // Incomplete loop
-        assertSyntax(groupLoop, "minecraft:allay", ExpectedExecution.DEFAULT);
-        assertSyntax(groupLoop, "minecraft:allay minecraft:allay", ExpectedExecution.DEFAULT);
-        assertSyntax(groupLoop, "minecraft:stone", ExpectedExecution.DEFAULT);
-        assertSyntax(groupLoop, "minecraft:stone minecraft:stone", ExpectedExecution.DEFAULT);
+        // Invalid loops
+        assertSyntax(groupLoop, "minecraft:allay", ExpectedExecution.INVALID);
+        assertSyntax(groupLoop, "minecraft:allay minecraft:allay", ExpectedExecution.INVALID);
+        assertSyntax(groupLoop, "minecraft:stone", ExpectedExecution.INVALID);
+        assertSyntax(groupLoop, "minecraft:stone minecraft:stone", ExpectedExecution.INVALID);
     }
 
     private static void assertSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution, Map<String, Object> expectedValues) {
@@ -160,7 +165,6 @@ public class CommandSyntaxSingleTest {
                 fail("Multiple execution: " + result.get());
             }
         });
-
         command.addSyntax((sender, context) -> {
             if (!result.compareAndSet(null, ExpectedExecution.SYNTAX)) {
                 fail("Multiple execution: " + result.get());
@@ -169,7 +173,12 @@ public class CommandSyntaxSingleTest {
         }, args.toArray(Argument[]::new));
 
         final String executeString = commandName + " " + input;
-        manager.executeServerCommand(executeString);
+        var commandResult = manager.executeServerCommand(executeString);
+        if (commandResult.getType() == CommandResult.Type.INVALID_SYNTAX) {
+            if (!result.compareAndSet(null, ExpectedExecution.INVALID)) {
+                fail("Multiple execution: " + result.get());
+            }
+        }
         assertEquals(expectedExecution, result.get());
         if (expectedValues != null) {
             assertEquals(expectedValues, values.get());
@@ -182,6 +191,7 @@ public class CommandSyntaxSingleTest {
 
     enum ExpectedExecution {
         DEFAULT,
-        SYNTAX
+        SYNTAX,
+        INVALID
     }
 }
