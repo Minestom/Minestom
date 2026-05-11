@@ -35,7 +35,8 @@ public class ItemDisplayMeta extends AbstractDisplayMeta {
         HEAD,
         GUI,
         GROUND,
-        FIXED;
+        FIXED,
+        ON_SHELF;
 
         private final static DisplayContext[] VALUES = values();
 
