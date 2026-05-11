@@ -4,11 +4,12 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Common command conditions
  */
-public class Conditions {
+public final class Conditions {
     /**
      * Will only execute if all command conditions succeed.
      */
@@ -50,14 +51,14 @@ public class Conditions {
     /**
      * Will succeed if the command sender is a player.
      */
-    public static boolean playerOnly(CommandSender sender, String commandString) {
+    public static boolean playerOnly(CommandSender sender, @Nullable String commandString) {
         return sender instanceof Player;
     }
 
     /**
      * Will succeed if the command sender is the server console.
      */
-    public static boolean consoleOnly(CommandSender sender, String commandString) {
+    public static boolean consoleOnly(CommandSender sender, @Nullable String commandString) {
         return sender instanceof ConsoleSender;
     }
 

@@ -222,7 +222,7 @@ final class EntityView {
             }
         }
 
-        public void updateRule(Predicate<T> predicate) {
+        public void updateRule(@Nullable Predicate<T> predicate) {
             synchronized (mutex) {
                 this.predicate = predicate;
                 updateRule0(predicate);

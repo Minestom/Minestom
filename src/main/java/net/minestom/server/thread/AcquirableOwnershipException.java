@@ -7,7 +7,8 @@ import org.jetbrains.annotations.Nullable;
  * Exception thrown when an acquirable element is accessed without proper ownership.
  */
 public final class AcquirableOwnershipException extends RuntimeException {
-    private final Thread initThread, assignedThread;
+    private final Thread initThread;
+    private final @Nullable Thread assignedThread;
     private final Object element;
 
     @ApiStatus.Internal
