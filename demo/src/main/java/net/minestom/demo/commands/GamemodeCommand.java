@@ -29,12 +29,10 @@ public class GamemodeCommand extends Command {
 
         //GameMode parameter
         ArgumentEnum<GameMode> gamemode = ArgumentType.Enum("gamemode", GameMode.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
-        gamemode.setCallback((sender, exception) -> {
-            sender.sendMessage(
-                    Component.text("Invalid gamemode ", NamedTextColor.RED)
-                            .append(Component.text(exception.getInput(), NamedTextColor.WHITE))
-                            .append(Component.text("!")), MessageType.SYSTEM);
-        });
+        gamemode.setCallback((sender, exception) -> sender.sendMessage(
+                Component.text("Invalid gamemode ", NamedTextColor.RED)
+                        .append(Component.text(exception.getInput(), NamedTextColor.WHITE))
+                        .append(Component.text("!")), MessageType.SYSTEM));
 
         ArgumentEntity player = ArgumentType.Entity("targets").onlyPlayers(true);
 

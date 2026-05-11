@@ -36,9 +36,11 @@ public class UseEntityListener {
             if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) // Can't attack dead entities
                 return;
             EventDispatcher.call(new EntityAttackEvent(player, entity));
-        } else if (type instanceof ClientInteractEntityPacket.InteractAt interactAt) {
-            Point interactPosition = new Vec(interactAt.targetX(), interactAt.targetY(), interactAt.targetZ());
-            EventDispatcher.call(new PlayerEntityInteractEvent(player, entity, interactAt.hand(), interactPosition));
+        } else if (type instanceof ClientInteractEntityPacket.InteractAt(
+                float targetX, float targetY, float targetZ, net.minestom.server.entity.PlayerHand hand
+        )) {
+            Point interactPosition = new Vec(targetX, targetY, targetZ);
+            EventDispatcher.call(new PlayerEntityInteractEvent(player, entity, hand, interactPosition));
         }
     }
 
@@ -61,9 +63,9 @@ public class UseEntityListener {
         final double minZ = entityPos.z() - halfWidth;
         final double maxZ = entityPos.z() + halfWidth;
 
-        final double clampX = Math.max(minX, Math.min(px, maxX));
-        final double clampY = Math.max(minY, Math.min(py, maxY));
-        final double clampZ = Math.max(minZ, Math.min(pz, maxZ));
+        final double clampX = Math.clamp(px, minX, maxX);
+        final double clampY = Math.clamp(py, minY, maxY);
+        final double clampZ = Math.clamp(pz, minZ, maxZ);
 
         final double dx = px - clampX;
         final double dy = py - clampY;

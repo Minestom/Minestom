@@ -51,9 +51,7 @@ public class TranslationIntegrationTest {
 
         // the message should not be changed if translations are enabled.
         // the translation of the message itself will be proceeded in PlayerConnectionImpl class
-        collector.assertSingle(received -> {
-            assertNotEquals(message, received.message());
-        });
+        collector.assertSingle(received -> assertNotEquals(message, received.message()));
     }
 
     @Test
@@ -68,9 +66,7 @@ public class TranslationIntegrationTest {
         final var packet = new SystemChatPacket(message, false);
         PacketSendingUtils.sendGroupedPacket(List.of(player), packet);
 
-        collector.assertSingle(received -> {
-            assertEquals(message, received.message());
-        });
+        collector.assertSingle(received -> assertEquals(message, received.message()));
     }
 
     @Test

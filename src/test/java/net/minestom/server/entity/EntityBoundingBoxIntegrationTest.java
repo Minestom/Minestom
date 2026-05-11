@@ -71,7 +71,7 @@ public class EntityBoundingBoxIntegrationTest {
 
         dropItem(instance, spawnPos.sub(.5));
         listener.followup();
-        entity.update(time += 1_000L);
+        entity.update(time + 1_000L);
     }
 
     private void dropItem(final Instance instance, final Pos position) {

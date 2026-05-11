@@ -10,11 +10,7 @@ public class TestCommand2 extends Command {
         var argA = ArgumentType.String("a");
         var argB = ArgumentType.String("b");
 
-        addSyntax((sender, context) -> {
-            sender.sendMessage("a only");
-        }, argA);
-        addSyntax((sender, context) -> {
-            sender.sendMessage("a and b");
-        }, argB, argA);
+        addSyntax((sender, context) -> sender.sendMessage("a only"), argA);
+        addSyntax((sender, context) -> sender.sendMessage("a and b"), argB, argA);
     }
 }

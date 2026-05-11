@@ -56,12 +56,14 @@ public class SendablePacketTest {
         var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet, 0);
 
         var result = PacketReading.readClient(buffer, ConnectionState.PLAY, false);
-        if (!(result instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(result instanceof PacketReading.Result.Success<ClientPacket>(
+                java.util.List<PacketReading.ParsedPacket<ClientPacket>> packets
+        ))) {
             fail();
             return;
         }
-        assertEquals(1, success.packets().size());
-        ClientPacket readPacket = success.packets().getFirst().packet();
+        assertEquals(1, packets.size());
+        ClientPacket readPacket = packets.getFirst().packet();
         assertEquals(packet, readPacket);
     }
 }
