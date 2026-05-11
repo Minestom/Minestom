@@ -1,13 +1,12 @@
+@SuppressWarnings({"UnstableApiUsage"}) // We are allowed to implement these
 module net.minestom.server {
     requires transitive static org.jetbrains.annotations;  // TODO remove this when jspecify matures.
     requires transitive com.google.gson;
     requires it.unimi.dsi.fastutil;
     requires space.vectrix.flare.fastutil;
     requires jdk.unsupported; // Unsafe
-    requires transitive net.kyori.adventure;
+    requires transitive net.kyori.adventure.api;
     requires transitive net.kyori.adventure.nbt;
-    requires transitive net.kyori.adventure.key;
-    requires transitive net.kyori.examination.api;
     requires net.kyori.adventure.text.logger.slf4j;
     requires net.kyori.adventure.text.serializer.legacy;
     requires net.kyori.adventure.text.serializer.gson;
@@ -182,4 +181,11 @@ module net.minestom.server {
     exports net.minestom.server.world.biome;
     exports net.minestom.server.world.timeline;
 
+    provides net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider with net.minestom.server.adventure.provider.MinestomComponentLoggerProvider;
+    provides net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomAnsiComponentSerializerProvider;
+    provides net.kyori.adventure.text.event.ClickCallback.Provider with net.minestom.server.adventure.provider.MinestomClickCallbackProvider;
+    provides net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomPlainTextComponentSerializerProvider;
+    provides net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomLegacyComponentSerializerProvider;
+    provides net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomGsonComponentSerializerProvider;
+    provides net.kyori.adventure.text.event.DataComponentValueConverterRegistry.Provider with net.minestom.server.adventure.provider.MinestomDataComponentValueConverterProvider;
 }

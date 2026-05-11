@@ -10,26 +10,8 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.registry.RegistryTranscoder;
 
-public interface NbtComponentSerializer extends ComponentSerializer<Component, Component, BinaryTag> {
+public sealed interface NbtComponentSerializer extends ComponentSerializer<Component, Component, BinaryTag> permits NbtComponentSerializerImpl {
     static NbtComponentSerializer nbt() {
         return NbtComponentSerializerImpl.INSTANCE;
-    }
-
-    /**
-     * @deprecated use {@link Codec#COMPONENT_STYLE} instead.
-     */
-    @Deprecated(forRemoval = true)
-    default Style deserializeStyle(BinaryTag tag) {
-        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
-        return Codec.COMPONENT_STYLE.decode(coder, tag).orElseThrow();
-    }
-
-    /**
-     * @deprecated use {@link Codec#COMPONENT_STYLE} instead.
-     */
-    @Deprecated(forRemoval = true)
-    default CompoundBinaryTag serializeStyle(Style style) {
-        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
-        return (CompoundBinaryTag) Codec.COMPONENT_STYLE.encode(coder, style).orElseThrow();
     }
 }
