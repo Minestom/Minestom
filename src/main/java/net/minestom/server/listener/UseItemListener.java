@@ -63,6 +63,9 @@ public class UseItemListener {
         } else if (consumable != null) {
             useItemTime = consumable.consumeTicks();
             useAnimation = consumable.animation();
+        } else if (itemStack.has(DataComponents.KINETIC_WEAPON)) {
+            useItemTime = 72000;
+            useAnimation = ItemAnimation.SPEAR;
         }
 
         boolean usingMainHand = player.getItemUseHand() == PlayerHand.MAIN && hand == PlayerHand.OFF;
