@@ -28,16 +28,19 @@ public record MessageSignature(byte[] signature) {
             this(packed.id, packed.fullSignature);
         }
 
-        public static final NetworkBuffer.Type<Packed> SERIALIZER = VAR_INT.unionType(
-                rawId -> {
-                    int id = rawId - 1;
-                    if (id == -1) return NetworkBufferTemplate.template(
-                            MessageSignature.SERIALIZER, Packed::fullSignature,
-                            sig -> new Packed(-1, sig));
-                    return NetworkBufferTemplate.template(new Packed(id, null));
-                },
-                p -> p.id + 1
-        );
+        public static final NetworkBuffer.Type<Packed> SERIALIZER = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(NetworkBuffer buffer, Packed value) {
+                buffer.write(VAR_INT, value.id + 1);
+                if (value.id == 0) buffer.write(MessageSignature.SERIALIZER, value.fullSignature);
+            }
+
+            @Override
+            public Packed read(NetworkBuffer buffer) {
+                final int id = buffer.read(VAR_INT) - 1;
+                return new Packed(id, id == -1 ? buffer.read(MessageSignature.SERIALIZER) : null);
+            }
+        };
     }
 
     @Override
