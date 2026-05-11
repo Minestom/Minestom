@@ -2,7 +2,10 @@ package net.minestom.codegen;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.palantir.javapoet.*;
+import com.palantir.javapoet.ClassName;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.JavaFile;
+import com.palantir.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
 import java.io.InputStream;
@@ -47,23 +50,14 @@ public record ParticleGenerator(InputStream particleFile,
             final JsonObject value = particleIdObjectEntry.getValue().getAsJsonObject();
             final String namespacedName = namespaceShort(key);
 
-            final ClassName fieldCN;
-            final CodeBlock cast;
-            if (value.get("hasData").getAsBoolean()) {
-                // This particle has data, use the particle implementation class
-                fieldCN = ClassName.get("net.minestom.server.particle", "Particle",
-                        toPascalCase(namespacedName));
-                cast = CodeBlock.of("($T) ", fieldCN);
-            } else {
-                fieldCN = particleCN;
-                cast = CodeBlock.builder().build(); // Empty cast for particles without data
-            }
+            final ClassName fieldCN = value.get("hasData").getAsBoolean()
+                    ? ClassName.get("net.minestom.server.particle", "Particle", toPascalCase(namespacedName))
+                    : particleCN;
 
-            String fieldName = toConstant(key);
-
-            particlesInterface.addField(FieldSpec.builder(fieldCN, fieldName)
+            particlesInterface.addField(FieldSpec.builder(fieldCN, toConstant(key))
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("$L$T.get($S)", cast, particleImplCN, key).build());
+                    .initializer("$T.get($S)", particleImplCN, key)
+                    .build());
         }
 
         writeFiles(JavaFile.builder("net.minestom.server.particle", particlesInterface.build())
