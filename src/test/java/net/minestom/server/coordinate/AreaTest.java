@@ -199,9 +199,10 @@ public class AreaTest {
     public void splitLineSingleSection() {
         Area.Line line = Area.line(new BlockVec(1, 2, 3), new BlockVec(2, 2, 3));
         List<Area.Cuboid> splits = line.split();
-        assertEquals(2, splits.size()); // Now returns individual single-block cuboids
+        assertEquals(1, splits.size());
+        assertEquals(Area.cuboid(new BlockVec(1, 2, 3), new BlockVec(2, 2, 3)), splits.getFirst());
 
-        // Verify all splits are single blocks that match the line
+        // Verify all split blocks match the line
         Set<BlockVec> expectedBlocks = Set.of(new BlockVec(1, 2, 3), new BlockVec(2, 2, 3));
         Set<BlockVec> splitBlocks = new HashSet<>();
         for (Area.Cuboid split : splits) {
@@ -216,9 +217,9 @@ public class AreaTest {
     public void splitLineCrossSection() {
         Area.Line line = Area.line(new BlockVec(15, 0, 0), new BlockVec(17, 0, 0));
         List<Area.Cuboid> splits = line.split();
-        assertEquals(3, splits.size()); // Now returns individual single-block cuboids
+        assertEquals(2, splits.size());
 
-        // Verify all splits are single blocks that match the line
+        // Verify all split blocks match the line
         Set<BlockVec> expectedBlocks = Set.of(
                 new BlockVec(15, 0, 0),
                 new BlockVec(16, 0, 0),
@@ -385,6 +386,80 @@ public class AreaTest {
         assertPoint(new BlockVec(1, 2, 3), bound.max());
     }
 
+    @Test
+    public void containsSingle() {
+        Area.Single single = Area.single(new BlockVec(1, 2, 3));
+
+        assertTrue(single.contains(new BlockVec(1, 2, 3)));
+        assertTrue(single.contains(new Vec(1.9, 2.9, 3.9)));
+        assertFalse(single.contains(new BlockVec(1, 2, 4)));
+    }
+
+    @Test
+    public void containsLine() {
+        Area.Line line = Area.line(new BlockVec(0, 0, 0), new BlockVec(4, 2, 0));
+
+        assertTrue(line.contains(new BlockVec(0, 0, 0)));
+        assertTrue(line.contains(new BlockVec(1, 0, 0)));
+        assertTrue(line.contains(new BlockVec(2, 1, 0)));
+        assertTrue(line.contains(new BlockVec(4, 2, 0)));
+        assertFalse(line.contains(new BlockVec(2, 2, 0)));
+        assertFalse(line.contains(new BlockVec(5, 2, 0)));
+    }
+
+    @Test
+    public void containsCuboid() {
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(-1, 2, 3), new BlockVec(1, 4, 5));
+
+        assertTrue(cuboid.contains(new BlockVec(-1, 2, 3)));
+        assertTrue(cuboid.contains(new BlockVec(0, 3, 4)));
+        assertTrue(cuboid.contains(new BlockVec(1, 4, 5)));
+        assertFalse(cuboid.contains(new BlockVec(2, 4, 5)));
+        assertFalse(cuboid.contains(new BlockVec(1, 5, 5)));
+        assertFalse(cuboid.contains(new BlockVec(1, 4, 6)));
+    }
+
+    @Test
+    public void containsSphere() {
+        Area.Sphere sphere = Area.sphere(new BlockVec(0, 0, 0), 2);
+
+        assertTrue(sphere.contains(new BlockVec(0, 0, 0)));
+        assertTrue(sphere.contains(new BlockVec(2, 0, 0)));
+        assertTrue(sphere.contains(new BlockVec(1, 1, 1)));
+        assertFalse(sphere.contains(new BlockVec(2, 1, 0)));
+        assertFalse(sphere.contains(new BlockVec(0, 0, 3)));
+    }
+
+    @Test
+    public void blockCountSingle() {
+        assertEquals(1, Area.single(new BlockVec(1, 2, 3)).blockCount());
+    }
+
+    @Test
+    public void blockCountLine() {
+        assertEquals(1, Area.line(new BlockVec(1, 2, 3), new BlockVec(1, 2, 3)).blockCount());
+        assertEquals(5, Area.line(new BlockVec(0, 0, 0), new BlockVec(4, 2, 0)).blockCount());
+        assertEquals(6, Area.line(new BlockVec(0, 0, 0), new BlockVec(2, 5, 1)).blockCount());
+    }
+
+    @Test
+    public void blockCountCuboid() {
+        assertEquals(1, Area.cuboid(BlockVec.ZERO, BlockVec.ZERO).blockCount());
+        assertEquals(24, Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(3, 2, 1)).blockCount());
+        assertEquals(27, Area.cube(new BlockVec(0, 0, 0), 2).blockCount());
+    }
+
+    @Test
+    public void blockCountSphere() {
+        Area.Sphere radius0 = Area.sphere(BlockVec.ZERO, 0);
+        Area.Sphere radius1 = Area.sphere(BlockVec.ZERO, 1);
+        Area.Sphere radius2 = Area.sphere(BlockVec.ZERO, 2);
+
+        assertEquals(blocks(radius0).size(), radius0.blockCount());
+        assertEquals(blocks(radius1).size(), radius1.blockCount());
+        assertEquals(blocks(radius2).size(), radius2.blockCount());
+    }
+
     // Additional comprehensive iterator tests
     @Test
     public void lineIteratorEdgeCases() {
@@ -494,31 +569,7 @@ public class AreaTest {
     public void splitSphereFullAndPartialSections() {
         // Large sphere that should have both full and partial sections
         Area.Sphere largeSphere = Area.sphere(new BlockVec(16, 16, 16), 20);
-        List<Area.Cuboid> splits = largeSphere.split();
-
-        // Verify that split covers all sphere blocks
-        Set<BlockVec> allSplitBlocks = new HashSet<>();
-        for (Area.Cuboid split : splits) {
-            for (BlockVec block : split) {
-                allSplitBlocks.add(block);
-            }
-        }
-
-        Set<BlockVec> sphereBlocks = new HashSet<>();
-        for (BlockVec block : largeSphere) {
-            sphereBlocks.add(block);
-        }
-
-        // All sphere blocks should be covered by splits
-        assertTrue(allSplitBlocks.containsAll(sphereBlocks));
-
-        // No extra blocks should be in splits (beyond minimal bounding)
-        for (BlockVec block : allSplitBlocks) {
-            // Check if block is within the sphere's bounding box
-            assertTrue(block.blockX() >= 16 - 20 && block.blockX() <= 16 + 20);
-            assertTrue(block.blockY() >= 16 - 20 && block.blockY() <= 16 + 20);
-            assertTrue(block.blockZ() >= 16 - 20 && block.blockZ() <= 16 + 20);
-        }
+        assertEquals(blocks(largeSphere), splitBlocks(largeSphere));
     }
 
     @Test
@@ -590,6 +641,42 @@ public class AreaTest {
         }
     }
 
+    @Test
+    public void factoryMethodsFloorPointCoordinates() {
+        assertEquals(new BlockVec(1, -2, 3), Area.single(new Vec(1.9, -1.1, 3.0)).point());
+        assertEquals(new BlockVec(1, -2, 3), Area.line(new Vec(1.9, -1.1, 3.0), new Vec(4.2, 5.8, -6.1)).start());
+        assertEquals(new BlockVec(4, 5, -7), Area.line(new Vec(1.9, -1.1, 3.0), new Vec(4.2, 5.8, -6.1)).end());
+        assertEquals(new BlockVec(0, 0, 0), Area.cuboid(new Vec(1.9, 2.9, 3.9), new Vec(0.1, 0.1, 0.1)).min());
+        assertEquals(new BlockVec(1, 2, 3), Area.cuboid(new Vec(1.9, 2.9, 3.9), new Vec(0.1, 0.1, 0.1)).max());
+        assertEquals(new BlockVec(-1, 2, 3), Area.sphere(new Vec(-0.1, 2.9, 3.0), 2).center());
+    }
+
+    @Test
+    public void boxArea() {
+        Area.Cuboid box = Area.box(new BlockVec(10, 10, 10), new Vec(4, 2, 6));
+
+        assertEquals(new BlockVec(8, 9, 7), box.min());
+        assertEquals(new BlockVec(12, 11, 13), box.max());
+        assertEquals(5 * 3 * 7, blocks(box).size());
+    }
+
+    @Test
+    public void negativeSphereRadiusRejected() {
+        assertThrows(IllegalArgumentException.class, () -> Area.sphere(BlockVec.ZERO, -1));
+    }
+
+    @Test
+    public void nullPointsRejected() {
+        assertThrows(NullPointerException.class, () -> Area.single(null));
+        assertThrows(NullPointerException.class, () -> Area.line(null, BlockVec.ZERO));
+        assertThrows(NullPointerException.class, () -> Area.line(BlockVec.ZERO, null));
+        assertThrows(NullPointerException.class, () -> Area.cuboid(null, BlockVec.ZERO));
+        assertThrows(NullPointerException.class, () -> Area.cuboid(BlockVec.ZERO, null));
+        assertThrows(NullPointerException.class, () -> Area.box(null, BlockVec.ONE));
+        assertThrows(NullPointerException.class, () -> Area.box(BlockVec.ZERO, null));
+        assertThrows(NullPointerException.class, () -> Area.sphere(null, 1));
+    }
+
     private static List<Area> areas() {
         return List.of(
                 Area.single(new BlockVec(7, 8, 9)),
@@ -600,5 +687,23 @@ public class AreaTest {
                 Area.sphere(new BlockVec(8, 8, 8), 2), // Small multisection sphere
                 Area.cuboid(new BlockVec(-5, -5, -5), new BlockVec(5, 5, 5)) // Negative coordinates
         );
+    }
+
+    private static Set<BlockVec> blocks(Area area) {
+        Set<BlockVec> blocks = new HashSet<>();
+        for (BlockVec block : area) {
+            blocks.add(block);
+        }
+        return blocks;
+    }
+
+    private static Set<BlockVec> splitBlocks(Area area) {
+        Set<BlockVec> blocks = new HashSet<>();
+        for (Area.Cuboid split : area.split()) {
+            for (BlockVec block : split) {
+                blocks.add(block);
+            }
+        }
+        return blocks;
     }
 }
