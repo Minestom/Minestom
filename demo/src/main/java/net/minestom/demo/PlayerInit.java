@@ -345,7 +345,6 @@ public class PlayerInit {
                     player.setItemInHand(event.getHand(), itemStack.without(DataComponents.CHARGED_PROJECTILES));
                     event.getPlayer().sendMessage("pew pew!");
                     event.setItemUseDuration(0); // Do not start using the item
-                    return;
                 }
             })
             .addListener(PlayerFinishItemUseEvent.class, event -> {
@@ -358,7 +357,6 @@ public class PlayerInit {
                 final ItemStack itemStack = event.getItemStack();
                 if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
                     player.setItemInHand(event.getHand(), itemStack.with(DataComponents.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
-                    return;
                 }
             })
             .addListener(PlayerBlockInteractEvent.class, event -> {
