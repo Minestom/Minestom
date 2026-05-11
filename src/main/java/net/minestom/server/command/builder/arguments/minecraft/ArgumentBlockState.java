@@ -54,7 +54,12 @@ public class ArgumentBlockState extends Argument<Block> {
                 throw new ArgumentSyntaxException("Property list need to end with ]", input, INVALID_PROPERTY);
             // Block state
             final String blockName = input.substring(0, nbtIndex);
-            Block block = Block.fromKey(blockName);
+            Block block;
+            try {
+                block = Block.fromKey(blockName);
+            } catch (InvalidKeyException ignored) {
+                block = null;
+            }
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
 
