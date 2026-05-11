@@ -113,6 +113,17 @@ public class ItemTest {
     }
 
     @Test
+    public void testBuilderImmutableLore(Env env) {
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.text("Hey!"));
+        var itemStack = ItemStack.builder(Material.LAPIS_BLOCK).lore(lore).build();
+        var itemStackLore = itemStack.get(DataComponents.LORE);
+        assertNotNull(itemStackLore);
+        assertEquals(lore, itemStackLore, "Lore list should have the same content");
+        assertThrows(UnsupportedOperationException.class, () -> itemStackLore.add(Component.text("Hey!")), "Should be immutable");
+    }
+
+    @Test
     public void testFromNbt(Env env) {
         var itemNbt = createItem().toItemNBT();
         var item = ItemStack.fromItemNBT(itemNbt);
