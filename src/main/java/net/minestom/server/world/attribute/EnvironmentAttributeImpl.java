@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 
 import java.util.Objects;
 
@@ -13,7 +14,7 @@ record EnvironmentAttributeImpl<T>(
         T defaultValue
 ) implements EnvironmentAttribute<T> {
     public static final DynamicRegistry<EnvironmentAttribute<?>> REGISTRY =
-            DynamicRegistry.create(Key.key("environment_attribute"));
+            DynamicRegistry.create(RegistryKey.unsafeOf("environment_attribute"));
     public static final Codec<EnvironmentAttribute<?>> CODEC = Codec.KEY.transform(
             key -> Objects.requireNonNull(REGISTRY.get(key), () -> "no such environment attribute: " + key),
             EnvironmentAttribute::key);

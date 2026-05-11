@@ -4,27 +4,17 @@ import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
 
 import javax.lang.model.element.Modifier;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.util.Objects;
 
-public record ConstantsGenerator(InputStream constantsFile,
-                                 Path outputFolder) implements MinestomCodeGenerator {
-    public ConstantsGenerator {
-        Objects.requireNonNull(constantsFile, "Constants file cannot be null");
-        Objects.requireNonNull(outputFolder, "Output folder cannot be null");
-    }
+public final class ConstantsGenerator implements MinestomCodeGenerator {
 
     @Override
-    public void generate() {
-        ensureDirectory(outputFolder);
-
-        final ClassName implCN = ClassName.get("net.minestom.server", "MinecraftServer");
+    public void generate(Path outputFolder, CodegenRegistry registry, CodegenValue value) {
+        final ClassName implCN = ClassName.get(value.packageName(), value.typeName());
 
         // Important classes we use alot
-        JsonObject constants = GSON.fromJson(new InputStreamReader(constantsFile), JsonObject.class);
-        ClassName minecraftConstantsCN = ClassName.get("net.minestom.server", "MinecraftConstants");
+        JsonObject constants = GSON.fromJson(registry.resource(value.resource()), JsonObject.class);
+        ClassName minecraftConstantsCN = ClassName.get(value.packageName(), value.generatedName());
         TypeSpec.Builder constantsInterface = TypeSpec.interfaceBuilder(minecraftConstantsCN)
                 .addModifiers(Modifier.SEALED)
                 .addPermittedSubclass(implCN)
@@ -49,7 +39,7 @@ public record ConstantsGenerator(InputStream constantsFile,
         addMajorMinorField(constantsInterface, "DATA_PACK_VERSION", constants.get("datapack").getAsString());
 
         // Write files to outputFolder
-        writeFiles(JavaFile.builder("net.minestom.server", constantsInterface.build())
+        writeFiles(outputFolder, JavaFile.builder(value.packageName(), constantsInterface.build())
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build()

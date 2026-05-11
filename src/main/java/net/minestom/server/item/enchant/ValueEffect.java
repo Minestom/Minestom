@@ -1,11 +1,11 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
 
     @ApiStatus.Internal
     static DynamicRegistry<StructCodec<? extends ValueEffect>> createDefaultRegistry() {
-        final DynamicRegistry<StructCodec<? extends ValueEffect>> registry = DynamicRegistry.create(Key.key("minestom:enchantment_value_effect"));
+        final DynamicRegistry<StructCodec<? extends ValueEffect>> registry = DynamicRegistry.create(RegistryKey.unsafeOf("minestom:enchantment_value_effect"));
         registry.register("add", Add.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("multiply", Multiply.CODEC, DataPack.MINECRAFT_CORE);

@@ -1,12 +1,12 @@
 package net.minestom.server.item.instrument;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
@@ -51,7 +51,7 @@ public sealed interface Instrument extends Holder.Direct<Instrument>, Instrument
      */
     @ApiStatus.Internal
     static DynamicRegistry<Instrument> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("instrument"), REGISTRY_CODEC, RegistryData.Resource.INSTRUMENTS);
+        return DynamicRegistry.create(BuiltinRegistries.INSTRUMENT, REGISTRY_CODEC, RegistryData.Resource.INSTRUMENTS);
     }
 
     SoundEvent soundEvent();

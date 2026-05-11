@@ -1,6 +1,5 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
@@ -8,6 +7,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +37,7 @@ public interface LevelBasedValue {
 
     @ApiStatus.Internal
     static DynamicRegistry<StructCodec<? extends LevelBasedValue>> createDefaultRegistry() {
-        final DynamicRegistry<StructCodec<? extends LevelBasedValue>> registry = DynamicRegistry.create(Key.key("minestom:enchantment_value_effect"));
+        final DynamicRegistry<StructCodec<? extends LevelBasedValue>> registry = DynamicRegistry.create(RegistryKey.unsafeOf("minestom:enchantment_value_effect"));
         // Note that constant is omitted from the registry, it has serialization handled out of band above.
         registry.register("linear", Linear.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("clamped", Clamped.CODEC, DataPack.MINECRAFT_CORE);

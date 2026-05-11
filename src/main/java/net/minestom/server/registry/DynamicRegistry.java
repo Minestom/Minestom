@@ -28,15 +28,15 @@ import java.util.Objects;
 public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRegistryImpl {
 
     @SafeVarargs
-    static <T> DynamicRegistry<T> fromMap(Key key, Map.Entry<Key, T>... entries) {
-        var registry = new DynamicRegistryImpl<T>(key, null);
+    static <T> DynamicRegistry<T> fromMap(RegistryKey<DynamicRegistry<T>> key, Map.Entry<Key, T>... entries) {
+        var registry = new DynamicRegistryImpl<>(key, null);
         for (var entry : entries)
             registry.register(entry.getKey(), entry.getValue(), DataPack.MINESTOM_UNNAMED);
         return registry.compact();
     }
 
     @ApiStatus.Internal
-    static <T> DynamicRegistry<T> create(Key key) {
+    static <T> DynamicRegistry<T> create(RegistryKey<DynamicRegistry<T>> key) {
         return new DynamicRegistryImpl<>(key, null);
     }
 
@@ -46,7 +46,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec) {
+    static <T> DynamicRegistry<T> create(RegistryKey<DynamicRegistry<T>> key, Codec<T> codec) {
         return new DynamicRegistryImpl<>(key, codec);
     }
 
@@ -56,7 +56,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, RegistryData.Resource resource) {
+    static <T> DynamicRegistry<T> create(RegistryKey<DynamicRegistry<T>> key, Codec<T> codec, RegistryData.Resource resource) {
         return create(key, codec, null, resource, null, null);
     }
 
@@ -66,7 +66,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource) {
+    static <T> DynamicRegistry<T> create(RegistryKey<DynamicRegistry<T>> key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource) {
         return create(key, codec, registries, resource, null, null);
     }
 
@@ -76,7 +76,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
+    static <T> DynamicRegistry<T> create(RegistryKey<DynamicRegistry<T>> key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key, codec);
         DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator, Objects.requireNonNullElse(readCodec, codec));
         return registry.compact();
@@ -84,7 +84,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
 
     @ApiStatus.Internal
     static DynamicRegistry<Enchantment> createForEnchantmentsWithSelfReferentialLoadingNightmare(
-            Key key, Codec<Enchantment> codec,
+            RegistryKey<DynamicRegistry<Enchantment>> key, Codec<Enchantment> codec,
             RegistryData.Resource resource, Registries registries
     ) {
         final DynamicRegistryImpl<Enchantment> registry = new DynamicRegistryImpl<>(key, codec);
@@ -99,7 +99,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
 
     @ApiStatus.Internal
     static DynamicRegistry<Dialog> createForDialogWithSelfReferentialLoadingNightmare(
-            Key key, Codec<Dialog> codec,
+            RegistryKey<DynamicRegistry<Dialog>> key, Codec<Dialog> codec,
             RegistryData.Resource resource, Registries registries
     ) {
         final DynamicRegistryImpl<Dialog> registry = new DynamicRegistryImpl<>(key, codec);
@@ -158,6 +158,9 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @throws UnsupportedOperationException If the system property <code>minestom.registry.unsafe-remove</code> is not set to <code>true</code>
      */
     boolean remove(Key key) throws UnsupportedOperationException;
+
+    @Override
+    RegistryKey<DynamicRegistry<T>> registryKey();
 
     /**
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
