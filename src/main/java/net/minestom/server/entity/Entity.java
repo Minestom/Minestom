@@ -1658,7 +1658,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return new EntityMetaDataPacket(getEntityId(), metadata.getEntries());
     }
 
-    private void notifyMetadataChanges(Map<Integer, Metadata.Entry<?>> changes) {
+    // Currently file-private so it can be used in MetadataHolder, planned to be private.
+    void notifyMetadataChanges(Map<Integer, Metadata.Entry<?>> changes) {
         if (!isActive()) return;
         sendPacketToViewersAndSelf(new EntityMetaDataPacket(getEntityId(), changes));
     }

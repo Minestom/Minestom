@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetadataHolderTest {
 
@@ -52,5 +52,12 @@ public class MetadataHolderTest {
         holder.setNotifyAboutChanges(true);
 
         assertTrue(received.isEmpty());
+    }
+
+    @SuppressWarnings({"ConstantConditions", "removal"})
+    @Test
+    public void testNullCtor() {
+        assertDoesNotThrow(() -> new MetadataHolder((Entity) null));
+        assertThrows(NullPointerException.class, () -> new MetadataHolder((Consumer<Map<Integer, Metadata.Entry<?>>>) null));
     }
 }

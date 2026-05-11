@@ -64,8 +64,16 @@ public final class MetadataHolder {
     private volatile boolean notifyAboutChanges = true;
     private final Map<Integer, Metadata.Entry<?>> notNotifiedChanges = new HashMap<>();
 
+    /**
+     * @deprecated Use {@link #MetadataHolder(Consumer)} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public MetadataHolder(@Nullable Entity entity) {
+        this(entity == null ? _ -> {} : entity::notifyMetadataChanges);
+    }
+
     public MetadataHolder(Consumer<Map<Integer, Metadata.Entry<?>>> changesListener) {
-        this.changesListener = changesListener;
+        this.changesListener = Objects.requireNonNull(changesListener, "changesListener");
     }
 
     @SuppressWarnings("unchecked")
