@@ -18,7 +18,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
                         Map<Integer, Block> blockEntities) {
     public ChunkData {
-        heightmaps = Map.copyOf(heightmaps);
+        heightmaps = Map.copyOf(heightmaps); // TODO deep copy?
+        data = data.clone();
         blockEntities = blockEntities.entrySet()
                 .stream()
                 .filter((entry) -> entry.getValue().registry().isBlockEntity())
