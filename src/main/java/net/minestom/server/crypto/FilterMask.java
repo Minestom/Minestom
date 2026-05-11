@@ -1,28 +1,24 @@
 package net.minestom.server.crypto;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.BitSet;
+import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.BITSET;
 
 public record FilterMask(Type type, BitSet mask) {
-    public static final NetworkBuffer.Type<FilterMask> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, FilterMask value) {
-            buffer.write(NetworkBuffer.Enum(Type.class), value.type);
-            if (value.type == Type.PARTIALLY_FILTERED) {
-                buffer.write(BITSET, value.mask);
-            }
-        }
-
-        @Override
-        public FilterMask read(NetworkBuffer buffer) {
-            Type type = buffer.read(NetworkBuffer.Enum(Type.class));
-            BitSet mask = type == Type.PARTIALLY_FILTERED ? buffer.read(BITSET) : new BitSet();
-            return new FilterMask(type, mask);
-        }
-    };
+    public static final NetworkBuffer.Type<FilterMask> SERIALIZER = NetworkBuffer.Tagged(
+            NetworkBuffer.Enum(Type.class), FilterMask::type,
+            Map.of(
+                    Type.PASS_THROUGH, NetworkBufferTemplate.template(new FilterMask(Type.PASS_THROUGH, new BitSet())),
+                    Type.FULLY_FILTERED, NetworkBufferTemplate.template(new FilterMask(Type.FULLY_FILTERED, new BitSet())),
+                    Type.PARTIALLY_FILTERED, NetworkBufferTemplate.template(
+                            BITSET, FilterMask::mask,
+                            mask -> new FilterMask(Type.PARTIALLY_FILTERED, mask))
+            )
+    );
 
     public FilterMask {
         mask = (BitSet) mask.clone();

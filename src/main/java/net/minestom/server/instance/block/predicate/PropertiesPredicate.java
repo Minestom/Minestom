@@ -7,6 +7,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -42,26 +43,11 @@ public record PropertiesPredicate(Map<String, ValuePredicate> properties) implem
     }
 
     public sealed interface ValuePredicate extends Predicate<@Nullable String> permits ValuePredicate.Exact, ValuePredicate.Range {
-        NetworkBuffer.Type<ValuePredicate> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, ValuePredicate value) {
-                switch (value) {
-                    case Exact exact -> {
-                        buffer.write(NetworkBuffer.BOOLEAN, true);
-                        buffer.write(Exact.NETWORK_TYPE, exact);
-                    }
-                    case Range range -> {
-                        buffer.write(NetworkBuffer.BOOLEAN, false);
-                        buffer.write(Range.NETWORK_TYPE, range);
-                    }
-                }
-            }
-
-            @Override
-            public ValuePredicate read(NetworkBuffer buffer) {
-                return buffer.read(NetworkBuffer.BOOLEAN) ? buffer.read(Exact.NETWORK_TYPE) : buffer.read(Range.NETWORK_TYPE);
-            }
-        };
+        NetworkBuffer.Type<ValuePredicate> NETWORK_TYPE = NetworkBuffer.Either(Exact.NETWORK_TYPE, Range.NETWORK_TYPE)
+                .transform(Either::identity, it -> switch (it) {
+                            case Exact exact -> Either.left(exact);
+                            case Range range -> Either.right(range);
+                });
         Codec<ValuePredicate> CODEC = new Codec<>() {
             @Override
             public <D> Result<ValuePredicate> decode(Transcoder<D> coder, D value) {

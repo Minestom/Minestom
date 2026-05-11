@@ -820,6 +820,25 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    final class RecursiveType<T> implements NetworkBufferTypeImpl<T> {
+        final Type<T> delegate;
+
+        public RecursiveType(Function<Type<T>, Type<T>> self) {
+            Objects.requireNonNull(self, "self");
+            this.delegate = Objects.requireNonNull(self.apply(this), "delegate");
+        }
+
+        @Override
+        public void write(NetworkBuffer buffer, T value) {
+            delegate.write(buffer, value);
+        }
+
+        @Override
+        public T read(NetworkBuffer buffer) {
+            return delegate.read(buffer);
+        }
+    }
+
     record TypedNbtType<T>(Codec<T> nbtType) implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
@@ -974,6 +993,36 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public T read(NetworkBuffer buffer) {
             final K key = buffer.read(keyType);
             var serializer = serializers.apply(key);
+            if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + key);
+            return serializer.read(buffer);
+        }
+    }
+
+    record TaggedType<T, D>(
+            Type<D> discriminatorType, Function<? super T, ? extends D> discriminatorFromValue,
+            Map<? super D, Type<? extends T>> serializerMap, @Nullable Type<? extends T> fallback
+    ) implements NetworkBufferTypeImpl<T> {
+        public TaggedType {
+            Objects.requireNonNull(discriminatorType, "discriminatorType");
+            Objects.requireNonNull(discriminatorFromValue, "discriminatorFromValue");
+            serializerMap = Map.copyOf(serializerMap);
+        }
+
+        @SuppressWarnings("unchecked") // Likely fine here
+        @Override
+        public void write(NetworkBuffer buffer, T value) {
+            final D key = discriminatorFromValue.apply(value);
+            buffer.write(discriminatorType, key);
+            var serializer = serializerMap.getOrDefault(key, fallback);
+            if (serializer == null)
+                throw new UnsupportedOperationException("Unrecognized type: " + key);
+            ((Type<T>) serializer).write(buffer, value);
+        }
+
+        @Override
+        public T read(NetworkBuffer buffer) {
+            final D key = buffer.read(discriminatorType);
+            var serializer = serializerMap.getOrDefault(key, fallback);
             if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + key);
             return serializer.read(buffer);
         }

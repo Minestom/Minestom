@@ -5,37 +5,27 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
+import java.util.Map;
+
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientInteractEntityPacket(int targetId, Type type, boolean sneaking) implements ClientPacket {
 
-    public static final NetworkBuffer.Type<ClientInteractEntityPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, ClientInteractEntityPacket value) {
-            buffer.write(VAR_INT, value.targetId);
-            buffer.write(VAR_INT, value.type.id());
-            @SuppressWarnings("unchecked") NetworkBuffer.Type<Type> serializer = (NetworkBuffer.Type<Type>) typeSerializer(value.type.id());
-            buffer.write(serializer, value.type);
-            buffer.write(BOOLEAN, value.sneaking);
-        }
+    private static final NetworkBuffer.Type<Type> TYPE_NETWORK_TYPE = Tagged(
+            VAR_INT, Type::id,
+            Map.of(
+                    0, Interact.SERIALIZER,
+                    1, Attack.SERIALIZER,
+                    2, InteractAt.SERIALIZER
+            )
+    );
 
-        @Override
-        public ClientInteractEntityPacket read(NetworkBuffer buffer) {
-            final int targetId = buffer.read(VAR_INT);
-            final Type type = typeSerializer(buffer.read(VAR_INT)).read(buffer);
-            final boolean sneaking = buffer.read(BOOLEAN);
-            return new ClientInteractEntityPacket(targetId, type, sneaking);
-        }
-    };
-
-    private static NetworkBuffer.Type<? extends Type> typeSerializer(int id) {
-        return switch (id) {
-            case 0 -> Interact.SERIALIZER;
-            case 1 -> Attack.SERIALIZER;
-            case 2 -> InteractAt.SERIALIZER;
-            default -> throw new RuntimeException("Unknown action id");
-        };
-    }
+    public static final NetworkBuffer.Type<ClientInteractEntityPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, ClientInteractEntityPacket::targetId,
+            TYPE_NETWORK_TYPE, ClientInteractEntityPacket::type,
+            BOOLEAN, ClientInteractEntityPacket::sneaking,
+            ClientInteractEntityPacket::new
+    );
 
     public sealed interface Type permits Interact, Attack, InteractAt {
         int id();

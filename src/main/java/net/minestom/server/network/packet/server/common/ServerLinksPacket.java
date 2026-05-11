@@ -4,10 +4,12 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.utils.validate.Check;
+import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 
 public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Configuration, ServerPacket.Play {
     private static final int MAX_ENTRIES = 100;
@@ -24,34 +26,40 @@ public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Con
         this(List.of(entries));
     }
 
-    public record Entry(@Nullable KnownLinkType knownType, @Nullable Component customType, String link) {
-        public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, Entry value) {
-                buffer.write(NetworkBuffer.BOOLEAN, value.knownType != null);
-                if (value.knownType != null) {
-                    buffer.write(KnownLinkType.NETWORK_TYPE, value.knownType);
-                } else {
-                    assert value.customType != null;
-                    buffer.write(NetworkBuffer.COMPONENT, value.customType);
-                }
-                buffer.write(NetworkBuffer.STRING, value.link);
-            }
-
-            @Override
-            public Entry read(NetworkBuffer buffer) {
-                boolean known = buffer.read(NetworkBuffer.BOOLEAN);
-                if (known) {
-                    return new Entry(buffer.read(KnownLinkType.NETWORK_TYPE), buffer.read(NetworkBuffer.STRING));
-                } else {
-                    return new Entry(buffer.read(NetworkBuffer.COMPONENT), buffer.read(NetworkBuffer.STRING));
-                }
-            }
-        };
+    public record Entry(Either<KnownLinkType, Component> linkType, String link) {
+        public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = NetworkBufferTemplate.template(
+                NetworkBuffer.Either(KnownLinkType.NETWORK_TYPE, NetworkBuffer.COMPONENT), Entry::linkType,
+                NetworkBuffer.STRING, Entry::link,
+                Entry::new
+        );
 
         public Entry {
-            Check.argCondition(knownType == null && customType == null, "One of knownType and customType must be present");
-            Check.argCondition(knownType != null && customType != null, "Only one of knownType and customType may be present");
+            Objects.requireNonNull(linkType, "linkType");
+            Objects.requireNonNull(link, "link");
+        }
+
+        /**
+         * @deprecated Use {@link #Entry(KnownLinkType, String)} or {@link #Entry(Component, String)} instead.
+         */
+        @Deprecated(forRemoval = true)
+        public Entry(@Nullable KnownLinkType knownType, @Nullable Component customType, String link) {
+            this(knownType != null ? Either.left(knownType) : Either.right(customType), link);
+        }
+
+        /**
+         * @deprecated Use {@link #linkType()} instead.
+         */
+        @Deprecated(forRemoval = true)
+        public @Nullable KnownLinkType knownType() {
+            return linkType.unify(Function.identity(), _ -> null);
+        }
+
+        /**
+         * @deprecated Use {@link #linkType()} instead.
+         */
+        @Deprecated(forRemoval = true)
+        public @Nullable Component customType() {
+            return linkType.unify(_ -> null, Function.identity());
         }
 
         public Entry(KnownLinkType type, String link) {
