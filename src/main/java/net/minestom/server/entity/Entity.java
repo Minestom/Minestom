@@ -186,7 +186,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
     private long nextSynchronizationTick = synchronizationTicks;
 
-    protected MetadataHolder metadata = new MetadataHolder(this);
+    protected MetadataHolder metadata = new MetadataHolder(this::notifyMetadataChanges);
     protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
@@ -589,7 +589,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public synchronized void switchEntityType(EntityType entityType) {
         this.entityType = entityType;
-        this.metadata = new MetadataHolder(this);
+        this.metadata = new MetadataHolder(this::notifyMetadataChanges);
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
         final RegistryData.EntityEntry registry = entityType.registry();
@@ -1656,6 +1656,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public EntityMetaDataPacket getMetadataPacket() {
         return new EntityMetaDataPacket(getEntityId(), metadata.getEntries());
+    }
+
+    // Currently file-private so it can be used in MetadataHolder, planned to be private.
+    void notifyMetadataChanges(Map<Integer, Metadata.Entry<?>> changes) {
+        if (!isActive()) return;
+        sendPacketToViewersAndSelf(new EntityMetaDataPacket(getEntityId(), changes));
     }
 
     /**
