@@ -37,6 +37,11 @@ public final class Section {
         this.biomePalette.fill(0);
     }
 
+    public void invalidate() {
+        this.skyLight.invalidate();
+        this.blockLight.invalidate();
+    }
+
     @Override
     public Section clone() {
         final Light skyLight = Light.sky();

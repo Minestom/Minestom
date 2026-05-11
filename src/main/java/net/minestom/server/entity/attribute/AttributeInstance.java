@@ -3,6 +3,7 @@ package net.minestom.server.entity.attribute;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -16,20 +17,12 @@ import java.util.function.Consumer;
  * entity to modify its attributes).
  */
 public final class AttributeInstance {
-    public static final NetworkBuffer.Type<AttributeInstance> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, AttributeInstance value) {
-            buffer.write(Attribute.NETWORK_TYPE, value.attribute());
-            buffer.write(NetworkBuffer.DOUBLE, value.getBaseValue());
-            buffer.write(AttributeModifier.NETWORK_TYPE.list(Short.MAX_VALUE), List.copyOf(value.modifiers()));
-        }
-
-        @Override
-        public AttributeInstance read(NetworkBuffer buffer) {
-            return new AttributeInstance(buffer.read(Attribute.NETWORK_TYPE), buffer.read(NetworkBuffer.DOUBLE),
-                    buffer.read(AttributeModifier.NETWORK_TYPE.list(Short.MAX_VALUE)), null);
-        }
-    };
+    public static final NetworkBuffer.Type<AttributeInstance> NETWORK_TYPE = NetworkBufferTemplate.template(
+            Attribute.NETWORK_TYPE, AttributeInstance::attribute,
+            NetworkBuffer.DOUBLE, AttributeInstance::getBaseValue,
+            AttributeModifier.NETWORK_TYPE.list(Short.MAX_VALUE), value -> List.copyOf(value.modifiers()),
+            (attribute, baseValue, modifiers) -> new AttributeInstance(attribute, baseValue, modifiers, null)
+    );
 
     private final Attribute attribute;
     private final Map<Key, AttributeModifier> modifiers;
