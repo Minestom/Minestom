@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -33,11 +34,11 @@ public class UseEntityListener {
 
         ClientInteractEntityPacket.Type type = packet.type();
         if (type instanceof ClientInteractEntityPacket.Attack) {
-            if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) // Can't attack dead entities
+            if (entity instanceof LivingEntity livingEntity && livingEntity.isDead()) // Can't attack dead entities
                 return;
             EventDispatcher.call(new EntityAttackEvent(player, entity));
         } else if (type instanceof ClientInteractEntityPacket.InteractAt(
-                float targetX, float targetY, float targetZ, net.minestom.server.entity.PlayerHand hand
+                float targetX, float targetY, float targetZ, PlayerHand hand
         )) {
             Point interactPosition = new Vec(targetX, targetY, targetZ);
             EventDispatcher.call(new PlayerEntityInteractEvent(player, entity, hand, interactPosition));
