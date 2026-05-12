@@ -326,6 +326,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     @ApiStatus.Experimental
     public final void lockWriteLock() {
+        assert holdsWriteLock() || lock.getReadHoldCount() == 0 : "Cannot acquire write-lock while holding read-lock for chunk " + chunkX + "," + chunkZ;
         lock.writeLock().lock();
     }
 

@@ -319,6 +319,7 @@ public class InstanceContainer extends Instance {
                 runnable.run();
                 future.complete(null);
             } catch (Throwable e) {
+                future.completeExceptionally(e);
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         });
@@ -345,10 +346,10 @@ public class InstanceContainer extends Instance {
             cacheChunk(chunk);
             chunk.onLoad();
 
-            EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
             final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
             assert future == completableFuture : "Invalid future: " + future;
             completableFuture.complete(chunk);
+            EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
         };
         Supplier<Chunk> loaderSupplier = () -> {
             var chunkLoading = EventsJFR.newChunkLoading(getUuid(), loader.getClass(), chunkX, chunkZ);
@@ -364,15 +365,27 @@ public class InstanceContainer extends Instance {
                     final Chunk chunk = loaderSupplier.get();
                     generate.accept(chunk);
                 } catch (Throwable e) {
+                    this.loadingChunks.remove(index, completableFuture);
+                    completableFuture.completeExceptionally(e);
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             });
         } else {
-            final Chunk chunk = loaderSupplier.get();
+            final Chunk chunk;
+            try {
+                chunk = loaderSupplier.get();
+            } catch (Throwable e) {
+                this.loadingChunks.remove(index, completableFuture);
+                completableFuture.completeExceptionally(e);
+                MinecraftServer.getExceptionManager().handleException(e);
+                return completableFuture;
+            }
             Thread.startVirtualThread(() -> {
                 try {
                     generate.accept(chunk);
                 } catch (Throwable e) {
+                    this.loadingChunks.remove(index, completableFuture);
+                    completableFuture.completeExceptionally(e);
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             });
@@ -634,16 +647,21 @@ public class InstanceContainer extends Instance {
     public CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         Thread.startVirtualThread(() -> {
-            Chunk chunk = loadChunk(chunkX, chunkZ).join();
-            chunk.lockWriteLock();
             try {
-                generateChunk(chunk, generator);
-                chunk.invalidate();
-            } finally {
-                chunk.unlockWriteLock();
+                Chunk chunk = loadChunk(chunkX, chunkZ).join();
+                chunk.lockWriteLock();
+                try {
+                    generateChunk(chunk, generator);
+                    chunk.invalidate();
+                } finally {
+                    chunk.unlockWriteLock();
+                }
+                chunk.sendChunk();
+                future.complete(null);
+            } catch (Throwable e) {
+                future.completeExceptionally(e);
+                MinecraftServer.getExceptionManager().handleException(e);
             }
-            chunk.sendChunk();
-            future.complete(null);
         });
         return future;
     }
