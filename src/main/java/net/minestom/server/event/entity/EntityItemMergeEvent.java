@@ -9,6 +9,7 @@ import net.minestom.server.item.ItemStack;
 /**
  * Called when two {@link ItemEntity} are merging their {@link ItemStack} together to form a sole entity.
  */
+@Deprecated
 public class EntityItemMergeEvent implements EntityInstanceEvent, CancellableEvent {
 
     private final Entity entity;

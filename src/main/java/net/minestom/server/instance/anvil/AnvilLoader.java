@@ -42,16 +42,16 @@ import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
 public class AnvilLoader implements ChunkLoader {
-    private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
-    private final static int PLAINS_ID = BIOME_REGISTRY.getId(Biome.PLAINS);
+    private static final int PLAINS_ID = BIOME_REGISTRY.getId(Biome.PLAINS);
     private static final CompoundBinaryTag[] BLOCK_STATE_ID_2_OBJECT_CACHE = new CompoundBinaryTag[Block.statesCount()];
 
     private final ReentrantLock fileCreationLock = new ReentrantLock();
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
     private final Path path;
-    private final Path levelPath;
-    private final Path regionPath;
+    protected final Path levelPath;
+    protected final Path regionPath;
 
     /**
      * Represents the chunks currently loaded per region. Used to determine when a region file can be unloaded.
