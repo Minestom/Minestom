@@ -211,6 +211,12 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                     }
                     default -> throw new UnsupportedOperationException("Unknown object contents: " + object.contents());
                 }
+                var fallback = object.fallback();
+                if (fallback != null) {
+                    buffer.write(BYTE, TAG_STRING);
+                    buffer.write(STRING_IO_UTF8, "fallback");
+                    writeInnerComponent(buffer, fallback);
+                }
             }
             default -> throw new UnsupportedOperationException("Unsupported component type: " + component.getClass());
         }
