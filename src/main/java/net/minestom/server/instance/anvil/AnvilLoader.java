@@ -49,7 +49,7 @@ public class AnvilLoader implements ChunkLoader {
 
     private final ReentrantLock fileCreationLock = new ReentrantLock();
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
-    private final Path path;
+    protected final Path path;
     protected final Path levelPath;
     protected final Path regionPath;
 
