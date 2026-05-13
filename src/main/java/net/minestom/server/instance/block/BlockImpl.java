@@ -96,7 +96,8 @@ record BlockImpl(RegistryData.BlockEntry registry,
                             if (propertyTypes.length != propertyMap.size()) {
                                 throw new IllegalStateException("Invalid property count for block state " + namespace + query);
                             }
-                            if (schema == null) schema = new BlockSchema(propertyTypes, List.of(), new Long2ObjectArrayMap<>());
+                            if (schema == null)
+                                schema = new BlockSchema(propertyTypes, List.of(), new Long2ObjectArrayMap<>());
                             long propertiesValue = 0;
                             for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
                                 final byte keyIndex = schema.findKeyIndexThrow(entry.getKey(), null);
@@ -277,7 +278,8 @@ record BlockImpl(RegistryData.BlockEntry registry,
     private Block compute(long updatedProperties) {
         if (updatedProperties == this.propertiesArray) return this;
         final BlockImpl block = schema().states.get(updatedProperties);
-        if (block == null) throw new IllegalStateException("No block state for " + name() + " properties " + updatedProperties);
+        if (block == null)
+            throw new IllegalStateException("No block state for " + name() + " properties " + updatedProperties);
         // Reuse the same block instance if possible
         if (nbt == null && handler == null) return block;
         // Otherwise copy with the nbt and handler
@@ -316,29 +318,27 @@ record BlockImpl(RegistryData.BlockEntry registry,
         return lookup;
     }
 
-    private static final class BlockSchema {
-        private final PropertyType[] properties;
-        private final List<Block> possibleStates;
-        private final Long2ObjectMap<BlockImpl> states;
-        private final Object2ByteMap<String> keyIndexes;
+    private record BlockSchema(PropertyType[] properties, List<Block> possibleStates,
+                               Long2ObjectMap<BlockImpl> states, Object2ByteMap<String> keyIndexes) {
 
         private BlockSchema(PropertyType[] properties, List<Block> possibleStates, Long2ObjectMap<BlockImpl> states) {
-            this.properties = properties;
-            this.possibleStates = possibleStates;
-            this.states = states;
+            this(properties, possibleStates, states, keyIndexes(properties));
+        }
+
+        private static Object2ByteMap<String> keyIndexes(PropertyType[] properties) {
             final Object2ByteOpenHashMap<String> propertyIndexes = new Object2ByteOpenHashMap<>(properties.length);
             propertyIndexes.defaultReturnValue((byte) -1);
             for (byte i = 0; i < properties.length; i++) {
                 propertyIndexes.put(properties[i].key(), i);
             }
-            this.keyIndexes = propertyIndexes;
+            return propertyIndexes;
         }
 
         private byte findKeyIndex(String key) {
             return keyIndexes.getByte(key);
         }
 
-        private byte findKeyIndexThrow(String key, BlockImpl block) {
+        private byte findKeyIndexThrow(String key, @Nullable BlockImpl block) {
             final byte index = findKeyIndex(key);
             if (index == -1) {
                 if (block != null) {
@@ -350,7 +350,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
             return index;
         }
 
-        private byte findValueIndexThrow(PropertyType propertyType, String value, BlockImpl block) {
+        private byte findValueIndexThrow(PropertyType propertyType, String value, @Nullable BlockImpl block) {
             final byte index = propertyType.valueIndexes().getByte(value);
             if (index == -1) {
                 if (block != null) {
