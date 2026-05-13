@@ -222,6 +222,10 @@ public final class CoordConversion {
         return encodeSectionBlockChange(sectionBlockIndex(localX, localY, localZ), value);
     }
 
+    public static short deltaShort4096(double newCoordinate, double oldCoordinate) {
+        return (short) ((newCoordinate - oldCoordinate) * 4096);
+    }
+
     // HASHING
 
     private static final long PRIME_X = 0x9E37_79B9_7F4A_7C15L;  // Large prime for X axis
