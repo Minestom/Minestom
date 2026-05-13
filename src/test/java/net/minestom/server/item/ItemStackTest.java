@@ -20,17 +20,6 @@ public class ItemStackTest {
     }
 
     @Test
-    void withComponentsBatchesPatchChanges(Env env) {
-        ItemStack item = ItemStack.of(Material.STONE)
-                .withComponents(components -> components
-                        .set(DataComponents.REPAIR_COST, 42)
-                        .set(DataComponents.CUSTOM_NAME, Component.text("Name")));
-
-        assertEquals(42, item.get(DataComponents.REPAIR_COST));
-        assertEquals(Component.text("Name"), item.get(DataComponents.CUSTOM_NAME));
-    }
-
-    @Test
     void resetRevertsToMaterialDefault(Env env) {
         ItemStack apple = ItemStack.of(Material.APPLE).without(DataComponents.FOOD);
 

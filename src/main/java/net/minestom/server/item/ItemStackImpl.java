@@ -126,13 +126,6 @@ final class ItemStackImpl implements ItemStack {
     }
 
     @Override
-    public ItemStack withComponents(Consumer<DataComponentMap.PatchBuilder> consumer) {
-        final DataComponentMap.PatchBuilder builder = components.toPatchBuilder();
-        consumer.accept(builder);
-        return new ItemStackImpl(material, amount, builder.build());
-    }
-
-    @Override
     public ItemStack withMaterial(Material material) {
         if (material == Material.AIR) return ItemStack.AIR;
         return new ItemStackImpl(material, Math.max(1, amount), components);
