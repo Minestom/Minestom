@@ -146,9 +146,6 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     @Contract(value = "_, -> new", pure = true)
     ItemStack with(Consumer<Builder> consumer);
 
-    @Contract(value = "_ -> new", pure = true)
-    ItemStack withComponents(Consumer<DataComponentMap.PatchBuilder> consumer);
-
     /**
      * Returns a new ItemStack with the given Material set.
      *
