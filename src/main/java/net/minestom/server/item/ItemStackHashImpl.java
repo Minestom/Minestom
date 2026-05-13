@@ -10,12 +10,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-//TODO(1.21.5) hashes of components should be cached. Vanilla does it on a per player basis, could also do it globally perhaps.
 final class ItemStackHashImpl {
 
     public static ItemStack.Hash of(Transcoder<Integer> hashCoder, ItemStack itemStack) {
         if (itemStack.isAir()) return net.minestom.server.item.ItemStack.Hash.AIR;
+        if (itemStack instanceof ItemStackImpl impl) return impl.hash(hashCoder);
+        return compute(hashCoder, itemStack);
+    }
 
+    static ItemStack.Hash compute(Transcoder<Integer> hashCoder, ItemStack itemStack) {
         final Map<DataComponent<?>, Integer> addedComponents = new HashMap<>();
         final Set<DataComponent<?>> removedComponents = new HashSet<>();
         for (var entry : itemStack.componentPatch().entrySet()) {

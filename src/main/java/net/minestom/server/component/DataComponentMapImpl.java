@@ -78,6 +78,14 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
     }
 
     @Override
+    public DataComponentMap reset(DataComponent<?> component) {
+        if (!components.containsKey(component.id())) return this;
+        Int2ObjectMap<@Nullable Object> newComponents = new Int2ObjectArrayMap<>(components);
+        newComponents.remove(component.id());
+        return newComponents.isEmpty() ? DataComponentMap.EMPTY : new DataComponentMapImpl(newComponents);
+    }
+
+    @Override
     public Collection<DataComponent.Value> entrySet() {
         if (components.isEmpty()) return List.of();
         final List<DataComponent.Value> entries = new ArrayList<>(components.size());
@@ -117,7 +125,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
 
         @Override
         public DataComponentMap build() {
-            return new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
+            return components.isEmpty() ? DataComponentMap.EMPTY : new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
         }
     }
 
@@ -147,8 +155,14 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
 
         @Override
+        public PatchBuilder reset(DataComponent<?> component) {
+            components.remove(component.id());
+            return this;
+        }
+
+        @Override
         public DataComponentMap build() {
-            return new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
+            return components.isEmpty() ? DataComponentMap.EMPTY : new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
         }
     }
 
@@ -259,7 +273,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
                 }
             }
 
-            return new Result.Ok<>(new DataComponentMapImpl(patch));
+            return new Result.Ok<>(patch.isEmpty() ? EMPTY : new DataComponentMapImpl(patch));
         }
 
         @Override
