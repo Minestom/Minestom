@@ -108,15 +108,7 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
                                      Point shapePos, BoundingBox moving, SweepResult finalResult) {
         boolean hitBlock = false;
         for (BoundingBox blockSection : shapeData.boundingBoxes) {
-            // Update final result if the temp result collision is sooner than the current final result
-            if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
-                finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
-                finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
-                finalResult.collidedPositionZ = rayStart.z() + rayDirection.z() * finalResult.res;
-                finalResult.collidedShapeX = shapePos.x();
-                finalResult.collidedShapeY = shapePos.y();
-                finalResult.collidedShapeZ = shapePos.z();
-                finalResult.collidedShape = this;
+            if (RayUtils.BoundingBoxIntersectionCheck(this, moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
                 hitBlock = true;
             }
         }

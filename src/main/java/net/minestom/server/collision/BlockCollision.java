@@ -7,8 +7,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.block.BlockIterator;
-import org.jetbrains.annotations.Nullable;
 
 final class BlockCollision {
     /**
@@ -20,19 +18,12 @@ final class BlockCollision {
     static PhysicsResult handlePhysics(BoundingBox boundingBox,
                                        Vec velocity, Pos entityPosition,
                                        Block.Getter getter,
-                                       @Nullable PhysicsResult lastPhysicsResult,
                                        boolean singleCollision) {
         if (velocity.isZero()) {
             // TODO should return a constant
             return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false,
                     velocity, new Point[3], new Shape[3], new Point[3], false, SweepResult.NO_COLLISION);
         }
-        // Fast-exit using cache
-        final PhysicsResult cachedResult = cachedPhysics(velocity, entityPosition, getter, lastPhysicsResult);
-        if (cachedResult != null) {
-            return cachedResult;
-        }
-        // Expensive AABB computation
         return stepPhysics(boundingBox, velocity, entityPosition, getter, singleCollision);
     }
 
@@ -56,34 +47,6 @@ final class BlockCollision {
         return null;
     }
 
-    private static PhysicsResult cachedPhysics(Vec velocity, Pos entityPosition,
-                                               Block.Getter getter, PhysicsResult lastPhysicsResult) {
-        if (lastPhysicsResult != null && lastPhysicsResult.collisionShapes()[1] instanceof ShapeImpl shape) {
-            var currentBlock = getter.getBlock(lastPhysicsResult.collisionShapePositions()[1], Block.Getter.Condition.TYPE);
-            var lastBlockBoxes = shape.boundingBoxes();
-            var currentBlockBoxes = ((ShapeImpl) currentBlock.registry().collisionShape()).boundingBoxes();
-
-            // Fast exit if entity hasn't moved
-            if (lastPhysicsResult.collisionY()
-                    && velocity.y() == lastPhysicsResult.originalDelta().y()
-                    // Check block below to fast exit gravity
-                    && currentBlockBoxes.equals(lastBlockBoxes)
-                    && velocity.x() == 0 && velocity.z() == 0
-                    && entityPosition.samePoint(lastPhysicsResult.newPosition())
-                    && !lastBlockBoxes.isEmpty()) {
-                if (lastPhysicsResult.cached()) {
-                    return lastPhysicsResult;
-                } else {
-                    return new PhysicsResult(lastPhysicsResult.newPosition(), lastPhysicsResult.newVelocity(),
-                            lastPhysicsResult.isOnGround(), lastPhysicsResult.collisionX(), lastPhysicsResult.collisionY(),
-                            lastPhysicsResult.collisionZ(), lastPhysicsResult.originalDelta(), lastPhysicsResult.collisionPoints(),
-                            lastPhysicsResult.collisionShapes(), lastPhysicsResult.collisionShapePositions(), lastPhysicsResult.hasCollision(), lastPhysicsResult.res(), true);
-                }
-            }
-        }
-        return null;
-    }
-
     private static PhysicsResult stepPhysics(BoundingBox boundingBox,
                                              Vec velocity, Pos entityPosition,
                                              Block.Getter getter, boolean singleCollision) {
@@ -98,9 +61,7 @@ final class BlockCollision {
 
         boolean hasCollided = false;
 
-        // Query faces to get the points needed for collision
-        final Vec[] allFaces = calculateFaces(velocity, boundingBox);
-        PhysicsResult result = computePhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
+        PhysicsResult result = computePhysics(boundingBox, velocity, entityPosition, getter, finalResult);
         // Loop until no collisions are found.
         // When collisions are found, the collision axis is set to 0
         // Looping until there are no collisions will allow the entity to move in axis other than the collision axis after a collision.
@@ -139,7 +100,7 @@ final class BlockCollision {
             if (result.newVelocity().isZero()) break;
 
             finalResult.res = 1 - Vec.EPSILON;
-            result = computePhysics(boundingBox, result.newVelocity(), result.newPosition(), getter, allFaces, finalResult);
+            result = computePhysics(boundingBox, result.newVelocity(), result.newPosition(), getter, finalResult);
         }
 
         finalResult.res = result.res().res;
@@ -156,16 +117,8 @@ final class BlockCollision {
     private static PhysicsResult computePhysics(BoundingBox boundingBox,
                                                 Vec velocity, Pos entityPosition,
                                                 Block.Getter getter,
-                                                Vec[] allFaces,
                                                 SweepResult finalResult) {
-        // If the movement is small we don't need to run the expensive ray casting.
-        // Positions of move less than one can have hardcoded blocks to check for every direction
-        // Diagonals are a special case which will work with fast physics
-        if (velocity.length() <= 1 || isDiagonal(velocity)) {
-            fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
-        } else {
-            slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
-        }
+        sweepBlocks(boundingBox, velocity, entityPosition, getter, finalResult);
 
         final boolean collisionX = finalResult.normalX != 0;
         final boolean collisionY = finalResult.normalY != 0;
@@ -190,84 +143,39 @@ final class BlockCollision {
                 Vec.ZERO, null, null, null, false, finalResult);
     }
 
-    private static boolean isDiagonal(Vec velocity) {
-        return Math.abs(velocity.x()) == 1 && Math.abs(velocity.z()) == 1;
-    }
-
-    private static void slowPhysics(BoundingBox boundingBox,
+    private static void sweepBlocks(BoundingBox boundingBox,
                                     Vec velocity, Pos entityPosition,
                                     Block.Getter getter,
-                                    Vec[] allFaces,
                                     SweepResult finalResult) {
-        BlockIterator iterator = new BlockIterator();
-        // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
-        for (Vec point : allFaces) {
-            iterator.reset(point.add(entityPosition), velocity, 0, velocity.length(), false);
-            int timer = -1;
+        final double startX = entityPosition.x();
+        final double startY = entityPosition.y();
+        final double startZ = entityPosition.z();
+        final double endX = startX + velocity.x();
+        final double endY = startY + velocity.y();
+        final double endZ = startZ + velocity.z();
 
-            while (iterator.hasNext() && timer != 0) {
-                Point p = iterator.next();
+        final int minX = (int) Math.floor(Math.min(startX, endX) + boundingBox.minX());
+        final int minY = (int) Math.floor(Math.min(startY, endY) + boundingBox.minY());
+        final int minZ = (int) Math.floor(Math.min(startZ, endZ) + boundingBox.minZ());
+        final int maxX = (int) Math.floor(Math.max(startX, endX) + boundingBox.maxX());
+        final int maxY = (int) Math.floor(Math.max(startY, endY) + boundingBox.maxY());
+        final int maxZ = (int) Math.floor(Math.max(startZ, endZ) + boundingBox.maxZ());
 
-                // If we hit a block, there are at most 3 other blocks that could be closer
-                if (checkBoundingBox(p.blockX(), p.blockY(), p.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult))
-                    timer = 3;
+        final int stepX = velocity.x() < 0 ? -1 : 1;
+        final int stepY = velocity.y() < 0 ? -1 : 1;
+        final int stepZ = velocity.z() < 0 ? -1 : 1;
+        final int startBlockX = stepX > 0 ? minX : maxX;
+        final int endBlockX = stepX > 0 ? maxX : minX;
+        final int startBlockY = stepY > 0 ? minY : maxY;
+        final int endBlockY = stepY > 0 ? maxY : minY;
+        final int startBlockZ = stepZ > 0 ? minZ : maxZ;
+        final int endBlockZ = stepZ > 0 ? maxZ : minZ;
 
-                timer--;
-            }
-        }
-    }
-
-    private static void fastPhysics(BoundingBox boundingBox,
-                                    Vec velocity, Pos entityPosition,
-                                    Block.Getter getter,
-                                    Vec[] allFaces,
-                                    SweepResult finalResult) {
-        for (Vec point : allFaces) {
-            final Vec pointBefore = point.add(entityPosition);
-            final Vec pointAfter = point.add(entityPosition).add(velocity);
-            // Entity can pass through up to 4 blocks. Starting block, Two intermediate blocks, and a final block.
-            // This means we must check every combination of block movements when an entity moves over an axis.
-            // 000, 001, 010, 011, etc.
-            // There are 8 of these combinations
-            // Checks can be limited by checking if we moved across an axis line
-
-            boolean needsX = pointBefore.x() != pointAfter.x();
-            boolean needsY = pointBefore.y() != pointAfter.y();
-            boolean needsZ = pointBefore.z() != pointAfter.z();
-
-            checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-
-            if (needsX && needsY && needsZ) {
-                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-
-                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-            } else if (needsX && needsY) {
-                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-            } else if (needsX && needsZ) {
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-            } else if (needsY && needsZ) {
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-            } else if (needsX) {
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-            } else if (needsY) {
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-            } else if (needsZ) {
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+        for (int x = startBlockX; x != endBlockX + stepX; x += stepX) {
+            for (int y = startBlockY; y != endBlockY + stepY; y += stepY) {
+                for (int z = startBlockZ; z != endBlockZ + stepZ; z += stepZ) {
+                    checkBoundingBox(x, y, z, velocity, entityPosition, boundingBox, getter, finalResult);
+                }
             }
         }
     }
@@ -365,110 +273,4 @@ final class BlockCollision {
         return m * (blockPos - pos + (m > 0 ? 1 : 0)) + entityY;
     }
 
-    private static Vec[] calculateFaces(Vec queryVec, BoundingBox boundingBox) {
-        final int queryX = (int) Math.signum(queryVec.x());
-        final int queryY = (int) Math.signum(queryVec.y());
-        final int queryZ = (int) Math.signum(queryVec.z());
-
-        final int ceilWidth = (int) Math.ceil(boundingBox.width());
-        final int ceilHeight = (int) Math.ceil(boundingBox.height());
-        final int ceilDepth = (int) Math.ceil(boundingBox.depth());
-        Vec[] facePoints;
-        // Compute array length
-        {
-            final int ceilX = ceilWidth + 1;
-            final int ceilY = ceilHeight + 1;
-            final int ceilZ = ceilDepth + 1;
-            int pointCount = 0;
-            if (queryX != 0) pointCount += ceilY * ceilZ;
-            if (queryY != 0) pointCount += ceilX * ceilZ;
-            if (queryZ != 0) pointCount += ceilX * ceilY;
-            // Three edge reduction
-            if (queryX != 0 && queryY != 0 && queryZ != 0) {
-                pointCount -= ceilX + ceilY + ceilZ;
-                // inclusion exclusion principle
-                pointCount++;
-            } else if (queryX != 0 && queryY != 0) { // Two edge reduction
-                pointCount -= ceilZ;
-            } else if (queryY != 0 && queryZ != 0) { // Two edge reduction
-                pointCount -= ceilX;
-            } else if (queryX != 0 && queryZ != 0) { // Two edge reduction
-                pointCount -= ceilY;
-            }
-            facePoints = new Vec[pointCount];
-        }
-        int insertIndex = 0;
-        // X -> Y x Z
-        if (queryX != 0) {
-            int startIOffset = 0, endIOffset = 0, startJOffset = 0, endJOffset = 0;
-            // Y handles XY edge
-            if (queryY < 0) startJOffset = 1;
-            if (queryY > 0) endJOffset = 1;
-            // Z handles XZ edge
-            if (queryZ < 0) startIOffset = 1;
-            if (queryZ > 0) endIOffset = 1;
-
-            for (int i = startIOffset; i <= ceilDepth - endIOffset; ++i) {
-                for (int j = startJOffset; j <= ceilHeight - endJOffset; ++j) {
-                    double cellI = i;
-                    double cellJ = j;
-                    double cellK = queryX < 0 ? 0 : boundingBox.width();
-
-                    if (i >= boundingBox.depth()) cellI = boundingBox.depth();
-                    if (j >= boundingBox.height()) cellJ = boundingBox.height();
-
-                    cellI += boundingBox.minZ();
-                    cellJ += boundingBox.minY();
-                    cellK += boundingBox.minX();
-
-                    facePoints[insertIndex++] = new Vec(cellK, cellJ, cellI);
-                }
-            }
-        }
-        // Y -> X x Z
-        if (queryY != 0) {
-            int startJOffset = 0, endJOffset = 0;
-            // Z handles YZ edge
-            if (queryZ < 0) startJOffset = 1;
-            if (queryZ > 0) endJOffset = 1;
-
-            for (int i = startJOffset; i <= ceilDepth - endJOffset; ++i) {
-                for (int j = 0; j <= ceilWidth; ++j) {
-                    double cellI = i;
-                    double cellJ = j;
-                    double cellK = queryY < 0 ? 0 : boundingBox.height();
-
-                    if (i >= boundingBox.depth()) cellI = boundingBox.depth();
-                    if (j >= boundingBox.width()) cellJ = boundingBox.width();
-
-                    cellI += boundingBox.minZ();
-                    cellJ += boundingBox.minX();
-                    cellK += boundingBox.minY();
-
-                    facePoints[insertIndex++] = new Vec(cellJ, cellK, cellI);
-                }
-            }
-        }
-        // Z -> X x Y
-        if (queryZ != 0) {
-            for (int i = 0; i <= ceilHeight; ++i) {
-                for (int j = 0; j <= ceilWidth; ++j) {
-                    double cellI = i;
-                    double cellJ = j;
-                    double cellK = queryZ < 0 ? 0 : boundingBox.depth();
-
-                    if (i >= boundingBox.height()) cellI = boundingBox.height();
-                    if (j >= boundingBox.width()) cellJ = boundingBox.width();
-
-                    cellI += boundingBox.minY();
-                    cellJ += boundingBox.minX();
-                    cellK += boundingBox.minZ();
-
-                    facePoints[insertIndex++] = new Vec(cellJ, cellI, cellK);
-                }
-            }
-        }
-
-        return facePoints;
-    }
 }

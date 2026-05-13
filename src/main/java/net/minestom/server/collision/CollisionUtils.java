@@ -20,28 +20,6 @@ import java.util.function.Function;
 public final class CollisionUtils {
 
     /**
-     * Moves an entity with physics applied (ie checking against blocks)
-     * <p>
-     * Works by getting all the full blocks that an entity could interact with.
-     * All bounding boxes inside the full blocks are checked for collisions with the entity.
-     *
-     * @param entity            the entity to move
-     * @param entityVelocity    the velocity of the entity
-     * @param lastPhysicsResult the last physics result, can be null
-     * @param singleCollision   if the entity should only collide with one block
-     * @return the result of physics simulation
-     */
-    public static PhysicsResult handlePhysics(Entity entity, Vec entityVelocity,
-                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
-        final Instance instance = entity.getInstance();
-        assert instance != null;
-        return handlePhysics(instance, entity.getChunk(),
-                entity.getBoundingBox(),
-                entity.getPosition(), entityVelocity,
-                lastPhysicsResult, singleCollision);
-    }
-
-    /**
      * Checks for entity collisions
      *
      * @param velocity     the velocity of the entity
@@ -69,27 +47,6 @@ public final class CollisionUtils {
     }
 
     /**
-     * Moves an entity with physics applied (ie checking against blocks)
-     * <p>
-     * Works by getting all the full blocks that an entity could interact with.
-     * All bounding boxes inside the full blocks are checked for collisions with the entity.
-     *
-     * @param entity            the entity to move
-     * @param entityVelocity    the velocity of the entity
-     * @param lastPhysicsResult the last physics result, can be null
-     * @return the result of physics simulation
-     */
-    public static PhysicsResult handlePhysics(Entity entity, Vec entityVelocity,
-                                              @Nullable PhysicsResult lastPhysicsResult) {
-        final Instance instance = entity.getInstance();
-        assert instance != null;
-        return handlePhysics(instance, entity.getChunk(),
-                entity.getBoundingBox(),
-                entity.getPosition(), entityVelocity,
-                lastPhysicsResult, false);
-    }
-
-    /**
      * Moves bounding box with physics applied (ie checking against blocks)
      * <p>
      * Works by getting all the full blocks that a bounding box could interact with.
@@ -101,9 +58,9 @@ public final class CollisionUtils {
     public static PhysicsResult handlePhysics(Instance instance, @Nullable Chunk chunk,
                                               BoundingBox boundingBox,
                                               Pos position, Vec velocity,
-                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+                                              boolean singleCollision) {
         final Block.Getter getter = new ChunkCache(instance, chunk != null ? chunk : instance.getChunkAt(position), Block.STONE);
-        return handlePhysics(getter, boundingBox, position, velocity, lastPhysicsResult, singleCollision);
+        return handlePhysics(getter, boundingBox, position, velocity, singleCollision);
     }
 
     /**
@@ -119,10 +76,10 @@ public final class CollisionUtils {
     public static PhysicsResult handlePhysics(Block.Getter blockGetter,
                                               BoundingBox boundingBox,
                                               Pos position, Vec velocity,
-                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+                                              boolean singleCollision) {
         return BlockCollision.handlePhysics(boundingBox,
                 velocity, position,
-                blockGetter, lastPhysicsResult, singleCollision);
+                blockGetter, singleCollision);
     }
 
     /**
@@ -142,13 +99,18 @@ public final class CollisionUtils {
                                                      Shape shape, Point shapePos) {
         final PhysicsResult result = handlePhysics(instance, chunk,
                 BoundingBox.ZERO, start.asPos(), end.sub(start).asVec(),
-                null, false);
+                false);
 
         return shape.intersectBox(shapePos.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
     }
 
     public static PhysicsResult handlePhysics(Entity entity, Vec entityVelocity) {
-        return handlePhysics(entity, entityVelocity, null);
+        final Instance instance = entity.getInstance();
+        assert instance != null;
+        return handlePhysics(instance, entity.getChunk(),
+                entity.getBoundingBox(),
+                entity.getPosition(), entityVelocity,
+                false);
     }
 
     public static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
