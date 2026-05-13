@@ -6,7 +6,9 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.block.BlockUtils;
 
 import java.util.HashMap;
@@ -74,5 +76,20 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
             blockEntities.put(index, block.withNbt(nbt));
         }
         return blockEntities;
+    }
+
+    public record Section(short blockCount, Palette blockStates, Palette biomes) {
+        public static Section from(net.minestom.server.instance.Section section) {
+            return new Section((short) section.blockPalette().count(), section.blockPalette(), section.biomePalette());
+        }
+
+        public static NetworkBuffer.Type<Section> networkType(int biomeCount) {
+            return NetworkBufferTemplate.template(
+                    SHORT, Section::blockCount,
+                    Palette.BLOCK_SERIALIZER, Section::blockStates,
+                    Palette.biomeSerializer(biomeCount), Section::biomes,
+                    Section::new
+            );
+        }
     }
 }
