@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.objects.Object2ByteMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
-import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
@@ -70,9 +69,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
                             for (var entry : stateProperties) {
                                 final var k = entry.getKey();
                                 final var v = (List<String>) entry.getValue();
-                                if (v.size() >= MAX_VALUES) {
-                                    throw new IllegalStateException("Too many values for block property " + namespace + "[" + k + "]");
-                                }
+                                assert v.size() < MAX_VALUES;
                                 propertyTypes[i++] = new PropertyType(k, v);
                             }
                         } else {
@@ -143,22 +140,11 @@ record BlockImpl(RegistryData.BlockEntry registry,
         if (input.isEmpty()) return null;
         final int nbtIndex = input.indexOf("[");
         if (nbtIndex == 0) return null;
-        if (nbtIndex == -1) {
-            try {
-                return Block.fromKey(input);
-            } catch (InvalidKeyException e) {
-                return null;
-            }
-        }
+        if (nbtIndex == -1) return Block.fromKey(input);
         if (!input.endsWith("]")) return null;
         // Block state
         final String blockName = input.substring(0, nbtIndex);
-        Block block;
-        try {
-            block = Block.fromKey(blockName);
-        } catch (InvalidKeyException e) {
-            return null;
-        }
+        Block block = Block.fromKey(blockName);
         if (block == null) return null;
         // Compute properties
         final String query = input.substring(nbtIndex);
