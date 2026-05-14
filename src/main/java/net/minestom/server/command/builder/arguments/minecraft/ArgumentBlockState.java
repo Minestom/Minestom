@@ -40,12 +40,7 @@ public class ArgumentBlockState extends Argument<Block> {
 
         if (nbtIndex == -1) {
             // Only block name
-            Block block;
-            try {
-                block = Block.fromKey(input);
-            } catch (InvalidKeyException ignored) {
-                block = null;
-            }
+            Block block = Block.fromKey(input);
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
             return block;
