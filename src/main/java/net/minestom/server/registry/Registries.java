@@ -20,10 +20,14 @@ import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.timeline.Timeline;
+
+import java.util.List;
 
 /**
  * <p>Provides access to all the dynamic registries. {@link net.minestom.server.ServerProcess} is the most relevant
@@ -34,6 +38,14 @@ import net.minestom.server.world.timeline.Timeline;
 public interface Registries {
     static Registries vanilla() {
         return new VanillaRegistries();
+    }
+
+    static List<SendablePacket> registryDataPackets(Registries registries, boolean excludeVanilla) {
+        return RegistriesImpl.registryDataPackets(registries, excludeVanilla);
+    }
+
+    static TagsPacket tagsPacket(Registries registries) {
+        return RegistriesImpl.tagsPacket(registries);
     }
 
     // Static registries
