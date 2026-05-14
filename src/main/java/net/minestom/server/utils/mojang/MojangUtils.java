@@ -38,7 +38,7 @@ public final class MojangUtils {
     public static UUID getUUID(String username) throws IOException {
         // Thanks stackoverflow: https://stackoverflow.com/a/19399768/13247146
         return UUID.fromString(
-                retrieve(String.format(FROM_USERNAME_URL, username)).get("id")
+                retrieve(String.format(FROM_USERNAME_URL, encode(username))).get("id")
                         .getAsString()
                         .replaceFirst(
                                 "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
@@ -56,7 +56,7 @@ public final class MojangUtils {
      */
     @Blocking
     public static String getUsername(UUID playerUUID) throws IOException {
-        return retrieve(String.format(FROM_UUID_URL, playerUUID)).get("name").getAsString();
+        return retrieve(String.format(FROM_UUID_URL, encode(playerUUID.toString()))).get("name").getAsString();
     }
 
     /**
@@ -79,7 +79,7 @@ public final class MojangUtils {
     @Blocking
     public static @Nullable JsonObject fromUuid(String uuid) {
         try {
-            return retrieve(String.format(FROM_UUID_URL, uuid));
+            return retrieve(String.format(FROM_UUID_URL, encode(uuid)));
         } catch (IOException e) {
             return null;
         }
@@ -94,7 +94,7 @@ public final class MojangUtils {
     @Blocking
     public static @Nullable JsonObject fromUsername(String username) {
         try {
-            return retrieve(String.format(FROM_USERNAME_URL, username));
+            return retrieve(String.format(FROM_USERNAME_URL, encode(username)));
         } catch (IOException e) {
             return null;
         }
@@ -103,19 +103,24 @@ public final class MojangUtils {
     @Blocking
     @ApiStatus.Internal
     public static JsonObject authenticateSession(String loginUsername, String serverId, @Nullable SocketAddress userSocket) throws IOException {
-        final String username = URLEncoder.encode(loginUsername, StandardCharsets.UTF_8);
+        final String username = encode(loginUsername);
+        final String encodedServerId = encode(serverId);
 
         final String url;
         if (ServerFlag.AUTH_PREVENT_PROXY_CONNECTIONS
                 && userSocket instanceof InetSocketAddress inetSocketAddress
                 && inetSocketAddress.getAddress() instanceof InetAddress address
         ) {
-            url = String.format(PREVENT_PROXY_CONNECTIONS_AUTH_URL, username, serverId, address.getHostAddress());
+            url = String.format(PREVENT_PROXY_CONNECTIONS_AUTH_URL, username, encodedServerId, encode(address.getHostAddress()));
         } else {
-            url = String.format(BASE_AUTH_URL, username, serverId);
+            url = String.format(BASE_AUTH_URL, username, encodedServerId);
         }
 
         return retrieve(url);
+    }
+
+    private static String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
     /**

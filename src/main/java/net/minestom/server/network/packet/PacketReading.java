@@ -173,7 +173,7 @@ public final class PacketReading {
         final long writerEnd = buffer.writeIndex();
         buffer.writeIndex(readerEnd);
         final PacketRegistry<T> registry = parser.stateRegistry(state);
-        final T packet = readFramedPacket(buffer, registry, compressed);
+        final T packet = readFramedPacket(buffer, registry, compressed, maxPacketSize);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
         buffer.index(readerEnd, writerEnd);
         return new Result.Success<>(new ParsedPacket<>(nextState, packet));
@@ -181,7 +181,8 @@ public final class PacketReading {
 
     private static <T> T readFramedPacket(NetworkBuffer buffer,
                                           PacketRegistry<T> registry,
-                                          boolean compressed) throws DataFormatException {
+                                          boolean compressed,
+                                          int maxPacketSize) throws DataFormatException {
         if (!compressed) {
             // No compression format
             return readPayload(buffer, registry);
@@ -192,9 +193,11 @@ public final class PacketReading {
             // Uncompressed packet
             return readPayload(buffer, registry);
         }
+        if (dataLength < 0 || dataLength > maxPacketSize) {
+            throw new DataFormatException("Decompressed packet too large: " + dataLength);
+        }
 
-        // Decompress the packet into the pooled buffer
-        // and read the uncompressed packet from it
+        // Decompress the packet into the pooled buffer and read the uncompressed packet from it
         NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
         try {
             if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
