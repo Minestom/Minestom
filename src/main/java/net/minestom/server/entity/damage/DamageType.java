@@ -61,8 +61,8 @@ public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
         private String messageId;
         private String scaling;
         private float exhaustion = 0f;
-        private String effects;
-        private String deathMessageType;
+        private @Nullable String effects;
+        private @Nullable String deathMessageType;
 
         private Builder() {
         }
@@ -96,5 +96,4 @@ public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
             return new DamageTypeImpl(messageId, scaling, exhaustion, effects, deathMessageType);
         }
     }
-
 }

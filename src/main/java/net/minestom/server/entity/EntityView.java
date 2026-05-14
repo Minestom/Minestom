@@ -28,7 +28,7 @@ final class EntityView {
     final Set<Player> set = new SetImpl();
     private final Object mutex = this;
 
-    private volatile TrackedLocation trackedLocation;
+    private volatile @Nullable TrackedLocation trackedLocation;
 
     public EntityView(Entity entity) {
         this.entity = entity;
@@ -156,7 +156,7 @@ final class EntityView {
         handleAutoView(entity, viewerOption.removal, viewableOption.removal);
     }
 
-    private void handleAutoView(Entity entity, Consumer<Entity> viewer, Consumer<Player> viewable) {
+    private void handleAutoView(Entity entity, @Nullable Consumer<Entity> viewer, @Nullable Consumer<Player> viewable) {
         if (this.entity instanceof Player && viewerOption.isAuto() && entity.isAutoViewable()) {
             if (viewer != null) viewer.accept(entity); // Send packet to this player
         }
@@ -173,17 +173,17 @@ final class EntityView {
         // The condition that must be met for this option to be considered auto.
         private final Predicate<T> loopPredicate;
         // The consumers to be called when an entity is added/removed.
-        public final Consumer<T> addition, removal;
+        public final @Nullable Consumer<T> addition, removal;
         // Contains all the auto-entity ids that are viewable by this option.
         public final IntSet bitSet = new IntOpenHashSet();
         // 1 if auto, 0 if manual
         private volatile int auto = 1;
         // The custom rule used to determine if an entity is viewable.
         // null if auto-viewable
-        private Predicate<T> predicate = null;
+        private @Nullable Predicate<T> predicate = null;
 
         public Option(EntityTracker.Target<T> target, Predicate<T> loopPredicate,
-                      Consumer<T> addition, Consumer<T> removal) {
+                      @Nullable Consumer<T> addition, @Nullable Consumer<T> removal) {
             this.target = target;
             this.loopPredicate = loopPredicate;
             this.addition = addition;
@@ -222,7 +222,7 @@ final class EntityView {
             }
         }
 
-        public void updateRule(Predicate<T> predicate) {
+        public void updateRule(@Nullable Predicate<T> predicate) {
             synchronized (mutex) {
                 this.predicate = predicate;
                 updateRule0(predicate);
@@ -235,7 +235,7 @@ final class EntityView {
             }
         }
 
-        void updateRule0(Predicate<T> predicate) {
+        void updateRule0(@Nullable Predicate<T> predicate) {
             if (predicate == null) {
                 update(loopPredicate, entity -> {
                     if (!isRegistered(entity)) addition.accept(entity);

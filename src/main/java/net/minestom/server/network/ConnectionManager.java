@@ -74,7 +74,7 @@ public final class ConnectionManager {
     private volatile PlayerProvider playerProvider = Player::new;
 
     /**
-     * Gets the number of "online" players, eg for the query response.
+     * Gets the number of "online" players, e.g. for the query response.
      *
      * <p>Only includes players in the play state, not players in configuration.</p>
      */
@@ -105,7 +105,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @return the player linked to the connection
      */
-    public Player getPlayer(PlayerConnection connection) {
+    public @Nullable Player getPlayer(PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
     }
 

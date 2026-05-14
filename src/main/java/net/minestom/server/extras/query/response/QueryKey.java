@@ -22,7 +22,7 @@ public enum QueryKey {
     HOST_PORT("hostport", () -> String.valueOf(MinecraftServer.getServer().getPort())),
     HOST_IP("hostip", () -> Objects.requireNonNullElse(MinecraftServer.getServer().getAddress(), "localhost"));
 
-    static QueryKey[] VALUES = QueryKey.values();
+    static final QueryKey[] VALUES = QueryKey.values();
 
     private final String key;
     private final Supplier<String> value;

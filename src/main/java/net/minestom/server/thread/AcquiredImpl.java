@@ -1,16 +1,17 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
 final class AcquiredImpl<T> implements Acquired<T> {
     private final T value;
     private final Thread owner;
-    private final ReentrantLock lock;
+    private final @Nullable ReentrantLock lock;
     private boolean unlocked;
 
-    AcquiredImpl(T value, ReentrantLock lock) {
+    AcquiredImpl(T value, @Nullable ReentrantLock lock) {
         this.value = value;
         this.owner = Thread.currentThread();
         this.lock = lock;

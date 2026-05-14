@@ -127,7 +127,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 buffer.write(STRING_IO_UTF8, "keybind");
                 buffer.write(STRING_IO_UTF8, keybind.keybind());
             }
-            case NBTComponent<?, ?> nbt -> {
+            case NBTComponent<?, ?> _ -> {
                 //todo
                 throw new UnsupportedOperationException("NBTComponent is not implemented yet");
             }

@@ -19,7 +19,7 @@ public class MetadataHolderTest {
         holder.set(MetadataDef.CUSTOM_NAME_VISIBLE, true);
 
         assertEquals(1, received.size());
-        Map<Integer, Metadata.Entry<?>> changes = received.get(0);
+        Map<Integer, Metadata.Entry<?>> changes = received.getFirst();
         assertEquals(1, changes.size());
         assertEquals(true, changes.get(MetadataDef.CUSTOM_NAME_VISIBLE.index()).value());
     }
@@ -37,7 +37,7 @@ public class MetadataHolderTest {
         holder.setNotifyAboutChanges(true);
 
         assertEquals(1, received.size());
-        Map<Integer, Metadata.Entry<?>> changes = received.get(0);
+        Map<Integer, Metadata.Entry<?>> changes = received.getFirst();
         assertEquals(2, changes.size());
         assertEquals(true, changes.get(MetadataDef.CUSTOM_NAME_VISIBLE.index()).value());
         assertEquals(42, changes.get(MetadataDef.AIR_TICKS.index()).value());

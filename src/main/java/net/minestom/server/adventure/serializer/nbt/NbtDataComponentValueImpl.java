@@ -5,7 +5,7 @@ import net.kyori.adventure.text.event.DataComponentValue;
 import org.jetbrains.annotations.Nullable;
 
 sealed class NbtDataComponentValueImpl implements NbtDataComponentValue permits NbtDataComponentValueImpl.Removed {
-    private final BinaryTag tag;
+    private final @Nullable BinaryTag tag;
 
     NbtDataComponentValueImpl(@Nullable BinaryTag tag) {
         this.tag = tag;
@@ -21,5 +21,4 @@ sealed class NbtDataComponentValueImpl implements NbtDataComponentValue permits 
             super(null);
         }
     }
-
 }

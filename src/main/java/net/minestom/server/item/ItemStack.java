@@ -55,7 +55,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     Codec<ItemStack> CODEC = new StructCodec<>() {
         // These exist because Mojang optionally decodes count (ie missing will default to 1),
         // but when encoding they always include the 1. We want to preserve this behavior and
-        // since its currently a one off we can just do it here in a gross way.
+        // since it's currently a one off we can just do it here in a gross way.
         private static final StructCodec<ItemStack> DECODER = StructCodec.struct(
                 "id", Material.CODEC, ItemStack::material,
                 "count", Codec.INT.optional(1), ItemStack::amount,

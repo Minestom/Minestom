@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;

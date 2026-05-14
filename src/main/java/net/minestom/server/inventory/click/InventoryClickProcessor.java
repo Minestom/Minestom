@@ -10,7 +10,6 @@ import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Equippable;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.utils.MathUtils;

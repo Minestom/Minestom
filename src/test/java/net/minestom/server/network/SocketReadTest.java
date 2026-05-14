@@ -24,10 +24,12 @@ public class SocketReadTest {
         PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket>(
+                List<PacketReading.ParsedPacket<ClientPacket>> packets1
+        ))) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
+        List<ClientPacket> packets = packets1.stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(List.of(packet), packets);
     }
 
@@ -41,10 +43,12 @@ public class SocketReadTest {
         PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket>(
+                List<PacketReading.ParsedPacket<ClientPacket>> packets1
+        ))) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
+        List<ClientPacket> packets = packets1.stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(List.of(packet, packet), packets);
     }
 
@@ -60,10 +64,12 @@ public class SocketReadTest {
         buffer.write(NetworkBuffer.VAR_INT, 200); // incomplete 200 bytes packet
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket>(
+                List<PacketReading.ParsedPacket<ClientPacket>> packets1
+        ))) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
+        List<ClientPacket> packets = packets1.stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(List.of(packet), packets);
 
         readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
@@ -84,10 +90,12 @@ public class SocketReadTest {
         buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket>(
+                List<PacketReading.ParsedPacket<ClientPacket>> packets1
+        ))) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
+        List<ClientPacket> packets = packets1.stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(1, buffer.readableBytes());
 
         assertEquals(List.of(packet), packets);
@@ -112,10 +120,10 @@ public class SocketReadTest {
         buffer = buffer.copy(0, packetLength / 2).index(0, packetLength / 2);
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket>(long requiredCapacity))) {
             throw new AssertionError("Expected a failure result, got " + readResult);
         }
-        assertEquals(packetLength, failure.requiredCapacity());
+        assertEquals(packetLength, requiredCapacity);
     }
 
     @ParameterizedTest
@@ -127,11 +135,11 @@ public class SocketReadTest {
         buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket>(long requiredCapacity))) {
             throw new AssertionError("Expected a failure result, got " + readResult);
         }
         // 5 = max var-int size
-        assertEquals(5, failure.requiredCapacity());
+        assertEquals(5, requiredCapacity);
     }
 
     private static int getVarIntSize(int input) {
