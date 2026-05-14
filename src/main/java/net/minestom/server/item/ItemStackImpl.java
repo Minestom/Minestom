@@ -16,7 +16,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -44,10 +43,8 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
             public ItemStack read(NetworkBuffer buffer) {
                 final int amount = buffer.read(NetworkBuffer.VAR_INT);
                 if (amount <= 0) return ItemStack.AIR;
-                final int materialId = buffer.read(NetworkBuffer.VAR_INT);
+                final Material material = buffer.read(Material.NETWORK_TYPE);
                 final DataComponentMap components = buffer.read(componentPatchType);
-                final Material material = Material.fromId(materialId);
-                Objects.requireNonNull(material, "Invalid material");
                 return ItemStackImpl.create(material, amount, components);
             }
         };
