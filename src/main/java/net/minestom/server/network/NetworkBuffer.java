@@ -90,11 +90,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     static <E extends Enum<E>> Type<EnumSet<E>> EnumSet(Class<E> enumClass) {
         final E[] values = enumClass.getEnumConstants();
-        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, values, FixedBitSet(values.length));
+        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, values);
     }
 
     static Type<BitSet> FixedBitSet(int length) {
-        return new NetworkBufferTypeImpl.FixedBitSetType(length, FixedRawBytes((length + 7) / Long.BYTES));
+        return new NetworkBufferTypeImpl.FixedBitSetType(length);
     }
 
     static Type<byte[]> FixedRawBytes(int length) {

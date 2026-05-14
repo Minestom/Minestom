@@ -710,6 +710,10 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             Objects.requireNonNull(bitSetType, "bitSetType");
         }
 
+        public EnumSetType(Class<E> enumClass, E[] values) {
+            this(enumClass, values, FixedBitSet(values.length));
+        }
+
         @Override
         public void write(NetworkBuffer buffer, EnumSet<E> value) {
             BitSet bitSet = new BitSet(values.length);
@@ -736,6 +740,10 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public FixedBitSetType {
             Check.argCondition(length < 0, "Length is negative found {0}", length);
             Objects.requireNonNull(arrayType, "arrayType");
+        }
+
+        public FixedBitSetType(int length) {
+            this(length, FixedRawBytes((length + 7) / Long.BYTES));
         }
 
         @Override
