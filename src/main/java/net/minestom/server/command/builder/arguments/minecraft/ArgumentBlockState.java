@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.kyori.adventure.key.InvalidKeyException;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -49,12 +48,7 @@ public class ArgumentBlockState extends Argument<Block> {
                 throw new ArgumentSyntaxException("Property list need to end with ]", input, INVALID_PROPERTY);
             // Block state
             final String blockName = input.substring(0, nbtIndex);
-            Block block;
-            try {
-                block = Block.fromKey(blockName);
-            } catch (InvalidKeyException ignored) {
-                block = null;
-            }
+            Block block = Block.fromKey(blockName);
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
 
