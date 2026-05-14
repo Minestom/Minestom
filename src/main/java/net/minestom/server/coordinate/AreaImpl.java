@@ -1,5 +1,6 @@
 package net.minestom.server.coordinate;
 
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -7,6 +8,20 @@ import java.util.*;
 import static net.minestom.server.coordinate.CoordConversion.*;
 
 final class AreaImpl {
+
+    static Area.Cuboid cube(Point center, int size) {
+        Check.argCondition(size < 0, "Cube size must be non-negative: {0}", size);
+        return new Cuboid(
+                center.sub((double) size / 2).asBlockVec(),
+                center.add((double) size / 2).asBlockVec());
+    }
+
+    static Area.Cuboid box(Point center, Point size) {
+        Check.argCondition(size.x() < 0 || size.y() < 0 || size.z() < 0,
+                "Box size must be non-negative on each axis: ({0}, {1}, {2})", size.x(), size.y(), size.z());
+        final Point half = size.div(2);
+        return new Cuboid(center.sub(half).asBlockVec(), center.add(half).asBlockVec());
+    }
 
     record Single(BlockVec point) implements Area.Single {
         public Single {
@@ -287,7 +302,7 @@ final class AreaImpl {
     record Sphere(BlockVec center, int radius) implements Area.Sphere {
         public Sphere {
             Objects.requireNonNull(center, "Center cannot be null");
-            if (radius < 0) throw new IllegalArgumentException("Radius must be non-negative");
+            Check.argCondition(radius < 0, "Radius must be non-negative: {0}", radius);
         }
 
         @Override

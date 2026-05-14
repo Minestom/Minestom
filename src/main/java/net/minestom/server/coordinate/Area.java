@@ -141,9 +141,10 @@ public sealed interface Area extends Iterable<BlockVec> {
      * @param center the center point to convert to a block coordinate
      * @param size   the size used for each axis
      * @return a cuboid area
+     * @throws IllegalArgumentException if {@code size} is negative
      */
     static Cuboid cube(Point center, int size) {
-        return cuboid(center.sub((double) size / 2), center.add((double) size / 2));
+        return AreaImpl.cube(center, size);
     }
 
     /**
@@ -156,10 +157,10 @@ public sealed interface Area extends Iterable<BlockVec> {
      * @param center the center point to convert to a block coordinate
      * @param size   the size point, converted through its coordinates
      * @return a cuboid area
+     * @throws IllegalArgumentException if any size component is negative
      */
     static Cuboid box(Point center, Point size) {
-        final Point half = size.div(2);
-        return cuboid(center.sub(half), center.add(half));
+        return AreaImpl.box(center, size);
     }
 
     /**

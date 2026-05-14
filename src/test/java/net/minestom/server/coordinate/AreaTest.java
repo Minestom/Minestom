@@ -666,6 +666,18 @@ public class AreaTest {
     }
 
     @Test
+    public void negativeCubeSizeRejected() {
+        assertThrows(IllegalArgumentException.class, () -> Area.cube(BlockVec.ZERO, -1));
+    }
+
+    @Test
+    public void negativeBoxSizeRejected() {
+        assertThrows(IllegalArgumentException.class, () -> Area.box(BlockVec.ZERO, new Vec(-1, 2, 3)));
+        assertThrows(IllegalArgumentException.class, () -> Area.box(BlockVec.ZERO, new Vec(1, -2, 3)));
+        assertThrows(IllegalArgumentException.class, () -> Area.box(BlockVec.ZERO, new Vec(1, 2, -3)));
+    }
+
+    @Test
     public void nullPointsRejected() {
         assertThrows(NullPointerException.class, () -> Area.single(null));
         assertThrows(NullPointerException.class, () -> Area.line(null, BlockVec.ZERO));
