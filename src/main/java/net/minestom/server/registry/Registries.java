@@ -20,10 +20,14 @@ import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.timeline.Timeline;
+
+import java.util.List;
 
 /**
  * <p>Provides access to all the dynamic registries. {@link net.minestom.server.ServerProcess} is the most relevant
@@ -32,6 +36,17 @@ import net.minestom.server.world.timeline.Timeline;
  * @see net.minestom.server.MinecraftServer for static access to these
  */
 public interface Registries {
+    static Registries vanilla() {
+        return new VanillaRegistries();
+    }
+
+    static List<SendablePacket> registryDataPackets(Registries registries, boolean excludeVanilla) {
+        return RegistriesImpl.registryDataPackets(registries, excludeVanilla);
+    }
+
+    static TagsPacket tagsPacket(Registries registries) {
+        return RegistriesImpl.tagsPacket(registries);
+    }
 
     // Static registries
 
@@ -119,166 +134,163 @@ public interface Registries {
         Registry<T> select(Registries registries);
     }
 
-    class Delegating implements Registries {
-        private final Registries delegate;
+    @FunctionalInterface
+    interface Delegating extends Registries {
+        Registries registries();
 
-        public Delegating(Registries delegate) {
-            this.delegate = delegate;
+        @Override
+        default Registry<Block> blocks() {
+            return registries().blocks();
         }
 
         @Override
-        public Registry<Block> blocks() {
-            return delegate.blocks();
+        default Registry<Material> material() {
+            return registries().material();
         }
 
         @Override
-        public Registry<Material> material() {
-            return delegate.material();
+        default Registry<PotionEffect> potionEffect() {
+            return registries().potionEffect();
         }
 
         @Override
-        public Registry<PotionEffect> potionEffect() {
-            return delegate.potionEffect();
+        default Registry<EntityType> entityType() {
+            return registries().entityType();
         }
 
         @Override
-        public Registry<EntityType> entityType() {
-            return delegate.entityType();
+        default Registry<Fluid> fluid() {
+            return registries().fluid();
         }
 
         @Override
-        public Registry<Fluid> fluid() {
-            return delegate.fluid();
+        default Registry<GameEvent> gameEvent() {
+            return registries().gameEvent();
         }
 
         @Override
-        public Registry<GameEvent> gameEvent() {
-            return delegate.gameEvent();
+        default DynamicRegistry<ChatType> chatType() {
+            return registries().chatType();
         }
 
         @Override
-        public DynamicRegistry<ChatType> chatType() {
-            return delegate.chatType();
+        default DynamicRegistry<DimensionType> dimensionType() {
+            return registries().dimensionType();
         }
 
         @Override
-        public DynamicRegistry<DimensionType> dimensionType() {
-            return delegate.dimensionType();
+        default DynamicRegistry<Biome> biome() {
+            return registries().biome();
         }
 
         @Override
-        public DynamicRegistry<Biome> biome() {
-            return delegate.biome();
+        default DynamicRegistry<DamageType> damageType() {
+            return registries().damageType();
         }
 
         @Override
-        public DynamicRegistry<DamageType> damageType() {
-            return delegate.damageType();
+        default DynamicRegistry<TrimMaterial> trimMaterial() {
+            return registries().trimMaterial();
         }
 
         @Override
-        public DynamicRegistry<TrimMaterial> trimMaterial() {
-            return delegate.trimMaterial();
+        default DynamicRegistry<TrimPattern> trimPattern() {
+            return registries().trimPattern();
         }
 
         @Override
-        public DynamicRegistry<TrimPattern> trimPattern() {
-            return delegate.trimPattern();
+        default DynamicRegistry<BannerPattern> bannerPattern() {
+            return registries().bannerPattern();
         }
 
         @Override
-        public DynamicRegistry<BannerPattern> bannerPattern() {
-            return delegate.bannerPattern();
+        default DynamicRegistry<Enchantment> enchantment() {
+            return registries().enchantment();
         }
 
         @Override
-        public DynamicRegistry<Enchantment> enchantment() {
-            return delegate.enchantment();
+        default DynamicRegistry<PaintingVariant> paintingVariant() {
+            return registries().paintingVariant();
         }
 
         @Override
-        public DynamicRegistry<PaintingVariant> paintingVariant() {
-            return delegate.paintingVariant();
+        default DynamicRegistry<JukeboxSong> jukeboxSong() {
+            return registries().jukeboxSong();
         }
 
         @Override
-        public DynamicRegistry<JukeboxSong> jukeboxSong() {
-            return delegate.jukeboxSong();
+        default DynamicRegistry<Instrument> instrument() {
+            return registries().instrument();
         }
 
         @Override
-        public DynamicRegistry<Instrument> instrument() {
-            return delegate.instrument();
+        default DynamicRegistry<WolfVariant> wolfVariant() {
+            return registries().wolfVariant();
         }
 
         @Override
-        public DynamicRegistry<WolfVariant> wolfVariant() {
-            return delegate.wolfVariant();
+        default DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
+            return registries().wolfSoundVariant();
         }
 
         @Override
-        public DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
-            return delegate.wolfSoundVariant();
+        default DynamicRegistry<CatVariant> catVariant() {
+            return registries().catVariant();
         }
 
         @Override
-        public DynamicRegistry<CatVariant> catVariant() {
-            return delegate.catVariant();
+        default DynamicRegistry<ChickenVariant> chickenVariant() {
+            return registries().chickenVariant();
         }
 
         @Override
-        public DynamicRegistry<ChickenVariant> chickenVariant() {
-            return delegate.chickenVariant();
+        default DynamicRegistry<CowVariant> cowVariant() {
+            return registries().cowVariant();
         }
 
         @Override
-        public DynamicRegistry<CowVariant> cowVariant() {
-            return delegate.cowVariant();
+        default DynamicRegistry<FrogVariant> frogVariant() {
+            return registries().frogVariant();
         }
 
         @Override
-        public DynamicRegistry<FrogVariant> frogVariant() {
-            return delegate.frogVariant();
+        default DynamicRegistry<PigVariant> pigVariant() {
+            return registries().pigVariant();
         }
 
         @Override
-        public DynamicRegistry<PigVariant> pigVariant() {
-            return delegate.pigVariant();
+        default DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
+            return registries().zombieNautilusVariant();
         }
 
         @Override
-        public DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
-            return delegate.zombieNautilusVariant();
+        default DynamicRegistry<Dialog> dialog() {
+            return registries().dialog();
         }
 
         @Override
-        public DynamicRegistry<Dialog> dialog() {
-            return delegate.dialog();
+        default DynamicRegistry<Timeline> timeline() {
+            return registries().timeline();
         }
 
         @Override
-        public DynamicRegistry<Timeline> timeline() {
-            return delegate.timeline();
+        default DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+            return registries().enchantmentLevelBasedValues();
         }
 
         @Override
-        public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
-            return delegate.enchantmentLevelBasedValues();
+        default DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
+            return registries().enchantmentValueEffects();
         }
 
         @Override
-        public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
-            return delegate.enchantmentValueEffects();
+        default DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
+            return registries().enchantmentEntityEffects();
         }
 
         @Override
-        public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
-            return delegate.enchantmentEntityEffects();
-        }
-
-        @Override
-        public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
-            return delegate.enchantmentLocationEffects();
+        default DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
+            return registries().enchantmentLocationEffects();
         }
     }
 }

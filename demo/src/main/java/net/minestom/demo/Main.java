@@ -38,7 +38,7 @@ import java.util.Objects;
 
 public class Main {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         System.setProperty("minestom.new-socket-write-lock", "true");
         MinecraftServer.setCompressionThreshold(0);
 
@@ -125,7 +125,7 @@ public class Main {
             if (event.getConnection() != null) {
                 String ip = event.getConnection().getServerAddress();
                 builder = builder
-                        .sample("IP test: " + event.getConnection().getRemoteAddress().toString())
+                        .sample("IP test: " + event.getConnection().getRemoteAddress())
                         .sample("Connection Info:")
                         .sample(Component.text('-', NamedTextColor.DARK_GRAY)
                                 .append(Component.text(" IP: ", NamedTextColor.GRAY))

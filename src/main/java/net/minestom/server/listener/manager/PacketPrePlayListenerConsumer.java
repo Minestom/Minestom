@@ -1,6 +1,5 @@
 package net.minestom.server.listener.manager;
 
-import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.player.PlayerConnection;

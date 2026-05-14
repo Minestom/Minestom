@@ -248,9 +248,7 @@ public class LeftClickIntegrationTest {
             for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
                 player.getInventory().setItemStack(hotbarSlot, ItemStack.of(Material.BRICK));
             }
-            listener.followup(event -> {
-                assertEquals(inventory, event.getInventory());
-            });
+            listener.followup(event -> assertEquals(inventory, event.getInventory()));
             shiftClickOpenInventory(player, 1);
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
             assertEquals(ItemStack.of(Material.GOLD_INGOT), player.getInventory().getItemStack(35)); // The item should appear in the bottom right of the player's inventory excluding the hotbar

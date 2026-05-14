@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.pointer.PointersSupplier;
@@ -126,9 +125,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean onGround;
 
     protected BoundingBox boundingBox;
-    private PhysicsResult previousPhysicsResult = null;
+    private @Nullable PhysicsResult previousPhysicsResult = null;
 
-    protected Entity vehicle;
+    protected @Nullable Entity vehicle;
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
@@ -311,8 +310,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.CUSTOM_DATA) {
             tagHandler.updateContent(((CustomData) value).nbt());
-        }
-        else EntityMeta.setComponent(getEntityMeta(), component, value);
+        } else EntityMeta.setComponent(getEntityMeta(), component, value);
     }
 
     /**

@@ -77,7 +77,7 @@ public class FullQueryResponse {
      *
      * @param players the players
      */
-    public void addPlayers(String ... players) {
+    public void addPlayers(String... players) {
         Collections.addAll(this.players, players);
     }
 
@@ -115,11 +115,7 @@ public class FullQueryResponse {
      * @return the string result
      */
     public static String generatePluginsValue() {
-        StringBuilder builder = new StringBuilder(MinecraftServer.getBrandName())
-                .append(' ')
-                .append(MinecraftServer.VERSION_NAME);
-
-        return builder.toString();
+        return MinecraftServer.getBrandName() + ' ' + MinecraftServer.VERSION_NAME;
     }
 
     public static final NetworkBuffer.Type<FullQueryResponse> SERIALIZER = new NetworkBuffer.Type<>() {

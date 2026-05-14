@@ -6,8 +6,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
-import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.Suggestion;
@@ -137,7 +135,8 @@ final class CommandParserImpl implements CommandParser {
             return previousNode;
         }
 
-        Chain() {}
+        Chain() {
+        }
 
         Chain(@Nullable CommandExecutor defaultExecutor,
               @Nullable SuggestionCallback suggestionCallback,
@@ -222,7 +221,7 @@ final class CommandParserImpl implements CommandParser {
                 return new NodeResult(
                         node,
                         chain,
-                        new ArgumentResult.SyntaxError<>("Not enough arguments","",-1),
+                        new ArgumentResult.SyntaxError<>("Not enough arguments", "", -1),
                         argument.getSuggestionCallback()
                 );
             }
@@ -359,13 +358,14 @@ final class CommandParserImpl implements CommandParser {
 
     record ValidCommand(String input, CommandCondition condition, CommandExecutor executor,
                         Map<String, ArgumentResult<Object>> arguments,
-                        CommandExecutor globalListener, @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
+                        CommandExecutor globalListener, @Nullable SuggestionCallback suggestionCallback,
+                        List<Argument<?>> args)
             implements InternalKnownCommand, Result.KnownCommand.Valid {
 
         static @Nullable ValidCommand defaultExecutor(String input, Chain chain) {
             CommandExecutor defaultExecutor = null;
 
-            for (Iterator<NodeResult> it = chain.nodeResults.descendingIterator(); it.hasNext();) {
+            for (Iterator<NodeResult> it = chain.nodeResults.descendingIterator(); it.hasNext(); ) {
                 final NodeResult node = it.next();
                 defaultExecutor = node.chain().defaultExecutor;
                 if (defaultExecutor != null) break;
@@ -412,7 +412,7 @@ final class CommandParserImpl implements CommandParser {
                 executor().apply(sender, context);
                 return new ExecutionResultImpl(ExecutableCommand.Result.Type.SUCCESS, context.getReturnData());
             } catch (Exception e) {
-                LOGGER.error("An exception was encountered while executing command: " + input(), e);
+                LOGGER.error("An exception was encountered while executing command: {}", input(), e);
                 return ExecutionResultImpl.EXECUTOR_EXCEPTION;
             }
         }
@@ -456,7 +456,8 @@ final class CommandParserImpl implements CommandParser {
         static final ExecutableCommand.Result INVALID_SYNTAX = new ExecutionResultImpl(Type.INVALID_SYNTAX, null);
     }
 
-    private record NodeResult(Node node, Chain chain, ArgumentResult<Object> argumentResult, SuggestionCallback callback) {
+    private record NodeResult(Node node, Chain chain, ArgumentResult<Object> argumentResult,
+                              SuggestionCallback callback) {
         public String name() {
             return node.argument().getId();
         }

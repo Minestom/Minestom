@@ -46,13 +46,13 @@ public abstract class PlayerConnection {
     // the server will be in CONFIGURATION while the client is still in PLAY.
     private volatile ConnectionState serverState, clientState;
 
-    private PlayerPublicKey playerPublicKey;
+    private @Nullable PlayerPublicKey playerPublicKey;
     volatile boolean online;
     private volatile boolean wasTransferred;
 
-    private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
+    private @Nullable LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
-    private CompletableFuture<List<SelectKnownPacksPacket.Entry>> knownPacksFuture = null; // Present only when waiting for a response from the client.
+    private @Nullable CompletableFuture<List<SelectKnownPacksPacket.Entry>> knownPacksFuture = null; // Present only when waiting for a response from the client.
 
     private final Map<Key, CompletableFuture<byte @Nullable []>> pendingCookieRequests = new ConcurrentHashMap<>();
 
@@ -223,7 +223,7 @@ public abstract class PlayerConnection {
         }
     }
 
-    public PlayerPublicKey playerPublicKey() {
+    public @Nullable PlayerPublicKey playerPublicKey() {
         return playerPublicKey;
     }
 

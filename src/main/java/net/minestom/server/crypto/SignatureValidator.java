@@ -24,8 +24,8 @@ import java.util.function.Consumer;
  */
 @FunctionalInterface
 public interface SignatureValidator {
-    SignatureValidator PASS = (payload, signature) -> true;
-    SignatureValidator FAIL = (payload, signature) -> false;
+    SignatureValidator PASS = (_, _) -> true;
+    SignatureValidator FAIL = (_, _) -> false;
     SignatureValidator YGGDRASIL = createYggdrasilValidator();
 
     /**
@@ -60,8 +60,9 @@ public interface SignatureValidator {
      * @return null if the player didn't send a public key
      */
     static @Nullable SignatureValidator from(Player player) {
-        if (player.getPlayerConnection().playerPublicKey() == null) return null;
-        return from(player.getPlayerConnection().playerPublicKey().publicKey(), KeyUtils.SignatureAlgorithm.SHA256withRSA);
+        final PlayerPublicKey playerPublicKey = player.getPlayerConnection().playerPublicKey();
+        if (playerPublicKey == null) return null;
+        return from(playerPublicKey.publicKey(), KeyUtils.SignatureAlgorithm.SHA256withRSA);
     }
 
     private static SignatureValidator createYggdrasilValidator() {

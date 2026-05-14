@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.lang.String;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Float;

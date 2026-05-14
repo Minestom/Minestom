@@ -8,9 +8,9 @@ package net.minestom.server.particle;
 sealed interface Particles permits Particle {
     Particle ANGRY_VILLAGER = ParticleImpl.get("minecraft:angry_villager");
 
-    Particle.Block BLOCK = (Particle.Block) ParticleImpl.get("minecraft:block");
+    Particle.Block BLOCK = ParticleImpl.get("minecraft:block");
 
-    Particle.BlockMarker BLOCK_MARKER = (Particle.BlockMarker) ParticleImpl.get("minecraft:block_marker");
+    Particle.BlockMarker BLOCK_MARKER = ParticleImpl.get("minecraft:block_marker");
 
     Particle BUBBLE = ParticleImpl.get("minecraft:bubble");
 
@@ -22,7 +22,7 @@ sealed interface Particles permits Particle {
 
     Particle DAMAGE_INDICATOR = ParticleImpl.get("minecraft:damage_indicator");
 
-    Particle.DragonBreath DRAGON_BREATH = (Particle.DragonBreath) ParticleImpl.get("minecraft:dragon_breath");
+    Particle.DragonBreath DRAGON_BREATH = ParticleImpl.get("minecraft:dragon_breath");
 
     Particle DRIPPING_LAVA = ParticleImpl.get("minecraft:dripping_lava");
 
@@ -34,11 +34,11 @@ sealed interface Particles permits Particle {
 
     Particle FALLING_WATER = ParticleImpl.get("minecraft:falling_water");
 
-    Particle.Dust DUST = (Particle.Dust) ParticleImpl.get("minecraft:dust");
+    Particle.Dust DUST = ParticleImpl.get("minecraft:dust");
 
-    Particle.DustColorTransition DUST_COLOR_TRANSITION = (Particle.DustColorTransition) ParticleImpl.get("minecraft:dust_color_transition");
+    Particle.DustColorTransition DUST_COLOR_TRANSITION = ParticleImpl.get("minecraft:dust_color_transition");
 
-    Particle.Effect EFFECT = (Particle.Effect) ParticleImpl.get("minecraft:effect");
+    Particle.Effect EFFECT = ParticleImpl.get("minecraft:effect");
 
     Particle ELDER_GUARDIAN = ParticleImpl.get("minecraft:elder_guardian");
 
@@ -48,7 +48,7 @@ sealed interface Particles permits Particle {
 
     Particle END_ROD = ParticleImpl.get("minecraft:end_rod");
 
-    Particle.EntityEffect ENTITY_EFFECT = (Particle.EntityEffect) ParticleImpl.get("minecraft:entity_effect");
+    Particle.EntityEffect ENTITY_EFFECT = ParticleImpl.get("minecraft:entity_effect");
 
     Particle EXPLOSION_EMITTER = ParticleImpl.get("minecraft:explosion_emitter");
 
@@ -64,7 +64,7 @@ sealed interface Particles permits Particle {
 
     Particle SONIC_BOOM = ParticleImpl.get("minecraft:sonic_boom");
 
-    Particle.FallingDust FALLING_DUST = (Particle.FallingDust) ParticleImpl.get("minecraft:falling_dust");
+    Particle.FallingDust FALLING_DUST = ParticleImpl.get("minecraft:falling_dust");
 
     Particle FIREWORK = ParticleImpl.get("minecraft:firework");
 
@@ -78,11 +78,11 @@ sealed interface Particles permits Particle {
 
     Particle PALE_OAK_LEAVES = ParticleImpl.get("minecraft:pale_oak_leaves");
 
-    Particle.TintedLeaves TINTED_LEAVES = (Particle.TintedLeaves) ParticleImpl.get("minecraft:tinted_leaves");
+    Particle.TintedLeaves TINTED_LEAVES = ParticleImpl.get("minecraft:tinted_leaves");
 
     Particle SCULK_SOUL = ParticleImpl.get("minecraft:sculk_soul");
 
-    Particle.SculkCharge SCULK_CHARGE = (Particle.SculkCharge) ParticleImpl.get("minecraft:sculk_charge");
+    Particle.SculkCharge SCULK_CHARGE = ParticleImpl.get("minecraft:sculk_charge");
 
     Particle SCULK_CHARGE_POP = ParticleImpl.get("minecraft:sculk_charge_pop");
 
@@ -90,7 +90,7 @@ sealed interface Particles permits Particle {
 
     Particle SOUL = ParticleImpl.get("minecraft:soul");
 
-    Particle.Flash FLASH = (Particle.Flash) ParticleImpl.get("minecraft:flash");
+    Particle.Flash FLASH = ParticleImpl.get("minecraft:flash");
 
     Particle HAPPY_VILLAGER = ParticleImpl.get("minecraft:happy_villager");
 
@@ -98,13 +98,13 @@ sealed interface Particles permits Particle {
 
     Particle HEART = ParticleImpl.get("minecraft:heart");
 
-    Particle.InstantEffect INSTANT_EFFECT = (Particle.InstantEffect) ParticleImpl.get("minecraft:instant_effect");
+    Particle.InstantEffect INSTANT_EFFECT = ParticleImpl.get("minecraft:instant_effect");
 
-    Particle.Item ITEM = (Particle.Item) ParticleImpl.get("minecraft:item");
+    Particle.Item ITEM = ParticleImpl.get("minecraft:item");
 
-    Particle.Vibration VIBRATION = (Particle.Vibration) ParticleImpl.get("minecraft:vibration");
+    Particle.Vibration VIBRATION = ParticleImpl.get("minecraft:vibration");
 
-    Particle.Trail TRAIL = (Particle.Trail) ParticleImpl.get("minecraft:trail");
+    Particle.Trail TRAIL = ParticleImpl.get("minecraft:trail");
 
     Particle ITEM_SLIME = ParticleImpl.get("minecraft:item_slime");
 
@@ -212,7 +212,7 @@ sealed interface Particles permits Particle {
 
     Particle SCRAPE = ParticleImpl.get("minecraft:scrape");
 
-    Particle.Shriek SHRIEK = (Particle.Shriek) ParticleImpl.get("minecraft:shriek");
+    Particle.Shriek SHRIEK = ParticleImpl.get("minecraft:shriek");
 
     Particle EGG_CRACK = ParticleImpl.get("minecraft:egg_crack");
 
@@ -224,7 +224,7 @@ sealed interface Particles permits Particle {
 
     Particle VAULT_CONNECTION = ParticleImpl.get("minecraft:vault_connection");
 
-    Particle.DustPillar DUST_PILLAR = (Particle.DustPillar) ParticleImpl.get("minecraft:dust_pillar");
+    Particle.DustPillar DUST_PILLAR = ParticleImpl.get("minecraft:dust_pillar");
 
     Particle OMINOUS_SPAWNING = ParticleImpl.get("minecraft:ominous_spawning");
 
@@ -232,7 +232,7 @@ sealed interface Particles permits Particle {
 
     Particle TRIAL_OMEN = ParticleImpl.get("minecraft:trial_omen");
 
-    Particle.BlockCrumble BLOCK_CRUMBLE = (Particle.BlockCrumble) ParticleImpl.get("minecraft:block_crumble");
+    Particle.BlockCrumble BLOCK_CRUMBLE = ParticleImpl.get("minecraft:block_crumble");
 
     Particle FIREFLY = ParticleImpl.get("minecraft:firefly");
 }

@@ -20,7 +20,7 @@ final class AcquirableImpl<T> implements Acquirable<T> {
 
     private final T value;
     private final Thread initThread = Thread.currentThread();
-    private volatile TickThread assignedThread;
+    private volatile @Nullable TickThread assignedThread;
 
     public AcquirableImpl(T value) {
         this.value = value;

@@ -202,7 +202,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private long startItemUseTime;
     private long itemUseTime;
-    private PlayerHand itemUseHand;
+    private @Nullable PlayerHand itemUseHand;
 
     // Game state (https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Game_Event)
     private boolean enableRespawnScreen;
@@ -1229,7 +1229,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * More information can be found <a href="https://minecraft.wiki/w/Java_Edition_protocol/Packets#player-info:player-actions">here</a>.
      *
      * @param listOrder the order in which the player should be displayed in the tab-list. A higher number means
-     *                     the player will appear higher in the tab-list.
+     *                  the player will appear higher in the tab-list.
      */
     public void setListOrder(int listOrder) {
         this.listOrder = listOrder;
@@ -1380,7 +1380,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     @Override
     public void clearResourcePacks() {
-        sendPacket(new ResourcePackPopPacket((UUID) null));
+        sendPacket(new ResourcePackPopPacket(null));
     }
 
     /**
@@ -2445,6 +2445,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     /**
      * Gets the client's 'effective' view distance, which is the minimum of the client's view distance settings, and the local instance settings, plus one
+     *
      * @return The effective chunk view distance range of the client
      */
     public int effectiveViewDistance() {

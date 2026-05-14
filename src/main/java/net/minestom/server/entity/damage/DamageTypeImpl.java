@@ -16,5 +16,4 @@ record DamageTypeImpl(
         Check.argCondition(messageId == null || messageId.isEmpty(), "missing message id");
         Check.argCondition(scaling == null || scaling.isEmpty(), "missing scaling");
     }
-
 }

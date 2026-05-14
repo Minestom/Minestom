@@ -8,7 +8,7 @@ import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.Nullable;
 
 public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    private Entity shooter;
+    private @Nullable Entity shooter;
 
     public WitherSkullMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
