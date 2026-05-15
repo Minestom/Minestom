@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -124,52 +125,30 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     private void processPackets(NetworkBuffer readBuffer, PacketParser<ClientPacket> packetParser) {
-        final ConnectionState startingState = getClientState();
-        final PacketReading.Result<ClientPacket> result;
+        final List<PacketReading.ParsedPacket<ClientPacket>> parsed;
         try {
-            result = PacketReading.readPackets(
-                    readBuffer,
-                    packetParser,
-                    startingState, PacketVanilla::nextClientState,
-                    compression()
-            );
+            parsed = PacketReading.readPacketsAutoResize(readBuffer, packetParser,
+                    getClientState(), PacketVanilla::nextClientState, compression());
         } catch (DataFormatException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             disconnect();
             return;
         }
-        switch (result) {
-            case PacketReading.Result.Success<ClientPacket> success -> {
-                for (PacketReading.ParsedPacket<ClientPacket> parsedPacket : success.packets()) {
-                    final ClientPacket packet = parsedPacket.packet();
-
-                    try {
-                        final boolean processImmediately = IMMEDIATE_PROCESS_PACKETS.contains(packet.getClass());
-                        if (processImmediately) {
-                            // Interpret the packet using the connection state we received it.
-                            MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
-                        } else {
-                            // To be processed during the next player tick
-                            final Player player = getPlayer();
-                            assert player != null;
-                            player.addPacketToQueue(packet);
-                        }
-                    } catch (Exception e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
-                    }
+        for (PacketReading.ParsedPacket<ClientPacket> parsedPacket : parsed) {
+            final ClientPacket packet = parsedPacket.packet();
+            try {
+                final boolean processImmediately = IMMEDIATE_PROCESS_PACKETS.contains(packet.getClass());
+                if (processImmediately) {
+                    // Interpret the packet using the connection state we received it.
+                    MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
+                } else {
+                    // To be processed during the next player tick
+                    final Player player = getPlayer();
+                    assert player != null;
+                    player.addPacketToQueue(packet);
                 }
-                // Compact in case of incomplete read
-                readBuffer.compact();
-            }
-            case PacketReading.Result.Empty<ClientPacket> ignored -> {
-                // Empty
-            }
-            case PacketReading.Result.Failure<ClientPacket> failure -> {
-                // Resize for next read
-                final long requiredCapacity = failure.requiredCapacity();
-                assert requiredCapacity > readBuffer.capacity() :
-                        "New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.capacity();
-                readBuffer.resize(requiredCapacity);
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         }
     }
@@ -358,52 +337,13 @@ public class PlayerSocketConnection extends PlayerConnection {
         final long start = buffer.writeIndex();
         final int compressionThreshold = compressed ? MinecraftServer.getCompressionThreshold() : 0;
         try {
-            return switch (packet) {
-                case ServerPacket serverPacket -> {
-                    var nextState = PacketVanilla.nextServerState(serverPacket, state);
-                    if (nextState != state) setServerState(nextState);
-
-                    PacketWriting.writeFramedPacket(buffer, state, serverPacket, compressionThreshold);
-                    yield true;
-                }
-                case FramedPacket framedPacket -> {
-                    final NetworkBuffer body = framedPacket.body();
-                    yield writeBuffer(buffer, body, 0, body.capacity());
-                }
-                case CachedPacket cachedPacket -> {
-                    final NetworkBuffer body = cachedPacket.body(state);
-                    if (body != null) {
-                        yield writeBuffer(buffer, body, 0, body.capacity());
-                    } else {
-                        PacketWriting.writeFramedPacket(buffer, state, cachedPacket.packet(state), compressionThreshold);
-                        yield true;
-                    }
-                }
-                case LazyPacket lazyPacket -> {
-                    PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
-                    yield true;
-                }
-                case BufferedPacket bufferedPacket -> {
-                    final NetworkBuffer rawBuffer = bufferedPacket.buffer();
-                    final long index = bufferedPacket.index();
-                    final long length = bufferedPacket.length();
-                    yield writeBuffer(buffer, rawBuffer, index, length);
-                }
-            };
+            final ConnectionState nextState = PacketWriting.writeFramedPacket(buffer, state, packet, compressionThreshold);
+            if (nextState != state) setServerState(nextState);
+            return true;
         } catch (IndexOutOfBoundsException exception) {
             buffer.writeIndex(start);
             return false;
         }
-    }
-
-    private boolean writeBuffer(NetworkBuffer buffer, NetworkBuffer body, long index, long length) {
-        if (buffer.writableBytes() < length) {
-            // Not enough space in the buffer
-            return false;
-        }
-        NetworkBuffer.copy(body, index, buffer, buffer.writeIndex(), length);
-        buffer.advanceWrite(length);
-        return true;
     }
 
     private NetworkBuffer writeLeftover = null;
