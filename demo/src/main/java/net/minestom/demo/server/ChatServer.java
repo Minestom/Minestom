@@ -7,10 +7,7 @@ import net.minestom.demo.feature.chat.ChatFeature;
 import net.minestom.demo.feature.dialog.DialogFeature;
 import net.minestom.demo.feature.input.InputFeature;
 
-/**
- * Chat-side showcase: text components, sidebar, notifications, dialogs,
- * and the keybind action-bar HUD.
- */
+/** Chat, dialog, and input HUD. */
 public final class ChatServer {
 
     static void main(String[] args) {

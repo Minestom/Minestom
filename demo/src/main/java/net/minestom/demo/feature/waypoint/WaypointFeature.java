@@ -9,11 +9,7 @@ import net.minestom.server.utils.Either;
 
 import java.util.UUID;
 
-/**
- * Sends a single coordinate-only {@link TrackedWaypointPacket} on first
- * spawn so the waypoint API can be demoed without an NPC backing entity.
- * Independent from {@code EntitiesFeature}, though they pair well.
- */
+/** Coordinate-only {@link TrackedWaypointPacket} on first spawn. */
 public final class WaypointFeature implements Feature {
 
     private static final UUID DEMO_WAYPOINT = UUID.fromString("00000000-0000-0000-0000-000000000001");

@@ -24,18 +24,7 @@ import net.minestom.server.utils.Either;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Entity showcase:
- * <ul>
- *   <li>Commands: {@code /summon}, {@code /remove}, {@code /horse},
- *       {@code /minecart}, {@code /setentity}.</li>
- *   <li>First-spawn NPC zoo: a Happy Ghast (with green harness), a Copper
- *       Golem (state GETTING_ITEM + nearby copper-golem-statue block), a
- *       custom-skin {@link PlayerEntity}, and a Mannequin with a profile
- *       and a held player head. Each entity gets a tracked waypoint sent
- *       to the player so it shows up on the HUD.</li>
- * </ul>
- */
+/** Entity commands and a first-spawn NPC zoo with tracked waypoints. */
 public final class EntitiesFeature implements Feature {
 
     @Override
@@ -79,11 +68,6 @@ public final class EntitiesFeature implements Feature {
         });
     }
 
-    /**
-     * Spawn a stationary {@link LivingEntity} at {@code pos}, apply
-     * {@code configure}, push it into the player's instance, and send a
-     * tracked waypoint anchored to its UUID.
-     */
     private static void spawn(Player player, EntityType type, Pos pos, Consumer<LivingEntity> configure) {
         var entity = new LivingEntity(type);
         entity.setNoGravity(true);

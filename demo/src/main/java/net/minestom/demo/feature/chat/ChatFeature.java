@@ -13,16 +13,7 @@ import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.item.Material;
 import net.minestom.server.sound.SoundEvent;
 
-/**
- * Chat / text component demos:
- * <ul>
- *   <li>Commands: {@code /title}, {@code /book}, {@code /echo},
- *       {@code /notification}, {@code /sidebar}, {@code /belowname},
- *       {@code /players}.</li>
- *   <li>First-spawn welcome: action message with click + sprite/playerhead
- *       object components, a {@link Notification}, and a played sound.</li>
- * </ul>
- */
+/** Chat/text component commands plus a first-spawn welcome notification. */
 public final class ChatFeature implements Feature {
 
     @Override

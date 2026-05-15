@@ -22,21 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Block-system showcase:
- * <ul>
- *   <li>Placement rules: dripstone direction, bed pairing (one per bed colour).</li>
- *   <li>Handlers: a generic {@link TestBlockHandler}, and {@link SignHandler}
- *       registered for every block in the {@code #minecraft:all_signs} tag.</li>
- *   <li>Commands: {@code /setblock}, {@code /relight}, {@code /debuggrid}.</li>
- *   <li>Bed double-block: break both halves; enter-bed on interact.</li>
- *   <li>Waterlogging: filling/emptying a waterlogged block with a bucket.</li>
- *   <li>Open property toggle (doors, trapdoors, fence gates, ...).</li>
- *   <li>Crafting table interact opens a chest-1-row inventory titled "Crafting".</li>
- *   <li>On block place: auto-attach the registered handler for that block key.</li>
- *   <li>Sign edits are echoed back to the placing player.</li>
- * </ul>
- */
+/** Placement rules, handlers, bed/door/waterlog mechanics, sign editing. */
 public final class BlocksFeature implements Feature {
 
     @Override
@@ -60,7 +46,6 @@ public final class BlocksFeature implements Feature {
                 new DebugGridCommand()
         );
 
-        // Bed: break both halves
         process.eventHandler().addListener(PlayerBlockBreakEvent.class, event -> {
             Point other = bedTwin(event.getBlockPosition(), event.getBlock());
             if (other == null) return;
@@ -70,7 +55,6 @@ public final class BlocksFeature implements Feature {
             }
         });
 
-        // Bed: enter on interact (works on either half)
         process.eventHandler().addListener(PlayerBlockInteractEvent.class, event -> {
             if (!event.getBlock().key().asMinimalString().endsWith("_bed")) return;
             Point other = bedTwin(event.getBlockPosition(), event.getBlock());
@@ -80,12 +64,10 @@ public final class BlocksFeature implements Feature {
             var player = event.getPlayer();
             player.setVelocity(Vec.ZERO);
             player.swingMainHand();
-            // Always sleep on the head half
             boolean isHead = "head".equals(event.getBlock().getProperty("part"));
             player.enterBed(isHead ? event.getBlockPosition() : other);
         });
 
-        // Waterlogging via bucket / water bucket
         process.eventHandler().addListener(PlayerUseItemOnBlockEvent.class, event -> {
             if (event.getHand() != PlayerHand.MAIN) return;
             var material = event.getItemStack().material();
@@ -98,7 +80,6 @@ public final class BlocksFeature implements Feature {
             }
         });
 
-        // Toggle open property + crafting-table inventory
         process.eventHandler().addListener(PlayerBlockInteractEvent.class, event -> {
             var block = event.getBlock();
             String openProp = block.getProperty("open");
@@ -111,26 +92,20 @@ public final class BlocksFeature implements Feature {
             }
         });
 
-        // Auto-attach a registered handler when its block gets placed
         process.eventHandler().addListener(PlayerBlockPlaceEvent.class, event -> {
             Block block = event.getBlock();
-            BlockHandler existing = block.handler();
-            if (existing != null) return;
+            if (block.handler() != null) return;
             BlockHandler handler = blockManager.getHandler(block.key().asString());
             if (handler != null) event.setBlock(block.withHandler(handler));
         });
 
-        // Echo sign edits back to the editor
         process.eventHandler().addListener(PlayerEditSignEvent.class, event -> event.getLines()
                 .stream()
                 .map(Component::text)
                 .forEach(event.getPlayer()::sendMessage));
     }
 
-    /**
-     * For a bed block at {@code pos}, returns the position of its other
-     * half — or {@code null} if the block is not a properly-oriented bed.
-     */
+    /** Position of the other half of a bed, or {@code null} if not a bed. */
     private static @Nullable Point bedTwin(Point pos, Block bed) {
         String part = bed.getProperty("part");
         String facing = bed.getProperty("facing");

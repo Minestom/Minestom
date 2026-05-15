@@ -9,17 +9,7 @@ import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.player.PlayerDeathEvent;
 
-/**
- * Combat showcase:
- * <ul>
- *   <li>Commands: {@code /health}, {@code /kill}, {@code /attribute},
- *       {@code /tnt}, {@code /potion}.</li>
- *   <li>{@link EntityAttackEvent}: vanilla-like knockback + a flat 5-damage
- *       hit if the target is a player. Attacker gets a chat message.</li>
- *   <li>{@link PlayerDeathEvent}: replace the death chat line with a
- *       fixed string.</li>
- * </ul>
- */
+/** Attack/knockback/damage, combat commands, and a custom death message. */
 public final class CombatFeature implements Feature {
 
     @Override

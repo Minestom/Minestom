@@ -9,10 +9,7 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.ping.Status;
 
-/**
- * Demonstrates {@link ServerListPingEvent}: custom MOTD, favicon,
- * sample/hover lines including remote address and protocol version.
- */
+/** MOTD, favicon, and sample-line builder for {@link ServerListPingEvent}. */
 public final class ServerListPingFeature implements Feature {
 
     @Override

@@ -9,16 +9,7 @@ import net.minestom.server.sound.SoundEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * World-state showcase:
- * <ul>
- *   <li>Commands: {@code /weather}, {@code /worldborder},
- *       {@code /dimension}, {@code /save}, {@code /sleep}.</li>
- *   <li>{@link PlayerLeaveBedEvent}: with 70% probability cancel the leave
- *       (sending an "I'm too tired to stand up!" action bar and a sound),
- *       otherwise clear the action bar.</li>
- * </ul>
- */
+/** World-state commands plus a 70%-chance bed-leave snooze. */
 public final class WorldFeature implements Feature {
 
     @Override

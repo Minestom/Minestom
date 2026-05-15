@@ -6,11 +6,7 @@ import net.minestom.demo.core.ServerListPingFeature;
 import net.minestom.demo.feature.networking.NetworkingFeature;
 import net.minestom.demo.feature.transfer.TransferFeature;
 
-/**
- * Protocol-layer showcase: server-list ping (MOTD, favicon, sample
- * lines), server links + custom report details on spawn, the
- * {@code /config} command, and transfer/cookie commands.
- */
+/** Server-list ping, server links/reports, config phase, transfer. */
 public final class NetworkingServer {
 
     static void main(String[] args) {

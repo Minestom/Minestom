@@ -10,12 +10,7 @@ import net.minestom.server.recipe.RecipeBookCategory;
 
 import java.util.List;
 
-/**
- * Registers a single demo {@link ShapelessRecipe}: one dirt block → one
- * gold block named "abc". Shapeless rather than shaped to keep the data
- * concise; the same {@link ShapelessRecipe} subclass can be reused for
- * any shapeless recipe.
- */
+/** Registers one demo shapeless recipe: dirt → named gold block. */
 public final class RecipeFeature implements Feature {
 
     @Override

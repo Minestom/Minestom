@@ -6,11 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
-/**
- * Lazy loader for the {@code minestom.png} favicon embedded in
- * {@code demo/src/main/resources}. Used by
- * {@link ServerListPingFeature}.
- */
+/** Lazily caches the {@code minestom.png} favicon from resources. */
 public final class Favicon {
 
     private static final String RESOURCE = "/minestom.png";

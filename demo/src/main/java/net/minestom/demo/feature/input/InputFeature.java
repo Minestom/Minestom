@@ -6,11 +6,7 @@ import net.minestom.demo.core.Feature;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.event.player.PlayerInputEvent;
 
-/**
- * Shows the live state of every movement key by repainting an action-bar
- * keybind HUD on each {@link PlayerInputEvent}. Held keys go green,
- * released ones red.
- */
+/** Live keybind state painted to the action bar via {@link PlayerInputEvent}. */
 public final class InputFeature implements Feature {
 
     @Override

@@ -3,10 +3,7 @@ package net.minestom.demo.feature.display;
 import net.minestom.demo.core.Feature;
 import net.minestom.server.ServerProcess;
 
-/**
- * Display entity showcase: {@code /display} — spawns block/item/text
- * display entities with various transforms.
- */
+/** {@code /display} command: block/item/text display entities. */
 public final class DisplayFeature implements Feature {
 
     @Override

@@ -11,16 +11,7 @@ import net.minestom.server.item.Material;
 
 import java.util.List;
 
-/**
- * Projectile / charged-item showcase:
- * <ul>
- *   <li>{@code /shoot} command (snowball etc.).</li>
- *   <li>Crossbow: on {@link PlayerBeginItemUseEvent} with a charged
- *       projectile, "shoot" it by clearing CHARGED_PROJECTILES.</li>
- *   <li>On {@link PlayerCancelItemUseEvent} after holding > 25 ticks,
- *       charge the crossbow with an arrow.</li>
- * </ul>
- */
+/** {@code /shoot} command and crossbow charge/release behaviour. */
 public final class ProjectileFeature implements Feature {
 
     @Override

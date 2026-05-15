@@ -13,13 +13,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Enables {@link BenchmarkManager} for CPU sampling and posts a tab-list
- * header/footer every 10 ticks with RAM usage, tick time, acquisition
- * time, and the CPU monitoring breakdown. Subscribes to
- * {@link ServerTickMonitorEvent} so it stays in sync with the actual
- * tick rate.
- */
+/** CPU sampling + a tab-list HUD with RAM, tick time, and CPU breakdown. */
 public final class BenchmarkFeature implements Feature {
 
     @Override

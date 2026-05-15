@@ -7,23 +7,7 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerGameModeRequestEvent;
 
-/**
- * Utility / debug grab-bag:
- * <ul>
- *   <li>Commands: {@code /test}, {@code /test2}, {@code /execute},
- *       {@code /redirect}, {@code /autoview}, {@code /testinstabreak},
- *       {@code /legacy}, {@code /find}, {@code /gamemode},
- *       {@code /teleport}, {@code /shutdown}, {@code /entityselector}.</li>
- *   <li>{@link PlayerGameModeRequestEvent}: honour gamemode requests from
- *       op players (permission level &ge; 2).</li>
- *   <li>{@link AsyncPlayerConfigurationEvent}: removes the
- *       {@link FeatureFlag#TRADE_REBALANCE} flag, just to demonstrate that
- *       feature flags can be toggled at config time.</li>
- *   <li>Enables Adventure's automatic component translation and installs
- *       an identity translator (no-op) so demo code paths exercising
- *       translation logic are wired up.</li>
- * </ul>
- */
+/** Utility/debug commands, op-gated gamemode requests, translation toggles. */
 public final class DebugFeature implements Feature {
 
     @Override

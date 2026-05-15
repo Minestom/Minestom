@@ -19,13 +19,7 @@ import net.minestom.demo.feature.recipe.RecipeFeature;
 import net.minestom.demo.feature.transfer.TransferFeature;
 import net.minestom.demo.feature.world.WorldFeature;
 
-/**
- * Parity launcher: same surface area as the old monolithic
- * {@code Main} — every feature on, one port, offline auth, LAN broadcast.
- * <p>
- * Bound to {@code 0.0.0.0:25565}. Use the per-feature launchers in this
- * package for smaller, focused reproducers.
- */
+/** Every feature on. */
 public final class AllInOneServer {
 
     static void main(String[] args) {

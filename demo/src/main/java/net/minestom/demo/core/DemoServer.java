@@ -13,12 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Tiny fluent runner used by every {@code server/*Server.java} launcher.
- * <p>
- * Each launcher instantiates a {@code DemoServer}, registers the
- * features it wants to showcase, picks a bind address, and starts.
- */
+/** Fluent builder used by every {@code server/*Server.java} launcher. */
 public final class DemoServer {
 
     private final Auth auth;
@@ -52,19 +47,17 @@ public final class DemoServer {
         return this;
     }
 
-    /** Build the server and bind it on the given host/port. */
     public void start(String host, int port) {
         bootstrap().start(host, port);
         afterStart();
     }
 
-    /** Build the server and bind it on the given socket address (unix sockets, etc.). */
     public void start(SocketAddress address) {
         bootstrap().start(address);
         afterStart();
     }
 
-    /** Convenience: bind on {@code 0.0.0.0:25565}. */
+    /** Bind on {@code 0.0.0.0:25565}. */
     public void start() {
         start("0.0.0.0", 25565);
     }
@@ -72,7 +65,6 @@ public final class DemoServer {
     private MinecraftServer bootstrap() {
         System.setProperty("minestom.new-socket-write-lock", "true");
         MinecraftServer.setCompressionThreshold(0);
-
         MinecraftServer server = MinecraftServer.init(auth);
         ServerProcess process = MinecraftServer.process();
         for (Feature feature : features) feature.register(process);
@@ -81,7 +73,6 @@ public final class DemoServer {
 
     private void afterStart() {
         if (!openToLan) return;
-        // Long event-call delay so LAN broadcast doesn't spam during testing.
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
     }
 }

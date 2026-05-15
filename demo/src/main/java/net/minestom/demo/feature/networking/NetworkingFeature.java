@@ -9,15 +9,7 @@ import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 
 import java.util.Map;
 
-/**
- * Connection / config-phase showcase:
- * <ul>
- *   <li>{@code /config} command (sends the player back to the config phase).</li>
- *   <li>On first spawn, ships a {@link CustomReportDetailsPacket} with a
- *       single key/value plus a {@link ServerLinksPacket} with a NEWS link,
- *       a BUG_REPORT link, and a custom component link.</li>
- * </ul>
- */
+/** {@code /config} command plus server links and custom report details on spawn. */
 public final class NetworkingFeature implements Feature {
 
     @Override

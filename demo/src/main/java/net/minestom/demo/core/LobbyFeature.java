@@ -14,17 +14,7 @@ import net.minestom.server.instance.block.Block;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Default flat lobby:
- * <ul>
- *   <li>creates one {@link InstanceContainer} filled with stone up to y=40
- *       (plus one torch per chunk) and frozen at midday;</li>
- *   <li>spawns connecting players into a random known instance, so that
- *       multi-instance demos (see {@code TransferServer}) also work;</li>
- *   <li>puts players in creative with op permissions and an unknown-command
- *       callback that prints a red "Unknown command".</li>
- * </ul>
- */
+/** Flat stone instance at y=40, creative + op spawn, random-instance routing. */
 public final class LobbyFeature implements Feature {
 
     @Override

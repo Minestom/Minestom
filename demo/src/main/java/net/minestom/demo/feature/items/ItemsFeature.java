@@ -28,20 +28,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Item-stack showcase:
- * <ul>
- *   <li>{@code /give} command.</li>
- *   <li>First-spawn gift: stone with {@code CAN_PLACE_ON}/{@code CAN_BREAK}
- *       predicates, a bundle with diamonds and rabbit feet, an iron-nugget
- *       "food" with a {@link Consumable} component, and a purple bed.</li>
- *   <li>{@link PickupItemEvent}: cancel if the player has no inventory room.</li>
- *   <li>{@link ItemDropEvent}: throw the dropped item forward like vanilla.</li>
- *   <li>{@link CreativeInventoryActionEvent}: convert APPLE → GOLDEN_APPLE,
- *       and block taking ENCHANTED_GOLDEN_APPLE.</li>
- *   <li>{@link PlayerFinishItemUseEvent}: react to eating an apple.</li>
- * </ul>
- */
+/** Item components, predicates, bundles, drop/pickup physics, creative tweaks. */
 public final class ItemsFeature implements Feature {
 
     @Override
@@ -105,10 +92,6 @@ public final class ItemsFeature implements Feature {
         });
     }
 
-    /**
-     * Iron nugget with a {@link Consumable} component — used as the
-     * spawn-gift "food" item.
-     */
     private static ItemStack food(int consumeTicks) {
         return ItemStack.builder(Material.IRON_NUGGET)
                 .amount(64)

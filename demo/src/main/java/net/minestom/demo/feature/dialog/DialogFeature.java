@@ -22,12 +22,7 @@ import net.minestom.server.item.Material;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Dialog showcase: on chat, sends a clickable component that opens a
- * multi-action dialog with every input type (text/multiline, boolean,
- * single option, number range x6). Also logs {@code PlayerCustomClickEvent}
- * payloads to standard out so dialog responses are visible.
- */
+/** Chat-triggered multi-action dialog exercising every {@link DialogInput} type. */
 public final class DialogFeature implements Feature {
 
     @Override
