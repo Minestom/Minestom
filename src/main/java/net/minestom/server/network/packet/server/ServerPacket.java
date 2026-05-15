@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server;
 
 import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.network.packet.Packet;
 import net.minestom.server.network.player.PlayerConnection;
 
 /**
@@ -8,7 +9,7 @@ import net.minestom.server.network.player.PlayerConnection;
  * <p>
  * Packets are value-based, and should therefore not be reliant on identity.
  */
-public sealed interface ServerPacket extends SendablePacket permits ServerPacket.Configuration, ServerPacket.Login, ServerPacket.Play, ServerPacket.Status {
+public sealed interface ServerPacket extends Packet, SendablePacket permits ServerPacket.Configuration, ServerPacket.Login, ServerPacket.Play, ServerPacket.Status {
 
     non-sealed interface Configuration extends ServerPacket {
     }
