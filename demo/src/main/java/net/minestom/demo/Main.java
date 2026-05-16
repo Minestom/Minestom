@@ -40,6 +40,7 @@ public class Main {
 
     static void main(String[] args) {
         System.setProperty("minestom.new-socket-write-lock", "true");
+        System.setProperty("minestom.registry.unsafe-ops", "true");
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Offline());
@@ -94,6 +95,7 @@ public class Main {
         commandManager.register(new SleepCommand());
         commandManager.register(new MinecartCommand());
         commandManager.register(new BelowNameCommand());
+        commandManager.register(new TestBiomeAmbientParticleCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
