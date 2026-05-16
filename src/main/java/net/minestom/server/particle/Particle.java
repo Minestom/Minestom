@@ -98,11 +98,18 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
             if (value.properties().isEmpty()) {
                 return new Result.Ok<>(mapBuilder.build());
             }
+            Map<String, String> defaultProperties = value.defaultState().properties();
             Transcoder.MapBuilder<D> propertiesBuilder = coder.createMap();
+            boolean nonDefaultPropertyExists = false;
             for (Map.Entry<String, String> entry : value.properties().entrySet()) {
+                if (defaultProperties.getOrDefault(entry.getKey(), "").equals(entry.getValue()))
+                    continue; // Skip default values
                 propertiesBuilder.put(entry.getKey(), coder.createString(entry.getValue()));
+                nonDefaultPropertyExists = true;
             }
-            mapBuilder.put("Properties", propertiesBuilder.build());
+            if (nonDefaultPropertyExists) {
+                mapBuilder.put("Properties", propertiesBuilder.build());
+            }
             return new Result.Ok<>(mapBuilder.build());
         }
     };
