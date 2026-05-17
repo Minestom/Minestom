@@ -49,18 +49,18 @@ public interface PacketRegistry<T> {
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
 
-    abstract sealed class Client extends PacketRegistryTemplate<ClientPacket> {
-        @SafeVarargs Client(Entry<? extends ClientPacket>... suppliers) {
+    abstract sealed class Client<T extends ClientPacket> extends PacketRegistryTemplate<T> {
+        @SafeVarargs Client(Entry<? extends T>... suppliers) {
             super(suppliers);
         }
 
         @Override
-        public ConnectionSide side() {
+        public final ConnectionSide side() {
             return ConnectionSide.CLIENT;
         }
     }
 
-    final class ClientHandshake extends Client {
+    final class ClientHandshake extends Client<ClientPacket.Handshake> {
         public ClientHandshake() {
             super(
                     entry(ClientHandshakePacket.class, ClientHandshakePacket.SERIALIZER)
@@ -73,7 +73,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientStatus extends Client {
+    final class ClientStatus extends Client<ClientPacket.Status> {
         public ClientStatus() {
             super(
                     entry(StatusRequestPacket.class, StatusRequestPacket.SERIALIZER),
@@ -87,7 +87,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientLogin extends Client {
+    final class ClientLogin extends Client<ClientPacket.Login> {
         public ClientLogin() {
             super(
                     entry(ClientLoginStartPacket.class, ClientLoginStartPacket.SERIALIZER),
@@ -104,7 +104,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientConfiguration extends Client {
+    final class ClientConfiguration extends Client<ClientPacket.Configuration> {
         public ClientConfiguration() {
             super(
                     entry(ClientSettingsPacket.class, ClientSettingsPacket.SERIALIZER),
@@ -126,10 +126,11 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientPlay extends Client {
+    final class ClientPlay extends Client<ClientPacket.Play> {
         public ClientPlay() {
             super(
                     entry(ClientTeleportConfirmPacket.class, ClientTeleportConfirmPacket.SERIALIZER),
+                    entry(ClientAttackPacket.class, ClientAttackPacket.SERIALIZER),
                     entry(ClientQueryBlockNbtPacket.class, ClientQueryBlockNbtPacket.SERIALIZER),
                     entry(ClientSelectBundleItemPacket.class, ClientSelectBundleItemPacket.SERIALIZER),
                     entry(ClientChangeDifficultyPacket.class, ClientChangeDifficultyPacket.SERIALIZER),
@@ -185,12 +186,14 @@ public interface PacketRegistry<T> {
                     entry(ClientUpdateCommandBlockPacket.class, ClientUpdateCommandBlockPacket.SERIALIZER),
                     entry(ClientUpdateCommandBlockMinecartPacket.class, ClientUpdateCommandBlockMinecartPacket.SERIALIZER),
                     entry(ClientCreativeInventoryActionPacket.class, ClientCreativeInventoryActionPacket.SERIALIZER),
+                    entry(ClientSetGameRulesPacket.class, ClientSetGameRulesPacket.SERIALIZER),
                     entry(ClientUpdateJigsawBlockPacket.class, ClientUpdateJigsawBlockPacket.SERIALIZER),
                     entry(ClientUpdateStructureBlockPacket.class, ClientUpdateStructureBlockPacket.SERIALIZER),
                     entry(ClientSetTestBlockPacket.class, ClientSetTestBlockPacket.SERIALIZER),
                     entry(ClientUpdateSignPacket.class, ClientUpdateSignPacket.SERIALIZER),
+                    entry(ClientSpectateEntityPacket.class, ClientSpectateEntityPacket.SERIALIZER),
                     entry(ClientAnimationPacket.class, ClientAnimationPacket.SERIALIZER),
-                    entry(ClientSpectatePacket.class, ClientSpectatePacket.SERIALIZER),
+                    entry(ClientTeleportToEntityPacket.class, ClientTeleportToEntityPacket.SERIALIZER),
                     entry(ClientTestInstanceBlockActionPacket.class, ClientTestInstanceBlockActionPacket.SERIALIZER),
                     entry(ClientPlayerBlockPlacementPacket.class, ClientPlayerBlockPlacementPacket.SERIALIZER),
                     entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER),
@@ -204,18 +207,18 @@ public interface PacketRegistry<T> {
         }
     }
 
-    abstract sealed class Server extends PacketRegistryTemplate<ServerPacket> {
-        @SafeVarargs Server(Entry<? extends ServerPacket>... suppliers) {
+    abstract sealed class Server<T extends ServerPacket> extends PacketRegistryTemplate<T> {
+        @SafeVarargs Server(Entry<? extends T>... suppliers) {
             super(suppliers);
         }
 
         @Override
-        public ConnectionSide side() {
+        public final ConnectionSide side() {
             return ConnectionSide.SERVER;
         }
     }
 
-    final class ServerHandshake extends Server {
+    final class ServerHandshake extends Server<ServerPacket.Handshake> {
         public ServerHandshake() {
             super(
                     // Empty
@@ -228,7 +231,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerStatus extends Server {
+    final class ServerStatus extends Server<ServerPacket.Status> {
         public ServerStatus() {
             super(
                     entry(ResponsePacket.class, ResponsePacket.SERIALIZER),
@@ -242,7 +245,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerLogin extends Server {
+    final class ServerLogin extends Server<ServerPacket.Login> {
         public ServerLogin() {
             super(
                     entry(LoginDisconnectPacket.class, LoginDisconnectPacket.SERIALIZER),
@@ -260,7 +263,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerConfiguration extends Server {
+    final class ServerConfiguration extends Server<ServerPacket.Configuration> {
         public ServerConfiguration() {
             super(
                     entry(CookieRequestPacket.class, CookieRequestPacket.SERIALIZER),
@@ -292,7 +295,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ServerPlay extends Server {
+    final class ServerPlay extends Server<ServerPacket.Play> {
         public ServerPlay() {
             super(
                     entry(BundlePacket.class, BundlePacket.SERIALIZER),
@@ -334,6 +337,7 @@ public interface PacketRegistry<T> {
                     entry(ExplosionPacket.class, ExplosionPacket.SERIALIZER),
                     entry(UnloadChunkPacket.class, UnloadChunkPacket.SERIALIZER),
                     entry(ChangeGameStatePacket.class, ChangeGameStatePacket.SERIALIZER),
+                    entry(GameRuleValuesPacket.class, GameRuleValuesPacket.SERIALIZER),
                     entry(GameTestHighlightPosPacket.class, GameTestHighlightPosPacket.SERIALIZER),
                     entry(OpenHorseWindowPacket.class, OpenHorseWindowPacket.SERIALIZER),
                     entry(HitAnimationPacket.class, HitAnimationPacket.SERIALIZER),
@@ -344,6 +348,7 @@ public interface PacketRegistry<T> {
                     entry(ParticlePacket.class, ParticlePacket.SERIALIZER),
                     entry(UpdateLightPacket.class, UpdateLightPacket.SERIALIZER),
                     entry(JoinGamePacket.class, JoinGamePacket.SERIALIZER),
+                    entry(LowDiskSpaceWarningPacket.class, LowDiskSpaceWarningPacket.SERIALIZER),
                     entry(MapDataPacket.class, MapDataPacket.SERIALIZER),
                     entry(TradeListPacket.class, TradeListPacket.SERIALIZER),
                     entry(EntityPositionPacket.class, EntityPositionPacket.SERIALIZER),
@@ -406,7 +411,7 @@ public interface PacketRegistry<T> {
                     entry(UpdateScorePacket.class, UpdateScorePacket.SERIALIZER),
                     entry(UpdateSimulationDistancePacket.class, UpdateSimulationDistancePacket.SERIALIZER),
                     entry(SetTitleSubTitlePacket.class, SetTitleSubTitlePacket.SERIALIZER),
-                    entry(TimeUpdatePacket.class, TimeUpdatePacket.SERIALIZER),
+                    entry(SetTimePacket.class, SetTimePacket.SERIALIZER),
                     entry(SetTitleTextPacket.class, SetTitleTextPacket.SERIALIZER),
                     entry(SetTitleTimePacket.class, SetTitleTimePacket.SERIALIZER),
                     entry(EntitySoundEffectPacket.class, EntitySoundEffectPacket.SERIALIZER),

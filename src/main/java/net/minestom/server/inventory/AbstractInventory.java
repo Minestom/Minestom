@@ -73,7 +73,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     public abstract byte getWindowId();
 
     @Override
-    public Set<Player> getViewers() {
+    public Set<? extends Player> getViewers() {
         return unmodifiableViewers;
     }
 
@@ -296,7 +296,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
 
         for (int i = 0; i < itemStacks.length; i++) {
             final ItemStack itemStack = itemStacks[i];
-            Check.notNull(itemStack, "The item array cannot contain any null element!");
+            Objects.requireNonNull(itemStack, "The item array cannot contain any null element!");
             setItemStack(i, itemStack);
         }
     }

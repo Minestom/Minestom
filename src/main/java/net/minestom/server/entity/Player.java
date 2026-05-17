@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
 import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.identity.Identity;
@@ -33,7 +32,6 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.*;
 import net.minestom.server.dialog.Dialog;
-import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.avatar.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerInputs;
@@ -256,7 +254,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(DimensionType.OVERWORLD); // Default dimension
         this.levelFlat = true;
-        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -531,6 +528,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacket(new SetExperiencePacket(exp, level, 0));
         triggerStatus((byte) (EntityStatuses.Player.PERMISSION_LEVEL_0 + permissionLevel)); // Set permission level
         refreshAbilities();
+        sendPacket(instance.createTimePacket());
     }
 
     /**
@@ -899,10 +897,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     @Override
-    @SuppressWarnings({"UnstableApiUsage", "deprecation"})
-    public void sendMessage(final Identity source, final Component message, final MessageType type) {
-        // Note to readers: this method may be deprecated, however it is in fact required.
-        Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
+    public void sendMessage(Component message) {
+        Messenger.sendMessage(this, message, ChatPosition.SYSTEM_MESSAGE);
     }
 
     /**

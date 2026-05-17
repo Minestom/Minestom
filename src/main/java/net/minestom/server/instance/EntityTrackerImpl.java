@@ -313,7 +313,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
 
         @Override
-        public Set<Player> getViewers() {
+        public Set<? extends Player> getViewers() {
             return set;
         }
 

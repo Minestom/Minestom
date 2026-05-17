@@ -105,7 +105,8 @@ public class AnvilLoader implements ChunkLoader {
 
         // Load the chunk data (assuming it is fully generated)
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
-        synchronized (chunk) { // todo: boo, synchronized
+        chunk.lockWriteLock();
+        try {
             final String status = chunkData.getString("status");
             // TODO: Should we handle other statuses?
             if (status.isEmpty() || "minecraft:full".equals(status)) {
@@ -125,6 +126,8 @@ public class AnvilLoader implements ChunkLoader {
                     .remove("block_entities")
                     .build();
             chunk.tagHandler().updateContent(handlerData);
+        } finally {
+            chunk.unlockWriteLock();
         }
 
         // Cache the index of the loaded chunk
@@ -247,7 +250,7 @@ public class AnvilLoader implements ChunkLoader {
                                 LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were {}",
                                         propertiesNBT, property.getKey(), MinestomAdventure.tagStringIO().asString(property.getValue()));
                             } catch (IOException e) {
-                                LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were a {} tag", propertiesNBT, property.getKey(), property.getValue().examinableName());
+                                LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were a {} tag", propertiesNBT, property.getKey(), property.getValue());
                             }
                         }
                     }
@@ -391,7 +394,8 @@ public class AnvilLoader implements ChunkLoader {
         IntList blockPaletteIndices = new IntArrayList(); // Map block indices by state id to avoid doing a deep comparison on every block tag
         int[] blockIndices = new int[SECTION_BLOCK_COUNT];
 
-        synchronized (chunk) {
+        chunk.lockWriteLock();
+        try {
             for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
                 final Section section = chunk.getSection(sectionY);
 
@@ -488,6 +492,8 @@ public class AnvilLoader implements ChunkLoader {
 
                 sections.add(sectionData.build());
             }
+        } finally {
+            chunk.unlockWriteLock();
         }
 
         chunkData.put("sections", sections.build());
