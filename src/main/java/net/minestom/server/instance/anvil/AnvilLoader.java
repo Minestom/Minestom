@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -27,10 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -40,6 +38,7 @@ import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
 public class AnvilLoader implements ChunkLoader {
+    private final static Key DEFAULT_DIMENSION = Key.key("minecraft", "overworld");
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
     private final static int PLAINS_ID = BIOME_REGISTRY.getId(Biome.PLAINS);
@@ -59,14 +58,45 @@ public class AnvilLoader implements ChunkLoader {
     private final Long2ObjectOpenHashMap<LongSet> perRegionLoadedChunks = new Long2ObjectOpenHashMap<>();
     private final ReentrantLock perRegionLoadedChunksLock = new ReentrantLock();
 
-    public AnvilLoader(Path path) {
+
+    private static Path resolveDimensionPath(Path worldPath, String namespace, String dimension) {
+        final Path newPath = worldPath.resolve("dimensions").resolve(namespace).resolve(dimension);
+
+        // 26.1+ layout
+        if (Files.exists(newPath)) {
+            return newPath;
+        }
+
+        // Backwards-compatible loading for old vanilla layouts
+        if ("minecraft".equals(namespace)) {
+            return switch (dimension) {
+                case "overworld" -> worldPath;
+                case "the_nether" -> worldPath.resolve("DIM-1");
+                case "the_end" -> worldPath.resolve("DIM1");
+                default -> newPath;
+            };
+        }
+
+        // New custom dimension layout
+        return newPath;
+    }
+
+    public AnvilLoader(Path path, Key dimension) {
         this.path = path;
         this.levelPath = path.resolve("level.dat");
-        this.regionPath = path.resolve("region");
+        this.regionPath = resolveDimensionPath(path, dimension.namespace(), dimension.value()).resolve("region");
+    }
+
+    public AnvilLoader(String path, Key dimension) {
+        this(Path.of(path), dimension);
+    }
+
+    public AnvilLoader(Path path) {
+        this(path, DEFAULT_DIMENSION);
     }
 
     public AnvilLoader(String path) {
-        this(Path.of(path));
+        this(Path.of(path), DEFAULT_DIMENSION);
     }
 
     @Override
