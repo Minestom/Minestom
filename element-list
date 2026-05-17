@@ -67,9 +67,6 @@ net.minestom.server.event.trait
 net.minestom.server.exception
 net.minestom.server.extras.lan
 net.minestom.server.extras.mojangAuth
-net.minestom.server.extras.query
-net.minestom.server.extras.query.event
-net.minestom.server.extras.query.response
 net.minestom.server.game
 net.minestom.server.gamedata
 net.minestom.server.instance
@@ -81,6 +78,7 @@ net.minestom.server.instance.block.jukebox
 net.minestom.server.instance.block.predicate
 net.minestom.server.instance.block.rule
 net.minestom.server.instance.fluid
+net.minestom.server.instance.gamerule
 net.minestom.server.instance.generator
 net.minestom.server.instance.heightmap
 net.minestom.server.instance.light
@@ -158,5 +156,6 @@ net.minestom.server.utils.validate
 net.minestom.server.world
 net.minestom.server.world.attribute
 net.minestom.server.world.biome
+net.minestom.server.world.clock
 net.minestom.server.world.timeline
 net.minestom.server.worldevent
