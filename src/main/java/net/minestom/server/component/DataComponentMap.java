@@ -88,7 +88,23 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
             }
         }
 
-        return new DataComponentMapImpl(diff);
+        return diff.isEmpty() ? EMPTY : new DataComponentMapImpl(diff);
+    }
+
+    static DataComponentMap applyPatch(DataComponentMap prototype, DataComponentMap patch) {
+        final DataComponentMapImpl patchImpl = (DataComponentMapImpl) patch;
+        if (patchImpl.components().isEmpty()) return prototype;
+
+        final DataComponentMapImpl protoImpl = (DataComponentMapImpl) prototype;
+        final Int2ObjectArrayMap<@Nullable Object> result = new Int2ObjectArrayMap<>(protoImpl.components());
+        for (var entry : patchImpl.components().int2ObjectEntrySet()) {
+            if (entry.getValue() == null) {
+                result.remove(entry.getIntKey());
+            } else {
+                result.put(entry.getIntKey(), entry.getValue());
+            }
+        }
+        return result.isEmpty() ? EMPTY : new DataComponentMapImpl(result);
     }
 
     boolean isEmpty();
@@ -138,6 +154,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      */
     DataComponentMap remove(DataComponent<?> component);
 
+    DataComponentMap reset(DataComponent<?> component);
+
     Collection<DataComponent.Value> entrySet();
 
     Builder toBuilder();
@@ -164,6 +182,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         }
 
         PatchBuilder remove(DataComponent<?> component);
+
+        PatchBuilder reset(DataComponent<?> component);
 
         DataComponentMap build();
     }
