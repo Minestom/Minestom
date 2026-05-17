@@ -208,8 +208,10 @@ public class AnvilLoaderIntegrationTest {
 
             NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(MinecraftServer.getBiomeRegistry().size());
             // easiest equality check to write is a memory compare on written output
-            var original = NetworkBuffer.makeArray(buffer -> buffer.write(sectionSerializer, ChunkData.Section.from(originalSection)));
-            var reloaded = NetworkBuffer.makeArray(buffer -> buffer.write(sectionSerializer, ChunkData.Section.from(reloadedSection)));
+            var original = NetworkBuffer.makeArray(buffer ->
+                    buffer.write(sectionSerializer, new ChunkData.Section((short) originalSection.blockPalette().count(), (short) 0, originalSection.blockPalette(), originalSection.biomePalette())));
+            var reloaded = NetworkBuffer.makeArray(buffer ->
+                    buffer.write(sectionSerializer, new ChunkData.Section((short) reloadedSection.blockPalette().count(), (short) 0, reloadedSection.blockPalette(), reloadedSection.biomePalette())));
             Assertions.assertArrayEquals(original, reloaded);
         }
     }

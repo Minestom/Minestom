@@ -269,7 +269,7 @@ public class DynamicChunk extends Chunk {
             NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(MinecraftServer.getBiomeRegistry().size());
             final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
-                    networkBuffer.write(sectionSerializer, ChunkData.Section.from(section));
+                    networkBuffer.write(sectionSerializer, new ChunkData.Section((short) section.blockPalette().count(), (short) 0, section.blockPalette(), section.biomePalette()));
                 }
             });
 

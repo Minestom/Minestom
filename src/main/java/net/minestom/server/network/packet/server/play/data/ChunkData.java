@@ -79,22 +79,6 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
     }
 
     public record Section(short blockCount, short liquidCount, Palette blockStates, Palette biomes) {
-        private static final int[] LIQUID_STATE_IDS = Block.values().stream()
-                .filter(b -> b.registry().isLiquid())
-                .mapToInt(Block::stateId)
-                .toArray();
-
-
-        public static Section from(net.minestom.server.instance.Section section) {
-            final Palette blocks = section.blockPalette();
-            final short blockCount = (short) blocks.count();
-
-            int liquid = 0;
-            for (int stateId : LIQUID_STATE_IDS) liquid += blocks.count(stateId);
-
-            return new Section(blockCount, (short) liquid, blocks, section.biomePalette());
-        }
-
         public static NetworkBuffer.Type<Section> networkType(int biomeCount) {
             return NetworkBufferTemplate.template(
                     SHORT, Section::blockCount,
