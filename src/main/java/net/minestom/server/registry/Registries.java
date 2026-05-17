@@ -26,8 +26,8 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.timeline.Timeline;
 
 import java.util.List;
@@ -257,7 +257,7 @@ public interface Registries {
 
         @Override
         default DynamicRegistry<CatSoundVariant> catSoundVariant() {
-            return delegate.catSoundVariant();
+            return registries().catSoundVariant();
         }
 
         @Override
@@ -267,7 +267,7 @@ public interface Registries {
 
         @Override
         default DynamicRegistry<ChickenSoundVariant> chickenSoundVariant() {
-            return delegate.chickenSoundVariant();
+            return registries().chickenSoundVariant();
         }
 
         @Override
@@ -277,7 +277,7 @@ public interface Registries {
 
         @Override
         default DynamicRegistry<CowSoundVariant> cowSoundVariant() {
-            return delegate.cowSoundVariant();
+            return registries().cowSoundVariant();
         }
 
         @Override
@@ -292,7 +292,7 @@ public interface Registries {
 
         @Override
         default DynamicRegistry<PigSoundVariant> pigSoundVariant() {
-            return delegate.pigSoundVariant();
+            return registries().pigSoundVariant();
         }
 
         @Override
@@ -312,7 +312,7 @@ public interface Registries {
 
         @Override
         default DynamicRegistry<WorldClock> worldClock() {
-            return delegate.worldClock();
+            return registries().worldClock();
         }
 
         @Override
