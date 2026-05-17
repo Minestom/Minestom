@@ -4,6 +4,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
@@ -37,8 +39,63 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     NetworkBuffer.Type<Block> ID_NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromBlockId, Block::id);
     NetworkBuffer.Type<Block> STATE_NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromStateId, Block::stateId);
 
+    /**
+     * Codec for blocks states as strings.
+     * Format: <code>"minecraft:x[a=y,b=z]"</code>
+     */
     Codec<Block> STATE_CODEC = Codec.STRING.transform(state -> Objects.requireNonNull(
             Block.fromState(state), () -> "not a block state: " + state), Block::state);
+
+    /**
+     * Codec for block states as a map.
+     * Format: <code>{Name:"minecraft:x",Properties:{a:"y",b:"z"}}</code>
+     */
+    Codec<Block> BLOCK_STATE_MAP_CODEC = new Codec<>() {
+        @Override
+        public <D> Result<Block> decode(Transcoder<D> coder, D value) {
+            Result<Transcoder.MapLike<D>> mapResult = coder.getMap(value);
+            if (!(mapResult instanceof Result.Ok(Transcoder.MapLike<D> map)))
+                return mapResult.cast();
+            Result<Block> blockResult = map.getValue("Name").map(coder::getString).mapResult(Block::fromKey);
+            if (!(blockResult instanceof Result.Ok(Block block)))
+                return blockResult.cast();
+            Result<Transcoder.MapLike<D>> propertiesResult = map.getValue("Properties").map(coder::getMap);
+            if (!(propertiesResult instanceof Result.Ok(Transcoder.MapLike<D> properties)))
+                // properties are optional
+                return new Result.Ok<>(block);
+            for (String key : properties.keys()) {
+                Result<String> valueResult = properties.getValue(key).map(coder::getString);
+                if (!(valueResult instanceof Result.Ok(String mapValue))) {
+                    return new Result.Error<>("No string value found for property " + key + " in block state");
+                }
+                block = block.withProperty(key, mapValue);
+            }
+            return new Result.Ok<>(block);
+        }
+
+        @Override
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable Block value) {
+            if (value == null) return new Result.Error<>("null");
+            Transcoder.MapBuilder<D> mapBuilder = coder.createMap();
+            mapBuilder.put("Name", coder.createString(value.key().asMinimalString()));
+            if (value.properties().isEmpty()) {
+                return new Result.Ok<>(mapBuilder.build());
+            }
+            Map<String, String> defaultProperties = value.defaultState().properties();
+            Transcoder.MapBuilder<D> propertiesBuilder = coder.createMap();
+            boolean nonDefaultPropertyExists = false;
+            for (Map.Entry<String, String> entry : value.properties().entrySet()) {
+                if (defaultProperties.getOrDefault(entry.getKey(), "").equals(entry.getValue()))
+                    continue; // Skip default values
+                propertiesBuilder.put(entry.getKey(), coder.createString(entry.getValue()));
+                nonDefaultPropertyExists = true;
+            }
+            if (nonDefaultPropertyExists) {
+                mapBuilder.put("Properties", propertiesBuilder.build());
+            }
+            return new Result.Ok<>(mapBuilder.build());
+        }
+    };
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.

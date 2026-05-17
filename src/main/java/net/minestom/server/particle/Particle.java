@@ -20,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Objects;
 
+import static net.minestom.server.instance.block.Block.BLOCK_STATE_MAP_CODEC;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
@@ -64,53 +64,6 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
 
             //noinspection unchecked
             return ((StructCodec<@NotNull Particle>) value.codec()).encode(coder, value);
-        }
-    };
-
-    Codec<net.minestom.server.instance.block.Block> PARTICLE_BLOCK_STATE_CODEC = new Codec<>() {
-        @Override
-        public <D> Result<net.minestom.server.instance.block.Block> decode(Transcoder<D> coder, D value) {
-            Result<Transcoder.MapLike<D>> mapResult = coder.getMap(value);
-            if (!(mapResult instanceof Result.Ok(Transcoder.MapLike<D> map)))
-                return mapResult.cast();
-            Result<net.minestom.server.instance.block.Block> blockResult = map.getValue("Name").map(coder::getString).mapResult(net.minestom.server.instance.block.Block::fromKey);
-            if (!(blockResult instanceof Result.Ok(net.minestom.server.instance.block.Block block)))
-                return blockResult.cast();
-            Result<Transcoder.MapLike<D>> propertiesResult = map.getValue("Properties").map(coder::getMap);
-            if (!(propertiesResult instanceof Result.Ok(Transcoder.MapLike<D> properties)))
-                // properties are optional
-                return new Result.Ok<>(block);
-            for (String key : properties.keys()) {
-                Result<String> valueResult = properties.getValue(key).map(coder::getString);
-                if (!(valueResult instanceof Result.Ok(String mapValue))) {
-                    return new Result.Error<>("No string value found for property " + key + " in block state");
-                }
-                block = block.withProperty(key, mapValue);
-            }
-            return new Result.Ok<>(block);
-        }
-
-        @Override
-        public <D> Result<D> encode(Transcoder<D> coder, @Nullable net.minestom.server.instance.block.Block value) {
-            if (value == null) return new Result.Error<>("null");
-            Transcoder.MapBuilder<D> mapBuilder = coder.createMap();
-            mapBuilder.put("Name", coder.createString(value.key().asMinimalString()));
-            if (value.properties().isEmpty()) {
-                return new Result.Ok<>(mapBuilder.build());
-            }
-            Map<String, String> defaultProperties = value.defaultState().properties();
-            Transcoder.MapBuilder<D> propertiesBuilder = coder.createMap();
-            boolean nonDefaultPropertyExists = false;
-            for (Map.Entry<String, String> entry : value.properties().entrySet()) {
-                if (defaultProperties.getOrDefault(entry.getKey(), "").equals(entry.getValue()))
-                    continue; // Skip default values
-                propertiesBuilder.put(entry.getKey(), coder.createString(entry.getValue()));
-                nonDefaultPropertyExists = true;
-            }
-            if (nonDefaultPropertyExists) {
-                mapBuilder.put("Properties", propertiesBuilder.build());
-            }
-            return new Result.Ok<>(mapBuilder.build());
         }
     };
 
@@ -159,7 +112,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record Block(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<Block> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Block::key,
-                "block_state", PARTICLE_BLOCK_STATE_CODEC, Block::block,
+                "block_state", BLOCK_STATE_MAP_CODEC, Block::block,
                 (key, block) -> ParticleImpl.<Block>get(key).withBlock(block));
 
         @Contract(pure = true)
@@ -189,7 +142,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record BlockMarker(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<BlockMarker> CODEC = StructCodec.struct(
                 "type", Codec.KEY, BlockMarker::key,
-                "block_state", PARTICLE_BLOCK_STATE_CODEC, BlockMarker::block,
+                "block_state", BLOCK_STATE_MAP_CODEC, BlockMarker::block,
                 (key, block) -> ParticleImpl.<BlockMarker>get(key).withBlock(block));
 
         @Contract(pure = true)
@@ -312,7 +265,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record DustPillar(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<DustPillar> CODEC = StructCodec.struct(
                 "type", Codec.KEY, DustPillar::key,
-                "block_state", PARTICLE_BLOCK_STATE_CODEC, DustPillar::block,
+                "block_state", BLOCK_STATE_MAP_CODEC, DustPillar::block,
                 (key, block) -> ParticleImpl.<DustPillar>get(key).withBlock(block));
 
         @Contract(pure = true)
@@ -342,7 +295,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record FallingDust(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<FallingDust> CODEC = StructCodec.struct(
                 "type", Codec.KEY, FallingDust::key,
-                "block_state", PARTICLE_BLOCK_STATE_CODEC, FallingDust::block,
+                "block_state", BLOCK_STATE_MAP_CODEC, FallingDust::block,
                 (key, block) -> ParticleImpl.<FallingDust>get(key).withBlock(block));
 
         @Contract(pure = true)
@@ -597,7 +550,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record BlockCrumble(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<BlockCrumble> CODEC = StructCodec.struct(
                 "type", Codec.KEY, BlockCrumble::key,
-                "block_state", PARTICLE_BLOCK_STATE_CODEC, BlockCrumble::block,
+                "block_state", BLOCK_STATE_MAP_CODEC, BlockCrumble::block,
                 (key, block) -> ParticleImpl.<BlockCrumble>get(key).withBlock(block));
 
         @Contract(pure = true)
