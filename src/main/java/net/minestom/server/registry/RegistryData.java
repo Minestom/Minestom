@@ -252,6 +252,7 @@ public final class RegistryData {
         private final float friction;
         private final float speedFactor;
         private final float jumpFactor;
+        private final int mapColorId;
         private final byte packedFlags;
         private final byte lightEmission;
         private final byte lightBlocked;
@@ -272,6 +273,7 @@ public final class RegistryData {
             this.friction = fromParent(parent, BlockEntry::friction, main, "friction", Properties::getFloat, 0.6f);
             this.speedFactor = fromParent(parent, BlockEntry::speedFactor, main, "speedFactor", Properties::getFloat, 1.0f);
             this.jumpFactor = fromParent(parent, BlockEntry::jumpFactor, main, "jumpFactor", Properties::getFloat, 1.0f);
+            this.mapColorId = fromParent(parent, BlockEntry::mapColorId, main, "mapColorId", Properties::getInt, 0);
             var air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
             var solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
             var liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
@@ -385,6 +387,10 @@ public final class RegistryData {
 
         public float jumpFactor() {
             return jumpFactor;
+        }
+
+        public int mapColorId() {
+            return mapColorId;
         }
 
         public boolean isAir() {
