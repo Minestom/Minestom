@@ -21,8 +21,20 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @ApiStatus.Internal
 public final class PacketVanilla {
-    public static final PacketParser.Client CLIENT_PACKET_PARSER = new PacketParser.Client();
-    public static final PacketParser.Server SERVER_PACKET_PARSER = new PacketParser.Server();
+    public static final PacketParser.Client CLIENT_PACKET_PARSER = new PacketParser.Client(
+            PacketRegistry.CLIENT_HANDSHAKE,
+            PacketRegistry.CLIENT_STATUS,
+            PacketRegistry.CLIENT_LOGIN,
+            PacketRegistry.CLIENT_CONFIGURATION,
+            PacketRegistry.CLIENT_PLAY
+    );
+    public static final PacketParser.Server SERVER_PACKET_PARSER = new PacketParser.Server(
+            PacketRegistry.SERVER_HANDSHAKE,
+            PacketRegistry.SERVER_STATUS,
+            PacketRegistry.SERVER_LOGIN,
+            PacketRegistry.SERVER_CONFIGURATION,
+            PacketRegistry.SERVER_PLAY
+    );
 
     /**
      * Pool containing a buffer able to hold the largest packet.
