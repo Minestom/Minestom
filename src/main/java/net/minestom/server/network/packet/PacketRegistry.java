@@ -338,7 +338,6 @@ public interface PacketRegistry<T> {
 
     enum ConnectionSide {
         CLIENT,
-        SERVER,
-        BIDIRECTIONAL
+        SERVER
     }
 }
