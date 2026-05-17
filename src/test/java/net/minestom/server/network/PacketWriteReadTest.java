@@ -12,8 +12,8 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementAction;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.crypto.*;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
@@ -354,7 +354,7 @@ public class PacketWriteReadTest {
         addServerPackets(new PlayerPositionAndLookPacket(5, VEC, Vec.ZERO, 0f, 0f, 0));
         addServerPackets(new PlayerRotationPacket(45f, false, 90f, false));
         addServerPackets(new ProjectilePowerPacket(5, 1.0));
-        addServerPackets(new RespawnPacket(0,"overworld", 0L, GameMode.CREATIVE, GameMode.SURVIVAL, false, false, null, 5, 63, (byte) RespawnPacket.COPY_METADATA));
+        addServerPackets(new RespawnPacket(0, "overworld", 0L, GameMode.CREATIVE, GameMode.SURVIVAL, false, false, null, 5, 63, (byte) RespawnPacket.COPY_METADATA));
         addServerPackets(
                 new ScoreboardObjectivePacket("objective", (byte) 0, COMPONENT, ScoreboardObjectivePacket.Type.HEARTS, Sidebar.NumberFormat.blank()),
                 new ScoreboardObjectivePacket("objective", (byte) 0, COMPONENT, ScoreboardObjectivePacket.Type.HEARTS, null),
@@ -609,7 +609,7 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientPlayerRotationPacket(45f, 90f, true, false), new ClientPlayerRotationPacket(180f, -45f, false, true));
         addClientPackets(new ClientPlayerBlockPlacementPacket(PlayerHand.MAIN, Vec.ONE, BlockFace.TOP, 0.5f, 0.5f, 0.5f, false, false, 0), new ClientPlayerBlockPlacementPacket(PlayerHand.OFF, Vec.ZERO, BlockFace.BOTTOM, 1f, 1f, 1f, true, true, Integer.MAX_VALUE));
         addClientPackets(new ClientUseItemPacket(PlayerHand.MAIN, 0, 45f, 90f), new ClientUseItemPacket(PlayerHand.OFF, Integer.MAX_VALUE, 180f, -45f));
-        addClientPackets(new ClientSpectateEntityPacket(1251), new ClientSpectateEntityPacket(Integer.MAX_VALUE), new ClientSpectateEntityPacket(Integer.MIN_VALUE), new  ClientSpectateEntityPacket(0));
+        addClientPackets(new ClientSpectateEntityPacket(1251), new ClientSpectateEntityPacket(Integer.MAX_VALUE), new ClientSpectateEntityPacket(Integer.MIN_VALUE), new ClientSpectateEntityPacket(0));
         addClientPackets(new ClientTeleportToEntityPacket(UUID.randomUUID()), new ClientTeleportToEntityPacket(new UUID(0, 0)));
         addClientPackets(new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.CRAFTING, true, false), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.FURNACE, false, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.BLAST_FURNACE, true, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.SMOKER, false, false));
         addClientPackets(new ClientNameItemPacket("Diamond Sword"), new ClientNameItemPacket(""), new ClientNameItemPacket("A".repeat(100)));
@@ -628,7 +628,7 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientRecipeBookSeenRecipePacket(0), new ClientRecipeBookSeenRecipePacket(100), new ClientRecipeBookSeenRecipePacket(Integer.MAX_VALUE));
         addClientPackets(new ClientSetTestBlockPacket(Vec.ZERO, ClientSetTestBlockPacket.TestBlockMode.START, "test started"), new ClientSetTestBlockPacket(Vec.ONE, ClientSetTestBlockPacket.TestBlockMode.FAIL, "test failed"), new ClientSetTestBlockPacket(Vec.ZERO, ClientSetTestBlockPacket.TestBlockMode.ACCEPT, ""));
         addClientPackets(new ClientTestInstanceBlockActionPacket(Vec.ZERO, ClientTestInstanceBlockActionPacket.Action.INIT, new ClientTestInstanceBlockActionPacket.Data("mytest", new Vec(10, 10, 10), 0, false, ClientTestInstanceBlockActionPacket.Status.CLEARED, null)), new ClientTestInstanceBlockActionPacket(Vec.ONE, ClientTestInstanceBlockActionPacket.Action.RUN, new ClientTestInstanceBlockActionPacket.Data(null, new Vec(5, 5, 5), 1, true, ClientTestInstanceBlockActionPacket.Status.RUNNING, Component.text("Error!"))));
-        addClientPackets(new ClientSetGameRulesPacket(List.of()), new  ClientSetGameRulesPacket(List.of(new ClientSetGameRulesPacket.Entry(Objects.requireNonNull(GameRule.staticRegistry().getKey(GameRule.MOB_DROPS)), "false"))));
+        addClientPackets(new ClientSetGameRulesPacket(List.of()), new ClientSetGameRulesPacket(List.of(new ClientSetGameRulesPacket.Entry(Objects.requireNonNull(GameRule.staticRegistry().getKey(GameRule.MOB_DROPS)), "false"))));
     }
 
     private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet, Env env) {
@@ -649,7 +649,7 @@ public class PacketWriteReadTest {
     }
 
     static <T> Stream<Arguments> packets(PacketRegistry<? extends T> registry, Map<Class<? extends T>, ? extends Collection<T>> map) {
-        return registry.packets().stream().flatMap(info ->  {
+        return registry.packets().stream().flatMap(info -> {
             var tests = map.get(info.packetClass());
             var name = info.packetClass().getSimpleName();
             assertNotNull(tests, "No packet tests for %s".formatted(name));
