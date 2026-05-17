@@ -189,7 +189,7 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(Type<P1> p1, Function<? super R, ? extends P1> g1, Function<? super P1, ? extends R> ctor) {
+    public static <P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(Type<P1> p1, Function<? super R, ? extends P1> g1, F1<? super P1, ? extends R> ctor) {
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(ctor, "ctor");
