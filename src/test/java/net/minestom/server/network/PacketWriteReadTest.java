@@ -14,7 +14,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementAction;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.crypto.*;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
@@ -23,6 +22,7 @@ import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatMessageType;
@@ -72,6 +72,7 @@ import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.WeightedList;
 import net.minestom.server.world.Difficulty;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
@@ -389,9 +390,10 @@ public class PacketWriteReadTest {
         addServerPackets(new TeamsPacket("team", new TeamsPacket.CreateTeamAction(COMPONENT, (byte) 0, TeamsPacket.NameTagVisibility.ALWAYS, TeamsPacket.CollisionRule.ALWAYS, NamedTextColor.RED, COMPONENT, COMPONENT, List.of("player1"))));
         addServerPackets(new TickStepPacket(20));
         addServerPackets(
-                new TimeUpdatePacket(1000L, 100L, true),
-                new TimeUpdatePacket(1000L, Long.MAX_VALUE, false),
-                new TimeUpdatePacket(Long.MIN_VALUE, 100L, true)
+                new SetTimePacket(1000L, Map.of()),
+                new SetTimePacket(1000L, Map.of(WorldClock.OVERWORLD, new SetTimePacket.ClockState(1000L, 0.6f, 1f))),
+                new SetTimePacket(Long.MIN_VALUE, Map.of(WorldClock.OVERWORLD, new SetTimePacket.ClockState(1000L, 0.6f, 1f),
+                        WorldClock.THE_END, new SetTimePacket.ClockState(Long.MAX_VALUE, 0f, 0f)))
         );
         addServerPackets(new TradeListPacket(5, List.of(), 5, 5, true, true));
         addServerPackets(new UnloadChunkPacket(0, 0));
@@ -436,6 +438,8 @@ public class PacketWriteReadTest {
         addServerPackets(new TestInstanceBlockStatus(Component.text("Minestom is cool"), null), new TestInstanceBlockStatus(Component.text("Where is season 5 william?"), BLOCK_VEC));
         addServerPackets(new EntityEffectPacket(0, new Potion(PotionEffect.ABSORPTION, 1, 150)));
         addServerPackets(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.UNTRACK, new TrackedWaypointPacket.Waypoint(Either.right("test"), TrackedWaypointPacket.Icon.DEFAULT, new TrackedWaypointPacket.Target.Empty())));
+        addServerPackets(new GameRuleValuesPacket(Map.of()), new GameRuleValuesPacket(Map.of(Objects.requireNonNull(GameRule.staticRegistry().getKey(GameRule.ADVANCE_TIME)), "false", Objects.requireNonNull(GameRule.staticRegistry().getKey(GameRule.KEEP_INVENTORY)), "false")));
+        addServerPackets(new LowDiskSpaceWarningPacket());
     }
 
     @BeforeAll
@@ -579,18 +583,13 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientEditBookPacket(14, List.of("page1", "page2"), "Wrath of nothing"), new ClientEditBookPacket(15, List.of(), null), new ClientEditBookPacket(12, List.of("hi".repeat(99).split("h")), "What is this book?"));
         addClientPackets(new ClientQueryEntityNbtPacket(1325, 25), new ClientQueryEntityNbtPacket(-15, Integer.MAX_VALUE));
         addClientPackets(
-                new ClientInteractEntityPacket(10, new ClientInteractEntityPacket.Interact(PlayerHand.OFF), true),
-                new ClientInteractEntityPacket(134, new ClientInteractEntityPacket.Interact(PlayerHand.OFF), false),
-                new ClientInteractEntityPacket(124, new ClientInteractEntityPacket.InteractAt(1f, 1f, 1f, PlayerHand.OFF), true),
-                new ClientInteractEntityPacket(Integer.MAX_VALUE, new ClientInteractEntityPacket.InteractAt(1f, 1f, 1f, PlayerHand.MAIN), true),
-                new ClientInteractEntityPacket(Integer.MIN_VALUE, new ClientInteractEntityPacket.InteractAt(1f, 100000f, 1f, PlayerHand.OFF), false)
+                new ClientInteractEntityPacket(10, PlayerHand.MAIN, VEC, true),
+                new ClientInteractEntityPacket(124, PlayerHand.OFF, VEC, true),
+                new ClientInteractEntityPacket(10, PlayerHand.OFF, Vec.ZERO, false),
+                new ClientInteractEntityPacket(Integer.MAX_VALUE, PlayerHand.MAIN, VEC, true),
+                new ClientInteractEntityPacket(Integer.MIN_VALUE, PlayerHand.MAIN, VEC, false)
         );
-        addClientPackets(
-                new ClientInteractEntityPacket(10, new ClientInteractEntityPacket.Attack(), false),
-                new ClientInteractEntityPacket(Integer.MAX_VALUE, new ClientInteractEntityPacket.Attack(), false),
-                new ClientInteractEntityPacket(Integer.MIN_VALUE, new ClientInteractEntityPacket.Attack(), false),
-                new ClientInteractEntityPacket(0, new ClientInteractEntityPacket.Attack(), false)
-        );
+        addClientPackets(new ClientAttackPacket(10), new ClientAttackPacket(Integer.MAX_VALUE), new ClientAttackPacket(Integer.MIN_VALUE), new ClientAttackPacket(0));
         addClientPackets(new ClientGenerateStructurePacket(Vec.ZERO, Integer.MAX_VALUE, true));
         addClientPackets(new ClientLockDifficultyPacket(true), new ClientLockDifficultyPacket(false));
         addClientPackets(new ClientPlayerPositionPacket(Vec.ONE, (byte) ClientPlayerPositionPacket.FLAG_HORIZONTAL_COLLISION), new ClientPlayerPositionPacket(Vec.ZERO, (byte) ClientPlayerPositionPacket.FLAG_ON_GROUND));
@@ -610,7 +609,8 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientPlayerRotationPacket(45f, 90f, true, false), new ClientPlayerRotationPacket(180f, -45f, false, true));
         addClientPackets(new ClientPlayerBlockPlacementPacket(PlayerHand.MAIN, Vec.ONE, BlockFace.TOP, 0.5f, 0.5f, 0.5f, false, false, 0), new ClientPlayerBlockPlacementPacket(PlayerHand.OFF, Vec.ZERO, BlockFace.BOTTOM, 1f, 1f, 1f, true, true, Integer.MAX_VALUE));
         addClientPackets(new ClientUseItemPacket(PlayerHand.MAIN, 0, 45f, 90f), new ClientUseItemPacket(PlayerHand.OFF, Integer.MAX_VALUE, 180f, -45f));
-        addClientPackets(new ClientSpectatePacket(UUID.randomUUID()), new ClientSpectatePacket(new UUID(0, 0)));
+        addClientPackets(new ClientSpectateEntityPacket(1251), new ClientSpectateEntityPacket(Integer.MAX_VALUE), new ClientSpectateEntityPacket(Integer.MIN_VALUE), new  ClientSpectateEntityPacket(0));
+        addClientPackets(new ClientTeleportToEntityPacket(UUID.randomUUID()), new ClientTeleportToEntityPacket(new UUID(0, 0)));
         addClientPackets(new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.CRAFTING, true, false), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.FURNACE, false, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.BLAST_FURNACE, true, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.SMOKER, false, false));
         addClientPackets(new ClientNameItemPacket("Diamond Sword"), new ClientNameItemPacket(""), new ClientNameItemPacket("A".repeat(100)));
         addClientPackets(new ClientResourcePackStatusPacket(UUID.randomUUID(), ResourcePackStatus.ACCEPTED), new ClientResourcePackStatusPacket(UUID.randomUUID(), ResourcePackStatus.DECLINED));
@@ -628,6 +628,7 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientRecipeBookSeenRecipePacket(0), new ClientRecipeBookSeenRecipePacket(100), new ClientRecipeBookSeenRecipePacket(Integer.MAX_VALUE));
         addClientPackets(new ClientSetTestBlockPacket(Vec.ZERO, ClientSetTestBlockPacket.TestBlockMode.START, "test started"), new ClientSetTestBlockPacket(Vec.ONE, ClientSetTestBlockPacket.TestBlockMode.FAIL, "test failed"), new ClientSetTestBlockPacket(Vec.ZERO, ClientSetTestBlockPacket.TestBlockMode.ACCEPT, ""));
         addClientPackets(new ClientTestInstanceBlockActionPacket(Vec.ZERO, ClientTestInstanceBlockActionPacket.Action.INIT, new ClientTestInstanceBlockActionPacket.Data("mytest", new Vec(10, 10, 10), 0, false, ClientTestInstanceBlockActionPacket.Status.CLEARED, null)), new ClientTestInstanceBlockActionPacket(Vec.ONE, ClientTestInstanceBlockActionPacket.Action.RUN, new ClientTestInstanceBlockActionPacket.Data(null, new Vec(5, 5, 5), 1, true, ClientTestInstanceBlockActionPacket.Status.RUNNING, Component.text("Error!"))));
+        addClientPackets(new ClientSetGameRulesPacket(List.of()), new  ClientSetGameRulesPacket(List.of(new ClientSetGameRulesPacket.Entry(Objects.requireNonNull(GameRule.staticRegistry().getKey(GameRule.MOB_DROPS)), "false"))));
     }
 
     private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet, Env env) {
@@ -639,12 +640,12 @@ public class PacketWriteReadTest {
 
     static <T> Stream<Arguments> packets(PacketParser<T> parser, Map<Class<? extends T>, ? extends Collection<T>> map) {
         return Stream.of(
-                        parser.handshake(),
-                        parser.status(),
-                        parser.login(),
-                        parser.configuration(),
-                        parser.play()
-                ).flatMap(it -> packets(it, map));
+                parser.handshake(),
+                parser.status(),
+                parser.login(),
+                parser.configuration(),
+                parser.play()
+        ).flatMap(it -> packets(it, map));
     }
 
     static <T> Stream<Arguments> packets(PacketRegistry<? extends T> registry, Map<Class<? extends T>, ? extends Collection<T>> map) {
