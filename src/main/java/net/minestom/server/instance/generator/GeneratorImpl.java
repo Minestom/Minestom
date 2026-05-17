@@ -94,32 +94,26 @@ public final class GeneratorImpl {
 
         @Override
         public void setBlock(int x, int y, int z, Block block) {
-            final Fork cachedFork = this.fork;
-            Fork fork = setBlock(cachedFork, x, y, z, block);
-            if (fork != cachedFork) {
-                this.fork = fork;
-            }
-        }
-
-        private Fork setBlock(@Nullable Fork fork, int x, int y, int z, Block block) {
-            fork = resize(fork, x, y, z);
+            resize(x, y, z);
+            final Fork fork = this.fork;
             GenerationUnit section = findAbsolute(fork.sections(), fork.minSection(), fork.width(), fork.height(), fork.depth(), x, y, z);
             assert section.absoluteStart().sectionX() == globalToChunk(x) &&
                     section.absoluteStart().sectionY() == globalToChunk(y) &&
                     section.absoluteStart().sectionZ() == globalToChunk(z) :
                     "Invalid section " + section.absoluteStart() + " for " + x + ", " + y + ", " + z;
             section.modifier().setBlock(x, y, z, block);
-            return fork;
         }
 
-        private Fork resize(@Nullable Fork fork, int x, int y, int z) {
+        private void resize(int x, int y, int z) {
             final int sectionX = globalToChunk(x);
             final int sectionY = globalToChunk(y);
             final int sectionZ = globalToChunk(z);
+            final Fork fork = this.fork;
             if (fork == null) {
                 var minSection = BlockVec.SECTION.mul(sectionX, sectionY, sectionZ);
                 var sections = List.of(section(biomeRegistry, new GenSection(), sectionX, sectionY, sectionZ, true));
-                return new Fork(minSection, 1, 1, 1, sections);
+                this.fork = new Fork(minSection, 1, 1, 1, sections);
+                return;
             }
             // Section exists, we need to check the bounds
             final BlockVec minSection = fork.minSection();
@@ -128,7 +122,7 @@ public final class GeneratorImpl {
             final int maxZ = minSection.blockZ() + fork.depth() * SECTION_SIZE;
             if (x >= minSection.blockX() && y >= minSection.blockY() && z >= minSection.blockZ() &&
                     x < maxX && y < maxY && z < maxZ) {
-                return fork; // inside bounds, no resize needed
+                return; // inside bounds, no resize needed
             }
             // Find new min and max
             final BlockVec section = BlockVec.SECTION.mul(sectionX, sectionY, sectionZ);
@@ -163,7 +157,7 @@ public final class GeneratorImpl {
                     newSections[i] = unit;
                 }
             }
-            return new Fork(newMin, newWidth, newHeight, newDepth, List.of(newSections));
+            this.fork = new Fork(newMin, newWidth, newHeight, newDepth, List.of(newSections));
         }
     }
 

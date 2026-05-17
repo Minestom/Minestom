@@ -36,19 +36,17 @@ public class GeneratorForkConsumerIntegrationTest {
     public void local(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
-        instance.setGenerator(unit -> {
-            unit.fork(setter -> {
-                var dynamic = (GeneratorImpl.DynamicFork) setter;
-                assertNull(dynamic.fork);
-                setter.setBlock(unit.absoluteStart(), Block.STONE);
-                final var fork = dynamic.fork;
-                assertNotNull(fork);
-                assertEquals(unit.absoluteStart(), fork.minSection());
-                assertEquals(1, fork.width());
-                assertEquals(1, fork.height());
-                assertEquals(1, fork.depth());
-            });
-        });
+        instance.setGenerator(unit -> unit.fork(setter -> {
+            var dynamic = (GeneratorImpl.DynamicFork) setter;
+            assertNull(dynamic.fork);
+            setter.setBlock(unit.absoluteStart(), Block.STONE);
+            final var fork = dynamic.fork;
+            assertNotNull(fork);
+            assertEquals(unit.absoluteStart(), fork.minSection());
+            assertEquals(1, fork.width());
+            assertEquals(1, fork.height());
+            assertEquals(1, fork.depth());
+        }));
         instance.loadChunk(0, 0).join();
         assertEquals(Block.STONE, instance.getBlock(0, -64, 0));
     }
