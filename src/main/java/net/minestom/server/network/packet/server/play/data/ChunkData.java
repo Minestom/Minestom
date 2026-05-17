@@ -78,14 +78,15 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
         return blockEntities;
     }
 
-    public record Section(short blockCount, Palette blockStates, Palette biomes) {
+    public record Section(short blockCount, short liquidCount, Palette blockStates, Palette biomes) {
         public static Section from(net.minestom.server.instance.Section section) {
-            return new Section((short) section.blockPalette().count(), section.blockPalette(), section.biomePalette());
+            return new Section((short) section.blockPalette().count(), (short) (section.blockPalette().count() > 0 ? 1 : 0), section.blockPalette(), section.biomePalette());
         }
 
         public static NetworkBuffer.Type<Section> networkType(int biomeCount) {
             return NetworkBufferTemplate.template(
                     SHORT, Section::blockCount,
+                    SHORT, Section::liquidCount,
                     Palette.BLOCK_SERIALIZER, Section::blockStates,
                     Palette.biomeSerializer(biomeCount), Section::biomes,
                     Section::new

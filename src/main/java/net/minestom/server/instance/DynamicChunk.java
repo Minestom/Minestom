@@ -12,7 +12,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
 import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
-import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -29,7 +28,6 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
-import static net.minestom.server.network.NetworkBuffer.SHORT;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -269,14 +266,10 @@ public class DynamicChunk extends Chunk {
 
         lockReadLock();
         try {
-            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
+            NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(MinecraftServer.getBiomeRegistry().size());
             final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
-                    final int fillCount = section.blockPalette().count();
-                    networkBuffer.write(SHORT, (short) fillCount);
-                    networkBuffer.write(SHORT, (short) (fillCount > 0 ? 1 : 0)); //TODO(26.1) proper fluid count
-                    networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blockPalette());
-                    networkBuffer.write(biomeSerializer, section.biomePalette());
+                    networkBuffer.write(sectionSerializer, ChunkData.Section.from(section));
                 }
             });
 
