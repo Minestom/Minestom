@@ -876,7 +876,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.instance = instance;
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             try {
-                Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
+                Objects.requireNonNull(chunk, "Entity has been placed in an unloaded chunk!");
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
                     player.sendPacket(instance.createInitializeWorldBorderPacket());

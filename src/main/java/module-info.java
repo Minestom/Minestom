@@ -18,6 +18,7 @@ module net.minestom.server {
     requires jdk.jfr;
     requires java.desktop;
     requires java.management;
+    requires net.minestom.data;
 
     // EXPORTS
     exports net.minestom.server;
@@ -88,9 +89,6 @@ module net.minestom.server {
     exports net.minestom.server.exception;
     exports net.minestom.server.extras.lan;
     exports net.minestom.server.extras.mojangAuth;
-    exports net.minestom.server.extras.query;
-    exports net.minestom.server.extras.query.event;
-    exports net.minestom.server.extras.query.response;
     exports net.minestom.server.game;
     exports net.minestom.server.gamedata;
     exports net.minestom.server.instance;
@@ -102,6 +100,7 @@ module net.minestom.server {
     exports net.minestom.server.instance.block.predicate;
     exports net.minestom.server.instance.block.rule;
     exports net.minestom.server.instance.fluid;
+    exports net.minestom.server.instance.gamerule;
     exports net.minestom.server.instance.generator;
     exports net.minestom.server.instance.heightmap;
     exports net.minestom.server.instance.light;
@@ -177,9 +176,11 @@ module net.minestom.server {
     exports net.minestom.server.utils.url;
     exports net.minestom.server.utils.validate;
     exports net.minestom.server.world;
+    exports net.minestom.server.worldevent;
     exports net.minestom.server.world.attribute;
     exports net.minestom.server.world.biome;
     exports net.minestom.server.world.timeline;
+    exports net.minestom.server.world.clock;
 
     provides net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider with net.minestom.server.adventure.provider.MinestomComponentLoggerProvider;
     provides net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomAnsiComponentSerializerProvider;

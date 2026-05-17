@@ -9,9 +9,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface JukeboxSongs permits JukeboxSong {
-    RegistryKey<JukeboxSong> PRECIPICE = RegistryKey.unsafeOf("precipice");
-
     RegistryKey<JukeboxSong> STAL = RegistryKey.unsafeOf("stal");
+
+    RegistryKey<JukeboxSong> PRECIPICE = RegistryKey.unsafeOf("precipice");
 
     RegistryKey<JukeboxSong> STRAD = RegistryKey.unsafeOf("strad");
 
@@ -37,17 +37,17 @@ sealed interface JukeboxSongs permits JukeboxSong {
 
     RegistryKey<JukeboxSong> MALL = RegistryKey.unsafeOf("mall");
 
-    RegistryKey<JukeboxSong> CHIRP = RegistryKey.unsafeOf("chirp");
+    RegistryKey<JukeboxSong> PIGSTEP = RegistryKey.unsafeOf("pigstep");
 
     RegistryKey<JukeboxSong> CREATOR = RegistryKey.unsafeOf("creator");
 
-    RegistryKey<JukeboxSong> PIGSTEP = RegistryKey.unsafeOf("pigstep");
+    RegistryKey<JukeboxSong> CHIRP = RegistryKey.unsafeOf("chirp");
 
     RegistryKey<JukeboxSong> WARD = RegistryKey.unsafeOf("ward");
 
-    RegistryKey<JukeboxSong> CAT = RegistryKey.unsafeOf("cat");
-
     RegistryKey<JukeboxSong> WAIT = RegistryKey.unsafeOf("wait");
+
+    RegistryKey<JukeboxSong> CAT = RegistryKey.unsafeOf("cat");
 
     RegistryKey<JukeboxSong> _11 = RegistryKey.unsafeOf("11");
 }

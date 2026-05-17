@@ -257,11 +257,29 @@ public final class ComponentCodecs {
             final Result<? extends ObjectContents> contents = map.hasValue("player")
                     ? PLAYER_HEAD_CONTENTS.decodeFromMap(coder, map)
                     : SPRITE_CONTENT.decodeFromMap(coder, map);
-            return contents.mapResult(Component::object);
+            // fallback is inlined into the map.
+            if (!map.hasValue("fallback")) {
+                return contents.mapResult(Component::object);
+            }
+
+            final Result<Component> fallback = map.getValue("fallback")
+                    .map(value -> ComponentCodecs.COMPONENT.decode(coder, value))
+                    .mapError(error -> "fallback: " + error);
+            return contents.map(objectContents -> fallback.mapResult(fallbackComponent ->
+                    Component.object().contents(objectContents).fallback(fallbackComponent).build()));
         }
 
         @Override
         public <D> Result<D> encodeToMap(Transcoder<D> coder, ObjectComponent value, MapBuilder<D> map) {
+            var fallback = value.fallback();
+            if (fallback != null) {
+                switch (ComponentCodecs.COMPONENT.encode(coder, fallback)) {
+                    case Result.Ok<D>(D component) -> map.put("fallback", component);
+                    case Result.Error<D>(String error) -> {
+                        return new Result.Error<>("fallback: " + error);
+                    }
+                }
+            }
             return switch (value.contents()) {
                 case SpriteObjectContents sprite -> SPRITE_CONTENT.encodeToMap(coder, sprite, map);
                 case PlayerHeadObjectContents playerHead -> PLAYER_HEAD_CONTENTS.encodeToMap(coder, playerHead, map);
