@@ -35,7 +35,7 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, b
             FilterMask.SERIALIZER, PlayerChatMessagePacket::filterMask,
             VAR_INT, PlayerChatMessagePacket::msgTypeId,
             COMPONENT, PlayerChatMessagePacket::msgTypeName,
-            COMPONENT, PlayerChatMessagePacket::msgTypeTarget,
+            COMPONENT.optional(), PlayerChatMessagePacket::msgTypeTarget,
             PlayerChatMessagePacket::new
     );
 

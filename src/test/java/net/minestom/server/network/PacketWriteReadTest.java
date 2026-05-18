@@ -16,6 +16,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
+import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.DisconnectPacket;
@@ -35,10 +36,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -173,6 +177,17 @@ public class PacketWriteReadTest {
             NetworkBuffer.Type<ClientPacket> serializer = (NetworkBuffer.Type<ClientPacket>) packetClass.getField("SERIALIZER").get(packetClass);
             testPacket(serializer, packet);
         }
+    }
+
+    @Test
+    public void clientChatMessageWritesFixedLengthAckList() {
+        final byte checksum = 42;
+        final var packet = new ClientChatMessagePacket("hello", 0L, 0L, null, 0, new BitSet(), checksum);
+
+        final byte[] bytes = NetworkBuffer.makeArray(ClientChatMessagePacket.SERIALIZER, packet);
+
+        assertEquals(28, bytes.length);
+        assertArrayEquals(new byte[]{0, 0, 0, checksum}, Arrays.copyOfRange(bytes, bytes.length - 4, bytes.length));
     }
 
     private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet) {
