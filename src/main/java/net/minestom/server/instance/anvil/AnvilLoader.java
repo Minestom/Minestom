@@ -20,6 +20,7 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -28,7 +29,10 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -38,7 +42,6 @@ import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
 public class AnvilLoader implements ChunkLoader {
-    private final static Key DEFAULT_DIMENSION = Key.key("minecraft", "overworld");
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
     private final static int PLAINS_ID = BIOME_REGISTRY.getId(Biome.PLAINS);
@@ -58,45 +61,35 @@ public class AnvilLoader implements ChunkLoader {
     private final Long2ObjectOpenHashMap<LongSet> perRegionLoadedChunks = new Long2ObjectOpenHashMap<>();
     private final ReentrantLock perRegionLoadedChunksLock = new ReentrantLock();
 
-
-    private static Path resolveDimensionPath(Path worldPath, String namespace, String dimension) {
-        final Path newPath = worldPath.resolve("dimensions").resolve(namespace).resolve(dimension);
-
-        // 26.1+ layout
-        if (Files.exists(newPath)) {
-            return newPath;
-        }
-
-        // Backwards-compatible loading for old vanilla layouts
-        if ("minecraft".equals(namespace)) {
-            return switch (dimension) {
-                case "overworld" -> worldPath;
-                case "the_nether" -> worldPath.resolve("DIM-1");
-                case "the_end" -> worldPath.resolve("DIM1");
-                default -> newPath;
-            };
-        }
-
-        // New custom dimension layout
-        return newPath;
-    }
-
+    /**
+     * Creates a new AnvilLoader for the given world path and dimension.
+     * @param path The path to the world
+     * @param dimension The key for the dimension. Use {@link DimensionType} for getting vanilla keys for dimensions.
+     */
     public AnvilLoader(Path path, Key dimension) {
         this.path = path;
         this.levelPath = path.resolve("level.dat");
-        this.regionPath = resolveDimensionPath(path, dimension.namespace(), dimension.value()).resolve("region");
+        this.regionPath = path.resolve("dimensions").resolve(dimension.namespace()).resolve(dimension.value()).resolve("region");
     }
 
-    public AnvilLoader(String path, Key dimension) {
-        this(Path.of(path), dimension);
-    }
-
+    /**
+     * @deprecated This creates the AnvilLoader for worlds created before 26.1. Use {@link #AnvilLoader(Path, Key)} instead.
+     * @param path The path to the world
+     */
+    @Deprecated(forRemoval = true)
     public AnvilLoader(Path path) {
-        this(path, DEFAULT_DIMENSION);
+        this.path = path;
+        this.levelPath = path.resolve("level.dat");
+        this.regionPath = path.resolve("region");
     }
 
+    /**
+     * @deprecated This creates the AnvilLoader for worlds created before 26.1. Use {@link #AnvilLoader(Path, Key)} instead.
+     * @param path The path to the world
+     */
+    @Deprecated(forRemoval = true)
     public AnvilLoader(String path) {
-        this(Path.of(path), DEFAULT_DIMENSION);
+        this(Path.of(path));
     }
 
     @Override
