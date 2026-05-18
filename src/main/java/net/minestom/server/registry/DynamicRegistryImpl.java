@@ -246,6 +246,76 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return createRegistryDataPacket(registries, false);
     }
 
+    @SuppressWarnings("unchecked")
+    void applyRegistryDataPacket(Registries registries, DynamicRegistry<?> vanillaRegistry, RegistryDataPacket packet) {
+        Objects.requireNonNull(registries, "Registries cannot be null");
+        final DynamicRegistry<T> vanilla = (DynamicRegistry<T>) Objects.requireNonNull(vanillaRegistry,
+                "Vanilla registry cannot be null");
+        Objects.requireNonNull(packet, "Packet cannot be null");
+        Check.argCondition(!key.asString().equals(packet.registryId()),
+                "Cannot apply registry data packet for {0} to registry {1}", packet.registryId(), key);
+        Objects.requireNonNull(codec, "Cannot apply registry data packet to server-only registry");
+
+        final Transcoder<BinaryTag> transcoder = new RegistryTranscoder<>(Transcoder.NBT, registries);
+        final List<T> newIdToValue = new ArrayList<>(packet.entries().size());
+        final List<RegistryKey<T>> newIdToKey = new ArrayList<>(packet.entries().size());
+        final Map<RegistryKey<T>, Integer> newKeyToId = new HashMap<>(packet.entries().size());
+        final Map<Key, T> newKeyToValue = new HashMap<>(packet.entries().size());
+        final Map<T, RegistryKey<T>> newValueToKey = new HashMap<>(packet.entries().size());
+        final List<DataPack> newPackById = new ArrayList<>(packet.entries().size());
+
+        for (RegistryDataPacket.Entry entry : packet.entries()) {
+            final Key entryKey = Key.key(entry.id());
+            final RegistryKey<T> registryKey = new RegistryKeyImpl<>(entryKey);
+            final T value;
+            final DataPack pack;
+            if (entry.data() == null) {
+                value = Objects.requireNonNull(vanilla.get(entryKey),
+                        "Missing vanilla registry entry " + entryKey + " for registry " + key);
+                pack = DataPack.MINECRAFT_CORE;
+            } else {
+                final Result<T> result = codec.decode(transcoder, entry.data());
+                value = result.orElseThrow("Failed to decode registry entry " + entryKey + " for registry " + key);
+                final T vanillaValue = vanilla.get(entryKey);
+                pack = Objects.equals(vanillaValue, value) ? DataPack.MINECRAFT_CORE : DataPack.MINESTOM_UNNAMED;
+            }
+
+            Check.argCondition(newKeyToId.put(registryKey, newIdToValue.size()) != null,
+                    "Duplicate registry entry {0} in registry data packet for {1}", entryKey, key);
+            newIdToValue.add(value);
+            newIdToKey.add(registryKey);
+            newKeyToValue.put(entryKey, value);
+            newValueToKey.put(value, registryKey);
+            newPackById.add(pack);
+        }
+
+        synchronized (REGISTRY_LOCK) {
+            idToValue.clear();
+            idToValue.addAll(newIdToValue);
+            idToKey.clear();
+            idToKey.addAll(newIdToKey);
+            keyToId.clear();
+            keyToId.putAll(newKeyToId);
+            keyToValue.clear();
+            keyToValue.putAll(newKeyToValue);
+            valueToKey.clear();
+            valueToKey.putAll(newValueToKey);
+            packById.clear();
+            packById.addAll(newPackById);
+
+            for (RegistryTagImpl.Backed<T> tag : tags.values()) {
+                final List<RegistryKey<T>> tagEntries = new ArrayList<>();
+                tag.forEach(tagEntries::add);
+                for (RegistryKey<T> tagEntry : tagEntries) {
+                    if (!newKeyToId.containsKey(tagEntry))
+                        tag.remove(tagEntry);
+                }
+            }
+
+            vanillaRegistryDataPacket.invalidate();
+        }
+    }
+
     @Override
     public TagsPacket.Registry tagRegistry() {
         final List<TagsPacket.Tag> tagList = new ArrayList<>(tags.size());

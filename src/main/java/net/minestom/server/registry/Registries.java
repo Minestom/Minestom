@@ -24,6 +24,7 @@ import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
@@ -49,6 +50,13 @@ public interface Registries {
 
     static TagsPacket tagsPacket(Registries registries) {
         return RegistriesImpl.tagsPacket(registries);
+    }
+
+    /**
+     * Applies a registry data packet to the matching dynamic registry.
+     */
+    static void applyRegistryDataPacket(Registries registries, RegistryDataPacket packet) {
+        RegistriesImpl.applyRegistryDataPacket(registries, packet);
     }
 
     // Static registries
