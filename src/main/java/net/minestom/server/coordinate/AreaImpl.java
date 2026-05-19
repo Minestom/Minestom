@@ -360,6 +360,7 @@ final class AreaImpl {
                                     double dz = z - center.blockZ();
                                     if (dx * dx + dy * dy + dz * dz > radiusSquared) {
                                         fullSection = false;
+                                        break;
                                     }
                                 }
                             }

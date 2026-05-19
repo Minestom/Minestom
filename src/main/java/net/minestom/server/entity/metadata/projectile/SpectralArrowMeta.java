@@ -6,7 +6,7 @@ import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.Nullable;
 
 public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
-    private Entity shooter;
+    private @Nullable Entity shooter;
 
     public SpectralArrowMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
@@ -32,5 +32,4 @@ public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataPr
     public boolean requiresVelocityPacketAtSpawn() {
         return true;
     }
-
 }

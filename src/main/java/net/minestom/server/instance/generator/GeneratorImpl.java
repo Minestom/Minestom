@@ -11,6 +11,7 @@ import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -76,7 +77,7 @@ public final class GeneratorImpl {
     }
 
     public static UnitImpl unit(DynamicRegistry<Biome> biomeRegistry, UnitModifier modifier, Vec start, Vec end,
-                                List<GenerationUnit> divided) {
+                                @Nullable List<GenerationUnit> divided) {
         if (start.x() > end.x() || start.y() > end.y() || start.z() > end.z()) {
             throw new IllegalArgumentException("absoluteStart must be before absoluteEnd");
         }
@@ -168,7 +169,7 @@ public final class GeneratorImpl {
 
     public record UnitImpl(DynamicRegistry<Biome> biomeRegistry, UnitModifier modifier,
                            Vec size, Vec absoluteStart, Vec absoluteEnd,
-                           List<GenerationUnit> divided,
+                           @Nullable List<GenerationUnit> divided,
                            List<UnitImpl> forks) implements GenerationUnit {
         @Override
         public GenerationUnit fork(Point start, Point end) {

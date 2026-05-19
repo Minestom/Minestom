@@ -110,7 +110,7 @@ public sealed interface Click {
      * adjusting the slot ID as necessary. On the returned {@link Window} instance, the boolean field indicates which
      * inventory the click is in (since it was unambiguous previously, but is not now).
      *
-     * @param click the click to convert
+     * @param click         the click to convert
      * @param containerSize the size of the opened container, or null if the player inventory is open
      * @return the (possibly) converted click
      */
@@ -126,7 +126,8 @@ public sealed interface Click {
             case Double(int slot) -> toWindowSingle(slot, containerSize, Double::new);
             case OffhandSwap(int slot) -> toWindowSingle(slot, containerSize, OffhandSwap::new);
             case DropSlot(int slot, boolean all) -> toWindowSingle(slot, containerSize, s -> new DropSlot(s, all));
-            case HotbarSwap(int hotbarSlot, int slot) -> toWindowSingle(slot, containerSize, s -> new HotbarSwap(hotbarSlot, s));
+            case HotbarSwap(int hotbarSlot, int slot) ->
+                    toWindowSingle(slot, containerSize, s -> new HotbarSwap(hotbarSlot, s));
 
             // Everything with zero slots
             case LeftDropCursor() -> new Window(false, click);
@@ -171,7 +172,7 @@ public sealed interface Click {
      * <br>
      * This is the inverse of {@link #toWindow(Click, Integer)}; read that for more information
      *
-     * @param window the click, along with whether or not it was inside the window
+     * @param window        the click, along with whether it was inside the window
      * @param containerSize the size of the opened container, or null if the player inventory is open
      * @return the (potentially) converted click information
      */
@@ -179,15 +180,16 @@ public sealed interface Click {
     static Click fromWindow(Click.Window window, @Nullable Integer containerSize) {
         return switch (window.click()) {
             // Everything with one dynamic slot
-            case Left(int slot) -> fromWindowSingle(window, containerSize, Left::new);
-            case Right(int slot) -> fromWindowSingle(window, containerSize, Right::new);
-            case Middle(int slot) -> fromWindowSingle(window, containerSize, Middle::new);
-            case LeftShift(int slot) -> fromWindowSingle(window, containerSize, LeftShift::new);
-            case RightShift(int slot) -> fromWindowSingle(window, containerSize, RightShift::new);
-            case Double(int slot) -> fromWindowSingle(window, containerSize, Double::new);
-            case OffhandSwap(int slot) -> fromWindowSingle(window, containerSize, OffhandSwap::new);
-            case DropSlot(int slot, boolean all) -> fromWindowSingle(window, containerSize, s -> new DropSlot(s, all));
-            case HotbarSwap(int hotbarSlot, int slot) -> fromWindowSingle(window, containerSize, s -> new HotbarSwap(hotbarSlot, s));
+            case Left(_) -> fromWindowSingle(window, containerSize, Left::new);
+            case Right(_) -> fromWindowSingle(window, containerSize, Right::new);
+            case Middle(_) -> fromWindowSingle(window, containerSize, Middle::new);
+            case LeftShift(_) -> fromWindowSingle(window, containerSize, LeftShift::new);
+            case RightShift(_) -> fromWindowSingle(window, containerSize, RightShift::new);
+            case Double(_) -> fromWindowSingle(window, containerSize, Double::new);
+            case OffhandSwap(_) -> fromWindowSingle(window, containerSize, OffhandSwap::new);
+            case DropSlot(_, boolean all) -> fromWindowSingle(window, containerSize, s -> new DropSlot(s, all));
+            case HotbarSwap(int hotbarSlot, _) ->
+                    fromWindowSingle(window, containerSize, s -> new HotbarSwap(hotbarSlot, s));
 
             // Everything with zero slots
             case LeftDropCursor() -> window.click();
@@ -217,7 +219,7 @@ public sealed interface Click {
      * Represents a click inside a window.
      *
      * @param inOpened whether the window is the player inventory (false) or the opened inventory (true).
-     * @param click the (contextualized) click
+     * @param click    the (contextualized) click
      */
     record Window(boolean inOpened, Click click) {
     }

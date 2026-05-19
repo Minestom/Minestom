@@ -531,9 +531,7 @@ public class GeneratorTest {
         assertEquals(2, sections.size()); // 2x1x1 = 2 sections
 
         // Verify immutability by attempting to modify (should throw exception)
-        assertThrows(UnsupportedOperationException.class, () -> {
-            sections.add(new Vec(99, 99, 99));
-        });
+        assertThrows(UnsupportedOperationException.class, () -> sections.add(new Vec(99, 99, 99)));
     }
 
     @Test

@@ -54,13 +54,7 @@ tasks.withType<Javadoc> {
         // Links to external javadocs
         links("https://docs.oracle.com/en/java/javase/$javaVersion/docs/api/")
         if (!adventureVersion.endsWith("-SNAPSHOT")) {
-            links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
-            links("https://jd.advntr.dev/nbt/${libs.versions.adventure.get()}/")
-            links("https://jd.advntr.dev/key/${libs.versions.adventure.get()}/")
-            links("https://jd.advntr.dev/text-serializer-ansi/${libs.versions.adventure.get()}/")
-            links("https://jd.advntr.dev/text-serializer-gson/${libs.versions.adventure.get()}/")
-            links("https://jd.advntr.dev/text-serializer-legacy/${libs.versions.adventure.get()}/")
-            links("https://jd.advntr.dev/text-serializer-plain/${libs.versions.adventure.get()}/")
+            links("https://jd.papermc.io/adventure/${libs.versions.adventure.get()}/")
         }
         links("https://javadoc.io/doc/com.google.code.gson/gson/${libs.versions.gson.get()}/")
         links("https://javadoc.io/doc/org.jetbrains/annotations/${libs.versions.jetbrainsAnnotations.get()}/")

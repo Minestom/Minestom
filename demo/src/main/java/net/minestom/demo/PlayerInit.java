@@ -76,8 +76,7 @@ public class PlayerInit {
 
                 entity.takeKnockback(0.4f, Math.sin(source.getPosition().yaw() * 0.017453292), -Math.cos(source.getPosition().yaw() * 0.017453292));
 
-                if (entity instanceof Player) {
-                    Player target = (Player) entity;
+                if (entity instanceof Player target) {
                     target.damage(Damage.fromEntity(source, 5));
                 }
 
@@ -125,9 +124,9 @@ public class PlayerInit {
                 player.setPermissionLevel(4);
 
                 player.sendMessage(Component.text("click me for less health ")
-                                           .clickEvent(ClickEvent.runCommand("health set 2"))
-                                           .append(Component.object(ObjectContents.sprite(Key.key("block/stone"))))
-                                           .append(Component.object(ObjectContents.playerHead("Minestom"))));
+                        .clickEvent(ClickEvent.runCommand("health set 2"))
+                        .append(Component.object(ObjectContents.sprite(Key.key("block/stone"))))
+                        .append(Component.object(ObjectContents.playerHead("Minestom"))));
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
                         .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(Block.STONE)))
@@ -204,7 +203,7 @@ public class PlayerInit {
                     mannequinMeta.setDescription(Component.text("npc"));
                     mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
                     mannequinEntity.setItemInMainHand(ItemStack.of(Material.PLAYER_HEAD).with(DataComponents.PROFILE,
-                          new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of()))));
+                            new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of()))));
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
                             Either.left(mannequinEntity.getUuid()),
                             TrackedWaypointPacket.Icon.DEFAULT,
@@ -346,7 +345,6 @@ public class PlayerInit {
                     player.setItemInHand(event.getHand(), itemStack.without(DataComponents.CHARGED_PROJECTILES));
                     event.getPlayer().sendMessage("pew pew!");
                     event.setItemUseDuration(0); // Do not start using the item
-                    return;
                 }
             })
             .addListener(PlayerFinishItemUseEvent.class, event -> {
@@ -359,7 +357,6 @@ public class PlayerInit {
                 final ItemStack itemStack = event.getItemStack();
                 if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
                     player.setItemInHand(event.getHand(), itemStack.with(DataComponents.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
-                    return;
                 }
             })
             .addListener(PlayerBlockInteractEvent.class, event -> {
@@ -387,29 +384,25 @@ public class PlayerInit {
                 if (handler != null) return;
                 event.setBlock(event.getBlock().withHandler(MinecraftServer.getBlockManager().getHandler(block.key().asString())));
             })
-            .addListener(PlayerEditSignEvent.class, event -> {
-                event.getLines()
-                        .stream()
-                        .map(Component::text)
-                        .forEach(comp -> event.getPlayer().sendMessage(comp));
-            })
-            .addListener(PlayerInputEvent.class, event -> {
-                event.getPlayer().sendActionBar(Component.empty()
-                        .append(Component.keybind("key.left").color(event.isHoldingLeftKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.forward").color(event.isHoldingForwardKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.back").color(event.isHoldingBackwardKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.right").color(event.isHoldingRightKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" | "))
-                        .append(Component.keybind("key.jump").color(event.isHoldingJumpKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.sneak").color(event.isHoldingShiftKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.sprint").color(event.isHoldingSprintKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                );
-            });
+            .addListener(PlayerEditSignEvent.class, event -> event.getLines()
+                    .stream()
+                    .map(Component::text)
+                    .forEach(comp -> event.getPlayer().sendMessage(comp)))
+            .addListener(PlayerInputEvent.class, event -> event.getPlayer().sendActionBar(Component.empty()
+                    .append(Component.keybind("key.left").color(event.isHoldingLeftKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.forward").color(event.isHoldingForwardKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.back").color(event.isHoldingBackwardKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.right").color(event.isHoldingRightKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" | "))
+                    .append(Component.keybind("key.jump").color(event.isHoldingJumpKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.sneak").color(event.isHoldingShiftKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.sprint").color(event.isHoldingSprintKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+            ));
 
     {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
@@ -423,8 +416,9 @@ public class PlayerInit {
             }
         });
         instanceContainer.setChunkSupplier(LightingChunk::new);
-        instanceContainer.setTimeRate(0);
-        instanceContainer.setTime(12000);
+
+        var defaultClock = instanceContainer.defaultClock();
+        defaultClock.rate(4f);
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
@@ -435,9 +429,6 @@ public class PlayerInit {
     public void init() {
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
-
-        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
-        MinestomAdventure.COMPONENT_TRANSLATOR = (c, l) -> c;
 
         eventHandler.addListener(ServerTickMonitorEvent.class, event -> LAST_TICK.set(event.getTickMonitor()));
 

@@ -24,7 +24,7 @@ public record DyeColorGenerator(InputStream dyeColorsFile,
     @Override
     public void generate() {
         ensureDirectory(outputFolder);
-        // Important classes we use alot
+        // Important classes we use a lot
         ClassName colorCN = ClassName.get("net.minestom.server.color", "Color");
 
         JsonArray dyeColors = GSON.fromJson(new InputStreamReader(dyeColorsFile), JsonArray.class);

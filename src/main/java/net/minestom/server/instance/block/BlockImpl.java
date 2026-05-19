@@ -174,7 +174,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
         if (nbt != null) builder.put(nbt);
         tag.write(builder, value);
         final CompoundBinaryTag temporaryNbt = builder.build();
-        final CompoundBinaryTag finalNbt = temporaryNbt.size() > 0 ? temporaryNbt : null;
+        final CompoundBinaryTag finalNbt = !temporaryNbt.isEmpty() ? temporaryNbt : null;
         return new BlockImpl(registry, propertiesArray, finalNbt, handler);
     }
 

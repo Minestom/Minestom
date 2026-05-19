@@ -7,7 +7,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
-import net.minestom.server.registry.TagKey;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +17,7 @@ public record BlocksAttacks(
         float disableCooldownScale,
         List<DamageReduction> damageReductions,
         ItemDamageFunction itemDamage,
-        @Nullable TagKey<DamageType> bypassedBy,
+        @Nullable RegistryTag<DamageType> bypassedBy,
         @Nullable SoundEvent blockSound,
         @Nullable SoundEvent disableSound
 ) {
@@ -27,7 +26,7 @@ public record BlocksAttacks(
             NetworkBuffer.FLOAT, BlocksAttacks::disableCooldownScale,
             DamageReduction.NETWORK_TYPE.list(Short.MAX_VALUE), BlocksAttacks::damageReductions,
             ItemDamageFunction.NETWORK_TYPE, BlocksAttacks::itemDamage,
-            TagKey.networkType(Registries::damageType).optional(), BlocksAttacks::bypassedBy,
+            RegistryTag.networkType(Registries::damageType).optional(), BlocksAttacks::bypassedBy,
             SoundEvent.NETWORK_TYPE.optional(), BlocksAttacks::blockSound,
             SoundEvent.NETWORK_TYPE.optional(), BlocksAttacks::disableSound,
             BlocksAttacks::new);
@@ -36,7 +35,7 @@ public record BlocksAttacks(
             "disable_cooldown_scale", Codec.FLOAT.optional(1f), BlocksAttacks::disableCooldownScale,
             "damage_reductions", DamageReduction.CODEC.list().optional(List.of(DamageReduction.DEFAULT)), BlocksAttacks::damageReductions,
             "item_damage", ItemDamageFunction.CODEC.optional(ItemDamageFunction.DEFAULT), BlocksAttacks::itemDamage,
-            "bypassed_by", TagKey.hashCodec(Registries::damageType).optional(), BlocksAttacks::bypassedBy,
+            "bypassed_by", RegistryTag.codec(Registries::damageType).optional(), BlocksAttacks::bypassedBy,
             "block_sound", SoundEvent.CODEC.optional(), BlocksAttacks::blockSound,
             "disabled_sound", SoundEvent.CODEC.optional(), BlocksAttacks::disableSound,
             BlocksAttacks::new);

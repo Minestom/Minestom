@@ -4,6 +4,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.*;
+import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -16,6 +17,7 @@ import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.Nullable;
@@ -38,13 +40,18 @@ public class TestRegistries implements Registries {
     public @Nullable DynamicRegistry<Instrument> instrument = null;
     public @Nullable DynamicRegistry<WolfSoundVariant> wolfSoundVariant = null;
     public @Nullable DynamicRegistry<CatVariant> catVariant = null;
+    public @Nullable DynamicRegistry<CatSoundVariant> catSoundVariant = null;
     public @Nullable DynamicRegistry<ChickenVariant> chickenVariant = null;
+    public @Nullable DynamicRegistry<ChickenSoundVariant> chickenSoundVariant = null;
     public @Nullable DynamicRegistry<CowVariant> cowVariant = null;
+    public @Nullable DynamicRegistry<CowSoundVariant> cowSoundVariant = null;
     public @Nullable DynamicRegistry<FrogVariant> frogVariant = null;
     public @Nullable DynamicRegistry<PigVariant> pigVariant = null;
+    public @Nullable DynamicRegistry<PigSoundVariant> pigSoundVariant = null;
     public @Nullable DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant = null;
     public @Nullable DynamicRegistry<Dialog> dialog = null;
     public @Nullable DynamicRegistry<Timeline> timeline = null;
+    public @Nullable DynamicRegistry<WorldClock> worldClock = null;
     public @Nullable DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
     public @Nullable DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
     public @Nullable DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
@@ -105,13 +112,28 @@ public class TestRegistries implements Registries {
     }
 
     @Override
+    public DynamicRegistry<CatSoundVariant> catSoundVariant() {
+        return Objects.requireNonNull(catSoundVariant);
+    }
+
+    @Override
     public DynamicRegistry<ChickenVariant> chickenVariant() {
         return Objects.requireNonNull(chickenVariant);
     }
 
     @Override
+    public DynamicRegistry<ChickenSoundVariant> chickenSoundVariant() {
+        return Objects.requireNonNull(chickenSoundVariant);
+    }
+
+    @Override
     public DynamicRegistry<CowVariant> cowVariant() {
         return Objects.requireNonNull(cowVariant);
+    }
+
+    @Override
+    public DynamicRegistry<CowSoundVariant> cowSoundVariant() {
+        return Objects.requireNonNull(cowSoundVariant);
     }
 
     @Override
@@ -122,6 +144,11 @@ public class TestRegistries implements Registries {
     @Override
     public DynamicRegistry<PigVariant> pigVariant() {
         return Objects.requireNonNull(pigVariant);
+    }
+
+    @Override
+    public DynamicRegistry<PigSoundVariant> pigSoundVariant() {
+        return Objects.requireNonNull(pigSoundVariant);
     }
 
     @Override
@@ -157,6 +184,11 @@ public class TestRegistries implements Registries {
     @Override
     public DynamicRegistry<Timeline> timeline() {
         return Objects.requireNonNull(timeline);
+    }
+
+    @Override
+    public DynamicRegistry<WorldClock> worldClock() {
+        return Objects.requireNonNull(worldClock);
     }
 
     @Override

@@ -184,14 +184,14 @@ public class EventNodeTest {
                 });
         node.addChild(child1);
         node.addChild(child2);
-        assertEquals(node.getChildren().size(), 2, "The node should have 2 children");
+        assertEquals(2, node.getChildren().size(), "The node should have 2 children");
         node.call(new EventTest());
         assertEquals(2, result.get(), "The event should be called after the call");
 
         // Test removal
         result.set(0);
         node.removeChild(child2);
-        assertEquals(node.getChildren().size(), 1, "The node should have 1 child");
+        assertEquals(1, node.getChildren().size(), "The node should have 1 child");
         node.call(new EventTest());
         assertEquals(1, result.get(), "child2 should has been removed");
 

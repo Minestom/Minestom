@@ -11,7 +11,7 @@ import net.minestom.server.registry.RegistryKey;
 sealed interface ChickenVariants permits ChickenVariant {
     RegistryKey<ChickenVariant> WARM = RegistryKey.unsafeOf("warm");
 
-    RegistryKey<ChickenVariant> COLD = RegistryKey.unsafeOf("cold");
-
     RegistryKey<ChickenVariant> TEMPERATE = RegistryKey.unsafeOf("temperate");
+
+    RegistryKey<ChickenVariant> COLD = RegistryKey.unsafeOf("cold");
 }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 public class GuardianMeta extends MonsterMeta {
-    private Entity target;
+    private @Nullable Entity target;
 
     public GuardianMeta(Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
@@ -38,5 +38,4 @@ public class GuardianMeta extends MonsterMeta {
         this.target = target;
         setTargetEntityId(target == null ? 0 : target.getEntityId());
     }
-
 }

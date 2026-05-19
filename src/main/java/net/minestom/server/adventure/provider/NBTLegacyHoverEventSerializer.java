@@ -34,7 +34,7 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
         return HoverEvent.ShowItem.showItem(
                 Key.key(contents.getString(ITEM_TYPE, "")),
                 contents.getByte(ITEM_COUNT, (byte) 1),
-                tag.size() == 0 ? null : BinaryTagHolder.encode(tag, MinestomAdventure.NBT_CODEC)
+                tag.isEmpty() ? null : BinaryTagHolder.encode(tag, MinestomAdventure.NBT_CODEC)
         );
     }
 

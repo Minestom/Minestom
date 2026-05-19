@@ -22,6 +22,7 @@ public final class ServerFlag {
     public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000); // 5s
     public static final long KNOWN_PACKS_RESPONSE_TIMEOUT = longProperty("minestom.known-packs-response-timeout", 5 * 60_000); // 5m
     public static final boolean ACCEPT_TRANSFERS = booleanProperty("minestom.accept-transfers", false);
+    public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = booleanProperty("minestom.automatic-component-translation", false);
 
     // Network rate limiting
     public static final int PLAYER_PACKET_PER_TICK = intProperty("minestom.packet-per-tick", 50);

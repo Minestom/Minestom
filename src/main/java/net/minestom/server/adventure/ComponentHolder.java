@@ -18,7 +18,7 @@ public interface ComponentHolder<T> {
      *
      * @return the components
      */
-    Collection<Component> components();
+    Collection<? extends Component> components();
 
     /**
      * Returns a copy of this object. For each component this object holds, the operator
@@ -34,7 +34,7 @@ public interface ComponentHolder<T> {
      *
      * @param visitor the visitor
      */
-    default void visitComponents(Consumer<Component> visitor) {
+    default void visitComponents(Consumer<? super Component> visitor) {
         for (Component component : this.components()) {
             visitor.accept(component);
         }

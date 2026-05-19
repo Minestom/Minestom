@@ -24,9 +24,11 @@ final class PaletteImpl implements Palette {
 
     long @UnknownNullability [] values; // null when bitsPerEntry == 0
     // palette index = value
-    @UnknownNullability IntArrayList paletteToValueList; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
+    @UnknownNullability
+    IntArrayList paletteToValueList; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
     // value = palette index
-    @UnknownNullability Int2IntOpenHashMap valueToPaletteMap; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
+    @UnknownNullability
+    Int2IntOpenHashMap valueToPaletteMap; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
 
     PaletteImpl(byte dimension, byte minBitsPerEntry, byte maxBitsPerEntry, byte directBits) {
         validateDimension(dimension);
@@ -89,7 +91,7 @@ final class PaletteImpl implements Palette {
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = 64 / bitsPerEntry;
         final int mask = (1 << bitsPerEntry) - 1;
-        final int[] paletteIds = hasPalette() ? paletteToValueList.elements() : null;
+        final int @Nullable [] paletteIds = hasPalette() ? paletteToValueList.elements() : null;
         for (int y = startY; y >= 0; y--) {
             final int index = sectionIndex(dimension, x, y, z);
             final int longIndex = index / valuesPerLong;
@@ -194,12 +196,20 @@ final class PaletteImpl implements Palette {
             if (hasPalette()) {
                 final int index = valueToPaletteMap.get(oldValue);
                 if (index == -1) return; // Old value not present in palette
+                final int newIndex = valueToPaletteMap.get(newValue);
                 final boolean countUpdate = newValue == 0 || oldValue == 0;
-                final int count = countUpdate ? count(oldValue) : -1;
-                if (count == 0) return; // No blocks to replace
-                paletteToValueList.set(index, newValue);
-                valueToPaletteMap.remove(oldValue);
-                valueToPaletteMap.put(newValue, index);
+                final int count;
+                if (newIndex == -1) {
+                    count = countUpdate ? countPaletteIndex(index) : -1;
+                    if (count == 0) return; // No blocks to replace
+                    valueToPaletteMap.remove(oldValue);
+                    paletteToValueList.set(index, newValue);
+                    valueToPaletteMap.put(newValue, index);
+                } else {
+                    count = replacePaletteIndex(index, newIndex);
+                    if (count == 0) return; // No blocks to replace
+                    valueToPaletteMap.remove(oldValue);
+                }
                 // Update count
                 if (newValue == 0) {
                     this.count -= count; // Replacing with air
@@ -355,7 +365,7 @@ final class PaletteImpl implements Palette {
         final int sourceValuesPerLong = 64 / sourceBitsPerEntry;
         final int sourceDimensionBitCount = MathUtils.bitsToRepresent(sourceDimension - 1);
         final int sourceShiftedDimensionBitCount = sourceDimensionBitCount << 1;
-        final int[] sourcePaletteIds = sourcePalette.hasPalette() ? sourcePalette.paletteToValueList.elements() : null;
+        final int @Nullable [] sourcePaletteIds = sourcePalette.hasPalette() ? sourcePalette.paletteToValueList.elements() : null;
 
         int countDelta = 0;
         for (int y = 0; y < maxY; y++) {
@@ -474,6 +484,28 @@ final class PaletteImpl implements Palette {
         return result;
     }
 
+    /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
+    int replacePaletteIndex(int oldPaletteIndex, int newPaletteIndex) {
+        final int size = maxSize();
+        final int bits = bitsPerEntry;
+        final int valuesPerLong = 64 / bits;
+        final long mask = (1L << bits) - 1L;
+        int result = 0;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            final int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                final int bitIndex = j * bits;
+                if (((int) (block >>> bitIndex & mask)) == oldPaletteIndex) {
+                    block = block & ~(mask << bitIndex) | ((long) newPaletteIndex << bitIndex);
+                    result++;
+                }
+            }
+            values[i] = block;
+        }
+        return result;
+    }
+
     @Override
     public boolean any(int value) {
         if (bitsPerEntry == 0) return count == value;
@@ -577,7 +609,7 @@ final class PaletteImpl implements Palette {
         final int valuesPerLong = 64 / bitsPerEntry;
         final int size = maxSize();
         final int dimensionMinus = dimension - 1;
-        final int[] ids = hasPalette() ? paletteToValueList.elements() : null;
+        final int @Nullable [] ids = hasPalette() ? paletteToValueList.elements() : null;
         final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMinus);
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
         for (int i = 0; i < values.length; i++) {

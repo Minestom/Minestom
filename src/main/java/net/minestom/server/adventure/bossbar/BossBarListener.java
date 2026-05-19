@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * A listener for boss bar updates. This class is not intended for public use and it is
+ * A listener for boss bar updates. This class is not intended for public use, and it is
  * automatically added to boss bars shown to players using the methods in
  * {@link Audience}, instead you should use {@link BossBarManager} to manage boss bars
  * for players.
