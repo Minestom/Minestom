@@ -53,7 +53,7 @@ public class AudienceRegistry {
      * @param keyed     the provider of the key
      * @param audiences the audiences
      */
-    public void register(Keyed keyed, Collection<Audience> audiences) {
+    public void register(Keyed keyed, Collection<? extends Audience> audiences) {
         this.register(keyed.key(), audiences);
     }
 
@@ -77,7 +77,7 @@ public class AudienceRegistry {
      * @param key       the key to store the audiences under
      * @param audiences the audiences
      */
-    public void register(Key key, Collection<Audience> audiences) {
+    public void register(Key key, Collection<? extends Audience> audiences) {
         if (!audiences.isEmpty()) {
             this.registry.computeIfAbsent(key, this.provider).addAll(audiences);
         }
@@ -122,7 +122,7 @@ public class AudienceRegistry {
      * @param filter the predicate
      * @return the matching audience members
      */
-    public Iterable<? extends Audience> of(Predicate<Audience> filter) {
+    public Iterable<? extends Audience> of(Predicate<? super Audience> filter) {
         return this.registry.values().stream().flatMap(Collection::stream).filter(filter).toList();
     }
 }

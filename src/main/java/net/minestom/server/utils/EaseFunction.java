@@ -1,6 +1,5 @@
 package net.minestom.server.utils;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.coordinate.Vec;

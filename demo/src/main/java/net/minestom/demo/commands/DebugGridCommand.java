@@ -34,7 +34,7 @@ public class DebugGridCommand extends Command {
         Player player = (Player) sender;
         final Boolean replace = context.get(this.replace);
         final RelativeBlockBatch relativeBlockBatch = new RelativeBlockBatch(new BatchOption().setCalculateInverse(replace));
-        final Integer radius = context.get(this.radius);
+        final int radius = context.get(this.radius);
         for (int x = -radius / 2; x < radius / 2; x++) {
             for (int z = -radius / 2; z < radius / 2; z++) {
                 relativeBlockBatch.setBlock(x, 0, z, ((x % 2 == 0) ^ (z % 2) == 0) ? Block.WHITE_CONCRETE : Block.BLACK_CONCRETE);
@@ -44,7 +44,7 @@ public class DebugGridCommand extends Command {
         //noinspection ConstantConditions
         relativeBlockBatch.apply(player.getInstance(), context.get(center).from(player), (inverse) -> {
             if (!replace) return;
-            player.getInstance().scheduler().scheduleTask(()->{
+            player.getInstance().scheduler().scheduleTask(() -> {
                 if (inverse == null) return;
                 inverse.apply(player.getInstance(), null);
             }, TaskSchedule.seconds(1), TaskSchedule.stop());

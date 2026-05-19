@@ -1,6 +1,5 @@
 package net.minestom.demo.commands;
 
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -21,12 +20,8 @@ public class EchoCommand extends Command {
         ArgumentComponent json = ArgumentType.Component("json");
         ArgumentUUID uuid = ArgumentType.UUID("uuid");
 
-        this.addSyntax((sender, context) -> {
-            sender.sendMessage(context.get(json));
-        }, json);
+        this.addSyntax((sender, context) -> sender.sendMessage(context.get(json)), json);
 
-        this.addSyntax((sender, context) -> {
-            sender.sendMessage(Identity.identity(context.get(uuid)), context.get(json), MessageType.CHAT);
-        }, uuid, json);
+        this.addSyntax((sender, context) -> sender.sendMessage(context.get(json)), uuid, json);
     }
 }

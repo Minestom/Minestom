@@ -96,7 +96,7 @@ public sealed interface Biome extends Biomes permits BiomeImpl {
         private float temperature = 0.8f;
         private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
         private float downfall = 0.4f;
-        private EnvironmentAttributeMap.Builder attributes = EnvironmentAttributeMap.builder();
+        private final EnvironmentAttributeMap.Builder attributes = EnvironmentAttributeMap.builder();
         private BiomeEffects effects = BiomeEffects.DEFAULT;
 
         private Builder() {

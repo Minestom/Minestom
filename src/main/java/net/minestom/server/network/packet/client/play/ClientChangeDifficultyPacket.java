@@ -8,7 +8,7 @@ import net.minestom.server.world.Difficulty;
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 import static net.minestom.server.network.NetworkBuffer.Enum;
 
-public record ClientChangeDifficultyPacket(Difficulty difficulty, boolean locked) implements ClientPacket {
+public record ClientChangeDifficultyPacket(Difficulty difficulty, boolean locked) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientChangeDifficultyPacket> SERIALIZER = NetworkBufferTemplate.template(
             Enum(Difficulty.class), ClientChangeDifficultyPacket::difficulty,
             BOOLEAN, ClientChangeDifficultyPacket::locked,

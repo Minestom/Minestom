@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.key.Key;
+import net.minestom.data.MinestomData;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
@@ -16,6 +17,7 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
@@ -106,8 +108,8 @@ public final class RegistryData {
      * @param path The path without a leading slash, e.g. "blocks.json"
      */
     public static @Nullable InputStream loadRegistryFile(String path) throws IOException {
-        // 1. Try to load from jar resources
-        InputStream resourceStream = RegistryData.class.getClassLoader().getResourceAsStream(path);
+        // 1. Try to load from data resources
+        InputStream resourceStream = MinestomData.resource(path);
 
         // 2. Try to load from working directory
         final Path filesystemPath = Path.of(path);
@@ -197,9 +199,12 @@ public final class RegistryData {
         BANNER_PATTERNS("banner_pattern.json"),
         BIOMES("biome.json"),
         CAT_VARIANTS("cat_variant.json"),
+        CAT_SOUND_VARIANTS("cat_sound_variant.json"),
         CHAT_TYPES("chat_type.json"),
         CHICKEN_VARIANTS("chicken_variant.json"),
+        CHICKEN_SOUND_VARIANTS("chicken_sound_variant.json"),
         COW_VARIANTS("cow_variant.json"),
+        COW_SOUND_VARIANTS("cow_sound_variant.json"),
         DAMAGE_TYPES("damage_type.json"),
         DIALOGS("dialog.json"),
         DIMENSION_TYPES("dimension_type.json"),
@@ -209,12 +214,14 @@ public final class RegistryData {
         INSTRUMENTS("instrument.json"),
         PAINTING_VARIANTS("painting_variant.json"),
         PIG_VARIANTS("pig_variant.json"),
+        PIG_SOUND_VARIANTS("pig_sound_variant.json"),
         TRIM_MATERIALS("trim_material.json"),
         TRIM_PATTERNS("trim_pattern.json"),
         WOLF_VARIANTS("wolf_variant.json"),
         WOLF_SOUND_VARIANTS("wolf_sound_variant.json"),
         ZOMBIE_NAUTILUS_VARIANTS("zombie_nautilus_variant.json"),
-        TIMELINES("timeline.json");
+        TIMELINES("timeline.json"),
+        WORLD_CLOCKS("world_clock.json");
 
         private final String name;
 
@@ -252,6 +259,7 @@ public final class RegistryData {
         private final float friction;
         private final float speedFactor;
         private final float jumpFactor;
+        private final int mapColorId;
         private final byte packedFlags;
         private final byte lightEmission;
         private final byte lightBlocked;
@@ -272,6 +280,7 @@ public final class RegistryData {
             this.friction = fromParent(parent, BlockEntry::friction, main, "friction", Properties::getFloat, 0.6f);
             this.speedFactor = fromParent(parent, BlockEntry::speedFactor, main, "speedFactor", Properties::getFloat, 1.0f);
             this.jumpFactor = fromParent(parent, BlockEntry::jumpFactor, main, "jumpFactor", Properties::getFloat, 1.0f);
+            this.mapColorId = fromParent(parent, BlockEntry::mapColorId, main, "mapColorId", Properties::getInt, 0);
             var air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
             var solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
             var liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
@@ -385,6 +394,10 @@ public final class RegistryData {
 
         public float jumpFactor() {
             return jumpFactor;
+        }
+
+        public int mapColorId() {
+            return mapColorId;
         }
 
         public boolean isAir() {
@@ -562,6 +575,7 @@ public final class RegistryData {
         private final int clientTrackingRange;
         private final boolean fireImmune;
         private final Map<String, List<Double>> entityOffsets;
+        private final Map<Attribute, Double> defaultAttributes;
         private final BoundingBox boundingBox;
 
         public EntityEntry(String namespace, Properties main) {
@@ -592,6 +606,24 @@ public final class RegistryData {
                 }
             }
             this.entityOffsets = Map.copyOf(entityOffsets);
+
+            Properties defaultAttributesSection = main.section("defaultAttributes");
+
+            if (defaultAttributesSection == null) {
+                this.defaultAttributes = Map.of();
+            } else {
+                Map<Attribute, Double> attributes = new HashMap<>();
+
+                for (var entry : defaultAttributesSection) {
+                    Attribute attribute = Attribute.fromKey(entry.getKey());
+                    Check.notNull(attribute, "Failed to find attribute {0}", entry.getKey());
+                    Object value = entry.getValue();
+                    Check.stateCondition(!(value instanceof Number), "Attribute value {0} is not a number", value);
+                    attributes.put(attribute, ((Number) value).doubleValue());
+                }
+
+                this.defaultAttributes = Map.copyOf(attributes);
+            }
         }
 
         public Key key() {
@@ -658,6 +690,10 @@ public final class RegistryData {
 
         public BoundingBox boundingBox() {
             return boundingBox;
+        }
+
+        public Map<Attribute, Double> defaultAttributes() {
+            return defaultAttributes;
         }
     }
 
@@ -856,7 +892,7 @@ public final class RegistryData {
         @Override
         public String toString() {
             AtomicReference<String> string = new AtomicReference<>("{ ");
-            this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object.toString() + "\""));
+            this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object + "\""));
             return string.updateAndGet(s -> s.replaceFirst(" , ", "") + "}");
         }
 

@@ -133,6 +133,6 @@ public record DeclareCommandsPacket(List<Node> nodes,
     }
 
     public enum NodeType {
-        ROOT, LITERAL, ARGUMENT, NONE;
+        ROOT, LITERAL, ARGUMENT, NONE
     }
 }

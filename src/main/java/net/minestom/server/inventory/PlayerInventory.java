@@ -77,7 +77,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
 
     public void setEquipment(EquipmentSlot slot, byte heldSlot, ItemStack itemStack) {
         final int slotId = getSlotId(slot, heldSlot);
-        if (slotId < 0) Check.fail("PlayerInventory does not support " + slot + " equipment");
+        if (slotId < 0) Check.fail("PlayerInventory does not support {0} equipment", slot);
 
         setItemStack(slotId, itemStack);
     }

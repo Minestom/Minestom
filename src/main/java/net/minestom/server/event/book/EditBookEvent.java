@@ -13,7 +13,7 @@ public class EditBookEvent implements PlayerInstanceEvent, ItemEvent {
     private final Player player;
     private final ItemStack itemStack;
     private final List<String> pages;
-    private final String title;
+    private final @Nullable String title;
 
     public EditBookEvent(
             Player player,

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * A Batch used when all of the block changed are contained inside a single chunk.
+ * A Batch used when all the block changed are contained inside a single chunk.
  * If more than one chunk is needed, use an {@link AbsoluteBlockBatch} instead.
  * <p>
  * The batch can be placed in any chunk in any instance, however it will always remain
@@ -144,12 +144,12 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param chunk        The target chunk
      * @param callback     The callback to be executed when the batch is applied
      * @param safeCallback If true, the callback will be executed in the next instance update.
-     *                     Otherwise it will be executed immediately upon completion
+     *                     Otherwise, it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     protected @UnknownNullability ChunkBatch apply(Instance instance,
-                               Chunk chunk, @Nullable ChunkCallback callback,
-                               boolean safeCallback) {
+                                                   Chunk chunk, @Nullable ChunkCallback callback,
+                                                   boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
 
         final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(options, false) : null;
@@ -181,7 +181,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             }
 
             final IntSet sections = new IntArraySet();
-            synchronized (chunk) {
+            chunk.lockWriteLock();
+            try {
                 synchronized (blocks) {
                     for (var entry : blocks.int2ObjectEntrySet()) {
                         final int position = entry.getIntKey();
@@ -190,6 +191,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                         sections.add(section);
                     }
                 }
+            } finally {
+                chunk.unlockWriteLock();
             }
 
             if (inverse != null) inverse.readyLatch.countDown();

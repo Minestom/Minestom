@@ -24,9 +24,11 @@ final class PaletteImpl implements Palette {
 
     long @UnknownNullability [] values; // null when bitsPerEntry == 0
     // palette index = value
-    @UnknownNullability IntArrayList paletteToValueList; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
+    @UnknownNullability
+    IntArrayList paletteToValueList; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
     // value = palette index
-    @UnknownNullability Int2IntOpenHashMap valueToPaletteMap; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
+    @UnknownNullability
+    Int2IntOpenHashMap valueToPaletteMap; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
 
     PaletteImpl(byte dimension, byte minBitsPerEntry, byte maxBitsPerEntry, byte directBits) {
         validateDimension(dimension);
@@ -89,7 +91,7 @@ final class PaletteImpl implements Palette {
         final int bitsPerEntry = this.bitsPerEntry;
         final int valuesPerLong = 64 / bitsPerEntry;
         final int mask = (1 << bitsPerEntry) - 1;
-        final int[] paletteIds = hasPalette() ? paletteToValueList.elements() : null;
+        final int @Nullable [] paletteIds = hasPalette() ? paletteToValueList.elements() : null;
         for (int y = startY; y >= 0; y--) {
             final int index = sectionIndex(dimension, x, y, z);
             final int longIndex = index / valuesPerLong;
@@ -363,7 +365,7 @@ final class PaletteImpl implements Palette {
         final int sourceValuesPerLong = 64 / sourceBitsPerEntry;
         final int sourceDimensionBitCount = MathUtils.bitsToRepresent(sourceDimension - 1);
         final int sourceShiftedDimensionBitCount = sourceDimensionBitCount << 1;
-        final int[] sourcePaletteIds = sourcePalette.hasPalette() ? sourcePalette.paletteToValueList.elements() : null;
+        final int @Nullable [] sourcePaletteIds = sourcePalette.hasPalette() ? sourcePalette.paletteToValueList.elements() : null;
 
         int countDelta = 0;
         for (int y = 0; y < maxY; y++) {
@@ -607,7 +609,7 @@ final class PaletteImpl implements Palette {
         final int valuesPerLong = 64 / bitsPerEntry;
         final int size = maxSize();
         final int dimensionMinus = dimension - 1;
-        final int[] ids = hasPalette() ? paletteToValueList.elements() : null;
+        final int @Nullable [] ids = hasPalette() ? paletteToValueList.elements() : null;
         final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMinus);
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
         for (int i = 0; i < values.length; i++) {

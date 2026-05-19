@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * Represents the target selector argument.
- * https://minecraft.wiki/w/Target_selectors
+ * <a href="https://minecraft.wiki/w/Target_selectors">Target selectors</a>
  */
 public class ArgumentEntity extends Argument<EntityFinder> {
 
@@ -291,18 +291,14 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     }
 
     private static EntityFinder.TargetSelector toTargetSelector(String selectorVariable) {
-        if (selectorVariable.equals("@p"))
-            return EntityFinder.TargetSelector.NEAREST_PLAYER;
-        if (selectorVariable.equals("@n"))
-            return EntityFinder.TargetSelector.NEAREST_ENTITY;
-        if (selectorVariable.equals("@r"))
-            return EntityFinder.TargetSelector.RANDOM_PLAYER;
-        if (selectorVariable.equals("@a"))
-            return EntityFinder.TargetSelector.ALL_PLAYERS;
-        if (selectorVariable.equals("@e"))
-            return EntityFinder.TargetSelector.ALL_ENTITIES;
-        if (selectorVariable.equals("@s"))
-            return EntityFinder.TargetSelector.SELF;
-        throw new IllegalStateException("Weird selector variable: " + selectorVariable);
+        return switch (selectorVariable) {
+            case "@p" -> EntityFinder.TargetSelector.NEAREST_PLAYER;
+            case "@n" -> EntityFinder.TargetSelector.NEAREST_ENTITY;
+            case "@r" -> EntityFinder.TargetSelector.RANDOM_PLAYER;
+            case "@a" -> EntityFinder.TargetSelector.ALL_PLAYERS;
+            case "@e" -> EntityFinder.TargetSelector.ALL_ENTITIES;
+            case "@s" -> EntityFinder.TargetSelector.SELF;
+            default -> throw new IllegalStateException("Weird selector variable: " + selectorVariable);
+        };
     }
 }
