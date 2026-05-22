@@ -156,25 +156,101 @@ final class AreaImpl {
 
         @Override
         public List<Area.Cuboid> split() {
-            List<Area.Cuboid> result = new ArrayList<>();
-            BlockVec runStart = null;
-            BlockVec runEnd = null;
-            for (BlockVec block : this) {
-                if (runStart == null) {
-                    runStart = block;
-                    runEnd = block;
-                } else if (sameSection(runStart, block) && canExtendAxisAlignedRun(runStart, runEnd, block)) {
-                    runEnd = block;
+            final int x1 = start.blockX(), y1 = start.blockY(), z1 = start.blockZ();
+            final int x2 = end.blockX(), y2 = end.blockY(), z2 = end.blockZ();
+            if (x1 == x2 && y1 == y2 && z1 == z2) {
+                return List.of(Area.cuboid(start, end));
+            }
+            final List<Area.Cuboid> result = new ArrayList<>();
+            final int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1), dz = Math.abs(z2 - z1);
+            final int sx = x1 < x2 ? 1 : -1, sy = y1 < y2 ? 1 : -1, sz = z1 < z2 ? 1 : -1;
+            int x = x1, y = y1, z = z1;
+            int err1, err2;
+            if (dx >= dy && dx >= dz) {
+                err1 = dx / 2;
+                err2 = dx / 2;
+            } else if (dy >= dz) {
+                err1 = dy / 2;
+                err2 = dy / 2;
+            } else {
+                err1 = dz / 2;
+                err2 = dz / 2;
+            }
+            int runStartX = x, runStartY = y, runStartZ = z;
+            int runEndX = x, runEndY = y, runEndZ = z;
+            while (x != x2 || y != y2 || z != z2) {
+                // Advance Bresenham
+                int nextX = x, nextY = y, nextZ = z;
+                if (dx >= dy && dx >= dz) {
+                    nextX += sx;
+                    err1 -= dy;
+                    err2 -= dz;
+                    if (err1 < 0) {
+                        nextY += sy;
+                        err1 += dx;
+                    }
+                    if (err2 < 0) {
+                        nextZ += sz;
+                        err2 += dx;
+                    }
+                } else if (dy >= dz) {
+                    nextY += sy;
+                    err1 -= dx;
+                    err2 -= dz;
+                    if (err1 < 0) {
+                        nextX += sx;
+                        err1 += dy;
+                    }
+                    if (err2 < 0) {
+                        nextZ += sz;
+                        err2 += dy;
+                    }
                 } else {
-                    result.add(Area.cuboid(runStart, runEnd));
-                    runStart = block;
-                    runEnd = block;
+                    nextZ += sz;
+                    err1 -= dx;
+                    err2 -= dy;
+                    if (err1 < 0) {
+                        nextX += sx;
+                        err1 += dz;
+                    }
+                    if (err2 < 0) {
+                        nextY += sy;
+                        err2 += dz;
+                    }
                 }
+                // Try to extend the current run with the next block
+                final boolean sameSection = (runStartX >> 4) == (nextX >> 4)
+                        && (runStartY >> 4) == (nextY >> 4)
+                        && (runStartZ >> 4) == (nextZ >> 4);
+                if (sameSection && canExtendAxisAlignedRun(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ, nextX, nextY, nextZ)) {
+                    runEndX = nextX;
+                    runEndY = nextY;
+                    runEndZ = nextZ;
+                } else {
+                    result.add(buildRunCuboid(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ));
+                    runStartX = nextX;
+                    runStartY = nextY;
+                    runStartZ = nextZ;
+                    runEndX = nextX;
+                    runEndY = nextY;
+                    runEndZ = nextZ;
+                }
+                x = nextX;
+                y = nextY;
+                z = nextZ;
             }
-            if (runStart != null) {
-                result.add(Area.cuboid(runStart, runEnd));
-            }
+            result.add(buildRunCuboid(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ));
             return result;
+        }
+
+        private static AreaImpl.Cuboid buildRunCuboid(int startX, int startY, int startZ,
+                                                     int endX, int endY, int endZ) {
+            final BlockVec startVec = new BlockVec(startX, startY, startZ);
+            // Singleton runs (one block) share the same BlockVec for min and max
+            final BlockVec endVec = (startX == endX && startY == endY && startZ == endZ)
+                    ? startVec
+                    : new BlockVec(endX, endY, endZ);
+            return new AreaImpl.Cuboid(startVec, endVec);
         }
 
         @Override
@@ -285,11 +361,8 @@ final class AreaImpl {
                 @Override
                 public BlockVec next() {
                     if (!hasNext) throw new NoSuchElementException();
-                    BlockVec vec = new BlockVec(x, y, z);
-                    // Determine next position or finish
-                    if (x == maxX && y == maxY && z == maxZ) {
-                        hasNext = false;
-                    } else if (x < maxX) {
+                    final BlockVec vec = new BlockVec(x, y, z);
+                    if (x < maxX) {
                         x++;
                     } else if (y < maxY) {
                         x = minX;
@@ -298,6 +371,8 @@ final class AreaImpl {
                         x = minX;
                         y = minY;
                         z++;
+                    } else {
+                        hasNext = false;
                     }
                     return vec;
                 }
@@ -475,15 +550,26 @@ final class AreaImpl {
 
         @Override
         public long blockCount() {
-            long count = 0;
+            final int radius = this.radius;
+            if (radius == 0) return 1;
             final long radiusSquared = (long) radius * radius;
-            for (int dx = -radius; dx <= radius; dx++) {
+
+            // Center column (dx=0, dy=0)
+            long count = 2L * radius + 1;
+
+            // Axis columns: (±d, 0) and (0, ±d) — 4 copies of each column for d in [1, radius]
+            for (int d = 1; d <= radius; d++) {
+                final long remaining = radiusSquared - (long) d * d;
+                count += 4L * (2L * floorSqrt(remaining) + 1);
+            }
+
+            // Quadrant: (±dx, ±dy) — 4 copies; break when row is empty since dy only grows
+            for (int dx = 1; dx < radius; dx++) {
                 final long dxSquared = (long) dx * dx;
-                for (int dy = -radius; dy <= radius; dy++) {
+                for (int dy = 1; dy < radius; dy++) {
                     final long remaining = radiusSquared - dxSquared - (long) dy * dy;
-                    if (remaining >= 0) {
-                        count += 2L * floorSqrt(remaining) + 1;
-                    }
+                    if (remaining < 0) break;
+                    count += 4L * (2L * floorSqrt(remaining) + 1);
                 }
             }
             return count;
@@ -497,16 +583,9 @@ final class AreaImpl {
         return dx * dx + dy * dy + dz * dz <= (long) radius * radius;
     }
 
-    private static boolean sameSection(BlockVec first, BlockVec second) {
-        final int firstX = first.sectionX(), firstY = first.sectionY(), firstZ = first.sectionZ();
-        final int secondX = second.sectionX(), secondY = second.sectionY(), secondZ = second.sectionZ();
-        return firstX == secondX && firstY == secondY && firstZ == secondZ;
-    }
-
-    private static boolean canExtendAxisAlignedRun(BlockVec start, BlockVec end, BlockVec next) {
-        final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
-        final int endX = end.blockX(), endY = end.blockY(), endZ = end.blockZ();
-        final int nextX = next.blockX(), nextY = next.blockY(), nextZ = next.blockZ();
+    private static boolean canExtendAxisAlignedRun(int startX, int startY, int startZ,
+                                                   int endX, int endY, int endZ,
+                                                   int nextX, int nextY, int nextZ) {
         final boolean sameX = startX == endX && endX == nextX;
         final boolean sameY = startY == endY && endY == nextY;
         final boolean sameZ = startZ == endZ && endZ == nextZ;
