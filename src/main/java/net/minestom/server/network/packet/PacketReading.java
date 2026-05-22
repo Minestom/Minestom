@@ -198,6 +198,7 @@ public final class PacketReading {
         NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
         try {
             if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
+            decompressed.registries(buffer.registries());
             buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
             return readPayload(decompressed, registry);
         } finally {

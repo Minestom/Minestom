@@ -4,7 +4,7 @@ metadata.format.version = "1.1"
 
 # Important dependencies
 data = "26.1.1-rv1"
-adventure = "5.1.0"
+adventure = "5.1.1"
 jetbrainsAnnotations = "26.1.0"
 slf4j = "2.0.18"
 
@@ -15,7 +15,7 @@ gson = "2.14.0"
 jcTools = "4.0.6"
 
 # Quality
-junit = "6.0.3"
+junit = "6.1.0"
 jmh = "1.37"
 jcstress = "0.16"
 
