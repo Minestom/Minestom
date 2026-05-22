@@ -9,10 +9,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
 final class AreaImpl {
 
     static Area.Cuboid section(int sectionX, int sectionY, int sectionZ) {
-        final int minX = sectionX * SECTION_SIZE;
-        final int minY = sectionY * SECTION_SIZE;
-        final int minZ = sectionZ * SECTION_SIZE;
-        final BlockVec min = new BlockVec(minX, minY, minZ);
+        final BlockVec min = new BlockVec(sectionMin(sectionX), sectionMin(sectionY), sectionMin(sectionZ));
         return new Cuboid(min, min.add(SECTION_BOUND));
     }
 
@@ -65,34 +62,15 @@ final class AreaImpl {
         @Override
         public Iterator<BlockVec> iterator() {
             if (start.samePoint(end)) return List.of(start).iterator();
+            final int x1 = start.blockX(), y1 = start.blockY(), z1 = start.blockZ();
+            final int x2 = end.blockX(), y2 = end.blockY(), z2 = end.blockZ();
+            final int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1), dz = Math.abs(z2 - z1);
+            final int sx = x1 < x2 ? 1 : -1, sy = y1 < y2 ? 1 : -1, sz = z1 < z2 ? 1 : -1;
+            final int errInit = Math.max(dx, Math.max(dy, dz)) / 2;
             return new Iterator<>() {
-                private final int x1 = start.blockX(), y1 = start.blockY(), z1 = start.blockZ();
-                private final int x2 = end.blockX(), y2 = end.blockY(), z2 = end.blockZ();
                 private int x = x1, y = y1, z = z1;
-                private boolean done = false;
-
-                // 3D Bresenham algorithm
-                private final int dx = Math.abs(x2 - x1);
-                private final int dy = Math.abs(y2 - y1);
-                private final int dz = Math.abs(z2 - z1);
-                private final int sx = x1 < x2 ? 1 : -1;
-                private final int sy = y1 < y2 ? 1 : -1;
-                private final int sz = z1 < z2 ? 1 : -1;
-                private int err1, err2;
-
-                {
-                    // Initialize error terms based on the dominant axis
-                    if (dx >= dy && dx >= dz) {
-                        err1 = dx / 2;
-                        err2 = dx / 2;
-                    } else if (dy >= dx && dy >= dz) {
-                        err1 = dy / 2;
-                        err2 = dy / 2;
-                    } else {
-                        err1 = dz / 2;
-                        err2 = dz / 2;
-                    }
-                }
+                private int err1 = errInit, err2 = errInit;
+                private boolean done;
 
                 @Override
                 public boolean hasNext() {
@@ -102,15 +80,12 @@ final class AreaImpl {
                 @Override
                 public BlockVec next() {
                     if (done) throw new NoSuchElementException();
-                    BlockVec result = new BlockVec(x, y, z);
-                    // Check if we've reached the end
+                    final BlockVec result = new BlockVec(x, y, z);
                     if (x == x2 && y == y2 && z == z2) {
                         done = true;
                         return result;
                     }
-                    // Move to next position using 3D Bresenham
                     if (dx >= dy && dx >= dz) {
-                        // X is the dominant axis
                         x += sx;
                         err1 -= dy;
                         err2 -= dz;
@@ -122,8 +97,7 @@ final class AreaImpl {
                             z += sz;
                             err2 += dx;
                         }
-                    } else if (dy >= dx && dy >= dz) {
-                        // Y is the dominant axis
+                    } else if (dy >= dz) {
                         y += sy;
                         err1 -= dx;
                         err2 -= dz;
@@ -136,7 +110,6 @@ final class AreaImpl {
                             err2 += dy;
                         }
                     } else {
-                        // Z is the dominant axis
                         z += sz;
                         err1 -= dx;
                         err2 -= dy;
@@ -159,28 +132,16 @@ final class AreaImpl {
             final int x1 = start.blockX(), y1 = start.blockY(), z1 = start.blockZ();
             final int x2 = end.blockX(), y2 = end.blockY(), z2 = end.blockZ();
             if (x1 == x2 && y1 == y2 && z1 == z2) {
-                return List.of(Area.cuboid(start, end));
+                return List.of(new AreaImpl.Cuboid(start, end));
             }
             final List<Area.Cuboid> result = new ArrayList<>();
             final int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1), dz = Math.abs(z2 - z1);
             final int sx = x1 < x2 ? 1 : -1, sy = y1 < y2 ? 1 : -1, sz = z1 < z2 ? 1 : -1;
-            int x = x1, y = y1, z = z1;
-            int err1, err2;
-            if (dx >= dy && dx >= dz) {
-                err1 = dx / 2;
-                err2 = dx / 2;
-            } else if (dy >= dz) {
-                err1 = dy / 2;
-                err2 = dy / 2;
-            } else {
-                err1 = dz / 2;
-                err2 = dz / 2;
-            }
-            int runStartX = x, runStartY = y, runStartZ = z;
-            int runEndX = x, runEndY = y, runEndZ = z;
-            while (x != x2 || y != y2 || z != z2) {
-                // Advance Bresenham
-                int nextX = x, nextY = y, nextZ = z;
+            int err1 = Math.max(dx, Math.max(dy, dz)) / 2, err2 = err1;
+            int runStartX = x1, runStartY = y1, runStartZ = z1;
+            int runEndX = x1, runEndY = y1, runEndZ = z1;
+            while (runEndX != x2 || runEndY != y2 || runEndZ != z2) {
+                int nextX = runEndX, nextY = runEndY, nextZ = runEndZ;
                 if (dx >= dy && dx >= dz) {
                     nextX += sx;
                     err1 -= dy;
@@ -218,10 +179,9 @@ final class AreaImpl {
                         err2 += dz;
                     }
                 }
-                // Try to extend the current run with the next block
-                final boolean sameSection = (runStartX >> 4) == (nextX >> 4)
-                        && (runStartY >> 4) == (nextY >> 4)
-                        && (runStartZ >> 4) == (nextZ >> 4);
+                final boolean sameSection = globalToSection(runStartX) == globalToSection(nextX)
+                        && globalToSection(runStartY) == globalToSection(nextY)
+                        && globalToSection(runStartZ) == globalToSection(nextZ);
                 if (sameSection && canExtendAxisAlignedRun(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ, nextX, nextY, nextZ)) {
                     runEndX = nextX;
                     runEndY = nextY;
@@ -235,22 +195,9 @@ final class AreaImpl {
                     runEndY = nextY;
                     runEndZ = nextZ;
                 }
-                x = nextX;
-                y = nextY;
-                z = nextZ;
             }
             result.add(buildRunCuboid(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ));
             return result;
-        }
-
-        private static AreaImpl.Cuboid buildRunCuboid(int startX, int startY, int startZ,
-                                                     int endX, int endY, int endZ) {
-            final BlockVec startVec = new BlockVec(startX, startY, startZ);
-            // Singleton runs (one block) share the same BlockVec for min and max
-            final BlockVec endVec = (startX == endX && startY == endY && startZ == endZ)
-                    ? startVec
-                    : new BlockVec(endX, endY, endZ);
-            return new AreaImpl.Cuboid(startVec, endVec);
         }
 
         @Override
@@ -264,21 +211,10 @@ final class AreaImpl {
                     targetZ < Math.min(z1, z2) || targetZ > Math.max(z1, z2)) {
                 return false;
             }
-            // Walk Bresenham in-place to avoid BlockVec allocation per step
             final int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1), dz = Math.abs(z2 - z1);
             final int sx = x1 < x2 ? 1 : -1, sy = y1 < y2 ? 1 : -1, sz = z1 < z2 ? 1 : -1;
             int x = x1, y = y1, z = z1;
-            int err1, err2;
-            if (dx >= dy && dx >= dz) {
-                err1 = dx / 2;
-                err2 = dx / 2;
-            } else if (dy >= dz) {
-                err1 = dy / 2;
-                err2 = dy / 2;
-            } else {
-                err1 = dz / 2;
-                err2 = dz / 2;
-            }
+            int err1 = Math.max(dx, Math.max(dy, dz)) / 2, err2 = err1;
             while (true) {
                 if (x == targetX && y == targetY && z == targetZ) return true;
                 if (x == x2 && y == y2 && z == z2) return false;
@@ -335,11 +271,12 @@ final class AreaImpl {
         public Cuboid {
             Objects.requireNonNull(min, "min cannot be null");
             Objects.requireNonNull(max, "max cannot be null");
+            // Fast-path: when callers (split, cube, box, section) pass ordered inputs we keep
+            // the original BlockVec references and skip allocating reordered copies.
             if (min.blockX() > max.blockX() || min.blockY() > max.blockY() || min.blockZ() > max.blockZ()) {
                 final BlockVec origMin = min;
-                final BlockVec origMax = max;
-                min = origMin.min(origMax);
-                max = origMin.max(origMax);
+                min = origMin.min(max);
+                max = origMin.max(max);
             }
         }
 
@@ -385,36 +322,25 @@ final class AreaImpl {
             final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
             final int minSecX = min.sectionX(), minSecY = min.sectionY(), minSecZ = min.sectionZ();
             final int maxSecX = max.sectionX(), maxSecY = max.sectionY(), maxSecZ = max.sectionZ();
-
-            // Fast path: already within a single section
             if (minSecX == maxSecX && minSecY == maxSecY && minSecZ == maxSecZ) {
                 return List.of(this);
             }
-
-            List<Area.Cuboid> result = new ArrayList<>(estimatedSectionCount(minSecX, minSecY, minSecZ, maxSecX, maxSecY, maxSecZ));
-
-            // Split into cuboids per section
+            final List<Area.Cuboid> result = new ArrayList<>(estimatedSectionCount(minSecX, minSecY, minSecZ, maxSecX, maxSecY, maxSecZ));
             for (int sx = minSecX; sx <= maxSecX; sx++) {
                 for (int sy = minSecY; sy <= maxSecY; sy++) {
                     for (int sz = minSecZ; sz <= maxSecZ; sz++) {
                         final int sectionMinX = sectionMin(sx), sectionMinY = sectionMin(sy), sectionMinZ = sectionMin(sz);
                         final int sectionMaxX = sectionMax(sectionMinX), sectionMaxY = sectionMax(sectionMinY), sectionMaxZ = sectionMax(sectionMinZ);
-
-                        // Calculate intersection with this section
                         final int intersectMinX = Math.max(minX, sectionMinX), intersectMinY = Math.max(minY, sectionMinY), intersectMinZ = Math.max(minZ, sectionMinZ);
                         final int intersectMaxX = Math.min(maxX, sectionMaxX), intersectMaxY = Math.min(maxY, sectionMaxY), intersectMaxZ = Math.min(maxZ, sectionMaxZ);
-
-                        // Only add if there's a valid intersection
                         if (intersectMinX <= intersectMaxX && intersectMinY <= intersectMaxY && intersectMinZ <= intersectMaxZ) {
-                            result.add(Area.cuboid(
+                            result.add(new AreaImpl.Cuboid(
                                     new BlockVec(intersectMinX, intersectMinY, intersectMinZ),
-                                    new BlockVec(intersectMaxX, intersectMaxY, intersectMaxZ)
-                            ));
+                                    new BlockVec(intersectMaxX, intersectMaxY, intersectMaxZ)));
                         }
                     }
                 }
             }
-
             return result;
         }
 
@@ -499,38 +425,31 @@ final class AreaImpl {
 
         @Override
         public List<Area.Cuboid> split() {
-            // Calculate the bounding sections for the sphere
             final int centerX = center.blockX(), centerY = center.blockY(), centerZ = center.blockZ();
             final long radiusSquared = (long) radius * radius;
             final int minSecX = globalToSection(centerX - radius), minSecY = globalToSection(centerY - radius), minSecZ = globalToSection(centerZ - radius);
             final int maxSecX = globalToSection(centerX + radius), maxSecY = globalToSection(centerY + radius), maxSecZ = globalToSection(centerZ + radius);
-
-            List<Area.Cuboid> result = new ArrayList<>(estimatedSectionCount(minSecX, minSecY, minSecZ, maxSecX, maxSecY, maxSecZ));
-
-            // For each section that might contain sphere blocks
+            final List<Area.Cuboid> result = new ArrayList<>(estimatedSectionCount(minSecX, minSecY, minSecZ, maxSecX, maxSecY, maxSecZ));
             for (int sx = minSecX; sx <= maxSecX; sx++) {
                 for (int sy = minSecY; sy <= maxSecY; sy++) {
                     for (int sz = minSecZ; sz <= maxSecZ; sz++) {
                         final int sectionMinX = sectionMin(sx), sectionMinY = sectionMin(sy), sectionMinZ = sectionMin(sz);
                         final int sectionMaxX = sectionMax(sectionMinX), sectionMaxY = sectionMax(sectionMinY), sectionMaxZ = sectionMax(sectionMinZ);
-
                         if (sectionInsideSphere(sectionMinX, sectionMinY, sectionMinZ, sectionMaxX, sectionMaxY, sectionMaxZ, centerX, centerY, centerZ, radius)) {
-                            result.add(Area.section(sx, sy, sz));
-                        } else {
-                            for (int y = sectionMinY; y <= sectionMaxY; y++) {
-                                final long dy = (long) y - centerY;
-                                for (int z = sectionMinZ; z <= sectionMaxZ; z++) {
-                                    final long dz = (long) z - centerZ;
-                                    final long remaining = radiusSquared - dy * dy - dz * dz;
-                                    if (remaining < 0) {
-                                        continue;
-                                    }
-                                    final int halfWidth = (int) floorSqrt(remaining);
-                                    final int minX = Math.max(sectionMinX, centerX - halfWidth);
-                                    final int maxX = Math.min(sectionMaxX, centerX + halfWidth);
-                                    if (minX <= maxX) {
-                                        result.add(Area.cuboid(new BlockVec(minX, y, z), new BlockVec(maxX, y, z)));
-                                    }
+                            result.add(AreaImpl.section(sx, sy, sz));
+                            continue;
+                        }
+                        for (int y = sectionMinY; y <= sectionMaxY; y++) {
+                            final long dy = (long) y - centerY;
+                            for (int z = sectionMinZ; z <= sectionMaxZ; z++) {
+                                final long dz = (long) z - centerZ;
+                                final long remaining = radiusSquared - dy * dy - dz * dz;
+                                if (remaining < 0) continue;
+                                final int halfWidth = (int) floorSqrt(remaining);
+                                final int minX = Math.max(sectionMinX, centerX - halfWidth);
+                                final int maxX = Math.min(sectionMaxX, centerX + halfWidth);
+                                if (minX <= maxX) {
+                                    result.add(new AreaImpl.Cuboid(new BlockVec(minX, y, z), new BlockVec(maxX, y, z)));
                                 }
                             }
                         }
@@ -553,27 +472,30 @@ final class AreaImpl {
             final int radius = this.radius;
             if (radius == 0) return 1;
             final long radiusSquared = (long) radius * radius;
-
-            // Center column (dx=0, dy=0)
-            long count = 2L * radius + 1;
-
-            // Axis columns: (±d, 0) and (0, ±d) — 4 copies of each column for d in [1, radius]
+            long count = 2L * radius + 1; // center column
             for (int d = 1; d <= radius; d++) {
                 final long remaining = radiusSquared - (long) d * d;
                 count += 4L * (2L * floorSqrt(remaining) + 1);
             }
-
-            // Quadrant: (±dx, ±dy) — 4 copies; break when row is empty since dy only grows
             for (int dx = 1; dx < radius; dx++) {
                 final long dxSquared = (long) dx * dx;
                 for (int dy = 1; dy < radius; dy++) {
                     final long remaining = radiusSquared - dxSquared - (long) dy * dy;
-                    if (remaining < 0) break;
+                    if (remaining < 0) break; // dy only grows; further values stay negative
                     count += 4L * (2L * floorSqrt(remaining) + 1);
                 }
             }
             return count;
         }
+    }
+
+    private static Cuboid buildRunCuboid(int startX, int startY, int startZ,
+                                         int endX, int endY, int endZ) {
+        final BlockVec startVec = new BlockVec(startX, startY, startZ);
+        final BlockVec endVec = (startX == endX && startY == endY && startZ == endZ)
+                ? startVec
+                : new BlockVec(endX, endY, endZ);
+        return new Cuboid(startVec, endVec);
     }
 
     private static boolean withinSphereRadius(long dx, long dy, long dz, int radius) {
@@ -605,11 +527,9 @@ final class AreaImpl {
     }
 
     private static long floorSqrt(long value) {
-        if (value == 0) return 0;
         long sqrt = (long) Math.sqrt(value);
-        // Math.sqrt may be off by one due to double precision; correct in either direction.
-        if (sqrt > 0 && sqrt > value / sqrt) sqrt--;
-        else if (sqrt + 1 <= value / (sqrt + 1)) sqrt++;
+        // Math.sqrt may round up to an exact integer for value > 2^52; correct by one if so.
+        if (sqrt > 0 && sqrt * sqrt > value) sqrt--;
         return sqrt;
     }
 
@@ -622,9 +542,8 @@ final class AreaImpl {
     }
 
     private static int estimatedSectionCount(int minSecX, int minSecY, int minSecZ, int maxSecX, int maxSecY, int maxSecZ) {
-        final long count = (long) (maxSecX - minSecX + 1) *
-                (maxSecY - minSecY + 1) *
-                (maxSecZ - minSecZ + 1);
+        final long count = (long) (maxSecX - minSecX + 1) * (maxSecY - minSecY + 1) * (maxSecZ - minSecZ + 1);
+        // Clamp to avoid huge initial allocations on pathologically large bounding boxes.
         return count > 1_000_000 ? 10 : (int) count;
     }
 }
