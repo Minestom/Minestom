@@ -172,7 +172,7 @@ public final class PacketReading {
         final long readerEnd = readerStart + packetLength;
         final long writerEnd = buffer.writeIndex();
         buffer.writeIndex(readerEnd);
-        final PacketRegistry<T> registry = parser.stateRegistry(state);
+        final PacketRegistry<? extends T> registry = parser.stateRegistry(state);
         final T packet = readFramedPacket(buffer, registry, compressed, maxPacketSize);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
         buffer.index(readerEnd, writerEnd);
@@ -201,6 +201,7 @@ public final class PacketReading {
         NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
         try {
             if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
+            decompressed.registries(buffer.registries());
             buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
             return readPayload(decompressed, registry);
         } finally {

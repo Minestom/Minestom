@@ -8,7 +8,7 @@ import net.minestom.server.utils.Unit;
 
 import java.util.List;
 
-// TODO: Pending pr #2732
+// TODO: Pending pr #2732, (26.1: `villager/variant`)
 public class DataComponentPredicates {
     public static final DataComponentPredicates EMPTY = new DataComponentPredicates();
 

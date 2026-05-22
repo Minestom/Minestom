@@ -187,8 +187,8 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            F1<P1, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            F1<? super P1, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -228,9 +228,9 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            F2<P1, P2, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            F2<? super P1, ? super P2, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -282,10 +282,10 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            F3<P1, P2, P3, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            F3<? super P1, ? super P2, ? super P3, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -349,11 +349,11 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            F4<P1, P2, P3, P4, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            F4<? super P1, ? super P2, ? super P3, ? super P4, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -429,12 +429,12 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            F5<P1, P2, P3, P4, P5, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            F5<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -522,13 +522,13 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            F6<P1, P2, P3, P4, P5, P6, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            F6<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -628,14 +628,14 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            F7<P1, P2, P3, P4, P5, P6, P7, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            F7<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -748,15 +748,15 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            F8<P1, P2, P3, P4, P5, P6, P7, P8, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            F8<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -880,16 +880,16 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            F9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            F9<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -1025,17 +1025,17 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            F10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            F10<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -1183,18 +1183,18 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            F11<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            F11<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -1355,19 +1355,19 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            String name12, Codec<P12> codec12, Function<R, P12> getter12,
-            F12<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            String name12, Codec<P12> codec12, Function<? super R, ? extends P12> getter12,
+            F12<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -1539,20 +1539,20 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            String name12, Codec<P12> codec12, Function<R, P12> getter12,
-            String name13, Codec<P13> codec13, Function<R, P13> getter13,
-            F13<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            String name12, Codec<P12> codec12, Function<? super R, ? extends P12> getter12,
+            String name13, Codec<P13> codec13, Function<? super R, ? extends P13> getter13,
+            F13<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -1736,21 +1736,21 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            String name12, Codec<P12> codec12, Function<R, P12> getter12,
-            String name13, Codec<P13> codec13, Function<R, P13> getter13,
-            String name14, Codec<P14> codec14, Function<R, P14> getter14,
-            F14<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            String name12, Codec<P12> codec12, Function<? super R, ? extends P12> getter12,
+            String name13, Codec<P13> codec13, Function<? super R, ? extends P13> getter13,
+            String name14, Codec<P14> codec14, Function<? super R, ? extends P14> getter14,
+            F14<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -1946,22 +1946,22 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            String name12, Codec<P12> codec12, Function<R, P12> getter12,
-            String name13, Codec<P13> codec13, Function<R, P13> getter13,
-            String name14, Codec<P14> codec14, Function<R, P14> getter14,
-            String name15, Codec<P15> codec15, Function<R, P15> getter15,
-            F15<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            String name12, Codec<P12> codec12, Function<? super R, ? extends P12> getter12,
+            String name13, Codec<P13> codec13, Function<? super R, ? extends P13> getter13,
+            String name14, Codec<P14> codec14, Function<? super R, ? extends P14> getter14,
+            String name15, Codec<P15> codec15, Function<? super R, ? extends P15> getter15,
+            F15<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -2169,23 +2169,23 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            String name12, Codec<P12> codec12, Function<R, P12> getter12,
-            String name13, Codec<P13> codec13, Function<R, P13> getter13,
-            String name14, Codec<P14> codec14, Function<R, P14> getter14,
-            String name15, Codec<P15> codec15, Function<R, P15> getter15,
-            String name16, Codec<P16> codec16, Function<R, P16> getter16,
-            F16<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            String name12, Codec<P12> codec12, Function<? super R, ? extends P12> getter12,
+            String name13, Codec<P13> codec13, Function<? super R, ? extends P13> getter13,
+            String name14, Codec<P14> codec14, Function<? super R, ? extends P14> getter14,
+            String name15, Codec<P15> codec15, Function<? super R, ? extends P15> getter15,
+            String name16, Codec<P16> codec16, Function<? super R, ? extends P16> getter16,
+            F16<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -2405,24 +2405,24 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            String name12, Codec<P12> codec12, Function<R, P12> getter12,
-            String name13, Codec<P13> codec13, Function<R, P13> getter13,
-            String name14, Codec<P14> codec14, Function<R, P14> getter14,
-            String name15, Codec<P15> codec15, Function<R, P15> getter15,
-            String name16, Codec<P16> codec16, Function<R, P16> getter16,
-            String name17, Codec<P17> codec17, Function<R, P17> getter17,
-            F17<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            String name12, Codec<P12> codec12, Function<? super R, ? extends P12> getter12,
+            String name13, Codec<P13> codec13, Function<? super R, ? extends P13> getter13,
+            String name14, Codec<P14> codec14, Function<? super R, ? extends P14> getter14,
+            String name15, Codec<P15> codec15, Function<? super R, ? extends P15> getter15,
+            String name16, Codec<P16> codec16, Function<? super R, ? extends P16> getter16,
+            String name17, Codec<P17> codec17, Function<? super R, ? extends P17> getter17,
+            F17<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -2654,25 +2654,25 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            String name12, Codec<P12> codec12, Function<R, P12> getter12,
-            String name13, Codec<P13> codec13, Function<R, P13> getter13,
-            String name14, Codec<P14> codec14, Function<R, P14> getter14,
-            String name15, Codec<P15> codec15, Function<R, P15> getter15,
-            String name16, Codec<P16> codec16, Function<R, P16> getter16,
-            String name17, Codec<P17> codec17, Function<R, P17> getter17,
-            String name18, Codec<P18> codec18, Function<R, P18> getter18,
-            F18<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            String name12, Codec<P12> codec12, Function<? super R, ? extends P12> getter12,
+            String name13, Codec<P13> codec13, Function<? super R, ? extends P13> getter13,
+            String name14, Codec<P14> codec14, Function<? super R, ? extends P14> getter14,
+            String name15, Codec<P15> codec15, Function<? super R, ? extends P15> getter15,
+            String name16, Codec<P16> codec16, Function<? super R, ? extends P16> getter16,
+            String name17, Codec<P17> codec17, Function<? super R, ? extends P17> getter17,
+            String name18, Codec<P18> codec18, Function<? super R, ? extends P18> getter18,
+            F18<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -2916,26 +2916,26 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            String name12, Codec<P12> codec12, Function<R, P12> getter12,
-            String name13, Codec<P13> codec13, Function<R, P13> getter13,
-            String name14, Codec<P14> codec14, Function<R, P14> getter14,
-            String name15, Codec<P15> codec15, Function<R, P15> getter15,
-            String name16, Codec<P16> codec16, Function<R, P16> getter16,
-            String name17, Codec<P17> codec17, Function<R, P17> getter17,
-            String name18, Codec<P18> codec18, Function<R, P18> getter18,
-            String name19, Codec<P19> codec19, Function<R, P19> getter19,
-            F19<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            String name12, Codec<P12> codec12, Function<? super R, ? extends P12> getter12,
+            String name13, Codec<P13> codec13, Function<? super R, ? extends P13> getter13,
+            String name14, Codec<P14> codec14, Function<? super R, ? extends P14> getter14,
+            String name15, Codec<P15> codec15, Function<? super R, ? extends P15> getter15,
+            String name16, Codec<P16> codec16, Function<? super R, ? extends P16> getter16,
+            String name17, Codec<P17> codec17, Function<? super R, ? extends P17> getter17,
+            String name18, Codec<P18> codec18, Function<? super R, ? extends P18> getter18,
+            String name19, Codec<P19> codec19, Function<? super R, ? extends P19> getter19,
+            F19<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");
@@ -3191,27 +3191,27 @@ public interface StructCodec<R> extends Codec<R> {
      * @return the new {@link StructCodec} template.
      */
     static <R, P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, P20 extends @UnknownNullability Object> StructCodec<R> struct(
-            String name1, Codec<P1> codec1, Function<R, P1> getter1,
-            String name2, Codec<P2> codec2, Function<R, P2> getter2,
-            String name3, Codec<P3> codec3, Function<R, P3> getter3,
-            String name4, Codec<P4> codec4, Function<R, P4> getter4,
-            String name5, Codec<P5> codec5, Function<R, P5> getter5,
-            String name6, Codec<P6> codec6, Function<R, P6> getter6,
-            String name7, Codec<P7> codec7, Function<R, P7> getter7,
-            String name8, Codec<P8> codec8, Function<R, P8> getter8,
-            String name9, Codec<P9> codec9, Function<R, P9> getter9,
-            String name10, Codec<P10> codec10, Function<R, P10> getter10,
-            String name11, Codec<P11> codec11, Function<R, P11> getter11,
-            String name12, Codec<P12> codec12, Function<R, P12> getter12,
-            String name13, Codec<P13> codec13, Function<R, P13> getter13,
-            String name14, Codec<P14> codec14, Function<R, P14> getter14,
-            String name15, Codec<P15> codec15, Function<R, P15> getter15,
-            String name16, Codec<P16> codec16, Function<R, P16> getter16,
-            String name17, Codec<P17> codec17, Function<R, P17> getter17,
-            String name18, Codec<P18> codec18, Function<R, P18> getter18,
-            String name19, Codec<P19> codec19, Function<R, P19> getter19,
-            String name20, Codec<P20> codec20, Function<R, P20> getter20,
-            F20<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, R> ctor
+            String name1, Codec<P1> codec1, Function<? super R, ? extends P1> getter1,
+            String name2, Codec<P2> codec2, Function<? super R, ? extends P2> getter2,
+            String name3, Codec<P3> codec3, Function<? super R, ? extends P3> getter3,
+            String name4, Codec<P4> codec4, Function<? super R, ? extends P4> getter4,
+            String name5, Codec<P5> codec5, Function<? super R, ? extends P5> getter5,
+            String name6, Codec<P6> codec6, Function<? super R, ? extends P6> getter6,
+            String name7, Codec<P7> codec7, Function<? super R, ? extends P7> getter7,
+            String name8, Codec<P8> codec8, Function<? super R, ? extends P8> getter8,
+            String name9, Codec<P9> codec9, Function<? super R, ? extends P9> getter9,
+            String name10, Codec<P10> codec10, Function<? super R, ? extends P10> getter10,
+            String name11, Codec<P11> codec11, Function<? super R, ? extends P11> getter11,
+            String name12, Codec<P12> codec12, Function<? super R, ? extends P12> getter12,
+            String name13, Codec<P13> codec13, Function<? super R, ? extends P13> getter13,
+            String name14, Codec<P14> codec14, Function<? super R, ? extends P14> getter14,
+            String name15, Codec<P15> codec15, Function<? super R, ? extends P15> getter15,
+            String name16, Codec<P16> codec16, Function<? super R, ? extends P16> getter16,
+            String name17, Codec<P17> codec17, Function<? super R, ? extends P17> getter17,
+            String name18, Codec<P18> codec18, Function<? super R, ? extends P18> getter18,
+            String name19, Codec<P19> codec19, Function<? super R, ? extends P19> getter19,
+            String name20, Codec<P20> codec20, Function<? super R, ? extends P20> getter20,
+            F20<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? super P20, ? extends R> ctor
     ) {
         Objects.requireNonNull(name1, "name1");
         Objects.requireNonNull(codec1, "codec1");

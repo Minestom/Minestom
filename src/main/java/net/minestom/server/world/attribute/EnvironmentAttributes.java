@@ -33,8 +33,11 @@ sealed interface EnvironmentAttributes permits EnvironmentAttribute {
     EnvironmentAttribute<Float> STAR_ANGLE = register("visual/star_angle", Type.ANGLE_DEGREES, 0f);
     EnvironmentAttribute<MoonPhase> MOON_PHASE = register("visual/moon_phase", Type.MOON_PHASE, MoonPhase.FULL_MOON);
     EnvironmentAttribute<Float> STAR_BRIGHTNESS = register("visual/star_brightness", Type.FLOAT, 0f);
+    EnvironmentAttribute<RGBLike> BLOCK_LIGHT_TINT = register("visual/block_light_tint", Type.RGB_COLOR, new Color(0xFFD88C));
     EnvironmentAttribute<RGBLike> SKY_LIGHT_COLOR = register("visual/sky_light_color", Type.RGB_COLOR, Color.WHITE);
     EnvironmentAttribute<Float> SKY_LIGHT_FACTOR = register("visual/sky_light_factor", Type.FLOAT, 1f);
+    EnvironmentAttribute<RGBLike> NIGHT_VISION_COLOR = register("visual/night_vision_color", Type.RGB_COLOR, new Color(0x999999));
+    EnvironmentAttribute<RGBLike> AMBIENT_LIGHT_COLOR = register("visual/ambient_light_color", Type.RGB_COLOR, new Color(0x000000));
     EnvironmentAttribute<Particle> DEFAULT_DRIPSTONE_PARTICLE = register("visual/default_dripstone_particle", Type.PARTICLE, Particle.DRIPPING_DRIPSTONE_WATER);
     EnvironmentAttribute<List<AmbientParticle>> AMBIENT_PARTICLES = register("visual/ambient_particles", Type.AMBIENT_PARTICLES, List.of());
     EnvironmentAttribute<BackgroundMusic> BACKGROUND_MUSIC = register("audio/background_music", Type.BACKGROUND_MUSIC, BackgroundMusic.EMPTY);
@@ -50,7 +53,7 @@ sealed interface EnvironmentAttributes permits EnvironmentAttribute {
     EnvironmentAttribute<Boolean> FAST_LAVA = register("gameplay/fast_lava", Type.BOOLEAN, false);
     EnvironmentAttribute<Boolean> INCREASED_FIRE_BURNOUT = register("gameplay/increased_fire_burnout", Type.BOOLEAN, false);
     EnvironmentAttribute<TriState> EYEBLOSSOM_OPEN = register("gameplay/eyeblossom_open", Type.TRI_STATE, TriState.NOT_SET);
-    EnvironmentAttribute<Float> TURTLE_EGG_HATCH_CHANCE = register("gameplay/turtle_egg_hatch_chance", Type.FLOAT, 0f);
+    EnvironmentAttribute<Float> TURTLE_EGG_HATCH_CHANCE = register("gameplay/turtle_egg_hatch_chance", Type.FLOAT, 0.02f);
     EnvironmentAttribute<Boolean> PIGLINS_ZOMBIFY = register("gameplay/piglins_zombify", Type.BOOLEAN, true);
     EnvironmentAttribute<Boolean> SNOW_GOLEM_MELTS = register("gameplay/snow_golem_melts", Type.BOOLEAN, false);
     EnvironmentAttribute<Boolean> CREAKING_ACTIVE = register("gameplay/creaking_active", Type.BOOLEAN, false);

@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientChatAckPacket(int offset) implements ClientPacket {
+public record ClientChatAckPacket(int offset) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientChatAckPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientChatAckPacket::offset,
             ClientChatAckPacket::new);

@@ -61,8 +61,7 @@ public class ChatMessageListener {
                 Messenger.sendMessage(
                         recipients,
                         playerChatEvent.getFormattedMessage(),
-                        ChatPosition.CHAT,
-                        player.getUuid());
+                        ChatPosition.CHAT);
             }
         });
     }

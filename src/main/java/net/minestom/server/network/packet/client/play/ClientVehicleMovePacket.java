@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 import static net.minestom.server.network.NetworkBuffer.POS;
 
-public record ClientVehicleMovePacket(Pos position, boolean onGround) implements ClientPacket {
+public record ClientVehicleMovePacket(Pos position, boolean onGround) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientVehicleMovePacket> SERIALIZER = NetworkBufferTemplate.template(
             POS, ClientVehicleMovePacket::position,
             BOOLEAN, ClientVehicleMovePacket::onGround,
