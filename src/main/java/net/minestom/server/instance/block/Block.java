@@ -5,6 +5,7 @@ import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
@@ -50,12 +51,9 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * Codec for block states as a map.
      * Format: <code>{Name:"minecraft:x",Properties:{a:"y",b:"z"}}</code>
      */
-    Codec<Block> BLOCK_STATE_MAP_CODEC = new Codec<>() {
+    Codec<Block> STATE_STRUCT_CODEC = new StructCodec<>() {
         @Override
-        public <D> Result<Block> decode(Transcoder<D> coder, D value) {
-            Result<Transcoder.MapLike<D>> mapResult = coder.getMap(value);
-            if (!(mapResult instanceof Result.Ok(Transcoder.MapLike<D> map)))
-                return mapResult.cast();
+        public <D> Result<Block> decodeFromMap(Transcoder<D> coder, Transcoder.MapLike<D> map) {
             Result<Block> blockResult = map.getValue("Name").map(coder::getString).mapResult(Block::fromKey);
             if (!(blockResult instanceof Result.Ok(Block block)))
                 return blockResult.cast();
@@ -74,12 +72,11 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         }
 
         @Override
-        public <D> Result<D> encode(Transcoder<D> coder, @Nullable Block value) {
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, Block value, Transcoder.MapBuilder<D> map) {
             if (value == null) return new Result.Error<>("null");
-            Transcoder.MapBuilder<D> mapBuilder = coder.createMap();
-            mapBuilder.put("Name", coder.createString(value.key().asMinimalString()));
+            map.put("Name", coder.createString(value.key().asMinimalString()));
             if (value.properties().isEmpty()) {
-                return new Result.Ok<>(mapBuilder.build());
+                return new Result.Ok<>(map.build());
             }
             Map<String, String> defaultProperties = value.defaultState().properties();
             Transcoder.MapBuilder<D> propertiesBuilder = coder.createMap();
@@ -91,9 +88,9 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
                 nonDefaultPropertyExists = true;
             }
             if (nonDefaultPropertyExists) {
-                mapBuilder.put("Properties", propertiesBuilder.build());
+                map.put("Properties", propertiesBuilder.build());
             }
-            return new Result.Ok<>(mapBuilder.build());
+            return new Result.Ok<>(map.build());
         }
     };
 
