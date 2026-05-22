@@ -734,7 +734,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             if (setLength > length) {
                 throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
             } else {
-                final byte[] array = value.toByteArray();
+                final byte[] array = Arrays.copyOf(value.toByteArray(), (length + 7) / 8);
                 buffer.write(RAW_BYTES, array);
             }
         }
