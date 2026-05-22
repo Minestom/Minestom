@@ -689,6 +689,213 @@ public class AreaTest {
         assertThrows(NullPointerException.class, () -> Area.sphere(null, 1));
     }
 
+    @Test
+    public void blockCountMatchesIteratorAllAreas() {
+        for (Area area : areas()) {
+            long iterated = 0;
+            for (BlockVec ignored : area) iterated++;
+            assertEquals(iterated, area.blockCount(),
+                    "blockCount mismatch for " + area);
+        }
+    }
+
+    @Test
+    public void containsReturnsTrueForEveryIteratedBlock() {
+        for (Area area : areas()) {
+            for (BlockVec block : area) {
+                assertTrue(area.contains(block),
+                        "contains(" + block + ") returned false for iterated block of " + area);
+            }
+        }
+    }
+
+    @Test
+    public void containsRejectsBlocksOutsideBounds() {
+        for (Area area : areas()) {
+            Area.Cuboid bound = area.bound();
+            BlockVec outside = bound.max().add(100, 100, 100).asBlockVec();
+            assertFalse(area.contains(outside),
+                    "contains should reject far-outside block for " + area);
+        }
+    }
+
+    @Test
+    public void offsetPreservesBlockCount() {
+        for (Area area : areas()) {
+            Area offset = area.offset(7, -3, 11);
+            assertEquals(area.blockCount(), offset.blockCount(),
+                    "offset changed blockCount for " + area);
+        }
+    }
+
+    @Test
+    public void offsetSingle() {
+        Area.Single single = Area.single(new BlockVec(1, 2, 3));
+        Area offset = single.offset(4, 5, 6);
+        assertInstanceOf(Area.Single.class, offset);
+        assertEquals(new BlockVec(5, 7, 9), ((Area.Single) offset).point());
+    }
+
+    @Test
+    public void offsetLine() {
+        Area.Line line = Area.line(new BlockVec(0, 0, 0), new BlockVec(3, 0, 0));
+        Area offset = line.offset(10, 20, 30);
+        assertInstanceOf(Area.Line.class, offset);
+        Area.Line shifted = (Area.Line) offset;
+        assertEquals(new BlockVec(10, 20, 30), shifted.start());
+        assertEquals(new BlockVec(13, 20, 30), shifted.end());
+    }
+
+    @Test
+    public void offsetSphere() {
+        Area.Sphere sphere = Area.sphere(new BlockVec(0, 0, 0), 4);
+        Area offset = sphere.offset(1, 2, 3);
+        assertInstanceOf(Area.Sphere.class, offset);
+        Area.Sphere shifted = (Area.Sphere) offset;
+        assertEquals(new BlockVec(1, 2, 3), shifted.center());
+        assertEquals(4, shifted.radius());
+    }
+
+    @Test
+    public void offsetByPoint() {
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(1, 1, 1));
+        Area offset = cuboid.offset(new Vec(2.9, -1.5, 4.0));
+        assertInstanceOf(Area.Cuboid.class, offset);
+        Area.Cuboid shifted = (Area.Cuboid) offset;
+        assertEquals(new BlockVec(2, -2, 4), shifted.min());
+        assertEquals(new BlockVec(3, -1, 5), shifted.max());
+    }
+
+    @Test
+    public void recordEquality() {
+        assertEquals(Area.single(new BlockVec(1, 2, 3)), Area.single(new BlockVec(1, 2, 3)));
+        assertEquals(Area.single(new BlockVec(1, 2, 3)).hashCode(),
+                Area.single(new BlockVec(1, 2, 3)).hashCode());
+
+        assertEquals(Area.line(new BlockVec(0, 0, 0), new BlockVec(5, 5, 5)),
+                Area.line(new BlockVec(0, 0, 0), new BlockVec(5, 5, 5)));
+
+        assertEquals(Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(5, 5, 5)),
+                Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(5, 5, 5)));
+        // Cuboid equality holds regardless of argument order (auto-ordered)
+        assertEquals(Area.cuboid(new BlockVec(0, 0, 0), new BlockVec(5, 5, 5)),
+                Area.cuboid(new BlockVec(5, 5, 5), new BlockVec(0, 0, 0)));
+
+        assertEquals(Area.sphere(new BlockVec(1, 2, 3), 4),
+                Area.sphere(new BlockVec(1, 2, 3), 4));
+
+        assertNotEquals(Area.single(new BlockVec(1, 2, 3)), Area.single(new BlockVec(1, 2, 4)));
+        assertNotEquals(Area.sphere(new BlockVec(0, 0, 0), 3), Area.sphere(new BlockVec(0, 0, 0), 4));
+    }
+
+    @Test
+    public void cuboidConstructorOrders() {
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(5, 5, 5), new BlockVec(0, 0, 0));
+        assertEquals(new BlockVec(0, 0, 0), cuboid.min());
+        assertEquals(new BlockVec(5, 5, 5), cuboid.max());
+
+        // Already-ordered inputs pass through unchanged
+        BlockVec min = new BlockVec(0, 0, 0);
+        BlockVec max = new BlockVec(5, 5, 5);
+        Area.Cuboid ordered = Area.cuboid(min, max);
+        assertSame(min, ordered.min());
+        assertSame(max, ordered.max());
+    }
+
+    @Test
+    public void cubeSizeZero() {
+        Area.Cuboid cube = Area.cube(new BlockVec(5, 5, 5), 0);
+        assertEquals(new BlockVec(5, 5, 5), cube.min());
+        assertEquals(new BlockVec(5, 5, 5), cube.max());
+        assertEquals(1, cube.blockCount());
+    }
+
+    @Test
+    public void boxZeroSize() {
+        Area.Cuboid box = Area.box(new BlockVec(3, 3, 3), Vec.ZERO);
+        assertEquals(new BlockVec(3, 3, 3), box.min());
+        assertEquals(new BlockVec(3, 3, 3), box.max());
+        assertEquals(1, box.blockCount());
+    }
+
+    @Test
+    public void sphereZeroRadiusBlockCount() {
+        assertEquals(1, Area.sphere(new BlockVec(5, 5, 5), 0).blockCount());
+    }
+
+    @Test
+    public void sphereLargerRadiusSplitMatchesIterator() {
+        Area.Sphere sphere = Area.sphere(new BlockVec(0, 0, 0), 7);
+        assertEquals(blocks(sphere), splitBlocks(sphere));
+    }
+
+    @Test
+    public void sphereSplitCenteredOnSectionBoundary() {
+        Area.Sphere sphere = Area.sphere(new BlockVec(16, 16, 16), 4);
+        assertEquals(blocks(sphere), splitBlocks(sphere));
+    }
+
+    @Test
+    public void sphereSplitNegativeCenter() {
+        Area.Sphere sphere = Area.sphere(new BlockVec(-8, -8, -8), 5);
+        assertEquals(blocks(sphere), splitBlocks(sphere));
+    }
+
+    @Test
+    public void cuboidContainedInSingleSectionSplitReturnsSelf() {
+        Area.Cuboid cuboid = Area.cuboid(new BlockVec(1, 2, 3), new BlockVec(4, 5, 6));
+        List<Area.Cuboid> splits = cuboid.split();
+        assertEquals(1, splits.size());
+        assertEquals(cuboid, splits.getFirst());
+    }
+
+    @Test
+    public void sectionAtNegativeCoordinates() {
+        Area.Cuboid section = Area.section(-1, -1, -1);
+        assertEquals(new BlockVec(-16, -16, -16), section.min());
+        assertEquals(new BlockVec(-1, -1, -1), section.max());
+    }
+
+    @Test
+    public void boundOfOffsetMatchesOffsetOfBound() {
+        for (Area area : areas()) {
+            Area.Cuboid expected = Area.cuboid(
+                    area.bound().min().add(2, 3, 4).asBlockVec(),
+                    area.bound().max().add(2, 3, 4).asBlockVec());
+            Area.Cuboid actual = area.offset(2, 3, 4).bound();
+            assertEquals(expected, actual, "bound mismatch after offset for " + area);
+        }
+    }
+
+    @Test
+    public void splitNeverEmptyForNonEmptyArea() {
+        for (Area area : areas()) {
+            assertFalse(area.split().isEmpty(), "split should not be empty for " + area);
+        }
+    }
+
+    @Test
+    public void lineDiagonal3D() {
+        // Verify that a 3D diagonal line generates the expected number of blocks
+        Area.Line line = Area.line(new BlockVec(0, 0, 0), new BlockVec(10, 10, 10));
+        assertEquals(11, line.blockCount());
+        Set<BlockVec> blocks = blocks(line);
+        assertEquals(11, blocks.size());
+        // Each block should be on the diagonal (x == y == z)
+        for (BlockVec block : blocks) {
+            assertEquals(block.blockX(), block.blockY());
+            assertEquals(block.blockY(), block.blockZ());
+        }
+    }
+
+    @Test
+    public void lineContainsRejectsPointsOnBoundingBoxButOffLine() {
+        // Bresenham diagonal: (0,0,0) -> (4,2,0) — point (4,0,0) is in the bbox but not on the line
+        Area.Line line = Area.line(new BlockVec(0, 0, 0), new BlockVec(4, 2, 0));
+        assertFalse(line.contains(new BlockVec(4, 0, 0)));
+        assertFalse(line.contains(new BlockVec(0, 2, 0)));
+    }
+
     private static List<Area> areas() {
         return List.of(
                 Area.single(new BlockVec(7, 8, 9)),

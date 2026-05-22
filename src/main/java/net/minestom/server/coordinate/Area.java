@@ -172,8 +172,7 @@ public sealed interface Area extends Iterable<BlockVec> {
      * @return a 16x16x16 section cuboid
      */
     static Cuboid section(int sectionX, int sectionY, int sectionZ) {
-        final BlockVec section = BlockVec.SECTION.mul(sectionX, sectionY, sectionZ);
-        return cuboid(section, BlockVec.SECTION.add(section).sub(1));
+        return AreaImpl.section(sectionX, sectionY, sectionZ);
     }
 
     /**

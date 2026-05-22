@@ -1,13 +1,20 @@
 package net.minestom.server.coordinate;
 
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 import static net.minestom.server.coordinate.CoordConversion.*;
 
 final class AreaImpl {
+
+    static Area.Cuboid section(int sectionX, int sectionY, int sectionZ) {
+        final int minX = sectionX * SECTION_SIZE;
+        final int minY = sectionY * SECTION_SIZE;
+        final int minZ = sectionZ * SECTION_SIZE;
+        final BlockVec min = new BlockVec(minX, minY, minZ);
+        return new Cuboid(min, min.add(SECTION_BOUND));
+    }
 
     static Area.Cuboid cube(Point center, int size) {
         Check.argCondition(size < 0, "Cube size must be non-negative: {0}", size);
@@ -173,20 +180,70 @@ final class AreaImpl {
         @Override
         public boolean contains(Point point) {
             final BlockVec block = point.asBlockVec();
-            final int blockX = block.blockX(), blockY = block.blockY(), blockZ = block.blockZ();
-            final int startX = start.blockX(), startY = start.blockY(), startZ = start.blockZ();
-            final int endX = end.blockX(), endY = end.blockY(), endZ = end.blockZ();
-            if (blockX < Math.min(startX, endX) || blockX > Math.max(startX, endX) ||
-                    blockY < Math.min(startY, endY) || blockY > Math.max(startY, endY) ||
-                    blockZ < Math.min(startZ, endZ) || blockZ > Math.max(startZ, endZ)) {
+            final int targetX = block.blockX(), targetY = block.blockY(), targetZ = block.blockZ();
+            final int x1 = start.blockX(), y1 = start.blockY(), z1 = start.blockZ();
+            final int x2 = end.blockX(), y2 = end.blockY(), z2 = end.blockZ();
+            if (targetX < Math.min(x1, x2) || targetX > Math.max(x1, x2) ||
+                    targetY < Math.min(y1, y2) || targetY > Math.max(y1, y2) ||
+                    targetZ < Math.min(z1, z2) || targetZ > Math.max(z1, z2)) {
                 return false;
             }
-            for (BlockVec lineBlock : this) {
-                if (lineBlock.equals(block)) {
-                    return true;
+            // Walk Bresenham in-place to avoid BlockVec allocation per step
+            final int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1), dz = Math.abs(z2 - z1);
+            final int sx = x1 < x2 ? 1 : -1, sy = y1 < y2 ? 1 : -1, sz = z1 < z2 ? 1 : -1;
+            int x = x1, y = y1, z = z1;
+            int err1, err2;
+            if (dx >= dy && dx >= dz) {
+                err1 = dx / 2;
+                err2 = dx / 2;
+            } else if (dy >= dz) {
+                err1 = dy / 2;
+                err2 = dy / 2;
+            } else {
+                err1 = dz / 2;
+                err2 = dz / 2;
+            }
+            while (true) {
+                if (x == targetX && y == targetY && z == targetZ) return true;
+                if (x == x2 && y == y2 && z == z2) return false;
+                if (dx >= dy && dx >= dz) {
+                    x += sx;
+                    err1 -= dy;
+                    err2 -= dz;
+                    if (err1 < 0) {
+                        y += sy;
+                        err1 += dx;
+                    }
+                    if (err2 < 0) {
+                        z += sz;
+                        err2 += dx;
+                    }
+                } else if (dy >= dz) {
+                    y += sy;
+                    err1 -= dx;
+                    err2 -= dz;
+                    if (err1 < 0) {
+                        x += sx;
+                        err1 += dy;
+                    }
+                    if (err2 < 0) {
+                        z += sz;
+                        err2 += dy;
+                    }
+                } else {
+                    z += sz;
+                    err1 -= dx;
+                    err2 -= dy;
+                    if (err1 < 0) {
+                        x += sx;
+                        err1 += dz;
+                    }
+                    if (err2 < 0) {
+                        y += sy;
+                        err2 += dz;
+                    }
                 }
             }
-            return false;
         }
 
         @Override
@@ -202,10 +259,12 @@ final class AreaImpl {
         public Cuboid {
             Objects.requireNonNull(min, "min cannot be null");
             Objects.requireNonNull(max, "max cannot be null");
-            final BlockVec origMin = min;
-            final BlockVec origMax = max;
-            min = origMin.min(origMax);
-            max = origMin.max(origMax);
+            if (min.blockX() > max.blockX() || min.blockY() > max.blockY() || min.blockZ() > max.blockZ()) {
+                final BlockVec origMin = min;
+                final BlockVec origMax = max;
+                min = origMin.min(origMax);
+                max = origMin.max(origMax);
+            }
         }
 
         @Override
@@ -251,6 +310,11 @@ final class AreaImpl {
             final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
             final int minSecX = min.sectionX(), minSecY = min.sectionY(), minSecZ = min.sectionZ();
             final int maxSecX = max.sectionX(), maxSecY = max.sectionY(), maxSecZ = max.sectionZ();
+
+            // Fast path: already within a single section
+            if (minSecX == maxSecX && minSecY == maxSecY && minSecZ == maxSecZ) {
+                return List.of(this);
+            }
 
             List<Area.Cuboid> result = new ArrayList<>(estimatedSectionCount(minSecX, minSecY, minSecZ, maxSecX, maxSecY, maxSecZ));
 
@@ -308,44 +372,51 @@ final class AreaImpl {
         @Override
         public Iterator<BlockVec> iterator() {
             final int centerX = center.blockX(), centerY = center.blockY(), centerZ = center.blockZ();
-            final int minX = centerX - radius, minY = centerY - radius, minZ = centerZ - radius;
-            final int maxX = centerX + radius, maxY = centerY + radius, maxZ = centerZ + radius;
+            final int radius = this.radius;
+            final long radiusSquared = (long) radius * radius;
             return new Iterator<>() {
-                private int x = minX;
-                private int y = minY;
-                private int z = minZ;
-                private @Nullable BlockVec nextVec = findNext();
+                private int x;
+                private int xEnd = Integer.MIN_VALUE;
+                private int y = -radius;
+                private int z = -radius;
+                private boolean done;
 
-                private @Nullable BlockVec findNext() {
-                    while (z <= maxZ) {
-                        while (y <= maxY) {
-                            while (x <= maxX) {
-                                if (withinSphereRadius((long) x - centerX, (long) y - centerY, (long) z - centerZ, radius)) {
-                                    BlockVec result = new BlockVec(x, y, z);
-                                    x++;
-                                    return result;
-                                }
-                                x++;
+                {
+                    advance();
+                }
+
+                private void advance() {
+                    while (z <= radius) {
+                        while (y <= radius) {
+                            final long dy = y, dz = z;
+                            final long remaining = radiusSquared - dy * dy - dz * dz;
+                            if (remaining >= 0) {
+                                final int halfWidth = (int) floorSqrt(remaining);
+                                x = -halfWidth;
+                                xEnd = halfWidth;
+                                return;
                             }
-                            x = minX;
                             y++;
                         }
-                        y = minY;
+                        y = -radius;
                         z++;
                     }
-                    return null;
+                    done = true;
                 }
 
                 @Override
                 public boolean hasNext() {
-                    return nextVec != null;
+                    return !done;
                 }
 
                 @Override
                 public BlockVec next() {
-                    if (nextVec == null) throw new NoSuchElementException();
-                    BlockVec result = nextVec;
-                    nextVec = findNext();
+                    if (done) throw new NoSuchElementException();
+                    final BlockVec result = new BlockVec(centerX + x, centerY + y, centerZ + z);
+                    if (++x > xEnd) {
+                        y++;
+                        advance();
+                    }
                     return result;
                 }
             };
@@ -423,14 +494,7 @@ final class AreaImpl {
         if (dx < -radius || dx > radius || dy < -radius || dy > radius || dz < -radius || dz > radius) {
             return false;
         }
-        final long radiusSquared = (long) radius * radius;
-        final long dxSquared = dx * dx;
-        if (dxSquared > radiusSquared) return false;
-        final long remainingAfterX = radiusSquared - dxSquared;
-        final long dySquared = dy * dy;
-        if (dySquared > remainingAfterX) return false;
-        final long dzSquared = dz * dz;
-        return dzSquared <= remainingAfterX - dySquared;
+        return dx * dx + dy * dy + dz * dz <= (long) radius * radius;
     }
 
     private static boolean sameSection(BlockVec first, BlockVec second) {
@@ -464,12 +528,9 @@ final class AreaImpl {
     private static long floorSqrt(long value) {
         if (value == 0) return 0;
         long sqrt = (long) Math.sqrt(value);
-        while (sqrt > value / sqrt) {
-            sqrt--;
-        }
-        while (sqrt + 1 <= value / (sqrt + 1)) {
-            sqrt++;
-        }
+        // Math.sqrt may be off by one due to double precision; correct in either direction.
+        if (sqrt > 0 && sqrt > value / sqrt) sqrt--;
+        else if (sqrt + 1 <= value / (sqrt + 1)) sqrt++;
         return sqrt;
     }
 
