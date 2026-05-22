@@ -328,6 +328,9 @@ final class NetworkBufferImpl implements NetworkBuffer {
         try {
             inflater.setInput(input);
             final int bytes = inflater.inflate(outputBuffer);
+            if (!inflater.finished()) {
+                throw new DataFormatException("Decompressed payload exceeds output capacity");
+            }
             output.advanceWrite(bytes);
             return bytes;
         } finally {

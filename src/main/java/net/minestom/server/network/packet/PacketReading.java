@@ -194,7 +194,7 @@ public final class PacketReading {
             return readPayload(buffer, registry);
         }
         if (dataLength < 0 || dataLength > maxPacketSize) {
-            throw new DataFormatException("Decompressed packet too large: " + dataLength);
+            throw new DataFormatException("Invalid decompressed length: " + dataLength);
         }
 
         // Decompress the packet into the pooled buffer and read the uncompressed packet from it
@@ -202,7 +202,10 @@ public final class PacketReading {
         try {
             if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
             decompressed.registries(buffer.registries());
-            buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
+            final long written = buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
+            if (written != dataLength) {
+                throw new DataFormatException("Decompressed length mismatch: expected " + dataLength + ", got " + written);
+            }
             return readPayload(decompressed, registry);
         } finally {
             PacketVanilla.PACKET_POOL.add(decompressed);
