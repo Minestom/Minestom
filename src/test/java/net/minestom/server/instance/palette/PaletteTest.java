@@ -287,6 +287,30 @@ public class PaletteTest {
     }
 
     @Test
+    public void replaceWithExistingValue() {
+        for (Palette palette : testPalettes()) {
+            palette.set(0, 0, 0, 1);
+            palette.set(1, 0, 0, 2);
+            palette.set(0, 1, 0, 2);
+
+            palette.replace(1, 2);
+
+            assertEquals(2, palette.get(0, 0, 0));
+            assertEquals(2, palette.get(1, 0, 0));
+            assertEquals(2, palette.get(0, 1, 0));
+            assertEquals(3, palette.count(2));
+            assertEquals(0, palette.count(1));
+            assertFalse(palette.any(1));
+            assertTrue(palette.any(2));
+
+            palette.set(1, 1, 0, 1);
+            assertEquals(1, palette.get(1, 1, 0));
+            assertEquals(1, palette.count(1));
+            assertEquals(3, palette.count(2));
+        }
+    }
+
+    @Test
     public void countValue() {
         for (Palette palette : testPalettes()) {
             assertEquals(palette.maxSize(), palette.count(0));

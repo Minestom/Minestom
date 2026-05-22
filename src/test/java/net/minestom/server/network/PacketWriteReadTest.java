@@ -25,7 +25,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.message.meMessageType;
 import net.minestom.server.network.debug.DebugSubscription;
 import net.minestom.server.network.debug.info.DebugHiveInfo;
 import net.minestom.server.network.debug.info.DebugPathInfo;
@@ -565,7 +565,7 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientCommandChatPacket("l".repeat(256)), new ClientCommandChatPacket("helloworld"));
         //TODO (signed) support signed chat/commands with proper data.
         addClientPackets(new ClientSignedCommandChatPacket("helloworld", Long.MAX_VALUE, 0L, new ArgumentSignatures(List.of(new ArgumentSignatures.Entry("hey", new MessageSignature(new byte[256])))), new LastSeenMessages.Update(100, new BitSet(20)), (byte) 0));
-        addClientPackets(new ClientChatMessagePacket("My name is bob", Long.MAX_VALUE, 0L, new MessageSignature(new byte[256]), 100, new BitSet(), (byte) 100));
+        addClientPackets(new ClientChatMessagePacket("My name is bob", Long.MAX_VALUE, 0L, new MessageSignature(new byte[256]), 100, new BitSet(), (byte) 100), new ClientChatMessagePacket("hello", 0L, 0L, null, 0, new BitSet(), (byte) 42));
         //TODO (signed) use a key for tests
         addClientPackets(new ClientChatSessionUpdatePacket(new ChatSession(UUID.randomUUID(), new PlayerPublicKey(Instant.EPOCH, Objects.requireNonNull(MojangCrypt.generateKeyPair()).getPublic(), new byte[4096]))));
         addClientPackets(new ClientChunkBatchReceivedPacket(0.5f));

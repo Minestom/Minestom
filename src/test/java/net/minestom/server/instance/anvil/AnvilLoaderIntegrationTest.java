@@ -10,8 +10,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-import static net.minestom.server.network.NetworkBuffer.SHORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -207,18 +206,12 @@ public class AnvilLoaderIntegrationTest {
             Section originalSection = originalChunk.getSection(section);
             Section reloadedSection = reloadedChunk.getSection(section);
 
-            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
+            NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(MinecraftServer.getBiomeRegistry().size());
             // easiest equality check to write is a memory compare on written output
-            var original = NetworkBuffer.makeArray(buffer -> {
-                buffer.write(SHORT, (short) originalSection.blockPalette().count());
-                buffer.write(Palette.BLOCK_SERIALIZER, originalSection.blockPalette());
-                buffer.write(biomeSerializer, originalSection.biomePalette());
-            });
-            var reloaded = NetworkBuffer.makeArray(buffer -> {
-                buffer.write(SHORT, (short) reloadedSection.blockPalette().count());
-                buffer.write(Palette.BLOCK_SERIALIZER, reloadedSection.blockPalette());
-                buffer.write(biomeSerializer, reloadedSection.biomePalette());
-            });
+            var original = NetworkBuffer.makeArray(buffer ->
+                    buffer.write(sectionSerializer, new ChunkData.Section((short) originalSection.blockPalette().count(), (short) 0, originalSection.blockPalette(), originalSection.biomePalette())));
+            var reloaded = NetworkBuffer.makeArray(buffer ->
+                    buffer.write(sectionSerializer, new ChunkData.Section((short) reloadedSection.blockPalette().count(), (short) 0, reloadedSection.blockPalette(), reloadedSection.biomePalette())));
             Assertions.assertArrayEquals(original, reloaded);
         }
     }
