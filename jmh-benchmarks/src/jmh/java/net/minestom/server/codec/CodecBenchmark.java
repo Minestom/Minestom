@@ -42,9 +42,9 @@ public class CodecBenchmark {
         final Codec<Object> codec;
         final Object value;
 
-        @SuppressWarnings({"rawtypes", "unchecked"})
-        CodecKind(Codec codec, Object value) {
-            this.codec = codec;
+        @SuppressWarnings("unchecked")
+        <T> CodecKind(Codec<T> codec, T value) {
+            this.codec = (Codec<Object>) codec;
             this.value = value;
         }
     }
