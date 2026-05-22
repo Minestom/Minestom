@@ -15,6 +15,7 @@ import java.net.SocketAddress;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Utils class using mojang API.
@@ -27,6 +28,8 @@ public final class MojangUtils {
     private static final String BASE_AUTH_URL = ServerFlag.AUTH_URL.concat("?username=%s&serverId=%s");
     private static final String PREVENT_PROXY_CONNECTIONS_AUTH_URL = BASE_AUTH_URL.concat("&ip=%s");
 
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{3,16}");
+
     /**
      * Gets a player's UUID from their username
      *
@@ -38,7 +41,7 @@ public final class MojangUtils {
     public static UUID getUUID(String username) throws IOException {
         // Thanks stackoverflow: https://stackoverflow.com/a/19399768/13247146
         return UUID.fromString(
-                retrieve(String.format(FROM_USERNAME_URL, encode(username))).get("id")
+                retrieve(String.format(FROM_USERNAME_URL, validateUsername(username))).get("id")
                         .getAsString()
                         .replaceFirst(
                                 "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
@@ -56,7 +59,7 @@ public final class MojangUtils {
      */
     @Blocking
     public static String getUsername(UUID playerUUID) throws IOException {
-        return retrieve(String.format(FROM_UUID_URL, encode(playerUUID.toString()))).get("name").getAsString();
+        return retrieve(String.format(FROM_UUID_URL, playerUUID)).get("name").getAsString();
     }
 
     /**
@@ -67,7 +70,11 @@ public final class MojangUtils {
      */
     @Blocking
     public static @Nullable JsonObject fromUuid(UUID uuid) {
-        return fromUuid(uuid.toString());
+        try {
+            return retrieve(String.format(FROM_UUID_URL, uuid));
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     /**
@@ -78,11 +85,13 @@ public final class MojangUtils {
      */
     @Blocking
     public static @Nullable JsonObject fromUuid(String uuid) {
+        final UUID parsed;
         try {
-            return retrieve(String.format(FROM_UUID_URL, encode(uuid)));
-        } catch (IOException e) {
+            parsed = UUID.fromString(uuid);
+        } catch (IllegalArgumentException e) {
             return null;
         }
+        return fromUuid(parsed);
     }
 
     /**
@@ -93,8 +102,9 @@ public final class MojangUtils {
      */
     @Blocking
     public static @Nullable JsonObject fromUsername(String username) {
+        if (!USERNAME_PATTERN.matcher(username).matches()) return null;
         try {
-            return retrieve(String.format(FROM_USERNAME_URL, encode(username)));
+            return retrieve(String.format(FROM_USERNAME_URL, username));
         } catch (IOException e) {
             return null;
         }
@@ -121,6 +131,13 @@ public final class MojangUtils {
 
     private static String encode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
+    private static String validateUsername(String username) throws IOException {
+        if (!USERNAME_PATTERN.matcher(username).matches()) {
+            throw new IOException("Invalid username: " + username);
+        }
+        return username;
     }
 
     /**
