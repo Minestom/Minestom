@@ -96,6 +96,22 @@ public final class Palettes {
         return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
     }
 
+    static void validateIndices(int bitsPerEntry, int dimension, long[] values, int paletteSize) {
+        final int valuesPerLong = 64 / bitsPerEntry;
+        final int size = dimension * dimension * dimension;
+        final long mask = (1L << bitsPerEntry) - 1L;
+        for (int i = 0, idx = 0; i < values.length; i++) {
+            long block = values[i];
+            final int end = Math.min(valuesPerLong, size - idx);
+            for (int j = 0; j < end; j++, idx++) {
+                final int paletteIdx = (int) (block & mask);
+                if (paletteIdx >= paletteSize)
+                    throw new IllegalArgumentException("Palette index out of range: " + paletteIdx + " >= " + paletteSize);
+                block >>>= bitsPerEntry;
+            }
+        }
+    }
+
     // Optimized operations
 
     public static void getAllFill(byte dimension, int value, Palette.EntryConsumer consumer) {

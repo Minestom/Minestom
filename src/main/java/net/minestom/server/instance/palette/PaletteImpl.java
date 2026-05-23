@@ -575,12 +575,18 @@ final class PaletteImpl implements Palette {
         if (palette.count != this.count) return false;
         if (palette.count == 0) return true;
         if (palette.bitsPerEntry == 0 && this.bitsPerEntry == 0) return true;
+        final long[] thisValues = this.values;
+        final long[] thatValues = palette.values;
+        final int thisBpe = this.bitsPerEntry;
+        final int thatBpe = palette.bitsPerEntry;
         for (int y = 0; y < dimension; y++) {
             for (int z = 0; z < dimension; z++) {
                 for (int x = 0; x < dimension; x++) {
-                    final int value1 = this.get(x, y, z);
-                    final int value2 = palette.get(x, y, z);
-                    if (value1 != value2) return false;
+                    final int v1 = thisBpe == 0 ? this.count
+                            : paletteIndexToValue(read(dimension, thisBpe, thisValues, x, y, z));
+                    final int v2 = thatBpe == 0 ? palette.count
+                            : palette.paletteIndexToValue(read(dimension, thatBpe, thatValues, x, y, z));
+                    if (v1 != v2) return false;
                 }
             }
         }

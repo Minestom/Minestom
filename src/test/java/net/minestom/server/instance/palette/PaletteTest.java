@@ -6,11 +6,12 @@ import net.minestom.server.network.NetworkBuffer;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static net.minestom.server.instance.palette.PaletteAssertions.assertAllEquals;
+import static net.minestom.server.instance.palette.PaletteAssertions.testPalettes;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PaletteTest {
@@ -104,23 +105,11 @@ public class PaletteTest {
             palette.fill(6);
             assertEquals(6, palette.get(0, 0, 0));
             assertEquals(palette.maxSize(), palette.count());
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(6, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(6, palette);
 
             palette.fill(0);
             assertEquals(0, palette.count());
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(0, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(0, palette);
         }
     }
 
@@ -129,13 +118,7 @@ public class PaletteTest {
         for (Palette palette : testPalettes()) {
             palette.fill(0);
             palette.offset(1);
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(1, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(1, palette);
 
             palette.fill(1);
             palette.set(0, 0, 1, 2);
@@ -217,13 +200,7 @@ public class PaletteTest {
         for (Palette palette : testPalettes()) {
             palette.fill(0);
             palette.replace(0, 1);
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(1, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(1, palette);
 
             palette.fill(1);
             palette.set(0, 0, 1, 2);
@@ -1024,13 +1001,4 @@ public class PaletteTest {
         assertEquals(testPalette.maxSize() - 12, testPalette.count());
     }
 
-    private static List<Palette> testPalettes() {
-        return List.of(
-                Palette.sized(2, 1, 5, 15, 3),
-                Palette.sized(4, 1, 5, 15, 3),
-                Palette.sized(8, 1, 5, 15, 3),
-                Palette.sized(16, 1, 5, 15, 3),
-                Palette.blocks()
-        );
-    }
 }
