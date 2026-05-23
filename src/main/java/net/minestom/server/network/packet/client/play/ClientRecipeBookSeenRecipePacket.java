@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientRecipeBookSeenRecipePacket(int index) implements ClientPacket {
+public record ClientRecipeBookSeenRecipePacket(int index) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientRecipeBookSeenRecipePacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientRecipeBookSeenRecipePacket::index,
             ClientRecipeBookSeenRecipePacket::new);

@@ -11,6 +11,7 @@ import net.minestom.server.color.AlphaColor;
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.ItemStackTemplate;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.validate.Check;
@@ -323,7 +324,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record Item(Key key, int id, ItemStack item) implements Particle {
         public static final StructCodec<Item> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Item::key,
-                "item", ItemStack.CODEC, Item::item,
+                "item", ItemStackTemplate.CODEC, Item::item,
                 (type, item) -> ParticleImpl.<Item>get(type).withItem(item));
 
         @Contract(pure = true)
@@ -333,12 +334,12 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
 
         @Override
         public Item readData(NetworkBuffer reader) {
-            return this.withItem(reader.read(ItemStack.NETWORK_TYPE));
+            return this.withItem(reader.read(ItemStackTemplate.NETWORK_TYPE));
         }
 
         @Override
         public void writeData(NetworkBuffer writer) {
-            writer.write(ItemStack.NETWORK_TYPE, item);
+            writer.write(ItemStackTemplate.NETWORK_TYPE, item);
         }
 
         @Override

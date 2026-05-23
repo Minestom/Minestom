@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
 public record ClientSetRecipeBookStatePacket(BookType bookType,
-                                             boolean bookOpen, boolean filterActive) implements ClientPacket {
+                                             boolean bookOpen, boolean filterActive) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientSetRecipeBookStatePacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.Enum(BookType.class), ClientSetRecipeBookStatePacket::bookType,
             BOOLEAN, ClientSetRecipeBookStatePacket::bookOpen,

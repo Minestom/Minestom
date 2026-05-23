@@ -2,49 +2,56 @@ package net.minestom.server.utils;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
-import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.codec.Transcoder;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 
 public sealed interface IntProvider {
-    Codec<IntProvider> CODEC = new Codec<>() {
-        public static final Registry<StructCodec<? extends IntProvider>> REGISTRY = DynamicRegistry.fromMap(Key.key("int_provider"),
-                Map.entry(Key.key("uniform"), Uniform.CODEC));
-        private static final StructCodec<IntProvider> TAGGED_CODEC = Codec.RegistryTaggedUnion(REGISTRY, IntProvider::codec);
+    Registry<StructCodec<? extends IntProvider>> REGISTRY = DynamicRegistry.fromMap(Key.key("int_provider"),
+            Map.entry(Key.key("constant"), Constant.CODEC),
+            Map.entry(Key.key("uniform"), Uniform.CODEC),
+            Map.entry(Key.key("biased_to_bottom"), BiasedToBottom.CODEC),
+            Map.entry(Key.key("clamped"), Clamped.CODEC),
+            Map.entry(Key.key("weighted_list"), Weighted.CODEC),
+            Map.entry(Key.key("clamped_normal"), ClampedNormal.CODEC),
+            Map.entry(Key.key("trapezoid"), Trapezoid.CODEC)
+    );
+    StructCodec<IntProvider> REGISTRY_CODEC = Codec.RegistryTaggedUnion(REGISTRY, IntProvider::codec);
 
-        @Override
-        public <D> Result<D> encode(Transcoder<D> coder, @Nullable IntProvider value) {
-            if (value instanceof IntProvider.Constant(int number))
-                return new Result.Ok<>(coder.createInt(number));
-            return TAGGED_CODEC.encode(coder, value);
-        }
-
-        @Override
-        public <D> Result<IntProvider> decode(Transcoder<D> coder, D value) {
-            final Result<Integer> numberResult = coder.getInt(value);
-            if (numberResult instanceof Result.Ok(Integer number))
-                return new Result.Ok<>(new IntProvider.Constant(number));
-            return TAGGED_CODEC.decode(coder, value);
-        }
-    };
+    Codec<IntProvider> CODEC = Codec.Either(Codec.INT, REGISTRY_CODEC).transform(
+            it -> it.unify(Constant::new, Function.identity()),
+            it -> it instanceof Constant(int value) ? Either.left(value) : Either.right(it)
+    );
 
     record Constant(int value) implements IntProvider {
-        public static final Codec<Constant> CODEC = Codec.INT.transform(Constant::new, Constant::value);
+        public static final StructCodec<Constant> CODEC = StructCodec.struct(
+                "value", Codec.INT, Constant::value,
+                Constant::new
+        );
 
         @Override
-        public int sample(Random random) {
+        public int minInclusive() {
             return value;
         }
 
         @Override
-        public StructCodec<? extends IntProvider> codec() {
-            throw new UnsupportedOperationException("Constant values are serialized as a special case, use IntProvider#CODEC");
+        public int maxInclusive() {
+            return value;
+        }
+
+        @Override
+        public int sample(Random ignored) {
+            return value;
+        }
+
+        @Override
+        public StructCodec<Constant> codec() {
+            return CODEC;
         }
     }
 
@@ -60,7 +67,7 @@ public sealed interface IntProvider {
         }
 
         @Override
-        public StructCodec<? extends IntProvider> codec() {
+        public StructCodec<Uniform> codec() {
             return CODEC;
         }
     }
@@ -77,14 +84,14 @@ public sealed interface IntProvider {
         }
 
         @Override
-        public StructCodec<? extends IntProvider> codec() {
+        public StructCodec<BiasedToBottom> codec() {
             return CODEC;
         }
     }
 
     record Clamped(IntProvider source, int minInclusive, int maxInclusive) implements IntProvider {
         public static final StructCodec<Clamped> CODEC = StructCodec.struct(
-                "source", IntProvider.CODEC, Clamped::source,
+                "source", Codec.ForwardRef(() -> IntProvider.CODEC), Clamped::source,
                 "min_inclusive", Codec.INT, Clamped::minInclusive,
                 "max_inclusive", Codec.INT, Clamped::maxInclusive,
                 Clamped::new);
@@ -95,15 +102,25 @@ public sealed interface IntProvider {
         }
 
         @Override
-        public StructCodec<? extends IntProvider> codec() {
+        public StructCodec<Clamped> codec() {
             return CODEC;
         }
     }
 
     record Weighted(WeightedList<IntProvider> distribution) implements IntProvider {
         public static final StructCodec<Weighted> CODEC = StructCodec.struct(
-                "distribution", WeightedList.codec(IntProvider.CODEC), Weighted::distribution,
+                "distribution", WeightedList.codec(Codec.ForwardRef(() -> IntProvider.CODEC)), Weighted::distribution,
                 Weighted::new);
+
+        @Override
+        public int minInclusive() {
+            return 0;
+        }
+
+        @Override
+        public int maxInclusive() {
+            return 0;
+        }
 
         @Override
         public int sample(Random random) {
@@ -111,7 +128,7 @@ public sealed interface IntProvider {
         }
 
         @Override
-        public StructCodec<? extends IntProvider> codec() {
+        public StructCodec<Weighted> codec() {
             return CODEC;
         }
     }
@@ -130,10 +147,42 @@ public sealed interface IntProvider {
         }
 
         @Override
-        public StructCodec<? extends IntProvider> codec() {
+        public StructCodec<ClampedNormal> codec() {
             return CODEC;
         }
     }
+
+    record Trapezoid(int minInclusive, int maxInclusive, int plateau) implements IntProvider {
+        public static final StructCodec<Trapezoid> CODEC = StructCodec.struct(
+                "min", Codec.INT, Trapezoid::minInclusive,
+                "max", Codec.INT, Trapezoid::maxInclusive,
+                "plateau", Codec.INT, Trapezoid::plateau,
+                Trapezoid::new);
+
+        @Override
+        public int sample(Random random) {
+            if (plateau == 0 && maxInclusive == -minInclusive) {
+                return random.nextInt(maxInclusive + 1) - random.nextInt(maxInclusive + 1);
+            }
+            int range = maxInclusive - minInclusive;
+            if (plateau == range) {
+                return random.nextInt(minInclusive, maxInclusive + 1);
+            } else {
+                int plateauStart = (range - plateau) / 2;
+                int plateauEnd = range - plateauStart;
+                return minInclusive + random.nextInt(plateauEnd + 1) + random.nextInt(plateauStart + 1);
+            }
+        }
+
+        @Override
+        public StructCodec<Trapezoid> codec() {
+            return CODEC;
+        }
+    }
+
+    int minInclusive();
+
+    int maxInclusive();
 
     int sample(Random random);
 

@@ -465,7 +465,7 @@ public class Team implements PacketGroupingAudience {
     }
 
     @Override
-    public Collection<Player> getPlayers() {
+    public Collection<? extends Player> getPlayers() {
         if (!this.isPlayerMembersUpToDate) {
             this.playerMembers.clear();
 

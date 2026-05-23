@@ -11,7 +11,7 @@ public record ClientTestInstanceBlockActionPacket(
         Point blockPosition,
         Action action,
         Data data
-) implements ClientPacket {
+) implements ClientPacket.Play {
 
     public static final NetworkBuffer.Type<ClientTestInstanceBlockActionPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.BLOCK_POSITION, ClientTestInstanceBlockActionPacket::blockPosition,

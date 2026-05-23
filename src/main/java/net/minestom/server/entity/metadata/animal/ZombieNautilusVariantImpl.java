@@ -1,7 +1,8 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.utils.validate.Check;
+
+import java.util.Objects;
 
 record ZombieNautilusVariantImpl(
         Model model,
@@ -9,7 +10,7 @@ record ZombieNautilusVariantImpl(
 ) implements ZombieNautilusVariant {
 
     public ZombieNautilusVariantImpl {
-        Check.notNull(model, "Model cannot be null");
-        Check.notNull(assetId, "Asset ID cannot be null");
+        Objects.requireNonNull(model, "Model cannot be null");
+        Objects.requireNonNull(assetId, "Asset ID cannot be null");
     }
 }

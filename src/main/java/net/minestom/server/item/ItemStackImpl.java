@@ -12,10 +12,10 @@ import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -41,10 +41,10 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
             @Override
             public ItemStack read(NetworkBuffer buffer) {
-                int amount = buffer.read(NetworkBuffer.VAR_INT);
+                final int amount = buffer.read(NetworkBuffer.VAR_INT);
                 if (amount <= 0) return ItemStack.AIR;
-                Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
-                DataComponentMap components = buffer.read(componentPatchType);
+                final Material material = buffer.read(Material.NETWORK_TYPE);
+                final DataComponentMap components = buffer.read(componentPatchType);
                 return ItemStackImpl.create(material, amount, components);
             }
         };
@@ -60,7 +60,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     public ItemStackImpl {
-        Check.notNull(material, "Material cannot be null");
+        Objects.requireNonNull(material, "Material cannot be null");
 
         // It is relevant to create the minimal diff of the prototype so that #isSimilar returns consistent
         // results for ItemStacks which would resolve to the same thing. For example, consider two items
@@ -103,8 +103,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public ItemStack withMaterial(Material material) {
-        if (material == Material.AIR) return ItemStack.AIR;
-        return new ItemStackImpl(material, Math.max(1, amount), components);
+        return create(material, Math.max(1, amount), components);
     }
 
     @Override
@@ -115,7 +114,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public <T> ItemStack with(DataComponent<T> component, T value) {
-        return new ItemStackImpl(material, amount, components.set(component, value));
+        return create(material, amount, components.set(component, value));
     }
 
     @Override
@@ -123,7 +122,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         // We can be slightly smart here. If the component is not present, this will always be a noop.
         // No need to make a new patch with the removal only for it to be removed again when doing a diff.
         if (get(component) == null) return this;
-        return new ItemStackImpl(material, amount, components.remove(component));
+        return create(material, amount, components.remove(component));
     }
 
     @Override
@@ -161,6 +160,16 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     static final class Builder implements ItemStack.Builder {
+        private static final TooltipDisplay EXTRA_TOOLTIP_HIDE = new TooltipDisplay(false, Set.of(
+                DataComponents.BANNER_PATTERNS, DataComponents.BEES, DataComponents.BLOCK_ENTITY_DATA,
+                DataComponents.BLOCK_STATE, DataComponents.BUNDLE_CONTENTS, DataComponents.CHARGED_PROJECTILES,
+                DataComponents.CONTAINER, DataComponents.CONTAINER_LOOT, DataComponents.FIREWORK_EXPLOSION,
+                DataComponents.FIREWORKS, DataComponents.INSTRUMENT, DataComponents.MAP_ID,
+                DataComponents.PAINTING_VARIANT, DataComponents.POT_DECORATIONS, DataComponents.POTION_CONTENTS,
+                DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT,
+                DataComponents.UNBREAKABLE, DataComponents.ATTRIBUTE_MODIFIERS
+        ));
+
         private Material material;
         private int amount;
         private final DataComponentMap.PatchBuilder components;
@@ -209,15 +218,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
         @Override
         public ItemStack.Builder hideExtraTooltip() {
-            return set(DataComponents.TOOLTIP_DISPLAY, new TooltipDisplay(false, Set.of(
-                    DataComponents.BANNER_PATTERNS, DataComponents.BEES, DataComponents.BLOCK_ENTITY_DATA,
-                    DataComponents.BLOCK_STATE, DataComponents.BUNDLE_CONTENTS, DataComponents.CHARGED_PROJECTILES,
-                    DataComponents.CONTAINER, DataComponents.CONTAINER_LOOT, DataComponents.FIREWORK_EXPLOSION,
-                    DataComponents.FIREWORKS, DataComponents.INSTRUMENT, DataComponents.MAP_ID,
-                    DataComponents.PAINTING_VARIANT, DataComponents.POT_DECORATIONS, DataComponents.POTION_CONTENTS,
-                    DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT,
-                    DataComponents.UNBREAKABLE, DataComponents.ATTRIBUTE_MODIFIERS
-            )));
+            return set(DataComponents.TOOLTIP_DISPLAY, EXTRA_TOOLTIP_HIDE);
         }
 
         @Override

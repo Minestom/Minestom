@@ -5,6 +5,7 @@ import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.*;
+import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -14,16 +15,22 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.instance.fluid.Fluid;
+import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.timeline.Timeline;
+
+import java.util.List;
 
 /**
  * <p>Provides access to all the dynamic registries. {@link net.minestom.server.ServerProcess} is the most relevant
@@ -34,6 +41,14 @@ import net.minestom.server.world.timeline.Timeline;
 public interface Registries {
     static Registries vanilla() {
         return new VanillaRegistries();
+    }
+
+    static List<SendablePacket> registryDataPackets(Registries registries, boolean excludeVanilla) {
+        return RegistriesImpl.registryDataPackets(registries, excludeVanilla);
+    }
+
+    static TagsPacket tagsPacket(Registries registries) {
+        return RegistriesImpl.tagsPacket(registries);
     }
 
     // Static registries
@@ -61,6 +76,10 @@ public interface Registries {
 
     default Registry<GameEvent> gameEvent() {
         return GameEvent.staticRegistry();
+    }
+
+    default Registry<GameRule<?>> gameRule() {
+        return GameRule.staticRegistry();
     }
 
     // Dynamic registries
@@ -93,19 +112,29 @@ public interface Registries {
 
     DynamicRegistry<CatVariant> catVariant();
 
+    DynamicRegistry<CatSoundVariant> catSoundVariant();
+
     DynamicRegistry<ChickenVariant> chickenVariant();
 
+    DynamicRegistry<ChickenSoundVariant> chickenSoundVariant();
+
     DynamicRegistry<CowVariant> cowVariant();
+
+    DynamicRegistry<CowSoundVariant> cowSoundVariant();
 
     DynamicRegistry<FrogVariant> frogVariant();
 
     DynamicRegistry<PigVariant> pigVariant();
+
+    DynamicRegistry<PigSoundVariant> pigSoundVariant();
 
     DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant();
 
     DynamicRegistry<Dialog> dialog();
 
     DynamicRegistry<Timeline> timeline();
+
+    DynamicRegistry<WorldClock> worldClock();
 
     // The following are _not_ sent to the client.
 
@@ -227,13 +256,28 @@ public interface Registries {
         }
 
         @Override
+        default DynamicRegistry<CatSoundVariant> catSoundVariant() {
+            return registries().catSoundVariant();
+        }
+
+        @Override
         default DynamicRegistry<ChickenVariant> chickenVariant() {
             return registries().chickenVariant();
         }
 
         @Override
+        default DynamicRegistry<ChickenSoundVariant> chickenSoundVariant() {
+            return registries().chickenSoundVariant();
+        }
+
+        @Override
         default DynamicRegistry<CowVariant> cowVariant() {
             return registries().cowVariant();
+        }
+
+        @Override
+        default DynamicRegistry<CowSoundVariant> cowSoundVariant() {
+            return registries().cowSoundVariant();
         }
 
         @Override
@@ -244,6 +288,11 @@ public interface Registries {
         @Override
         default DynamicRegistry<PigVariant> pigVariant() {
             return registries().pigVariant();
+        }
+
+        @Override
+        default DynamicRegistry<PigSoundVariant> pigSoundVariant() {
+            return registries().pigSoundVariant();
         }
 
         @Override
@@ -259,6 +308,11 @@ public interface Registries {
         @Override
         default DynamicRegistry<Timeline> timeline() {
             return registries().timeline();
+        }
+
+        @Override
+        default DynamicRegistry<WorldClock> worldClock() {
+            return registries().worldClock();
         }
 
         @Override

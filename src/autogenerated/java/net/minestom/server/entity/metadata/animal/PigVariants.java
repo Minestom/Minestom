@@ -11,7 +11,7 @@ import net.minestom.server.registry.RegistryKey;
 sealed interface PigVariants permits PigVariant {
     RegistryKey<PigVariant> WARM = RegistryKey.unsafeOf("warm");
 
-    RegistryKey<PigVariant> COLD = RegistryKey.unsafeOf("cold");
-
     RegistryKey<PigVariant> TEMPERATE = RegistryKey.unsafeOf("temperate");
+
+    RegistryKey<PigVariant> COLD = RegistryKey.unsafeOf("cold");
 }

@@ -39,7 +39,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     private BinaryTagReader nbtReader;
 
     final @Nullable AutoResize autoResize;
-    final @Nullable Registries registries;
+    @Nullable Registries registries;
 
     ByteBuffer nioBuffer = null;
 
@@ -328,6 +328,9 @@ final class NetworkBufferImpl implements NetworkBuffer {
         try {
             inflater.setInput(input);
             final int bytes = inflater.inflate(outputBuffer);
+            if (!inflater.finished()) {
+                throw new DataFormatException("Decompressed payload exceeds output capacity");
+            }
             output.advanceWrite(bytes);
             return bytes;
         } finally {
@@ -339,6 +342,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public @Nullable Registries registries() {
         return registries;
+    }
+
+    @Override
+    public void registries(@Nullable Registries registries) {
+        this.registries = registries;
     }
 
     private ByteBuffer bufferSlice(int position, int length) {
