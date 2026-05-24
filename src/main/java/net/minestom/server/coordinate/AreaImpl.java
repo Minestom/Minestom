@@ -9,7 +9,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
 final class AreaImpl {
 
     static Area.Cuboid section(int sectionX, int sectionY, int sectionZ) {
-        final BlockVec min = new BlockVec(sectionMin(sectionX), sectionMin(sectionY), sectionMin(sectionZ));
+        final BlockVec min = new BlockVec(sectionX * SECTION_SIZE, sectionY * SECTION_SIZE, sectionZ * SECTION_SIZE);
         return new Cuboid(min, min.add(SECTION_BOUND));
     }
 
@@ -134,11 +134,18 @@ final class AreaImpl {
             if (x1 == x2 && y1 == y2 && z1 == z2) {
                 return List.of(new AreaImpl.Cuboid(start, end));
             }
-            final List<Area.Cuboid> result = new ArrayList<>();
             final int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1), dz = Math.abs(z2 - z1);
+            // Axis-aligned lines cover the same blocks as an inclusive cuboid; reuse Cuboid.split.
+            if ((dx == 0 ? 1 : 0) + (dy == 0 ? 1 : 0) + (dz == 0 ? 1 : 0) >= 2) {
+                return new AreaImpl.Cuboid(
+                        new BlockVec(Math.min(x1, x2), Math.min(y1, y2), Math.min(z1, z2)),
+                        new BlockVec(Math.max(x1, x2), Math.max(y1, y2), Math.max(z1, z2))).split();
+            }
+            final List<Area.Cuboid> result = new ArrayList<>();
             final int sx = x1 < x2 ? 1 : -1, sy = y1 < y2 ? 1 : -1, sz = z1 < z2 ? 1 : -1;
             int err1 = Math.max(dx, Math.max(dy, dz)) / 2, err2 = err1;
             int runStartX = x1, runStartY = y1, runStartZ = z1;
+            int runStartSecX = x1 >> 4, runStartSecY = y1 >> 4, runStartSecZ = z1 >> 4;
             int runEndX = x1, runEndY = y1, runEndZ = z1;
             while (runEndX != x2 || runEndY != y2 || runEndZ != z2) {
                 int nextX = runEndX, nextY = runEndY, nextZ = runEndZ;
@@ -179,9 +186,8 @@ final class AreaImpl {
                         err2 += dz;
                     }
                 }
-                final boolean sameSection = globalToSection(runStartX) == globalToSection(nextX)
-                        && globalToSection(runStartY) == globalToSection(nextY)
-                        && globalToSection(runStartZ) == globalToSection(nextZ);
+                final int nextSecX = nextX >> 4, nextSecY = nextY >> 4, nextSecZ = nextZ >> 4;
+                final boolean sameSection = runStartSecX == nextSecX && runStartSecY == nextSecY && runStartSecZ == nextSecZ;
                 if (sameSection && canExtendAxisAlignedRun(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ, nextX, nextY, nextZ)) {
                     runEndX = nextX;
                     runEndY = nextY;
@@ -191,6 +197,9 @@ final class AreaImpl {
                     runStartX = nextX;
                     runStartY = nextY;
                     runStartZ = nextZ;
+                    runStartSecX = nextSecX;
+                    runStartSecY = nextSecY;
+                    runStartSecZ = nextSecZ;
                     runEndX = nextX;
                     runEndY = nextY;
                     runEndZ = nextZ;
@@ -271,8 +280,6 @@ final class AreaImpl {
         public Cuboid {
             Objects.requireNonNull(min, "min cannot be null");
             Objects.requireNonNull(max, "max cannot be null");
-            // Fast-path: when callers (split, cube, box, section) pass ordered inputs we keep
-            // the original BlockVec references and skip allocating reordered copies.
             if (min.blockX() > max.blockX() || min.blockY() > max.blockY() || min.blockZ() > max.blockZ()) {
                 final BlockVec origMin = min;
                 min = origMin.min(max);
@@ -320,24 +327,28 @@ final class AreaImpl {
         public List<Area.Cuboid> split() {
             final int minX = min.blockX(), minY = min.blockY(), minZ = min.blockZ();
             final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
-            final int minSecX = min.sectionX(), minSecY = min.sectionY(), minSecZ = min.sectionZ();
-            final int maxSecX = max.sectionX(), maxSecY = max.sectionY(), maxSecZ = max.sectionZ();
+            final int minSecX = minX >> 4, minSecY = minY >> 4, minSecZ = minZ >> 4;
+            final int maxSecX = maxX >> 4, maxSecY = maxY >> 4, maxSecZ = maxZ >> 4;
             if (minSecX == maxSecX && minSecY == maxSecY && minSecZ == maxSecZ) {
                 return List.of(this);
             }
-            final List<Area.Cuboid> result = new ArrayList<>(estimatedSectionCount(minSecX, minSecY, minSecZ, maxSecX, maxSecY, maxSecZ));
+            final long total = (long) (maxSecX - minSecX + 1) * (maxSecY - minSecY + 1) * (maxSecZ - minSecZ + 1);
+            final List<Area.Cuboid> result = new ArrayList<>(total > 1_000_000 ? 16 : (int) total);
             for (int sx = minSecX; sx <= maxSecX; sx++) {
+                final int sectionBaseX = sx << 4;
+                final int ixMin = sx == minSecX ? minX : sectionBaseX;
+                final int ixMax = sx == maxSecX ? maxX : sectionBaseX | SECTION_BOUND;
                 for (int sy = minSecY; sy <= maxSecY; sy++) {
+                    final int sectionBaseY = sy << 4;
+                    final int iyMin = sy == minSecY ? minY : sectionBaseY;
+                    final int iyMax = sy == maxSecY ? maxY : sectionBaseY | SECTION_BOUND;
                     for (int sz = minSecZ; sz <= maxSecZ; sz++) {
-                        final int sectionMinX = sectionMin(sx), sectionMinY = sectionMin(sy), sectionMinZ = sectionMin(sz);
-                        final int sectionMaxX = sectionMax(sectionMinX), sectionMaxY = sectionMax(sectionMinY), sectionMaxZ = sectionMax(sectionMinZ);
-                        final int intersectMinX = Math.max(minX, sectionMinX), intersectMinY = Math.max(minY, sectionMinY), intersectMinZ = Math.max(minZ, sectionMinZ);
-                        final int intersectMaxX = Math.min(maxX, sectionMaxX), intersectMaxY = Math.min(maxY, sectionMaxY), intersectMaxZ = Math.min(maxZ, sectionMaxZ);
-                        if (intersectMinX <= intersectMaxX && intersectMinY <= intersectMaxY && intersectMinZ <= intersectMaxZ) {
-                            result.add(new AreaImpl.Cuboid(
-                                    new BlockVec(intersectMinX, intersectMinY, intersectMinZ),
-                                    new BlockVec(intersectMaxX, intersectMaxY, intersectMaxZ)));
-                        }
+                        final int sectionBaseZ = sz << 4;
+                        final int izMin = sz == minSecZ ? minZ : sectionBaseZ;
+                        final int izMax = sz == maxSecZ ? maxZ : sectionBaseZ | SECTION_BOUND;
+                        result.add(new AreaImpl.Cuboid(
+                                new BlockVec(ixMin, iyMin, izMin),
+                                new BlockVec(ixMax, iyMax, izMax)));
                     }
                 }
             }
@@ -426,32 +437,108 @@ final class AreaImpl {
         @Override
         public List<Area.Cuboid> split() {
             final int centerX = center.blockX(), centerY = center.blockY(), centerZ = center.blockZ();
+            final int radius = this.radius;
+            if (radius == 0) {
+                return List.of(new AreaImpl.Cuboid(center, center));
+            }
             final long radiusSquared = (long) radius * radius;
-            final int minSecX = globalToSection(centerX - radius), minSecY = globalToSection(centerY - radius), minSecZ = globalToSection(centerZ - radius);
-            final int maxSecX = globalToSection(centerX + radius), maxSecY = globalToSection(centerY + radius), maxSecZ = globalToSection(centerZ + radius);
-            final List<Area.Cuboid> result = new ArrayList<>(estimatedSectionCount(minSecX, minSecY, minSecZ, maxSecX, maxSecY, maxSecZ));
+            final int bbMinX = centerX - radius, bbMinY = centerY - radius, bbMinZ = centerZ - radius;
+            final int bbMaxX = centerX + radius, bbMaxY = centerY + radius, bbMaxZ = centerZ + radius;
+            final int minSecX = bbMinX >> 4, minSecY = bbMinY >> 4, minSecZ = bbMinZ >> 4;
+            final int maxSecX = bbMaxX >> 4, maxSecY = bbMaxY >> 4, maxSecZ = bbMaxZ >> 4;
+            final long sectionCount = (long) (maxSecX - minSecX + 1) * (maxSecY - minSecY + 1) * (maxSecZ - minSecZ + 1);
+            final List<Area.Cuboid> result = new ArrayList<>(sectionCount > 1_000_000 ? 16 : (int) sectionCount);
+            // Scratch buffers for the current and previous z-slice rectangles (xMin, xMax, yStart, yEnd per rect).
+            int[] prevSlice = new int[64];
+            int[] currentSlice = new int[64];
             for (int sx = minSecX; sx <= maxSecX; sx++) {
+                final int sectionMinX = sx << 4, sectionMaxX = sectionMinX | SECTION_BOUND;
                 for (int sy = minSecY; sy <= maxSecY; sy++) {
+                    final int sectionMinY = sy << 4, sectionMaxY = sectionMinY | SECTION_BOUND;
+                    final int yLo = Math.max(bbMinY, sectionMinY), yHi = Math.min(bbMaxY, sectionMaxY);
                     for (int sz = minSecZ; sz <= maxSecZ; sz++) {
-                        final int sectionMinX = sectionMin(sx), sectionMinY = sectionMin(sy), sectionMinZ = sectionMin(sz);
-                        final int sectionMaxX = sectionMax(sectionMinX), sectionMaxY = sectionMax(sectionMinY), sectionMaxZ = sectionMax(sectionMinZ);
+                        final int sectionMinZ = sz << 4, sectionMaxZ = sectionMinZ | SECTION_BOUND;
+                        final int zLo = Math.max(bbMinZ, sectionMinZ), zHi = Math.min(bbMaxZ, sectionMaxZ);
                         if (sectionInsideSphere(sectionMinX, sectionMinY, sectionMinZ, sectionMaxX, sectionMaxY, sectionMaxZ, centerX, centerY, centerZ, radius)) {
                             result.add(AreaImpl.section(sx, sy, sz));
                             continue;
                         }
-                        for (int y = sectionMinY; y <= sectionMaxY; y++) {
-                            final long dy = (long) y - centerY;
-                            for (int z = sectionMinZ; z <= sectionMaxZ; z++) {
-                                final long dz = (long) z - centerZ;
-                                final long remaining = radiusSquared - dy * dy - dz * dz;
-                                if (remaining < 0) continue;
-                                final int halfWidth = (int) floorSqrt(remaining);
-                                final int minX = Math.max(sectionMinX, centerX - halfWidth);
-                                final int maxX = Math.min(sectionMaxX, centerX + halfWidth);
-                                if (minX <= maxX) {
-                                    result.add(new AreaImpl.Cuboid(new BlockVec(minX, y, z), new BlockVec(maxX, y, z)));
+                        int prevCount = 0;
+                        int prevZStart = Integer.MIN_VALUE;
+                        for (int z = zLo; z <= zHi; z++) {
+                            final long dz = (long) z - centerZ;
+                            final long remZ = radiusSquared - dz * dz;
+                            if (remZ < 0) {
+                                if (prevCount > 0) {
+                                    emitSliceCuboids(result, prevSlice, prevCount, prevZStart, z - 1);
+                                    prevCount = 0;
+                                }
+                                continue;
+                            }
+                            // Build the (x, y) rectangles for this z slice via y-row merging.
+                            int currentCount = 0;
+                            int runMinX = 0, runMaxX = -1;
+                            int runStartY = Integer.MIN_VALUE, runEndY = Integer.MIN_VALUE;
+                            for (int y = yLo; y <= yHi; y++) {
+                                final long dy = (long) y - centerY;
+                                final long rem = remZ - dy * dy;
+                                int stripMinX = 0, stripMaxX = -1;
+                                if (rem >= 0) {
+                                    final int halfWidth = (int) floorSqrt(rem);
+                                    stripMinX = Math.max(sectionMinX, centerX - halfWidth);
+                                    stripMaxX = Math.min(sectionMaxX, centerX + halfWidth);
+                                }
+                                final boolean hasStrip = stripMinX <= stripMaxX;
+                                if (hasStrip && runStartY != Integer.MIN_VALUE && stripMinX == runMinX && stripMaxX == runMaxX) {
+                                    runEndY = y;
+                                } else {
+                                    if (runStartY != Integer.MIN_VALUE) {
+                                        if ((currentCount + 1) * 4 > currentSlice.length) {
+                                            currentSlice = Arrays.copyOf(currentSlice, currentSlice.length * 2);
+                                        }
+                                        final int base = currentCount * 4;
+                                        currentSlice[base] = runMinX;
+                                        currentSlice[base + 1] = runMaxX;
+                                        currentSlice[base + 2] = runStartY;
+                                        currentSlice[base + 3] = runEndY;
+                                        currentCount++;
+                                        runStartY = Integer.MIN_VALUE;
+                                    }
+                                    if (hasStrip) {
+                                        runMinX = stripMinX;
+                                        runMaxX = stripMaxX;
+                                        runStartY = y;
+                                        runEndY = y;
+                                    }
                                 }
                             }
+                            if (runStartY != Integer.MIN_VALUE) {
+                                if ((currentCount + 1) * 4 > currentSlice.length) {
+                                    currentSlice = Arrays.copyOf(currentSlice, currentSlice.length * 2);
+                                }
+                                final int base = currentCount * 4;
+                                currentSlice[base] = runMinX;
+                                currentSlice[base + 1] = runMaxX;
+                                currentSlice[base + 2] = runStartY;
+                                currentSlice[base + 3] = runEndY;
+                                currentCount++;
+                            }
+                            // Compare this z slice to the prev one to extend a z-run if they match.
+                            if (currentCount > 0 && currentCount == prevCount
+                                    && Arrays.equals(currentSlice, 0, currentCount * 4, prevSlice, 0, currentCount * 4)) {
+                                continue;
+                            }
+                            if (prevCount > 0) {
+                                emitSliceCuboids(result, prevSlice, prevCount, prevZStart, z - 1);
+                            }
+                            final int[] tmp = prevSlice;
+                            prevSlice = currentSlice;
+                            currentSlice = tmp;
+                            prevCount = currentCount;
+                            prevZStart = z;
+                        }
+                        if (prevCount > 0) {
+                            emitSliceCuboids(result, prevSlice, prevCount, prevZStart, zHi);
                         }
                     }
                 }
@@ -486,6 +573,15 @@ final class AreaImpl {
                 }
             }
             return count;
+        }
+    }
+
+    private static void emitSliceCuboids(List<Area.Cuboid> out, int[] slice, int count, int zStart, int zEnd) {
+        for (int i = 0; i < count; i++) {
+            final int base = i * 4;
+            out.add(new AreaImpl.Cuboid(
+                    new BlockVec(slice[base], slice[base + 2], zStart),
+                    new BlockVec(slice[base + 1], slice[base + 3], zEnd)));
         }
     }
 
@@ -531,19 +627,5 @@ final class AreaImpl {
         // Math.sqrt may round up to an exact integer for value > 2^52; correct by one if so.
         if (sqrt > 0 && sqrt * sqrt > value) sqrt--;
         return sqrt;
-    }
-
-    private static int sectionMin(int section) {
-        return section * SECTION_SIZE;
-    }
-
-    private static int sectionMax(int sectionMin) {
-        return sectionMin + SECTION_BOUND;
-    }
-
-    private static int estimatedSectionCount(int minSecX, int minSecY, int minSecZ, int maxSecX, int maxSecY, int maxSecZ) {
-        final long count = (long) (maxSecX - minSecX + 1) * (maxSecY - minSecY + 1) * (maxSecZ - minSecZ + 1);
-        // Clamp to avoid huge initial allocations on pathologically large bounding boxes.
-        return count > 1_000_000 ? 10 : (int) count;
     }
 }
