@@ -67,31 +67,34 @@ public class ChunkWorker {
     }
 
     void workerGenerateChunk(int x, int z, ChunkLoader loader, ChunkSupplier supplier, @Nullable Generator generator) {
-        if (!loader.supportsParallelLoading()) {
-            // TODO maybe revisit and add locking to allow for non-parallel loaders, but not right now
-            synchronized (WARNED_LOADERS) {
-                if (!WARNED_LOADERS.containsKey(loader)) {
-                    LOGGER.error("ChunkLoaders must support parallel loading. Please migrate your system. Violating loader: {}", loader, new AssertionError());
-                    WARNED_LOADERS.put(loader, true);
+        try {
+            if (!loader.supportsParallelLoading()) {
+                // TODO maybe revisit and add locking to allow for non-parallel loaders, but not right now
+                synchronized (WARNED_LOADERS) {
+                    if (!WARNED_LOADERS.containsKey(loader)) {
+                        LOGGER.error("ChunkLoaders must support parallel loading. Please migrate your system. Violating loader: {}", loader, new AssertionError());
+                        WARNED_LOADERS.put(loader, true);
+                    }
                 }
             }
-        }
 
-        var chunk = loader.loadChunk(instance, x, z);
-        if (chunk == null) {
-            // Loader couldn't load the chunk from storage, generate it instead
-            chunk = this.chunkGenerationHandler.createChunk(supplier, generator, x, z);
-            chunk.onGenerate();
-        } else {
-            chunk.onLoadedFromStorage();
-        }
+            var chunk = loader.loadChunk(instance, x, z);
+            if (chunk == null) {
+                // Loader couldn't load the chunk from storage, generate it instead
+                chunk = this.chunkGenerationHandler.createChunk(supplier, generator, x, z);
+                chunk.onGenerate();
+            } else {
+                chunk.onLoadedFromStorage();
+            }
 
-        this.workerFinishedGeneration(chunk);
+            this.workerFinishedGeneration(chunk);
+        } catch (Throwable t) {
+            this.taskSchedulerThread.addTask(new TaskSchedulerThread.Task.ChunkGenerationFail(x, z, t));
+        }
     }
 
     void workerFinishedGeneration(Chunk chunk) {
         this.taskSchedulerThread.addTask(new TaskSchedulerThread.Task.ChunkGenerationFinished(chunk));
-        // TODO
     }
 
     /**

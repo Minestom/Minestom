@@ -327,6 +327,8 @@ class TaskSchedulerThread implements Runnable {
             case Task.AddClaim(var chunkAndClaim) -> this.singleThreadedManager.addClaim(chunkAndClaim);
             case Task.RemoveClaim(var claim, var future) -> this.singleThreadedManager.removeClaim(claim, future);
             case Task.ChunkGenerationFinished(var chunk) -> this.singleThreadedManager.chunkGenerationFinished(chunk);
+            case Task.ChunkGenerationFail(var x, var z, var t) ->
+                    this.singleThreadedManager.chunkGenerationFail(x, z, t);
             case Task.SaveChunk(var chunk, var future) -> this.singleThreadedManager.saveChunk(chunk, future);
             case Task.SaveChunks(var future) -> this.singleThreadedManager.saveChunks(future);
             case Task.SaveInstanceData(var future) -> this.singleThreadedManager.saveInstanceData(future);
@@ -510,6 +512,9 @@ class TaskSchedulerThread implements Runnable {
         }
 
         record ChunkGenerationFinished(Chunk chunk) implements Task {
+        }
+
+        record ChunkGenerationFail(int chunkX, int chunkZ, Throwable throwable) implements Task {
         }
 
         record SaveInstanceDataCompleted() implements Task {

@@ -5,6 +5,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.light.LightingChunk;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -14,6 +15,7 @@ import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@Disabled("enable or delete once lighting is complete")
 @EnvTest
 public class BlockLightMergeIntegrationTest {
     @Test

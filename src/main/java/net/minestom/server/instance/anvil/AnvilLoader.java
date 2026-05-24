@@ -72,6 +72,7 @@ public class AnvilLoader implements ChunkLoader {
         this.path = path;
         this.levelPath = path.resolve("level.dat");
         this.regionPath = path.resolve("dimensions").resolve(dimension.namespace()).resolve(dimension.value()).resolve("region");
+        this.callbacks = AnvilCallbacks.noop();
     }
 
     /**

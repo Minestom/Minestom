@@ -37,6 +37,7 @@ import static net.minestom.server.instance.chunksystem.TaskSchedulerThread.link;
 
 @SuppressWarnings("DuplicatedCode")
 class SingleThreadedManager {
+    private static final CancellationException CLAIM_REMOVED = new CancellationException("Claim was removed");
     static @Nullable InternalCallbacks callbacks = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleThreadedManager.class);
 
@@ -225,31 +226,40 @@ class SingleThreadedManager {
     }
 
     void removeClaim(ChunkClaim claim, CompletableFuture<@Nullable Void> future) {
-        var claimedChunk = this.claimMap.remove(claim);
-        if (claimedChunk == null) {
-            this.taskSchedulerThread.completeExceptionally(future, new IllegalStateException("The claim you attempted to remove is not valid"));
-            return;
+        try {
+            var claimData = removeClaimInternal(claim);
+            this.taskSchedulerThread.complete(future, null);
+            this.taskSchedulerThread.completeExceptionally(claimData.mainChunkFuture, CLAIM_REMOVED);
+        } catch (Throwable t) {
+            this.taskSchedulerThread.completeExceptionally(future, t);
         }
-        var x = claimedChunk.claim.chunkX();
-        var z = claimedChunk.claim.chunkZ();
+    }
+
+    private ClaimData removeClaimInternal(ChunkClaim claim) {
+        var claimData = this.claimMap.remove(claim);
+        if (claimData == null) {
+            throw new IllegalStateException("The claim you attempted to remove is not valid");
+        }
+        var x = claimData.claim.chunkX();
+        var z = claimData.claim.chunkZ();
         var chunkIndex = chunkIndex(x, z);
         var claims = this.claimsByChunk.get(chunkIndex);
-        claims.remove(claimedChunk);
+        claims.remove(claimData);
         if (claims.isEmpty()) {
             this.claimsByChunk.remove(chunkIndex);
         }
 
         this.tree.delete(x, z, claim.radius(), claim.priority(), claim.shape());
-        this.submitUpdate(x, z, UpdateType.REMOVE_CLAIM_EXPLICIT, claim, claimedChunk);
+        this.submitUpdate(x, z, UpdateType.REMOVE_CLAIM_EXPLICIT, claim, claimData);
         // We can complete the future right here, the claim was removed.
         // Removing a claim makes no guarantees about when the chunk is unloaded, so this is the easiest
         // and most obvious place to complete the future
-        this.taskSchedulerThread.complete(future, null);
-        this.taskSchedulerThread.completeExceptionally(claimedChunk.mainChunkFuture, new CancellationException("Claim was removed"));
+        this.taskSchedulerThread.completeExceptionally(claimData.mainChunkFuture, CLAIM_REMOVED);
 
         if (callbacks != null) {
             callbacks.onRemoveClaim(x, z, claim);
         }
+        return claimData;
     }
 
     boolean hasClaim(ChunkClaim claim) {
@@ -309,6 +319,17 @@ class SingleThreadedManager {
         var data = new CompletableFuture<Void>();
         this.saveInstanceData(data);
         link(CompletableFuture.allOf(chunks, data), future);
+    }
+
+    void chunkGenerationFail(int x, int z, Throwable t) {
+        var chunkIndex = chunkIndex(x, z);
+        var claims = this.claimsByChunk.get(chunkIndex);
+        if (claims != null) {
+            for (var claimData : List.copyOf(claims)) {
+                this.taskSchedulerThread.completeExceptionally(claimData.mainChunkFuture, t);
+                removeClaimInternal(claimData.claim);
+            }
+        }
     }
 
     void chunkGenerationFinished(Chunk chunk) {
