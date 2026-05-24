@@ -158,6 +158,16 @@ public interface Scoreboard extends PacketGroupingAudience {
     /// @return true if the player has been removed, false otherwise
     boolean removeViewer(Player player);
 
+    /// Gets if a player is seeing this scoreboard.
+    /// @param player the player to check
+    /// @return true if {@code player} is a viewer, false otherwise
+    boolean isViewer(Player player);
+
+    /// Gets if a player is seeing this scoreboard in a specific position.
+    /// @param player the player to check
+    /// @return true if {@code player} is a viewer, false otherwise
+    boolean isViewer(Player player, Position position);
+
     /// Gets an unmodifiable view of all viewers. Each viewer is mapped to a set of the positions they see the
     /// scoreboard in.
     @UnmodifiableView

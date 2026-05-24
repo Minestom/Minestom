@@ -69,6 +69,18 @@ public class ScoreboardImpl implements Scoreboard {
     }
 
     @Override
+    public boolean isViewer(Player player) {
+        return viewers.containsKey(player);
+    }
+
+    @Override
+    public boolean isViewer(Player player, Position position) {
+        Set<Position> positions = viewers.get(player);
+        if (positions != null) return positions.contains(position);
+        return false;
+    }
+
+    @Override
     public Map<Player, Set<Position>> getViewers() {
         return unmodifiableViewers;
     }
