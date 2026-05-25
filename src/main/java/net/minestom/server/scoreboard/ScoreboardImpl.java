@@ -11,12 +11,12 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /// A scoreboard that stores score and line format per entry.
-public class ScoreboardImpl implements Scoreboard {
+final class ScoreboardImpl implements Scoreboard {
 
-    protected final String objectiveName;
-    protected Component displayName;
-    protected RenderType renderType = RenderType.INTEGER;
-    protected @Nullable NumberFormat defaultNumberFormat;
+    private final String objectiveName;
+    private Component displayName;
+    private RenderType renderType = RenderType.INTEGER;
+    private @Nullable NumberFormat defaultNumberFormat;
 
     private final Map<Player, Set<Position>> viewers = new ConcurrentHashMap<>();
     private final Map<Player, Set<Position>> unmodifiableViewers = Collections.unmodifiableMap(viewers);
@@ -181,6 +181,7 @@ public class ScoreboardImpl implements Scoreboard {
         sendGroupedPacket(new ResetScorePacket(entity, objectiveName));
     }
 
+    @Override
     public void sendUpdate(String entity, ScoreEntry entry) {
         sendGroupedPacket(entry.getUpdateScorePacket(entity, objectiveName));
     }

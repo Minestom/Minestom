@@ -173,6 +173,11 @@ public interface Scoreboard extends PacketGroupingAudience {
     @UnmodifiableView
     Map<Player, Set<Position>> getViewers();
 
+    /// Sends a score entry update to viewers without updating stored state.
+    /// @param entity the entry name
+    /// @param entry the new score entry
+    void sendUpdate(String entity, ScoreEntry entry);
+
     @Override
     default Collection<? extends Player> getPlayers() {
         return this.getViewers().keySet();
