@@ -75,8 +75,7 @@ final class PacketRegistryImpl<T> implements PacketRegistry<T> {
     }
 
     @Override
-    public Iterator<PacketInfo<T>> iterator() {
-        //noinspection unchecked
-        return (Iterator<PacketInfo<T>>) List.of(suppliers);
+    public Iterator<PacketInfo<? extends T>> iterator() {
+        return List.of(suppliers).iterator();
     }
 }

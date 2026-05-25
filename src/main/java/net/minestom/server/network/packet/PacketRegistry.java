@@ -6,7 +6,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Map;
 
-public interface PacketRegistry<T> extends Iterable<PacketRegistry.PacketInfo<T>> {
+public interface PacketRegistry<T> extends Iterable<PacketRegistry.PacketInfo<? extends T>> {
     @UnknownNullability
     T create(int packetId, NetworkBuffer reader);
 
