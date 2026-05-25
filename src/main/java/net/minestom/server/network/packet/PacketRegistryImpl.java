@@ -4,6 +4,8 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -70,5 +72,11 @@ final class PacketRegistryImpl<T> implements PacketRegistry<T> {
         if (packetId < 0 || packetId >= suppliers.length)
             throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
         return (PacketInfo<T>) suppliers[packetId];
+    }
+
+    @Override
+    public Iterator<PacketInfo<T>> iterator() {
+        //noinspection unchecked
+        return (Iterator<PacketInfo<T>>) List.of(suppliers);
     }
 }
