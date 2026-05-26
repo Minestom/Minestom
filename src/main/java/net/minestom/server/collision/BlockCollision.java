@@ -7,6 +7,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 final class BlockCollision {
     /**
@@ -27,7 +28,7 @@ final class BlockCollision {
         return stepPhysics(boundingBox, velocity, entityPosition, getter, singleCollision);
     }
 
-    static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+    static @Nullable Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
             if (!entity.preventBlockPlacement())
                 continue;
