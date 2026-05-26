@@ -51,97 +51,63 @@ final class BlockCollision {
     private static PhysicsResult stepPhysics(BoundingBox boundingBox,
                                              Vec velocity, Pos entityPosition,
                                              Block.Getter getter, boolean singleCollision) {
-        // Allocate once and update values
-        SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
+        final SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
+        final Point[] collidedPoints = new Point[3];
+        final Shape[] collisionShapes = new Shape[3];
+        final Point[] collisionShapePositions = new Point[3];
 
-        boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
+        Pos position = entityPosition;
+        Vec remaining = velocity;
+        // Each sweep advances along `remaining` until the first hit, zeroes
+        // the collided axis, then repeats so the entity slides on the others.
+        while (true) {
+            sweepBlocks(boundingBox, remaining, position, getter, finalResult);
+            double dx = finalResult.res * remaining.x();
+            double dy = finalResult.res * remaining.y();
+            double dz = finalResult.res * remaining.z();
+            if (Math.abs(dx) < Vec.EPSILON) dx = 0;
+            if (Math.abs(dy) < Vec.EPSILON) dy = 0;
+            if (Math.abs(dz) < Vec.EPSILON) dz = 0;
+            position = position.add(dx, dy, dz);
 
-        Point[] collidedPoints = new Point[3];
-        Shape[] collisionShapes = new Shape[3];
-        Point[] collisionShapePositions = new Point[3];
+            // The slab method records the entry face as a single non-zero normal.
+            final int axis;
+            if (finalResult.normalX != 0) axis = 0;
+            else if (finalResult.normalY != 0) axis = 1;
+            else if (finalResult.normalZ != 0) axis = 2;
+            else break; // no collision this pass
 
-        boolean hasCollided = false;
+            collisionShapes[axis] = finalResult.collidedShape;
+            collisionShapePositions[axis] = new Vec(finalResult.collidedShapeX, finalResult.collidedShapeY, finalResult.collidedShapeZ);
+            collidedPoints[axis] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
 
-        PhysicsResult result = computePhysics(boundingBox, velocity, entityPosition, getter, finalResult);
-        // Loop until no collisions are found.
-        // When collisions are found, the collision axis is set to 0
-        // Looping until there are no collisions will allow the entity to move in axis other than the collision axis after a collision.
-        while (result.collisionX() || result.collisionY() || result.collisionZ()) {
-            // Reset final result
+            if (singleCollision || (collisionShapes[0] != null && collisionShapes[1] != null && collisionShapes[2] != null))
+                break;
+
+            remaining = new Vec(
+                    axis == 0 ? 0 : remaining.x() - dx,
+                    axis == 1 ? 0 : remaining.y() - dy,
+                    axis == 2 ? 0 : remaining.z() - dz);
+            if (remaining.isZero()) break;
+
             finalResult.normalX = 0;
             finalResult.normalY = 0;
             finalResult.normalZ = 0;
-
-            if (result.collisionX()) {
-                foundCollisionX = true;
-                collisionShapes[0] = finalResult.collidedShape;
-                collisionShapePositions[0] = new Vec(finalResult.collidedShapeX, finalResult.collidedShapeY, finalResult.collidedShapeZ);
-                collidedPoints[0] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
-                hasCollided = true;
-                if (singleCollision) break;
-            } else if (result.collisionZ()) {
-                foundCollisionZ = true;
-                collisionShapes[2] = finalResult.collidedShape;
-                collisionShapePositions[2] = new Vec(finalResult.collidedShapeX, finalResult.collidedShapeY, finalResult.collidedShapeZ);
-                collidedPoints[2] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
-                hasCollided = true;
-                if (singleCollision) break;
-            } else if (result.collisionY()) {
-                foundCollisionY = true;
-                collisionShapes[1] = finalResult.collidedShape;
-                collisionShapePositions[1] = new Vec(finalResult.collidedShapeX, finalResult.collidedShapeY, finalResult.collidedShapeZ);
-                collidedPoints[1] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
-                hasCollided = true;
-                if (singleCollision) break;
-            }
-
-            // If all axis have had collisions, break
-            if (foundCollisionX && foundCollisionY && foundCollisionZ) break;
-            // If the entity isn't moving, break
-            if (result.newVelocity().isZero()) break;
-
             finalResult.res = 1 - Vec.EPSILON;
-            result = computePhysics(boundingBox, result.newVelocity(), result.newPosition(), getter, finalResult);
         }
 
-        finalResult.res = result.res().res;
-
-        final double newDeltaX = foundCollisionX ? 0 : velocity.x();
-        final double newDeltaY = foundCollisionY ? 0 : velocity.y();
-        final double newDeltaZ = foundCollisionZ ? 0 : velocity.z();
-
-        return new PhysicsResult(result.newPosition(), new Vec(newDeltaX, newDeltaY, newDeltaZ),
-                newDeltaY == 0 && velocity.y() < 0,
-                foundCollisionX, foundCollisionY, foundCollisionZ, velocity, collidedPoints, collisionShapes, collisionShapePositions, hasCollided, finalResult);
-    }
-
-    private static PhysicsResult computePhysics(BoundingBox boundingBox,
-                                                Vec velocity, Pos entityPosition,
-                                                Block.Getter getter,
-                                                SweepResult finalResult) {
-        sweepBlocks(boundingBox, velocity, entityPosition, getter, finalResult);
-
-        final boolean collisionX = finalResult.normalX != 0;
-        final boolean collisionY = finalResult.normalY != 0;
-        final boolean collisionZ = finalResult.normalZ != 0;
-
-        double deltaX = finalResult.res * velocity.x();
-        double deltaY = finalResult.res * velocity.y();
-        double deltaZ = finalResult.res * velocity.z();
-
-        if (Math.abs(deltaX) < Vec.EPSILON) deltaX = 0;
-        if (Math.abs(deltaY) < Vec.EPSILON) deltaY = 0;
-        if (Math.abs(deltaZ) < Vec.EPSILON) deltaZ = 0;
-
-        final Pos finalPos = entityPosition.add(deltaX, deltaY, deltaZ);
-
-        final double remainingX = collisionX ? 0 : velocity.x() - deltaX;
-        final double remainingY = collisionY ? 0 : velocity.y() - deltaY;
-        final double remainingZ = collisionZ ? 0 : velocity.z() - deltaZ;
-
-        return new PhysicsResult(finalPos, new Vec(remainingX, remainingY, remainingZ),
-                collisionY, collisionX, collisionY, collisionZ,
-                Vec.ZERO, null, null, null, false, finalResult);
+        final boolean foundX = collisionShapes[0] != null;
+        final boolean foundY = collisionShapes[1] != null;
+        final boolean foundZ = collisionShapes[2] != null;
+        final Vec newDelta = new Vec(
+                foundX ? 0 : velocity.x(),
+                foundY ? 0 : velocity.y(),
+                foundZ ? 0 : velocity.z());
+        return new PhysicsResult(position, newDelta,
+                foundY && velocity.y() < 0,
+                foundX, foundY, foundZ,
+                velocity, collidedPoints, collisionShapes, collisionShapePositions,
+                foundX || foundY || foundZ, finalResult);
     }
 
     private static void sweepBlocks(BoundingBox boundingBox,
@@ -155,6 +121,7 @@ final class BlockCollision {
         final double endY = startY + velocity.y();
         final double endZ = startZ + velocity.z();
 
+        // Block-aligned bounds of the swept AABB.
         final int minX = (int) Math.floor(Math.min(startX, endX) + boundingBox.minX());
         final int minY = (int) Math.floor(Math.min(startY, endY) + boundingBox.minY());
         final int minZ = (int) Math.floor(Math.min(startZ, endZ) + boundingBox.minZ());
@@ -162,19 +129,18 @@ final class BlockCollision {
         final int maxY = (int) Math.floor(Math.max(startY, endY) + boundingBox.maxY());
         final int maxZ = (int) Math.floor(Math.max(startZ, endZ) + boundingBox.maxZ());
 
+        // Walk from near to far along velocity so finalResult.res tightens early
+        // (later iterations reject more candidates via `percentage <= res`).
         final int stepX = velocity.x() < 0 ? -1 : 1;
         final int stepY = velocity.y() < 0 ? -1 : 1;
         final int stepZ = velocity.z() < 0 ? -1 : 1;
-        final int startBlockX = stepX > 0 ? minX : maxX;
-        final int endBlockX = stepX > 0 ? maxX : minX;
-        final int startBlockY = stepY > 0 ? minY : maxY;
-        final int endBlockY = stepY > 0 ? maxY : minY;
-        final int startBlockZ = stepZ > 0 ? minZ : maxZ;
-        final int endBlockZ = stepZ > 0 ? maxZ : minZ;
+        final int firstX = stepX > 0 ? minX : maxX, lastX = stepX > 0 ? maxX : minX;
+        final int firstY = stepY > 0 ? minY : maxY, lastY = stepY > 0 ? maxY : minY;
+        final int firstZ = stepZ > 0 ? minZ : maxZ, lastZ = stepZ > 0 ? maxZ : minZ;
 
-        for (int x = startBlockX; x != endBlockX + stepX; x += stepX) {
-            for (int y = startBlockY; y != endBlockY + stepY; y += stepY) {
-                for (int z = startBlockZ; z != endBlockZ + stepZ; z += stepZ) {
+        for (int x = firstX; x != lastX + stepX; x += stepX) {
+            for (int y = firstY; y != lastY + stepY; y += stepY) {
+                for (int z = firstZ; z != lastZ + stepZ; z += stepZ) {
                     checkBoundingBox(x, y, z, velocity, entityPosition, boundingBox, getter, finalResult);
                 }
             }
@@ -182,58 +148,44 @@ final class BlockCollision {
     }
 
     /**
-     * Check if a moving entity will collide with a block. Updates finalResult
-     *
-     * @param blockX         block x position
-     * @param blockY         block y position
-     * @param blockZ         block z position
-     * @param entityVelocity entity movement vector
-     * @param entityPosition entity position
-     * @param boundingBox    entity bounding box
-     * @param getter         block getter
-     * @param finalResult    place to store final result of collision
-     * @return true if entity finds collision, other false
+     * Check if a moving entity will collide with a block. Updates finalResult.
+     * Handles the "tall block below" case (fences/walls) when the current shape
+     * is short enough that an entity could be touching the block below.
      */
     static boolean checkBoundingBox(int blockX, int blockY, int blockZ,
                                     Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox,
                                     Block.Getter getter, SweepResult finalResult) {
-        // Don't step if chunk isn't loaded yet
         final Block currentBlock = getter.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
         final Shape currentShape = currentBlock.registry().collisionShape();
-
         final boolean currentCollidable = !currentShape.relativeEnd().isZero();
         final boolean currentShort = currentShape.relativeEnd().y() < 0.5;
 
-        // only consider the block below if our current shape is sufficiently short
         if (currentShort && shouldCheckLower(entityVelocity, entityPosition, blockX, blockY, blockZ)) {
-            // we need to check below for a tall block (fence, wall, ...)
-            final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
-            final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
-            final Shape belowShape = belowBlock.registry().collisionShape();
-
-            final Vec currentPos = new Vec(blockX, blockY, blockZ);
-            // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
-            // collision check against the current shape since the below shape isn't tall
+            // Below block could be a tall shape (fence, wall) extending into this cell.
+            final Shape belowShape = getter.getBlock(blockX, blockY - 1, blockZ, Block.Getter.Condition.TYPE)
+                    .registry().collisionShape();
+            // Always test both shapes here so we never miss the tall one even if the short one hits.
             if (belowShape.relativeEnd().y() > 1) {
-                // we should always check both shapes, so no short-circuit here, to handle properties where the bounding box
-                // hits the current solid but misses the tall solid
-                return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult) |
-                        (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult));
-            } else {
-                return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult);
+                final boolean belowHit = belowShape.intersectBoxSwept(entityPosition, entityVelocity,
+                        blockX, blockY - 1, blockZ, boundingBox, finalResult);
+                final boolean currentHit = currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
+                        blockX, blockY, blockZ, boundingBox, finalResult);
+                return belowHit | currentHit;
             }
+            return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
+                    blockX, blockY, blockZ, boundingBox, finalResult);
         }
 
         if (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
-                new Vec(blockX, blockY, blockZ), boundingBox, finalResult)) {
-            // if the current collision is sufficiently short, we might need to collide against the block below too
+                blockX, blockY, blockZ, boundingBox, finalResult)) {
+            // If the current collision is sufficiently short, we might also need to collide against the block below.
             if (currentShort) {
-                final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
-                final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
-                final Shape belowShape = belowBlock.registry().collisionShape();
-                // only do sweep if the below block is big enough to possibly hit
-                if (belowShape.relativeEnd().y() > 1)
-                    belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult);
+                final Shape belowShape = getter.getBlock(blockX, blockY - 1, blockZ, Block.Getter.Condition.TYPE)
+                        .registry().collisionShape();
+                if (belowShape.relativeEnd().y() > 1) {
+                    belowShape.intersectBoxSwept(entityPosition, entityVelocity,
+                            blockX, blockY - 1, blockZ, boundingBox, finalResult);
+                }
             }
             return true;
         }
@@ -253,8 +205,7 @@ final class BlockCollision {
         // default to true: if no x velocity, only consider YZ line, and vice-versa
         final boolean underYX = xVelocity != 0 && computeHeight(yVelocity, xVelocity, entityPosition.y(), entityPosition.x(), blockX) >= blockY;
         final boolean underYZ = zVelocity != 0 && computeHeight(yVelocity, zVelocity, entityPosition.y(), entityPosition.z(), blockZ) >= blockY;
-        // true if the block is at or below the same height as a line drawn from the entity's position to its final
-        // destination
+        // true if the block is at or below the same height as a line drawn from the entity's position to its final destination
         return underYX && underYZ;
     }
 

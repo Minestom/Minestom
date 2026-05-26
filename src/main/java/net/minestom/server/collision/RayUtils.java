@@ -19,10 +19,11 @@ final class RayUtils {
      * @param shape the shape that owns {@code collidableStatic} (recorded on hit)
      * @return true iff {@code finalResult} was updated
      */
-    public static boolean BoundingBoxIntersectionCheck(Shape shape,
-                                                       BoundingBox moving, Point rayStart, Point rayDirection,
-                                                       BoundingBox collidableStatic, Point staticOffset,
-                                                       SweepResult finalResult) {
+    static boolean BoundingBoxIntersectionCheck(Shape shape,
+                                                BoundingBox moving, Point rayStart, Point rayDirection,
+                                                BoundingBox collidableStatic,
+                                                double sx, double sy, double sz,
+                                                SweepResult finalResult) {
         // Moving box origin (in its own frame) and half-extents
         final double mMinX = moving.minX(), mMinY = moving.minY(), mMinZ = moving.minZ();
         final double mw2 = (moving.maxX() - mMinX) * 0.5;
@@ -30,7 +31,6 @@ final class RayUtils {
         final double md2 = (moving.maxZ() - mMinZ) * 0.5;
 
         // Expanded static box bounds (Minkowski sum) in world space
-        final double sx = staticOffset.x(), sy = staticOffset.y(), sz = staticOffset.z();
         final double minX = sx + collidableStatic.minX() - mw2;
         final double maxX = sx + collidableStatic.maxX() + mw2;
         final double minY = sy + collidableStatic.minY() - mh2;
@@ -63,7 +63,13 @@ final class RayUtils {
             // that legacy behavior accepted via the same epsilon clamp.
             if (Math.abs(t1) < Vec.EPSILON) t1 = 0;
             if (Math.abs(t2) < Vec.EPSILON) t2 = 0;
-            if (t1 > t2) { tMinX = t2; tMaxX = t1; } else { tMinX = t1; tMaxX = t2; }
+            if (t1 > t2) {
+                tMinX = t2;
+                tMaxX = t1;
+            } else {
+                tMinX = t1;
+                tMaxX = t2;
+            }
         }
         final double tMinY, tMaxY;
         if (dy == 0) {
@@ -75,7 +81,13 @@ final class RayUtils {
             double t2 = (maxY - ry) / dy;
             if (Math.abs(t1) < Vec.EPSILON) t1 = 0;
             if (Math.abs(t2) < Vec.EPSILON) t2 = 0;
-            if (t1 > t2) { tMinY = t2; tMaxY = t1; } else { tMinY = t1; tMaxY = t2; }
+            if (t1 > t2) {
+                tMinY = t2;
+                tMaxY = t1;
+            } else {
+                tMinY = t1;
+                tMaxY = t2;
+            }
         }
         final double tMinZ, tMaxZ;
         if (dz == 0) {
@@ -87,14 +99,26 @@ final class RayUtils {
             double t2 = (maxZ - rz) / dz;
             if (Math.abs(t1) < Vec.EPSILON) t1 = 0;
             if (Math.abs(t2) < Vec.EPSILON) t2 = 0;
-            if (t1 > t2) { tMinZ = t2; tMaxZ = t1; } else { tMinZ = t1; tMaxZ = t2; }
+            if (t1 > t2) {
+                tMinZ = t2;
+                tMaxZ = t1;
+            } else {
+                tMinZ = t1;
+                tMaxZ = t2;
+            }
         }
 
         // Entry t and axis. Tie-break order X > Z > Y matches legacy face precedence.
         double tNear = tMinX;
         int face = 0;
-        if (tMinZ > tNear) { tNear = tMinZ; face = 1; }
-        if (tMinY > tNear) { tNear = tMinY; face = 2; }
+        if (tMinZ > tNear) {
+            tNear = tMinZ;
+            face = 1;
+        }
+        if (tMinY > tNear) {
+            tNear = tMinY;
+            face = 2;
+        }
         final double tFar = Math.min(Math.min(tMaxX, tMaxY), tMaxZ);
         // NaN-safe: any NaN makes both comparisons false, returning here.
         if (!(tNear <= tFar)) return false;
@@ -116,8 +140,9 @@ final class RayUtils {
         return true;
     }
 
-    public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
-        return BoundingBoxIntersectionCheck(boundingBox, BoundingBox.ZERO, start, direction, boundingBox, position,
+    static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
+        return BoundingBoxIntersectionCheck(boundingBox, BoundingBox.ZERO, start, direction, boundingBox,
+                position.x(), position.y(), position.z(),
                 new SweepResult(Double.MAX_VALUE, 0, 0, 0, null, 0, 0, 0, 0, 0, 0));
     }
 }

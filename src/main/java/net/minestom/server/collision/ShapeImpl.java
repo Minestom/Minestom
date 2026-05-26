@@ -106,9 +106,18 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
     @Override
     public boolean intersectBoxSwept(Point rayStart, Point rayDirection,
                                      Point shapePos, BoundingBox moving, SweepResult finalResult) {
+        return intersectBoxSwept(rayStart, rayDirection,
+                shapePos.x(), shapePos.y(), shapePos.z(), moving, finalResult);
+    }
+
+    @Override
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection,
+                                     double shapeX, double shapeY, double shapeZ,
+                                     BoundingBox moving, SweepResult finalResult) {
         boolean hitBlock = false;
         for (BoundingBox blockSection : shapeData.boundingBoxes) {
-            if (RayUtils.BoundingBoxIntersectionCheck(this, moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
+            if (RayUtils.BoundingBoxIntersectionCheck(this, moving, rayStart, rayDirection, blockSection,
+                    shapeX, shapeY, shapeZ, finalResult)) {
                 hitBlock = true;
             }
         }

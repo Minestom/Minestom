@@ -1,6 +1,7 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.BlockFace;
 
@@ -36,6 +37,17 @@ public interface Shape {
      */
     boolean intersectBoxSwept(Point rayStart, Point rayDirection,
                               Point shapePos, BoundingBox moving, SweepResult finalResult);
+
+    /**
+     * Primitive-coordinate overload of {@link #intersectBoxSwept(Point, Point, Point, BoundingBox, SweepResult)}
+     * used on hot paths (block sweeps) to avoid allocating a {@link Vec} per call.
+     * The default implementation allocates and delegates; optimized shapes override it.
+     */
+    default boolean intersectBoxSwept(Point rayStart, Point rayDirection,
+                                      double shapeX, double shapeY, double shapeZ,
+                                      BoundingBox moving, SweepResult finalResult) {
+        return intersectBoxSwept(rayStart, rayDirection, new Vec(shapeX, shapeY, shapeZ), moving, finalResult);
+    }
 
 
     /**

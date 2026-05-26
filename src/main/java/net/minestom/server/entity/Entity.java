@@ -1855,6 +1855,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @Override
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection,
+                                     double shapeX, double shapeY, double shapeZ,
+                                     BoundingBox moving, SweepResult finalResult) {
+        return boundingBox.intersectBoxSwept(rayStart, rayDirection, shapeX, shapeY, shapeZ, moving, finalResult);
+    }
+
+    @Override
     public Point relativeStart() {
         return boundingBox.relativeStart();
     }

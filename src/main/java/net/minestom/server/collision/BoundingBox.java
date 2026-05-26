@@ -42,7 +42,16 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
 
     @Override
     public boolean intersectBoxSwept(Point rayStart, Point rayDirection, Point shapePos, BoundingBox moving, SweepResult finalResult) {
-        return RayUtils.BoundingBoxIntersectionCheck(this, moving, rayStart, rayDirection, this, shapePos, finalResult);
+        return RayUtils.BoundingBoxIntersectionCheck(this, moving, rayStart, rayDirection, this,
+                shapePos.x(), shapePos.y(), shapePos.z(), finalResult);
+    }
+
+    @Override
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection,
+                                     double shapeX, double shapeY, double shapeZ,
+                                     BoundingBox moving, SweepResult finalResult) {
+        return RayUtils.BoundingBoxIntersectionCheck(this, moving, rayStart, rayDirection, this,
+                shapeX, shapeY, shapeZ, finalResult);
     }
 
     public boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {

@@ -37,7 +37,8 @@ final class EntityCollision {
 
             // Check collisions with entity
             SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
-            boolean intersected = targetBoundingBox.intersectBoxSwept(point, entityVelocity, targetPosition, boundingBox, sweepResult);
+            boolean intersected = targetBoundingBox.intersectBoxSwept(point, entityVelocity,
+                    targetPosition.x(), targetPosition.y(), targetPosition.z(), boundingBox, sweepResult);
 
             if (intersected && sweepResult.res < 1) {
                 var p = startPosition.add(entityVelocity.mul(sweepResult.res));
