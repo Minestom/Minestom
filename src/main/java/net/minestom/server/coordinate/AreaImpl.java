@@ -4,7 +4,8 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.*;
 
-import static net.minestom.server.coordinate.CoordConversion.*;
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BOUND;
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
 
 final class AreaImpl {
 
@@ -43,8 +44,8 @@ final class AreaImpl {
         }
 
         @Override
-        public boolean contains(Point point) {
-            return this.point.equals(point.asBlockVec());
+        public boolean contains(int x, int y, int z) {
+            return this.point.blockX() == x && this.point.blockY() == y && this.point.blockZ() == z;
         }
 
         @Override
@@ -210,9 +211,7 @@ final class AreaImpl {
         }
 
         @Override
-        public boolean contains(Point point) {
-            final BlockVec block = point.asBlockVec();
-            final int targetX = block.blockX(), targetY = block.blockY(), targetZ = block.blockZ();
+        public boolean contains(int targetX, int targetY, int targetZ) {
             final int x1 = start.blockX(), y1 = start.blockY(), z1 = start.blockZ();
             final int x2 = end.blockX(), y2 = end.blockY(), z2 = end.blockZ();
             if (targetX < Math.min(x1, x2) || targetX > Math.max(x1, x2) ||
@@ -356,14 +355,10 @@ final class AreaImpl {
         }
 
         @Override
-        public boolean contains(Point point) {
-            final BlockVec block = point.asBlockVec();
-            final int blockX = block.blockX(), blockY = block.blockY(), blockZ = block.blockZ();
+        public boolean contains(int x, int y, int z) {
             final int minX = min.blockX(), minY = min.blockY(), minZ = min.blockZ();
             final int maxX = max.blockX(), maxY = max.blockY(), maxZ = max.blockZ();
-            return blockX >= minX && blockX <= maxX &&
-                    blockY >= minY && blockY <= maxY &&
-                    blockZ >= minZ && blockZ <= maxZ;
+            return x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ;
         }
 
         @Override
@@ -547,10 +542,9 @@ final class AreaImpl {
         }
 
         @Override
-        public boolean contains(Point point) {
-            final BlockVec block = point.asBlockVec();
+        public boolean contains(int x, int y, int z) {
             final int centerX = center.blockX(), centerY = center.blockY(), centerZ = center.blockZ();
-            final long dx = (long) block.blockX() - centerX, dy = (long) block.blockY() - centerY, dz = (long) block.blockZ() - centerZ;
+            final long dx = (long) x - centerX, dy = (long) y - centerY, dz = (long) z - centerZ;
             return withinSphereRadius(dx, dy, dz, radius);
         }
 

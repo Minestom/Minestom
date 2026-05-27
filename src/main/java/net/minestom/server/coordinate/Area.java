@@ -62,12 +62,24 @@ public sealed interface Area extends Iterable<BlockVec> {
     }
 
     /**
+     * Checks whether this area contains the given block coordinate.
+     *
+     * @param x the block X coordinate
+     * @param y the block Y coordinate
+     * @param z the block Z coordinate
+     * @return {@code true} if the block coordinate is contained in this area
+     */
+    boolean contains(int x, int y, int z);
+
+    /**
      * Checks whether this area contains the block coordinate of {@code point}.
      *
      * @param point the point to convert to a block coordinate
      * @return {@code true} if the block coordinate is contained in this area
      */
-    boolean contains(Point point);
+    default boolean contains(Point point) {
+        return contains(point.blockX(), point.blockY(), point.blockZ());
+    }
 
     /**
      * Returns the number of blocks contained in this area.
