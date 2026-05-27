@@ -189,11 +189,7 @@ final class AreaImpl {
                 }
                 final int nextSecX = nextX >> 4, nextSecY = nextY >> 4, nextSecZ = nextZ >> 4;
                 final boolean sameSection = runStartSecX == nextSecX && runStartSecY == nextSecY && runStartSecZ == nextSecZ;
-                if (sameSection && canExtendAxisAlignedRun(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ, nextX, nextY, nextZ)) {
-                    runEndX = nextX;
-                    runEndY = nextY;
-                    runEndZ = nextZ;
-                } else {
+                if (!sameSection || !canExtendAxisAlignedRun(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ, nextX, nextY, nextZ)) {
                     result.add(buildRunCuboid(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ));
                     runStartX = nextX;
                     runStartY = nextY;
@@ -201,10 +197,10 @@ final class AreaImpl {
                     runStartSecX = nextSecX;
                     runStartSecY = nextSecY;
                     runStartSecZ = nextSecZ;
-                    runEndX = nextX;
-                    runEndY = nextY;
-                    runEndZ = nextZ;
                 }
+                runEndX = nextX;
+                runEndY = nextY;
+                runEndZ = nextZ;
             }
             result.add(buildRunCuboid(runStartX, runStartY, runStartZ, runEndX, runEndY, runEndZ));
             return result;
