@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntCollection;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntIterators;
+import it.unimi.dsi.fastutil.ints.IntSets;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -24,7 +25,7 @@ final class PointIndexImpl implements PointIndex {
 
     private final Int2ObjectOpenHashMap<@Nullable Slot> byId = new Int2ObjectOpenHashMap<>();
     private final Long2ObjectOpenHashMap<@Nullable Bucket> byChunk = new Long2ObjectOpenHashMap<>();
-    private final IntCollection view = new ValuesView();
+    private final IntCollection view = IntSets.unmodifiable(byId.keySet());
 
     @Override
     public void add(int id, Point point) {
@@ -280,19 +281,6 @@ final class PointIndexImpl implements PointIndex {
     }
 
     @Override
-    public void forEachInChunkRange(Point point, int chunkRange, IntConsumer consumer) {
-        final int centerX = point.chunkX();
-        final int centerZ = point.chunkZ();
-        for (int cx = centerX - chunkRange; cx <= centerX + chunkRange; cx++) {
-            for (int cz = centerZ - chunkRange; cz <= centerZ + chunkRange; cz++) {
-                final Bucket b = byChunk.get(chunkIndex(cx, cz));
-                if (b == null) continue;
-                forEachInBucket(b, consumer);
-            }
-        }
-    }
-
-    @Override
     public void forEachInChunkRangeDiffering(Point oldPoint, Point newPoint, int chunkRange,
                                              IntConsumer added, IntConsumer removed) {
         final int oldCX = oldPoint.chunkX(), oldCZ = oldPoint.chunkZ();
@@ -376,29 +364,6 @@ final class PointIndexImpl implements PointIndex {
             ys = Arrays.copyOf(ys, newCap);
             zs = Arrays.copyOf(zs, newCap);
             ids = Arrays.copyOf(ids, newCap);
-        }
-    }
-
-    private final class ValuesView extends AbstractIntCollection {
-        @Override
-        public IntIterator iterator() {
-            final var it = byId.keySet().iterator();
-            return new IntIterator() {
-                @Override
-                public boolean hasNext() {
-                    return it.hasNext();
-                }
-
-                @Override
-                public int nextInt() {
-                    return it.nextInt();
-                }
-            };
-        }
-
-        @Override
-        public int size() {
-            return byId.size();
         }
     }
 

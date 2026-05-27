@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.AbstractIntCollection;
 import it.unimi.dsi.fastutil.ints.IntCollection;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntIterators;
+import it.unimi.dsi.fastutil.ints.IntSets;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
@@ -22,10 +23,10 @@ final class PointIndexConcurrentImpl implements PointIndex {
     private static final double SECTION_SIZE_D = SECTION_SIZE;
 
     private final Int2ObjectSyncMap<@Nullable Slot> byId = Int2ObjectSyncMap.hashmap();
-    private final Long2ObjectSyncMap<@Nullable Object> byChunk = Long2ObjectSyncMap.hashmap();
+    private final Long2ObjectSyncMap<@Nullable Bucket> byChunk = Long2ObjectSyncMap.hashmap();
     private final Object[] locks;
     private final Object crossChunkLock = new Object();
-    private final IntCollection view = new ValuesView();
+    private final IntCollection view = IntSets.unmodifiable(byId.keySet());
 
     PointIndexConcurrentImpl() {
         this.locks = new Object[LOCK_STRIPES];
@@ -44,11 +45,6 @@ final class PointIndexConcurrentImpl implements PointIndex {
         return locks[stripeFor(chunk)];
     }
 
-    private @Nullable Bucket bucket(long chunkKey) {
-        final Object value = byChunk.get(chunkKey);
-        return value instanceof Bucket b ? b : null;
-    }
-
     private boolean belongsToChunk(int id, long chunk) {
         final Slot slot = byId.get(id);
         return slot != null && slot.chunk == chunk;
@@ -64,7 +60,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
                 throw new IllegalStateException("Point with id " + id + " already present");
             }
             synchronized (lockFor(chunk)) {
-                Bucket bucket = bucket(chunk);
+                Bucket bucket = byChunk.get(chunk);
                 if (bucket == null) bucket = Bucket.first(id, x, y, z);
                 else bucket = bucket.withAdded(id, x, y, z);
                 byChunk.put(chunk, bucket);
@@ -79,7 +75,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
             removed = byId.remove(id);
             if (removed == null) return null;
             synchronized (lockFor(removed.chunk)) {
-                final Bucket bucket = bucket(removed.chunk);
+                final Bucket bucket = byChunk.get(removed.chunk);
                 if (bucket != null) {
                     final int idx = bucket.indexOf(id);
                     if (idx != -1) {
@@ -105,7 +101,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
 
         if (oldChunk == newChunk) {
             synchronized (lockFor(oldChunk)) {
-                final Bucket bucket = bucket(oldChunk);
+                final Bucket bucket = byChunk.get(oldChunk);
                 if (bucket != null) {
                     final int idx = bucket.indexOf(id);
                     if (idx != -1) byChunk.put(oldChunk, bucket.withUpdated(idx, newX, newY, newZ));
@@ -137,11 +133,11 @@ final class PointIndexConcurrentImpl implements PointIndex {
 
     private void doMoveCross(int id, long oldChunk, long newChunk,
                              double newX, double newY, double newZ, Point newPoint) {
-        final Bucket destBucket = bucket(newChunk);
+        final Bucket destBucket = byChunk.get(newChunk);
         if (destBucket == null) byChunk.put(newChunk, Bucket.first(id, newX, newY, newZ));
         else byChunk.put(newChunk, destBucket.withAdded(id, newX, newY, newZ));
         byId.put(id, new Slot(newChunk, newPoint));
-        final Bucket oldBucket = bucket(oldChunk);
+        final Bucket oldBucket = byChunk.get(oldChunk);
         if (oldBucket != null) {
             final int idx = oldBucket.indexOf(id);
             if (idx != -1) {
@@ -176,9 +172,8 @@ final class PointIndexConcurrentImpl implements PointIndex {
 
         if (byChunk.size() <= 4) {
             for (var entry : byChunk.long2ObjectEntrySet()) {
-                final long chunk = entry.getLongKey();
-                final Object value = entry.getValue();
-                if (value instanceof Bucket b) scanBucketForNearest(b, chunk, px, py, pz, state);
+                final Bucket b = entry.getValue();
+                if (b != null) scanBucketForNearest(b, entry.getLongKey(), px, py, pz, state);
             }
             return state.bestId;
         }
@@ -213,12 +208,12 @@ final class PointIndexConcurrentImpl implements PointIndex {
         final double dz = Math.max(0.0, Math.max(czMin - pz, pz - czMax));
         if (dx * dx + dz * dz >= state.bestSq) return;
         final long chunk = chunkIndex(cx, cz);
-        final Bucket b = bucket(chunk);
+        final Bucket b = byChunk.get(chunk);
         if (b != null) scanBucketForNearest(b, chunk, px, py, pz, state);
     }
 
     private void scanBucketForNearest(Bucket b, long chunk, double px, double py, double pz, NearestState state) {
-        final int n = b.size;
+        final int n = b.size();
         final double[] xs = b.xs, ys = b.ys, zs = b.zs;
         final int[] ids = b.ids;
         double bestSq = state.bestSq;
@@ -253,7 +248,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
 
         if (minCX == maxCX && minCZ == maxCZ) {
             final long chunk = chunkIndex(minCX, minCZ);
-            final Bucket b = bucket(chunk);
+            final Bucket b = byChunk.get(chunk);
             if (b == null) return;
             forEachInBucketWithin(b, chunk, px, py, pz, rSq, consumer);
             return;
@@ -269,7 +264,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
                     final double cdz = Math.max(0.0, Math.max(czMin - pz, pz - czMax));
                     if (cdxSq + cdz * cdz >= rSq) continue;
                     final long chunk = chunkIndex(cx, cz);
-                    final Bucket b = bucket(chunk);
+                    final Bucket b = byChunk.get(chunk);
                     if (b == null) continue;
                     forEachInBucketWithin(b, px, py, pz, rSq, consumer);
                 }
@@ -279,7 +274,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
 
     private void forEachInBucketWithin(Bucket b, long chunk, double px, double py, double pz,
                                        double rSq, IntConsumer consumer) {
-        final int n = b.size;
+        final int n = b.size();
         final double[] xs = b.xs, ys = b.ys, zs = b.zs;
         final int[] ids = b.ids;
         for (int i = 0; i < n; i++) {
@@ -292,7 +287,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
 
     private static void forEachInBucketWithin(Bucket b, double px, double py, double pz,
                                               double rSq, IntConsumer consumer) {
-        final int n = b.size;
+        final int n = b.size();
         final double[] xs = b.xs, ys = b.ys, zs = b.zs;
         final int[] ids = b.ids;
         for (int i = 0; i < n; i++) {
@@ -311,7 +306,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
         final int maxCZ = globalToChunk(pz + radius);
         if (minCX == maxCX && minCZ == maxCZ) {
             final long chunk = chunkIndex(minCX, minCZ);
-            final Bucket b = bucket(chunk);
+            final Bucket b = byChunk.get(chunk);
             return b == null ? 0 : countInBucketWithin(b, chunk, px, py, pz, rSq);
         }
         int total = 0;
@@ -326,7 +321,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
                     final double cdz = Math.max(0.0, Math.max(czMin - pz, pz - czMax));
                     if (cdxSq + cdz * cdz >= rSq) continue;
                     final long chunk = chunkIndex(cx, cz);
-                    final Bucket b = bucket(chunk);
+                    final Bucket b = byChunk.get(chunk);
                     if (b == null) continue;
                     total += countInBucketWithin(b, px, py, pz, rSq);
                 }
@@ -336,7 +331,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
     }
 
     private int countInBucketWithin(Bucket b, long chunk, double px, double py, double pz, double rSq) {
-        final int n = b.size;
+        final int n = b.size();
         final double[] xs = b.xs, ys = b.ys, zs = b.zs;
         final int[] ids = b.ids;
         int total = 0;
@@ -350,7 +345,7 @@ final class PointIndexConcurrentImpl implements PointIndex {
     }
 
     private static int countInBucketWithin(Bucket b, double px, double py, double pz, double rSq) {
-        final int n = b.size;
+        final int n = b.size();
         final double[] xs = b.xs, ys = b.ys, zs = b.zs;
         int total = 0;
         for (int i = 0; i < n; i++) {
@@ -363,9 +358,9 @@ final class PointIndexConcurrentImpl implements PointIndex {
     @Override
     public void forEachInChunk(int chunkX, int chunkZ, IntConsumer consumer) {
         final long chunk = chunkIndex(chunkX, chunkZ);
-        final Bucket b = bucket(chunk);
+        final Bucket b = byChunk.get(chunk);
         if (b == null) return;
-        final int n = b.size;
+        final int n = b.size();
         final int[] ids = b.ids;
         for (int i = 0; i < n; i++) {
             final int id = ids[i];
@@ -390,9 +385,9 @@ final class PointIndexConcurrentImpl implements PointIndex {
             for (int cx = minCX; cx <= maxCX; cx++) {
                 for (int cz = minCZ; cz <= maxCZ; cz++) {
                     final long chunk = chunkIndex(cx, cz);
-                    final Bucket b = bucket(chunk);
+                    final Bucket b = byChunk.get(chunk);
                     if (b == null) continue;
-                    final int n = b.size;
+                    final int n = b.size();
                     final int[] ids = b.ids;
                     for (int i = 0; i < n; i++) {
                         consumer.accept(ids[i]);
@@ -412,9 +407,9 @@ final class PointIndexConcurrentImpl implements PointIndex {
                 for (int cz = newCZ - chunkRange; cz <= newCZ + chunkRange; cz++) {
                     if (Math.abs(cx - oldCX) <= chunkRange && Math.abs(cz - oldCZ) <= chunkRange) continue;
                     final long chunk = chunkIndex(cx, cz);
-                    final Bucket b = bucket(chunk);
+                    final Bucket b = byChunk.get(chunk);
                     if (b == null) continue;
-                    final int n = b.size;
+                    final int n = b.size();
                     final int[] ids = b.ids;
                     for (int i = 0; i < n; i++) {
                         added.accept(ids[i]);
@@ -425,9 +420,9 @@ final class PointIndexConcurrentImpl implements PointIndex {
                 for (int cz = oldCZ - chunkRange; cz <= oldCZ + chunkRange; cz++) {
                     if (Math.abs(cx - newCX) <= chunkRange && Math.abs(cz - newCZ) <= chunkRange) continue;
                     final long chunk = chunkIndex(cx, cz);
-                    final Bucket b = bucket(chunk);
+                    final Bucket b = byChunk.get(chunk);
                     if (b == null) continue;
-                    final int n = b.size;
+                    final int n = b.size();
                     final int[] ids = b.ids;
                     for (int i = 0; i < n; i++) {
                         removed.accept(ids[i]);
@@ -440,36 +435,38 @@ final class PointIndexConcurrentImpl implements PointIndex {
     record Slot(long chunk, Point point) {
     }
 
-    record Bucket(int size, double[] xs, double[] ys, double[] zs, int[] ids) {
+    record Bucket(double[] xs, double[] ys, double[] zs, int[] ids) {
         static Bucket first(int id, double x, double y, double z) {
-            return new Bucket(1,
-                    new double[]{x}, new double[]{y}, new double[]{z},
-                    new int[]{id});
+            return new Bucket(new double[]{x}, new double[]{y}, new double[]{z}, new int[]{id});
+        }
+
+        int size() {
+            return ids.length;
         }
 
         int indexOf(int id) {
             final int[] ids = this.ids;
-            final int n = size;
-            for (int i = 0; i < n; i++) if (ids[i] == id) return i;
+            for (int i = 0; i < ids.length; i++) if (ids[i] == id) return i;
             return -1;
         }
 
         Bucket withAdded(int id, double x, double y, double z) {
-            final int newSize = size + 1;
+            final int prev = ids.length;
+            final int newSize = prev + 1;
             final double[] nxs = Arrays.copyOf(xs, newSize);
-            nxs[size] = x;
+            nxs[prev] = x;
             final double[] nys = Arrays.copyOf(ys, newSize);
-            nys[size] = y;
+            nys[prev] = y;
             final double[] nzs = Arrays.copyOf(zs, newSize);
-            nzs[size] = z;
+            nzs[prev] = z;
             final int[] nids = Arrays.copyOf(ids, newSize);
-            nids[size] = id;
-            return new Bucket(newSize, nxs, nys, nzs, nids);
+            nids[prev] = id;
+            return new Bucket(nxs, nys, nzs, nids);
         }
 
         @Nullable
         Bucket withRemovedAt(int idx) {
-            final int newSize = size - 1;
+            final int newSize = ids.length - 1;
             if (newSize == 0) return null;
             final double[] nxs = Arrays.copyOf(xs, newSize);
             final double[] nys = Arrays.copyOf(ys, newSize);
@@ -481,40 +478,18 @@ final class PointIndexConcurrentImpl implements PointIndex {
                 nzs[idx] = zs[newSize];
                 nids[idx] = ids[newSize];
             }
-            return new Bucket(newSize, nxs, nys, nzs, nids);
+            return new Bucket(nxs, nys, nzs, nids);
         }
 
         Bucket withUpdated(int idx, double x, double y, double z) {
-            final double[] nxs = Arrays.copyOf(xs, size);
+            final int n = ids.length;
+            final double[] nxs = Arrays.copyOf(xs, n);
             nxs[idx] = x;
-            final double[] nys = Arrays.copyOf(ys, size);
+            final double[] nys = Arrays.copyOf(ys, n);
             nys[idx] = y;
-            final double[] nzs = Arrays.copyOf(zs, size);
+            final double[] nzs = Arrays.copyOf(zs, n);
             nzs[idx] = z;
-            return new Bucket(size, nxs, nys, nzs, ids);
-        }
-    }
-
-    private final class ValuesView extends AbstractIntCollection {
-        @Override
-        public IntIterator iterator() {
-            final var it = byId.keySet().iterator();
-            return new IntIterator() {
-                @Override
-                public boolean hasNext() {
-                    return it.hasNext();
-                }
-
-                @Override
-                public int nextInt() {
-                    return it.nextInt();
-                }
-            };
-        }
-
-        @Override
-        public int size() {
-            return byId.size();
+            return new Bucket(nxs, nys, nzs, ids);
         }
     }
 
@@ -529,10 +504,10 @@ final class PointIndexConcurrentImpl implements PointIndex {
 
         @Override
         public IntIterator iterator() {
-            final Bucket b = index.bucket(chunkKey);
+            final Bucket b = index.byChunk.get(chunkKey);
             if (b == null) return IntIterators.EMPTY_ITERATOR;
             final int[] ids = b.ids;
-            final int n = b.size;
+            final int n = b.size();
             return new IntIterator() {
                 int i = 0;
                 int next;
@@ -563,25 +538,13 @@ final class PointIndexConcurrentImpl implements PointIndex {
 
         @Override
         public int size() {
-            final Bucket b = index.bucket(chunkKey);
-            if (b == null) return 0;
-            int size = 0;
-            final int[] ids = b.ids;
-            for (int i = 0, n = b.size; i < n; i++) {
-                if (index.belongsToChunk(ids[i], chunkKey)) size++;
-            }
-            return size;
+            final Bucket b = index.byChunk.get(chunkKey);
+            return b == null ? 0 : b.size();
         }
 
         @Override
         public boolean isEmpty() {
-            final Bucket b = index.bucket(chunkKey);
-            if (b == null) return true;
-            final int[] ids = b.ids;
-            for (int i = 0, n = b.size; i < n; i++) {
-                if (index.belongsToChunk(ids[i], chunkKey)) return false;
-            }
-            return true;
+            return index.byChunk.get(chunkKey) == null;
         }
     }
 
