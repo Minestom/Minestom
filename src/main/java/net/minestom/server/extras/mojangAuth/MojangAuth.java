@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.security.KeyPair;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,12 +20,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 
-/** Stateless primitives for Mojang online-mode login. Entry point: {@link #completeOnlineLogin}. */
+/**
+ * Stateless primitives for Mojang online-mode login. Entry point: {@link #completeOnlineLogin}.
+ */
 public final class MojangAuth {
     private MojangAuth() {
     }
 
-    /** Username + 4-byte verify-token nonce issued at LoginStart, consumed at EncryptionResponse. */
+    /**
+     * Username + 4-byte verify-token nonce issued at LoginStart, consumed at EncryptionResponse.
+     */
     public record LoginChallenge(String username, byte[] nonce) {
         public static LoginChallenge create(String username, RandomGenerator rng) {
             final byte[] nonce = new byte[4];
@@ -32,11 +38,15 @@ public final class MojangAuth {
         }
     }
 
-    /** Resolved profile + AES session key to install on the connection. */
+    /**
+     * Resolved profile + AES session key to install on the connection.
+     */
     public record AuthResult(GameProfile profile, SecretKey encryptionKey) {
     }
 
-    /** Auth payload is invalid. Distinct from {@link IOException}, which signals a transport failure to Mojang. */
+    /**
+     * Auth payload is invalid. Distinct from {@link IOException}, which signals a transport failure to Mojang.
+     */
     public static final class AuthException extends Exception {
         public enum Reason {VERIFY_TOKEN_INVALID, SHARED_SECRET_INVALID}
 
@@ -56,18 +66,31 @@ public final class MojangAuth {
         }
     }
 
-    /** Seam for the Mojang {@code hasJoined} call. Production: {@code MojangUtils::authenticateSession}. */
+    /**
+     * Seam for the Mojang {@code hasJoined} call. Production: {@code MojangUtils::authenticateSession}.
+     */
     @FunctionalInterface
     public interface SessionClient {
         JsonObject hasJoined(String username, String serverId, @Nullable InetAddress clientIp) throws IOException;
     }
 
-    /** Lowercase hex of {@code SHA-1("" || serverPublicKey || sharedSecret)}, the {@code serverId} for {@code hasJoined}. */
+    /**
+     * Lowercase hex of {@code SHA-1(sharedSecret || serverPublicKey)}, the {@code serverId} for {@code hasJoined}.
+     */
     public static String serverIdHash(PublicKey serverPublicKey, SecretKey sharedSecret) {
-        return new BigInteger(MojangCrypt.digestData("", serverPublicKey, sharedSecret)).toString(16);
+        try {
+            final MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.update(sharedSecret.getEncoded());
+            digest.update(serverPublicKey.getEncoded());
+            return new BigInteger(digest.digest()).toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-1 not available", e);
+        }
     }
 
-    /** Parses a Mojang {@code hasJoined} JSON response into a {@link GameProfile}. */
+    /**
+     * Parses a Mojang {@code hasJoined} JSON response into a {@link GameProfile}.
+     */
     public static GameProfile parseProfile(JsonObject hasJoinedResponse) {
         final UUID uuid = UUID.fromString(hasJoinedResponse.get("id").getAsString().replaceFirst(
                 "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
