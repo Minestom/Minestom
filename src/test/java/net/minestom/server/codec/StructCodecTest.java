@@ -82,6 +82,30 @@ public class StructCodecTest {
     }
 
     @Test
+    void singleFieldOptionalExplicitJsonNull() {
+        record TheObject(String name) {
+        }
+
+        var codec = StructCodec.struct(
+                "name", Codec.STRING.optional(), TheObject::name,
+                TheObject::new);
+        var json = com.google.gson.JsonParser.parseString("{\"name\": null}");
+        assertEquals(new TheObject(null), assertOk(codec.decode(Transcoder.JSON, json)));
+    }
+
+    @Test
+    void singleFieldOptionalExplicitJsonNullWithDefault() {
+        record TheObject(String name) {
+        }
+
+        var codec = StructCodec.struct(
+                "name", Codec.STRING.optional("defaultValue"), TheObject::name,
+                TheObject::new);
+        var json = com.google.gson.JsonParser.parseString("{\"name\": null}");
+        assertEquals(new TheObject("defaultValue"), assertOk(codec.decode(Transcoder.JSON, json)));
+    }
+
+    @Test
     void inlineField() {
         record InnerObject(String value) {
         }

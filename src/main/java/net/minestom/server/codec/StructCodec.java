@@ -3403,8 +3403,9 @@ public interface StructCodec<R> extends Codec<R> {
         }
         if (codec instanceof CodecImpl.OptionalImpl<T>(Codec<T> inner, T defaultValue)) {
             return switch (map.getValue(key)) {
-                case Result.Ok(D innerValue) -> inner.decode(coder, innerValue)
-                        .mapError(e -> key + ": " + e);
+                case Result.Ok(D innerValue) -> Objects.equals(innerValue, coder.createNull())
+                        ? new Result.Ok<>(defaultValue)
+                        : inner.decode(coder, innerValue).mapError(e -> key + ": " + e);
                 case Result.Error(String ignored) -> new Result.Ok<>(defaultValue);
             };
         }
