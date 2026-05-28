@@ -1,12 +1,14 @@
 package net.minestom.server.codec;
 
+import com.google.gson.JsonParser;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.adventure.MinestomAdventure;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.codec.CodecAssertions.assertError;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StructCodecTest {
 
@@ -89,7 +91,7 @@ public class StructCodecTest {
         var codec = StructCodec.struct(
                 "name", Codec.STRING.optional(), TheObject::name,
                 TheObject::new);
-        var json = com.google.gson.JsonParser.parseString("{\"name\": null}");
+        var json = JsonParser.parseString("{\"name\": null}");
         assertEquals(new TheObject(null), assertOk(codec.decode(Transcoder.JSON, json)));
     }
 
@@ -101,7 +103,7 @@ public class StructCodecTest {
         var codec = StructCodec.struct(
                 "name", Codec.STRING.optional("defaultValue"), TheObject::name,
                 TheObject::new);
-        var json = com.google.gson.JsonParser.parseString("{\"name\": null}");
+        var json = JsonParser.parseString("{\"name\": null}");
         assertEquals(new TheObject("defaultValue"), assertOk(codec.decode(Transcoder.JSON, json)));
     }
 
