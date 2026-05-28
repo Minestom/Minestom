@@ -507,6 +507,40 @@ public class PaletteTest {
     }
 
     @Test
+    public void getAllPresentNonAirFill() {
+        // Filling with a non-air value then editing a cell must still report every non-air cell.
+        for (Palette palette : testPalettes()) {
+            palette.fill(5);
+            palette.set(0, 0, 0, 7);
+            AtomicInteger reported = new AtomicInteger();
+            palette.getAllPresent((x, y, z, value) -> {
+                assertNotEquals(0, value, "air must never be reported as present");
+                assertEquals(x == 0 && y == 0 && z == 0 ? 7 : 5, value);
+                reported.incrementAndGet();
+            });
+            assertEquals(palette.maxSize(), reported.get());
+            assertEquals(palette.count(), reported.get(), "getAllPresent must agree with count()");
+        }
+    }
+
+    @Test
+    public void getAllPresentNonAirFillThenAir() {
+        // Carving a single air cell out of a non-air fill must exclude only that cell.
+        for (Palette palette : testPalettes()) {
+            palette.fill(5);
+            palette.set(0, 0, 0, 0);
+            AtomicInteger reported = new AtomicInteger();
+            palette.getAllPresent((x, y, z, value) -> {
+                assertEquals(5, value);
+                assertFalse(x == 0 && y == 0 && z == 0, "the air cell must be excluded");
+                reported.incrementAndGet();
+            });
+            assertEquals(palette.maxSize() - 1, reported.get());
+            assertEquals(palette.count(), reported.get(), "getAllPresent must agree with count()");
+        }
+    }
+
+    @Test
     public void replaceAll() {
         for (Palette palette : testPalettes()) {
             palette.setAll((x, y, z) -> x + y + z + 1);

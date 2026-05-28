@@ -468,42 +468,12 @@ final class PaletteImpl implements Palette {
     /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
     int countPaletteIndex(int paletteIndex) {
         if (paletteIndex < 0) return 0;
-        int result = 0;
-        final int size = maxSize();
-        final int bits = bitsPerEntry;
-        final int valuesPerLong = 64 / bits;
-        final int mask = (1 << bits) - 1;
-        for (int i = 0, idx = 0; i < values.length; i++) {
-            long block = values[i];
-            int end = Math.min(valuesPerLong, size - idx);
-            for (int j = 0; j < end; j++, idx++) {
-                if (((int) (block & mask)) == paletteIndex) result++;
-                block >>>= bits;
-            }
-        }
-        return result;
+        return Palettes.countEquals(bitsPerEntry, values, maxSize(), paletteIndex);
     }
 
     /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
     int replacePaletteIndex(int oldPaletteIndex, int newPaletteIndex) {
-        final int size = maxSize();
-        final int bits = bitsPerEntry;
-        final int valuesPerLong = 64 / bits;
-        final long mask = (1L << bits) - 1L;
-        int result = 0;
-        for (int i = 0, idx = 0; i < values.length; i++) {
-            long block = values[i];
-            final int end = Math.min(valuesPerLong, size - idx);
-            for (int j = 0; j < end; j++, idx++) {
-                final int bitIndex = j * bits;
-                if (((int) (block >>> bitIndex & mask)) == oldPaletteIndex) {
-                    block = block & ~(mask << bitIndex) | ((long) newPaletteIndex << bitIndex);
-                    result++;
-                }
-            }
-            values[i] = block;
-        }
-        return result;
+        return Palettes.replaceEquals(bitsPerEntry, values, maxSize(), oldPaletteIndex, newPaletteIndex);
     }
 
     @Override
@@ -512,20 +482,7 @@ final class PaletteImpl implements Palette {
         if (value == 0) return maxSize() != count;
         int queryValue = valueToPalettIndexOrDefault(value);
         if (queryValue == -1) return false;
-        // Scan through the values
-        final int size = maxSize();
-        final int bits = bitsPerEntry;
-        final int valuesPerLong = 64 / bits;
-        final int mask = (1 << bits) - 1;
-        for (int i = 0, idx = 0; i < values.length; i++) {
-            long block = values[i];
-            int end = Math.min(valuesPerLong, size - idx);
-            for (int j = 0; j < end; j++, idx++) {
-                if (((int) (block & mask)) == queryValue) return true;
-                block >>>= bits;
-            }
-        }
-        return false;
+        return Palettes.anyEquals(bitsPerEntry, values, maxSize(), queryValue);
     }
 
     @Override
@@ -616,16 +573,20 @@ final class PaletteImpl implements Palette {
         final int size = maxSize();
         final int dimensionMinus = dimension - 1;
         final int @Nullable [] ids = hasPalette() ? paletteToValueList.elements() : null;
+        // Palette index that maps to air (value 0), or -1 when air is absent from the palette.
+        final int airIndex = consumeEmpty ? -1 : valueToPalettIndexOrDefault(0);
         final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMinus);
         final int shiftedDimensionBitCount = dimensionBitCount << 1;
         for (int i = 0; i < values.length; i++) {
             final long value = values[i];
+            // Skip whole longs of air; only valid when air sits at palette index 0
+            if (!consumeEmpty && airIndex == 0 && value == 0) continue;
             final int startIndex = i * valuesPerLong;
             final int endIndex = Math.min(startIndex + valuesPerLong, size);
             for (int index = startIndex; index < endIndex; index++) {
                 final int bitIndex = (index - startIndex) * bitsPerEntry;
                 final int paletteIndex = (int) (value >> bitIndex & magicMask);
-                if (consumeEmpty || paletteIndex != 0) {
+                if (consumeEmpty || paletteIndex != airIndex) {
                     final int y = index >> shiftedDimensionBitCount;
                     final int z = index >> dimensionBitCount & dimensionMinus;
                     final int x = index & dimensionMinus;
