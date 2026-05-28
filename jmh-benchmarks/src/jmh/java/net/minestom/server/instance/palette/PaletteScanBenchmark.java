@@ -1,7 +1,6 @@
 package net.minestom.server.instance.palette;
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;

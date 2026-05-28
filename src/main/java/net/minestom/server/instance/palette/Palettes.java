@@ -106,7 +106,7 @@ public final class Palettes {
         final long broadcastTarget = ones * target;
         int result = 0;
         for (int i = 0, idx = 0; i < values.length; i++, idx += valuesPerLong) {
-            result += Long.bitCount(matchingLanes(values[i], broadcastTarget, lowMask, highBits, size - idx, bitsPerEntry));
+            result += Long.bitCount(matchingLanes(values[i], broadcastTarget, lowMask, highBits, size - idx, valuesPerLong, bitsPerEntry));
         }
         return result;
     }
@@ -119,7 +119,8 @@ public final class Palettes {
         final long highBits = ones * (1L << (bitsPerEntry - 1));
         final long broadcastTarget = ones * target;
         for (int i = 0, idx = 0; i < values.length; i++, idx += valuesPerLong) {
-            if (matchingLanes(values[i], broadcastTarget, lowMask, highBits, size - idx, bitsPerEntry) != 0) return true;
+            if (matchingLanes(values[i], broadcastTarget, lowMask, highBits, size - idx, valuesPerLong, bitsPerEntry) != 0)
+                return true;
         }
         return false;
     }
@@ -136,7 +137,7 @@ public final class Palettes {
         int result = 0;
         for (int i = 0, idx = 0; i < values.length; i++, idx += valuesPerLong) {
             final long block = values[i];
-            final long zeros = matchingLanes(block, broadcastOld, lowMask, highBits, size - idx, bitsPerEntry);
+            final long zeros = matchingLanes(block, broadcastOld, lowMask, highBits, size - idx, valuesPerLong, bitsPerEntry);
             if (zeros == 0) continue;
             // Expand each lane's high-bit marker to a full-lane mask, then swap the matching lanes.
             final long laneMask = zeros | (zeros - (zeros >>> (bitsPerEntry - 1)));
@@ -149,11 +150,10 @@ public final class Palettes {
     /// High bit set in each lane equal to {@code broadcastTarget}, restricted to the first
     /// {@code remaining} lanes. Borrow-safe so a zero lane never spills into its neighbour.
     private static long matchingLanes(long block, long broadcastTarget, long lowMask, long highBits,
-                                      int remaining, int bitsPerEntry) {
+                                      int remaining, int valuesPerLong, int bitsPerEntry) {
         final long x = block ^ broadcastTarget;
         final long t = (x & lowMask) + lowMask;
         long zeros = ~(t | x) & highBits;
-        final int valuesPerLong = 64 / bitsPerEntry;
         if (remaining < valuesPerLong) zeros &= (1L << (remaining * bitsPerEntry)) - 1L;
         return zeros;
     }
@@ -198,7 +198,8 @@ public final class Palettes {
         long newValue = 0;
         int newValueIndex = 0;
         int newBitIndex = 0;
-        outer: {
+        outer:
+        {
             for (int i = 0; i < values.length; i++) {
                 long value = values[i];
                 final int startIndex = i * oldValuesPerLong;
