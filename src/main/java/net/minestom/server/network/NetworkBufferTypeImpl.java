@@ -331,13 +331,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
         @Override
         public byte[] read(NetworkBuffer buffer) {
-            long length = buffer.readableBytes();
-            if (this.length != -1) {
-                length = Math.min(length, this.length);
+            long length = this.length;
+            if (length == -1) {
+                length = buffer.readableBytes();
             }
             if (length == 0) return new byte[0];
             assert length > 0 : "Invalid remaining: " + length;
-
+            if (length > buffer.readableBytes())
+                throw new IndexOutOfBoundsException("Buffer needs " + length + " bytes to read found" + buffer.readableBytes());
             final int arrayLength = Math.toIntExact(length);
             final byte[] bytes = new byte[arrayLength];
             impl(buffer)._getBytes(buffer.readIndex(), bytes);
@@ -702,21 +703,29 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     // Combinators
 
     record EnumSetType<E extends Enum<E>>(Class<E> enumType,
-                                          E[] values) implements NetworkBufferTypeImpl<EnumSet<E>> {
+                                          E[] values, Type<BitSet> bitSetType) implements Type<EnumSet<E>> {
+        public EnumSetType {
+            Objects.requireNonNull(enumType, "enumType");
+            Objects.requireNonNull(values, "values");
+            Objects.requireNonNull(bitSetType, "bitSetType");
+        }
+
+        public EnumSetType(Class<E> enumClass, E[] values) {
+            this(enumClass, values, FixedBitSet(values.length));
+        }
+
         @Override
         public void write(NetworkBuffer buffer, EnumSet<E> value) {
             BitSet bitSet = new BitSet(values.length);
             for (int i = 0; i < values.length; ++i) {
                 bitSet.set(i, value.contains(values[i]));
             }
-            final byte[] array = bitSet.toByteArray();
-            buffer.write(RAW_BYTES, array);
+            bitSetType.write(buffer, bitSet);
         }
 
         @Override
         public EnumSet<E> read(NetworkBuffer buffer) {
-            final byte[] array = buffer.read(FixedRawBytes((values.length + 7) / 8));
-            BitSet bitSet = BitSet.valueOf(array);
+            final BitSet bitSet = bitSetType.read(buffer);
             EnumSet<E> enumSet = EnumSet.noneOf(enumType);
             for (int i = 0; i < values.length; ++i) {
                 if (bitSet.get(i)) {
@@ -727,21 +736,32 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record FixedBitSetType(int length) implements NetworkBufferTypeImpl<BitSet> {
+    record FixedBitSetType(int length, Type<byte[]> arrayType) implements Type<BitSet> {
+        public FixedBitSetType {
+            Check.argCondition(length < 0, "Length is negative found {0}", length);
+            Objects.requireNonNull(arrayType, "arrayType");
+        }
+
+        public FixedBitSetType(int length) {
+            this(length, FixedRawBytes((length + 7) / Long.BYTES));
+        }
+
         @Override
         public void write(NetworkBuffer buffer, BitSet value) {
-            final int setLength = value.length();
-            if (setLength > length) {
-                throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
-            } else {
-                final byte[] array = value.toByteArray();
-                buffer.write(RAW_BYTES, array);
+            if (value.length() > length) {
+                throw new IllegalArgumentException("BitSet is larger than expected size (" + value.length() + ">" + length + ")");
             }
+            byte[] array = value.toByteArray();
+            final int length = (this.length + 7) / Long.BYTES;
+            if (array.length != length) {
+                array = Arrays.copyOf(array, length);
+            }
+            arrayType.write(buffer, array);
         }
 
         @Override
         public BitSet read(NetworkBuffer buffer) {
-            final byte[] array = buffer.read(FixedRawBytes((length + 7) / 8));
+            final byte[] array = arrayType.read(buffer);
             return BitSet.valueOf(array);
         }
     }

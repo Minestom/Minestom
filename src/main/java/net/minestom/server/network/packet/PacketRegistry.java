@@ -20,7 +20,11 @@ import net.minestom.server.network.packet.server.configuration.*;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.List;
 
 public interface PacketRegistry<T> {
     @UnknownNullability
@@ -37,6 +41,10 @@ public interface PacketRegistry<T> {
     ConnectionState state();
 
     ConnectionSide side();
+
+    @ApiStatus.Experimental
+    @Unmodifiable
+    List<PacketInfo<? extends T>> packets();
 
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
@@ -487,6 +495,11 @@ public interface PacketRegistry<T> {
                 throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
             }
             return info;
+        }
+
+        @Override
+        public @Unmodifiable List<PacketInfo<? extends T>> packets() {
+            return List.of(suppliers);
         }
 
 
