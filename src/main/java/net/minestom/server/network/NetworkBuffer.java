@@ -89,7 +89,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static <E extends Enum<E>> Type<EnumSet<E>> EnumSet(Class<E> enumClass) {
-        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, enumClass.getEnumConstants());
+        final E[] values = enumClass.getEnumConstants();
+        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, values);
     }
 
     static Type<BitSet> FixedBitSet(int length) {

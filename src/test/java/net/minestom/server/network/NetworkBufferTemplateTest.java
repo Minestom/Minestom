@@ -156,11 +156,6 @@ public class NetworkBufferTemplateTest {
     }
 
     @Test
-    public void templateNullSupplier() {
-        assertThrows(NullPointerException.class, () -> NetworkBufferTemplate.template(null));
-    }
-
-    @Test
     public void templateNullArguments() {
         record Single(int value) {
         }

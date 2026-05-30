@@ -480,6 +480,22 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
         return this;
     }
 
+    /**
+     * Equivalent to {@link #withView(float, float)} as this is already a {@link Pos}.
+     * <p>
+     * Marked as deprecated to warn against redundant usage.
+     *
+     * @param yaw   the yaw
+     * @param pitch the pitch
+     * @return a new position with the provided view
+     */
+    @Deprecated
+    @Override
+    @Contract(pure = true, value = "_, _ -> new")
+    public Pos asPos(float yaw, float pitch) {
+        return withView(yaw, pitch);
+    }
+
     @Override
     @Contract(pure = true, value = "-> new")
     public Pos normalize() {

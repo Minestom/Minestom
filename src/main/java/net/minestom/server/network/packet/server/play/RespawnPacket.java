@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record RespawnPacket(
         int dimensionType, String worldName,
-        long hashedSeed, GameMode gameMode, GameMode previousGameMode,
+        long hashedSeed, GameMode gameMode, @Nullable GameMode previousGameMode,
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
         int portalCooldown, int seaLevel, byte copyData
 ) implements ServerPacket.Play {
