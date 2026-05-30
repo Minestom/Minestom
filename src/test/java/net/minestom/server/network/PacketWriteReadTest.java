@@ -25,7 +25,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.message.meMessageType;
+import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.debug.DebugSubscription;
 import net.minestom.server.network.debug.info.DebugHiveInfo;
 import net.minestom.server.network.debug.info.DebugPathInfo;

@@ -337,8 +337,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             }
             if (length == 0) return new byte[0];
             assert length > 0 : "Invalid remaining: " + length;
-            if (buffer.readableBytes() < length)
-                throw new IndexOutOfBoundsException("Buffer needs " + length + " bytes to read");
+            if (length > buffer.readableBytes())
+                throw new IndexOutOfBoundsException("Buffer needs " + length + " bytes to read found" + buffer.readableBytes());
             final int arrayLength = Math.toIntExact(length);
             final byte[] bytes = new byte[arrayLength];
             impl(buffer)._getBytes(buffer.readIndex(), bytes);
