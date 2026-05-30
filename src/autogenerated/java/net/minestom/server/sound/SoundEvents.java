@@ -463,6 +463,8 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ITEM_BUCKET_EMPTY_POWDER_SNOW = BuiltinSoundEvent.get("item.bucket.empty_powder_snow");
 
+    SoundEvent ITEM_BUCKET_EMPTY_SULFUR_CUBE = BuiltinSoundEvent.get("item.bucket.empty_sulfur_cube");
+
     SoundEvent ITEM_BUCKET_EMPTY_TADPOLE = BuiltinSoundEvent.get("item.bucket.empty_tadpole");
 
     SoundEvent ITEM_BUCKET_FILL = BuiltinSoundEvent.get("item.bucket.fill");
@@ -474,6 +476,8 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent ITEM_BUCKET_FILL_LAVA = BuiltinSoundEvent.get("item.bucket.fill_lava");
 
     SoundEvent ITEM_BUCKET_FILL_POWDER_SNOW = BuiltinSoundEvent.get("item.bucket.fill_powder_snow");
+
+    SoundEvent ITEM_BUCKET_FILL_SULFUR_CUBE = BuiltinSoundEvent.get("item.bucket.fill_sulfur_cube");
 
     SoundEvent ITEM_BUCKET_FILL_TADPOLE = BuiltinSoundEvent.get("item.bucket.fill_tadpole");
 
@@ -2069,6 +2073,8 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent MUSIC_DISC_BLOCKS = BuiltinSoundEvent.get("music_disc.blocks");
 
+    SoundEvent MUSIC_DISC_BOUNCE = BuiltinSoundEvent.get("music_disc.bounce");
+
     SoundEvent MUSIC_DISC_CAT = BuiltinSoundEvent.get("music_disc.cat");
 
     SoundEvent MUSIC_DISC_CHIRP = BuiltinSoundEvent.get("music_disc.chirp");
@@ -2158,6 +2164,8 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent MUSIC_OVERWORLD_SPARSE_JUNGLE = BuiltinSoundEvent.get("music.overworld.sparse_jungle");
 
     SoundEvent MUSIC_OVERWORLD_BAMBOO_JUNGLE = BuiltinSoundEvent.get("music.overworld.bamboo_jungle");
+
+    SoundEvent MUSIC_OVERWORLD_SULFUR_CAVES = BuiltinSoundEvent.get("music.overworld.sulfur_caves");
 
     SoundEvent MUSIC_UNDER_WATER = BuiltinSoundEvent.get("music.under_water");
 
@@ -3217,6 +3225,18 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ENTITY_STRAY_STEP = BuiltinSoundEvent.get("entity.stray.step");
 
+    SoundEvent BLOCK_SULFUR_SPIKE_BREAK = BuiltinSoundEvent.get("block.sulfur_spike.break");
+
+    SoundEvent BLOCK_SULFUR_SPIKE_STEP = BuiltinSoundEvent.get("block.sulfur_spike.step");
+
+    SoundEvent BLOCK_SULFUR_SPIKE_PLACE = BuiltinSoundEvent.get("block.sulfur_spike.place");
+
+    SoundEvent BLOCK_SULFUR_SPIKE_HIT = BuiltinSoundEvent.get("block.sulfur_spike.hit");
+
+    SoundEvent BLOCK_SULFUR_SPIKE_FALL = BuiltinSoundEvent.get("block.sulfur_spike.fall");
+
+    SoundEvent BLOCK_SULFUR_SPIKE_LAND = BuiltinSoundEvent.get("block.sulfur_spike.land");
+
     SoundEvent BLOCK_SWEET_BERRY_BUSH_BREAK = BuiltinSoundEvent.get("block.sweet_berry_bush.break");
 
     SoundEvent BLOCK_SWEET_BERRY_BUSH_PLACE = BuiltinSoundEvent.get("block.sweet_berry_bush.place");
@@ -3810,4 +3830,116 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent ITEM_NAUTILUS_SADDLE_UNDERWATER_EQUIP = BuiltinSoundEvent.get("item.nautilus_saddle_underwater_equip");
 
     SoundEvent ITEM_NAUTILUS_SADDLE_EQUIP = BuiltinSoundEvent.get("item.nautilus_saddle_equip");
+
+    SoundEvent BLOCK_SULFUR_BREAK = BuiltinSoundEvent.get("block.sulfur.break");
+
+    SoundEvent BLOCK_SULFUR_STEP = BuiltinSoundEvent.get("block.sulfur.step");
+
+    SoundEvent BLOCK_SULFUR_PLACE = BuiltinSoundEvent.get("block.sulfur.place");
+
+    SoundEvent BLOCK_SULFUR_HIT = BuiltinSoundEvent.get("block.sulfur.hit");
+
+    SoundEvent BLOCK_SULFUR_FALL = BuiltinSoundEvent.get("block.sulfur.fall");
+
+    SoundEvent BLOCK_POTENT_SULFUR_BREAK = BuiltinSoundEvent.get("block.potent_sulfur.break");
+
+    SoundEvent BLOCK_POTENT_SULFUR_STEP = BuiltinSoundEvent.get("block.potent_sulfur.step");
+
+    SoundEvent BLOCK_POTENT_SULFUR_PLACE = BuiltinSoundEvent.get("block.potent_sulfur.place");
+
+    SoundEvent BLOCK_POTENT_SULFUR_HIT = BuiltinSoundEvent.get("block.potent_sulfur.hit");
+
+    SoundEvent BLOCK_POTENT_SULFUR_FALL = BuiltinSoundEvent.get("block.potent_sulfur.fall");
+
+    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_ERUPTION = BuiltinSoundEvent.get("block.potent_sulfur.geyser_eruption");
+
+    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_ERUPTION_ACTIVE = BuiltinSoundEvent.get("block.potent_sulfur.geyser_eruption_active");
+
+    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION = BuiltinSoundEvent.get("block.potent_sulfur.geyser_continuous_eruption");
+
+    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION_ACTIVE = BuiltinSoundEvent.get("block.potent_sulfur.geyser_continuous_eruption_active");
+
+    SoundEvent BLOCK_CINNABAR_BREAK = BuiltinSoundEvent.get("block.cinnabar.break");
+
+    SoundEvent BLOCK_CINNABAR_STEP = BuiltinSoundEvent.get("block.cinnabar.step");
+
+    SoundEvent BLOCK_CINNABAR_PLACE = BuiltinSoundEvent.get("block.cinnabar.place");
+
+    SoundEvent BLOCK_CINNABAR_HIT = BuiltinSoundEvent.get("block.cinnabar.hit");
+
+    SoundEvent BLOCK_CINNABAR_FALL = BuiltinSoundEvent.get("block.cinnabar.fall");
+
+    SoundEvent ENTITY_SULFUR_CUBE_ABSORB = BuiltinSoundEvent.get("entity.sulfur_cube.absorb");
+
+    SoundEvent ENTITY_SULFUR_CUBE_BOUNCE = BuiltinSoundEvent.get("entity.sulfur_cube.bounce");
+
+    SoundEvent ENTITY_SULFUR_CUBE_DEATH = BuiltinSoundEvent.get("entity.sulfur_cube.death");
+
+    SoundEvent ENTITY_SULFUR_CUBE_EJECT = BuiltinSoundEvent.get("entity.sulfur_cube.eject");
+
+    SoundEvent ENTITY_SULFUR_CUBE_HURT = BuiltinSoundEvent.get("entity.sulfur_cube.hurt");
+
+    SoundEvent ENTITY_SULFUR_CUBE_JUMP = BuiltinSoundEvent.get("entity.sulfur_cube.jump");
+
+    SoundEvent ENTITY_SULFUR_CUBE_REGULAR_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.regular.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_REGULAR_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.regular.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_BOUNCY_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.bouncy.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_BOUNCY_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.bouncy.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_BOUNCY_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.slow_bouncy.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_BOUNCY_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.slow_bouncy.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_FLAT_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.slow_flat.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_FLAT_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.slow_flat.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_FAST_FLAT_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.fast_flat.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_FAST_FLAT_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.fast_flat.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_LIGHT_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.light.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_LIGHT_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.light.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_FAST_SLIDING_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.fast_sliding.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_FAST_SLIDING_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.fast_sliding.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_SLIDING_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.slow_sliding.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_SLIDING_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.slow_sliding.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_STICKY_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.sticky.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_STICKY_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.sticky.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.high_resistance.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.high_resistance.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_EXPLOSIVE_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.explosive.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_EXPLOSIVE_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.explosive.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_HOT_HIT = BuiltinSoundEvent.get("entity.sulfur_cube.hot.hit");
+
+    SoundEvent ENTITY_SULFUR_CUBE_HOT_PUSH = BuiltinSoundEvent.get("entity.sulfur_cube.hot.push");
+
+    SoundEvent ENTITY_SULFUR_CUBE_SQUISH = BuiltinSoundEvent.get("entity.sulfur_cube.squish");
+
+    SoundEvent BLOCK_POTENT_SULFUR_NOXIOUS_GAS = BuiltinSoundEvent.get("block.potent_sulfur.noxious_gas");
+
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_DEATH = BuiltinSoundEvent.get("entity.small_sulfur_cube.death");
+
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_HURT = BuiltinSoundEvent.get("entity.small_sulfur_cube.hurt");
+
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_JUMP = BuiltinSoundEvent.get("entity.small_sulfur_cube.jump");
+
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_SQUISH = BuiltinSoundEvent.get("entity.small_sulfur_cube.squish");
+
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_EAT = BuiltinSoundEvent.get("entity.small_sulfur_cube.eat");
 }

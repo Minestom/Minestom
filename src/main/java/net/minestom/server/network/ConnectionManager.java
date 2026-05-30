@@ -210,7 +210,8 @@ public final class ConnectionManager {
             throw new RuntimeException("Error getting replies for login plugin messages", t);
         }
         // Send login success packet (and switch to configuration phase)
-        connection.sendPacket(new LoginSuccessPacket(gameProfile));
+        //TODO(26.2) sessionId is shared, reset on all disconnected, usage likely a p2p/friends thing.
+        connection.sendPacket(new LoginSuccessPacket(gameProfile, UUID.randomUUID()));
         return gameProfile;
     }
 

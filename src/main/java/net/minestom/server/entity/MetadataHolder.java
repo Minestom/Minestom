@@ -10,6 +10,9 @@ import net.minestom.server.entity.metadata.animal.tameable.ParrotMeta;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.avatar.MannequinMeta;
 import net.minestom.server.entity.metadata.avatar.PlayerMeta;
+import net.minestom.server.entity.metadata.cube.MagmaCubeMeta;
+import net.minestom.server.entity.metadata.cube.SlimeMeta;
+import net.minestom.server.entity.metadata.cube.SulfurCubeMeta;
 import net.minestom.server.entity.metadata.display.BlockDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
@@ -343,6 +346,7 @@ public final class MetadataHolder {
         map.put("minecraft:zombified_piglin", ZombifiedPiglinMeta::new);
         map.put("minecraft:player", PlayerMeta::new);
         map.put("minecraft:fishing_bobber", FishingHookMeta::new);
+        map.put("minecraft:sulfur_cube", SulfurCubeMeta::new);
         return Map.copyOf(map);
     }
 }
