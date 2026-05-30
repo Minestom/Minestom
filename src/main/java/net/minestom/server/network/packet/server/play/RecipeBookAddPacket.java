@@ -1,12 +1,14 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.display.RecipeDisplay;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTag;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
     public record Entry(
             int displayId, RecipeDisplay display,
             @Nullable Integer group, RecipeBookCategory category,
-            @Nullable List<Ingredient> craftingRequirements,
+            @Nullable List<RegistryTag<Material>> craftingRequirements,
             byte flags
     ) {
         public static final NetworkBuffer.Type<Entry> SERIALIZER = NetworkBufferTemplate.template(
@@ -40,7 +42,7 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
                 RecipeDisplay.NETWORK_TYPE, Entry::display,
                 NetworkBuffer.OPTIONAL_VAR_INT, Entry::group,
                 RecipeBookCategory.NETWORK_TYPE, Entry::category,
-                Ingredient.NETWORK_TYPE.list().optional(), Entry::craftingRequirements,
+                RegistryTag.networkType(Registries::material).list().optional(), Entry::craftingRequirements,
                 NetworkBuffer.BYTE, Entry::flags,
                 Entry::new);
 
@@ -50,7 +52,7 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
 
         public Entry(int displayId, RecipeDisplay display,
                      @Nullable Integer group, RecipeBookCategory category,
-                     @Nullable List<Ingredient> craftingRequirements,
+                     @Nullable List<RegistryTag<Material>> craftingRequirements,
                      boolean notification, boolean highlight) {
             this(displayId, display, group, category, craftingRequirements,
                     (byte) ((notification ? FLAG_NOTIFICATION : 0) | (highlight ? FLAG_HIGHLIGHT : 0)));

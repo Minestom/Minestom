@@ -4,8 +4,9 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeProperty;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.recipe.display.SlotDisplay;
 
 import java.util.List;
@@ -29,11 +30,11 @@ public record DeclareRecipesPacket(
     }
 
     public record StonecutterRecipe(
-            Ingredient ingredient,
+            RegistryTag<Material> ingredient,
             SlotDisplay optionDisplay
     ) {
         public static final NetworkBuffer.Type<StonecutterRecipe> NETWORK_TYPE = NetworkBufferTemplate.template(
-                Ingredient.NETWORK_TYPE, StonecutterRecipe::ingredient,
+                RegistryTag.networkType(Registries::material), StonecutterRecipe::ingredient,
                 SlotDisplay.NETWORK_TYPE, StonecutterRecipe::optionDisplay,
                 StonecutterRecipe::new);
     }

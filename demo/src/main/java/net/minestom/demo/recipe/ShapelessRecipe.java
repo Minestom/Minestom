@@ -2,11 +2,11 @@ package net.minestom.demo.recipe;
 
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
+import net.minestom.server.registry.RegistryTag;
 
 import java.util.List;
 
@@ -26,8 +26,8 @@ public record ShapelessRecipe(
     }
 
     @Override
-    public List<Ingredient> craftingRequirements() {
-        return List.of(new Ingredient(ingredients));
+    public List<RegistryTag<Material>> craftingRequirements() {
+        return List.of(RegistryTag.direct(ingredients));
     }
 
 }
