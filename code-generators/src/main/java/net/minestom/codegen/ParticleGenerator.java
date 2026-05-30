@@ -51,7 +51,7 @@ public record ParticleGenerator(InputStream particleFile,
             final String namespacedName = namespaceShort(key);
 
             final ClassName fieldCN = value.get("hasData").getAsBoolean()
-                    ? ClassName.get("net.minestom.server.particle", "Particle", toPascalCase(namespacedName))
+                    ? getDataImplementation(namespacedName)
                     : particleCN;
 
             particlesInterface.addField(FieldSpec.builder(fieldCN, toConstant(key))
@@ -64,6 +64,16 @@ public record ParticleGenerator(InputStream particleFile,
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build());
+    }
+
+    private static ClassName getDataImplementation(String namespacedName) {
+        //TODO(26.2) remove this hack, as two use another implementation
+        if (namespacedName.startsWith("geyser")) {
+            namespacedName = namespacedName
+                    .replace("geyser_plume", "geyser")
+                    .replace("geyser_poof", "geyser_base");
+        }
+        return ClassName.get("net.minestom.server.particle", "Particle", toPascalCase(namespacedName));
     }
 
     private static String toPascalCase(String input) {

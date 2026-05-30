@@ -7,7 +7,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.metadata.other.SlimeMeta;
+import net.minestom.server.entity.metadata.cube.SlimeMeta;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
 

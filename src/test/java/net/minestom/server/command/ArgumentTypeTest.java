@@ -69,11 +69,10 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentColor() {
-        var arg = ArgumentType.Color("color");
+    public void testArgumentTeamColor() {
+        var arg = ArgumentType.TeamColor("color");
         assertInvalidArg(arg, "invalid_color");
         assertArg(arg, Style.style(NamedTextColor.DARK_PURPLE), "dark_purple");
-        assertArg(arg, Style.empty(), "reset");
     }
 
     @Test

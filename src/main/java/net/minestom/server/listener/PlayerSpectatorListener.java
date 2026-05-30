@@ -8,20 +8,21 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerSpectateEntityEvent;
 import net.minestom.server.event.player.PlayerTeleportToEntityEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.network.packet.client.play.ClientSpectateEntityPacket;
+import net.minestom.server.network.packet.client.play.ClientSpectatorActionPacket;
 import net.minestom.server.network.packet.client.play.ClientTeleportToEntityPacket;
 
 import java.util.UUID;
 
 public class PlayerSpectatorListener {
 
-    public static void listener(ClientSpectateEntityPacket packet, Player player) {
+    public static void listener(ClientSpectatorActionPacket packet, Player player) {
         // Ignore if the player is not in spectator mode
         if (player.getGameMode() != GameMode.SPECTATOR) {
             return;
         }
 
-        final int targetId = packet.targetId();
+        final Integer targetId = packet.targetId();
+        if (targetId == null) return;
         final Entity target = player.getInstance().getEntityById(targetId);
 
         // Check if the target is valid, and the use is allowed
