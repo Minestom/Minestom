@@ -127,7 +127,7 @@ public final class RecipeManager {
             if (!(recipeBookEntry.getKey().display() instanceof RecipeDisplay.Stonecutter stonecutterDisplay))
                 continue;
 
-            final RegistryTag<Material> input = ingredientFromSlotDisplay(stonecutterDisplay.ingredient());
+            final Ingredient input = ingredientFromSlotDisplay(stonecutterDisplay.ingredient());
             if (input == null) continue;
 
             stonecutterRecipes.add(new DeclareRecipesPacket.StonecutterRecipe(input, stonecutterDisplay.result()));
@@ -136,10 +136,13 @@ public final class RecipeManager {
         return new DeclareRecipesPacket(itemPropertiesLists, stonecutterRecipes);
     }
 
-    private static @Nullable RegistryTag<Material> ingredientFromSlotDisplay(SlotDisplay slotDisplay) {
+    private static @Nullable Ingredient ingredientFromSlotDisplay(SlotDisplay slotDisplay) {
         return switch (slotDisplay) {
-            case SlotDisplay.Item item -> RegistryTag.direct(item.material());
-            case SlotDisplay.Tag tag -> Material.staticRegistry().getTag(tag.tag());
+            case SlotDisplay.Item item -> new Ingredient(RegistryTag.direct(item.material()));
+            case SlotDisplay.Tag tag -> {
+                final RegistryTag<Material> tagValue = Material.staticRegistry().getTag(tag.tag());
+                yield tagValue != null ? new Ingredient(tagValue) : null;
+            }
             default -> null;
         };
     }

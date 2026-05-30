@@ -3,7 +3,6 @@ package net.minestom.server.recipe;
 import net.minestom.server.item.Material;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
-import net.minestom.server.registry.RegistryTag;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public interface Recipe {
         return null;
     }
 
-    default @Nullable List<RegistryTag<Material>> craftingRequirements() {
+    default @Nullable List<Ingredient> craftingRequirements() {
         return null;
     }
 
