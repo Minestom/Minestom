@@ -65,7 +65,6 @@ import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
-import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticCategory;
@@ -249,11 +248,11 @@ public class PacketWriteReadTest {
                 RecipeProperty.BLAST_FURNACE_INPUT, List.of(Material.IRON_HOE, Material.DANDELION),
                 RecipeProperty.SMOKER_INPUT, List.of(Material.STONE),
                 RecipeProperty.CAMPFIRE_INPUT, List.of(Material.STONE)),
-                List.of(new DeclareRecipesPacket.StonecutterRecipe(new Ingredient(RegistryTag.direct(Material.DIAMOND)),
+                List.of(new DeclareRecipesPacket.StonecutterRecipe(new Ingredient(Material.DIAMOND),
                         new SlotDisplay.ItemStack(ItemStack.of(Material.GOLD_BLOCK))))
         ));
         addServerPackets(new RecipeBookAddPacket(List.of(new RecipeBookAddPacket.Entry(1, recipeDisplay, null,
-                RecipeBookCategory.CRAFTING_MISC, List.of(new Ingredient(RegistryTag.direct(Material.STONE))), true, true)), false));
+                RecipeBookCategory.CRAFTING_MISC, List.of(new Ingredient(Material.STONE)), true, true)), false));
         addServerPackets(new RecipeBookRemovePacket(List.of(1)));
 
         addServerPackets(new DestroyEntitiesPacket(List.of(5, 5, 5)));

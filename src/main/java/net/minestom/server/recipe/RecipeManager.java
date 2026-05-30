@@ -138,7 +138,7 @@ public final class RecipeManager {
 
     private static @Nullable Ingredient ingredientFromSlotDisplay(SlotDisplay slotDisplay) {
         return switch (slotDisplay) {
-            case SlotDisplay.Item item -> new Ingredient(RegistryTag.direct(item.material()));
+            case SlotDisplay.Item item -> new Ingredient(item.material());
             case SlotDisplay.Tag tag -> {
                 final RegistryTag<Material> tagValue = Material.staticRegistry().getTag(tag.tag());
                 yield tagValue != null ? new Ingredient(tagValue) : null;

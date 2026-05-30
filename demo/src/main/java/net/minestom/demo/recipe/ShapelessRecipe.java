@@ -7,7 +7,6 @@ import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
-import net.minestom.server.registry.RegistryTag;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public record ShapelessRecipe(
 
     @Override
     public List<Ingredient> craftingRequirements() {
-        return List.of(new Ingredient(RegistryTag.direct(ingredients)));
+        return List.of(new Ingredient(ingredients));
     }
 
 }
