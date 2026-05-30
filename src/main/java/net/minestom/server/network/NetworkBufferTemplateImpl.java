@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.classfile.ClassFile;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 
+@ApiStatus.Internal
 final class NetworkBufferTemplateImpl {
     private static final String PACKAGE = "net.minestom.server.network";
     private static final ClassDesc CD_OBJECT = ConstantDescs.CD_Object;
