@@ -20,12 +20,8 @@ public record Ingredient(RegistryTag<Material> tag) {
     }
 
     public Ingredient(List<Material> items) {
-        this(toTag(items));
-    }
-
-    private static RegistryTag<Material> toTag(List<Material> items) {
         Check.argCondition(items.isEmpty(), "Ingredients can't be empty");
         Check.argCondition(items.contains(Material.AIR), "Ingredient can't contain air");
-        return RegistryTag.direct(items);
+        this(RegistryTag.direct(items));
     }
 }
