@@ -386,6 +386,17 @@ public class VecTest {
     }
 
     @Test
+    public void testAsPosWithView() {
+        Vec vec = new Vec(1, 2, 3);
+        Pos result = vec.asPos(45f, 30f);
+        assertEquals(1, result.x());
+        assertEquals(2, result.y());
+        assertEquals(3, result.z());
+        assertEquals(45f, result.yaw());
+        assertEquals(30f, result.pitch());
+    }
+
+    @Test
     public void testDistance() {
         Vec v1 = new Vec(0, 0, 0);
         Vec v2 = new Vec(3, 4, 0);

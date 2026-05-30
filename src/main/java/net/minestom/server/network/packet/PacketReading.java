@@ -155,9 +155,8 @@ public final class PacketReading {
             return EMPTY_CLIENT_PACKET;
         }
         final int maxPacketSize = maxPacketSize(state);
-        if (packetLength > maxPacketSize) {
-            throw new DataFormatException("Packet too large: " + packetLength);
-        }
+        if (packetLength < 0) throw new DataFormatException("Packet length negative: " + packetLength);
+        if (packetLength > maxPacketSize) throw new DataFormatException("Packet too large: " + packetLength);
         // READ PAYLOAD https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Packet_format
         if (buffer.readableBytes() < packetLength) {
             // Can't read the full packet
