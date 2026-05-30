@@ -751,6 +751,19 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     }
 
     /**
+     * Converts this point to a {@link Pos} with the provided view angles.
+     *
+     * @param yaw   the yaw
+     * @param pitch the pitch
+     * @return the converted position
+     */
+    @Contract(pure = true, value = "_, _ -> new")
+    default Pos asPos(float yaw, float pitch) {
+        assert !(this instanceof Pos) : "Should be overridden";
+        return new Pos(x(), y(), z(), yaw, pitch);
+    }
+
+    /**
      * Converts this point to a {@link Vec}.
      *
      * @return the converted point or this if already a {@link Vec}
