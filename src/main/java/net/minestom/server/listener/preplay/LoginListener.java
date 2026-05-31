@@ -47,37 +47,32 @@ public final class LoginListener {
 
     public static void loginStartListener(ClientLoginStartPacket packet, PlayerConnection connection) {
         final Auth auth = MinecraftServer.process().auth();
+        switch (auth) {
+            case Auth.Velocity _ when connection instanceof PlayerSocketConnection socketConnection ->
+                    connection.loginPluginMessageProcessor().request(Auth.Velocity.PLAYER_INFO_CHANNEL, new byte[0])
+                            .thenAccept(response -> handleVelocityProxyResponse(socketConnection, response));
 
-        // Velocity support (socket connections only)
-        if (auth instanceof Auth.Velocity && connection instanceof PlayerSocketConnection socketConnection) {
-            connection.loginPluginMessageProcessor().request(Auth.Velocity.PLAYER_INFO_CHANNEL, new byte[0])
-                    .thenAccept(response -> handleVelocityProxyResponse(socketConnection, response));
-            return;
-        }
-
-        if (auth instanceof Auth.Online(KeyPair keyPair) && connection instanceof PlayerSocketConnection socketConnection) {
-            if (MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(packet.username()) != null) {
-                connection.kick(ALREADY_CONNECTED);
-                return;
+            case Auth.Online(KeyPair keyPair) when connection instanceof PlayerSocketConnection socketConnection -> {
+                if (MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(packet.username()) != null) {
+                    connection.kick(ALREADY_CONNECTED);
+                    return;
+                }
+                final MojangAuth.LoginChallenge challenge = MojangAuth.LoginChallenge.create(packet.username(), NONCE_RANDOM);
+                socketConnection.UNSAFE_setLoginChallenge(challenge);
+                socketConnection.sendPacket(new EncryptionRequestPacket("", keyPair.getPublic().getEncoded(), challenge.nonce(), true));
             }
-            final MojangAuth.LoginChallenge challenge = MojangAuth.LoginChallenge.create(packet.username(), NONCE_RANDOM);
-            socketConnection.UNSAFE_setLoginChallenge(challenge);
-            socketConnection.sendPacket(new EncryptionRequestPacket("", keyPair.getPublic().getEncoded(), challenge.nonce(), true));
-            return;
-        }
 
-        // Offline / Bungee
-        final GameProfile gameProfile;
-        if (auth instanceof Auth.Bungee) {
-            // LEGACY FORWARDING — use the game profile set during handshake
-            assert connection instanceof PlayerSocketConnection;
-            final GameProfile bungeeProfile = ((PlayerSocketConnection) connection).gameProfile();
-            assert bungeeProfile != null;
-            gameProfile = new GameProfile(bungeeProfile.uuid(), packet.username(), bungeeProfile.properties());
-        } else {
-            gameProfile = new GameProfile(packet.profileId(), packet.username());
+            case Auth.Bungee _ -> {
+                // LEGACY FORWARDING — use the game profile set during handshake
+                assert connection instanceof PlayerSocketConnection;
+                final GameProfile bungeeProfile = ((PlayerSocketConnection) connection).gameProfile();
+                assert bungeeProfile != null;
+                enterConfig(connection, new GameProfile(bungeeProfile.uuid(), packet.username(), bungeeProfile.properties()));
+            }
+
+            // Offline, plus Velocity/Online on non-socket connections
+            default -> enterConfig(connection, new GameProfile(packet.profileId(), packet.username()));
         }
-        enterConfig(connection, gameProfile);
     }
 
     public static void loginEncryptionResponseListener(ClientEncryptionResponsePacket packet, PlayerConnection connection) {
@@ -129,33 +124,28 @@ public final class LoginListener {
         }
 
         final byte[] data = response.payload();
-        SocketAddress socketAddress = null;
-        GameProfile gameProfile = null;
-        boolean success = false;
-        if (data != null && data.length > 0) {
-            NetworkBuffer buffer = NetworkBuffer.wrap(data, 0, data.length);
-            success = velocity.checkIntegrity(buffer);
-            if (success) {
-                // Get the real connection address
-                final InetAddress address;
-                try {
-                    address = InetAddress.getByName(buffer.read(STRING));
-                } catch (UnknownHostException e) {
-                    socketConnection.kick(INVALID_PROXY_RESPONSE);
-                    MinecraftServer.getExceptionManager().handleException(e);
-                    return;
-                }
-                final int port = ((java.net.InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
-                socketAddress = new InetSocketAddress(address, port);
-                gameProfile = GameProfile.SERIALIZER.read(buffer);
-            }
-        }
-        if (!success) {
+        if (data == null || data.length == 0) {
             socketConnection.kick(INVALID_PROXY_RESPONSE);
             return;
         }
-        socketConnection.setRemoteAddress(socketAddress);
-        enterConfig(socketConnection, gameProfile);
+        final NetworkBuffer buffer = NetworkBuffer.wrap(data, 0, data.length);
+        if (!velocity.checkIntegrity(buffer)) {
+            socketConnection.kick(INVALID_PROXY_RESPONSE);
+            return;
+        }
+
+        // Get the real connection address
+        final InetAddress address;
+        try {
+            address = InetAddress.getByName(buffer.read(STRING));
+        } catch (UnknownHostException e) {
+            socketConnection.kick(INVALID_PROXY_RESPONSE);
+            MinecraftServer.getExceptionManager().handleException(e);
+            return;
+        }
+        final int port = ((InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
+        socketConnection.setRemoteAddress(new InetSocketAddress(address, port));
+        enterConfig(socketConnection, GameProfile.SERIALIZER.read(buffer));
     }
 
     public static void loginPluginResponseListener(ClientLoginPluginResponsePacket packet, PlayerConnection connection) {
