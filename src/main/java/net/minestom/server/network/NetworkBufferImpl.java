@@ -436,8 +436,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
         var src = impl(srcBuffer);
         var dst = impl(dstBuffer);
         dst.assertReadOnly();
-        Objects.checkFromIndexSize(srcOffset, length, src.capacity());
-        Objects.checkFromIndexSize(dstOffset, length, dst.capacity());
         MemorySegment.copy(src.segment, srcOffset, dst.segment, dstOffset, length);
     }
 
