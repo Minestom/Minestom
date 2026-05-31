@@ -40,7 +40,7 @@ public sealed interface Biome extends Biomes permits BiomeImpl {
         return new Builder();
     }
 
-    static Builder Builder(Biome existing) {
+    static Builder builder(Biome existing) {
         return new Builder(existing);
     }
 
