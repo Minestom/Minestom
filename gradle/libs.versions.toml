@@ -20,10 +20,10 @@ jmh = "1.37"
 jcstress = "0.16"
 
 # Code Generation
-javaPoet = "0.15.0"
+javaPoet = "0.16.0"
 
 # Log impl (for demo)
-logback = "1.5.32"
+logback = "1.5.33"
 
 # Gradle plugins
 blossom = "2.2.0"

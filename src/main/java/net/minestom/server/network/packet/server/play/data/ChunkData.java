@@ -11,6 +11,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.block.BlockUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -76,6 +77,22 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
             blockEntities.put(index, block.withNbt(nbt));
         }
         return blockEntities;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ChunkData(
+                Map<Heightmap.Type, long[]> heightmaps1, byte[] data1, Map<Integer, Block> entities
+        ))) return false;
+        return Arrays.equals(data(), data1) && blockEntities().equals(entities) && heightmaps().equals(heightmaps1);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = heightmaps().hashCode();
+        result = 31 * result + Arrays.hashCode(data());
+        result = 31 * result + blockEntities().hashCode();
+        return result;
     }
 
     public record Section(short blockCount, short liquidCount, Palette blockStates, Palette biomes) {
