@@ -19,12 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Demonstrates that the online-login server flow can be exercised end-to-end without
- * booting a {@code MinecraftServer}: a synthetic keypair plus a fake {@link MojangAuth.SessionClient}
- * is all that's needed to drive {@link MojangAuth#completeOnlineLogin}.
+ * Demonstrates that the online-login crypto can be exercised without booting a {@code MinecraftServer}:
+ * a synthetic keypair is all that's needed to drive {@link MojangAuth#verifyEncryptionResponse},
+ * {@link MojangAuth#serverIdHash} and {@link MojangAuth#parseProfile}.
  */
 class MojangAuthTest {
 
@@ -87,7 +86,7 @@ class MojangAuthTest {
     }
 
     @Test
-    void completes_online_login_with_fake_session_server() throws Exception {
+    void verifies_encryption_response_and_recovers_shared_secret() throws Exception {
         final KeyPair kp = MojangCrypt.generateKeyPair();
         final SecretKey aes = KeyGenerator.getInstance("AES").generateKey();
         final byte[] nonce = {7, 7, 7, 7};
@@ -97,21 +96,10 @@ class MojangAuthTest {
                 rsaEncrypt(kp.getPublic(), nonce));
         final MojangAuth.LoginChallenge challenge = new MojangAuth.LoginChallenge("Steve", nonce);
 
-        final JsonObject canned = JsonParser.parseString("""
-                {"id":"%s","name":"Steve","properties":[]}""".formatted(NOTCH_DASHLESS)).getAsJsonObject();
-        final String expectedServerId = MojangAuth.serverIdHash(kp.getPublic(), aes);
-        final MojangAuth.SessionClient fake = (user, serverId, ip) -> {
-            assertEquals("Steve", user);
-            assertEquals(expectedServerId, serverId);
-            return canned;
-        };
-
-        final MojangAuth.AuthResult result = MojangAuth.completeOnlineLogin(
-                kp, challenge, packet, false, null, fake);
-
-        assertEquals("Steve", result.profile().name());
-        assertEquals(NOTCH_UUID, result.profile().uuid());
-        assertArrayEquals(aes.getEncoded(), result.encryptionKey().getEncoded());
+        final SecretKey recovered = MojangAuth.verifyEncryptionResponse(kp, challenge, packet, false);
+        assertArrayEquals(aes.getEncoded(), recovered.getEncoded());
+        // serverId is derived purely from the recovered secret + server key, so it matches what the client computed.
+        assertEquals(MojangAuth.serverIdHash(kp.getPublic(), aes), MojangAuth.serverIdHash(kp.getPublic(), recovered));
     }
 
     @Test
@@ -124,10 +112,8 @@ class MojangAuthTest {
                 rsaEncrypt(kp.getPublic(), new byte[]{9, 9, 9, 9}));
         final MojangAuth.LoginChallenge challenge = new MojangAuth.LoginChallenge("Steve", new byte[]{1, 2, 3, 4});
 
-        final MojangAuth.AuthException ex = assertThrows(MojangAuth.AuthException.class, () ->
-                MojangAuth.completeOnlineLogin(kp, challenge, packet, false, null,
-                        (u, s, ip) -> fail("session server must not be contacted on auth failure")));
-        assertEquals(MojangAuth.AuthException.Reason.VERIFY_TOKEN_INVALID, ex.reason());
+        assertThrows(MojangAuth.AuthException.class, () ->
+                MojangAuth.verifyEncryptionResponse(kp, challenge, packet, false));
     }
 
     @Test
@@ -143,10 +129,8 @@ class MojangAuthTest {
                 rsaEncrypt(kp.getPublic(), nonce));
         final MojangAuth.LoginChallenge challenge = new MojangAuth.LoginChallenge("Steve", nonce);
 
-        final MojangAuth.AuthException ex = assertThrows(MojangAuth.AuthException.class, () ->
-                MojangAuth.completeOnlineLogin(kp, challenge, packet, /*clientHasPublicKey=*/ true,
-                        null, (u, s, ip) -> fail("session server must not be contacted")));
-        assertEquals(MojangAuth.AuthException.Reason.VERIFY_TOKEN_INVALID, ex.reason());
+        assertThrows(MojangAuth.AuthException.class, () ->
+                MojangAuth.verifyEncryptionResponse(kp, challenge, packet, /*clientHasPublicKey=*/ true));
     }
 
     @Test
@@ -160,29 +144,8 @@ class MojangAuthTest {
                 rsaEncrypt(kp.getPublic(), aes.getEncoded()), garbage);
         final MojangAuth.LoginChallenge challenge = new MojangAuth.LoginChallenge("Steve", new byte[]{1, 2, 3, 4});
 
-        final MojangAuth.AuthException ex = assertThrows(MojangAuth.AuthException.class, () ->
-                MojangAuth.completeOnlineLogin(kp, challenge, packet, false, null,
-                        (u, s, ip) -> fail("session server must not be contacted")));
-        assertEquals(MojangAuth.AuthException.Reason.VERIFY_TOKEN_INVALID, ex.reason());
-    }
-
-    @Test
-    void propagates_session_server_io_failure() throws Exception {
-        final KeyPair kp = MojangCrypt.generateKeyPair();
-        final SecretKey aes = KeyGenerator.getInstance("AES").generateKey();
-        final byte[] nonce = {1, 2, 3, 4};
-
-        final ClientEncryptionResponsePacket packet = new ClientEncryptionResponsePacket(
-                rsaEncrypt(kp.getPublic(), aes.getEncoded()),
-                rsaEncrypt(kp.getPublic(), nonce));
-        final MojangAuth.LoginChallenge challenge = new MojangAuth.LoginChallenge("Steve", nonce);
-        final MojangAuth.SessionClient brokenServer = (u, s, ip) -> {
-            throw new java.io.IOException("mojang down");
-        };
-
-        final java.io.IOException ex = assertThrows(java.io.IOException.class, () ->
-                MojangAuth.completeOnlineLogin(kp, challenge, packet, false, null, brokenServer));
-        assertEquals("mojang down", ex.getMessage());
+        assertThrows(MojangAuth.AuthException.class, () ->
+                MojangAuth.verifyEncryptionResponse(kp, challenge, packet, false));
     }
 
     private static byte[] rsaEncrypt(PublicKey key, byte[] data) throws Exception {

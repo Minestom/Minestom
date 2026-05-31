@@ -7,9 +7,7 @@ import net.minestom.server.network.player.GameProfile;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.net.InetAddress;
 import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,7 +19,10 @@ import java.util.UUID;
 import java.util.random.RandomGenerator;
 
 /**
- * Stateless primitives for Mojang online-mode login. Entry point: {@link #completeOnlineLogin}.
+ * Stateless crypto primitives for Mojang online-mode login. Pure: no IO and no server state.
+ * The session-server {@code hasJoined} call lives in {@link net.minestom.server.utils.mojang.MojangUtils};
+ * a caller {@linkplain #verifyEncryptionResponse verifies} the encryption response here, hashes the
+ * {@linkplain #serverIdHash server id}, fetches the profile JSON, then {@linkplain #parseProfile parses} it.
  */
 public final class MojangAuth {
     private MojangAuth() {
@@ -39,39 +40,16 @@ public final class MojangAuth {
     }
 
     /**
-     * Resolved profile + AES session key to install on the connection.
-     */
-    public record AuthResult(GameProfile profile, SecretKey encryptionKey) {
-    }
-
-    /**
-     * Auth payload is invalid. Distinct from {@link IOException}, which signals a transport failure to Mojang.
+     * The client's encryption response failed verification: bad verify token or undecryptable shared secret.
      */
     public static final class AuthException extends Exception {
-        public enum Reason {VERIFY_TOKEN_INVALID, SHARED_SECRET_INVALID}
-
-        private final Reason reason;
-
-        public AuthException(Reason reason, String message) {
-            this(reason, message, null);
+        public AuthException(String message) {
+            this(message, null);
         }
 
-        public AuthException(Reason reason, String message, @Nullable Throwable cause) {
+        public AuthException(String message, @Nullable Throwable cause) {
             super(message, cause);
-            this.reason = reason;
         }
-
-        public Reason reason() {
-            return reason;
-        }
-    }
-
-    /**
-     * Seam for the Mojang {@code hasJoined} call. Production: {@code MojangUtils::authenticateSession}.
-     */
-    @FunctionalInterface
-    public interface SessionClient {
-        JsonObject hasJoined(String username, String serverId, @Nullable InetAddress clientIp) throws IOException;
     }
 
     /**
@@ -108,37 +86,29 @@ public final class MojangAuth {
     }
 
     /**
-     * Verify-token check, shared-secret decryption, Mojang {@code hasJoined}, profile parse.
+     * Verifies the client's encryption response and returns the negotiated AES session key.
+     * Checks the verify-token nonce, then decrypts the shared secret.
      * {@code clientHasPublicKey=true} forces rejection (legacy chat-signing path).
-     * {@code clientIp} is forwarded to Mojang for {@code AUTH_PREVENT_PROXY_CONNECTIONS} when non-null.
      */
-    public static AuthResult completeOnlineLogin(
+    public static SecretKey verifyEncryptionResponse(
             KeyPair serverKeyPair,
             LoginChallenge challenge,
             ClientEncryptionResponsePacket response,
-            boolean clientHasPublicKey,
-            @Nullable InetAddress clientIp,
-            SessionClient sessionClient
-    ) throws AuthException, IOException {
+            boolean clientHasPublicKey
+    ) throws AuthException {
         final byte[] decryptedVerifyToken;
         try {
             decryptedVerifyToken = MojangCrypt.decryptUsingKey(serverKeyPair.getPrivate(), response.encryptedVerifyToken());
         } catch (MojangCrypt.CryptoException e) {
-            throw new AuthException(AuthException.Reason.VERIFY_TOKEN_INVALID, "Failed to decrypt verify token", e);
+            throw new AuthException("Failed to decrypt verify token", e);
         }
         if (clientHasPublicKey || !Arrays.equals(challenge.nonce(), decryptedVerifyToken)) {
-            throw new AuthException(AuthException.Reason.VERIFY_TOKEN_INVALID, "Verify token mismatch");
+            throw new AuthException("Verify token mismatch");
         }
-
-        final SecretKey secretKey;
         try {
-            secretKey = MojangCrypt.decryptByteToSecretKey(serverKeyPair.getPrivate(), response.sharedSecret());
+            return MojangCrypt.decryptByteToSecretKey(serverKeyPair.getPrivate(), response.sharedSecret());
         } catch (MojangCrypt.CryptoException e) {
-            throw new AuthException(AuthException.Reason.SHARED_SECRET_INVALID, "Failed to decrypt shared secret", e);
+            throw new AuthException("Failed to decrypt shared secret", e);
         }
-
-        final String serverId = serverIdHash(serverKeyPair.getPublic(), secretKey);
-        final JsonObject hasJoined = sessionClient.hasJoined(challenge.username(), serverId, clientIp);
-        return new AuthResult(parseProfile(hasJoined), secretKey);
     }
 }

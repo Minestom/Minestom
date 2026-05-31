@@ -1,5 +1,6 @@
 package net.minestom.server.listener.preplay;
 
+import com.google.gson.JsonObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.Auth;
@@ -24,6 +25,7 @@ import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.utils.mojang.MojangUtils;
 import org.jetbrains.annotations.Nullable;
 
+import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -90,18 +92,17 @@ public final class LoginListener {
         }
 
         try {
-            final MojangAuth.AuthResult result = MojangAuth.completeOnlineLogin(
-                    keyPair,
-                    challenge,
-                    packet,
-                    connection.playerPublicKey() != null,
-                    clientIpForMojang(socketConnection.getRemoteAddress()),
-                    MojangUtils::authenticateSession);
-            socketConnection.setEncryptionKey(result.encryptionKey());
-            MinecraftServer.LOGGER.info("UUID of player {} is {}", result.profile().name(), result.profile().uuid());
-            enterConfig(connection, result.profile());
+            final SecretKey encryptionKey = MojangAuth.verifyEncryptionResponse(
+                    keyPair, challenge, packet, connection.playerPublicKey() != null);
+            final String serverId = MojangAuth.serverIdHash(keyPair.getPublic(), encryptionKey);
+            final JsonObject hasJoined = MojangUtils.authenticateSession(
+                    challenge.username(), serverId, clientIpForMojang(socketConnection.getRemoteAddress()));
+            final GameProfile profile = MojangAuth.parseProfile(hasJoined);
+            socketConnection.setEncryptionKey(encryptionKey);
+            MinecraftServer.LOGGER.info("UUID of player {} is {}", profile.name(), profile.uuid());
+            enterConfig(connection, profile);
         } catch (MojangAuth.AuthException e) {
-            MinecraftServer.LOGGER.error("Encryption failed for {}: {}", challenge.username(), e.reason(), e);
+            MinecraftServer.LOGGER.error("Encryption failed for {}: {}", challenge.username(), e.getMessage(), e);
             connection.kick(ENCRYPTION_FAILED);
         } catch (IOException e) {
             socketConnection.kick(ERROR_MOJANG_RESPONSE);
