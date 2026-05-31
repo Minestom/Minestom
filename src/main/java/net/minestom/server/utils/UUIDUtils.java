@@ -24,15 +24,9 @@ public final class UUIDUtils {
     }
 
     /**
-     * Parses a {@link UUID} from its hexadecimal string representation, accepting both the
-     * dashed canonical form ({@code d2ac7139-76a6-435b-b659-7852d34dd7a3}) and the dashless
-     * form returned by the Mojang session server ({@code d2ac713976a6435bb6597852d34dd7a3}).
-     * <p>
-     * Parsing is done in a single pass without any allocation, making it faster than
-     * {@link UUID#fromString(String)}.
+     * Parses a {@link UUID} from its hexadecimal string, accepting both the dashed canonical
+     * form and the dashless form (e.g. as returned by the Mojang session server).
      *
-     * @param input the dashed or dashless UUID string
-     * @return the parsed {@link UUID}
      * @throws IllegalArgumentException if the input does not contain exactly 32 hex digits
      */
     public static UUID fromString(String input) {

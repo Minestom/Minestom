@@ -123,7 +123,6 @@ public final class CodecTest {
     void uuidStringRoundTrip() {
         var uuid = UUID.fromString("d2ac7139-76a6-435b-b659-7852d34dd7a3");
         var encoded = Codec.UUID_STRING.encode(Transcoder.JSON, uuid);
-        // Encoding always produces the canonical dashed form.
         assertEquals("d2ac7139-76a6-435b-b659-7852d34dd7a3",
                 Transcoder.JSON.getString(encoded.orElseThrow()).orElseThrow());
         var decoded = Codec.UUID_STRING.decode(Transcoder.JSON, encoded.orElseThrow());
@@ -132,7 +131,6 @@ public final class CodecTest {
 
     @Test
     void uuidStringDashlessDecode() {
-        // Mojang's session server returns dashless UUIDs.
         var uuid = UUID.fromString("ab70ecb4-2346-4c14-a52d-7a091507c24e");
         var decoded = Codec.UUID_STRING.decode(Transcoder.JSON, Transcoder.JSON.createString("ab70ecb423464c14a52d7a091507c24e"));
         assertEquals(uuid, CodecAssertions.assertOk(decoded));

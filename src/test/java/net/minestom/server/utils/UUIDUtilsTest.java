@@ -39,7 +39,6 @@ class UUIDUtilsTest {
 
     @Test
     void fromStringDashless() {
-        // The dashless form is what the Mojang session server returns.
         assertEquals(TEST_UUID, UUIDUtils.fromString("d2ac713976a6435bb6597852d34dd7a3"));
         assertEquals(UUID.fromString("ab70ecb4-2346-4c14-a52d-7a091507c24e"),
                 UUIDUtils.fromString("ab70ecb423464c14a52d7a091507c24e"));
@@ -53,11 +52,8 @@ class UUIDUtilsTest {
     @Test
     void fromStringInvalid() {
         assertThrows(IllegalArgumentException.class, () -> UUIDUtils.fromString("not a uuid"));
-        // Too few hex digits.
         assertThrows(IllegalArgumentException.class, () -> UUIDUtils.fromString("d2ac713976a6435bb6597852d34dd7a"));
-        // Too many hex digits.
         assertThrows(IllegalArgumentException.class, () -> UUIDUtils.fromString("d2ac713976a6435bb6597852d34dd7a33"));
-        // Non-hex character.
         assertThrows(IllegalArgumentException.class, () -> UUIDUtils.fromString("g2ac713976a6435bb6597852d34dd7a3"));
     }
 }
