@@ -44,6 +44,7 @@ import net.minestom.server.world.biome.Biome;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.ServerSocketChannel;
@@ -119,9 +120,7 @@ public final class Scratch {
                                 case ClientLoginStartPacket login -> connection.send(new LoginSuccessPacket(
                                         new GameProfile(login.profileId(), login.username())));
                                 case ClientLoginAcknowledgedPacket _ -> sendConfigurationStart(connection);
-                                case ClientSelectKnownPacksPacket knownPacks ->
-                                        sendConfigurationData(connection, registries,
-                                                knownPacks.entries().contains(SelectKnownPacksPacket.MINECRAFT_CORE));
+                                case ClientSelectKnownPacksPacket _ -> sendConfigurationData(connection, registries);
                                 case ClientFinishConfigurationPacket _ ->
                                         sendJoinGame(connection, registries, flatWorld);
                                 default -> {
@@ -149,8 +148,8 @@ public final class Scratch {
         connection.send(new SelectKnownPacksPacket(List.of(SelectKnownPacksPacket.MINECRAFT_CORE)));
     }
 
-    private static void sendConfigurationData(Connection connection, Registries registries, boolean excludeVanilla) {
-        for (SendablePacket packet : Registries.registryDataPackets(registries, excludeVanilla)) {
+    private static void sendConfigurationData(Connection connection, Registries registries) {
+        for (SendablePacket packet : Registries.registryDataPackets(registries, false)) {
             connection.send(packet);
         }
 
@@ -182,7 +181,7 @@ public final class Scratch {
         connection.send(new UpdateViewPositionPacket(0, 0));
         connection.send(new ChunkBatchStartPacket());
         ChunkRange.chunksInRange(0, 0, VIEW_DISTANCE, (chunkX, chunkZ) -> connection.send(flatWorld.chunk(chunkX, chunkZ)));
-        connection.send(new ChunkBatchFinishedPacket((VIEW_DISTANCE * 2 + 1) * (VIEW_DISTANCE * 2 + 1)));
+        connection.send(new ChunkBatchFinishedPacket(ChunkRange.chunksCount(VIEW_DISTANCE)));
     }
 
     private static final class Connection {
@@ -204,13 +203,10 @@ public final class Scratch {
             serverState = PacketVanilla.nextServerState(serverPacket, serverState);
             NetworkBuffer buffer = NetworkBuffer.resizableBuffer(1024, registries);
             PacketWriting.writeFramedPacket(buffer, previousState, serverPacket, 0);
-            while (true) {
-                try {
-                    if (buffer.writeChannel(channel)) break;
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                Thread.onSpinWait();
+            try {
+                while (!buffer.writeChannel(channel)) Thread.onSpinWait();
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
             }
         }
     }
