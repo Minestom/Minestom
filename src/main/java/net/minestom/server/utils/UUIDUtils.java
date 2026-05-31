@@ -23,6 +23,35 @@ public final class UUIDUtils {
         return UNIQUE_ID_PATTERN.matcher(input).matches();
     }
 
+    /**
+     * Parses a {@link UUID} from its hexadecimal string representation, accepting both the
+     * dashed canonical form ({@code d2ac7139-76a6-435b-b659-7852d34dd7a3}) and the dashless
+     * form returned by the Mojang session server ({@code d2ac713976a6435bb6597852d34dd7a3}).
+     * <p>
+     * Parsing is done in a single pass without any allocation, making it faster than
+     * {@link UUID#fromString(String)}.
+     *
+     * @param input the dashed or dashless UUID string
+     * @return the parsed {@link UUID}
+     * @throws IllegalArgumentException if the input does not contain exactly 32 hex digits
+     */
+    public static UUID fromString(String input) {
+        long most = 0, least = 0;
+        int count = 0;
+        for (int i = 0, length = input.length(); i < length; i++) {
+            final char c = input.charAt(i);
+            if (c == '-') continue;
+            final int digit = Character.digit(c, 16);
+            if (digit < 0 || count >= 32)
+                throw new IllegalArgumentException("Invalid UUID string: " + input);
+            if (count < 16) most = most << 4 | digit;
+            else least = least << 4 | digit;
+            count++;
+        }
+        if (count != 32) throw new IllegalArgumentException("Invalid UUID string: " + input);
+        return new UUID(most, least);
+    }
+
     public static UUID fromNbt(IntArrayBinaryTag tag) {
         return intArrayToUuid(tag.value());
     }

@@ -114,7 +114,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     Codec<UUID> UUID = Codec.INT_ARRAY.transform(UUIDUtils::intArrayToUuid, UUIDUtils::uuidToIntArray);
 
-    Codec<UUID> UUID_STRING = STRING.transform(java.util.UUID::fromString, java.util.UUID::toString);
+    Codec<UUID> UUID_STRING = STRING.transform(UUIDUtils::fromString, java.util.UUID::toString);
 
     Codec<UUID> UUID_COERCED = UUID.orElse(UUID_STRING);
 
