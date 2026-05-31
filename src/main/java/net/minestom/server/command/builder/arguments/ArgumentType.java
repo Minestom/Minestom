@@ -116,6 +116,13 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentHexColor
+     */
+    public static ArgumentHexColor HexColor(String id) {
+        return new ArgumentHexColor(id);
+    }
+
+    /**
      * @see ArgumentTime
      */
     public static ArgumentTime Time(String id) {
