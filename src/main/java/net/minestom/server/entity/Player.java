@@ -830,8 +830,20 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         EntityPose oldPose = getPose();
         EntityPose newPose;
 
-        // Figure out their expected state
         var meta = getEntityMeta();
+
+        if (instance != null) {
+            Pos pos = getPosition();
+            int eyeBlockX = pos.blockX();
+            int eyeBlockY = (int) Math.floor(pos.y() + getEyeHeight());
+            int eyeBlockZ = pos.blockZ();
+            Block eyeBlock = instance.getBlock(eyeBlockX, eyeBlockY, eyeBlockZ, Block.Getter.Condition.TYPE);
+            boolean eyeInWater = eyeBlock.compare(Block.WATER)
+                    || "true".equals(instance.getBlock(eyeBlockX, eyeBlockY, eyeBlockZ).getProperty("waterlogged"));
+            meta.setSwimming(eyeInWater && isSprinting() && getVehicle() == null);
+        }
+
+        // Figure out their expected state
         if (meta.isFlyingWithElytra()) {
             newPose = EntityPose.FALL_FLYING;
         } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.getBedInWhichSleepingPosition() != null) {
