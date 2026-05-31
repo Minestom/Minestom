@@ -1,5 +1,6 @@
 package net.minestom.demo;
 
+import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.RelativeFlags;
@@ -142,14 +143,13 @@ public final class Scratch {
         }
     }
 
-    private static void sendConfigurationStart(Connection connection) throws IOException {
+    private static void sendConfigurationStart(Connection connection) {
         connection.send(PluginMessagePacket.brandPacket("Minestom Scratch"));
         connection.send(new UpdateEnabledFeaturesPacket(List.of("minecraft:vanilla")));
         connection.send(new SelectKnownPacksPacket(List.of(SelectKnownPacksPacket.MINECRAFT_CORE)));
     }
 
-    private static void sendConfigurationData(Connection connection, Registries registries, boolean excludeVanilla)
-            throws IOException {
+    private static void sendConfigurationData(Connection connection, Registries registries, boolean excludeVanilla) {
         for (SendablePacket packet : Registries.registryDataPackets(registries, excludeVanilla)) {
             connection.send(packet);
         }
@@ -158,7 +158,7 @@ public final class Scratch {
         connection.send(new FinishConfigurationPacket());
     }
 
-    private static void sendJoinGame(Connection connection, Registries registries, FlatWorld flatWorld) throws IOException {
+    private static void sendJoinGame(Connection connection, Registries registries, FlatWorld flatWorld) {
         int dimensionTypeId = registries.dimensionType().getId(DimensionType.OVERWORLD);
         var spawn = new Vec(8.5, GROUND_Y + 2, 8.5);
 
@@ -181,11 +181,7 @@ public final class Scratch {
         connection.send(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.LEVEL_CHUNKS_LOAD_START, 0));
         connection.send(new UpdateViewPositionPacket(0, 0));
         connection.send(new ChunkBatchStartPacket());
-        for (int chunkX = -VIEW_DISTANCE; chunkX <= VIEW_DISTANCE; chunkX++) {
-            for (int chunkZ = -VIEW_DISTANCE; chunkZ <= VIEW_DISTANCE; chunkZ++) {
-                connection.send(flatWorld.chunk(chunkX, chunkZ));
-            }
-        }
+        ChunkRange.chunksInRange(0, 0, VIEW_DISTANCE, (chunkX, chunkZ) -> connection.send(flatWorld.chunk(chunkX, chunkZ)));
         connection.send(new ChunkBatchFinishedPacket((VIEW_DISTANCE * 2 + 1) * (VIEW_DISTANCE * 2 + 1)));
     }
 
@@ -201,14 +197,21 @@ public final class Scratch {
             this.readBuffer = NetworkBuffer.resizableBuffer(4096, registries);
         }
 
-        private void send(SendablePacket packet) throws IOException {
+        private void send(SendablePacket packet) {
             ConnectionState previousState = serverState;
             ServerPacket serverPacket = SendablePacket.extractServerPacket(previousState, packet);
             if (serverPacket == null) throw new IllegalArgumentException("Unsupported packet: " + packet);
             serverState = PacketVanilla.nextServerState(serverPacket, serverState);
             NetworkBuffer buffer = NetworkBuffer.resizableBuffer(1024, registries);
             PacketWriting.writeFramedPacket(buffer, previousState, serverPacket, 0);
-            while (!buffer.writeChannel(channel)) Thread.onSpinWait();
+            while (true) {
+                try {
+                    if (buffer.writeChannel(channel)) break;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Thread.onSpinWait();
+            }
         }
     }
 
