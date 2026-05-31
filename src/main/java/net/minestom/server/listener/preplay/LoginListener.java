@@ -35,6 +35,8 @@ import java.security.SecureRandom;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public final class LoginListener {
+    private static final SecureRandom NONCE_RANDOM = new SecureRandom();
+
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
     private static final Component ERROR_DURING_LOGIN = Component.text("Error during login!", NamedTextColor.RED);
     private static final Component ERROR_MALFORMED_USERNAME = Component.text("Error malformed username", NamedTextColor.RED);
@@ -42,8 +44,6 @@ public final class LoginListener {
     private static final Component ERROR_MOJANG_RESPONSE = Component.text("Failed to contact Mojang's Session Servers (Are they down?)", NamedTextColor.RED);
 
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
-
-    private static final SecureRandom NONCE_RANDOM = new SecureRandom();
 
     public static void loginStartListener(ClientLoginStartPacket packet, PlayerConnection connection) {
         final Auth auth = MinecraftServer.process().auth();
