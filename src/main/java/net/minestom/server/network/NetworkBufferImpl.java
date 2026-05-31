@@ -32,9 +32,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     private static final ValueLayout.OfDouble DOUBLE_LAYOUT = ValueLayout.JAVA_DOUBLE_UNALIGNED.withOrder(BIG_ENDIAN);
 
     private @UnknownNullability MemorySegment segment; // null for dummy buffers
-    private long capacity;
     private long readIndex, writeIndex;
-    boolean readOnly;
 
     private @Nullable BinaryTagWriter nbtWriter;
     private @Nullable BinaryTagReader nbtReader;
@@ -42,15 +40,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
     final @Nullable AutoResize autoResize;
     @Nullable Registries registries;
 
-    // Cached ByteBuffer view over the whole segment, invalidated when the segment changes.
-    private @Nullable ByteBuffer nioBuffer = null;
-
-    NetworkBufferImpl(@UnknownNullability MemorySegment segment, long capacity,
+    NetworkBufferImpl(@UnknownNullability MemorySegment segment,
                       long readIndex, long writeIndex,
                       @Nullable AutoResize autoResize,
                       @Nullable Registries registries) {
         this.segment = segment;
-        this.capacity = capacity;
         this.readIndex = readIndex;
         this.writeIndex = writeIndex;
         this.autoResize = autoResize;
@@ -171,30 +165,32 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public long capacity() {
-        return capacity;
+        final MemorySegment segment = this.segment;
+        return segment != null ? segment.byteSize() : Long.MAX_VALUE;
     }
 
     @Override
     public void readOnly() {
-        this.readOnly = true;
+        final MemorySegment segment = this.segment;
+        if (segment != null) this.segment = segment.asReadOnly();
     }
 
     @Override
     public boolean isReadOnly() {
-        return readOnly;
+        final MemorySegment segment = this.segment;
+        return segment != null && segment.isReadOnly();
     }
 
     @Override
     public void resize(long newSize) {
         assertDummy();
         assertReadOnly();
+        final long capacity = capacity();
         if (newSize < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (newSize == capacity) throw new IllegalArgumentException("New size is the same as the current size");
         final MemorySegment newSegment = Arena.ofAuto().allocate(newSize);
         MemorySegment.copy(segment, 0, newSegment, 0, capacity);
         this.segment = newSegment;
-        this.capacity = newSize;
-        this.nioBuffer = null; // Invalidate cached view, the backing memory moved
     }
 
     @Override
@@ -229,13 +225,10 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
         assertDummy();
-        Objects.checkFromIndexSize(index, length, capacity);
+        Objects.checkFromIndexSize(index, length, capacity());
         final MemorySegment newSegment = Arena.ofAuto().allocate(length);
         MemorySegment.copy(segment, index, newSegment, 0, length);
-        return new NetworkBufferImpl(
-                newSegment, length,
-                readIndex, writeIndex,
-                autoResize, registries);
+        return new NetworkBufferImpl(newSegment, readIndex, writeIndex, autoResize, registries);
     }
 
     @Override
@@ -340,18 +333,13 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     private ByteBuffer bufferSlice(int position, int length) {
-        ByteBuffer nioBuffer = this.nioBuffer;
-        if (nioBuffer == null) {
-            this.nioBuffer = nioBuffer = segment.asByteBuffer().order(BIG_ENDIAN);
-        }
-        nioBuffer.limit(position + length).position(position);
-        return nioBuffer;
+        return segment.asByteBuffer().order(BIG_ENDIAN).limit(position + length).position(position);
     }
 
     @Override
     public String toString() {
         return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, autoResize=%s, readOnly=%s}",
-                readIndex, writeIndex, capacity, registries != null, autoResize != null, readOnly);
+                readIndex, writeIndex, capacity(), registries != null, autoResize != null, isReadOnly());
     }
 
     private boolean isDummy() {
@@ -448,20 +436,20 @@ final class NetworkBufferImpl implements NetworkBuffer {
         var src = impl(srcBuffer);
         var dst = impl(dstBuffer);
         dst.assertReadOnly();
-        Objects.checkFromIndexSize(srcOffset, length, src.capacity);
-        Objects.checkFromIndexSize(dstOffset, length, dst.capacity);
+        Objects.checkFromIndexSize(srcOffset, length, src.capacity());
+        Objects.checkFromIndexSize(dstOffset, length, dst.capacity());
         MemorySegment.copy(src.segment, srcOffset, dst.segment, dstOffset, length);
     }
 
     public static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
         var impl1 = impl(buffer1);
         var impl2 = impl(buffer2);
-        if (impl1.capacity != impl2.capacity) return false;
+        if (impl1.capacity() != impl2.capacity()) return false;
         return impl1.segment.mismatch(impl2.segment) == -1;
     }
 
     void assertReadOnly() {
-        if (readOnly) throw new UnsupportedOperationException("Buffer is read-only");
+        if (isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
     }
 
     void assertDummy() {
@@ -492,20 +480,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
         @Override
         public NetworkBuffer build() {
             final MemorySegment segment = Arena.ofAuto().allocate(initialSize);
-            return new NetworkBufferImpl(
-                    segment, initialSize,
-                    0, 0,
-                    autoResize, registries);
+            return new NetworkBufferImpl(segment, 0, 0, autoResize, registries);
         }
     }
 
     static NetworkBufferImpl dummy(Registries registries) {
         // Dummy buffer with no memory allocated
         // Useful for size calculations
-        return new NetworkBufferImpl(
-                null, Long.MAX_VALUE,
-                0, 0,
-                null, registries);
+        return new NetworkBufferImpl(null, 0, 0, null, registries);
     }
 
     static NetworkBufferImpl impl(NetworkBuffer buffer) {
