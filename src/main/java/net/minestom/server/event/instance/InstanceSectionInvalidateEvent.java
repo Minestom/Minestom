@@ -10,7 +10,10 @@ import org.jetbrains.annotations.ApiStatus;
  * Changes in this case are not known but indicate that its content must be reinterpreted.
  * <p>
  * Can be triggered using {@link Instance#invalidateSection(int, int, int)}
+ * 
+ * @deprecated see {@link Instance#invalidateSection(int, int, int)}
  */
+@Deprecated
 public class InstanceSectionInvalidateEvent implements InstanceEvent {
     private final Instance instance;
     private final int sectionX, sectionY, sectionZ;

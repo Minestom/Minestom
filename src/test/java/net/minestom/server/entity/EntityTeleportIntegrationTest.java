@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionSyncPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
@@ -97,15 +98,15 @@ public class EntityTeleportIntegrationTest {
         player.teleport(new Pos(10, 10, 10, 90, 0)).join();
         assertEquals(new Pos(10, 10, 10, 90, 0), player.getPosition());
 
-        player.teleport(new Pos(0, 0, 0, 0, 0), null, RelativeFlags.ALL).join();
+        player.teleport(new Pos(0, 0, 0, 0, 0), Vec.ZERO, RelativeFlags.ALL).join();
         assertEquals(new Pos(10, 10, 10, 90, 0), player.getPosition());
 
-        player.teleport(new Pos(5, 10, 2, 5, 5), null, RelativeFlags.VIEW).join();
+        player.teleport(new Pos(5, 10, 2, 5, 5), Vec.ZERO, RelativeFlags.VIEW).join();
         assertEquals(new Pos(5, 10, 2, 95, 5), player.getPosition());
     }
 
     @Test
-    public void entityTeleportToInfinity(Env env) throws ExecutionException, InterruptedException, TimeoutException {
+    public void entityTeleportToPositiveInfinity(Env env) throws ExecutionException, InterruptedException, TimeoutException {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -119,5 +120,22 @@ public class EntityTeleportIntegrationTest {
 
         // The position should have been capped at 2 billion.
         assertEquals(new Pos(Entity.MAX_COORDINATE, 42, 52), entity.getPosition());
+    }
+
+    @Test
+    public void entityTeleportToNegativeInfinity(Env env) throws ExecutionException, InterruptedException, TimeoutException {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+        assertEquals(new Pos(0, 42, 0), entity.getPosition());
+
+        entity.teleport(new Pos(Double.NEGATIVE_INFINITY, 42, 52)).join();
+        CompletableFuture.runAsync(() -> entity.tick(0 /* 0 is fine here, it's just a delta*/))
+                .get(10, TimeUnit.SECONDS);
+        // This should not hang forever
+
+        // The position should have been capped at 2 billion.
+        assertEquals(new Pos(-Entity.MAX_COORDINATE, 42, 52), entity.getPosition());
     }
 }

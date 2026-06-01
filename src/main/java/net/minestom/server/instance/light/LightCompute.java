@@ -1,25 +1,25 @@
 package net.minestom.server.instance.light;
 
+import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.collision.Shape;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Function;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 
 public final class LightCompute {
     static final Direction[] DIRECTIONS = Direction.values();
-    static final BlockFace[] FACES = BlockFace.values();
     static final int LIGHT_LENGTH = SECTION_BLOCK_COUNT / 2;
     static final int SECTION_SIZE = 16;
 
-    public static final byte[] UNSET_CONTENT = new byte[0];
     public static final byte[] EMPTY_CONTENT = new byte[LIGHT_LENGTH];
     public static final byte[] CONTENT_FULLY_LIT = new byte[LIGHT_LENGTH];
 
@@ -27,80 +27,92 @@ public final class LightCompute {
         Arrays.fill(CONTENT_FULLY_LIT, (byte) -1);
     }
 
-    static byte[] lazyArray(byte[] content) {
-        if (content == null || content.length == 0) return EMPTY_CONTENT;
-        else if (Arrays.equals(content, EMPTY_CONTENT)) return EMPTY_CONTENT;
-        else if (Arrays.equals(content, CONTENT_FULLY_LIT)) return CONTENT_FULLY_LIT;
-        else return content.clone();
-    }
+    private static final int SECTION_SIZE_3 = SECTION_SIZE * 3;
 
-    static ShortArrayFIFOQueue buildExternalQueue(Palette blockPalette,
-                                                  Point[] neighbors, byte[] content,
-                                                  Light.LightLookup lightLookup,
-                                                  Light.PaletteLookup paletteLookup) {
-        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
-        for (int i = 0; i < neighbors.length; i++) {
-            Point neighborSection = neighbors[i];
-            if (neighborSection == null) continue;
-            Palette otherPalette = paletteLookup.palette(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
-            if (otherPalette == null) continue;
-            Light otherLight = lightLookup.light(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
-            if (otherLight == null) continue;
+    /**
+     * Computes light in 3x3 sections for the center section
+     * <p>
+     * Takes queue of lights positions and spreads light from this positions in 3d using Breadth-first search
+     *
+     * @param blockPalettes blocks placed in sections
+     * @param lightPre      ints queue in format: [5 bits 0][2 bit sectionY][2 bit sectionZ][2 bit sectionX][5 bit sectionIdx][4bit light level][4bit y][4bit z][4bit x]
+     * @return lighting wrapped in Result
+     */
+    public static byte[] compute3x3(Palette[] blockPalettes, IntArrayFIFOQueue lightPre) {
+        if (lightPre.isEmpty()) return EMPTY_CONTENT;
 
-            final BlockFace face = FACES[i];
-            final int k = switch (face) {
-                case WEST, BOTTOM, NORTH -> 0;
-                case EAST, TOP, SOUTH -> 15;
-            };
-            for (int bx = 0; bx < 16; bx++) {
-                for (int by = 0; by < 16; by++) {
-                    final byte lightEmission = (byte) Math.max(switch (face) {
-                        case NORTH, SOUTH -> (byte) otherLight.getLevel(bx, by, 15 - k);
-                        case WEST, EAST -> (byte) otherLight.getLevel(15 - k, bx, by);
-                        default -> (byte) otherLight.getLevel(bx, 15 - k, by);
-                    } - 1, 0);
-                    if (lightEmission <= 0) continue;
+        final byte[][] lightArrays = new byte[27][LIGHT_LENGTH];
 
-                    final int posTo = switch (face) {
-                        case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
-                        case WEST, EAST -> k | (by << 4) | (bx << 8);
-                        default -> bx | (by << 4) | (k << 8);
-                    };
+        final IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
 
-                    if (content != null) {
-                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
-                        if (lightEmission <= internalEmission) continue;
-                    }
+        while (!lightPre.isEmpty()) {
+            final int index = lightPre.dequeueInt();
 
-                    final Block blockTo = switch (face) {
-                        case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
-                        case WEST, EAST -> getBlock(blockPalette, k, bx, by);
-                        default -> getBlock(blockPalette, bx, k, by);
-                    };
+            final int sectionIdx = (index >> 16) & 0x1F;
+            final int newLightLevel = (index >> 12) & 15;
+            final int newIndex = index & 0xFFF;
 
-                    final Block blockFrom = switch (face) {
-                        case NORTH, SOUTH -> getBlock(otherPalette, bx, by, 15 - k);
-                        case WEST, EAST -> getBlock(otherPalette, 15 - k, bx, by);
-                        default -> getBlock(otherPalette, bx, 15 - k, by);
-                    };
+            final int oldLightLevel = getLight(lightArrays[sectionIdx], newIndex);
 
-                    if (blockTo == null && blockFrom != null) {
-                        if (blockFrom.registry().occlusionShape().isOccluded(Block.AIR.registry().occlusionShape(), face.getOppositeFace()))
-                            continue;
-                    } else if (blockTo != null && blockFrom == null) {
-                        if (Block.AIR.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face))
-                            continue;
-                    } else if (blockTo != null && blockFrom != null) {
-                        if (blockFrom.registry().occlusionShape().isOccluded(blockTo.registry().occlusionShape(), face.getOppositeFace()))
-                            continue;
-                    }
+            if (oldLightLevel < newLightLevel) {
+                placeLight(lightArrays[sectionIdx], newIndex, newLightLevel);
+                lightSources.enqueue(index);
+            }
+        }
 
-                    final int index = posTo | (lightEmission << 12);
-                    lightSources.enqueue((short) index);
+        while (!lightSources.isEmpty()) {
+            final int index = lightSources.dequeueInt();
+            final int sectionIdx = (index >> 16) & 0x1F;
+            final int x = index & 15;
+            final int z = (index >> 4) & 15;
+            final int y = (index >> 8) & 15;
+            final int lightLevel = (index >> 12) & 15;
+
+            final int sectionX = ((index >> 21) & 0x3) << 4;
+            final int sectionZ = ((index >> 23) & 0x3) << 4;
+            final int sectionY = ((index >> 25) & 0x3) << 4;
+
+            for (Direction direction : DIRECTIONS) {
+                final int xO = x + direction.normalX();
+                final int yO = y + direction.normalY();
+                final int zO = z + direction.normalZ();
+                final int absXO = sectionX + xO;
+                final int absYO = sectionY + yO;
+                final int absZO = sectionZ + zO;
+
+                // Handler border
+                if (absXO < 0 || absXO >= SECTION_SIZE_3 || absYO < 0 || absYO >= SECTION_SIZE_3 || absZO < 0 || absZO >= SECTION_SIZE_3) {
+                    continue;
+                }
+                final int sectionIdxO = sectionIdx3x3(sectionX + xO, sectionY + yO, sectionZ + zO);
+
+                // Section
+                final int newIndex = index3x3(xO, yO, zO);
+                final Block targetBlock = getBlock(blockPalettes[sectionIdxO], xO & 0xF, yO & 0xF, zO & 0xF);
+                final int opacity = targetBlock.registry().lightBlocked();
+                final byte newLightLevel = (byte) Math.max(lightLevel - Math.max(opacity, 1), 0);
+
+                if (getLight(lightArrays[sectionIdxO], newIndex) < newLightLevel) {
+                    final Block currentBlock = getBlock(blockPalettes[sectionIdx], x, y, z);
+                    final Block propagatedBlock = getBlock(blockPalettes[sectionIdxO], xO & 0xF, yO & 0xF, zO & 0xF);
+
+                    final Shape currentShape = currentBlock.registry().occlusionShape();
+                    final Shape propagatedShape = propagatedBlock.registry().occlusionShape();
+
+                    final boolean airAir = currentBlock.isAir() && propagatedBlock.isAir();
+                    if (!airAir && currentShape.isOccluded(propagatedShape, BlockFace.fromDirection(direction)))
+                        continue;
+
+                    placeLight(lightArrays[sectionIdxO], newIndex, newLightLevel);
+                    final int sectionXO = (absXO >> 4) & 0x3;
+                    final int sectionYO = (absYO >> 4) & 0x3;
+                    final int sectionZO = (absZO >> 4) & 0x3;
+                    final int sectionPos = (sectionYO << 4) | (sectionZO << 2) | (sectionXO);
+                    lightSources.enqueue((sectionPos << 21) | (sectionIdxO << 16) | newIndex | (newLightLevel << 12));
                 }
             }
         }
-        return lightSources;
+        return lightArrays[sectionIdx3x3(16, 16, 16)];
     }
 
     /**
@@ -112,8 +124,25 @@ public final class LightCompute {
      * @param lightPre     shorts queue in format: [4bit light level][4bit y][4bit z][4bit x]
      * @return lighting wrapped in Result
      */
-    static byte [] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
+    public static byte[] compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
         if (lightPre.isEmpty()) return EMPTY_CONTENT;
+
+//        if (true) { // TODO
+//            var stone = Palette.empty(64, Palette.BLOCK_PALETTE_MIN_BITS, Palette.BLOCK_PALETTE_MAX_BITS, Palette.BLOCK_PALETTE_DIRECT_BITS);
+//            stone.fill(Block.STONE.stateId());
+//            var palettes = new Palette[27];
+//            Arrays.fill(palettes, stone);
+//            palettes[sectionIdx3x3(16, 16, 16)] = blockPalette;
+//            var lightPreI = new IntArrayFIFOQueue();
+//            final int sectionIdx = sectionIdx3x3(16, 16, 16);
+//            while (!lightPre.isEmpty()) {
+//                final int index = lightPre.dequeueShort() & 0xFFFF;
+//                final int sectionPos = 0b010101;
+//                lightPreI.enqueue((sectionPos << 21) | (sectionIdx << 16) | index);
+//            }
+//            return compute3x3(palettes, lightPreI);
+//        }
+
 
         final byte[] lightArray = new byte[LIGHT_LENGTH];
 
@@ -139,7 +168,6 @@ public final class LightCompute {
             final int z = (index >> 4) & 15;
             final int y = (index >> 8) & 15;
             final int lightLevel = (index >> 12) & 15;
-            final byte newLightLevel = (byte) (lightLevel - 1);
 
             for (Direction direction : DIRECTIONS) {
                 final int xO = x + direction.normalX();
@@ -153,6 +181,9 @@ public final class LightCompute {
 
                 // Section
                 final int newIndex = xO | (zO << 4) | (yO << 8);
+                final Block targetBlock = Objects.requireNonNullElse(getBlock(blockPalette, xO, yO, zO), Block.AIR);
+                final int opacity = targetBlock.registry().lightBlocked();
+                final byte newLightLevel = (byte) Math.max(lightLevel - Math.max(opacity, 1), 0);
 
                 if (getLight(lightArray, newIndex) < newLightLevel) {
                     final Block currentBlock = Objects.requireNonNullElse(getBlock(blockPalette, x, y, z), Block.AIR);
@@ -179,11 +210,22 @@ public final class LightCompute {
         light[i] = (byte) ((light[i] & (0xF0 >>> shift)) | (value << shift));
     }
 
-    static int getLight(byte[] light, int x, int y, int z) {
+    public static int getLight(byte[] light, int x, int y, int z) {
         return getLight(light, x | (z << 4) | (y << 8));
     }
 
-    static int getLight(byte[] light, int index) {
+    public static int sectionIdx3x3(int x, int y, int z) {
+        var sx = x >> 4;
+        var sy = y >> 4;
+        var sz = z >> 4;
+        return sy + sx * 3 + sz * 9;
+    }
+
+    static int index3x3(int x, int y, int z) {
+        return (x & 0xF) | ((z & 0xF) << 4) | ((y & 0xF) << 8);
+    }
+
+    public static int getLight(byte[] light, int index) {
         if (index >>> 1 >= light.length) return 0;
         final int value = light[index >>> 1];
         return ((value >>> ((index & 1) << 2)) & 0xF);
@@ -193,7 +235,7 @@ public final class LightCompute {
         return Block.fromStateId(palette.get(x, y, z));
     }
 
-    public static byte[] bake(byte[] content1, byte[] content2) {
+    public static byte[] bake(byte @Nullable [] content1, byte @Nullable [] content2) {
         if (content1 == null && content2 == null) return EMPTY_CONTENT;
         if (content1 == EMPTY_CONTENT && content2 == EMPTY_CONTENT) return EMPTY_CONTENT;
 
@@ -231,9 +273,7 @@ public final class LightCompute {
         return lightMax;
     }
 
-    public static boolean compareBorders(byte[] content, byte[] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {
-        if (content == null && contentPropagation == null && contentPropagationTemp == null) return true;
-
+    public static boolean hasBorderChanged(byte[] oldLight, byte[] newLight, BlockFace face) {
         final int k = switch (face) {
             case WEST, BOTTOM, NORTH -> 0;
             case EAST, TOP, SOUTH -> 15;
@@ -246,16 +286,11 @@ public final class LightCompute {
                     default -> bx | (by << 4) | (k << 8);
                 };
 
-                int valueFrom;
-                if (content == null && contentPropagation == null) valueFrom = 0;
-                else if (content != null && contentPropagation == null) valueFrom = getLight(content, posFrom);
-                else if (content == null) valueFrom = getLight(contentPropagation, posFrom);
-                else valueFrom = Math.max(getLight(content, posFrom), getLight(contentPropagation, posFrom));
-
-                final int valueTo = getLight(contentPropagationTemp, posFrom);
-                if (valueFrom < valueTo) return false;
+                final int valueFrom = getLight(oldLight, posFrom);
+                final int valueTo = getLight(newLight, posFrom);
+                if (valueFrom != valueTo) return true;
             }
         }
-        return true;
+        return false;
     }
 }

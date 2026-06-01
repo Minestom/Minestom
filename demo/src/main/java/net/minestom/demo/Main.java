@@ -40,7 +40,14 @@ public class Main {
 
     static void main(String[] args) {
         System.setProperty("minestom.new-socket-write-lock", "true");
+        System.setProperty("minestom.chunk-view-distance", "32");
+        System.setProperty("minestom.dispatcher-threads", Integer.toString(Runtime.getRuntime().availableProcessors()));
+        System.setProperty("minestom.tps", "50");
         MinecraftServer.setCompressionThreshold(0);
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            System.err.println("Exception in " + t.getName());
+            e.printStackTrace();
+        });
 
         MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Offline());
 
@@ -81,7 +88,6 @@ public class Main {
         commandManager.register(new ConfigCommand());
         commandManager.register(new SidebarCommand());
         commandManager.register(new SetEntityType());
-        commandManager.register(new RelightCommand());
         commandManager.register(new KillCommand());
         commandManager.register(new WeatherCommand());
         commandManager.register(new PotionCommand());
@@ -94,6 +100,9 @@ public class Main {
         commandManager.register(new SleepCommand());
         commandManager.register(new MinecartCommand());
         commandManager.register(new BelowNameCommand());
+        commandManager.register(new CopyInstanceCommand());
+        commandManager.register(new LoadedChunksCommand());
+        commandManager.register(new TestLightCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

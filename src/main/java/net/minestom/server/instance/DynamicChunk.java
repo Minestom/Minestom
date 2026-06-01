@@ -12,11 +12,12 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
 import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
+import net.minestom.server.instance.light.LightDataBuilder;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.registry.DynamicRegistry;
@@ -29,6 +30,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,14 +57,14 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
-    final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
+    protected final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
     public DynamicChunk(Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> new Section());
+        Arrays.setAll(sectionsTemp, _ -> new Section());
         this.sections = List.of(sectionsTemp);
     }
 
@@ -181,7 +183,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void tick(long time) {
+    public void tick0(long time) {
         if (tickableMap.isEmpty()) return;
         tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
             final int index = entry.getIntKey();
@@ -262,7 +264,7 @@ public class DynamicChunk extends Chunk {
             unlockWriteLock();
         }
         // Compute light data outside any locks. This *should* prevent deadlocks
-        var lightData = createLightData(true);
+        var lightData = createLightData();
 
         lockReadLock();
         try {
@@ -284,41 +286,22 @@ public class DynamicChunk extends Chunk {
         }
     }
 
-    UpdateLightPacket createLightPacket() {
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
-    }
-
-    protected LightData createLightData(boolean requiredFullChunk) {
-        BitSet skyMask = new BitSet();
-        BitSet blockMask = new BitSet();
-        BitSet emptySkyMask = new BitSet();
-        BitSet emptyBlockMask = new BitSet();
-        List<byte[]> skyLights = new ArrayList<>();
-        List<byte[]> blockLights = new ArrayList<>();
-
-        int index = 0;
-        for (Section section : sections) {
-            index++;
-            final byte[] skyLight = section.skyLight().array();
-            final byte[] blockLight = section.blockLight().array();
-            if (skyLight.length != 0) {
-                skyLights.add(skyLight);
-                skyMask.set(index);
-            } else {
-                emptySkyMask.set(index);
-            }
-            if (blockLight.length != 0) {
-                blockLights.add(blockLight);
-                blockMask.set(index);
-            } else {
-                emptyBlockMask.set(index);
-            }
+    /**
+     * Creates the light data for the entire chunk. This is supposed to be
+     * overridden by custom chunk implementations
+     *
+     * @return the light data
+     */
+    protected LightData createLightData() {
+        var builder = new LightDataBuilder(this);
+        // first section, below all block sections
+        builder.beginSection().emptyBlock().emptySky().endSection();
+        for (var i = 0; i < sections.size(); i++) {
+            builder.beginSection().emptyBlock().emptySky().endSection();
         }
-        return new LightData(
-                skyMask, blockMask,
-                emptySkyMask, emptyBlockMask,
-                skyLights, blockLights
-        );
+        // last section, above all block sections
+        builder.beginSection().emptyBlock().emptySky().endSection();
+        return builder.build();
     }
 
     protected Map<Heightmap.Type, long[]> getHeightmaps() {

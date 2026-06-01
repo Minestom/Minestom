@@ -51,7 +51,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
  * <p>
  * All implementations are immutable and subject to become value types. Type conversions are also explicit to avoid precision loss.
  */
-public sealed interface Point permits Vec, Pos, BlockVec {
+public sealed interface Point permits BlockVec, Pos, Vec {
     /**
      * The smallest difference between two double values to consider them equal if applicable.
      */

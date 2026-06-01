@@ -233,7 +233,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         return BlockImpl.statesCount();
     }
 
-    static @Nullable Block fromStateId(int stateId) {
+    static Block fromStateId(int stateId) {
         return BlockImpl.getState(stateId);
     }
 

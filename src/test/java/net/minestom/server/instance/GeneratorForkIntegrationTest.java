@@ -53,7 +53,7 @@ public class GeneratorForkIntegrationTest {
         instance.setGenerator(unit -> {
             var u = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
             assertEquals(unit.absoluteStart(), u.absoluteStart());
-            assertEquals(unit.absoluteEnd().add(16, 0, 16), u.absoluteEnd());
+            assertEquals(unit.absoluteEnd().add(16, 0, 16).asBlockVec(), u.absoluteEnd());
             u.modifier().setRelative(16, 0, 0, Block.STONE);
             u.modifier().setRelative(16, 33, 0, Block.STONE);
         });

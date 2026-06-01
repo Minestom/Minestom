@@ -2,6 +2,7 @@ package net.minestom.server.instance.light;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.light.parallel.BlockLightSection;
 import net.minestom.server.instance.palette.Palette;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -69,31 +70,31 @@ public class LightComputeBenchmark {
 
     @Benchmark
     public void buildInternalQueue_air(Blackhole blackhole) {
-        var queue = BlockLight.buildInternalQueue(airPalette);
+        var queue = BlockLightSection.getBlockLightInternalSources(airPalette);
         blackhole.consume(queue);
     }
 
     @Benchmark
     public void buildInternalQueue_stone(Blackhole blackhole) {
-        var queue = BlockLight.buildInternalQueue(stonePalette);
+        var queue = BlockLightSection.getBlockLightInternalSources(stonePalette);
         blackhole.consume(queue);
     }
 
     @Benchmark
     public void buildInternalQueue_glowstone(Blackhole blackhole) {
-        var queue = BlockLight.buildInternalQueue(glowstonePalette);
+        var queue = BlockLightSection.getBlockLightInternalSources(glowstonePalette);
         blackhole.consume(queue);
     }
 
     @Benchmark
     public void buildInternalQueue_mixedStone(Blackhole blackhole) {
-        var queue = BlockLight.buildInternalQueue(mixedStonePalette);
+        var queue = BlockLightSection.getBlockLightInternalSources(mixedStonePalette);
         blackhole.consume(queue);
     }
 
     @Benchmark
     public void buildInternalQueue_mixedGlowStone(Blackhole blackhole) {
-        var queue = BlockLight.buildInternalQueue(mixedGlowstonePalette);
+        var queue = BlockLightSection.getBlockLightInternalSources(mixedGlowstonePalette);
         blackhole.consume(queue);
     }
 
