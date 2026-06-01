@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play.data;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
@@ -70,11 +71,12 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
             final byte xz = reader.read(BYTE);
             final short y = reader.read(SHORT);
             final BlockEntityType blockEntity = reader.read(BlockEntityType.NETWORK_TYPE);
-            final CompoundBinaryTag nbt = reader.read(NBT_COMPOUND);
+            // Vanilla sends a TAG_END when the block entity has no client-side NBT.
+            final BinaryTag nbt = reader.read(NBT);
             final Block block = Block.fromKey(blockEntity.key());
             if (block == null) continue;
             final int index = CoordConversion.chunkBlockIndex(xz >> 4, y, xz & 15);
-            blockEntities.put(index, block.withNbt(nbt));
+            blockEntities.put(index, nbt instanceof CompoundBinaryTag compound ? block.withNbt(compound) : block);
         }
         return blockEntities;
     }
