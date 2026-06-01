@@ -252,4 +252,12 @@ sealed interface BlockSoundTypes permits BlockSoundType {
     BlockSoundType IRON = BlockSoundImpl.get("iron");
 
     BlockSoundType DRIED_GHAST = BlockSoundImpl.get("dried_ghast");
+
+    BlockSoundType SULFUR = BlockSoundImpl.get("sulfur");
+
+    BlockSoundType POTENT_SULFUR = BlockSoundImpl.get("potent_sulfur");
+
+    BlockSoundType SULFUR_SPIKE = BlockSoundImpl.get("sulfur_spike");
+
+    BlockSoundType CINNABAR = BlockSoundImpl.get("cinnabar");
 }

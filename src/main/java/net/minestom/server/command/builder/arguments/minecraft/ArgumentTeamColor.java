@@ -8,16 +8,15 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 
 /**
- * Represents an argument which will give you a {@link Style} containing the color or no
- * color if the argument was {@code reset}.
+ * Represents an argument which will give you a {@link Style} containing the team color
  * <p>
  * Example: red, white, reset
  */
-public class ArgumentColor extends Argument<Style> {
+public class ArgumentTeamColor extends Argument<Style> {
 
     public static final int UNDEFINED_COLOR = -2;
 
-    public ArgumentColor(String id) {
+    public ArgumentTeamColor(String id) {
         super(id);
     }
 
@@ -30,17 +29,12 @@ public class ArgumentColor extends Argument<Style> {
             return Style.style(color);
         }
 
-        // check for reset
-        if (input.equals("reset")) {
-            return Style.empty();
-        }
-
         throw new ArgumentSyntaxException("Undefined color", input, UNDEFINED_COLOR);
     }
 
     @Override
     public ArgumentParserType parser() {
-        return ArgumentParserType.COLOR;
+        return ArgumentParserType.TEAM_COLOR;
     }
 
     @Override

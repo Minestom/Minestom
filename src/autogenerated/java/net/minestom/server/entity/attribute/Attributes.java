@@ -7,6 +7,8 @@ package net.minestom.server.entity.attribute;
  */
 @SuppressWarnings("unused")
 sealed interface Attributes permits Attribute {
+    Attribute AIR_DRAG_MODIFIER = AttributeImpl.get("air_drag_modifier");
+
     Attribute ARMOR = AttributeImpl.get("armor");
 
     Attribute ARMOR_TOUGHNESS = AttributeImpl.get("armor_toughness");
@@ -17,9 +19,13 @@ sealed interface Attributes permits Attribute {
 
     Attribute ATTACK_SPEED = AttributeImpl.get("attack_speed");
 
+    Attribute BELOW_NAME_DISTANCE = AttributeImpl.get("below_name_distance");
+
     Attribute BLOCK_BREAK_SPEED = AttributeImpl.get("block_break_speed");
 
     Attribute BLOCK_INTERACTION_RANGE = AttributeImpl.get("block_interaction_range");
+
+    Attribute BOUNCINESS = AttributeImpl.get("bounciness");
 
     Attribute BURNING_TIME = AttributeImpl.get("burning_time");
 
@@ -34,6 +40,8 @@ sealed interface Attributes permits Attribute {
     Attribute FLYING_SPEED = AttributeImpl.get("flying_speed");
 
     Attribute FOLLOW_RANGE = AttributeImpl.get("follow_range");
+
+    Attribute FRICTION_MODIFIER = AttributeImpl.get("friction_modifier");
 
     Attribute GRAVITY = AttributeImpl.get("gravity");
 
@@ -52,6 +60,8 @@ sealed interface Attributes permits Attribute {
     Attribute MOVEMENT_EFFICIENCY = AttributeImpl.get("movement_efficiency");
 
     Attribute MOVEMENT_SPEED = AttributeImpl.get("movement_speed");
+
+    Attribute NAME_TAG_DISTANCE = AttributeImpl.get("name_tag_distance");
 
     Attribute OXYGEN_BONUS = AttributeImpl.get("oxygen_bonus");
 

@@ -46,7 +46,7 @@ public class Main {
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
-        var beds = Block.values().stream().filter(block -> BlockEntityType.BED.equals(block.registry().blockEntityType())).toList();
+        var beds = Block.values().stream().filter(block -> block.key().value().contains("bed")).toList();
         beds.forEach(block -> blockManager.registerBlockPlacementRule(new BedPlacementRule(block)));
         blockManager.registerHandler(TestBlockHandler.INSTANCE.getKey(), () -> TestBlockHandler.INSTANCE);
 

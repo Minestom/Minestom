@@ -25,6 +25,8 @@ sealed interface GameEvents permits GameEvent {
 
     GameEvent BLOCK_PLACE = GameEventImpl.get("block_place");
 
+    GameEvent BOUNCE = GameEventImpl.get("bounce");
+
     GameEvent CONTAINER_CLOSE = GameEventImpl.get("container_close");
 
     GameEvent CONTAINER_OPEN = GameEventImpl.get("container_open");
