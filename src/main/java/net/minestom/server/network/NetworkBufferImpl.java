@@ -25,6 +25,7 @@ import java.util.zip.Inflater;
 import static java.nio.ByteOrder.BIG_ENDIAN;
 
 final class NetworkBufferImpl implements NetworkBuffer {
+    private static final Arena ARENA = Arena.ofAuto();
     private static final ValueLayout.OfShort SHORT_LAYOUT = ValueLayout.JAVA_SHORT_UNALIGNED.withOrder(BIG_ENDIAN);
     private static final ValueLayout.OfInt INT_LAYOUT = ValueLayout.JAVA_INT_UNALIGNED.withOrder(BIG_ENDIAN);
     private static final ValueLayout.OfLong LONG_LAYOUT = ValueLayout.JAVA_LONG_UNALIGNED.withOrder(BIG_ENDIAN);
@@ -188,7 +189,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         final long capacity = capacity();
         if (newSize < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (newSize == capacity) throw new IllegalArgumentException("New size is the same as the current size");
-        final MemorySegment newSegment = Arena.ofAuto().allocate(newSize);
+        final MemorySegment newSegment = ARENA.allocate(newSize);
         MemorySegment.copy(segment, 0, newSegment, 0, capacity);
         this.segment = newSegment;
     }
@@ -226,7 +227,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     public NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
         assertDummy();
         Objects.checkFromIndexSize(index, length, capacity());
-        final MemorySegment newSegment = Arena.ofAuto().allocate(length);
+        final MemorySegment newSegment = ARENA.allocate(length);
         MemorySegment.copy(segment, index, newSegment, 0, length);
         return new NetworkBufferImpl(newSegment, readIndex, writeIndex, autoResize, registries);
     }
@@ -477,7 +478,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
         @Override
         public NetworkBuffer build() {
-            final MemorySegment segment = Arena.ofAuto().allocate(initialSize);
+            final MemorySegment segment = ARENA.allocate(initialSize);
             return new NetworkBufferImpl(segment, 0, 0, autoResize, registries);
         }
     }
