@@ -888,8 +888,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private boolean isBlockInWater(@Nullable Block block, double localY) {
         if (block == null) return false;
         if (block.compare(Block.WATER)) {
-            String levelStr = block.getProperty("level");
-            int level = levelStr != null ? Integer.parseInt(levelStr) : 0;
+            int level = Integer.parseInt(block.getProperty("level"));
             return localY < (9 - (level & 7)) / 9.0;
         }
         return "true".equals(block.getProperty("waterlogged"));
