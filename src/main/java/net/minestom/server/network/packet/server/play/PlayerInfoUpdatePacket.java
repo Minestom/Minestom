@@ -20,6 +20,14 @@ public record PlayerInfoUpdatePacket(
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ENTRIES = 1024;
 
+    public PlayerInfoUpdatePacket(EnumSet<Action> actions, Entry entry) {
+        this(actions, List.of(entry));
+    }
+
+    public PlayerInfoUpdatePacket(Action action, List<Entry> entries) {
+        this(EnumSet.of(action), entries);
+    }
+
     public PlayerInfoUpdatePacket(Action action, Entry entry) {
         this(EnumSet.of(action), List.of(entry));
     }
