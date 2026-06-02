@@ -59,6 +59,10 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         return new Builder();
     }
 
+    static Builder builder(DimensionType existing) {
+        return new Builder(existing);
+    }
+
     /**
      * <p>Creates a new registry for dimension types, loading the vanilla dimension types.</p>
      *
@@ -142,11 +146,32 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         private int monsterSpawnBlockLightLimit = 0;
         private Skybox skybox = Skybox.OVERWORLD;
         private CardinalLight cardinalLight = CardinalLight.DEFAULT;
-        private final EnvironmentAttributeMap.Builder attributes = EnvironmentAttributeMap.builder();
+        private final EnvironmentAttributeMap.Builder attributes;
         private RegistryTag<Timeline> timelines = RegistryTag.empty();
         private RegistryKey<WorldClock> defaultClock = null;
 
         private Builder() {
+            attributes = EnvironmentAttributeMap.builder();
+        }
+
+        private Builder(DimensionType existing) {
+            this.hasFixedTime = existing.hasFixedTime();
+            this.hasSkylight = existing.hasSkylight();
+            this.hasCeiling = existing.hasCeiling();
+            this.hasEnderDragonFight = existing.hasEnderDragonFight();
+            this.coordinateScale = existing.coordinateScale();
+            this.minY = existing.minY();
+            this.height = existing.height();
+            this.logicalHeight = existing.logicalHeight();
+            this.infiniburn = existing.infiniburn();
+            this.ambientLight = existing.ambientLight();
+            this.monsterSpawnLightLevel = existing.monsterSpawnLightLevel();
+            this.monsterSpawnBlockLightLimit = existing.monsterSpawnBlockLightLimit();
+            this.skybox = existing.skybox();
+            this.cardinalLight = existing.cardinalLight();
+            this.attributes = EnvironmentAttributeMap.builder(existing.attributes());
+            this.timelines = existing.timelines();
+            this.defaultClock = existing.defaultClock();
         }
 
         @Contract(value = "_ -> this")
