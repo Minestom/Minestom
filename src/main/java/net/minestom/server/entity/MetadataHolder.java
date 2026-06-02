@@ -71,7 +71,8 @@ public final class MetadataHolder {
      */
     @Deprecated(forRemoval = true)
     public MetadataHolder(@Nullable Entity entity) {
-        this(entity == null ? _ -> {} : entity::notifyMetadataChanges);
+        this(entity == null ? _ -> {
+        } : entity::notifyMetadataChanges);
     }
 
     public MetadataHolder(Consumer<Map<Integer, Metadata.Entry<?>>> changesListener) {
@@ -174,7 +175,7 @@ public final class MetadataHolder {
         return Map.copyOf(this.entries);
     }
 
-    static final Map<String, BiFunction<Entity, MetadataHolder, ? extends EntityMeta>> ENTITY_META_SUPPLIER = Map.ofEntries(
+    static final Map<String, BiFunction<@Nullable Entity, MetadataHolder, ? extends EntityMeta>> ENTITY_META_SUPPLIER = Map.ofEntries(
             entry("minecraft:acacia_boat", BoatMeta::new),
             entry("minecraft:acacia_chest_boat", BoatMeta::new),
             entry("minecraft:allay", AllayMeta::new),
@@ -336,7 +337,7 @@ public final class MetadataHolder {
     );
 
     @ApiStatus.Internal
-    public static EntityMeta createMeta(EntityType entityType, Entity entity, MetadataHolder metadata) {
+    public static EntityMeta createMeta(EntityType entityType, @Nullable Entity entity, MetadataHolder metadata) {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
     }
 }
