@@ -19,6 +19,7 @@ public final class BlockManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(BlockManager.class);
     // Namespace -> handler supplier
     private final Map<String, Supplier<? extends BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
+    private final Map<String, Supplier<? extends BlockHandler>> defaultBlockHandlerMap = new ConcurrentHashMap<>();
     // block id -> block placement rule
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
 
@@ -26,6 +27,8 @@ public final class BlockManager {
 
     public void registerHandler(String namespace, Supplier<? extends BlockHandler> handlerSupplier) {
         blockHandlerMap.put(namespace, handlerSupplier);
+        if (!handlerSupplier.get().isDefaultHandler()) return;
+        defaultBlockHandlerMap.put(namespace, handlerSupplier);
     }
 
     public void registerHandler(Key key, Supplier<? extends BlockHandler> handlerSupplier) {
@@ -34,6 +37,11 @@ public final class BlockManager {
 
     public @Nullable BlockHandler getHandler(String namespace) {
         final var handler = blockHandlerMap.get(namespace);
+        return handler != null ? handler.get() : null;
+    }
+
+    public @Nullable BlockHandler getDefaultHandler(String namespace) {
+        final var handler = defaultBlockHandlerMap.get(namespace);
         return handler != null ? handler.get() : null;
     }
 

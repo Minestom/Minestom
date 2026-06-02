@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.tag.Tag;
@@ -20,6 +21,13 @@ record BlockImpl(RegistryData.BlockEntry registry,
                  long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
                  @Nullable BlockHandler handler) implements Block {
+
+    @Override
+    public @Nullable BlockHandler handler() {
+        if (handler != null) return handler;
+        return MinecraftServer.getBlockManager().getDefaultHandler(registry.key().namespace());
+    }
+
     /**
      * Number of bits used to store the index of a property value.
      * <p>

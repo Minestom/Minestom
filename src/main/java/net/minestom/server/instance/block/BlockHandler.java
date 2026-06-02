@@ -20,6 +20,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * Implementations are expected to be thread safe.
  */
 public interface BlockHandler {
+    /**
+     * Вызывается при регистрации хендлера.
+     * Если возвращается true, то этот обработчик
+     * будет применяться к блокам даже без прямой
+     * его установки в случае если у блока нет своего обработчика.
+     * @return true будет применён к блоку по умолчанию
+     */
+    default boolean isDefaultHandler() {
+        return false;
+    }
 
     /**
      * Called when a block has been placed.
