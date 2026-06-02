@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.network.NetworkBuffer.Type;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -190,6 +191,7 @@ public final class NetworkBufferTemplate {
      * @return the new template
      */
     public static <P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(Type<P1> p1, Function<? super R, ? extends P1> g1, F1<? super P1, ? extends R> ctor) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(ctor, "ctor");
@@ -223,6 +225,7 @@ public final class NetworkBufferTemplate {
             Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
             F2<? super P1, ? super P2, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -262,6 +265,7 @@ public final class NetworkBufferTemplate {
             Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
             Type<P3> p3, Function<? super R, ? extends P3> g3, F3<? super P1, ? super P2, ? super P3, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -308,6 +312,7 @@ public final class NetworkBufferTemplate {
             Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
             F4<? super P1, ? super P2, ? super P3, ? super P4, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -363,6 +368,7 @@ public final class NetworkBufferTemplate {
             Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
             Type<P5> p5, Function<? super R, ? extends P5> g5, F5<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -426,6 +432,7 @@ public final class NetworkBufferTemplate {
             Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
             F6<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -495,6 +502,7 @@ public final class NetworkBufferTemplate {
             Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
             Type<P7> p7, Function<? super R, ? extends P7> g7, F7<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -572,6 +580,7 @@ public final class NetworkBufferTemplate {
             Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
             F8<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -655,6 +664,7 @@ public final class NetworkBufferTemplate {
             Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
             Type<P9> p9, Function<? super R, ? extends P9> g9, F9<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -746,6 +756,7 @@ public final class NetworkBufferTemplate {
             Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
             F10<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -843,6 +854,7 @@ public final class NetworkBufferTemplate {
             Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
             Type<P11> p11, Function<? super R, ? extends P11> g11, F11<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -947,6 +959,7 @@ public final class NetworkBufferTemplate {
             Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
             Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12, F12<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -1059,6 +1072,7 @@ public final class NetworkBufferTemplate {
             Type<P13> p13, Function<? super R, ? extends P13> g13,
             F13<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -1178,6 +1192,7 @@ public final class NetworkBufferTemplate {
             Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
             F14<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -1304,6 +1319,7 @@ public final class NetworkBufferTemplate {
             Type<P15> p15, Function<? super R, ? extends P15> g15,
             F15<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -1437,6 +1453,7 @@ public final class NetworkBufferTemplate {
             Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
             F16<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -1577,6 +1594,7 @@ public final class NetworkBufferTemplate {
             Type<P17> p17, Function<? super R, ? extends P17> g17,
             F17<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -1724,6 +1742,7 @@ public final class NetworkBufferTemplate {
             Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
             F18<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, p18, g18, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -1876,6 +1895,7 @@ public final class NetworkBufferTemplate {
             Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
             Type<P19> p19, Function<? super R, ? extends P19> g19, F19<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? extends R> ctor
     ) {
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, p18, g18, p19, g19, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");
@@ -2037,7 +2057,7 @@ public final class NetworkBufferTemplate {
             Type<P19> p19, Function<? super R, ? extends P19> g19, Type<P20> p20, Function<? super R, ? extends P20> g20,
             F20<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? super P20, ? extends R> ctor
     ) {
-
+        if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, p18, g18, p19, g19, p20, g20, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
         Objects.requireNonNull(p2, "p2");

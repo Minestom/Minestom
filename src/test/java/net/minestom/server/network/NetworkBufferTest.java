@@ -11,6 +11,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -18,6 +19,7 @@ import java.util.function.Function;
 
 import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
 import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NetworkBufferTest {
@@ -44,6 +46,11 @@ public class NetworkBufferTest {
 
         assertEquals((byte) 3, buffer.read(BYTE));
         assertEquals((byte) 4, buffer.read(BYTE));
+    }
+
+    @Test
+    public void garbageCollected() {
+        waitUntilCleared(new WeakReference<>(NetworkBuffer.staticBuffer(1024)));
     }
 
     @Test
