@@ -253,10 +253,10 @@ final class EntityTrackerImpl implements EntityTracker {
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof ChunkViewKey key)) return false;
-            return sharedInstances == key.sharedInstances &&
-                    chunkX == key.chunkX &&
-                    chunkZ == key.chunkZ;
+            if (!(obj instanceof ChunkViewKey(List<SharedInstance> instances, int x, int z))) return false;
+            return sharedInstances == instances &&
+                    chunkX == x &&
+                    chunkZ == z;
         }
     }
 
@@ -313,7 +313,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
 
         @Override
-        public Set<Player> getViewers() {
+        public Set<? extends Player> getViewers() {
             return set;
         }
 

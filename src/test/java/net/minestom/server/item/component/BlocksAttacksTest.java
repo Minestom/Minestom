@@ -6,7 +6,7 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerActionPacket;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -34,7 +34,7 @@ public class BlocksAttacksTest {
         assertTrue(player.isUsingItem());
         assertTrue(player.getPlayerMeta().isHandActive());
 
-        player.addPacketToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE, player.getPosition(), BlockFace.NORTH, 1));
+        player.addPacketToQueue(new ClientPlayerActionPacket(ClientPlayerActionPacket.Status.UPDATE_ITEM_STATE, player.getPosition(), BlockFace.NORTH, 1));
         player.interpretPacketQueue();
 
         assertFalse(player.isUsingItem());

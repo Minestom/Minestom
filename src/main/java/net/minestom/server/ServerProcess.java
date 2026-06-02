@@ -1,6 +1,7 @@
 package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
@@ -100,7 +101,7 @@ public interface ServerProcess extends Registries, Snapshotable {
      * <p>
      * Can be used if you want to convert a buffer to a client packet object.
      */
-    PacketParser<ClientPacket> packetParser();
+    PacketParser.Client packetParser();
 
     /**
      * Exposed socket server.
@@ -116,6 +117,11 @@ public interface ServerProcess extends Registries, Snapshotable {
      * Handles the server ticks.
      */
     Ticker ticker();
+
+    /**
+     * The click callback manager.
+     */
+    ClickCallbackManager clickCallbackManager();
 
     void start(SocketAddress socketAddress);
 

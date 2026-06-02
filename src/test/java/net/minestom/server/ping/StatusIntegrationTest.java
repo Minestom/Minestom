@@ -2,6 +2,7 @@ package net.minestom.server.ping;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.MainHand;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.testing.Env;
@@ -25,7 +26,7 @@ public class StatusIntegrationTest {
         player3.refreshSettings(new ClientSettings(
                 Locale.US, (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
                 ChatMessageType.FULL, true,
-                (byte) 0x7F, ClientSettings.MainHand.RIGHT,
+                (byte) 0x7F, MainHand.RIGHT,
                 true, false,
                 ClientSettings.ParticleSetting.ALL
         ));

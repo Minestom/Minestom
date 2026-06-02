@@ -38,11 +38,11 @@ public class WolfMeta extends TameableAnimalMeta {
         metadata.set(MetadataDef.Wolf.COLLAR_COLOR, value.ordinal());
     }
 
-    public int getAngerTime() {
+    public long getAngerTime() {
         return metadata.get(MetadataDef.Wolf.ANGER_TIME);
     }
 
-    public void setAngerTime(int value) {
+    public void setAngerTime(long value) {
         metadata.set(MetadataDef.Wolf.ANGER_TIME, value);
     }
 

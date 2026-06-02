@@ -252,6 +252,8 @@ public sealed interface Palette permits PaletteImpl {
             @Override
             public Palette read(NetworkBuffer buffer) {
                 final byte bitsPerEntry = buffer.read(BYTE);
+                if (bitsPerEntry != 0 && (bitsPerEntry < minIndirect || (bitsPerEntry > maxIndirect && bitsPerEntry != directBits)))
+                    throw new IllegalArgumentException("Invalid bitsPerEntry: " + bitsPerEntry);
                 PaletteImpl result = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
                 result.bitsPerEntry = bitsPerEntry;
                 if (bitsPerEntry == 0) {
@@ -259,11 +261,15 @@ public sealed interface Palette permits PaletteImpl {
                     result.count = buffer.read(VAR_INT);
                     return result;
                 }
+                int[] palette = null;
                 if (result.hasPalette()) {
                     // Indirect palette
-                    final int[] palette = buffer.read(VAR_INT_ARRAY);
+                    palette = buffer.read(VAR_INT_ARRAY);
+                    if (palette.length == 0 || palette.length > Palettes.maxPaletteSize(bitsPerEntry))
+                        throw new IllegalArgumentException("Invalid palette length: " + palette.length);
                     result.paletteToValueList = new IntArrayList(palette);
                     result.valueToPaletteMap = new Int2IntOpenHashMap(palette.length);
+                    result.valueToPaletteMap.defaultReturnValue(-1);
                     for (int i = 0; i < palette.length; i++) {
                         result.valueToPaletteMap.put(palette[i], i);
                     }
@@ -271,6 +277,7 @@ public sealed interface Palette permits PaletteImpl {
                 final long[] data = new long[Palettes.arrayLength(dimension, bitsPerEntry)];
                 for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
                 result.values = data;
+                if (palette != null) Palettes.validateIndices(bitsPerEntry, dimension, data, palette.length);
                 result.recount();
                 return result;
             }

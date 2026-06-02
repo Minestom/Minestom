@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientQueryEntityNbtPacket(int transactionId, int entityId) implements ClientPacket {
+public record ClientQueryEntityNbtPacket(int transactionId, int entityId) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientQueryEntityNbtPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientQueryEntityNbtPacket::transactionId,
             VAR_INT, ClientQueryEntityNbtPacket::entityId,

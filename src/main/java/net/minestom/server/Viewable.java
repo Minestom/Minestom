@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketSendingUtils;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,7 +38,8 @@ public interface Viewable {
      *
      * @return A Set containing all the element's viewers
      */
-    Set<Player> getViewers();
+    @Unmodifiable
+    Set<? extends Player> getViewers();
 
     /**
      * Gets if a player is seeing this viewable object.
@@ -65,7 +67,7 @@ public interface Viewable {
         }
     }
 
-    default void sendPacketsToViewers(Collection<SendablePacket> packets) {
+    default void sendPacketsToViewers(Collection<? extends SendablePacket> packets) {
         packets.forEach(this::sendPacketToViewers);
     }
 

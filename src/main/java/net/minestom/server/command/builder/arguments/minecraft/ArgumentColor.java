@@ -8,8 +8,8 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 
 /**
- * Represents an argument which will give you a {@link Style} containing the colour or no
- * colour if the argument was {@code reset}.
+ * Represents an argument which will give you a {@link Style} containing the color or no
+ * color if the argument was {@code reset}.
  * <p>
  * Example: red, white, reset
  */
@@ -24,7 +24,7 @@ public class ArgumentColor extends Argument<Style> {
     @Override
     public Style parse(CommandSender sender, String input) throws ArgumentSyntaxException {
 
-        // check for colour
+        // check for color
         NamedTextColor color = NamedTextColor.NAMES.value(input);
         if (color != null) {
             return Style.style(color);

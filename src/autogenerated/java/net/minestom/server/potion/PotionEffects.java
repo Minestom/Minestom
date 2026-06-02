@@ -84,4 +84,6 @@ sealed interface PotionEffects permits PotionEffect {
     PotionEffect OOZING = PotionEffectImpl.get("oozing");
 
     PotionEffect INFESTED = PotionEffectImpl.get("infested");
+
+    PotionEffect BREATH_OF_THE_NAUTILUS = PotionEffectImpl.get("breath_of_the_nautilus");
 }

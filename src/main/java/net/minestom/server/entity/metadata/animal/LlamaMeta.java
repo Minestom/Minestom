@@ -22,14 +22,6 @@ public class LlamaMeta extends ChestedHorseMeta {
         metadata.set(MetadataDef.Llama.STRENGTH, value);
     }
 
-    public int getCarpetColor() {
-        return metadata.get(MetadataDef.Llama.CARPET_COLOR);
-    }
-
-    public void setCarpetColor(int value) {
-        metadata.set(MetadataDef.Llama.CARPET_COLOR, value);
-    }
-
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#LLAMA_VARIANT} instead.
      */

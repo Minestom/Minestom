@@ -20,6 +20,14 @@ public class VillagerMeta extends AbstractVillagerMeta {
         metadata.set(MetadataDef.Villager.VARIANT, data);
     }
 
+    public boolean isFinalized() {
+        return metadata.get(MetadataDef.Villager.IS_FINALIZED);
+    }
+
+    public void setFinalized(boolean value) {
+        metadata.set(MetadataDef.Villager.IS_FINALIZED, value);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected <T> @Nullable T get(DataComponent<T> component) {
@@ -68,7 +76,17 @@ public class VillagerMeta extends AbstractVillagerMeta {
         EXPERT,
         MASTER;
 
-        public static final NetworkBuffer.Type<Level> NETWORK_TYPE = NetworkBuffer.Enum(Level.class);
+        private static final Level[] VALUES = values();
+
+        private int toProtocolId() {
+            return this.ordinal() + 1;  // Villager levels are 1-indexed
+        }
+
+        private static Level fromProtocolId(int value) {
+            return VALUES[value - 1];
+        }
+
+        public static final NetworkBuffer.Type<Level> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Level::fromProtocolId, Level::toProtocolId);
     }
 
 }

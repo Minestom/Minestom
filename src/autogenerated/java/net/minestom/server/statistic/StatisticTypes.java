@@ -51,6 +51,8 @@ sealed interface StatisticTypes permits StatisticType {
 
     StatisticType STRIDER_ONE_CM = StatisticTypeImpl.get("strider_one_cm");
 
+    StatisticType NAUTILUS_ONE_CM = StatisticTypeImpl.get("nautilus_one_cm");
+
     StatisticType JUMP = StatisticTypeImpl.get("jump");
 
     StatisticType DROP = StatisticTypeImpl.get("drop");

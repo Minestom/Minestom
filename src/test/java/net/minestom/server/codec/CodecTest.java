@@ -1,12 +1,17 @@
 package net.minestom.server.codec;
 
+import net.kyori.adventure.nbt.ListBinaryTag;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.*;
 import java.util.stream.Stream;
+
+import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class CodecTest {
 
@@ -33,7 +38,7 @@ public final class CodecTest {
         var optionalCodec = codec.optional(expected);
         var result = optionalCodec.decode(transcoder, transcoder.createNull());
         CodecAssertions.assertOk(result);
-        Assertions.assertEquals(expected, result.orElseThrow());
+        assertEquals(expected, result.orElseThrow());
     }
 
     @ParameterizedTest
@@ -43,7 +48,7 @@ public final class CodecTest {
         var encodeResult = optionalCodec.encode(transcoder, null);
         var result = optionalCodec.decode(transcoder, encodeResult.orElseThrow());
         CodecAssertions.assertOk(result);
-        Assertions.assertEquals(expected, result.orElseThrow());
+        assertEquals(expected, result.orElseThrow());
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -57,7 +62,7 @@ public final class CodecTest {
         var decoded = codec.decode(transcoder, encoded.orElseThrow());
         CodecAssertions.assertOk(decoded);
         var decodedObject = decoded.orElseThrow();
-        Assertions.assertEquals(testList, decodedObject);
+        assertEquals(testList, decodedObject);
         Assertions.assertDoesNotThrow(() -> testList.set(0, "Test"));
         Assertions.assertNotEquals(testList, decodedObject);
         Assertions.assertThrows(UnsupportedOperationException.class, () -> decodedObject.set(0, "Test"));
@@ -74,7 +79,7 @@ public final class CodecTest {
         var decoded = codec.decode(transcoder, encoded.orElseThrow());
         CodecAssertions.assertOk(decoded);
         var decodedObject = decoded.orElseThrow();
-        Assertions.assertEquals(testSet, decodedObject);
+        assertEquals(testSet, decodedObject);
         Assertions.assertDoesNotThrow(() -> testSet.remove("Hey"));
         Assertions.assertNotEquals(testSet, decodedObject);
         Assertions.assertThrows(UnsupportedOperationException.class, () -> decodedObject.remove("Hey"));
@@ -91,9 +96,26 @@ public final class CodecTest {
         var decoded = codec.decode(transcoder, encoded.orElseThrow());
         CodecAssertions.assertOk(decoded);
         var decodedObject = decoded.orElseThrow();
-        Assertions.assertEquals(testSet, decodedObject);
+        assertEquals(testSet, decodedObject);
         Assertions.assertDoesNotThrow(() -> testSet.remove("Hey"));
         Assertions.assertNotEquals(testSet, decodedObject);
         Assertions.assertThrows(UnsupportedOperationException.class, () -> decodedObject.remove("Hey"));
+    }
+
+    @Test
+    void listOrSingleSingleValueAsSingle() {
+        var codec = Codec.INT.listOrSingle();
+        var value = codec.encode(Transcoder.NBT, List.of(42)).orElseThrow();
+        assertEquals(intBinaryTag(42), value);
+    }
+
+    @Test
+    void listOrSingleMultiValueAsList() {
+        var codec = Codec.INT.listOrSingle();
+        var value = codec.encode(Transcoder.NBT, List.of(42, 24)).orElseThrow();
+        assertEquals(ListBinaryTag.builder()
+                             .add(intBinaryTag(42))
+                             .add(intBinaryTag(24))
+                             .build(), value);
     }
 }

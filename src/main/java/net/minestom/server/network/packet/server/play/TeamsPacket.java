@@ -11,6 +11,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -21,38 +22,26 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record TeamsPacket(String teamName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_MEMBERS = 16384;
 
-    public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, TeamsPacket value) {
-            buffer.write(STRING, value.teamName);
-            buffer.write(BYTE, (byte) value.action.id());
-            @SuppressWarnings("unchecked") final Type<Action> type = (Type<Action>) actionSerializer(value.action.id());
-            buffer.write(type, value.action);
-        }
+    private static final NetworkBuffer.Type<Action> ACTION_NETWORK_TYPE = Tagged(
+            NetworkBuffer.BYTE, action -> (byte) action.id(),
+            Map.of(
+                    (byte) 0, CreateTeamAction.SERIALIZER,
+                    (byte) 1, RemoveTeamAction.SERIALIZER,
+                    (byte) 2, UpdateTeamAction.SERIALIZER,
+                    (byte) 3, AddEntitiesToTeamAction.SERIALIZER,
+                    (byte) 4, RemoveEntitiesToTeamAction.SERIALIZER
+            )
+    );
 
-        @Override
-        public TeamsPacket read(NetworkBuffer buffer) {
-            final String teamName = buffer.read(STRING);
-            final byte actionId = buffer.read(BYTE);
-            final var type = actionSerializer(actionId);
-            return new TeamsPacket(teamName, type.read(buffer));
-        }
-    };
+    public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = NetworkBufferTemplate.template(
+            STRING, TeamsPacket::teamName,
+            ACTION_NETWORK_TYPE, TeamsPacket::action,
+            TeamsPacket::new
+    );
 
     @Override
-    public Collection<Component> components() {
+    public Collection<? extends Component> components() {
         return this.action instanceof ComponentHolder<?> holder ? holder.components() : List.of();
-    }
-
-    private static Type<? extends Action> actionSerializer(int id) {
-        return switch (id) {
-            case 0 -> CreateTeamAction.SERIALIZER;
-            case 1 -> RemoveTeamAction.SERIALIZER;
-            case 2 -> UpdateTeamAction.SERIALIZER;
-            case 3 -> AddEntitiesToTeamAction.SERIALIZER;
-            case 4 -> RemoveEntitiesToTeamAction.SERIALIZER;
-            default -> throw new RuntimeException("Unknown action id");
-        };
     }
 
     @Override
@@ -94,7 +83,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             public CreateTeamAction read(NetworkBuffer buffer) {
                 return new CreateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
                         buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
-                        NamedTextColor.namedColor(buffer.read(VAR_INT)), buffer.read(COMPONENT), buffer.read(COMPONENT),
+                        AdventurePacketConvertor.getNamedTextColor(buffer.read(VAR_INT)), buffer.read(COMPONENT), buffer.read(COMPONENT),
                         buffer.read(STRING.list(MAX_MEMBERS)));
             }
         };
@@ -155,7 +144,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             public UpdateTeamAction read(NetworkBuffer buffer) {
                 return new UpdateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
                         buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
-                        NamedTextColor.namedColor(buffer.read(VAR_INT)),
+                        AdventurePacketConvertor.getNamedTextColor(buffer.read(VAR_INT)),
                         buffer.read(COMPONENT), buffer.read(COMPONENT));
             }
         };
@@ -261,12 +250,12 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             this.identifier = identifier;
         }
 
-            public static NameTagVisibility fromIdentifier(String identifier) {
+        public static NameTagVisibility fromIdentifier(String identifier) {
             for (NameTagVisibility v : values()) {
                 if (v.getIdentifier().equals(identifier))
                     return v;
             }
-            Check.fail("Identifier for NameTagVisibility is invalid: " + identifier);
+            Check.fail("Identifier for NameTagVisibility is invalid: {0}", identifier);
             return null;
         }
 
@@ -275,7 +264,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          *
          * @return the identifier
          */
-            public String getIdentifier() {
+        public String getIdentifier() {
             return identifier;
         }
     }
@@ -322,7 +311,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
                 if (v.getIdentifier().equals(identifier))
                     return v;
             }
-            Check.fail("Identifier for CollisionRule is invalid: " + identifier);
+            Check.fail("Identifier for CollisionRule is invalid: {0}", identifier);
             return null;
         }
 

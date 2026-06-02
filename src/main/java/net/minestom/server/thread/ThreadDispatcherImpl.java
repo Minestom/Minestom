@@ -1,8 +1,8 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.Tickable;
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -23,7 +23,7 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
     private final ArrayDeque<P> partitionUpdateQueue = new ArrayDeque<>();
 
     // Requests consumed at the end of each tick
-    private final MessagePassingQueue<Update<P, E>> updates = new MpscUnboundedArrayQueue<>(1024);
+    private final MessagePassingQueue<Update<P, E>> updates = ConcurrentMessageQueues.mpscUnboundedArrayQueue(1024);
 
     ThreadDispatcherImpl(ThreadProvider<P> provider, int threadCount,
                          IntFunction<? extends TickThread> threadGenerator) {

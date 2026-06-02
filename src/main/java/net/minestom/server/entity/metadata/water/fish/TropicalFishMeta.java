@@ -60,7 +60,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
         public static Variant fromPackedId(int packedId) {
             int patternColorId = (packedId >> 24) & 0xFF;
             int bodyColorId = (packedId >> 16) & 0xFF;
-            int patternId = packedId & 0xFF;
+            int patternId = packedId & 0xFFFF;
 
             DyeColor patternColor = DyeColor.values()[patternColorId];
             DyeColor bodyColor = DyeColor.values()[bodyColorId];

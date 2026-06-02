@@ -2,18 +2,23 @@ package net.minestom.server;
 
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.animal.ChickenVariant;
+import net.minestom.server.entity.metadata.animal.CowVariant;
+import net.minestom.server.entity.metadata.animal.FrogVariant;
+import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.ZombieNautilusVariant;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.extras.MojangAuth;
-import net.minestom.server.extras.bungee.BungeeCordProxy;
-import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -41,6 +46,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -82,7 +88,7 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public static MinecraftServer init() {
-        return init(defaultAuth());
+        return init(new Auth.Offline());
     }
 
     @ApiStatus.Internal
@@ -94,15 +100,7 @@ public final class MinecraftServer implements MinecraftConstants {
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
-        return updateProcess(defaultAuth());
-    }
-
-    @SuppressWarnings("removal")
-    private static Auth defaultAuth() {
-        if (MojangAuth.isEnabled()) return new Auth.Online(MojangAuth.getKeyPair());
-        if (VelocityProxy.isEnabled()) return new Auth.Velocity(VelocityProxy.getKey());
-        if (BungeeCordProxy.isEnabled()) return new Auth.Bungee(BungeeCordProxy.getBungeeGuardTokens());
-        return new Auth.Offline();
+        return updateProcess(new Auth.Offline());
     }
 
     /**
@@ -201,7 +199,7 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.bossBar();
     }
 
-    public static PacketParser<ClientPacket> getPacketParser() {
+    public static PacketParser.Client getPacketParser() {
         return serverProcess.packetParser();
     }
 
@@ -263,6 +261,10 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.advancement();
     }
 
+    public static ClickCallbackManager getClickCallbackManager() {
+        return serverProcess.clickCallbackManager();
+    }
+
     public static DynamicRegistry<ChatType> getChatTypeRegistry() {
         return serverProcess.chatType();
     }
@@ -299,6 +301,34 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.wolfVariant();
     }
 
+    public static DynamicRegistry<WolfSoundVariant> getWolfSoundVariantRegistry() {
+        return serverProcess.wolfSoundVariant();
+    }
+
+    public static DynamicRegistry<CatVariant> getCatVariantRegistry() {
+        return serverProcess.catVariant();
+    }
+
+    public static DynamicRegistry<ChickenVariant> getChickenVariantRegistry() {
+        return serverProcess.chickenVariant();
+    }
+
+    public static DynamicRegistry<CowVariant> getCowVariantRegistry() {
+        return serverProcess.cowVariant();
+    }
+
+    public static DynamicRegistry<FrogVariant> getFrogVariantRegistry() {
+        return serverProcess.frogVariant();
+    }
+
+    public static DynamicRegistry<PigVariant> getPigVariantRegistry() {
+        return serverProcess.pigVariant();
+    }
+
+    public static DynamicRegistry<ZombieNautilusVariant> getZombieNautilusVariantRegistry() {
+        return serverProcess.zombieNautilusVariant();
+    }
+
     public static DynamicRegistry<Enchantment> getEnchantmentRegistry() {
         return serverProcess.enchantment();
     }
@@ -315,20 +345,24 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.instrument();
     }
 
+    public static DynamicRegistry<Timeline> getTimelineRegistry() {
+        return serverProcess.timeline();
+    }
+
     public static DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
-        return process().enchantmentLevelBasedValues();
+        return serverProcess.enchantmentLevelBasedValues();
     }
 
     public static DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
-        return process().enchantmentValueEffects();
+        return serverProcess.enchantmentValueEffects();
     }
 
     public static DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
-        return process().enchantmentEntityEffects();
+        return serverProcess.enchantmentEntityEffects();
     }
 
     public static DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
-        return process().enchantmentLocationEffects();
+        return serverProcess.enchantmentLocationEffects();
     }
 
     public static Server getServer() {

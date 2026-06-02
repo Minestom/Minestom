@@ -222,9 +222,9 @@ public class CommandTestUtils {
         record TestNode(List<String> children, String meta, AtomicReference<String> redirect) {
             @Override
             public boolean equals(Object obj) {
-                if (obj instanceof TestNode that) {
-                    return this.meta.equals(that.meta) && Objects.equals(this.redirect.get(), that.redirect.get()) &&
-                            this.children.containsAll(that.children) && this.children.size() == that.children.size();
+                if (obj instanceof TestNode(List<String> children1, String meta1, AtomicReference<String> redirect1)) {
+                    return this.meta.equals(meta1) && Objects.equals(this.redirect.get(), redirect1.get()) &&
+                            this.children.containsAll(children1) && this.children.size() == children1.size();
                 } else {
                     return false;
                 }
@@ -279,7 +279,7 @@ public class CommandTestUtils {
         if (prettyPrint)
             return builder.toString()
                     .replaceFirst("\\{r", "{\n  r")
-                    .replaceAll(";", "\n  ")
+                    .replace(";", "\n  ")
                     .replaceFirst(" {2}}$", "}\n");
         else
             return builder.toString();

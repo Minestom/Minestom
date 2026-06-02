@@ -11,6 +11,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -18,6 +19,7 @@ import java.util.function.Function;
 
 import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
 import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NetworkBufferTest {
@@ -44,6 +46,11 @@ public class NetworkBufferTest {
 
         assertEquals((byte) 3, buffer.read(BYTE));
         assertEquals((byte) 4, buffer.read(BYTE));
+    }
+
+    @Test
+    public void garbageCollected() {
+        waitUntilCleared(new WeakReference<>(NetworkBuffer.staticBuffer(1024)));
     }
 
     @Test
@@ -466,6 +473,34 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void maxLength() {
+        var buffer = NetworkBuffer.resizableBuffer();
+
+        buffer.write(BOOLEAN.maxLength(1), true);
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.maxLength(3), 1));
+        buffer.write(INT.maxLength(4), 1);
+
+        assertTrue(buffer.read(BOOLEAN.maxLength(1)));
+        assertEquals(1, buffer.read(INT.maxLength(4)));
+    }
+
+    @Test
+    public void maxLengthList() {
+        var buffer = NetworkBuffer.resizableBuffer();
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(3), List.of(1)));
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(4), List.of(1)));
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(8), List.of(1, 2)));
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(4), List.of(1, 2)));
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(INT.list().maxLength(5), List.of(1, 2)));
+
+        buffer.write(INT.list().maxLength(9), List.of(1));
+        buffer.write(INT.list().maxLength(14), List.of(1, 2));
+
+        assertEquals(List.of(1), buffer.read(INT.list().maxLength(9)));
+        assertEquals(List.of(1, 2), buffer.read(INT.list().maxLength(14)));
+    }
+
+    @Test
     public void oomStringRegression() {
         var buffer = NetworkBuffer.resizableBuffer(100);
         buffer.write(VAR_INT, Integer.MAX_VALUE); // String length
@@ -582,7 +617,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferTypeOptional(NetworkBuffer.Type<T> type, @Nullable T value, byte @Nullable [] expected) {
-        assertBufferType(type, value, expected, new Action<T>() {
+        assertBufferType(type, value, expected, new Action<>() {
             @Override
             public void write(NetworkBuffer buffer, NetworkBuffer.Type<T> type, @UnknownNullability T value) {
                 buffer.write(type.optional(), value);

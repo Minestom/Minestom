@@ -23,10 +23,7 @@ import net.minestom.server.entity.metadata.item.*;
 import net.minestom.server.entity.metadata.minecart.*;
 import net.minestom.server.entity.metadata.monster.*;
 import net.minestom.server.entity.metadata.monster.raider.*;
-import net.minestom.server.entity.metadata.monster.skeleton.BoggedMeta;
-import net.minestom.server.entity.metadata.monster.skeleton.SkeletonMeta;
-import net.minestom.server.entity.metadata.monster.skeleton.StrayMeta;
-import net.minestom.server.entity.metadata.monster.skeleton.WitherSkeletonMeta;
+import net.minestom.server.entity.metadata.monster.skeleton.*;
 import net.minestom.server.entity.metadata.monster.zombie.*;
 import net.minestom.server.entity.metadata.other.*;
 import net.minestom.server.entity.metadata.projectile.*;
@@ -37,15 +34,19 @@ import net.minestom.server.entity.metadata.water.DolphinMeta;
 import net.minestom.server.entity.metadata.water.GlowSquidMeta;
 import net.minestom.server.entity.metadata.water.SquidMeta;
 import net.minestom.server.entity.metadata.water.fish.*;
-import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+
+import static java.util.Map.entry;
 
 public final class MetadataHolder {
     private static final VarHandle NOTIFIED_CHANGES;
@@ -58,24 +59,34 @@ public final class MetadataHolder {
         }
     }
 
-    private final Entity entity;
+    private final Consumer<Map<Integer, Metadata.Entry<?>>> changesListener;
     private final Int2ObjectMap<Metadata.Entry<?>> entries = new Int2ObjectOpenHashMap<>();
 
     @SuppressWarnings("FieldMayBeFinal")
     private volatile boolean notifyAboutChanges = true;
     private final Map<Integer, Metadata.Entry<?>> notNotifiedChanges = new HashMap<>();
 
+    /**
+     * @deprecated Use {@link #MetadataHolder(Consumer)} instead.
+     */
+    @Deprecated(forRemoval = true)
     public MetadataHolder(@Nullable Entity entity) {
-        this.entity = entity;
+        this(entity == null ? _ -> {
+        } : entity::notifyMetadataChanges);
     }
 
-    public <T> T get(MetadataDef.Entry<T> entry) {
+    public MetadataHolder(Consumer<Map<Integer, Metadata.Entry<?>>> changesListener) {
+        this.changesListener = Objects.requireNonNull(changesListener, "changesListener");
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends @UnknownNullability Object> T get(MetadataDef.Entry<T> entry) {
         final int id = entry.index();
 
         final Metadata.Entry<?> value = this.entries.get(id);
         if (value == null) return entry.defaultValue();
         return switch (entry) {
-            case MetadataDef.Entry.Index<T> v -> (T) value.value();
+            case MetadataDef.Entry.Index<T> _ -> (T) value.value();
             case MetadataDef.Entry.BitMask bitMask -> {
                 final byte maskValue = (byte) value.value();
                 yield (T) ((Boolean) getMaskBit(maskValue, bitMask.bitMask()));
@@ -87,8 +98,18 @@ public final class MetadataHolder {
         };
     }
 
-    public <T> void set(MetadataDef.Entry<T> entry, T value) {
+    public <T extends @UnknownNullability Object> void set(MetadataDef.Entry<T> entry, T value) {
         final int id = entry.index();
+
+        T current = get(entry);
+
+        // If a metadata value is unchanged we should not send it. In particular we need to be careful with
+        //  sending bitmasks which will overwrite client-predicted values. See PR 3089 for more info.
+        // However, interpolation delay is expected to be sent regularly with the same value to begin
+        //  interpolation so we always send it for now.
+        if (Objects.equals(current, value) && entry != MetadataDef.Display.INTERPOLATION_DELAY) {
+            return;
+        }
 
         Metadata.Entry<?> result = switch (entry) {
             case MetadataDef.Entry.Index<T> v -> v.function().apply(value);
@@ -107,15 +128,13 @@ public final class MetadataHolder {
         };
 
         this.entries.put(id, result);
-        final Entity entity = this.entity;
-        if (entity != null && entity.isActive()) {
-            if (!this.notifyAboutChanges) {
-                synchronized (this.notNotifiedChanges) {
-                    this.notNotifiedChanges.put(id, result);
-                }
-            } else {
-                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(id, result)));
+
+        if (!this.notifyAboutChanges) {
+            synchronized (this.notNotifiedChanges) {
+                this.notNotifiedChanges.put(id, result);
             }
+        } else {
+            this.changesListener.accept(Map.of(id, result));
         }
     }
 
@@ -142,8 +161,6 @@ public final class MetadataHolder {
             // Ask future metadata changes to be cached
             return;
         }
-        final Entity entity = this.entity;
-        if (entity == null || !entity.isActive()) return;
         Map<Integer, Metadata.Entry<?>> entries;
         synchronized (this.notNotifiedChanges) {
             Map<Integer, Metadata.Entry<?>> awaitingChanges = this.notNotifiedChanges;
@@ -151,180 +168,176 @@ public final class MetadataHolder {
             entries = Map.copyOf(awaitingChanges);
             awaitingChanges.clear();
         }
-        entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
+        this.changesListener.accept(entries);
     }
 
     public Map<Integer, Metadata.Entry<?>> getEntries() {
         return Map.copyOf(this.entries);
     }
 
-    static final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
+    static final Map<String, BiFunction<@Nullable Entity, MetadataHolder, ? extends EntityMeta>> ENTITY_META_SUPPLIER = Map.ofEntries(
+            entry("minecraft:acacia_boat", BoatMeta::new),
+            entry("minecraft:acacia_chest_boat", BoatMeta::new),
+            entry("minecraft:allay", AllayMeta::new),
+            entry("minecraft:area_effect_cloud", AreaEffectCloudMeta::new),
+            entry("minecraft:armadillo", ArmadilloMeta::new),
+            entry("minecraft:armor_stand", ArmorStandMeta::new),
+            entry("minecraft:arrow", ArrowMeta::new),
+            entry("minecraft:axolotl", AxolotlMeta::new),
+            entry("minecraft:bamboo_raft", BoatMeta::new),
+            entry("minecraft:bamboo_chest_raft", BoatMeta::new),
+            entry("minecraft:bat", BatMeta::new),
+            entry("minecraft:bee", BeeMeta::new),
+            entry("minecraft:birch_boat", BoatMeta::new),
+            entry("minecraft:birch_chest_boat", BoatMeta::new),
+            entry("minecraft:blaze", BlazeMeta::new),
+            entry("minecraft:block_display", BlockDisplayMeta::new),
+            entry("minecraft:bogged", BoggedMeta::new),
+            entry("minecraft:breeze", BreezeMeta::new),
+            entry("minecraft:breeze_wind_charge", BreezeWindChargeMeta::new),
+            entry("minecraft:camel", CamelMeta::new),
+            entry("minecraft:camel_husk", CamelHuskMeta::new),
+            entry("minecraft:cat", CatMeta::new),
+            entry("minecraft:cave_spider", CaveSpiderMeta::new),
+            entry("minecraft:cherry_boat", BoatMeta::new),
+            entry("minecraft:cherry_chest_boat", BoatMeta::new),
+            entry("minecraft:chicken", ChickenMeta::new),
+            entry("minecraft:cod", CodMeta::new),
+            entry("minecraft:copper_golem", CopperGolemMeta::new),
+            entry("minecraft:cow", CowMeta::new),
+            entry("minecraft:creaking", CreakingMeta::new),
+            entry("minecraft:creeper", CreeperMeta::new),
+            entry("minecraft:dark_oak_boat", BoatMeta::new),
+            entry("minecraft:dark_oak_chest_boat", BoatMeta::new),
+            entry("minecraft:dolphin", DolphinMeta::new),
+            entry("minecraft:donkey", DonkeyMeta::new),
+            entry("minecraft:dragon_fireball", DragonFireballMeta::new),
+            entry("minecraft:drowned", DrownedMeta::new),
+            entry("minecraft:elder_guardian", ElderGuardianMeta::new),
+            entry("minecraft:end_crystal", EndCrystalMeta::new),
+            entry("minecraft:ender_dragon", EnderDragonMeta::new),
+            entry("minecraft:enderman", EndermanMeta::new),
+            entry("minecraft:endermite", EndermiteMeta::new),
+            entry("minecraft:evoker", EvokerMeta::new),
+            entry("minecraft:evoker_fangs", EvokerFangsMeta::new),
+            entry("minecraft:experience_orb", ExperienceOrbMeta::new),
+            entry("minecraft:eye_of_ender", EyeOfEnderMeta::new),
+            entry("minecraft:falling_block", FallingBlockMeta::new),
+            entry("minecraft:fireball", FireballMeta::new),
+            entry("minecraft:firework_rocket", FireworkRocketMeta::new),
+            entry("minecraft:fox", FoxMeta::new),
+            entry("minecraft:frog", FrogMeta::new),
+            entry("minecraft:ghast", GhastMeta::new),
+            entry("minecraft:giant", GiantMeta::new),
+            entry("minecraft:glow_item_frame", GlowItemFrameMeta::new),
+            entry("minecraft:glow_squid", GlowSquidMeta::new),
+            entry("minecraft:goat", GoatMeta::new),
+            entry("minecraft:guardian", GuardianMeta::new),
+            entry("minecraft:happy_ghast", HappyGhastMeta::new),
+            entry("minecraft:hoglin", HoglinMeta::new),
+            entry("minecraft:horse", HorseMeta::new),
+            entry("minecraft:husk", HuskMeta::new),
+            entry("minecraft:illusioner", IllusionerMeta::new),
+            entry("minecraft:interaction", InteractionMeta::new),
+            entry("minecraft:iron_golem", IronGolemMeta::new),
+            entry("minecraft:item", ItemEntityMeta::new),
+            entry("minecraft:item_display", ItemDisplayMeta::new),
+            entry("minecraft:item_frame", ItemFrameMeta::new),
+            entry("minecraft:jungle_boat", BoatMeta::new),
+            entry("minecraft:jungle_chest_boat", BoatMeta::new),
+            entry("minecraft:leash_knot", LeashKnotMeta::new),
+            entry("minecraft:lightning_bolt", LightningBoltMeta::new),
+            entry("minecraft:lingering_potion", LingeringPotionMeta::new),
+            entry("minecraft:llama", LlamaMeta::new),
+            entry("minecraft:llama_spit", LlamaSpitMeta::new),
+            entry("minecraft:magma_cube", MagmaCubeMeta::new),
+            entry("minecraft:mangrove_boat", BoatMeta::new),
+            entry("minecraft:mangrove_chest_boat", BoatMeta::new),
+            entry("minecraft:mannequin", MannequinMeta::new),
+            entry("minecraft:marker", MarkerMeta::new),
+            entry("minecraft:minecart", MinecartMeta::new),
+            entry("minecraft:nautilus", NautilusMeta::new),
+            entry("minecraft:chest_minecart", ChestMinecartMeta::new),
+            entry("minecraft:command_block_minecart", CommandBlockMinecartMeta::new),
+            entry("minecraft:furnace_minecart", FurnaceMinecartMeta::new),
+            entry("minecraft:hopper_minecart", HopperMinecartMeta::new),
+            entry("minecraft:spawner_minecart", SpawnerMinecartMeta::new),
+            entry("minecraft:text_display", TextDisplayMeta::new),
+            entry("minecraft:tnt_minecart", TntMinecartMeta::new),
+            entry("minecraft:mooshroom", MooshroomMeta::new),
+            entry("minecraft:mule", MuleMeta::new),
+            entry("minecraft:oak_boat", BoatMeta::new),
+            entry("minecraft:oak_chest_boat", BoatMeta::new),
+            entry("minecraft:ocelot", OcelotMeta::new),
+            entry("minecraft:ominous_item_spawner", OminousItemSpawnerMeta::new),
+            entry("minecraft:painting", PaintingMeta::new),
+            entry("minecraft:pale_oak_boat", BoatMeta::new),
+            entry("minecraft:pale_oak_chest_boat", BoatMeta::new),
+            entry("minecraft:panda", PandaMeta::new),
+            entry("minecraft:parrot", ParrotMeta::new),
+            entry("minecraft:parched", ParchedMeta::new),
+            entry("minecraft:phantom", PhantomMeta::new),
+            entry("minecraft:pig", PigMeta::new),
+            entry("minecraft:piglin", PiglinMeta::new),
+            entry("minecraft:piglin_brute", PiglinBruteMeta::new),
+            entry("minecraft:pillager", PillagerMeta::new),
+            entry("minecraft:polar_bear", PolarBearMeta::new),
+            entry("minecraft:tnt", PrimedTntMeta::new),
+            entry("minecraft:pufferfish", PufferfishMeta::new),
+            entry("minecraft:rabbit", RabbitMeta::new),
+            entry("minecraft:ravager", RavagerMeta::new),
+            entry("minecraft:salmon", SalmonMeta::new),
+            entry("minecraft:sheep", SheepMeta::new),
+            entry("minecraft:shulker", ShulkerMeta::new),
+            entry("minecraft:shulker_bullet", ShulkerBulletMeta::new),
+            entry("minecraft:silverfish", SilverfishMeta::new),
+            entry("minecraft:skeleton", SkeletonMeta::new),
+            entry("minecraft:skeleton_horse", SkeletonHorseMeta::new),
+            entry("minecraft:slime", SlimeMeta::new),
+            entry("minecraft:small_fireball", SmallFireballMeta::new),
+            entry("minecraft:sniffer", SnifferMeta::new),
+            entry("minecraft:snow_golem", SnowGolemMeta::new),
+            entry("minecraft:snowball", SnowballMeta::new),
+            entry("minecraft:spectral_arrow", SpectralArrowMeta::new),
+            entry("minecraft:spider", SpiderMeta::new),
+            entry("minecraft:splash_potion", SplashPotionMeta::new),
+            entry("minecraft:spruce_boat", BoatMeta::new),
+            entry("minecraft:spruce_chest_boat", BoatMeta::new),
+            entry("minecraft:squid", SquidMeta::new),
+            entry("minecraft:stray", StrayMeta::new),
+            entry("minecraft:strider", StriderMeta::new),
+            entry("minecraft:tadpole", TadpoleMeta::new),
+            entry("minecraft:egg", ThrownEggMeta::new),
+            entry("minecraft:ender_pearl", ThrownEnderPearlMeta::new),
+            entry("minecraft:experience_bottle", ThrownExperienceBottleMeta::new),
+            entry("minecraft:potion", SplashPotionMeta::new),
+            entry("minecraft:trident", ThrownTridentMeta::new),
+            entry("minecraft:trader_llama", TraderLlamaMeta::new),
+            entry("minecraft:tropical_fish", TropicalFishMeta::new),
+            entry("minecraft:turtle", TurtleMeta::new),
+            entry("minecraft:vex", VexMeta::new),
+            entry("minecraft:villager", VillagerMeta::new),
+            entry("minecraft:vindicator", VindicatorMeta::new),
+            entry("minecraft:wandering_trader", WanderingTraderMeta::new),
+            entry("minecraft:warden", WardenMeta::new),
+            entry("minecraft:wind_charge", WindChargeMeta::new),
+            entry("minecraft:witch", WitchMeta::new),
+            entry("minecraft:wither", WitherMeta::new),
+            entry("minecraft:wither_skeleton", WitherSkeletonMeta::new),
+            entry("minecraft:wither_skull", WitherSkullMeta::new),
+            entry("minecraft:wolf", WolfMeta::new),
+            entry("minecraft:zoglin", ZoglinMeta::new),
+            entry("minecraft:zombie", ZombieMeta::new),
+            entry("minecraft:zombie_horse", ZombieHorseMeta::new),
+            entry("minecraft:zombie_nautilus", ZombieNautilusMeta::new),
+            entry("minecraft:zombie_villager", ZombieVillagerMeta::new),
+            entry("minecraft:zombified_piglin", ZombifiedPiglinMeta::new),
+            entry("minecraft:player", PlayerMeta::new),
+            entry("minecraft:fishing_bobber", FishingHookMeta::new)
+    );
 
     @ApiStatus.Internal
-    public static EntityMeta createMeta(
-            EntityType entityType,
-            @Nullable Entity entity,
-            MetadataHolder metadata
-    ) {
+    public static EntityMeta createMeta(EntityType entityType, @Nullable Entity entity, MetadataHolder metadata) {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
-    }
-
-    private static Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> createMetaMap() {
-        final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> map = new HashMap<>();
-        map.put("minecraft:acacia_boat", BoatMeta::new);
-        map.put("minecraft:acacia_chest_boat", BoatMeta::new);
-        map.put("minecraft:allay", AllayMeta::new);
-        map.put("minecraft:area_effect_cloud", AreaEffectCloudMeta::new);
-        map.put("minecraft:armadillo", ArmadilloMeta::new);
-        map.put("minecraft:armor_stand", ArmorStandMeta::new);
-        map.put("minecraft:arrow", ArrowMeta::new);
-        map.put("minecraft:axolotl", AxolotlMeta::new);
-        map.put("minecraft:bamboo_raft", BoatMeta::new);
-        map.put("minecraft:bamboo_chest_raft", BoatMeta::new);
-        map.put("minecraft:bat", BatMeta::new);
-        map.put("minecraft:bee", BeeMeta::new);
-        map.put("minecraft:birch_boat", BoatMeta::new);
-        map.put("minecraft:birch_chest_boat", BoatMeta::new);
-        map.put("minecraft:blaze", BlazeMeta::new);
-        map.put("minecraft:block_display", BlockDisplayMeta::new);
-        map.put("minecraft:bogged", BoggedMeta::new);
-        map.put("minecraft:breeze", BreezeMeta::new);
-        map.put("minecraft:breeze_wind_charge", BreezeWindChargeMeta::new);
-        map.put("minecraft:camel", CamelMeta::new);
-        map.put("minecraft:cat", CatMeta::new);
-        map.put("minecraft:cave_spider", CaveSpiderMeta::new);
-        map.put("minecraft:cherry_boat", BoatMeta::new);
-        map.put("minecraft:cherry_chest_boat", BoatMeta::new);
-        map.put("minecraft:chicken", ChickenMeta::new);
-        map.put("minecraft:cod", CodMeta::new);
-        map.put("minecraft:copper_golem", CopperGolemMeta::new);
-        map.put("minecraft:cow", CowMeta::new);
-        map.put("minecraft:creaking", CreakingMeta::new);
-        map.put("minecraft:creeper", CreeperMeta::new);
-        map.put("minecraft:dark_oak_boat", BoatMeta::new);
-        map.put("minecraft:dark_oak_chest_boat", BoatMeta::new);
-        map.put("minecraft:dolphin", DolphinMeta::new);
-        map.put("minecraft:donkey", DonkeyMeta::new);
-        map.put("minecraft:dragon_fireball", DragonFireballMeta::new);
-        map.put("minecraft:drowned", DrownedMeta::new);
-        map.put("minecraft:elder_guardian", ElderGuardianMeta::new);
-        map.put("minecraft:end_crystal", EndCrystalMeta::new);
-        map.put("minecraft:ender_dragon", EnderDragonMeta::new);
-        map.put("minecraft:enderman", EndermanMeta::new);
-        map.put("minecraft:endermite", EndermiteMeta::new);
-        map.put("minecraft:evoker", EvokerMeta::new);
-        map.put("minecraft:evoker_fangs", EvokerFangsMeta::new);
-        map.put("minecraft:experience_orb", ExperienceOrbMeta::new);
-        map.put("minecraft:eye_of_ender", EyeOfEnderMeta::new);
-        map.put("minecraft:falling_block", FallingBlockMeta::new);
-        map.put("minecraft:fireball", FireballMeta::new);
-        map.put("minecraft:firework_rocket", FireworkRocketMeta::new);
-        map.put("minecraft:fox", FoxMeta::new);
-        map.put("minecraft:frog", FrogMeta::new);
-        map.put("minecraft:ghast", GhastMeta::new);
-        map.put("minecraft:giant", GiantMeta::new);
-        map.put("minecraft:glow_item_frame", GlowItemFrameMeta::new);
-        map.put("minecraft:glow_squid", GlowSquidMeta::new);
-        map.put("minecraft:goat", GoatMeta::new);
-        map.put("minecraft:guardian", GuardianMeta::new);
-        map.put("minecraft:happy_ghast", HappyGhastMeta::new);
-        map.put("minecraft:hoglin", HoglinMeta::new);
-        map.put("minecraft:horse", HorseMeta::new);
-        map.put("minecraft:husk", HuskMeta::new);
-        map.put("minecraft:illusioner", IllusionerMeta::new);
-        map.put("minecraft:interaction", InteractionMeta::new);
-        map.put("minecraft:iron_golem", IronGolemMeta::new);
-        map.put("minecraft:item", ItemEntityMeta::new);
-        map.put("minecraft:item_display", ItemDisplayMeta::new);
-        map.put("minecraft:item_frame", ItemFrameMeta::new);
-        map.put("minecraft:jungle_boat", BoatMeta::new);
-        map.put("minecraft:jungle_chest_boat", BoatMeta::new);
-        map.put("minecraft:leash_knot", LeashKnotMeta::new);
-        map.put("minecraft:lightning_bolt", LightningBoltMeta::new);
-        map.put("minecraft:lingering_potion", LingeringPotionMeta::new);
-        map.put("minecraft:llama", LlamaMeta::new);
-        map.put("minecraft:llama_spit", LlamaSpitMeta::new);
-        map.put("minecraft:magma_cube", MagmaCubeMeta::new);
-        map.put("minecraft:mangrove_boat", BoatMeta::new);
-        map.put("minecraft:mangrove_chest_boat", BoatMeta::new);
-        map.put("minecraft:mannequin", MannequinMeta::new);
-        map.put("minecraft:marker", MarkerMeta::new);
-        map.put("minecraft:minecart", MinecartMeta::new);
-        map.put("minecraft:chest_minecart", ChestMinecartMeta::new);
-        map.put("minecraft:command_block_minecart", CommandBlockMinecartMeta::new);
-        map.put("minecraft:furnace_minecart", FurnaceMinecartMeta::new);
-        map.put("minecraft:hopper_minecart", HopperMinecartMeta::new);
-        map.put("minecraft:spawner_minecart", SpawnerMinecartMeta::new);
-        map.put("minecraft:text_display", TextDisplayMeta::new);
-        map.put("minecraft:tnt_minecart", TntMinecartMeta::new);
-        map.put("minecraft:mooshroom", MooshroomMeta::new);
-        map.put("minecraft:mule", MuleMeta::new);
-        map.put("minecraft:oak_boat", BoatMeta::new);
-        map.put("minecraft:oak_chest_boat", BoatMeta::new);
-        map.put("minecraft:ocelot", OcelotMeta::new);
-        map.put("minecraft:ominous_item_spawner", OminousItemSpawnerMeta::new);
-        map.put("minecraft:painting", PaintingMeta::new);
-        map.put("minecraft:pale_oak_boat", BoatMeta::new);
-        map.put("minecraft:pale_oak_chest_boat", BoatMeta::new);
-        map.put("minecraft:panda", PandaMeta::new);
-        map.put("minecraft:parrot", ParrotMeta::new);
-        map.put("minecraft:phantom", PhantomMeta::new);
-        map.put("minecraft:pig", PigMeta::new);
-        map.put("minecraft:piglin", PiglinMeta::new);
-        map.put("minecraft:piglin_brute", PiglinBruteMeta::new);
-        map.put("minecraft:pillager", PillagerMeta::new);
-        map.put("minecraft:polar_bear", PolarBearMeta::new);
-        map.put("minecraft:tnt", PrimedTntMeta::new);
-        map.put("minecraft:pufferfish", PufferfishMeta::new);
-        map.put("minecraft:rabbit", RabbitMeta::new);
-        map.put("minecraft:ravager", RavagerMeta::new);
-        map.put("minecraft:salmon", SalmonMeta::new);
-        map.put("minecraft:sheep", SheepMeta::new);
-        map.put("minecraft:shulker", ShulkerMeta::new);
-        map.put("minecraft:shulker_bullet", ShulkerBulletMeta::new);
-        map.put("minecraft:silverfish", SilverfishMeta::new);
-        map.put("minecraft:skeleton", SkeletonMeta::new);
-        map.put("minecraft:skeleton_horse", SkeletonHorseMeta::new);
-        map.put("minecraft:slime", SlimeMeta::new);
-        map.put("minecraft:small_fireball", SmallFireballMeta::new);
-        map.put("minecraft:sniffer", SnifferMeta::new);
-        map.put("minecraft:snow_golem", SnowGolemMeta::new);
-        map.put("minecraft:snowball", SnowballMeta::new);
-        map.put("minecraft:spectral_arrow", SpectralArrowMeta::new);
-        map.put("minecraft:spider", SpiderMeta::new);
-        map.put("minecraft:splash_potion", SplashPotionMeta::new);
-        map.put("minecraft:spruce_boat", BoatMeta::new);
-        map.put("minecraft:spruce_chest_boat", BoatMeta::new);
-        map.put("minecraft:squid", SquidMeta::new);
-        map.put("minecraft:stray", StrayMeta::new);
-        map.put("minecraft:strider", StriderMeta::new);
-        map.put("minecraft:tadpole", TadpoleMeta::new);
-        map.put("minecraft:egg", ThrownEggMeta::new);
-        map.put("minecraft:ender_pearl", ThrownEnderPearlMeta::new);
-        map.put("minecraft:experience_bottle", ThrownExperienceBottleMeta::new);
-        map.put("minecraft:potion", SplashPotionMeta::new);
-        map.put("minecraft:trident", ThrownTridentMeta::new);
-        map.put("minecraft:trader_llama", TraderLlamaMeta::new);
-        map.put("minecraft:tropical_fish", TropicalFishMeta::new);
-        map.put("minecraft:turtle", TurtleMeta::new);
-        map.put("minecraft:vex", VexMeta::new);
-        map.put("minecraft:villager", VillagerMeta::new);
-        map.put("minecraft:vindicator", VindicatorMeta::new);
-        map.put("minecraft:wandering_trader", WanderingTraderMeta::new);
-        map.put("minecraft:warden", WardenMeta::new);
-        map.put("minecraft:wind_charge", WindChargeMeta::new);
-        map.put("minecraft:witch", WitchMeta::new);
-        map.put("minecraft:wither", WitherMeta::new);
-        map.put("minecraft:wither_skeleton", WitherSkeletonMeta::new);
-        map.put("minecraft:wither_skull", WitherSkullMeta::new);
-        map.put("minecraft:wolf", WolfMeta::new);
-        map.put("minecraft:zoglin", ZoglinMeta::new);
-        map.put("minecraft:zombie", ZombieMeta::new);
-        map.put("minecraft:zombie_horse", ZombieHorseMeta::new);
-        map.put("minecraft:zombie_villager", ZombieVillagerMeta::new);
-        map.put("minecraft:zombified_piglin", ZombifiedPiglinMeta::new);
-        map.put("minecraft:player", PlayerMeta::new);
-        map.put("minecraft:fishing_bobber", FishingHookMeta::new);
-        return Map.copyOf(map);
     }
 }

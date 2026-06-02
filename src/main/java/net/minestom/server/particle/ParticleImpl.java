@@ -14,8 +14,14 @@ final class ParticleImpl {
     static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(Key.key("particle"),
             (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
 
-    static @UnknownNullability Particle get(String key) {
-        return REGISTRY.get(Key.key(key));
+    static <P extends Particle> @UnknownNullability P get(String key) {
+        //noinspection unchecked
+        return (P) REGISTRY.get(Key.key(key));
+    }
+
+    static <P extends Particle> @UnknownNullability P get(Key key) {
+        //noinspection unchecked
+        return (P) REGISTRY.get(key);
     }
 
     private static Particle defaultParticle(Key key, int id) {

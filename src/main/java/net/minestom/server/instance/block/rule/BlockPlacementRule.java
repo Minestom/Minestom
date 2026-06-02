@@ -75,9 +75,9 @@ public abstract class BlockPlacementRule {
             Block block,
             BlockFace blockFace,
             Point cursorPosition,
-            /**
-			 * Whether or not the placement position is offset from the clicked block
-			 * position.
+            /*
+			  Whether the placement position is offset from the clicked block
+			  position.
 			 */
             boolean isOffset,
             Material material

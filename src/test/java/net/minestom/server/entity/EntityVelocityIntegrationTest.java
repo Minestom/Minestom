@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -113,7 +114,7 @@ public class EntityVelocityIntegrationTest {
 
         final double epsilon = 0.000001;
 
-        assertEquals(player.getVelocity().y(), -1.568, epsilon);
+        assertEquals(-1.568, player.getVelocity().y(), epsilon);
         double previousVelocity = player.getVelocity().y();
 
         player.setFlying(true);
@@ -125,7 +126,7 @@ public class EntityVelocityIntegrationTest {
             previousVelocity = player.getVelocity().y();
             env.tick();
         }
-        assertEquals(player.getVelocity().y(), 0);
+        assertEquals(0, player.getVelocity().y());
     }
 
     @Test
@@ -189,6 +190,39 @@ public class EntityVelocityIntegrationTest {
         i.set(0);
         env.tickWhile(tickLoopCondition, null);
         tracker.assertCount(1); // Verify the update is only sent once
+    }
+
+    @Test
+    public void velocityWorldBorder(Env env) {
+        var instance = env.createFlatInstance();
+        loadChunks(instance);
+
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        var point = new Pos(1.9, 40, 0.2);
+        instance.setWorldBorder(new WorldBorder(4, 0, 0, 0, 0));
+        instance.setBlock(new Vec(1, 39, 0), Block.ICE);
+        instance.setBlock(new Vec(1, 39, 1), Block.SOUL_SAND);
+        entity.setInstance(instance, point).join();
+        env.tick();
+        env.tick(); // Ensure the entity is onGround
+
+        var initialVelocity = new Vec(10, 0, 25);
+        entity.setVelocity(initialVelocity);
+        env.tick();
+
+        double horizontalAirResistance = entity.getAerodynamics().horizontalAirResistance();
+        double oldFriction = Block.ICE.registry().friction();
+        double newFriction = Block.SOUL_SAND.registry().friction();
+        assertNotEquals(oldFriction, newFriction, Vec.EPSILON);
+
+        double expectedDrag = newFriction * horizontalAirResistance;
+        double expectedOldDrag = oldFriction * horizontalAirResistance;
+
+        assertEquals(point.x(), entity.getPosition().x(), Vec.EPSILON);
+        assertTrue(entity.getPosition().z() > point.z());
+        assertEquals(initialVelocity.x() * expectedDrag, entity.getVelocity().x(), Vec.EPSILON);
+        assertEquals(initialVelocity.z() * expectedDrag, entity.getVelocity().z(), Vec.EPSILON);
+        assertNotEquals(initialVelocity.x() * expectedOldDrag, entity.getVelocity().x(), Vec.EPSILON);
     }
 
     private void testMovement(Env env, Entity entity, Vec... sample) {

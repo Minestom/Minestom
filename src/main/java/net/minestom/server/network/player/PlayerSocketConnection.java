@@ -28,8 +28,9 @@ import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import net.minestom.server.utils.validate.Check;
-import org.jctools.queues.MpscUnboundedXaddArrayQueue;
+import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,7 +84,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int protocolVersion;
 
     private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process());
-    private final MpscUnboundedXaddArrayQueue<SendablePacket> packetQueue = new MpscUnboundedXaddArrayQueue<>(1024);
+    private final MessagePassingQueue<SendablePacket> packetQueue = ConcurrentMessageQueues.mpscUnboundedArrayQueue(1024);
     private final Thread readThread, writeThread;
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
@@ -348,8 +349,8 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
             }
             // Translation
-            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding) {
-                packet = ((ServerPacket.ComponentHolding) packet).copyWithOperator(component ->
+            if (ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding translatablePacket) {
+                packet = translatablePacket.copyWithOperator(component ->
                         MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
         }
@@ -434,8 +435,9 @@ public class PlayerSocketConnection extends PlayerConnection {
             } else {
                 assert this.writeThread == Thread.currentThread(): "writeThread should be the current thread";
                 this.writeSignaled.set(false);
+                if (!isOnline()) return; // already offline, don't park
                 LockSupport.park(this);
-                assert this.packetQueue.peek() != null : "packet queue should not be empty";
+                if (packetQueue.isEmpty()) return; // woken by disconnect signal, not by packets
             }
         }
         if (!channel.isConnected()) throw new EOFException("Channel is closed");
@@ -452,6 +454,12 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Keep the buffer if not fully written
         if (success) PacketVanilla.PACKET_POOL.add(buffer);
         else this.writeLeftover = buffer;
+    }
+
+    @Override
+    public void disconnect() {
+        super.disconnect();
+        LockSupport.unpark(writeThread);
     }
 
     public Thread readThread() {

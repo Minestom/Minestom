@@ -3,11 +3,14 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryButtonClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.common.ClientPongPacket;
+import net.minestom.server.network.packet.client.play.ClientClickWindowButtonPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
@@ -81,4 +84,15 @@ public class WindowListener {
         player.closeInventory(true, (byte) packet.windowId());
     }
 
+    public static void inventoryButtonClickListener(ClientClickWindowButtonPacket packet, Player player) {
+        AbstractInventory inventory = player.getOpenInventory();
+
+        // Can't press a button if the inventory is not open
+        if (inventory == null) return;
+
+        // Can't press a button if the inventory is different from the packet's window id
+        if (packet.windowId() != (int) inventory.getWindowId()) return;
+
+        EventDispatcher.call(new InventoryButtonClickEvent(player, inventory, packet.buttonId()));
+    }
 }

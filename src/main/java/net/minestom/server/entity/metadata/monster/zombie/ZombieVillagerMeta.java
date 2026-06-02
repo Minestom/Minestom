@@ -27,7 +27,15 @@ public class ZombieVillagerMeta extends ZombieMeta {
     }
 
     public void setVillagerData(VillagerMeta.VillagerData data) {
-        metadata.set(MetadataDef.Villager.VARIANT, data);
+        metadata.set(MetadataDef.ZombieVillager.VILLAGER_DATA, data);
+    }
+
+    public boolean isFinalized() {
+        return metadata.get(MetadataDef.ZombieVillager.IS_FINALIZED);
+    }
+
+    public void setFinalized(boolean value) {
+        metadata.set(MetadataDef.ZombieVillager.IS_FINALIZED, value);
     }
 
     @Override

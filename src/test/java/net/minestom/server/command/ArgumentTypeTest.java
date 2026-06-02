@@ -276,7 +276,7 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentLong() {
         var arg = ArgumentType.Long("long");
-        assertArg(arg, 2564l, "2564");
+        assertArg(arg, 2564L, "2564");
         assertInvalidArg(arg, "256.4");
         assertInvalidArg(arg, "9223372036854775808");
     }
