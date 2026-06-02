@@ -834,13 +834,17 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         if (instance != null) {
             Pos pos = getPosition();
-            int eyeBlockX = pos.blockX();
-            int eyeBlockY = (int) Math.floor(pos.y() + getEyeHeight());
-            int eyeBlockZ = pos.blockZ();
-            Block eyeBlock = instance.getBlock(eyeBlockX, eyeBlockY, eyeBlockZ, Block.Getter.Condition.TYPE);
-            boolean eyeInWater = eyeBlock.compare(Block.WATER)
-                    || "true".equals(instance.getBlock(eyeBlockX, eyeBlockY, eyeBlockZ).getProperty("waterlogged"));
-            meta.setSwimming(eyeInWater && isSprinting() && getVehicle() == null);
+            boolean shouldSwim;
+            if (meta.isSwimming()) {
+                Block feetBlock = getBlockSafe(pos.blockX(), pos.blockY(), pos.blockZ());
+                shouldSwim = isBlockInWater(feetBlock, 0.0) && isSprinting() && getVehicle() == null;
+            } else {
+                double eyeY = pos.y() + getEyeHeight();
+                int eyeBlockY = (int) Math.floor(eyeY);
+                Block eyeBlock = getBlockSafe(pos.blockX(), eyeBlockY, pos.blockZ());
+                shouldSwim = isBlockInWater(eyeBlock, eyeY - eyeBlockY) && isSprinting() && getVehicle() == null;
+            }
+            meta.setSwimming(shouldSwim);
         }
 
         // Figure out their expected state
@@ -871,6 +875,24 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         if (newPose != oldPose) setPose(newPose);
+    }
+
+    private @Nullable Block getBlockSafe(int x, int y, int z) {
+        try {
+            return instance.getBlock(x, y, z);
+        } catch (NullPointerException ignored) {
+            return null;
+        }
+    }
+
+    private boolean isBlockInWater(@Nullable Block block, double localY) {
+        if (block == null) return false;
+        if (block.compare(Block.WATER)) {
+            String levelStr = block.getProperty("level");
+            int level = levelStr != null ? Integer.parseInt(levelStr) : 0;
+            return localY < (9 - (level & 7)) / 9.0;
+        }
+        return "true".equals(block.getProperty("waterlogged"));
     }
 
     /**
