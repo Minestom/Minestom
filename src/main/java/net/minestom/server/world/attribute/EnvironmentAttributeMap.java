@@ -19,6 +19,10 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> 
         return new Builder();
     }
 
+    public static Builder builder(EnvironmentAttributeMap existing) {
+        return new Builder(existing.entries);
+    }
+
     public EnvironmentAttributeMap {
         entries = Map.copyOf(entries);
     }
@@ -58,6 +62,14 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> 
 
     public static final class Builder {
         private final Map<EnvironmentAttribute<?>, Entry<?, ?>> entries = new HashMap<>();
+
+        public Builder() {
+
+        }
+
+        public Builder(Map<EnvironmentAttribute<?>, Entry<?, ?>> existing) {
+            entries.putAll(existing);
+        }
 
         public <T> Builder set(EnvironmentAttribute<T> attribute, T value) {
             entries.put(attribute, new Entry<>(value, new Modifier.Override<>(attribute.valueCodec())));
