@@ -216,10 +216,12 @@ final class NetworkBufferImpl implements NetworkBuffer {
     public void compact() {
         assertDummy();
         assertReadOnly();
-        ByteBuffer nioBuffer = bufferSlice((int) readIndex, (int) readableBytes());
-        nioBuffer.compact();
-        writeIndex -= readIndex;
-        readIndex = 0;
+        final long readIndex = readIndex();
+        if (readIndex == 0) return;
+        final MemorySegment segment = this.segment;
+        MemorySegment.copy(segment, readIndex, segment, 0, readableBytes());
+        this.writeIndex -= readIndex;
+        this.readIndex = 0;
     }
 
     @Override
@@ -236,7 +238,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         assertDummy();
         assertReadOnly();
         assertOverflow(writeIndex + writableBytes());
-        var buffer = bufferSlice((int) writeIndex, (int) writableBytes());
+        var buffer = bufferSlice(writeIndex, writableBytes());
         final int count = channel.read(buffer);
         if (count == -1) throw new EOFException("Disconnected");
         advanceWrite(count);
@@ -249,7 +251,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         final long readableBytes = readableBytes();
         if (readableBytes == 0) return true; // Nothing to write
         assertOverflow(readIndex + readableBytes);
-        var buffer = bufferSlice((int) readIndex, (int) readableBytes);
+        var buffer = bufferSlice(readIndex, readableBytes);
         if (!buffer.hasRemaining())
             return true; // Nothing to write
         final int count = channel.write(buffer);
@@ -262,7 +264,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     public void cipher(Cipher cipher, long start, long length) {
         assertDummy();
         assertOverflow(start + length);
-        ByteBuffer input = bufferSlice((int) start, (int) length);
+        ByteBuffer input = bufferSlice(start, length);
         try {
             cipher.update(input, input.duplicate());
         } catch (ShortBufferException e) {
@@ -282,8 +284,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         impl(output).assertReadOnly();
         assertOverflow(start + length);
 
-        ByteBuffer input = bufferSlice((int) start, (int) length);
-        ByteBuffer outputBuffer = impl(output).bufferSlice((int) output.writeIndex(), (int) output.writableBytes());
+        ByteBuffer input = bufferSlice(start, length);
+        ByteBuffer outputBuffer = impl(output).bufferSlice(output.writeIndex(), output.writableBytes());
 
         Deflater deflater = CompressionHolder.DEFLATER_POOL.get();
         try {
@@ -304,8 +306,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         impl(output).assertReadOnly();
         assertOverflow(start + length);
 
-        ByteBuffer input = bufferSlice((int) start, (int) length);
-        ByteBuffer outputBuffer = impl(output).bufferSlice((int) output.writeIndex(), (int) output.writableBytes());
+        ByteBuffer input = bufferSlice(start, length);
+        ByteBuffer outputBuffer = impl(output).bufferSlice(output.writeIndex(), output.writableBytes());
 
         Inflater inflater = CompressionHolder.INFLATER_POOL.get();
         try {
@@ -332,8 +334,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         this.registries = registries;
     }
 
-    private ByteBuffer bufferSlice(int position, int length) {
-        return segment.asByteBuffer().order(BIG_ENDIAN).limit(position + length).position(position);
+    private ByteBuffer bufferSlice(long position, long length) {
+        return segment.asSlice(position, length).asByteBuffer().order(BIG_ENDIAN);
     }
 
     @Override
