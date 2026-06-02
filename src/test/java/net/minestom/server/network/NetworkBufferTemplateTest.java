@@ -154,4 +154,13 @@ public class NetworkBufferTemplateTest {
 
         assertEquals(List.of("write:first=1", "write:second=2", "write:third=3", "read:first=1", "read:second=2", "read:third=3"), events);
     }
+
+    @Test
+    public void templateNullArguments() {
+        record Single(int value) {
+        }
+        assertThrows(NullPointerException.class, () -> NetworkBufferTemplate.template(null, Single::value, Single::new));
+        assertThrows(NullPointerException.class, () -> NetworkBufferTemplate.template(VAR_INT, null, Single::new));
+        assertThrows(NullPointerException.class, () -> NetworkBufferTemplate.template(VAR_INT, Single::value, null));
+    }
 }
