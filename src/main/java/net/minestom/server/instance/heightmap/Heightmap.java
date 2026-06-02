@@ -150,7 +150,7 @@ public abstract class Heightmap {
      *                     container.
      * @return array of encoded heights.
      */
-    static long[] encode(short[] heights, int bitsPerEntry) {
+    public static long[] encode(short[] heights, int bitsPerEntry) {
         final int entriesPerLong = 64 / bitsPerEntry;
         // ceil(HeightsCount / entriesPerLong)
         final int len = (heights.length + entriesPerLong - 1) / entriesPerLong;
