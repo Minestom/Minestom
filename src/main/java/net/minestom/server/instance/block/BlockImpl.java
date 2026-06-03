@@ -25,7 +25,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     @Override
     public @Nullable BlockHandler handler() {
         if (handler != null) return handler;
-        return MinecraftServer.getBlockManager().getDefaultHandler(registry.key().namespace());
+        return MinecraftServer.getBlockManager().getDefaultHandler(registry.key().toString());
     }
 
     /**
