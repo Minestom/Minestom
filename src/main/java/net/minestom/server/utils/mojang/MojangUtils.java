@@ -10,8 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -110,22 +108,19 @@ public final class MojangUtils {
         }
     }
 
+    /**
+     * Issues a {@code hasJoined} request to the Mojang session server. Pure with respect to
+     * server state: the caller decides (typically by checking {@link ServerFlag#AUTH_PREVENT_PROXY_CONNECTIONS})
+     * whether to forward the client IP and supplies it (or {@code null}) accordingly.
+     */
     @Blocking
     @ApiStatus.Internal
-    public static JsonObject authenticateSession(String loginUsername, String serverId, @Nullable SocketAddress userSocket) throws IOException {
+    public static JsonObject authenticateSession(String loginUsername, String serverId, @Nullable InetAddress clientIp) throws IOException {
         final String username = encode(loginUsername);
         final String encodedServerId = encode(serverId);
-
-        final String url;
-        if (ServerFlag.AUTH_PREVENT_PROXY_CONNECTIONS
-                && userSocket instanceof InetSocketAddress inetSocketAddress
-                && inetSocketAddress.getAddress() instanceof InetAddress address
-        ) {
-            url = String.format(PREVENT_PROXY_CONNECTIONS_AUTH_URL, username, encodedServerId, encode(address.getHostAddress()));
-        } else {
-            url = String.format(BASE_AUTH_URL, username, encodedServerId);
-        }
-
+        final String url = clientIp != null
+                ? String.format(PREVENT_PROXY_CONNECTIONS_AUTH_URL, username, encodedServerId, encode(clientIp.getHostAddress()))
+                : String.format(BASE_AUTH_URL, username, encodedServerId);
         return retrieve(url);
     }
 

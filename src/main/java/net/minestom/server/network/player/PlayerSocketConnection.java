@@ -7,6 +7,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
+import net.minestom.server.extras.mojangAuth.MojangAuth;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
@@ -74,10 +75,10 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     //Could be null. Only used for Mojang Auth
     private volatile EncryptionContext encryptionContext;
-    private byte[] nonce = new byte[4];
+    // Set at LoginStart for Auth.Online, consumed at EncryptionResponse. Null otherwise.
+    private @Nullable MojangAuth.LoginChallenge loginChallenge;
 
     // Data from client packets
-    private String loginUsername;
     private GameProfile gameProfile;
     private String serverAddress;
     private int serverPort;
@@ -248,23 +249,16 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     /**
-     * Retrieves the username received from the client during connection.
-     * <p>
-     * This value has not been checked and could be anything.
-     *
-     * @return the username given by the client, unchecked
+     * The {@link MojangAuth.LoginChallenge} issued to this connection at {@code LoginStart}
+     * for {@link net.minestom.server.Auth.Online} mode. {@code null} for offline/proxy modes
+     * or before the LoginStart packet has been processed.
      */
-    public @Nullable String getLoginUsername() {
-        return loginUsername;
+    public MojangAuth.@Nullable LoginChallenge loginChallenge() {
+        return loginChallenge;
     }
 
-    /**
-     * Sets the internal login username field.
-     *
-     * @param loginUsername the new login username field
-     */
-    public void UNSAFE_setLoginUsername(String loginUsername) {
-        this.loginUsername = loginUsername;
+    public void UNSAFE_setLoginChallenge(MojangAuth.LoginChallenge loginChallenge) {
+        this.loginChallenge = loginChallenge;
     }
 
     /**
@@ -312,14 +306,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         this.protocolVersion = protocolVersion;
-    }
-
-    public byte[] getNonce() {
-        return nonce;
-    }
-
-    public void setNonce(byte[] nonce) {
-        this.nonce = nonce;
     }
 
     private boolean writeSendable(NetworkBuffer buffer, SendablePacket sendable, boolean compressed) {
@@ -433,7 +419,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                     throw new RuntimeException(e);
                 }
             } else {
-                assert this.writeThread == Thread.currentThread(): "writeThread should be the current thread";
+                assert this.writeThread == Thread.currentThread() : "writeThread should be the current thread";
                 this.writeSignaled.set(false);
                 if (!isOnline()) return; // already offline, don't park
                 LockSupport.park(this);

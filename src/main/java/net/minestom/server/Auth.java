@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.*;
-import java.util.Objects;
 import java.util.Set;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -18,7 +17,7 @@ public sealed interface Auth {
 
     record Online(KeyPair keyPair) implements Auth {
         public Online() {
-            this(Objects.requireNonNull(MojangCrypt.generateKeyPair()));
+            this(MojangCrypt.generateKeyPair());
         }
     }
 
