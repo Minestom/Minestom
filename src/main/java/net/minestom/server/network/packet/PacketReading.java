@@ -116,6 +116,44 @@ public final class PacketReading {
         return !packets.isEmpty() ? new Result.Success<>(packets) : EMPTY_CLIENT_PACKET;
     }
 
+    public static List<ParsedPacket<ClientPacket>> readClientsAutoResize(
+            NetworkBuffer buffer,
+            ConnectionState state,
+            boolean compressed
+    ) throws DataFormatException {
+        return readPacketsAutoResize(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state,
+                PacketVanilla::nextClientState, compressed);
+    }
+
+    public static List<ParsedPacket<ServerPacket>> readServersAutoResize(
+            NetworkBuffer buffer,
+            ConnectionState state,
+            boolean compressed
+    ) throws DataFormatException {
+        return readPacketsAutoResize(buffer, PacketVanilla.SERVER_PACKET_PARSER, state,
+                PacketVanilla::nextServerState, compressed);
+    }
+
+    public static <T> List<ParsedPacket<T>> readPacketsAutoResize(
+            NetworkBuffer buffer,
+            PacketParser<T> parser,
+            ConnectionState state,
+            BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            boolean compressed
+    ) throws DataFormatException {
+        return switch (readPackets(buffer, parser, state, stateUpdater, compressed)) {
+            case Result.Success<T> success -> {
+                buffer.compact();
+                yield success.packets();
+            }
+            case Result.Empty<T> ignored -> List.of();
+            case Result.Failure<T> failure -> {
+                buffer.resize(failure.requiredCapacity());
+                yield List.of();
+            }
+        };
+    }
+
     public static Result<ClientPacket> readClient(
             NetworkBuffer buffer,
             ConnectionState state,

@@ -4,7 +4,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.*;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -22,6 +22,45 @@ public final class PacketWriting {
                                          ClientPacket packet,
                                          int compressionThreshold) throws IndexOutOfBoundsException {
         writeFramedPacket(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, packet, compressionThreshold);
+    }
+
+    public static ConnectionState writeFramedPacket(NetworkBuffer buffer,
+                                                    ConnectionState state,
+                                                    SendablePacket packet,
+                                                    int compressionThreshold) throws IndexOutOfBoundsException {
+        return switch (packet) {
+            case ServerPacket serverPacket -> {
+                writeFramedPacket(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, serverPacket, compressionThreshold);
+                yield PacketVanilla.nextServerState(serverPacket, state);
+            }
+            case FramedPacket framedPacket -> {
+                final NetworkBuffer body = framedPacket.body();
+                writePreEncoded(buffer, body, 0, body.capacity());
+                yield PacketVanilla.nextServerState(framedPacket.packet(), state);
+            }
+            case CachedPacket cachedPacket -> {
+                final NetworkBuffer body = cachedPacket.body(state);
+                final ServerPacket inner = cachedPacket.packet(state);
+                if (body != null) writePreEncoded(buffer, body, 0, body.capacity());
+                else writeFramedPacket(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, inner, compressionThreshold);
+                yield PacketVanilla.nextServerState(inner, state);
+            }
+            case LazyPacket lazyPacket -> {
+                final ServerPacket inner = lazyPacket.packet();
+                writeFramedPacket(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, inner, compressionThreshold);
+                yield PacketVanilla.nextServerState(inner, state);
+            }
+            case BufferedPacket bufferedPacket -> {
+                writePreEncoded(buffer, bufferedPacket.buffer(), bufferedPacket.index(), bufferedPacket.length());
+                yield state;
+            }
+        };
+    }
+
+    private static void writePreEncoded(NetworkBuffer dest, NetworkBuffer source, long index, long length) {
+        dest.ensureWritable(length);
+        NetworkBuffer.copy(source, index, dest, dest.writeIndex(), length);
+        dest.advanceWrite(length);
     }
 
     public static void writeFramedPacket(NetworkBuffer buffer,
