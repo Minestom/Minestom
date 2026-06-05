@@ -19,6 +19,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
 import java.io.IOException;
+import java.lang.foreign.MemorySegment;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
 import java.security.PublicKey;
@@ -282,8 +283,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(null);
     }
 
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
+        return NetworkBufferImpl.wrap(segment, readIndex, writeIndex, registries);
+    }
+
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex) {
+        return wrap(segment, readIndex, writeIndex, null);
+    }
+
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
-        return NetworkBufferImpl.wrap(bytes, readIndex, writeIndex, registries);
+        /* TODO(next) remove me for zero copy. The old behavior didnt actually modify the underlying array.
+            quite unfortunate and will require until waiting for the next release to change this behavior. */
+        bytes = bytes.clone();
+        return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
     }
 
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
