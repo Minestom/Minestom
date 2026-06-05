@@ -118,4 +118,27 @@ public final class CodecTest {
                              .add(intBinaryTag(24))
                              .build(), value);
     }
+
+    @Test
+    void uuidStringRoundTrip() {
+        var uuid = UUID.fromString("d2ac7139-76a6-435b-b659-7852d34dd7a3");
+        var encoded = Codec.UUID_STRING.encode(Transcoder.JSON, uuid);
+        assertEquals("d2ac7139-76a6-435b-b659-7852d34dd7a3",
+                Transcoder.JSON.getString(encoded.orElseThrow()).orElseThrow());
+        var decoded = Codec.UUID_STRING.decode(Transcoder.JSON, encoded.orElseThrow());
+        assertEquals(uuid, CodecAssertions.assertOk(decoded));
+    }
+
+    @Test
+    void uuidStringDashlessDecode() {
+        var uuid = UUID.fromString("ab70ecb4-2346-4c14-a52d-7a091507c24e");
+        var decoded = Codec.UUID_STRING.decode(Transcoder.JSON, Transcoder.JSON.createString("ab70ecb423464c14a52d7a091507c24e"));
+        assertEquals(uuid, CodecAssertions.assertOk(decoded));
+    }
+
+    @Test
+    void uuidStringInvalidDecode() {
+        var decoded = Codec.UUID_STRING.decode(Transcoder.JSON, Transcoder.JSON.createString("not a uuid"));
+        Assertions.assertInstanceOf(Result.Error.class, decoded);
+    }
 }

@@ -31,4 +31,29 @@ class UUIDUtilsTest {
     void intArrayToUuid() {
         assertEquals(TEST_UUID, UUIDUtils.intArrayToUuid(TEST_INT_ARRAY));
     }
+
+    @Test
+    void fromStringDashed() {
+        assertEquals(TEST_UUID, UUIDUtils.fromString("d2ac7139-76a6-435b-b659-7852d34dd7a3"));
+    }
+
+    @Test
+    void fromStringDashless() {
+        assertEquals(TEST_UUID, UUIDUtils.fromString("d2ac713976a6435bb6597852d34dd7a3"));
+        assertEquals(UUID.fromString("ab70ecb4-2346-4c14-a52d-7a091507c24e"),
+                UUIDUtils.fromString("ab70ecb423464c14a52d7a091507c24e"));
+    }
+
+    @Test
+    void fromStringUppercase() {
+        assertEquals(TEST_UUID, UUIDUtils.fromString("D2AC713976A6435BB6597852D34DD7A3"));
+    }
+
+    @Test
+    void fromStringInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> UUIDUtils.fromString("not a uuid"));
+        assertThrows(IllegalArgumentException.class, () -> UUIDUtils.fromString("d2ac713976a6435bb6597852d34dd7a"));
+        assertThrows(IllegalArgumentException.class, () -> UUIDUtils.fromString("d2ac713976a6435bb6597852d34dd7a33"));
+        assertThrows(IllegalArgumentException.class, () -> UUIDUtils.fromString("g2ac713976a6435bb6597852d34dd7a3"));
+    }
 }
