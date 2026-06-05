@@ -152,8 +152,8 @@ public class SocketReadTest {
         final var packet = new ClientPluginMessagePacket("ch", new byte[2000]);
         final var encoded = NetworkBuffer.resizableBuffer();
         PacketWriting.writeFramedPacket(encoded, ConnectionState.PLAY, packet, 256);
-        final long length = encoded.writeIndex();
-        final byte[] framed = new byte[(int) length];
+        final int length = (int) encoded.writeIndex();
+        final byte[] framed = new byte[length];
         encoded.copyTo(0, framed, 0, length);
 
         // Drain the pool so any buffer we inspect afterwards must have been used by the read.

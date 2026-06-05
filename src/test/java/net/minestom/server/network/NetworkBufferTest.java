@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -474,6 +475,43 @@ public class NetworkBufferTest {
         var readArray = buffer.read(RAW_BYTES);
         assertArrayEquals(array, readArray);
         assertEquals(array.length, buffer.readIndex());
+    }
+
+    @Test
+    public void copyTo() {
+        var array = new byte[]{0x01, 0x02, 0x03, 0x04, 0x05};
+        var buffer = NetworkBuffer.wrap(array, 0, 5);
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+
+        byte[] dest = new byte[6];
+        buffer.copyTo(1, dest, 2, 3);
+
+        assertArrayEquals(new byte[]{0, 0, 0x02, 0x03, 0x04, 0}, dest);
+
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+    }
+
+    @Test
+    public void copyToSegment() {
+        var array = new byte[]{0x01, 0x02, 0x03, 0x04, 0x05};
+        var buffer = NetworkBuffer.wrap(array, 0, 5);
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+
+        try (var arena = Arena.ofConfined()) {
+            MemorySegment dest = arena.allocate(6);
+            buffer.copyTo(1, dest, 2, 3);
+
+            assertEquals(0, buffer.readIndex());
+            assertEquals((byte) 0x02, dest.get(ValueLayout.JAVA_BYTE, 2));
+            assertEquals((byte) 0x03, dest.get(ValueLayout.JAVA_BYTE, 3));
+            assertEquals((byte) 0x04, dest.get(ValueLayout.JAVA_BYTE, 4));
+        }
+
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
     }
 
     @Test
