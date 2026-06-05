@@ -238,6 +238,60 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void segmentWrap() {
+        try (var arena = Arena.ofConfined()) {
+            final MemorySegment segment = arena.allocate(512);
+            var buffer = NetworkBuffer.wrap(segment, 0L, 0L);
+            assertEquals(0, buffer.writeIndex());
+            assertEquals(0, buffer.readIndex());
+            assertEquals(512,  buffer.capacity());
+            assertFalse(buffer.isReadOnly());
+
+            buffer.write(BYTE, (byte) 1);
+            buffer.write(LONG, 50L);
+            buffer.write(FLOAT, 3.5f);
+
+            assertEquals(0, buffer.readIndex());
+            assertEquals(13, buffer.writeIndex());
+
+            assertEquals((byte) 1, buffer.read(BYTE));
+            assertEquals(50L, buffer.read(LONG));
+            assertEquals(3.5f, buffer.read(FLOAT));
+
+            assertEquals(13, buffer.readIndex());
+            assertEquals(13, buffer.writeIndex());
+
+            // Rewrapping shouldn't carry anything except the data
+            var buffer2 = NetworkBuffer.wrap(segment.asReadOnly(), 0L, 0L);
+            assertEquals(0, buffer2.writeIndex());
+            assertEquals(0, buffer2.readIndex());
+            assertTrue(buffer2.isReadOnly());
+
+            assertFalse(buffer.isReadOnly(), "OG buffer should still be writeable");
+
+            buffer2.writeIndex(buffer.writeIndex());
+            assertEquals(13,  buffer2.writeIndex());
+
+            assertEquals((byte) 1, buffer2.read(BYTE));
+            assertEquals(50L, buffer2.read(LONG));
+            assertEquals(3.5f, buffer2.read(FLOAT));
+
+            assertEquals(13, buffer2.readIndex());
+        }
+    }
+
+    @Test
+    public void segmentWrapScope() {
+        NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            final MemorySegment segment = arena.allocate(512);
+            buffer = NetworkBuffer.wrap(segment, 0L, 0L);
+            buffer.write(BYTE, (byte) 1);
+        }
+        assertThrows(Exception.class, () -> buffer.read(BYTE));
+    }
+
+    @Test
     public void sizeOfPrimitives() {
         assertEquals(1, BYTE.sizeOf((byte) 1));
         assertEquals(2, SHORT.sizeOf((short) 1));
@@ -566,7 +620,6 @@ public class NetworkBufferTest {
 
         assertBufferType(STRING_IO_UTF8, "Hello", stream.toByteArray());
     }
-
 
     @Test
     public void testStringUtf8ModifiedRead() throws IOException {
