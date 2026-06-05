@@ -19,6 +19,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
 import java.io.IOException;
+import java.lang.foreign.MemorySegment;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
 import java.security.PublicKey;
@@ -137,7 +138,15 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
+    /**
+     * @deprecated Use {@link #copyTo(long, byte[], int, int)} instead, as longs can easily overflow arrays.
+     */
+    @Deprecated(forRemoval = true)
     void copyTo(long srcOffset, byte[] dest, long destOffset, long length);
+
+    void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
+
+    void copyTo(long srcOffset, MemorySegment dest, long destOffset, long length);
 
     byte[] extractBytes(Consumer<NetworkBuffer> extractor);
 
